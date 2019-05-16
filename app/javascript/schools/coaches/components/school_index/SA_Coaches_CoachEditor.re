@@ -570,7 +570,7 @@ let make =
                       {
                         switch (coach) {
                         | Some(_coach) =>
-                          <div className="flex items-center flex-no-shrink">
+                          <div className="flex items-center flex-shrink-0">
                             <label
                               className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
                               htmlFor="evaluated">
@@ -578,7 +578,7 @@ let make =
                             </label>
                             <div
                               id="exited"
-                              className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                              className="flex flex-shrink-0 rounded-lg overflow-hidden border">
                               <button
                                 onClick=(
                                   _event => {

@@ -353,7 +353,7 @@ let make =
                   />
                 </div>
                 <div className="mt-6">
-                  <div className="flex items-center flex-no-shrink">
+                  <div className="flex items-center flex-shrink-0">
                     <label
                       className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
                       {
@@ -362,7 +362,7 @@ let make =
                       }
                     </label>
                     <div
-                      className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                      className="flex flex-shrink-0 rounded-lg overflow-hidden border">
                       <button
                         title="Exclude this student from the leaderboard"
                         onClick={
@@ -397,13 +397,13 @@ let make =
                 <div className="max-w-2xl px-6 mx-auto">
                   <div
                     className="flex max-w-2xl w-full justify-between items-center mx-auto">
-                    <div className="flex items-center flex-no-shrink">
+                    <div className="flex items-center flex-shrink-0">
                       <label
                         className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
                         {"Has this student dropped out?" |> str}
                       </label>
                       <div
-                        className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                        className="flex flex-shrink-0 rounded-lg overflow-hidden border">
                         <button
                           title="Prevent this student from accessing the course"
                           onClick={

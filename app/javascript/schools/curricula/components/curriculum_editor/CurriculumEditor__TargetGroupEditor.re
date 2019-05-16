@@ -212,7 +212,7 @@ let make =
                     {"Is this a milestone target group?" |> str}
                   </label>
                   <div
-                    className="milestone toggle-button__group inline-flex flex-no-shrink rounded-lg overflow-hidden border">
+                    className="milestone toggle-button__group inline-flex flex-shrink-0 rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -252,7 +252,7 @@ let make =
                           {"Is this target group archived" |> str}
                         </label>
                         <div
-                          className="toggle-button__group archived inline-flex flex-no-shrink rounded-lg overflow-hidden border">
+                          className="toggle-button__group archived inline-flex flex-shrink-0 rounded-lg overflow-hidden border">
                           <button
                             onClick=(
                               _event => {

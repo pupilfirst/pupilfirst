@@ -194,7 +194,7 @@ let make =
                   |> List.map(coach =>
                        <div
                          key={coach |> Coach.id |> string_of_int}
-                         className="flex w-1/2 flex-no-shrink mb-5 px-3">
+                         className="flex w-1/2 flex-shrink-0 mb-5 px-3">
                          <div
                            id={coach |> Coach.name}
                            className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">

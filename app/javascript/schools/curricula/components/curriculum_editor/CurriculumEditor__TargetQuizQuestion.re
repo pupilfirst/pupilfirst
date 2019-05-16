@@ -73,7 +73,7 @@ let make =
           {
             questionCanBeRemoved ?
               <button
-                className="flex items-center flex-no-shrink bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
+                className="flex items-center flex-shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
                 type_="button"
                 title="Remove Quiz Question"
                 onClick={

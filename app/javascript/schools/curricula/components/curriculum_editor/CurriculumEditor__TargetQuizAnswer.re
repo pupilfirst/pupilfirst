@@ -75,8 +75,8 @@ let make =
           <button
             className={
               answerOption |> AnswerOption.correctAnswer ?
-                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-green-500 font-semibold cursor-default focus:outline-none text-xs py-1 px-2" :
-                "w-28 flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
+                "w-28 flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-green-500 font-semibold cursor-default focus:outline-none text-xs py-1 px-2" :
+                "w-28 flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
             }
             type_="button"
             onClick={
@@ -97,14 +97,14 @@ let make =
                 send(InvertHasHint);
               }
             }
-            className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
+            className="flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
             type_="button">
             {"Explain" |> str}
           </button>
           {
             canBeDeleted ?
               <button
-                className="flex-no-shrink border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
+                className="flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
                 type_="button"
                 onClick={
                   event => {

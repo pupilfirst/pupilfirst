@@ -696,7 +696,7 @@ let make =
                   </label>
                   <div
                     id="evaluated"
-                    className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border">
+                    className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden border">
                     <button
                       onClick={
                         _event => {
@@ -913,7 +913,7 @@ let make =
                 {
                   switch (target) {
                   | Some(_) =>
-                    <div className="flex items-center flex-no-shrink">
+                    <div className="flex items-center flex-shrink-0">
                       <label
                         className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
                         htmlFor="archived">
@@ -921,7 +921,7 @@ let make =
                       </label>
                       <div
                         id="archived"
-                        className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border">
+                        className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {

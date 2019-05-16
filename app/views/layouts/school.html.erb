@@ -18,7 +18,7 @@
 <!--                          </div>-->
             </div>
           </div>
-          <ul class="list-reset">
+          <ul>
             <li>
               <%= link_to school_path, class: presenter.nav_link_classes(school_path) do %>
                 <i class="fas fa-eye fa-fw text-xl mr-2"></i>
@@ -42,7 +42,7 @@
                 <i class="fas fa-books fa-fw text-xl mr-2"></i>
                 <span>Courses</span>
               <% end %>
-              <ul class="list-reset pr-4 pb-4 ml-10 mt-1">
+              <ul class="pr-4 pb-4 ml-10 mt-1">
                 <% @courses.each do |course| %>
                   <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs no-underline' %></li>
                 <% end %>
@@ -50,7 +50,7 @@
             </li>
           </ul>
         </div>
-        <ul class="list-reset">
+        <ul>
           <% if presenter.founder_profile? %>
             <li>
               <%= link_to student_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold no-underline items-center' do %>

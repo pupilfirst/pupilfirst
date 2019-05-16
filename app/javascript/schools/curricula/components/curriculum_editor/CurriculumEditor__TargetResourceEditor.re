@@ -14,7 +14,7 @@ let make = _children => {
       <label className="block tracking-wide text-gray-800 text-xs font-semibold mb-2" htmlFor="title">
         {"Resources" |> str}
       </label>
-      <ul className="list-reset resources-upload-tab flex border-b">
+      <ul className="resources-upload-tab flex border-b">
         <li className="mr-1 resources-upload-tab__link resources-upload-tab__link--active">
           <div className="inline-block text-gray-800 hover:text-indigo-800 p-4 text-xs font-semibold"> {"Upload File" |> str} </div>
         </li>

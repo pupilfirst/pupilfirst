@@ -16,7 +16,7 @@
               <% end %>
             </div>
           </div>
-          <ul class="list-reset">
+          <ul>
             <li>
               <%= link_to school_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
                 <i class="fas fa-eye fa-fw text-xl"></i>
@@ -41,7 +41,7 @@
             </li>
           </ul>
         </div>
-        <ul class="list-reset">
+        <ul>
           <% if presenter.founder_profile?(@course) %>
             <li>
               <%= link_to student_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold no-underline items-center justify-center' do %>
@@ -65,7 +65,7 @@
       </div>
 
       <div class="bg-gray-200 global-sidebar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
-        <ul class="list-reset p-4">
+        <ul class="p-4">
           <% default_classes = 'flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded no-underline items-center my-1' %>
           <% selected_classes = ' bg-gray-400' %>
           <li>

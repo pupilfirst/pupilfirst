@@ -520,7 +520,7 @@ let make =
                     </div>
                     <div className="grade-bar__container w-full mb-6">
                       <ul
-                        className="grade-bar__track flex justify-between list-reset">
+                        className="grade-bar__track flex justify-between">
                         {
                           state.gradesAndLabels
                           |> List.filter(gradesAndLabel =>

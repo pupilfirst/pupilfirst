@@ -138,7 +138,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
     };
 
     <div className={formClasses(state.saving)}>
-      <ul className="list-reset resources-upload-tab flex border-b">
+      <ul className="resources-upload-tab flex border-b">
         <li className={resourcesUploadTabClasses(state.resourceType == File)}>
           <a
             onClick={

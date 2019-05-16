@@ -154,7 +154,7 @@ let make = (~authenticityToken, ~communityId, ~communityPath, ~target) => {
           <div className="w-full flex flex-col">
             <DisablingCover disabled=saving>
               <MarkDownEditor
-                placeholderText="Explain your answer"
+                placeholderText="Explain your question"
                 updateDescriptionCB
               />
             </DisablingCover>
@@ -172,7 +172,7 @@ let make = (~authenticityToken, ~communityId, ~communityPath, ~target) => {
                   )
                 }
                 className="btn btn-primary btn-large">
-                {"Post Your Answer" |> str}
+                {"Post Your Question" |> str}
               </button>
             </div>
           </div>

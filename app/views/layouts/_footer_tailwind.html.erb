@@ -1,7 +1,7 @@
 <% presenter = ::Layouts::FooterPresenter.new(self) %>
 
-<footer>
-  <section class="bg-grey-darkest text-white p-6 flex justify-center">
+<footer class="bg-grey-darkest">
+  <section class="text-white flex flex-row w-full xl:max-w-2xl mx-auto justify-between items-start py-8">
     <div class="pt-2 w-3/5">
       <div class="flex flex-col items-left">
         <span class="uppercase font-bold text-sm p-2">SITEMAP</span>
@@ -16,27 +16,28 @@
       </div>
 
     </div>
+    <div class="pt-2 flex-1">
+      <% if presenter.social_links.any? %>
+        <p class="uppercase font-bold text-sm py-2">SOCIAL</p>
+        <div class="py-2">
+          <% presenter.social_links.each do |social_link| %>
+            <a class="text-white no-underline pointer-cursor pr-2" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
+              <i class="text-3xl <%= presenter.social_icon(social_link[:url]) %>"></i>
+            </a>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
     <div class="pt-2 w-2/6">
       <div class="text-xs">
         <% if presenter.address.present? %>
           <p class="uppercase font-bold text-sm py-2">CONTACT</p>
 
-          <address class="text-xs font-normal leading-loose">
+          <address class="text-sm leading-normal">
             <%= presenter.address.html_safe %>
           </address>
         <% end %>
-
-        <% if presenter.social_links.any? %>
-          <div class="py-2">
-            <% presenter.social_links.each do |social_link| %>
-              <a class="text-white no-underline pointer-cursor pr-2" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
-                <!--                <i class="fa <%#= presenter.social_icon(social_link[:url]) %>"></i>-->
-                <i class="material-icons text-4xl">add_circle</i>
-              </a>
-            <% end %>
-          </div>
-        <% end %>
-        <div class="text-xs py-1">
+        <div class="text-xs py-2">
           <% if presenter.email_address.present? %>
             <p>Reach us at
               <strong><%= mail_to presenter.email_address, presenter.email_address, class: "text-white font-bold no-underline pointer-cursor" %></strong>.
@@ -47,11 +48,11 @@
     </div>
   </section>
 
-  <section class="w-full">
-    <div class="bg-black">
-      <div class="flex flex-row justify-between items-center">
-        <div class="text-center w-1/4 m-4">
-          <a class="ml-10" href="/">
+  <section class="w-full bg-black">
+    <div class="text-white flex flex-row w-full xl:max-w-2xl mx-auto justify-between items-start">
+      <div class="w-full flex flex-row justify-between items-center">
+        <div class="w-1/4 my-4">
+          <a href="/">
             <% if presenter.logo? %>
               <img class="w-27" src="<%= presenter.logo_url %>" alt="Logo of <%= presenter.school_name %>"/>
             <% else %>
@@ -60,7 +61,7 @@
           </a>
         </div>
 
-        <div class="w-2/5 text-center text-xs font-hairline">
+        <div class="w-2/5 text-right text-xs font-hairline">
           <% if presenter.privacy_policy? %>
             <a id="show-privacy-policy" class="text-grey-lightest cursor-pointer mr-3">Privacy Policy</a>
           <% end %>
@@ -69,7 +70,7 @@
             <a id="show-terms-of-use" class="text-grey-lightest cursor-pointer mr-3">Terms of Use</a>
           <% end %>
 
-          <span class="text-grey-light mr-3">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>
+          <span class="text-grey-light">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>
         </div>
       </div>
     </div>

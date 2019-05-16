@@ -21,7 +21,7 @@ module Layouts
       @social_links ||= SchoolLink.where(
         school: current_school,
         kind: SchoolLink::KIND_SOCIAL
-      ).map { |sl| { title: sl.title, url: sl.url } }
+      ).map { |sl| { title: sl.title, url: sl.url } }.reverse
     end
 
     def school_name
@@ -42,15 +42,14 @@ module Layouts
       end
     end
 
-    # TODO: Write a better way to decide which icon to present
-    def social_icon(url)
-      %w[facebook twitter instagram youtube].each do |key|
-        if key.in?(url)
-          return "fa-#{key}"
+    def social_icon(title)
+      %w[facebook twitter instagram youtube linkedin snapchat tumblr pinterest reddit flickr].each do |key|
+        if key.in?(title)
+          return "fab fa-#{key}"
         end
       end
 
-      'fa-users'
+      'fas fa-users'
     end
 
     def address

@@ -144,7 +144,7 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
-      "cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-2 rounded flex items-center "
+      "cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 rounded flex items-center "
       ++ additionalClasses
     }
     title
@@ -264,7 +264,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
     },
   render: ({state, send}) =>
     <div>
-      <div className="px-6 pt-6 w-full xl:max-w-2xl mx-auto">
+      <div className="px-6 pt-6 w-full xl:max-w-6xl mx-auto">
         <div className="font-bold"> {"Header" |> str} </div>
         <div
           className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">

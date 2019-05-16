@@ -344,7 +344,7 @@ let make =
       <div className="overflow-y-scroll">
         <div className="px-3">
           <div
-            className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+            className="max-w-3xl h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
             <div className="flex">
               <label className="flex items-center leading-tight mr-4 my-auto">
                 <input
@@ -439,7 +439,7 @@ let make =
             </div>
           </div>
           <div
-            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
+            className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
             <div className="flex items-center justify-between">
               <input
                 type_="search"
@@ -473,7 +473,7 @@ let make =
           </div>
         </div>
         <div className="flex bg-gray-100 pb-6">
-          <div className="flex flex-col max-w-lg mx-auto w-full">
+          <div className="flex flex-col max-w-3xl mx-auto w-full">
             {
               state.filterVisible && state.tags |> List.length > 0 ?
                 <div className="px-4 py-3 border-b bg-gray-200 shadow">

@@ -204,7 +204,7 @@ let make =
       }
       <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
         <div
-          className="max-w-lg flex py-4 items-center relative md:sticky top-0 z-20 bg-gray-100 border-b justify-between mx-auto">
+          className="max-w-3xl flex py-4 items-center relative md:sticky top-0 z-20 bg-gray-100 border-b justify-between mx-auto">
           <div className="flex">
             <div className="inline-block relative w-auto md:w-64">
               <select
@@ -280,7 +280,7 @@ let make =
           }
         </div>
         <div
-          className="target-group__container max-w-lg mt-5 mx-auto relative">
+          className="target-group__container max-w-3xl mt-5 mx-auto relative">
           {
             targetGroupsToDisplay
             |> List.map(targetGroup =>

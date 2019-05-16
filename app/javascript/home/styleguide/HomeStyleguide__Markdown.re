@@ -2,7 +2,9 @@
 
 let str = React.string;
 
-let reasonCode = {|```reasonml
+let reasonCode = {|
+<span class="prism-token prism-keyword">def</span>
+```reason
 /* A sample fizzbuzz implementation. */
 let fizzbuzz = (num) =>
   switch (num mod 3, num mod 5) {
@@ -54,21 +56,35 @@ for(var i = 1; i <= num; i++) {
 ```|};
 
 [@react.component]
-let make = () =>
+let make = () => {
+  let (show, setShow) = React.useState(() => true);
+
   <div>
-    <p className="text-xs font-semibold"> {"ReasonML" |> str} </p>
-    <div
-      className="mt-2"
-      dangerouslySetInnerHTML={"__html": reasonCode |> Markdown.parse}
-    />
-    <p className="mt-4 text-xs font-semibold"> {"Ruby" |> str} </p>
-    <div
-      className="mt-2"
-      dangerouslySetInnerHTML={"__html": rubyCode |> Markdown.parse}
-    />
-    <p className="mt-4 text-xs font-semibold"> {"Javascript" |> str} </p>
-    <div
-      className="mt-2"
-      dangerouslySetInnerHTML={"__html": jsCode |> Markdown.parse}
-    />
+    <button onClick={_event => setShow(s => !s)}>
+      {"Toggle code" |> str}
+    </button>
+    {
+      if (show) {
+        <div>
+          <p className="text-xs font-semibold"> {"ReasonML" |> str} </p>
+          <div
+            className="mt-2"
+            dangerouslySetInnerHTML={"__html": reasonCode |> Markdown.parse}
+          />
+          <p className="mt-4 text-xs font-semibold"> {"Ruby" |> str} </p>
+          <div
+            className="mt-2"
+            dangerouslySetInnerHTML={"__html": rubyCode |> Markdown.parse}
+          />
+          <p className="mt-4 text-xs font-semibold"> {"Javascript" |> str} </p>
+          <div
+            className="mt-2"
+            dangerouslySetInnerHTML={"__html": jsCode |> Markdown.parse}
+          />
+        </div>;
+      } else {
+        React.null;
+      }
+    }
   </div>;
+};

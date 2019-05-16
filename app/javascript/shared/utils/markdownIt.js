@@ -1,24 +1,22 @@
-import hljs from "highlight.js/lib/highlight";
+import Prism from "prismjs";
 
-import reasonml from "highlight.js/lib/languages/reasonml";
-import ruby from "highlight.js/lib/languages/ruby";
-import javascript from "highlight.js/lib/languages/javascript";
+require("./prism-okaidia.css");
 
-hljs.registerLanguage("reasonml", reasonml);
-hljs.registerLanguage("ruby", ruby);
-hljs.registerLanguage("javascript", javascript);
-
-import "highlight.js/styles/monokai-sublime.css";
+Prism.plugins.customClass.prefix("prism-");
 
 import commonmarkPreset from "markdown-it/lib/presets/commonmark";
 
 const md = require("markdown-it")({
   ...commonmarkPreset.options,
-  langPrefix: "hljs language-",
+  langPrefix: "line-numbers language-",
   highlight: function(str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
+    const prismLang = Prism.languages[lang];
+
+    if (lang && prismLang) {
       try {
-        return hljs.highlight(lang, str).value;
+        const highlightedCode = Prism.highlight(str, prismLang, lang);
+        console.log(highlightedCode);
+        return highlightedCode;
       } catch (__) {}
     }
 

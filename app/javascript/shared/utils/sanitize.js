@@ -7,55 +7,61 @@ const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
 ]);
 
 const allowedCodeClasses = [
-  "language-reasonml",
-  "language-ruby",
+  "language-reason",
   "language-javascript",
-  "hljs"
+  "language-ruby"
 ];
+const allowedPreClasses = allowedCodeClasses.concat("line-numbers");
+
+console.log(allowedPreClasses);
 
 const allowedSpanClasses = [
-  "hljs-keyword",
-  "hljs-comment",
-  "hljs-quote",
-  "hljs-selector-tag",
-  "hljs-subst",
-  "hljs-number",
-  "hljs-literal",
-  "hljs-variable",
-  "hljs-template-variable",
-  "hljs-tag .hljs-attr",
-  "hljs-string",
-  "hljs-doctag",
-  "hljs-title",
-  "hljs-section",
-  "hljs-selector-id",
-  "hljs-type",
-  "hljs-class",
-  "hljs-tag",
-  "hljs-name",
-  "hljs-attribute",
-  "hljs-regexp",
-  "hljs-link",
-  "hljs-symbol",
-  "hljs-bullet",
-  "hljs-built_in",
-  "hljs-builtin-name",
-  "hljs-meta ",
-  "hljs-deletion",
-  "hljs-addition",
-  "hljs-emphasis",
-  "hljs-strong",
-  "hljs-function",
-  "hljs-template-tag",
-  "hljs-meta"
+  "prism-comment",
+  "prism-prolog",
+  "prism-doctype",
+  "prism-cdata",
+  "prism-punctuation",
+  "prism-namespace",
+  "prism-property",
+  "prism-tag",
+  "prism-constant",
+  "prism-symbol",
+  "prism-deleted",
+  "prism-boolean",
+  "prism-number",
+  "prism-selector",
+  "prism-attr-name",
+  "prism-string",
+  "prism-char",
+  "prism-builtin",
+  "prism-inserted",
+  "prism-operator",
+  "prism-entity",
+  "prism-url",
+  "language-css ",
+  "prism-style ",
+  "prism-variable",
+  "prism-atrule",
+  "prism-attr-value",
+  "prism-function",
+  "prism-class-name",
+  "prism-keyword",
+  "prism-regex",
+  "prism-important",
+  "prism-bold",
+  "prism-italic"
 ];
 
 const sanitize = dirtyHtml => {
   return sanitizeHtml(dirtyHtml, {
     allowedTags: allowedTags,
     allowedClasses: {
+      pre: allowedPreClasses,
       code: allowedCodeClasses,
-      span: allowedSpanClasses
+      span: ["line-numbers-rows"]
+    },
+    allowedAttributes: {
+      span: ["aria-hidden"]
     }
   });
 };

@@ -77,6 +77,15 @@ module.exports = function(api) {
         {
           removeImport: true
         }
+      ],
+      [
+        "prismjs",
+        {
+          languages: ["javascript", "css", "markup", "ruby", "reason"],
+          plugins: ["line-numbers", "custom-class"],
+          theme: "okaidia",
+          css: true
+        }
       ]
     ].filter(Boolean)
   };

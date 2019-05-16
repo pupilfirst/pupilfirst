@@ -300,26 +300,26 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"Course Details" |> str}
                 </h5>
                 <label
-                  className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                   htmlFor="name">
                   {"Course Name" |> str}
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                   id="name"
                   type_="text"
                   placeholder="Type course name here"
@@ -337,12 +337,12 @@ let make =
                     ReasonReact.null
                 }
                 <label
-                  className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
+                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                   htmlFor="date">
                   {"Course ends at" |> str}
                 </label>
                 <input
-                  className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                   id="date"
                   type_="text"
                   placeholder="DD/MM/YYYY"
@@ -365,14 +365,14 @@ let make =
               </div>
             </div>
             <div className="mx-auto">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"Grades" |> str}
                 </h5>
                 <div className="mb-4">
                   <span
-                    className="inline-block tracking-wide text-grey-800 text-sm font-semibold mr-2"
+                    className="inline-block tracking-wide text-gray-800 text-sm font-semibold mr-2"
                     htmlFor="max_grades">
                     {"Maximum grade is" |> str}
                   </span>
@@ -395,7 +395,7 @@ let make =
                             )
                         )
                         value={state.maxGrade |> string_of_int}
-                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 leading-tight rounded-none focus:outline-none">
+                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray px-3 py-2 leading-tight rounded-none focus:outline-none">
                         {
                           possibleGradeValues
                           |> List.filter(g => g != 1)
@@ -413,7 +413,7 @@ let make =
                     }
                   }
                   <span
-                    className="inline-block tracking-wide text-grey-800 text-sm font-semibold mx-2"
+                    className="inline-block tracking-wide text-gray-800 text-sm font-semibold mx-2"
                     htmlFor="pass_grades">
                     {"and the passing grade is" |> str}
                   </span>
@@ -436,7 +436,7 @@ let make =
                             )
                         )
                         value={state.passGrade |> string_of_int}
-                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-grey px-3 py-2 rounded-none leading-tight focus:outline-none">
+                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray px-3 py-2 rounded-none leading-tight focus:outline-none">
                         {
                           possibleGradeValues
                           |> List.filter(g => g < state.maxGrade)
@@ -455,7 +455,7 @@ let make =
                   }
                 </div>
                 <label
-                  className="block tracking-wide text-grey-800 text-xs font-semibold mb-2"
+                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                   htmlFor="grades">
                   {"Grades" |> str}
                 </label>
@@ -486,7 +486,7 @@ let make =
                                  |> string_of_int
                                }>
                                <input
-                                 className="text-center grades__label-input appearance-none inline-block bg-white text-grey-800 border border-grey-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                                 className="text-center grades__label-input appearance-none inline-block bg-white text-gray-800 border border-gray-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                                  id={
                                    "label"
                                    ++ (

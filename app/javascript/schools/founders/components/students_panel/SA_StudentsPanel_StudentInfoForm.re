@@ -80,10 +80,10 @@ let make = (~addToListCB, ~studentTags, _children) => {
       })
     },
   render: ({state, send}) =>
-    <div className="bg-grey-100 p-4">
+    <div className="bg-gray-100 p-4">
       <div>
         <label
-          className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
           htmlFor="name">
           {"Name" |> str}
         </label>
@@ -93,7 +93,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           onChange={
             event => updateName(send, ReactEvent.Form.target(event)##value)
           }
-          className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           id="name"
           type_="text"
           placeholder="Student name here"
@@ -105,7 +105,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       </div>
       <div className="mt-6">
         <label
-          className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
           htmlFor="email">
           {"Email" |> str}
         </label>
@@ -115,7 +115,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           onChange={
             event => updateEmail(send, ReactEvent.Form.target(event)##value)
           }
-          className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           id="email"
           type_="email"
           placeholder="Student email here"
@@ -127,7 +127,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       </div>
       <div className="mt-6">
         <label
-          className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
           htmlFor="tags">
           {"Tags" |> str}
         </label>

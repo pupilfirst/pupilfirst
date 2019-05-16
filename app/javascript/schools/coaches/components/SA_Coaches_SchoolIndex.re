@@ -54,13 +54,13 @@ let make = (~coaches, ~authenticityToken, _children) => {
                 send(UpdateFormVisible(CoachEditor(None)));
               }
             }
-            className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-200 hover:bg-grey-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-gray-200 hover:bg-gray-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
             <i className="material-icons"> {"add_circle_outline" |> str} </i>
             <h4 className="font-semibold ml-2"> {"Add New Coach" |> str} </h4>
           </button>
         </div>
         <div className="px-6 pb-4 mt-5 flex flex-1">
-          <div className="max-w-md w-full mx-auto relative">
+          <div className="max-w-2xl w-full mx-auto relative">
             {
               state.coaches
               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
@@ -70,7 +70,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                      className="flex items-center shadow bg-white rounded-lg mb-4">
                      <div className="course-faculty__list-item flex w-full">
                        <div
-                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-grey-200"
+                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-200"
                          onClick={
                            _event => {
                              ReactEvent.Mouse.preventDefault(_event);
@@ -90,7 +90,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                                {coach |> Coach.name |> str}
                              </p>
                              <p
-                               className="text-grey-600 font-semibold text-xs mt-1">
+                               className="text-gray-600 font-semibold text-xs mt-1">
                                {coach |> Coach.title |> str}
                              </p>
                            </div>

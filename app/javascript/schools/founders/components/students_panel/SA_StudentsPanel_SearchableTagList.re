@@ -26,7 +26,7 @@ let search =
             onMouseDown=(_e => handleClick(searchString, send, addTagCB))
             className="p-2 text-sm hover:text-indigo cursor-pointer">
             (searchString |> str)
-            <span className="text-grey"> (" (New)" |> str) </span>
+            <span className="text-gray"> (" (New)" |> str) </span>
           </span>,
         ];
       } else {
@@ -82,7 +82,7 @@ let make =
               |> List.map(tag =>
                    <div
                      key=tag
-                     className="flex items-center pl-2 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-grey-400">
+                     className="flex items-center pl-2 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-gray-400">
                      <span> (tag |> str) </span>
                      <span
                        title=("Remove tag " ++ tag)
@@ -103,7 +103,7 @@ let make =
       <input
         value=state
         onChange=(event => send(ReactEvent.Form.target(event)##value))
-        className="appearance-none block bg-white text-grey-800 border border-grey-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-grey"
+        className="appearance-none block bg-white text-gray-800 border border-gray-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray"
         id="tags"
         type_="text"
         placeholder=(
@@ -113,7 +113,7 @@ let make =
       (
         if (results |> ListUtils.isNotEmpty) {
           <div
-            className="border border-grey-400 bg-white mt-3 rounded-lg max-w-xs searchable-tag-list__dropdown relative px-4 py-2">
+            className="border border-gray-400 bg-white mt-3 rounded-lg max-w-xs searchable-tag-list__dropdown relative px-4 py-2">
             (results |> Array.of_list |> ReasonReact.array)
           </div>;
         } else {

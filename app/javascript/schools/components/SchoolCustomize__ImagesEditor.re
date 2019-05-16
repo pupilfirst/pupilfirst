@@ -191,7 +191,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
         type_="hidden"
         value=authenticityToken
       />
-      <h5 className="uppercase text-center border-b border-grey-400 pb-2">
+      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage Images" |> str}
       </h5>
       <SchoolAdmin__DisablingCover disabled={state.updating}>
@@ -199,7 +199,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
           key="sc-images-editor__logo-on-400-bg-input-group"
           className="mt-4">
           <label
-            className="block tracking-wide text-grey-800 text-xs font-semibold"
+            className="block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="sc-images-editor__logo-on-400-bg-input">
             {"Logo on a light background" |> str}
           </label>
@@ -238,7 +238,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
         <div
           key="sc-images-editor__logo-on-600-bg-input-group" className="mt-4">
           <label
-            className="block tracking-wide text-grey-800 text-xs font-semibold"
+            className="block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="sc-images-editor__logo-on-600-bg-input">
             {"Logo on a dark background" |> str}
           </label>
@@ -276,7 +276,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
         </div>
         <div key="sc-images-editor__icon-input-group" className="mt-4">
           <label
-            className="block tracking-wide text-grey-800 text-xs font-semibold"
+            className="block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="sc-images-editor__icon-input">
             {"Icon" |> str}
           </label>

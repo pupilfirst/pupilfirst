@@ -15,7 +15,7 @@
   transform: translateX(-50%);
   width: 4px;
   z-index: -1;
-  @apply bg-grey-400;
+  @apply bg-gray-400;
 }
 
 .target-group__box {

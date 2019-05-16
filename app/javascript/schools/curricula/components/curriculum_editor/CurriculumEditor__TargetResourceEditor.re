@@ -11,15 +11,15 @@ let make = _children => {
        | None => ""
        }; */
     <div>
-      <label className="block tracking-wide text-grey-800 text-xs font-semibold mb-2" htmlFor="title">
+      <label className="block tracking-wide text-gray-800 text-xs font-semibold mb-2" htmlFor="title">
         {"Resources" |> str}
       </label>
       <ul className="list-reset resources-upload-tab flex border-b">
         <li className="mr-1 resources-upload-tab__link resources-upload-tab__link--active">
-          <div className="inline-block text-grey-800 hover:text-indigo-800 p-4 text-xs font-semibold"> {"Upload File" |> str} </div>
+          <div className="inline-block text-gray-800 hover:text-indigo-800 p-4 text-xs font-semibold"> {"Upload File" |> str} </div>
         </li>
         <li className="mr-1 resources-upload-tab__link">
-          <div className="inline-block text-grey-800 p-4 text-xs hover:text-indigo-800 font-semibold">
+          <div className="inline-block text-gray-800 p-4 text-xs hover:text-indigo-800 font-semibold">
             {"Add URL" |> str}
           </div>
         </li>

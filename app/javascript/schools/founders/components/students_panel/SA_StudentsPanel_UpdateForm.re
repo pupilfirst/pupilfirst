@@ -94,8 +94,8 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
 };
 
 let boolBtnClasses = selected => {
-  let classes = "w-1/2 toggle-button__button hover:bg-grey text-grey-900 text-sm font-semibold py-2 px-6 focus:outline-none";
-  classes ++ (selected ? " bg-grey" : " bg-white");
+  let classes = "w-1/2 toggle-button__button hover:bg-gray-500 text-gray-900 text-sm font-semibold py-2 px-6 focus:outline-none";
+  classes ++ (selected ? " bg-gray" : " bg-white");
 };
 
 let handleEligibleTeamCoachList =
@@ -214,7 +214,7 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-grey-200 text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-gray-200 text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
@@ -222,7 +222,7 @@ let make =
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div
-                className="flex items-centre py-6 pl-16 mb-4 bg-grey-200">
+                className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
                 <img
                   className="w-12 h-12 rounded-full mr-4"
                   src={studentUserProfile |> UserProfile.avatarUrl}
@@ -231,15 +231,15 @@ let make =
                   <div className="text-black font-bold inline-block">
                     {studentUserProfile |> UserProfile.name |> str}
                   </div>
-                  <div className="text-grey-600 inline-block">
+                  <div className="text-gray-600 inline-block">
                     {student |> Student.email |> str}
                   </div>
                 </div>
               </div>
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <div>
                   <label
-                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="name">
                     {"Name" |> str}
                   </label>
@@ -254,7 +254,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="name"
                     type_="text"
                     placeholder="Student name here"
@@ -266,7 +266,7 @@ let make =
                 </div>
                 <div className="mt-6">
                   <label
-                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="team_name">
                     {"Team Name" |> str}
                   </label>
@@ -281,7 +281,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="team_name"
                     type_="text"
                     placeholder="Team name here"
@@ -292,9 +292,9 @@ let make =
                   />
                 </div>
                 <div className="mt-6">
-                  <div className="border-b border-grey-400 pb-2 mb-2 ">
+                  <div className="border-b border-gray-400 pb-2 mb-2 ">
                     <span
-                      className="inline-block mr-1 text-grey-800 text-xs font-semibold">
+                      className="inline-block mr-1 text-gray-800 text-xs font-semibold">
                       {"Course Coaches:" |> str}
                     </span>
                     <div className="mt-2">
@@ -304,7 +304,7 @@ let make =
                           |> List.map(coachId =>
                                <div
                                  key={coachId |> string_of_int}
-                                 className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-600 border rounded p-3 mb-2">
+                                 className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
                                  {
                                    schoolCoaches
                                    |> List.find(coach =>
@@ -319,15 +319,15 @@ let make =
                           |> Array.of_list
                           |> ReasonReact.array :
                           <div
-                            className="select-list__item-selected flex items-center justify-between bg-grey-100 text-xs text-grey-600 border rounded p-3 mb-2">
+                            className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
                             {"None Assigned" |> str}
                           </div>
                       }
                     </div>
                   </div>
-                  <div className="border-b border-grey-400 pb-2 mb-2 ">
+                  <div className="border-b border-gray-400 pb-2 mb-2 ">
                     <span
-                      className="inline-block mr-1 text-grey-800 text-xs font-semibold">
+                      className="inline-block mr-1 text-gray-800 text-xs font-semibold">
                       {"Exclusive Team Coaches:" |> str}
                     </span>
                     <div className="mt-2">
@@ -356,7 +356,7 @@ let make =
                 <div className="mt-6">
                   <div className="flex items-center flex-no-shrink">
                     <label
-                      className="block tracking-wide text-grey-800 text-xs font-semibold mr-3">
+                      className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
                       {
                         "Should this student be excluded from leaderboards?"
                         |> str
@@ -394,13 +394,13 @@ let make =
                   </div>
                 </div>
               </div>
-              <div className="p-6 bg-grey-200">
-                <div className="max-w-md px-6 mx-auto">
+              <div className="p-6 bg-gray-200">
+                <div className="max-w-2xl px-6 mx-auto">
                   <div
-                    className="flex max-w-md w-full justify-between items-center mx-auto">
+                    className="flex max-w-2xl w-full justify-between items-center mx-auto">
                     <div className="flex items-center flex-no-shrink">
                       <label
-                        className="block tracking-wide text-grey-800 text-xs font-semibold mr-3">
+                        className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
                         {"Has this student dropped out?" |> str}
                       </label>
                       <div

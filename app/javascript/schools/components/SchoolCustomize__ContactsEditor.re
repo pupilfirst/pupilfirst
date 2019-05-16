@@ -144,20 +144,20 @@ let make =
     },
   render: ({state, send}) =>
     <div className="mx-8 pt-8">
-      <h5 className="uppercase text-center border-b border-grey-400 pb-2">
+      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage Contact Details" |> str}
       </h5>
       <SchoolAdmin__DisablingCover disabled={state.updating}>
         <div key="contacts-editor__address-input-group" className="mt-3">
           <label
-            className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+            className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="contacts-editor__address">
             {"Contact Address " |> str}
             <i className="fab fa-markdown text-base" />
           </label>
           <textarea
             maxLength=1000
-            className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
             id="contacts-editor__address"
             placeholder="Leave the address empty to hide the footer section."
             onChange={
@@ -168,14 +168,14 @@ let make =
         </div>
         <div key="contacts-editor__email-address-input-group" className="mt-3">
           <label
-            className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+            className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="contacts-editor__email-address">
             {"Email Address" |> str}
           </label>
           <input
             type_="text"
             maxLength=250
-            className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
             id="contacts-editor__email-address"
             placeholder="Leave the email address empty to hide the footer link."
             onChange={

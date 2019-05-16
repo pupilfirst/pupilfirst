@@ -112,16 +112,16 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"ADD NEW COACHES TO THE COURSE" |> str}
                 </h5>
                 {
@@ -137,7 +137,7 @@ let make =
                     ReasonReact.null
                 }
               </div>
-              <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
+              <div className="flex max-w-2xl w-full px-6 pb-5 mx-auto">
                 <button
                   disabled=saveDisabled
                   onClick={_e => updateCourseCoaches(courseId, state)}

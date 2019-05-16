@@ -47,7 +47,7 @@ let setPayload = (authenticityToken, state) => {
 let booleanButtonClasses = bool =>
   bool ?
     "w-1/2 bg-white text-purple hover:text-purple-600 shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white text-grey-600 hover:text-purple-600 text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-white text-gray-600 hover:text-purple-600 text-sm font-semibold py-2 px-6 focus:outline-none";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
@@ -143,27 +143,27 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className={formClasses(state.saving)}>
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md pt-6 px-6 mx-auto">
+              <div className="max-w-2xl pt-6 px-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-400 pb-2">
+                  className="uppercase text-center border-b border-gray-400 pb-2">
                   {"Target Group Details" |> str}
                 </h5>
                 <div className="mt-6">
                   <label
-                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
                     htmlFor="name">
                     {"Title" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="name"
                     type_="text"
                     placeholder="Type target group name here"
@@ -183,12 +183,12 @@ let make =
                 </div>
                 <div className="mt-6">
                   <label
-                    className="block tracking-wide text-grey-800 text-xs font-semibold"
+                    className="block tracking-wide text-gray-800 text-xs font-semibold"
                     htmlFor="description">
                     {" Description" |> str}
                   </label>
                   <textarea
-                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="description"
                     placeholder="Type target group description"
                     value={state.description}
@@ -206,7 +206,7 @@ let make =
                 </div>
                 <div className="flex items-center mt-6">
                   <label
-                    className="block tracking-wide text-grey-800 text-xs font-semibold mr-3">
+                    className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
                     {"Is this a milestone target group?" |> str}
                   </label>
                   <div
@@ -238,14 +238,14 @@ let make =
                   </div>
                 </div>
               </div>
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <div className="flex w-full justify-between items-center pt-6 border-t">
                   {
                     switch (targetGroup) {
                     | Some(_) =>
                       <div className="flex items-center mr-2">
                         <label
-                          className="block tracking-wide text-grey-800 text-xs font-semibold mr-6">
+                          className="block tracking-wide text-gray-800 text-xs font-semibold mr-6">
                           {"Is this target group archived" |> str}
                         </label>
                         <div

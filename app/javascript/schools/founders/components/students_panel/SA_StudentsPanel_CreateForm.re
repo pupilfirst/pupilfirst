@@ -90,16 +90,16 @@ let make =
         <div className="drawer-right__close absolute">
           <button
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
+            className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
             <i className="material-icons"> {"close" |> str} </i>
           </button>
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-400 pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"Student Details" |> str}
                 </h5>
                 <SA_StudentsPanel_StudentInfoForm
@@ -116,7 +116,7 @@ let make =
                 <div>
                   <div className="mt-6">
                     <div
-                      className="inline-block tracking-wide text-grey-800 text-xs font-semibold">
+                      className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
                       {
                         "These new students will be added to the course:" |> str
                       }
@@ -125,7 +125,7 @@ let make =
                       switch (state.studentsToAdd) {
                       | [] =>
                         <div
-                          className="flex items-center justify-between bg-grey-100 border rounded p-3 italic mt-2">
+                          className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
                           {
                             "This list is empty! Add some students using the form above."
                             |> str
@@ -136,13 +136,13 @@ let make =
                         |> List.map(studentInfo =>
                              <div
                                key={studentInfo |> StudentInfo.email}
-                               className="select-list__item-selected flex items-center justify-between bg-grey-100 border rounded p-3 mt-2">
+                               className="select-list__item-selected flex items-center justify-between bg-gray-100 border rounded p-3 mt-2">
                                <div
                                  className="flex flex flex-wrap pr-3 items-center">
                                  <div className="mr-1">
                                    {studentInfo |> StudentInfo.name |> str}
                                  </div>
-                                 <div className="text-xs text-grey-600">
+                                 <div className="text-xs text-gray-600">
                                    {
                                      " ("
                                      ++ (studentInfo |> StudentInfo.email)
@@ -156,7 +156,7 @@ let make =
                                    |> List.map(tag =>
                                         <div
                                           key=tag
-                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-grey-400">
+                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-gray-400">
                                           {tag |> str}
                                         </div>
                                       )

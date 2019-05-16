@@ -20,7 +20,7 @@ button:disabled, .disabled {
 
 .toggle-label:before {
     content: "";
-    @apply relative block bg-grey;
+    @apply relative block bg-gray-500;
     position: relative;
     top: 3px;
     left: 3px;
@@ -31,7 +31,7 @@ button:disabled, .disabled {
 }
 
 .toggle-label span {
-    @apply absolute w-5 h-5 pin-t pin-l block bg-white shadow-md rounded-full;
+    @apply absolute w-5 h-5 top-0 left-0 block bg-white shadow-md rounded-full;
     transition: all 0.2s ease;
 }
 
@@ -144,7 +144,7 @@ button:disabled, .disabled {
 }
 
 .nav-tab-item--selected:before {
-    @apply absolute w-full pin-t pin-l;
+    @apply absolute w-full top-0 left-0;
     content: '';
     height: 3px;
     background-color: theme('colors.primary');
@@ -282,8 +282,8 @@ button:disabled, .disabled {
 
 .global-sidebar__primary-nav-link--active {
     @apply .bg-gray-200 .text-primary-500;
-    box-shadow: inset 4px 0 0 0 theme('colors.yellow');
-    background-image: linear-gradient(to right, theme('colors.white'), theme('colors.grey-200'));
+    box-shadow: inset 4px 0 0 0 theme('colors.yellow.500');
+    background-image: linear-gradient(to right, theme('colors.white'), theme('colors.gray.200'));
 }
 
 .global-sidebar__primary-nav-link--active:before, .global-sidebar__primary-nav-link--active:after {
@@ -298,7 +298,7 @@ button:disabled, .disabled {
     top: -16px;
     border-radius: 0 0 50%;
     border-width: 0px 20px 0 0;
-    box-shadow: 0px 8px theme(colors.grey-200);
+    box-shadow: 0px 8px theme(colors.gray.200);
     border-color: transparent;
 }
 
@@ -306,7 +306,7 @@ button:disabled, .disabled {
     bottom: -16px;
     border-radius: 0 50% 0;
     border-width: 0 20px 0 0;
-    box-shadow: 0 -8px theme(colors.grey-200);
+    box-shadow: 0 -8px theme(colors.gray.200);
     border-color: transparent;
 }
 
@@ -385,7 +385,7 @@ button:disabled, .disabled {
 }
 
 .hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner::before, .hamburger.is-active .hamburger-inner::after {
-    @apply bg-grey-800;
+    @apply bg-gray-800;
 }
 
 .hamburger-box {
@@ -442,7 +442,7 @@ button:disabled, .disabled {
 
 .resources-upload-tab__link--active {
     background-color: #F2F8FF;
-    @apply border-grey-400 border-l border-t border-r -mb-px rounded-t;
+    @apply border-gray-400 border-l border-t border-r -mb-px rounded-t;
 }
 
 .resources-upload-tab__body {
@@ -472,7 +472,7 @@ button:disabled, .disabled {
 }
 
 .input-file__container:hover .input-file__label {
-    @apply .bg-grey-400;
+    @apply .bg-gray-400;
 }
 
 .toggle-button__group {
@@ -490,7 +490,7 @@ button:disabled, .disabled {
 }
 
 .toggle-button__button {
-    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-grey-600;
+    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-gray-600;
     transition: .3s cubic-bezier(0, 0, 0, 1);
 }
 
@@ -519,7 +519,7 @@ button:disabled, .disabled {
     transform: translateX(-50%);
     width: 4px;
     z-index: -1;
-    @apply bg-grey-400;
+    @apply bg-gray-400;
 }
 
 .target-group__box {

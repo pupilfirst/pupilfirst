@@ -255,7 +255,7 @@ let make =
       ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) =>
-    <div className="flex flex-1 flex-col bg-grey-100 overflow-hidden">
+    <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
       {
         let closeFormCB = () => send(UpdateFormVisible(None));
         let submitFormCB = (teams, students, userProfiles, tags) => {
@@ -314,7 +314,7 @@ let make =
               | Some(n) => n |> string_of_int
               }
             }
-            className="block appearance-none w-full bg-white border border-grey-400 hover:border-grey px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
+            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
             <option value="all"> {"All levels" |> str} </option>
             {
               levels
@@ -336,7 +336,7 @@ let make =
             }
           </select>
           <div
-            className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-800">
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
             <Icon kind=Icon.Down size="3" />
           </div>
         </div>
@@ -360,7 +360,7 @@ let make =
                 />
                 <span
                   id="selected-students"
-                  className="ml-2 text-sm text-grey-600">
+                  className="ml-2 text-sm text-gray-600">
                   {
                     let selectedCount = state.selectedStudents |> List.length;
                     let studentCount =
@@ -381,7 +381,7 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-200er:bg-grey-400 hover:text-grey-800 focus:outline-none text-grey-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-gray-200er:bg-gray-400 hover:text-gray-800 focus:outline-none text-gray-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null
@@ -472,11 +472,11 @@ let make =
             </div>
           </div>
         </div>
-        <div className="flex bg-grey-100 pb-6">
+        <div className="flex bg-gray-100 pb-6">
           <div className="flex flex-col max-w-lg mx-auto w-full">
             {
               state.filterVisible && state.tags |> List.length > 0 ?
-                <div className="px-4 py-3 border-b bg-grey-200 shadow">
+                <div className="px-4 py-3 border-b bg-gray-200 shadow">
                   <div className="flex flex-col pt-2">
                     <div className="mb-1 text-sm"> {"Filters:" |> str} </div>
                     <SA_StudentsPanel_SearchableTagList
@@ -512,7 +512,7 @@ let make =
                          id={team |> Team.name}
                          className={
                            "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                           ++ (isSingleFounder ? " hover:bg-grey-100" : "")
+                           ++ (isSingleFounder ? " hover:bg-gray-100" : "")
                          }>
                          <div className="flex-1 w-3/5">
                            {
@@ -536,11 +536,11 @@ let make =
                                          )
                                       |> UserProfile.name
                                     }
-                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-100">
+                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-gray-100">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
                                         <label
-                                          className="block text-grey leading-tight font-bold px-4 py-5"
+                                          className="block text-gray leading-tight font-bold px-4 py-5"
                                           htmlFor=checkboxId>
                                           <input
                                             className="leading-tight"

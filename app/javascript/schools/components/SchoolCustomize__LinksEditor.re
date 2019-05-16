@@ -86,14 +86,14 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey-400 rounded italic text-grey-600 text-xs cursor-default mt-2 p-3">
+      className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
       {"There are no custom links here. Add some?" |> str}
     </div>
   | links =>
     links
     |> List.map(((id, title, url)) =>
          <div
-           className="flex items-center justify-between bg-grey-100 text-xs text-grey-900 border rounded pl-3 mt-2"
+           className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
            key=id>
            <div className="flex items-center">
              {
@@ -139,12 +139,12 @@ let titleInputVisible = state =>
   };
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t border-grey-400 cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-grey-800 bg-grey-100 hover:bg-grey-200 hover:text-grey-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-grey-100";
+  let classes = "nav-tab-item border-t border-gray-400 cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-100";
   classes
   ++ (
     selected ?
       " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500" :
-      " text-grey-600"
+      " text-gray-600"
   );
 };
 
@@ -316,16 +316,16 @@ let make =
     },
   render: ({state, send}) =>
     <div className="mt-8 mx-8">
-      <h5 className="uppercase text-center border-b border-grey-400 pb-2">
+      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage custom links" |> str}
       </h5>
       <div className="mt-3">
         <label
-          className="inline-block tracking-wide text-grey-800 text-xs font-semibold">
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
           {"Location of Link" |> str}
         </label>
         <div
-          className="flex bg-white border border-t-0 border-grey-400 rounded-t mt-2">
+          className="flex bg-white border border-t-0 border-gray-400 rounded-t mt-2">
           <div
             title="Show header links"
             className={kindClasses(state.kind == HeaderLink)}
@@ -348,7 +348,7 @@ let make =
       </div>
       <div className="p-5 border border-t-0 rounded-b">
         <label
-          className="inline-block tracking-wide text-grey-800 text-xs font-semibold mt-4">
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold mt-4">
           {linksTitle(state.kind)}
         </label>
         {
@@ -367,12 +367,12 @@ let make =
               if (state |> titleInputVisible) {
                 <div className="flex-grow mr-4">
                   <label
-                    className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
                     htmlFor="link-title">
                     {"Title" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="link-title"
                     type_="text"
                     placeholder="A short title for a new link"
@@ -391,12 +391,12 @@ let make =
             }
             <div className="flex-grow">
               <label
-                className="inline-block tracking-wide text-grey-800 text-xs font-semibold"
+                className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
                 htmlFor="link-full-url">
                 {"Full URL" |> str}
               </label>
               <input
-                className="appearance-none block w-full bg-white text-grey-800 border border-grey-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white"
+                className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white"
                 id="link-full-url"
                 type_="text"
                 placeholder="Full URL, staring with https://"

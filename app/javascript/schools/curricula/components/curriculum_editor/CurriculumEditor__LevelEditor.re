@@ -144,6 +144,7 @@ let make =
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
+            title="close"
             onClick={_ => hideEditorActionCB()}
             className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
             <i className="fal fa-times text-xl" />
@@ -234,7 +235,7 @@ let make =
                             createLevel(authenticityToken, course, state)
                         )
                         className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-                        {"Create Level" |> str}
+                        {"Create New Level" |> str}
                       </button>
                     }
                   }

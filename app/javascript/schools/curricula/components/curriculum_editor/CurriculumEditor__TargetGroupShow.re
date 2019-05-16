@@ -41,9 +41,9 @@ let make =
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         {milestone ? <div> {"Milestone" |> str} </div> : ReasonReact.null}
         <div className="target-group__title">
-          <h2> {targetGroup |> TargetGroup.name |> str} </h2>
+          <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
-        <div className="target-group__description pt-2">
+        <div className="target-group__description pt-1">
           <p>
             {
               (
@@ -79,10 +79,10 @@ let make =
               _event =>
                 showTargetEditorCB(targetGroup |> TargetGroup.id, None)
             }>
-            <Icon kind=Icon.PlusCircle size="6" />
-            <h5 className="font-semibold ml-2">
+            <i className="fal fa-plus-circle text-lg" />
+            <p className="font-semibold text-sm ml-2">
               {"Create a target" |> str}
-            </h5>
+            </p>
           </div>
       }
     </div>;

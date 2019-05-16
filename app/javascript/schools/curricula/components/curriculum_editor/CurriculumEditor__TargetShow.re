@@ -18,6 +18,8 @@ let make = (~target, ~targetGroup, ~showTargetEditorCB, _children) => {
       onClick={
         _e => showTargetEditorCB(targetGroup |> TargetGroup.id, Some(target))
       }>
-      <h5 className="font-semibold"> {target |> Target.title |> str} </h5>
+      <p className="font-semibold text-sm">
+        {target |> Target.title |> str}
+      </p>
     </div>,
 };

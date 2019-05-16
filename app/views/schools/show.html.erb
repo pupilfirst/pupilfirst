@@ -6,13 +6,13 @@
 <% @presenter = Schools::ShowPresenter.new(self) %>
 <div class="flex-1 flex flex-col bg-gray-200 overflow-y-auto">
     <div class="w-full p-12">
-        <div class="max-w-2xl mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
+        <div class="max-w-3xl mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
             <div class="bg-gradient-secondary-to-secondary-600-120 bg-cover h-24 p-5">
 
             </div>
             <div class="flex px-5 pb-5 bg-white justify-between">
                 <div class="flex">
-                  <div class="school-overview__logo-container flex items-center bg-white p-3 border rounded-lg -mt-16">
+                  <div class="school-overview__logo-container flex items-center bg-white p-3 border rounded-lg -mt-16 overflow-hidden">
                     <%= image_tag(@presenter.school_logo_path, alt: current_school.name) %>
                   </div>
                   <div class="school-overview__school-name pl-3 p-3">
@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div class="max-w-2xl w-full mx-auto my-8">
+    <div class="max-w-3xl w-full mx-auto my-8">
         <h2 class="font-semibold mb-4 pb-2 border-b">Courses</h2>
         <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
             <% @presenter.course_details.each_with_index do |course, index| %>

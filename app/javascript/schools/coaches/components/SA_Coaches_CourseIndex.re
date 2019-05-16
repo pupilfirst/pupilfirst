@@ -160,12 +160,10 @@ let make =
                     }
                   }
                   className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-gray-200 hover:bg-gray-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
-                  <i className="material-icons">
-                    {"add_circle_outline" |> str}
-                  </i>
-                  <h4 className="font-semibold ml-2">
+                  <i className="far fa-user-plus text-lg" />
+                  <h5 className="font-semibold ml-2">
                     {"Assign Coaches to Course" |> str}
-                  </h4>
+                  </h5>
                 </button>
               </div>
           }

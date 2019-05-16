@@ -10,12 +10,12 @@
   <footer>
     <% if presenter.contact_email.present? %>
       <div class="container mx-auto px-4 text-center">
-        <%= mail_to presenter.contact_email, 'Contact Support', class:'text-purple-600 hover:text-purple-800 no-underline' %>
+        <%= mail_to presenter.contact_email, 'Contact Support', class:'text-primary-500 hover:text-primary-600' %>
       </div>
     <% end %>
 
     <div class="container mx-auto p-4 text-center flex justify-center">
-      <%= link_to ('/'), class:'text-purple-600 font-semibold text-xl no-underline' do %>
+      <%= link_to ('/'), class:'text-primary-500 font-semibold text-xl' do %>
         <% if presenter.school_has_icon? %>
           <%= image_tag(presenter.school_icon_url, class: 'w-12') %>
         <% else %>

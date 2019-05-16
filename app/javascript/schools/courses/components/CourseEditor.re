@@ -147,7 +147,7 @@ let make = (~authenticityToken, _children) => {
                            ++ (course |> Course.id |> string_of_int)
                            ++ "/students"
                          }
-                         className="hover:bg-gray-200 items-center p-4 flex cursor-pointer no-underline">
+                         className="text-primary-500 hover:bg-gray-200 items-center p-4 flex cursor-pointer">
                          {"view" |> str}
                        </a>
                      </div>

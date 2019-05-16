@@ -43,7 +43,7 @@ let make = (~courses, ~currentCourse, _children) => {
                    )
                 |> List.map(course =>
                      <a
-                       className="no-underline block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap"
+                       className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap"
                        key={course |> Course.id |> string_of_int}
                        href={course |> Course.path}>
                        {course |> Course.name |> str}

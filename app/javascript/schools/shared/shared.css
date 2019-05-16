@@ -272,7 +272,7 @@ button:disabled, .disabled {
 }
 
 .global-sidebar__primary-nav-link {
-    @apply flex text-white h-13 text-sm font-semibold no-underline items-center;
+    @apply flex text-white h-13 text-sm font-semibold items-center;
     position: relative;
 }
 

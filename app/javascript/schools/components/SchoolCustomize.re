@@ -69,7 +69,7 @@ let sitemap = links =>
   switch (links) {
   | [] =>
     <div
-      className="border border-gray rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"You can customize links in the footer." |> str}
     </div>
   | links =>
@@ -91,7 +91,7 @@ let socialLinks = links =>
   switch (links) {
   | [] =>
     <div
-      className="border border-gray rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"Add social media links?" |> str}
     </div>
   | links =>
@@ -116,7 +116,7 @@ let address = a =>
     />
   | None =>
     <div
-      className="border border-gray rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"Add an address?" |> str}
     </div>
   };
@@ -130,7 +130,7 @@ let emailAddress = email =>
     </div>
   | None =>
     <div
-      className="border border-gray rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-4 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-4 py-2 px-4">
       {"Add a contact email?" |> str}
     </div>
   };

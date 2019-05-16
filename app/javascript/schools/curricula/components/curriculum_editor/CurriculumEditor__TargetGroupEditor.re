@@ -46,7 +46,7 @@ let setPayload = (authenticityToken, state) => {
 
 let booleanButtonClasses = bool =>
   bool ?
-    "w-1/2 bg-white text-purple hover:text-purple-600 shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
+    "w-1/2 bg-white text-purple-500 hover:text-purple-600 shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
     "w-1/2 bg-white text-gray-600 hover:text-purple-600 text-sm font-semibold py-2 px-6 focus:outline-none";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
@@ -137,8 +137,7 @@ let make =
       Api.update(url, payload, handleResponseCB, handleErrorCB);
     };
     <div>
-      <div className="blanket">
-      </div>
+      <div className="blanket" />
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
@@ -170,7 +169,10 @@ let make =
                     value={state.name}
                     onChange={
                       event =>
-                        updateName(send, ReactEvent.Form.target(event)##value)
+                        updateName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                     }
                   />
                   {
@@ -239,7 +241,8 @@ let make =
                 </div>
               </div>
               <div className="max-w-2xl p-6 mx-auto">
-                <div className="flex w-full justify-between items-center pt-6 border-t">
+                <div
+                  className="flex w-full justify-between items-center pt-6 border-t">
                   {
                     switch (targetGroup) {
                     | Some(_) =>
@@ -286,7 +289,9 @@ let make =
                       <div className="w-auto">
                         <button
                           disabled={saveDisabled(state)}
-                          onClick=(_e => updateTargetGroup(id |> string_of_int))
+                          onClick=(
+                            _e => updateTargetGroup(id |> string_of_int)
+                          )
                           className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none">
                           {"Update Target Group" |> str}
                         </button>

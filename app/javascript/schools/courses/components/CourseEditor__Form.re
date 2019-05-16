@@ -395,7 +395,7 @@ let make =
                             )
                         )
                         value={state.maxGrade |> string_of_int}
-                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray px-3 py-2 leading-tight rounded-none focus:outline-none">
+                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 leading-tight rounded-none focus:outline-none">
                         {
                           possibleGradeValues
                           |> List.filter(g => g != 1)
@@ -436,7 +436,7 @@ let make =
                             )
                         )
                         value={state.passGrade |> string_of_int}
-                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray px-3 py-2 rounded-none leading-tight focus:outline-none">
+                        className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 rounded-none leading-tight focus:outline-none">
                         {
                           possibleGradeValues
                           |> List.filter(g => g < state.maxGrade)

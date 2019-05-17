@@ -33,6 +33,12 @@ module Schools
 
     def inactive_students
       @course = authorize(courses.find(params[:course_id]), policy_class: Schools::CoursePolicy)
+      inactive_teams = if params[:search].present?
+        ::Courses::InactiveTeamsSearchService.new(@course).find_teams(params[:search].to_s)
+      else
+        Startup.joins(:course).inactive.where(courses: { id: @course }).to_a
+      end
+      @teams = Kaminari.paginate_array(inactive_teams).page(params[:page]).per(20)
       render layout: 'course'
     end
 
@@ -48,6 +54,17 @@ module Schools
         render json: { teams: presenter.teams, students: presenter.students, userProfiles: presenter.user_profiles, error: nil }
       else
         render json: { error: form.errors.full_messages.join(', ') }
+      end
+    end
+
+    # POST /school/courses/:course_id/mark_team_active?team_ids[]=
+    def mark_team_active
+      @course = authorize(courses.find(params[:course_id]), policy_class: Schools::CoursePolicy)
+      Startup.transaction do
+        Startup.where(id: params[:team_ids]).each do |startup|
+          startup.update!(access_ends_at: nil)
+        end
+        redirect_to school_course_inactive_students_path(@course)
       end
     end
   end

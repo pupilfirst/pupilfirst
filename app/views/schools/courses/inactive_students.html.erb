@@ -3,7 +3,11 @@
   <%= stylesheet_pack_tag 'schools/courses/inactive_students_index', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
-<% @presenter = Schools::Founders::IndexPresenter.new(self, @course, inactive: true) %>
-<div id="sa-students-panel" class="flex flex-1 h-screen"
-     data-props="<%= @presenter.react_props.to_json %>"></div>
-
+<% @presenter = Schools::Courses::InactiveStudentsPresenter.new(self, @teams, @course) %>
+<div class="flex flex-col">
+  <div id="sa-students-panel" class="flex flex-1 h-screen"
+       data-props="<%= @presenter.props_to_json %>"></div>
+<!--  <div class="w-full flex mx-auto">-->
+    <%#= paginate @teams %>
+<!--  </div>-->
+</div>

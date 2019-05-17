@@ -4,7 +4,7 @@ module Courses
       @course = course
     end
 
-    def assign(faculty)
+    def teams(faculty)
       raise 'Faculty must in same school as course' if faculty.school != @course.school
 
       return if faculty.courses.where(id: @course).exists?

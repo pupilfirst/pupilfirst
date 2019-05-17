@@ -20,6 +20,7 @@ module Schools
     alias students? show?
     alias inactive_students? show?
     alias create_students? delete_coach_enrollment?
+    alias mark_team_active? delete_coach_enrollment?
 
     class Scope < Scope
       def resolve

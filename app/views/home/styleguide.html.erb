@@ -1,8 +1,11 @@
-<% presenter = ::Layouts::SchoolPresenter.new(self) %>
 <% content_for(:head) do %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'HomeStyleguidePack', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'HomeStyleguidePack', nonce: true %>
+<% end %>
 
 <main class="min-h-screen flex flex-col">
   <section class="w-full flex-grow mx-auto">
@@ -271,7 +274,7 @@
               <span class="inline-block bg-red-500 text-red-100 rounded px-2 pb-1 ml-3 truncate">
                 <span class="text-xs font-semibold text-truncate">Error</span>
               </span>
-               <span class="inline-block bg-blue text-blue-100 rounded px-2 pb-1 ml-3 truncate">
+              <span class="inline-block bg-blue text-blue-100 rounded px-2 pb-1 ml-3 truncate">
                 <span class="text-xs font-semibold">Info</span>
               </span>
               <span class="inline-block bg-orange text-orange-100 rounded px-2 pb-1 ml-3 truncate">
@@ -303,7 +306,7 @@
                   <i class="fal fa-times mr-2"></i>
                 </span>
               </span>
-               <span class="inline-flex items-center justify-center bg-blue text-blue-100 rounded ml-3 truncate">
+              <span class="inline-flex items-center justify-center bg-blue text-blue-100 rounded ml-3 truncate">
                 <span class="text-xs font-semibold px-2 py-1">Info</span>
                 <span>
                   <i class="fal fa-times mr-2"></i>
@@ -319,6 +322,12 @@
           </div>
         </div>
       </div>
+      <div class="bg-grey-lighter pt-6 px-2 pb-2 mt-6 shadow rounded-lg">
+        <h3>Markdown Syntax Highlighting</h3>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <div id="styleguide__markdown-syntax-highlighting-root"></div>
+        </div>
+      </div>
     </div>
   </section>
   <footer class="bg-primary-900 w-full text-center border-t border-gray-500 p-4">
@@ -327,17 +336,17 @@
       <ul class="footer__social-list flex">
         <li>
           <a class="footer__social-list__icon inline-block opacity-75" href="#">
-            <%= image_tag 'home/pupilfirst/facebook-social-icon.svg', class:'w-6', alt: 'PupilFirst' %>
+            <%= image_tag 'home/pupilfirst/facebook-social-icon.svg', class: 'w-6', alt: 'PupilFirst' %>
           </a>
         </li>
         <li class="ml-4">
           <a class="footer__social-list__icon inline-block opacity-75" href="#">
-            <%= image_tag 'home/pupilfirst/instagram-social-icon.svg', class:'w-6', alt: 'PupilFirst' %>
+            <%= image_tag 'home/pupilfirst/instagram-social-icon.svg', class: 'w-6', alt: 'PupilFirst' %>
           </a>
         </li>
         <li class="ml-4">
           <a class="footer__social-list__icon inline-block opacity-75" href="#">
-            <%= image_tag 'home/pupilfirst/slack-social-icon.svg', class:'w-6', alt: 'PupilFirst' %>
+            <%= image_tag 'home/pupilfirst/slack-social-icon.svg', class: 'w-6', alt: 'PupilFirst' %>
           </a>
         </li>
       </ul>

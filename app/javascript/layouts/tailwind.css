@@ -1,7 +1,6 @@
-@import "tailwindcss/preflight";
+@import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
 /* Custom utilities */
 
 .max-w-fc {
@@ -13,7 +12,35 @@
 body {
   font-family: "Open Sans", sans-serif;
   color: #3a3f52;
-  @apply .antialiased;
+  @apply antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: 0.875rem;
 }
 
 /* Button */
@@ -29,71 +56,71 @@ body {
 /* Button Styles */
 
 .btn-default {
-  @apply bg-grey-lighter text-grey-dark;
+  @apply bg-gray-200 text-gray-600;
 }
 
 .btn-default:hover {
-  @apply bg-primary-lightest text-primary-light;
+  @apply bg-primary-100 text-primary-400;
 }
 
 .btn-default:focus {
-  @apply bg-primary-lightest text-primary;
+  @apply bg-primary-100 text-primary-500;
 }
 
 .btn-primary {
-  @apply bg-primary text-white shadow;
+  @apply bg-primary-500 text-white shadow;
 }
 
 .btn-primary:hover {
-  @apply bg-primary-dark;
+  @apply bg-primary-600;
 }
 
 .btn-primary:focus {
-  @apply bg-primary-darker;
+  @apply bg-primary-800;
 }
 
 .btn-secondary {
-  @apply bg-secondary text-white;
+  @apply bg-secondary-500 text-white;
 }
 
 .btn-secondary:hover {
-  @apply bg-secondary-dark;
+  @apply bg-secondary-600;
 }
 
 .btn-secondary:focus {
-  @apply bg-secondary-darker;
+  @apply bg-secondary-800;
 }
 
 .btn-success {
-  @apply bg-green text-white;
+  @apply bg-green-500 text-white;
 }
 
 .btn-success:hover {
-  @apply bg-green-dark;
+  @apply bg-green-600;
 }
 
 .btn-success:focus {
-  @apply bg-green-darker;
+  @apply bg-green-800;
 }
 
 .btn-danger {
-  @apply bg-red text-white;
+  @apply bg-red-500 text-white;
 }
 
 .btn-danger:hover {
-  @apply bg-red-dark;
+  @apply bg-red-600;
 }
 
 .btn-danger:focus {
-  @apply bg-red-darker;
+  @apply bg-red-800;
 }
 
 button:disabled, .disabled {
-  @apply cursor-not-allowed bg-grey-light text-grey-darker shadow-none;
+  @apply cursor-not-allowed bg-gray-400 text-gray-800 shadow-none;
 }
 
 button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
-  @apply bg-grey-light text-grey-darker;
+  @apply bg-gray-400 text-gray-800;
 }
 
 .btn-small {
@@ -111,18 +138,10 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 /* Gradients */
 
 @responsive {
-  .bg-gradient-primary-dark-to-primary-darker-to-bottom {
-    background-image: linear-gradient(
-      to bottom,
-      config("colors.primary-dark"),
-      config("colors.primary-darker")
-    );
+  .bg-gradient-primary-600-to-primary-800-to-bottom {
+    background-image: linear-gradient( to bottom, theme("colors.primary.600"), theme("colors.primary.800"));
   }
-  .bg-gradient-secondary-to-secondary-dark-120 {
-    background-image: linear-gradient(
-      120deg,
-      config("colors.secondary"),
-      config("colors.secondary-dark")
-    );
+  .bg-gradient-secondary-to-secondary-600-120 {
+    background-image: linear-gradient( 120deg, theme("colors.secondary.500"), theme("colors.secondary.600"));
   }
 }

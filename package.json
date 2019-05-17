@@ -7,6 +7,7 @@
     "@glennsl/bs-json": "^3.0.0",
     "@rails/ujs": "^6.0.0-alpha",
     "@rails/webpacker": "^4.0.2",
+    "babel-plugin-prismjs": "^1.0.2",
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-preset-react": "^6.24.1",
@@ -19,9 +20,9 @@
     "markdown-it": "^8.4.2",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "material-design-icons-iconfont": "^4.0.5",
     "pnotify": "^4.0.0",
     "postcss-scss": "^2.0.0",
+    "prismjs": "^1.16.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -38,7 +39,7 @@
     "prettier": "1.9.1",
     "reason-react": ">=0.7.0",
     "sass-loader": "^7.0.1",
-    "tailwindcss": "^0.7.2",
+    "tailwindcss": "^1.0.1",
     "webpack-dev-server": "^3.3.1"
   },
   "scripts": {

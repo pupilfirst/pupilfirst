@@ -7,7 +7,7 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
     <div class="global-sidebar hidden md:flex">
-      <div class="bg-gradient-primary-dark-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-lighter flex flex-col justify-between">
+      <div class="bg-gradient-primary-600-to-primary-800-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--shrinked text-purple-200 flex flex-col justify-between">
         <div>
           <div class="global-sidebar__header mx-auto">
             <div class="global-sidebar__school-logo-container flex items-center justify-center w-16 h-16">
@@ -16,7 +16,7 @@
               <% end %>
             </div>
           </div>
-          <ul class="list-reset">
+          <ul>
             <li>
               <%= link_to school_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
                 <i class="fas fa-eye fa-fw text-xl"></i>
@@ -41,33 +41,33 @@
             </li>
           </ul>
         </div>
-        <ul class="list-reset">
+        <ul>
           <% if presenter.founder_profile?(@course) %>
             <li>
-              <%= link_to student_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
+              <%= link_to student_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold items-center justify-center' do %>
                 <i class="fas fa-user-graduate fa-fw text-sm"></i>
               <% end %>
             </li>
           <% end %>
           <% if presenter.coach_profile?(@course) %>
             <li>
-              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
+              <%= link_to course_coach_dashboard_path(@course), class: 'flex text-white py-4 hover:bg-primary-900 font-semibold items-center justify-center' do %>
                 <i class="fas fa-clipboard-check fa-fw text-sm"></i>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-4 hover:bg-primary-darkest font-semibold no-underline items-center justify-center' do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold items-center justify-center' do %>
               <i class="fas fa-sign-out fa-fw text-sm"></i>
             <% end %>
           </li>
         </ul>
       </div>
 
-      <div class="bg-grey-lighter global-sidebar__secondary-nav w-full border-r border-grey-light pb-6 overflow-y-auto">
-        <ul class="list-reset p-4">
-          <% default_classes = 'flex text-indigo-darker text-sm py-3 px-4 hover:bg-grey-light focus:bg-grey-light font-semibold rounded no-underline items-center my-1' %>
-          <% selected_classes = ' bg-grey-light' %>
+      <div class="bg-gray-200 global-sidebar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+        <ul class="p-4">
+          <% default_classes = 'flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1' %>
+          <% selected_classes = ' bg-gray-400' %>
           <li>
             <div id="layouts-courses" data-props="<%= presenter.react_props(@course).to_json %>"></div>
           </li>

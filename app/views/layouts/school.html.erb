@@ -6,7 +6,7 @@
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
     <div class="flex global-sidebar">
-      <div class="bg-gradient-primary-dark-to-primary-darker-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex flex-col justify-between overflow-y-auto">
+      <div class="bg-gradient-primary-600-to-primary-800-to-bottom global-sidebar__primary-nav global-sidebar__primary-nav--expanded flex flex-col justify-between overflow-y-auto">
         <div>
           <div class="global-sidebar__header px-5 py-2 relative z-20 border-r border-b bg-white flex h-16 items-center">
             <div class="global-sidebar__school-logo-container flex items-center bg-white h-12 w-2/5 rounded">
@@ -18,7 +18,7 @@
 <!--                          </div>-->
             </div>
           </div>
-          <ul class="list-reset">
+          <ul>
             <li>
               <%= link_to school_path, class: presenter.nav_link_classes(school_path) do %>
                 <i class="fas fa-eye fa-fw text-xl mr-2"></i>
@@ -42,18 +42,18 @@
                 <i class="fas fa-books fa-fw text-xl mr-2"></i>
                 <span>Courses</span>
               <% end %>
-              <ul class="list-reset pr-4 pb-4 ml-10 mt-1">
+              <ul class="pr-4 pb-4 ml-10 mt-1">
                 <% @courses.each do |course| %>
-                  <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-darker rounded font-semibold text-xs no-underline' %></li>
+                  <li><%= link_to course.name, school_course_students_path(course), class: 'block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs' %></li>
                 <% end %>
               </ul>
             </li>
           </ul>
         </div>
-        <ul class="list-reset">
+        <ul>
           <% if presenter.founder_profile? %>
             <li>
-              <%= link_to student_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+              <%= link_to student_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center' do %>
                 <i class="fas fa-user-graduate fa-fw"></i>
                 <span class="ml-2">Student Dashboard</span>
               <% end %>
@@ -61,14 +61,14 @@
           <% end %>
           <% if presenter.coach_profile? %>
             <li>
-              <%= link_to presenter.coach_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+              <%= link_to presenter.coach_dashboard_path, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center' do %>
                 <i class="fas fa-clipboard-check fa-fw"></i>
                 <span class="ml-2">Review Submissions</span>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-darkest font-semibold no-underline items-center' do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center' do %>
               <i class="fas fa-sign-out fa-fw"></i>
               <span class="ml-2">Log Out</span>
             <% end %>

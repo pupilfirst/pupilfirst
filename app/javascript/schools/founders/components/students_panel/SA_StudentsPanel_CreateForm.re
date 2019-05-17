@@ -89,17 +89,18 @@ let make =
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
+            title="close"
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
+            className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            <i className="fal fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"Student Details" |> str}
                 </h5>
                 <SA_StudentsPanel_StudentInfoForm
@@ -116,7 +117,7 @@ let make =
                 <div>
                   <div className="mt-6">
                     <div
-                      className="inline-block tracking-wide text-grey-darker text-xs font-semibold">
+                      className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
                       {
                         "These new students will be added to the course:" |> str
                       }
@@ -125,7 +126,7 @@ let make =
                       switch (state.studentsToAdd) {
                       | [] =>
                         <div
-                          className="flex items-center justify-between bg-grey-lightest border rounded p-3 italic mt-2">
+                          className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
                           {
                             "This list is empty! Add some students using the form above."
                             |> str
@@ -136,13 +137,13 @@ let make =
                         |> List.map(studentInfo =>
                              <div
                                key={studentInfo |> StudentInfo.email}
-                               className="select-list__item-selected flex items-center justify-between bg-grey-lightest border rounded p-3 mt-2">
+                               className="select-list__item-selected flex items-center justify-between bg-gray-100 border rounded p-3 mt-2">
                                <div
                                  className="flex flex flex-wrap pr-3 items-center">
                                  <div className="mr-1">
                                    {studentInfo |> StudentInfo.name |> str}
                                  </div>
-                                 <div className="text-xs text-grey-dark">
+                                 <div className="text-xs text-gray-600">
                                    {
                                      " ("
                                      ++ (studentInfo |> StudentInfo.email)
@@ -156,7 +157,7 @@ let make =
                                    |> List.map(tag =>
                                         <div
                                           key=tag
-                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-grey-light">
+                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-gray-400">
                                           {tag |> str}
                                         </div>
                                       )
@@ -192,7 +193,7 @@ let make =
                         )
                     }
                     className={
-                      "w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
+                      "w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
                       ++ (
                         formInvalid(state) ?
                           " opacity-50 cursor-not-allowed" : ""

@@ -191,16 +191,16 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
         type_="hidden"
         value=authenticityToken
       />
-      <h5 className="uppercase text-center border-b border-grey-light pb-2">
+      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage Images" |> str}
       </h5>
       <SchoolAdmin__DisablingCover disabled={state.updating}>
         <div
-          key="sc-images-editor__logo-on-light-bg-input-group"
+          key="sc-images-editor__logo-on-400-bg-input-group"
           className="mt-4">
           <label
-            className="block tracking-wide text-grey-darker text-xs font-semibold"
-            htmlFor="sc-images-editor__logo-on-light-bg-input">
+            className="block tracking-wide text-gray-800 text-xs font-semibold"
+            htmlFor="sc-images-editor__logo-on-400-bg-input">
             {"Logo on a light background" |> str}
           </label>
           <div
@@ -211,14 +211,14 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               name="logo_on_light_bg"
               type_="file"
               accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__logo-on-light-bg-input"
+              id="sc-images-editor__logo-on-400-bg-input"
               required=false
               multiple=false
               onChange={updateLogoOnLightBg(send)}
             />
             <label
               className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-              htmlFor="sc-images-editor__logo-on-light-bg-input">
+              htmlFor="sc-images-editor__logo-on-400-bg-input">
               <i className="fas fa-upload" />
               <span className="ml-2 truncate">
                 {
@@ -236,10 +236,10 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
           />
         </div>
         <div
-          key="sc-images-editor__logo-on-dark-bg-input-group" className="mt-4">
+          key="sc-images-editor__logo-on-600-bg-input-group" className="mt-4">
           <label
-            className="block tracking-wide text-grey-darker text-xs font-semibold"
-            htmlFor="sc-images-editor__logo-on-dark-bg-input">
+            className="block tracking-wide text-gray-800 text-xs font-semibold"
+            htmlFor="sc-images-editor__logo-on-600-bg-input">
             {"Logo on a dark background" |> str}
           </label>
           <div
@@ -250,14 +250,14 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               name="logo_on_dark_bg"
               type_="file"
               accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__logo-on-dark-bg-input"
+              id="sc-images-editor__logo-on-600-bg-input"
               required=false
               multiple=false
               onChange={updateLogoOnDarkBg(send)}
             />
             <label
               className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-              htmlFor="sc-images-editor__logo-on-dark-bg-input">
+              htmlFor="sc-images-editor__logo-on-600-bg-input">
               <i className="fas fa-upload" />
               <span className="ml-2 truncate">
                 {
@@ -276,7 +276,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
         </div>
         <div key="sc-images-editor__icon-input-group" className="mt-4">
           <label
-            className="block tracking-wide text-grey-darker text-xs font-semibold"
+            className="block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="sc-images-editor__icon-input">
             {"Icon" |> str}
           </label>
@@ -312,7 +312,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
             type_="submit"
             key="sc-images-editor__update-button"
             disabled={updateButtonDisabled(state)}
-            className="btn btn-primary btn-large mt-6">
+            className="btn btn-primary-500 btn-large mt-6">
             {updateButtonText(state.updating) |> str}
           </button>
         </div>

@@ -28,7 +28,7 @@ def fizzbuzz(num)
   a
 end
 
-(1.100).each do |i|
+(1..100).each do |i|
   puts fizzbuzz(i)
 end
 ```|};
@@ -36,20 +36,18 @@ end
 let jsCode = {|```js
 // A sample fizzbuzz implementation.
 const fizzbuzz = (num) => {
-  if (i % 3 === 0){
-    return('fizz');
-  }
-  else if (i % 5 === 0){
-    return('buzz');
-  }
-  else if (i % (5 * 3) === 0){
+  if (i % (15) === 0){
     return('fizzbuzz');
+  } else if (i % 3 === 0){
+    return('fizz');
+  } else if (i % 5 === 0){
+    return('buzz');
   } else {
     return(i);
   }
 };
 
-for(var i = 1; i <= num; i++) {
+for(var i = 1; i <= 100; i++) {
   console.log(fizzbuzz(i));
 }
 ```|};

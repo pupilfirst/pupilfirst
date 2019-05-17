@@ -1,7 +1,11 @@
 import Prism from "prismjs";
 
-// Prevent Prism from highlighting all eligible code blocks in the DOM upon page load - its default behavior.
-// There is one other way to disable this behavior - to set Prism.manual to false before
+/*
+ * Prevent Prism from highlighting all eligible code blocks in the DOM upon
+ * page load - its default behavior. It sets up an event listener as soon as
+ * its lib code is evaluated, so the only option at this point is to remove
+ * the listener.
+ */
 document.removeEventListener("DOMContentLoaded", Prism.highlightAll);
 
 // Use the custom-class plugin to instruct Prism to prefix all generated classes with 'prism-'.

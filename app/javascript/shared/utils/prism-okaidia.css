@@ -1,4 +1,8 @@
 /**
+ * This is a namespaced version of the original okaidia theme. All of
+ * the span styling CSS classes have been prefixed with "prism-" to
+ * avoid conflicts at the root level.
+ *
  * okaidia theme for JavaScript, CSS and HTML
  * Loosely based on Monokai textmate theme by http://www.monokai.nl/
  * @author ocodia

@@ -19,7 +19,8 @@ const allowedCodeClasses = [
   "language-svg", // markup
   "language-mathml" // markup
 ];
-const allowedPreClasses = allowedCodeClasses.concat("line-numbers");
+
+const allowedPreClasses = ["line-numbers"];
 
 const sanitize = dirtyHtml => {
   return sanitizeHtml(dirtyHtml, {

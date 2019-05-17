@@ -5,7 +5,7 @@ let str = React.string;
 let randomId = () => {
   let randomComponent =
     Js.Math.random() |> Js.Float.toString |> Js.String.substr(~from=2);
-  "markdown-block" ++ randomComponent;
+  "markdown-block-" ++ randomComponent;
 };
 
 [@react.component]

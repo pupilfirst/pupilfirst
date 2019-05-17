@@ -56,12 +56,8 @@ Rails.application.config.content_security_policy do |policy|
     { frame: 'https://www.youtube.com' }
   end
 
-  def jsdelivr_csp
-    { style: 'https://cdn.jsdelivr.net/npm/prismjs@1.16.0/' }
-  end
-
   def style_sources
-    ['fonts.googleapis.com', 'https://assets.pupilfirst.com', jsdelivr_csp[:style]]
+    ['fonts.googleapis.com', 'https://assets.pupilfirst.com']
   end
 
   def connect_sources

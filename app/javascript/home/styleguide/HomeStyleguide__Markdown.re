@@ -3,7 +3,6 @@
 let str = React.string;
 
 let reasonCode = {|
-<span class="prism-token prism-keyword">def</span>
 ```reason
 /* A sample fizzbuzz implementation. */
 let fizzbuzz = (num) =>
@@ -34,7 +33,7 @@ end
 end
 ```|};
 
-let jsCode = {|```javascript
+let jsCode = {|```js
 // A sample fizzbuzz implementation.
 const fizzbuzz = (num) => {
   if (i % 3 === 0){
@@ -55,36 +54,123 @@ for(var i = 1; i <= num; i++) {
 }
 ```|};
 
+let htmlCode = {|```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fizzbuzz Demo</title>
+  </head>
+
+  <body>
+    <!-- Display for a JS implementation -->
+  </body>
+</html>
+|};
+
+let scssCode = {|```scss
+/* Fizzbuzz with SCSS! */
+
+@import "compass/css3";
+
+ul {
+  list-style-type:none;
+}
+
+li:nth-child(3n), li:nth-child(5n){
+  font-size:0px;
+}
+
+li:nth-child(3n):before{
+  font-size:16px;
+  content:"Fizz";
+}
+
+li:nth-child(5n):after{
+  font-size:16px;
+  content:"Buzz";
+}
+|};
+
+let cssCode = {|```css
+/* Fizzbuzz with CSS! */
+
+.fizz-buzz {
+  counter-reset: fizzbuzz;
+}
+
+.fizz-buzz > div::before {
+  content: counter(fizzbuzz);
+  counter-increment: fizzbuzz;
+}
+
+.fizz-buzz > div:nth-of-type(3n+3)::before {
+  content: "Fizz";
+}
+
+.fizz-buzz > div:nth-of-type(5n+5)::before {
+  content: "Buzz";
+}
+
+.fizz-buzz > div:nth-of-type(3n+3):nth-of-type(5n+5)::before {
+  content: "FizzBuzz";
+}
+|};
+
+type language =
+  | ReasonML
+  | Ruby
+  | Javascript
+  | Html
+  | Css
+  | Scss;
+
+let renderedMarkdown = language => {
+  let (title, markdown) =
+    switch (language) {
+    | ReasonML => ("ReasonML", reasonCode)
+    | Ruby => ("Ruby", rubyCode)
+    | Javascript => ("Javascript", jsCode)
+    | Html => ("HTML", htmlCode)
+    | Css => ("CSS", cssCode)
+    | Scss => ("SCSS", scssCode)
+    };
+
+  <div className="mt-4">
+    <p className="text-xs font-semibold"> {title |> str} </p>
+    <MarkdownBlock markdown className="mt-2" />
+  </div>;
+};
+
+let handleChange = (setLanguage, event) => {
+  let language =
+    switch (ReactEvent.Form.target(event)##value) {
+    | "reasonml" => ReasonML
+    | "ruby" => Ruby
+    | "javascript" => Javascript
+    | "html" => Html
+    | "css" => Css
+    | "scss" => Scss
+    | _ => ReasonML
+    };
+
+  setLanguage(_ => language);
+};
+
 [@react.component]
 let make = () => {
-  let (show, setShow) = React.useState(() => true);
+  let (language, setLanguage) = React.useState(() => ReasonML);
 
   <div>
-    <button onClick={_event => setShow(s => !s)}>
-      {"Toggle code" |> str}
-    </button>
-    {
-      if (show) {
-        <div>
-          <p className="text-xs font-semibold"> {"ReasonML" |> str} </p>
-          <div
-            className="mt-2"
-            dangerouslySetInnerHTML={"__html": reasonCode |> Markdown.parse}
-          />
-          <p className="mt-4 text-xs font-semibold"> {"Ruby" |> str} </p>
-          <div
-            className="mt-2"
-            dangerouslySetInnerHTML={"__html": rubyCode |> Markdown.parse}
-          />
-          <p className="mt-4 text-xs font-semibold"> {"Javascript" |> str} </p>
-          <div
-            className="mt-2"
-            dangerouslySetInnerHTML={"__html": jsCode |> Markdown.parse}
-          />
-        </div>;
-      } else {
-        React.null;
-      }
-    }
+    <span> {"Select a language to preview:" |> str} </span>
+    <select className="ml-2" onChange={handleChange(setLanguage)}>
+      <option value="reasonml"> {"ReasonML" |> str} </option>
+      <option value="ruby"> {"Ruby" |> str} </option>
+      <option value="javascript"> {"Javascript" |> str} </option>
+      <option value="html"> {"HTML" |> str} </option>
+      <option value="css"> {"CSS" |> str} </option>
+      <option value="scss"> {"SCSS" |> str} </option>
+    </select>
+    {renderedMarkdown(language)}
   </div>;
 };

@@ -56,9 +56,10 @@ for(var i = 1; i <= num; i++) {
 
 let htmlCode = {|```html
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Fizzbuzz Demo</title>
   </head>
 

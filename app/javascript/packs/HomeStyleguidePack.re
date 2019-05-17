@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
 ReactDOMRe.renderToElementWithId(
-  <HomeStyleguide__Markdown />,
-  "styleguide__markdown-root",
+  <HomeStyleguide__MarkdownSyntaxHighlightingPreview />,
+  "styleguide__markdown-syntax-highlighting-root",
 );

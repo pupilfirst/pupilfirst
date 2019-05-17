@@ -27,3 +27,5 @@ let decode = json =>
     sortIndex: json |> field("sortIndex", int),
     resubmittable: json |> field("resubmittable", bool),
   };
+
+let id = t => t.id;

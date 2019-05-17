@@ -192,4 +192,8 @@ class Founder < ApplicationRecord
     logo = Scarf::InitialAvatar.new(name)
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
+
+  def access_ended?
+    startup.access_ends_at.present? && startup.access_ends_at.past?
+  end
 end

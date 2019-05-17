@@ -20,11 +20,17 @@ module Courses
         target_groups: target_groups,
         targets: targets,
         submissions: submissions,
-        team: current_student.startup.name,
+        team: team_details,
         students: team_members.map(&:attributes),
         coaches: faculty.map(&:attributes),
-        user_profiles: user_profiles
+        user_profiles: user_profiles,
+        current_user_id: current_user.id,
+        locked: @course.ended? || current_student.access_ended?
       }
+    end
+
+    def team_details
+      current_student.startup.attributes.slice('name', 'access_ends_at', 'level_id')
     end
 
     def course_details
@@ -44,7 +50,11 @@ module Courses
     end
 
     def target_groups
-      @course.target_groups.where(archived: false).map do |target_group|
+      scope = @course.target_groups
+        .where(level_id: open_level_ids)
+        .where(archived: false)
+
+      scope.map do |target_group|
         target_group.attributes.slice('id', 'level_id', 'name', 'description', 'sort_index', 'milestone')
       end
     end
@@ -52,14 +62,20 @@ module Courses
     def targets
       attributes = %w[id role title target_group_id sort_index resubmittable]
 
-      @course.targets.where(archived: false).select(*attributes).map do |target|
-        target.attributes.slice(*attributes)
+      scope = @course.targets.joins(:target_group).includes(:target_prerequisites)
+        .where(target_groups: { level_id: open_level_ids })
+        .where(archived: false)
+
+      scope.select(*attributes).map do |target|
+        attributes = target.attributes.slice(*attributes)
+        attributes[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
+        attributes
       end
     end
 
     def submissions
       current_student.timeline_events.where(latest: true).map do |timeline_event|
-        timeline_event.attributes.slice('target_id', 'passed_at')
+        timeline_event.attributes.slice('target_id', 'passed_at', 'evaluator_id')
       end
     end
 
@@ -89,6 +105,10 @@ module Courses
 
     def current_student
       @current_student ||= @course.founders.find_by(user_id: current_user.id)
+    end
+
+    def open_level_ids
+      @open_level_ids ||= @course.levels.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Date.today)).pluck(:id)
     end
   end
 end

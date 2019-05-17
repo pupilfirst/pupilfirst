@@ -29,7 +29,7 @@ class Course < ApplicationRecord
   end
 
   def ended?
-    ends_at.present? ? ends_at < Time.now : false
+    ends_at.present? && ends_at.past?
   end
 
   private

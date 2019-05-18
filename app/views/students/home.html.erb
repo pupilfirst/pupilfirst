@@ -1,4 +1,27 @@
-<div class="flex justify-center my-6">
+<% presenter = Students::HomePresenter.new(self, @user) %>
+
+<div class="flex flex-col justify-center items-center">
+  <div class="w-full bg-primary">
+    <div class="py-16 flex items-center justify-center mx-auto">
+      <div class="w-full lg:max-w-md flex flex-row justify-between text-white items-center">
+        <div class="flex flex-row items-center">
+          <div class="w-10 h-10 rounded-full bg-grey text-white border border-white flex items-center justify-center overflow-hidden">
+            <img src="<%= presenter.avatar %>">
+          </div>
+          <div class="pl-2">
+            <div class="text-2xl font-semibold"><%= presenter.user_profile.name %></div>
+            <div class="text-lg "><%= presenter.user_profile.title %></div>
+          </div>
+        </div>
+        <div>
+          <a class="no-underline text-white border p-2 text-sm rounded mt-2" href="<%= edit_user_profile_path(presenter.user_profile) %>">
+            <i class="fas fa-edit text-sm text-white"></i>
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="flex flex-col w-full lg:max-w-md shadow rounded-lg px-6 py-6">
     <div class="flex flex-row items-center">
       <i class="fas fa-book text-2xl text-primary"></i>
@@ -17,10 +40,12 @@
               edge technologies to India for ambitious students.
             </div>
             <div class="flex flex-row pt-4 flex-wrap justify-between">
-              <div class="text-primary border p-2 text-sm rounded mt-2">
-                <i class="fas fa-book text-sm text-primary"></i>
-                Curriculum
-              </div>
+              <%= link_to select_founder_path(founder), method: :post do %>
+                <div class="text-primary border p-2 text-sm rounded mt-2">
+                  <i class="fas fa-book text-sm text-primary"></i>
+                  Curriculum
+                </div>
+              <% end %>
               <div class="text-primary border p-2 text-sm rounded mt-2">
                 <i class="fas fa-book text-sm text-primary"></i>
                 Calender

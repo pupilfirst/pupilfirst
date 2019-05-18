@@ -57,14 +57,14 @@ module Schools
       end
     end
 
-    # POST /school/courses/:course_id/mark_team_active?team_ids[]=
-    def mark_team_active
+    # POST /school/courses/:course_id/mark_teams_active?team_ids[]=
+    def mark_teams_active
       @course = authorize(courses.find(params[:course_id]), policy_class: Schools::CoursePolicy)
       Startup.transaction do
         Startup.where(id: params[:team_ids]).each do |startup|
           startup.update!(access_ends_at: nil)
         end
-        redirect_to school_course_inactive_students_path(@course)
+        render json: { message: 'Teams marked active successfully!', error: nil }
       end
     end
   end

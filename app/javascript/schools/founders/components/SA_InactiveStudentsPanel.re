@@ -16,13 +16,12 @@ type state = {
 };
 
 type action =
-  | RefreshData(list(Team.t), list(Student.t), list(UserProfile.t))
+  | RefreshData(list(Team.t))
   | SelectTeam(Team.t)
   | DeselectTeam(Team.t)
   | UpdateSearchString(string)
   | AddTagFilter(string)
-  | RemoveTagFilter(string)
-  | ToggleFilterVisibility;
+  | RemoveTagFilter(string);
 
 let studentsInTeam = (students, team) =>
   students
@@ -34,23 +33,30 @@ let studentUserProfile = (userProfiles, student) =>
        UserProfile.userId(profile) === Student.userId(student)
      );
 
-let canBeMarkedActive = (selectedTeams, students) => {
- switch(ListUtils.isEmpty(selectedTeams)) {
- | true => false
- | false => {
-  let teamId = selectedTeams |> List.hd |> Student.teamId;
-  let selectedAllStudents = (selectedTeams |> List.length) === (students |> List.filter(student => Student.teamId(student) === teamId) |> List.length );
-  (selectedTeams |> List.for_all(student => Student.teamId(student) === teamId)) && selectedAllStudents;
- }
- }
-};
+let canBeMarkedActive = (selectedTeams, students) =>
+  ListUtils.isEmpty(selectedTeams) ?
+    false :
+    {
+      let teamId = selectedTeams |> List.hd |> Student.teamId;
+      let selectedAllStudents =
+        selectedTeams
+        |> List.length
+        === (
+              students
+              |> List.filter(student => Student.teamId(student) === teamId)
+              |> List.length
+            );
+      selectedTeams
+      |> List.for_all(student => Student.teamId(student) === teamId)
+      && selectedAllStudents;
+    };
 
 let filteredTeams = state => {
   let tagFilteredTeams =
     switch (state.tagsFilteredBy) {
     | [] => state.teams
     | tags =>
-    state.teams
+      state.teams
       |> List.filter(team =>
            tags
            |> List.for_all(tag =>
@@ -78,14 +84,29 @@ let filteredTeams = state => {
      );
 };
 
-let handleTeamUpResponse = (send, json) => {
-  let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  let students =
-    json |> Json.Decode.(field("students", list(Student.decode)));
-  let userProfiles =
-    json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
-  send(RefreshData(teams, students, userProfiles));
-  Notification.success("Success!", "Teams updated successfully");
+let handleErrorCB = () => ();
+
+let markActive = (teams, courseId, responseCB, authenticityToken) => {
+  let payload = Js.Dict.empty();
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(
+    payload,
+    "team_ids",
+    teams
+    |> List.map(s => s |> Team.id |> int_of_string)
+    |> Json.Encode.(list(int)),
+  );
+  let url = "/school/courses/" ++ courseId ++ "/mark_teams_active";
+  Api.create(url, payload, responseCB, handleErrorCB);
+};
+
+let handleActiveTeamResponse = (send, json) => {
+  let message = json |> Json.Decode.(field("message", string));
+  Notification.success("Success!", message);
 };
 
 let handleErrorCB = () => ();
@@ -115,8 +136,8 @@ let make =
   },
   reducer: (action, state) =>
     switch (action) {
-    | RefreshData(teams, students, userProfiles) =>
-      ReasonReact.Update({...state, teams, students, userProfiles})
+    | RefreshData(teams) =>
+      ReasonReact.Update({...state, teams})
     | SelectTeam(team) =>
       ReasonReact.Update({
         ...state,
@@ -141,8 +162,6 @@ let make =
         ...state,
         tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag),
       })
-    | ToggleFilterVisibility =>
-      ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) =>
     <div className="flex flex-1 flex-col bg-grey-lightest overflow-hidden">
@@ -166,13 +185,14 @@ let make =
                 }
               />
               <a
-              className="btn btn-default no-underline"
-              href={
-              "/school/courses/"
-              ++ courseId
-              ++ "/inactive_students?search=" ++ state.searchString
-            }>
-            {"Search" |> str}
+                className="btn btn-default no-underline"
+                href={
+                  "/school/courses/"
+                  ++ courseId
+                  ++ "/inactive_students?search="
+                  ++ state.searchString
+                }>
+                {"Search" |> str}
               </a>
               {
                 state.selectedTeams |> ListUtils.isEmpty ?
@@ -180,9 +200,10 @@ let make =
                   <button
                     onClick={
                       _e =>
-                        teamUp(
+                        markActive(
                           state.selectedTeams,
-                          handleTeamUpResponse(send),
+                          courseId,
+                          handleActiveTeamResponse(send),
                           authenticityToken,
                         )
                     }
@@ -200,7 +221,8 @@ let make =
                 filteredTeams(state) |> List.length > 0 ?
                   filteredTeams(state)
                   |> List.sort((team1, team2) =>
-                       (team2 |> Team.id |> int_of_string) - (team1 |> Team.id |> int_of_string)
+                       (team2 |> Team.id |> int_of_string)
+                       - (team1 |> Team.id |> int_of_string)
                      )
                   |> List.map(team => {
                        let isSingleFounder =
@@ -217,52 +239,33 @@ let make =
                            )
                          }>
                          {
-                          let isChecked =
-                          state.selectedTeams
-                          |> List.mem(team);
-                        let checkboxId =
-                                    "select-team-"
-                                    ++ (team |> Team.id);
-                          <label
-                          className="block text-grey leading-tight font-bold px-4 py-5"
-                          htmlFor=checkboxId>
-                          <input
-                            className="leading-tight"
-                            type_="checkbox"
-                            id=checkboxId
-                            checked=isChecked
-                            onChange={
-                              isChecked ?
-                                _e =>
-                                  send(
-                                    DeselectTeam(team),
-                                  ) :
-                                (
-                                  _e =>
-                                    send(
-                                      SelectTeam(team),
-                                    )
-                                )
-                            }
-                          />
-                        </label>
+                           let isChecked =
+                             state.selectedTeams |> List.mem(team);
+                           let checkboxId =
+                             "select-team-" ++ (team |> Team.id);
+                           <label
+                             className="block text-grey leading-tight font-bold px-4 py-5"
+                             htmlFor=checkboxId>
+                             <input
+                               className="leading-tight"
+                               type_="checkbox"
+                               id=checkboxId
+                               checked=isChecked
+                               onChange={
+                                 isChecked ?
+                                   _e => send(DeselectTeam(team)) :
+                                   (_e => send(SelectTeam(team)))
+                               }
+                             />
+                           </label>;
                          }
                          <div className="flex-1 w-3/5">
-
                            {
                              team
                              |> studentsInTeam(state.students)
                              |> List.map(student => {
-                                  let isChecked =
-                                    state.selectedTeams
-                                    |> List.mem(team);
-                                  let checkboxId =
-                                    "select-student-"
-                                    ++ (student |> Student.id);
                                   <div
-                                    key={
-                                      student |> Student.id
-                                    }
+                                    key={student |> Student.id}
                                     id={
                                       student
                                       |> studentUserProfile(
@@ -284,8 +287,7 @@ let make =
                                               |> UserProfile.name
                                             )
                                             ++ "_edit"
-                                          }
-                                          >
+                                          }>
                                           <img
                                             className="w-10 h-10 rounded-full mr-4"
                                             src={

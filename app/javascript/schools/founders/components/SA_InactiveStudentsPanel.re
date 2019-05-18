@@ -136,8 +136,7 @@ let make =
   },
   reducer: (action, state) =>
     switch (action) {
-    | RefreshData(teams) =>
-      ReasonReact.Update({...state, teams})
+    | RefreshData(teams) => ReasonReact.Update({...state, teams})
     | SelectTeam(team) =>
       ReasonReact.Update({
         ...state,
@@ -164,36 +163,38 @@ let make =
       })
     },
   render: ({state, send}) =>
-    <div className="flex flex-1 flex-col bg-grey-lightest overflow-hidden">
+    <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
       <div className="overflow-y-scroll">
         <div className="px-3">
           <div
-            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
+            className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b py-3 mt-3 w-full">
             <div className="flex items-center justify-between">
-              <input
-                type_="search"
-                className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
-                placeholder="Search by student name..."
-                value={state.searchString}
-                onChange={
-                  event =>
-                    send(
-                      UpdateSearchString(
-                        ReactEvent.Form.target(event)##value,
-                      ),
-                    )
-                }
-              />
-              <a
-                className="btn btn-default no-underline"
-                href={
-                  "/school/courses/"
-                  ++ courseId
-                  ++ "/inactive_students?search="
-                  ++ state.searchString
-                }>
-                {"Search" |> str}
-              </a>
+              <div className="flex">
+                <input
+                  type_="search"
+                  className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
+                  placeholder="Search by student name..."
+                  value={state.searchString}
+                  onChange={
+                    event =>
+                      send(
+                        UpdateSearchString(
+                          ReactEvent.Form.target(event)##value,
+                        ),
+                      )
+                  }
+                />
+                <a
+                  className="btn btn-default no-underline"
+                  href={
+                    "/school/courses/"
+                    ++ courseId
+                    ++ "/inactive_students?search="
+                    ++ state.searchString
+                  }>
+                  {"Search" |> str}
+                </a>
+              </div>
               {
                 state.selectedTeams |> ListUtils.isEmpty ?
                   ReasonReact.null :
@@ -207,15 +208,15 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="btn btn-primary focus:outline-none">
                     {"Mark Team Active" |> str}
                   </button>
               }
             </div>
           </div>
         </div>
-        <div className="flex bg-grey-lightest pb-6">
-          <div className="flex flex-col max-w-lg mx-auto w-full">
+        <div className="flex bg-gray-100 pb-6">
+          <div className="flex flex-col max-w-3xl mx-auto w-full">
             <div className="w-full py-3 rounded-b-lg">
               {
                 filteredTeams(state) |> List.length > 0 ?
@@ -234,9 +235,7 @@ let make =
                          id={team |> Team.name}
                          className={
                            "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                           ++ (
-                             isSingleFounder ? " hover:bg-grey-lightest" : ""
-                           )
+                           ++ (isSingleFounder ? " hover:bg-gray-100" : "")
                          }>
                          {
                            let isChecked =
@@ -259,11 +258,11 @@ let make =
                              />
                            </label>;
                          }
-                         <div className="flex-1 w-3/5">
+                         <div className="flex-1 w-3/5 order-last border-l">
                            {
                              team
                              |> studentsInTeam(state.students)
-                             |> List.map(student => {
+                             |> List.map(student =>
                                   <div
                                     key={student |> Student.id}
                                     id={
@@ -273,7 +272,7 @@ let make =
                                          )
                                       |> UserProfile.name
                                     }
-                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
+                                    className="student-team__card flex items-center bg-white pl-4">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
                                         <a
@@ -316,7 +315,7 @@ let make =
                                                        state.searchString
                                                        |> String.lowercase,
                                                      ) ?
-                                                    "bg-yellow-light" : ""
+                                                    "bg-yellow-400" : ""
                                                 )
                                               }>
                                               {
@@ -347,26 +346,26 @@ let make =
                                         </a>
                                       </div>
                                     </div>
-                                  </div>;
-                                })
+                                  </div>
+                                )
                              |> Array.of_list
                              |> ReasonReact.array
                            }
                          </div>
-                         <div className="flex w-2/5 items-center">
-                           <div className="w-3/5 py-4 px-3">
-                             {
-                               isSingleFounder ?
-                                 ReasonReact.null :
+                         {
+                           isSingleFounder ?
+                             ReasonReact.null :
+                             <div className="flex w-2/5 items-center">
+                               <div className="w-3/5 py-4 px-3">
                                  <div className="students-team--name mb-5">
                                    <p className="mb-1 text-xs">
                                      {"Team" |> str}
                                    </p>
                                    <h4> {team |> Team.name |> str} </h4>
                                  </div>
-                             }
-                           </div>
-                         </div>
+                               </div>
+                             </div>
+                         }
                        </div>;
                      })
                   |> Array.of_list

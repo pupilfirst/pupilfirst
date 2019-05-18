@@ -4,8 +4,8 @@
 <% end %>
 
 <% @presenter = Schools::Courses::InactiveStudentsPresenter.new(self, @teams, @course) %>
-<div class="flex flex-col">
-  <div id="sa-students-panel" class="flex flex-1 h-screen"
+<div class="flex flex-1">
+  <div id="sa-students-panel" class="flex w-full h-screen"
        data-props="<%= @presenter.props_to_json %>"></div>
 <!--  <div class="w-full flex mx-auto">-->
     <%#= paginate @teams %>

@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   before_action :authenticate_user!
-  layout 'community'
+  layout 'student'
 
   # GET /home/
   def home

@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :community, except: %i[show]
   before_action :target, except: %i[show]
 
-  layout 'community'
+  layout 'student'
 
   def show
     @question = authorize(Question.find(params[:id]))

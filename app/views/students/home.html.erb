@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col w-full lg:max-w-md shadow rounded-lg px-6 py-6">
+  <div class="flex flex-col w-full lg:max-w-md shadow rounded-lg px-6 py-6 mt-6">
     <div class="flex flex-row items-center">
       <i class="fas fa-book text-2xl text-primary"></i>
       <div class="px-2 text-2xl font-semibold">Here's everything you're learning</div>
@@ -57,6 +57,18 @@
             </div>
           </div>
         </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex flex-col w-full lg:max-w-md shadow rounded-lg px-6 py-6 mt-6">
+    <div class="flex flex-row items-center">
+      <i class="fas fa-book text-2xl text-primary"></i>
+      <div class="px-2 text-2xl font-semibold">Communities</div>
+    </div>
+    <div>
+      <% presenter.communities.each do |community| %>
+        <div> <%= community.name %></div>
       <% end %>
     </div>
   </div>

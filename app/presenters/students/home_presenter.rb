@@ -6,6 +6,10 @@ module Students
       @user = user
     end
 
+    def founders
+      @founders ||= @user.founders
+    end
+
     def user_profile
       @user_profile ||= UserProfile.where(user: @user, school: current_school).first
     end
@@ -16,6 +20,11 @@ module Students
       else
         user_profile.initials_avatar(:square)
       end
+    end
+
+    def communities
+      course_ids = founders.joins(:course).pluck(:course_id)
+      Community.where(school: current_school).joins(:courses).where(courses: { id: course_ids }).distinct
     end
   end
 end

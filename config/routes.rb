@@ -91,6 +91,8 @@ Rails.application.routes.draw do
 
   get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
+  get 'home', controller: "students", action: "home", as: "home"
+
   resources :founders, only: %i[] do
     member do
       post 'select'

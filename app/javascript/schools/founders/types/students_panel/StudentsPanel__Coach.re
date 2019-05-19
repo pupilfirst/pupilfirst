@@ -1,18 +1,14 @@
 type t = {
   id: int,
-  name: string,
-  avatarUrl: string,
+  userId: int,
 };
-
-let avatarUrl = t => t.avatarUrl;
 
 let id = t => t.id;
 
-let name = t => t.name;
+let userId = t => t.userId;
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
-    name: json |> field("name", string),
-    avatarUrl: json |> field("avatarUrl", string),
+    userId: json |> field("userId", int),
   };

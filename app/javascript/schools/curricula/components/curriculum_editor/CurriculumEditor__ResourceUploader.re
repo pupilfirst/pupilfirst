@@ -138,7 +138,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
     };
 
     <div className={formClasses(state.saving)}>
-      <ul className="list-reset resources-upload-tab flex border-b">
+      <ul className="resources-upload-tab flex border-b">
         <li className={resourcesUploadTabClasses(state.resourceType == File)}>
           <a
             onClick={
@@ -147,7 +147,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 updateResourceType(state, send, File);
               }
             }
-            className="inline-block text-grey-darker hover:text-indigo-darker p-4 text-xs font-semibold">
+            className="inline-block text-gray-800 hover:text-indigo-800 p-4 text-xs font-semibold">
             {"Upload File" |> str}
           </a>
         </li>
@@ -159,7 +159,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 updateResourceType(state, send, Link);
               }
             }
-            className="inline-block text-grey-darker p-4 hover:text-indigo-darker text-xs font-semibold">
+            className="inline-block text-gray-800 p-4 hover:text-indigo-800 text-xs font-semibold">
             {"Add URL" |> str}
           </a>
         </li>
@@ -178,7 +178,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           <input
             disabled={state.saving}
             name="resource[title]"
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray"
             id="resource_title"
             type_="text"
             placeholder="Type resource title here"
@@ -212,15 +212,13 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
                 <label
                   className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                   htmlFor="file">
-                  <i className="material-icons mr-2 text-grey-dark">
-                    {"file_upload" |> str}
-                  </i>
+                  <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
                   <span className="truncate"> {state.fileName |> str} </span>
                 </label>
               </div> :
               <input
                 disabled={state.saving}
-                className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                 name="resource[link]"
                 id="link"
                 type_="url"
@@ -230,7 +228,7 @@ let make = (~authenticityToken, ~addResourceCB, _children) => {
           }
           <button
             disabled={state.saving}
-            className="bg-indigo-dark hover:bg-grey text-white text-sm font-semibold py-2 px-6 focus:outline-none">
+            className="bg-indigo-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
             {(state.saving ? "Uploading" : "Add Resource") |> str}
           </button>
         </div>

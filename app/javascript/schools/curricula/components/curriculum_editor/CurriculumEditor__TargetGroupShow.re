@@ -6,8 +6,8 @@ let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
   archived ?
-    "target-group__header hover:bg-grey-lighter target-group__header--archived p-6 border border-b-0 text-center rounded-lg rounded-b-none" :
-    "target-group__header hover:bg-grey-lighter bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none";
+    "target-group__header hover:bg-gray-200 target-group__header--archived p-6 border border-b-0 text-center rounded-lg rounded-b-none" :
+    "target-group__header hover:bg-gray-200 bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none";
 
 let make =
     (
@@ -41,9 +41,9 @@ let make =
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         {milestone ? <div> {"Milestone" |> str} </div> : ReasonReact.null}
         <div className="target-group__title">
-          <h2> {targetGroup |> TargetGroup.name |> str} </h2>
+          <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
-        <div className="target-group__description pt-2">
+        <div className="target-group__description pt-1">
           <p>
             {
               (
@@ -74,15 +74,15 @@ let make =
         targetGroupArchived ?
           ReasonReact.null :
           <div
-            className="target-group__target-create flex items-center bg-grey-lighter border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
+            className="target-group__target-create flex items-center bg-gray-200 border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer"
             onClick={
               _event =>
                 showTargetEditorCB(targetGroup |> TargetGroup.id, None)
             }>
-            <Icon.Jsx2 kind=Icon.PlusCircle size="6" />
-            <h5 className="font-semibold ml-2">
+            <i className="fal fa-plus-circle text-lg" />
+            <p className="font-semibold text-sm ml-2">
               {"Create a target" |> str}
-            </h5>
+            </p>
           </div>
       }
     </div>;

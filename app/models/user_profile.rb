@@ -55,7 +55,7 @@ class UserProfile < ApplicationRecord
     end
   end
 
-  def initials_avatar(background_shape)
+  def initials_avatar(background_shape: nil)
     logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end

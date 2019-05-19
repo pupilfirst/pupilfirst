@@ -111,17 +111,18 @@ let make =
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
+            title="close"
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
+            className="flex items-center justify-center bg-white text-gray-600 py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            <i className="fal fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"ADD NEW COACHES TO THE COURSE" |> str}
                 </h5>
                 {
@@ -137,11 +138,11 @@ let make =
                     ReasonReact.null
                 }
               </div>
-              <div className="flex max-w-md w-full px-6 pb-5 mx-auto">
+              <div className="flex max-w-2xl w-full px-6 pb-5 mx-auto">
                 <button
                   disabled=saveDisabled
                   onClick={_e => updateCourseCoaches(courseId, state)}
-                  className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                  className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                   {"Add Course Coaches" |> str}
                 </button>
               </div>

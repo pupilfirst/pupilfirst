@@ -29,7 +29,7 @@ let make = (~courses, ~currentCourse, _children) => {
           onClick={_ => send(ToggleShowDropDown)}
           className="appearance-none flex items-center justify-between font-medium relative px-4 py-2 rounded w-full">
           {currentCourse |> Course.name |> str}
-          <i className="material-icons"> {"arrow_drop_down" |> str} </i>
+          <i className="far fa-chevron-down text-gray-600" />
         </button>
         {
           state.showDropDown ?
@@ -43,7 +43,7 @@ let make = (~courses, ~currentCourse, _children) => {
                    )
                 |> List.map(course =>
                      <a
-                       className="no-underline block px-4 py-3 text-xs font-semibold text-grey-darkest border-b border-grey-lighter bg-white hover:text-primary hover:bg-grey-lighter whitespace-no-wrap"
+                       className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap"
                        key={course |> Course.id |> string_of_int}
                        href={course |> Course.path}>
                        {course |> Course.name |> str}

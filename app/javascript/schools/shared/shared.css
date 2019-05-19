@@ -16,7 +16,7 @@
 
 .toggle-label:before {
     content: "";
-    @apply relative block bg-grey;
+    @apply relative block bg-gray-500;
     position: relative;
     top: 3px;
     left: 3px;
@@ -27,23 +27,23 @@
 }
 
 .toggle-label span {
-    @apply absolute w-5 h-5 pin-t pin-l block bg-white shadow-md rounded-full;
+    @apply absolute w-5 h-5 top-0 left-0 block bg-white shadow-md rounded-full;
     transition: all 0.2s ease;
 }
 
 .toggle-label span:before {
     content: "";
-    @apply absolute block w-14 h-14 bg-primary-light pointer-events-none opacity-100 rounded-full;
+    @apply absolute block w-14 h-14 bg-primary-400 pointer-events-none opacity-100 rounded-full;
     margin: -18px;
     transform: scale(0);
 }
 
 .toggle-input:checked+.toggle-label:before {
-    @apply bg-primary-light;
+    @apply bg-primary-400;
 }
 
 .toggle-input:checked+.toggle-label span {
-    @apply bg-primary;
+    @apply bg-primary-500;
     transform: translateX(20px);
     transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
     box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
@@ -92,7 +92,7 @@
 
 .checkbox-label span:first-child:before {
     content: "";
-    @apply bg-primary w-full h-full block opacity-100 rounded-full;
+    @apply bg-primary-500 w-full h-full block opacity-100 rounded-full;
     transform: scale(0);
 }
 
@@ -101,11 +101,11 @@
 }
 
 .checkbox-label:hover span:first-child {
-    @apply bg-primary-lightest border-primary;
+    @apply bg-primary-100 border-primary-500;
 }
 
 .checkbox-input:checked+.checkbox-label span:first-child {
-    @apply bg-primary border-primary;
+    @apply bg-primary-500 border-primary-500;
     animation: wave 0.4s ease;
 }
 
@@ -140,10 +140,10 @@
 }
 
 .nav-tab-item--selected:before {
-    @apply absolute w-full pin-t pin-l;
+    @apply absolute w-full top-0 left-0;
     content: '';
     height: 3px;
-    background-color: config('colors.primary');
+    background-color: theme('colors.primary.500');
 }
 
 .nav-tab-item--selected:after {
@@ -268,18 +268,18 @@
 }
 
 .global-sidebar__primary-nav-link {
-    @apply .flex .text-white .text-sm .font-semibold .no-underline .items-center;
+    @apply flex text-white h-13 text-sm font-semibold items-center;
     position: relative;
 }
 
 .global-sidebar__primary-nav-link:hover {
-    @apply .bg-primary-darker;
+    @apply .bg-primary-800;
 }
 
 .global-sidebar__primary-nav-link--active {
-    @apply .bg-grey-lighter .text-primary;
-    box-shadow: inset 4px 0 0 0 config('colors.yellow');
-    background-image: linear-gradient(to right, config('colors.white'), config('colors.grey-lighter'));
+    @apply bg-gray-200 text-primary-500;
+    box-shadow: inset 4px 0 0 0 theme('colors.yellow.500');
+    background-image: linear-gradient(to right, theme('colors.white'), theme('colors.gray.200'));
 }
 
 .global-sidebar__primary-nav-link--active:before, .global-sidebar__primary-nav-link--active:after {
@@ -294,7 +294,7 @@
     top: -16px;
     border-radius: 0 0 50%;
     border-width: 0px 20px 0 0;
-    box-shadow: 0px 8px config(colors.grey-lighter);
+    box-shadow: 0px 8px theme(colors.gray.200);
     border-color: transparent;
 }
 
@@ -302,12 +302,12 @@
     bottom: -16px;
     border-radius: 0 50% 0;
     border-width: 0 20px 0 0;
-    box-shadow: 0 -8px config(colors.grey-lighter);
+    box-shadow: 0 -8px theme(colors.gray.200);
     border-color: transparent;
 }
 
 .global-sidebar__primary-nav-link--active:hover {
-    @apply .bg-grey-lighter .text-primary;
+    @apply .bg-gray-200 .text-primary-500;
 }
 
 .blanket {
@@ -394,7 +394,7 @@
 }
 
 .hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner::before, .hamburger.is-active .hamburger-inner::after {
-    @apply bg-grey-darker;
+    @apply bg-gray-800;
 }
 
 .hamburger-box {
@@ -451,7 +451,7 @@
 
 .resources-upload-tab__link--active {
     background-color: #F2F8FF;
-    @apply border-grey-light border-l border-t border-r -mb-px rounded-t;
+    @apply border-gray-400 border-l border-t border-r -mb-px rounded-t;
 }
 
 .resources-upload-tab__body {
@@ -481,7 +481,7 @@
 }
 
 .input-file__container:hover .input-file__label {
-    @apply .bg-grey-light;
+    @apply .bg-gray-400;
 }
 
 .toggle-button__group {
@@ -499,12 +499,12 @@
 }
 
 .toggle-button__button {
-    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-grey-dark;
+    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-gray-600;
     transition: .3s cubic-bezier(0, 0, 0, 1);
 }
 
 .toggle-button__button:hover {
-    @apply bg-primary-lightest text-purple-dark;
+    @apply bg-primary-100 text-purple-600;
 }
 
 .toggle-button__button:focus {
@@ -512,11 +512,11 @@
 }
 
 .toggle-button__button--active {
-    @apply bg-primary-dark text-white shadow-inner;
+    @apply bg-primary-600 text-white shadow-inner;
 }
 
 .toggle-button__button--active:hover {
-    @apply bg-primary-dark text-white shadow-inner;
+    @apply bg-primary-600 text-white shadow-inner;
 }
 
 .target-group__container> :not(:last-child):before {
@@ -528,7 +528,7 @@
     transform: translateX(-50%);
     width: 4px;
     z-index: -1;
-    @apply bg-grey-light;
+    @apply bg-gray-400;
 }
 
 .target-group__box {
@@ -620,7 +620,7 @@
 
 .select-list__item-selected {
     animation: glowing 500ms ease-in;
-    @apply .border-indigo-light;
+    @apply .border-indigo-400;
 }
 
 @keyframes glowing {

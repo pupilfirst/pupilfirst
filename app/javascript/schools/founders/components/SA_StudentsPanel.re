@@ -11,7 +11,9 @@ type formVisible =
 
 type state = {
   teams: list(Team.t),
+  students: list(Student.t),
   selectedStudents: list(Student.t),
+  userProfiles: list(UserProfile.t),
   searchString: string,
   formVisible,
   selectedLevelNumber: option(int),
@@ -22,6 +24,9 @@ type state = {
 
 type action =
   | UpdateTeams(list(Team.t))
+  | UpdateStudents(list(Student.t))
+  | UpdateUserProfiles(list(UserProfile.t))
+  | RefreshData(list(Team.t), list(Student.t), list(UserProfile.t))
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
   | SelectAllStudents
@@ -40,14 +45,18 @@ let selectedAcrossTeams = selectedStudents =>
   |> List.sort_uniq((id1, id2) => id1 - id2)
   |> List.length > 1;
 
-let selectedPartialTeam = (selectedStudents, teams) => {
+let studentsInTeam = (students, team) =>
+  students
+  |> List.filter(student => Student.teamId(student) === Team.id(team));
+
+let selectedPartialTeam = (selectedStudents, teams, students) => {
   let selectedTeam =
     teams
     |> List.find(t =>
          Team.id(t) == (selectedStudents |> List.hd |> Student.teamId)
        );
-  selectedStudents
-  |> List.length < (selectedTeam |> Team.students |> List.length);
+  let studentsInSelectedTeam = studentsInTeam(students, selectedTeam);
+  selectedStudents |> List.length < (studentsInSelectedTeam |> List.length);
 };
 
 let selectedWithinLevel = (selectedStudents, teams) => {
@@ -62,23 +71,35 @@ let selectedWithinLevel = (selectedStudents, teams) => {
   |> List.length == 1;
 };
 
-let isGroupable = (selectedStudents, teams) =>
+let isGroupable = (selectedStudents, teams, students) =>
   selectedStudents
   |> List.length > 1
   && selectedWithinLevel(selectedStudents, teams)
   && (
     selectedAcrossTeams(selectedStudents)
-    || selectedPartialTeam(selectedStudents, teams)
+    || selectedPartialTeam(selectedStudents, teams, students)
   );
 
-let isMoveOutable = (selectedStudents, teams) =>
+let studentUserProfile = (userProfiles, student) =>
+  userProfiles
+  |> List.find(profile =>
+       UserProfile.userId(profile) === Student.userId(student)
+     );
+
+let coachUserProfile = (userProfiles, coach) =>
+  userProfiles
+  |> List.find(profile =>
+       UserProfile.userId(profile) === Coach.userId(coach)
+     );
+
+let isMoveOutable = (selectedStudents, teams, students) =>
   selectedStudents
   |> List.length == 1
   && teams
   |> List.find(team =>
        team |> Team.id == (selectedStudents |> List.hd |> Student.teamId)
      )
-  |> Team.students
+  |> studentsInTeam(students)
   |> List.length > 1;
 
 let filteredTeams = state => {
@@ -97,7 +118,7 @@ let filteredTeams = state => {
            tags
            |> List.for_all(tag =>
                 team
-                |> Team.students
+                |> studentsInTeam(state.students)
                 |> List.map(student => student |> Student.tags)
                 |> List.flatten
                 |> List.mem(tag)
@@ -107,8 +128,10 @@ let filteredTeams = state => {
   tagFilteredTeams
   |> List.filter(team =>
        team
-       |> Team.students
-       |> List.map(s => s |> Student.name)
+       |> studentsInTeam(state.students)
+       |> List.map(s =>
+            s |> studentUserProfile(state.userProfiles) |> UserProfile.name
+          )
        |> List.filter(n =>
             n
             |> String.lowercase
@@ -120,7 +143,11 @@ let filteredTeams = state => {
 
 let handleTeamUpResponse = (send, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  send(UpdateTeams(teams));
+  let students =
+    json |> Json.Decode.(field("students", list(Student.decode)));
+  let userProfiles =
+    json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
+  send(RefreshData(teams, students, userProfiles));
   send(DeselectAllStudents);
   Notification.success("Success!", "Teams updated successfully");
 };
@@ -149,6 +176,8 @@ let make =
     (
       ~teams,
       ~courseId,
+      ~students,
+      ~userProfiles,
       ~courseCoachIds,
       ~schoolCoaches,
       ~authenticityToken,
@@ -159,6 +188,8 @@ let make =
   ...component,
   initialState: () => {
     teams,
+    students,
+    userProfiles,
     selectedStudents: [],
     searchString: "",
     formVisible: None,
@@ -169,7 +200,13 @@ let make =
   },
   reducer: (action, state) =>
     switch (action) {
+    | RefreshData(teams, students, userProfiles) =>
+      ReasonReact.Update({...state, teams, students, userProfiles})
+
     | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
+    | UpdateStudents(students) => ReasonReact.Update({...state, students})
+    | UpdateUserProfiles(userProfiles) =>
+      ReasonReact.Update({...state, userProfiles})
     | SelectStudent(student) =>
       ReasonReact.Update({
         ...state,
@@ -186,7 +223,9 @@ let make =
       ReasonReact.Update({
         ...state,
         selectedStudents:
-          state.teams |> List.map(t => t |> Team.students) |> List.flatten,
+          state.teams
+          |> List.map(t => t |> studentsInTeam(state.students))
+          |> List.flatten,
       })
     | DeselectAllStudents =>
       ReasonReact.Update({...state, selectedStudents: []})
@@ -216,11 +255,11 @@ let make =
       ReasonReact.Update({...state, filterVisible: !state.filterVisible})
     },
   render: ({state, send}) =>
-    <div className="flex flex-1 flex-col bg-grey-lightest overflow-hidden">
+    <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
       {
         let closeFormCB = () => send(UpdateFormVisible(None));
-        let submitFormCB = (teams, tags) => {
-          send(UpdateTeams(teams));
+        let submitFormCB = (teams, students, userProfiles, tags) => {
+          send(RefreshData(teams, students, userProfiles));
           send(AddNewTags(tags));
           send(UpdateFormVisible(None));
         };
@@ -239,10 +278,13 @@ let make =
             state.teams
             |> List.find(team => Team.id(team) == Student.teamId(student))
             |> Team.coachIds;
+
           <SA_StudentsPanel_UpdateForm
             student
+            teams={state.teams}
             studentTags={state.tags}
             teamCoachIds
+            userProfiles={state.userProfiles}
             courseCoachIds
             schoolCoaches
             closeFormCB
@@ -272,7 +314,7 @@ let make =
               | Some(n) => n |> string_of_int
               }
             }
-            className="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
+            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight leading-normal focus:outline-none">
             <option value="all"> {"All levels" |> str} </option>
             {
               levels
@@ -294,7 +336,7 @@ let make =
             }
           </select>
           <div
-            className="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
             <Icon.Jsx2 kind=Icon.Down size="3" />
           </div>
         </div>
@@ -302,7 +344,7 @@ let make =
       <div className="overflow-y-scroll">
         <div className="px-3">
           <div
-            className="max-w-lg h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+            className="max-w-3xl h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
             <div className="flex">
               <label className="flex items-center leading-tight mr-4 my-auto">
                 <input
@@ -318,12 +360,14 @@ let make =
                 />
                 <span
                   id="selected-students"
-                  className="ml-2 text-sm text-grey-dark">
+                  className="ml-2 text-sm text-gray-600">
                   {
                     let selectedCount = state.selectedStudents |> List.length;
                     let studentCount =
                       filteredTeams(state)
-                      |> List.map(team => team |> Team.students)
+                      |> List.map(team =>
+                           team |> studentsInTeam(state.students)
+                         )
                       |> List.flatten
                       |> List.length;
                     selectedCount > 0 ?
@@ -337,13 +381,13 @@ let make =
               {
                 false ?
                   <button
-                    className="bg-grey-lighter hover:bg-grey-light hover:text-grey-darker focus:outline-none text-grey-dark text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                    className="bg-gray-200 hover:bg-gray-400 hover:text-gray-800 focus:outline-none text-gray-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
                     {"Add tags" |> str}
                   </button> :
                   ReasonReact.null
               }
               {
-                isGroupable(state.selectedStudents, state.teams) ?
+                isGroupable(state.selectedStudents, state.teams, students) ?
                   <button
                     onClick={
                       _e =>
@@ -353,13 +397,17 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                     {"Group as Team" |> str}
                   </button> :
                   ReasonReact.null
               }
               {
-                isMoveOutable(state.selectedStudents, state.teams) ?
+                isMoveOutable(
+                  state.selectedStudents,
+                  state.teams,
+                  state.students,
+                ) ?
                   <button
                     onClick={
                       _e =>
@@ -369,7 +417,7 @@ let make =
                           authenticityToken,
                         )
                     }
-                    className="bg-transparent hover:bg-purple-dark focus:outline-none text-purple-dark text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                    className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
                     {"Move out from Team" |> str}
                   </button> :
                   ReasonReact.null
@@ -379,19 +427,15 @@ let make =
                   ReasonReact.null :
                   <button
                     onClick={_e => send(UpdateFormVisible(CreateForm))}
-                    className="hover:bg-purple-dark text-purple-dark font-semibold hover:text-white focus:outline-none border border-dashed border-blue hover:border-transparent flex items-center px-2 py-1 rounded-lg cursor-pointer">
-                    <i className="material-icons mr-2">
-                      {"add_circle_outline" |> str}
-                    </i>
-                    <h5 className="font-semibold ml-2">
-                      {"Add New Students" |> str}
-                    </h5>
+                    className="btn btn-primary ml-4">
+                    <i className="far fa-user-plus mr-2" />
+                    <span> {"Add New Students" |> str} </span>
                   </button>
               }
             </div>
           </div>
           <div
-            className="max-w-lg bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
+            className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
             <div className="flex items-center justify-between">
               <input
                 type_="search"
@@ -415,20 +459,24 @@ let make =
                     (state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str
                   }
                 </p>
-                <i className="material-icons md-48">
-                  {
-                    (state.filterVisible ? "expand_less" : "expand_more") |> str
+                <FaIcon.Jsx2
+                  classes={
+                    "far ml-1 text-sm"
+                    ++ (
+                      state.filterVisible ?
+                        " fa-chevron-up" : " fa-chevron-down"
+                    )
                   }
-                </i>
+                />
               </div>
             </div>
           </div>
         </div>
-        <div className="flex bg-grey-lightest pb-6">
-          <div className="flex flex-col max-w-lg mx-auto w-full">
+        <div className="flex bg-gray-100 pb-6">
+          <div className="flex flex-col max-w-3xl mx-auto w-full">
             {
               state.filterVisible && state.tags |> List.length > 0 ?
-                <div className="px-4 py-3 border-b bg-grey-lighter shadow">
+                <div className="px-4 py-3 border-b bg-gray-200 shadow">
                   <div className="flex flex-col pt-2">
                     <div className="mb-1 text-sm"> {"Filters:" |> str} </div>
                     <SA_StudentsPanel_SearchableTagList
@@ -456,20 +504,20 @@ let make =
                      )
                   |> List.map(team => {
                        let isSingleFounder =
-                         team |> Team.students |> List.length == 1;
+                         team
+                         |> studentsInTeam(state.students)
+                         |> List.length == 1;
                        <div
                          key={team |> Team.id |> string_of_int}
                          id={team |> Team.name}
                          className={
                            "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                           ++ (
-                             isSingleFounder ? " hover:bg-grey-lightest" : ""
-                           )
+                           ++ (isSingleFounder ? " hover:bg-gray-100" : "")
                          }>
                          <div className="flex-1 w-3/5">
                            {
                              team
-                             |> Team.students
+                             |> studentsInTeam(state.students)
                              |> List.map(student => {
                                   let isChecked =
                                     state.selectedStudents
@@ -481,12 +529,18 @@ let make =
                                     key={
                                       student |> Student.id |> string_of_int
                                     }
-                                    id={student |> Student.name}
-                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-grey-lightest">
+                                    id={
+                                      student
+                                      |> studentUserProfile(
+                                           state.userProfiles,
+                                         )
+                                      |> UserProfile.name
+                                    }
+                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-gray-100">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
                                         <label
-                                          className="block text-grey leading-tight font-bold px-4 py-5"
+                                          className="block text-gray-500 leading-tight font-bold px-4 py-5"
                                           htmlFor=checkboxId>
                                           <input
                                             className="leading-tight"
@@ -511,7 +565,13 @@ let make =
                                         <a
                                           className="flex flex-1 items-center py-4 pr-4"
                                           id={
-                                            (student |> Student.name)
+                                            (
+                                              student
+                                              |> studentUserProfile(
+                                                   state.userProfiles,
+                                                 )
+                                              |> UserProfile.name
+                                            )
                                             ++ "_edit"
                                           }
                                           onClick={
@@ -524,7 +584,13 @@ let make =
                                           }>
                                           <img
                                             className="w-10 h-10 rounded-full mr-4"
-                                            src={student |> Student.avatarUrl}
+                                            src={
+                                              student
+                                              |> studentUserProfile(
+                                                   state.userProfiles,
+                                                 )
+                                              |> UserProfile.avatarUrl
+                                            }
                                           />
                                           <div
                                             className="text-sm flex flex-col">
@@ -535,16 +601,26 @@ let make =
                                                   state.searchString
                                                   |> String.length > 0
                                                   && student
-                                                  |> Student.name
+                                                  |> studentUserProfile(
+                                                       state.userProfiles,
+                                                     )
+                                                  |> UserProfile.name
                                                   |> String.lowercase
                                                   |> Js.String.includes(
                                                        state.searchString
                                                        |> String.lowercase,
                                                      ) ?
-                                                    "bg-yellow-light" : ""
+                                                    "bg-yellow-400" : ""
                                                 )
                                               }>
-                                              {student |> Student.name |> str}
+                                              {
+                                                student
+                                                |> studentUserProfile(
+                                                     state.userProfiles,
+                                                   )
+                                                |> UserProfile.name
+                                                |> str
+                                              }
                                             </p>
                                             <div className="flex">
                                               {
@@ -605,12 +681,28 @@ let make =
                                    teamCoaches
                                    |> List.map(coach =>
                                         <img
-                                          key={coach |> Coach.avatarUrl}
+                                          key={
+                                            coach
+                                            |> Coach.userId
+                                            |> string_of_int
+                                          }
                                           className="w-6 h-6 rounded-full mr-1"
-                                          src={coach |> Coach.avatarUrl}
+                                          src={
+                                            coach
+                                            |> coachUserProfile(
+                                                 state.userProfiles,
+                                               )
+                                            |> UserProfile.avatarUrl
+                                          }
                                           alt={
                                             "Avatar of "
-                                            ++ (coach |> Coach.name)
+                                            ++ (
+                                              coach
+                                              |> coachUserProfile(
+                                                   state.userProfiles,
+                                                 )
+                                              |> UserProfile.name
+                                            )
                                           }
                                         />
                                       )
@@ -622,7 +714,7 @@ let make =
                            </div>
                            <div className="w-2/5 text-center">
                              <span
-                               className="inline-flex flex-col rounded bg-indigo-lightest px-2 py-1">
+                               className="inline-flex flex-col rounded bg-indigo-100 px-2 py-1">
                                <div className="text-xs">
                                  {"Level" |> str}
                                </div>
@@ -655,6 +747,8 @@ let make =
 type props = {
   teams: list(Team.t),
   courseId: int,
+  students: list(Student.t),
+  userProfiles: list(UserProfile.t),
   courseCoachIds: list(int),
   schoolCoaches: list(Coach.t),
   levels: list(Level.t),
@@ -666,10 +760,12 @@ let decode = json =>
   Json.Decode.{
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
+    students: json |> field("students", list(Student.decode)),
+    userProfiles: json |> field("userProfiles", list(UserProfile.decode)),
     courseCoachIds: json |> field("courseCoachIds", list(int)),
+    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     levels: json |> field("levels", list(Level.decode)),
     studentTags: json |> field("studentTags", list(string)),
-    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -681,7 +777,9 @@ let jsComponent =
       make(
         ~teams=props.teams,
         ~courseId=props.courseId,
+        ~students=props.students,
         ~courseCoachIds=props.courseCoachIds,
+        ~userProfiles=props.userProfiles,
         ~schoolCoaches=props.schoolCoaches,
         ~levels=props.levels,
         ~studentTags=props.studentTags,

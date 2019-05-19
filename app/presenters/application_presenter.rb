@@ -1,9 +1,16 @@
 class ApplicationPresenter
+  include CamelizeKeys
+  include StringifyIds
+
   def initialize(view_context)
     @view = view_context
   end
 
-  protected
+  def props_to_json
+    camelize_keys(stringify_ids(props)).to_json
+  end
+
+  private
 
   attr_reader :view
 

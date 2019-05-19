@@ -52,7 +52,7 @@ let headerLinks = links => {
   switch (visibleLinks) {
   | [] =>
     <div
-      className="border border-grey-light rounded-lg italic text-grey-dark cursor-default text-sm py-2 px-4">
+      className="border border-gray-400 rounded-lg italic text-gray-600 cursor-default text-sm py-2 px-4">
       {"You can customize links on the header." |> str}
     </div>
   | visibleLinks =>
@@ -69,7 +69,7 @@ let sitemap = links =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"You can customize links in the footer." |> str}
     </div>
   | links =>
@@ -91,7 +91,7 @@ let socialLinks = links =>
   switch (links) {
   | [] =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"Add social media links?" |> str}
     </div>
   | links =>
@@ -116,7 +116,7 @@ let address = a =>
     />
   | None =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-3 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-3 py-2 px-4">
       {"Add an address?" |> str}
     </div>
   };
@@ -130,7 +130,7 @@ let emailAddress = email =>
     </div>
   | None =>
     <div
-      className="border border-grey rounded-lg italic text-grey-light cursor-default text-sm max-w-fc mt-4 py-2 px-4">
+      className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-4 py-2 px-4">
       {"Add a contact email?" |> str}
     </div>
   };
@@ -144,7 +144,7 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
     className={
-      "cursor-pointer bg-primary-lightest border border-primary-light text-primary hover:bg-primary-lighter hover:border-primary hover:text-primary-dark p-2  rounded flex items-center "
+      "cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 rounded flex items-center "
       ++ additionalClasses
     }
     title
@@ -264,11 +264,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
     },
   render: ({state, send}) =>
     <div>
-      <div className="px-6 pt-6 w-full xl:max-w-2xl mx-auto">
+      <div className="px-6 pt-6 w-full xl:max-w-6xl mx-auto">
         <div className="font-bold"> {"Header" |> str} </div>
         <div
           className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
-          <div className="flex items-center bg-grey-lighter rounded p-2">
+          <div className="flex items-center bg-gray-200 rounded p-2">
             {
               headerLogo(
                 schoolName,
@@ -285,7 +285,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           </div>
           <div className="flex items-center">
             <div
-              className="school-customize__header-links flex items-center bg-grey-lighter rounded px-3 py-2 h-full">
+              className="school-customize__header-links flex items-center bg-gray-200 rounded px-3 py-2 h-full">
               {
                 headerLinks(
                   state.customizations
@@ -304,7 +304,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 )
               }
             </div>
-            <div className="ml-6 w-12 h-12 rounded-full bg-grey-light" />
+            <div className="ml-6 w-12 h-12 rounded-full bg-gray-400" />
           </div>
         </div>
         <div className="mt-6 font-bold"> {"Footer" |> str} </div>
@@ -313,7 +313,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
             <div className="w-1/2">
               <div
-                className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full mr-2">
+                className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
                 <div className="flex items-center">
                   <span className="uppercase font-bold text-sm">
                     {"Sitemap" |> str}
@@ -342,7 +342,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               <div className="flex">
                 <div className="w-1/2">
                   <div
-                    className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full mr-2">
+                    className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
                     <div className="flex items-center">
                       <span className="uppercase font-bold text-sm">
                         {"Social" |> str}
@@ -371,7 +371,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 </div>
                 <div className="w-1/2">
                   <div
-                    className="p-3 bg-black border border-dashed border-grey-darkest rounded h-full">
+                    className="p-3 bg-black border border-dashed border-gray-900 rounded h-full">
                     <div className="flex items-center">
                       <span className="uppercase font-bold text-sm">
                         {"Contact" |> str}
@@ -398,7 +398,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
           <div
             className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
             <div
-              className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2">
+              className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
               {
                 footerLogo(
                   schoolName,
@@ -415,7 +415,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             </div>
             <div className="flex items-center text-sm">
               <div
-                className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2">
+                className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
                 <div> {"Privacy Policy" |> str} </div>
                 {
                   editIcon(
@@ -431,7 +431,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 }
               </div>
               <div
-                className="flex items-center bg-black border border-dashed border-grey-darkest rounded p-2 ml-6">
+                className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2 ml-6">
                 <div> {"Terms of Use" |> str} </div>
                 {
                   editIcon(
@@ -467,13 +467,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         </div>
         <div className="mt-6 font-bold"> {"Icon" |> str} </div>
         <div className="mt-3 w-2/4 max-w-sm">
-          <div className="bg-grey-light rounded-t-lg h-12 flex items-end">
+          <div className="bg-gray-400 rounded-t-lg h-12 flex items-end">
             <div className="w-full flex items-center pr-3">
-              <div className="h-3 w-3 rounded-full bg-grey ml-4" />
-              <div className="h-3 w-3 rounded-full bg-grey ml-2" />
-              <div className="h-3 w-3 rounded-full bg-grey ml-2" />
+              <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
+              <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
+              <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
               <div
-                className="p-3 ml-4 bg-grey-lightest rounded-t-lg flex items-center">
+                className="p-3 ml-4 bg-gray-100 rounded-t-lg flex items-center">
                 <img
                   src={
                     state.customizations
@@ -489,9 +489,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
               {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
             </div>
           </div>
-          <div
-            className="bg-grey-lightest border border-t-0 h-16 rounded-b-lg"
-          />
+          <div className="bg-gray-100 border border-t-0 h-16 rounded-b-lg" />
         </div>
       </div>
       {editor(state, send, authenticityToken)}

@@ -83,8 +83,8 @@ let updateConnectLink = (send, connectLink) => {
 
 let booleanButtonClasses = bool =>
   bool ?
-    "w-1/2 bg-grey hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white hover:bg-grey text-grey-darkest text-sm font-semibold py-2 px-6 focus:outline-none";
+    "w-1/2 bg-gray-500 hover:bg-gray-500 text-gray-900 text-sm font-semibold py-2 px-6 focus:outline-none" :
+    "w-1/2 bg-white hover:bg-gray-500 text-gray-900 text-sm font-semibold py-2 px-6 focus:outline-none";
 
 let saveDisabled = state =>
   state.hasTitleError
@@ -300,17 +300,18 @@ let make =
       <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
+            title="close"
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-white text-grey-darker font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-            <i className="material-icons"> {"close" |> str} </i>
+            className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            <i className="fal fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-md p-6 mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"Coach Details" |> str}
                 </h5>
               </div>
@@ -320,15 +321,15 @@ let make =
                   type_="hidden"
                   value=authenticityToken
                 />
-                <div className="max-w-md p-6 mx-auto">
+                <div className="max-w-2xl p-6 mx-auto">
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="name">
                     {"Name" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="name"
                     type_="text"
                     name="faculty[name]"
@@ -347,13 +348,13 @@ let make =
                     active={state.hasNameError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="email">
                     {"Email" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="email"
                     type_="email"
                     name="faculty[email]"
@@ -372,13 +373,13 @@ let make =
                     active={state.hasEmailError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="title">
                     {"Title" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="title"
                     type_="text"
                     name="faculty[title]"
@@ -397,12 +398,12 @@ let make =
                     active={state.hasTitleError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="linkedIn">
                     {"LinkedIn" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="linkedIn"
                     type_="text"
                     name="faculty[linkedin_url]"
@@ -421,12 +422,12 @@ let make =
                     active={state.hasLinkedInUrlError}
                   />
                   <label
-                    className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="connectLink">
                     {"Connect Link" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
@@ -446,7 +447,7 @@ let make =
                   />
                   <div className="flex items-center mb-6">
                     <label
-                      className="block w-1/2 tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                      className="block w-1/2 tracking-wide text-gray-800 text-xs font-semibold mr-6"
                       htmlFor="evaluated">
                       {"Should the coach profile be public?" |> str}
                     </label>
@@ -485,7 +486,7 @@ let make =
                   </div>
                   <div className="flex items-center mb-6">
                     <label
-                      className="w-1/2 block tracking-wide text-grey-darker text-xs font-semibold mr-6"
+                      className="w-1/2 block tracking-wide text-gray-800 text-xs font-semibold mr-6"
                       htmlFor="evaluated">
                       {
                         "Should the coach be notified of student submissions?"
@@ -528,7 +529,7 @@ let make =
                     </div>
                   </div>
                   <label
-                    className="block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+                    className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                     htmlFor="avatarUploader">
                     {"Avatar" |> str}
                   </label>
@@ -554,31 +555,31 @@ let make =
                     <label
                       className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
                       htmlFor="file">
-                      <i className="material-icons mr-2 text-grey-dark">
-                        {"file_upload" |> str}
-                      </i>
+                      <i
+                        className="fas fa-upload mr-2 text-gray-600 text-lg"
+                      />
                       <span className="truncate">
                         {avatarUploaderText() |> str}
                       </span>
                     </label>
                   </div>
                 </div>
-                <div className="p-6 bg-grey-lighter">
-                  <div className="max-w-md px-6 mx-auto">
+                <div className="p-6 bg-gray-200">
+                  <div className="max-w-2xl px-6 mx-auto">
                     <div
-                      className="flex max-w-md w-full justify-between items-center mx-auto">
+                      className="flex max-w-2xl w-full justify-between items-center mx-auto">
                       {
                         switch (coach) {
                         | Some(_coach) =>
-                          <div className="flex items-center flex-no-shrink">
+                          <div className="flex items-center flex-shrink-0">
                             <label
-                              className="block tracking-wide text-grey-darker text-xs font-semibold mr-3"
+                              className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
                               htmlFor="evaluated">
                               {"Has the coach left the school?" |> str}
                             </label>
                             <div
                               id="exited"
-                              className="flex flex-no-shrink rounded-lg overflow-hidden border">
+                              className="flex flex-shrink-0 rounded-lg overflow-hidden border">
                               <button
                                 onClick=(
                                   _event => {
@@ -617,13 +618,13 @@ let make =
                         | Some(_coach) =>
                           <button
                             disabled={saveDisabled(state)}
-                            className="w-auto bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            className="w-auto bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                             {"Update Coach" |> str}
                           </button>
                         | None =>
                           <button
                             disabled={saveDisabled(state)}
-                            className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                             {"Create Coach" |> str}
                           </button>
                         }

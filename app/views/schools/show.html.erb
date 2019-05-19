@@ -4,15 +4,15 @@
 <% end %>
 
 <% @presenter = Schools::ShowPresenter.new(self) %>
-<div class="flex-1 flex flex-col bg-grey-lighter overflow-y-auto">
+<div class="flex-1 flex flex-col bg-gray-200 overflow-y-auto">
     <div class="w-full p-12">
-        <div class="max-w-md mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
-            <div class="bg-gradient-secondary-to-secondary-dark-120 bg-cover h-24 p-5">
+        <div class="max-w-3xl mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
+            <div class="bg-gradient-secondary-to-secondary-600-120 bg-cover h-24 p-5">
 
             </div>
             <div class="flex px-5 pb-5 bg-white justify-between">
                 <div class="flex">
-                  <div class="school-overview__logo-container flex items-center bg-white p-3 border rounded-lg -mt-16">
+                  <div class="school-overview__logo-container flex items-center bg-white p-3 border rounded-lg -mt-16 overflow-hidden">
                     <%= image_tag(@presenter.school_logo_path, alt: current_school.name) %>
                   </div>
                   <div class="school-overview__school-name pl-3 p-3">
@@ -37,17 +37,17 @@
             </div>
         </div>
     </div>
-    <div class="max-w-md w-full mx-auto my-8">
+    <div class="max-w-3xl w-full mx-auto my-8">
         <h2 class="font-semibold mb-4 pb-2 border-b">Courses</h2>
         <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
             <% @presenter.course_details.each_with_index do |course, index| %>
               <div data-t="<%= course[:name] %> details" class="w-1/2 mb-4">
-                <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-indigo-dark no-underline text-black" href=<%= school_course_students_path(course[:id]) %>>
+                <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-primary-500 text-black" href=<%= school_course_students_path(course[:id]) %>>
                   <div class="flex items-end justify-between border-b p-4 pt-6">
                     <h3 class="font-bold text-xl"><%= course[:name] %></h3>
                     <p class="text-sm"><%= course[:levels_count] %> Levels</p>
                   </div>
-                  <div class="school-overview__course-list-card-count relative flex items-end bg-grey-lighter justify-between border-b">
+                  <div class="school-overview__course-list-card-count relative flex items-end bg-gray-200 justify-between border-b">
                     <div data-t="<%= course[:name] %> students" class="w-1/2">
                       <div class="p-4">
                         <p>Students</p>
@@ -63,16 +63,16 @@
                   </div>
                   <div class="flex items-end p-4 text-xs items-center">
                     <% if course[:submissions_count] == 0 %>
-                      <i class="material-icons mr-1 text-sm text-grey-dark bg-grey-lighter p-1 rounded">inbox</i>
-                      <div class="text-grey-dark">No student submissions yet!</div>
+                      <i class="fal fa-inbox mr-2 text-2xl text-gray-600 bg-gray-200 p-1 rounded"></i>
+                      <div class="text-gray-600">No student submissions yet!</div>
                     <% elsif course[:submissions_count] == course[:evaluated_submissions_count] %>
-                      <i class="material-icons mr-1 text-sm text-green-dark bg-green-lighter p-1 rounded">done</i>
-                      <div class="text-green-dark">
+                      <i class="fal fa-badge-check mr-2 text-2xl text-green-600 bg-green-200 p-1 rounded"></i>
+                      <div class="text-green-600">
                         <%= course[:evaluated_submissions_count] %>/<%= course[:submissions_count] %> submissions reviewed.
                       </div>
                     <% else %>
-                      <i class="material-icons mr-1 text-sm text-orange-dark bg-orange-lighter p-1 rounded">alarm</i>
-                      <div class="text-orange-dark">
+                      <i class="fal fa-alarm-clock mr-2 text-2xl text-orange-600 bg-orange-200 p-1 rounded"></i>
+                      <div class="text-orange-600">
                         <%= course[:evaluated_submissions_count] %>/<%= course[:submissions_count] %> submissions reviewed.
                       </div>
                     <% end %>

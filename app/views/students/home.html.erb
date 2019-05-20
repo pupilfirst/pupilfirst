@@ -1,9 +1,9 @@
 <% presenter = Students::HomePresenter.new(self, @user) %>
 
 <div class="flex flex-col justify-center items-center">
-  <div class="w-full bg-primary">
+  <div class="w-full bg-primary-500">
     <div class="py-16 flex items-center justify-center mx-auto">
-      <div class="w-full lg:max-w-md flex flex-row justify-between text-white items-center">
+      <div class="w-full lg:max-w-2xl flex flex-row justify-between text-white items-center">
         <div class="flex flex-row items-center">
           <div class="w-10 h-10 rounded-full bg-gray-500 text-white border border-white flex items-center justify-center overflow-hidden">
             <img src="<%= presenter.avatar %>">
@@ -22,16 +22,18 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col w-full lg:max-w-md shadow rounded-lg px-6 py-6 mt-6">
+  <div class="flex flex-col w-full lg:max-w-2xl shadow rounded-lg px-6 py-6 mt-6">
     <div class="flex flex-row items-center">
       <i class="fas fa-book text-2xl text-primary"></i>
       <div class="px-2 text-2xl font-semibold">Here's everything you're learning</div>
     </div>
     <div>
-      <% @user.founders.each do |founder| %>
-        <div class="flex flex-row w-full lg:max-w-md shadow rounded-lg mt-4">
+      <% presenter.founders.each do |founder| %>
+        <div class="flex flex-row w-full lg:max-w-2xl shadow rounded-lg mt-4">
           <div class="flex w-1/3 bg-primary-400 items-center justify-center p-4 shadow rounded-lg">
-            <div class="text-white border p-2 rounded">Continue Course</div>
+            <%= link_to select_founder_path(founder), method: :post do %>
+              <div class="text-white border p-2 rounded">Continue Course</div>
+            <% end %>
           </div>
           <div class="w-2/3 px-4 py-4">
             <div class="text-4xl font-bold text-black"> <%= founder.course.name %></div>
@@ -50,10 +52,14 @@
                 <i class="fas fa-book text-sm text-primary"></i>
                 Calender
               </div>
-              <div class="text-primary border p-2 text-sm rounded mt-2">
-                <i class="fas fa-book text-sm text-primary"></i>
-                Leaderboard
-              </div>
+              <% if presenter.show_leaderboard_link?(founder.course) %>
+                <%= link_to leaderboard_course_path(founder.course) do %>
+                  <div class="text-primary border p-2 text-sm rounded mt-2">
+                    <i class="fas fa-book text-sm text-primary"></i>
+                    Leaderboard
+                  </div>
+                <% end %>
+              <% end %>
             </div>
           </div>
         </div>
@@ -61,14 +67,25 @@
     </div>
   </div>
 
-  <div class="flex flex-col w-full lg:max-w-md shadow rounded-lg px-6 py-6 mt-6">
+  <div class="flex flex-col w-full lg:max-w-2xl shadow rounded-lg px-6 py-6 mt-6">
     <div class="flex flex-row items-center">
       <i class="fas fa-book text-2xl text-primary"></i>
       <div class="px-2 text-2xl font-semibold">Communities</div>
     </div>
-    <div>
+    <div class="lg:max-w-2xl flex flex-wrap">
       <% presenter.communities.each do |community| %>
-        <div> <%= community.name %></div>
+        <div class="flex flex-col w-1/2 p-2">
+          <%= link_to community_path(community) do %>
+            <div class=" shadow rounded-lg">
+              <div class="flex w-full bg-primary-400 items-center justify-center p-4 shadow rounded-lg">
+
+              </div>
+              <div class="w-2/3 px-4 py-4">
+                <div> <%= community.name %></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </div>

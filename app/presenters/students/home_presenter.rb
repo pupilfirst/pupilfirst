@@ -7,7 +7,7 @@ module Students
     end
 
     def founders
-      @founders ||= @user.founders
+      @founders ||= @user.founders.where(exited: false)
     end
 
     def user_profile
@@ -25,6 +25,17 @@ module Students
     def communities
       course_ids = founders.joins(:course).pluck(:course_id)
       Community.where(school: current_school).joins(:courses).where(courses: { id: course_ids }).distinct
+    end
+
+    def show_leaderboard_link?(course)
+      lts = LeaderboardTimeService.new
+
+      course_entries_last_week = LeaderboardEntry.joins(:course).where(
+        courses: { id: course },
+        period_from: lts.week_start,
+        period_to: lts.week_end
+      )
+      course_entries_last_week.exists?
     end
   end
 end

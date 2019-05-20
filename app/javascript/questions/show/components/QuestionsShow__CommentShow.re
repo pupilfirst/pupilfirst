@@ -17,7 +17,7 @@ let make =
     ) => {
   let (showMore, setShowMore) = React.useState(() => false);
   <ul
-    className="list-reset max-w-lg w-full flex flex-col mx-auto items-center justify-center px-5 md:px-8">
+    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-5 md:px-8">
     {
       comments
       |> List.mapi((index, comment) =>
@@ -65,7 +65,7 @@ let make =
       comments |> List.length > 3 && !showMore ?
         <a
           onClick={_ => setShowMore(_ => !showMore)}
-          className="bg-grey-lighter rounded-full cursor-pointer border py-1 px-3 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-lightest hover:text-primary -mt-3">
+          className="bg-gray-200 rounded-full cursor-pointer border py-1 px-3 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-100 hover:text-primary -mt-3">
           {(showMore ? "Show Less" : "Show More") |> str}
         </a> :
         ReasonReact.null

@@ -104,7 +104,7 @@ module Questions
       if user_profile.avatar.attached?
         view.url_for(user_profile.avatar_variant(:mid))
       else
-        user_profile.initials_avatar(:square)
+        user_profile.initials_avatar
       end
     end
   end

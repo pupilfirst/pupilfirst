@@ -50,13 +50,13 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
     <div className="flex px-6 py-2 items-center justify-between">
       <button
         onClick={_ => setEditorAction(_ => ShowEditor(None))}
-        className="max-w-md w-full flex mx-auto items-center justify-center relative bg-grey-lighter hover:bg-grey-light hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+        className="max-w-3xl w-full flex mx-auto items-center justify-center relative bg-gray-200 hover:bg-gray-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
         <i className="material-icons"> {"add_circle_outline" |> str} </i>
         <h4 className="font-semibold ml-2"> {"Add New Community" |> str} </h4>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
-      <div className="max-w-md w-full mx-auto relative">
+      <div className="max-w-3xl w-full mx-auto relative">
         {
           stateCommunities
           |> List.map(community =>
@@ -68,7 +68,7 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
                  }>
                  <div className="course-faculty__list-item flex w-full">
                    <div
-                     className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-grey-lighter">
+                     className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-200">
                      <div className="flex">
                        <div className="text-sm">
                          <p className="text-black font-semibold">

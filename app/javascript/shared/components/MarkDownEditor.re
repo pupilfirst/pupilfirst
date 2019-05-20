@@ -94,7 +94,7 @@ let buttons = (description, setDescription, updateDescriptionCB) =>
   [|Bold, Italics, Code|]
   |> Array.map(action =>
        <button
-         className="markdown-button-group__button hover:bg-primary-lightest hover:text-primary-light focus:outline-none focus:text-primary-dark"
+         className="markdown-button-group__button hover:bg-primary-100 hover:text-primary-400 focus:outline-none focus:text-primary-600"
          key={action |> buttonTitle}
          title={action |> buttonTitle}
          onClick={
@@ -162,7 +162,7 @@ let make = (~placeholderText, ~updateDescriptionCB) => {
                 updateDescriptionCB,
               )
           }
-          className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded p-3 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+          className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded p-3 leading-tight focus:outline-none focus:bg-white focus:border-gray"
         />
     }
   </div>;

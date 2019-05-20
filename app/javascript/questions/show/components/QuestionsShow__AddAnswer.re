@@ -80,7 +80,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   };
 
   <div
-    className="mt-4 my-8 max-w-lg w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
+    className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
     <div className="flex w-full py-4 px-4">
       <div className="w-full flex flex-col">
         <DisablingCover disabled=saving>

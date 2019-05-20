@@ -42,7 +42,7 @@ module CreateAnswerLikeErrorHandler =
   GraphqlErrorHandler.Make(CreateAnswerLikeError);
 
 let iconClasses = (liked, saving) => {
-  let classes = "text-xl text-grey-dark";
+  let classes = "text-xl text-gray-600";
   classes
   ++ (
     if (saving) {

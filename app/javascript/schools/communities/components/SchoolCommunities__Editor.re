@@ -161,7 +161,7 @@ let handleQuery =
 
 let booleanButtonClasses = bool => {
   let classes = "toggle-button__button";
-  classes ++ (bool ? " toggle-button__button--active" : " text-grey-dark");
+  classes ++ (bool ? " toggle-button__button--active" : " text-gray-600");
 };
 
 let communityCourseIds = courseState =>
@@ -229,14 +229,14 @@ let make =
   let saveDisabled = name == "" || !dirty;
 
   <div className="mx-8 pt-8">
-    <h5 className="uppercase text-center border-b border-grey-light pb-2">
+    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
       {"Community Editor" |> str}
     </h5>
     <DisablingCover disabled=saving>
       <div key="communities-editor" className="mt-3">
         <div className="mt-2">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__name">
             {"Name" |> str}
           </label>
@@ -249,7 +249,7 @@ let make =
               }
             }
             id="communities-editor__name"
-            className="appearance-none h-10 mt-2 block w-full text-grey-darker border border-grey-light rounded py-2 px-4 text-sm bg-grey-lightest hover:bg-grey-lighter focus:outline-none focus:bg-white focus:border-primary-light"
+            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           />
           <School__InputGroupError
             message="is not a valid name"
@@ -258,7 +258,7 @@ let make =
         </div>
         <div className="flex items-center mt-6">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold"
+            className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
             {
               "Allow students to ask questions about targets in this community?"
@@ -291,7 +291,7 @@ let make =
         </div>
         <div className="mt-4">
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+            className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
             {"Give Access to students from" |> str}
           </label>
@@ -314,7 +314,7 @@ let make =
           )
         }
         key="communities-editor__update-button"
-        className="w-full bg-indigo-dark hover:bg-blue-dark text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
         {
           (
             switch (community) {

@@ -3,10 +3,10 @@
 }
 
 .community-answer-container>::after {
-  @apply relative h-13 inline-block text-center pin-b w-full pt-3;
+  @apply relative h-13 inline-block text-center bottom-0 w-full pt-3;
   content: '...';
   line-height: 1;
-  color: config(colors.grey-dark);
+  color: theme(colors.grey-600);
   font-size: 30px;
   letter-spacing: .6em;
 }

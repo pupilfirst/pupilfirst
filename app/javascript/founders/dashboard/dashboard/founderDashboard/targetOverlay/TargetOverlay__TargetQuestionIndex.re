@@ -81,7 +81,7 @@ let make = (~questions, ~targetId, ~communities, ~loading) =>
                                   ++ (question##id |> string_of_int)
                                 }
                                 key={question##id |> string_of_int}
-                                className="target-overlay-community__question d-flex justify-content-between text-dark align-items-center border-bottom border-grey p-3">
+                                className="target-overlay-community__question d-flex justify-content-between text-600 align-items-center border-bottom border-grey p-3">
                                 <span className="d-block col-12 col-sm-9">
                                   {React.string(question##title)}
                                 </span>

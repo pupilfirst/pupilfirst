@@ -105,9 +105,9 @@ let make = (~authenticityToken, ~communityId, ~communityPath, ~target) => {
   let updateDescriptionCB = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
 
-  <div className="flex flex-1 bg-grey-lightest">
+  <div className="flex flex-1 bg-gray-100">
     <div className="flex-1 flex flex-col">
-      <div className="max-w-lg w-full mx-auto mt-5 pb-2">
+      <div className="max-w-2xl w-full mx-auto mt-5 pb-2">
         <a className="btn btn-default no-underline" href=communityPath>
           <i className="far fa-arrow-left" />
           <span className="ml-2"> {React.string("Back")} </span>
@@ -116,14 +116,14 @@ let make = (~authenticityToken, ~communityId, ~communityPath, ~target) => {
       {
         switch (target) {
         | Some(target) =>
-          <div className="max-w-lg w-full mt-5 mx-auto px-3 md:px-0">
+          <div className="max-w-2xl w-full mt-5 mx-auto px-3 md:px-0">
             <div
-              className="flex py-4 px-4 md:px-6 w-full bg-yellow-lightest border border-dashed border-yellow-light rounded justify-between items-center">
+              className="flex py-4 px-4 md:px-6 w-full bg-yellow-100 border border-dashed border-yellow-400 rounded justify-between items-center">
               <p className="w-3/5 md:w-4/5 font-semibold text-sm">
                 {"Target:" ++ (target |> QuestionsEditor__Target.title) |> str}
               </p>
               <a
-                className="no-underline bg-yellow-lightest border border-yellow-light px-3 py-2 hover:bg-yellow-lighter rounded-lg cursor-pointer text-xs font-semibold">
+                className="no-underline bg-yellow-100 border border-yellow-400 px-3 py-2 hover:bg-yellow-200 rounded-lg cursor-pointer text-xs font-semibold">
                 {"Clear" |> str}
               </a>
             </div>
@@ -132,20 +132,20 @@ let make = (~authenticityToken, ~communityId, ~communityPath, ~target) => {
         }
       }
       <div
-        className="mt-4 my-8 max-w-lg w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
+        className="mt-4 my-8 max-w-2xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
         <div className="flex w-full flex-col py-4 px-4">
           <h5
-            className="uppercase text-center border-b border-grey-light pb-2 mb-4">
+            className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
             {"Ask a new Question" |> str}
           </h5>
           <label
-            className="inline-block tracking-wide text-grey-darker text-xs font-semibold mb-2"
+            className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
             htmlFor="title">
             {"Title" |> str}
           </label>
           <input
             id="title"
-            className="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
             onChange={
               event => setTitle(ReactEvent.Form.target(event)##value)
             }

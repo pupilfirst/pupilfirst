@@ -15,8 +15,8 @@ let additionalLinks = (linksVisible, links) =>
       className="border-2 border-gray-200 rounded-lg absolute w-48 bg-white mt-2">
       {
         links
-        |> List.map(link =>
-             <div className="p-2 cursor-default">
+        |> List.mapi((index, link) =>
+             <div key={index |> string_of_int} className="p-2 cursor-default">
                <a
                  className="no-underline text-black"
                  href={link |> NavLink.url}>

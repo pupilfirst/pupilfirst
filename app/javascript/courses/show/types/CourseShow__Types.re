@@ -4,5 +4,6 @@ module TargetGroup = CourseShow__TargetGroup;
 module Target = CourseShow__Target;
 module Submission = CourseShow__Submission;
 module Student = CourseShow__Student;
+module Team = CourseShow__Team;
 module Coach = CourseShow__Coach;
 module UserProfile = CourseShow__UserProfile;

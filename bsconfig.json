@@ -19,7 +19,8 @@
     "reason-react",
     "@glennsl/bs-json",
     "bs-fetch",
-    "bs-webapi"
+    "bs-webapi",
+    "bs-date-fns"
   ],
   "refmt": 3,
   "ppx-flags": ["graphql_ppx/ppx"],

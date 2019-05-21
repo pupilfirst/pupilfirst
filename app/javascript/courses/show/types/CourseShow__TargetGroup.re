@@ -16,3 +16,7 @@ let decode = json =>
     sortIndex: json |> field("sortIndex", int),
     milestone: json |> field("milestone", bool),
   };
+
+let id = t => t.id;
+let levelId = t => t.levelId;
+let milestone = t => t.milestone;

@@ -12,6 +12,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.3.1",
+    "bs-date-fns": "^0.1.6",
     "bs-fetch": "^0.3.0",
     "bs-webapi": "^0.14.2",
     "cloc": "^2.4.0",

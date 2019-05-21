@@ -11,12 +11,11 @@ let decodeProps = json =>
     json |> field("targetGroups", list(TargetGroup.decode)),
     json |> field("targets", list(Target.decode)),
     json |> field("submissions", list(Submission.decode)),
-    json |> field("team", string),
+    json |> field("team", Team.decode),
     json |> field("students", list(Student.decode)),
     json |> field("coaches", list(Coach.decode)),
     json |> field("userProfiles", list(UserProfile.decode)),
     json |> field("currentUserId", string),
-    json |> field("locked", bool),
   );
 
 let (
@@ -32,7 +31,6 @@ let (
   coaches,
   userProfiles,
   currentUserId,
-  locked,
 ) =
   DomUtils.parseJsonAttribute() |> decodeProps;
 
@@ -50,7 +48,6 @@ ReactDOMRe.renderToElementWithId(
     coaches
     userProfiles
     currentUserId
-    locked
   />,
   "react-root",
 );

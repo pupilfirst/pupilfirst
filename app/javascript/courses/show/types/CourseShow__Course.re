@@ -16,3 +16,5 @@ let decode = json =>
     gradeLabels: json |> field("gradeLabels", list(GradeLabel.decode)),
     endsAt: json |> field("endsAt", nullable(string)) |> Js.Null.toOption,
   };
+
+let endsAt = t => t.endsAt;

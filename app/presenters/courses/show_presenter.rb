@@ -24,8 +24,7 @@ module Courses
         students: team_members.map(&:attributes),
         coaches: faculty.map(&:attributes),
         user_profiles: user_profiles,
-        current_user_id: current_user.id,
-        locked: @course.ended? || current_student.access_ended?
+        current_user_id: current_user.id
       }
     end
 
@@ -67,9 +66,9 @@ module Courses
         .where(archived: false)
 
       scope.select(*attributes).map do |target|
-        attributes = target.attributes.slice(*attributes)
-        attributes[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
-        attributes
+        details = target.attributes.slice(*attributes)
+        details[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
+        details
       end
     end
 

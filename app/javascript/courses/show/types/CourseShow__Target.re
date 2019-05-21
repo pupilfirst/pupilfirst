@@ -11,6 +11,7 @@ type t = {
   targetGroupId: string,
   sortIndex: int,
   resubmittable: bool,
+  prerequisiteTargetIds: list(string),
 };
 
 let decode = json =>
@@ -26,6 +27,11 @@ let decode = json =>
     targetGroupId: json |> field("targetGroupId", string),
     sortIndex: json |> field("sortIndex", int),
     resubmittable: json |> field("resubmittable", bool),
+    prerequisiteTargetIds:
+      json |> field("prerequisiteTargetIds", list(string)),
   };
 
 let id = t => t.id;
+let title = t => t.title;
+let targetGroupId = t => t.targetGroupId;
+let prerequisiteTargetIds = t => t.prerequisiteTargetIds;

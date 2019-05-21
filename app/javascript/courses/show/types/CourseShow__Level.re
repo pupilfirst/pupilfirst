@@ -13,3 +13,6 @@ let decode = json =>
     unlockOn:
       json |> field("unlockOn", nullable(string)) |> Js.Null.toOption,
   };
+
+let id = t => t.id;
+let number = t => t.number;

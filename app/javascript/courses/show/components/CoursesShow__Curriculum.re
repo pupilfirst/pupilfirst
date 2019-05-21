@@ -11,9 +11,10 @@ open CourseShow__Types;
  * the sake of performance - things like target and student's level number, the
  * submission state for each target.
  */
-module StatusComputer = {
+module TargetStatus = {
   type lockReason =
     | CourseLocked
+    | AccessLocked
     | LevelLocked
     | PreviousLevelMilestonesIncomplete
     | PrerequisitesIncomplete;
@@ -25,7 +26,7 @@ module StatusComputer = {
     | Failed
     | Locked(lockReason);
 
-  type targetStatus = {
+  type t = {
     targetId: string,
     status,
   };
@@ -41,80 +42,157 @@ module StatusComputer = {
     levelNumber: int,
     milestone: bool,
     submissionStatus,
+    prerequisiteTargetIds: list(string),
   };
 
   type cachedStudent = {levelNumber: int};
 
-  let compute = (team, students, course, levels, targets, submissions) => {
-    /* Step 0: Eliminate the two course ended and student access ended conditions. */
-    /* Step 1: Cache level number of the student. */
-    /* Step 2: Cache level number, milestone boolean, and submission status for all targets. */
-    /* Do the stuff in the computeStatusOfTargets (below), but with the cached values. */
-  };
+  let isPast = dateString =>
+    switch (dateString) {
+    | Some(date) =>
+      date |> DateFns.parseString |> DateFns.isBefore(Js.Date.make())
+    | None => false
+    };
+
+  let lockTargets = (targets, reason) =>
+    targets
+    |> List.map(t => {targetId: t |> Target.id, status: Locked(reason)});
+
+  let allTargetsComplete = (targetCache, targetIds) =>
+    targetIds
+    |> List.for_all(targetId => {
+         let cachedTarget =
+           targetCache |> List.find(ct => ct.targetId == targetId);
+         cachedTarget.submissionStatus == SubmissionPassed;
+       });
+
+  let compute =
+      (team, students, course, levels, targetGroups, targets, submissions) =>
+    /* Eliminate the two course ended and student access ended conditions. */
+    if (course |> Course.endsAt |> isPast) {
+      lockTargets(targets, CourseLocked);
+    } else if (team |> Team.accessEndsAt |> isPast) {
+      lockTargets(targets, AccessLocked);
+    } else {
+      /* Cache level number of the student. */
+      let studentLevelNumber =
+        levels
+        |> List.find(l => l |> Level.id == (team |> Team.levelId))
+        |> Level.number;
+
+      /* Create a mutable cache of levels and their milestone completion status. */
+      let levelCache =
+        levels
+        |> List.map(l => (l |> Level.number |> string_of_int, true))
+        |> Js.Dict.fromList;
+
+      /* Cache level number, milestone boolean, and submission status for all targets. */
+      let targetsCache =
+        targets
+        |> List.map(target => {
+             let targetId = target |> Target.id;
+
+             let targetGroup =
+               targetGroups
+               |> List.find(tg =>
+                    tg |> TargetGroup.id == (target |> Target.targetGroupId)
+                  );
+
+             let milestone = targetGroup |> TargetGroup.milestone;
+
+             let levelNumber =
+               levels
+               |> List.find(l =>
+                    l |> Level.id == (targetGroup |> TargetGroup.levelId)
+                  )
+               |> Level.number;
+
+             let submission =
+               submissions
+               |> ListUtils.findOpt(s => s |> Submission.targetId == targetId);
+
+             let submissionStatus =
+               switch (submission) {
+               | Some(s) =>
+                 if (s |> Submission.hasPassed) {
+                   SubmissionPassed;
+                 } else if (s |> Submission.hasBeenEvaluated) {
+                   SubmissionFailed;
+                 } else {
+                   SubmissionPendingReview;
+                 }
+               | None => SubmissionMissing
+               };
+
+             /* If any milestone target is incomplete, mark that level as having incomplete milestones. */
+             if (milestone && submissionStatus != SubmissionPassed) {
+               Js.Dict.set(levelCache, levelNumber |> string_of_int, false);
+             };
+
+             {
+               targetId,
+               levelNumber,
+               milestone,
+               submissionStatus,
+               prerequisiteTargetIds: target |> Target.prerequisiteTargetIds,
+             };
+           });
+
+      /* Scan the targets cache again to form final list of target statuses. */
+      targetsCache
+      |> List.map(ct => {
+           let status =
+             switch (ct.submissionStatus) {
+             | SubmissionPendingReview => Submitted
+             | SubmissionPassed => Passed
+             | SubmissionFailed => Failed
+             | SubmissionMissing =>
+               if (ct.levelNumber > studentLevelNumber) {
+                 Locked(LevelLocked);
+               } else if (ct.milestone
+                          && ct.levelNumber > 1
+                          && !(
+                               ct.levelNumber
+                               - 1
+                               |> string_of_int
+                               |> Js.Dict.unsafeGet(levelCache)
+                             )) {
+                 Locked(PreviousLevelMilestonesIncomplete);
+               } else if (!(
+                            ct.prerequisiteTargetIds
+                            |> allTargetsComplete(targetsCache)
+                          )) {
+                 Locked(PrerequisitesIncomplete);
+               } else {
+                 Pending;
+               }
+             };
+
+           {targetId: ct.targetId, status};
+         });
+    };
+
+  let targetId = (t: t) => t.targetId;
+  let status = t => t.status;
+
+  let lockReasonToString = lr =>
+    switch (lr) {
+    | CourseLocked => "Course has ended"
+    | AccessLocked => "Student's access to course has ended"
+    | LevelLocked => "Student must level up to access this target"
+    | PreviousLevelMilestonesIncomplete => "Previous level's milestone targets have not been reviewed yet"
+    | PrerequisitesIncomplete => "This target has pre-requisites that are incomplete"
+    };
+
+  let statusToString = t =>
+    switch (t.status) {
+    | Pending => "Pending"
+    | Submitted => "Submitted"
+    | Passed => "Passed"
+    | Failed => "Failed"
+    | Locked(reason) => "Locked(" ++ lockReasonToString(reason) ++ ")"
+    };
 };
-
-/*
- let computeStatusOfTargets = (locked, students, levels, targets, submissions) =>
-   if (locked) {
-     targets
-     |> List.map(target =>
-          {targetId: target |> Target.id, status: Locked(CourseLocked)}
-        );
-   } else {
-     targets
-     |> List.map(target => {
-          let targetId = target |> Target.id;
-
-          let status =
-            switch (
-              submissions
-              |> ListUtils.findOpt(s => s |> Submission.targetId == targetId)
-            ) {
-            | Some(submission) =>
-              if (submission |> Submission.hasPassed) {
-                Passed;
-              } else if (submission |> Submission.hasBeenEvaluated) {
-                Failed;
-              } else {
-                Submitted;
-              }
-            | None =>
-              let targetLevel = target |> Target.levelNumber;
-              let studentLevel = currentStudent |> Student.levelNumber;
-
-              if (targetLevel > studentLevel) {
-                Locked(LevelLocked);
-              } else {
-
-
-                if (target |> Target.isMilestone) {
-                 let lastLevel = target |> Target.levelNumber -1;
-                 let milestoneTargetsFromLastLevel = target |> List.filter(t => t |> Target.isMilestone && t.levelNumber == lastLevel);
-                }
-
-                if (target
-                         |> Target.isMilestone
-                         && targets
-                         |> List.filter(t =>
-                              t
-                              |> Target.levelNumber
-                              == (target |> Target.levelNumber - 1)
-                            )
-                         |> targetsNotPassed(submissions)) {
-                Locked(PreviousLevelMilestonesIncomplete);
-              } else if (target
-                         |> Target.prerequisiteTargetIds
-                         |> targetsNotPassed(submissions)) {
-                Locked(PrerequisitesIncomplete);
-              } else {
-                Pending;
-              };
-            };
-
-          {targetId, status};
-        });
-   };
- */
 
 [@react.component]
 let make =
@@ -131,10 +209,25 @@ let make =
       ~coaches,
       ~userProfiles,
       ~currentUserId,
-      ~locked,
     ) => {
   let statusOfTargets =
-    computeStatusOfTargets(locked, students, levels, targets, submissions);
-  Js.log2(authenticityToken, schoolName);
+    TargetStatus.compute(
+      team,
+      students,
+      course,
+      levels,
+      targetGroups,
+      targets,
+      submissions,
+    );
+
+  statusOfTargets
+  |> List.iter(ts => {
+       let target =
+         targets
+         |> List.find(t => t |> Target.id == (ts |> TargetStatus.targetId));
+       Js.log2(target |> Target.title, ts |> TargetStatus.statusToString);
+     });
+
   <div> {"Boo!" |> React.string} </div>;
 };

@@ -1,40 +1,22 @@
 module Layouts
   class StudentTopNavPresenter < ::ApplicationPresenter
-    def school_name
-      @school_name ||= current_school.present? ? current_school.name : 'PupilFirst'
+    def props
+      {
+        school_name: school_name,
+        logo_url: logo_url,
+        links: nav_links
+      }
     end
 
-    def logo?
-      return true if current_school.blank?
-
-      current_school.logo_on_light_bg.attached?
+    def school_name
+      @school_name ||= current_school.present? ? current_school.name : 'PupilFirst'
     end
 
     def logo_url
       if current_school.blank?
         view.image_url('mailer/pupilfirst-logo.png')
-      else
+      elsif current_school.logo_on_light_bg.attached?
         view.url_for(current_school.logo_variant(:mid))
-      end
-    end
-
-    def visible_links
-      if nav_links.length > 4
-        nav_links[0..2]
-      else
-        nav_links
-      end
-    end
-
-    def more_links
-      @more_links ||= begin
-        if nav_links.length > 4
-          {
-            title: 'More',
-            id: 'navbar-more-dropdown',
-            options: nav_links[-(nav_links.length - 3)..-1]
-          }
-        end
       end
     end
 
@@ -51,12 +33,16 @@ module Layouts
         end
 
         # Both, with the user-based links at the front.
-        links + custom_links
+        home_link + links + custom_links
       end
     end
 
     def admin_link
       { title: 'Admin', url: '/school' } if current_school.present? && view.policy(current_school).show?
+    end
+
+    def home_link
+      [{ title: 'Home', url: '/home' }]
     end
   end
 end

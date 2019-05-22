@@ -15,6 +15,7 @@ type action =
 type state = {
   answers: list(Answer.t),
   comments: list(Comment.t),
+  markdownVersions: list(MarkdownVersion.t),
   likes: list(Like.t),
   showAnswerCreate: bool,
 };
@@ -50,13 +51,14 @@ let make =
       ~comments,
       ~userData,
       ~likes,
+      ~markdownVersions,
       ~currentUserId,
       ~communityPath,
     ) => {
   let (state, dispatch) =
     React.useReducer(
       reducer,
-      {answers, comments, likes, showAnswerCreate: false},
+      {answers, comments, likes, showAnswerCreate: false, markdownVersions},
     );
   let addCommentCB = comment => dispatch(AddComment(comment));
   let addAnswerCB = answer => {
@@ -83,9 +85,17 @@ let make =
                   {question |> Question.title |> str}
                 </h2>
               </div>
-              <div className="pt-2 pb-4 px-6 leading-normal text-sm">
-                {question |> Question.description |> str}
-              </div>
+              <div
+                className="py-4 px-6 leading-normal text-sm markdown-body"
+                dangerouslySetInnerHTML={
+                  "__html":
+                    state.markdownVersions
+                    |> MarkdownVersion.latestValue(
+                         question |> Question.id,
+                         "Question",
+                       ),
+                }
+              />
               <div className="flex flex-row justify-between px-6 pb-6">
                 <div className="pr-2 pt-6 text-center">
                   <i className="fal fa-comment-lines text-xl text-gray-600" />
@@ -151,7 +161,11 @@ let make =
                            className="py-4 px-6 leading-normal text-sm markdown-body"
                            dangerouslySetInnerHTML={
                              "__html":
-                               answer |> Answer.description |> Markdown.parse,
+                               state.markdownVersions
+                               |> MarkdownVersion.latestValue(
+                                    answer |> Answer.id,
+                                    "Answer",
+                                  ),
                            }
                          />
                          <div

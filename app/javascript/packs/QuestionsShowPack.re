@@ -7,6 +7,7 @@ type props = {
   answers: list(Answer.t),
   comments: list(Comment.t),
   userData: list(UserData.t),
+  markdownVersions: list(MarkdownVersion.t),
   likes: list(Like.t),
   currentUserId: string,
   communityPath: string,
@@ -19,6 +20,8 @@ let decodeProps = json =>
     answers: json |> field("answers", list(Answer.decode)),
     comments: json |> field("comments", list(Comment.decode)),
     userData: json |> field("userData", list(UserData.decode)),
+    markdownVersions:
+      json |> field("markdownVersions", list(MarkdownVersion.decode)),
     likes: json |> field("likes", list(Like.decode)),
     currentUserId: json |> field("currentUserId", string),
     communityPath: json |> field("communityPath", string),
@@ -34,6 +37,7 @@ ReactDOMRe.renderToElementWithId(
     comments={props.comments}
     userData={props.userData}
     likes={props.likes}
+    markdownVersions={props.markdownVersions}
     currentUserId={props.currentUserId}
     communityPath={props.communityPath}
   />,

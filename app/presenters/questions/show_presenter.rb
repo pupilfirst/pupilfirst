@@ -14,6 +14,7 @@ module Questions
         userData: user_data,
         likes: likes,
         currentUserId: current_user.id.to_s,
+        markdownVersions: markdown_versions,
         communityPath: view.community_path(@question.community)
       }.to_json
     end
@@ -22,7 +23,6 @@ module Questions
       {
         id: @question.id.to_s,
         title: @question.title,
-        description: @question.description,
         userId: @question.user_id.to_s,
         createdAt: created_at(@question)
       }
@@ -30,10 +30,9 @@ module Questions
 
     def answer_data
       @answer_data ||=
-        @question.answers.select(:id, :description, :user_id, :created_at).map do |answer|
+        @question.answers.select(:id, :user_id, :created_at).map do |answer|
           {
             id: answer.id.to_s,
-            description: answer.description,
             userId: answer.user_id.to_s,
             createdAt: created_at(answer)
           }
@@ -57,6 +56,25 @@ module Questions
         userId: comment.user_id.to_s,
         commentableType: comment.commentable_type,
         commentableId: comment.commentable_id.to_s
+      }
+    end
+
+    def markdown_versions
+      (@question.markdown_versions +
+        MarkdownVersion.where(
+          versionable_type: MarkdownVersion::VERSIONABLE_TYPE__ANSWER,
+          versionable_id: @answer_data.pluck(:id)
+        ))
+        .map(&method(:markdown_versions_data))
+    end
+
+    def markdown_versions_data(markdown_version)
+      {
+        id: markdown_version.to_s,
+        value: markdown_version.value,
+        latest: markdown_version.latest,
+        versionableType: markdown_version.versionable_type,
+        versionableId: markdown_version.versionable_id.to_s
       }
     end
 

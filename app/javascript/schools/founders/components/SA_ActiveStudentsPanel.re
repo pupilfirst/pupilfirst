@@ -447,7 +447,7 @@ let make =
           </div>
           <div
             className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b py-3 mt-3 w-full">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pl-3">
               <input
                 type_="search"
                 className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
@@ -464,7 +464,7 @@ let make =
               />
               <div
                 onClick={_e => send(ToggleFilterVisibility)}
-                className="flex text-indigo items-center">
+                className="flex text-indigo items-center mr-3">
                 <p className="text-sm font-semibold mr-1">
                   {
                     (state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str

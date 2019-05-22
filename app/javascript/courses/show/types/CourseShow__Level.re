@@ -15,4 +15,5 @@ let decode = json =>
   };
 
 let id = t => t.id;
+let name = t => t.name;
 let number = t => t.number;

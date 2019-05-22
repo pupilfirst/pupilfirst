@@ -18,5 +18,7 @@ let decode = json =>
   };
 
 let id = t => t.id;
+let name = t => t.name;
 let levelId = t => t.levelId;
+let sortIndex = t => t.sortIndex;
 let milestone = t => t.milestone;

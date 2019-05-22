@@ -33,5 +33,6 @@ let decode = json =>
 
 let id = t => t.id;
 let title = t => t.title;
+let sortIndex = t => t.sortIndex;
 let targetGroupId = t => t.targetGroupId;
 let prerequisiteTargetIds = t => t.prerequisiteTargetIds;

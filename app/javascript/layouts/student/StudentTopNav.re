@@ -49,11 +49,11 @@ let make = (~schoolName, ~logoUrl, ~links) => {
 
   Js.log(isMobile());
 
-  <div className="flex m-2">
+  <div className="flex p-2 border-b">
     <nav
       className="flex flex-col md:flex-row w-full xl:max-w-5xl mx-auto justify-between items-center">
       <div className="flex w-full flex-row items-center justify-between">
-        <a className="w-48 pr-6 pl-2 py-4" href="/">
+        <a className="w-40 pr-6 pl-2 py-4" href="/">
           {
             switch (logoUrl) {
             | Some(url) =>

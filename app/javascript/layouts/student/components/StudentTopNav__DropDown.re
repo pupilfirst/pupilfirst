@@ -12,13 +12,13 @@ let handleToggle = (linksVisible, setLinksVisible, event) => {
 let additionalLinks = (linksVisible, links) =>
   linksVisible ?
     <div
-      className="border-2 border-gray-200 rounded-lg absolute w-48 bg-white mt-2">
+      className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden w-40 right-0 z-50">
       {
         links
         |> List.mapi((index, link) =>
-             <div key={index |> string_of_int} className="p-2 cursor-default">
+             <div key={index |> string_of_int} className="">
                <a
-                 className="no-underline text-black"
+                 className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
                  href={link |> NavLink.url}>
                  {link |> NavLink.title |> str}
                </a>

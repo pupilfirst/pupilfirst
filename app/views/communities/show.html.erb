@@ -18,7 +18,7 @@
             <%= hidden_field_tag "target_id", @target.id %>
           <% end %>
           <%= text_field_tag :search, @search, placeholder: "Search...", class: "appearance-none block w-full shadow bg-white text-gray-700 border border-primary-200 rounded py-3 pl-4 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-primary-400 focus:shadow-md" %>
-          <%= button_tag(type: "submit", class: "absolute right-0 w-8 h-8 mr-3 rounded-full bg-gray-200 text-gray-600 hover:bg-primary-100 hover:text-primary flex items-center justify-center focus:outline-none focus:text-primary") do %>
+          <%= button_tag(type: "submit", class: "absolute right-0 w-8 h-8 mr-3 rounded-full bg-gray-200 text-gray-600 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-center focus:outline-none focus:text-primary-500") do %>
             <i title="Search" class="far fa-arrow-right text-lg"></i>
           <% end %>
         <% end %>

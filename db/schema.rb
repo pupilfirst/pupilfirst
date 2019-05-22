@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
   end
 
   create_table "answers", force: :cascade do |t|
+    t.text "description"
     t.bigint "question_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
@@ -316,16 +317,6 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.index ["number"], name: "index_levels_on_number"
   end
 
-  create_table "markdown_versions", force: :cascade do |t|
-    t.text "value"
-    t.boolean "latest", default: false
-    t.string "versionable_type"
-    t.bigint "versionable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["versionable_type", "versionable_id"], name: "index_markdown_versions_on_versionable_type_and_versionable_id"
-  end
-
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
     t.text "description"
@@ -362,6 +353,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
 
   create_table "questions", force: :cascade do |t|
     t.string "title"
+    t.text "description"
     t.bigint "community_id"
     t.bigint "user_id"
     t.datetime "last_activity_at"

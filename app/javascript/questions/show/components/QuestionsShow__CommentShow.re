@@ -65,7 +65,7 @@ let make =
       comments |> List.length > 3 && !showMore ?
         <a
           onClick={_ => setShowMore(_ => !showMore)}
-          className="bg-gray-200 rounded-full cursor-pointer border py-1 px-3 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-100 hover:text-primary -mt-3">
+          className="bg-gray-200 rounded-full cursor-pointer border py-1 px-3 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-100 hover:text-primary-500 -mt-3">
           {(showMore ? "Show Less" : "Show More") |> str}
         </a> :
         ReasonReact.null

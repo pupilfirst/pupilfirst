@@ -5,4 +5,5 @@ class Answer < ApplicationRecord
   has_many :comments, as: :commentable, dependent: :restrict_with_error
   has_one :school, through: :question
   has_many :markdown_versions, as: :versionable, dependent: :restrict_with_error
+  has_one :community, through: :question
 end

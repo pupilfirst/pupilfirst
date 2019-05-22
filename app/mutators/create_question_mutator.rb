@@ -1,6 +1,4 @@
 class CreateQuestionMutator < ApplicationMutator
-  include ActiveSupport::Concern
-
   attr_accessor :title
   attr_accessor :description
   attr_accessor :community_id
@@ -24,16 +22,14 @@ class CreateQuestionMutator < ApplicationMutator
   end
 
   def authorized?
-    # Can't ask questions at PupilFirst.
-    raise UnauthorizedMutationException if current_school.blank?
+    #  Can't ask questions at PupilFirst., current user must exist, Can only ask questions in the same school.
+    return false unless current_school.present? && current_user.present? && (community&.school == current_school)
 
-    # Only a student or coach can ask a question.
-    raise UnauthorizedMutationException if current_founder.blank? && current_coach.blank?
+    # Coach has access to all communities
+    return true if current_coach.present?
 
-    # Can only ask questions in the same school.
-    raise UnauthorizedMutationException if community&.school != current_school
-
-    true
+    # User should have access to the community
+    current_user.founders.includes(:course).where(courses: { id: community.courses }).any?
   end
 
   private

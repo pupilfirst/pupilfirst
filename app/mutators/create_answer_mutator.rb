@@ -1,6 +1,4 @@
 class CreateAnswerMutator < ApplicationMutator
-  include ActiveSupport::Concern
-
   attr_accessor :description
   attr_accessor :question_id
 
@@ -20,16 +18,14 @@ class CreateAnswerMutator < ApplicationMutator
   end
 
   def authorized?
-    # Can't answer at PupilFirst.
-    raise UnauthorizedMutationException if current_school.blank?
+    # Can't answer at PupilFirst, current user must exist, Can only answer questions in the same school.
+    return false unless current_school.present? && current_user.present? && (question&.school == current_school)
 
-    # Only a student or coach can answer.
-    raise UnauthorizedMutationException if current_founder.blank? && current_coach.blank?
+    # Coach has access to all communities
+    return true if current_coach.present?
 
-    # Can only answer questions in the same school.
-    raise UnauthorizedMutationException if question&.school != current_school
-
-    true
+    # User should have access to the community
+    current_user.founders.includes(:course).where(courses: { id: question.community.courses }).any?
   end
 
   private

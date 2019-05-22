@@ -1,6 +1,4 @@
 class DestroyAnswerLikeMutator < ApplicationMutator
-  include ActiveSupport::Concern
-
   attr_accessor :id
 
   validates :id, presence: true
@@ -10,19 +8,11 @@ class DestroyAnswerLikeMutator < ApplicationMutator
   end
 
   def authorized?
-    # Can't unlike at PupilFirst.
-    raise UnauthorizedMutationException if current_school.blank?
-
-    # Only a student or coach can unlike.
-    raise UnauthorizedMutationException if current_founder.blank? && current_coach.blank?
-
-    # Can only unlike on answers in the same school.
-    raise UnauthorizedMutationException if answer_like&.answer&.school != current_school
+    # Can't unlike at PupilFirst, current user must exist, Can only unlike on answers in the same school.
+    return false unless current_school.present? && current_user.present? && (answer_like&.answer&.school == current_school)
 
     # Only a the liked user can can unlike.
-    raise UnauthorizedMutationException if answer_like&.user != current_user
-
-    true
+    answer_like&.user == current_user
   end
 
   private

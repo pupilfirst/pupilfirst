@@ -1,10 +1,7 @@
 class CreateAnswerLikeMutator < ApplicationMutator
-  include ActiveSupport::Concern
-
   attr_accessor :answer_id
 
   validates :answer_id, presence: { message: 'BlankAnswerId' }
-
   validate :like_from_user_does_not_exist
 
   def like_from_user_does_not_exist
@@ -22,16 +19,14 @@ class CreateAnswerLikeMutator < ApplicationMutator
   end
 
   def authorized?
-    # Can't comment at PupilFirst.
-    raise UnauthorizedMutationException if current_school.blank?
+    # Can't like at PupilFirst, current user must exist, Can only like answers in the same school.
+    return false unless current_school.present? && current_user.present? && (answer&.school == current_school)
 
-    # Only a student or coach can like an answer.
-    raise UnauthorizedMutationException if current_founder.blank? && current_coach.blank?
+    # Coach has access to all communities
+    return true if current_coach.present?
 
-    # Can only like on answers in the same school.
-    raise UnauthorizedMutationException if answer&.school != current_school
-
-    true
+    # User should have access to the community
+    current_user.founders.includes(:course).where(courses: { id: answer.community.courses }).any?
   end
 
   private

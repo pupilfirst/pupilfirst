@@ -1,6 +1,4 @@
 class CreateCommentMutator < ApplicationMutator
-  include ActiveSupport::Concern
-
   attr_accessor :value
   attr_accessor :commentable_type
   attr_accessor :commentable_id
@@ -20,16 +18,14 @@ class CreateCommentMutator < ApplicationMutator
   end
 
   def authorized?
-    # Can't comment at PupilFirst.
-    raise UnauthorizedMutationException if current_school.blank?
+    # Can't comment at PupilFirst, current user must exist, Can only comment in the same school.
+    return false unless current_school.present? && current_user.present? && (commentable&.school == current_school)
 
-    # Only a student or coach can comment.
-    raise UnauthorizedMutationException if current_founder.blank? && current_coach.blank?
+    # Coach has access to all communities
+    return true if current_coach.present?
 
-    # Can only comment on commentables in the same school.
-    raise UnauthorizedMutationException if commentable&.school != current_school
-
-    true
+    # User should have access to the community
+    current_user.founders.includes(:course).where(courses: { id: commentable.community.courses }).any?
   end
 
   private

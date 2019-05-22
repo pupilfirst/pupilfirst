@@ -7,7 +7,7 @@ let str = React.string;
 
 type action =
   | AddComment(Comment.t)
-  | AddAnswer(Answer.t)
+  | AddAnswer(Answer.t, MarkdownVersion.t, bool)
   | AddLike(Like.t)
   | RemoveLike(string)
   | UpdateShowAnswerCreate(bool);
@@ -26,10 +26,14 @@ let reducer = (state, action) =>
       ...state,
       comments: Comment.addComment(state.comments, comment),
     }
-  | AddAnswer(answer) => {
+  | AddAnswer(answer, markdownVersion, bool) => {
       ...state,
       answers: Answer.addAnswer(state.answers, answer),
+      markdownVersions:
+        MarkdownVersion.add(markdownVersion, state.markdownVersions),
+      showAnswerCreate: bool,
     }
+
   | AddLike(like) => {...state, likes: state.likes |> Like.addLike(like)}
   | RemoveLike(id) => {...state, likes: state.likes |> Like.removeLike(id)}
   | UpdateShowAnswerCreate(bool) => {...state, showAnswerCreate: bool}
@@ -61,10 +65,8 @@ let make =
       {answers, comments, likes, showAnswerCreate: false, markdownVersions},
     );
   let addCommentCB = comment => dispatch(AddComment(comment));
-  let addAnswerCB = answer => {
-    dispatch(AddAnswer(answer));
-    dispatch(UpdateShowAnswerCreate(false));
-  };
+  let addAnswerCB = (answer, markdownVersion) =>
+    dispatch(AddAnswer(answer, markdownVersion, false));
   let addLikeCB = like => dispatch(AddLike(like));
   let removeLikeCB = id => dispatch(RemoveLike(id));
   <div className="flex flex-1 bg-gray-100">

@@ -1,5 +1,4 @@
 type t = {
-  id: string,
   value: string,
   latest: bool,
   versionableId: string,
@@ -8,7 +7,6 @@ type t = {
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", string),
     value: json |> field("value", string),
     latest: json |> field("latest", bool),
     versionableId: json |> field("versionableId", string),
@@ -21,16 +19,42 @@ let versionableId = t => t.versionableId;
 
 let value = t => t.value;
 
-let id = t => t.id;
+let versionsForResource = (vId, vType, versions) =>
+  versions
+  |> List.filter(verion =>
+       verion.versionableType == vType && verion.versionableId == vId
+     );
 
-let latestValue = (vId, vType, versions) => {
-  let latestVersion =
+let latestVersion = (vId, vType, versions) =>
+  versionsForResource(vId, vType, versions)
+  |> List.filter(verion => verion.latest)
+  |> List.hd;
+
+let latestValue = (vId, vType, versions) =>
+  latestVersion(vId, vType, versions).value;
+
+let create = (value, latest, versionableId, versionableType) => {
+  value,
+  latest,
+  versionableId,
+  versionableType,
+};
+
+let add = (newVersion, versions) => {
+  let oldVersions =
     versions
-    |> List.filter(verion =>
-         verion.versionableType == vType
-         && verion.versionableId == vId
-         && verion.latest
-       )
-    |> List.hd;
-  latestVersion.value;
+    |> List.map(markV =>
+         markV.latest
+         && markV.versionableId == newVersion.versionableId
+         && markV.versionableType == newVersion.versionableType ?
+           create(
+             markV.value,
+             false,
+             markV.versionableId,
+             markV.versionableType,
+           ) :
+           markV
+       );
+
+  oldVersions |> List.append([newVersion]);
 };

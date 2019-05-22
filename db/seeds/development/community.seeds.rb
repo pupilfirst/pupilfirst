@@ -13,18 +13,30 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
     [john_doe, mickey, groot, rocket, donald].each do |user_1|
       question = Question.create!(
         title: Faker::Lorem.sentence,
-        description: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
         community: community,
         user: user_1
+      )
+      question.markdown_versions.create!(
+        value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
+      )
+      question.markdown_versions.create!(
+        value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
+        latest: true
       )
       [john_doe, mickey, groot, rocket, donald].each do |user_2|
 
         next if user_1 == user_2
 
         answer = Answer.create!(
-          description: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
           question: question,
           user: user_2
+        )
+        answer.markdown_versions.create!(
+          value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5)
+        )
+        answer.markdown_versions.create!(
+          value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
+          latest: true
         )
         AnswerLike.create!(
           answer: answer,

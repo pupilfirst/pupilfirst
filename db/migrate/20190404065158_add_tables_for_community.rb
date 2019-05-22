@@ -10,7 +10,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
 
     create_table :questions do |t|
       t.string :title
-      t.text :description
       t.references :community
       t.references :user
 
@@ -20,7 +19,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     end
 
     create_table :answers do |t|
-      t.text :description
       t.references :question
       t.references :user
 
@@ -38,6 +36,14 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.text :value
       t.references :commentable, polymorphic: true, index: true
       t.references :user
+
+      t.timestamps
+    end
+
+    create_table :markdown_versions do |t|
+      t.text :value
+      t.boolean :latest, default: false
+      t.references :versionable, polymorphic: true, index: true
 
       t.timestamps
     end
@@ -64,5 +70,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     drop_table :answers
     drop_table :answer_likes
     drop_table :comments
+    drop_table :markdown_versions
   end
 end

@@ -8,4 +8,5 @@ class Question < ApplicationRecord
 
   has_many :target_questions, dependent: :destroy
   has_many :targets, through: :target_questions
+  has_many :markdown_versions, as: :versionable, dependent: :restrict_with_error
 end

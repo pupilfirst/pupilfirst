@@ -14,6 +14,8 @@ module Schools
           students: students,
           user_profiles: user_profiles,
           student_tags: founder_tags,
+          current_page: @teams.current_page,
+          is_last_page: @teams.last_page?,
           authenticity_token: view.form_authenticity_token
         }
       end
@@ -59,7 +61,7 @@ module Schools
       end
 
       def founders
-        @founders ||= Founder.where(startup: @teams).not_exited
+        @founders ||= Founder.where(startup: @teams)
       end
     end
   end

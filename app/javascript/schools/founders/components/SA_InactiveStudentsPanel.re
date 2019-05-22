@@ -19,9 +19,7 @@ type action =
   | RefreshData(list(Team.t))
   | SelectTeam(Team.t)
   | DeselectTeam(Team.t)
-  | UpdateSearchString(string)
-  | AddTagFilter(string)
-  | RemoveTagFilter(string);
+  | UpdateSearchString(string);
 
 let studentsInTeam = (students, team) =>
   students
@@ -50,40 +48,6 @@ let canBeMarkedActive = (selectedTeams, students) =>
       |> List.for_all(student => Student.teamId(student) === teamId)
       && selectedAllStudents;
     };
-
-let filteredTeams = state => {
-  let tagFilteredTeams =
-    switch (state.tagsFilteredBy) {
-    | [] => state.teams
-    | tags =>
-      state.teams
-      |> List.filter(team =>
-           tags
-           |> List.for_all(tag =>
-                team
-                |> studentsInTeam(state.students)
-                |> List.map(student => student |> Student.tags)
-                |> List.flatten
-                |> List.mem(tag)
-              )
-         )
-    };
-  tagFilteredTeams
-  |> List.filter(team =>
-       team
-       |> studentsInTeam(state.students)
-       |> List.map(s =>
-            s |> studentUserProfile(state.userProfiles) |> UserProfile.name
-          )
-       |> List.filter(n =>
-            n
-            |> String.lowercase
-            |> Js.String.includes(state.searchString |> String.lowercase)
-          )
-       |> List.length > 0
-     );
-};
-
 let handleErrorCB = () => ();
 
 let markActive = (teams, courseId, responseCB, authenticityToken) => {
@@ -104,14 +68,25 @@ let markActive = (teams, courseId, responseCB, authenticityToken) => {
   Api.create(url, payload, responseCB, handleErrorCB);
 };
 
-let handleActiveTeamResponse = (send, json) => {
+let handleActiveTeamResponse = (send, state, json) => {
   let message = json |> Json.Decode.(field("message", string));
+  let updatedTeams =
+    state.teams
+    |> List.filter(team =>
+         !(
+           state.selectedTeams
+           |> List.exists(removedTeam =>
+                Team.id(team) === Team.id(removedTeam)
+              )
+         )
+       );
+  send(RefreshData(updatedTeams));
   Notification.success("Success!", message);
 };
 
 let handleErrorCB = () => ();
 
-let component = ReasonReact.reducerComponent("SA_StudentsPanel");
+let component = ReasonReact.reducerComponent("SA_InactiveStudentsPanel");
 
 let make =
     (
@@ -121,6 +96,8 @@ let make =
       ~userProfiles,
       ~authenticityToken,
       ~studentTags,
+      ~isLastPage,
+      ~currentPage,
       _children,
     ) => {
   ...component,
@@ -136,7 +113,8 @@ let make =
   },
   reducer: (action, state) =>
     switch (action) {
-    | RefreshData(teams) => ReasonReact.Update({...state, teams})
+    | RefreshData(teams) =>
+      ReasonReact.Update({...state, teams, selectedTeams: []})
     | SelectTeam(team) =>
       ReasonReact.Update({
         ...state,
@@ -151,16 +129,6 @@ let make =
       })
     | UpdateSearchString(searchString) =>
       ReasonReact.Update({...state, searchString})
-    | AddTagFilter(tag) =>
-      ReasonReact.Update({
-        ...state,
-        tagsFilteredBy: [tag, ...state.tagsFilteredBy],
-      })
-    | RemoveTagFilter(tag) =>
-      ReasonReact.Update({
-        ...state,
-        tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag),
-      })
     },
   render: ({state, send}) =>
     <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
@@ -169,11 +137,11 @@ let make =
           <div
             className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b py-3 mt-3 w-full">
             <div className="flex items-center justify-between">
-              <div className="flex">
+              <div className="flex pl-3 ">
                 <input
                   type_="search"
                   className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
-                  placeholder="Search by student name..."
+                  placeholder="Search by student or team name..."
                   value={state.searchString}
                   onChange={
                     event =>
@@ -204,11 +172,11 @@ let make =
                         markActive(
                           state.selectedTeams,
                           courseId,
-                          handleActiveTeamResponse(send),
+                          handleActiveTeamResponse(send, state),
                           authenticityToken,
                         )
                     }
-                    className="btn btn-primary focus:outline-none">
+                    className="mr-3 btn btn-primary focus:outline-none">
                     {"Mark Team Active" |> str}
                   </button>
               }
@@ -219,17 +187,22 @@ let make =
           <div className="flex flex-col max-w-3xl mx-auto w-full">
             <div className="w-full py-3 rounded-b-lg">
               {
-                filteredTeams(state) |> List.length > 0 ?
-                  filteredTeams(state)
+                state.teams |> List.length > 0 ?
+                  state.teams
                   |> List.sort((team1, team2) =>
                        (team2 |> Team.id |> int_of_string)
                        - (team1 |> Team.id |> int_of_string)
                      )
                   |> List.map(team => {
-                       let isSingleFounder =
+                       let isSingleFounder = {
+                         team
+                         |> studentsInTeam(state.students)
+                         |> List.length == 1 ?
+                           Js.log(team |> Team.name) : Js.log("");
                          team
                          |> studentsInTeam(state.students)
                          |> List.length == 1;
+                       };
                        <div
                          key={team |> Team.id}
                          id={team |> Team.name}
@@ -300,24 +273,7 @@ let make =
                                           <div
                                             className="text-sm flex flex-col">
                                             <p
-                                              className={
-                                                "text-black font-semibold inline-block "
-                                                ++ (
-                                                  state.searchString
-                                                  |> String.length > 0
-                                                  && student
-                                                  |> studentUserProfile(
-                                                       state.userProfiles,
-                                                     )
-                                                  |> UserProfile.name
-                                                  |> String.lowercase
-                                                  |> Js.String.includes(
-                                                       state.searchString
-                                                       |> String.lowercase,
-                                                     ) ?
-                                                    "bg-yellow-400" : ""
-                                                )
-                                              }>
+                                              className="text-black font-semibold inline-block ">
                                               {
                                                 student
                                                 |> studentUserProfile(
@@ -371,8 +327,47 @@ let make =
                   |> Array.of_list
                   |> ReasonReact.array :
                   <div className="shadow bg-white rounded-lg mb-4 p-4">
-                    {"No student matches your search/filter criteria." |> str}
+                    {
+                      "No inactive student matches your search criteria." |> str
+                    }
                   </div>
+              }
+              {
+                teams |> ListUtils.isNotEmpty ?
+                  <div
+                    className="max-w-3xl w-full flex flex-row mx-auto justify-center pb-8">
+                    {
+                      currentPage > 1 ?
+                        <a
+                          className="block btn btn-default no-underline border shadow mx-2"
+                          href={
+                            "/school/courses/"
+                            ++ courseId
+                            ++ "/inactive_students?page="
+                            ++ (currentPage - 1 |> string_of_int)
+                          }>
+                          <i className="far fa-arrow-left" />
+                          <span className="ml-2"> {"Prev" |> str} </span>
+                        </a> :
+                        ReasonReact.null
+                    }
+                    {
+                      isLastPage ?
+                        ReasonReact.null :
+                        <a
+                          className="block btn btn-default no-underline border shadow mx-2"
+                          href={
+                            "/school/courses/"
+                            ++ courseId
+                            ++ "/inactive_students?page="
+                            ++ (currentPage + 1 |> string_of_int)
+                          }>
+                          <span className="mr-2"> {"Next" |> str} </span>
+                          <i className="far fa-arrow-right" />
+                        </a>
+                    }
+                  </div> :
+                  ReasonReact.null
               }
             </div>
           </div>
@@ -388,6 +383,8 @@ type props = {
   userProfiles: list(UserProfile.t),
   studentTags: list(string),
   authenticityToken: string,
+  isLastPage: bool,
+  currentPage: int,
 };
 
 let decode = json =>
@@ -398,6 +395,8 @@ let decode = json =>
     userProfiles: json |> field("userProfiles", list(UserProfile.decode)),
     studentTags: json |> field("studentTags", list(string)),
     authenticityToken: json |> field("authenticityToken", string),
+    currentPage: json |> field("currentPage", int),
+    isLastPage: json |> field("isLastPage", bool),
   };
 
 let jsComponent =
@@ -408,6 +407,8 @@ let jsComponent =
       make(
         ~teams=props.teams,
         ~courseId=props.courseId,
+        ~currentPage=props.currentPage,
+        ~isLastPage=props.isLastPage,
         ~students=props.students,
         ~userProfiles=props.userProfiles,
         ~studentTags=props.studentTags,

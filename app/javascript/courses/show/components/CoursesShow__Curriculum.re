@@ -6,17 +6,9 @@ open CourseShow__Types;
 
 let str = React.string;
 
-let changeLevel = (levels, setSelectedLevel, event) => {
-  let level =
-    levels
-    |> ListUtils.findOpt(l =>
-         l |> Level.id == ReactEvent.Form.target(event)##value
-       );
-
-  switch (level) {
-  | Some(level) => setSelectedLevel(_ => level)
-  | None => ()
-  };
+let updateSelectedLevel = (setSelectedLevelId, event) => {
+  let newLevelId = ReactEvent.Form.target(event)##value;
+  setSelectedLevelId(_ => newLevelId);
 };
 
 [@react.component]
@@ -37,11 +29,8 @@ let make =
     ) => {
   let teamLevel =
     levels |> List.find(l => l |> Level.id == (team |> Team.levelId));
-  let (selectedLevel, setSelectedLevel) = React.useState(() => teamLevel);
-  let (latestSubmissions, setLatestSubmissions) =
-    React.useState(() => submissions);
 
-  let statusOfTargets =
+  let computeStatusOfTargets =
     TargetStatus.compute(
       team,
       students,
@@ -49,21 +38,28 @@ let make =
       levels,
       targetGroups,
       targets,
-      latestSubmissions,
     );
 
-  statusOfTargets
-  |> List.iter(ts => {
-       let target =
-         targets
-         |> List.find(t => t |> Target.id == (ts |> TargetStatus.targetId));
-       Js.log2(target |> Target.title, ts |> TargetStatus.statusToString);
-     });
+  let (selectedLevelId, setSelectedLevelId) =
+    React.useState(() => teamLevel |> Level.id);
+  let (statusOfTargets, setStatusOfTargets) =
+    React.useState(() =>
+      TargetStatus.compute(
+        team,
+        students,
+        course,
+        levels,
+        targetGroups,
+        targets,
+        submissions,
+      )
+    );
 
   <div>
     <select
       className="p-2 border rounded-lg"
-      onChange={changeLevel(levels, setSelectedLevel)}>
+      onChange={updateSelectedLevel(setSelectedLevelId)}
+      value=selectedLevelId>
       {
         levels
         |> List.filter(l => l |> Level.number != 0)
@@ -87,7 +83,7 @@ let make =
       | Some(level) =>
         <button
           className="p-2 border rounded-lg ml-2"
-          onClick=(_e => setSelectedLevel(_ => level))>
+          onClick=(_e => setSelectedLevelId(_ => level |> Level.id))>
           {level |> Level.name |> str}
         </button>
       | None => React.null
@@ -95,9 +91,7 @@ let make =
     }
     {
       targetGroups
-      |> List.filter(tg =>
-           tg |> TargetGroup.levelId == (selectedLevel |> Level.id)
-         )
+      |> List.filter(tg => tg |> TargetGroup.levelId == selectedLevelId)
       |> List.sort((tg1, tg2) =>
            (tg1 |> TargetGroup.sortIndex) - (tg2 |> TargetGroup.sortIndex)
          )
@@ -121,7 +115,7 @@ let make =
                            ts |> TargetStatus.targetId == (target |> Target.id)
                          );
 
-                    <div className="border p-2">
+                    <div key={target |> Target.id} className="border p-2">
                       <span> {target |> Target.title |> str} </span>
                       <span className="ml-4 font-bold">
                         {targetStatus |> TargetStatus.statusToString |> str}

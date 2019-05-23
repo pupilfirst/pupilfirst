@@ -1,11 +1,10 @@
 module Schools
   module Founders
     class IndexPresenter < ApplicationPresenter
-      def initialize(view_context, course, inactive: false)
+      def initialize(view_context, course)
         super(view_context)
 
         @course = course
-        @inactive = inactive
       end
 
       def react_props
@@ -92,7 +91,7 @@ module Schools
       end
 
       def startups
-        @startups ||= @inactive ? @course.startups.inactive : @course.startups.active
+        @startups ||= @course.startups.active
       end
 
       def founders

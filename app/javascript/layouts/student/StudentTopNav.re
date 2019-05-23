@@ -13,10 +13,7 @@ let headerLink = (key, link) =>
     </a>
   </div>;
 
-let isMobile = () => {
-  let window = Webapi.Dom.window;
-  Webapi.Dom.Window.innerWidth(window) < 640;
-};
+let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
 let headerLinks = links => {
   let (visibleLinks, dropdownLinks) =
@@ -47,7 +44,12 @@ let headerLinks = links => {
 let make = (~schoolName, ~logoUrl, ~links) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile());
 
-  Js.log(isMobile());
+  React.useEffect(() => {
+    let resizeCB = _ => toggleMenuHidden(_ => isMobile());
+    Webapi.Dom.Window.asEventTarget(Webapi.Dom.window)
+    |> Webapi.Dom.EventTarget.addEventListener("resize", resizeCB);
+    None;
+  });
 
   <div className="flex p-2 border-b">
     <nav

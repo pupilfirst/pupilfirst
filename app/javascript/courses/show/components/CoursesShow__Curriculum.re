@@ -6,10 +6,20 @@ open CourseShow__Types;
 
 let str = React.string;
 
-let updateSelectedLevel = (setSelectedLevelId, event) => {
-  let newLevelId = ReactEvent.Form.target(event)##value;
-  setSelectedLevelId(_ => newLevelId);
+let updateSelectedLevel = (levels, setSelectedLevelId, event) => {
+  let selectedLevelId = ReactEvent.Form.target(event)##value;
+  let level =
+    levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
+
+  switch (level) {
+  | Some(level) =>
+    level |> Level.isLocked ? () : setSelectedLevelId(_ => selectedLevelId)
+  | None => ()
+  };
 };
+
+let closeOverlay = (setSelectedTargetId, ()) =>
+  setSelectedTargetId(_ => None);
 
 [@react.component]
 let make =
@@ -54,15 +64,40 @@ let make =
         submissions,
       )
     );
+  let (selectedTargetId, setSelectedTargetId) = React.useState(() => None);
 
   <div>
+    {
+      switch (selectedTargetId) {
+      | Some(targetId) =>
+        let selectedTarget =
+          targets |> ListUtils.findOpt(t => t |> Target.id == targetId);
+        switch (selectedTarget) {
+        | Some(target) =>
+          let targetStatus =
+            statusOfTargets
+            |> List.find(ts =>
+                 ts |> TargetStatus.targetId == (target |> Target.id)
+               );
+          <CourseShow__Overlay
+            targetId={target |> Target.id}
+            targetStatus
+            closeOverlayCB={closeOverlay(setSelectedTargetId)}
+          />;
+        | None => React.null
+        };
+
+      | None => React.null
+      }
+    }
     <select
       className="p-2 border rounded-lg"
-      onChange={updateSelectedLevel(setSelectedLevelId)}
+      onChange={updateSelectedLevel(levels, setSelectedLevelId)}
       value=selectedLevelId>
       {
         levels
         |> List.filter(l => l |> Level.number != 0)
+        |> List.sort((l1, l2) => (l1 |> Level.number) - (l2 |> Level.number))
         |> List.map(l => {
              let levelTitle =
                "L"
@@ -115,7 +150,13 @@ let make =
                            ts |> TargetStatus.targetId == (target |> Target.id)
                          );
 
-                    <div key={target |> Target.id} className="border p-2">
+                    <div
+                      key={target |> Target.id}
+                      className="border p-2 cursor-pointer"
+                      onClick={
+                        _e =>
+                          setSelectedTargetId(_ => Some(target |> Target.id))
+                      }>
                       <span> {target |> Target.title |> str} </span>
                       <span className="ml-4 font-bold">
                         {targetStatus |> TargetStatus.statusToString |> str}

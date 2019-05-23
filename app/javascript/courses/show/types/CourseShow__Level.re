@@ -17,3 +17,9 @@ let decode = json =>
 let id = t => t.id;
 let name = t => t.name;
 let number = t => t.number;
+
+let isLocked = t =>
+  switch (t.unlockOn) {
+  | Some(date) => date |> DateFns.parseString |> DateFns.isFuture
+  | None => false
+  };

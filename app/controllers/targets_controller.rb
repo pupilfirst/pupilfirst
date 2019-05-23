@@ -1,5 +1,6 @@
 class TargetsController < ApplicationController
   include CamelizeKeys
+  include StringifyIds
 
   before_action :authenticate_founder!, except: :select2_search
   before_action :authenticate_user!, only: :select2_search
@@ -47,7 +48,7 @@ class TargetsController < ApplicationController
   # GET /targets/:id/details
   def details_v2
     target = authorize(Target.find(params[:id]))
-    render json: camelize_keys(Targets::DetailsService.new(target, current_founder).details)
+    render json: camelize_keys(stringify_ids(Targets::DetailsService.new(target, current_founder).details))
   end
 
   # GET /targets/:id/details

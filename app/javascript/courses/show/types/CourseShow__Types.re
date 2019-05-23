@@ -2,6 +2,7 @@ module Course = CourseShow__Course;
 module Level = CourseShow__Level;
 module TargetGroup = CourseShow__TargetGroup;
 module Target = CourseShow__Target;
+module TargetDetails = CourseShow__TargetDetails;
 module Submission = CourseShow__Submission;
 module Student = CourseShow__Student;
 module Team = CourseShow__Team;

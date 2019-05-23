@@ -9,9 +9,9 @@ module Targets
 
     def details
       {
-        pending_founder_ids: pending_founder_ids,
-        latest_event: latest_event_details,
-        latest_event_attachments: latest_event_attachments,
+        pending_student_ids: pending_founder_ids,
+        latest_submission_details: latest_event_details,
+        latest_submission_attachments: latest_event_attachments,
         latest_feedback: latest_feedback_details,
         quiz_questions: quiz_questions,
         content_blocks: content_blocks
@@ -21,6 +21,8 @@ module Targets
     private
 
     def pending_founder_ids
+      return [] unless @target.founder_role?
+
       @founder.startup.founders.where.not(id: @founder).reject do |founder|
         founder.exited? || founder.timeline_events.where(target: @target).passed.exists?
       end.map(&:id)
@@ -29,7 +31,7 @@ module Targets
     def latest_event_details
       return nil if latest_event.blank?
 
-      latest_event.attributes.slice('id', 'title', 'description', 'created_at')
+      latest_event.attributes.slice('id', 'description', 'created_at')
     end
 
     def latest_event
@@ -51,7 +53,7 @@ module Targets
 
       files = latest_event.timeline_event_files.map do |file|
         {
-          type: "file",
+          submission_type: "file",
           title: file.title,
           url: url_helpers.download_timeline_event_file_path(file)
         }
@@ -59,28 +61,13 @@ module Targets
 
       links = latest_event.links.map do |link|
         {
-          type: "link",
+          submission_type: "link",
           title: link[:title],
           url: link[:url]
         }
       end
 
       files + links
-    end
-
-    def linked_resources
-      return if @target.resources.blank?
-
-      @target.resources.with_attached_file.map do |resource|
-        {
-          id: resource.id,
-          title: resource.title,
-          slug: resource.slug,
-          can_stream: resource.stream?,
-          has_link: resource.link.present?,
-          has_file: resource.file.attached?
-        }
-      end
     end
 
     def quiz_questions

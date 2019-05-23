@@ -14,14 +14,8 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
       question = Question.create!(
         title: Faker::Lorem.sentence,
         community: community,
-        user: user_1
-      )
-      question.markdown_versions.create!(
-        value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
-      )
-      question.markdown_versions.create!(
-        value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
-        latest: true
+        description: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
+        creator: user_1
       )
       [john_doe, mickey, groot, rocket, donald].each do |user_2|
 
@@ -29,21 +23,15 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
 
         answer = Answer.create!(
           question: question,
-          user: user_2
-        )
-        answer.markdown_versions.create!(
-          value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5)
-        )
-        answer.markdown_versions.create!(
-          value: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
-          latest: true
+          creator: user_2,
+          description: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5)
         )
         AnswerLike.create!(
           answer: answer,
           user: [john_doe, mickey, groot, rocket, donald].sample
         )
         answer.comments.create!(
-          user: [john_doe, mickey, groot, rocket, donald].sample,
+          creator: [john_doe, mickey, groot, rocket, donald].sample,
           value: Faker::Lorem.paragraph(sentence_count = 4, supplemental = false, random_sentences_to_add = 5)
         )
         question.touch(:last_activity_at)
@@ -51,7 +39,7 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
 
       [john_doe, mickey, groot, rocket, donald].each do |user_3|
         question.comments.create!(
-          user: user_3,
+          creator: user_3,
           value: Faker::Lorem.paragraph(sentence_count = 4, supplemental = false, random_sentences_to_add = 5)
         )
       end

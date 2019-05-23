@@ -61,8 +61,8 @@ module Questions
 
     def markdown_versions
       (@question.markdown_versions +
-        MarkdownVersion.where(
-          versionable_type: MarkdownVersion::VERSIONABLE_TYPE__ANSWER,
+        TextVersion.where(
+          versionable_type: TextVersion::VERSIONABLE_TYPE__ANSWER,
           versionable_id: @answer_data.pluck(:id)
         ))
         .map(&method(:markdown_versions_data))

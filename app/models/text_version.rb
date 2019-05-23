@@ -1,4 +1,4 @@
-class MarkdownVersion < ApplicationRecord
+class TextVersion < ApplicationRecord
   VERSIONABLE_TYPE__QUESTION = -'Question'
   VERSIONABLE_TYPE__ANSWER = -'Answer'
 

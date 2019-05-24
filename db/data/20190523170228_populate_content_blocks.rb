@@ -40,6 +40,11 @@ class PopulateContentBlocks < ActiveRecord::Migration[5.2]
       additional_md += "This session is to be conducted at #{target.session_at.iso8601}. " if target.session_at.present?
       additional_md += "This session was last conducted at #{target.last_session_at.iso8601}. " if target.last_session_at.present?
 
+      if additional_md.present?
+        # Make 'additional' markdown another paragraph.
+        additional_md = "\n\n---\n\n#{additional_md}"
+      end
+
       target.content_blocks.create!(
         block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
         content: { markdown: description_md + completion_instructions_md + links_md + additional_md },

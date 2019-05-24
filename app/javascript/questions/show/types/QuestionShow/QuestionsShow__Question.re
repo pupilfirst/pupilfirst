@@ -29,3 +29,12 @@ let creatorId = t => t.creatorId;
 let editorId = t => t.editorId;
 
 let createdAt = t => t.createdAt;
+
+let create = (id, title, description, creatorId, editorId, createdAt) => {
+  id,
+  title,
+  description,
+  creatorId,
+  editorId,
+  createdAt,
+};

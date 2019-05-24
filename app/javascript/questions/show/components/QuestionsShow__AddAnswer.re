@@ -87,6 +87,7 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
           <MarkDownEditor
             placeholderText="Type your Answer"
             updateDescriptionCB
+            value=description
           />
         </DisablingCover>
         <div className="flex justify-end pt-3 border-t">

@@ -111,8 +111,8 @@ let buttons = (description, setDescription, updateDescriptionCB) =>
   |> React.array;
 
 [@react.component]
-let make = (~placeholderText, ~updateDescriptionCB) => {
-  let (description, setDescription) = React.useState(() => "");
+let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
+  let (description, setDescription) = React.useState(() => value);
   let (showPreview, setShowPreview) = React.useState(() => false);
   <div>
     <div className="flex w-full justify-between items-center py-2">

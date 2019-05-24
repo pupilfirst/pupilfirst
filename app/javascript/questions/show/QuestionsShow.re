@@ -10,13 +10,17 @@ type action =
   | AddAnswer(Answer.t, bool)
   | AddLike(Like.t)
   | RemoveLike(string)
-  | UpdateShowAnswerCreate(bool);
+  | UpdateShowAnswerCreate(bool)
+  | UpdateShowQuestionEdit(bool)
+  | UpdateQuestion(Question.t);
 
 type state = {
+  question: Question.t,
   answers: list(Answer.t),
   comments: list(Comment.t),
   likes: list(Like.t),
   showAnswerCreate: bool,
+  showQuestionEdit: bool,
 };
 
 let reducer = (state, action) =>
@@ -34,6 +38,8 @@ let reducer = (state, action) =>
   | AddLike(like) => {...state, likes: state.likes |> Like.addLike(like)}
   | RemoveLike(id) => {...state, likes: state.likes |> Like.removeLike(id)}
   | UpdateShowAnswerCreate(bool) => {...state, showAnswerCreate: bool}
+  | UpdateShowQuestionEdit(bool) => {...state, showQuestionEdit: bool}
+  | UpdateQuestion(question) => {...state, question, showQuestionEdit: false}
   };
 
 let showAnswersCreateComponent = (answers, showAnswerCreate, currentUserId) =>
@@ -58,205 +64,264 @@ let make =
   let (state, dispatch) =
     React.useReducer(
       reducer,
-      {answers, comments, likes, showAnswerCreate: false},
+      {
+        question,
+        answers,
+        comments,
+        likes,
+        showAnswerCreate: false,
+        showQuestionEdit: false,
+      },
     );
   let addCommentCB = comment => dispatch(AddComment(comment));
   let addAnswerCB = answer => dispatch(AddAnswer(answer, false));
   let addLikeCB = like => dispatch(AddLike(like));
   let removeLikeCB = id => dispatch(RemoveLike(id));
+  let updateQuestionCB = (title, description) => {
+    let oldq = state.question;
+    let newQuestion =
+      Question.create(
+        oldq |> Question.id,
+        title,
+        description,
+        oldq |> Question.creatorId,
+        Some(currentUserId),
+        oldq |> Question.createdAt,
+      );
+    dispatch(UpdateQuestion(newQuestion));
+  };
   <div className="flex flex-1 bg-gray-100">
     <div className="flex-1 flex flex-col">
       <div className="flex-col px-3 md:px-6 py-2 items-center justify-between">
-        <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-          <a className="btn btn-default no-underline" href=communityPath>
-            <i className="far fa-arrow-left" />
-            <span className="ml-2"> {React.string("Back")} </span>
-          </a>
-        </div>
-        <div
-          className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg">
-          <div className="flex w-full">
-            <div className="flex flex-1 flex-col">
-              <div className="pt-6 pb-2 mx-6 flex flex-col">
-                <h2 className="text-xl text-black font-semibold">
-                  {question |> Question.title |> str}
-                </h2>
+        {
+          state.showQuestionEdit ?
+            <div>
+              <div className="max-w-2xl w-full mx-auto mt-5 pb-2 text-right">
+                <a
+                  id="close-button"
+                  className="btn btn-default no-underline"
+                  onClick={
+                    event => {
+                      event |> ReactEvent.Mouse.preventDefault;
+                      dispatch(UpdateShowQuestionEdit(false));
+                    }
+                  }>
+                  <i className="far fa-arrow-left" />
+                  <span className="ml-2"> {"close" |> str} </span>
+                </a>
               </div>
-              <div className="py-4 px-6 flex flex-col">
-                <div
-                  className="leading-normal text-sm markdown-body"
-                  dangerouslySetInnerHTML={
-                    "__html": question |> Question.description,
-                  }
-                />
-                {
-                  question |> Question.creatorId == currentUserId ?
-                    <div>
-                      <a className="text-sm mr-2 font-semibold cursor-pointer">
-                        {"Edit" |> str}
-                      </a>
-                      <a className="text-sm mr-2 font-semibold cursor-pointer">
-                        {"Hide" |> str}
-                      </a>
-                    </div> :
-                    React.null
-                }
+              <QuestionsEditor
+                authenticityToken
+                communityId="1"
+                target=None
+                question={state.question}
+                updateQuestionCB
+              />
+            </div> :
+            <div>
+              <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
+                <a className="btn btn-default no-underline" href=communityPath>
+                  <i className="far fa-arrow-left" />
+                  <span className="ml-2"> {React.string("Back")} </span>
+                </a>
               </div>
-              <div className="flex flex-row justify-between px-6 pb-6">
-                <div className="pr-2 pt-6 text-center">
-                  <i className="fal fa-comment-lines text-xl text-gray-600" />
-                  <p className="text-xs py-1">
+              <div
+                className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg">
+                <div className="flex w-full">
+                  <div className="flex flex-1 flex-col">
+                    <div className="pt-6 pb-2 mx-6 flex flex-col">
+                      <h2 className="text-xl text-black font-semibold">
+                        {state.question |> Question.title |> str}
+                      </h2>
+                    </div>
+                    <div className="py-4 px-6 flex flex-col">
+                      <div
+                        className="leading-normal text-sm markdown-body"
+                        dangerouslySetInnerHTML={
+                          "__html": state.question |> Question.description,
+                        }
+                      />
+                      {
+                        state.question |> Question.creatorId == currentUserId ?
+                          <div>
+                            <a
+                              onClick={
+                                _ => dispatch(UpdateShowQuestionEdit(true))
+                              }
+                              className="text-sm mr-2 font-semibold cursor-pointer">
+                              {"Edit" |> str}
+                            </a>
+                            <a
+                              className="text-sm mr-2 font-semibold cursor-pointer">
+                              {"Hide" |> str}
+                            </a>
+                          </div> :
+                          React.null
+                      }
+                    </div>
+                    <div className="flex flex-row justify-between px-6 pb-6">
+                      <div className="pr-2 pt-6 text-center">
+                        <i
+                          className="fal fa-comment-lines text-xl text-gray-600"
+                        />
+                        <p className="text-xs py-1">
+                          {
+                            state.comments
+                            |> Comment.commentsForQuestion
+                            |> List.length
+                            |> string_of_int
+                            |> str
+                          }
+                        </p>
+                      </div>
+                      <QuestionsShow__UserShow
+                        userProfile={
+                          userData
+                          |> UserData.user(
+                               state.question |> Question.creatorId,
+                             )
+                        }
+                        createdAt={state.question |> Question.createdAt}
+                        textForTimeStamp="Asked"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <QuestionsShow__CommentShow
+                comments={state.comments |> Comment.commentsForQuestion}
+                userData
+                authenticityToken
+                commentableType="Question"
+                commentableId={state.question |> Question.id}
+                addCommentCB
+                currentUserId
+              />
+              <div
+                className="max-w-3xl w-full justify-center mx-auto mb-4 pt-5 pb-2 border-b">
+                <div className="flex justify-between items-end">
+                  <span className="text-lg font-semibold">
                     {
-                      state.comments
-                      |> Comment.commentsForQuestion
-                      |> List.length
-                      |> string_of_int
+                      (state.answers |> List.length |> string_of_int)
+                      ++ " Answers"
                       |> str
                     }
-                  </p>
+                  </span>
                 </div>
-                <QuestionsShow__UserShow
-                  userProfile={
-                    userData |> UserData.user(question |> Question.creatorId)
-                  }
-                  createdAt={question |> Question.createdAt}
-                  textForTimeStamp="Asked"
-                />
               </div>
-            </div>
-          </div>
-        </div>
-        <QuestionsShow__CommentShow
-          comments={state.comments |> Comment.commentsForQuestion}
-          userData
-          authenticityToken
-          commentableType="Question"
-          commentableId={question |> Question.id}
-          addCommentCB
-          currentUserId
-        />
-        <div
-          className="max-w-3xl w-full justify-center mx-auto mb-4 pt-5 pb-2 border-b">
-          <div className="flex justify-between items-end">
-            <span className="text-lg font-semibold">
-              {
-                (state.answers |> List.length |> string_of_int)
-                ++ " Answers"
-                |> str
-              }
-            </span>
-          </div>
-        </div>
-        <div className="community-answer-container">
-          {
-            state.answers
-            |> List.map(answer => {
-                 let userProfile =
-                   userData |> UserData.user(answer |> Answer.creatorId);
-                 let commentsForAnswer =
-                   state.comments
-                   |> Comment.commentsForAnswer(answer |> Answer.id);
-                 <div
-                   className="flex flex-col relative"
-                   key={answer |> Answer.id}>
-                   <div
-                     className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-4">
-                     <div className="flex w-full">
-                       <div className="flex flex-1 flex-col">
-                         <div className="py-4 px-6 flex flex-col">
-                           <div
-                             className="leading-normal text-sm markdown-body"
-                             dangerouslySetInnerHTML={
-                               "__html": answer |> Answer.description,
-                             }
-                           />
-                           {
-                             question |> Question.creatorId == currentUserId ?
-                               <div>
-                                 <a
-                                   className="text-sm mr-2 font-semibold cursor-pointer">
-                                   {"Edit" |> str}
-                                 </a>
-                                 <a
-                                   className="text-sm mr-2 font-semibold cursor-pointer">
-                                   {"Hide" |> str}
-                                 </a>
-                               </div> :
-                               React.null
-                           }
-                         </div>
+              <div className="community-answer-container">
+                {
+                  state.answers
+                  |> List.map(answer => {
+                       let userProfile =
+                         userData |> UserData.user(answer |> Answer.creatorId);
+                       let commentsForAnswer =
+                         state.comments
+                         |> Comment.commentsForAnswer(answer |> Answer.id);
+                       <div
+                         className="flex flex-col relative"
+                         key={answer |> Answer.id}>
                          <div
-                           className="flex flex-row justify-between items-center px-6 pb-4">
-                           <div className="pt-4 text-center">
-                             <div className="flex flex-row">
-                               <QuestionsShow__LikeManager
-                                 authenticityToken
-                                 likes={state.likes}
-                                 answerId={answer |> Answer.id}
-                                 currentUserId
-                                 addLikeCB
-                                 removeLikeCB
-                               />
-                               <div className="mr-2 pt-2 px-2">
-                                 <i
-                                   className="fal fa-comment-lines text-xl text-gray-600"
-                                 />
-                                 <p className="text-xs py-1">
-                                   {
-                                     commentsForAnswer
-                                     |> List.length
-                                     |> string_of_int
-                                     |> str
+                           className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-4">
+                           <div className="flex w-full">
+                             <div className="flex flex-1 flex-col">
+                               <div className="py-4 px-6 flex flex-col">
+                                 <div
+                                   className="leading-normal text-sm markdown-body"
+                                   dangerouslySetInnerHTML={
+                                     "__html": answer |> Answer.description,
                                    }
-                                 </p>
+                                 />
+                                 {
+                                   state.question
+                                   |> Question.creatorId == currentUserId ?
+                                     <div>
+                                       <a
+                                         className="text-sm mr-2 font-semibold cursor-pointer">
+                                         {"Edit" |> str}
+                                       </a>
+                                       <a
+                                         className="text-sm mr-2 font-semibold cursor-pointer">
+                                         {"Hide" |> str}
+                                       </a>
+                                     </div> :
+                                     React.null
+                                 }
+                               </div>
+                               <div
+                                 className="flex flex-row justify-between items-center px-6 pb-4">
+                                 <div className="pt-4 text-center">
+                                   <div className="flex flex-row">
+                                     <QuestionsShow__LikeManager
+                                       authenticityToken
+                                       likes={state.likes}
+                                       answerId={answer |> Answer.id}
+                                       currentUserId
+                                       addLikeCB
+                                       removeLikeCB
+                                     />
+                                     <div className="mr-2 pt-2 px-2">
+                                       <i
+                                         className="fal fa-comment-lines text-xl text-gray-600"
+                                       />
+                                       <p className="text-xs py-1">
+                                         {
+                                           commentsForAnswer
+                                           |> List.length
+                                           |> string_of_int
+                                           |> str
+                                         }
+                                       </p>
+                                     </div>
+                                   </div>
+                                 </div>
+                                 <QuestionsShow__UserShow
+                                   userProfile
+                                   createdAt={answer |> Answer.createdAt}
+                                   textForTimeStamp="Answered"
+                                 />
                                </div>
                              </div>
                            </div>
-                           <QuestionsShow__UserShow
-                             userProfile
-                             createdAt={answer |> Answer.createdAt}
-                             textForTimeStamp="Answered"
-                           />
                          </div>
-                       </div>
-                     </div>
-                   </div>
-                   <QuestionsShow__CommentShow
-                     comments=commentsForAnswer
-                     userData
-                     authenticityToken
-                     commentableType="Answer"
-                     commentableId={answer |> Answer.id}
-                     addCommentCB
-                     currentUserId
-                   />
-                 </div>;
-               })
-            |> Array.of_list
-            |> ReasonReact.array
-          }
-        </div>
-        {
-          showAnswersCreateComponent(
-            state.answers,
-            state.showAnswerCreate,
-            currentUserId,
-          ) ?
-            <QuestionsShow__AddAnswer
-              question
-              authenticityToken
-              currentUserId
-              addAnswerCB
-            /> :
-            <div
-              className="community-ask-button-container mt-4 my-8 max-w-3xl w-full flex mx-auto justify-center">
-              <div className="bg-gray-100 px-1 z-10">
-                <button
-                  className="btn btn-primary btn-large"
-                  onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
-                  {"Add another answer" |> str}
-                </button>
+                         <QuestionsShow__CommentShow
+                           comments=commentsForAnswer
+                           userData
+                           authenticityToken
+                           commentableType="Answer"
+                           commentableId={answer |> Answer.id}
+                           addCommentCB
+                           currentUserId
+                         />
+                       </div>;
+                     })
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
               </div>
+              {
+                showAnswersCreateComponent(
+                  state.answers,
+                  state.showAnswerCreate,
+                  currentUserId,
+                ) ?
+                  <QuestionsShow__AddAnswer
+                    question={state.question}
+                    authenticityToken
+                    currentUserId
+                    addAnswerCB
+                  /> :
+                  <div
+                    className="community-ask-button-container mt-4 my-8 max-w-3xl w-full flex mx-auto justify-center">
+                    <div className="bg-gray-100 px-1 z-10">
+                      <button
+                        className="btn btn-primary btn-large"
+                        onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
+                        {"Add another answer" |> str}
+                      </button>
+                    </div>
+                  </div>
+              }
             </div>
         }
       </div>

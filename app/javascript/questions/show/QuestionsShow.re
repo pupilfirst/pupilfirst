@@ -77,17 +77,31 @@ let make =
           className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg">
           <div className="flex w-full">
             <div className="flex flex-1 flex-col">
-              <div className="pt-6 pb-2 mx-6">
+              <div className="pt-6 pb-2 mx-6 flex flex-col">
                 <h2 className="text-xl text-black font-semibold">
                   {question |> Question.title |> str}
                 </h2>
               </div>
-              <div
-                className="py-4 px-6 leading-normal text-sm markdown-body"
-                dangerouslySetInnerHTML={
-                  "__html": question |> Question.description,
+              <div className="py-4 px-6 flex flex-col">
+                <div
+                  className="leading-normal text-sm markdown-body"
+                  dangerouslySetInnerHTML={
+                    "__html": question |> Question.description,
+                  }
+                />
+                {
+                  question |> Question.creatorId == currentUserId ?
+                    <div>
+                      <a className="text-sm mr-2 font-semibold cursor-pointer">
+                        {"Edit" |> str}
+                      </a>
+                      <a className="text-sm mr-2 font-semibold cursor-pointer">
+                        {"Hide" |> str}
+                      </a>
+                    </div> :
+                    React.null
                 }
-              />
+              </div>
               <div className="flex flex-row justify-between px-6 pb-6">
                 <div className="pr-2 pt-6 text-center">
                   <i className="fal fa-comment-lines text-xl text-gray-600" />
@@ -149,12 +163,28 @@ let make =
                      className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-4">
                      <div className="flex w-full">
                        <div className="flex flex-1 flex-col">
-                         <div
-                           className="py-4 px-6 leading-normal text-sm markdown-body"
-                           dangerouslySetInnerHTML={
-                             "__html": answer |> Answer.description,
+                         <div className="py-4 px-6 flex flex-col">
+                           <div
+                             className="leading-normal text-sm markdown-body"
+                             dangerouslySetInnerHTML={
+                               "__html": answer |> Answer.description,
+                             }
+                           />
+                           {
+                             question |> Question.creatorId == currentUserId ?
+                               <div>
+                                 <a
+                                   className="text-sm mr-2 font-semibold cursor-pointer">
+                                   {"Edit" |> str}
+                                 </a>
+                                 <a
+                                   className="text-sm mr-2 font-semibold cursor-pointer">
+                                   {"Hide" |> str}
+                                 </a>
+                               </div> :
+                               React.null
                            }
-                         />
+                         </div>
                          <div
                            className="flex flex-row justify-between items-center px-6 pb-4">
                            <div className="pt-4 text-center">

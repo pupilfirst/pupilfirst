@@ -9,7 +9,7 @@ class CreateCommentMutator < ApplicationMutator
 
   def create_comment
     comment = Comment.create!(
-      user: current_user,
+      creator: current_user,
       commentable: commentable,
       value: value
     )

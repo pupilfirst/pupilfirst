@@ -7,7 +7,7 @@ let str = React.string;
 
 type action =
   | AddComment(Comment.t)
-  | AddAnswer(Answer.t, MarkdownVersion.t, bool)
+  | AddAnswer(Answer.t, bool)
   | AddLike(Like.t)
   | RemoveLike(string)
   | UpdateShowAnswerCreate(bool);
@@ -15,7 +15,6 @@ type action =
 type state = {
   answers: list(Answer.t),
   comments: list(Comment.t),
-  markdownVersions: list(MarkdownVersion.t),
   likes: list(Like.t),
   showAnswerCreate: bool,
 };
@@ -26,11 +25,9 @@ let reducer = (state, action) =>
       ...state,
       comments: Comment.addComment(state.comments, comment),
     }
-  | AddAnswer(answer, markdownVersion, bool) => {
+  | AddAnswer(answer, bool) => {
       ...state,
       answers: Answer.addAnswer(state.answers, answer),
-      markdownVersions:
-        MarkdownVersion.add(markdownVersion, state.markdownVersions),
       showAnswerCreate: bool,
     }
 
@@ -55,18 +52,16 @@ let make =
       ~comments,
       ~userData,
       ~likes,
-      ~markdownVersions,
       ~currentUserId,
       ~communityPath,
     ) => {
   let (state, dispatch) =
     React.useReducer(
       reducer,
-      {answers, comments, likes, showAnswerCreate: false, markdownVersions},
+      {answers, comments, likes, showAnswerCreate: false},
     );
   let addCommentCB = comment => dispatch(AddComment(comment));
-  let addAnswerCB = (answer, markdownVersion) =>
-    dispatch(AddAnswer(answer, markdownVersion, false));
+  let addAnswerCB = answer => dispatch(AddAnswer(answer, false));
   let addLikeCB = like => dispatch(AddLike(like));
   let removeLikeCB = id => dispatch(RemoveLike(id));
   <div className="flex flex-1 bg-gray-100">
@@ -90,12 +85,7 @@ let make =
               <div
                 className="py-4 px-6 leading-normal text-sm markdown-body"
                 dangerouslySetInnerHTML={
-                  "__html":
-                    state.markdownVersions
-                    |> MarkdownVersion.latestValue(
-                         question |> Question.id,
-                         "Question",
-                       ),
+                  "__html": question |> Question.description,
                 }
               />
               <div className="flex flex-row justify-between px-6 pb-6">
@@ -113,7 +103,7 @@ let make =
                 </div>
                 <QuestionsShow__UserShow
                   userProfile={
-                    userData |> UserData.user(question |> Question.userId)
+                    userData |> UserData.user(question |> Question.creatorId)
                   }
                   createdAt={question |> Question.createdAt}
                   textForTimeStamp="Asked"
@@ -148,7 +138,7 @@ let make =
             state.answers
             |> List.map(answer => {
                  let userProfile =
-                   userData |> UserData.user(answer |> Answer.userId);
+                   userData |> UserData.user(answer |> Answer.creatorId);
                  let commentsForAnswer =
                    state.comments
                    |> Comment.commentsForAnswer(answer |> Answer.id);
@@ -162,12 +152,7 @@ let make =
                          <div
                            className="py-4 px-6 leading-normal text-sm markdown-body"
                            dangerouslySetInnerHTML={
-                             "__html":
-                               state.markdownVersions
-                               |> MarkdownVersion.latestValue(
-                                    answer |> Answer.id,
-                                    "Answer",
-                                  ),
+                             "__html": answer |> Answer.description,
                            }
                          />
                          <div

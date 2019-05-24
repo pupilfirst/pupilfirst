@@ -7,7 +7,7 @@ class CreateAnswerMutator < ApplicationMutator
 
   def create_answer
     answer = Answer.create!(
-      user: current_user,
+      creator: current_user,
       question: question,
       description: description
     )

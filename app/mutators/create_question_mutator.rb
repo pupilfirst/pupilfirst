@@ -12,7 +12,7 @@ class CreateQuestionMutator < ApplicationMutator
     question = Question.create!(
       title: title,
       description: description,
-      user: current_user,
+      creator: current_user,
       community: community
     )
 

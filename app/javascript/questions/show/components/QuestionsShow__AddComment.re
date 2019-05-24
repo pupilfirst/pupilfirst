@@ -63,6 +63,7 @@ let make =
         currentUserId,
         commentableId,
         commentableType,
+        false,
       );
     setValue(_ => "");
     setSaving(_ => false);

@@ -45,12 +45,11 @@ let make = (~question, ~authenticityToken, ~currentUserId, ~addAnswerCB) => {
   let updateDescriptionCB = description => setDescription(_ => description);
 
   let handleResponseCB = id => {
-    let answer = Answer.create(id, currentUserId, dateTime);
-    let markdownVersion =
-      MarkdownVersion.create(description, true, id, "Answer");
+    let answer =
+      Answer.create(id, description, currentUserId, None, dateTime, false);
     setDescription(_ => "");
     setSaving(_ => false);
-    addAnswerCB(answer, markdownVersion);
+    addAnswerCB(answer);
   };
   let handleCreateAnswer = event => {
     event |> ReactEvent.Mouse.preventDefault;

@@ -19,12 +19,12 @@ module Questions
     end
 
     def question_data
-      @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'archived')
+      @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id')
         .merge(created_at: created_at(@question))
     end
 
     def answer_data
-      attributes = %w[id creator_id description]
+      attributes = %w[id creator_id editor_id description archived]
       @answer_data ||=
         @question.answers.select(*attributes).map do |answer|
           answer.attributes.slice(*attributes)
@@ -38,16 +38,16 @@ module Questions
     end
 
     def comments_for_answers
-      Comment.where(commentable_type: Comment::COMMENTABLE_TYPE_ANSWER, commentable_id: @answer_data.pluck(:id))
+      Comment.where(commentable_type: Comment::COMMENTABLE_TYPE_ANSWER, commentable_id: @answer_data.pluck('id'))
         .map(&method(:comment_data))
     end
 
     def comment_data(comment)
-      comment.attributes.slice('id', 'value', 'userId', 'commentableType', 'commentableId')
+      comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id')
     end
 
     def user_data
-      user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck(:creator_id), answer_data.pluck(:editor_id), comments.pluck(:userId), current_user.id]
+      user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck('creator_id'), answer_data.pluck('editor_id'), comments.pluck('userId'), current_user.id]
         .flatten.uniq
 
       UserProfile.where(user_id: user_ids, school: current_school).with_attached_avatar
@@ -60,7 +60,7 @@ module Questions
     end
 
     def likes
-      AnswerLike.where(answer_id: answer_data.pluck(:id)).map do |like|
+      AnswerLike.where(answer_id: answer_data.pluck('id')).map do |like|
         like.attributes.slice('id', 'answer_id', 'user_id')
       end
     end

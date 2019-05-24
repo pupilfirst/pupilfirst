@@ -33,7 +33,7 @@ let make =
                      " - "
                      ++ (
                        userData
-                       |> UserData.userName(comment |> Comment.userId)
+                       |> UserData.userName(comment |> Comment.creatorId)
                      )
                      |> str
                    }

@@ -14,5 +14,7 @@ module Types
     field :create_community, mutation: Mutations::CreateCommunity, null: false
     field :update_community, mutation: Mutations::UpdateCommunity, null: false
     field :archive_community_resource, mutation: Mutations::ArchiveCommunityResource, null: false
+    field :update_question, mutation: Mutations::UpdateQuestion, null: false
+    field :update_answer, mutation: Mutations::UpdateAnswer, null: false
   end
 end

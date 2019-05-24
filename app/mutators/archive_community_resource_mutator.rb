@@ -2,7 +2,6 @@ class ArchiveCommunityResourceMutator < ApplicationMutator
   attr_accessor :id
   attr_accessor :resource_type
 
-  validates :id, presence: true
   validates :resource_type, inclusion: { in: %w[Question Answer Comment] }
 
   def archive
@@ -16,7 +15,7 @@ class ArchiveCommunityResourceMutator < ApplicationMutator
     # Faculty can archive resources
     return true if current_coach.present?
 
-    community_resource&.editor == current_user
+    community_resource&.creator == current_user
   end
 
   private
@@ -33,7 +32,7 @@ class ArchiveCommunityResourceMutator < ApplicationMutator
   end
 
   def school
-    return community_resource&.school if resource_type.in? %w[question answer]
+    return community_resource&.school if resource_type.in? %w[Question Answer]
 
     if resource_type == "Comment"
       if community_resource&.commentable_type == "Question"

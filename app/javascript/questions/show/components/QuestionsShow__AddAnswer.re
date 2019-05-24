@@ -16,13 +16,13 @@ module CreateAnswerQuery = [%graphql
 ];
 
 module CreateAnswerError = {
-  type t = [ | `InvalidLengthValue | `BlankQuestionId];
+  type t = [ | `InvalidLengthDescription | `BlankQuestionId];
 
   let notification = error =>
     switch (error) {
-    | `InvalidLengthValue => (
-        "InvalidLengthValue",
-        "Supplied comment must be greater than 1 characters in length",
+    | `InvalidLengthDescription => (
+        "InvalidLengthDescription",
+        "Supplied description must be greater than 1 characters in length",
       )
     | `BlankQuestionId => (
         "BlankQuestionId",

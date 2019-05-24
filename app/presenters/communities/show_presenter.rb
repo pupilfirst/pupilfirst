@@ -13,8 +13,8 @@ module Communities
       question.created_at.to_formatted_s(:long)
     end
 
-    def user_name(question)
-      question.user.user_profiles.where(school: current_school).first.name
+    def creator_name(question)
+      question.creator.user_profiles.where(school: current_school).first.name
     end
 
     def comments_count(question)

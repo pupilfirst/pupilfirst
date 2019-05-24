@@ -8,9 +8,9 @@ class CreateAnswerMutator < ApplicationMutator
   def create_answer
     answer = Answer.create!(
       user: current_user,
-      question: question
+      question: question,
+      description: description
     )
-    answer.markdown_versions.create!(value: description, latest: true)
     # rubocop:disable Rails/SkipsModelValidations
     question.touch(:last_activity_at)
     # rubocop:enable Rails/SkipsModelValidations

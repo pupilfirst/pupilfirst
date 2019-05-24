@@ -5,4 +5,4 @@
 
 <% presenter = Questions::ShowPresenter.new(self, @question) %>
 
-<div class="w-full" id="react-root" data-json-props="<%= presenter.json_props %>"></div>
+<div class="w-full" id="react-root" data-json-props="<%= presenter.props_to_json %>"></div>

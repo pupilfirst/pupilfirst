@@ -5,37 +5,30 @@ module Questions
       @question = question
     end
 
-    def json_props
+    def props
       {
-        authenticityToken: view.form_authenticity_token,
+        authenticity_token: view.form_authenticity_token,
         questions: question_data,
         answers: answer_data,
         comments: comments,
         userData: user_data,
         likes: likes,
-        currentUserId: current_user.id.to_s,
-        markdownVersions: markdown_versions,
-        communityPath: view.community_path(@question.community)
-      }.to_json
-    end
-
-    def question_data
-      {
-        id: @question.id.to_s,
-        title: @question.title,
-        userId: @question.user_id.to_s,
-        createdAt: created_at(@question)
+        currentUser_id: current_user.id,
+        community_path: view.community_path(@question.community)
       }
     end
 
+    def question_data
+      @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'archived')
+        .merge(created_at: created_at(@question))
+    end
+
     def answer_data
+      attributes = %w[id creator_id description]
       @answer_data ||=
-        @question.answers.select(:id, :user_id, :created_at).map do |answer|
-          {
-            id: answer.id.to_s,
-            userId: answer.user_id.to_s,
-            createdAt: created_at(answer)
-          }
+        @question.answers.select(*attributes).map do |answer|
+          answer.attributes.slice(*attributes)
+            .merge(created_at: created_at(@question))
         end
     end
 
@@ -50,55 +43,25 @@ module Questions
     end
 
     def comment_data(comment)
-      {
-        id: comment.id.to_s,
-        value: comment.value,
-        userId: comment.user_id.to_s,
-        commentableType: comment.commentable_type,
-        commentableId: comment.commentable_id.to_s
-      }
-    end
-
-    def markdown_versions
-      (@question.markdown_versions +
-        TextVersion.where(
-          versionable_type: TextVersion::VERSIONABLE_TYPE__ANSWER,
-          versionable_id: @answer_data.pluck(:id)
-        ))
-        .map(&method(:markdown_versions_data))
-    end
-
-    def markdown_versions_data(markdown_version)
-      {
-        id: markdown_version.to_s,
-        value: markdown_version.value,
-        latest: markdown_version.latest,
-        versionableType: markdown_version.versionable_type,
-        versionableId: markdown_version.versionable_id.to_s
-      }
+      comment.attributes.slice('id', 'value', 'userId', 'commentableType', 'commentableId')
     end
 
     def user_data
-      user_ids = [@question.user_id, answer_data.pluck(:userId), comments.pluck(:userId), current_user.id].flatten.uniq
+      user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck(:creator_id), answer_data.pluck(:editor_id), comments.pluck(:userId), current_user.id]
+        .flatten.uniq
 
-      UserProfile.where(user_id: user_ids, school: current_school)
-        .includes([:avatar_attachment, user: :faculty]).map do |user_profile|
-        {
-          userId: user_profile.user_id.to_s,
-          name: user_profile.name,
-          avatarUrl: avatar_url(user_profile),
+      UserProfile.where(user_id: user_ids, school: current_school).with_attached_avatar
+        .includes([user: :faculty]).map do |user_profile|
+        user_profile.attributes.slice('user_id', 'name').merge(
+          avatar_url: avatar_url(user_profile),
           title: title(user_profile)
-        }
+        )
       end
     end
 
     def likes
       AnswerLike.where(answer_id: answer_data.pluck(:id)).map do |like|
-        {
-          id: like.id.to_s,
-          answerId: like.answer_id.to_s,
-          userId: like.user_id.to_s
-        }
+        like.attributes.slice('id', 'answer_id', 'user_id')
       end
     end
 

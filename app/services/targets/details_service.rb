@@ -49,7 +49,7 @@ module Targets
     end
 
     def latest_event_attachments
-      return nil if latest_event.blank?
+      return [] if latest_event.blank?
 
       files = latest_event.timeline_event_files.map do |file|
         {

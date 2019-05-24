@@ -80,7 +80,7 @@ let make =
                  ts |> TargetStatus.targetId == (target |> Target.id)
                );
           <CourseShow__Overlay
-            targetId={target |> Target.id}
+            target
             targetStatus
             closeOverlayCB={closeOverlay(setSelectedTargetId)}
           />;

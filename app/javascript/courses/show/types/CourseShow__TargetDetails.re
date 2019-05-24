@@ -1,6 +1,6 @@
 type t = {
   pendingStudentIds: list(string),
-  latestSubmissionDetails: CourseShow__SubmissionDetails.t,
+  latestSubmissionDetails: option(CourseShow__SubmissionDetails.t),
   latestSubmissionAttachments: list(CourseShow__SubmissionAttachment.t),
   latestFeedback: option(CourseShow__Feedback.t),
   questions: list(CourseShow__QuizQuestion.t),
@@ -14,8 +14,9 @@ let decode = json =>
       json
       |> field(
            "latestSubmissionDetails",
-           CourseShow__SubmissionDetails.decode,
-         ),
+           nullable(CourseShow__SubmissionDetails.decode),
+         )
+      |> Js.Null.toOption,
     latestSubmissionAttachments:
       json
       |> field(
@@ -31,3 +32,5 @@ let decode = json =>
     contentBlocks:
       json |> field("contentBlocks", list(CourseShow__ContentBlock.decode)),
   };
+
+let contentBlocks = t => t.contentBlocks;

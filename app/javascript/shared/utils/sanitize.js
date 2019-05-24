@@ -1,10 +1,30 @@
 const sanitizeHtml = require("sanitize-html");
 
-const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
+const sanitizationProfiles = {};
+
+sanitizationProfiles.permissive = [
+  "p",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "em",
+  "strong",
+  "del",
+  "ul",
+  "ol",
+  "li",
+  "a",
+  "code",
+  "pre",
+  "blockquote",
+  "hr",
   "sup",
   "sub",
   "span"
-]);
+];
 
 const allowedCodeClasses = [
   "language-javascript",
@@ -24,7 +44,7 @@ const allowedPreClasses = ["line-numbers"];
 
 const sanitize = dirtyHtml => {
   return sanitizeHtml(dirtyHtml, {
-    allowedTags: allowedTags,
+    allowedTags: sanitizationProfiles.permissive,
     allowedClasses: {
       pre: allowedPreClasses,
       code: allowedCodeClasses

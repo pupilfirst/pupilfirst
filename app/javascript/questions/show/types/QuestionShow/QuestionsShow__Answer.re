@@ -39,6 +39,12 @@ let answerFromUser = (userId, answers) =>
 
 let archived = t => t.archived;
 
+let findAnswer = (answerId, answers) => {
+  let a = answers |> List.filter(answer => answer.id == answerId);
+  Js.log(a);
+  a |> List.hd;
+};
+
 let create = (id, description, creatorId, editorId, createdAt, archived) => {
   id,
   description,

@@ -10,6 +10,8 @@ type props = {
   likes: list(Like.t),
   currentUserId: string,
   communityPath: string,
+  isCoach: bool,
+  communityId: string,
 };
 
 let decodeProps = json =>
@@ -22,6 +24,8 @@ let decodeProps = json =>
     likes: json |> field("likes", list(Like.decode)),
     currentUserId: json |> field("currentUserId", string),
     communityPath: json |> field("communityPath", string),
+    isCoach: json |> field("isCoach", bool),
+    communityId: json |> field("communityId", string),
   };
 
 let props = DomUtils.parseJsonAttribute() |> decodeProps;
@@ -36,6 +40,8 @@ ReactDOMRe.renderToElementWithId(
     likes={props.likes}
     currentUserId={props.currentUserId}
     communityPath={props.communityPath}
+    isCoach={props.isCoach}
+    communityId={props.communityId}
   />,
   "react-root",
 );

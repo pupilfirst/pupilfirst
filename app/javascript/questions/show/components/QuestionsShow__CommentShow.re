@@ -14,14 +14,18 @@ let make =
       ~commentableId,
       ~addCommentCB,
       ~currentUserId,
+      ~archiveCB,
+      ~isCoach,
     ) => {
   let (showMore, setShowMore) = React.useState(() => false);
+  let filteredComments =
+    comments |> List.filter(comment => !(comment |> Comment.archived));
   <ul
     className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-5 md:px-8">
     {
-      comments
+      filteredComments
       |> List.mapi((index, comment) =>
-           index < (showMore ? comments |> List.length : 3) ?
+           index < (showMore ? filteredComments |> List.length : 3) ?
              <li
                key={comment |> Comment.id}
                className="w-full text-left border border-t-0">
@@ -38,6 +42,16 @@ let make =
                      |> str
                    }
                  </span>
+                 {
+                   isCoach || comment.creatorId == currentUserId ?
+                     <QuestionsShow__ArchiveManager
+                       authenticityToken
+                       id={comment |> Comment.id}
+                       resourceType="Comment"
+                       archiveCB
+                     /> :
+                     React.null
+                 }
                </div>
              </li> :
              ReasonReact.null
@@ -46,10 +60,10 @@ let make =
       |> ReasonReact.array
     }
     {
-      comments
+      filteredComments
       |> List.length > 3
       && showMore
-      || comments
+      || filteredComments
       |> List.length <= 3
       && !showMore ?
         <QuestionsShow__AddComment
@@ -62,7 +76,7 @@ let make =
         ReasonReact.null
     }
     {
-      comments |> List.length > 3 && !showMore ?
+      filteredComments |> List.length > 3 && !showMore ?
         <a
           onClick={_ => setShowMore(_ => !showMore)}
           className="bg-gray-200 rounded-full cursor-pointer border py-1 px-3 flex mx-auto appearance-none text-xs font-semibold hover:bg-primary-100 hover:text-primary-500 -mt-3">

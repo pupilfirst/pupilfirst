@@ -14,7 +14,9 @@ module Questions
         userData: user_data,
         likes: likes,
         currentUser_id: current_user.id,
-        community_path: view.community_path(@question.community)
+        community_path: view.community_path(community),
+        is_coach: current_coach.present?,
+        community_id: community.id
       }
     end
 
@@ -63,6 +65,10 @@ module Questions
       AnswerLike.where(answer_id: answer_data.pluck('id')).map do |like|
         like.attributes.slice('id', 'answer_id', 'user_id')
       end
+    end
+
+    def community
+      @community ||= @question.community
     end
 
     private

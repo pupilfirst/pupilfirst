@@ -13,7 +13,8 @@ type action =
   | UpdateShowAnswerCreate(bool)
   | UpdateShowQuestionEdit(bool)
   | UpdateQuestion(Question.t)
-  | UpdateAnswer(Answer.t);
+  | UpdateAnswer(Answer.t)
+  | UpdateComment(Comment.t);
 
 type state = {
   question: Question.t,
@@ -45,6 +46,10 @@ let reducer = (state, action) =>
       ...state,
       answers: Answer.updateAnswer(state.answers, answer),
     }
+  | UpdateComment(comment) => {
+      ...state,
+      comments: Comment.updateComment(state.comments, comment),
+    }
   };
 
 let showAnswersCreateComponent = (answers, showAnswerCreate, currentUserId) =>
@@ -53,6 +58,52 @@ let showAnswersCreateComponent = (answers, showAnswerCreate, currentUserId) =>
   } else {
     answers |> Answer.answerFromUser(currentUserId) |> ListUtils.isEmpty;
   };
+
+let likesForAnswer = (likes, answerId) =>
+  likes |> Like.likesForAnswer(answerId) |> List.length;
+
+let handleUpdateQuestion =
+    (title, description, currentUserId, question, dispatch) => {
+  let newQuestion =
+    Question.create(
+      question |> Question.id,
+      title,
+      description,
+      question |> Question.creatorId,
+      Some(currentUserId),
+      question |> Question.createdAt,
+    );
+  dispatch(UpdateQuestion(newQuestion));
+};
+
+let handleUpdateAnswer = (id, answers, dispatch) => {
+  let oldAnswer = answers |> Answer.findAnswer(id);
+  let newAnswer =
+    Answer.create(
+      id,
+      oldAnswer |> Answer.description,
+      oldAnswer |> Answer.creatorId,
+      oldAnswer |> Answer.editorId,
+      oldAnswer |> Answer.createdAt,
+      true,
+    );
+  dispatch(UpdateAnswer(newAnswer));
+};
+
+let handleUpdateComment = (id, comments, dispatch) => {
+  let oldComment = comments |> Comment.findComment(id);
+  let newComment =
+    Comment.create(
+      oldComment |> Comment.id,
+      oldComment |> Comment.value,
+      oldComment |> Comment.creatorId,
+      oldComment |> Comment.commentableId,
+      oldComment |> Comment.commentableType,
+      true,
+    );
+
+  dispatch(UpdateComment(newComment));
+};
 
 [@react.component]
 let make =
@@ -65,6 +116,8 @@ let make =
       ~likes,
       ~currentUserId,
       ~communityPath,
+      ~isCoach,
+      ~communityId,
     ) => {
   let (state, dispatch) =
     React.useReducer(
@@ -81,23 +134,32 @@ let make =
   let addCommentCB = comment => dispatch(AddComment(comment));
   let handleAnswerCB = (answer, newAnswer) =>
     newAnswer ?
-      dispatch(AddAnswer(answer, false)) :
-      dispatch(AddAnswer(answer, false));
+      dispatch(AddAnswer(answer, false)) : dispatch(UpdateAnswer(answer));
   let addLikeCB = like => dispatch(AddLike(like));
   let removeLikeCB = id => dispatch(RemoveLike(id));
-  let updateQuestionCB = (title, description) => {
-    let oldq = state.question;
-    let newQuestion =
-      Question.create(
-        oldq |> Question.id,
-        title,
-        description,
-        oldq |> Question.creatorId,
-        Some(currentUserId),
-        oldq |> Question.createdAt,
-      );
-    dispatch(UpdateQuestion(newQuestion));
-  };
+  let updateQuestionCB = (title, description) =>
+    handleUpdateQuestion(
+      title,
+      description,
+      currentUserId,
+      question,
+      dispatch,
+    );
+  let archiveCB = (id, resourceType) =>
+    switch (resourceType) {
+    | "Question" =>
+      communityPath |> Webapi.Dom.Window.setLocation(Webapi.Dom.window)
+    | "Answer" => handleUpdateAnswer(id, state.answers, dispatch)
+    | "Comment" => handleUpdateComment(id, state.comments, dispatch)
+    | _ =>
+      Notification.error(
+        "Something went wrong",
+        "Please refresh the page and try again",
+      )
+    };
+  let filteredAnswers =
+    state.answers |> List.filter(answer => !(answer |> Answer.archived));
+
   <div className="flex flex-1 bg-gray-100">
     <div className="flex-1 flex flex-col">
       <div className="flex-col px-3 md:px-6 py-2 items-center justify-between">
@@ -120,7 +182,7 @@ let make =
               </div>
               <QuestionsEditor
                 authenticityToken
-                communityId="1"
+                communityId
                 target=None
                 question={state.question}
                 updateQuestionCB
@@ -150,7 +212,9 @@ let make =
                         }
                       />
                       {
-                        state.question |> Question.creatorId == currentUserId ?
+                        state.question
+                        |> Question.creatorId == currentUserId
+                        || isCoach ?
                           <div>
                             <a
                               onClick={
@@ -159,10 +223,12 @@ let make =
                               className="text-sm mr-2 font-semibold cursor-pointer">
                               {"Edit" |> str}
                             </a>
-                            <a
-                              className="text-sm mr-2 font-semibold cursor-pointer">
-                              {"Hide" |> str}
-                            </a>
+                            <QuestionsShow__ArchiveManager
+                              authenticityToken
+                              id={question |> Question.id}
+                              resourceType="Question"
+                              archiveCB
+                            />
                           </div> :
                           React.null
                       }
@@ -204,10 +270,12 @@ let make =
                 commentableId={state.question |> Question.id}
                 addCommentCB
                 currentUserId
+                archiveCB
+                isCoach
               />
               <div
                 className="max-w-3xl w-full justify-center mx-auto mb-4 pt-5 pb-2 border-b">
-                <div className="flex justify-between items-end">
+                <div className="flex items-end">
                   <span className="text-lg font-semibold">
                     {
                       (state.answers |> List.length |> string_of_int)
@@ -215,12 +283,31 @@ let make =
                       |> str
                     }
                   </span>
+                  {
+                    let archivedAnswerCount =
+                      (state.answers |> List.length)
+                      - (filteredAnswers |> List.length);
+                    archivedAnswerCount == 0 ?
+                      React.null :
+                      <span className="text-xs font-normal px-2">
+                        {
+                          "( "
+                          ++ (archivedAnswerCount |> string_of_int)
+                          ++ " hidden)"
+                          |> str
+                        }
+                      </span>;
+                  }
                 </div>
               </div>
               <div className="community-answer-container">
                 {
-                  state.answers
+                  filteredAnswers
                   |> List.map(answer =>
+                       (answer, likesForAnswer(likes, answer |> Answer.id))
+                     )
+                  |> List.sort(((_, likeX), (_, likeY)) => likeY - likeX)
+                  |> List.map(((answer, _)) =>
                        <QuestionsShow__AnswerShow
                          key={answer |> Answer.id}
                          authenticityToken
@@ -234,6 +321,8 @@ let make =
                          comments={state.comments}
                          likes={state.likes}
                          handleAnswerCB
+                         isCoach
+                         archiveCB
                        />
                      )
                   |> Array.of_list

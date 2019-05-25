@@ -18,6 +18,8 @@ let make =
       ~comments,
       ~likes,
       ~handleAnswerCB,
+      ~isCoach,
+      ~archiveCB,
     ) => {
   let userProfile = userData |> UserData.user(answer |> Answer.creatorId);
   let commentsForAnswer =
@@ -54,17 +56,19 @@ let make =
                     }
                   />
                   {
-                    question |> Question.creatorId == currentUserId ?
+                    answer |> Answer.creatorId == currentUserId || isCoach ?
                       <div>
                         <a
                           onClick={_ => toggleShowAnswerEdit(_ => true)}
                           className="text-sm mr-2 font-semibold cursor-pointer">
                           {"Edit" |> str}
                         </a>
-                        <a
-                          className="text-sm mr-2 font-semibold cursor-pointer">
-                          {"Hide" |> str}
-                        </a>
+                        <QuestionsShow__ArchiveManager
+                          authenticityToken
+                          id={answer |> Answer.id}
+                          resourceType="Answer"
+                          archiveCB
+                        />
                       </div> :
                       React.null
                   }
@@ -113,6 +117,8 @@ let make =
             commentableId={answer |> Answer.id}
             addCommentCB
             currentUserId
+            archiveCB
+            isCoach
           />
         </div>
     }

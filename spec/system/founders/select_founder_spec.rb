@@ -23,7 +23,7 @@ feature 'Select another founder profile as the active profile' do
   let(:single_founder_user) { startup_2.founders.first.user }
 
   scenario 'Multi-founder user can switch between courses in the same school', js: true do
-    sign_in_user multi_founder_user, referer: root_path
+    sign_in_user multi_founder_user, referer: student_dashboard_path
 
     # The links to switch to other student profiles should not be immediately visible.
     expect(page).not_to have_link("#{startup_1.course.name} Course")
@@ -58,7 +58,7 @@ feature 'Select another founder profile as the active profile' do
   end
 
   scenario 'Single-founder user does not have option to switch between courses' do
-    sign_in_user single_founder_user, referer: root_path
+    sign_in_user single_founder_user, referer: student_dashboard_path
 
     expect(page).to have_link("Student Dashboard", href: '/student/dashboard')
   end

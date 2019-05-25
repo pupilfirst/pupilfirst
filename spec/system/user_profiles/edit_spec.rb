@@ -54,7 +54,7 @@ feature 'User Profile Edit' do
       click_button 'Save Changes'
 
       expect(page).to have_text(founder_name)
-      expect(page).to have_selector('div.profile-data')
+      expect(page).to have_text('All Courses')
 
       # Confirm that founder has, indeed, been updated.
       expect(founder.reload).to have_attributes(

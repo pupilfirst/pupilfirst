@@ -15,6 +15,7 @@ let headerLink = (key, link) =>
 
 let logoutLink = () =>
   <div
+    key="Logout-button"
     className="ml-6 text-sm font-semibold cursor-default flex w-full justify-center p-2 md:p-0 border-t-2 md:border-t-0">
     <form className="button_to" method="post" action="/users/sign_out">
       <input name="_method" value="delete" type_="hidden" />

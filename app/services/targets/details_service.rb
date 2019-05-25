@@ -78,8 +78,8 @@ module Targets
           index: index,
           question: question.question,
           description: question.description,
-          correctAnswerId: question.correct_answer_id,
-          answerOptions: answer_options(question).shuffle
+          correct_answer_id: question.correct_answer_id,
+          answer_options: answer_options(question).shuffle
         }
       end
     end

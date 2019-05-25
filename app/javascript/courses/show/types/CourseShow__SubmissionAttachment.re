@@ -2,7 +2,7 @@ exception UnexpectedSubmissionType(string);
 
 type submissionType =
   | File
-  | Url;
+  | Link;
 
 type t = {
   submissionType,
@@ -15,7 +15,7 @@ let decode = json =>
     submissionType:
       switch (json |> field("submissionType", string)) {
       | "file" => File
-      | "url" => Url
+      | "link" => Link
       | unknownSubmissionType =>
         raise(UnexpectedSubmissionType(unknownSubmissionType))
       },

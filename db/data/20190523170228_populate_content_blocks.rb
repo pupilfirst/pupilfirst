@@ -6,12 +6,16 @@ class PopulateContentBlocks < ActiveRecord::Migration[5.2]
     YOUTUBE_EMBED_CODE
   end
 
+  def replace_divs(html)
+    html.gsub(/<div>\n?/, '').gsub(/<\/div>\n?/, '<br/>')
+  end
+
   def up
     Target.all.each do |target|
       puts "Processing Target##{target.id}..."
 
       # Create a markdown block with all of the textual content.
-      description_md = Kramdown::Document.new(target.description, input: 'html').to_kramdown
+      description_md = Kramdown::Document.new(replace_divs(target.description), input: 'html').to_kramdown
 
       completion_instructions_md = if target.completion_instructions.present?
         <<~COMPLETION_INTRUCTIONS

@@ -13,6 +13,22 @@ let headerLink = (key, link) =>
     </a>
   </div>;
 
+let logoutLink = () =>
+  <div
+    className="ml-6 text-sm font-semibold cursor-default flex w-full justify-center p-2 md:p-0 border-t-2 md:border-t-0">
+    <form className="button_to" method="post" action="/users/sign_out">
+      <input name="_method" value="delete" type_="hidden" />
+      <input name="authenticity_token" type_="hidden" />
+      <div className="flex items-center justify-center">
+        <button
+          className="no-underline text-black" type_="submit" value="Submit">
+          {"Logout" |> str}
+        </button>
+      </div>
+    </form>
+  </div>;
+/* <a className="no-underline text-black" href="#"> {"Logout" |> str} </a> */
+
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
 let headerLinks = links => {
@@ -35,6 +51,7 @@ let headerLinks = links => {
     ->List.append([
         <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
+    ->List.append([logoutLink()])
     |> Array.of_list
     |> ReasonReact.array
   };

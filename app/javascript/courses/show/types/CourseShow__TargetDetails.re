@@ -3,7 +3,7 @@ type t = {
   latestSubmissionDetails: option(CourseShow__SubmissionDetails.t),
   latestSubmissionAttachments: list(CourseShow__SubmissionAttachment.t),
   latestFeedback: option(CourseShow__Feedback.t),
-  questions: list(CourseShow__QuizQuestion.t),
+  quizQuestions: list(CourseShow__QuizQuestion.t),
   contentBlocks: list(CourseShow__ContentBlock.t),
 };
 
@@ -27,10 +27,11 @@ let decode = json =>
       json
       |> field("latestFeedback", nullable(CourseShow__Feedback.decode))
       |> Js.Null.toOption,
-    questions:
+    quizQuestions:
       json |> field("quizQuestions", list(CourseShow__QuizQuestion.decode)),
     contentBlocks:
       json |> field("contentBlocks", list(CourseShow__ContentBlock.decode)),
   };
 
 let contentBlocks = t => t.contentBlocks;
+let quizQuestions = t => t.quizQuestions;

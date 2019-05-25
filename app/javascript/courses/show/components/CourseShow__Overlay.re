@@ -88,11 +88,22 @@ let discussSection = (overlaySelection, _targetDetails) =>
     {"Discussion section goes here" |> str}
   </div>;
 
-let completeSection = (overlaySelection, _target) =>
-  <div
-    className={overlaySelectionVisiblilityClasses(Complete, overlaySelection)}>
-    {"Submission form goes here" |> str}
-  </div>;
+let completeSection = (overlaySelection, target, targetDetails) =>
+  switch (targetDetails) {
+  | Some(targetDetails) =>
+    <div
+      className={
+        overlaySelectionVisiblilityClasses(Complete, overlaySelection)
+      }>
+      {
+        switch (targetDetails |> TargetDetails.quizQuestions) {
+        | [] => <CourseShow__SubmissionForm target />
+        | quizQuestions => <CourseShow__Quiz target quizQuestions />
+        }
+      }
+    </div>
+  | None => <div> {"Loading..." |> str} </div>
+  };
 
 [@react.component]
 let make = (~target, ~targetStatus, ~closeOverlayCB) => {
@@ -110,6 +121,6 @@ let make = (~target, ~targetStatus, ~closeOverlayCB) => {
     {overlaySelectionOptions(target, overlaySelection, setOverlaySelection)}
     {learnSection(overlaySelection, targetDetails)}
     {discussSection(overlaySelection, targetDetails)}
-    {completeSection(overlaySelection, target)}
+    {completeSection(overlaySelection, target, targetDetails)}
   </div>;
 };

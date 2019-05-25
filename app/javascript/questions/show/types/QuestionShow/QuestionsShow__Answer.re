@@ -31,6 +31,9 @@ let editorId = t => t.editorId;
 let addAnswer = (answers, answer) =>
   answers |> List.rev |> List.append([answer]) |> List.rev;
 
+let updateAnswer = (answers, newAnswer) =>
+  answers |> List.map(answer => answer.id == newAnswer.id ? newAnswer : answer);
+
 let answerFromUser = (userId, answers) =>
   answers |> List.filter(answer => answer.creatorId == userId);
 

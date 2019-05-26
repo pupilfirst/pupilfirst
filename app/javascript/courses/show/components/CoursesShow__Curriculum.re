@@ -90,40 +90,45 @@ let make =
       | None => React.null
       }
     }
-    <select
-      className="p-2 border rounded-lg"
-      onChange={updateSelectedLevel(levels, setSelectedLevelId)}
-      value=selectedLevelId>
+    <div className="flex justify-center">
+      <select
+        className="p-2 border rounded-lg"
+        onChange={updateSelectedLevel(levels, setSelectedLevelId)}
+        value=selectedLevelId>
+        {
+          levels
+          |> List.filter(l => l |> Level.number != 0)
+          |> List.sort((l1, l2) =>
+               (l1 |> Level.number) - (l2 |> Level.number)
+             )
+          |> List.map(l => {
+               let levelTitle =
+                 "L"
+                 ++ (l |> Level.number |> string_of_int)
+                 ++ ": "
+                 ++ (l |> Level.name);
+               <option value={l |> Level.id} key={l |> Level.id}>
+                 {levelTitle |> str}
+               </option>;
+             })
+          |> Array.of_list
+          |> React.array
+        }
+      </select>
       {
-        levels
-        |> List.filter(l => l |> Level.number != 0)
-        |> List.sort((l1, l2) => (l1 |> Level.number) - (l2 |> Level.number))
-        |> List.map(l => {
-             let levelTitle =
-               "L"
-               ++ (l |> Level.number |> string_of_int)
-               ++ ": "
-               ++ (l |> Level.name);
-             <option value={l |> Level.id} key={l |> Level.id}>
-               {levelTitle |> str}
-             </option>;
-           })
-        |> Array.of_list
-        |> React.array
+        let levelZero =
+          levels |> ListUtils.findOpt(l => l |> Level.number == 0);
+        switch (levelZero) {
+        | Some(level) =>
+          <button
+            className="p-2 border rounded-lg ml-2"
+            onClick=(_e => setSelectedLevelId(_ => level |> Level.id))>
+            {level |> Level.name |> str}
+          </button>
+        | None => React.null
+        };
       }
-    </select>
-    {
-      let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
-      switch (levelZero) {
-      | Some(level) =>
-        <button
-          className="p-2 border rounded-lg ml-2"
-          onClick=(_e => setSelectedLevelId(_ => level |> Level.id))>
-          {level |> Level.name |> str}
-        </button>
-      | None => React.null
-      };
-    }
+    </div>
     {
       targetGroups
       |> List.filter(tg => tg |> TargetGroup.levelId == selectedLevelId)
@@ -136,7 +141,7 @@ let make =
              targets
              |> List.filter(t => t |> Target.targetGroupId == targetGroupId);
 
-           <div key=targetGroupId className="border-red p-2">
+           <div key=targetGroupId className="border-red p-2 w-1/2 mx-auto">
              <div> {targetGroup |> TargetGroup.name |> str} </div>
              {
                targets

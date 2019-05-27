@@ -114,7 +114,7 @@ let buttons = (description, setDescription, updateDescriptionCB) =>
 let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
   let (description, setDescription) = React.useState(() => value);
   let (showPreview, setShowPreview) = React.useState(() => false);
-  <div>
+  <div title="Markdown Editor">
     <div className="flex w-full justify-between items-center py-2">
       {
         showPreview ?
@@ -150,6 +150,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
         /> :
         <textarea
           id="mytextarea"
+          title="Markdown input"
           maxLength=1000
           rows=6
           placeholder=placeholderText

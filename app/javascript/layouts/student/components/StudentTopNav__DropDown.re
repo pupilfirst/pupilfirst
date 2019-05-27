@@ -4,10 +4,8 @@ let str = React.string;
 
 open StudentTopNav__Types;
 
-let handleToggle = (linksVisible, setLinksVisible, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
+let handleToggle = (linksVisible, setLinksVisible, _) =>
   setLinksVisible(linksVisible => !linksVisible);
-};
 
 let additionalLinks = (linksVisible, links) =>
   linksVisible ?

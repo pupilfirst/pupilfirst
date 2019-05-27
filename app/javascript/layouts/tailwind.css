@@ -15,12 +15,7 @@ body {
   @apply antialiased;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   @apply font-bold;
 }
 
@@ -120,15 +115,11 @@ h6 {
   @apply bg-red-800;
 }
 
-button:disabled,
-.disabled {
+button:disabled, .disabled {
   @apply cursor-not-allowed bg-gray-400 text-gray-800 shadow-none;
 }
 
-button:disabled:hover,
-.disabled:hover,
-button:disabled:focus,
-.disabled:focus {
+button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   @apply bg-gray-400 text-gray-800;
 }
 
@@ -144,21 +135,23 @@ button:disabled:focus,
   @apply py-2 px-5 text-base h-10;
 }
 
+/* Footer Style */
+
+.footer__container {
+  background-color: #271F33;
+}
+
+.footer__bottom {
+  background-color: #1C1626;
+}
+
 /* Gradients */
 
 @responsive {
   .bg-gradient-primary-600-to-primary-800-to-bottom {
-    background-image: linear-gradient(
-      to bottom,
-      theme("colors.primary.600"),
-      theme("colors.primary.800")
-    );
+    background-image: linear-gradient( to bottom, theme("colors.primary.600"), theme("colors.primary.800"));
   }
   .bg-gradient-secondary-to-secondary-600-120 {
-    background-image: linear-gradient(
-      120deg,
-      theme("colors.secondary.500"),
-      theme("colors.secondary.600")
-    );
+    background-image: linear-gradient( 120deg, theme("colors.secondary.500"), theme("colors.secondary.600"));
   }
 }

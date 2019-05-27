@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-open QuestionsShow__Types;
-
 let str = React.string;
 
 module ArchiveQuery = [%graphql
@@ -42,6 +40,7 @@ let archive =
 let make = (~authenticityToken, ~id, ~resourceType, ~archiveCB) => {
   let (saving, setSaving) = React.useState(() => false);
   <a
+    title={"Archive " ++ resourceType}
     onClick={
       archive(authenticityToken, id, resourceType, archiveCB, setSaving)
     }

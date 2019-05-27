@@ -30,8 +30,12 @@ let make =
                key={comment |> Comment.id}
                className="w-full text-left border border-t-0">
                <div
-                 className="w-full px-4 py-3 leading-normal text-xs bg-white">
-                 <span> {comment |> Comment.value |> str} </span>
+                 className="flex w-full px-4 py-3 leading-normal text-xs bg-white">
+                 <span
+                   dangerouslySetInnerHTML={
+                     "__html": comment |> Comment.value |> Markdown.parse,
+                   }
+                 />
                  <span className="font-semibold">
                    {
                      " - "

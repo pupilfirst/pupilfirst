@@ -7,8 +7,10 @@ open StudentTopNav__Types;
 let headerLink = (key, link) =>
   <div
     key
-    className="ml-6 text-sm font-semibold cursor-default flex w-full justify-center p-2 md:p-0 border-t-2 md:border-t-0">
-    <a className="no-underline text-black" href={link |> NavLink.url}>
+    className="md:ml-6 text-sm font-semibold text-center cursor-default flex w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    <a
+      className="no-underline bg-gray-100 md:bg-white text-black hover:text-primary w-full p-4 md:p-2"
+      href={link |> NavLink.url}>
       {link |> NavLink.title |> str}
     </a>
   </div>;
@@ -16,13 +18,15 @@ let headerLink = (key, link) =>
 let logoutLink = () =>
   <div
     key="Logout-button"
-    className="ml-6 text-sm font-semibold cursor-default flex w-full justify-center p-2 md:p-0 border-t-2 md:border-t-0">
+    className="md:ml-6 text-sm font-semibold cursor-default flex w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <form className="button_to" method="post" action="/users/sign_out">
       <input name="_method" value="delete" type_="hidden" />
       <input name="authenticity_token" type_="hidden" />
       <div className="flex items-center justify-center">
         <button
-          className="no-underline text-black" type_="submit" value="Submit">
+          className="btn btn-small md:btn-normal leading-tight md:leading-normal btn-default m-4 md:m-0 no-underline font-semibold text-black"
+          type_="submit"
+          value="Submit">
           {"Logout" |> str}
         </button>
       </div>
@@ -88,7 +92,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
         <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
           <div
             className={
-              "navbar-toggle focus:outline-none md:hidden "
+              "student-navbar__toggle focus:outline-none rounded-full h-10 w-12 p-3 md:hidden "
               ++ (menuHidden ? "" : "opened")
             }>
             <span className="sr-only"> {"Toggle navigation" |> str} </span>
@@ -101,7 +105,8 @@ let make = (~schoolName, ~logoUrl, ~links) => {
       {
         menuHidden ?
           React.null :
-          <div className="flex flex-col md:flex-row w-full md:w-1/2">
+          <div
+            className="student-navbar__links-container flex flex-row md:items-center border-t border-l md:border-0 w-full md:w-1/2 flex-wrap md:flex-no-wrap shadow-lg md:shadow-none">
             {headerLinks(links)}
           </div>
       }

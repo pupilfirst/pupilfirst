@@ -10,7 +10,7 @@ let handleToggle = (linksVisible, setLinksVisible, _) =>
 let additionalLinks = (linksVisible, links) =>
   linksVisible ?
     <div
-      className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden w-40 right-0 z-50">
+      className="dropdown__list dropdown__list-right bg-white shadow-lg rounded mt-3 border absolute w-40 z-50">
       {
         links
         |> List.mapi((index, link) =>

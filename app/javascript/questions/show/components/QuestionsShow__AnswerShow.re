@@ -43,7 +43,7 @@ let make =
             answer
           />
         </div> :
-        <div>
+        <div title={"Answer " ++ (answer |> Answer.id)}>
           <div
             className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-4">
             <div className="flex w-full">
@@ -52,13 +52,14 @@ let make =
                   <div
                     className="leading-normal text-sm markdown-body"
                     dangerouslySetInnerHTML={
-                      "__html": answer |> Answer.description,
+                      "__html": answer |> Answer.description |> Markdown.parse,
                     }
                   />
                   {
                     answer |> Answer.creatorId == currentUserId || isCoach ?
                       <div>
                         <a
+                          title="Edit Answer"
                           onClick={_ => toggleShowAnswerEdit(_ => true)}
                           className="text-sm mr-2 font-semibold cursor-pointer">
                           {"Edit" |> str}

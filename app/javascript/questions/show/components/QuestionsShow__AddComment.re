@@ -98,6 +98,7 @@ let make =
       className="w-full border rounded-b border-dashed border-gray-500 border-t-0 overflow-hidden focus:border-gray-600">
       <DisablingCover disabled=saving containerClasses="flex flex-row">
         <input
+          title={"Add your comment for " ++ commentableType}
           placeholder="Add your comment"
           value
           onChange={event => setValue(ReactEvent.Form.target(event)##value)}

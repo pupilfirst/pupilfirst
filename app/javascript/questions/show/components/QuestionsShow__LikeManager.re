@@ -107,7 +107,10 @@ let make =
   };
 
   <div className="mr-2">
-    <div className="pt-2 px-2 cursor-pointer" onClick=handleAnswerLike>
+    <div
+      className="pt-2 px-2 cursor-pointer"
+      title={(liked ? "Unlike" : "Like") ++ " Answer"}
+      onClick=handleAnswerLike>
       <div key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>

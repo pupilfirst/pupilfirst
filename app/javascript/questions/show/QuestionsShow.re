@@ -198,7 +198,7 @@ let make =
               <div
                 className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg">
                 <div className="flex w-full">
-                  <div className="flex flex-1 flex-col">
+                  <div title="Question block" className="flex flex-1 flex-col">
                     <div className="pt-6 pb-2 mx-6 flex flex-col">
                       <h2 className="text-xl text-black font-semibold">
                         {state.question |> Question.title |> str}
@@ -208,7 +208,10 @@ let make =
                       <div
                         className="leading-normal text-sm markdown-body"
                         dangerouslySetInnerHTML={
-                          "__html": state.question |> Question.description,
+                          "__html":
+                            state.question
+                            |> Question.description
+                            |> Markdown.parse,
                         }
                       />
                       {
@@ -220,6 +223,7 @@ let make =
                               onClick={
                                 _ => dispatch(UpdateShowQuestionEdit(true))
                               }
+                              title="Edit Question"
                               className="text-sm mr-2 font-semibold cursor-pointer">
                               {"Edit" |> str}
                             </a>
@@ -278,9 +282,10 @@ let make =
                 <div className="flex items-end">
                   <span className="text-lg font-semibold">
                     {
-                      (state.answers |> List.length |> string_of_int)
-                      ++ " Answers"
-                      |> str
+                      let numberOfAnswers = state.answers |> List.length;
+                      (numberOfAnswers |> string_of_int)
+                      ++ (numberOfAnswers == 1 ? " Answer" : " Answers")
+                      |> str;
                     }
                   </span>
                   {

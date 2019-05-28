@@ -186,7 +186,7 @@ let make =
   let updateDescriptionCB = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
 
-  <div className="flex flex-1 bg-gray-100">
+  <div title="Question Editor" className="flex flex-1 bg-gray-100">
     <div className="flex-1 flex flex-col">
       <div>
         {

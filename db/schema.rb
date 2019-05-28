@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.integer "pass_grade"
     t.json "grade_labels"
     t.datetime "ends_at"
+    t.string "description"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 

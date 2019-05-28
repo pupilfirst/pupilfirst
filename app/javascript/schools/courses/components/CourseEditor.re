@@ -6,6 +6,7 @@ module CoursesQuery = [%graphql
     courses{
       id
       name
+      description
       endsAt
       maxGrade
       passGrade
@@ -76,6 +77,7 @@ let make = (~authenticityToken, _children) => {
                 Course.create(
                   rawCourse##id |> int_of_string,
                   rawCourse##name,
+                  rawCourse##description,
                   endsAt,
                   rawCourse##maxGrade,
                   rawCourse##passGrade,
@@ -125,6 +127,7 @@ let make = (~authenticityToken, _children) => {
               |> Course.sort
               |> List.map(course =>
                    <div
+                     key={course |> Course.id |> string_of_int}
                      className="flex items-center shadow bg-white rounded-lg mb-4">
                      <div
                        className="flex w-full"

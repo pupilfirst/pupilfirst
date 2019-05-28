@@ -5,8 +5,10 @@ class UpdateCourseMutator < ApplicationMutator
   attr_accessor :name
   attr_accessor :grades_and_labels
   attr_accessor :ends_at
+  attr_accessor :description
 
   validates :name, presence: { message: 'NameBlank' }
+  validates :description, presence: { message: 'DescriptionBlank' }
   validates :grades_and_labels, presence: { messaage: 'GradesAndLabelsBlank' }
 
   validate :valid_course_id
@@ -25,7 +27,7 @@ class UpdateCourseMutator < ApplicationMutator
   end
 
   def update_course
-    @course.update!(name: name, grade_labels: grade_labels, ends_at: ends_at)
+    @course.update!(name: name, description: description, grade_labels: grade_labels, ends_at: ends_at)
     @course
   end
 

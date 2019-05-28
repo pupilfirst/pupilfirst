@@ -41,10 +41,7 @@
             </div>
             <div class="w-2/3 px-4 py-4">
               <div class="text-4xl font-bold text-black"> <%= founder.course.name %></div>
-              <div class="text-sm"> School of Innovation India aims to foster future talent in emerging technologies and
-                bring cutting
-                edge technologies to India for ambitious students.
-              </div>
+              <div class="text-sm"> <%= founder.course.description %></div>
               <div class="flex flex-row pt-4 flex-wrap">
                 <%= link_to select_founder_path(founder), method: :post do %>
                   <div class="text-primary-500 border p-2 text-sm rounded mt-2">

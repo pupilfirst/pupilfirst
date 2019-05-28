@@ -12,6 +12,8 @@ feature 'Courses Index' do
 
   let!(:new_course_name) { Faker::Lorem.words(2).join ' ' }
   let!(:new_course_name_1) { Faker::Lorem.words(2).join ' ' }
+  let!(:new_description) { Faker::Lorem.sentences.join ' ' }
+  let!(:new_description_for_edit) { Faker::Lorem.sentences.join ' ' }
   let!(:grade_label_1) { Faker::Lorem.words(2).join ' ' }
   let!(:grade_label_2) { Faker::Lorem.words(2).join ' ' }
   let!(:grade_label_3) { Faker::Lorem.words(2).join ' ' }
@@ -38,6 +40,7 @@ feature 'Courses Index' do
 
     fill_in 'Course Name', with: new_course_name
     fill_in 'Name', with: new_course_name
+    fill_in 'Description', with: new_description
     fill_in 'label1', with: grade_label_1
     find('label[for=label2]').click
     fill_in 'label2', with: grade_label_2
@@ -54,6 +57,7 @@ feature 'Courses Index' do
     expect(page).to have_text(new_course_name)
     course = Course.last
     expect(course.name).to eq(new_course_name)
+    expect(course.description).to eq(new_description)
     expect(course.max_grade).to eq(5)
     expect(course.pass_grade).to eq(2)
     expect(course.grade_labels["1"]).to eq(grade_label_1)
@@ -64,11 +68,13 @@ feature 'Courses Index' do
 
     find("a", text: new_course_name).click
     fill_in 'Name', with: new_course_name_1, fill_options: { clear: :backspace }
+    fill_in 'Description', with: new_description_for_edit, fill_options: { clear: :backspace }
     fill_in 'Course ends at', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
     click_button 'Update Course'
     expect(page).to have_text("Course updated successfully")
     course.reload
     expect(course.name).to eq(new_course_name_1)
+    expect(course.description).to eq(new_description_for_edit)
     expect(Date.parse(course.ends_at.strftime("%Y-%m-%d"))).to eq(date)
   end
 end

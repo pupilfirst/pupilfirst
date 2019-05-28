@@ -288,7 +288,9 @@ let make =
                    targets={state.targets}
                    showTargetGroupEditorCB
                    showTargetEditorCB
+                   updateTargetCB
                    showArchived={state.showArchived}
+                   authenticityToken
                  />
                )
             |> Array.of_list

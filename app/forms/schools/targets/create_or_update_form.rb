@@ -3,7 +3,7 @@ module Schools
     class CreateOrUpdateForm < Reform::Form
       property :role, validates: { presence: true }
       property :title, validates: { presence: true, length: { maximum: 250 } }
-      property :description, validates: { presence: true }
+      property :description
       property :target_action_type, validates: { presence: true }
       property :target_group_id, validates: { presence: true }
       property :sort_index

@@ -65,7 +65,7 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
                  className="flex items-center shadow bg-white rounded-lg mb-4">
                  <div
                    className="course-faculty__list-item flex w-full items-center">
-                   <div
+                   <a
                      onClick={
                        _event => {
                          ReactEvent.Mouse.preventDefault(_event);
@@ -80,10 +80,7 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
                          </span>
                        </div>
                      </div>
-                     <div
-                       className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible"
-                     />
-                   </div>
+                   </a>
                    <div>
                      <a
                        href={"/communities/" ++ (community |> Community.id)}

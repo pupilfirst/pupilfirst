@@ -69,7 +69,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
     None;
   });
 
-  <div className="flex p-2 border-b">
+  <div className="flex py-2 px-3 border-b">
     <nav
       className="flex flex-col md:flex-row w-full xl:max-w-5xl mx-auto justify-between items-center">
       <div className="flex w-full flex-row items-center justify-between">
@@ -86,12 +86,16 @@ let make = (~schoolName, ~logoUrl, ~links) => {
           }
         </a>
         <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
-          <FaIcon
-            classes={
-              "text-2xl md:hidden mr-2 "
-              ++ (menuHidden ? "fas fa-hamburger" : "fas fa-times")
-            }
-          />
+          <div
+            className={
+              "navbar-toggle focus:outline-none md:hidden "
+              ++ (menuHidden ? "" : "opened")
+            }>
+            <span className="sr-only"> {"Toggle navigation" |> str} </span>
+            <span className="icon-bar top-bar" />
+            <span className="icon-bar middle-bar" />
+            <span className="icon-bar bottom-bar" />
+          </div>
         </div>
       </div>
       {

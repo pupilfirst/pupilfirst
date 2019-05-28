@@ -28,24 +28,22 @@ let make =
            index < (showMore ? filteredComments |> List.length : 3) ?
              <li
                key={comment |> Comment.id}
-               className="w-full text-left border border-t-0">
+               className="w-full text-left border border-gray-400 border-t-0">
                <div
                  className="flex w-full px-4 py-3 leading-normal text-xs bg-white">
                  <span
                    dangerouslySetInnerHTML={
-                     "__html": comment |> Comment.value |> Markdown.parse,
+                     "__html":
+                       (comment |> Comment.value)
+                       ++ " **- "
+                       ++ (
+                         userData
+                         |> UserData.userName(comment |> Comment.creatorId)
+                       )
+                       ++ "**"
+                       |> Markdown.parse,
                    }
                  />
-                 <span className="font-semibold">
-                   {
-                     " - "
-                     ++ (
-                       userData
-                       |> UserData.userName(comment |> Comment.creatorId)
-                     )
-                     |> str
-                   }
-                 </span>
                  {
                    isCoach || comment.creatorId == currentUserId ?
                      <QuestionsShow__ArchiveManager

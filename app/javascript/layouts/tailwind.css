@@ -145,6 +145,56 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   background-color: #1C1626;
 }
 
+/* Navbar hamburger toggle */
+
+.navbar-toggle {
+  vertical-align: middle;
+  padding: 0.7rem 0.2rem 0.7rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+  border: 0;
+  outline: none;
+}
+
+.icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #888888;
+  transition: all 0.2s;
+}
+
+.icon-bar+.icon-bar {
+  margin-top: 4px;
+}
+
+.top-bar {
+  transform: rotate(0);
+}
+
+.middle-bar {
+  opacity: 1;
+}
+
+.bottom-bar {
+  transform: rotate(0);
+}
+
+.opened .top-bar {
+  transform: rotate(45deg);
+  transform-origin: 10% 10%;
+}
+
+.opened .middle-bar {
+  opacity: 0;
+}
+
+.opened .bottom-bar {
+  transform: rotate(-45deg);
+  transform-origin: 10% 90%;
+}
+
 /* Gradients */
 
 @responsive {

@@ -21,8 +21,8 @@
         <p class="uppercase font-bold text-sm py-2">SOCIAL</p>
         <div class="py-2 flex flex-wrap">
           <% presenter.social_links.each do |social_link| %>
-            <a class="text-white no-underline pointer-cursor pr-2" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
-              <i class="text-3xl <%= presenter.social_icon(social_link[:url]) %>"></i>
+            <a class="text-white no-underline pointer-cursor pr-4" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
+              <i class="text-2xl <%= presenter.social_icon(social_link[:url]) %>"></i>
             </a>
           <% end %>
         </div>

@@ -11,6 +11,7 @@ module Courses
     def clone(new_name)
       Course.transaction do
         Course.create!(name: new_name,
+                       description: @course.description,
                        grade_labels: @course.grade_labels,
                        max_grade: @course.max_grade,
                        pass_grade: @course.pass_grade,

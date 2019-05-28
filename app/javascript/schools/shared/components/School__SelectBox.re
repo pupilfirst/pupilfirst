@@ -87,6 +87,7 @@ let make = (~items, ~multiSelectCB) => {
                            multiSelectCB(_key, value, true);
                          }
                        }
+                       title=value
                        className="px-3 py-2 hover:bg-gray-200">
                        {value |> str}
                      </div>

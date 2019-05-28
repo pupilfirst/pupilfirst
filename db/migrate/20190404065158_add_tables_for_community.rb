@@ -71,6 +71,8 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
 
     add_index :community_course_connections, %i[course_id community_id], unique: true, name: 'index_community_course_connection_on_course_id_and_community_id'
     add_index :target_questions, %i[target_id question_id], unique: true
+
+    add_column :courses, :description, :string
   end
 
   def down
@@ -82,5 +84,6 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     drop_table :answer_likes
     drop_table :comments
     drop_table :text_versions
+    remove_column :courses, :description, :string
   end
 end

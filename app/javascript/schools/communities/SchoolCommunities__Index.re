@@ -62,23 +62,31 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
           |> List.map(community =>
                <div
                  key={community |> Community.id}
-                 className="flex items-center shadow bg-white rounded-lg mb-4"
-                 onClick={
-                   _ => setEditorAction(_ => ShowEditor(Some(community)))
-                 }>
-                 <div className="course-faculty__list-item flex w-full">
-                   <div
+                 className="flex items-center shadow bg-white rounded-lg mb-4">
+                 <div
+                   className="course-faculty__list-item flex w-full items-center">
+                   <a
+                     onClick={
+                       _event => {
+                         ReactEvent.Mouse.preventDefault(_event);
+                         setEditorAction(_ => ShowEditor(Some(community)));
+                       }
+                     }
                      className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-200">
                      <div className="flex">
-                       <div className="text-sm">
-                         <p className="text-black font-semibold">
+                       <div className="text-sm justify-between">
+                         <span className="text-black font-semibold">
                            {community |> Community.name |> str}
-                         </p>
+                         </span>
                        </div>
                      </div>
-                     <div
-                       className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible"
-                     />
+                   </a>
+                   <div>
+                     <a
+                       href={"/communities/" ++ (community |> Community.id)}
+                       className="text-black font-semibold px-4">
+                       {"View" |> str}
+                     </a>
                    </div>
                  </div>
                </div>

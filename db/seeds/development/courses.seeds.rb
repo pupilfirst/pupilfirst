@@ -12,8 +12,8 @@ after 'development:schools' do
   sv = School.find_by(name: 'SV.CO')
 
 
-  Course.create!(name: 'Startup', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'Developer', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'VR', max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'iOS', max_grade: 5, pass_grade: 3, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'Startup', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'Developer', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'VR', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
+  Course.create!(name: 'iOS', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 3, grade_labels: grade_labels, school: sv)
 end

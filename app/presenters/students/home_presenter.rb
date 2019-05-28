@@ -23,7 +23,7 @@ module Students
     end
 
     def communities
-      course_ids = founders.joins(:course).pluck(:course_id)
+      course_ids = founders.joins(:course).select(:course_id)
       Community.where(school: current_school).joins(:courses).where(courses: { id: course_ids }).distinct
     end
 

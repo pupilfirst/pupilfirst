@@ -79,6 +79,18 @@ h6 {
   @apply bg-primary-800;
 }
 
+.btn-primary-ghost {
+  @apply bg-white text-primary-500 border border-primary-500;
+}
+
+.btn-primary-ghost:hover {
+  @apply bg-primary-100 text-primary-600 border-primary-400;
+}
+
+.btn-primary-ghost:focus {
+  @apply bg-primary-800 text-white border-primary-400;
+}
+
 .btn-secondary {
   @apply bg-secondary-500 text-white;
 }
@@ -116,11 +128,11 @@ h6 {
 }
 
 button:disabled, .disabled {
-  @apply cursor-not-allowed bg-gray-400 text-gray-800 shadow-none;
+  @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
 }
 
 button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
-  @apply bg-gray-400 text-gray-800;
+  @apply bg-gray-300 text-gray-500 border-transparent;
 }
 
 .btn-small {

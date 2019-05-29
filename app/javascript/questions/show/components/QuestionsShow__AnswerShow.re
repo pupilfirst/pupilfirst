@@ -47,15 +47,24 @@ let make =
           <div
             className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-2">
             <div className="flex w-full">
-              <div className="flex flex-1 flex-col">
+              <div className="flex flex-1 flex-col relative">
                 <div
                   className="absolute right-0 top-0 flex border border-t-0 border-r-0 border-gray-400 bg-gray-200 rounded-bl">
-                  <a
-                    title="Edit History"
-                    className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
-                    <i className="far fa-history text-sm" />
-                    <span className="ml-2"> {"Edit History" |> str} </span>
-                  </a>
+                  {
+                    switch (answer |> Answer.editorId) {
+                    | Some(_) =>
+                      <a
+                        href={
+                          "/answers/" ++ (answer |> Answer.id) ++ "/versions"
+                        }
+                        title="Edit History"
+                        className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
+                        <i className="far fa-history text-sm" />
+                        <span className="ml-2"> {"Edit History" |> str} </span>
+                      </a>
+                    | None => React.null
+                    }
+                  }
                   {
                     answer |> Answer.creatorId == currentUserId || isCoach ?
                       <div className="flex">
@@ -77,11 +86,9 @@ let make =
                   }
                 </div>
                 <div className="pt-8 pb-4 px-6 flex flex-col">
-                  <div
-                    className="leading-normal text-sm markdown-body"
-                    dangerouslySetInnerHTML={
-                      "__html": answer |> Answer.description |> Markdown.parse,
-                    }
+                  <MarkdownBlock
+                    markdown={answer |> Answer.description}
+                    className="leading-normal text-sm "
                   />
                 </div>
                 <div

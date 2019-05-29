@@ -203,12 +203,25 @@ let make =
                     className="flex flex-1 flex-col relative">
                     <div
                       className="absolute right-0 top-0 flex border border-t-0 border-r-0 border-gray-400 bg-gray-200 rounded-bl">
-                      <a
-                        title="Edit History"
-                        className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
-                        <i className="far fa-history text-sm" />
-                        <span className="ml-2"> {"Edit History" |> str} </span>
-                      </a>
+                      {
+                        switch (state.question |> Question.editorId) {
+                        | Some(_) =>
+                          <a
+                            href={
+                              "/questions/"
+                              ++ (state.question |> Question.id)
+                              ++ "/versions"
+                            }
+                            title="Edit History"
+                            className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
+                            <i className="far fa-history text-sm" />
+                            <span className="ml-2">
+                              {"Edit History" |> str}
+                            </span>
+                          </a>
+                        | None => React.null
+                        }
+                      }
                       {
                         state.question
                         |> Question.creatorId == currentUserId
@@ -239,14 +252,9 @@ let make =
                       </h2>
                     </div>
                     <div className="pb-4 pt-2 px-6 flex flex-col">
-                      <div
+                      <MarkdownBlock
+                        markdown={state.question |> Question.description}
                         className="leading-normal text-sm markdown-body"
-                        dangerouslySetInnerHTML={
-                          "__html":
-                            state.question
-                            |> Question.description
-                            |> Markdown.parse,
-                        }
                       />
                     </div>
                     <div className="flex flex-row justify-between px-6 pb-6">

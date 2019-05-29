@@ -89,6 +89,9 @@ Rails.application.routes.draw do
     resources :questions, only: %i[new]
   end
 
+  get 'answers/:id/versions', controller: "answers", action: "versions", as: "answer_version"
+
+  get 'questions/:id(/:title)/versions', controller: "questions", action: "versions"
   get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
   get 'home', controller: "students", action: "home", as: "home"

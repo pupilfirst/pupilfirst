@@ -144,9 +144,9 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
     </div>
     {
       showPreview ?
-        <div
+        <MarkdownBlock
+          markdown=description
           className="p-3 leading-normal text-sm markdown-body"
-          dangerouslySetInnerHTML={"__html": description |> Markdown.parse}
         /> :
         <textarea
           id="mytextarea"

@@ -221,7 +221,7 @@ let make =
         }
       }
       <div
-        className="mt-4 my-8 max-w-2xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
+        className="mb-8 max-w-2xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
         <div className="flex w-full flex-col py-4 px-4">
           <h5
             className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
@@ -257,7 +257,7 @@ let make =
                 value=description
               />
             </DisablingCover>
-            <div className="flex justify-start pt-3 border-t">
+            <div className="flex justify-end pt-3 border-t">
               <button
                 disabled=saveDisabled
                 onClick={
@@ -272,7 +272,7 @@ let make =
                     updateQuestionCB,
                   )
                 }
-                className="btn btn-primary btn-large">
+                className="btn btn-primary">
                 {
                   (
                     switch (question) {

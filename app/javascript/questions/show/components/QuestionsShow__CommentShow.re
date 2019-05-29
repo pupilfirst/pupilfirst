@@ -30,8 +30,9 @@ let make =
                key={comment |> Comment.id}
                className="w-full text-left border border-gray-400 border-t-0">
                <div
-                 className="flex w-full px-4 py-3 leading-normal text-xs bg-white">
+                 className="flex w-full leading-normal text-xs bg-white justify-between">
                  <span
+                   className="px-4 py-3"
                    dangerouslySetInnerHTML={
                      "__html":
                        (comment |> Comment.value)

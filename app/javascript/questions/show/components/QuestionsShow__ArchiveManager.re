@@ -44,10 +44,14 @@ let make = (~authenticityToken, ~id, ~resourceType, ~archiveCB) => {
     onClick={
       archive(authenticityToken, id, resourceType, archiveCB, setSaving)
     }
-    className="text-sm px-2 font-semibold cursor-pointer">
+    className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent text-red-400 hover:bg-red-100 hover:text-red-800 cursor-pointer">
     {
       saving ?
-        <FaIcon classes="fal fa-spinner-third fa-spin" /> : "Delete" |> str
+        <FaIcon classes="fal fa-spinner-third fa-spin" /> :
+        <FaIcon classes="fas fa-trash-alt" />
     }
+    <span className="ml-1">
+      {resourceType == "Comment" ? React.null : "Delete" |> str}
+    </span>
   </a>;
 };

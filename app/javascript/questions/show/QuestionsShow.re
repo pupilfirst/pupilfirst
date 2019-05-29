@@ -166,7 +166,7 @@ let make =
         {
           state.showQuestionEdit ?
             <div>
-              <div className="max-w-2xl w-full mx-auto mt-5 pb-2 text-right">
+              <div className="max-w-2xl w-full mx-auto mt-5 pb-2">
                 <a
                   id="close-button"
                   className="btn btn-default no-underline"
@@ -177,7 +177,7 @@ let make =
                     }
                   }>
                   <i className="far fa-arrow-left" />
-                  <span className="ml-2"> {"close" |> str} </span>
+                  <span className="ml-2"> {"Close" |> str} </span>
                 </a>
               </div>
               <QuestionsEditor
@@ -196,36 +196,32 @@ let make =
                 </a>
               </div>
               <div
-                className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg">
+                className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden">
                 <div className="flex w-full">
-                  <div title="Question block" className="flex flex-1 flex-col">
-                    <div className="pt-6 pb-2 mx-6 flex flex-col">
-                      <h2 className="text-xl text-black font-semibold">
-                        {state.question |> Question.title |> str}
-                      </h2>
-                    </div>
-                    <div className="py-4 px-6 flex flex-col">
-                      <div
-                        className="leading-normal text-sm markdown-body"
-                        dangerouslySetInnerHTML={
-                          "__html":
-                            state.question
-                            |> Question.description
-                            |> Markdown.parse,
-                        }
-                      />
+                  <div
+                    title="Question block"
+                    className="flex flex-1 flex-col relative">
+                    <div
+                      className="absolute right-0 top-0 flex border border-t-0 border-r-0 border-gray-400 bg-gray-200 rounded-bl">
+                      <a
+                        title="Edit History"
+                        className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
+                        <i className="far fa-history text-sm" />
+                        <span className="ml-2"> {"Edit History" |> str} </span>
+                      </a>
                       {
                         state.question
                         |> Question.creatorId == currentUserId
                         || isCoach ?
-                          <div>
+                          <div className="flex">
                             <a
                               onClick={
                                 _ => dispatch(UpdateShowQuestionEdit(true))
                               }
                               title="Edit Question"
-                              className="text-sm mr-2 font-semibold cursor-pointer">
-                              {"Edit" |> str}
+                              className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-700 border-r border-gray-400 cursor-pointer">
+                              <i className="far fa-pen-square text-sm" />
+                              <span className="ml-2"> {"Edit" |> str} </span>
                             </a>
                             <QuestionsShow__ArchiveManager
                               authenticityToken
@@ -236,6 +232,22 @@ let make =
                           </div> :
                           React.null
                       }
+                    </div>
+                    <div className="pt-7 mx-6 flex flex-col">
+                      <h2 className="text-xl text-black font-semibold">
+                        {state.question |> Question.title |> str}
+                      </h2>
+                    </div>
+                    <div className="pb-4 pt-2 px-6 flex flex-col">
+                      <div
+                        className="leading-normal text-sm markdown-body"
+                        dangerouslySetInnerHTML={
+                          "__html":
+                            state.question
+                            |> Question.description
+                            |> Markdown.parse,
+                        }
+                      />
                     </div>
                     <div className="flex flex-row justify-between px-6 pb-6">
                       <div className="pr-2 pt-6 text-center">
@@ -278,7 +290,7 @@ let make =
                 isCoach
               />
               <div
-                className="max-w-3xl w-full justify-center mx-auto mb-4 pt-5 pb-2 border-b">
+                className="max-w-3xl w-full justify-center mx-auto pt-8 pb-2 border-b">
                 <div className="flex items-end">
                   <span className="text-lg font-semibold">
                     {

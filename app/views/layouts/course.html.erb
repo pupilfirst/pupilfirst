@@ -1,7 +1,8 @@
 <% presenter = ::Layouts::CoursePresenter.new(self) %>
-<% content_for(:head) do %>
-  <%= javascript_pack_tag 'layouts/courses', 'data-turbolinks-track': 'reload', nonce: true %>
-  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+<% content_for(:tail) do %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
+  <%= javascript_pack_tag 'layouts/courses', nonce: true %>
 <% end %>
 
 <% content_for(:wrapper) do %>

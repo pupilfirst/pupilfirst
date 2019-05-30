@@ -1,6 +1,7 @@
 <% presenter = Students::HomePresenter.new(self, @user) %>
+
 <% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'students/home', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'students/home', media: 'all' %>
 <% end %>
 
 <div class="flex flex-col justify-center items-center">

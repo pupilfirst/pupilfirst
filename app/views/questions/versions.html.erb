@@ -28,7 +28,7 @@
           <div class="mt-4 text-xs">
             <span>Edited by</span>
             <span class="font-semibold"><%= presenter.editor_name_for_question %></span>
-            <span><%= presenter.updated_at(@question) %></span>
+            <span><%= presenter.question_updated_at %></span>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
           <div class="mt-4 text-xs">
             <span>Edited by</span>
             <span class="font-semibold"><%= presenter.name(version.user) %></span>
-            <span><%= presenter.updated_at(version) %></span>
+            <span><%= presenter.edited_at(version) %></span>
           </div>
         </div>
       </div>

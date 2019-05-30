@@ -55,6 +55,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.text :value
       t.references :versionable, polymorphic: true, index: true
       t.references :user
+      t.datetime :edited_at
 
       t.timestamps
     end

@@ -603,6 +603,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.string "versionable_type"
     t.bigint "versionable_id"
     t.bigint "user_id"
+    t.datetime "edited_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_text_versions_on_user_id"

@@ -34,8 +34,12 @@ module Questions
       user.user_profiles.where(school: current_school).first.name
     end
 
-    def updated_at(object)
-      object.updated_at.to_formatted_s(:long)
+    def question_updated_at
+      @question.updated_at.to_formatted_s(:long)
+    end
+
+    def edited_at(version)
+      version.edited_at.to_formatted_s(:long)
     end
 
     def version_number(index)

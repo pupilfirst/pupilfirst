@@ -5,7 +5,7 @@ class UpdateAnswerMutator < ApplicationMutator
   validates :description, length: { minimum: 1, message: 'InvalidLengthDescription' }, allow_nil: false
 
   def update_answer
-    answer.text_versions.create!(value: answer.description, user: answer.creator)
+    answer.text_versions.create!(value: answer.description, user: answer.creator, edited_at: answer.updated_at)
     answer.update!(description: description, editor: current_user)
   end
 

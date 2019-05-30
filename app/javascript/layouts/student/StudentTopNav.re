@@ -7,7 +7,7 @@ open StudentTopNav__Types;
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ml-6 text-sm font-semibold text-center cursor-default flex w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-5 text-sm font-semibold text-center cursor-default flex w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <a
       className="no-underline bg-gray-100 md:bg-white text-black hover:text-primary w-full p-4 md:p-2"
       href={link |> NavLink.url}>
@@ -76,7 +76,8 @@ let make = (~schoolName, ~logoUrl, ~links) => {
   <div className="flex py-2 px-3 border-b">
     <nav
       className="flex flex-col md:flex-row w-full xl:max-w-5xl mx-auto justify-between items-center">
-      <div className="flex w-full flex-row items-center justify-between">
+      <div
+        className="flex w-full flex-row items-center justify-between md:w-1/5">
         <a className="w-40 pr-6 pl-2 py-4" href="/">
           {
             switch (logoUrl) {
@@ -106,7 +107,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
         menuHidden ?
           React.null :
           <div
-            className="student-navbar__links-container flex flex-row md:items-center border-t border-l md:border-0 w-full md:w-1/2 flex-wrap md:flex-no-wrap shadow-lg md:shadow-none">
+            className="student-navbar__links-container flex flex-row justify-end md:items-center border-t border-l md:border-0 w-full md:w-4/5 flex-wrap md:flex-no-wrap shadow-lg md:shadow-none">
             {headerLinks(links)}
           </div>
       }

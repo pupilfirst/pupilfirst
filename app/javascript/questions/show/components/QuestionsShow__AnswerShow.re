@@ -45,7 +45,7 @@ let make =
         </div> :
         <div title={"Answer " ++ (answer |> Answer.id)}>
           <div
-            className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-2">
+            className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-2 z-10">
             <div className="flex w-full">
               <div className="flex flex-1 flex-col relative">
                 <div
@@ -60,7 +60,7 @@ let make =
                         title="Edit History"
                         className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
                         <i className="far fa-history text-sm" />
-                        <span className="ml-2"> {"Edit History" |> str} </span>
+                        <span className="ml-2"> {"History" |> str} </span>
                       </a>
                     | None => React.null
                     }

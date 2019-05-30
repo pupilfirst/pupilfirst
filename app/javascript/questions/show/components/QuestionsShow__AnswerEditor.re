@@ -225,7 +225,7 @@ let make =
                 answer,
               )
             }
-            className="btn btn-primary btn-large">
+            className="btn btn-primary">
             {
               (
                 switch (answer) {

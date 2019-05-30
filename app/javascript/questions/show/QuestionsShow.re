@@ -190,7 +190,7 @@ let make =
             </div> :
             <div>
               <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-                <a className="btn btn-default no-underline" href=communityPath>
+                <a className="btn btn-default" href=communityPath>
                   <i className="far fa-arrow-left" />
                   <span className="ml-2"> {React.string("Back")} </span>
                 </a>
@@ -215,9 +215,7 @@ let make =
                             title="Edit History"
                             className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
                             <i className="far fa-history text-sm" />
-                            <span className="ml-2">
-                              {"Edit History" |> str}
-                            </span>
+                            <span className="ml-2"> {"History" |> str} </span>
                           </a>
                         | None => React.null
                         }
@@ -370,7 +368,7 @@ let make =
                     className="community-ask-button-container mt-4 my-8 max-w-3xl w-full flex mx-auto justify-center">
                     <div className="bg-gray-100 px-1 z-10">
                       <button
-                        className="btn btn-primary btn-large"
+                        className="btn btn-primary"
                         onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
                         {"Add another answer" |> str}
                       </button>

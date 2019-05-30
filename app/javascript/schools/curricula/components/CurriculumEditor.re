@@ -67,7 +67,10 @@ let make =
     ) => {
   ...component,
   initialState: () => {
-    selectedLevel: levels |> List.rev |> List.hd,
+    selectedLevel:
+      levels
+      |> List.sort((l1, l2) => (l2 |> Level.number) - (l1 |> Level.number))
+      |> List.hd,
     editorAction: Hidden,
     targetGroups,
     levels,

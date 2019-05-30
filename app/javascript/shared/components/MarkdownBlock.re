@@ -21,7 +21,7 @@ let make = (~markdown, ~className) => {
   );
 
   <div
-    className
+    className={"markdown-block " ++ className}
     id
     dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse}
   />;

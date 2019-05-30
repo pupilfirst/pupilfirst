@@ -82,8 +82,7 @@ module.exports = function(api) {
         "prismjs",
         {
           languages: ["javascript", "css", "scss", "ruby", "reason", "markup"],
-          plugins: ["line-numbers", "custom-class"],
-          css: true
+          plugins: ["line-numbers", "custom-class"]
         }
       ]
     ].filter(Boolean)

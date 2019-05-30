@@ -19,35 +19,41 @@ module Answers
     end
 
     def markdown_prop(version, index)
-      {
-        id: version_number(index).to_s,
-        text: version.value
-      }.to_json
+      markdown_props_to_json(version_number(index), version.value)
     end
 
     def markdown_props_for_answer
-      {
-        id: version_number_for_answer.to_s,
-        text: @answer.description
-      }.to_json
+      markdown_props_to_json(version_number_for_answer, @answer.description)
     end
 
     def editor_name_for_answer
       if @answer.editor.present?
+        name(@answer.editor)
         @answer.editor.user_profiles.where(school: current_school).first.name
       else
-        @answer.creator.user_profiles.where(school: current_school).first.name
+        name(@answer.creator)
       end
     end
 
-    def editor_name(version)
-      version.user.user_profiles.where(school: current_school).first.name
+    def name(user)
+      user.user_profiles.where(school: current_school).first.name
+    end
+
+    def updated_at(object)
+      object.updated_at.to_formatted_s(:long)
     end
 
     private
 
     def versions_count
       @versions_count ||= versions.count
+    end
+
+    def markdown_props_to_json(id, text)
+      {
+        id: id.to_s,
+        text: text
+      }.to_json
     end
   end
 end

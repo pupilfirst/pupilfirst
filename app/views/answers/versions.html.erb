@@ -13,15 +13,31 @@
     </div>
     <div class="flex items-center mt-1">
       <div class="font-black text-4xl px-4 text-gray-600 "> <%= presenter.version_number_for_answer %></div>
-      <div class="w-full flex mx-auto relative shadow bg-white border rounded-lg px-4 py-2">
-        <div class="markdown-text" id="<%= presenter.version_number_for_answer %>" data-json-props="<%= presenter.markdown_props_for_answer %>"></div>
+      <div class="w-full flex flex-col mx-auto relative shadow bg-white border rounded-lg px-4 py-2">
+        <div class="markdown-text" id="<%= presenter.version_number_for_answer %>" data-json-props="<%= presenter.markdown_props_for_answer %>">
+          <%= @answer.description %>
+        </div>
+        <div>
+          <span>Edited by</span>
+          <span><%= presenter.editor_name_for_answer %></span>
+          <span><%= presenter.updated_at(@answer) %></span>
+        </div>
       </div>
 
     </div>
     <% presenter.versions.each_with_index do |version, index| %>
       <div class="flex items-center mt-2">
         <div class="font-black text-4xl px-4 text-gray-600 "> <%= presenter.version_number(index) %></div>
-        <div id="<%= presenter.version_number(index) %>" data-json-props="<%= presenter.markdown_prop(version, index) %>" class="markdown-text w-full flex mx-auto relative shadow bg-orange-100 border border-orange-400 rounded-lg px-4 py-2"></div>
+        <div class=" w-full flex flex-col mx-auto relative shadow bg-orange-100 border border-orange-400 rounded-lg px-4 py-2">
+          <div id="<%= presenter.version_number(index) %>" data-json-props="<%= presenter.markdown_prop(version, index) %>" class="markdown-text">
+            <%= version.value %>
+          </div>
+          <div>
+            <span>Edited by</span>
+            <span><%= presenter.name(version.user) %></span>
+            <span><%= presenter.updated_at(version) %></span>
+          </div>
+        </div>
       </div>
     <% end %>
   </div>

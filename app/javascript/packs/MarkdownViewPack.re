@@ -34,7 +34,7 @@ let parseMarkdown =
        ReactDOMRe.renderToElementWithId(
          <MarkdownBlock
            markdown={props.text}
-           className="p-3 leading-normal text-sm"
+           className="leading-normal text-sm"
          />,
          props.id,
        );

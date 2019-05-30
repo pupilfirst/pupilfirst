@@ -47,7 +47,7 @@ let make =
           <div
             className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-2 z-10">
             <div className="flex w-full">
-              <div className="flex flex-1 flex-col relative">
+              <div className="flex flex-col w-full relative">
                 <div
                   className="absolute right-0 top-0 flex border border-t-0 border-r-0 border-gray-400 bg-gray-200 rounded-bl">
                   {
@@ -85,14 +85,14 @@ let make =
                       React.null
                   }
                 </div>
-                <div className="pt-8 pb-4 px-6 flex flex-col">
+                <div className="pt-8 pb-4 px-3 md:px-6 flex flex-col">
                   <MarkdownBlock
                     markdown={answer |> Answer.description}
                     className="leading-normal text-sm "
                   />
                 </div>
                 <div
-                  className="flex flex-row justify-between items-center px-6 pb-4">
+                  className="flex flex-row justify-between items-center pl-2 px-3 md:px-6 pb-4">
                   <div className="pt-4 text-center">
                     <div className="flex flex-row">
                       <QuestionsShow__LikeManager

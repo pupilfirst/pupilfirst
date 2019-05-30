@@ -21,7 +21,7 @@ let make =
   let filteredComments =
     comments |> List.filter(comment => !(comment |> Comment.archived));
   <ul
-    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-5 md:px-8">
+    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-3 md:px-8">
     {
       filteredComments
       |> List.mapi((index, comment) =>

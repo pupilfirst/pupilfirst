@@ -36,7 +36,7 @@ let make = (~links) => {
   | moreLinks =>
     <div
       title="Show more links"
-      className="ml-6 font-semibold text-sm cursor-pointer relative"
+      className="ml-6 font-semibold text-sm cursor-pointer relative text-black"
       onClick={handleToggle(linksVisible, setLinksVisible)}
       key="more-links">
       <span> {"More" |> str} </span>

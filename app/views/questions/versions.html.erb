@@ -3,8 +3,8 @@
   <%= javascript_pack_tag 'MarkdownViewPack', nonce: true %>
 <% end %>
 <% presenter = Questions::VersionsPresenter.new(self, @question) %>
-<div class="bg-gray-100 justify-center flex py-4">
-  <div class="mb-2 max-w-3xl w-full">
+<div class="bg-gray-100 px-3 py-4">
+  <div class="mb-2 max-w-3xl w-full mx-auto">
     <div class="border-b pb-3">
       <%= link_to question_path(@question), class: "btn btn-default" do %>
         <i class="far fa-arrow-left"></i>
@@ -15,10 +15,10 @@
       <span class="font-semibold text-gray-700">Question Edit History</span>
     </div>
     <div class="text-xl text-black font-semibold mt-1"><%= @question.title %></div>
-    <div class="flex items-center mt-3">
-      <div class="font-bold text-4xl px-4 text-gray-400 "> <%= presenter.version_number_for_question %></div>
-      <div class="w-full flex mx-auto relative bg-white border rounded p-5">
-        <div>
+    <div class="flex items-start mt-3">
+      <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-gray-400 text-center"><%= presenter.version_number_for_question %></div>
+      <div class="w-11/12 relative bg-white border rounded p-5 overflow-hidden">
+        <div class="w-full">
           <div class="markdown-text"
                id="<%= presenter.version_number_for_question %>"
                data-json-props="<%= presenter.markdown_props_for_questions %>"
@@ -35,9 +35,9 @@
 
     </div>
     <% presenter.versions.each_with_index do |version, index| %>
-      <div class="flex items-center mt-2">
-        <div class="font-bold text-4xl px-4 text-gray-400 "> <%= presenter.version_number(index) %></div>
-        <div class="w-full flex flex-col mx-auto relative bg-orange-100 border border-orange-200 rounded p-5">
+      <div class="flex items-start mt-2">
+        <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-gray-400 text-center"><%= presenter.version_number(index) %></div>
+        <div class="w-11/12 relative bg-orange-100 border border-orange-200 rounded p-5 overflow-hidden">
           <div id="<%= presenter.version_number(index) %>" data-json-props="<%= presenter.markdown_prop(version, index) %>" class="markdown-text">
             <%= version.value %>
           </div>

@@ -48,7 +48,7 @@ let iconClasses = (liked, saving) => {
     if (saving) {
       " fas fa-spinner-third fa-spin";
     } else if (liked) {
-      " fas fa-thumbs-up cursor-pointer text-yellow";
+      " fas fa-thumbs-up cursor-pointer text-primary-400";
     } else {
       " fal fa-thumbs-up cursor-pointer";
     }

@@ -118,7 +118,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
     <div className="flex w-full justify-between items-center py-2">
       {
         showPreview ?
-          <p className="font-semibold text-sm pl-3"> {"Preview" |> str} </p> :
+          <p className="font-semibold text-sm"> {"Preview" |> str} </p> :
           <div className="flex markdown-button-group">
             {buttons(description, setDescription, updateDescriptionCB)}
           </div>
@@ -146,7 +146,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
       showPreview ?
         <MarkdownBlock
           markdown=description
-          className="p-3 leading-normal text-sm markdown-body"
+          className="py-3 leading-normal text-sm markdown-body"
         /> :
         <textarea
           id="mytextarea"

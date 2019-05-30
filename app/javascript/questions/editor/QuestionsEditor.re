@@ -186,13 +186,13 @@ let make =
   let updateDescriptionCB = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
 
-  <div title="Question Editor" className="flex flex-1 bg-gray-100">
+  <div title="Question Editor" className="bg-gray-100">
     <div className="flex-1 flex flex-col">
       <div>
         {
           switch (communityPath) {
           | Some(communityPath) =>
-            <div className="max-w-2xl w-full mx-auto mt-5 pb-2">
+            <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
               <a className="btn btn-default no-underline" href=communityPath>
                 <i className="far fa-arrow-left" />
                 <span className="ml-2"> {React.string("Back")} </span>
@@ -205,7 +205,7 @@ let make =
       {
         switch (target) {
         | Some(target) =>
-          <div className="max-w-2xl w-full mt-5 mx-auto px-3 md:px-0">
+          <div className="max-w-3xl w-full mt-5 mx-auto px-3 md:px-0">
             <div
               className="flex py-4 px-4 md:px-6 w-full bg-yellow-100 border border-dashed border-yellow-400 rounded justify-between items-center">
               <p className="w-3/5 md:w-4/5 font-semibold text-sm">
@@ -221,7 +221,7 @@ let make =
         }
       }
       <div
-        className="mb-8 max-w-2xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
+        className="mb-8 max-w-3xl w-full mx-auto relative shadow border bg-white rounded-lg">
         <div className="flex w-full flex-col py-4 px-4">
           <h5
             className="uppercase text-center border-b border-gray-400 pb-2 mb-4">

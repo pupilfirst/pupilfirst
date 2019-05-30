@@ -13,28 +13,34 @@ module ArchiveQuery = [%graphql
 ];
 
 let archive =
-    (authenticityToken, id, resourceType, archiveCB, setSaving, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  setSaving(_ => true);
-  ArchiveQuery.make(~id, ~resourceType, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
-  |> Js.Promise.then_(response => {
-       response##archiveCommunityResource##success ?
-         {
-           Notification.success(
-             "Success",
-             resourceType ++ " archived successfully",
-           );
-           archiveCB(id, resourceType);
-         } :
-         Notification.error(
-           "Something went wrong",
-           "Please refresh the page and try again",
-         );
-       Js.Promise.resolve();
-     })
-  |> ignore;
-};
+    (authenticityToken, id, resourceType, archiveCB, setSaving, event) =>
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm(
+       "Are you sure you want to delete this " ++ (resourceType |> Js.String.toLowerCase) ++ ". You cannot undo this.",
+     ) ?
+    {
+      event |> ReactEvent.Mouse.preventDefault;
+      setSaving(_ => true);
+      ArchiveQuery.make(~id, ~resourceType, ())
+      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> Js.Promise.then_(response => {
+           response##archiveCommunityResource##success ?
+             {
+               Notification.success(
+                 "Success",
+                 (resourceType ++ " archived successfully")
+               );
+               archiveCB(id, resourceType);
+             } :
+             Notification.error(
+               "Something went wrong",
+               "Please refresh the page and try again",
+             );
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    } :
+    ();
 
 [@react.component]
 let make = (~authenticityToken, ~id, ~resourceType, ~archiveCB) => {

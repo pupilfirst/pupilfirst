@@ -4,8 +4,6 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { jsComponent } from "../../../schools/coaches/components/SA_Coaches_CourseIndex.bs";
 
-document.addEventListener("turbolinks:load", () => {
-  const root = document.getElementById("sa-coaches-enrollment-panel");
-  const props = JSON.parse(root.dataset.props);
-  ReactDOM.render(React.createElement(jsComponent, props), root);
-});
+const root = document.getElementById("sa-coaches-enrollment-panel");
+const props = JSON.parse(root.dataset.props);
+ReactDOM.render(React.createElement(jsComponent, props), root);

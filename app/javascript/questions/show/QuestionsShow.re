@@ -253,6 +253,20 @@ let make =
                       markdown={state.question |> Question.description}
                       className="leading-normal text-sm"
                     />
+                    <div>
+                      {
+                        switch (state.question |> Question.editorId) {
+                        | Some(editorId) =>
+                          <div>
+                            <span> {"Last edited by " |> str} </span>
+                            <span>
+                              {userData |> UserData.userName(editorId) |> str}
+                            </span>
+                          </div>
+                        | None => React.null
+                        }
+                      }
+                    </div>
                   </div>
                   <div
                     className="flex flex-row justify-between px-3 md:px-6 pb-6">

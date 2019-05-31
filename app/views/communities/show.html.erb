@@ -1,7 +1,7 @@
 <% presenter = Communities::ShowPresenter.new(self, @community, @questions, @search, @target) %>
 <% content_for(:head) do %>
-  <title>Community</title>
-  <%= stylesheet_pack_tag 'communities/show', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'communities/show', media: 'all' %>
 <% end %>
 
 <div class="bg-gray-100">

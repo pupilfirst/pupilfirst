@@ -1,7 +1,7 @@
 class TimelineEventPolicy < ApplicationPolicy
   def create?
     # Current course must not have ended.
-    return false if current_founder.startup.course.ended?
+    return false if current_founder.startup.course.ended? || !current_founder.startup.active?
 
     true
   end

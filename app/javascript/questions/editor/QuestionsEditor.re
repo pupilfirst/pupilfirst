@@ -212,6 +212,7 @@ let make =
                 {"Target:" ++ (target |> QuestionsEditor__Target.title) |> str}
               </p>
               <a
+                href="./new"
                 className="no-underline bg-yellow-100 border border-yellow-400 px-3 py-2 hover:bg-yellow-200 rounded-lg cursor-pointer text-xs font-semibold">
                 {"Clear" |> str}
               </a>

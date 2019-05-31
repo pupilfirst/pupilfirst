@@ -7,12 +7,14 @@ class QuestionsController < ApplicationController
   def show
     @question = authorize(Question.find(params[:id]))
     raise_not_found if @question.blank?
+    raise_not_found if @question.archived?
   end
 
   def versions
     @question = authorize(Question.find(params[:id]))
 
     raise_not_found if @question.blank?
+    raise_not_found if @question.archived?
   end
 
   private

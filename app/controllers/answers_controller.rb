@@ -6,5 +6,6 @@ class AnswersController < ApplicationController
     @answer = authorize(Answer.find(params[:id]))
 
     raise_not_found if @answer.blank?
+    raise_not_found if @answer.archived?
   end
 end

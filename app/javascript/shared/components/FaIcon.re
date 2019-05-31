@@ -1,4 +1,4 @@
-[@bs.config {jsx: 3}]
+[@bs.config {jsx: 3}];
 [@react.component]
 let make = (~classes) => <span key=classes> <i className=classes /> </span>;
 

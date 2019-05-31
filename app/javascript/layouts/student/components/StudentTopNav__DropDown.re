@@ -4,7 +4,7 @@ let str = React.string;
 
 open StudentTopNav__Types;
 
-let handleToggle = (linksVisible, setLinksVisible, _) =>
+let handleToggle = (setLinksVisible, _) =>
   setLinksVisible(linksVisible => !linksVisible);
 
 let additionalLinks = (linksVisible, links) =>
@@ -37,7 +37,7 @@ let make = (~links) => {
     <div
       title="Show more links"
       className="ml-6 font-semibold text-sm cursor-pointer relative text-black"
-      onClick={handleToggle(linksVisible, setLinksVisible)}
+      onClick={handleToggle(setLinksVisible)}
       key="more-links">
       <span> {"More" |> str} </span>
       <i className="fas fa-angle-down ml-1" />

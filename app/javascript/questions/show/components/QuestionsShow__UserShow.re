@@ -11,7 +11,7 @@ let make = (~userProfile, ~createdAt, ~textForTimeStamp) =>
       {textForTimeStamp ++ " on " ++ createdAt |> str}
     </p>
     <div
-      className="p-2 flex flex-row items-center bg-yellow-100 rounded-lg mt-1">
+      className="p-2 flex flex-row items-center bg-orange-100 text-orange-900 border border-orange-200 rounded-lg mt-1">
       <div
         className="w-10 h-10 rounded-full bg-gray-500 text-white border border-yellow-400 flex items-center justify-center overflow-hidden">
         <img src={userProfile |> UserData.avatarUrl} />
@@ -20,7 +20,7 @@ let make = (~userProfile, ~createdAt, ~textForTimeStamp) =>
         <p className="font-semibold text-xs">
           {userProfile |> UserData.name |> str}
         </p>
-        <p className="text-xs mt-1">
+        <p className="text-xs leadig-normal">
           {userProfile |> UserData.title |> str}
         </p>
       </div>

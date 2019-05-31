@@ -27,7 +27,7 @@ let logoutLink = () =>
           className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
           type_="submit"
           value="Submit">
-          <FaIcon classes="far fa-sign-out-alt" />
+          <FaIcon classes="far fa-power-off" />
           <span className="ml-2"> {"Logout" |> str} </span>
         </button>
       </div>

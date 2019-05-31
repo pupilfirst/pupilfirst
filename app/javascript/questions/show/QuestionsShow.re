@@ -257,9 +257,10 @@ let make =
                       {
                         switch (state.question |> Question.editorId) {
                         | Some(editorId) =>
-                          <div>
+                          <div
+                            className="text-xs mt-1 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                             <span> {"Last edited by " |> str} </span>
-                            <span>
+                            <span className="font-semibold">
                               {userData |> UserData.userName(editorId) |> str}
                             </span>
                           </div>

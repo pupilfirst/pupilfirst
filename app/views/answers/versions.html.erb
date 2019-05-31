@@ -3,7 +3,7 @@
   <%= javascript_pack_tag 'MarkdownViewPack', nonce: true %>
 <% end %>
 <% presenter = Answers::VersionsPresenter.new(self, @answer) %>
-<div class="bg-gray-100 px-3 py-4">
+<div class="container bg-gray-100 px-3 py-4">
   <div class="mb-2 max-w-3xl w-full mx-auto">
     <div class="border-b pb-3">
       <%= link_to question_path(@answer.question), class: "btn btn-default" do %>
@@ -18,7 +18,8 @@
       <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-center text-gray-500"><%= presenter.version_number_for_answer %></div>
       <div class="w-11/12 overflow-hidden">
         <div class="w-full relative bg-white border rounded p-5">
-          <div class="markdown-text" id="<%= presenter.version_number_for_answer %>" data-json-props="<%= presenter.markdown_props_for_answer %>">
+          <span class="inline-block text-xs bg-green-500 text-white font-semibold rounded py-1 px-2">Current Version</span>
+          <div class="markdown-text mt-1" id="<%= presenter.version_number_for_answer %>" data-json-props="<%= presenter.markdown_props_for_answer %>">
             <%= @answer.description %>
           </div>
           <div class="mt-4 text-xs">

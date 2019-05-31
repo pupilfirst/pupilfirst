@@ -197,6 +197,7 @@ let make =
       ~currentUserId,
       ~handleAnswerCB,
       ~answer=?,
+      ~handleCloseCB=?,
     ) => {
   let (description, setDescription) =
     React.useState(() =>
@@ -219,6 +220,17 @@ let make =
           />
         </DisablingCover>
         <div className="flex justify-end pt-3 border-t">
+          {
+            switch (handleCloseCB) {
+            | Some(handleCloseCB) =>
+              <button
+                onClick=(_ => handleCloseCB())
+                className="btn btn-default mr-2">
+                {"Cancel" |> str}
+              </button>
+            | None => React.null
+            }
+          }
           <button
             disabled={description == ""}
             onClick={

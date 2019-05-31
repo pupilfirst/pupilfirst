@@ -26,6 +26,8 @@ let make =
     comments |> Comment.commentsForAnswer(answer |> Answer.id);
   let (showAnswerEdit, toggleShowAnswerEdit) = React.useState(() => false);
 
+  let handleCloseCB = () => toggleShowAnswerEdit(_ => false);
+
   let handleAnswerEditCB = (answer, bool) => {
     toggleShowAnswerEdit(_ => false);
     handleAnswerCB(answer, bool);
@@ -41,6 +43,7 @@ let make =
             currentUserId
             handleAnswerCB=handleAnswerEditCB
             answer
+            handleCloseCB
           />
         </div> :
         <div title={"Answer " ++ (answer |> Answer.id)}>

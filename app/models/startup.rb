@@ -8,6 +8,8 @@ class Startup < ApplicationRecord
   COURSE_FEE = 50_000
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
+  scope :inactive, -> { where('access_ends_at < ?', Time.now) }
+  scope :active, -> { where('access_ends_at > ?', Time.now).or(where(access_ends_at: nil)) }
 
   # Custom scope to allow AA to filter by intersection of tags.
   scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
@@ -105,5 +107,9 @@ class Startup < ApplicationRecord
 
   def timeline_events
     TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders })
+  end
+
+  def active?
+    access_ends_at.blank? || (access_ends_at > Time.now)
   end
 end

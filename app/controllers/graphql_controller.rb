@@ -1,5 +1,5 @@
 class GraphqlController < ApplicationController
-  skip_forgery_protection
+  skip_forgery_protection if: :introspection?
 
   def execute
     variables = ensure_hash(params[:variables])
@@ -26,6 +26,10 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def introspection?
+    Rails.env.development? && params[:introspection] == 'true'
+  end
 
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)

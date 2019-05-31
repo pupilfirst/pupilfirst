@@ -1,7 +1,14 @@
 <% presenter = ::Layouts::CoursePresenter.new(self) %>
 
-<% content_for(:tail) do %>
+<% content_for(:viewport) do %>
+  <meta name="viewport"/>
+<% end %>
+
+<% content_for(:head) do %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
   <%= javascript_pack_tag 'layouts/courses', nonce: true %>
 <% end %>
 
@@ -19,17 +26,17 @@
           </div>
           <ul>
             <li>
-              <%= link_to school_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
+              <%= link_to school_path, class: 'global-sidebar__primary-nav-link p-4 justify-center' do %>
                 <i class="fal fa-eye fa-fw text-lg"></i>
               <% end %>
             </li>
             <li>
-              <%= link_to school_coaches_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
+              <%= link_to school_coaches_path, class: 'global-sidebar__primary-nav-link p-4 justify-center' do %>
                 <i class="fal fa-chalkboard-teacher fa-fw text-lg"></i>
               <% end %>
             </li>
             <li>
-              <%= link_to customize_school_path, class:'global-sidebar__primary-nav-link p-4 justify-center' do%>
+              <%= link_to customize_school_path, class: 'global-sidebar__primary-nav-link p-4 justify-center' do %>
                 <i class="fal fa-cog fa-fw text-lg"></i>
               <% end %>
             </li>

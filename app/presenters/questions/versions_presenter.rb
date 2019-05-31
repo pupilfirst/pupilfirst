@@ -14,12 +14,10 @@ module Questions
       versions_count + 1
     end
 
-    def markdown_prop(version, index)
-      markdown_props_to_json(version_number(index), version.value)
-    end
-
-    def markdown_props_for_questions
-      markdown_props_to_json(version_number_for_question, @question.description)
+    def markdown_prop(markdown)
+      {
+        markdown: markdown
+      }.to_json
     end
 
     def editor_name_for_question
@@ -47,13 +45,6 @@ module Questions
     end
 
     private
-
-    def markdown_props_to_json(id, text)
-      {
-        id: id.to_s,
-        text: text
-      }.to_json
-    end
 
     def versions_count
       @versions_count ||= versions.count

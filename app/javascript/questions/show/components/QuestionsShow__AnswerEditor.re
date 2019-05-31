@@ -59,8 +59,7 @@ module UpdateAnswerError = {
 module CreateAnswerErrorHandler = GraphqlErrorHandler.Make(CreateAnswerError);
 module UpdateAnswerErrorHandler = GraphqlErrorHandler.Make(UpdateAnswerError);
 
-let dateTime =
-  currentTime() |> DateTime.parse |> DateTime.format(DateTime.DateAndTime);
+let dateTime = currentTime();
 
 let handleAnswerCreateCB =
     (
@@ -72,7 +71,15 @@ let handleAnswerCreateCB =
       handleAnswerCB,
     ) => {
   let answer =
-    Answer.create(id, description, currentUserId, None, dateTime, false);
+    Answer.create(
+      id,
+      description,
+      currentUserId,
+      None,
+      dateTime,
+      dateTime,
+      false,
+    );
   setDescription(_ => "");
   setSaving(_ => false);
   handleAnswerCB(answer, true);
@@ -94,6 +101,7 @@ let handleAnswerUpdateResponseCB =
       description,
       answer |> Answer.creatorId,
       Some(currentUserId),
+      answer |> Answer.createdAt,
       dateTime,
       false,
     );
@@ -189,6 +197,7 @@ let make =
       ~currentUserId,
       ~handleAnswerCB,
       ~answer=?,
+      ~handleCloseCB=?,
     ) => {
   let (description, setDescription) =
     React.useState(() =>
@@ -211,6 +220,17 @@ let make =
           />
         </DisablingCover>
         <div className="flex justify-end pt-3 border-t">
+          {
+            switch (handleCloseCB) {
+            | Some(handleCloseCB) =>
+              <button
+                onClick=(_ => handleCloseCB())
+                className="btn btn-default mr-2">
+                {"Cancel" |> str}
+              </button>
+            | None => React.null
+            }
+          }
           <button
             disabled={description == ""}
             onClick={

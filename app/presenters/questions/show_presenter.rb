@@ -21,16 +21,14 @@ module Questions
     end
 
     def question_data
-      @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id')
-        .merge(created_at: created_at(@question))
+      @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'created_at', 'updated_at')
     end
 
     def answer_data
-      attributes = %w[id creator_id editor_id description archived]
+      attributes = %w[id creator_id editor_id description archived created_at updated_at]
       @answer_data ||=
         @question.answers.select(*attributes).map do |answer|
           answer.attributes.slice(*attributes)
-            .merge(created_at: created_at(@question))
         end
     end
 
@@ -72,10 +70,6 @@ module Questions
     end
 
     private
-
-    def created_at(object)
-      object.created_at.to_formatted_s(:long)
-    end
 
     def title(user_profile)
       title = user_profile.title

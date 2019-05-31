@@ -1,6 +1,6 @@
 <% content_for(:tail) do %>
-  <%= stylesheet_pack_tag 'MarkdownViewPack', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'MarkdownViewPack', nonce: true %>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
 <% presenter = Questions::VersionsPresenter.new(self, @question) %>
 <div class="bg-gray-100 px-3 py-4">
@@ -20,9 +20,8 @@
       <div class="w-11/12 relative bg-white border rounded p-5 pt-8 overflow-hidden">
         <span class="inline-block text-xs bg-green-500 text-white font-semibold rounded-b py-1 px-2 absolute top-0">Current Version</span>
         <div class="w-full mt-1">
-          <div class="markdown-text"
-               id="<%= presenter.version_number_for_question %>"
-               data-json-props="<%= presenter.markdown_props_for_questions %>"
+          <div class="convert-markdown"
+               data-json-props="<%= presenter.markdown_prop(@question.description) %>"
           >
             <%= @question.description %>
           </div>
@@ -39,7 +38,9 @@
       <div class="flex items-start mt-2">
         <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-gray-400 text-center"><%= presenter.version_number(index) %></div>
         <div class="w-11/12 relative bg-orange-100 border border-orange-200 rounded p-5 overflow-hidden">
-          <div id="<%= presenter.version_number(index) %>" data-json-props="<%= presenter.markdown_prop(version, index) %>" class="markdown-text">
+          <div
+            class="convert-markdown"
+            data-json-props="<%= presenter.markdown_prop(version.value) %>">
             <%= version.value %>
           </div>
           <div class="mt-4 text-xs">

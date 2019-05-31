@@ -97,6 +97,7 @@ feature 'Community Show' do
 
     # can archive his answer
     find('a[title="Archive Answer"]').click
+    page.driver.browser.switch_to.alert.accept
 
     dismiss_notification
 
@@ -115,6 +116,7 @@ feature 'Community Show' do
 
     # can archive his comment for question
     find('a[title="Archive Comment"]').click
+    page.driver.browser.switch_to.alert.accept
 
     dismiss_notification
 
@@ -133,6 +135,7 @@ feature 'Community Show' do
 
     # can archive his comment for question
     find('a[title="Archive Comment"]').click
+    page.driver.browser.switch_to.alert.accept
 
     dismiss_notification
 

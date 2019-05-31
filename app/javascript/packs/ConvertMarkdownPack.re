@@ -3,16 +3,10 @@ exception RootAttributeMissing(string);
 
 open Webapi.Dom;
 
-type props = {
-  id: string,
-  text: string,
-};
+type props = {markdown: string};
 
 let decodeProps = json =>
-  Json.Decode.{
-    id: json |> field("id", string),
-    text: json |> field("text", string),
-  };
+  Json.Decode.{markdown: json |> field("markdown", string)};
 
 let parseElement = (element, attribute) =>
   (
@@ -25,19 +19,19 @@ let parseElement = (element, attribute) =>
   |> decodeProps;
 
 let parseMarkdown =
-    (~attributeName="markdown-text", ~attribute="data-json-props", ()) =>
+    (~attributeName="convert-markdown", ~attribute="data-json-props", ()) =>
   document
   |> Document.getElementsByClassName(attributeName)
   |> HtmlCollection.toArray
   |> Array.map(element => {
        let props = parseElement(element, attribute);
-       ReactDOMRe.renderToElementWithId(
-         <MarkdownBlock
-           markdown={props.text}
-           className="leading-normal text-sm"
-         />,
-         props.id,
-       );
+       element
+       |> ReactDOMRe.render(
+            <MarkdownBlock
+              markdown={props.markdown}
+              className="leading-normal markdown-sm"
+            />,
+          );
      });
 
 parseMarkdown();

@@ -72,6 +72,7 @@ let handleUpdateQuestion =
       question |> Question.creatorId,
       Some(currentUserId),
       question |> Question.createdAt,
+      question |> Question.updatedAt,
     );
   dispatch(UpdateQuestion(newQuestion));
 };
@@ -85,6 +86,7 @@ let handleUpdateAnswer = (id, answers, dispatch) => {
       oldAnswer |> Answer.creatorId,
       oldAnswer |> Answer.editorId,
       oldAnswer |> Answer.createdAt,
+      oldAnswer |> Answer.updatedAt,
       true,
     );
   dispatch(UpdateAnswer(newAnswer));
@@ -251,23 +253,36 @@ let make =
                   <div className="pb-4 pt-2 px-3 md:px-6 flex flex-col">
                     <MarkdownBlock
                       markdown={state.question |> Question.description}
-                      className="leading-normal text-sm"
+                      className="leading-normal text-sm px-1"
                     />
-                    <div>
-                      {
-                        switch (state.question |> Question.editorId) {
-                        | Some(editorId) =>
+                    {
+                      switch (state.question |> Question.editorId) {
+                      | Some(editorId) =>
+                        <div>
                           <div
                             className="text-xs mt-2 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                             <span> {"Last edited by " |> str} </span>
                             <span className="font-semibold">
                               {userData |> UserData.userName(editorId) |> str}
                             </span>
+                            <span>
+                              {
+                                " on "
+                                ++ (
+                                  state.question
+                                  |> Question.updatedAt
+                                  |> DateTime.stingToFormatedTime(
+                                       DateTime.DateWithYearAndTime,
+                                     )
+                                )
+                                |> str
+                              }
+                            </span>
                           </div>
-                        | None => React.null
-                        }
+                        </div>
+                      | None => React.null
                       }
-                    </div>
+                    }
                   </div>
                   <div
                     className="flex flex-row justify-between px-3 md:px-6 pb-6">

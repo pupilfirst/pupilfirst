@@ -33,7 +33,7 @@ module Layouts
         end
 
         # Both, with the user-based links at the front.
-        home_link + links + custom_links
+        links + home_link + custom_links
       end
     end
 

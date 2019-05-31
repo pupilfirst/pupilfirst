@@ -1,6 +1,11 @@
 <% presenter = ::Layouts::SchoolPresenter.new(self) %>
+
+<% content_for(:viewport) do %>
+  <meta name="viewport"/>
+<% end %>
+
 <% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
 <% end %>
 
 <% content_for(:wrapper) do %>
@@ -66,8 +71,10 @@
           <% default_classes = 'flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1' %>
           <% selected_classes = ' bg-gray-400' %>
           <li><%= link_to 'Customization', customize_school_path, class: (default_classes + selected_classes) %></li>
-          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Domains</span></li>
-          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Homepage</span></li>
+          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Domains</span>
+          </li>
+          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Homepage</span>
+          </li>
         </ul>
       </div>
     </div>

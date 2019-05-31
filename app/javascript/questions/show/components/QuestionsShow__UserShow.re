@@ -8,7 +8,16 @@ let str = React.string;
 let make = (~userProfile, ~createdAt, ~textForTimeStamp) =>
   <div>
     <p className="text-xs text-gray-600">
-      {textForTimeStamp ++ " on " ++ createdAt |> str}
+      {
+        textForTimeStamp
+        ++ " on "
+        ++ (
+          createdAt
+          |> DateTime.parse
+          |> DateTime.format(DateTime.DateWithYearAndTime)
+        )
+        |> str
+      }
     </p>
     <div
       className="p-2 flex flex-row items-center bg-orange-100 text-orange-900 border border-orange-200 rounded-lg mt-1">

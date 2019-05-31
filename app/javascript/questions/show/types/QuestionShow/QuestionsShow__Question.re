@@ -5,6 +5,7 @@ type t = {
   creatorId: string,
   editorId: option(string),
   createdAt: string,
+  updatedAt: string,
 };
 
 let decode = json =>
@@ -16,6 +17,7 @@ let decode = json =>
     editorId:
       json |> field("editorId", nullable(string)) |> Js.Null.toOption,
     createdAt: json |> field("createdAt", string),
+    updatedAt: json |> field("updatedAt", string),
   };
 
 let id = t => t.id;
@@ -30,11 +32,15 @@ let editorId = t => t.editorId;
 
 let createdAt = t => t.createdAt;
 
-let create = (id, title, description, creatorId, editorId, createdAt) => {
+let updatedAt = t => t.updatedAt;
+
+let create =
+    (id, title, description, creatorId, editorId, createdAt, updatedAt) => {
   id,
   title,
   description,
   creatorId,
   editorId,
   createdAt,
+  updatedAt,
 };

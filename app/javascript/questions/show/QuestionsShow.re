@@ -328,27 +328,12 @@ let make =
               <div className="flex items-end">
                 <span className="text-lg font-semibold">
                   {
-                    let numberOfAnswers = state.answers |> List.length;
+                    let numberOfAnswers = filteredAnswers |> List.length;
                     (numberOfAnswers |> string_of_int)
                     ++ (numberOfAnswers == 1 ? " Answer" : " Answers")
                     |> str;
                   }
                 </span>
-                {
-                  let archivedAnswerCount =
-                    (state.answers |> List.length)
-                    - (filteredAnswers |> List.length);
-                  archivedAnswerCount == 0 ?
-                    React.null :
-                    <span className="text-xs font-normal px-2">
-                      {
-                        "( "
-                        ++ (archivedAnswerCount |> string_of_int)
-                        ++ " hidden)"
-                        |> str
-                      }
-                    </span>;
-                }
               </div>
             </div>
             <div className="community-answer-container">

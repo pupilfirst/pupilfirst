@@ -8,4 +8,6 @@ class Answer < ApplicationRecord
   has_one :school, through: :question
   has_many :text_versions, as: :versionable, dependent: :restrict_with_error
   has_one :community, through: :question
+
+  scope :live, -> { where(archived: false) }
 end

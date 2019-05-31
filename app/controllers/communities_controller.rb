@@ -5,10 +5,8 @@ class CommunitiesController < ApplicationController
   def show
     @community = authorize(Community.find(params[:id]))
     @search = params[:search]
-    @questions = scoped_questions.where.not(archived: true).includes(%i[creator answers])
+    @questions = scoped_questions.live.includes(%i[creator answers])
       .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
-
-    raise_not_found if @community.blank?
   end
 
   private

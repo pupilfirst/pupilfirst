@@ -5,16 +5,11 @@ class QuestionsController < ApplicationController
   layout 'student'
 
   def show
-    @question = authorize(Question.find(params[:id]))
-    raise_not_found if @question.blank?
-    raise_not_found if @question.archived?
+    @question = authorize(Question.live.find(params[:id]))
   end
 
   def versions
-    @question = authorize(Question.find(params[:id]))
-
-    raise_not_found if @question.blank?
-    raise_not_found if @question.archived?
+    @question = authorize(Question.live.find(params[:id]))
   end
 
   private

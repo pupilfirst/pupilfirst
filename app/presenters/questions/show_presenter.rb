@@ -27,18 +27,18 @@ module Questions
     def answer_data
       attributes = %w[id creator_id editor_id description archived created_at updated_at]
       @answer_data ||=
-        @question.answers.select(*attributes).map do |answer|
+        @question.answers.live.select(*attributes).map do |answer|
           answer.attributes.slice(*attributes)
         end
     end
 
     def comments
       @comments ||=
-        @question.comments.map(&method(:comment_data)) + comments_for_answers
+        @question.comments.live.map(&method(:comment_data)) + comments_for_answers
     end
 
     def comments_for_answers
-      Comment.where(commentable_type: Comment::COMMENTABLE_TYPE_ANSWER, commentable_id: @answer_data.pluck('id'))
+      Comment.live.where(commentable_type: Comment::COMMENTABLE_TYPE_ANSWER, commentable_id: @answer_data.pluck('id'))
         .map(&method(:comment_data))
     end
 

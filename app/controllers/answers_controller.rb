@@ -3,9 +3,6 @@ class AnswersController < ApplicationController
   layout 'student'
 
   def versions
-    @answer = authorize(Answer.find(params[:id]))
-
-    raise_not_found if @answer.blank?
-    raise_not_found if @answer.archived?
+    @answer = authorize(Answer.live.find(params[:id]))
   end
 end

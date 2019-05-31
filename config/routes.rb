@@ -46,7 +46,6 @@ Rails.application.routes.draw do
 
     resources :courses, only: %i[index] do
       resource :curriculum, only: %i[show]
-      resources :founders, as: 'students', path: 'students', only: %i[index create]
       resources :evaluation_criteria, only: %i[create]
       resources :levels, only: %i[create]
 
@@ -56,6 +55,10 @@ Rails.application.routes.draw do
         end
       end
 
+      post 'students', action: 'create_students'
+      post 'mark_teams_active'
+      get 'students'
+      get 'inactive_students'
       post 'delete_coach_enrollment'
       post 'update_coach_enrollments'
     end

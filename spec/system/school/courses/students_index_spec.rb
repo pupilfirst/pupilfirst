@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'School students index' do
   include UserSpecHelper
+  include NotificationHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -22,6 +23,8 @@ feature 'School students index' do
   let!(:email_2) { Faker::Internet.email }
 
   let!(:new_team_name) { (Faker::Lorem.words(4).join ' ').titleize }
+
+  let!(:inactive_team_1) { create :startup, level: level_1, access_ends_at: 1.day.ago }
 
   let!(:course_coach) { create :faculty, school: school }
   let!(:coach) { create :faculty, school: school }
@@ -90,7 +93,7 @@ feature 'School students index' do
     click_button 'Add to List'
     click_button 'Save List'
     expect(page).to have_text("Student(s) with given email(s) already exist in this course!")
-    find('.ui-pnotify-container').click
+    dismiss_notification
     click_button 'close'
 
     # Update a student
@@ -103,7 +106,7 @@ feature 'School students index' do
     click_button 'Update Student'
 
     expect(page).to have_text("Student updated successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
 
     expect(founder_1.user_profile.reload.name).to end_with('Jr.')
     expect(founder_1.reload.startup.name).to eq(new_team_name)
@@ -114,7 +117,7 @@ feature 'School students index' do
     check "select-student-#{founder_2.id}"
     click_button 'Group as Team'
     expect(page).to have_text("Teams updated successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
     founder_1.reload
     founder_2.reload
     expect(founder_1.startup.name).to eq(founder_2.startup.name)
@@ -124,7 +127,7 @@ feature 'School students index' do
     check "select-student-#{founder_1.id}"
     click_button 'Move out from Team'
     expect(page).to have_text("Teams updated successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
     founder_1.reload
     founder_2.reload
     expect(founder_1.startup.id).not_to eq(founder_2.startup.id)
@@ -138,7 +141,7 @@ feature 'School students index' do
     click_button 'Update Student'
 
     expect(page).to have_text("Student updated successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
     founder.reload
     expect(founder.exited).to eq(true)
 
@@ -154,8 +157,19 @@ feature 'School students index' do
     end
     click_button 'Update Student'
     expect(page).to have_text("Student updated successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
     founder.reload
     expect(founder.startup.faculty.last).to eq(coach)
+
+    # Inactive students list
+    expect(page).to_not have_text(inactive_team_1.founders.first.name)
+    click_link 'Inactive Students'
+    expect(page).to have_text(inactive_team_1.founders.first.name)
+    check "select-team-#{inactive_team_1.id}"
+    expect(page).to have_button('Mark Team Active')
+    click_button 'Mark Team Active'
+    expect(page).to have_text("Teams marked active successfully!")
+    visit school_course_students_path(course)
+    expect(page).to have_text(inactive_team_1.founders.first.name)
   end
 end

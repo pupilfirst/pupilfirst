@@ -12,10 +12,11 @@ let component =
 
 let search =
     (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB) =>
-  switch (state) {
+  switch (state |> String.lowercase) {
   | "" => []
   | searchString =>
-    let allTags = List.append(selectedTags, unselectedTags);
+    let allTags =
+      List.append(selectedTags, unselectedTags) |> List.map(String.lowercase);
     /* If addition of tag is allowed, and it IS new, then display that option at the front. */
     let initial =
       if (allowNewTags && !(allTags |> List.mem(searchString))) {
@@ -35,7 +36,7 @@ let search =
     let searchResults =
       unselectedTags
       |> List.filter(tag =>
-           tag |> String.lowercase |> Js.String.includes(state)
+           tag |> String.lowercase |> Js.String.includes(searchString)
          )
       |> List.sort(String.compare)
       |> List.map(tag =>

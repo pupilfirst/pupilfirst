@@ -294,7 +294,7 @@ let make =
         };
       }
       <div
-        className="border-b px-6 py-2 bg-white items-center justify-between z-20">
+        className="border-b px-6 py-2 bg-white flex items-center justify-between z-20">
         <div className="inline-block relative w-64">
           <select
             onChange={
@@ -340,11 +340,22 @@ let make =
             <Icon.Jsx2 kind=Icon.Down size="3" />
           </div>
         </div>
+        <div>
+          <a
+            className="btn btn-default no-underline"
+            href={
+              "/school/courses/"
+              ++ string_of_int(courseId)
+              ++ "/inactive_students"
+            }>
+            {"Inactive Students" |> str}
+          </a>
+        </div>
       </div>
       <div className="overflow-y-scroll">
         <div className="px-3">
           <div
-            className="max-w-3xl h-16 bg-white mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+            className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
             <div className="flex">
               <label className="flex items-center leading-tight mr-4 my-auto">
                 <input
@@ -435,8 +446,8 @@ let make =
             </div>
           </div>
           <div
-            className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b px-4 py-3 mt-3 w-full">
-            <div className="flex items-center justify-between">
+            className="max-w-3xl bg-white mx-auto relative rounded rounded-b-none border-b py-3 mt-3 w-full">
+            <div className="flex items-center justify-between pl-3">
               <input
                 type_="search"
                 className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
@@ -453,7 +464,7 @@ let make =
               />
               <div
                 onClick={_e => send(ToggleFilterVisibility)}
-                className="flex text-indigo items-center">
+                className="flex text-indigo items-center mr-3">
                 <p className="text-sm font-semibold mr-1">
                   {
                     (state.filterVisible ? "Hide" : "Show") ++ " Filters" |> str

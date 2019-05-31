@@ -1,5 +1,5 @@
 class GraphqlController < ApplicationController
-  skip_forgery_protection
+  skip_forgery_protection if: :introspection?
 
   def execute
     raise 'Only schools have access to GraphQL API' if current_school.blank?
@@ -28,6 +28,10 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def introspection?
+    Rails.env.development? && params[:introspection] == 'true'
+  end
 
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)

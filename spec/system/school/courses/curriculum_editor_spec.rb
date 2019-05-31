@@ -57,7 +57,7 @@ feature 'Curriculum Editor' do
     create :domain, :primary, school: school
   end
 
-  scenario 'school admin create a course', js: true do
+  scenario 'school admin creates the curriculum', js: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
     # he should be on the last level

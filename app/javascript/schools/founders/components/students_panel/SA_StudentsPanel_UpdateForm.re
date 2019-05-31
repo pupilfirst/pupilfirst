@@ -95,7 +95,7 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
 
 let boolBtnClasses = selected => {
   let classes = "w-1/2 toggle-button__button hover:bg-gray-500 text-gray-900 text-sm font-semibold py-2 px-6 focus:outline-none";
-  classes ++ (selected ? " bg-gray" : " bg-white");
+  classes ++ (selected ? " bg-gray-400" : " bg-white");
 };
 
 let handleEligibleTeamCoachList =

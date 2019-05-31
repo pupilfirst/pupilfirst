@@ -11,7 +11,7 @@ ActiveAdmin.register Target do
   filter :session_at_not_null, as: :boolean, label: 'Session?'
   filter :target_group, collection: -> { TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC') }
   filter :level, collection: -> { Level.all.includes(:course).order('courses.name ASC, levels.number ASC') }
-  filter :faculty_name, as: :string
+  filter :faculty_user_profiles_name, as: :string
   filter :role, as: :select, collection: -> { Target.valid_roles }
   filter :course, as: :select
 

@@ -5,6 +5,7 @@ type t = {
   editorId: option(string),
   createdAt: string,
   archived: bool,
+  updatedAt: string,
 };
 
 let decode = json =>
@@ -16,6 +17,7 @@ let decode = json =>
       json |> field("editorId", nullable(string)) |> Js.Null.toOption,
     createdAt: json |> field("createdAt", string),
     archived: json |> field("archived", bool),
+    updatedAt: json |> field("updatedAt", string),
   };
 
 let id = t => t.id;
@@ -27,6 +29,8 @@ let createdAt = t => t.createdAt;
 let creatorId = t => t.creatorId;
 
 let editorId = t => t.editorId;
+
+let updatedAt = t => t.updatedAt;
 
 let addAnswer = (answers, answer) =>
   answers |> List.rev |> List.append([answer]) |> List.rev;
@@ -45,11 +49,13 @@ let findAnswer = (answerId, answers) => {
   a |> List.hd;
 };
 
-let create = (id, description, creatorId, editorId, createdAt, archived) => {
+let create =
+    (id, description, creatorId, editorId, createdAt, updatedAt, archived) => {
   id,
   description,
   creatorId,
   editorId,
   createdAt,
+  updatedAt,
   archived,
 };

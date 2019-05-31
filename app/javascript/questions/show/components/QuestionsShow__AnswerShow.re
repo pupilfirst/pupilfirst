@@ -90,6 +90,34 @@ let make =
                     markdown={answer |> Answer.description}
                     className="leading-normal text-sm "
                   />
+                  {
+                    switch (answer |> Answer.editorId) {
+                    | Some(editorId) =>
+                      <div>
+                        <div
+                          className="text-xs mt-1 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
+                          <span> {"Last edited by " |> str} </span>
+                          <span className="font-semibold">
+                            {userData |> UserData.userName(editorId) |> str}
+                          </span>
+                          <span>
+                            {
+                              " on "
+                              ++ (
+                                answer
+                                |> Answer.updatedAt
+                                |> DateTime.stingToFormatedTime(
+                                     DateTime.DateWithYearAndTime,
+                                   )
+                              )
+                              |> str
+                            }
+                          </span>
+                        </div>
+                      </div>
+                    | None => React.null
+                    }
+                  }
                 </div>
                 <div
                   className="flex flex-row justify-between items-center pl-2 px-3 md:px-6 pb-4">

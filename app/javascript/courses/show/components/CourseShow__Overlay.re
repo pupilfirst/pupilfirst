@@ -26,6 +26,16 @@ let overlaySelectionVisiblilityClasses =
     (inspectedSelection, currentSelection) =>
   inspectedSelection == currentSelection ? "" : "hidden";
 
+let markdownContentBlock = markdown => <MarkdownBlock markdown className="" />;
+
+let fileContentBlock = (url, title) =>
+  <a href=url> {"File: " ++ title |> str} </a>;
+
+let imageContentBlock = (url, caption) => <img src=url alt=caption />;
+
+let embedContentBlock = (_url, embedCode) =>
+  <div dangerouslySetInnerHTML={"__html": embedCode} />;
+
 let learnSection = (overlaySelection, targetDetails) =>
   <div
     className={overlaySelectionVisiblilityClasses(Learn, overlaySelection)}>
@@ -37,15 +47,15 @@ let learnSection = (overlaySelection, targetDetails) =>
         |> List.map(block => {
              let renderedBlock =
                switch (block |> ContentBlock.blockType) {
-               | Markdown(markdown) => <MarkdownBlock markdown className="" />
-               | File(url, title) =>
-                 <a href=url> {"File: " ++ title |> str} </a>
-               | Image(url, caption) => <img src=url alt=caption />
-               | Embed(_url, embedCode) =>
-                 <div dangerouslySetInnerHTML={"__html": embedCode} />
+               | Markdown(markdown) => markdownContentBlock(markdown)
+               | File(url, title) => fileContentBlock(url, title)
+               | Image(url, caption) => imageContentBlock(url, caption)
+               | Embed(url, embedCode) => embedContentBlock(url, embedCode)
                };
 
-             <div key={block |> ContentBlock.id}> renderedBlock </div>;
+             <div className="mt-2" key={block |> ContentBlock.id}>
+               renderedBlock
+             </div>;
            })
         |> Array.of_list
         |> React.array
@@ -62,7 +72,7 @@ let selectionToString = overlaySelection =>
   };
 
 let overlaySelectionOptions = (target, overlaySelection, setOverlaySelection) =>
-  <div className="border rounded-lg max-w-fc">
+  <div className="border rounded-lg max-w-fc mt-4">
     {
       [Learn, Discuss, Complete]
       |> List.map(selection => {
@@ -105,6 +115,21 @@ let completeSection = (overlaySelection, target, targetDetails) =>
   | None => <div> {"Loading..." |> str} </div>
   };
 
+let overlayStatus = (closeOverlayCB, target, targetStatus) =>
+  <div
+    className="flex justify-between items-center py-4 px-6 bg-yellow-200 border-transparent rounded-b-lg">
+    <div className="flex items-center">
+      <button className="mr-4" onClick={_e => closeOverlayCB()}>
+        <i className="fal fa-arrow-circle-left fa-2x" />
+      </button>
+      <h1 className="text-3xl"> {target |> Target.title |> str} </h1>
+    </div>
+    <div
+      className="border-2 border-yellow-600 py-1 px-2 rounded-full text-yellow-600 font-bold">
+      {targetStatus |> CourseShow__TargetStatus.statusToString |> str}
+    </div>
+  </div>;
+
 [@react.component]
 let make = (~target, ~targetStatus, ~closeOverlayCB) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
@@ -116,11 +141,12 @@ let make = (~target, ~targetStatus, ~closeOverlayCB) => {
   );
 
   <div className="absolute top-0 left-0 min-h-screen w-full bg-white">
-    <button onClick={_e => closeOverlayCB()}> {"Close" |> str} </button>
-    <h1> {target |> Target.title |> str} </h1>
-    {overlaySelectionOptions(target, overlaySelection, setOverlaySelection)}
-    {learnSection(overlaySelection, targetDetails)}
-    {discussSection(overlaySelection, targetDetails)}
-    {completeSection(overlaySelection, target, targetDetails)}
+    <div className="container mx-auto px-4">
+      {overlayStatus(closeOverlayCB, target, targetStatus)}
+      {overlaySelectionOptions(target, overlaySelection, setOverlaySelection)}
+      {learnSection(overlaySelection, targetDetails)}
+      {discussSection(overlaySelection, targetDetails)}
+      {completeSection(overlaySelection, target, targetDetails)}
+    </div>
   </div>;
 };

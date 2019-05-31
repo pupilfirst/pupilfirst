@@ -1,6 +1,11 @@
 <% presenter = ::Layouts::SchoolPresenter.new(self) %>
+
+<% content_for(:viewport) do %>
+  <meta name="viewport"/>
+<% end %>
+
 <% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
 <% end %>
 
 <% content_for(:wrapper) do %>

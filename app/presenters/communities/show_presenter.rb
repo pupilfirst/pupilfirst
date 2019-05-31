@@ -13,6 +13,10 @@ module Communities
       question.created_at.to_formatted_s(:long)
     end
 
+    def page_title
+      "#{@community.name} Community | #{current_school.name}"
+    end
+
     def creator_name(question)
       question.creator.user_profiles.where(school: current_school).first.name
     end

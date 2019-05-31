@@ -193,7 +193,7 @@ let make =
           switch (communityPath) {
           | Some(communityPath) =>
             <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-              <a className="btn btn-default no-underline" href=communityPath>
+              <a className="btn btn-default" href=communityPath>
                 <i className="far fa-arrow-left" />
                 <span className="ml-2"> {React.string("Back")} </span>
               </a>

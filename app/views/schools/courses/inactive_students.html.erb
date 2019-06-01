@@ -1,13 +1,16 @@
 <% content_for(:head) do %>
-  <%= javascript_pack_tag 'schools/courses/inactive_students_index', 'data-turbolinks-track': 'reload', nonce: true %>
-  <%= stylesheet_pack_tag 'schools/courses/inactive_students_index', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'schools/courses/inactive_students_index', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'schools/courses/inactive_students_index', nonce: true %>
 <% end %>
 
 <% @presenter = Schools::Courses::InactiveStudentsPresenter.new(self, @teams, @course) %>
 <div class="flex flex-1">
   <div id="sa-students-panel" class="flex w-full h-screen"
        data-props="<%= @presenter.props_to_json %>"></div>
-<!--  <div class="w-full flex mx-auto">-->
-    <%#= paginate @teams %>
-<!--  </div>-->
+  <!--  <div class="w-full flex mx-auto">-->
+  <%#= paginate @teams %>
+  <!--  </div>-->
 </div>

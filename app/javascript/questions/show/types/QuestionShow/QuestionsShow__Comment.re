@@ -47,6 +47,8 @@ let updateComment = (comments, newComment) =>
   comments
   |> List.map(comment => comment.id == newComment.id ? newComment : comment);
 
+let delete = (id, comments) => comments |> List.filter(c => c.id != id);
+
 let create = (id, value, creatorId, commentableId, commentableType, archived) => {
   id,
   value,

@@ -49,6 +49,8 @@ let findAnswer = (answerId, answers) => {
   a |> List.hd;
 };
 
+let delete = (id, answers) => answers |> List.filter(a => a.id != id);
+
 let create =
     (id, description, creatorId, editorId, createdAt, updatedAt, archived) => {
   id,

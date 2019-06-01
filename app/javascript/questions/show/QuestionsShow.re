@@ -14,7 +14,9 @@ type action =
   | UpdateShowQuestionEdit(bool)
   | UpdateQuestion(Question.t)
   | UpdateAnswer(Answer.t)
-  | UpdateComment(Comment.t);
+  | RemoveAnswer(string)
+  | UpdateComment(Comment.t)
+  | RemoveComment(string);
 
 type state = {
   question: Question.t,
@@ -42,6 +44,14 @@ let reducer = (state, action) =>
   | UpdateShowAnswerCreate(bool) => {...state, showAnswerCreate: bool}
   | UpdateShowQuestionEdit(bool) => {...state, showQuestionEdit: bool}
   | UpdateQuestion(question) => {...state, question, showQuestionEdit: false}
+  | RemoveAnswer(id) => {
+      ...state,
+      answers: state.answers |> Answer.delete(id),
+    }
+  | RemoveComment(id) => {
+      ...state,
+      comments: state.comments |> Comment.delete(id),
+    }
   | UpdateAnswer(answer) => {
       ...state,
       answers: Answer.updateAnswer(state.answers, answer),
@@ -75,36 +85,6 @@ let handleUpdateQuestion =
       question |> Question.updatedAt,
     );
   dispatch(UpdateQuestion(newQuestion));
-};
-
-let handleUpdateAnswer = (id, answers, dispatch) => {
-  let oldAnswer = answers |> Answer.findAnswer(id);
-  let newAnswer =
-    Answer.create(
-      id,
-      oldAnswer |> Answer.description,
-      oldAnswer |> Answer.creatorId,
-      oldAnswer |> Answer.editorId,
-      oldAnswer |> Answer.createdAt,
-      oldAnswer |> Answer.updatedAt,
-      true,
-    );
-  dispatch(UpdateAnswer(newAnswer));
-};
-
-let handleUpdateComment = (id, comments, dispatch) => {
-  let oldComment = comments |> Comment.findComment(id);
-  let newComment =
-    Comment.create(
-      oldComment |> Comment.id,
-      oldComment |> Comment.value,
-      oldComment |> Comment.creatorId,
-      oldComment |> Comment.commentableId,
-      oldComment |> Comment.commentableType,
-      true,
-    );
-
-  dispatch(UpdateComment(newComment));
 };
 
 [@react.component]
@@ -151,8 +131,8 @@ let make =
     switch (resourceType) {
     | "Question" =>
       communityPath |> Webapi.Dom.Window.setLocation(Webapi.Dom.window)
-    | "Answer" => handleUpdateAnswer(id, state.answers, dispatch)
-    | "Comment" => handleUpdateComment(id, state.comments, dispatch)
+    | "Answer" => dispatch(RemoveAnswer(id))
+    | "Comment" => dispatch(RemoveComment(id))
     | _ =>
       Notification.error(
         "Something went wrong",

@@ -6,5 +6,5 @@ let isInvalid = (~allowBlank, email) =>
   if (allowBlank && email |> String.trim |> String.length == 0) {
     false;
   } else {
-    !(regularExpression |> Js.Re.test(email));
+    !(email |> Js.Re.test_(regularExpression));
   };

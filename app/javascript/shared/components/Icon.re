@@ -48,14 +48,7 @@ module Jsx2 = {
       (~kind, ~size, ~inverse=false, ~opacity=100, ~rotate=false, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(
-        ~kind,
-        ~size,
-        ~inverse=false,
-        ~opacity=100,
-        ~rotate=false,
-        (),
-      ),
+      makeProps(~kind, ~size, ~inverse, ~opacity, ~rotate, ()),
       children,
     );
 };

@@ -27,7 +27,7 @@ let updateName = (send, name) => {
 
 let updateEmail = (send, email) => {
   let regex = [%re {|/.+@.+\..+/i|}];
-  let hasError = !Js.Re.test(email, regex);
+  let hasError = !Js.Re.test_(regex, email);
   send(UpdateEmail(email, hasError));
 };
 

@@ -29,7 +29,7 @@ let updateUnlockOn = (send, date) => {
   ];
 
   let lengthOfInput = date |> String.length;
-  let hasError = lengthOfInput == 0 ? false : !Js.Re.test(date, regex);
+  let hasError = lengthOfInput == 0 ? false : !Js.Re.test_(regex, date);
   send(UpdateUnlockOn(date, hasError));
 };
 

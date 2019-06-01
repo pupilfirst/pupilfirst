@@ -71,7 +71,7 @@ let updateEndsAt = (send, date) => {
     {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
   ];
   let lengthOfInput = date |> String.length;
-  let hasError = lengthOfInput == 0 ? false : !Js.Re.test(date, regex);
+  let hasError = lengthOfInput == 0 ? false : !Js.Re.test_(regex, date);
   send(UpdateEndsAt(date, hasError));
 };
 

@@ -71,8 +71,7 @@ let handleResponseCB = (id, title) => {
   let parameterizedTitle =
     title
     |> Js.String.toLowerCase
-    |> Js.String.replaceByRe([%re "/[^0-9a-zA-Z]+/gi"], "-")
-    |> Js.String.replaceByRe([%re "/\s/g"], "-");
+    |> Js.String.replaceByRe([%re "/[^0-9a-zA-Z]+/gi"], "-");
   let redirectPath = "/questions/" ++ id ++ "/" ++ parameterizedTitle;
   redirectPath |> Webapi.Dom.Window.setLocation(window);
 };

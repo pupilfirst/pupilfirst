@@ -38,7 +38,7 @@ module Questions
     end
 
     def comments_for_answers
-      Comment.live.where(commentable_type: Comment::COMMENTABLE_TYPE_ANSWER, commentable_id: @answer_data.pluck('id'))
+      Comment.live.where(commentable_type: Answer.to_s, commentable_id: @answer_data.pluck('id'))
         .map(&method(:comment_data))
     end
 

@@ -3,7 +3,7 @@ class CreateCommentMutator < ApplicationMutator
   attr_accessor :commentable_type
   attr_accessor :commentable_id
 
-  validates :commentable_type, inclusion: { in: Comment::VALID_COMMENTABLE_TYPES, message: 'InvalidCommentableType' }
+  validates :commentable_type, inclusion: { in: [Answer.name, Question.name], message: 'InvalidCommentableType' }
   validates :value, length: { minimum: 1, message: 'InvalidLengthValue' }, allow_nil: false
   validates :commentable_id, presence: { message: 'BlankCommentableId' }
 
@@ -13,7 +13,7 @@ class CreateCommentMutator < ApplicationMutator
       commentable: commentable,
       value: value
     )
-    update_last_activity_for_question if commentable_type == Comment::COMMENTABLE_TYPE_QUESTION
+    update_last_activity_for_question if commentable_type == Question.name
     comment.id
   end
 
@@ -38,9 +38,9 @@ class CreateCommentMutator < ApplicationMutator
 
   def commentable
     @commentable ||= case commentable_type
-      when Comment::COMMENTABLE_TYPE_QUESTION
+      when Question.name
         Question.find_by(id: commentable_id)
-      when Comment::COMMENTABLE_TYPE_ANSWER
+      when Answer.name
         Answer.find_by(id: commentable_id)
     end
   end

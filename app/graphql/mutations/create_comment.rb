@@ -13,8 +13,10 @@ module Mutations
       mutator = CreateCommentMutator.new(params, context)
 
       if mutator.valid?
+        mutator.notify(:success, "Done!", "Your comment has been saved.")
         { comment_id: mutator.create_comment, errors: nil }
       else
+        mutator.notify_errors
         { comment_id: nil, errors: mutator.error_codes }
       end
     end

@@ -1,5 +1,39 @@
 exception Graphql_error(string);
 
+type notification = {
+  kind: string,
+  title: string,
+  body: string,
+};
+
+let decodeNotification = json =>
+  Json.Decode.{
+    kind: json |> field("kind", string),
+    title: json |> field("title", string),
+    body: json |> field("body", string),
+  };
+
+let decodeNotifications = json =>
+  json |> Json.Decode.list(decodeNotification);
+
+let flashNotifications = obj =>
+  switch (Js.Dict.get(obj, "notifications")) {
+  | Some(notifications) =>
+    notifications
+    |> decodeNotifications
+    |> List.iter(n => {
+         let notify =
+           switch (n.kind) {
+           | "success" => Notification.success
+           | "error" => Notification.error
+           | _ => Notification.notice
+           };
+
+         notify(n.title, n.body);
+       })
+  | None => ()
+  };
+
 let sendQuery = (authenticityToken, q) =>
   Bs_fetch.(
     fetchWithInit(
@@ -35,7 +69,8 @@ let sendQuery = (authenticityToken, q) =>
     |> Js.Promise.then_(json =>
          switch (Js.Json.decodeObject(json)) {
          | Some(obj) =>
-           Js.Dict.unsafeGet(obj, "data") |> q##parse |> Js.Promise.resolve
+           obj |> flashNotifications;
+           Js.Dict.unsafeGet(obj, "data") |> q##parse |> Js.Promise.resolve;
          | None =>
            Js.Promise.reject(Graphql_error("Response is not an object"))
          }

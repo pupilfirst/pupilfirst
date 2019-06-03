@@ -5,7 +5,11 @@ module Students
     end
 
     def founders
-      @founders ||= current_user.founders.where(exited: false)
+      @founders ||= current_user.founders
+    end
+
+    def show_profile_edit?
+      founders.where(exited: false).any?
     end
 
     def user_profile
@@ -60,7 +64,13 @@ module Students
     end
 
     def course_cover_button_text(founder)
-      founder.dashboard_toured? ? "Continue Course" : "Start Course"
+      if access_ended?(founder)
+        'Course Ended'
+      elsif !founder.dashboard_toured?
+        'Start Course'
+      else
+        'Continue Course'
+      end
     end
 
     private
@@ -71,6 +81,14 @@ module Students
 
     def faculty_course
       @faculty_course = current_coach&.courses&.where(school: current_school)
+    end
+
+    def access_ended?(founder)
+      founder.startup&.access_ends_at.present? && (founder.startup.access_ends_at < current_time)
+    end
+
+    def current_time
+      @current_time = Time.now
     end
   end
 end

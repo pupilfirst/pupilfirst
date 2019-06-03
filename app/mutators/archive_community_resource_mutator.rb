@@ -2,44 +2,42 @@ class ArchiveCommunityResourceMutator < ApplicationMutator
   attr_accessor :id
   attr_accessor :resource_type
 
-  validates :resource_type, inclusion: { in: %w[Question Answer Comment] }
+  validates :resource_type, inclusion: { in: [Question, Answer, Comment].map(&:to_s) }
 
   def archive
     community_resource.update!(archived: true, archiver: current_user)
   end
 
   def authorized?
+    return false if community_resource.blank?
+
     # Can't archive at PupilFirst, current user must exist, Can only archive only in the same school.
-    return false unless current_school.present? && current_user.present? && (school == current_school)
+    return false unless current_school.present? && current_user.present? && (resource_school == current_school)
 
     # Faculty can archive resources
     return true if current_coach.present?
 
-    community_resource&.creator == current_user
+    community_resource.creator == current_user
   end
 
   private
 
   def community_resource
-    @community_resource ||=
-      if resource_type == "Question"
+    @community_resource ||= case resource_type
+      when "Question"
         Question.find_by(id: id)
-      elsif resource_type == "Answer"
+      when "Answer"
         Answer.find_by(id: id)
-      elsif resource_type == "Comment"
+      when "Comment"
         Comment.find_by(id: id)
-      end
+      else
+        raise "Unexpected resource type #{resource_type}"
+    end
   end
 
-  def school
-    return community_resource&.school if resource_type.in? %w[Question Answer]
+  def resource_school
+    return community_resource.school if resource_type.in?([Question.name, Answer.name])
 
-    if resource_type == "Comment"
-      if community_resource&.commentable_type == "Question"
-        Question.find_by(id: community_resource.commentable_id)&.school
-      elsif community_resource&.commentable_type == "Answer"
-        Answer.find_by(id: community_resource.commentable_id)&.school
-      end
-    end
+    community_resource.commentable.school if resource_type == Comment.name
   end
 end

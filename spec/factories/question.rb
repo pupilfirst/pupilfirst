@@ -3,6 +3,5 @@ FactoryBot.define do
     title { Faker::Lorem.sentence }
     description { Faker::Lorem.paragraph }
     community
-    creator
   end
 end

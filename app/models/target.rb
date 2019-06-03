@@ -65,14 +65,23 @@ class Target < ApplicationRecord
   TYPE_READ = 'Read'
   TYPE_LEARN = 'Learn'
 
+  VISIBILITY_LIVE = 'live'
+  VISIBILITY_ARCHIVED = 'archived'
+  VISIBILITY_DRAFT = 'draft'
+
   def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
+  end
+
+  def self.valid_visibility_types
+    [VISIBILITY_LIVE, VISIBILITY_ARCHIVED, VISIBILITY_DRAFT].freeze
   end
 
   validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :call_to_action, length: { maximum: 20 }
+  validates :visibility, presence: true, inclusion: { in: valid_visibility_types }
 
   validate :days_to_complete_or_session_at_should_be_present
 

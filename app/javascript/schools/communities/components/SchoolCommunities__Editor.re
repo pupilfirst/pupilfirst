@@ -261,7 +261,7 @@ let make =
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
             {
-              "Allow students to ask questions about targets in this community?"
+              "Should students be allowed to discuss targets in this community?"
               |> str
             }
           </label>

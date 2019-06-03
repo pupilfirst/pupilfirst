@@ -1,8 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :community, except: %i[show versions]
-  before_action :target, except: %i[show versions]
+
   layout 'student'
+
+  # GET /community/:community_id/questions/new
+  def new
+    @community = Community.find(params[:community_id])
+    @target = find_target(params[:target_id])
+  end
 
   def show
     @question = authorize(Question.live.find(params[:id]))
@@ -14,18 +19,15 @@ class QuestionsController < ApplicationController
 
   private
 
-  def community
-    @community = Community.find(params[:community_id])
-  end
+  def find_target(target_id)
+    # Community should have the target_linkable flag set.
+    return unless @community.target_linkable?
 
-  def target
-    @target ||= begin
-      if params[:target_id].present?
-        t = Target.find_by(id: params[:target_id])
+    target = Target.find_by(id: target_id)
 
-        # Only return the target if the target is in a course that is linked to this community.
-        @community.courses.where(id: t&.course).exists? ? t : nil
-      end
-    end
+    # Only return the target if the target is in a course that is linked to this community.
+    return if @community.courses.where(id: t&.course).empty?
+
+    target
   end
 end

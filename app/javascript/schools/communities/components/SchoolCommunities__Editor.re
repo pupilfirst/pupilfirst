@@ -33,11 +33,11 @@ module CreateCommunityError = {
     switch (error) {
     | `InvalidLengthName => (
         "InvalidLengthName",
-        "The list of courses selected are incorrect",
+        "Course name should be between 1 and 50 characters long.",
       )
     | `IncorrectCourseIds => (
         "IncorrectCourseIds",
-        "Supplied description must be greater than 1 characters in length",
+        "Could not find courses with the supplied IDs.",
       )
     };
 };
@@ -53,15 +53,15 @@ module UpdateCommunityError = {
     switch (error) {
     | `InvalidLengthName => (
         "InvalidLengthName",
-        "The list of courses selected are incorrect",
+        "Course name should be between 1 and 50 characters long.",
       )
     | `IncorrectCourseIds => (
         "IncorrectCourseIds",
-        "Supplied description must be greater than 1 characters in length",
+        "Could not find courses with the supplied IDs.",
       )
     | `IncorrectCommunityId => (
         "IncorrectCommunityId",
-        "Community does not exist",
+        "Community does not exist.",
       )
     };
 };

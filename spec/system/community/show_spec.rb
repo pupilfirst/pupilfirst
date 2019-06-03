@@ -96,6 +96,13 @@ feature 'Community Show' do
     expect(new_answer.reload.description).to eq(answer_description_for_edit)
     expect(new_answer.text_versions.first.value).to eq(answer_description)
 
+    # can see answer edit history
+    click_link 'History'
+    expect(page).to have_text('Answer Edit History')
+    expect(page).to have_text(answer_description)
+    expect(page).to have_text(answer_description_for_edit)
+    click_link 'Back to Answer'
+
     # can archive his answer
     find('a[title="Archive Answer"]').click
     page.driver.browser.switch_to.alert.accept
@@ -192,6 +199,14 @@ feature 'Community Show' do
     expect(page).not_to have_text(old_description)
     expect(question_1.reload.description).to eq(question_description_for_edit)
     expect(question_1.text_versions.first.value).to eq(old_description)
+
+    # can see question edit history
+    click_link 'History'
+    expect(page).to have_text('Question Edit History')
+    expect(page).to have_text(question_1.title)
+    expect(page).to have_text(old_description)
+    expect(page).to have_text(question_description_for_edit)
+    click_link 'Back to Question'
   end
 
   scenario 'When an active founder visits student dashboard', js: true do

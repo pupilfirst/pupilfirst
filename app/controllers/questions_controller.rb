@@ -26,7 +26,7 @@ class QuestionsController < ApplicationController
     target = Target.find_by(id: target_id)
 
     # Only return the target if the target is in a course that is linked to this community.
-    return if @community.courses.where(id: t&.course).empty?
+    return if @community.courses.where(id: target&.course).empty?
 
     target
   end

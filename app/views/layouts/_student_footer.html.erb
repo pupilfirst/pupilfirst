@@ -63,11 +63,10 @@
 
         <div class="w-3/4 md:w-2/5 text-right text-xs font-hairline">
           <% if presenter.privacy_policy? %>
-            <a id="show-privacy-policy" class="text-gray-100 cursor-pointer mr-3">Privacy Policy</a>
+            <%= link_to 'Privacy Policy', policies_privacy_path, class: "text-gray-100 cursor-pointer mr-3" %>
           <% end %>
-
           <% if presenter.terms_of_use? %>
-            <a id="show-terms-of-use" class="text-gray-100 cursor-pointer md:mr-3">Terms of Use</a>
+            <%= link_to 'Terms of Use', policies_terms_path, class: "text-gray-100 cursor-pointer mr-3" %>
           <% end %>
 
           <span class="text-gray-400 block md:inline-block">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>

@@ -1,0 +1,15 @@
+<% presenter = ::Home::TermsPresenter.new(self, @terms_of_use) %>
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %> Terms of Use</title>
+<% end %>
+<div class="flex flex-col items-center justify-center">
+  <div class="py-4 px-2">
+    <div class="text-5xl font-bold">
+      Privacy Policy
+    </div>
+    <div class="mt-2 max-w-4xl leading-normal text-sm">
+      <%= presenter.terms_of_use_html %>
+    </div>
+  </div>
+</div>
+

@@ -47,7 +47,7 @@ module Questions
     end
 
     def user_data
-      user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck('creator_id'), answer_data.pluck('editor_id'), comments.pluck('userId'), current_user.id]
+      user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck('creator_id'), answer_data.pluck('editor_id'), comments.pluck('creator_id'), current_user.id]
         .flatten.uniq
 
       UserProfile.where(user_id: user_ids, school: current_school).with_attached_avatar

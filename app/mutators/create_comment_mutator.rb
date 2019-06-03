@@ -1,4 +1,6 @@
 class CreateCommentMutator < ApplicationMutator
+  include AuthorizeCommunityUser
+
   attr_accessor :value
   attr_accessor :commentable_type
   attr_accessor :commentable_id
@@ -8,32 +10,25 @@ class CreateCommentMutator < ApplicationMutator
   validates :commentable_id, presence: { message: 'BlankCommentableId' }
 
   def create_comment
-    comment = Comment.create!(
-      creator: current_user,
-      commentable: commentable,
-      value: value
-    )
-    update_last_activity_for_question if commentable_type == Question.name
+    comment = Comment.transaction do
+      @commentable.update!(last_activity_at: Time.zone.now) if commentable_type == Question.name
+
+      Comment.create!(
+        creator: current_user,
+        commentable: commentable,
+        value: value
+      )
+    end
+
     comment.id
-  end
-
-  def authorized?
-    # Can't comment at PupilFirst, current user must exist, Can only comment in the same school.
-    return false unless current_school.present? && current_user.present? && (commentable&.school == current_school)
-
-    # Coach has access to all communities
-    return true if current_coach.present?
-
-    # User should have access to the community
-    current_user.founders.includes(:course).where(courses: { id: commentable.community.courses }).any?
   end
 
   private
 
-  def update_last_activity_for_question
-    # rubocop:disable Rails/SkipsModelValidations
-    @commentable.touch(:last_activity_at)
-    # rubocop:enable Rails/SkipsModelValidations
+  alias authorized? authorized_create?
+
+  def community
+    commentable.community
   end
 
   def commentable
@@ -42,6 +37,8 @@ class CreateCommentMutator < ApplicationMutator
         Question.find_by(id: commentable_id)
       when Answer.name
         Answer.find_by(id: commentable_id)
+      else
+        raise "Invalid commentable_type #{commentable_type}"
     end
   end
 end

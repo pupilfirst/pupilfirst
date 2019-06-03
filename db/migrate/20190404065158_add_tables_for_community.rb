@@ -33,7 +33,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
     end
 
     create_table :answer_likes do |t|
-      t.references :answer
+      t.references :answer, index: false
       t.references :user
 
       t.timestamps
@@ -70,6 +70,7 @@ class AddTablesForCommunity < ActiveRecord::Migration[5.2]
       t.references :course, foreign_key: true, index: false
     end
 
+    add_index :answer_likes, %i[answer_id user_id], unique: true
     add_index :community_course_connections, %i[course_id community_id], unique: true, name: 'index_community_course_connection_on_course_id_and_community_id'
     add_index :target_questions, %i[target_id question_id], unique: true
 

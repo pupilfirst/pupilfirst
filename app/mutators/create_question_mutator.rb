@@ -1,4 +1,6 @@
 class CreateQuestionMutator < ApplicationMutator
+  include AuthorizeCommunityUser
+
   attr_accessor :title
   attr_accessor :description
   attr_accessor :community_id
@@ -21,18 +23,9 @@ class CreateQuestionMutator < ApplicationMutator
     question.id
   end
 
-  def authorized?
-    #  Can't ask questions at PupilFirst., current user must exist, Can only ask questions in the same school.
-    return false unless current_school.present? && current_user.present? && (community&.school == current_school)
-
-    # Coach has access to all communities
-    return true if current_coach.present?
-
-    # User should have access to the community
-    current_user.founders.includes(:course).where(courses: { id: community.courses }).any?
-  end
-
   private
+
+  alias authorized? authorized_create?
 
   def community
     @community ||= Community.find_by(id: community_id)

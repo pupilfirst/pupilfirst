@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_073450) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["answer_id"], name: "index_answer_likes_on_answer_id"
+    t.index ["answer_id", "user_id"], name: "index_answer_likes_on_answer_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_answer_likes_on_user_id"
   end
 

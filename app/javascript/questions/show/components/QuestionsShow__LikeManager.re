@@ -26,15 +26,12 @@ module DestroyAnswerLikeQuery = [%graphql
 ];
 
 module CreateAnswerLikeError = {
-  type t = [ | `LikeExist | `BlankAnswerId];
+  type t = [ | `LikeExists | `BlankAnswerId];
 
   let notification = error =>
     switch (error) {
-    | `LikeExist => ("LikeExist", "You have already liked the answer!")
-    | `BlankAnswerId => (
-        "BlankAnswerId",
-        "Answer id is required for adding a like",
-      )
+    | `LikeExists => ("Oops!", "You have already liked the answer.")
+    | `BlankAnswerId => ("Oops!", "Answer ID is required for adding a like.")
     };
 };
 

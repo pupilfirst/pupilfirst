@@ -1672,7 +1672,7 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "LikeExist",
+              "name": "LikeExists",
               "description": "You have already liked the answer!",
               "isDeprecated": false,
               "deprecationReason": null

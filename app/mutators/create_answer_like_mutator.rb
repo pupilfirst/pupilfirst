@@ -1,35 +1,31 @@
 class CreateAnswerLikeMutator < ApplicationMutator
+  include AuthorizeCommunityUser
+
   attr_accessor :answer_id
 
   validates :answer_id, presence: { message: 'BlankAnswerId' }
-  validate :like_from_user_does_not_exist
+  validate :like_should_not_exist
 
-  def like_from_user_does_not_exist
-    return if answer.answer_likes.where(user: current_user).blank?
+  def like_should_not_exist
+    return if answer.answer_likes.where(user: current_user).empty?
 
-    raise 'LikeExist'
+    errors[:base] << 'LikeExists'
   end
 
   def create_answer_like
-    like = AnswerLike.create!(
+    AnswerLike.create!(
       user: current_user,
       answer: answer
-    )
-    like.id
-  end
-
-  def authorized?
-    # Can't like at PupilFirst, current user must exist, Can only like answers in the same school.
-    return false unless current_school.present? && current_user.present? && (answer&.school == current_school)
-
-    # Coach has access to all communities
-    return true if current_coach.present?
-
-    # User should have access to the community
-    current_user.founders.includes(:course).where(courses: { id: answer.community.courses }).any?
+    ).id
   end
 
   private
+
+  alias authorized? authorized_create?
+
+  def community
+    @community ||= answer&.community
+  end
 
   def answer
     @answer ||= Answer.find_by(id: answer_id)

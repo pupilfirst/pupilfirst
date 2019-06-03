@@ -1,4 +1,6 @@
 class UpdateQuestionMutator < ApplicationMutator
+  include AuthorizeCommunityUser
+
   attr_accessor :id
   attr_accessor :title
   attr_accessor :description
@@ -11,17 +13,17 @@ class UpdateQuestionMutator < ApplicationMutator
     question.update!(title: title, description: description, editor: current_user)
   end
 
-  def authorized?
-    # Can't edit question at PupilFirst, current user must exist, Can only edit question in the same school.
-    return false unless current_school.present? && current_user.present? && (question&.school == current_school)
+  private
 
-    # Faculty can edit questions
-    return true if current_coach.present?
+  alias authorized? authorized_update?
 
-    question&.creator == current_user
+  def community
+    @community ||= question&.community
   end
 
-  private
+  def creator
+    question&.creator
+  end
 
   def question
     @question ||= Question.find_by(id: id)

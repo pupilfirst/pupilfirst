@@ -6,12 +6,11 @@ class UpdateCommunityMutator < ApplicationMutator
   attr_accessor :target_linkable
   attr_accessor :course_ids
 
-  validates :name, length: { minimum: 1, maximum: 50, message: 'InvalidLengthName' }, allow_nil: false
+  validates :name, length: { minimum: 1, maximum: 50, message: 'InvalidLengthName' }
+
   validate :course_must_exist_in_current_school
 
   def course_must_exist_in_current_school
-    return if course_ids.blank?
-
     return if courses.count == course_ids.count
 
     errors[:base] << 'IncorrectCourseIds'
@@ -26,9 +25,10 @@ class UpdateCommunityMutator < ApplicationMutator
   def update_community
     community.update!(
       name: name,
-      target_linkable: target_linkable
+      target_linkable: target_linkable,
+      courses: courses
     )
-    community.courses = courses
+
     community.id
   end
 
@@ -39,6 +39,6 @@ class UpdateCommunityMutator < ApplicationMutator
   end
 
   def community
-    @community ||= current_school.communities.where(id: id).first
+    @community ||= current_school.communities.find_by(id: id)
   end
 end

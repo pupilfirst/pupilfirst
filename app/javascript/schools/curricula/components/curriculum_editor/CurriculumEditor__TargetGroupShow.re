@@ -9,6 +9,32 @@ type state = {
   validTargetTitle: bool,
 };
 
+module CreateTargetMutation = [%graphql
+  {|
+   mutation($title: String!, $targetGroupId: String!) {
+     createTarget(title: $title, targetGroupId: $targetGroupId ) @bsVariant {
+       targetId
+       errors
+     }
+   }
+   |}
+];
+
+module CreateTargetError = {
+  type t = [ | `TitleBlank | `TargetGroupIdBlank];
+
+  let notification = error =>
+    switch (error) {
+    | `TitleBlank => ("TitleBlank", "Target title cannot be blank")
+    | `TargetGroupIdBlank => (
+        "TargetGroupIdBlank",
+        "Target group id cannot be blank",
+      )
+    };
+};
+
+module CreateTargetErrorHandler = GraphqlErrorHandler.Make(CreateTargetError);
+
 type action =
   | UpdateTargetTitle(string)
   | UpdateTargetSaving;
@@ -62,10 +88,10 @@ let make =
       showArchived ?
         targetsInTG :
         targetsInTG |> List.filter(target => !(target |> Target.archived));
-    let handleResponseCB = json => {
-      let id = json |> Json.Decode.(field("id", int));
+    let handleResponseCB = targetId => {
+      let id = targetId |> int_of_string;
       let targetGroupId = targetGroup |> TargetGroup.id;
-      let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+      /* let sortIndex = json |> Json.Decode.(field("sortIndex", int)); */
       let newTarget =
         Target.create(
           id,
@@ -80,7 +106,7 @@ let make =
           None,
           "founder",
           "Todo",
-          sortIndex,
+          999,
           true,
         );
       send(UpdateTargetSaving);
@@ -88,24 +114,37 @@ let make =
       updateTargetCB(newTarget);
       showTargetEditorCB(targetGroupId, Some(newTarget));
     };
-    let handleErrorCB = () => send(UpdateTargetSaving);
-    let handleCreateTarget = () => {
+    let handleCreateTarget = (title, targetGroupId) => {
       send(UpdateTargetSaving);
-      let payload = Js.Dict.empty();
-      let targetData = Js.Dict.empty();
-      Js.Dict.set(targetData, "title", state.targetTitle |> Js.Json.string);
-      Js.Dict.set(targetData, "role", "founder" |> Js.Json.string);
-      Js.Dict.set(targetData, "target_action_type", "Todo" |> Js.Json.string);
+      /* let payload = Js.Dict.empty();
+         let targetData = Js.Dict.empty();
+         Js.Dict.set(targetData, "title", state.targetTitle |> Js.Json.string);
+         Js.Dict.set(targetData, "role", "founder" |> Js.Json.string);
+         Js.Dict.set(targetData, "target_action_type", "Todo" |> Js.Json.string);
 
-      Js.Dict.set(
-        payload,
-        "authenticity_token",
-        authenticityToken |> Js.Json.string,
-      );
-      Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
-      let tgId = targetGroup |> TargetGroup.id |> string_of_int;
-      let url = "/school/target_groups/" ++ tgId ++ "/targets";
-      Api.create(url, payload, handleResponseCB, handleErrorCB);
+         Js.Dict.set(
+           payload,
+           "authenticity_token",
+           authenticityToken |> Js.Json.string,
+         );
+         Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
+         let tgId = targetGroup |> TargetGroup.id |> string_of_int;
+         let url = "/school/target_groups/" ++ tgId ++ "/targets";
+         Api.create(url, payload, handleResponseCB, handleErrorCB); */
+      CreateTargetMutation.make(~title, ~targetGroupId, ())
+      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> Js.Promise.then_(response =>
+           switch (response##createTarget) {
+           | `TargetId(targetId) =>
+             handleResponseCB(targetId);
+             Notification.success("Done!", "Target created successfully.");
+             Js.Promise.resolve();
+           | `Errors(errors) =>
+             Js.Promise.reject(CreateTargetErrorHandler.Errors(errors))
+           }
+         )
+      |> CreateTargetErrorHandler.catch(() => send(UpdateTargetSaving))
+      |> ignore;
     };
 
     <div className="target-group__box relative mt-12 rounded-lg">
@@ -165,7 +204,13 @@ let make =
             {
               state.validTargetTitle ?
                 <button
-                  onClick={_e => handleCreateTarget()}
+                  onClick={
+                    _e =>
+                      handleCreateTarget(
+                        state.targetTitle,
+                        targetGroup |> TargetGroup.id |> string_of_int,
+                      )
+                  }
                   disabled={state.savingNewTarget}
                   className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 btn-primary appearance-none focus:outline-none text-center">
                   {"Create" |> str}

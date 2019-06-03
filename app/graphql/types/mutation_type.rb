@@ -7,5 +7,7 @@ module Types
     field :update_school_string, mutation: Mutations::UpdateSchoolString, null: false
     field :undo_submission, mutation: Mutations::UndoSubmission, null: false
     field :complete_target, mutation: Mutations::CompleteTarget, null: false
+    field :create_target, mutation: Mutations::CreateTarget, null: false
+    field :update_target, mutation: Mutations::UpdateTarget, null: false
   end
 end

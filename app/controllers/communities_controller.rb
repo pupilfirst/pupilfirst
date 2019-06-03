@@ -20,14 +20,14 @@ class CommunitiesController < ApplicationController
 
   def scoped_questions
     if params[:search].present?
-      filtered_question.where('title ILIKE ?', "%#{@search.downcase}%")
+      filtered_question.where('title ILIKE ?', "%#{@search}%")
     else
       filtered_question
     end
   end
 
   def filtered_question
-    if params[:target_id].present? && target.present?
+    if target.present?
       target.questions.where(community: @community)
     else
       @community.questions
@@ -35,7 +35,7 @@ class CommunitiesController < ApplicationController
   end
 
   def target
-    @target ||= begin
+    @target ||= if params[:target_id].present?
       t = Target.find_by(id: params[:target_id])
 
       # Only return the target if the target is in a course that is linked to this community.

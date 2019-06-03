@@ -1,12 +1,11 @@
 module UserProfiles
   class EditForm < Reform::Form
     property :name, validates: { presence: true }
-    property :phone, validates: { presence: true, mobile_number: true }
-    property :avatar, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.gigabytes } }
-    property :about, validates: { length: { maximum: 250 } }
-    # property :roles
+    property :phone, validates: { mobile_number: true, allow_blank: true }
+    property :avatar, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes } }
+    property :about, validates: { length: { maximum: 1000 } }
     property :skype_id
-    property :communication_address, validates: { presence: true, length: { maximum: 250 } }
+    property :communication_address, validates: { length: { maximum: 250 }, allow_blank: true }
     property :twitter_url, validates: { url: true, allow_blank: true }
     property :linkedin_url, validates: { url: true, allow_blank: true }
     property :personal_website_url, validates: { url: true, allow_blank: true }

@@ -2,18 +2,20 @@ class CreateAnswerMutator < ApplicationMutator
   attr_accessor :description
   attr_accessor :question_id
 
-  validates :description, length: { minimum: 1, message: 'InvalidLengthDescription' }, allow_nil: false
-  validates :question_id, presence: { message: 'BlankCommentableId' }
+  validates :description, length: { minimum: 1, maximum: 5000, message: 'InvalidLengthDescription' }
+  validates :question_id, presence: { message: 'BlankQuestionId' }
 
   def create_answer
-    answer = Answer.create!(
-      creator: current_user,
-      question: question,
-      description: description
-    )
-    # rubocop:disable Rails/SkipsModelValidations
-    question.touch(:last_activity_at)
-    # rubocop:enable Rails/SkipsModelValidations
+    answer = Answer.transaction do
+      question.update!(last_activity_at: Time.zone.now)
+
+      Answer.create!(
+        creator: current_user,
+        question: question,
+        description: description
+      )
+    end
+
     answer.id
   end
 

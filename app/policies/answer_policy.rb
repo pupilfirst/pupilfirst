@@ -1,5 +1,5 @@
 class AnswerPolicy < ApplicationPolicy
   def versions?
-    QuestionPolicy.new(@pundit_user, record.question).show?
+    CommunityPolicy.new(@pundit_user, record.question.community).show?
   end
 end

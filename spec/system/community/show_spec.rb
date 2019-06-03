@@ -6,14 +6,15 @@ feature 'Community Show' do
   include NotificationHelper
 
   # Setup a course with founders and target for community.
-  let!(:school) { create :school, :current }
-  let!(:course) { create :course, school: school }
-  let!(:level_1) { create :level, :one, course: course }
-  let!(:target_group) { create :target_group, level: level_1 }
-  let!(:community) { create :community, school: school }
-  let!(:startup) { create :startup, level: level_1 }
-  let!(:founder_1) { create :founder, startup: startup }
-  let!(:founder_2) { create :founder, startup: startup }
+  let(:school) { create :school, :current }
+  let(:course) { create :course, school: school }
+  let(:level_1) { create :level, :one, course: course }
+  let(:target_group) { create :target_group, level: level_1 }
+  let!(:target) { create :target, target_group: target_group }
+  let!(:community) { create :community, school: school, target_linkable: true }
+  let(:startup) { create :startup, level: level_1 }
+  let(:founder_1) { create :founder, startup: startup }
+  let(:founder_2) { create :founder, startup: startup }
   let(:coach) { create :faculty, school: school }
   let!(:question_1) { create :question, community: community, creator: founder_1.user }
   let!(:question_2) { create :question, community: community, creator: founder_1.user }
@@ -191,5 +192,54 @@ feature 'Community Show' do
     expect(page).not_to have_text(old_description)
     expect(question_1.reload.description).to eq(question_description_for_edit)
     expect(question_1.text_versions.first.value).to eq(old_description)
+  end
+
+  scenario 'When an active founder visits student dashboard', js: true do
+    sign_in_user(founder_1.user, referer: student_dashboard_path)
+    expect(page).to have_text(target.title)
+
+    find('.founder-dashboard-target-header__headline', text: target.title).click
+
+    # Expect page to have community tab
+    expect(page).to have_text(community.name)
+    expect(page).to have_text("Go to community")
+    expect(page).to have_text("Ask a question")
+
+    # He can ask a question related to the target in community from target overlay
+    click_link "Ask a question"
+
+    expect(page).to have_text("ASK A NEW QUESTION")
+    expect(page).to have_text(target.title)
+
+    fill_in 'Title', with: question_title
+    description_field = find('textarea[title="Markdown input"]')
+    description_field.fill_in with: question_description
+    click_button 'Post Your Question'
+
+    expect(page).to have_text(question_title)
+    expect(page).to have_text(question_description)
+    expect(page).not_to have_text("ASK A NEW QUESTION")
+    expect(Question.where(title: question_title).first.targets.first).to eq(target)
+
+    # He can see the questions related to the target in target overlay
+    sign_in_user(founder_1.user, referer: student_dashboard_path)
+    find('.founder-dashboard-target-header__headline', text: target.title).click
+    expect(page).to have_text(community.name)
+    expect(page).to have_text(question_title)
+
+    # He can filter all questions linked to the target
+    click_link 'Go to community'
+    expect(page).to have_text('Clear Filter')
+    expect(page).to have_text(question_title)
+    expect(page).not_to have_text(question_1.title)
+    expect(page).not_to have_text(question_2.title)
+    expect(page).not_to have_text(question_3.title)
+
+    # He see all questions in the community by clearing the filter
+    click_link 'Clear Filter'
+    expect(page).to have_text(question_title)
+    expect(page).to have_text(question_1.title)
+    expect(page).to have_text(question_2.title)
+    expect(page).to have_text(question_3.title)
   end
 end

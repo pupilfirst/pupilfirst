@@ -15,7 +15,12 @@ body {
   @apply antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply font-bold;
 }
 
@@ -127,11 +132,15 @@ h6 {
   @apply bg-red-800;
 }
 
-button:disabled, .disabled {
+button:disabled,
+.disabled {
   @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
 }
 
-button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
+button:disabled:hover,
+.disabled:hover,
+button:disabled:focus,
+.disabled:focus {
   @apply bg-gray-300 text-gray-500 border-transparent;
 }
 
@@ -150,11 +159,11 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 /* Footer Style */
 
 .footer__container {
-  background-color: #271F33;
+  background-color: #271f33;
 }
 
 .footer__bottom {
-  background-color: #1C1626;
+  background-color: #1c1626;
 }
 
 /* Navbar hamburger toggle */
@@ -173,7 +182,7 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   transition: all 0.25s;
 }
 
-.icon-bar+.icon-bar {
+.icon-bar + .icon-bar {
   margin-top: 4px;
 }
 
@@ -205,10 +214,11 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 .student-navbar__links-container {
   position: relative;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
-.student-navbar__links-container:before, .student-navbar__links-container:after {
+.student-navbar__links-container:before,
+.student-navbar__links-container:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -216,23 +226,24 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 .student-navbar__links-container:before {
   top: -10px;
-  right: 18px;
+  right: 27px;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid theme('colors.gray.400');
+  border-bottom: 10px solid theme("colors.gray.400");
   border-left: 10px solid transparent;
-  border-bottom-color: theme('colors.gray.400');
+  border-bottom-color: theme("colors.gray.400");
 }
 
 .student-navbar__links-container:after {
   top: -9px;
-  right: 19px;
+  right: 28px;
   border-right: 9px solid transparent;
-  border-bottom: 9px solid theme('colors.gray.100');
+  border-bottom: 9px solid theme("colors.gray.100");
   border-left: 9px solid transparent;
 }
 
 @screen md {
-  .student-navbar__links-container:before, .student-navbar__links-container:after {
+  .student-navbar__links-container:before,
+  .student-navbar__links-container:after {
     display: none;
   }
 }
@@ -245,7 +256,8 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   @apply left-0;
 }
 
-.dropdown__list-left:before, .dropdown__list-left:after {
+.dropdown__list-left:before,
+.dropdown__list-left:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -255,9 +267,9 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   top: -7px;
   left: 9px;
   border-right: 7px solid transparent;
-  border-bottom: 7px solid theme('colors.gray.400');
+  border-bottom: 7px solid theme("colors.gray.400");
   border-left: 7px solid transparent;
-  border-bottom-color: theme('colors.gray.400');
+  border-bottom-color: theme("colors.gray.400");
 }
 
 .dropdown__list-left:after {
@@ -268,7 +280,8 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   border-left: 6px solid transparent;
 }
 
-.dropdown__list-right:before, .dropdown__list-right:after {
+.dropdown__list-right:before,
+.dropdown__list-right:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -278,9 +291,9 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   top: -7px;
   right: 9px;
   border-right: 7px solid transparent;
-  border-bottom: 7px solid theme('colors.gray.400');
+  border-bottom: 7px solid theme("colors.gray.400");
   border-left: 7px solid transparent;
-  border-bottom-color: theme('colors.gray.400');
+  border-bottom-color: theme("colors.gray.400");
 }
 
 .dropdown__list-right:after {
@@ -295,9 +308,17 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 @responsive {
   .bg-gradient-primary-600-to-primary-800-to-bottom {
-    background-image: linear-gradient( to bottom, theme("colors.primary.600"), theme("colors.primary.800"));
+    background-image: linear-gradient(
+      to bottom,
+      theme("colors.primary.600"),
+      theme("colors.primary.800")
+    );
   }
   .bg-gradient-secondary-to-secondary-600-120 {
-    background-image: linear-gradient( 120deg, theme("colors.secondary.500"), theme("colors.secondary.600"));
+    background-image: linear-gradient(
+      120deg,
+      theme("colors.secondary.500"),
+      theme("colors.secondary.600")
+    );
   }
 }

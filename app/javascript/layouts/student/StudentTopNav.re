@@ -74,44 +74,58 @@ let make = (~schoolName, ~logoUrl, ~links) => {
     None;
   });
 
-  <div className="flex py-2 px-3 border-b">
-    <nav
-      className="flex flex-col md:flex-row w-full xl:max-w-5xl mx-auto justify-between items-center">
-      <div
-        className="flex w-full flex-row items-center justify-between md:w-1/5">
-        <a className="w-40 pr-6 pl-2 py-4" href="/">
-          {
-            switch (logoUrl) {
-            | Some(url) =>
-              <img className="" src=url alt={"Logo of" ++ schoolName} />
-            | None =>
-              <span className="text-2xl text-black">
-                {schoolName |> str}
-              </span>
+  <div className="border-b">
+    <div className="container mx-auto px-6">
+      <nav className="flex justify-between items-center h-20">
+        <div className="flex w-full items-center justify-between">
+          <a className="max-w-xs" href="/">
+            {
+              switch (logoUrl) {
+              | Some(url) =>
+                <img className="h-13" src=url alt={"Logo of " ++ schoolName} />
+              | None =>
+                <span className="text-2xl text-black">
+                  {schoolName |> str}
+                </span>
+              }
             }
+          </a>
+          {
+            isMobile() ?
+              <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
+                <div
+                  className={
+                    "student-navbar__toggle focus:outline-none rounded-full"
+                    ++ (menuHidden ? "" : "opened")
+                  }>
+                  <span className="sr-only">
+                    {"Toggle navigation" |> str}
+                  </span>
+                  <span className="icon-bar top-bar" />
+                  <span className="icon-bar middle-bar" />
+                  <span className="icon-bar bottom-bar" />
+                </div>
+              </div> :
+              React.null
           }
-        </a>
-        <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
-          <div
-            className={
-              "student-navbar__toggle focus:outline-none rounded-full h-10 w-12 p-3 md:hidden "
-              ++ (menuHidden ? "" : "opened")
-            }>
-            <span className="sr-only"> {"Toggle navigation" |> str} </span>
-            <span className="icon-bar top-bar" />
-            <span className="icon-bar middle-bar" />
-            <span className="icon-bar bottom-bar" />
-          </div>
         </div>
-      </div>
-      {
-        menuHidden ?
-          React.null :
-          <div
-            className="student-navbar__links-container flex flex-row md:justify-end md:items-center border-t border-l md:border-0 w-full md:w-4/5 flex-wrap md:flex-no-wrap shadow-lg md:shadow-none">
-            {headerLinks(links)}
-          </div>
-      }
-    </nav>
+        {
+          !menuHidden && !isMobile() ?
+            <div
+              className="student-navbar__links-container flex justify-end items-center w-4/5 flex-no-wrap flex-shrink-0">
+              {headerLinks(links)}
+            </div> :
+            React.null
+        }
+      </nav>
+    </div>
+    {
+      isMobile() && !menuHidden ?
+        <div
+          className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
+          {headerLinks(links)}
+        </div> :
+        React.null
+    }
   </div>;
 };

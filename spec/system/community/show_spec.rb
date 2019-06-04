@@ -2,7 +2,6 @@ require 'rails_helper'
 
 feature 'Community Show' do
   include UserSpecHelper
-  include FounderSpecHelper
   include NotificationHelper
 
   # Setup a course with founders and target for community.

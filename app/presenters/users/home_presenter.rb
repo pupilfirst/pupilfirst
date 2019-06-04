@@ -8,7 +8,8 @@ module Users
       course_details = founders.map do |founder|
         course_detail = course_info(founder.course)
         course_detail[:cta] = cta_for_founder(founder)
-        course_detail[:links] = [curriculum_link(founder), leaderboard_link(founder)]
+        course_detail[:links] = founder.exited ? [] : [curriculum_link(founder), leaderboard_link(founder)]
+        course_detail[:founder_exited] = founder.exited
         course_detail
       end
 
@@ -53,6 +54,8 @@ module Users
       end
     end
 
+    private
+
     def show_leaderboard_link?(course)
       lts = LeaderboardTimeService.new
 
@@ -79,10 +82,8 @@ module Users
       }
     end
 
-    private
-
     def student_courses
-      @student_courses = current_school&.courses&.where(id: founders.joins(:course).pluck(:course_id))
+      @student_courses = current_school&.courses&.where(id: current_user.founders.joins(:course).pluck(:course_id))
     end
 
     def access_ended?(founder)

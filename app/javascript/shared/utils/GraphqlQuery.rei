@@ -1,6 +1,7 @@
 let sendQuery:
   (
     string,
+    ~notify: bool=?,
     {
       ..
       "parse": Js.Json.t => 'a,

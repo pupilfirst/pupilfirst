@@ -19,6 +19,8 @@ class GraphqlController < ApplicationController
     }
 
     result = SvappSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+
+    # Inject notifications into the GraphQL response, if any. These should be manually handled by the client.
     result[:notifications] = context[:notifications] if context[:notifications].any?
 
     render json: result

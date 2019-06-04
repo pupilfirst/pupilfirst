@@ -34,7 +34,7 @@ let flashNotifications = obj =>
   | None => ()
   };
 
-let sendQuery = (authenticityToken, q) =>
+let sendQuery = (authenticityToken, ~notify=true, q) =>
   Bs_fetch.(
     fetchWithInit(
       "/graphql",
@@ -69,7 +69,10 @@ let sendQuery = (authenticityToken, q) =>
     |> Js.Promise.then_(json =>
          switch (Js.Json.decodeObject(json)) {
          | Some(obj) =>
-           obj |> flashNotifications;
+           if (notify) {
+             obj |> flashNotifications;
+           };
+
            Js.Dict.unsafeGet(obj, "data") |> q##parse |> Js.Promise.resolve;
          | None =>
            Js.Promise.reject(Graphql_error("Response is not an object"))

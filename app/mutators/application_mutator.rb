@@ -34,7 +34,7 @@ class ApplicationMutator
   end
 
   def notify_errors
-    context[:notifications].push(kind: 'error', title: "Something went wrong!", body: error_codes.join(", "))
+    notify(:error, 'Something went wrong!', error_codes.join(", "))
   end
 
   private

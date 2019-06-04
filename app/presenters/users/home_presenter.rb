@@ -1,4 +1,4 @@
-module Students
+module Users
   class HomePresenter < ApplicationPresenter
     def initialize(view_context)
       super(view_context)
@@ -14,11 +14,11 @@ module Students
 
       return course_details if current_coach.blank?
 
-      add_review_link_for_coach(course_details)
+      add_review_links_for_coach(course_details)
     end
 
     def founders
-      @founders ||= current_user.founders
+      @founders ||= current_user.founders.joins(:school).where(schools: { id: current_school })
     end
 
     def show_profile_edit?
@@ -86,16 +86,10 @@ module Students
     end
 
     def access_ended?(founder)
-      return true if founder.course.ends_at.present? && (founder.course.ends_at < current_time)
-
-      founder.startup.access_ends_at.present? && (founder.startup.access_ends_at < current_time)
+      founder.course.ends_at&.past? || founder.startup.access_ends_at&.past?
     end
 
-    def current_time
-      @current_time = Time.now
-    end
-
-    def add_review_link_for_coach(course_details)
+    def add_review_links_for_coach(course_details)
       current_coach.courses.inject(course_details) do |saved_courses, coach_course|
         saved_course, other_saved_courses = saved_courses.partition { |c| c[:course_id] == coach_course.id }
         saved_course = saved_course[0]

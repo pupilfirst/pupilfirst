@@ -19,6 +19,10 @@ type methodOfCompletion =
   | TakeQuiz
   | MarkAsComplete;
 
+type visibility = Live | Draft | Archived;
+
+type activeStep = One | Two;
+
 type evaluationCriterion = (int, string, bool);
 
 type prerequisiteTarget = (int, string, bool);
@@ -39,10 +43,10 @@ type state = {
   hasYoutubeVideoIdError: bool,
   hasLinktoCompleteError: bool,
   isValidQuiz: bool,
-  isArchived: bool,
   dirty: bool,
   saving: bool,
-  activeStep: int,
+  activeStep,
+  visibility
 };
 
 type action =
@@ -54,9 +58,9 @@ type action =
   | AddQuizQuestion
   | UpdateQuizQuestion(int, QuizQuestion.t)
   | RemoveQuizQuestion(int)
-  | UpdateIsArchived(bool)
   | UpdateSaving
-  | UpdateActiveStep(int);
+  | UpdateActiveStep(activeStep)
+  | UpdateVisibility(visibility);
 
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetEditor");
@@ -198,8 +202,6 @@ let setPayload = (state, target, authenticityToken) => {
     prerequisiteTargetIds |> Json.Encode.(list(int)),
   );
 
-  Js.Dict.set(targetData, "archived", state.isArchived |> Js.Json.boolean);
-
   Js.Dict.set(
     targetData,
     "evaluation_criterion_ids",
@@ -277,11 +279,15 @@ let make =
         hasDescriptionError: false,
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
-        isArchived: target |> Target.visibility === "archived",
         dirty: false,
         isValidQuiz: true,
         saving: false,
-        activeStep: 1,
+        activeStep: One,
+        visibility: switch(target |> Target.visibility) {
+        | "live" => Live
+        | "archived" => Archived
+        | _ => Draft
+        }
       }
     | None => {
         title: "",
@@ -308,11 +314,11 @@ let make =
         hasDescriptionError: false,
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
-        isArchived: false,
         dirty: false,
         isValidQuiz: true,
         saving: false,
-        activeStep: 1,
+        activeStep: One,
+        visibility: Draft
       }
     },
   reducer: (action, state) =>
@@ -380,11 +386,11 @@ let make =
         dirty: true,
         isValidQuiz: isValidQuiz(quiz),
       });
-    | UpdateIsArchived(isArchived) =>
-      ReasonReact.Update({...state, isArchived, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     | UpdateActiveStep(step) =>
       ReasonReact.Update({...state, activeStep: step})
+    | UpdateVisibility(visibility) =>
+    ReasonReact.Update({...state, visibility})
     },
   render: ({state, send}) => {
     let targetEvaluated = () =>
@@ -487,18 +493,18 @@ let make =
           <div className="w-full">
             <ul className="flex">
               <li
-                onClick={_event => send(UpdateActiveStep(1))}
+                onClick={_event => send(UpdateActiveStep(One))}
                 className="w-1/2 border p-3 text-center font-semibold text-primary-500">
                 {"1. Create Lesson" |> str}
               </li>
               <li
-                onClick={_event => send(UpdateActiveStep(2))}
+                onClick={_event => send(UpdateActiveStep(Two))}
                 className="w-1/2 border p-3 text-center font-semibold -ml-px">
                 {"2. Method of Completion" |> str}
               </li>
             </ul>
             {
-              state.activeStep === 1 ?
+              state.activeStep === One ?
                 <div className="mx-auto bg-white">
                   <div className="max-w-2xl p-6 mx-auto">
                     <h5
@@ -537,7 +543,7 @@ let make =
                 ReasonReact.null
             }
             {
-              state.activeStep === 2 ?
+              state.activeStep === Two ?
                 <div className="mx-auto">
                   <div className="max-w-2xl p-6 mx-auto">
                     <h5
@@ -810,41 +816,62 @@ let make =
                       <label
                         className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
                         htmlFor="archived">
-                        {"Is this target archived?" |> str}
+                        {"Target Visibility" |> str}
                       </label>
                       <div
-                        id="archived"
+                        id="visibility"
                         className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden border">
                         <button
                           onClick=(
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateIsArchived(true));
+                              send(UpdateVisibility(Live));
                             }
                           )
                           className={
-                            booleanButtonClasses(state.isArchived == true)
+                            booleanButtonClasses(state.visibility === Live)
                           }>
-                          {"Yes" |> str}
+                          {"Live" |> str}
                         </button>
                         <button
                           onClick=(
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateIsArchived(false));
+                              send(UpdateVisibility(Archived));
                             }
                           )
                           className={
-                            booleanButtonClasses(state.isArchived == false)
+                            booleanButtonClasses(state.visibility === Archived)
                           }>
-                          {"No" |> str}
+                          {"Archived" |> str}
+                        </button>
+                        <button
+                          onClick=(
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateVisibility(Draft));
+                            }
+                          )
+                          className={
+                            booleanButtonClasses(state.visibility === Draft)
+                          }>
+                          {"Draft" |> str}
                         </button>
                       </div>
                     </div>
                   | None => ReasonReact.null
                   }
                 }
-                {
+                { switch(state.activeStep) {
+                | One => <div className="w-auto">
+                <button
+                  onClick={_event => send(UpdateActiveStep(Two))}
+                  className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                  {"Next Step" |> str}
+                </button>
+              </div>
+                | Two =>
+
                   switch (target) {
                   | Some(target) =>
                     <div className="w-auto">
@@ -866,6 +893,7 @@ let make =
                       </button>
                     </div>
                   }
+                }
                 }
               </div>
             </div>

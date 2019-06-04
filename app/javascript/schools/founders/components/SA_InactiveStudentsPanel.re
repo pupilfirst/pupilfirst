@@ -194,15 +194,11 @@ let make =
                        - (team1 |> Team.id |> int_of_string)
                      )
                   |> List.map(team => {
-                       let isSingleFounder = {
-                         team
-                         |> studentsInTeam(state.students)
-                         |> List.length == 1 ?
-                           Js.log(team |> Team.name) : Js.log("");
+                       let isSingleFounder =
                          team
                          |> studentsInTeam(state.students)
                          |> List.length == 1;
-                       };
+
                        <div
                          key={team |> Team.id}
                          id={team |> Team.name}

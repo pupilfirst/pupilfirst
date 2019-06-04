@@ -69,9 +69,7 @@ let make = (~questions, ~targetId, ~communities, ~loading) =>
                          |> List.filter(question =>
                               question##communityId == community##id
                             );
-                       Js.log(questions);
-                       Js.log(questionsForCommunity);
-                       Js.log(community##id);
+
                        questionsForCommunity |> List.length > 0 ?
                          questionsForCommunity
                          |> List.map(question =>

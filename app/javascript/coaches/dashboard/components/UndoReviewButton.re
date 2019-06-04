@@ -19,7 +19,8 @@ let handleResponseJSON = (te, replaceTimelineEvent, json) =>
     |> Json.Decode.(field("error", nullable(string)))
     |> Js.Null.toOption
   ) {
-  | Some(error) => Js.log(error)
+  | Some(error) =>
+    CoachDashboard__Notification.error("Something went wrong!", error)
   | None =>
     CoachDashboard__Notification.success(
       "Review Reverted",
@@ -93,11 +94,11 @@ let make =
     <div className="d-flex justify-content-end">
       <button
         className="btn btn-sm btn-default undo-review-btn mx-0"
-        onClick=(
+        onClick={
           undoReview(timelineEvent, replaceTimelineEvent, authenticityToken)
-        )>
+        }>
         <i className="fa fa-undo mr-1" />
-        ("Undo Review" |> str)
+        {"Undo Review" |> str}
       </button>
     </div>,
 };

@@ -50,8 +50,6 @@ let handleResponseJSON = (state, send, te, replaceTimelineEvent, json) =>
 
 let sendFeedback =
     (state, send, te, replaceTimelineEvent, authenticityToken, _event) => {
-  Js.log("Sending feedback for emailing");
-  Js.log("Feedback to be sent:" ++ state.feedbackHTML);
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,

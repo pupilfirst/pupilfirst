@@ -32,8 +32,7 @@ let editorId = t => t.editorId;
 
 let updatedAt = t => t.updatedAt;
 
-let addAnswer = (answers, answer) =>
-  answers |> List.rev |> List.append([answer]) |> List.rev;
+let addAnswer = (answers, answer) => [answer, ...answers];
 
 let updateAnswer = (answers, newAnswer) =>
   answers |> List.map(answer => answer.id == newAnswer.id ? newAnswer : answer);
@@ -43,11 +42,8 @@ let answerFromUser = (userId, answers) =>
 
 let archived = t => t.archived;
 
-let findAnswer = (answerId, answers) => {
-  let a = answers |> List.filter(answer => answer.id == answerId);
-  Js.log(a);
-  a |> List.hd;
-};
+let findAnswer = (answerId, answers) =>
+  answers |> List.filter(answer => answer.id == answerId) |> List.hd;
 
 let delete = (id, answers) => answers |> List.filter(a => a.id != id);
 

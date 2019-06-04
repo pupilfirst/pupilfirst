@@ -16,12 +16,6 @@ let parseJsonAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
   )
   |> Json.parseOrRaise;
 
-let parseMarkdown = (~attributeName="markdown-text", ()) => {
-  let elements = document |> Document.getElementsByClassName(attributeName);
-  [%debugger];
-  Js.log(elements);
-};
-
 module FormData = {
   type t = Fetch.formData;
 

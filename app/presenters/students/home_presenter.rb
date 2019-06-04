@@ -4,6 +4,19 @@ module Students
       super(view_context)
     end
 
+    def course_details
+      course_details = founders.map do |founder|
+        course_detail = course_info(founder.course)
+        course_detail[:cta] = cta_for_founder(founder)
+        course_detail[:links] = [curriculum_link(founder), leaderboard_link(founder)]
+        course_detail
+      end
+
+      return course_details if current_coach.blank?
+
+      add_review_link_for_coach(course_details)
+    end
+
     def founders
       @founders ||= current_user.founders
     end
@@ -22,18 +35,6 @@ module Students
       else
         user_profile.initials_avatar
       end
-    end
-
-    def can_review?(course)
-      return false if current_coach.blank?
-
-      course.in? faculty_course
-    end
-
-    def additional_courses_for_faculty
-      return [] if current_coach.blank?
-
-      (student_courses - faculty_course) | (faculty_course - student_courses)
     end
 
     def show_communities?
@@ -63,14 +64,19 @@ module Students
       course_entries_last_week.exists?
     end
 
-    def course_cover_button_text(founder)
-      if access_ended?(founder)
+    def cta_for_founder(founder)
+      text = if access_ended?(founder)
         'Course Ended'
       elsif !founder.dashboard_toured?
         'Start Course'
       else
         'Continue Course'
       end
+      {
+        text: text,
+        link: view.select_founder_path(founder),
+        method: :post
+      }
     end
 
     private
@@ -79,16 +85,69 @@ module Students
       @student_courses = current_school&.courses&.where(id: founders.joins(:course).pluck(:course_id))
     end
 
-    def faculty_course
-      @faculty_course = current_coach&.courses&.where(school: current_school)
-    end
-
     def access_ended?(founder)
-      founder.startup&.access_ends_at.present? && (founder.startup.access_ends_at < current_time)
+      return true if founder.course.ends_at.present? && (founder.course.ends_at < current_time)
+
+      founder.startup.access_ends_at.present? && (founder.startup.access_ends_at < current_time)
     end
 
     def current_time
       @current_time = Time.now
+    end
+
+    def add_review_link_for_coach(course_details)
+      current_coach.courses.inject(course_details) do |saved_courses, coach_course|
+        saved_course, other_saved_courses = saved_courses.partition { |c| c[:course_id] == coach_course.id }
+        saved_course = saved_course[0]
+
+        if saved_course.present?
+          saved_course[:cta] = review_link(coach_course, 'Review Submissions')
+          saved_course[:links] << review_link(coach_course)
+        else
+          saved_course = course_details_for_coach(coach_course)
+        end
+
+        [saved_course] + other_saved_courses
+      end
+    end
+
+    def course_details_for_coach(course)
+      course_detail = course_info(course)
+      course_detail[:cta] = review_link(course, 'Review Submissions')
+      course_detail[:links] = [review_link(course)]
+      course_detail
+    end
+
+    def review_link(course, text = 'Review')
+      {
+        text: text,
+        link: view.course_coach_dashboard_path(course),
+        method: :get
+      }
+    end
+
+    def course_info(course)
+      {
+        course_id: course.id,
+        course_name: course.name,
+        course_description: course.description
+      }
+    end
+
+    def curriculum_link(founder)
+      {
+        text: "Curriculum",
+        link: view.select_founder_path(founder),
+        method: :post
+      }
+    end
+
+    def leaderboard_link(founder)
+      {
+        text: "Leaderboard",
+        link: view.leaderboard_course_path(founder.course),
+        method: :get
+      }
     end
   end
 end

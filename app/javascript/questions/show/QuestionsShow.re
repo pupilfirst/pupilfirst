@@ -177,7 +177,7 @@ let make =
               </a>
             </div>
             <div
-              className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden">
+              className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden z-10">
               <div className="flex w-full">
                 <div
                   title="Question block"

@@ -29,6 +29,16 @@ class ApplicationMutator
     super
   end
 
+  def notify(kind, title, body)
+    context[:notifications].push(kind: kind, title: title, body: body)
+  end
+
+  def notify_errors
+    notify(:error, 'Something went wrong!', error_codes.join(", "))
+  end
+
+  private
+
   def authorized?
     raise 'Please implement the "authorized?" method in the mutator class.'
   end

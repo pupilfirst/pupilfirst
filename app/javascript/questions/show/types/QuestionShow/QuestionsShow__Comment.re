@@ -57,3 +57,9 @@ let create = (id, value, creatorId, commentableId, commentableType, archived) =>
   commentableType,
   archived,
 };
+
+let sort = comments =>
+  comments
+  |> List.sort((c1, c2) =>
+       (c1.id |> int_of_string) - (c2.id |> int_of_string)
+     );

@@ -481,6 +481,16 @@ let make =
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-2xl p-6 mx-auto">
+                <ul className="flex">
+                  <li
+                    className="w-1/2 border p-3 text-center font-semibold text-primary-500">
+                    {"1. Create Lesson" |> str}
+                  </li>
+                  <li
+                    className="w-1/2 border p-3 text-center font-semibold -ml-px">
+                    {"2. Method of Completion" |> str}
+                  </li>
+                </ul>
                 <h5
                   className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"Target Details" |> str}

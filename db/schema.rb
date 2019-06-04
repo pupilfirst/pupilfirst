@@ -74,6 +74,15 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
+  create_table "answer_likes", force: :cascade do |t|
+    t.bigint "answer_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_id", "user_id"], name: "index_answer_likes_on_answer_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_answer_likes_on_user_id"
+  end
+
   create_table "answer_options", force: :cascade do |t|
     t.bigint "quiz_question_id"
     t.string "value"
@@ -81,6 +90,21 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.text "description"
+    t.bigint "question_id"
+    t.bigint "creator_id"
+    t.bigint "editor_id"
+    t.bigint "archiver_id"
+    t.boolean "archived", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["archiver_id"], name: "index_answers_on_archiver_id"
+    t.index ["creator_id"], name: "index_answers_on_creator_id"
+    t.index ["editor_id"], name: "index_answers_on_editor_id"
+    t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
   create_table "colleges", id: :serial, force: :cascade do |t|
@@ -94,6 +118,39 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.integer "university_id"
     t.index ["state_id"], name: "index_colleges_on_state_id"
     t.index ["university_id"], name: "index_colleges_on_university_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "value"
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.datetime "archived_at"
+    t.bigint "creator_id"
+    t.bigint "editor_id"
+    t.bigint "archiver_id"
+    t.boolean "archived", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["archiver_id"], name: "index_comments_on_archiver_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["creator_id"], name: "index_comments_on_creator_id"
+    t.index ["editor_id"], name: "index_comments_on_editor_id"
+  end
+
+  create_table "communities", force: :cascade do |t|
+    t.string "name"
+    t.boolean "target_linkable", default: false
+    t.bigint "school_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_communities_on_school_id"
+  end
+
+  create_table "community_course_connections", force: :cascade do |t|
+    t.bigint "community_id"
+    t.bigint "course_id"
+    t.index ["community_id"], name: "index_community_course_connections_on_community_id"
+    t.index ["course_id", "community_id"], name: "index_community_course_connection_on_course_id_and_community_id", unique: true
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|
@@ -142,6 +199,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.integer "pass_grade"
     t.json "grade_labels"
     t.datetime "ends_at"
+    t.string "description"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -314,6 +372,23 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.string "timestamp"
     t.integer "reaction_to_id"
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "community_id"
+    t.bigint "creator_id"
+    t.bigint "editor_id"
+    t.bigint "archiver_id"
+    t.boolean "archived", default: false
+    t.datetime "last_activity_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["archiver_id"], name: "index_questions_on_archiver_id"
+    t.index ["community_id"], name: "index_questions_on_community_id"
+    t.index ["creator_id"], name: "index_questions_on_creator_id"
+    t.index ["editor_id"], name: "index_questions_on_editor_id"
   end
 
   create_table "quiz_questions", force: :cascade do |t|
@@ -489,6 +564,13 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
   end
 
+  create_table "target_questions", force: :cascade do |t|
+    t.bigint "question_id"
+    t.bigint "target_id"
+    t.index ["question_id"], name: "index_target_questions_on_question_id"
+    t.index ["target_id", "question_id"], name: "index_target_questions_on_target_id_and_question_id", unique: true
+  end
+
   create_table "target_resources", force: :cascade do |t|
     t.bigint "target_id", null: false
     t.bigint "resource_id", null: false
@@ -526,6 +608,18 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
+  end
+
+  create_table "text_versions", force: :cascade do |t|
+    t.text "value"
+    t.string "versionable_type"
+    t.bigint "versionable_id"
+    t.bigint "user_id"
+    t.datetime "edited_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_text_versions_on_user_id"
+    t.index ["versionable_type", "versionable_id"], name: "index_text_versions_on_versionable_type_and_versionable_id"
   end
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
@@ -663,6 +757,9 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
+  add_foreign_key "communities", "schools"
+  add_foreign_key "community_course_connections", "communities"
+  add_foreign_key "community_course_connections", "courses"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
@@ -691,6 +788,8 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
+  add_foreign_key "target_questions", "questions"
+  add_foreign_key "target_questions", "targets"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"

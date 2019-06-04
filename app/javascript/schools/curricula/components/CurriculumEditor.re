@@ -49,7 +49,7 @@ let showArchivedButton = (targetGroupsInLevel, targets) => {
     |> List.filter(target =>
          tgIds |> List.mem(target |> Target.targetGroupId)
        )
-    |> List.filter(target => target |> Target.archived)
+    |> List.filter(target => target |> Target.visibility === "archived")
     |> List.length;
 
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
@@ -139,7 +139,7 @@ let make =
         state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
 
       let newTargetGroup =
-        target |> Target.archived ?
+        target |> Target.visibility === "archived" ?
           targetGroup : targetGroup |> TargetGroup.archive(false);
 
       send(UpdateTarget(target));
@@ -156,7 +156,7 @@ let make =
             state.targets
             |> List.map(target =>
                  targetIdsInTargerGroup |> List.mem(target |> Target.id) ?
-                   Target.archive(target, true) : target
+                   Target.archive(target) : target
                );
           send(UpdateTargets(newTargets));
         } :

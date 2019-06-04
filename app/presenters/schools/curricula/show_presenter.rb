@@ -65,17 +65,14 @@ module Schools
             id: target.id,
             targetGroupId: target.target_group_id,
             title: target.title,
-            description: target.description,
-            youtubeVideoId: target.youtube_video_id,
             evaluationCriteria: evaluation_criteria_for_target(target),
             prerequisiteTargets: prerequisite_targets(target),
             quiz: quiz(target),
-            resources: target_resources(target),
             linkToComplete: target.link_to_complete,
             role: target.role,
             targetActionType: target.target_action_type,
             sortIndex: target.sort_index,
-            archived: target.archived
+            visibility: target.visibility
           }
         end
       end

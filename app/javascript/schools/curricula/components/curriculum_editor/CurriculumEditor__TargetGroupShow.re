@@ -87,7 +87,8 @@ let make =
     let targetsToDisplay =
       showArchived ?
         targetsInTG :
-        targetsInTG |> List.filter(target => !(target |> Target.archived));
+        targetsInTG
+        |> List.filter(target => !(target |> Target.visibility === "archived"));
     let handleResponseCB = targetId => {
       let id = targetId |> int_of_string;
       let targetGroupId = targetGroup |> TargetGroup.id;
@@ -97,17 +98,14 @@ let make =
           id,
           targetGroupId,
           state.targetTitle,
-          "",
-          Some("youtubeId"),
           [],
           [],
           [QuizQuestion.empty(0)],
-          [],
           None,
           "founder",
           "Todo",
           999,
-          true,
+          "draft",
         );
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));
@@ -116,21 +114,6 @@ let make =
     };
     let handleCreateTarget = (title, targetGroupId) => {
       send(UpdateTargetSaving);
-      /* let payload = Js.Dict.empty();
-         let targetData = Js.Dict.empty();
-         Js.Dict.set(targetData, "title", state.targetTitle |> Js.Json.string);
-         Js.Dict.set(targetData, "role", "founder" |> Js.Json.string);
-         Js.Dict.set(targetData, "target_action_type", "Todo" |> Js.Json.string);
-
-         Js.Dict.set(
-           payload,
-           "authenticity_token",
-           authenticityToken |> Js.Json.string,
-         );
-         Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
-         let tgId = targetGroup |> TargetGroup.id |> string_of_int;
-         let url = "/school/target_groups/" ++ tgId ++ "/targets";
-         Api.create(url, payload, handleResponseCB, handleErrorCB); */
       CreateTargetMutation.make(~title, ~targetGroupId, ())
       |> GraphqlQuery.sendQuery(authenticityToken)
       |> Js.Promise.then_(response =>

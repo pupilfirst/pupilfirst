@@ -27,13 +27,10 @@ type resource = (int, string);
 
 type state = {
   title: string,
-  description: string,
-  youtubeVideoId: string,
   evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
-  resources: list(resource),
   linkToComplete: string,
   role: string,
   targetActionType: string,
@@ -49,8 +46,6 @@ type state = {
 
 type action =
   | UpdateTitle(string, bool)
-  | UpdateDescription(string, bool)
-  | UpdateYoutubeVideoId(string, bool)
   | UpdateLinkToComplete(string, bool)
   | UpdateEvaluationCriterion(int, string, bool)
   | UpdatePrerequisiteTargets(int, string, bool)
@@ -58,8 +53,6 @@ type action =
   | AddQuizQuestion
   | UpdateQuizQuestion(int, QuizQuestion.t)
   | RemoveQuizQuestion(int)
-  | AddResource(int, string)
-  | RemoveResource(int)
   | UpdateIsArchived(bool)
   | UpdateSaving;
 
@@ -69,15 +62,6 @@ let component =
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
   send(UpdateTitle(title, hasError));
-};
-let updateDescription = (send, description) => {
-  let hasError = description |> String.length < 12;
-  send(UpdateDescription(description, hasError));
-};
-let updateYoutubeVideoId = (send, youtubeVideoId) => {
-  let lengthOfInput = youtubeVideoId |> String.length;
-  let hasError = lengthOfInput == 0 ? false : lengthOfInput < 5;
-  send(UpdateYoutubeVideoId(youtubeVideoId, hasError));
 };
 let updateLinkToComplete = (send, link) => {
   let hasError = UrlUtils.isInvalid(link);
@@ -97,8 +81,6 @@ let saveDisabled = state => {
     | MarkAsComplete => false
     };
   state.title
-  |> String.length < 2
-  || state.description
   |> String.length < 2
   || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
@@ -129,7 +111,7 @@ let eligibleTargets = (targets, targetGroupIds) =>
   |> List.filter(target =>
        targetGroupIds |> List.mem(target |> Target.targetGroupId)
      )
-  |> List.filter(target => !(target |> Target.archived));
+  |> List.filter(target => !(target |> Target.visibility === "archived"));
 
 let handleEC = (evaluationCriteria, target) => {
   let selectedEcIds = target |> Target.evaluationCriteria |> Array.of_list;
@@ -171,7 +153,6 @@ let handlePT = (targets, target) => {
 let setPayload = (state, target, authenticityToken) => {
   let payload = Js.Dict.empty();
   let targetData = Js.Dict.empty();
-  let resourceIds = state.resources |> List.map(((key, _)) => key);
   let prerequisiteTargetIds =
     state.prerequisiteTargets
     |> List.filter(((_, _, selected)) => selected == true)
@@ -208,17 +189,6 @@ let setPayload = (state, target, authenticityToken) => {
     state.targetActionType |> Js.Json.string,
   );
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
-  Js.Dict.set(targetData, "description", state.description |> Js.Json.string);
-  Js.Dict.set(
-    targetData,
-    "youtube_video_id",
-    state.youtubeVideoId |> Js.Json.string,
-  );
-  Js.Dict.set(
-    targetData,
-    "resource_ids",
-    resourceIds |> Json.Encode.(list(int)),
-  );
 
   Js.Dict.set(
     targetData,
@@ -289,20 +259,10 @@ let make =
     switch (target) {
     | Some(target) => {
         title: target |> Target.title,
-        description: target |> Target.description,
-        youtubeVideoId:
-          switch (target |> Target.youtubeVideoId) {
-          | Some(youtubeVideoId) => youtubeVideoId
-          | None => ""
-          },
         evaluationCriteria: handleEC(evaluationCriteria, target),
         prerequisiteTargets:
           handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
         quiz: handleQuiz(target),
-        resources:
-          target
-          |> Target.resources
-          |> List.map(r => (r |> Resource.id, r |> Resource.title)),
         linkToComplete:
           switch (target |> Target.linkToComplete) {
           | Some(linkToComplete) => linkToComplete
@@ -315,15 +275,13 @@ let make =
         hasDescriptionError: false,
         hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
-        isArchived: target |> Target.archived,
+        isArchived: target |> Target.visibility === "archived",
         dirty: false,
         isValidQuiz: true,
         saving: false,
       }
     | None => {
         title: "",
-        description: "",
-        youtubeVideoId: "",
         evaluationCriteria:
           evaluationCriteria
           |> List.map(criteria =>
@@ -340,7 +298,6 @@ let make =
              ),
         quiz: [QuizQuestion.empty(0)],
         methodOfCompletion: NotSelected,
-        resources: [],
         linkToComplete: "",
         role: "founder",
         targetActionType: "Todo",
@@ -358,21 +315,6 @@ let make =
     switch (action) {
     | UpdateTitle(title, hasTitleError) =>
       ReasonReact.Update({...state, title, hasTitleError, dirty: true})
-    | UpdateDescription(description, hasDescriptionError) =>
-      ReasonReact.Update({
-        ...state,
-        description,
-        hasDescriptionError,
-        dirty: true,
-      })
-    | UpdateYoutubeVideoId(youtubeVideoId, hasYoutubeVideoIdError) =>
-      ReasonReact.Update({
-        ...state,
-        youtubeVideoId,
-        hasYoutubeVideoIdError,
-        dirty: true,
-      })
-
     | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) =>
       ReasonReact.Update({
         ...state,
@@ -434,16 +376,6 @@ let make =
         dirty: true,
         isValidQuiz: isValidQuiz(quiz),
       });
-    | AddResource(key, value) =>
-      ReasonReact.Update({
-        ...state,
-        resources: [(key, value), ...state.resources],
-        dirty: true,
-      })
-    | RemoveResource(key) =>
-      let newResources =
-        state.resources |> List.filter(((_key, _)) => _key !== key);
-      ReasonReact.Update({...state, resources: newResources, dirty: true});
     | UpdateIsArchived(isArchived) =>
       ReasonReact.Update({...state, isArchived, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
@@ -463,7 +395,6 @@ let make =
       |> List.filter(((_, _, selected)) => selected)
       |> List.length != 0;
 
-    let updateDescriptionCB = updateDescription(send);
     let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
       send(UpdatePrerequisiteTargets(key, value, selected));
     let multiSelectEvaluationCriterionCB = (key, value, selected) =>
@@ -472,7 +403,6 @@ let make =
     let updateQuizQuestionCB = (id, quizQuestion) =>
       send(UpdateQuizQuestion(id, quizQuestion));
     let questionCanBeRemoved = state.quiz |> List.length > 1;
-    let addResourceCB = (key, value) => send(AddResource(key, value));
     let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
       let id = json |> Json.Decode.(field("id", int));
@@ -481,9 +411,6 @@ let make =
         state.prerequisiteTargets
         |> List.filter(((_, _, selected)) => selected)
         |> List.map(((id, _, _)) => id);
-      let resources =
-        state.resources
-        |> List.map(((id, title)) => Resource.create(id, title));
 
       let evaluationCriteria =
         switch (state.methodOfCompletion) {
@@ -508,17 +435,14 @@ let make =
           id,
           targetGroupId,
           state.title,
-          state.description,
-          Some(state.youtubeVideoId),
           evaluationCriteria,
           prerequisiteTargets,
           quiz,
-          resources,
           linkToComplete,
           state.role,
           state.targetActionType,
           sortIndex,
-          state.isArchived,
+          "live",
         );
       switch (target) {
       | Some(_) =>
@@ -585,85 +509,6 @@ let make =
                     </div> :
                     ReasonReact.null
                 }
-                <label
-                  className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                  htmlFor="description">
-                  {" Description" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <div
-                  id="description"
-                  className="target-editor__trix-container appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray">
-                  <TrixEditor
-                    onChange=updateDescriptionCB
-                    initialValue={state.description}
-                    placeholder="Type target description"
-                  />
-                </div>
-                {
-                  state.hasDescriptionError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid description" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <label
-                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                  htmlFor="youtube">
-                  {"Youtube Video Id " |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
-                  id="youtube"
-                  type_="text"
-                  placeholder="Example 58CPRi5kRe8"
-                  value={state.youtubeVideoId}
-                  onChange={
-                    event =>
-                      updateYoutubeVideoId(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                  }
-                />
-                {
-                  state.hasYoutubeVideoIdError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid video embed" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <label
-                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                  htmlFor="resources">
-                  {"Resources" |> str}
-                </label>
-                {
-                  state.resources
-                  |> List.map(((_key, value)) =>
-                       <div
-                         id="resources"
-                         key={_key |> string_of_int}
-                         className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
-                         {value |> str}
-                         <button
-                           onClick={
-                             _event => {
-                               ReactEvent.Mouse.preventDefault(_event);
-                               send(RemoveResource(_key));
-                             }
-                           }>
-                           <Icon kind=Icon.Delete size="4" opacity=75 />
-                         </button>
-                       </div>
-                     )
-                  |> Array.of_list
-                  |> ReasonReact.array
-                }
-                <CurriculumEditor__ResourceUploader
-                  authenticityToken
-                  addResourceCB
-                />
               </div>
             </div>
             <div className="mx-auto">

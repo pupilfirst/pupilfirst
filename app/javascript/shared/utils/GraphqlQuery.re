@@ -61,6 +61,15 @@ let sendQuery = (authenticityToken, ~notify=true, q) =>
          if (Response.ok(resp)) {
            Response.json(resp);
          } else {
+           if (notify) {
+             let statusCode = resp |> Fetch.Response.status |> string_of_int;
+
+             Notification.error(
+               "Error " ++ statusCode,
+               "Our team has been notified of this error. Please reload the page and try again.",
+             );
+           };
+
            Js.Promise.reject(
              Graphql_error("Request failed: " ++ Response.statusText(resp)),
            );

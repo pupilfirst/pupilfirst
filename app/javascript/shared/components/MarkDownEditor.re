@@ -115,10 +115,10 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
   let (description, setDescription) = React.useState(() => value);
   let (showPreview, setShowPreview) = React.useState(() => false);
   <div title="Markdown Editor">
-    <div className="flex w-full justify-between items-center py-2">
+    <div className="flex w-full justify-between items-center py-2 h-12">
       {
         showPreview ?
-          <p className="font-semibold text-sm"> {"Preview" |> str} </p> :
+          <p className="font-semibold text-sm px-3"> {"Preview" |> str} </p> :
           <div className="flex markdown-button-group">
             {buttons(description, setDescription, updateDescriptionCB)}
           </div>
@@ -126,7 +126,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
       {
         description != "" ?
           <button
-            className="btn btn-default"
+            className="btn btn-default btn-small"
             onClick={_ => setShowPreview(_ => !showPreview)}>
             <span>
               {
@@ -146,7 +146,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
       showPreview ?
         <MarkdownBlock
           markdown=description
-          className="py-3 leading-normal text-sm markdown-body"
+          className="py-3 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
         /> :
         <textarea
           id="mytextarea"
@@ -163,7 +163,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
                 updateDescriptionCB,
               )
           }
-          className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded p-3 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+          className="appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray"
         />
     }
   </div>;

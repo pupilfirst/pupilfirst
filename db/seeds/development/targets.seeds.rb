@@ -27,14 +27,16 @@ after 'development:target_groups', 'development:faculty' do
     level.target_groups.each do |target_group|
       # Targets.
       2.times do
-        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true)
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'live')
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'archived')
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'draft')
       end
 
       # Add a target with a link to complete.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target::ROLE_TEAM, description: paragraph, link_to_complete: 'https://www.example.com',  target_action_type: Target::TYPE_TODO)
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target::ROLE_TEAM, description: paragraph, link_to_complete: 'https://www.example.com',  target_action_type: Target::TYPE_TODO, visibility: 'live')
 
       # Session.
-      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false, )
+      target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, session_at: 1.month.ago, description: paragraph, video_embed: video_embed, target_action_type: Target::TYPE_ATTEND, resubmittable: false,visibility: 'live' )
     end
   end
 

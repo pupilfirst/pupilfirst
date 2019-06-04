@@ -13,7 +13,8 @@ after "development:targets" do
                                         target_group: target_group,
                                         description: paragraph,
                                         faculty: Faculty.first,
-                                        target_action_type: Target::TYPE_TODO
+                                        target_action_type: Target::TYPE_TODO,
+                                        visibility: 'live'
   )
   quiz = Quiz.create!(
     title: Faker::Lorem.sentence,

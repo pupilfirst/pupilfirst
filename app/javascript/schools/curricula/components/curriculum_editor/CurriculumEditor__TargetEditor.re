@@ -19,9 +19,14 @@ type methodOfCompletion =
   | TakeQuiz
   | MarkAsComplete;
 
-type visibility = Live | Draft | Archived;
+type visibility =
+  | Live
+  | Draft
+  | Archived;
 
-type activeStep = One | Two;
+type activeStep =
+  | One
+  | Two;
 
 type evaluationCriterion = (int, string, bool);
 
@@ -46,7 +51,7 @@ type state = {
   dirty: bool,
   saving: bool,
   activeStep,
-  visibility
+  visibility,
 };
 
 type action =
@@ -283,11 +288,12 @@ let make =
         isValidQuiz: true,
         saving: false,
         activeStep: One,
-        visibility: switch(target |> Target.visibility) {
-        | "live" => Live
-        | "archived" => Archived
-        | _ => Draft
-        }
+        visibility:
+          switch (target |> Target.visibility) {
+          | "live" => Live
+          | "archived" => Archived
+          | _ => Draft
+          },
       }
     | None => {
         title: "",
@@ -318,7 +324,7 @@ let make =
         isValidQuiz: true,
         saving: false,
         activeStep: One,
-        visibility: Draft
+        visibility: Draft,
       }
     },
   reducer: (action, state) =>
@@ -390,7 +396,7 @@ let make =
     | UpdateActiveStep(step) =>
       ReasonReact.Update({...state, activeStep: step})
     | UpdateVisibility(visibility) =>
-    ReasonReact.Update({...state, visibility})
+      ReasonReact.Update({...state, visibility})
     },
   render: ({state, send}) => {
     let targetEvaluated = () =>
@@ -810,8 +816,8 @@ let make =
               <div
                 className="flex max-w-2xl w-full justify-between items-center px-6 mx-auto">
                 {
-                  switch (target) {
-                  | Some(_) =>
+                  switch (state.activeStep) {
+                  | Two =>
                     <div className="flex items-center flex-shrink-0">
                       <label
                         className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
@@ -841,7 +847,9 @@ let make =
                             }
                           )
                           className={
-                            booleanButtonClasses(state.visibility === Archived)
+                            booleanButtonClasses(
+                              state.visibility === Archived,
+                            )
                           }>
                           {"Archived" |> str}
                         </button>
@@ -859,41 +867,42 @@ let make =
                         </button>
                       </div>
                     </div>
-                  | None => ReasonReact.null
+                  | One => ReasonReact.null
                   }
                 }
-                { switch(state.activeStep) {
-                | One => <div className="w-auto">
-                <button
-                  onClick={_event => send(UpdateActiveStep(Two))}
-                  className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                  {"Next Step" |> str}
-                </button>
-              </div>
-                | Two =>
-
-                  switch (target) {
-                  | Some(target) =>
+                {
+                  switch (state.activeStep) {
+                  | One =>
                     <div className="w-auto">
                       <button
-                        disabled={saveDisabled(state)}
-                        onClick=(_e => updateTarget(target |> Target.id))
+                        onClick=(_event => send(UpdateActiveStep(Two)))
                         className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                        {"Update Target" |> str}
+                        {"Next Step" |> str}
                       </button>
                     </div>
+                  | Two =>
+                    switch (target) {
+                    | Some(target) =>
+                      <div className="w-auto">
+                        <button
+                          disabled={saveDisabled(state)}
+                          onClick=(_e => updateTarget(target |> Target.id))
+                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                          {"Update Target" |> str}
+                        </button>
+                      </div>
 
-                  | None =>
-                    <div className="w-full">
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(_e => createTarget())
-                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                        {"Create Target" |> str}
-                      </button>
-                    </div>
+                    | None =>
+                      <div className="w-full">
+                        <button
+                          disabled={saveDisabled(state)}
+                          onClick=(_e => createTarget())
+                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
+                          {"Create Target" |> str}
+                        </button>
+                      </div>
+                    }
                   }
-                }
                 }
               </div>
             </div>

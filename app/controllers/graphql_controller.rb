@@ -14,10 +14,15 @@ class GraphqlController < ApplicationController
       current_domain: current_domain,
       current_host: current_host,
       current_startup: current_startup,
-      current_school_admin: current_school_admin
+      current_school_admin: current_school_admin,
+      notifications: []
     }
 
     result = SvappSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+
+    # Inject notifications into the GraphQL response, if any. These should be manually handled by the client.
+    result[:notifications] = context[:notifications] if context[:notifications].any?
+
     render json: result
   rescue => e # rubocop:disable Style/RescueStandardError
     raise e unless Rails.env.development?

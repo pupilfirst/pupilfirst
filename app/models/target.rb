@@ -81,7 +81,7 @@ class Target < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :call_to_action, length: { maximum: 20 }
-  validates :visibility, presence: true, inclusion: { in: valid_visibility_types }
+  validates :visibility, inclusion: { in: valid_visibility_types }, allow_nil: true
 
   validate :days_to_complete_or_session_at_should_be_present
 

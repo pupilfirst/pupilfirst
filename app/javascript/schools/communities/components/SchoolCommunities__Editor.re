@@ -266,7 +266,7 @@ let make =
             }
           </label>
           <div
-            className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden border ml-2">
+            className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
             <button
               onClick={
                 _ => {

@@ -354,6 +354,9 @@
     .drawer-right {
         width: 48rem;
     }
+    .drawer-right-large {
+        width: 64rem;
+    }
 }
 
 .drawer-right__close {
@@ -362,7 +365,7 @@
 }
 
 .drawer-right-form {
-    background-color: #EDF3FA;
+    background-color: #F7F5FA;
     overflow-x: hidden;
     overflow-y: scroll;
     @apply .text-sm;
@@ -485,26 +488,20 @@
 }
 
 .toggle-button__group {
-    position: relative;
-}
-
-.toggle-button__group::before {
-    content: '';
-    position: absolute;
-    width: 1px;
-    height: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #dae1e7;
+    @apply relative border border-gray-400;
 }
 
 .toggle-button__button {
-    @apply w-1/2 bg-white text-sm font-semibold py-2 px-6 text-gray-600;
+    @apply w-1/2 bg-white text-sm font-semibold py-1 px-6 text-gray-700;
     transition: .3s cubic-bezier(0, 0, 0, 1);
 }
 
+.toggle-button__button:nth-child(n+2) {
+    @apply border-l;
+}
+
 .toggle-button__button:hover {
-    @apply bg-primary-100 text-purple-600;
+    @apply bg-primary-100 text-primary-600;
 }
 
 .toggle-button__button:focus {

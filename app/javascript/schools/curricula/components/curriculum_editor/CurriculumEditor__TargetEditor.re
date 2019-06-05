@@ -486,7 +486,7 @@ let make =
     let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
     <div>
       <div className="blanket" />
-      <div className="drawer-right">
+      <div className="drawer-right drawer-right-large">
         <div className="drawer-right__close absolute">
           <button
             title="close"
@@ -497,26 +497,22 @@ let make =
         </div>
         <div className={formClasses(state.saving)}>
           <div className="w-full">
-            <ul className="flex">
+            <ul className="flex flex-wrap max-w-3xl mx-auto mt-4 px-3">
               <li
                 onClick={_event => send(UpdateActiveStep(One))}
-                className="w-1/2 border p-3 text-center font-semibold text-primary-500">
-                {"1. Create Lesson" |> str}
+                className="w-1/2 border border-b-0 bg-white rounded-tl-lg p-3 text-center font-semibold text-primary-500">
+                {"1. Add Content" |> str}
               </li>
               <li
                 onClick={_event => send(UpdateActiveStep(Two))}
-                className="w-1/2 border p-3 text-center font-semibold -ml-px">
+                className="w-1/2 mr-auto border border-b-0 bg-white rounded-tr-lg p-3 text-center font-semibold -ml-px">
                 {"2. Method of Completion" |> str}
               </li>
             </ul>
             {
               state.activeStep === One ?
-                <div className="mx-auto bg-white">
-                  <div className="max-w-2xl p-6 mx-auto">
-                    <h5
-                      className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-                      {"Target Details" |> str}
-                    </h5>
+                <div className="mx-auto bg-white border-t">
+                  <div className="max-w-3xl py-6 px-3 mx-auto">
                     <label
                       className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                       htmlFor="title">
@@ -550,12 +546,8 @@ let make =
             }
             {
               state.activeStep === Two ?
-                <div className="mx-auto">
-                  <div className="max-w-2xl p-6 mx-auto">
-                    <h5
-                      className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-                      {"Method of Target Completion" |> str}
-                    </h5>
+                <div className="mx-auto bg-white border-t">
+                  <div className="max-w-3xl py-6 px-3 mx-auto">
                     {
                       showPrerequisiteTargets ?
                         <div>
@@ -581,7 +573,7 @@ let make =
                       </label>
                       <div
                         id="evaluated"
-                        className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden border">
+                        className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
                         <button
                           onClick={
                             _event => {
@@ -814,7 +806,7 @@ let make =
             }
             <div className="bg-white py-6">
               <div
-                className="flex max-w-2xl w-full justify-between items-center px-6 mx-auto">
+                className="flex max-w-3xl w-full justify-between items-center px-6 mx-auto">
                 {
                   switch (state.activeStep) {
                   | Two =>
@@ -826,7 +818,7 @@ let make =
                       </label>
                       <div
                         id="visibility"
-                        className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden border">
+                        className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
                         <button
                           onClick=(
                             _event => {
@@ -887,7 +879,7 @@ let make =
                         <button
                           disabled={saveDisabled(state)}
                           onClick=(_e => updateTarget(target |> Target.id))
-                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                          className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                           {"Update Target" |> str}
                         </button>
                       </div>

@@ -247,7 +247,7 @@ let booleanButtonClasses = bool => {
 
 let completionButtonClasses = value =>
   value ?
-    "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200-green text-sm font-semibold focus:outline-none rounded p-4" :
+    "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4" :
     "flex flex-col items-center bg-white border border-gray-400 opacity-50 hover:bg-gray-200 text-gray-900 text-sm font-semibold focus:outline-none rounded p-4";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
@@ -565,7 +565,7 @@ let make =
                             {"Any prerequisite targets?" |> str}
                           </label>
                           <div id="prerequisite_targets" className="mb-6">
-                            <CurriculumEditor__SelectBox
+                            <School__SelectBox.Jsx2
                               items={state.prerequisiteTargets}
                               multiSelectCB=multiSelectPrerequisiteTargetsCB
                             />
@@ -719,7 +719,7 @@ let make =
                                 {"Atleast one has to be selected" |> str}
                               </div>
                           }
-                          <CurriculumEditor__SelectBox
+                          <School__SelectBox.Jsx2
                             items={state.evaluationCriteria}
                             multiSelectCB=multiSelectEvaluationCriterionCB
                           />

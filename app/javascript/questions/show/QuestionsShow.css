@@ -1,0 +1,36 @@
+.community-answer-container {
+  @apply relative pb-8;
+}
+
+.community-answer-container>::after {
+  @apply relative h-13 inline-block text-center bottom-0 w-full pt-3;
+  content: '...';
+  line-height: 1;
+  color: theme(colors.grey-600);
+  font-size: 30px;
+  letter-spacing: .6em;
+}
+
+.community-answer-container>:last-child::after {
+  content: '';
+  height: 0;
+}
+
+.community-qa-comment__input:placeholder-shown {
+  @apply font-semibold;
+}
+
+.community-ask-button-container {
+  @apply relative;
+}
+
+.community-ask-button-container:before {
+  @apply absolute;
+  content: '';
+  height: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgb(255, 255, 255);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(191, 184, 204, 1) 50%, rgba(255, 255, 255, 0) 100%);
+  width: 100%;
+}

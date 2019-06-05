@@ -23,38 +23,28 @@ class HomeController < ApplicationController
 
   # GET /policies/privacy
   def privacy
-    privacy_policy = if current_school.present?
+    @privacy_policy = if current_school.present?
       SchoolString::PrivacyPolicy.for(current_school)
     else
       File.read(Rails.root.join('privacy_policy.md'))
     end
 
-    raise_not_found if privacy_policy.blank?
+    raise_not_found if @privacy_policy.blank?
 
-    @privacy_policy_html = Kramdown::Document.new(privacy_policy).to_html.html_safe
-
-    respond_to do |format|
-      format.json { render json: { policy: @privacy_policy_html } }
-      format.html
-    end
+    render layout: 'student'
   end
 
   # GET /policies/terms
   def terms
-    terms_of_use = if current_school.present?
+    @terms_of_use = if current_school.present?
       SchoolString::TermsOfUse.for(current_school)
     else
       File.read(Rails.root.join('terms_of_use.md'))
     end
 
-    raise_not_found if terms_of_use.blank?
+    raise_not_found if @terms_of_use.blank?
 
-    @terms_of_use_html = Kramdown::Document.new(terms_of_use).to_html.html_safe
-
-    respond_to do |format|
-      format.json { render json: { policy: @terms_of_use_html } }
-      format.html
-    end
+    render layout: 'student'
   end
 
   # GET /oauth/:provider?fqdn=FQDN&referer=

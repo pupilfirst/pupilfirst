@@ -5,7 +5,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <% if content_for?(:viewport) %>
+    <%= yield :viewport %>
+  <% else %>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <% end %>
 
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. -->
 
@@ -32,6 +37,10 @@
 <body data-env="<%= Rails.env %>">
 <%= render 'layouts/pretender_tailwind' if @pretender %>
 
+<% if content_for?(:nav) %>
+  <%= yield :nav %>
+<% end %>
+
 <% if content_for?(:wrapper) %>
   <%= yield :wrapper %>
 <% else %>
@@ -39,5 +48,10 @@
 <% end %>
 
 <%= yield :tail %>
+
+<% if content_for?(:nav) %>
+  <%= yield :footer %>
+<% end %>
+
 </body>
 </html>

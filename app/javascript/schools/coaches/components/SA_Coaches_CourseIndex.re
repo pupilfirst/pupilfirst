@@ -125,8 +125,7 @@ let make =
       );
       Api.create(url, payload, handleResponseCB, handleErrorCB);
     };
-    <SchoolAdmin__DisablingCover
-      containerClasses="w-full" disabled={state.saving}>
+    <DisablingCover.Jsx2 containerClasses="w-full" disabled={state.saving}>
       <div
         key="School admin coaches course index"
         className="flex flex-1 h-screen overflow-y-scroll">
@@ -224,7 +223,7 @@ let make =
                                    removeCoach(coach);
                                  }
                                }>
-                               <Icon kind=Icon.Delete size="4" />
+                               <Icon.Jsx2 kind=Icon.Delete size="4" />
                              </div>
                            </div>
                          </div>
@@ -277,7 +276,7 @@ let make =
                                    removeCoach(coach);
                                  }
                                }>
-                               <Icon kind=Icon.Delete size="4" />
+                               <Icon.Jsx2 kind=Icon.Delete size="4" />
                              </div>
                            </div>
                            <div className="pt-3 pb-4 px-4">
@@ -318,7 +317,7 @@ let make =
           </div>
         </div>
       </div>
-    </SchoolAdmin__DisablingCover>;
+    </DisablingCover.Jsx2>;
   },
 };
 

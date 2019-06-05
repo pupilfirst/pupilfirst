@@ -147,7 +147,7 @@ let make =
       <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage Contact Details" |> str}
       </h5>
-      <SchoolAdmin__DisablingCover disabled={state.updating}>
+      <DisablingCover.Jsx2 disabled={state.updating}>
         <div key="contacts-editor__address-input-group" className="mt-3">
           <label
             className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
@@ -190,7 +190,7 @@ let make =
             }
             value={state.emailAddress}
           />
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="is not a valid email address"
             active={state.emailAddressInvalid}
           />
@@ -210,6 +210,6 @@ let make =
           className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateContactDetailsButtonText(state.updating) |> str}
         </button>
-      </SchoolAdmin__DisablingCover>
+      </DisablingCover.Jsx2>
     </div>,
 };

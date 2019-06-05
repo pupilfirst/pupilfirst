@@ -1,6 +1,40 @@
 exception Graphql_error(string);
 
-let sendQuery = (authenticityToken, q) =>
+type notification = {
+  kind: string,
+  title: string,
+  body: string,
+};
+
+let decodeNotification = json =>
+  Json.Decode.{
+    kind: json |> field("kind", string),
+    title: json |> field("title", string),
+    body: json |> field("body", string),
+  };
+
+let decodeNotifications = json =>
+  json |> Json.Decode.list(decodeNotification);
+
+let flashNotifications = obj =>
+  switch (Js.Dict.get(obj, "notifications")) {
+  | Some(notifications) =>
+    notifications
+    |> decodeNotifications
+    |> List.iter(n => {
+         let notify =
+           switch (n.kind) {
+           | "success" => Notification.success
+           | "error" => Notification.error
+           | _ => Notification.notice
+           };
+
+         notify(n.title, n.body);
+       })
+  | None => ()
+  };
+
+let sendQuery = (authenticityToken, ~notify=true, q) =>
   Bs_fetch.(
     fetchWithInit(
       "/graphql",
@@ -27,6 +61,15 @@ let sendQuery = (authenticityToken, q) =>
          if (Response.ok(resp)) {
            Response.json(resp);
          } else {
+           if (notify) {
+             let statusCode = resp |> Fetch.Response.status |> string_of_int;
+
+             Notification.error(
+               "Error " ++ statusCode,
+               "Our team has been notified of this error. Please reload the page and try again.",
+             );
+           };
+
            Js.Promise.reject(
              Graphql_error("Request failed: " ++ Response.statusText(resp)),
            );
@@ -35,7 +78,11 @@ let sendQuery = (authenticityToken, q) =>
     |> Js.Promise.then_(json =>
          switch (Js.Json.decodeObject(json)) {
          | Some(obj) =>
-           Js.Dict.unsafeGet(obj, "data") |> q##parse |> Js.Promise.resolve
+           if (notify) {
+             obj |> flashNotifications;
+           };
+
+           Js.Dict.unsafeGet(obj, "data") |> q##parse |> Js.Promise.resolve;
          | None =>
            Js.Promise.reject(Graphql_error("Response is not an object"))
          }

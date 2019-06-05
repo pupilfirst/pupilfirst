@@ -127,7 +127,7 @@ let make =
         className="quiz-maker__answer-option cursor-pointer relative">
         <div
           className="quiz-maker__answer-option-pointer quiz-maker__answer-option-pointer--add">
-          <Icon kind=Icon.PlusCircle size="full" />
+          <Icon.Jsx2 kind=Icon.PlusCircle size="full" />
         </div>
         <a
           className="flex items-center h-11 bg-white hover:bg-gray-200 border rounded-lg ml-12 py-3 px-4">

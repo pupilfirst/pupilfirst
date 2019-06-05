@@ -44,7 +44,7 @@ module Users
     def founder_path
       return if @user.founders.not_exited.blank?
 
-      url_helpers.student_dashboard_path
+      url_helpers.home_path
     end
 
     def exited_founder_path

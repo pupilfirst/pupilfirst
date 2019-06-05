@@ -20,7 +20,8 @@ module Founders
           tourDashboard: tour_dashboard?,
           courseEnded: course_ended?,
           passGrade: current_course.pass_grade,
-          maxGrade: current_course.max_grade
+          maxGrade: current_course.max_grade,
+          communityEnabled: community_enabled
         )
       end
 
@@ -32,6 +33,10 @@ module Founders
 
       def current_course
         view.current_startup.level.course
+      end
+
+      def community_enabled
+        current_course.communities.where(target_linkable: true).any?
       end
 
       def course_ended?

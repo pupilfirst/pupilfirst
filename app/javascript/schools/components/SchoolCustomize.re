@@ -31,8 +31,8 @@ let component = ReasonReact.reducerComponent("SchoolCustomize");
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch (logoOnLightBg) {
   | Some(logo) =>
-    <div className="w-30">
-      <img className="w-full" src={logo |> Customizations.url} />
+    <div className="max-w-xs">
+      <img className="h-13" src={logo |> Customizations.url} />
     </div>
   | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
   };
@@ -161,7 +161,7 @@ let showEditor = (editor, send, event) => {
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(editor) =>
-    <SchoolAdmin__EditorDrawer closeDrawerCB=(() => send(CloseEditor))>
+    <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB=(() => send(CloseEditor))>
       {
         switch (editor) {
         | LinksEditor(kind) =>
@@ -205,7 +205,7 @@ let editor = (state, send, authenticityToken) =>
           />
         }
       }
-    </SchoolAdmin__EditorDrawer>
+    </SchoolAdmin__EditorDrawer.Jsx2>
 
   | None => ReasonReact.null
   };
@@ -304,7 +304,6 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                 )
               }
             </div>
-            <div className="ml-6 w-12 h-12 rounded-full bg-gray-400" />
           </div>
         </div>
         <div className="mt-6 font-bold"> {"Footer" |> str} </div>

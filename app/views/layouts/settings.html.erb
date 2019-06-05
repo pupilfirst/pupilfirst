@@ -1,6 +1,11 @@
 <% presenter = ::Layouts::SchoolPresenter.new(self) %>
+
+<% content_for(:viewport) do %>
+  <meta name="viewport"/>
+<% end %>
+
 <% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
 <% end %>
 
 <% content_for(:wrapper) do %>
@@ -18,22 +23,22 @@
           <ul>
             <li>
               <%= link_to school_path, class: 'global-sidebar__primary-nav-link p-4 justify-center' do %>
-                <i class="fas fa-eye fa-fw text-xl"></i>
+                <i class="fal fa-eye fa-fw text-lg"></i>
               <% end %>
             </li>
             <li>
               <%= link_to school_coaches_path, class: 'global-sidebar__primary-nav-link p-4 justify-center' do %>
-                <i class="fas fa-chalkboard-teacher fa-fw text-xl"></i>
+                <i class="fal fa-chalkboard-teacher fa-fw text-lg"></i>
               <% end %>
             </li>
             <li>
               <%= link_to customize_school_path, class: 'global-sidebar__primary-nav-link global-sidebar__primary-nav-link--active p-4 justify-center' do %>
-                <i class="fas fa-cog fa-fw text-xl"></i>
+                <i class="fal fa-cog fa-fw text-lg"></i>
               <% end %>
             </li>
             <li>
               <%= link_to school_courses_path, class: 'global-sidebar__primary-nav-link p-4 justify-center' do %>
-                <i class="fas fa-books fa-fw text-xl"></i>
+                <i class="fal fa-books fa-fw text-lg"></i>
               <% end %>
             </li>
           </ul>
@@ -42,20 +47,20 @@
           <% if presenter.founder_profile? %>
             <li>
               <%= link_to student_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold items-center justify-center' do %>
-                <i class="fas fa-user-graduate fa-fw text-sm"></i>
+                <i class="fal fa-user-graduate fa-fw text-sm"></i>
               <% end %>
             </li>
           <% end %>
           <% if presenter.coach_profile? %>
             <li>
               <%= link_to presenter.coach_dashboard_path, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold items-center justify-center' do %>
-                <i class="fas fa-clipboard-check fa-fw text-sm"></i>
+                <i class="fal fa-clipboard-check fa-fw text-sm"></i>
               <% end %>
             </li>
           <% end %>
           <li>
             <%= link_to destroy_user_session_path, method: :delete, class: 'flex text-white py-4 hover:bg-primary-900 font-semibold items-center justify-center' do %>
-              <i class="fas fa-sign-out fa-fw text-sm"></i>
+              <i class="fal fa-sign-out fa-fw text-sm"></i>
             <% end %>
           </li>
         </ul>
@@ -66,8 +71,10 @@
           <% default_classes = 'flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1' %>
           <% selected_classes = ' bg-gray-400' %>
           <li><%= link_to 'Customization', customize_school_path, class: (default_classes + selected_classes) %></li>
-          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Domains</span></li>
-          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Homepage</span></li>
+          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Domains</span>
+          </li>
+          <li><span class="<%= default_classes + " cursor-not-allowed" %>" title="Under construction">Homepage</span>
+          </li>
         </ul>
       </div>
     </div>

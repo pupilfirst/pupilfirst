@@ -89,7 +89,7 @@ let make =
                        title={"Remove tag " ++ tag}
                        className="cursor-pointer p-2"
                        onClick={_e => handleClick(tag, send, removeTagCB)}>
-                       <Icon kind=Icon.Close size="3" />
+                       <Icon.Jsx2 kind=Icon.Close size="3" />
                      </span>
                    </div>
                  )

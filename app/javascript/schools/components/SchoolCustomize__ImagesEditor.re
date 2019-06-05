@@ -194,7 +194,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
       <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage Images" |> str}
       </h5>
-      <SchoolAdmin__DisablingCover disabled={state.updating}>
+      <DisablingCover.Jsx2 disabled={state.updating}>
         <div
           key="sc-images-editor__logo-on-400-bg-input-group"
           className="mt-4">
@@ -230,7 +230,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               </span>
             </label>
           </div>
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.logoOnLightBgInvalid}
           />
@@ -269,7 +269,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               </span>
             </label>
           </div>
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.logoOnDarkBgInvalid}
           />
@@ -302,7 +302,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
               </span>
             </label>
           </div>
-          <School__InputGroupError
+          <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.iconInvalid}
           />
@@ -316,7 +316,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
             {updateButtonText(state.updating) |> str}
           </button>
         </div>
-      </SchoolAdmin__DisablingCover>
+      </DisablingCover.Jsx2>
     </form>;
   },
 };

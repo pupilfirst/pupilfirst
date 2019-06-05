@@ -11,7 +11,7 @@ after 'development:courses' do
     user: sanjay,
     school: sv,
     name: 'Sanjay Vijayakumar',
-    title: 'CEO',
+    title: 'CEO SV.CO',
     linkedin_url: 'https://linkedin.com',
     key_skills: Faker::Lorem.words(3).join(', ')
   )
@@ -62,7 +62,7 @@ after 'development:courses' do
     user: gautham,
     school: sv,
     name: 'Gautham',
-    title: 'COO',
+    title: 'COO SV.CO',
     linkedin_url: 'https://linkedin.com',
     key_skills: Faker::Lorem.words(3).join(', ')
   )
@@ -123,12 +123,8 @@ after 'development:courses' do
 
   admin = User.find_by(email: 'admin@example.com')
 
-  UserProfile.create!(
-    user: admin,
-    school: sv,
-    name: 'School Admin',
-    title: 'School Admin',
-  )
+  admin_profile = UserProfile.where(user: admin, school: sv).first_or_create!
+  admin_profile.update!(name: 'School Admin', title: 'School Admin')
 
   admin_coach = Faculty.create!(
     category: 'team',

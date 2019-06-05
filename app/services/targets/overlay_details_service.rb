@@ -13,11 +13,39 @@ module Targets
         latestEvent: latest_event_details,
         latestFeedback: latest_feedback,
         linkedResources: linked_resources,
-        quizQuestions: quiz_questions
+        quizQuestions: quiz_questions,
+        communities: community_details,
+        questions: questions
       }
     end
 
     private
+
+    def questions
+      communities.map do |community|
+        community.questions.joins(:targets).where(targets: { id: @target })
+          .order("last_activity_at DESC NULLs FIRST").first(3).map do |question|
+          {
+            id: question.id,
+            title: question.title,
+            communityId: question.community_id
+          }
+        end
+      end.flatten
+    end
+
+    def communities
+      @target.course.communities.where(target_linkable: true)
+    end
+
+    def community_details
+      communities.map do |community|
+        {
+          id: community.id,
+          name: community.name
+        }
+      end
+    end
 
     def pending_founder_ids
       @founder.startup.founders.where.not(id: @founder).reject do |founder|

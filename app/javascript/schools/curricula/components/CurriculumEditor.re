@@ -245,7 +245,7 @@ let make =
               </select>
               <div
                 className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-800">
-                <Icon kind=Icon.Down size="3" />
+                <Icon.Jsx2 kind=Icon.Down size="3" />
               </div>
             </div>
             <button
@@ -304,7 +304,7 @@ let make =
               _ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))
             }
             className="target-group__create flex items-center relative bg-gray-200 border-2 border-dashed p-6 z-10 rounded-lg mt-12 cursor-pointer">
-            <Icon kind=Icon.PlusCircle size="8" />
+            <Icon.Jsx2 kind=Icon.PlusCircle size="8" />
             <h4 className="font-semibold ml-2">
               {"Create a target group" |> str}
             </h4>

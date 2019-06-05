@@ -5,7 +5,7 @@ let isInvalid = url => {
     let regex = [%re
       {|/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/|}
     ];
-    !Js.Re.test(url, regex);
+    !Js.Re.test_(regex, url);
   } else {
     true;
   };

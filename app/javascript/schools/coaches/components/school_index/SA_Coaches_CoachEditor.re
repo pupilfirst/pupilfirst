@@ -52,7 +52,7 @@ let updateName = (send, name) => {
 
 let updateEmail = (send, email) => {
   let regex = [%re {|/.+@.+\..+/i|}];
-  let hasError = !Js.Re.test(email, regex);
+  let hasError = !Js.Re.test_(regex, email);
   send(UpdateEmail(email, hasError));
 };
 
@@ -67,7 +67,7 @@ let updateLinkedInUrl = (send, linkedinUrl) => {
   ];
   let hasError =
     linkedinUrl |> String.length < 1 ?
-      false : !Js.Re.test(linkedinUrl, regex);
+      false : !Js.Re.test_(regex, linkedinUrl);
   send(UpdateLinkedInUrl(linkedinUrl, hasError));
 };
 
@@ -77,7 +77,7 @@ let updateConnectLink = (send, connectLink) => {
   ];
   let hasError =
     connectLink |> String.length < 1 ?
-      false : !Js.Re.test(connectLink, regex);
+      false : !Js.Re.test_(regex, connectLink);
   send(UpdateConnectLink(connectLink, hasError));
 };
 
@@ -227,11 +227,6 @@ let make =
       | None => addCoach(json)
       };
     };
-    let errorNotification = error =>
-      switch (error |> handleApiError) {
-      | Some(code) => code |> string_of_int
-      | None => "Something went wrong!"
-      };
     let sendCoach = formData => {
       let endPoint =
         switch (coach) {
@@ -343,7 +338,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid name"
                     active={state.hasNameError}
                   />
@@ -368,7 +363,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid email"
                     active={state.hasEmailError}
                   />
@@ -393,7 +388,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid title"
                     active={state.hasTitleError}
                   />
@@ -417,7 +412,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid LinkedIn URL"
                     active={state.hasLinkedInUrlError}
                   />
@@ -441,7 +436,7 @@ let make =
                         )
                     }
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="is not a valid connect url"
                     active={state.hasConnectLinkError}
                   />

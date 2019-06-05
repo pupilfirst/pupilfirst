@@ -1,0 +1,8 @@
+<% content_for(:tail) do %>
+  <%= stylesheet_pack_tag 'QuestionsShowPack', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'QuestionsShowPack', nonce: true %>
+<% end %>
+
+<% presenter = Questions::ShowPresenter.new(self, @question) %>
+
+<div class="w-full" id="react-root" data-json-props="<%= presenter.props_to_json %>"></div>

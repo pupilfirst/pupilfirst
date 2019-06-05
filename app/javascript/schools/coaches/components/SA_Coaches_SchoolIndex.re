@@ -67,7 +67,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
               |> List.map(coach =>
                    <div
                      key={coach |> Coach.id |> string_of_int}
-                     className="flex items-center shadow bg-white rounded-lg mb-4">
+                     className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
                      <div className="course-faculty__list-item flex w-full">
                        <div
                          className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-200"
@@ -97,7 +97,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                          </div>
                          <div
                            className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible">
-                           <Icon kind=Icon.Edit size="4" />
+                           <Icon.Jsx2 kind=Icon.Edit size="4" />
                          </div>
                        </div>
                      </div>

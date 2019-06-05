@@ -121,7 +121,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
                handleDelete(state, send, authenticityToken, removeLinkCB, id)
              }
              className="p-3">
-             <FaIcon
+             <FaIcon.Jsx2
                classes={deleteIconClasses(state.deleting |> List.mem(id))}
              />
            </button>
@@ -361,7 +361,7 @@ let make =
             unpackLinks(state.kind, customizations),
           )
         }
-        <SchoolAdmin__DisablingCover disabled={state.adding}>
+        <DisablingCover.Jsx2 disabled={state.adding}>
           <div className="flex mt-3" key="sc-links-editor__form-body">
             {
               if (state |> titleInputVisible) {
@@ -380,7 +380,7 @@ let make =
                     value={state.title}
                     maxLength=24
                   />
-                  <School__InputGroupError
+                  <School__InputGroupError.Jsx2
                     message="can't be empty"
                     active={state.titleInvalid}
                   />
@@ -403,7 +403,7 @@ let make =
                 onChange={handleUrlChange(send)}
                 value={state.url}
               />
-              <School__InputGroupError
+              <School__InputGroupError.Jsx2
                 message="is not a valid URL"
                 active={state.urlInvalid}
               />
@@ -420,7 +420,7 @@ let make =
               {state.adding |> addLinkText |> str}
             </button>
           </div>
-        </SchoolAdmin__DisablingCover>
+        </DisablingCover.Jsx2>
       </div>
     </div>,
 };

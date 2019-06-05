@@ -1,4 +1,5 @@
-[@bs.config {jsx: 3}]
+[@bs.config {jsx: 3}];
+
 let str = React.string;
 
 module DeleteSubmissionQuery = [%graphql

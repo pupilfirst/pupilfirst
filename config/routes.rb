@@ -84,7 +84,20 @@ Rails.application.routes.draw do
     end
 
     resources :resources, only: %i[create]
+
+    resources :communities, only: %i[index]
   end
+
+  resources :communities, only: %i[show] do
+    resources :questions, only: %i[new]
+  end
+
+  get 'answers/:id/versions', controller: "answers", action: "versions", as: "answer_version"
+
+  get 'questions/:id(/:title)/versions', controller: "questions", action: "versions"
+  get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
+
+  get 'home', controller: "users", action: "home", as: "home"
 
   resources :founders, only: %i[] do
     member do

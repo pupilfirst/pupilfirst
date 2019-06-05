@@ -1,0 +1,77 @@
+<% presenter = ::Layouts::FooterPresenter.new(self) %>
+
+<footer class="footer__container bg-gray-800">
+  <section class="text-white flex flex-col md:flex-row w-full xl:max-w-5xl mx-auto justify-between items-start py-8 px-3">
+    <div class="pt-2 w-full md:w-2/4">
+      <div class="flex flex-col items-left md:pr-5 text-center md:text-left">
+        <span class="uppercase font-bold text-sm py-2">SITEMAP</span>
+
+        <div class="w-full flex flex-row flex-wrap text-xs">
+          <% presenter.nav_links.each do |nav_link| %>
+            <div class="w-1/3">
+              <%= link_to nav_link[:title], nav_link[:url], class: "no-underline pt-2 pb-1 block text-white hover:text-primary-200" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+    <div class="pt-5 md:pt-2 w-full md:flex-1 md:pr-5">
+      <% if presenter.social_links.any? %>
+        <p class="uppercase font-bold text-sm py-2 text-center md:text-left">SOCIAL</p>
+        <div class="py-2 flex flex-wrap justify-center md:justify-start">
+          <% presenter.social_links.each do |social_link| %>
+            <a class="text-white no-underline pointer-cursor pr-4" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
+              <i class="text-2xl <%= presenter.social_icon(social_link[:url]) %>"></i>
+            </a>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="pt-5 md:pt-2 w-full md:w-1/4 text-center md:text-left">
+      <div class="text-xs">
+        <% if presenter.address.present? %>
+          <p class="uppercase font-bold text-sm py-2">CONTACT</p>
+
+          <address class="text-sm leading-normal">
+            <%= presenter.address.html_safe %>
+          </address>
+        <% end %>
+        <div class="text-xs py-2">
+          <% if presenter.email_address.present? %>
+            <p>Reach us at
+              <strong><%= mail_to presenter.email_address, presenter.email_address, class: "text-white font-bold no-underline pointer-cursor" %></strong>.
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="w-full footer__bottom border-t border-gray-900">
+    <div class="text-white flex flex-row w-full xl:max-w-5xl mx-auto justify-between items-start px-3">
+      <div class="w-full flex flex-row justify-between items-center">
+        <div class="w-1/4 my-4">
+          <a href="/">
+            <% if presenter.logo? %>
+              <img class="w-27" src="<%= presenter.logo_url %>" alt="Logo of <%= presenter.school_name %>"/>
+            <% else %>
+              <span><%= presenter.school_name %></span>
+            <% end %>
+          </a>
+        </div>
+
+        <div class="w-3/4 md:w-2/5 text-right text-xs font-hairline">
+          <% if presenter.privacy_policy? %>
+            <%= link_to 'Privacy Policy', policies_privacy_path, class: "text-gray-100 cursor-pointer mr-3" %>
+          <% end %>
+          <% if presenter.terms_of_use? %>
+            <%= link_to 'Terms of Use', policies_terms_path, class: "text-gray-100 cursor-pointer mr-3" %>
+          <% end %>
+
+          <span class="text-gray-400 block md:inline-block">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</footer>

@@ -6,12 +6,14 @@ let str = ReasonReact.string;
 
 type state = {
   name: string,
+  description: string,
   maxGrade: int,
   passGrade: int,
   selectedGrade: int,
   gradesAndLabels: list(GradesAndLabels.t),
   endsAt: option(string),
   hasNameError: bool,
+  hasDescriptionError: bool,
   hasDateError: bool,
   dirty: bool,
   saving: bool,
@@ -19,6 +21,7 @@ type state = {
 
 type action =
   | UpdateName(string, bool)
+  | UpdateDescription(string, bool)
   | UpdateMaxGrade(int)
   | UpdatePassGrade(int)
   | UpdateGradesAndLabels(GradesAndLabels.t)
@@ -28,8 +31,8 @@ type action =
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation($name: String! $maxGrade: Int!, $passGrade: Int!, $endsAt: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-     createCourse(name: $name, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, gradesAndLabels: $gradesAndLabels ) {
+   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, gradesAndLabels: $gradesAndLabels ) {
        course {
          id
        }
@@ -40,8 +43,8 @@ module CreateCourseQuery = [%graphql
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation($id: ID!, $name: String!, $endsAt: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-    updateCourse(id: $id, name: $name, endsAt: $endsAt, gradesAndLabels: $gradesAndLabels){
+   mutation($id: ID!, $description: String!, $name: String!, $endsAt: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, gradesAndLabels: $gradesAndLabels){
        course {
          id
        }
@@ -57,12 +60,18 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
+let updateDescription = (send, description) => {
+  let lengthOfDescription = description |> String.length;
+  let hasError = lengthOfDescription < 2 || lengthOfDescription >= 151;
+  send(UpdateDescription(description, hasError));
+};
+
 let updateEndsAt = (send, date) => {
   let regex = [%re
     {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
   ];
   let lengthOfInput = date |> String.length;
-  let hasError = lengthOfInput == 0 ? false : !Js.Re.test(date, regex);
+  let hasError = lengthOfInput == 0 ? false : !Js.Re.test_(regex, date);
   send(UpdateEndsAt(date, hasError));
 };
 
@@ -75,9 +84,10 @@ let saveDisabled = state => {
     |> ListUtils.isNotEmpty;
 
   state.hasDateError
+  || state.hasDescriptionError
+  || state.description == ""
   || state.hasNameError
-  || state.name
-  |> String.length < 2
+  || state.name == ""
   || !state.dirty
   || state.saving
   || hasInvalidGrades;
@@ -130,6 +140,7 @@ let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
     Course.create(
       id |> int_of_string,
       state.name,
+      state.description,
       state.endsAt,
       state.maxGrade,
       state.passGrade,
@@ -161,6 +172,7 @@ let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
   let createCourseQuery =
     CreateCourseQuery.make(
       ~name=state.name,
+      ~description=state.description,
       ~maxGrade=state.maxGrade,
       ~passGrade=state.passGrade,
       ~endsAt,
@@ -202,6 +214,7 @@ let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => 
     UpdateCourseQuery.make(
       ~id=course |> Course.id |> string_of_int,
       ~name=state.name,
+      ~description=state.description,
       ~endsAt,
       ~gradesAndLabels=jsGradeAndLabelArray,
       (),
@@ -235,18 +248,21 @@ let make =
     switch (course) {
     | Some(course) => {
         name: course |> Course.name,
+        description: course |> Course.description,
         endsAt: course |> Course.endsAt,
         maxGrade: course |> Course.maxGrade,
         passGrade: course |> Course.passGrade,
         gradesAndLabels: course |> Course.gradesAndLabels,
         hasNameError: false,
         hasDateError: false,
+        hasDescriptionError: false,
         dirty: false,
         saving: false,
         selectedGrade: course |> Course.maxGrade,
       }
     | None => {
         name: "",
+        description: "",
         endsAt: None,
         maxGrade: 5,
         passGrade: 2,
@@ -254,6 +270,7 @@ let make =
           possibleGradeValues |> List.map(i => GradesAndLabels.empty(i)),
         hasNameError: false,
         hasDateError: false,
+        hasDescriptionError: false,
         dirty: false,
         saving: false,
         selectedGrade: 1,
@@ -264,6 +281,13 @@ let make =
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     | UpdateName(name, hasNameError) =>
       ReasonReact.Update({...state, name, hasNameError, dirty: true})
+    | UpdateDescription(description, hasDescriptionError) =>
+      ReasonReact.Update({
+        ...state,
+        description,
+        hasDescriptionError,
+        dirty: true,
+      })
     | UpdateEndsAt(date, hasDateError) =>
       ReasonReact.Update({
         ...state,
@@ -334,6 +358,36 @@ let make =
                   state.hasNameError ?
                     <div className="drawer-right-form__error-msg">
                       {"not a valid name" |> str}
+                    </div> :
+                    ReasonReact.null
+                }
+                <label
+                  className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                  htmlFor="description">
+                  {"Course Description" |> str}
+                </label>
+                <span> {"*" |> str} </span>
+                <input
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                  id="description"
+                  type_="text"
+                  placeholder="Type course description here"
+                  value={state.description}
+                  onChange={
+                    event =>
+                      updateDescription(
+                        send,
+                        ReactEvent.Form.target(event)##value,
+                      )
+                  }
+                />
+                {
+                  state.hasDescriptionError ?
+                    <div className="drawer-right-form__error-msg">
+                      {
+                        "Supplied description must be between 1 and 150 characters in length"
+                        |> str
+                      }
                     </div> :
                     ReasonReact.null
                 }

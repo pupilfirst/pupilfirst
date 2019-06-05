@@ -1,0 +1,8 @@
+<% content_for(:tail) do %>
+  <%= stylesheet_pack_tag 'QuestionsEditorPack', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'QuestionsEditorPack', nonce: true %>
+<% end %>
+
+<% presenter = Questions::NewPresenter.new(self, @community, @target) %>
+
+<div class="w-full" id="questions-editor" data-json-props="<%= presenter.json_props %>"></div>

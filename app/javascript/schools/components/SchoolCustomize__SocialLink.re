@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("SchoolCustomize__SocialLink");
 
 let test = (value, url) => {
   let tester = Js.Re.fromString(value);
-  tester |> Js.Re.test(url);
+  url |> Js.Re.test_(tester);
 };
 
 let iconClass = url =>

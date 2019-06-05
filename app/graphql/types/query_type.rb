@@ -3,7 +3,7 @@ module Types
     field :courses, [Types::CourseType], null: false
 
     def courses
-      context[:current_school].courses
+      CoursesResolver.new(context).collection
     end
   end
 end

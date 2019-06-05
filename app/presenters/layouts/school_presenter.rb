@@ -1,5 +1,9 @@
 module Layouts
   class SchoolPresenter < ::ApplicationPresenter
+    def show_admin_routes?
+      current_school_admin.present?
+    end
+
     def coach_profile?
       coach_dashboard_path.present?
     end

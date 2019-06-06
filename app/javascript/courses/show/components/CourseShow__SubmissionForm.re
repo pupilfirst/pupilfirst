@@ -33,7 +33,7 @@ let make = (~target) =>
   <div className="bg-gray-200 pt-6 px-4 pb-2 mt-4 shadow rounded-lg">
     <h5 className="pl-1"> {"Work on your submission" |> str} </h5>
     <textarea
-      className="w-full rounded-lg mt-4 p-4 border rounded-lg"
+      className="h-40 w-full rounded-lg mt-4 p-4 border rounded-lg"
       placeholder="Start typing! We'll auto-save your work periodically as a draft, and you can submit when you're ready to do so."
     />
     attachments

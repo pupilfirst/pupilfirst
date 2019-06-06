@@ -259,6 +259,185 @@
     }
 }
 
+/* Loading Pool Ball Animation */
+
+.loading-poolball {
+    width: 30px;
+    height: 30px;
+}
+
+.loading-poolball.poolball-animation {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+}
+
+.loading-poolball.poolball-animation .shape {
+    border-radius: 5px;
+}
+
+.loading-poolball.poolball-animation {
+    -webkit-animation: poolrotation 1s infinite;
+    animation: poolrotation 1s infinite;
+}
+
+.loading-poolball .shape {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 1px;
+}
+
+.loading-poolball .shape.shape1 {
+    left: 0;
+    background-color: #5C6BC0;
+}
+
+.loading-poolball .shape.shape2 {
+    right: 0;
+    background-color: #8BC34A;
+}
+
+.loading-poolball .shape.shape3 {
+    bottom: 0;
+    background-color: #FFB74D;
+}
+
+.loading-poolball .shape.shape4 {
+    bottom: 0;
+    right: 0;
+    background-color: #F44336;
+}
+
+.poolball-animation .shape1 {
+    -webkit-animation: animationshape1 0.5s ease 0s infinite alternate;
+    animation: animationshape1 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes animationshape1 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(20px, 20px);
+        transform: translate(20px, 20px);
+    }
+}
+
+@keyframes animationshape1 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(20px, 20px);
+        transform: translate(20px, 20px);
+    }
+}
+
+.poolball-animation .shape2 {
+    -webkit-animation: animationshape2 0.5s ease 0s infinite alternate;
+    animation: animationshape2 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes animationshape2 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-20px, 20px);
+        transform: translate(-20px, 20px);
+    }
+}
+
+@keyframes animationshape2 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-20px, 20px);
+        transform: translate(-20px, 20px);
+    }
+}
+
+.poolball-animation .shape3 {
+    -webkit-animation: animationshape3 0.5s ease 0s infinite alternate;
+    animation: animationshape3 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes animationshape3 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(20px, -20px);
+        transform: translate(20px, -20px);
+    }
+}
+
+@keyframes animationshape3 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(20px, -20px);
+        transform: translate(20px, -20px);
+    }
+}
+
+.poolball-animation .shape4 {
+    -webkit-animation: animationshape4 0.5s ease 0s infinite alternate;
+    animation: animationshape4 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes animationshape4 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-20px, -20px);
+        transform: translate(-20px, -20px);
+    }
+}
+
+@keyframes animationshape4 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-20px, -20px);
+        transform: translate(-20px, -20px);
+    }
+}
+
+@-webkit-keyframes poolrotation {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes poolrotation {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 .global-sidebar__primary-nav {
     @apply .w-full;
 }

@@ -28,3 +28,36 @@ let decode = json =>
     correctAnswerId: json |> field("correctAnswerId", string),
     answerOptions: json |> field("answerOptions", list(decodeAnswerOption)),
   };
+
+let index = t => t.index;
+
+let question = t => t.question;
+
+let description = t => t.description;
+
+let answerOptions = t => t.answerOptions;
+
+let id = answerOption => answerOption.id;
+
+let value = answerOption => answerOption.value;
+
+let hint = answerOption => answerOption.hint;
+
+let correctAnswer = t =>
+  t.answerOptions |> List.find(q => q |> id == t.correctAnswerId);
+
+let lastQuestion = questions => {
+  let maxIndex =
+    questions
+    |> List.sort((q1, q2) => q1.index - q2.index)
+    |> List.rev
+    |> List.hd
+    |> index;
+  questions |> List.find(q => q.index == maxIndex);
+};
+
+let nextQuestion = (questions, question) =>
+  questions |> List.find(q => q.index == question.index + 1);
+
+let isLastQuestion = (questions, question) =>
+  questions |> lastQuestion == question;

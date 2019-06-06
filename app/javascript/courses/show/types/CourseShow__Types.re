@@ -9,3 +9,4 @@ module Student = CourseShow__Student;
 module Team = CourseShow__Team;
 module Coach = CourseShow__Coach;
 module UserProfile = CourseShow__UserProfile;
+module QuizQuestion = CourseShow__QuizQuestion;

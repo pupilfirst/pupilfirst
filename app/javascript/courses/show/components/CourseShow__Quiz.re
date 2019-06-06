@@ -32,19 +32,25 @@ let resultsSection = (correctAnswer, currentAnswer) => {
   </div>;
 };
 
-let resultsSectionClasses = currentAnswer =>
+let resultsSectionClasses = currentAnswer => {
+  let defaultClasses = "flex flex-col w-2/5 p-4 text-center bg-gray-200 justify-center";
   switch (currentAnswer) {
-  | Some(_answer) => "col-md-5 quiz-root__result-panel p-4 text-center"
-  | None => "col-md-5 quiz-root__result-panel p-4 text-center quiz-root__result-panel-placeholder"
+  | Some(_answer) => defaultClasses
+  | None => defaultClasses
   };
+};
 
-let answerOptionClasses = (answerOption, correctAnswer, currentAnswer) =>
+let answerOptionClasses = (answerOption, correctAnswer, currentAnswer) => {
+  let defaultClasses = "border-1 shadow rounded-lg border-gray-200 p-1 mt-2 ";
   switch (currentAnswer) {
-  | Some(answer) when answer == correctAnswer && answerOption == correctAnswer => "quiz-root__answer-option quiz-root__answer-option--correct-answer"
-  | Some(incorrectAnswer) when incorrectAnswer == answerOption => "quiz-root__answer-option quiz-root__answer-option--wrong-answer"
-  | Some(_otherAnswer) => "quiz-root__answer-option"
-  | None => "quiz-root__answer-option"
+  | Some(answer) when answer == correctAnswer && answerOption == correctAnswer =>
+    defaultClasses ++ "bg-green-500"
+  | Some(incorrectAnswer) when incorrectAnswer == answerOption =>
+    defaultClasses ++ "bg-red-500"
+  | Some(_otherAnswer) => defaultClasses
+  | None => defaultClasses
   };
+};
 
 [@react.component]
 let make = (~target, ~quizQuestions) => {
@@ -55,8 +61,8 @@ let make = (~target, ~quizQuestions) => {
   let currentAnswer = selectedAnswer;
   let correctAnswer = selectedQuestion |> QuizQuestion.correctAnswer;
 
-  <div className="d-flex quiz-root__component flex-column flex-md-row">
-    <div className="col-md-7 quiz-root__question-panel p-4">
+  <div className="flex border-2 shadow rounded-lg mt-2">
+    <div className="p-4 w-3/5">
       <h6 className="font-semibold text-uppercase quiz-root__header-text mb-1">
         {"Question #" |> str}
         {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
@@ -88,7 +94,8 @@ let make = (~target, ~quizQuestions) => {
                      currentAnswer,
                    )
                  }
-                 key={answerOption |> QuizQuestion.id}>
+                 key={answerOption |> QuizQuestion.id}
+                 onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
                  {answerOption |> QuizQuestion.value |> str}
                </div>
              )
@@ -112,7 +119,7 @@ let make = (~target, ~quizQuestions) => {
           <div className="quiz-root__next-question-button py-4">
             {
               currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
-                <button className="btn btn-md btn-ghost-primary">
+                <button className="btn btn-primary-ghost">
                   {str("Submit Quiz")}
                 </button> :
                 {
@@ -121,7 +128,14 @@ let make = (~target, ~quizQuestions) => {
                   let nextQuestion =
                     currentQuestion
                     |> QuizQuestion.nextQuestion(quizQuestions);
-                  <button className="btn btn-md btn-ghost-secondary">
+                  <button
+                    className="btn btn-primary-ghost"
+                    onClick=(
+                      _ => {
+                        setSelectedQuestion(_ => nextQuestion);
+                        setSelectedAnswer(_ => None);
+                      }
+                    )>
                     {str("Next Question")}
                   </button>;
                   /* onClick=(_event => send(SelectQuestion(nextQuestion))) */

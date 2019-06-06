@@ -95,7 +95,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
                   className={
-                    "student-navbar__toggle focus:outline-none rounded-full"
+                    "student-navbar__toggle focus:outline-none rounded-full "
                     ++ (menuHidden ? "" : "opened")
                   }>
                   <span className="sr-only">

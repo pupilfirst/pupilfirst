@@ -19,5 +19,6 @@ module Types
     field :archive_community_resource, mutation: Mutations::ArchiveCommunityResource, null: false
     field :update_question, mutation: Mutations::UpdateQuestion, null: false
     field :update_answer, mutation: Mutations::UpdateAnswer, null: false
+    field :create_quiz_submissions, mutation: Mutations::CreateQuizSubmission, null: false
   end
 end

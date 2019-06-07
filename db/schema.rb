@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_03_063538) do
+ActiveRecord::Schema.define(version: 2019_06_07_180826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -661,6 +661,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_063538) do
     t.integer "evaluator_id"
     t.datetime "passed_at"
     t.boolean "latest"
+    t.string "quiz_score"
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|

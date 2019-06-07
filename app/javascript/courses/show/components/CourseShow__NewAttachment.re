@@ -47,7 +47,7 @@ let urlForm =
     <input
       type_="text"
       placeholder="Type full URL starting with https://..."
-      className="mt-2 cursor-pointer truncate h-10 border border-dashed flex px-4 items-center font-semibold rounded text-sm hover:bg-gray-200 flex-grow mr-2"
+      className="mt-2 cursor-pointer truncate h-10 border border-grey-400 border-dashed flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
     />
     <button
       className="mt-2 bg-indigo-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">

@@ -82,15 +82,31 @@ class CreateQuizSubmissionMutator < ApplicationMutator
         score += 1
       end
 
-      description_text = "#{description_text}
-      \n Q#{index + 1}: #{question.question}
-      \n Answers: #{question.answer_options.pluck(:value).join(', ')}
-      \n Correct Answer: #{correct_answer.value}
-      \n Your Answer: #{u_answer.value}
-      \n"
+      description_text = "#{description_text}Q#{index + 1}: #{question.question}
+      #{answer_text(question, correct_answer, u_answer)}\n\n"
     end
 
-    "#{intro_text} \n Score - #{score}/#{number_of_question} #{description_text}"
+    "#{intro_text} \n\n Score: #{score} out of #{number_of_question}.\n\n#{description_text}"
+  end
+
+  def answer_text(question, correct_answer, u_answer)
+    description_text = ""
+    question.answer_options.each_with_index do |answer, index|
+      description_text = "#{description_text} #{index + 1}. #{answer.value} #{result_text(answer, correct_answer, u_answer)}\n"
+    end
+    description_text
+  end
+
+  def result_text(answer, correct_answer, u_answer)
+    if (answer == correct_answer) && (answer == u_answer)
+      '(Your correct answer)'
+    elsif (answer == correct_answer) && (answer != u_answer)
+      '(Correct answer)'
+    elsif answer == u_answer
+      '(Your answer)'
+    else
+      ''
+    end
   end
 
   def founders

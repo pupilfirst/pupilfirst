@@ -6,6 +6,10 @@ module Answers
       @answer = answer
     end
 
+    def page_title
+      "Versions | Answer"
+    end
+
     def versions
       @versions ||= @answer.text_versions
     end

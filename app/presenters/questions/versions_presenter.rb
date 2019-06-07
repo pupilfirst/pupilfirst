@@ -6,6 +6,10 @@ module Questions
       @question = question
     end
 
+    def page_title
+      "Versions | #{@question.title}"
+    end
+
     def versions
       @versions ||= @question.text_versions
     end

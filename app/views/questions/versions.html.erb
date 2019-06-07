@@ -1,8 +1,14 @@
+<% presenter = Questions::VersionsPresenter.new(self, @question) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+
 <% content_for(:tail) do %>
-  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
-<% presenter = Questions::VersionsPresenter.new(self, @question) %>
+
 <div class="bg-gray-100 px-3 py-4">
   <div class="mb-2 container max-w-3xl mx-auto">
     <div class="border-b pb-3">

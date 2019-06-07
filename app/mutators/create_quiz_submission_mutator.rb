@@ -29,7 +29,8 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   def create_submission
     @target.timeline_events.create!(
       founders: founders,
-      description: description,
+      description: result[:description],
+      quiz_score: result[:score],
       passed_at: Time.zone.now,
       latest: true
     )
@@ -69,24 +70,26 @@ class CreateQuizSubmissionMutator < ApplicationMutator
     @target ||= Target.find_by(id: target_id)
   end
 
-  def description
-    score = 0
-    description_text = ""
-    intro_text = "Target '#{target.title}' was automatically marked complete."
+  def result
+    @result ||= begin
+      score = 0
+      description_text = ""
+      intro_text = "Target '#{target.title}' was automatically marked complete."
 
-    questions.each_with_index do |question, index|
-      correct_answer = question.correct_answer
-      u_answer = answers_from_user.where(quiz_question: question).first
+      questions.each_with_index do |question, index|
+        correct_answer = question.correct_answer
+        u_answer = answers_from_user.where(quiz_question: question).first
 
-      if correct_answer == u_answer
-        score += 1
+        if correct_answer == u_answer
+          score += 1
+        end
+        description_text = "#{description_text}Q#{index + 1}: #{question.question} \n#{answer_text(question, correct_answer, u_answer)}\n\n"
       end
-
-      description_text = "#{description_text}Q#{index + 1}: #{question.question}
-      #{answer_text(question, correct_answer, u_answer)}\n\n"
+      {
+        score: "#{score}/#{number_of_question}",
+        description: "#{intro_text}\n\n#{description_text}"
+      }
     end
-
-    "#{intro_text} \n\n Score: #{score} out of #{number_of_question}.\n\n#{description_text}"
   end
 
   def answer_text(question, correct_answer, u_answer)

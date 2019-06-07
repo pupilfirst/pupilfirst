@@ -98,7 +98,8 @@ let discussSection = (overlaySelection, _targetDetails) =>
     {"Discussion section goes here" |> str}
   </div>;
 
-let completeSection = (overlaySelection, target, targetDetails) =>
+let completeSection =
+    (overlaySelection, target, targetDetails, authenticityToken) =>
   switch (targetDetails) {
   | Some(targetDetails) =>
     <div
@@ -108,7 +109,8 @@ let completeSection = (overlaySelection, target, targetDetails) =>
       {
         switch (targetDetails |> TargetDetails.quizQuestions) {
         | [] => <CourseShow__SubmissionForm target />
-        | quizQuestions => <CourseShow__Quiz target quizQuestions />
+        | quizQuestions =>
+          <CourseShow__Quiz target quizQuestions authenticityToken />
         }
       }
     </div>
@@ -131,7 +133,7 @@ let overlayStatus = (closeOverlayCB, target, targetStatus) =>
   </div>;
 
 [@react.component]
-let make = (~target, ~targetStatus, ~closeOverlayCB) => {
+let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
 
@@ -146,7 +148,14 @@ let make = (~target, ~targetStatus, ~closeOverlayCB) => {
       {overlaySelectionOptions(target, overlaySelection, setOverlaySelection)}
       {learnSection(overlaySelection, targetDetails)}
       {discussSection(overlaySelection, targetDetails)}
-      {completeSection(overlaySelection, target, targetDetails)}
+      {
+        completeSection(
+          overlaySelection,
+          target,
+          targetDetails,
+          authenticityToken,
+        )
+      }
     </div>
   </div>;
 };

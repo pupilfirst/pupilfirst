@@ -83,6 +83,7 @@ let make =
             target
             targetStatus
             closeOverlayCB={closeOverlay(setSelectedTargetId)}
+            authenticityToken
           />;
         | None => React.null
         };

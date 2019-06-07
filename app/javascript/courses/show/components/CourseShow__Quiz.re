@@ -4,22 +4,55 @@ open CourseShow__Types;
 
 let str = React.string;
 
-/* [%bs.raw {|require("./Quiz__Root.scss")|}]; */
-/* [%bs.raw {|require("./images/quiz-placeholder.svg")|}]; */
-/* [%bs.raw {|require("./images/quiz-right-answer-icon.svg")|}]; */
-/* [%bs.raw {|require("./images/quiz-wrong-answer-icon.svg")|}]; */
+module CreateQuizSubmissionQuery = [%graphql
+  {|
+   mutation($targetId: ID!, $answerIds: [ID!]!) {
+    createQuizSubmissions(targetId: $targetId, answerIds: $answerIds){
+      submissionDetails{
+        id
+        description
+        createdAt
+      }
+     }
+   }
+ |}
+];
 
-let resultsSectionClasses = currentAnswer => {
+let createQuizSubmission =
+    (authenticityToken, target, selectedAnswersIds, setSaving) => {
+  setSaving(_ => true);
+  CreateQuizSubmissionQuery.make(
+    ~targetId=target |> Target.id,
+    ~answerIds=selectedAnswersIds |> Array.of_list,
+    (),
+  )
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       switch (response##createQuizSubmissions##submissionDetails) {
+       | Some(details) =>
+         Notification.success("Success", details##description)
+       | None =>
+         Notification.error(
+           "Something went wrong",
+           "Please refresh the page and try again",
+         )
+       };
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let resultsSectionClasses = selectedAnswer => {
   let defaultClasses = "flex flex-col p-4 text-center bg-gray-200 justify-center";
-  switch (currentAnswer) {
+  switch (selectedAnswer) {
   | Some(_answer) => defaultClasses
-  | None => defaultClasses
+  | None => ""
   };
 };
 
-let answerOptionClasses = (answerOption, correctAnswer, currentAnswer) => {
+let answerOptionClasses = (answerOption, selectedAnswer) => {
   let defaultClasses = "border-1 shadow rounded-lg border-gray-200 p-1 mt-2 ";
-  switch (currentAnswer) {
+  switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
     defaultClasses ++ "bg-blue-500"
   | Some(_otherAnswer) => defaultClasses
@@ -27,16 +60,23 @@ let answerOptionClasses = (answerOption, correctAnswer, currentAnswer) => {
   };
 };
 
+let handleSubmit =
+    (answer, authenticityToken, target, selectedAnswersIds, setSaving, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  let answerIds =
+    selectedAnswersIds |> List.append([answer |> QuizQuestion.answerId]);
+
+  createQuizSubmission(authenticityToken, target, answerIds, setSaving);
+};
+
 [@react.component]
-let make = (~target, ~quizQuestions) => {
+let make = (~target, ~quizQuestions, ~authenticityToken) => {
+  let (saving, setSaving) = React.useState(() => false);
   let (selectedQuestion, setSelectedQuestion) =
     React.useState(() => quizQuestions |> List.hd);
   let (selectedAnswer, setSelectedAnswer) = React.useState(() => None);
-  let (selectedAnswers, setSelectedAnswers) = React.useState(() => []);
+  let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => []);
   let currentQuestion = selectedQuestion;
-  let currentAnswer = selectedAnswer;
-  let correctAnswer = selectedQuestion |> QuizQuestion.correctAnswer;
-  Js.log(selectedAnswers);
   <div className="flex justify-center">
     <div className="border-2 shadow rounded-lg mt-2">
       <div className="p-4">
@@ -52,7 +92,7 @@ let make = (~target, ~quizQuestions) => {
         </div>
         {
           switch (currentQuestion |> QuizQuestion.description) {
-          | None => ReasonReact.null
+          | None => React.null
           | Some(description) =>
             <div className="quiz-root__question-description">
               <p> {description |> str} </p>
@@ -66,36 +106,41 @@ let make = (~target, ~quizQuestions) => {
             |> List.map(answerOption =>
                  <div
                    className={
-                     answerOptionClasses(
-                       answerOption,
-                       correctAnswer,
-                       currentAnswer,
-                     )
+                     answerOptionClasses(answerOption, selectedAnswer)
                    }
-                   key={answerOption |> QuizQuestion.id}
+                   key={answerOption |> QuizQuestion.answerId}
                    onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
-                   {answerOption |> QuizQuestion.value |> str}
+                   {answerOption |> QuizQuestion.answerValue |> str}
                  </div>
                )
             |> Array.of_list
-            |> ReasonReact.array
+            |> React.array
           }
         </div>
       </div>
-      <div className={resultsSectionClasses(currentAnswer)}>
+      <div className={resultsSectionClasses(selectedAnswer)}>
         {
-          switch (currentAnswer) {
-          | None => ReasonReact.null
+          switch (selectedAnswer) {
+          | None => React.null
           | Some(answer) =>
             <div className="quiz-root__next-question-button py-4">
               {
                 currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
-                  <button className="btn btn-primary-ghost">
+                  <button
+                    disabled=saving
+                    className="btn btn-primary-ghost"
+                    onClick={
+                      handleSubmit(
+                        answer,
+                        authenticityToken,
+                        target,
+                        selectedAnswersIds,
+                        setSaving,
+                      )
+                    }>
                     {str("Submit Quiz")}
                   </button> :
                   {
-                    /* onClick=(_event => submitTargetCB()) */
-
                     let nextQuestion =
                       currentQuestion
                       |> QuizQuestion.nextQuestion(quizQuestions);
@@ -104,9 +149,9 @@ let make = (~target, ~quizQuestions) => {
                       onClick=(
                         _ => {
                           setSelectedQuestion(_ => nextQuestion);
-                          setSelectedAnswers(_ =>
-                            selectedAnswers
-                            |> List.append([answer |> QuizQuestion.id])
+                          setSelectedAnswersIds(_ =>
+                            selectedAnswersIds
+                            |> List.append([answer |> QuizQuestion.answerId])
                           );
                           setSelectedAnswer(_ => None);
                         }

@@ -33,7 +33,6 @@ class CreateQuizSubmissionMutator < ApplicationMutator
       passed_at: Time.zone.now,
       latest: true
     )
-    true
   end
 
   private

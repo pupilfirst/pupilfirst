@@ -37,7 +37,11 @@ let make = (~target) =>
       placeholder="Start typing! We'll auto-save your work periodically as a draft, and you can submit when you're ready to do so."
     />
     attachments
-    <CourseShow__NewAttachment />
+    <CourseShow__NewAttachment
+      addFileAttachmentCB={
+        (id, filename) => Js.log3("Add new file attachment", id, filename)
+      }
+    />
     <div className="flex mt-3 justify-end">
       <button
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">

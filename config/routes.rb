@@ -130,7 +130,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :timeline_event_files, only: [] do
+  resources :timeline_event_files, only: %i[create] do
     member do
       get 'download'
     end

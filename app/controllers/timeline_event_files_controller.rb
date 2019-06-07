@@ -5,4 +5,11 @@ class TimelineEventFilesController < ApplicationController
     destination = Rails.application.routes.url_helpers.rails_blob_path(timeline_event_file.file)
     redirect_to destination
   end
+
+  # POST /timeline_event_files
+  def create
+    timeline_event_file = authorize(TimelineEventFile.new(file: params[:file]))
+    timeline_event_file.save!
+    render json: { id: timeline_event_file.id }
+  end
 end

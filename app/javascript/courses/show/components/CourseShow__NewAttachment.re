@@ -16,32 +16,6 @@ let tabClasses = (currentSelection, inspectedSelection) => {
   };
 };
 
-let fileForm =
-  <form className="flex items-center flex-wrap">
-    <input
-      name="authenticity_token"
-      type_="hidden"
-      value="n3PCNUXI0JTS/4S9URK4uRc+b6f73Eoo0BSBLN29wVyO+DTlCX1rjxGeaVC3gHv9iSz1TdhDgaloy6Qn2a8UTg=="
-    />
-    <input
-      id="attachment_file"
-      className="hidden"
-      name="attachment_file"
-      required=true
-      type_="file"
-    />
-    <label
-      className="mt-2 cursor-pointer truncate h-10 border border-dashed flex px-4 items-center font-semibold rounded text-sm hover:bg-gray-400 flex-grow mr-2"
-      htmlFor="attachment_file">
-      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-      <span className="truncate"> {"Choose file to upload" |> str} </span>
-    </label>
-    <button
-      className="mt-2 bg-indigo-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
-      {"Attach file" |> str}
-    </button>
-  </form>;
-
 let urlForm =
   <div className="flex items-center flex-wrap">
     <input
@@ -56,7 +30,7 @@ let urlForm =
   </div>;
 
 [@react.component]
-let make = () => {
+let make = (~addFileAttachmentCB) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
   <div>
@@ -81,7 +55,7 @@ let make = () => {
       className="bg-white p-4 pt-2 border-l border-r border-b rounded-b border-gray-400">
       {
         switch (selection) {
-        | UploadFile => fileForm
+        | UploadFile => <CourseShow__FileForm addFileAttachmentCB />
         | AddUrl => urlForm
         }
       }

@@ -1,14 +1,8 @@
 class TimelineEventFile < ApplicationRecord
-  belongs_to :timeline_event
+  belongs_to :timeline_event, optional: true
   has_one_attached :file
 
   validates :file, attached: true
 
-  def filename
-    file.filename
-  rescue Errno::ENOENT => e
-    raise e unless Rails.env.development?
-
-    'missing_in_development'
-  end
+  delegate :filename, to: :file
 end

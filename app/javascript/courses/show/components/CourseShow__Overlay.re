@@ -92,11 +92,23 @@ let overlaySelectionOptions = (target, overlaySelection, setOverlaySelection) =>
     }
   </div>;
 
-let discussSection = (overlaySelection, _targetDetails) =>
-  <div
-    className={overlaySelectionVisiblilityClasses(Discuss, overlaySelection)}>
-    {"Discussion section goes here" |> str}
-  </div>;
+let discussSection = (overlaySelection, target, targetDetails) =>
+  switch (targetDetails) {
+  | Some(targetDetails) =>
+    <div
+      className={
+        overlaySelectionVisiblilityClasses(Discuss, overlaySelection)
+      }>
+      {
+        switch (targetDetails |> TargetDetails.communities) {
+        | [] =>
+          <div> {"Error: Discuss section must not be triggered!" |> str} </div>
+        | communities => <CourseShow__Discuss target communities />
+        }
+      }
+    </div>
+  | None => <div> {"Loading..." |> str} </div>
+  };
 
 let completeSection =
     (overlaySelection, target, targetDetails, authenticityToken) =>
@@ -147,7 +159,7 @@ let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
       {overlayStatus(closeOverlayCB, target, targetStatus)}
       {overlaySelectionOptions(target, overlaySelection, setOverlaySelection)}
       {learnSection(overlaySelection, targetDetails)}
-      {discussSection(overlaySelection, targetDetails)}
+      {discussSection(overlaySelection, target, targetDetails)}
       {
         completeSection(
           overlaySelection,

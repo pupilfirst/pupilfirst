@@ -14,11 +14,36 @@ module Targets
         latest_submission_attachments: latest_event_attachments,
         latest_feedback: latest_feedback_details,
         quiz_questions: quiz_questions,
-        content_blocks: content_blocks
+        content_blocks: content_blocks,
+        communities: community_details
       }
     end
 
     private
+
+    def communities
+      @target.course.communities.where(target_linkable: true)
+    end
+
+    def community_details
+      communities.map do |community|
+        {
+          id: community.id,
+          name: community.name,
+          questions: questions(community)
+        }
+      end
+    end
+
+    def questions(community)
+      community.questions.joins(:targets).where(targets: { id: @target })
+        .order("last_activity_at DESC NULLs FIRST").first(3).map do |question|
+        {
+          id: question.id,
+          title: question.title
+        }
+      end
+    end
 
     def pending_founder_ids
       return [] unless @target.founder_role?

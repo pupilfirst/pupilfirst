@@ -5,6 +5,7 @@ type t = {
   latestFeedback: option(CourseShow__Feedback.t),
   quizQuestions: list(CourseShow__QuizQuestion.t),
   contentBlocks: list(CourseShow__ContentBlock.t),
+  communities: list(CourseShow__Community.t),
 };
 
 let decode = json =>
@@ -31,7 +32,10 @@ let decode = json =>
       json |> field("quizQuestions", list(CourseShow__QuizQuestion.decode)),
     contentBlocks:
       json |> field("contentBlocks", list(CourseShow__ContentBlock.decode)),
+    communities:
+      json |> field("communities", list(CourseShow__Community.decode)),
   };
 
 let contentBlocks = t => t.contentBlocks;
 let quizQuestions = t => t.quizQuestions;
+let communities = t => t.communities;

@@ -17,15 +17,15 @@ let linkToNewQuestion = (communityId, targetId) =>
 let questionCard = question => {
   let questionId = question |> Community.questionId;
   let questionLink = "/questions/" ++ questionId;
-  <a
+  <div
     href=questionLink
     key=questionId
-    className="flex justify-between items-center p-3">
+    className="flex justify-between items-center p-3 bg-gray-300 shadow-sm rounded-lg mb-2">
     <span className="w-3/4">
       {question |> Community.questionTitle |> str}
     </span>
     <a href=questionLink className="btn btn-default"> {"View" |> str} </a>
-  </a>;
+  </div>;
 };
 
 let handleEmpty = () =>
@@ -79,8 +79,7 @@ let make = (~target, ~communities) => {
                  </div>
                  {actionButtons(communityId, targetId)}
                </div>
-               <div
-                 className="bg-gray-300 justify-between shadow-sm rounded-lg">
+               <div className="justify-between">
                  {
                    switch (community |> Community.questions) {
                    | [] => handleEmpty()

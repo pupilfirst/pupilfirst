@@ -39,7 +39,7 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   private
 
   def authorized?
-    current_school.present? && course.school == current_school && founder.present?
+    current_school.present? && course.school == current_school && founder.present? && !course.ends_at&.past? && !founder.startup.access_ends_at&.past?
   end
 
   def founder

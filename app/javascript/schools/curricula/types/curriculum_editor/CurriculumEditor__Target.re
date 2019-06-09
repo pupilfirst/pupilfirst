@@ -1,5 +1,10 @@
 exception InvalidVisibilityValue(string);
 
+type visibility =
+  | Draft
+  | Live
+  | Archived;
+
 type t = {
   id: int,
   targetGroupId: int,
@@ -9,7 +14,7 @@ type t = {
   quiz: list(CurriculumEditor__QuizQuestion.t),
   linkToComplete: option(string),
   sortIndex: int,
-  visibility: string,
+  visibility,
 };
 
 let id = t => t.id;
@@ -30,6 +35,14 @@ let sortIndex = t => t.sortIndex;
 
 let visibility = t => t.visibility;
 
+let decodeVisbility = visibilityString =>
+  switch (visibilityString) {
+  | "draft" => Draft
+  | "live" => Live
+  | "archived" => Archived
+  | _ => raise(InvalidVisibilityValue("Unknown Value"))
+  };
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
@@ -41,12 +54,7 @@ let decode = json =>
     linkToComplete:
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     sortIndex: json |> field("sortIndex", int),
-    visibility: json |> field("visibility", string),
-  };
-
-let decodeVisibility = visibilityString =>
-  switch (visibilityString) {
-  | unknownValue => raise(InvalidVisibilityValue(unknownValue))
+    visibility: decodeVisbility(json |> field("visibility", string)),
   };
 
 let updateList = (targets, target) => {
@@ -80,7 +88,7 @@ let create =
 let sort = targets =>
   targets |> List.sort((x, y) => x.sortIndex - y.sortIndex);
 
-let archive = t => {...t, visibility: "archived"};
+let archive = t => {...t, visibility: Archived};
 
 let find = (id, targets) => targets |> List.find(t => t.id == id);
 

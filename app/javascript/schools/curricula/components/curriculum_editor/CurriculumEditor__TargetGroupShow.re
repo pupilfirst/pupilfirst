@@ -88,7 +88,7 @@ let make =
       showArchived ?
         targetsInTG :
         targetsInTG
-        |> List.filter(target => !(target |> Target.visibility === "archived"));
+        |> List.filter(target => !(target |> Target.visibility === Archived));
     let handleResponseCB = targetId => {
       let id = targetId |> int_of_string;
       let targetGroupId = targetGroup |> TargetGroup.id;
@@ -103,7 +103,7 @@ let make =
           [QuizQuestion.empty(0)],
           None,
           999,
-          "draft",
+          Draft,
         );
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));

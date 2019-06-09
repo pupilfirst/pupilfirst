@@ -1,3 +1,5 @@
+exception InvalidVisibilityValue(string);
+
 type t = {
   id: int,
   targetGroupId: int,
@@ -6,8 +8,6 @@ type t = {
   prerequisiteTargets: list(int),
   quiz: list(CurriculumEditor__QuizQuestion.t),
   linkToComplete: option(string),
-  role: string,
-  targetActionType: string,
   sortIndex: int,
   visibility: string,
 };
@@ -26,10 +26,6 @@ let quiz = t => t.quiz;
 
 let linkToComplete = t => t.linkToComplete;
 
-let role = t => t.role;
-
-let targetActionType = t => t.targetActionType;
-
 let sortIndex = t => t.sortIndex;
 
 let visibility = t => t.visibility;
@@ -44,10 +40,13 @@ let decode = json =>
     quiz: json |> field("quiz", list(CurriculumEditor__QuizQuestion.decode)),
     linkToComplete:
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
-    role: json |> field("role", string),
-    targetActionType: json |> field("targetActionType", string),
     sortIndex: json |> field("sortIndex", int),
     visibility: json |> field("visibility", string),
+  };
+
+let decodeVisibility = visibilityString =>
+  switch (visibilityString) {
+  | unknownValue => raise(InvalidVisibilityValue(unknownValue))
   };
 
 let updateList = (targets, target) => {
@@ -64,8 +63,6 @@ let create =
       prerequisiteTargets,
       quiz,
       linkToComplete,
-      role,
-      targetActionType,
       sortIndex,
       visibility,
     ) => {
@@ -76,8 +73,6 @@ let create =
   prerequisiteTargets,
   quiz,
   linkToComplete,
-  role,
-  targetActionType,
   sortIndex,
   visibility,
 };

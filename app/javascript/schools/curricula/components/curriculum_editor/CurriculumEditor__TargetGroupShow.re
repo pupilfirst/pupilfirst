@@ -102,8 +102,6 @@ let make =
           [],
           [QuizQuestion.empty(0)],
           None,
-          "founder",
-          "Todo",
           999,
           "draft",
         );

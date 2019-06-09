@@ -25,8 +25,8 @@ type visibility =
   | Archived;
 
 type activeStep =
-  | One
-  | Two;
+  | AddContent
+  | TargetActions;
 
 type evaluationCriterion = (int, string, bool);
 
@@ -41,11 +41,7 @@ type state = {
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
   linkToComplete: string,
-  role: string,
-  targetActionType: string,
   hasTitleError: bool,
-  hasDescriptionError: bool,
-  hasYoutubeVideoIdError: bool,
   hasLinktoCompleteError: bool,
   isValidQuiz: bool,
   dirty: bool,
@@ -93,7 +89,6 @@ let saveDisabled = state => {
     };
   state.title
   |> String.length < 2
-  || state.hasYoutubeVideoIdError
   || state.hasLinktoCompleteError
   || hasMethordOfCompletionError
   || !state.dirty
@@ -193,12 +188,6 @@ let setPayload = (state, target, authenticityToken) => {
     )
   | None => ()
   };
-  Js.Dict.set(targetData, "role", state.role |> Js.Json.string);
-  Js.Dict.set(
-    targetData,
-    "target_action_type",
-    state.targetActionType |> Js.Json.string,
-  );
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
 
   Js.Dict.set(
@@ -251,6 +240,7 @@ let completionButtonClasses = value =>
     "flex flex-col items-center bg-white border border-gray-400 opacity-50 hover:bg-gray-200 text-gray-900 text-sm font-semibold focus:outline-none rounded p-4";
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
+let updateDescriptionCB = description => Js.log(description);
 let make =
     (
       ~target,
@@ -277,17 +267,13 @@ let make =
           | Some(linkToComplete) => linkToComplete
           | None => ""
           },
-        role: target |> Target.role,
-        targetActionType: target |> Target.targetActionType,
         methodOfCompletion: handleMethodOfCompletion(target),
         hasTitleError: false,
-        hasDescriptionError: false,
-        hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         dirty: false,
         isValidQuiz: true,
         saving: false,
-        activeStep: One,
+        activeStep: AddContent,
         visibility:
           switch (target |> Target.visibility) {
           | "live" => Live
@@ -314,16 +300,12 @@ let make =
         quiz: [QuizQuestion.empty(0)],
         methodOfCompletion: NotSelected,
         linkToComplete: "",
-        role: "founder",
-        targetActionType: "Todo",
         hasTitleError: false,
-        hasDescriptionError: false,
-        hasYoutubeVideoIdError: false,
         hasLinktoCompleteError: false,
         dirty: false,
         isValidQuiz: true,
         saving: false,
-        activeStep: One,
+        activeStep: AddContent,
         visibility: Draft,
       }
     },
@@ -457,8 +439,6 @@ let make =
           prerequisiteTargets,
           quiz,
           linkToComplete,
-          state.role,
-          state.targetActionType,
           sortIndex,
           "live",
         );
@@ -499,18 +479,19 @@ let make =
           <div className="w-full">
             <ul className="flex flex-wrap max-w-3xl mx-auto mt-4 px-3">
               <li
-                onClick={_event => send(UpdateActiveStep(One))}
+                onClick={_event => send(UpdateActiveStep(AddContent))}
                 className="w-1/2 border border-b-0 bg-white rounded-tl-lg p-3 text-center font-semibold text-primary-500">
                 {"1. Add Content" |> str}
               </li>
               <li
-                onClick={_event => send(UpdateActiveStep(Two))}
+                onClick={_event => send(UpdateActiveStep(TargetActions))}
                 className="w-1/2 mr-auto border border-b-0 bg-white rounded-tr-lg p-3 text-center font-semibold -ml-px">
                 {"2. Method of Completion" |> str}
               </li>
             </ul>
             {
-              state.activeStep === One ?
+              switch (state.activeStep) {
+              | AddContent =>
                 <div className="mx-auto bg-white border-t">
                   <div className="max-w-3xl py-6 px-3 mx-auto">
                     <label
@@ -525,13 +506,13 @@ let make =
                       type_="text"
                       placeholder="Type target title here"
                       value={state.title}
-                      onChange={
+                      onChange=(
                         event =>
                           updateTitle(
                             send,
                             ReactEvent.Form.target(event)##value,
                           )
-                      }
+                      )
                     />
                     {
                       state.hasTitleError ?
@@ -540,12 +521,14 @@ let make =
                         </div> :
                         ReasonReact.null
                     }
+                    <MarkDownEditor.Jsx2
+                      placeholderText="Type your Answer"
+                      updateDescriptionCB
+                      value="description"
+                    />
                   </div>
-                </div> :
-                ReasonReact.null
-            }
-            {
-              state.activeStep === Two ?
+                </div>
+              | TargetActions =>
                 <div className="mx-auto bg-white border-t">
                   <div className="max-w-3xl py-6 px-3 mx-auto">
                     {
@@ -575,12 +558,12 @@ let make =
                         id="evaluated"
                         className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
                         <button
-                          onClick={
+                          onClick=(
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
                               send(UpdateMethodOfCompletion(Evaluated));
                             }
-                          }
+                          )
                           className={
                             booleanButtonClasses(
                               state.methodOfCompletion == Evaluated,
@@ -589,12 +572,12 @@ let make =
                           {"Yes" |> str}
                         </button>
                         <button
-                          onClick={
+                          onClick=(
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
                               send(UpdateMethodOfCompletion(MarkAsComplete));
                             }
-                          }
+                          )
                           className={booleanButtonClasses(!targetEvaluated())}>
                           {"No" |> str}
                         </button>
@@ -617,7 +600,7 @@ let make =
                               id="method_of_completion" className="flex -mx-2">
                               <div className="w-1/3 px-2">
                                 <button
-                                  onClick={
+                                  onClick=(
                                     _event => {
                                       ReactEvent.Mouse.preventDefault(_event);
                                       send(
@@ -626,7 +609,7 @@ let make =
                                         ),
                                       );
                                     }
-                                  }
+                                  )
                                   className={
                                     completionButtonClasses(
                                       state.methodOfCompletion
@@ -644,14 +627,14 @@ let make =
                               </div>
                               <div className="w-1/3 px-2">
                                 <button
-                                  onClick={
+                                  onClick=(
                                     _event => {
                                       ReactEvent.Mouse.preventDefault(_event);
                                       send(
                                         UpdateMethodOfCompletion(VisitLink),
                                       );
                                     }
-                                  }
+                                  )
                                   className={
                                     completionButtonClasses(
                                       state.methodOfCompletion == VisitLink,
@@ -668,14 +651,14 @@ let make =
                               </div>
                               <div className="w-1/3 px-2">
                                 <button
-                                  onClick={
+                                  onClick=(
                                     _event => {
                                       ReactEvent.Mouse.preventDefault(_event);
                                       send(
                                         UpdateMethodOfCompletion(TakeQuiz),
                                       );
                                     }
-                                  }
+                                  )
                                   className={
                                     completionButtonClasses(
                                       state.methodOfCompletion == TakeQuiz,
@@ -801,15 +784,15 @@ let make =
                       }
                     }
                   </div>
-                </div> :
-                ReasonReact.null
+                </div>
+              }
             }
             <div className="bg-white py-6">
               <div
                 className="flex max-w-3xl w-full justify-between items-center px-6 mx-auto">
                 {
                   switch (state.activeStep) {
-                  | Two =>
+                  | TargetActions =>
                     <div className="flex items-center flex-shrink-0">
                       <label
                         className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
@@ -859,20 +842,22 @@ let make =
                         </button>
                       </div>
                     </div>
-                  | One => ReasonReact.null
+                  | AddContent => ReasonReact.null
                   }
                 }
                 {
                   switch (state.activeStep) {
-                  | One =>
+                  | AddContent =>
                     <div className="w-auto">
                       <button
-                        onClick=(_event => send(UpdateActiveStep(Two)))
+                        onClick=(
+                          _event => send(UpdateActiveStep(TargetActions))
+                        )
                         className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                         {"Next Step" |> str}
                       </button>
                     </div>
-                  | Two =>
+                  | TargetActions =>
                     switch (target) {
                     | Some(target) =>
                       <div className="w-auto">

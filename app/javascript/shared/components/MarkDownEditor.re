@@ -168,3 +168,16 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
     }
   </div>;
 };
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent("MarkDownEditor");
+
+  let make =
+      (~placeholderText, ~updateDescriptionCB, ~value, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~placeholderText, ~updateDescriptionCB, ~value, ()),
+      children,
+    );
+};
+

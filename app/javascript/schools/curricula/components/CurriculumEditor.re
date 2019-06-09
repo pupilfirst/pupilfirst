@@ -49,7 +49,7 @@ let showArchivedButton = (targetGroupsInLevel, targets) => {
     |> List.filter(target =>
          tgIds |> List.mem(target |> Target.targetGroupId)
        )
-    |> List.filter(target => target |> Target.visibility === "archived")
+    |> List.filter(target => target |> Target.visibility === Archived)
     |> List.length;
 
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
@@ -139,7 +139,7 @@ let make =
         state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
 
       let newTargetGroup =
-        target |> Target.visibility === "archived" ?
+        target |> Target.visibility === Archived ?
           targetGroup : targetGroup |> TargetGroup.archive(false);
 
       send(UpdateTarget(target));
@@ -177,7 +177,7 @@ let make =
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
         | ShowTargetEditor(targetGroupId, target) =>
-          <CurriculumEditor__TargetEditor
+          <CurriculumEditor__TargetEditor.Jsx2
             target
             targetGroupId
             evaluationCriteria

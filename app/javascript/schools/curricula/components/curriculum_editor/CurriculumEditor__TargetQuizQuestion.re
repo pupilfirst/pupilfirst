@@ -12,7 +12,6 @@ let make =
       ~updateQuizQuestionCB,
       ~removeQuizQuestionCB,
       ~questionCanBeRemoved,
-      _children,
     ) => {
   let answerOptionId = (questionId, index) =>
     "quiz_question_"

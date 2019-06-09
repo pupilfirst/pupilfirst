@@ -145,7 +145,6 @@ let make =
       ~authenticityToken,
       ~updateTargetCB,
       ~hideEditorActionCB,
-      _children,
     ) => {
   let (title, setTitle) =
     React.useState(() =>
@@ -334,17 +333,16 @@ let make =
 
   let updateTarget = targetId => setSaving(_ => !saving);
   let showPrerequisiteTargets = prerequisiteTargets |> List.length > 0;
-  let addQuizQuestion = (quiz) => {
-    let lastQuestionId =
-        quiz |> List.rev |> List.hd |> QuizQuestion.id;
+  let addQuizQuestion = quiz => {
+    let lastQuestionId = quiz |> List.rev |> List.hd |> QuizQuestion.id;
     let quiz =
-        quiz
-        |> List.rev
-        |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
-        |> List.rev;
-      setQuiz(_ => quiz);
-      setIsValidQuiz(_ => quizValid(quiz));
-      setDirty(_ => true);
+      quiz
+      |> List.rev
+      |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+      |> List.rev;
+    setQuiz(_ => quiz);
+    setIsValidQuiz(_ => quizValid(quiz));
+    setDirty(_ => true);
   };
   <div>
     <div className="blanket" />
@@ -643,7 +641,7 @@ let make =
                           )
                         />
                         {
-                          hasLinktoCompleteError ?
+                          hasLinkToCompleteError ?
                             <div className="drawer-right-form__error-msg">
                               {"not a valid link" |> str}
                             </div> :
@@ -724,7 +722,7 @@ let make =
                   | Some(target) =>
                     <div className="w-auto">
                       <button
-                        disabled={saveDisabled(state)}
+                        disabled={saveDisabled()}
                         onClick=(_e => updateTarget(target |> Target.id))
                         className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                         {"Update Target" |> str}
@@ -734,7 +732,7 @@ let make =
                   | None =>
                     <div className="w-full">
                       <button
-                        disabled={saveDisabled(state)}
+                        disabled={saveDisabled()}
                         onClick=(_e => createTarget())
                         className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                         {"Create Target" |> str}
@@ -749,4 +747,37 @@ let make =
       </div>
     </div>
   </div>;
+};
+
+module Jsx2 = {
+  let component =
+    ReasonReact.statelessComponent("CurriculumEditor__TargetEditor");
+
+  let make =
+      (
+        ~target,
+        ~targetGroupId,
+        ~evaluationCriteria,
+        ~targets,
+        ~targetGroupIdsInLevel,
+        ~authenticityToken,
+        ~updateTargetCB,
+        ~hideEditorActionCB,
+        _children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~target,
+        ~targetGroupId,
+        ~evaluationCriteria,
+        ~targets,
+        ~targetGroupIdsInLevel,
+        ~authenticityToken,
+        ~updateTargetCB,
+        ~hideEditorActionCB,
+        (),
+      ),
+      _children,
+    );
 };

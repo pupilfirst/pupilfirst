@@ -13,7 +13,6 @@ let make =
       ~canBeDeleted,
       ~markAsCorrectCB,
       ~answerOptionId,
-      _children,
     ) => {
   let (hasHint, setHasHint) = React.useState(() => false);
   let hint =

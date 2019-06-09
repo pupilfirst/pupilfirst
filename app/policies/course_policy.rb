@@ -1,6 +1,15 @@
 class CoursePolicy < ApplicationPolicy
   def show?
-    record.present? && record == current_founder&.course
+    # PupilFirst does not have any courses.
+    return false unless record.present? && record.school == current_school
+
+    founder = user.founders.joins(:course).where(courses: { id: record }).first
+
+    # Current user must have a founder profile in the course
+    return false if founder.blank?
+
+    # Dropped out students cannot access student dashboard.
+    !founder.exited?
   end
 
   def leaderboard?

@@ -16,7 +16,7 @@ module Layouts
     end
 
     def courses
-      Course.joins(:founders).where(founders: { id: current_user.founders.select(:id) }).map do |course|
+      Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) }).map do |course|
         {
           id: course.id,
           name: course.name

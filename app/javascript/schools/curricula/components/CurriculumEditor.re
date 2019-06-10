@@ -270,7 +270,7 @@ let make =
           {
             showArchivedButton(targetGroupsInLevel, state.targets) ?
               <button
-                className="bg-indigo-100 hover:bg-indigo text-indigo-600 text-sm hover:text-indigo-100 font-semibold py-2 px-4 rounded focus:outline-none"
+                className="btn btn-default"
                 onClick={_ => send(ToggleShowArchived)}>
                 {
                   (state.showArchived ? "Hide Archived" : "Show Archived")

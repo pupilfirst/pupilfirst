@@ -32,6 +32,13 @@ feature 'Community Show' do
     create :community_course_connection, course: course, community: community
   end
 
+  scenario 'when an unknown user visits a community' do
+    visit community_path(community)
+
+    # Should 404.
+    expect(page).to have_content("The page you were looking for doesn't exist")
+  end
+
   scenario 'When an active founder visits his community', js: true do
     sign_in_user(founder_1.user, referer: community_path(community))
 
@@ -49,8 +56,7 @@ feature 'Community Show' do
     click_link 'Ask a question'
     expect(page).to have_text("ASK A NEW QUESTION")
     fill_in 'Title', with: question_title
-    description_field = find('textarea[title="Markdown input"]')
-    description_field.fill_in with: question_description
+    fill_in 'Body', with: question_description
     click_button 'Post Your Question'
 
     expect(page).to have_text(question_title)
@@ -73,8 +79,7 @@ feature 'Community Show' do
     expect(page).not_to have_text("Delete")
 
     # any one with access to the community can answer a question
-    description_field = find('textarea[title="Markdown input"]')
-    description_field.fill_in with: answer_description
+    fill_in 'Your Answer', with: answer_description
     click_button 'Post Your Answer'
 
     dismiss_notification
@@ -85,8 +90,7 @@ feature 'Community Show' do
 
     # can edit his answer
     find('a[title="Edit Answer"]').click
-    description_field = find('textarea[title="Markdown input"]')
-    description_field.fill_in with: answer_description_for_edit
+    fill_in 'Your Answer', with: answer_description_for_edit
     click_button 'Update Your Answer'
 
     dismiss_notification
@@ -189,8 +193,7 @@ feature 'Community Show' do
     end
 
     old_description = question_1.description
-    description_field = find('textarea[title="Markdown input"]')
-    description_field.fill_in with: question_description_for_edit
+    fill_in 'Body', with: question_description_for_edit
     click_button 'Update Question'
 
     dismiss_notification
@@ -226,8 +229,7 @@ feature 'Community Show' do
     expect(page).to have_text(target.title)
 
     fill_in 'Title', with: question_title
-    description_field = find('textarea[title="Markdown input"]')
-    description_field.fill_in with: question_description
+    fill_in 'Body', with: question_description
     click_button 'Post Your Question'
 
     expect(page).to have_text(question_title)

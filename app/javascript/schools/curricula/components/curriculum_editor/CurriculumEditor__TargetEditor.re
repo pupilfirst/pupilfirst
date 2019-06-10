@@ -402,11 +402,7 @@ let make =
                       </div> :
                       ReasonReact.null
                   }
-                  <MarkDownEditor
-                    placeholderText="Type your Answer"
-                    updateDescriptionCB
-                    value="description"
-                  />
+                  <MarkDownEditor updateDescriptionCB value="description" />
                 </div>
               </div>
             | TargetActions =>

@@ -14,15 +14,40 @@ module TextArea = {
   external unsafeAsHtmlInputElement: Dom.element => Dom.htmlInputElement =
     "%identity";
 
-  let element = () =>
+  let setStyleHeight: (string, Dom.htmlInputElement) => unit = [%raw
+    "(height, element) => { element.style.height = height; return }"
+  ];
+
+  let element = id =>
     document
-    |> Document.getElementById("mytextarea")
+    |> Document.getElementById(id)
     |> OptionUtils.unwrapUnsafely
     |> unsafeAsHtmlInputElement;
 
-  let selectionStart = () => element() |> HtmlInputElement.selectionStart;
+  let selectionStart = id => element(id) |> HtmlInputElement.selectionStart;
 
-  let selectionEnd = () => element() |> HtmlInputElement.selectionEnd;
+  let selectionEnd = id => element(id) |> HtmlInputElement.selectionEnd;
+
+  let fitContent = id => {
+    let e = id |> element;
+
+    /* Store the original window scroll height. It'll get messed up when we change the height of the textarea to auto. */
+    let windowScrollHeight = Window.scrollY(window);
+
+    /* Set height of the element to auto to be able to calculate its true scrollHeight. */
+    e |> setStyleHeight("auto");
+
+    /*
+     * Calculate true height, adding an additional 18 pixels to make sure that
+     * addition of line breaks does not cause the textarea to scroll up.
+     */
+    let height = ((e |> HtmlInputElement.scrollHeight) + 18 |> string_of_int) ++ "px";
+
+    e |> setStyleHeight(height);
+
+    /* Restore original window scroll height. */
+    window |> Window.scrollTo(0.0, windowScrollHeight);
+  };
 };
 
 type action =
@@ -38,7 +63,7 @@ let updateDescription = (description, setDescription, updateDescriptionCB) => {
 };
 
 let handleClick =
-    (description, setDescription, updateDescriptionCB, action, event) => {
+    (id, description, setDescription, updateDescriptionCB, action, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   let actionString =
@@ -48,8 +73,8 @@ let handleClick =
     | Code => "`"
     };
 
-  let start = TextArea.selectionStart();
-  let finish = TextArea.selectionEnd();
+  let start = TextArea.selectionStart(id);
+  let finish = TextArea.selectionEnd(id);
   let sel = Js.String.substring(~from=start, ~to_=finish, description);
 
   let newText =
@@ -84,76 +109,142 @@ let buttonTitle = action =>
   };
 
 let buttonIcon = action =>
-  switch (action) {
-  | Bold => <i className="far fa-bold" />
-  | Italics => <i className="far fa-italic" />
-  | Code => <i className="far fa-code" />
-  };
+  <span>
+    {
+      switch (action) {
+      | Bold => <i className="far fa-bold" />
+      | Italics => <i className="far fa-italic" />
+      | Code => <i className="far fa-code" />
+      }
+    }
+  </span>;
 
-let buttons = (description, setDescription, updateDescriptionCB) =>
-  [|Bold, Italics, Code|]
-  |> Array.map(action =>
-       <button
-         className="markdown-button-group__button hover:bg-primary-100 hover:text-primary-400 focus:outline-none focus:text-primary-600"
-         key={action |> buttonTitle}
-         title={action |> buttonTitle}
-         onClick={
-           handleClick(
-             description,
-             setDescription,
-             updateDescriptionCB,
-             action,
-           )
-         }>
-         {action |> buttonIcon}
-       </button>
-     )
+type previewButtonPosition =
+  | PositionRight
+  | PositionLeft;
+
+let buttons =
+    (
+      id,
+      description,
+      setDescription,
+      updateDescriptionCB,
+      preview,
+      setPreview,
+      previewButtonPosition,
+    ) => {
+  let classes = "markdown-button-group__button hover:bg-primary-100 hover:text-primary-400 focus:outline-none focus:text-primary-600";
+
+  let previewOrEditButton =
+    (
+      switch (description) {
+      | "" => React.null
+      | _someDescription =>
+        <button
+          key="preview-button"
+          className=classes
+          onClick=(_ => setPreview(_ => !preview))>
+          {
+            preview ?
+              <FaIcon classes="fab fa-markdown" /> :
+              <FaIcon classes="far fa-eye" />
+          }
+          <span className="ml-2">
+            {(preview ? "Edit Markdown" : "Preview") |> str}
+          </span>
+        </button>
+      }
+    )
+    |> Array.make(1);
+
+  let styleButtons =
+    [|Bold, Italics, Code|]
+    |> Array.map(action =>
+         <button
+           className=classes
+           key={action |> buttonTitle}
+           title={action |> buttonTitle}
+           onClick={
+             handleClick(
+               id,
+               description,
+               setDescription,
+               updateDescriptionCB,
+               action,
+             )
+           }>
+           {action |> buttonIcon}
+         </button>
+       );
+
+  (
+    switch (previewButtonPosition) {
+    | PositionLeft => Array.append(previewOrEditButton, styleButtons)
+    | PositionRight => Array.append(styleButtons, previewOrEditButton)
+    }
+  )
   |> React.array;
+};
 
 [@react.component]
-let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
+let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?) => {
   let (description, setDescription) = React.useState(() => value);
-  let (showPreview, setShowPreview) = React.useState(() => false);
-  <div title="Markdown Editor">
-    <div className="flex w-full justify-between items-center py-2 h-12">
-      {
-        showPreview ?
-          <p className="font-semibold text-sm px-3"> {"Preview" |> str} </p> :
-          <div className="flex markdown-button-group">
-            {buttons(description, setDescription, updateDescriptionCB)}
-          </div>
-      }
-      {
-        description != "" ?
-          <button
-            className="btn btn-default btn-small"
-            onClick={_ => setShowPreview(_ => !showPreview)}>
-            <span>
-              {
-                showPreview ?
-                  <FaIcon classes="far fa-edit" /> :
-                  <FaIcon classes="far fa-eye" />
-              }
-            </span>
-            <span className="ml-2">
-              {(showPreview ? "Edit" : "Preview") |> str}
-            </span>
-          </button> :
-          React.null
-      }
+  let (preview, setPreview) = React.useState(() => false);
+  let (id, _setId) =
+    React.useState(() =>
+      "markdown-editor-"
+      ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
+    );
+
+  let (label, previewButtonPosition) =
+    switch (label) {
+    | Some(label) => (
+        <label
+          className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
+          htmlFor=id>
+          {label |> str}
+        </label>,
+        PositionLeft,
+      )
+    | None => (React.null, PositionRight)
+    };
+
+  React.useEffect(() => {
+    if (!preview) {
+      TextArea.fitContent(id);
+    };
+
+    None;
+  });
+
+  <div>
+    <div className="flex justify-between items-end">
+      label
+      <div className="flex markdown-button-group">
+        {
+          buttons(
+            id,
+            description,
+            setDescription,
+            updateDescriptionCB,
+            preview,
+            setPreview,
+            previewButtonPosition,
+          )
+        }
+      </div>
     </div>
     {
-      showPreview ?
+      preview ?
         <MarkdownBlock
           markdown=description
-          className="py-3 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
+          className="py-3 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview mt-2"
         /> :
         <textarea
-          id="mytextarea"
-          title="Markdown input"
+          id
           maxLength=1000
           rows=6
-          placeholder=placeholderText
+          ?placeholder
           value=description
           onChange={
             event =>
@@ -163,7 +254,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
                 updateDescriptionCB,
               )
           }
-          className="appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray"
+          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray mt-2"
         />
     }
   </div>;
@@ -172,12 +263,10 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("MarkDownEditor");
 
-  let make =
-      (~placeholderText, ~updateDescriptionCB, ~value, children) =>
+  let make = (~placeholder, ~updateDescriptionCB, ~value, ~label, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~placeholderText, ~updateDescriptionCB, ~value, ()),
+      makeProps(~placeholder, ~updateDescriptionCB, ~value, ~label, ()),
       children,
     );
 };
-

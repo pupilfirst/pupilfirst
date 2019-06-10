@@ -185,7 +185,7 @@ let make =
   let updateDescriptionCB = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
 
-  <div title="Question Editor" className="bg-gray-100">
+  <div className="bg-gray-100">
     <div className="flex-1 flex flex-col">
       <div>
         {
@@ -247,14 +247,14 @@ let make =
             onChange={
               event => setTitle(ReactEvent.Form.target(event)##value)
             }
-            placeholder="Add your title"
           />
           <div className="w-full flex flex-col">
             <DisablingCover disabled=saving>
               <MarkDownEditor
-                placeholderText="Explain your question"
                 updateDescriptionCB
                 value=description
+                placeholder="You can use Markdown to format this text."
+                label="Body"
               />
             </DisablingCover>
             <div className="flex justify-end pt-3 border-t">

@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CurriculumEditor__TargetEditor.css")|}];
 
 open CurriculumEditor__Types;
 open SchoolAdmin__Utils;
@@ -21,11 +22,6 @@ type methodOfCompletion =
   | TakeQuiz
   | MarkAsComplete;
 
-type visibility =
-  | Live
-  | Draft
-  | Archived;
-
 type activeStep =
   | AddContent
   | TargetActions;
@@ -36,16 +32,62 @@ type prerequisiteTarget = (int, string, bool);
 
 type resource = (int, string);
 
-let updateTitle = (setTitle, setHasTitleError, title) => {
-  let hasError = title |> String.length < 2;
-  setTitle(_ => title);
-  setHasTitleError(_ => hasError);
+type state = {
+  title: string,
+  evaluationCriteria: list(evaluationCriterion),
+  prerequisiteTargets: list(prerequisiteTarget),
+  methodOfCompletion,
+  quiz: list(QuizQuestion.t),
+  linkToComplete: string,
+  hasTitleError: bool,
+  hasLinktoCompleteError: bool,
+  isValidQuiz: bool,
+  dirty: bool,
+  saving: bool,
+  activeStep,
+  visibility: Target.visibility,
 };
-let updateLinkToComplete =
-    (setLinkToComplete, setHasLinkToCompleteError, link) => {
+
+type action =
+  | UpdateTitle(string, bool)
+  | UpdateLinkToComplete(string, bool)
+  | UpdateEvaluationCriterion(int, string, bool)
+  | UpdatePrerequisiteTargets(int, string, bool)
+  | UpdateMethodOfCompletion(methodOfCompletion)
+  | AddQuizQuestion
+  | UpdateQuizQuestion(int, QuizQuestion.t)
+  | RemoveQuizQuestion(int)
+  | UpdateSaving
+  | UpdateActiveStep(activeStep)
+  | UpdateVisibility(Target.visibility);
+
+let updateTitle = (send, title) => {
+  let hasError = title |> String.length < 2;
+  send(UpdateTitle(title, hasError));
+};
+let updateLinkToComplete = (send, link) => {
   let hasError = UrlUtils.isInvalid(link);
-  setLinkToComplete(_ => link);
-  setHasLinkToCompleteError(_ => hasError);
+  send(UpdateLinkToComplete(link, hasError));
+};
+
+let saveDisabled = state => {
+  let hasMethordOfCompletionError =
+    switch (state.methodOfCompletion) {
+    | NotSelected => true
+    | Evaluated =>
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected)
+      |> List.length == 0
+    | VisitLink => state.hasLinktoCompleteError
+    | TakeQuiz => !state.isValidQuiz
+    | MarkAsComplete => false
+    };
+  state.title
+  |> String.length < 2
+  || state.hasLinktoCompleteError
+  || hasMethordOfCompletionError
+  || !state.dirty
+  || state.saving;
 };
 
 let handleMethodOfCompletion = target => {
@@ -109,12 +151,73 @@ let handlePT = (targets, target) => {
      });
 };
 
+let setPayload = (state, target, authenticityToken) => {
+  let payload = Js.Dict.empty();
+  let targetData = Js.Dict.empty();
+  let prerequisiteTargetIds =
+    state.prerequisiteTargets
+    |> List.filter(((_, _, selected)) => selected == true)
+    |> List.map(((key, _, _)) => key);
+  let evaluationCriteriaIds =
+    state.methodOfCompletion == Evaluated ?
+      state.evaluationCriteria
+      |> List.filter(((_, _, selected)) => selected == true)
+      |> List.map(((key, _, _)) => key) :
+      [];
+  let linkToComplete =
+    state.methodOfCompletion == VisitLink ? state.linkToComplete : "";
+  let quiz = state.methodOfCompletion == TakeQuiz ? state.quiz : [];
+
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+
+  switch (target) {
+  | Some(target) =>
+    Js.Dict.set(
+      targetData,
+      "sort_index",
+      target |> Target.sortIndex |> string_of_int |> Js.Json.string,
+    )
+  | None => ()
+  };
+  Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
+
+  Js.Dict.set(
+    targetData,
+    "prerequisite_target_ids",
+    prerequisiteTargetIds |> Json.Encode.(list(int)),
+  );
+
+  Js.Dict.set(
+    targetData,
+    "evaluation_criterion_ids",
+    evaluationCriteriaIds |> Json.Encode.(list(int)),
+  );
+
+  Js.Dict.set(
+    targetData,
+    "link_to_complete",
+    linkToComplete |> Js.Json.string,
+  );
+
+  Js.Dict.set(
+    targetData,
+    "quiz",
+    quiz |> Json.Encode.(list(QuizQuestion.encoder)),
+  );
+  Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
+  payload;
+};
+
 let handleQuiz = target => {
   let quiz = target |> Target.quiz;
   quiz |> List.length > 0 ? quiz : [QuizQuestion.empty(0)];
 };
 
-let quizValid = quiz =>
+let isValidQuiz = quiz =>
   quiz
   |> List.filter(quizQuestion =>
        quizQuestion |> QuizQuestion.isValidQuizQuestion != true
@@ -134,6 +237,65 @@ let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 let updateDescriptionCB = description => Js.log(description);
 
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateTitle(title, hasTitleError) => {
+      ...state,
+      title,
+      hasTitleError,
+      dirty: true,
+    }
+  | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) => {
+      ...state,
+      linkToComplete,
+      hasLinktoCompleteError,
+      dirty: true,
+    }
+  | UpdateEvaluationCriterion(key, value, selected) =>
+    let oldEC =
+      state.evaluationCriteria |> List.filter(((item, _, _)) => item !== key);
+    {
+      ...state,
+      evaluationCriteria: [(key, value, selected), ...oldEC],
+      dirty: true,
+    };
+  | UpdatePrerequisiteTargets(key, value, selected) =>
+    let oldPT =
+      state.prerequisiteTargets
+      |> List.filter(((item, _, _)) => item !== key);
+    {
+      ...state,
+      prerequisiteTargets: [(key, value, selected), ...oldPT],
+      dirty: true,
+    };
+  | UpdateMethodOfCompletion(methodOfCompletion) => {
+      ...state,
+      methodOfCompletion,
+      dirty: true,
+    }
+  | AddQuizQuestion =>
+    let lastQuestionId = state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
+
+    let quiz =
+      state.quiz
+      |> List.rev
+      |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+      |> List.rev;
+    {...state, quiz, dirty: true, isValidQuiz: isValidQuiz(quiz)};
+  | UpdateQuizQuestion(id, quizQuestion) =>
+    let quiz =
+      state.quiz
+      |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
+    {...state, quiz, dirty: true, isValidQuiz: isValidQuiz(quiz)};
+
+  | RemoveQuizQuestion(id) =>
+    let quiz = state.quiz |> List.filter(a => a |> QuizQuestion.id !== id);
+    {...state, quiz, dirty: true, isValidQuiz: isValidQuiz(quiz)};
+  | UpdateSaving => {...state, saving: !state.saving}
+  | UpdateActiveStep(step) => {...state, activeStep: step}
+  | UpdateVisibility(visibility) => {...state, visibility}
+  };
+
 [@react.component]
 let make =
     (
@@ -146,105 +308,61 @@ let make =
       ~updateTargetCB,
       ~hideEditorActionCB,
     ) => {
-  let (title, setTitle) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) => target |> Target.title
-      | None => ""
+  let handleInitialState = () =>
+    switch (target) {
+    | Some(target) => {
+        title: target |> Target.title,
+        evaluationCriteria: handleEC(evaluationCriteria, target),
+        prerequisiteTargets:
+          handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
+        quiz: handleQuiz(target),
+        linkToComplete:
+          switch (target |> Target.linkToComplete) {
+          | Some(linkToComplete) => linkToComplete
+          | None => ""
+          },
+        methodOfCompletion: handleMethodOfCompletion(target),
+        hasTitleError: false,
+        hasLinktoCompleteError: false,
+        dirty: false,
+        isValidQuiz: true,
+        saving: false,
+        activeStep: AddContent,
+        visibility: target |> Target.visibility,
       }
-    );
-  let (saving, setSaving) = React.useState(() => false);
-  let (activeStep, setActiveStep) = React.useState(() => AddContent);
-  let (visibility, setVisibility) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) => target |> Target.visibility
-      | None => Draft
+    | None => {
+        title: "",
+        evaluationCriteria:
+          evaluationCriteria
+          |> List.map(criteria =>
+               (
+                 criteria |> EvaluationCriteria.id,
+                 criteria |> EvaluationCriteria.name,
+                 true,
+               )
+             ),
+        prerequisiteTargets:
+          eligibleTargets(targets, targetGroupIdsInLevel)
+          |> List.map(_target =>
+               (_target |> Target.id, _target |> Target.title, false)
+             ),
+        quiz: [QuizQuestion.empty(0)],
+        methodOfCompletion: NotSelected,
+        linkToComplete: "",
+        hasTitleError: false,
+        hasLinktoCompleteError: false,
+        dirty: false,
+        isValidQuiz: true,
+        saving: false,
+        activeStep: AddContent,
+        visibility: Draft,
       }
-    );
-  let (evaluationCriteria, setEvaluationCriteria) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) => handleEC(evaluationCriteria, target)
-      | None =>
-        evaluationCriteria
-        |> List.map(criteria =>
-             (
-               criteria |> EvaluationCriteria.id,
-               criteria |> EvaluationCriteria.name,
-               true,
-             )
-           )
-      }
-    );
+    };
 
-  let (prerequisiteTargets, setPrerequisiteTargets) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) =>
-        handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target)
-      | None =>
-        eligibleTargets(targets, targetGroupIdsInLevel)
-        |> List.map(_target =>
-             (_target |> Target.id, _target |> Target.title, false)
-           )
-      }
-    );
-  let (quiz, setQuiz) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) => handleQuiz(target)
-      | None => [QuizQuestion.empty(0)]
-      }
-    );
-
-  let (linkToComplete, setLinkToComplete) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) =>
-        switch (target |> Target.linkToComplete) {
-        | Some(linkToComplete) => linkToComplete
-        | None => ""
-        }
-      | None => ""
-      }
-    );
-
-  let (methodOfCompletion, setMethodOfCompletion) =
-    React.useState(() =>
-      switch (target) {
-      | Some(target) => handleMethodOfCompletion(target)
-      | None => NotSelected
-      }
-    );
-
-  let (hasTitleError, setHasTitleError) = React.useState(() => false);
-  let (hasLinkToCompleteError, setHasLinkToCompleteError) =
-    React.useState(() => false);
-  let (dirty, setDirty) = React.useState(() => false);
-  let (isValidQuiz, setIsValidQuiz) = React.useState(() => true);
-  let saveDisabled = () => {
-    let hasMethordOfCompletionError =
-      switch (methodOfCompletion) {
-      | NotSelected => true
-      | Evaluated =>
-        evaluationCriteria
-        |> List.filter(((_, _, selected)) => selected)
-        |> List.length == 0
-      | VisitLink => hasLinkToCompleteError
-      | TakeQuiz => !isValidQuiz
-      | MarkAsComplete => false
-      };
-    title
-    |> String.length < 2
-    || hasLinkToCompleteError
-    || hasMethordOfCompletionError
-    || !dirty
-    || saving;
-  };
+  let (state, dispatch) = React.useReducer(reducer, handleInitialState());
 
   let targetEvaluated = () =>
-    switch (methodOfCompletion) {
+    switch (state.methodOfCompletion) {
     | NotSelected => true
     | Evaluated => true
     | VisitLink => false
@@ -253,68 +371,50 @@ let make =
     };
 
   let validNumberOfEvaluationCriteria =
-    evaluationCriteria
+    state.evaluationCriteria
     |> List.filter(((_, _, selected)) => selected)
     |> List.length != 0;
 
-  let multiSelectPrerequisiteTargetsCB = (key, value, selected) => {
-    let oldPT =
-      prerequisiteTargets |> List.filter(((item, _, _)) => item !== key);
-    setPrerequisiteTargets(_ => [(key, value, selected), ...oldPT]);
-    setDirty(_ => true);
-  };
-  let multiSelectEvaluationCriterionCB = (key, value, selected) => {
-    let oldEC =
-      evaluationCriteria |> List.filter(((item, _, _)) => item !== key);
-    setEvaluationCriteria(_ => [(key, value, selected), ...oldEC]);
-    setDirty(_ => true);
-  };
-  let removeQuizQuestionCB = id => {
-    let quiz = quiz |> List.filter(a => a |> QuizQuestion.id !== id);
-    setQuiz(_ => quiz);
-    setDirty(_ => true);
-    setIsValidQuiz(_ => quizValid(quiz));
-  };
-  let updateQuizQuestionCB = (id, quizQuestion) => {
-    let quiz =
-      quiz |> List.map(a => a |> QuizQuestion.id == id ? quizQuestion : a);
-    setQuiz(_ => quiz);
-    setDirty(_ => true);
-    setIsValidQuiz(_ => quizValid(quiz));
-  };
-  let questionCanBeRemoved = quiz |> List.length > 1;
-  let handleErrorCB = () => setSaving(_ => !saving);
+  let multiSelectPrerequisiteTargetsCB = (key, value, selected) =>
+    dispatch(UpdatePrerequisiteTargets(key, value, selected));
+  let multiSelectEvaluationCriterionCB = (key, value, selected) =>
+    dispatch(UpdateEvaluationCriterion(key, value, selected));
+  let removeQuizQuestionCB = id => dispatch(RemoveQuizQuestion(id));
+  let updateQuizQuestionCB = (id, quizQuestion) =>
+    dispatch(UpdateQuizQuestion(id, quizQuestion));
+  let questionCanBeRemoved = state.quiz |> List.length > 1;
+  let handleErrorCB = () => dispatch(UpdateSaving);
   let handleResponseCB = json => {
     let id = json |> Json.Decode.(field("id", int));
     let sortIndex = json |> Json.Decode.(field("sortIndex", int));
     let prerequisiteTargets =
-      prerequisiteTargets
+      state.prerequisiteTargets
       |> List.filter(((_, _, selected)) => selected)
       |> List.map(((id, _, _)) => id);
 
     let evaluationCriteria =
-      switch (methodOfCompletion) {
+      switch (state.methodOfCompletion) {
       | Evaluated =>
-        evaluationCriteria
+        state.evaluationCriteria
         |> List.filter(((_, _, selected)) => selected)
         |> List.map(((id, _, _)) => id)
       | _ => []
       };
     let linkToComplete =
-      switch (methodOfCompletion) {
-      | VisitLink => Some(linkToComplete)
+      switch (state.methodOfCompletion) {
+      | VisitLink => Some(state.linkToComplete)
       | _ => None
       };
     let quiz =
-      switch (methodOfCompletion) {
-      | TakeQuiz => quiz
+      switch (state.methodOfCompletion) {
+      | TakeQuiz => state.quiz
       | _ => []
       };
     let newTarget =
       Target.create(
         id,
         targetGroupId,
-        title,
+        state.title,
         evaluationCriteria,
         prerequisiteTargets,
         quiz,
@@ -329,21 +429,21 @@ let make =
     };
     updateTargetCB(newTarget);
   };
-  let createTarget = () => setSaving(_ => !saving);
-
-  let updateTarget = targetId => setSaving(_ => !saving);
-  let showPrerequisiteTargets = prerequisiteTargets |> List.length > 0;
-  let addQuizQuestion = quiz => {
-    let lastQuestionId = quiz |> List.rev |> List.hd |> QuizQuestion.id;
-    let quiz =
-      quiz
-      |> List.rev
-      |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
-      |> List.rev;
-    setQuiz(_ => quiz);
-    setIsValidQuiz(_ => quizValid(quiz));
-    setDirty(_ => true);
+  let createTarget = () => {
+    dispatch(UpdateSaving);
+    let payload = setPayload(state, target, authenticityToken);
+    let tgId = targetGroupId |> string_of_int;
+    let url = "/school/target_groups/" ++ tgId ++ "/targets";
+    Api.create(url, payload, handleResponseCB, handleErrorCB);
   };
+
+  let updateTarget = targetId => {
+    dispatch(UpdateSaving);
+    let payload = setPayload(state, target, authenticityToken);
+    let url = "/school/targets/" ++ (targetId |> string_of_int);
+    Api.update(url, payload, handleResponseCB, handleErrorCB);
+  };
+  let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
   <div>
     <div className="blanket" />
     <div className="drawer-right drawer-right-large">
@@ -355,22 +455,22 @@ let make =
           <i className="fal fa-times text-xl" />
         </button>
       </div>
-      <div className={formClasses(saving)}>
+      <div className={formClasses(state.saving)}>
         <div className="w-full">
           <ul className="flex flex-wrap max-w-3xl mx-auto mt-4 px-3">
             <li
-              onClick={_event => setActiveStep(_ => AddContent)}
+              onClick={_event => dispatch(UpdateActiveStep(AddContent))}
               className="w-1/2 border border-b-0 bg-white rounded-tl-lg p-3 text-center font-semibold text-primary-500">
               {"1. Add Content" |> str}
             </li>
             <li
-              onClick={_event => setActiveStep(_ => TargetActions)}
+              onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
               className="w-1/2 mr-auto border border-b-0 bg-white rounded-tr-lg p-3 text-center font-semibold -ml-px">
               {"2. Method of Completion" |> str}
             </li>
           </ul>
           {
-            switch (activeStep) {
+            switch (state.activeStep) {
             | AddContent =>
               <div className="mx-auto bg-white border-t">
                 <div className="max-w-3xl py-6 px-3 mx-auto">
@@ -385,24 +485,88 @@ let make =
                     id="title"
                     type_="text"
                     placeholder="Type target title here"
-                    value=title
+                    value={state.title}
                     onChange=(
                       event =>
                         updateTitle(
-                          setTitle,
-                          setHasTitleError,
+                          dispatch,
                           ReactEvent.Form.target(event)##value,
                         )
                     )
                   />
                   {
-                    hasTitleError ?
+                    state.hasTitleError ?
                       <div className="drawer-right-form__error-msg">
                         {"not a valid title" |> str}
                       </div> :
                       ReasonReact.null
                   }
-                  <MarkDownEditor updateDescriptionCB value="description" />
+                  <MarkDownEditor
+                    updateDescriptionCB
+                    value="description"
+                  />
+                  <div
+                    className="content-block__container relative border border-gray-400 rounded-lg overflow-hidden">
+                    <div
+                      className="content-block__controls flex absolute right-0 top-0 bg-white rounded-bl shadow">
+                      <button
+                        title="Move up"
+                        className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                        <i className="fas fa-arrow-up" />
+                      </button>
+                      <button
+                        title="Move down"
+                        className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                        <i className="fas fa-arrow-down" />
+                      </button>
+                      <button
+                        title="Delete block"
+                        className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
+                        <i className="fas fa-trash-alt" />
+                      </button>
+                    </div>
+                    <div
+                      className="content-block bg-gray-200 flex justify-center items-center">
+                      <div
+                        className="content-block-type__image-placeholder text-center p-10">
+                        <i className="fas fa-image text-6xl text-gray-500" />
+                        <p className="text-xs text-gray-700 mt-1">
+                          {"You can upload PNG, JPG, GIF files" |> str}
+                        </p>
+                        <div className="flex justify-center relative mt-2">
+                          <input
+                            id="content-block-type__image-input"
+                            type_="file"
+                            className="input-file__input cursor-pointer px-4"
+                          />
+                          <label
+                            className="btn btn-primary flex absolute"
+                            htmlFor="content-block-type__image-input">
+                            <i className="fas fa-upload" />
+                            <span className="ml-2 truncate">
+                              {"Select an image" |> str}
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="content-block__action-bar flex p-3 border-t">
+                      <div className="flex-1 content-block__action-bar-input">
+                        <input
+                          className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                          id="ImageCaption"
+                          type_="text"
+                          placeholder="Type caption for image (optional)"
+                        />
+                      </div>
+                      <div className="ml-2 text-right">
+                        <button className="btn btn-large btn-success">
+                          {"Save" |> str}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             | TargetActions =>
@@ -418,7 +582,7 @@ let make =
                         </label>
                         <div id="prerequisite_targets" className="mb-6">
                           <School__SelectBox
-                            items=prerequisiteTargets
+                            items={state.prerequisiteTargets}
                             multiSelectCB=multiSelectPrerequisiteTargetsCB
                           />
                         </div>
@@ -438,13 +602,12 @@ let make =
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
-                            setMethodOfCompletion(_ => Evaluated);
-                            setDirty(_ => true);
+                            dispatch(UpdateMethodOfCompletion(Evaluated));
                           }
                         )
                         className={
                           booleanButtonClasses(
-                            methodOfCompletion == Evaluated,
+                            state.methodOfCompletion == Evaluated,
                           )
                         }>
                         {"Yes" |> str}
@@ -453,8 +616,9 @@ let make =
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
-                            setMethodOfCompletion(_ => MarkAsComplete);
-                            setDirty(_ => true);
+                            dispatch(
+                              UpdateMethodOfCompletion(MarkAsComplete),
+                            );
                           }
                         )
                         className={booleanButtonClasses(!targetEvaluated())}>
@@ -482,13 +646,16 @@ let make =
                                 onClick=(
                                   _event => {
                                     ReactEvent.Mouse.preventDefault(_event);
-                                    setMethodOfCompletion(_ => MarkAsComplete);
-                                    setDirty(_ => true);
+                                    dispatch(
+                                      UpdateMethodOfCompletion(
+                                        MarkAsComplete,
+                                      ),
+                                    );
                                   }
                                 )
                                 className={
                                   completionButtonClasses(
-                                    methodOfCompletion == MarkAsComplete,
+                                    state.methodOfCompletion == MarkAsComplete,
                                   )
                                 }>
                                 <div className="mb-1">
@@ -502,13 +669,14 @@ let make =
                                 onClick=(
                                   _event => {
                                     ReactEvent.Mouse.preventDefault(_event);
-                                    setMethodOfCompletion(_ => VisitLink);
-                                    setDirty(_ => true);
+                                    dispatch(
+                                      UpdateMethodOfCompletion(VisitLink),
+                                    );
                                   }
                                 )
                                 className={
                                   completionButtonClasses(
-                                    methodOfCompletion == VisitLink,
+                                    state.methodOfCompletion == VisitLink,
                                   )
                                 }>
                                 <div className="mb-1">
@@ -522,13 +690,14 @@ let make =
                                 onClick=(
                                   _event => {
                                     ReactEvent.Mouse.preventDefault(_event);
-                                    setMethodOfCompletion(_ => TakeQuiz);
-                                    setDirty(_ => true);
+                                    dispatch(
+                                      UpdateMethodOfCompletion(TakeQuiz),
+                                    );
                                   }
                                 )
                                 className={
                                   completionButtonClasses(
-                                    methodOfCompletion == TakeQuiz,
+                                    state.methodOfCompletion == TakeQuiz,
                                   )
                                 }>
                                 <div className="mb-1">
@@ -542,7 +711,7 @@ let make =
                       </div>
                   }
                   {
-                    switch (methodOfCompletion) {
+                    switch (state.methodOfCompletion) {
                     | Evaluated =>
                       <div id="evaluation_criteria" className="mb-6">
                         <label
@@ -558,7 +727,7 @@ let make =
                             </div>
                         }
                         <School__SelectBox
-                          items=evaluationCriteria
+                          items={state.evaluationCriteria}
                           multiSelectCB=multiSelectEvaluationCriterionCB
                         />
                       </div>
@@ -571,7 +740,7 @@ let make =
                           {"Prepare the quiz now." |> str}
                         </h3>
                         {
-                          isValidQuiz ?
+                          state.isValidQuiz ?
                             ReasonReact.null :
                             <div className="drawer-right-form__error-msg">
                               {
@@ -581,7 +750,7 @@ let make =
                             </div>
                         }
                         {
-                          quiz
+                          state.quiz
                           |> List.mapi((index, quizQuestion) =>
                                <CurriculumEditor__TargetQuizQuestion
                                  key={
@@ -603,7 +772,7 @@ let make =
                           onClick=(
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
-                              addQuizQuestion(quiz);
+                              dispatch(AddQuizQuestion);
                             }
                           )
                           className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
@@ -626,18 +795,17 @@ let make =
                           id="link_to_complete"
                           type_="text"
                           placeholder="Paste link to complete"
-                          value=linkToComplete
+                          value={state.linkToComplete}
                           onChange=(
                             event =>
                               updateLinkToComplete(
-                                setLinkToComplete,
-                                setHasLinkToCompleteError,
+                                dispatch,
                                 ReactEvent.Form.target(event)##value,
                               )
                           )
                         />
                         {
-                          hasLinkToCompleteError ?
+                          state.hasLinktoCompleteError ?
                             <div className="drawer-right-form__error-msg">
                               {"not a valid link" |> str}
                             </div> :
@@ -655,7 +823,7 @@ let make =
             <div
               className="flex max-w-3xl w-full justify-between items-center px-6 mx-auto">
               {
-                switch (activeStep) {
+                switch (state.activeStep) {
                 | TargetActions =>
                   <div className="flex items-center flex-shrink-0">
                     <label
@@ -670,21 +838,23 @@ let make =
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
-                            setVisibility(_ => Live);
+                            dispatch(UpdateVisibility(Live));
                           }
                         )
-                        className={booleanButtonClasses(visibility === Live)}>
+                        className={
+                          booleanButtonClasses(state.visibility === Live)
+                        }>
                         {"Live" |> str}
                       </button>
                       <button
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
-                            setVisibility(_ => Archived);
+                            dispatch(UpdateVisibility(Archived));
                           }
                         )
                         className={
-                          booleanButtonClasses(visibility === Archived)
+                          booleanButtonClasses(state.visibility === Archived)
                         }>
                         {"Archived" |> str}
                       </button>
@@ -692,10 +862,12 @@ let make =
                         onClick=(
                           _event => {
                             ReactEvent.Mouse.preventDefault(_event);
-                            setVisibility(_ => Draft);
+                            dispatch(UpdateVisibility(Draft));
                           }
                         )
-                        className={booleanButtonClasses(visibility === Draft)}>
+                        className={
+                          booleanButtonClasses(state.visibility === Draft)
+                        }>
                         {"Draft" |> str}
                       </button>
                     </div>
@@ -704,11 +876,13 @@ let make =
                 }
               }
               {
-                switch (activeStep) {
+                switch (state.activeStep) {
                 | AddContent =>
                   <div className="w-auto">
                     <button
-                      onClick=(_event => setActiveStep(_ => TargetActions))
+                      onClick=(
+                        _event => dispatch(UpdateActiveStep(TargetActions))
+                      )
                       className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                       {"Next Step" |> str}
                     </button>
@@ -718,7 +892,7 @@ let make =
                   | Some(target) =>
                     <div className="w-auto">
                       <button
-                        disabled={saveDisabled()}
+                        disabled={saveDisabled(state)}
                         onClick=(_e => updateTarget(target |> Target.id))
                         className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                         {"Update Target" |> str}
@@ -728,7 +902,7 @@ let make =
                   | None =>
                     <div className="w-full">
                       <button
-                        disabled={saveDisabled()}
+                        disabled={saveDisabled(state)}
                         onClick=(_e => createTarget())
                         className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
                         {"Create Target" |> str}

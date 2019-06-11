@@ -188,5 +188,5 @@ let statusToString = t =>
   | Submitted => "Submitted"
   | Passed => "Passed"
   | Failed => "Failed"
-  | Locked(reason) => "Locked(" ++ lockReasonToString(reason) ++ ")"
+  | Locked(_) => "Locked"
   };

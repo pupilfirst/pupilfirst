@@ -23,3 +23,5 @@ let isLocked = t =>
   | Some(date) => date |> DateFns.parseString |> DateFns.isFuture
   | None => false
   };
+
+let sort = levels => levels |> List.sort((x, y) => x.number - y.number);

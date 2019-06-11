@@ -409,9 +409,9 @@ let make =
                     value="description"
                   />
                   <div
-                    className="content-block__container relative border border-gray-400 rounded-lg overflow-hidden">
+                    className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
                     <div
-                      className="content-block__controls flex absolute right-0 top-0 bg-white rounded-bl shadow">
+                      className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow">
                       <button
                         title="Move up"
                         className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
@@ -429,22 +429,22 @@ let make =
                       </button>
                     </div>
                     <div
-                      className="content-block bg-gray-200 flex justify-center items-center">
+                      className="content-block__content bg-gray-200 flex justify-center items-center">
                       <div
-                        className="content-block-type__image-placeholder text-center p-10">
+                        className="[ content-block__content-placeholder ] text-center p-10">
                         <i className="fas fa-image text-6xl text-gray-500" />
                         <p className="text-xs text-gray-700 mt-1">
                           {"You can upload PNG, JPG, GIF files" |> str}
                         </p>
                         <div className="flex justify-center relative mt-2">
                           <input
-                            id="content-block-type__image-input"
+                            id="content-block-image-input"
                             type_="file"
                             className="input-file__input cursor-pointer px-4"
                           />
                           <label
                             className="btn btn-primary flex absolute"
-                            htmlFor="content-block-type__image-input">
+                            htmlFor="content-block-image-input">
                             <i className="fas fa-upload" />
                             <span className="ml-2 truncate">
                               {"Select an image" |> str}
@@ -454,7 +454,7 @@ let make =
                       </div>
                     </div>
                     <div
-                      className="content-block__action-bar flex p-3 border-t">
+                      className="[ content-block__action-bar ] flex p-3 border-t">
                       <div className="flex-1 content-block__action-bar-input">
                         <input
                           className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
@@ -464,10 +464,46 @@ let make =
                         />
                       </div>
                       <div className="ml-2 text-right">
-                        <button className="btn btn-large btn-success">
+                        <button className="btn btn-large btn-success disabled">
                           {"Save" |> str}
                         </button>
                       </div>
+                    </div>
+                  </div>
+                  <div className="add-content-block add-content-block--open">
+                    <div
+                      className="add-content-block__plus-button-container relative py-3">
+                      <div
+                        className="add-content-block__plus-button bg-gray-200 relative rounded-lg w-9 h-9 flex justify-center items-center mx-auto z-20">
+                        <i className="fal fa-plus text-xl add-content-block__plus-button-icon" />
+                      </div>
+                    </div>
+                    <div
+                      className="add-content-block__blocks hidden shadow-lg max-w-2xl mx-auto relative bg-primary-900 px-5 pt-6 pb-5 rounded-lg -mt-6 z-10">
+                      <div className="flex-1 text-center text-primary-200">
+                        <i className="fab fa-markdown text-3xl" />
+                        <p className="font-semibold mt-1">
+                          {"Markdown" |> str}
+                        </p>
+                      </div>
+                      <div className="flex-1 text-center text-primary-200">
+                        <i className="far fa-image text-3xl" />
+                        <p className="font-semibold mt-1">
+                          {"Image" |> str}
+                        </p>
+                      </div>
+                      <div className="flex-1 text-center text-primary-200">
+                        <i className="far fa-code text-3xl" />
+                        <p className="font-semibold mt-1">
+                          {"Embed" |> str}
+                        </p>
+                      </div>
+                      <div className="flex-1 text-center text-primary-200">
+                        <i className="far fa-file-alt text-3xl" />
+                        <p className="font-semibold mt-1">
+                          {"File" |> str}
+                        </p>
+                        </div>
                     </div>
                   </div>
                 </div>

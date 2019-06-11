@@ -1,3 +1,22 @@
-.content-block {
+.content-block__content {
   min-height: 14rem;
+}
+
+.add-content-block__plus-button-container:before {
+  content: '';
+  @apply absolute w-full h-px border-t border-dashed border-gray-400;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.add-content-block--open .add-content-block__plus-button-icon {
+  transform: rotate(45deg);
+}
+
+.add-content-block--open .add-content-block__blocks {
+  display: flex;
+}
+
+.add-content-block--open .add-content-block__plus-button {
+  @apply bg-primary-900 text-primary-200;
 }

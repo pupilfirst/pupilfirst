@@ -214,7 +214,7 @@ let make =
       <div className="w-full flex flex-col">
         <DisablingCover disabled=saving>
           <MarkDownEditor
-            placeholderText="Type your Answer"
+            label="Your Answer"
             updateDescriptionCB
             value=description
           />

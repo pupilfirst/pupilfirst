@@ -20,6 +20,10 @@ module Questions
       }
     end
 
+    def page_title
+      "#{question_data['title']} | Question"
+    end
+
     def question_data
       @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'created_at', 'updated_at')
     end

@@ -41,7 +41,8 @@ module TextArea = {
      * Calculate true height, adding an additional 18 pixels to make sure that
      * addition of line breaks does not cause the textarea to scroll up.
      */
-    let height = ((e |> HtmlInputElement.scrollHeight) + 18 |> string_of_int) ++ "px";
+    let height =
+      ((e |> HtmlInputElement.scrollHeight) + 18 |> string_of_int) ++ "px";
 
     e |> setStyleHeight(height);
 
@@ -254,7 +255,7 @@ let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?) => {
                 updateDescriptionCB,
               )
           }
-          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray mt-2"
+          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500 mt-2"
         />
     }
   </div>;

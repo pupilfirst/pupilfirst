@@ -372,7 +372,7 @@ let make =
                     {"Title" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="link-title"
                     type_="text"
                     placeholder="A short title for a new link"
@@ -396,7 +396,7 @@ let make =
                 {"Full URL" |> str}
               </label>
               <input
-                className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white"
+                className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="link-full-url"
                 type_="text"
                 placeholder="Full URL, staring with https://"

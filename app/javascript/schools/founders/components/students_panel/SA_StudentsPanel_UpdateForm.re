@@ -254,7 +254,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="name"
                     type_="text"
                     placeholder="Student name here"
@@ -281,7 +281,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="team_name"
                     type_="text"
                     placeholder="Team name here"

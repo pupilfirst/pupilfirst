@@ -102,7 +102,7 @@ let make =
           placeholder="Add your comment"
           value
           onChange={event => setValue(ReactEvent.Form.target(event)##value)}
-          className="community-qa-comment__input text-xs text-left bg-gray-200 py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray"
+          className="community-qa-comment__input text-xs text-left bg-gray-200 py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white"
         />
         {
           validComment ?

@@ -243,7 +243,7 @@ let make =
           <input
             id="title"
             value=title
-            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             onChange={
               event => setTitle(ReactEvent.Form.target(event)##value)
             }

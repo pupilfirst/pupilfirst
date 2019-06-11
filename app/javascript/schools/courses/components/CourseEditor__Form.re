@@ -344,7 +344,7 @@ let make =
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="name"
                   type_="text"
                   placeholder="Type course name here"
@@ -368,7 +368,7 @@ let make =
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="description"
                   type_="text"
                   placeholder="Type course description here"
@@ -397,7 +397,7 @@ let make =
                   {"Course ends at" |> str}
                 </label>
                 <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="date"
                   type_="text"
                   placeholder="DD/MM/YYYY"
@@ -541,7 +541,7 @@ let make =
                                  |> string_of_int
                                }>
                                <input
-                                 className="text-center grades__label-input appearance-none inline-block bg-white text-gray-800 border border-gray-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                                 className="text-center grades__label-input appearance-none inline-block bg-white text-gray-800 border border-gray-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                  id={
                                    "label"
                                    ++ (

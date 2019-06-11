@@ -163,7 +163,7 @@ let make = (~placeholderText, ~updateDescriptionCB, ~value) => {
                 updateDescriptionCB,
               )
           }
-          className="appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray"
+          className="appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500"
         />
     }
   </div>;

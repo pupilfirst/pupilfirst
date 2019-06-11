@@ -6,15 +6,15 @@ module Mutations
 
     description "Update a target."
 
-    field :target, Types::CourseType, null: false
+    field :target, Types::TargetType, null: false
 
     def resolve(params)
       mutator = UpdateTargetMutator.new(params, context)
 
       if mutator.valid?
-        { course: mutator.create_course, errors: [] }
+        { target: mutator.update_target, errors: [] }
       else
-        { course: nil, errors: mutator.error_codes }
+        { target: nil, errors: mutator.error_codes }
       end
     end
   end

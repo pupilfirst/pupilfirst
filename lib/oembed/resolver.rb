@@ -23,11 +23,11 @@ module Oembed
 
     def provider
       host_name = URI.parse(@url).hostname
-      if host_name['youtube'].present?
+      if host_name.include?('youtube')
         return YoutubeProvider
-      elsif host_name['vimeo'].present?
+      elsif host_name.include?('vimeo')
         return VimeoProvider
-      elsif host_name['slideshare'].present?
+      elsif host_name.include?['slideshare']
         return SlideshareProvider
       else
         raise ProviderNotSupported

@@ -120,18 +120,14 @@ RSpec.configure do |config|
 
   # Remember failures. Run only failed tests with the --only-failures flag.
   config.example_status_persistence_file_path = "examples.txt"
+
+  config.before(:each, js: true) do
+    Capybara.page.driver.browser.manage.window.maximize unless Capybara.javascript_driver == :cuprite
+  end
 end
 
 Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    desired_capabilities: {
-      "chromeOptions" => {
-        "args" => %w[window-size=1024,768]
-      }
-    }
-  )
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 
 Capybara.register_driver :headless_chrome do |app|

@@ -509,6 +509,8 @@ let make =
                     className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
                     <div
                       className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow">
+                      /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
+                        it helps to quickly differentiate who does what */
                       <button
                         title="Move up"
                         className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
@@ -551,7 +553,7 @@ let make =
                       </div>
                     </div>
                     <div
-                      className="[ content-block__action-bar ] flex p-3 border-t">
+                      className="[ content-block__action-bar ] flex p-3 border-t justify-end">
                       <div className="flex-1 content-block__action-bar-input">
                         <input
                           className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"

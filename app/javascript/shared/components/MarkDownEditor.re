@@ -1,13 +1,6 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./MarkDownEditor.css")|}];
 
-type element;
-[@bs.scope "document"] [@bs.val]
-external getElementById: string => element = "";
-[@bs.get] external selectionStart: element => int = "";
-[@bs.get] external selectionEnd: element => int = "";
-[@bs.get] external value: element => string = "";
-
 module TextArea = {
   open Webapi.Dom;
 
@@ -41,7 +34,8 @@ module TextArea = {
      * Calculate true height, adding an additional 18 pixels to make sure that
      * addition of line breaks does not cause the textarea to scroll up.
      */
-    let height = ((e |> HtmlInputElement.scrollHeight) + 18 |> string_of_int) ++ "px";
+    let height =
+      ((e |> HtmlInputElement.scrollHeight) + 18 |> string_of_int) ++ "px";
 
     e |> setStyleHeight(height);
 

@@ -4,6 +4,10 @@ module Users
       super(view_context)
     end
 
+    def page_title
+      "Home | #{current_school.name}"
+    end
+
     def course_details
       course_details = founders.map do |founder|
         course_detail = course_info(founder.course)

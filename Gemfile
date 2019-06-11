@@ -152,8 +152,7 @@ group :test do
   gem 'factory_bot_rails', '~> 5.0' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.0' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
-  gem 'selenium-webdriver', '~> 3.3'
-  gem 'webdrivers', '~> 3.0' # Keep your Selenium WebDrivers updated automatically.
+  gem 'webdrivers', '~> 4.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
 end

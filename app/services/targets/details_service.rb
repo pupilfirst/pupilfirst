@@ -117,7 +117,10 @@ module Targets
     def content_blocks
       @target.content_blocks.with_attached_file.map do |content_block|
         cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index')
-        cb['file_url'] = url_helpers.url_for(content_block.file) if content_block.file.attached?
+        if content_block.file.attached?
+          cb['file_url'] = url_helpers.url_for(content_block.file)
+          cb['filename'] = content_block.file.filename
+        end
         cb
       end
     end

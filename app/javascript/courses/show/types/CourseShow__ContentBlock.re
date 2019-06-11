@@ -5,10 +5,11 @@ type url = string;
 type title = string;
 type caption = string;
 type embedCode = string;
+type filename = string;
 
 type blockType =
   | Markdown(markdown)
-  | File(url, title)
+  | File(url, title, filename)
   | Image(url, caption)
   | Embed(url, embedCode);
 
@@ -38,7 +39,8 @@ let decode = json => {
     | "file" =>
       let title = json |> field("content", decodeFileContent);
       let url = json |> field("fileUrl", string);
-      File(url, title);
+      let filename = json |> field("filename", string);
+      File(url, title, filename);
     | "image" =>
       let caption = json |> field("content", decodeImageContent);
       let url = json |> field("fileUrl", string);
@@ -55,6 +57,8 @@ let decode = json => {
     sortIndex: json |> field("sortIndex", int),
   };
 };
+
+let sort = blocks => blocks |> List.sort((x, y) => x.sortIndex - y.sortIndex);
 
 let id = t => t.id;
 let blockType = t => t.blockType;

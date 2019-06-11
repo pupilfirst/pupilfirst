@@ -26,16 +26,40 @@ let overlaySelectionVisiblilityClasses =
     (inspectedSelection, currentSelection) =>
   inspectedSelection == currentSelection ? "" : "hidden";
 
+let renderBlockClasses = block =>
+  switch (block |> ContentBlock.blockType) {
+  | Markdown(_) => "mt-4"
+  | File(_) => "mt-4"
+  | Image(_) => "mt-4"
+  | Embed(_) => "flex justify-center mt-4"
+  };
+
 let markdownContentBlock = markdown => <MarkdownBlock markdown className="" />;
 
-let fileContentBlock = (url, title) =>
-  <a href=url> {"File: " ++ title |> str} </a>;
+let fileContentBlock = (url, title, filename) =>
+  <div className="mt-2 shadow-md border px-6 py-4 rounded-lg">
+    <a className="flex justify-between items-center" href=url>
+      <div className="flex items-center">
+        <FaIcon classes="text-4xl text-red-600 fal fa-file-pdf" />
+        <div className="pl-4 leading-tight">
+          <div className="text-lg font-semibold"> {title |> str} </div>
+          <div className="text-sm italic text-gray-600">
+            {filename |> str}
+          </div>
+        </div>
+      </div>
+      <div> <FaIcon classes="text-2xl far fa-download" /> </div>
+    </a>
+  </div>;
 
-let imageContentBlock = (url, caption) => <img src=url alt=caption />;
+let imageContentBlock = (url, caption) =>
+  <div className="rounded-lg bg-gray-300">
+    <img src=url alt=caption />
+    <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
+  </div>;
 
 let embedContentBlock = (_url, embedCode) =>
   <div dangerouslySetInnerHTML={"__html": embedCode} />;
-
 let learnSection = (overlaySelection, targetDetails) =>
   <div
     className={overlaySelectionVisiblilityClasses(Learn, overlaySelection)}>
@@ -44,16 +68,20 @@ let learnSection = (overlaySelection, targetDetails) =>
       | Some(details) =>
         details
         |> TargetDetails.contentBlocks
+        |> ContentBlock.sort
         |> List.map(block => {
              let renderedBlock =
                switch (block |> ContentBlock.blockType) {
                | Markdown(markdown) => markdownContentBlock(markdown)
-               | File(url, title) => fileContentBlock(url, title)
+               | File(url, title, filename) =>
+                 fileContentBlock(url, title, filename)
                | Image(url, caption) => imageContentBlock(url, caption)
                | Embed(url, embedCode) => embedContentBlock(url, embedCode)
                };
 
-             <div className="mt-2" key={block |> ContentBlock.id}>
+             <div
+               className={renderBlockClasses(block)}
+               key={block |> ContentBlock.id}>
                renderedBlock
              </div>;
            })
@@ -72,13 +100,17 @@ let selectionToString = overlaySelection =>
   };
 
 let overlaySelectionOptions = (target, overlaySelection, setOverlaySelection) =>
-  <div className="border rounded-lg max-w-fc mt-4">
+  <div className="mt-4 flex justify-between max-w-3xl mx-auto">
     {
       [Learn, Discuss, Complete]
       |> List.map(selection => {
            let classes =
-             "inline-block p-4 cursor-pointer hover:bg-gray-200"
-             ++ (overlaySelection == selection ? " bg-gray-300" : "");
+             "p-4 flex w-full justify-center rounded-lg border-2 border-b-0 font-semibold"
+             ++ (
+               overlaySelection == selection ?
+                 " bg-white text-blue-600" :
+                 " bg-gray-300 hover:bg-gray-200 cursor-pointer"
+             );
 
            <span
              key={"select-" ++ (selection |> selectionToString)}
@@ -155,9 +187,19 @@ let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
   );
 
   <div className="absolute top-0 left-0 min-h-screen w-full bg-white">
-    <div className="container mx-auto px-4">
-      {overlayStatus(closeOverlayCB, target, targetStatus)}
-      {overlaySelectionOptions(target, overlaySelection, setOverlaySelection)}
+    <div className="bg-gray-200 border-b-2">
+      <div className="container mx-auto">
+        {overlayStatus(closeOverlayCB, target, targetStatus)}
+        {
+          overlaySelectionOptions(
+            target,
+            overlaySelection,
+            setOverlaySelection,
+          )
+        }
+      </div>
+    </div>
+    <div className="container mx-auto p-4 max-w-3xl">
       {learnSection(overlaySelection, targetDetails)}
       {discussSection(overlaySelection, target, targetDetails)}
       {

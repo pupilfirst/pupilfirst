@@ -9,8 +9,12 @@
   transform: translateY(-50%);
 }
 
+.add-content-block__plus-button-icon {
+  transition: all 0.25s ease-in-out;
+}
+
 .add-content-block--open .add-content-block__plus-button-icon {
-  transform: rotate(45deg);
+  transform: rotate(135deg);
 }
 
 .add-content-block--open .add-content-block__blocks {

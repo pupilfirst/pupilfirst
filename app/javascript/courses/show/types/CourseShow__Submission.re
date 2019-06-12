@@ -4,6 +4,10 @@ type t = {
   createdAt: string,
 };
 
+let id = t => t.id;
+let description = t => t.description;
+let createdAt = t => t.createdAt;
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),

@@ -1,8 +1,8 @@
 type t = {
   pendingStudentIds: list(string),
-  latestSubmissionDetails: option(CourseShow__SubmissionDetails.t),
-  latestSubmissionAttachments: list(CourseShow__SubmissionAttachment.t),
-  latestFeedback: option(CourseShow__Feedback.t),
+  submissions: list(CourseShow__Submission.t),
+  submissionAttachments: list(CourseShow__SubmissionAttachment.t),
+  feedback: list(CourseShow__Feedback.t),
   quizQuestions: list(CourseShow__QuizQuestion.t),
   contentBlocks: list(CourseShow__ContentBlock.t),
   communities: list(CourseShow__Community.t),
@@ -11,23 +11,15 @@ type t = {
 let decode = json =>
   Json.Decode.{
     pendingStudentIds: json |> field("pendingStudentIds", list(string)),
-    latestSubmissionDetails:
+    submissions:
+      json |> field("submissions", list(CourseShow__Submission.decode)),
+    submissionAttachments:
       json
       |> field(
-           "latestSubmissionDetails",
-           nullable(CourseShow__SubmissionDetails.decode),
-         )
-      |> Js.Null.toOption,
-    latestSubmissionAttachments:
-      json
-      |> field(
-           "latestSubmissionAttachments",
+           "submissionAttachments",
            list(CourseShow__SubmissionAttachment.decode),
          ),
-    latestFeedback:
-      json
-      |> field("latestFeedback", nullable(CourseShow__Feedback.decode))
-      |> Js.Null.toOption,
+    feedback: json |> field("feedback", list(CourseShow__Feedback.decode)),
     quizQuestions:
       json |> field("quizQuestions", list(CourseShow__QuizQuestion.decode)),
     contentBlocks:

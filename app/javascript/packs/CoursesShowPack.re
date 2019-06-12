@@ -10,7 +10,7 @@ let decodeProps = json =>
     json |> field("levels", list(Level.decode)),
     json |> field("targetGroups", list(TargetGroup.decode)),
     json |> field("targets", list(Target.decode)),
-    json |> field("submissions", list(Submission.decode)),
+    json |> field("submissions", list(LatestSubmission.decode)),
     json |> field("team", Team.decode),
     json |> field("students", list(Student.decode)),
     json |> field("coaches", list(Coach.decode)),

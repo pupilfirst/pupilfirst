@@ -75,7 +75,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
   });
 
   <div className="border-b">
-    <div className="container mx-auto px-6">
+    <div className="container mx-auto px-6 max-w-6xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-xs" href="/">

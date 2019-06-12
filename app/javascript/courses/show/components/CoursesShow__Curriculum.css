@@ -1,0 +1,9 @@
+.curriculum__target-group-container:not(:last-child):before {
+  content: "";
+  @apply absolute top-0 bg-primary-400;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  z-index: 0;
+}

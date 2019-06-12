@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesShow__Curriculum.css")|}];
 
 module TargetStatus = CourseShow__TargetStatus;
 
@@ -28,9 +29,9 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
 
   <div
     key={target |> Target.id}
-    className="hover:bg-gray-200 bg-white border border-b-0 px-5 py-4 flex justify-between"
+    className="bg-white border-t p-6 flex justify-between hover:bg-gray-200 hover:text-primary-500 "
     onClick={_e => setSelectedTargetId(_ => Some(target |> Target.id))}>
-    <span className="font-semibold text-sm">
+    <span className="font-semibold">
       {target |> Target.title |> str}
     </span>
     <span className="ml-4 font-bold">
@@ -45,28 +46,30 @@ let renderTargetGroup =
   let targets =
     targets |> List.filter(t => t |> Target.targetGroupId == targetGroupId);
 
-  <div
-    key=targetGroupId
-    className="mt-4 w-1/2 mx-auto bg-white text-center rounded-lg border shadow-lg overflow-hidden">
-    <div className="p-6">
-      <div className="text-2xl font-bold">
-        {targetGroup |> TargetGroup.name |> str}
+  <div className="curriculum__target-group-container relative mt-8">
+    <div
+      key=targetGroupId
+      className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
+      <div className="p-6">
+        <div className="text-2xl font-bold">
+          {targetGroup |> TargetGroup.name |> str}
+        </div>
+        <div className="text-sm">
+          {targetGroup |> TargetGroup.description |> str}
+        </div>
       </div>
-      <div className="text-sm">
-        {targetGroup |> TargetGroup.description |> str}
-      </div>
+      {
+        targets
+        |> List.sort((t1, t2) =>
+            (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
+          )
+        |> List.map(target =>
+            rendertarget(target, setSelectedTargetId, statusOfTargets)
+          )
+        |> Array.of_list
+        |> React.array
+      }
     </div>
-    {
-      targets
-      |> List.sort((t1, t2) =>
-           (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
-         )
-      |> List.map(target =>
-           rendertarget(target, setSelectedTargetId, statusOfTargets)
-         )
-      |> Array.of_list
-      |> React.array
-    }
   </div>;
 };
 
@@ -167,7 +170,7 @@ let make =
     );
   let (selectedTargetId, setSelectedTargetId) = React.useState(() => None);
 
-  <div className="py-4 bg-gray-300">
+  <div className="py-4 bg-gray-100">
     {
       switch (selectedTargetId) {
       | Some(targetId) =>

@@ -2,6 +2,14 @@
   min-height: 14rem;
 }
 
+.add-content-block {
+  transition: all 0.25s ease-in-out;
+}
+
+.add-content-block--open .add-content-block__blocks {
+  animation: slideDown 0.25s ease-in-out;
+}
+
 .add-content-block__plus-button-container:before {
   content: '';
   @apply absolute w-full h-px border-t border-dashed border-gray-400;
@@ -23,4 +31,15 @@
 
 .add-content-block--open .add-content-block__plus-button {
   @apply bg-primary-900 text-primary-200;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

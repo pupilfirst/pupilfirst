@@ -14,6 +14,7 @@ module Schools
           levels: levels,
           targetGroups: target_groups,
           targets: targets,
+          contentBlocks: content_blocks,
           authenticityToken: view.form_authenticity_token
         }
       end
@@ -23,6 +24,18 @@ module Schools
           id: @course.id,
           name: @course.name
         }
+      end
+
+      def content_blocks
+        ContentBlock.where(target: @course.targets).map do |content_block|
+          {
+            id: content_block.id,
+            targetId: content_block.target.id,
+            sortIndex: content_block.sort_index,
+            content: content_block.content,
+            blockType: content_block.block_type
+          }
+        end
       end
 
       def evaluation_criteria

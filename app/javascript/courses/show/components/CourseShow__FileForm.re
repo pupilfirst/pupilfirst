@@ -31,7 +31,7 @@ let reducer = (state, action) =>
   };
 
 let handleResponseJSON = (filename, send, attachFileCB, json) => {
-  let id = json |> Json.Decode.(field("id", int));
+  let id = json |> Json.Decode.(field("id", string));
   attachFileCB(id, filename);
   send(ResetForm);
 };

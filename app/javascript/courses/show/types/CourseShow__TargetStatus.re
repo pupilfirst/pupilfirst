@@ -107,14 +107,16 @@ let compute =
 
            let submission =
              submissions
-             |> ListUtils.findOpt(s => s |> Submission.targetId == targetId);
+             |> ListUtils.findOpt(s =>
+                  s |> LatestSubmission.targetId == targetId
+                );
 
            let submissionStatus =
              switch (submission) {
              | Some(s) =>
-               if (s |> Submission.hasPassed) {
+               if (s |> LatestSubmission.hasPassed) {
                  SubmissionPassed;
-               } else if (s |> Submission.hasBeenEvaluated) {
+               } else if (s |> LatestSubmission.hasBeenEvaluated) {
                  SubmissionFailed;
                } else {
                  SubmissionPendingReview;

@@ -185,6 +185,7 @@ let make =
                );
           <CourseShow__Overlay
             target
+            course
             targetStatus
             closeOverlayCB={closeOverlay(setSelectedTargetId)}
             authenticityToken

@@ -10,12 +10,14 @@ module Targets
     def details
       {
         pending_student_ids: pending_founder_ids,
-        latest_submission_details: latest_event_details,
-        latest_submission_attachments: latest_event_attachments,
-        latest_feedback: latest_feedback_details,
+        submissions: details_for_submissions,
+        submission_attachments: attachments_for_submissions,
+        feedback: feedback_for_submissions,
         quiz_questions: quiz_questions,
         content_blocks: content_blocks,
-        communities: community_details
+        communities: community_details,
+        link_to_complete: @target.link_to_complete,
+        evaluated: @target.evaluation_criteria.exists?
       }
     end
 
@@ -53,46 +55,40 @@ module Targets
       end.map(&:id)
     end
 
-    def latest_event_details
-      return nil if latest_event.blank?
-
-      latest_event.attributes.slice('id', 'description', 'created_at')
+    def details_for_submissions
+      submissions.as_json(only: %i[id description created_at])
     end
 
-    def latest_event
-      @latest_event ||= @target.timeline_events.joins(:founders).where(founders: { id: @founder }).find_by(latest: true)
+    def submissions
+      @target.timeline_events.joins(:founders).where(founders: { id: @founder }).load
     end
 
-    def latest_feedback_details
-      return if latest_feedback.blank?
-
-      latest_feedback.attributes.slice('faculty_id', 'feedback')
+    def feedback_for_submissions
+      StartupFeedback.where(timeline_event_id: submissions.pluck(:id)).as_json(only: %i[faculty_id feedback])
     end
 
-    def latest_feedback
-      @latest_feedback ||= latest_event&.startup_feedback&.order('created_at')&.last
-    end
+    def attachments_for_submissions
+      submissions.map do |submission|
+        files = submission.timeline_event_files.map do |file|
+          {
+            submission_id: submission.id,
+            submission_type: "file",
+            title: file.title,
+            url: url_helpers.download_timeline_event_file_path(file)
+          }
+        end
 
-    def latest_event_attachments
-      return [] if latest_event.blank?
+        links = submission.links.map do |link|
+          {
+            submission_id: submission.id,
+            submission_type: "link",
+            title: link[:title],
+            url: link[:url]
+          }
+        end
 
-      files = latest_event.timeline_event_files.map do |file|
-        {
-          submission_type: "file",
-          title: file.title,
-          url: url_helpers.download_timeline_event_file_path(file)
-        }
-      end
-
-      links = latest_event.links.map do |link|
-        {
-          submission_type: "link",
-          title: link[:title],
-          url: link[:url]
-        }
-      end
-
-      files + links
+        files + links
+      end.flatten
     end
 
     def quiz_questions

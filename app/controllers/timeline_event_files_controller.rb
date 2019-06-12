@@ -10,6 +10,7 @@ class TimelineEventFilesController < ApplicationController
   def create
     timeline_event_file = authorize(TimelineEventFile.new(file: params[:file]))
     timeline_event_file.save!
+
     render json: { id: timeline_event_file.id }
   end
 end

@@ -152,7 +152,7 @@ let completeSection =
       }>
       {
         switch (targetDetails |> TargetDetails.quizQuestions) {
-        | [] => <CourseShow__SubmissionForm target />
+        | [] => <CourseShow__SubmissionForm authenticityToken target />
         | quizQuestions =>
           <CourseShow__Quiz target quizQuestions authenticityToken />
         }

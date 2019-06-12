@@ -9,12 +9,12 @@ class TimelineEventFilePolicy < ApplicationPolicy
     founders.where(id: current_founder).exists?
   end
 
-  def create
+  def create?
     # User must be enrolled as a student.
-    return false if current_user.founders.empty?
+    return false if user.founders.empty?
 
     # At least one of the student profiles must be non-exited AND non-ended (course AND access).
-    current_user.founders.includes(:startup, :course).one? do |founder|
+    user.founders.includes(:startup, :course).one? do |founder|
       !(founder.exited? || founder.access_ended? || founder.course.ended?)
     end
   end

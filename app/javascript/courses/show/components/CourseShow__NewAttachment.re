@@ -30,7 +30,7 @@ let urlForm =
   </div>;
 
 [@react.component]
-let make = (~addFileAttachmentCB) => {
+let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
   <div>
@@ -55,7 +55,8 @@ let make = (~addFileAttachmentCB) => {
       className="bg-white p-4 pt-2 border-l border-r border-b rounded-b border-gray-400">
       {
         switch (selection) {
-        | UploadFile => <CourseShow__FileForm addFileAttachmentCB />
+        | UploadFile =>
+          <CourseShow__FileForm authenticityToken attachFileCB attachingCB />
         | AddUrl => urlForm
         }
       }

@@ -28,25 +28,67 @@ let attachments =
     </span>
   </div>;
 
+type buttonState =
+  | Attaching
+  | Saving
+  | Incomplete
+  | Ready;
+
+let buttonContents = buttonState => {
+  let icon =
+    switch (buttonState) {
+    | Attaching
+    | Saving => <FaIcon classes="fal fa-spinner-third fa-spin mr-2" />
+    | Incomplete => React.null
+    | Ready => <FaIcon classes="fas fa-cloud-upload mr-2" />
+    };
+
+  let text =
+    (
+      switch (buttonState) {
+      | Attaching => "Attaching..."
+      | Saving => "Submitting..."
+      | Incomplete
+      | Ready => "Submit"
+      }
+    )
+    |> str;
+
+  <span> icon text </span>;
+};
+
+let isButtonDisabled = buttonState =>
+  switch (buttonState) {
+  | Attaching
+  | Saving
+  | Incomplete => true
+  | Ready => false
+  };
+
 [@react.component]
-let make = (~target) =>
+let make = (~authenticityToken, ~target) => {
+  let (buttonState, setButtonState) = React.useState(() => Incomplete);
+
   <div className="bg-gray-200 pt-6 px-4 pb-2 mt-4 shadow rounded-lg">
     <h5 className="pl-1"> {"Work on your submission" |> str} </h5>
     <textarea
       className="h-40 w-full rounded-lg mt-4 p-4 border rounded-lg"
-      placeholder="Start typing! We'll auto-save your work periodically as a draft, and you can submit when you're ready to do so."
+      placeholder="Describe your work, attach any links or files, and then hit submit!"
     />
     attachments
     <CourseShow__NewAttachment
-      addFileAttachmentCB={
+      authenticityToken
+      attachingCB={() => setButtonState(_ => Attaching)}
+      attachFileCB={
         (id, filename) => Js.log3("Add new file attachment", id, filename)
       }
     />
     <div className="flex mt-3 justify-end">
       <button
+        disabled={isButtonDisabled(buttonState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
-        <i className="fal fa-spinner-third fa-spin mr-2" />
-        {"Submit" |> str}
+        {buttonContents(buttonState)}
       </button>
     </div>
   </div>;
+};

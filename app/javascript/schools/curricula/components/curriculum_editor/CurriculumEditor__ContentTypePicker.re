@@ -15,7 +15,7 @@ let make = (~sortIndex=?) => {
       className="add-content-block__plus-button-container relative py-3"
       onClick={_event => setVisibility(_ => !visibility)}>
       <div
-        className="add-content-block__plus-button bg-gray-200 relative rounded-lg w-9 h-9 flex justify-center items-center mx-auto z-20">
+        className="add-content-block__plus-button bg-gray-200 hover:bg-gray-400 relative rounded-lg w-9 h-9 flex justify-center items-center mx-auto z-20">
         <i
           className="fal fa-plus text-xl add-content-block__plus-button-icon"
         />

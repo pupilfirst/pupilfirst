@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CourseShow__Quiz.css")|}];
 
 open CourseShow__Types;
 
@@ -51,14 +52,25 @@ let resultsSectionClasses = selectedAnswer => {
 };
 
 let answerOptionClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "border-1 shadow rounded-lg border-gray-200 p-1 mt-2 ";
+  let defaultClasses = "quiz-root__answer bg-white flex items-center font-semibold shadow border border-transparent rounded p-3 mt-3 ";
   switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
-    defaultClasses ++ "bg-blue-500"
+    defaultClasses ++ "bg-primary-100 border-primary-500 text-primary-500 shadow-md quiz-root__answer-selected "
   | Some(_otherAnswer) => defaultClasses
   | None => defaultClasses
   };
 };
+
+let iconClasses = (answerOption, selectedAnswer) => {
+  let defaultClasses = "quiz-root__answer-option-icon far fa-check-circle text-lg ";
+  switch (selectedAnswer) {
+  | Some(answer) when answer == answerOption =>
+    defaultClasses ++ "text-green-500"
+  | Some(_otherAnswer) => defaultClasses ++ "text-gray-400"
+  | None => defaultClasses ++ "text-gray-400"
+  };
+};
+
 
 let handleSubmit =
     (answer, authenticityToken, target, selectedAnswersIds, setSaving, event) => {
@@ -77,93 +89,90 @@ let make = (~target, ~quizQuestions, ~authenticityToken) => {
   let (selectedAnswer, setSelectedAnswer) = React.useState(() => None);
   let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => []);
   let currentQuestion = selectedQuestion;
-  <div className="flex justify-center">
-    <div className="border-2 shadow rounded-lg mt-2">
-      <div className="p-4">
-        <h6
-          className="font-semibold text-uppercase quiz-root__header-text mb-1">
-          {"Question #" |> str}
-          {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
-        </h6>
-        <div className="quiz-root__question-text mb-1">
-          <h4 className="font-semibold mb-0">
-            {currentQuestion |> QuizQuestion.question |> str}
-          </h4>
-        </div>
-        {
-          switch (currentQuestion |> QuizQuestion.description) {
-          | None => React.null
-          | Some(description) =>
-            <div className="quiz-root__question-description">
-              <p> {description |> str} </p>
-            </div>
-          }
+  <div className="bg-gray-100 rounded overflow-hidden">
+    <div className="p-5">
+      <span
+        className="font-semibold text-xs block uppercase text-gray-600">
+        {"Question #" |> str}
+        {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
+      </span>
+      <h4 className="font-bold">
+        {currentQuestion |> QuizQuestion.question |> str}
+      </h4>
+      {
+        switch (currentQuestion |> QuizQuestion.description) {
+        | None => React.null
+        | Some(description) =>
+          <p className="text-sm"> {description |> str} </p>
         }
-        <div className="quiz-root__question-answers mt-4">
-          {
-            currentQuestion
-            |> QuizQuestion.answerOptions
-            |> List.map(answerOption =>
-                 <div
-                   className={
-                     answerOptionClasses(answerOption, selectedAnswer)
-                   }
-                   key={answerOption |> QuizQuestion.answerId}
-                   onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
-                   {answerOption |> QuizQuestion.answerValue |> str}
-                 </div>
-               )
-            |> Array.of_list
-            |> React.array
-          }
-        </div>
-      </div>
-      <div className={resultsSectionClasses(selectedAnswer)}>
+      }
+      <div className="pt-2">
         {
-          switch (selectedAnswer) {
-          | None => React.null
-          | Some(answer) =>
-            <div className="quiz-root__next-question-button py-4">
-              {
-                currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
-                  <button
-                    disabled=saving
-                    className="btn btn-primary-ghost"
-                    onClick={
-                      handleSubmit(
-                        answer,
-                        authenticityToken,
-                        target,
-                        selectedAnswersIds,
-                        setSaving,
-                      )
-                    }>
-                    {str("Submit Quiz")}
-                  </button> :
-                  {
-                    let nextQuestion =
-                      currentQuestion
-                      |> QuizQuestion.nextQuestion(quizQuestions);
-                    <button
-                      className="btn btn-primary-ghost"
-                      onClick=(
-                        _ => {
-                          setSelectedQuestion(_ => nextQuestion);
-                          setSelectedAnswersIds(_ =>
-                            selectedAnswersIds
-                            |> List.append([answer |> QuizQuestion.answerId])
-                          );
-                          setSelectedAnswer(_ => None);
-                        }
-                      )>
-                      {str("Next Question")}
-                    </button>;
+          currentQuestion
+          |> QuizQuestion.answerOptions
+          |> List.map(answerOption =>
+                <div
+                  className={
+                    answerOptionClasses(answerOption, selectedAnswer)
                   }
-              }
-            </div>
-          }
+                  key={answerOption |> QuizQuestion.answerId}
+                  onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
+                  <FaIcon classes={iconClasses(answerOption, selectedAnswer)} />
+                  <span className="ml-2">
+                    {answerOption |> QuizQuestion.answerValue |> str}
+                  </span>
+                </div>
+              )
+          |> Array.of_list
+          |> React.array
         }
       </div>
+    </div>
+    <div className={resultsSectionClasses(selectedAnswer)}>
+      {
+        switch (selectedAnswer) {
+        | None => React.null
+        | Some(answer) =>
+          <div className="py-4">
+            {
+              currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
+                <button
+                  disabled=saving
+                  className="btn btn-primary"
+                  onClick={
+                    handleSubmit(
+                      answer,
+                      authenticityToken,
+                      target,
+                      selectedAnswersIds,
+                      setSaving,
+                    )
+                  }>
+                  {str("Submit Quiz")}
+                </button> :
+                {
+                  let nextQuestion =
+                    currentQuestion
+                    |> QuizQuestion.nextQuestion(quizQuestions);
+                  <button
+                    className="btn btn-primary"
+                    onClick=(
+                      _ => {
+                        setSelectedQuestion(_ => nextQuestion);
+                        setSelectedAnswersIds(_ =>
+                          selectedAnswersIds
+                          |> List.append([answer |> QuizQuestion.answerId])
+                        );
+                        setSelectedAnswer(_ => None);
+                      }
+                    )>
+                    {str("Next Question")}
+                  </button>;
+                }
+            }
+          </div>
+        }
+      }
     </div>
   </div>;
 };

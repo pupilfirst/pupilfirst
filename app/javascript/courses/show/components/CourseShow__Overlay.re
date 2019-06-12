@@ -100,12 +100,12 @@ let selectionToString = overlaySelection =>
   };
 
 let overlaySelectionOptions = (target, overlaySelection, setOverlaySelection) =>
-  <div className="mt-4 flex justify-between max-w-3xl mx-auto">
+  <div className="mt-4 flex justify-between max-w-3xl mx-auto -mb-px">
     {
       [Learn, Discuss, Complete]
       |> List.map(selection => {
            let classes =
-             "p-4 flex w-full justify-center rounded-lg border-2 border-b-0 font-semibold"
+             "p-4 flex w-full justify-center rounded-t-lg border border-b-0 font-semibold"
              ++ (
                overlaySelection == selection ?
                  " bg-white text-blue-600" :
@@ -186,8 +186,8 @@ let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
     [|target |> Target.id|],
   );
 
-  <div className="absolute top-0 left-0 min-h-screen w-full bg-white">
-    <div className="bg-gray-200 border-b-2">
+  <div className="absolute top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    <div className="bg-gray-200 border-b">
       <div className="container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
         {
@@ -199,7 +199,7 @@ let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
         }
       </div>
     </div>
-    <div className="container mx-auto p-4 max-w-3xl">
+    <div className="container mx-auto py-8 max-w-3xl">
       {learnSection(overlaySelection, targetDetails)}
       {discussSection(overlaySelection, target, targetDetails)}
       {

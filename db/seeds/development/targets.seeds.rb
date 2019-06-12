@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:target_groups', 'development:faculty' do
+after 'development:evaluation_criteria', 'development:target_groups', 'development:faculty' do
   puts 'Seeding targets'
 
   startup_course = Course.find_by(name: 'Startup')

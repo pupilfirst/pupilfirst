@@ -113,6 +113,19 @@ let attachFile = (state, send, attachingCB, attachFileCB, event) => {
   };
 };
 
+let labelContents = state => {
+  let iconClasses =
+    (state.saving ? "fal fa-spinner-third fa-spin" : "fas fa-upload")
+    ++ " mr-2 text-gray-600 text-lg";
+  let labelText =
+    state.saving ? "Uploading " ++ state.filename : state.filename;
+
+  <span>
+    <FaIcon classes=iconClasses />
+    <span className="truncate"> {labelText |> str} </span>
+  </span>;
+};
+
 [@react.component]
 let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
   let (state, send) =
@@ -146,8 +159,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
       <label
         className="mt-2 cursor-pointer truncate h-10 border border-dashed flex px-4 items-center font-semibold rounded text-sm hover:bg-gray-400 flex-grow"
         htmlFor="attachment_file">
-        <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-        <span className="truncate"> {state.filename |> str} </span>
+        {labelContents(state)}
       </label>
     </form>
     {

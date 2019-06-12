@@ -39,6 +39,7 @@ module Courses
         { grade: key, label: value }
       end
 
+      details['enable_discuss'] = @course.communities.where(target_linkable: true).exists?
       details
     end
 

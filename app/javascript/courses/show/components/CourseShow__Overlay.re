@@ -17,10 +17,16 @@ let loadTargetDetails = (target, setTargetDetails, ()) => {
   None;
 };
 
+type methodOfCompletion =
+  | Evaluated
+  | TakeQuiz
+  | LinkToComplete
+  | MarkAsComplete;
+
 type overlaySelection =
   | Learn
   | Discuss
-  | Complete;
+  | Complete(methodOfCompletion);
 
 let overlaySelectionVisiblilityClasses =
     (inspectedSelection, currentSelection) =>
@@ -64,102 +70,140 @@ let learnSection = (overlaySelection, targetDetails) =>
   <div
     className={overlaySelectionVisiblilityClasses(Learn, overlaySelection)}>
     {
-      switch (targetDetails) {
-      | Some(details) =>
-        details
-        |> TargetDetails.contentBlocks
-        |> ContentBlock.sort
-        |> List.map(block => {
-             let renderedBlock =
-               switch (block |> ContentBlock.blockType) {
-               | Markdown(markdown) => markdownContentBlock(markdown)
-               | File(url, title, filename) =>
-                 fileContentBlock(url, title, filename)
-               | Image(url, caption) => imageContentBlock(url, caption)
-               | Embed(url, embedCode) => embedContentBlock(url, embedCode)
-               };
+      targetDetails
+      |> TargetDetails.contentBlocks
+      |> ContentBlock.sort
+      |> List.map(block => {
+           let renderedBlock =
+             switch (block |> ContentBlock.blockType) {
+             | Markdown(markdown) => markdownContentBlock(markdown)
+             | File(url, title, filename) =>
+               fileContentBlock(url, title, filename)
+             | Image(url, caption) => imageContentBlock(url, caption)
+             | Embed(url, embedCode) => embedContentBlock(url, embedCode)
+             };
 
-             <div
-               className={renderBlockClasses(block)}
-               key={block |> ContentBlock.id}>
-               renderedBlock
-             </div>;
-           })
-        |> Array.of_list
-        |> React.array
-      | None => "Loading..." |> str
-      }
-    }
-  </div>;
-
-let selectionToString = overlaySelection =>
-  switch (overlaySelection) {
-  | Learn => "Learn"
-  | Discuss => "Discuss"
-  | Complete => "Complete"
-  };
-
-let overlaySelectionOptions = (target, overlaySelection, setOverlaySelection) =>
-  <div className="mt-4 flex justify-between max-w-3xl mx-auto -mb-px">
-    {
-      [Learn, Discuss, Complete]
-      |> List.map(selection => {
-           let classes =
-             "p-4 flex w-full justify-center rounded-t-lg border border-b-0 font-semibold"
-             ++ (
-               overlaySelection == selection ?
-                 " bg-white text-blue-600" :
-                 " bg-gray-300 hover:bg-gray-200 cursor-pointer"
-             );
-
-           <span
-             key={"select-" ++ (selection |> selectionToString)}
-             className=classes
-             onClick={_e => setOverlaySelection(_ => selection)}>
-             {selection |> selectionToString |> str}
-           </span>;
+           <div
+             className={renderBlockClasses(block)}
+             key={block |> ContentBlock.id}>
+             renderedBlock
+           </div>;
          })
       |> Array.of_list
       |> React.array
     }
   </div>;
 
-let discussSection = (overlaySelection, target, targetDetails) =>
-  switch (targetDetails) {
-  | Some(targetDetails) =>
-    <div
-      className={
-        overlaySelectionVisiblilityClasses(Discuss, overlaySelection)
-      }>
-      {
-        switch (targetDetails |> TargetDetails.communities) {
-        | [] =>
-          <div> {"Error: Discuss section must not be triggered!" |> str} </div>
-        | communities => <CourseShow__Discuss target communities />
-        }
-      }
-    </div>
-  | None => <div> {"Loading..." |> str} </div>
+let methodOfCompletionToString = methodOfCompletion =>
+  switch (methodOfCompletion) {
+  | Evaluated => "Complete"
+  | TakeQuiz => "Take Quiz"
+  | LinkToComplete => "Visit Link to Complete"
+  | MarkAsComplete => "Mark as Complete"
   };
 
-let completeSection =
-    (overlaySelection, target, targetDetails, authenticityToken) =>
-  switch (targetDetails) {
-  | Some(targetDetails) =>
-    <div
-      className={
-        overlaySelectionVisiblilityClasses(Complete, overlaySelection)
-      }>
-      {
-        switch (targetDetails |> TargetDetails.quizQuestions) {
-        | [] => <CourseShow__SubmissionForm authenticityToken target />
-        | quizQuestions =>
-          <CourseShow__Quiz target quizQuestions authenticityToken />
-        }
-      }
-    </div>
-  | None => <div> {"Loading..." |> str} </div>
+let selectionToString = overlaySelection =>
+  switch (overlaySelection) {
+  | Learn => "Learn"
+  | Discuss => "Discuss"
+  | Complete(methodOfCompletion) =>
+    methodOfCompletionToString(methodOfCompletion)
   };
+
+let computemethodOfCompletion = targetDetails => {
+  let evaluated = targetDetails |> TargetDetails.evaluated;
+  let hasQuiz =
+    targetDetails |> TargetDetails.quizQuestions |> ListUtils.isNotEmpty;
+  let hasLinkToComplete =
+    switch (targetDetails |> TargetDetails.linkToComplete) {
+    | Some(_) => true
+    | None => false
+    };
+  switch (evaluated, hasQuiz, hasLinkToComplete) {
+  | (true, _, _) => Evaluated
+  | (false, true, _) => TakeQuiz
+  | (false, false, true) => LinkToComplete
+  | (_, _, _) => MarkAsComplete
+  };
+};
+
+let selectableTabs = course =>
+  course |> Course.enableDiscuss ? [Learn, Discuss] : [Learn];
+
+let tabClasses = (selection, overlaySelection) =>
+  "p-4 flex w-full justify-center rounded-t-lg border border-b-0 font-semibold"
+  ++ (
+    overlaySelection == selection ?
+      " bg-white text-blue-600" :
+      " bg-gray-300 hover:bg-gray-200 cursor-pointer"
+  );
+
+let tabButton = (selection, overlaySelection, setOverlaySelection) =>
+  <span
+    key={"select-" ++ (selection |> selectionToString)}
+    className={tabClasses(selection, overlaySelection)}
+    onClick={_e => setOverlaySelection(_ => selection)}>
+    {selection |> selectionToString |> str}
+  </span>;
+
+let tabLink = (selection, overlaySelection) =>
+  <a className={tabClasses(selection, overlaySelection)}>
+    {selection |> selectionToString |> str}
+  </a>;
+
+let overlaySelectionOptions =
+    (target, course, overlaySelection, setOverlaySelection, targetDetails) => {
+  let methodOfCompletion = computemethodOfCompletion(targetDetails);
+  <div className="mt-4 flex justify-between max-w-3xl mx-auto">
+    {
+      selectableTabs(course)
+      |> List.map(selection =>
+           tabButton(selection, overlaySelection, setOverlaySelection)
+         )
+      |> Array.of_list
+      |> React.array
+    }
+    {
+      switch (methodOfCompletion) {
+      | Evaluated =>
+        tabButton(Complete(Evaluated), overlaySelection, setOverlaySelection)
+      | TakeQuiz =>
+        tabButton(Complete(TakeQuiz), overlaySelection, setOverlaySelection)
+      | _methodOfCompletion =>
+        tabLink(Complete(_methodOfCompletion), overlaySelection)
+      }
+    }
+  </div>;
+};
+
+let discussSection = (overlaySelection, target, targetDetails) =>
+  <div
+    className={overlaySelectionVisiblilityClasses(Discuss, overlaySelection)}>
+    {
+      switch (targetDetails |> TargetDetails.communities) {
+      | [] =>
+        <div> {"Error: Discuss section must not be triggered!" |> str} </div>
+      | communities => <CourseShow__Discuss target communities />
+      }
+    }
+  </div>;
+
+let showQuizSection = (target, targetDetails, authenticityToken) => {
+  let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
+  <CourseShow__Quiz target quizQuestions authenticityToken />;
+};
+
+let completeSection =
+    (methodOfCompletion, target, targetDetails, authenticityToken) =>
+  <div>
+    {
+      switch (methodOfCompletion) {
+      | Evaluated => <CourseShow__SubmissionForm authenticityToken target />
+      | TakeQuiz => showQuizSection(target, targetDetails, authenticityToken)
+      | _ => React.null
+      }
+    }
+  </div>;
 
 let overlayStatus = (closeOverlayCB, target, targetStatus) =>
   <div
@@ -177,7 +221,8 @@ let overlayStatus = (closeOverlayCB, target, targetStatus) =>
   </div>;
 
 [@react.component]
-let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
+let make =
+    (~target, ~course, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
 
@@ -186,29 +231,43 @@ let make = (~target, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
     [|target |> Target.id|],
   );
 
-  <div className="absolute top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+  <div
+    className="absolute top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-200 border-b">
       <div className="container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
         {
-          overlaySelectionOptions(
-            target,
-            overlaySelection,
-            setOverlaySelection,
-          )
+          switch (targetDetails) {
+          | Some(targetDetails) =>
+            overlaySelectionOptions(
+              target,
+              course,
+              overlaySelection,
+              setOverlaySelection,
+              targetDetails,
+            )
+          | None => <div> {"Loading..." |> str} </div>
+          }
         }
       </div>
     </div>
-    <div className="container mx-auto py-8 max-w-3xl">
-      {learnSection(overlaySelection, targetDetails)}
-      {discussSection(overlaySelection, target, targetDetails)}
+    <div className="container mx-auto p-8 max-w-3xl">
       {
-        completeSection(
-          overlaySelection,
-          target,
-          targetDetails,
-          authenticityToken,
-        )
+        switch (targetDetails) {
+        | Some(targetDetails) =>
+          switch (overlaySelection) {
+          | Learn => learnSection(overlaySelection, targetDetails)
+          | Discuss => discussSection(overlaySelection, target, targetDetails)
+          | Complete(methodOfCompletion) =>
+            completeSection(
+              methodOfCompletion,
+              target,
+              targetDetails,
+              authenticityToken,
+            )
+          }
+        | None => <div> {"Loading..." |> str} </div>
+        }
       }
     </div>
   </div>;

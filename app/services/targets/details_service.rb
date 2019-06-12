@@ -15,7 +15,9 @@ module Targets
         feedback: feedback_for_submissions,
         quiz_questions: quiz_questions,
         content_blocks: content_blocks,
-        communities: community_details
+        communities: community_details,
+        link_to_complete: @target.link_to_complete,
+        evaluated: @target.evaluation_criteria.exists?
       }
     end
 

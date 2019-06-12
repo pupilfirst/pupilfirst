@@ -45,7 +45,7 @@ let make =
       <div className="flex">
         <input
           id=answerOptionId
-          className="appearance-none block w-full bg-white text-gray-800 text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+          className="appearance-none block w-full bg-white text-gray-800 text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           type_="text"
           placeholder="Answer option"
           value={answerOption |> AnswerOption.answer}

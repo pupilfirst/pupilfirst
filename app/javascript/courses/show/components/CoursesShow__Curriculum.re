@@ -29,12 +29,12 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
 
   <div
     key={target |> Target.id}
-    className="bg-white border-t p-6 flex justify-between hover:bg-gray-200 hover:text-primary-500 "
+    className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
     onClick={_e => setSelectedTargetId(_ => Some(target |> Target.id))}>
-    <span className="font-semibold">
+    <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
-    <span className="ml-4 font-bold">
+    <span className="curriculum__target-status px-3 py-px ml-4 h-6 curriculum__target-status--pending ">
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
   </div>;
@@ -170,7 +170,7 @@ let make =
     );
   let (selectedTargetId, setSelectedTargetId) = React.useState(() => None);
 
-  <div className="py-4 bg-gray-100">
+  <div className="bg-gray-100 pt-4 pb-8">
     {
       switch (selectedTargetId) {
       | Some(targetId) =>

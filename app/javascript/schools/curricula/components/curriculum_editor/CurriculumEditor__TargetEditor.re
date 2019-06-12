@@ -481,7 +481,7 @@ let make =
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                    className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-6 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
                     id="title"
                     type_="text"
                     placeholder="Type target title here"
@@ -553,7 +553,7 @@ let make =
                       className="[ content-block__action-bar ] flex p-3 border-t justify-end">
                       <div className="flex-1 content-block__action-bar-input">
                         <input
-                          className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                          className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           id="ImageCaption"
                           type_="text"
                           placeholder="Type caption for image (optional)"
@@ -791,7 +791,7 @@ let make =
                         </label>
                         <span> {"*" |> str} </span>
                         <input
-                          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           id="link_to_complete"
                           type_="text"
                           placeholder="Paste link to complete"

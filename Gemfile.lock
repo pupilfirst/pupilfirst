@@ -823,7 +823,7 @@ DEPENDENCIES
   dry-validation (~> 0.10)
   email_inquire (~> 0.6)
   factory_bot_rails (~> 5.0)
-  faker (~> 1.7)
+  faker (~> 1.8)
   fastimage (~> 2.1)
   file_validators (~> 2.1)
   font-awesome-rails (~> 4.7)

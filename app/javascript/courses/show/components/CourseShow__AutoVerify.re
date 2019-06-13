@@ -3,6 +3,7 @@
 let str = React.string;
 
 open CourseShow__Types;
+module TargetStatus = CourseShow__TargetStatus;
 
 module AutoVerifySubmissionQuery = [%graphql
   {|
@@ -44,32 +45,64 @@ let createAutoVerifySubmission =
   |> ignore;
 };
 
+let autoVerify =
+    (target, linkToComplete, saving, setSaving, authenticityToken) =>
+  <button
+    disabled=saving
+    className="btn btn-success btn-large w-full"
+    onClick={
+      createAutoVerifySubmission(
+        authenticityToken,
+        target,
+        linkToComplete,
+        setSaving,
+      )
+    }>
+    {saving ? <i className="fal fa-spinner-third fa-spin" /> : React.null}
+    <span className="ml-2">
+      {
+        (
+          switch (saving, linkToComplete) {
+          | (true, _) => "Saving"
+          | (false, Some(_)) => "Visit Link To Complete"
+          | (false, None) => "Mark As Complete"
+          }
+        )
+        |> str
+      }
+    </span>
+  </button>;
+
+let statusBadge = (string, complete) => {
+  let bgClasses = complete ? "bg-green-500" : "bg-gray-500";
+  <div
+    className={
+      "flex text-white rounded text-lg font-semibold justify-center p-2 "
+      ++ bgClasses
+    }>
+    {string |> str}
+  </div>;
+};
+
 [@react.component]
-let make = (~target, ~targetDetails, ~authenticityToken) => {
+let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) => {
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
-  <div>
-    <DisablingCover disabled=saving>
-      <button
-        className="btn btn-success btn-large w-full"
-        onClick={
-          createAutoVerifySubmission(
-            authenticityToken,
-            target,
-            linkToComplete,
-            setSaving,
-          )
-        }>
-        {
-          (
-            switch (linkToComplete) {
-            | Some(_) => "Visit Link To Complete"
-            | None => "Mark As Complete"
-            }
-          )
-          |> str
-        }
-      </button>
-    </DisablingCover>
+  <div className="mt-4" id="auto-verify-target">
+    {
+      switch (targetStatus |> TargetStatus.status) {
+      | Pending =>
+        autoVerify(
+          target,
+          linkToComplete,
+          saving,
+          setSaving,
+          authenticityToken,
+        )
+      | Locked(lockReason) =>
+        statusBadge(lockReason |> TargetStatus.lockReasonToString, false)
+      | _ => statusBadge("Completed", true)
+      }
+    }
   </div>;
 };

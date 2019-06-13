@@ -36,81 +36,16 @@ let loadTargetDetails = (target, setTargetDetails, ()) => {
   None;
 };
 
-type completionType =
-  | Evaluated
-  | TakeQuiz
-  | LinkToComplete
-  | MarkAsComplete;
-
 type overlaySelection =
   | Learn
   | Discuss
-  | Complete(completionType);
-
-let renderBlockClasses = block =>
-  switch (block |> ContentBlock.blockType) {
-  | Markdown(_) => "mt-4"
-  | File(_) => "mt-4"
-  | Image(_) => "mt-4"
-  | Embed(_) => "flex justify-center mt-4"
-  };
-
-let markdownContentBlock = markdown => <MarkdownBlock markdown className="" />;
-
-let fileContentBlock = (url, title, filename) =>
-  <div className="mt-2 shadow-md border px-6 py-4 rounded-lg">
-    <a className="flex justify-between items-center" href=url>
-      <div className="flex items-center">
-        <FaIcon classes="text-4xl text-red-600 fal fa-file-pdf" />
-        <div className="pl-4 leading-tight">
-          <div className="text-lg font-semibold"> {title |> str} </div>
-          <div className="text-sm italic text-gray-600">
-            {filename |> str}
-          </div>
-        </div>
-      </div>
-      <div> <FaIcon classes="text-2xl far fa-download" /> </div>
-    </a>
-  </div>;
-
-let imageContentBlock = (url, caption) =>
-  <div className="rounded-lg bg-gray-300">
-    <img src=url alt=caption />
-    <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
-  </div>;
-
-let embedContentBlock = (_url, embedCode) =>
-  <div dangerouslySetInnerHTML={"__html": embedCode} />;
-
-let learnSection = targetDetails =>
-  <div>
-    {
-      targetDetails
-      |> TargetDetails.contentBlocks
-      |> ContentBlock.sort
-      |> List.map(block => {
-           let renderedBlock =
-             switch (block |> ContentBlock.blockType) {
-             | Markdown(markdown) => markdownContentBlock(markdown)
-             | File(url, title, filename) =>
-               fileContentBlock(url, title, filename)
-             | Image(url, caption) => imageContentBlock(url, caption)
-             | Embed(url, embedCode) => embedContentBlock(url, embedCode)
-             };
-
-           <div
-             className={renderBlockClasses(block)}
-             key={block |> ContentBlock.id}>
-             renderedBlock
-           </div>;
-         })
-      |> Array.of_list
-      |> React.array
-    }
-  </div>;
+  | Complete(TargetDetails.completionType);
 
 let completionTypeToString = (completionType, targetStatus) =>
-  switch (targetStatus |> TargetStatus.status, completionType) {
+  switch (
+    targetStatus |> TargetStatus.status,
+    completionType: TargetDetails.completionType,
+  ) {
   | (Pending, Evaluated) => "Complete"
   | (Pending, TakeQuiz) => "Take Quiz"
   | (Pending, LinkToComplete) => "Visit Link to Complete"
@@ -128,23 +63,6 @@ let selectionToString = (targetStatus, overlaySelection) =>
   | Complete(completionType) =>
     completionTypeToString(completionType, targetStatus)
   };
-
-let computeCompletionType = targetDetails => {
-  let evaluated = targetDetails |> TargetDetails.evaluated;
-  let hasQuiz =
-    targetDetails |> TargetDetails.quizQuestions |> ListUtils.isNotEmpty;
-  let hasLinkToComplete =
-    switch (targetDetails |> TargetDetails.linkToComplete) {
-    | Some(_) => true
-    | None => false
-    };
-  switch (evaluated, hasQuiz, hasLinkToComplete) {
-  | (true, _, _) => Evaluated
-  | (false, true, _) => TakeQuiz
-  | (false, false, true) => LinkToComplete
-  | (_, _, _) => MarkAsComplete
-  };
-};
 
 let selectableTabs = course =>
   course |> Course.enableDiscuss ? [Learn, Discuss] : [Learn];
@@ -181,7 +99,7 @@ let overlaySelectionOptions =
       targetDetails,
       targetStatus,
     ) => {
-  let completionType = computeCompletionType(targetDetails);
+  let completionType = targetDetails |> TargetDetails.computeCompletionType;
 
   <div className="flex justify-between max-w-3xl mx-auto -mb-px">
     {
@@ -222,11 +140,6 @@ let overlaySelectionOptions =
   </div>;
 };
 
-let discussSection = (target, targetDetails) => {
-  let communities = targetDetails |> TargetDetails.communities;
-  <CourseShow__Discuss target communities />;
-};
-
 let showQuizSection = (target, targetDetails, authenticityToken) => {
   let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
   <CourseShow__Quiz target quizQuestions authenticityToken />;
@@ -236,7 +149,10 @@ let completeSection =
     (completionType, target, targetDetails, authenticityToken, targetStatus) =>
   <div>
     {
-      switch (targetStatus |> TargetStatus.status, completionType) {
+      switch (
+        targetStatus |> TargetStatus.status,
+        completionType: TargetDetails.completionType,
+      ) {
       | (Pending, Evaluated) =>
         <CourseShow__SubmissionForm authenticityToken target />
       | (Pending, TakeQuiz) =>
@@ -327,36 +243,26 @@ let make =
       {
         switch (targetDetails) {
         | Some(targetDetails) =>
-          <div>
-            {
-              switch (overlaySelection) {
-              | Learn => learnSection(targetDetails)
-              | Discuss => discussSection(target, targetDetails)
-              | Complete(completionType) =>
-                completeSection(
-                  completionType,
-                  target,
-                  targetDetails,
-                  authenticityToken,
-                  targetStatus,
-                )
-              }
-            }
-            {
-              switch (computeCompletionType(targetDetails)) {
-              | LinkToComplete
-              | MarkAsComplete =>
-                <CourseShow__AutoVerify
-                  target
-                  targetDetails
-                  authenticityToken
-                  targetStatus
-                />
-              | _ => React.null
-              }
-            }
-          </div>
-        | None => <div> {"Loading..." |> str} </div>
+          switch (overlaySelection) {
+          | Learn =>
+            <CourseShow__Learn
+              target
+              targetDetails
+              authenticityToken
+              targetStatus
+            />
+          | Discuss => <CourseShow__Discuss target targetDetails />
+          | Complete(completionType) =>
+            completeSection(
+              completionType,
+              target,
+              targetDetails,
+              authenticityToken,
+              targetStatus,
+            )
+          }
+
+        | None => "Loading..." |> str
         }
       }
     </div>

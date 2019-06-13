@@ -10,6 +10,12 @@ type t = {
   evaluated: bool,
 };
 
+type completionType =
+  | Evaluated
+  | TakeQuiz
+  | LinkToComplete
+  | MarkAsComplete;
+
 let decode = json =>
   Json.Decode.{
     pendingStudentIds: json |> field("pendingStudentIds", list(string)),
@@ -32,6 +38,22 @@ let decode = json =>
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     evaluated: json |> field("evaluated", bool),
   };
+
+let computeCompletionType = targetDetails => {
+  let evaluated = targetDetails.evaluated;
+  let hasQuiz = targetDetails.quizQuestions |> ListUtils.isNotEmpty;
+  let hasLinkToComplete =
+    switch (targetDetails.linkToComplete) {
+    | Some(_) => true
+    | None => false
+    };
+  switch (evaluated, hasQuiz, hasLinkToComplete) {
+  | (true, _, _) => Evaluated
+  | (false, true, _) => TakeQuiz
+  | (false, false, true) => LinkToComplete
+  | (_, _, _) => MarkAsComplete
+  };
+};
 
 let contentBlocks = t => t.contentBlocks;
 let quizQuestions = t => t.quizQuestions;

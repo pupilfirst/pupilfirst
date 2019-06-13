@@ -64,7 +64,8 @@ let communityTitle = community =>
   </h4>;
 
 [@react.component]
-let make = (~target, ~communities) => {
+let make = (~target, ~targetDetails) => {
+  let communities = targetDetails |> TargetDetails.communities;
   let targetId = target |> Target.id;
   <div className="flex justify-center w-full">
     <div className="w-full max-w-3xl">

@@ -11,7 +11,7 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   validate :pending_submission
 
   def pending_submission
-    return if founder.timeline_events.where(target_id: target_id).blank?
+    return if founder.timeline_events.where(target_id: target_id).empty?
 
     errors[:base] << 'You cannot resubmit the target'
   end

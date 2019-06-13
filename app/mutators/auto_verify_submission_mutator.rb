@@ -8,13 +8,13 @@ class AutoVerifySubmissionMutator < ApplicationMutator
   validate :can_be_submitted
 
   def can_be_auto_verified
-    return if target.evaluation_criteria.blank? && target.quiz.blank?
+    return if target.evaluation_criteria.empty? && target.quiz.empty?
 
     errors[:base] << 'The target cannot be auto verified'
   end
 
   def can_be_submitted
-    return if founder.timeline_events.where(target_id: target_id).blank?
+    return if founder.timeline_events.where(target_id: target_id).empty?
 
     errors[:base] << 'You cannot resubmit the target'
   end

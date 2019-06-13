@@ -228,16 +228,17 @@ let completeSection =
 
 let overlayStatus = (closeOverlayCB, target, targetStatus) =>
   <div
-    className="course-overlay__header-title-card course-overlay__header-title-card--pending flex justify-between items-center p-6 mb-7 ">
-    <div className="flex items-center">
-      <button className="mr-4" onClick={_e => closeOverlayCB()}>
-        <i className="fal fa-arrow-circle-left fa-2x" />
-      </button>
-      <h1 className="text-xl"> {target |> Target.title |> str} </h1>
-    </div>
-    <div
-      className="curriculum__target-status curriculum__target-status--pending text-sm py-1 px-3">
-      {targetStatus |> CourseShow__TargetStatus.statusToString |> str}
+    className="course-overlay__header-title-card course-overlay__header-title-card--pending flex justify-between items-center px-3 py-5 md:p-6 mb-5 md:mb-7 ">
+    <button className="xl:absolute pr-4 xl:-ml-20 focus:outline-none" onClick={_e => closeOverlayCB()}>
+      <i className="fal fa-arrow-circle-left text-3xl text-gray-800" />
+      <span className="block text-gray-800 font-semibold text-xs uppercase">{"Back" |> str}</span>
+    </button>
+    <div className="w-full flex items-center justify-between relative">
+      <h1 className="text-base leading-snug mr-3 md:text-xl"> {target |> Target.title |> str} </h1>
+      <div
+        className="curriculum__target-status curriculum__target-status--pending text-xs md:text-sm py-1 px-2 md:px-4">
+        {targetStatus |> CourseShow__TargetStatus.statusToString |> str}
+      </div>
     </div>
   </div>;
 
@@ -258,7 +259,7 @@ let make =
   });
 
   <div
-    className="fixed z-20 top-0 left-0 w-full overflow-y-scroll bg-white h-screen">
+    className="fixed z-20 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="container bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
@@ -272,12 +273,12 @@ let make =
               setOverlaySelection,
               targetDetails,
             )
-          | None => <div> {"Loading..." |> str} </div>
+          | None => <div className="text-center text-sm font-semibold"> {"Loading..." |> str} </div>
           }
         }
       </div>
     </div>
-    <div className="container mx-auto mt-8 max-w-3xl px-3 md:px-0 pb-8">
+    <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 md:px-0 pb-8">
       {
         switch (targetDetails) {
         | Some(targetDetails) =>

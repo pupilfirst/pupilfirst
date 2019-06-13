@@ -1,6 +1,7 @@
 [@bs.config {jsx: 3}];
 
 open CourseShow__Types;
+module TargetStatus = CourseShow__TargetStatus;
 
 let str = React.string;
 
@@ -34,7 +35,7 @@ let loadTargetDetails = (target, setTargetDetails, ()) => {
   None;
 };
 
-type methodOfCompletion =
+type completionType =
   | Evaluated
   | TakeQuiz
   | LinkToComplete
@@ -43,11 +44,7 @@ type methodOfCompletion =
 type overlaySelection =
   | Learn
   | Discuss
-  | Complete(methodOfCompletion);
-
-let overlaySelectionVisiblilityClasses =
-    (inspectedSelection, currentSelection) =>
-  inspectedSelection == currentSelection ? "" : "hidden";
+  | Complete(completionType);
 
 let renderBlockClasses = block =>
   switch (block |> ContentBlock.blockType) {
@@ -84,9 +81,8 @@ let imageContentBlock = (url, caption) =>
 let embedContentBlock = (_url, embedCode) =>
   <div dangerouslySetInnerHTML={"__html": embedCode} />;
 
-let learnSection = (overlaySelection, targetDetails) =>
-  <div
-    className={overlaySelectionVisiblilityClasses(Learn, overlaySelection)}>
+let learnSection = targetDetails =>
+  <div>
     {
       targetDetails
       |> TargetDetails.contentBlocks
@@ -112,23 +108,25 @@ let learnSection = (overlaySelection, targetDetails) =>
     }
   </div>;
 
-let methodOfCompletionToString = methodOfCompletion =>
-  switch (methodOfCompletion) {
-  | Evaluated => "Complete"
-  | TakeQuiz => "Take Quiz"
-  | LinkToComplete => "Visit Link to Complete"
-  | MarkAsComplete => "Mark as Complete"
+let completionTypeToString = (completionType, pending) =>
+  switch (pending, completionType) {
+  | (false, Evaluated | TakeQuiz) => "Submissions and Review"
+  | (false, LinkToComplete | MarkAsComplete) => "Completed"
+  | (true, Evaluated) => "Complete"
+  | (true, TakeQuiz) => "Take Quiz"
+  | (true, LinkToComplete) => "Visit Link to Complete"
+  | (true, MarkAsComplete) => "Mark as Complete"
   };
 
-let selectionToString = overlaySelection =>
+let selectionToString = (pending, overlaySelection) =>
   switch (overlaySelection) {
   | Learn => "Learn"
   | Discuss => "Discuss"
-  | Complete(methodOfCompletion) =>
-    methodOfCompletionToString(methodOfCompletion)
+  | Complete(completionType) =>
+    completionTypeToString(completionType, pending)
   };
 
-let computemethodOfCompletion = targetDetails => {
+let computeCompletionType = targetDetails => {
   let evaluated = targetDetails |> TargetDetails.evaluated;
   let hasQuiz =
     targetDetails |> TargetDetails.quizQuestions |> ListUtils.isNotEmpty;
@@ -156,57 +154,86 @@ let tabClasses = (selection, overlaySelection) =>
       " bg-gray-300 hover:bg-gray-200 cursor-pointer"
   );
 
-let tabButton = (selection, overlaySelection, setOverlaySelection) =>
+let tabButton = (selection, overlaySelection, setOverlaySelection, pending) =>
   <span
-    key={"select-" ++ (selection |> selectionToString)}
+    key={"select-" ++ (selection |> selectionToString(pending))}
     className={tabClasses(selection, overlaySelection)}
     onClick={_e => setOverlaySelection(_ => selection)}>
-    {selection |> selectionToString |> str}
+    {selection |> selectionToString(pending) |> str}
   </span>;
 
-let tabLink = (selection, overlaySelection) =>
+let tabLink = (selection, overlaySelection, pending) =>
   <a
     href="#auto-verify-target"
     className={tabClasses(selection, overlaySelection)}>
-    {selection |> selectionToString |> str}
+    {selection |> selectionToString(pending) |> str}
   </a>;
 
 let overlaySelectionOptions =
-    (target, course, overlaySelection, setOverlaySelection, targetDetails) => {
-  let methodOfCompletion = computemethodOfCompletion(targetDetails);
+    (
+      target,
+      course,
+      overlaySelection,
+      setOverlaySelection,
+      targetDetails,
+      targetStatus,
+    ) => {
+  let completionType = computeCompletionType(targetDetails);
+
   <div className="mt-4 flex justify-between max-w-3xl mx-auto">
     {
       selectableTabs(course)
       |> List.map(selection =>
-           tabButton(selection, overlaySelection, setOverlaySelection)
+           tabButton(selection, overlaySelection, setOverlaySelection, false)
          )
       |> Array.of_list
       |> React.array
     }
     {
-      switch (methodOfCompletion) {
-      | Evaluated =>
-        tabButton(Complete(Evaluated), overlaySelection, setOverlaySelection)
-      | TakeQuiz =>
-        tabButton(Complete(TakeQuiz), overlaySelection, setOverlaySelection)
-      | _methodOfCompletion =>
-        tabLink(Complete(_methodOfCompletion), overlaySelection)
+      switch (targetStatus |> TargetStatus.status, completionType) {
+      | (Pending, Evaluated) =>
+        tabButton(
+          Complete(Evaluated),
+          overlaySelection,
+          setOverlaySelection,
+          true,
+        )
+      | (Pending, TakeQuiz) =>
+        tabButton(
+          Complete(TakeQuiz),
+          overlaySelection,
+          setOverlaySelection,
+          true,
+        )
+      | (Pending, _completionTypes) =>
+        tabLink(Complete(_completionTypes), overlaySelection, true)
+
+      | (Submitted | Passed | Failed, Evaluated) =>
+        tabButton(
+          Complete(Evaluated),
+          overlaySelection,
+          setOverlaySelection,
+          false,
+        )
+      | (Submitted | Passed | Failed, TakeQuiz) =>
+        tabButton(
+          Complete(Evaluated),
+          overlaySelection,
+          setOverlaySelection,
+          false,
+        )
+      | (Submitted | Passed | Failed, _completionTypes) =>
+        tabLink(Complete(_completionTypes), overlaySelection, false)
+      | (Locked(_), _) => React.null
       }
     }
   </div>;
 };
 
-let discussSection = (overlaySelection, target, targetDetails) =>
-  <div
-    className={overlaySelectionVisiblilityClasses(Discuss, overlaySelection)}>
-    {
-      switch (targetDetails |> TargetDetails.communities) {
-      | [] =>
-        <div> {"Error: Discuss section must not be triggered!" |> str} </div>
-      | communities => <CourseShow__Discuss target communities />
-      }
-    }
-  </div>;
+let discussSection = (target, targetDetails) => {
+  let communities = targetDetails |> TargetDetails.communities;
+  <CourseShow__Discuss target communities />;
+};
 
 let showQuizSection = (target, targetDetails, authenticityToken) => {
   let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
@@ -214,13 +241,20 @@ let showQuizSection = (target, targetDetails, authenticityToken) => {
 };
 
 let completeSection =
-    (methodOfCompletion, target, targetDetails, authenticityToken) =>
+    (completionType, target, targetDetails, authenticityToken, targetStatus) =>
   <div>
     {
-      switch (methodOfCompletion) {
-      | Evaluated => <CourseShow__SubmissionForm authenticityToken target />
-      | TakeQuiz => showQuizSection(target, targetDetails, authenticityToken)
-      | _ => React.null
+      switch (targetStatus |> TargetStatus.status, completionType) {
+      | (Pending, Evaluated) =>
+        <CourseShow__SubmissionForm authenticityToken target />
+      | (Pending, TakeQuiz) =>
+        showQuizSection(target, targetDetails, authenticityToken)
+
+      | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
+        <CourseShow__SubmissionsAndFeedbacks targetDetails />
+      | (Submitted | Passed | Failed, LinkToComplete | MarkAsComplete)
+      | (Pending, LinkToComplete | MarkAsComplete)
+      | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
       }
     }
   </div>;
@@ -270,6 +304,7 @@ let make =
               overlaySelection,
               setOverlaySelection,
               targetDetails,
+              targetStatus,
             )
           | None => <div> {"Loading..." |> str} </div>
           }
@@ -283,22 +318,20 @@ let make =
           <div>
             {
               switch (overlaySelection) {
-              | Learn =>
-                <div> {learnSection(overlaySelection, targetDetails)} </div>
-              | Discuss =>
-                discussSection(overlaySelection, target, targetDetails)
-
-              | Complete(methodOfCompletion) =>
+              | Learn => learnSection(targetDetails)
+              | Discuss => discussSection(target, targetDetails)
+              | Complete(completionType) =>
                 completeSection(
-                  methodOfCompletion,
+                  completionType,
                   target,
                   targetDetails,
                   authenticityToken,
+                  targetStatus,
                 )
               }
             }
             {
-              switch (computemethodOfCompletion(targetDetails)) {
+              switch (computeCompletionType(targetDetails)) {
               | LinkToComplete
               | MarkAsComplete =>
                 <CourseShow__AutoVerify

@@ -49,7 +49,7 @@ let autoVerify =
     (target, linkToComplete, saving, setSaving, authenticityToken) =>
   <button
     disabled=saving
-    className="btn btn-success btn-large w-full"
+    className="flex text-white rounded text-lg font-semibold justify-center btn btn-success btn-large w-full"
     onClick={
       createAutoVerifySubmission(
         authenticityToken,
@@ -73,16 +73,11 @@ let autoVerify =
     </span>
   </button>;
 
-let statusBadge = (string, complete) => {
-  let bgClasses = complete ? "bg-green-500" : "bg-gray-500";
+let statusBadge = (string, complete) =>
   <div
-    className={
-      "flex text-white rounded text-lg font-semibold justify-center p-2 "
-      ++ bgClasses
-    }>
+    className="flex text-white rounded text-lg font-semibold justify-center p-2 bg-green-500">
     {string |> str}
   </div>;
-};
 
 [@react.component]
 let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) => {
@@ -99,8 +94,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) => {
           setSaving,
           authenticityToken,
         )
-      | Locked(lockReason) =>
-        statusBadge(lockReason |> TargetStatus.lockReasonToString, false)
+      | Locked(_) => React.null
       | _ => statusBadge("Completed", true)
       }
     }

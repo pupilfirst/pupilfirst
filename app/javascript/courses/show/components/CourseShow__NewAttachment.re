@@ -16,21 +16,9 @@ let tabClasses = (currentSelection, inspectedSelection) => {
   };
 };
 
-let urlForm =
-  <div className="flex items-center flex-wrap">
-    <input
-      type_="text"
-      placeholder="Type full URL starting with https://..."
-      className="mt-2 cursor-pointer truncate h-10 border border-grey-400 border-dashed flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
-    />
-    <button
-      className="mt-2 bg-indigo-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
-      {"Attach link" |> str}
-    </button>
-  </div>;
-
 [@react.component]
-let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~disabled) => {
+let make =
+    (~authenticityToken, ~attachFileCB, ~attachUrlCB, ~attachingCB, ~disabled) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
   <DisablingCover disabled message="Uploading file...">
@@ -57,7 +45,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~disabled) => {
         switch (selection) {
         | UploadFile =>
           <CourseShow__FileForm authenticityToken attachFileCB attachingCB />
-        | AddUrl => urlForm
+        | AddUrl => <CoursesShow__UrlForm attachUrlCB />
         }
       }
     </div>

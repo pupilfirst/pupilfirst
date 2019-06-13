@@ -17,7 +17,7 @@ after 'development:targets' do
       file_cb = ContentBlock.create!(target: target, sort_index: content_sort_index[2], block_type: 'file', content: { title: Faker::Lorem.sentence(3) })
       file_cb.file.attach(io: File.open(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')),
         filename: 'pdf-sample.pdf')
-      ContentBlock.create!(target: target, sort_index: content_sort_index[3], block_type: 'embed', content: { url: 'https://www.youtube.com/watch?v=58CPRi5kRe8', embed_code: '<iframe width=\"480\" height=\"270\" src=\"https://www.youtube.com/embed/58CPRi5kRe8?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>' })
+      ContentBlock.create!(target: target, sort_index: content_sort_index[3], block_type: 'embed', content: { url: 'https://www.youtube.com/watch?v=58CPRi5kRe8', embed_code: '<iframe width="480" height="270" src="https://www.youtube.com/embed/58CPRi5kRe8?feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' })
     end
   end
 end

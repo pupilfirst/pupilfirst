@@ -109,22 +109,24 @@ let learnSection = targetDetails =>
     }
   </div>;
 
-let completionTypeToString = (completionType, pending) =>
-  switch (pending, completionType) {
-  | (false, Evaluated | TakeQuiz) => "Submissions and Review"
-  | (false, LinkToComplete | MarkAsComplete) => "Completed"
-  | (true, Evaluated) => "Complete"
-  | (true, TakeQuiz) => "Take Quiz"
-  | (true, LinkToComplete) => "Visit Link to Complete"
-  | (true, MarkAsComplete) => "Mark as Complete"
+let completionTypeToString = (completionType, targetStatus) =>
+  switch (targetStatus |> TargetStatus.status, completionType) {
+  | (Pending, Evaluated) => "Complete"
+  | (Pending, TakeQuiz) => "Take Quiz"
+  | (Pending, LinkToComplete) => "Visit Link to Complete"
+  | (Pending, MarkAsComplete) => "Mark as Complete"
+  | (Submitted | Passed | Failed, Evaluated | TakeQuiz) => "Submissions and Review"
+  | (Submitted | Passed | Failed, LinkToComplete | MarkAsComplete) => "Completed"
+  /* Locked is an imposible state */
+  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
   };
 
-let selectionToString = (pending, overlaySelection) =>
+let selectionToString = (targetStatus, overlaySelection) =>
   switch (overlaySelection) {
   | Learn => "Learn"
   | Discuss => "Discuss"
   | Complete(completionType) =>
-    completionTypeToString(completionType, pending)
+    completionTypeToString(completionType, targetStatus)
   };
 
 let computeCompletionType = targetDetails => {
@@ -155,12 +157,13 @@ let tabClasses = (selection, overlaySelection) =>
       " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
   );
 
-let tabButton = (selection, overlaySelection, setOverlaySelection, pending) =>
+let tabButton =
+    (selection, overlaySelection, setOverlaySelection, targetStatus) =>
   <span
-    key={"select-" ++ (selection |> selectionToString(pending))}
+    key={"select-" ++ (selection |> selectionToString(targetStatus))}
     className={tabClasses(selection, overlaySelection)}
     onClick={_e => setOverlaySelection(_ => selection)}>
-    {selection |> selectionToString(pending) |> str}
+    {selection |> selectionToString(targetStatus) |> str}
   </span>;
 
 let tabLink = (selection, overlaySelection, pending) =>
@@ -185,46 +188,35 @@ let overlaySelectionOptions =
     {
       selectableTabs(course)
       |> List.map(selection =>
-           tabButton(selection, overlaySelection, setOverlaySelection, false)
+           tabButton(
+             selection,
+             overlaySelection,
+             setOverlaySelection,
+             targetStatus,
+           )
          )
       |> Array.of_list
       |> React.array
     }
     {
       switch (targetStatus |> TargetStatus.status, completionType) {
-      | (Pending, Evaluated) =>
+      | (Pending | Submitted | Passed | Failed, Evaluated) =>
         tabButton(
           Complete(Evaluated),
           overlaySelection,
           setOverlaySelection,
-          true,
+          targetStatus,
         )
-      | (Pending, TakeQuiz) =>
+      | (Pending | Submitted | Passed | Failed, TakeQuiz) =>
         tabButton(
           Complete(TakeQuiz),
           overlaySelection,
           setOverlaySelection,
-          true,
+          targetStatus,
         )
-      | (Pending, _completionTypes) =>
-        tabLink(Complete(_completionTypes), overlaySelection, true)
+      | (Pending | Submitted | Passed | Failed, _completionTypes) =>
+        tabLink(Complete(_completionTypes), overlaySelection, targetStatus)
 
-      | (Submitted | Passed | Failed, Evaluated) =>
-        tabButton(
-          Complete(Evaluated),
-          overlaySelection,
-          setOverlaySelection,
-          false,
-        )
-      | (Submitted | Passed | Failed, TakeQuiz) =>
-        tabButton(
-          Complete(Evaluated),
-          overlaySelection,
-          setOverlaySelection,
-          false,
-        )
-      | (Submitted | Passed | Failed, _completionTypes) =>
-        tabLink(Complete(_completionTypes), overlaySelection, false)
       | (Locked(_), _) => React.null
       }
     }

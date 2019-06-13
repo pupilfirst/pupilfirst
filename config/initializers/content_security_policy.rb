@@ -56,6 +56,10 @@ Rails.application.config.content_security_policy do |policy|
     { frame: 'https://www.youtube.com' }
   end
 
+  def vimeo_csp
+    { frame: 'https://player.vimeo.com' }
+  end
+
   def style_sources
     ['fonts.googleapis.com', 'https://assets.pupilfirst.com']
   end
@@ -77,7 +81,7 @@ Rails.application.config.content_security_policy do |policy|
   def frame_sources
     [
       'https://sv-co-public-slackin.herokuapp.com', 'https://www.google.com',
-      typeform_csp[:frame], youtube_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame],
+      typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame],
       *google_form_csp[:frame], facebook_csp[:frame]
     ]
   end

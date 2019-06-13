@@ -55,7 +55,8 @@ let answerOptionClasses = (answerOption, selectedAnswer) => {
   let defaultClasses = "quiz-root__answer bg-white flex items-center font-semibold shadow border border-transparent rounded p-3 mt-3 ";
   switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
-    defaultClasses ++ "bg-primary-100 border-primary-500 text-primary-500 shadow-md quiz-root__answer-selected "
+    defaultClasses
+    ++ "bg-primary-100 border-primary-500 text-primary-500 shadow-md quiz-root__answer-selected "
   | Some(_otherAnswer) => defaultClasses
   | None => defaultClasses
   };
@@ -65,12 +66,11 @@ let iconClasses = (answerOption, selectedAnswer) => {
   let defaultClasses = "quiz-root__answer-option-icon far fa-check-circle text-lg ";
   switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
-    defaultClasses ++ "text-green-500"
+    defaultClasses ++ "text-primary-500"
   | Some(_otherAnswer) => defaultClasses ++ "text-gray-400"
   | None => defaultClasses ++ "text-gray-400"
   };
 };
-
 
 let handleSubmit =
     (answer, authenticityToken, target, selectedAnswersIds, setSaving, event) => {
@@ -91,8 +91,7 @@ let make = (~target, ~quizQuestions, ~authenticityToken) => {
   let currentQuestion = selectedQuestion;
   <div className="bg-gray-100 rounded overflow-hidden">
     <div className="p-5">
-      <span
-        className="font-semibold text-xs block uppercase text-gray-600">
+      <span className="font-semibold text-xs block uppercase text-gray-600">
         {"Question #" |> str}
         {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
       </span>
@@ -111,18 +110,18 @@ let make = (~target, ~quizQuestions, ~authenticityToken) => {
           currentQuestion
           |> QuizQuestion.answerOptions
           |> List.map(answerOption =>
-                <div
-                  className={
-                    answerOptionClasses(answerOption, selectedAnswer)
-                  }
-                  key={answerOption |> QuizQuestion.answerId}
-                  onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
-                  <FaIcon classes={iconClasses(answerOption, selectedAnswer)} />
-                  <span className="ml-2">
-                    {answerOption |> QuizQuestion.answerValue |> str}
-                  </span>
-                </div>
-              )
+               <div
+                 className={answerOptionClasses(answerOption, selectedAnswer)}
+                 key={answerOption |> QuizQuestion.answerId}
+                 onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
+                 <FaIcon
+                   classes={iconClasses(answerOption, selectedAnswer)}
+                 />
+                 <span className="ml-2">
+                   {answerOption |> QuizQuestion.answerValue |> str}
+                 </span>
+               </div>
+             )
           |> Array.of_list
           |> React.array
         }

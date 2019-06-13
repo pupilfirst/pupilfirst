@@ -17,6 +17,11 @@ let loadTargetDetails = (target, setTargetDetails, ()) => {
   None;
 };
 
+let randomButton = () =>
+  <button className="btn btn-success btn-large w-full">
+    {"Mark As Complete" |> str}
+  </button>;
+
 type methodOfCompletion =
   | Evaluated
   | TakeQuiz
@@ -90,7 +95,8 @@ let learnSection = (overlaySelection, targetDetails) =>
            </div>;
          })
       |> Array.of_list
-      |> React.array
+      |> React.array;
+      randomButton();
     }
   </div>;
 
@@ -232,7 +238,7 @@ let make =
   );
 
   <div
-    className="absolute top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    className="absolute z-20 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-200 border-b">
       <div className="container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
@@ -251,13 +257,15 @@ let make =
         }
       </div>
     </div>
-    <div className="container mx-auto p-8 max-w-3xl">
+    <div className="container mx-auto mt-8 max-w-3xl">
       {
         switch (targetDetails) {
         | Some(targetDetails) =>
           switch (overlaySelection) {
           | Learn => learnSection(overlaySelection, targetDetails)
+
           | Discuss => discussSection(overlaySelection, target, targetDetails)
+
           | Complete(methodOfCompletion) =>
             completeSection(
               methodOfCompletion,

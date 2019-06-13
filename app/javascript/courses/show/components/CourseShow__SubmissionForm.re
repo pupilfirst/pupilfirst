@@ -107,6 +107,11 @@ let reducer = (state, action) =>
   | ResetForm => initialState
   };
 
+let removeAttachment = (attachment, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send(RemoveAttachment(attachment));
+};
+
 let attachments = (state, send) =>
   switch (state.attachments) {
   | [] => React.null
@@ -114,38 +119,46 @@ let attachments = (state, send) =>
     <div className="flex flex-wrap">
       {
         attachments
-        |> List.map(attachment =>
-             switch (attachment) {
-             | Link(url) =>
+        |> List.map(attachment => {
+             let (key, containerClasses, iconClasses, textClasses, text) =
+               switch (attachment) {
+               | Link(url) => (
+                   url,
+                   "border-blue-200 bg-blue-200",
+                   "bg-blue-200",
+                   "bg-blue-100",
+                   url,
+                 )
+               | File(id, filename) => (
+                   "file-" ++ id,
+                   "border-primary-200 bg-primary-200",
+                   "bg-primary-200",
+                   "bg-primary-100",
+                   filename,
+                 )
+               };
+
+             <span
+               key
+               className={
+                 "mt-2 mr-2 flex items-center border-2 rounded-lg "
+                 ++ containerClasses
+               }>
                <span
-                 key=url
-                 className="mt-2 mr-2 flex items-center border-2 border-blue-200 bg-blue-200 rounded-lg">
-                 <span className="flex p-2 bg-blue-200 cursor-pointer">
-                   <i className="fas fa-times" />
-                 </span>
-                 <span
-                   className="bg-blue-100 rounded px-2 py-1 truncate rounded-lg">
-                   <span className="text-xs font-semibold text-primary-600">
-                     {url |> str}
-                   </span>
+                 className={"flex p-2 cursor-pointer " ++ iconClasses}
+                 onClick={removeAttachment(attachment, send)}>
+                 <i className="fas fa-times" />
+               </span>
+               <span
+                 className={
+                   "rounded px-2 py-1 truncate rounded-lg " ++ textClasses
+                 }>
+                 <span className="text-xs font-semibold text-primary-600">
+                   {text |> str}
                  </span>
                </span>
-             | File(id, filename) =>
-               <span
-                 key={"file-" ++ id}
-                 className="mt-2 mr-2 flex items-center border-2 border-primary-200 bg-primary-200 rounded-lg">
-                 <span className="flex p-2 bg-primary-200 cursor-pointer">
-                   <i className="fas fa-times" />
-                 </span>
-                 <span
-                   className="bg-primary-100 rounded px-2 py-1 truncate rounded-lg">
-                   <span className="text-xs font-semibold text-primary-600">
-                     {filename |> str}
-                   </span>
-                 </span>
-               </span>
-             }
-           )
+             </span>;
+           })
         |> Array.of_list
         |> React.array
       }

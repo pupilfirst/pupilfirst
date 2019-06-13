@@ -1,5 +1,5 @@
 class CreateQuizSubmissionMutator < ApplicationMutator
-  include AuthorizeFounder
+  include AuthorizeStudent
 
   attr_accessor :target_id
   attr_accessor :answer_ids
@@ -39,22 +39,6 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   end
 
   private
-
-  def founder
-    @founder ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
-  end
-
-  def startup
-    @startup ||= founder.startup
-  end
-
-  def course
-    @course ||= target.course
-  end
-
-  def target
-    @target ||= Target.find_by(id: target_id)
-  end
 
   def number_of_question
     @number_of_question ||= quiz.quiz_questions.count
@@ -111,14 +95,6 @@ class CreateQuizSubmissionMutator < ApplicationMutator
       '(Your answer)'
     else
       ''
-    end
-  end
-
-  def founders
-    if target.founder_event?
-      [founder]
-    else
-      founder.startup.founders
     end
   end
 end

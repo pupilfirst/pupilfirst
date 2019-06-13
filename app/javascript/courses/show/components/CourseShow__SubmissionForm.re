@@ -58,7 +58,8 @@ type state = {
 type action =
   | UpdateButtonState(formState)
   | UpdateDescription(string)
-  | AddAttachment(attachment)
+  | AttachFile(id, filename)
+  | AttachUrl(url)
   | RemoveAttachment(attachment)
   | ResetForm;
 
@@ -80,17 +81,36 @@ let reducer = (state, action) =>
       description,
       formState: description |> computeFormState,
     }
-  | AddAttachment(attachment) => {
+  | AttachFile(id, filename) => {
       ...state,
-      attachments: [attachment, ...state.attachments],
+      attachments: [File(id, filename), ...state.attachments],
       formState: state.description |> computeFormState,
     }
+  | AttachUrl(url) =>
+    let attachment =
+      state.attachments
+      |> ListUtils.findOpt(attachment =>
+           switch (attachment) {
+           | File(_, _) => false
+           | Link(storedUrl) => url == storedUrl
+           }
+         );
+
+    switch (attachment) {
+    | Some(_attachment) => state
+    | None => {...state, attachments: [Link(url), ...state.attachments]}
+    };
   | RemoveAttachment(attachment) => {
       ...state,
       attachments: state.attachments |> List.filter(a => a != attachment),
     }
   | ResetForm => initialState
   };
+
+let removeAttachment = (attachment, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send(RemoveAttachment(attachment));
+};
 
 let attachments = (state, send) =>
   switch (state.attachments) {
@@ -99,36 +119,46 @@ let attachments = (state, send) =>
     <div className="flex flex-wrap">
       {
         attachments
-        |> List.map(attachment =>
-             switch (attachment) {
-             | Link(url) =>
+        |> List.map(attachment => {
+             let (key, containerClasses, iconClasses, textClasses, text) =
+               switch (attachment) {
+               | Link(url) => (
+                   url,
+                   "border-blue-200 bg-blue-200",
+                   "bg-blue-200",
+                   "bg-blue-100",
+                   url,
+                 )
+               | File(id, filename) => (
+                   "file-" ++ id,
+                   "border-primary-200 bg-primary-200",
+                   "bg-primary-200",
+                   "bg-primary-100",
+                   filename,
+                 )
+               };
+
+             <span
+               key
+               className={
+                 "mt-2 mr-2 flex items-center border-2 rounded-lg "
+                 ++ containerClasses
+               }>
                <span
-                 className="mt-2 mr-2 flex items-center border-2 border-blue-200 bg-blue-200 rounded-lg">
-                 <span className="flex p-2 bg-blue-200 cursor-pointer">
-                   <i className="fas fa-times" />
-                 </span>
-                 <span
-                   className="bg-blue-100 rounded px-2 py-1 truncate rounded-lg">
-                   <span className="text-xs font-semibold text-primary-600">
-                     {url |> str}
-                   </span>
+                 className={"flex p-2 cursor-pointer " ++ iconClasses}
+                 onClick={removeAttachment(attachment, send)}>
+                 <i className="fas fa-times" />
+               </span>
+               <span
+                 className={
+                   "rounded px-2 py-1 truncate rounded-lg " ++ textClasses
+                 }>
+                 <span className="text-xs font-semibold text-primary-600">
+                   {text |> str}
                  </span>
                </span>
-             | File(id, filename) =>
-               <span
-                 className="mt-2 mr-2 flex items-center border-2 border-primary-200 bg-primary-200 rounded-lg">
-                 <span className="flex p-2 bg-primary-200 cursor-pointer">
-                   <i className="fas fa-times" />
-                 </span>
-                 <span
-                   className="bg-primary-100 rounded px-2 py-1 truncate rounded-lg">
-                   <span className="text-xs font-semibold text-primary-600">
-                     {filename |> str}
-                   </span>
-                 </span>
-               </span>
-             }
-           )
+             </span>;
+           })
         |> Array.of_list
         |> React.array
       }
@@ -142,6 +172,52 @@ let isBusy = formState =>
   | Incomplete
   | Ready => false
   };
+
+module CreateSubmissionQuery = [%graphql
+  {|
+  mutation($targetId: ID!, $description: String!, $fileIds: [String!]!, $links: [String!]!) {
+    createSubmission(targetId: $targetId, description: $description, fileIds: $fileIds, links: $links) {
+      submission {
+        id
+      }
+    }
+  }
+  |}
+];
+
+let attachmentValues = attachments =>
+  attachments
+  |> List.map(attachment =>
+       switch (attachment) {
+       | File(id, _) => id
+       | Link(url) => url
+       }
+     )
+  |> Array.of_list;
+
+let submit = (state, send, target, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  let (fileAttachments, linkAttachments) =
+    state.attachments
+    |> List.partition(attachment =>
+         switch (attachment) {
+         | File(_, _) => true
+         | Link(_) => false
+         }
+       );
+
+  let fileIds = attachmentValues(fileAttachments);
+  let links = attachmentValues(linkAttachments);
+
+  CreateSubmissionQuery.make(
+    ~targetId=target |> Target.id,
+    ~description=state.description,
+    ~fileIds,
+    ~links,
+  )
+  |> ignore;
+};
 
 [@react.component]
 let make = (~authenticityToken, ~target) => {
@@ -159,13 +235,13 @@ let make = (~authenticityToken, ~target) => {
     <CourseShow__NewAttachment
       authenticityToken
       attachingCB={() => send(UpdateButtonState(Attaching))}
-      attachFileCB={
-        (id, filename) => send(AddAttachment(File(id, filename)))
-      }
+      attachFileCB={(id, filename) => send(AttachFile(id, filename))}
+      attachUrlCB={url => send(AttachUrl(url))}
       disabled={isBusy(state.formState)}
     />
     <div className="flex mt-3 justify-end">
       <button
+        onClick={submit(state, send, target)}
         disabled={isButtonDisabled(state.formState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}

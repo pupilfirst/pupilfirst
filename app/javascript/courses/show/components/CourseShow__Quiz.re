@@ -9,7 +9,7 @@ module CreateQuizSubmissionQuery = [%graphql
   {|
    mutation($targetId: ID!, $answerIds: [ID!]!) {
     createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
-      submissionDetails{
+      submission{
         id
         description
         createdAt
@@ -29,7 +29,7 @@ let createQuizSubmission =
   )
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       switch (response##createQuizSubmission##submissionDetails) {
+       switch (response##createQuizSubmission##submission) {
        | Some(details) =>
          Notification.success("Success", details##description)
        | None =>

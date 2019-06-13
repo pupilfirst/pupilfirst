@@ -9,7 +9,7 @@ module AutoVerifySubmissionQuery = [%graphql
   {|
    mutation($targetId: ID!) {
     autoVerifySubmission(targetId: $targetId){
-      submissionDetails{
+      submission{
         id
         description
         createdAt
@@ -31,7 +31,7 @@ let createAutoVerifySubmission =
   AutoVerifySubmissionQuery.make(~targetId=target |> Target.id, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       switch (response##autoVerifySubmission##submissionDetails) {
+       switch (response##autoVerifySubmission##submission) {
        | Some(details) => handleSuccess(details, linkToComplete)
 
        | None =>

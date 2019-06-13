@@ -175,7 +175,6 @@ let tabLink = (selection, overlaySelection, pending) =>
 
 let overlaySelectionOptions =
     (
-      target,
       course,
       overlaySelection,
       setOverlaySelection,
@@ -252,9 +251,20 @@ let completeSection =
     }
   </div>;
 
+let targetStatusClass = (prefix, targetStatus) =>
+  prefix
+  ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
+
+let targetStatusClasses = targetStatus =>
+  "curriculum__target-status text-xs md:text-sm py-1 px-2 md:px-4 "
+  ++ targetStatusClass("curriculum__target-status--", targetStatus);
+
+let overlayHeaderTitleCardClasses = targetStatus =>
+  "course-overlay__header-title-card flex justify-between items-center px-3 py-5 md:p-6 mb-5 md:mb-7 "
+  ++ targetStatusClass("course-overlay__header-title-card--", targetStatus);
+
 let overlayStatus = (closeOverlayCB, target, targetStatus) =>
-  <div
-    className="course-overlay__header-title-card course-overlay__header-title-card--pending flex justify-between items-center px-3 py-5 md:p-6 mb-5 md:mb-7 ">
+  <div className={overlayHeaderTitleCardClasses(targetStatus)}>
     <button
       className="xl:absolute pr-4 xl:-ml-20 focus:outline-none"
       onClick={_e => closeOverlayCB()}>
@@ -267,8 +277,7 @@ let overlayStatus = (closeOverlayCB, target, targetStatus) =>
       <h1 className="text-base leading-snug mr-3 md:text-xl">
         {target |> Target.title |> str}
       </h1>
-      <div
-        className="curriculum__target-status curriculum__target-status--pending text-xs md:text-sm py-1 px-2 md:px-4">
+      <div className={targetStatusClasses(targetStatus)}>
         {targetStatus |> CourseShow__TargetStatus.statusToString |> str}
       </div>
     </div>
@@ -299,7 +308,6 @@ let make =
           switch (targetDetails) {
           | Some(targetDetails) =>
             overlaySelectionOptions(
-              target,
               course,
               overlaySelection,
               setOverlaySelection,

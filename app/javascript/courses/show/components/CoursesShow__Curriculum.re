@@ -22,6 +22,13 @@ let updateSelectedLevel = (levels, setSelectedLevelId, event) => {
 let closeOverlay = (setSelectedTargetId, ()) =>
   setSelectedTargetId(_ => None);
 
+let targetStatusClasses = targetStatus => {
+  let statusClasses =
+    "curriculum__target-status--"
+    ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
+  "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses;
+};
+
 let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
   let targetStatus =
     statusOfTargets
@@ -34,11 +41,7 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
-    <span
-      className={
-        "curriculum__target-status px-3 py-px ml-4 h-6 "
-        ++ (targetStatus |> TargetStatus.statusClasses)
-      }>
+    <span className={targetStatusClasses(targetStatus)}>
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
   </div>;

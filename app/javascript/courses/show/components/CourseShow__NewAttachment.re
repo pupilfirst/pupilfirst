@@ -33,7 +33,7 @@ let urlForm =
 let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~disabled) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
-  <DisablingCover disabled>
+  <DisablingCover disabled message="Uploading file...">
     <h6 className="pl-1 mt-4"> {"Attach files & links" |> str} </h6>
     <ul className="flex border-b mt-2 border-gray-400">
       <li className={tabClasses(selection, UploadFile)}>

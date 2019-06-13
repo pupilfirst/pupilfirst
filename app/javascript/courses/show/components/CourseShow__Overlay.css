@@ -1,0 +1,32 @@
+.course-overlay__header-container {
+  max-width: 60rem;
+}
+
+.course-overlay__header-title-card {
+  @apply text-gray-900 border border-t-0 border-transparent rounded-b-lg;
+}
+
+.course-overlay__header-status-pill {
+  @apply text-gray-900 border rounded-full;
+}
+
+.course-overlay__header-title-card--pending, .course-overlay__header-status-pill--pending {
+  @apply bg-orange-100 border-orange-400;
+}
+
+.course-overlay__header-title-card--submitted, .course-overlay__header-status-pill--submitted {
+  @apply bg-blue-100 border-blue-400;
+}
+
+.course-overlay__header-title-card--passed, .course-overlay__header-status-pill--passed {
+  @apply bg-green-100 border-green-400;
+}
+
+.course-overlay__header-title-card--failed, .course-overlay__header-status-pill--failed {
+  @apply bg-red-100 border-red-400;
+}
+
+.course-overlay__header-title-card--locked, .course-overlay__header-status-pill--locked {
+  @apply bg-gray-100 border-gray-600;
+}
+

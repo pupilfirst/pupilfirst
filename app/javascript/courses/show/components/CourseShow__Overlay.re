@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CourseShow__Overlay.css")|}];
 
 open CourseShow__Types;
 
@@ -148,11 +149,11 @@ let selectableTabs = course =>
   course |> Course.enableDiscuss ? [Learn, Discuss] : [Learn];
 
 let tabClasses = (selection, overlaySelection) =>
-  "p-4 flex w-full justify-center rounded-t-lg border border-b-0 font-semibold"
+  "px-3 py-4 flex w-full justify-center text-sm -mx-px border border-gray-400 font-semibold"
   ++ (
     overlaySelection == selection ?
-      " bg-white text-blue-600" :
-      " bg-gray-300 hover:bg-gray-200 cursor-pointer"
+      " bg-white text-primary-500 border-b-0" :
+      " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
   );
 
 let tabButton = (selection, overlaySelection, setOverlaySelection) =>
@@ -171,7 +172,7 @@ let tabLink = (selection, overlaySelection) =>
 let overlaySelectionOptions =
     (target, course, overlaySelection, setOverlaySelection, targetDetails) => {
   let methodOfCompletion = computemethodOfCompletion(targetDetails);
-  <div className="mt-4 flex justify-between max-w-3xl mx-auto">
+  <div className="flex justify-between max-w-3xl mx-auto -mb-px">
     {
       selectableTabs(course)
       |> List.map(selection =>
@@ -224,15 +225,15 @@ let completeSection =
 
 let overlayStatus = (closeOverlayCB, target, targetStatus) =>
   <div
-    className="flex justify-between items-center py-4 px-6 bg-yellow-200 border-transparent rounded-b-lg">
+    className="course-overlay__header-title-card course-overlay__header-title-card--pending flex justify-between items-center p-6 mb-7 ">
     <div className="flex items-center">
       <button className="mr-4" onClick={_e => closeOverlayCB()}>
         <i className="fal fa-arrow-circle-left fa-2x" />
       </button>
-      <h1 className="text-3xl"> {target |> Target.title |> str} </h1>
+      <h1 className="text-xl"> {target |> Target.title |> str} </h1>
     </div>
     <div
-      className="border-2 border-yellow-600 py-1 px-2 rounded-full text-yellow-600 font-bold">
+      className="curriculum__target-status curriculum__target-status--pending text-sm py-1 px-3">
       {targetStatus |> CourseShow__TargetStatus.statusToString |> str}
     </div>
   </div>;
@@ -255,8 +256,8 @@ let make =
 
   <div
     className="fixed z-20 top-0 left-0 w-full overflow-y-scroll bg-white h-screen">
-    <div className="bg-gray-200 border-b">
-      <div className="container mx-auto">
+    <div className="container bg-gray-100 border-b border-gray-400 px-3">
+      <div className="course-overlay__header-container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
         {
           switch (targetDetails) {
@@ -273,7 +274,7 @@ let make =
         }
       </div>
     </div>
-    <div className="container mx-auto mt-8 max-w-3xl">
+    <div className="container mx-auto mt-8 max-w-3xl px-3 md:px-0 pb-8">
       {
         switch (targetDetails) {
         | Some(targetDetails) =>

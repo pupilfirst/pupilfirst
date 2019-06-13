@@ -24,6 +24,7 @@ class TargetPolicy < ApplicationPolicy
 
   alias startup_feedback? prerequisite_targets?
   alias details? prerequisite_targets?
+  alias target_overlay? details_v2?
 
   def auto_verify?
     prerequisite_targets? &&

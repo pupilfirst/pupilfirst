@@ -132,6 +132,33 @@ let levelSelector = (levels, setSelectedLevelId, selectedLevelId) => {
   </div>;
 };
 
+let handleURL = (url: ReasonReactRouter.url, setSelectedTargetId) => {
+  Js.log("change");
+  switch (url.path) {
+  | ["courses", _, "targets", targetId] =>
+    setSelectedTargetId(_ => Some(targetId))
+  | ["courses", _, "targets", targetId, ..._] =>
+    setSelectedTargetId(_ => Some(targetId))
+  | _ => setSelectedTargetId(_ => None)
+  };
+};
+
+let pushUrl = (course, selectedTargetId) =>
+  switch (selectedTargetId) {
+  | Some(targetId) =>
+    ReasonReactRouter.push(
+      "/courses/" ++ (course |> Course.id) ++ "/targets/" ++ targetId,
+    )
+  | None => ReasonReactRouter.push("/courses/" ++ (course |> Course.id))
+  };
+
+let handleTargetId = (url: ReasonReactRouter.url) =>
+  switch (url.path) {
+  | ["courses", _, "targets", targetId]
+  | ["courses", _, "targets", targetId, ..._] => Some(targetId)
+  | _ => None
+  };
+
 [@react.component]
 let make =
     (
@@ -175,7 +202,18 @@ let make =
         submissions,
       )
     );
-  let (selectedTargetId, setSelectedTargetId) = React.useState(() => None);
+  let (url, _) =
+    React.useState(() => ReasonReactRouter.dangerouslyGetInitialUrl());
+
+  let (selectedTargetId, setSelectedTargetId) =
+    React.useState(() => handleTargetId(url));
+
+  React.useEffect0(() => {
+    handleURL(url, setSelectedTargetId);
+    None;
+  });
+
+  pushUrl(course, selectedTargetId);
 
   <div className="bg-gray-100 pt-4 pb-8">
     {

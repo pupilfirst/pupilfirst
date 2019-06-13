@@ -173,6 +173,52 @@ let isBusy = formState =>
   | Ready => false
   };
 
+module CreateSubmissionQuery = [%graphql
+  {|
+  mutation($targetId: ID!, $description: String!, $fileIds: [String!]!, $links: [String!]!) {
+    createSubmission(targetId: $targetId, description: $description, fileIds: $fileIds, links: $links) {
+      submission {
+        id
+      }
+    }
+  }
+  |}
+];
+
+let attachmentValues = attachments =>
+  attachments
+  |> List.map(attachment =>
+       switch (attachment) {
+       | File(id, _) => id
+       | Link(url) => url
+       }
+     )
+  |> Array.of_list;
+
+let submit = (state, send, target, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  let (fileAttachments, linkAttachments) =
+    state.attachments
+    |> List.partition(attachment =>
+         switch (attachment) {
+         | File(_, _) => true
+         | Link(_) => false
+         }
+       );
+
+  let fileIds = attachmentValues(fileAttachments);
+  let links = attachmentValues(linkAttachments);
+
+  CreateSubmissionQuery.make(
+    ~targetId=target |> Target.id,
+    ~description=state.description,
+    ~fileIds,
+    ~links,
+  )
+  |> ignore;
+};
+
 [@react.component]
 let make = (~authenticityToken, ~target) => {
   let (state, send) = React.useReducer(reducer, initialState);
@@ -195,6 +241,7 @@ let make = (~authenticityToken, ~target) => {
     />
     <div className="flex mt-3 justify-end">
       <button
+        onClick={submit(state, send, target)}
         disabled={isButtonDisabled(state.formState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}

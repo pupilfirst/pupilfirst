@@ -16,7 +16,7 @@ let make = (~target, ~targetGroup, ~showTargetEditorCB, _children) => {
     <div
       className={archivedClasses(target |> Target.visibility === Archived)}
       onClick={
-        _e => showTargetEditorCB(targetGroup |> TargetGroup.id, Some(target))
+        _e => showTargetEditorCB(targetGroup |> TargetGroup.id, target)
       }>
       <p className="font-semibold text-sm">
         {target |> Target.title |> str}

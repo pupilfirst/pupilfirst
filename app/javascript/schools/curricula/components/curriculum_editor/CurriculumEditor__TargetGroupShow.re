@@ -108,7 +108,7 @@ let make =
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));
       updateTargetCB(newTarget);
-      showTargetEditorCB(targetGroupId, Some(newTarget));
+      showTargetEditorCB(targetGroupId, newTarget);
     };
     let handleCreateTarget = (title, targetGroupId) => {
       send(UpdateTargetSaving);

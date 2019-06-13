@@ -2,25 +2,29 @@
 
 let str = React.string;
 
-let buttonClasses = visibility => {
+let buttonClasses = (visibility, staticMode) => {
   let classes = "add-content-block py-5";
-  classes ++ (visibility ? " add-content-block--open" : " ");
+  classes ++ (visibility || staticMode ? " add-content-block--open" : " ");
 };
 
 [@react.component]
-let make = (~sortIndex=?) => {
+let make = (~sortIndex=?, ~staticMode) => {
   let (visibility, setVisibility) = React.useState(() => false);
-  <div className={buttonClasses(visibility)}>
-    <div
-      className="add-content-block__plus-button-container relative"
-      onClick={_event => setVisibility(_ => !visibility)}>
-      <div
-        className="add-content-block__plus-button bg-gray-200 hover:bg-gray-400 relative rounded-lg w-9 h-9 flex justify-center items-center mx-auto z-20">
-        <i
-          className="fal fa-plus text-xl add-content-block__plus-button-icon"
-        />
-      </div>
-    </div>
+  <div className={buttonClasses(visibility, staticMode)}>
+    {
+      staticMode ?
+        React.null :
+        <div
+          className="add-content-block__plus-button-container relative"
+          onClick={_event => setVisibility(_ => !visibility)}>
+          <div
+            className="add-content-block__plus-button bg-gray-200 hover:bg-gray-400 relative rounded-lg w-9 h-9 flex justify-center items-center mx-auto z-20">
+            <i
+              className="fal fa-plus text-xl add-content-block__plus-button-icon"
+            />
+          </div>
+        </div>
+    }
     <div
       className="add-content-block__blocks hidden shadow-lg mx-auto relative bg-primary-900 px-5 pt-6 pb-5 rounded-lg -mt-4 z-10">
       <div className="flex-1 text-center text-primary-200">

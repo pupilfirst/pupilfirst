@@ -12,7 +12,7 @@ type props = {
 
 type editorAction =
   | Hidden
-  | ShowTargetEditor(string, option(Target.t))
+  | ShowTargetEditor(string, Target.t)
   | ShowTargetGroupEditor(option(TargetGroup.t))
   | ShowLevelEditor(option(Level.t));
 
@@ -179,16 +179,22 @@ let make =
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
         | ShowTargetEditor(targetGroupId, target) =>
+          let contentBlocks =
+            contentBlocks
+            |> List.filter(contentBlock =>
+                 ContentBlock.targetId(contentBlock) == Target.id(target)
+               );
           <CurriculumEditor__TargetEditor.Jsx2
             target
             targetGroupId
+            contentBlocks
             evaluationCriteria
             targets={state.targets}
             targetGroupIdsInLevel
             authenticityToken
             updateTargetCB
             hideEditorActionCB
-          />
+          />;
         | ShowTargetGroupEditor(targetGroup) =>
           <CurriculumEditor__TargetGroupEditor
             targetGroup

@@ -38,6 +38,7 @@ type state = {
   prerequisiteTargets: list(prerequisiteTarget),
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
+  contentBlocks: list(ContentBlock.t),
   linkToComplete: string,
   hasTitleError: bool,
   hasLinktoCompleteError: bool,
@@ -178,16 +179,11 @@ let setPayload = (state, target, authenticityToken) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
-
-  switch (target) {
-  | Some(target) =>
-    Js.Dict.set(
-      targetData,
-      "sort_index",
-      target |> Target.sortIndex |> string_of_int |> Js.Json.string,
-    )
-  | None => ()
-  };
+  Js.Dict.set(
+    targetData,
+    "sort_index",
+    target |> Target.sortIndex |> string_of_int |> Js.Json.string,
+  );
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
 
   Js.Dict.set(
@@ -306,6 +302,7 @@ let make =
     (
       ~target,
       ~targetGroupId,
+      ~contentBlocks,
       ~evaluationCriteria,
       ~targets,
       ~targetGroupIdsInLevel,
@@ -313,62 +310,29 @@ let make =
       ~updateTargetCB,
       ~hideEditorActionCB,
     ) => {
-  let handleInitialState = () =>
-    switch (target) {
-    | Some(target) => {
-        title: target |> Target.title,
-        evaluationCriteria: handleEC(evaluationCriteria, target),
-        prerequisiteTargets:
-          handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
-        quiz: handleQuiz(target),
-        linkToComplete:
-          switch (target |> Target.linkToComplete) {
-          | Some(linkToComplete) => linkToComplete
-          | None => ""
-          },
-        methodOfCompletion: handleMethodOfCompletion(target),
-        hasTitleError: false,
-        hasLinktoCompleteError: false,
-        dirty: false,
-        isValidQuiz: true,
-        saving: false,
-        activeStep: AddContent,
-        visibility: target |> Target.visibility,
-      }
-    | None => {
-        title: "",
-        evaluationCriteria:
-          evaluationCriteria
-          |> List.map(criteria =>
-               (
-                 criteria |> EvaluationCriteria.id |> int_of_string,
-                 criteria |> EvaluationCriteria.name,
-                 true,
-               )
-             ),
-        prerequisiteTargets:
-          eligibleTargets(targets, targetGroupIdsInLevel)
-          |> List.map(_target =>
-               (
-                 _target |> Target.id |> int_of_string,
-                 _target |> Target.title,
-                 false,
-               )
-             ),
-        quiz: [QuizQuestion.empty(0)],
-        methodOfCompletion: NotSelected,
-        linkToComplete: "",
-        hasTitleError: false,
-        hasLinktoCompleteError: false,
-        dirty: false,
-        isValidQuiz: true,
-        saving: false,
-        activeStep: AddContent,
-        visibility: Draft,
-      }
-    };
+  let handleInitialState = {
+    title: target |> Target.title,
+    evaluationCriteria: handleEC(evaluationCriteria, target),
+    contentBlocks,
+    prerequisiteTargets:
+      handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
+    quiz: handleQuiz(target),
+    linkToComplete:
+      switch (target |> Target.linkToComplete) {
+      | Some(linkToComplete) => linkToComplete
+      | None => ""
+      },
+    methodOfCompletion: handleMethodOfCompletion(target),
+    hasTitleError: false,
+    hasLinktoCompleteError: false,
+    dirty: false,
+    isValidQuiz: true,
+    saving: false,
+    activeStep: AddContent,
+    visibility: target |> Target.visibility,
+  };
 
-  let (state, dispatch) = React.useReducer(reducer, handleInitialState());
+  let (state, dispatch) = React.useReducer(reducer, handleInitialState);
 
   let targetEvaluated = () =>
     switch (state.methodOfCompletion) {
@@ -431,11 +395,7 @@ let make =
         sortIndex,
         Live,
       );
-    switch (target) {
-    | Some(_) =>
-      Notification.success("Success", "Target updated successfully")
-    | None => Notification.success("Success", "Target created successfully")
-    };
+    Notification.success("Success", "Target updated successfully");
     updateTargetCB(newTarget);
   };
   let createTarget = () => {
@@ -510,8 +470,20 @@ let make =
                       </div> :
                       ReasonReact.null
                   }
-                  <CurriculumEditor__ContentBlockEditor target />
-                  <CurriculumEditor__ContentTypePicker />
+                  {
+                    state.contentBlocks
+                    |> List.map(contentBlock =>
+                         <CurriculumEditor__ContentBlockEditor
+                           target
+                           contentBlock={Some(contentBlock)}
+                           blockType={contentBlock |> ContentBlock.blockType}
+                           authenticityToken
+                         />
+                       )
+                    |> Array.of_list
+                    |> React.array
+                  }
+                  <CurriculumEditor__ContentTypePicker staticMode=true />
                 </div>
               </div>
             | TargetActions =>
@@ -833,27 +805,14 @@ let make =
                     </button>
                   </div>
                 | TargetActions =>
-                  switch (target) {
-                  | Some(target) =>
-                    <div className="w-auto">
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(_e => updateTarget(target |> Target.id))
-                        className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                        {"Update Target" |> str}
-                      </button>
-                    </div>
-
-                  | None =>
-                    <div className="w-full">
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(_e => createTarget())
-                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none mt-3">
-                        {"Create Target" |> str}
-                      </button>
-                    </div>
-                  }
+                  <div className="w-auto">
+                    <button
+                      disabled={saveDisabled(state)}
+                      onClick=(_e => updateTarget(target |> Target.id))
+                      className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                      {"Update Target" |> str}
+                    </button>
+                  </div>
                 }
               }
             </div>
@@ -872,6 +831,7 @@ module Jsx2 = {
       (
         ~target,
         ~targetGroupId,
+        ~contentBlocks,
         ~evaluationCriteria,
         ~targets,
         ~targetGroupIdsInLevel,
@@ -885,6 +845,7 @@ module Jsx2 = {
       makeProps(
         ~target,
         ~targetGroupId,
+        ~contentBlocks,
         ~evaluationCriteria,
         ~targets,
         ~targetGroupIdsInLevel,

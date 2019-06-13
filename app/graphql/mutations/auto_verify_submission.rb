@@ -4,17 +4,17 @@ module Mutations
 
     description "Auto verify target"
 
-    field :submission_details, Types::SubmissionDetails, null: true
+    field :submission, Types::Submission, null: true
 
     def resolve(params)
       mutator = AutoVerifySubmissionMutator.new(params, context)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Your Submission has been recorded")
-        { submission_details: mutator.create_submission }
+        { submission: mutator.create_submission }
       else
         mutator.notify_errors
-        { submission_details: nil }
+        { submission: nil }
       end
     end
   end

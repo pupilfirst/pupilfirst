@@ -1,5 +1,5 @@
 class AutoVerifySubmissionMutator < ApplicationMutator
-  include AuthorizeFounder
+  include AuthorizeStudent
 
   attr_accessor :target_id
 
@@ -30,31 +30,7 @@ class AutoVerifySubmissionMutator < ApplicationMutator
 
   private
 
-  def founder
-    @founder ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
-  end
-
-  def course
-    @course ||= target.course
-  end
-
-  def target
-    @target ||= Target.find_by(id: target_id)
-  end
-
-  def startup
-    @startup ||= founder.startup
-  end
-
   def description
     "Target '#{target.title}' was automatically marked complete."
-  end
-
-  def founders
-    if target.founder_event?
-      [founder]
-    else
-      founder.startup.founders
-    end
   end
 end

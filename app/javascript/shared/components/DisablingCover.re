@@ -1,7 +1,7 @@
 [@bs.config {jsx: 3}];
 
 [@react.component]
-let make = (~disabled, ~containerClasses="", ~children) =>
+let make = (~disabled, ~message="Loading...", ~containerClasses="", ~children) =>
   <div className={"relative " ++ containerClasses}>
     {
       if (disabled) {
@@ -22,7 +22,7 @@ let make = (~disabled, ~containerClasses="", ~children) =>
                 <div className="shape shape4" />
               </div>
               <span className="block p-3 font-semibold">
-                {"Loading..." |> React.string}
+                {message |> React.string}
               </span>
             </div>
           </div>,

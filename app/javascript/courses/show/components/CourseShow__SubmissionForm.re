@@ -4,15 +4,15 @@ open CourseShow__Types;
 
 let str = React.string;
 
-type buttonState =
+type formState =
   | Attaching
   | Saving
   | Incomplete
   | Ready;
 
-let buttonContents = buttonState => {
+let buttonContents = formState => {
   let icon =
-    switch (buttonState) {
+    switch (formState) {
     | Attaching
     | Saving => <FaIcon classes="fal fa-spinner-third fa-spin mr-2" />
     | Incomplete
@@ -21,7 +21,7 @@ let buttonContents = buttonState => {
 
   let text =
     (
-      switch (buttonState) {
+      switch (formState) {
       | Attaching => "Attaching..."
       | Saving => "Submitting..."
       | Incomplete
@@ -33,8 +33,8 @@ let buttonContents = buttonState => {
   <span> icon text </span>;
 };
 
-let isButtonDisabled = buttonState =>
-  switch (buttonState) {
+let isButtonDisabled = formState =>
+  switch (formState) {
   | Attaching
   | Saving
   | Incomplete => true
@@ -50,35 +50,40 @@ type attachment =
   | File(id, filename);
 
 type state = {
-  buttonState,
+  formState,
   description: string,
   attachments: list(attachment),
 };
 
 type action =
-  | UpdateButtonState(buttonState)
-  | UpdateDescription(string, buttonState)
+  | UpdateButtonState(formState)
+  | UpdateDescription(string)
   | AddAttachment(attachment)
   | RemoveAttachment(attachment)
   | ResetForm;
 
-let initialState = {
-  buttonState: Incomplete,
-  description: "",
-  attachments: [],
+let initialState = {formState: Incomplete, description: "", attachments: []};
+
+let computeFormState = description =>
+  description |> String.trim == "" ? Incomplete : Ready;
+
+let updateDescription = (send, event) => {
+  let value = ReactEvent.Form.target(event)##value;
+  send(UpdateDescription(value));
 };
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateButtonState(buttonState) => {...state, buttonState}
-  | UpdateDescription(description, buttonState) => {
+  | UpdateButtonState(formState) => {...state, formState}
+  | UpdateDescription(description) => {
       ...state,
       description,
-      buttonState,
+      formState: description |> computeFormState,
     }
   | AddAttachment(attachment) => {
       ...state,
       attachments: [attachment, ...state.attachments],
+      formState: state.description |> computeFormState,
     }
   | RemoveAttachment(attachment) => {
       ...state,
@@ -86,12 +91,6 @@ let reducer = (state, action) =>
     }
   | ResetForm => initialState
   };
-
-let updateDescription = (send, event) => {
-  let value = ReactEvent.Form.target(event)##value;
-  let buttonState = value |> String.trim == "" ? Incomplete : Ready;
-  send(UpdateDescription(value, buttonState));
-};
 
 let attachments = (state, send) =>
   switch (state.attachments) {
@@ -136,6 +135,14 @@ let attachments = (state, send) =>
     </div>
   };
 
+let isBusy = formState =>
+  switch (formState) {
+  | Attaching
+  | Saving => true
+  | Incomplete
+  | Ready => false
+  };
+
 [@react.component]
 let make = (~authenticityToken, ~target) => {
   let (state, send) = React.useReducer(reducer, initialState);
@@ -155,12 +162,13 @@ let make = (~authenticityToken, ~target) => {
       attachFileCB={
         (id, filename) => send(AddAttachment(File(id, filename)))
       }
+      disabled={isBusy(state.formState)}
     />
     <div className="flex mt-3 justify-end">
       <button
-        disabled={isButtonDisabled(state.buttonState)}
+        disabled={isButtonDisabled(state.formState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
-        {buttonContents(state.buttonState)}
+        {buttonContents(state.formState)}
       </button>
     </div>
   </div>;

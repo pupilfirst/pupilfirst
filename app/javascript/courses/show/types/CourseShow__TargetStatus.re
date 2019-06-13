@@ -192,3 +192,7 @@ let statusToString = t =>
   | Failed => "Failed"
   | Locked(_) => "Locked"
   };
+
+let statusClasses = t =>
+  "curriculum__target-status--"
+  ++ (statusToString(t) |> Js.String.toLowerCase);

@@ -8,7 +8,7 @@ let str = React.string;
 module CreateQuizSubmissionQuery = [%graphql
   {|
    mutation($targetId: ID!, $answerIds: [ID!]!) {
-    createQuizSubmissions(targetId: $targetId, answerIds: $answerIds){
+    createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
       submissionDetails{
         id
         description
@@ -29,7 +29,7 @@ let createQuizSubmission =
   )
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       switch (response##createQuizSubmissions##submissionDetails) {
+       switch (response##createQuizSubmission##submissionDetails) {
        | Some(details) =>
          Notification.success("Success", details##description)
        | None =>

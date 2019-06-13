@@ -1,13 +1,15 @@
 module Schools
   module Curricula
     class ShowPresenter < ApplicationPresenter
+      include RoutesResolvable
+
       def initialize(view_context, course)
         super(view_context)
 
         @course = course
       end
 
-      def react_props
+      def props
         {
           course: course_data,
           evaluationCriteria: evaluation_criteria,
@@ -27,14 +29,13 @@ module Schools
       end
 
       def content_blocks
-        ContentBlock.where(target: @course.targets).map do |content_block|
-          {
-            id: content_block.id,
-            targetId: content_block.target.id,
-            sortIndex: content_block.sort_index,
-            content: content_block.content,
-            blockType: content_block.block_type
-          }
+        ContentBlock.where(target: @course.targets).with_attached_file.map do |content_block|
+          cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index', 'target_id')
+          if content_block.file.attached?
+            cb['file_url'] = url_helpers.url_for(content_block.file)
+            cb['file_name'] = content_block.file.filename
+          end
+          cb
         end
       end
 
@@ -64,7 +65,7 @@ module Schools
             id: target_group.id,
             name: target_group.name,
             description: target_group.description,
-            levelId: target_group.level_id,
+            level_id: target_group.level_id,
             milestone: target_group.milestone,
             sortIndex: target_group.sort_index,
             archived: target_group.archived
@@ -76,7 +77,7 @@ module Schools
         @course.targets.map do |target|
           {
             id: target.id,
-            targetGroupId: target.target_group_id,
+            target_group_id: target.target_group_id,
             title: target.title,
             evaluationCriteria: evaluation_criteria_for_target(target),
             prerequisiteTargets: prerequisite_targets(target),

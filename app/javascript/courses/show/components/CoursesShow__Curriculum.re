@@ -35,7 +35,10 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
       {target |> Target.title |> str}
     </span>
     <span
-      className="curriculum__target-status px-3 py-px ml-4 h-6 curriculum__target-status--pending ">
+      className={
+        "curriculum__target-status px-3 py-px ml-4 h-6 "
+        ++ (targetStatus |> TargetStatus.statusClasses)
+      }>
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
   </div>;

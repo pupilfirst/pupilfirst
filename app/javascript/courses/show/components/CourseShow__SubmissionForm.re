@@ -4,15 +4,15 @@ open CourseShow__Types;
 
 let str = React.string;
 
-type buttonState =
+type formState =
   | Attaching
   | Saving
   | Incomplete
   | Ready;
 
-let buttonContents = buttonState => {
+let buttonContents = formState => {
   let icon =
-    switch (buttonState) {
+    switch (formState) {
     | Attaching
     | Saving => <FaIcon classes="fal fa-spinner-third fa-spin mr-2" />
     | Incomplete
@@ -21,7 +21,7 @@ let buttonContents = buttonState => {
 
   let text =
     (
-      switch (buttonState) {
+      switch (formState) {
       | Attaching => "Attaching..."
       | Saving => "Submitting..."
       | Incomplete
@@ -33,8 +33,8 @@ let buttonContents = buttonState => {
   <span> icon text </span>;
 };
 
-let isButtonDisabled = buttonState =>
-  switch (buttonState) {
+let isButtonDisabled = formState =>
+  switch (formState) {
   | Attaching
   | Saving
   | Incomplete => true
@@ -50,48 +50,62 @@ type attachment =
   | File(id, filename);
 
 type state = {
-  buttonState,
+  formState,
   description: string,
   attachments: list(attachment),
 };
 
 type action =
-  | UpdateButtonState(buttonState)
-  | UpdateDescription(string, buttonState)
-  | AddAttachment(attachment)
+  | UpdateButtonState(formState)
+  | UpdateDescription(string)
+  | AttachFile(id, filename)
+  | AttachUrl(url)
   | RemoveAttachment(attachment)
   | ResetForm;
 
-let initialState = {
-  buttonState: Incomplete,
-  description: "",
-  attachments: [],
+let initialState = {formState: Incomplete, description: "", attachments: []};
+
+let computeFormState = description =>
+  description |> String.trim == "" ? Incomplete : Ready;
+
+let updateDescription = (send, event) => {
+  let value = ReactEvent.Form.target(event)##value;
+  send(UpdateDescription(value));
 };
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateButtonState(buttonState) => {...state, buttonState}
-  | UpdateDescription(description, buttonState) => {
+  | UpdateButtonState(formState) => {...state, formState}
+  | UpdateDescription(description) => {
       ...state,
       description,
-      buttonState,
+      formState: description |> computeFormState,
     }
-  | AddAttachment(attachment) => {
+  | AttachFile(id, filename) => {
       ...state,
-      attachments: [attachment, ...state.attachments],
+      attachments: [File(id, filename), ...state.attachments],
+      formState: state.description |> computeFormState,
     }
+  | AttachUrl(url) =>
+    let attachment =
+      state.attachments
+      |> ListUtils.findOpt(attachment =>
+           switch (attachment) {
+           | File(_, _) => false
+           | Link(storedUrl) => url == storedUrl
+           }
+         );
+
+    switch (attachment) {
+    | Some(_attachment) => state
+    | None => {...state, attachments: [Link(url), ...state.attachments]}
+    };
   | RemoveAttachment(attachment) => {
       ...state,
       attachments: state.attachments |> List.filter(a => a != attachment),
     }
   | ResetForm => initialState
   };
-
-let updateDescription = (send, event) => {
-  let value = ReactEvent.Form.target(event)##value;
-  let buttonState = value |> String.trim == "" ? Incomplete : Ready;
-  send(UpdateDescription(value, buttonState));
-};
 
 let attachments = (state, send) =>
   switch (state.attachments) {
@@ -104,6 +118,7 @@ let attachments = (state, send) =>
              switch (attachment) {
              | Link(url) =>
                <span
+                 key=url
                  className="mt-2 mr-2 flex items-center border-2 border-blue-200 bg-blue-200 rounded-lg">
                  <span className="flex p-2 bg-blue-200 cursor-pointer">
                    <i className="fas fa-times" />
@@ -117,6 +132,7 @@ let attachments = (state, send) =>
                </span>
              | File(id, filename) =>
                <span
+                 key={"file-" ++ id}
                  className="mt-2 mr-2 flex items-center border-2 border-primary-200 bg-primary-200 rounded-lg">
                  <span className="flex p-2 bg-primary-200 cursor-pointer">
                    <i className="fas fa-times" />
@@ -136,6 +152,14 @@ let attachments = (state, send) =>
     </div>
   };
 
+let isBusy = formState =>
+  switch (formState) {
+  | Attaching
+  | Saving => true
+  | Incomplete
+  | Ready => false
+  };
+
 [@react.component]
 let make = (~authenticityToken, ~target) => {
   let (state, send) = React.useReducer(reducer, initialState);
@@ -152,15 +176,15 @@ let make = (~authenticityToken, ~target) => {
     <CourseShow__NewAttachment
       authenticityToken
       attachingCB={() => send(UpdateButtonState(Attaching))}
-      attachFileCB={
-        (id, filename) => send(AddAttachment(File(id, filename)))
-      }
+      attachFileCB={(id, filename) => send(AttachFile(id, filename))}
+      attachUrlCB={url => send(AttachUrl(url))}
+      disabled={isBusy(state.formState)}
     />
     <div className="flex mt-3 justify-end">
       <button
-        disabled={isButtonDisabled(state.buttonState)}
+        disabled={isButtonDisabled(state.formState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
-        {buttonContents(state.buttonState)}
+        {buttonContents(state.formState)}
       </button>
     </div>
   </div>;

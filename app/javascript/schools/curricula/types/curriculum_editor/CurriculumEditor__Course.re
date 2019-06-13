@@ -1,5 +1,5 @@
 type t = {
-  id: int,
+  id: string,
   name: string,
 };
 
@@ -10,5 +10,5 @@ let id = t => t.id;
 let decode = json =>
   Json.Decode.{
     name: json |> field("name", string),
-    id: json |> field("id", int),
+    id: json |> field("id", string),
   };

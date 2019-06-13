@@ -84,6 +84,7 @@ let imageContentBlock = (url, caption) =>
 
 let embedContentBlock = (_url, embedCode) =>
   <div dangerouslySetInnerHTML={"__html": embedCode} />;
+
 let learnSection = (overlaySelection, targetDetails) =>
   <div
     className={overlaySelectionVisiblilityClasses(Learn, overlaySelection)}>
@@ -165,7 +166,9 @@ let tabButton = (selection, overlaySelection, setOverlaySelection) =>
   </span>;
 
 let tabLink = (selection, overlaySelection) =>
-  <a className={tabClasses(selection, overlaySelection)}>
+  <a
+    href="#auto-verify-target"
+    className={tabClasses(selection, overlaySelection)}>
     {selection |> selectionToString |> str}
   </a>;
 
@@ -278,19 +281,37 @@ let make =
       {
         switch (targetDetails) {
         | Some(targetDetails) =>
-          switch (overlaySelection) {
-          | Learn => learnSection(overlaySelection, targetDetails)
+          <div>
+            {
+              switch (overlaySelection) {
+              | Learn =>
+                <div> {learnSection(overlaySelection, targetDetails)} </div>
+              | Discuss =>
+                discussSection(overlaySelection, target, targetDetails)
 
-          | Discuss => discussSection(overlaySelection, target, targetDetails)
-
-          | Complete(methodOfCompletion) =>
-            completeSection(
-              methodOfCompletion,
-              target,
-              targetDetails,
-              authenticityToken,
-            )
-          }
+              | Complete(methodOfCompletion) =>
+                completeSection(
+                  methodOfCompletion,
+                  target,
+                  targetDetails,
+                  authenticityToken,
+                )
+              }
+            }
+            {
+              switch (computemethodOfCompletion(targetDetails)) {
+              | LinkToComplete
+              | MarkAsComplete =>
+                <CourseShow__AutoVerify
+                  target
+                  targetDetails
+                  authenticityToken
+                  targetStatus
+                />
+              | _ => React.null
+              }
+            }
+          </div>
         | None => <div> {"Loading..." |> str} </div>
         }
       }

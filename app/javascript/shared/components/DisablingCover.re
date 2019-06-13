@@ -1,7 +1,9 @@
 [@bs.config {jsx: 3}];
 
+[%bs.raw {|require("./DisablingCover.css")|}];
+
 [@react.component]
-let make = (~disabled, ~containerClasses="", ~children) =>
+let make = (~disabled, ~message="Loading...", ~containerClasses="", ~children) =>
   <div className={"relative " ++ containerClasses}>
     {
       if (disabled) {
@@ -15,14 +17,22 @@ let make = (~disabled, ~containerClasses="", ~children) =>
             className="absolute w-full h-full z-20 flex items-center justify-center">
             <div className="bg-gray-200 rounded-lg p-6">
               <div
-                className="loading-poolball relative poolball-animation mx-auto">
-                <div className="shape shape1" />
-                <div className="shape shape2" />
-                <div className="shape shape3" />
-                <div className="shape shape4" />
+                className="disabling-cover__loading-poolball relative disabling-cover__poolball-animation mx-auto">
+                <div
+                  className="disabling-cover__shape disabling-cover__shape-1"
+                />
+                <div
+                  className="disabling-cover__shape disabling-cover__shape-2"
+                />
+                <div
+                  className="disabling-cover__shape disabling-cover__shape-3"
+                />
+                <div
+                  className="disabling-cover__shape disabling-cover__shape-4"
+                />
               </div>
               <span className="block p-3 font-semibold">
-                {"Loading..." |> React.string}
+                {message |> React.string}
               </span>
             </div>
           </div>,

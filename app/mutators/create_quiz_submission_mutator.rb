@@ -1,4 +1,6 @@
 class CreateQuizSubmissionMutator < ApplicationMutator
+  include AuthorizeFounder
+
   attr_accessor :target_id
   attr_accessor :answer_ids
 
@@ -27,7 +29,7 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   end
 
   def create_submission
-    @target.timeline_events.create!(
+    target.timeline_events.create!(
       founders: founders,
       description: result[:description],
       quiz_score: result[:score],
@@ -38,12 +40,20 @@ class CreateQuizSubmissionMutator < ApplicationMutator
 
   private
 
-  def authorized?
-    current_school.present? && course.school == current_school && founder.present? && !course.ends_at&.past? && !founder.startup.access_ends_at&.past?
-  end
-
   def founder
     @founder ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
+  end
+
+  def startup
+    @startup ||= founder.startup
+  end
+
+  def course
+    @course ||= target.course
+  end
+
+  def target
+    @target ||= Target.find_by(id: target_id)
   end
 
   def number_of_question
@@ -60,14 +70,6 @@ class CreateQuizSubmissionMutator < ApplicationMutator
 
   def quiz
     @quiz ||= target.quiz
-  end
-
-  def course
-    @course ||= target.course
-  end
-
-  def target
-    @target ||= Target.find_by(id: target_id)
   end
 
   def result
@@ -113,10 +115,10 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   end
 
   def founders
-    if @target.founder_event?
-      [@founder]
+    if target.founder_event?
+      [founder]
     else
-      @founder.startup.founders
+      founder.startup.founders
     end
   end
 end

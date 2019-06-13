@@ -5,4 +5,4 @@
 
 <% presenter = Schools::Curricula::ShowPresenter.new(self, @course) %>
 
-<div id="curriculum-editor" class="flex flex-1 h-screen bg-gray-100" data-props="<%= presenter.react_props.to_json %>"></div>
+<div id="curriculum-editor" class="flex flex-1 h-screen bg-gray-100" data-props="<%= presenter.props_to_json %>"></div>

@@ -6,8 +6,8 @@ type visibility =
   | Archived;
 
 type t = {
-  id: int,
-  targetGroupId: int,
+  id: string,
+  targetGroupId: string,
   title: string,
   evaluationCriteria: list(int),
   prerequisiteTargets: list(int),
@@ -45,8 +45,8 @@ let decodeVisbility = visibilityString =>
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
-    targetGroupId: json |> field("targetGroupId", int),
+    id: json |> field("id", string),
+    targetGroupId: json |> field("targetGroupId", string),
     title: json |> field("title", string),
     evaluationCriteria: json |> field("evaluationCriteria", list(int)),
     prerequisiteTargets: json |> field("prerequisiteTargets", list(int)),

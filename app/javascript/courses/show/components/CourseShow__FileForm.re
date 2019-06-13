@@ -8,7 +8,6 @@ let str = React.string;
 type state = {
   formId: string,
   filename: string,
-  saving: bool,
   errors: list(string),
 };
 
@@ -23,11 +22,11 @@ let defaultTitle = "Choose file to upload";
 
 let reducer = (state, action) =>
   switch (action) {
-  | AttachFile(filename) => {...state, filename, saving: true, errors: []}
+  | AttachFile(filename) => {...state, filename, errors: []}
   | SelectFile(filename, errors) => {...state, filename, errors}
   | GenerateNewId => {...state, formId: Random.int(99999) |> string_of_int}
   | ClearErrors => {...state, errors: []}
-  | ResetForm => {...state, saving: false, errors: [], filename: defaultTitle}
+  | ResetForm => {...state, errors: [], filename: defaultTitle}
   };
 
 let handleResponseJSON = (filename, send, attachFileCB, json) => {
@@ -113,19 +112,6 @@ let attachFile = (state, send, attachingCB, attachFileCB, event) => {
   };
 };
 
-let labelContents = state => {
-  let iconClasses =
-    (state.saving ? "fal fa-spinner-third fa-spin" : "fas fa-upload")
-    ++ " mr-2 text-gray-600 text-lg";
-  let labelText =
-    state.saving ? "Uploading " ++ state.filename : state.filename;
-
-  <span>
-    <FaIcon classes=iconClasses />
-    <span className="truncate"> {labelText |> str} </span>
-  </span>;
-};
-
 [@react.component]
 let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
   let (state, send) =
@@ -134,7 +120,6 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
       {
         formId: Random.int(99999) |> string_of_int,
         filename: defaultTitle,
-        saving: false,
         errors: [],
       },
     );
@@ -147,7 +132,6 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
         value=authenticityToken
       />
       <input
-        disabled={state.saving}
         id="attachment_file"
         className="hidden"
         name="file"
@@ -159,7 +143,10 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
       <label
         className="mt-2 cursor-pointer truncate h-10 border border-dashed flex px-4 items-center font-semibold rounded text-sm hover:bg-gray-400 flex-grow"
         htmlFor="attachment_file">
-        {labelContents(state)}
+        <span>
+          <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+          <span className="truncate"> {state.filename |> str} </span>
+        </span>
       </label>
     </form>
     {

@@ -1,5 +1,5 @@
 type t = {
-  id: int,
+  id: string,
   name: string,
   number: int,
   unlockOn: option(string),
@@ -15,7 +15,7 @@ let unlockOn = t => t.unlockOn;
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     name: json |> field("name", string),
     number: json |> field("number", int),
     unlockOn:

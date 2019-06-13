@@ -119,7 +119,7 @@ let handleEC = (evaluationCriteria, target) => {
 
   evaluationCriteria
   |> List.map(criterion => {
-       let criterionId = criterion |> EvaluationCriteria.id;
+       let criterionId = criterion |> EvaluationCriteria.id |> int_of_string;
        let selected =
          selectedEcIds
          |> Js.Array.findIndex(selectedCriterionId =>
@@ -127,7 +127,7 @@ let handleEC = (evaluationCriteria, target) => {
             )
          > (-1);
        (
-         criterion |> EvaluationCriteria.id,
+         criterion |> EvaluationCriteria.id |> int_of_string,
          criterion |> EvaluationCriteria.name,
          selected,
        );
@@ -135,19 +135,24 @@ let handleEC = (evaluationCriteria, target) => {
 };
 
 let handlePT = (targets, target) => {
-  let selectedEcIds = target |> Target.prerequisiteTargets |> Array.of_list;
+  let selectedTargetIds =
+    target |> Target.prerequisiteTargets |> Array.of_list;
 
   targets
   |> Target.removeTarget(target)
   |> List.map(criterion => {
-       let criterionId = criterion |> Target.id;
+       let targetId = criterion |> Target.id |> int_of_string;
        let selected =
-         selectedEcIds
-         |> Js.Array.findIndex(selectedCriterionId =>
-              criterionId == selectedCriterionId
+         selectedTargetIds
+         |> Js.Array.findIndex(selectedTargetId =>
+              targetId == selectedTargetId
             )
          > (-1);
-       (criterion |> Target.id, criterion |> Target.title, selected);
+       (
+         criterion |> Target.id |> int_of_string,
+         criterion |> Target.title,
+         selected,
+       );
      });
 };
 
@@ -336,7 +341,7 @@ let make =
           evaluationCriteria
           |> List.map(criteria =>
                (
-                 criteria |> EvaluationCriteria.id,
+                 criteria |> EvaluationCriteria.id |> int_of_string,
                  criteria |> EvaluationCriteria.name,
                  true,
                )
@@ -344,7 +349,11 @@ let make =
         prerequisiteTargets:
           eligibleTargets(targets, targetGroupIdsInLevel)
           |> List.map(_target =>
-               (_target |> Target.id, _target |> Target.title, false)
+               (
+                 _target |> Target.id |> int_of_string,
+                 _target |> Target.title,
+                 false,
+               )
              ),
         quiz: [QuizQuestion.empty(0)],
         methodOfCompletion: NotSelected,
@@ -385,7 +394,7 @@ let make =
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
   let handleResponseCB = json => {
-    let id = json |> Json.Decode.(field("id", int));
+    let id = json |> Json.Decode.(field("id", string));
     let sortIndex = json |> Json.Decode.(field("sortIndex", int));
     let prerequisiteTargets =
       state.prerequisiteTargets
@@ -432,7 +441,7 @@ let make =
   let createTarget = () => {
     dispatch(UpdateSaving);
     let payload = setPayload(state, target, authenticityToken);
-    let tgId = targetGroupId |> string_of_int;
+    let tgId = targetGroupId;
     let url = "/school/target_groups/" ++ tgId ++ "/targets";
     Api.create(url, payload, handleResponseCB, handleErrorCB);
   };
@@ -440,7 +449,7 @@ let make =
   let updateTarget = targetId => {
     dispatch(UpdateSaving);
     let payload = setPayload(state, target, authenticityToken);
-    let url = "/school/targets/" ++ (targetId |> string_of_int);
+    let url = "/school/targets/" ++ targetId;
     Api.update(url, payload, handleResponseCB, handleErrorCB);
   };
   let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
@@ -501,71 +510,7 @@ let make =
                       </div> :
                       ReasonReact.null
                   }
-                  <MarkDownEditor updateDescriptionCB value="description" />
-                  <div
-                    className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
-                    <div
-                      className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow">
-                      /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
-                        it helps to quickly differentiate who does what */
-                      <button
-                        title="Move up"
-                        className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-                        <i className="fas fa-arrow-up" />
-                      </button>
-                      <button
-                        title="Move down"
-                        className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-                        <i className="fas fa-arrow-down" />
-                      </button>
-                      <button
-                        title="Delete block"
-                        className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
-                        <i className="fas fa-trash-alt" />
-                      </button>
-                    </div>
-                    <div
-                      className="content-block__content bg-gray-200 flex justify-center items-center">
-                      <div
-                        className="[ content-block__content-placeholder ] text-center p-10">
-                        <i className="fas fa-image text-6xl text-gray-500" />
-                        <p className="text-xs text-gray-700 mt-1">
-                          {"You can upload PNG, JPG, GIF files" |> str}
-                        </p>
-                        <div className="flex justify-center relative mt-2">
-                          <input
-                            id="content-block-image-input"
-                            type_="file"
-                            className="input-file__input cursor-pointer px-4"
-                          />
-                          <label
-                            className="btn btn-primary flex absolute"
-                            htmlFor="content-block-image-input">
-                            <i className="fas fa-upload" />
-                            <span className="ml-2 truncate">
-                              {"Select an image" |> str}
-                            </span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className="[ content-block__action-bar ] flex p-3 border-t justify-end">
-                      <div className="flex-1 content-block__action-bar-input">
-                        <input
-                          className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          id="ImageCaption"
-                          type_="text"
-                          placeholder="Type caption for image (optional)"
-                        />
-                      </div>
-                      <div className="ml-2 text-right">
-                        <button className="btn btn-large btn-success disabled">
-                          {"Save" |> str}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <CurriculumEditor__ContentBlockEditor target />
                   <CurriculumEditor__ContentTypePicker />
                 </div>
               </div>

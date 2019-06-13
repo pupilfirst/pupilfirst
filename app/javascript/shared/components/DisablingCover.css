@@ -1,0 +1,178 @@
+/* Loading Pool Ball Animation */
+
+.disabling-cover__loading-poolball {
+  width: 30px;
+  height: 30px;
+}
+
+.disabling-cover__loading-poolball.disabling-cover__poolball-animation {
+  -webkit-transform: rotate(10deg);
+  transform: rotate(10deg);
+}
+
+.disabling-cover__loading-poolball.disabling-cover__poolball-animation .disabling-cover__shape {
+  border-radius: 5px;
+}
+
+.disabling-cover__loading-poolball.disabling-cover__poolball-animation {
+  -webkit-animation: disabling-cover__pool-rotation-animation 1s infinite;
+  animation: disabling-cover__pool-rotation-animation 1s infinite;
+}
+
+.disabling-cover__loading-poolball .disabling-cover__shape {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}
+
+.disabling-cover__loading-poolball .disabling-cover__shape.disabling-cover__shape-1 {
+  left: 0;
+  background-color: #5C6BC0;
+}
+
+.disabling-cover__loading-poolball .disabling-cover__shape.disabling-cover__shape-2 {
+  right: 0;
+  background-color: #8BC34A;
+}
+
+.disabling-cover__loading-poolball .disabling-cover__shape.disabling-cover__shape-3 {
+  bottom: 0;
+  background-color: #FFB74D;
+}
+
+.disabling-cover__loading-poolball .disabling-cover__shape.disabling-cover__shape-4 {
+  bottom: 0;
+  right: 0;
+  background-color: #F44336;
+}
+
+.disabling-cover__poolball-animation .disabling-cover__shape-1 {
+  -webkit-animation: disabling-cover__shape-1-animation 0.5s ease 0s infinite alternate;
+  animation: disabling-cover__shape-1-animation 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes disabling-cover__shape-1-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(20px, 20px);
+      transform: translate(20px, 20px);
+  }
+}
+
+@keyframes disabling-cover__shape-1-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(20px, 20px);
+      transform: translate(20px, 20px);
+  }
+}
+
+.disabling-cover__poolball-animation .disabling-cover__shape-2 {
+  -webkit-animation: disabling-cover__shape-2-animation 0.5s ease 0s infinite alternate;
+  animation: disabling-cover__shape-2-animation 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes disabling-cover__shape-2-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(-20px, 20px);
+      transform: translate(-20px, 20px);
+  }
+}
+
+@keyframes disabling-cover__shape-2-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(-20px, 20px);
+      transform: translate(-20px, 20px);
+  }
+}
+
+.disabling-cover__poolball-animation .disabling-cover__shape-3 {
+  -webkit-animation: disabling-cover__shape-3-animation 0.5s ease 0s infinite alternate;
+  animation: disabling-cover__shape-3-animation 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes disabling-cover__shape-3-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(20px, -20px);
+      transform: translate(20px, -20px);
+  }
+}
+
+@keyframes disabling-cover__shape-3-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(20px, -20px);
+      transform: translate(20px, -20px);
+  }
+}
+
+.disabling-cover__poolball-animation .disabling-cover__shape-4 {
+  -webkit-animation: disabling-cover__shape-4-animation 0.5s ease 0s infinite alternate;
+  animation: disabling-cover__shape-4-animation 0.5s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes disabling-cover__shape-4-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(-20px, -20px);
+      transform: translate(-20px, -20px);
+  }
+}
+
+@keyframes disabling-cover__shape-4-animation {
+  from {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  to {
+      -webkit-transform: translate(-20px, -20px);
+      transform: translate(-20px, -20px);
+  }
+}
+
+@-webkit-keyframes disabling-cover__pool-rotation-animation {
+  from {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+  }
+  to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+  }
+}
+
+@keyframes disabling-cover__pool-rotation-animation {
+  from {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+  }
+  to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+  }
+}

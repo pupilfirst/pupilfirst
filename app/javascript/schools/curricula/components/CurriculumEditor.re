@@ -6,12 +6,13 @@ type props = {
   levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
+  contentBlocks: list(ContentBlock.t),
   authenticityToken: string,
 };
 
 type editorAction =
   | Hidden
-  | ShowTargetEditor(int, option(Target.t))
+  | ShowTargetEditor(string, option(Target.t))
   | ShowTargetGroupEditor(option(TargetGroup.t))
   | ShowLevelEditor(option(Level.t));
 
@@ -62,6 +63,7 @@ let make =
       ~levels,
       ~targetGroups,
       ~targets,
+      ~contentBlocks,
       ~authenticityToken,
       _children,
     ) => {
@@ -228,8 +230,7 @@ let make =
                   |> Level.sort
                   |> List.map(level =>
                        <option
-                         key={Level.id(level) |> string_of_int}
-                         value={level |> Level.name}>
+                         key={Level.id(level)} value={level |> Level.name}>
                          {
                            "Level "
                            ++ (level |> Level.number |> string_of_int)
@@ -286,7 +287,7 @@ let make =
             targetGroupsToDisplay
             |> List.map(targetGroup =>
                  <CurriculumEditor__TargetGroupShow
-                   key={targetGroup |> TargetGroup.id |> string_of_int}
+                   key={targetGroup |> TargetGroup.id}
                    targetGroup
                    targets={state.targets}
                    showTargetGroupEditorCB
@@ -323,6 +324,7 @@ let decode = json =>
     levels: json |> field("levels", list(Level.decode)),
     targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
     targets: json |> field("targets", list(Target.decode)),
+    contentBlocks: json |> field("contentBlocks", list(ContentBlock.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -337,6 +339,7 @@ let jsComponent =
         ~levels=props.levels,
         ~targetGroups=props.targetGroups,
         ~targets=props.targets,
+        ~contentBlocks=props.contentBlocks,
         ~authenticityToken=props.authenticityToken,
         [||],
       );

@@ -90,7 +90,7 @@ let make =
         targetsInTG
         |> List.filter(target => !(target |> Target.visibility === Archived));
     let handleResponseCB = targetId => {
-      let id = targetId |> int_of_string;
+      let id = targetId;
       let targetGroupId = targetGroup |> TargetGroup.id;
       /* let sortIndex = json |> Json.Decode.(field("sortIndex", int)); */
       let newTarget =
@@ -155,7 +155,7 @@ let make =
         targetsToDisplay
         |> List.map(target =>
              <CurriculumEditor__TargetShow
-               key={target |> Target.id |> string_of_int}
+               key={target |> Target.id}
                target
                targetGroup
                showTargetEditorCB
@@ -189,7 +189,7 @@ let make =
                     _e =>
                       handleCreateTarget(
                         state.targetTitle,
-                        targetGroup |> TargetGroup.id |> string_of_int,
+                        targetGroup |> TargetGroup.id,
                       )
                   }
                   disabled={state.savingNewTarget}

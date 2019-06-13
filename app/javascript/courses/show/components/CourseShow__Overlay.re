@@ -12,8 +12,9 @@ module ScrollLock = {
 
     let body =
       document
-      |> Document.getElementsByTagName("BODY")
+      |> Document.getElementsByTagName("body")
       |> HtmlCollection.toArray;
+
     body[0]->Element.setClassName(classes);
   };
   let activate = () => handleScrollLock(true);
@@ -253,7 +254,7 @@ let make =
   });
 
   <div
-    className="absolute z-20 top-0 left-0 w-full overflow-y-scroll bg-white h-screen h-full">
+    className="fixed z-20 top-0 left-0 w-full overflow-y-scroll bg-white h-screen">
     <div className="bg-gray-200 border-b">
       <div className="container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}

@@ -100,7 +100,7 @@ let make =
   render: ({state, send}) => {
     let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
-      let id = json |> Json.Decode.(field("id", int));
+      let id = json |> Json.Decode.(field("id", string));
       let number = json |> Json.Decode.(field("number", int));
       let newLevel = Level.create(id, state.name, number, state.unlockOn);
       switch (level) {
@@ -113,7 +113,7 @@ let make =
 
     let createLevel = (authenticityToken, course, state) => {
       send(UpdateSaving);
-      let course_id = course |> Course.id |> string_of_int;
+      let course_id = course |> Course.id;
       let url = "/school/courses/" ++ course_id ++ "/levels";
       Api.create(
         url,
@@ -216,12 +216,7 @@ let make =
                       <button
                         disabled={saveDisabled(state)}
                         onClick=(
-                          _event =>
-                            updateLevel(
-                              authenticityToken,
-                              id |> string_of_int,
-                              state,
-                            )
+                          _event => updateLevel(authenticityToken, id, state)
                         )
                         className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
                         {"Update Level" |> str}

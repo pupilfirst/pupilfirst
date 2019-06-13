@@ -1,9 +1,9 @@
 type t = {
-  id: int,
+  id: string,
   name: string,
   description: option(string),
   milestone: bool,
-  levelId: int,
+  levelId: string,
   sortIndex: int,
   archived: bool,
 };
@@ -24,11 +24,11 @@ let archived = t => t.archived;
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     name: json |> field("name", string),
     description:
       json |> field("description", nullable(string)) |> Js.Null.toOption,
-    levelId: json |> field("levelId", int),
+    levelId: json |> field("levelId", string),
     milestone: json |> field("milestone", bool),
     sortIndex: json |> field("sortIndex", int),
     archived: json |> field("archived", bool),

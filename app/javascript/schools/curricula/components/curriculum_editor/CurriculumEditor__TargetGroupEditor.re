@@ -101,7 +101,7 @@ let make =
   render: ({state, send}) => {
     let handleErrorCB = () => send(UpdateSaving);
     let handleResponseCB = json => {
-      let id = json |> Json.Decode.(field("id", int));
+      let id = json |> Json.Decode.(field("id", string));
       let sortIndex = json |> Json.Decode.(field("sortIndex", int));
       let newTargetGroup =
         TargetGroup.create(
@@ -124,7 +124,7 @@ let make =
 
     let createTargetGroup = () => {
       send(UpdateSaving);
-      let level_id = currentLevelId |> string_of_int;
+      let level_id = currentLevelId;
       let payload = setPayload(authenticityToken, state);
       let url = "/school/levels/" ++ level_id ++ "/target_groups";
       Api.create(url, payload, handleResponseCB, handleErrorCB);
@@ -290,9 +290,7 @@ let make =
                       <div className="w-auto">
                         <button
                           disabled={saveDisabled(state)}
-                          onClick=(
-                            _e => updateTargetGroup(id |> string_of_int)
-                          )
+                          onClick=(_e => updateTargetGroup(id))
                           className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none">
                           {"Update Target Group" |> str}
                         </button>

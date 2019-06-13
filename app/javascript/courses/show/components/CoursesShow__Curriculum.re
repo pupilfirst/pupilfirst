@@ -34,7 +34,8 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
-    <span className="curriculum__target-status px-3 py-px ml-4 h-6 curriculum__target-status--pending ">
+    <span
+      className="curriculum__target-status px-3 py-px ml-4 h-6 curriculum__target-status--pending ">
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
   </div>;
@@ -61,11 +62,11 @@ let renderTargetGroup =
       {
         targets
         |> List.sort((t1, t2) =>
-            (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
-          )
+             (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
+           )
         |> List.map(target =>
-            rendertarget(target, setSelectedTargetId, statusOfTargets)
-          )
+             rendertarget(target, setSelectedTargetId, statusOfTargets)
+           )
         |> Array.of_list
         |> React.array
       }
@@ -183,6 +184,7 @@ let make =
             |> List.find(ts =>
                  ts |> TargetStatus.targetId == (target |> Target.id)
                );
+
           <CourseShow__Overlay
             target
             course

@@ -4,6 +4,22 @@ open CourseShow__Types;
 
 let str = React.string;
 
+module ScrollLock = {
+  open Webapi.Dom;
+
+  let handleScrollLock = add => {
+    let classes = add ? "overflow-hidden" : "";
+
+    let body =
+      document
+      |> Document.getElementsByTagName("BODY")
+      |> HtmlCollection.toArray;
+    body[0]->Element.setClassName(classes);
+  };
+  let activate = () => handleScrollLock(true);
+  let deActivate = () => handleScrollLock(false);
+};
+
 let loadTargetDetails = (target, setTargetDetails, ()) => {
   Js.Promise.(
     Fetch.fetch("/targets/" ++ (target |> Target.id) ++ "/details_v2")
@@ -16,11 +32,6 @@ let loadTargetDetails = (target, setTargetDetails, ()) => {
 
   None;
 };
-
-let randomButton = () =>
-  <button className="btn btn-success btn-large w-full">
-    {"Mark As Complete" |> str}
-  </button>;
 
 type methodOfCompletion =
   | Evaluated
@@ -95,8 +106,7 @@ let learnSection = (overlaySelection, targetDetails) =>
            </div>;
          })
       |> Array.of_list
-      |> React.array;
-      randomButton();
+      |> React.array
     }
   </div>;
 
@@ -237,8 +247,13 @@ let make =
     [|target |> Target.id|],
   );
 
+  React.useEffect(() => {
+    ScrollLock.activate();
+    Some(() => ScrollLock.deActivate());
+  });
+
   <div
-    className="absolute z-20 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    className="absolute z-20 top-0 left-0 w-full overflow-y-scroll bg-white h-screen h-full">
     <div className="bg-gray-200 border-b">
       <div className="container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}

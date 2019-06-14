@@ -10,6 +10,9 @@ type t = {
   evaluated: bool,
 };
 
+let submissions = t => t.submissions;
+let submissionAttachments = t => t.submissionAttachments;
+
 type completionType =
   | Evaluated
   | TakeQuiz

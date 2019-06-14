@@ -132,6 +132,15 @@ let levelSelector = (levels, setSelectedLevelId, selectedLevelId) => {
   </div>;
 };
 
+let addSubmission = (setStatusOfTargets, targetStatus) =>
+  setStatusOfTargets(statusOfTargets =>
+    statusOfTargets
+    |> List.map(ts =>
+         ts |> TargetStatus.targetId == (targetStatus |> TargetStatus.targetId) ?
+           targetStatus : ts
+       )
+  );
+
 [@react.component]
 let make =
     (
@@ -151,16 +160,6 @@ let make =
     ) => {
   let teamLevel =
     levels |> List.find(l => l |> Level.id == (team |> Team.levelId));
-
-  let computeStatusOfTargets =
-    TargetStatus.compute(
-      team,
-      students,
-      course,
-      levels,
-      targetGroups,
-      targets,
-    );
 
   let (selectedLevelId, setSelectedLevelId) =
     React.useState(() => teamLevel |> Level.id);
@@ -200,6 +199,7 @@ let make =
             targetStatus
             closeOverlayCB={closeOverlay(setSelectedTargetId)}
             authenticityToken
+            addSubmissionCB={addSubmission(setStatusOfTargets)}
           />;
         | None => React.null
         };

@@ -192,3 +192,5 @@ let statusToString = t =>
   | Failed => "Failed"
   | Locked(_) => "Locked"
   };
+
+let makeSubmitted = targetId => {targetId, status: Submitted};

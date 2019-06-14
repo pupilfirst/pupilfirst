@@ -56,12 +56,11 @@ type state = {
 };
 
 type action =
-  | UpdateButtonState(formState)
+  | UpdateFormState(formState)
   | UpdateDescription(string)
   | AttachFile(id, filename)
   | AttachUrl(url)
-  | RemoveAttachment(attachment)
-  | ResetForm;
+  | RemoveAttachment(attachment);
 
 let initialState = {formState: Incomplete, description: "", attachments: []};
 
@@ -75,7 +74,7 @@ let updateDescription = (send, event) => {
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateButtonState(formState) => {...state, formState}
+  | UpdateFormState(formState) => {...state, formState}
   | UpdateDescription(description) => {
       ...state,
       description,
@@ -104,7 +103,6 @@ let reducer = (state, action) =>
       ...state,
       attachments: state.attachments |> List.filter(a => a != attachment),
     }
-  | ResetForm => initialState
   };
 
 let removeAttachment = (attachment, send, event) => {
@@ -179,6 +177,7 @@ module CreateSubmissionQuery = [%graphql
     createSubmission(targetId: $targetId, description: $description, fileIds: $fileIds, links: $links) {
       submission {
         id
+        createdAt
       }
     }
   }
@@ -195,8 +194,10 @@ let attachmentValues = attachments =>
      )
   |> Array.of_list;
 
-let submit = (state, send, authenticityToken, target, event) => {
+let submit = (state, send, authenticityToken, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
+
+  send(UpdateFormState(Saving));
 
   let (fileAttachments, linkAttachments) =
     state.attachments
@@ -219,19 +220,63 @@ let submit = (state, send, authenticityToken, target, event) => {
   )
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       Js.log(response);
+       switch (response##createSubmission##submission) {
+       | Some(submission) =>
+         Js.log(submission##id);
+         let newSubmission =
+           Submission.make(
+             ~id=submission##id,
+             ~description=state.description,
+             ~createdAt=submission##createdAt,
+           );
+         let newAttachments =
+           state.attachments
+           |> List.map(attachment =>
+                switch (attachment) {
+                | File(id, filename) =>
+                  SubmissionAttachment.makeFile(
+                    submission##id,
+                    id,
+                    filename,
+                    "/timeline_event_files/" ++ id ++ "/download",
+                  )
+                | Link(url) =>
+                  SubmissionAttachment.makeLink(submission##id, url)
+                }
+              );
+
+         Js.log("Calling addSubmissionCB in SubmissionForm");
+         addSubmissionCB(newSubmission, newAttachments);
+       | None =>
+         /* Enable the form again in case of a validation failure. */
+         send(UpdateFormState(Ready))
+       };
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(_error => {
+       /* Enable the form again in case of server crash. */
+       send(UpdateFormState(Ready));
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
+let isDescriptionDisabled = formState =>
+  switch (formState) {
+  | Saving => true
+  | Attaching
+  | Incomplete
+  | Ready => false
+  };
+
 [@react.component]
-let make = (~authenticityToken, ~target) => {
+let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <div className="bg-gray-200 pt-6 px-4 pb-2 mt-4 shadow rounded-lg">
     <h5 className="pl-1"> {"Work on your submission" |> str} </h5>
     <textarea
+      disabled={isDescriptionDisabled(state.formState)}
       value={state.description}
       className="h-40 w-full rounded-lg mt-4 p-4 border rounded-lg"
       placeholder="Describe your work, attach any links or files, and then hit submit!"
@@ -240,14 +285,16 @@ let make = (~authenticityToken, ~target) => {
     {attachments(state, send)}
     <CourseShow__NewAttachment
       authenticityToken
-      attachingCB={() => send(UpdateButtonState(Attaching))}
+      attachingCB={() => send(UpdateFormState(Attaching))}
       attachFileCB={(id, filename) => send(AttachFile(id, filename))}
       attachUrlCB={url => send(AttachUrl(url))}
       disabled={isBusy(state.formState)}
     />
     <div className="flex mt-3 justify-end">
       <button
-        onClick={submit(state, send, authenticityToken, target)}
+        onClick={
+          submit(state, send, authenticityToken, target, addSubmissionCB)
+        }
         disabled={isButtonDisabled(state.formState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}

@@ -145,8 +145,46 @@ let showQuizSection = (target, targetDetails, authenticityToken) => {
   <CourseShow__Quiz target quizQuestions authenticityToken />;
 };
 
+let addSubmission =
+    (
+      target,
+      setTargetDetails,
+      addSubmissionCB,
+      submission,
+      submissionAttachments,
+    ) => {
+  Js.log("addSubmission in Overlay");
+
+  setTargetDetails(targetDetails =>
+    switch (targetDetails) {
+    | Some(targetDetails) =>
+      Some({
+        ...targetDetails,
+        TargetDetails.submissions: [
+          submission,
+          ...targetDetails |> TargetDetails.submissions,
+        ],
+        submissionAttachments:
+          submissionAttachments
+          @ (targetDetails |> TargetDetails.submissionAttachments),
+      })
+    | None => None
+    }
+  );
+
+  addSubmissionCB(target |> Target.id |> TargetStatus.makeSubmitted);
+};
+
 let completeSection =
-    (completionType, target, targetDetails, authenticityToken, targetStatus) =>
+    (
+      completionType,
+      target,
+      targetDetails,
+      setTargetDetails,
+      authenticityToken,
+      targetStatus,
+      addSubmissionCB,
+    ) =>
   <div>
     {
       switch (
@@ -154,7 +192,13 @@ let completeSection =
         completionType: TargetDetails.completionType,
       ) {
       | (Pending, Evaluated) =>
-        <CourseShow__SubmissionForm authenticityToken target />
+        <CourseShow__SubmissionForm
+          authenticityToken
+          target
+          addSubmissionCB={
+            addSubmission(target, setTargetDetails, addSubmissionCB)
+          }
+        />
       | (Pending, TakeQuiz) =>
         showQuizSection(target, targetDetails, authenticityToken)
 
@@ -207,7 +251,14 @@ let pushUrl = (course, selectedTargetId) =>
 
 [@react.component]
 let make =
-    (~target, ~course, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
+    (
+      ~target,
+      ~course,
+      ~targetStatus,
+      ~authenticityToken,
+      ~closeOverlayCB,
+      ~addSubmissionCB,
+    ) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
 
@@ -268,8 +319,10 @@ let make =
               completionType,
               target,
               targetDetails,
+              setTargetDetails,
               authenticityToken,
               targetStatus,
+              addSubmissionCB,
             )
           }
 

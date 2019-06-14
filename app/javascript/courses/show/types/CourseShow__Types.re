@@ -6,6 +6,7 @@ module TargetDetails = CourseShow__TargetDetails;
 module ContentBlock = CourseShow__ContentBlock;
 module LatestSubmission = CourseShow__LatestSubmission;
 module Submission = CourseShow__Submission;
+module SubmissionAttachment = CourseShow__SubmissionAttachment;
 module Student = CourseShow__Student;
 module Team = CourseShow__Team;
 module Coach = CourseShow__Coach;

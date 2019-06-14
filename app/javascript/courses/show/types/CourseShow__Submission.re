@@ -14,3 +14,5 @@ let decode = json =>
     description: json |> field("description", string),
     createdAt: json |> field("createdAt", string),
   };
+
+let make = (~id, ~description, ~createdAt) => {id, description, createdAt};

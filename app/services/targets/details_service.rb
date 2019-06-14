@@ -69,11 +69,12 @@ module Targets
 
     def attachments_for_submissions
       submissions.map do |submission|
-        files = submission.timeline_event_files.map do |file|
+        files = submission.timeline_event_files.with_attached_file.map do |file|
           {
+            id: file.id,
             submission_id: submission.id,
             submission_type: "file",
-            title: file.title,
+            title: file.file.filename,
             url: url_helpers.download_timeline_event_file_path(file)
           }
         end
@@ -82,8 +83,7 @@ module Targets
           {
             submission_id: submission.id,
             submission_type: "link",
-            title: link[:title],
-            url: link[:url]
+            url: link
           }
         end
 

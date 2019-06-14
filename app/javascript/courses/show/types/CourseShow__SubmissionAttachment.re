@@ -1,24 +1,39 @@
 exception UnexpectedSubmissionType(string);
 
-type submissionType =
-  | File
-  | Link;
+type id = string;
+type title = string;
+type url = string;
+
+type attachment =
+  | File(id, title, url)
+  | Link(url);
 
 type t = {
-  submissionType,
-  title: string,
-  url: string,
+  submissionId: id,
+  attachment,
 };
 
-let decode = json =>
+let decode = json => {
+  let url = json |> Json.Decode.(field("url", string));
+
   Json.Decode.{
-    submissionType:
+    submissionId: json |> field("submissionId", string),
+    attachment:
       switch (json |> field("submissionType", string)) {
-      | "file" => File
-      | "link" => Link
+      | "link" => Link(url)
+      | "file" =>
+        let id = json |> field("id", string);
+        let title = json |> field("title", string);
+        File(id, title, url);
       | unknownSubmissionType =>
         raise(UnexpectedSubmissionType(unknownSubmissionType))
       },
-    title: json |> field("title", string),
-    url: json |> field("url", string),
   };
+};
+
+let makeFile = (submissionId, id, title, url) => {
+  submissionId,
+  attachment: File(id, title, url),
+};
+
+let makeLink = (submissionId, url) => {submissionId, attachment: Link(url)};

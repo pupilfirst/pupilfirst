@@ -40,7 +40,7 @@ class Target < ApplicationRecord
 
   acts_as_taggable
 
-  scope :live, -> { joins(:target_group).where(archived: [false, nil]) }
+  scope :live, -> { where(visibility: VISIBILITY_LIVE) }
   scope :founder, -> { where(role: ROLE_FOUNDER) }
   scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
   scope :sessions, -> { where.not(session_at: nil) }

@@ -63,7 +63,7 @@ module Courses
     def targets
       attributes = %w[id role title target_group_id sort_index resubmittable]
 
-      scope = @course.targets.joins(:target_group).includes(:target_prerequisites)
+      scope = @course.targets.live.joins(:target_group).includes(:target_prerequisites)
         .where(target_groups: { level_id: open_level_ids })
         .where(archived: false)
 

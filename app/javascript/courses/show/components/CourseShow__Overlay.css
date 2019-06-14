@@ -26,3 +26,19 @@
   @apply bg-gray-100 border-gray-600;
 }
 
+.complete-button-selected {
+  animation: glowing 500ms ease-in;
+  @apply .border-indigo-400;
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 20px #7886d7;
+  }
+  50% {
+    box-shadow: 0 0 10px #7886d7;
+  }
+  100% {
+    box-shadow: 0 0 0 #7886d7;
+  }
+}

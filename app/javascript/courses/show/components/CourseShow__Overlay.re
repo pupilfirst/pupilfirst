@@ -75,6 +75,27 @@ let tabClasses = (selection, overlaySelection) =>
       " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
   );
 
+let scrollCompleteButtonIntoView = () => {
+  let element =
+    Webapi.Dom.document
+    |> Webapi.Dom.Document.getElementById("auto-verify-target");
+  (
+    switch (element) {
+    | Some(e) =>
+      Webapi.Dom.Element.scrollIntoView(e);
+      e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected");
+    | None => ()
+    }
+  )
+  |> ignore;
+  None;
+};
+
+let handleTablink = (setOverlaySelection, setScrollToSelection, _event) => {
+  setOverlaySelection(_ => Learn);
+  setScrollToSelection(scrollToSelection => !scrollToSelection);
+};
+
 let tabButton =
     (selection, overlaySelection, setOverlaySelection, targetStatus) =>
   <span
@@ -84,12 +105,19 @@ let tabButton =
     {selection |> selectionToString(targetStatus) |> str}
   </span>;
 
-let tabLink = (selection, overlaySelection, pending) =>
-  <a
-    href="#auto-verify-target"
+let tabLink =
+    (
+      selection,
+      overlaySelection,
+      setOverlaySelection,
+      targetStatus,
+      setScrollToSelection,
+    ) =>
+  <span
+    onClick={handleTablink(setOverlaySelection, setScrollToSelection)}
     className={tabClasses(selection, overlaySelection)}>
-    {selection |> selectionToString(pending) |> str}
-  </a>;
+    {selection |> selectionToString(targetStatus) |> str}
+  </span>;
 
 let overlaySelectionOptions =
     (
@@ -98,6 +126,7 @@ let overlaySelectionOptions =
       setOverlaySelection,
       targetDetails,
       targetStatus,
+      setScrollToSelection,
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
 
@@ -132,7 +161,13 @@ let overlaySelectionOptions =
           targetStatus,
         )
       | (Pending | Submitted | Passed | Failed, _completionTypes) =>
-        tabLink(Complete(_completionTypes), overlaySelection, targetStatus)
+        tabLink(
+          Complete(_completionTypes),
+          overlaySelection,
+          setOverlaySelection,
+          targetStatus,
+          setScrollToSelection,
+        )
 
       | (Locked(_), _) => React.null
       }
@@ -262,6 +297,10 @@ let make =
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
 
+  let (scrollToSelection, setScrollToSelection) = React.useState(() => false);
+
+  React.useEffect1(scrollCompleteButtonIntoView, [|scrollToSelection|]);
+
   React.useEffect1(
     loadTargetDetails(target, setTargetDetails),
     [|target |> Target.id|],
@@ -291,6 +330,7 @@ let make =
               setOverlaySelection,
               targetDetails,
               targetStatus,
+              setScrollToSelection,
             )
           | None =>
             <div className="text-center text-sm font-semibold">

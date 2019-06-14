@@ -175,7 +175,7 @@ let isBusy = formState =>
 
 module CreateSubmissionQuery = [%graphql
   {|
-  mutation($targetId: ID!, $description: String!, $fileIds: [String!]!, $links: [String!]!) {
+  mutation($targetId: ID!, $description: String!, $fileIds: [ID!]!, $links: [String!]!) {
     createSubmission(targetId: $targetId, description: $description, fileIds: $fileIds, links: $links) {
       submission {
         id
@@ -195,7 +195,7 @@ let attachmentValues = attachments =>
      )
   |> Array.of_list;
 
-let submit = (state, send, target, event) => {
+let submit = (state, send, authenticityToken, target, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   let (fileAttachments, linkAttachments) =
@@ -215,7 +215,13 @@ let submit = (state, send, target, event) => {
     ~description=state.description,
     ~fileIds,
     ~links,
+    (),
   )
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       Js.log(response);
+       Js.Promise.resolve();
+     })
   |> ignore;
 };
 
@@ -241,7 +247,7 @@ let make = (~authenticityToken, ~target) => {
     />
     <div className="flex mt-3 justify-end">
       <button
-        onClick={submit(state, send, target)}
+        onClick={submit(state, send, authenticityToken, target)}
         disabled={isButtonDisabled(state.formState)}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}

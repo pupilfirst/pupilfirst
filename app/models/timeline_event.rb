@@ -108,25 +108,6 @@ class TimelineEvent < ApplicationRecord
     links.reject { |l| l[:private] }.present?
   end
 
-  def attachments_for_founder(founder)
-    privileged = privileged_founder?(founder)
-    attachments = []
-
-    timeline_event_files.each do |file|
-      next if file.private? && !privileged
-
-      attachments << { file: file, title: file.title, private: file.private? }
-    end
-
-    links.each do |link|
-      next if link[:private] && !privileged
-
-      attachments << link
-    end
-
-    attachments
-  end
-
   def founder_or_startup
     founder_event? ? founder : startup
   end
@@ -175,11 +156,5 @@ class TimelineEvent < ApplicationRecord
 
   def pending_review?
     passed_at.blank? && evaluator_id.blank?
-  end
-
-  private
-
-  def privileged_founder?(founder)
-    founder.present? && startup.founders.include?(founder)
   end
 end

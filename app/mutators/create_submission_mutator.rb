@@ -8,6 +8,7 @@ class CreateSubmissionMutator < ApplicationMutator
 
   validates :target_id, presence: { message: 'BlankTargetId' }
   validates :description, presence: { message: 'BlankDescription' }, length: { maximum: 1500, minimum: 1, message: 'InvalidDescriptionLength' }
+  validates :links, urls: true
 
   validate :no_pending_submission_already
   validate :all_files_should_be_new
@@ -26,15 +27,19 @@ class CreateSubmissionMutator < ApplicationMutator
 
   def create_submission
     TimelineEvent.transaction do
-      timeline_event = target.timeline_events.create!(
-        founders: founders,
+      params = {
+        target: target,
         description: description,
-        quiz_score: result[:score],
-        passed_at: Time.zone.now,
-        latest: true
-      )
+        links: links
+      }
 
-      timeline_event_files.update!(timeline_event: timeline_event) if file_ids.any?
+      timeline_event = TimelineEvents::CreateService.new(params, founder).execute
+
+      timeline_event_files.each do |timeline_event_file|
+        timeline_event_file.update!(timeline_event: timeline_event) if file_ids.any?
+      end
+
+      TimelineEvents::AfterFounderSubmitJob.perform_later(timeline_event)
 
       timeline_event
     end

@@ -20,19 +20,3 @@
   .timeline-body
     .tl-body
       p #{simple_format(presenter.detailed_description)}
-
-    - if presenter.attachments.present?
-      .timeline-footer.tl-footer
-        - presenter.attachments.each do |attachment|
-          - if attachment[:url].present?
-            a.tl-link-button href="#{short_url(attachment[:url])}" target="_blank"
-              - if attachment[:private]
-                i.fa.fa-user-secret
-                | &nbsp;
-              | #{attachment[:title]}
-          - else # it is a file
-            a.tl-link-button href="#{short_url(download_timeline_event_file_url(attachment[:file]))}" target="_blank"
-              - if attachment[:private]
-                i.fa.fa-user-secret
-                | &nbsp;
-              | #{attachment[:title]}

@@ -18,10 +18,6 @@ module Founders
       @event.evaluator_id.present? && !@event.passed?
     end
 
-    def attachments
-      @attachments ||= @event.attachments_for_founder(@current_founder)
-    end
-
     def founder_not_exited?
       @current_founder && !@current_founder.exited && (@current_founder == @founder)
     end

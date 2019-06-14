@@ -41,7 +41,7 @@ let embedContentBlock = (_url, embedCode) =>
 
 [@react.component]
 let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) =>
-  <div>
+  <div id="learn-component">
     {
       targetDetails
       |> TargetDetails.contentBlocks

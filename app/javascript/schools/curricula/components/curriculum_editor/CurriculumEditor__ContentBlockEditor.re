@@ -90,9 +90,13 @@ let make =
                     </div>
                   </div>
                 | Embed(_url, embedCode) =>
-                  <div dangerouslySetInnerHTML={"__html": embedCode} />
+                  <div
+                    className="content-block__embed"
+                    dangerouslySetInnerHTML={"__html": embedCode}
+                  />
                 | File(url, title, filename) =>
-                  <div className="mt-2 shadow-md border px-6 py-4 rounded-lg">
+                  <div
+                    className="bg-white shadow-md border px-6 py-4 rounded-lg">
                     <a className="flex justify-between items-center" href=url>
                       <div className="flex items-center">
                         <FaIcon
@@ -114,7 +118,7 @@ let make =
             </div>
           | None =>
             <div
-              className="[ content-block__content-placeholder ] text-center p-10">
+              className="content-block__content-placeholder text-center p-10">
               <i className="fas fa-image text-6xl text-gray-500" />
               <p className="text-xs text-gray-700 mt-1">
                 {"You can upload PNG, JPG, GIF files" |> str}

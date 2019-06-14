@@ -11,11 +11,4 @@ class CoursesController < ApplicationController
   def leaderboard
     @course = authorize(Course.find(params[:id]))
   end
-
-  # GET /courses/:id/targets/:target_id(:slug)
-  def target_overlay
-    show
-    authorize(Target.find(params[:target_id]))
-    render 'show'
-  end
 end

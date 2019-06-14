@@ -199,6 +199,12 @@ let overlayStatus = (closeOverlayCB, target, targetStatus) =>
     </div>
   </div>;
 
+let pushUrl = (course, selectedTargetId) =>
+  switch (selectedTargetId) {
+  | Some(targetId) => ReasonReactRouter.push("/targets/" ++ targetId)
+  | None => ReasonReactRouter.push("/courses/" ++ (course |> Course.id))
+  };
+
 [@react.component]
 let make =
     (~target, ~course, ~targetStatus, ~closeOverlayCB, ~authenticityToken) => {
@@ -211,13 +217,18 @@ let make =
   );
 
   React.useEffect(() => {
+    pushUrl(course, Some(target |> Target.id));
+    Some(() => pushUrl(course, None));
+  });
+
+  React.useEffect(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deActivate());
   });
 
   <div
     className="fixed z-20 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="container bg-gray-100 border-b border-gray-400 px-3">
+    <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
         {

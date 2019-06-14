@@ -24,7 +24,8 @@ module Courses
         students: team_members.map(&:attributes),
         coaches: faculty.map(&:attributes),
         user_profiles: user_profiles,
-        current_user_id: current_user.id
+        current_user_id: current_user.id,
+        selected_target_id: nil
       }
     end
 

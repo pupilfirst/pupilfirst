@@ -16,6 +16,7 @@ let decodeProps = json =>
     json |> field("coaches", list(Coach.decode)),
     json |> field("userProfiles", list(UserProfile.decode)),
     json |> field("currentUserId", string),
+    json |> field("selectedTargetId", nullable(string)) |> Js.Null.toOption,
   );
 
 let (
@@ -31,6 +32,7 @@ let (
   coaches,
   userProfiles,
   currentUserId,
+  selectedTargetId,
 ) =
   DomUtils.parseJsonAttribute() |> decodeProps;
 
@@ -48,6 +50,7 @@ ReactDOMRe.renderToElementWithId(
     coaches
     userProfiles
     currentUserId
+    selectedTargetId
   />,
   "react-root",
 );

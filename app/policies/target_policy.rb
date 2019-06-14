@@ -1,9 +1,5 @@
 class TargetPolicy < ApplicationPolicy
   def show?
-    current_founder.present? && current_founder.course == record.course
-  end
-
-  def details_v2?
     # PupilFirst does not have any targets.
     return false unless record.present? && record.course.school == current_school
 
@@ -24,7 +20,7 @@ class TargetPolicy < ApplicationPolicy
 
   alias startup_feedback? prerequisite_targets?
   alias details? prerequisite_targets?
-  alias target_overlay? details_v2?
+  alias details_v2? show?
 
   def auto_verify?
     prerequisite_targets? &&

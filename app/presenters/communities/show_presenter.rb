@@ -30,12 +30,7 @@ module Communities
     end
 
     def activity(question)
-      if question.last_activity_at.blank?
-        ""
-      else
-        time_diff = ((Time.now - question.last_activity_at) / 1.minute).round
-        "<span class='hidden md:inline-block'>updated </span><i class='fal fa-history mr-1 md:hidden'></i> #{time_string(time_diff)} <span> ago </span>".html_safe
-      end
+      view.time_ago_in_words(question.last_activity_at)
     end
 
     def show_prev_page?
@@ -67,20 +62,6 @@ module Communities
       kwargs[:search] = @search if @search.present?
       kwargs[:target_id] = @target.id if @target.present?
       kwargs
-    end
-
-    private
-
-    def time_string(time)
-      if time < 60
-        "#{time} minute"
-      elsif time < 1440
-        "#{(time / 60).round} hour"
-      elsif time < 525_600
-        "#{(time / 1440).round} Day"
-      else
-        "#{(time / 525_600).round} Year"
-      end
     end
   end
 end

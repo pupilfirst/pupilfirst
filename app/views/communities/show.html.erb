@@ -9,7 +9,7 @@
     <div class="max-w-3xl w-full flex flex-col items-center justify-center mx-auto px-3 md:px-0">
       <h1 class="text-center font-normal text-2xl md:text-4xl leading-tight">
         Welcome to the
-        <span class="block font-bold text-3xl md:text-5xl"><%= @community.name%> Community</span>
+        <span class="block font-bold text-3xl md:text-5xl"><%= @community.name %> Community</span>
       </h1>
       <div class="max-w-lg flex w-full mt-3">
 
@@ -65,9 +65,11 @@
                       <span class="font-semibold"><%= presenter.creator_name(question) %> </span>
                       <span class="hidden md:inline-block">on <%= presenter.time(question) %> </span>
                       <span class="block md:inline-block md:border-l mt-1 md:mt-0 md:pl-2 md:ml-2">
-                        <span>
-                          <%= presenter.activity(question) %>
-                        </span>
+                        <% if question.last_activity_at.present? %>
+                        <span class='hidden md:inline-block'>updated </span>
+                        <i class='fal fa-history mr-1 md:hidden'></i>   <%= presenter.activity(question) %>
+                          <span> ago </span>
+                        <% end %>
                       </span>
                     </div>
                   </div>
@@ -80,7 +82,7 @@
                         <p class="text-xs pt-1"><%= presenter.comment_likes(question) %></p>
                       </div>
                       <div class="px-2 text-center">
-                        <i class="fal fa-comment-lines text-xl text-gray-600"></i>
+                        <i class="fal fa-comment-check text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= presenter.comments_count(question) %></p>
                       </div>
                     <% end %>

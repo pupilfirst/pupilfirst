@@ -19,26 +19,43 @@ module AutoVerifySubmissionQuery = [%graphql
  |}
 ];
 
-let handleSuccess = (details, linkToComplete) =>
+let redirect = link => {
+  let window = Webapi.Dom.window;
+  link |> Webapi.Dom.Window.setLocation(window);
+};
+
+let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
+  addSubmissionCB(
+    Submission.make(
+      ~id=submission##id,
+      ~description=submission##description,
+      ~createdAt=submission##createdAt,
+    ),
+  );
   switch (linkToComplete) {
-  | Some(link) => Notification.success("Forward", link)
-  | None => Notification.success("Success", details##description)
+  | Some(link) => redirect(link)
+  | None => ()
   };
+};
 
 let createAutoVerifySubmission =
-    (authenticityToken, target, linkToComplete, setSaving, event) => {
+    (
+      authenticityToken,
+      target,
+      linkToComplete,
+      setSaving,
+      addSubmissionCB,
+      event,
+    ) => {
+  event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
   AutoVerifySubmissionQuery.make(~targetId=target |> Target.id, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        switch (response##autoVerifySubmission##submission) {
-       | Some(details) => handleSuccess(details, linkToComplete)
-
-       | None =>
-         Notification.error(
-           "Something went wrong",
-           "Please refresh the page and try again",
-         )
+       | Some(details) =>
+         handleSuccess(details, linkToComplete, addSubmissionCB)
+       | None => setSaving(_ => false)
        };
        Js.Promise.resolve();
      })
@@ -46,7 +63,14 @@ let createAutoVerifySubmission =
 };
 
 let autoVerify =
-    (target, linkToComplete, saving, setSaving, authenticityToken) =>
+    (
+      target,
+      linkToComplete,
+      saving,
+      setSaving,
+      authenticityToken,
+      addSubmissionCB,
+    ) =>
   <button
     disabled=saving
     className="flex text-white rounded text-lg font-semibold justify-center btn btn-success btn-large w-full"
@@ -56,6 +80,7 @@ let autoVerify =
         target,
         linkToComplete,
         setSaving,
+        addSubmissionCB,
       )
     }>
     {saving ? <i className="fal fa-spinner-third fa-spin" /> : React.null}
@@ -80,7 +105,14 @@ let statusBadge = (string, complete) =>
   </div>;
 
 [@react.component]
-let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) => {
+let make =
+    (
+      ~target,
+      ~targetDetails,
+      ~authenticityToken,
+      ~targetStatus,
+      ~addSubmissionCB,
+    ) => {
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
   <div className="mt-4" id="auto-verify-target">
@@ -93,6 +125,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) => {
           saving,
           setSaving,
           authenticityToken,
+          addSubmissionCB,
         )
       | Locked(_) => React.null
       | _ => statusBadge("Completed", true)

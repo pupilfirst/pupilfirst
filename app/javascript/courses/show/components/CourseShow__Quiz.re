@@ -20,7 +20,13 @@ module CreateQuizSubmissionQuery = [%graphql
 ];
 
 let createQuizSubmission =
-    (authenticityToken, target, selectedAnswersIds, setSaving) => {
+    (
+      authenticityToken,
+      target,
+      selectedAnswersIds,
+      setSaving,
+      addSubmissionCB,
+    ) => {
   setSaving(_ => true);
   CreateQuizSubmissionQuery.make(
     ~targetId=target |> Target.id,
@@ -30,13 +36,15 @@ let createQuizSubmission =
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        switch (response##createQuizSubmission##submission) {
-       | Some(details) =>
-         Notification.success("Success", details##description)
-       | None =>
-         Notification.error(
-           "Something went wrong",
-           "Please refresh the page and try again",
+       | Some(submission) =>
+         addSubmissionCB(
+           Submission.make(
+             ~id=submission##id,
+             ~description=submission##description,
+             ~createdAt=submission##createdAt,
+           ),
          )
+       | None => setSaving(_ => false)
        };
        Js.Promise.resolve();
      })
@@ -73,12 +81,26 @@ let iconClasses = (answerOption, selectedAnswer) => {
 };
 
 let handleSubmit =
-    (answer, authenticityToken, target, selectedAnswersIds, setSaving, event) => {
+    (
+      answer,
+      authenticityToken,
+      target,
+      selectedAnswersIds,
+      setSaving,
+      addSubmissionCB,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   let answerIds =
     selectedAnswersIds |> List.append([answer |> QuizQuestion.answerId]);
 
-  createQuizSubmission(authenticityToken, target, answerIds, setSaving);
+  createQuizSubmission(
+    authenticityToken,
+    target,
+    answerIds,
+    setSaving,
+    addSubmissionCB,
+  );
 };
 
 [@react.component]
@@ -146,6 +168,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
                       target,
                       selectedAnswersIds,
                       setSaving,
+                      addSubmissionCB,
                     )
                   }>
                   {str("Submit Quiz")}

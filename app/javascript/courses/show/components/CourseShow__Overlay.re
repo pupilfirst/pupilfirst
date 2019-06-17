@@ -292,7 +292,8 @@ let completeSection =
       addSubmissionCB,
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
-
+  let addVerifiedSubmissionCB =
+    addVerifiedSubmission(target, setTargetDetails, addSubmissionCB);
   <div className={completeSectionClasses(overlaySelection, completionType)}>
     {
       switch (targetStatus |> TargetStatus.status, completionType) {
@@ -309,9 +310,7 @@ let completeSection =
           target
           targetDetails
           authenticityToken
-          addSubmissionCB={
-            addVerifiedSubmission(target, setTargetDetails, addSubmissionCB)
-          }
+          addSubmissionCB=addVerifiedSubmissionCB
         />
 
       | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
@@ -325,6 +324,7 @@ let completeSection =
           targetDetails
           authenticityToken
           targetStatus
+          addSubmissionCB=addVerifiedSubmissionCB
         />
       | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
       }

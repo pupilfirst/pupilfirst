@@ -194,3 +194,4 @@ let statusToString = t =>
   };
 
 let makeSubmitted = targetId => {targetId, status: Submitted};
+let makePassed = targetId => {targetId, status: Passed};

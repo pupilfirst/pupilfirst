@@ -8,7 +8,7 @@ class AutoVerifySubmissionMutator < ApplicationMutator
   validate :can_be_submitted
 
   def can_be_auto_verified
-    return if target.evaluation_criteria.empty? && target.quiz.empty?
+    return if target.evaluation_criteria.empty? && target.quiz.blank?
 
     errors[:base] << 'The target cannot be auto verified'
   end

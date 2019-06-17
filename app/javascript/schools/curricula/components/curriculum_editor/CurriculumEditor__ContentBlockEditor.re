@@ -22,12 +22,23 @@ let reducer = (state, action) =>
   | CreateNewContentBlock => state
   };
 
+module DeleteContentBlockMutation = [%graphql
+  {|
+   mutation($id: ID!) {
+    deleteContentBlock(id: $id) {
+       success
+     }
+   }
+   |}
+];
+
 [@react.component]
 let make =
     (
       ~target,
       ~contentBlock,
       ~blockType: ContentBlock.blockType,
+      ~removeTargetContentCB,
       ~sortIndex=?,
       ~authenticityToken,
     ) => {
@@ -74,6 +85,21 @@ let make =
     | _ => true
     };
 
+  let handleDeleteContentBlock = contentBlock =>
+    switch (contentBlock) {
+    | Some(contentBlock) =>
+      let id = ContentBlock.id(contentBlock);
+      DeleteContentBlockMutation.make(~id, ())
+      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> Js.Promise.then_(response => {
+           response##deleteContentBlock##success ?
+             removeTargetContentCB(id) : ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    | None => ()
+    };
+
   <div>
     <CurriculumEditor__ContentTypePicker staticMode=false />
     <div
@@ -95,6 +121,7 @@ let make =
           </button>
           <button
             title="Delete block"
+            onClick={_event => handleDeleteContentBlock(contentBlock)}
             className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
             <i className="fas fa-trash-alt" />
           </button>

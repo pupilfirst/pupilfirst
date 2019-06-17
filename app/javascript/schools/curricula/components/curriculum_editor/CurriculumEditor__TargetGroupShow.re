@@ -23,21 +23,6 @@ module CreateTargetMutation = [%graphql
    |}
 ];
 
-module CreateTargetError = {
-  type t = [ | `TitleBlank | `TargetGroupIdBlank];
-
-  let notification = error =>
-    switch (error) {
-    | `TitleBlank => ("TitleBlank", "Target title cannot be blank")
-    | `TargetGroupIdBlank => (
-        "TargetGroupIdBlank",
-        "Target group id cannot be blank",
-      )
-    };
-};
-
-module CreateTargetErrorHandler = GraphqlErrorHandler.Make(CreateTargetError);
-
 type action =
   | UpdateTargetTitle(string)
   | UpdateTargetSaving;

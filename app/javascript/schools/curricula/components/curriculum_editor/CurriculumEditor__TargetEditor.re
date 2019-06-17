@@ -305,6 +305,7 @@ let make =
       ~contentBlocks,
       ~evaluationCriteria,
       ~targets,
+      ~handleDeleteContentBlockCB,
       ~targetGroupIdsInLevel,
       ~authenticityToken,
       ~updateTargetCB,
@@ -472,7 +473,8 @@ let make =
                   }
                   <CurriculumEditor__TargetContentEditor
                     target
-                    contentBlocks
+                    contentBlocks={state.contentBlocks}
+                    handleDeleteContentBlockCB
                     authenticityToken
                   />
                   <CurriculumEditor__ContentTypePicker staticMode=true />
@@ -830,6 +832,7 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
+        ~handleDeleteContentBlockCB,
         _children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -844,6 +847,7 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
+        ~handleDeleteContentBlockCB,
         (),
       ),
       _children,

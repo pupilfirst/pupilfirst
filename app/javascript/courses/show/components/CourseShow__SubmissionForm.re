@@ -64,7 +64,7 @@ type action =
 
 let initialState = {formState: Incomplete, description: "", attachments: []};
 
-let computeFormState = description =>
+let descriptionToFormState = description =>
   description |> String.trim == "" ? Incomplete : Ready;
 
 let updateDescription = (send, event) => {
@@ -78,12 +78,18 @@ let reducer = (state, action) =>
   | UpdateDescription(description) => {
       ...state,
       description,
-      formState: description |> computeFormState,
+      formState:
+        switch (state.formState) {
+        | Incomplete
+        | Ready => descriptionToFormState(description)
+        | Attaching => Attaching
+        | Saving => Saving
+        },
     }
   | AttachFile(id, filename) => {
       ...state,
       attachments: [File(id, filename), ...state.attachments],
-      formState: state.description |> computeFormState,
+      formState: descriptionToFormState(state.description),
     }
   | AttachUrl(url) =>
     let attachment =

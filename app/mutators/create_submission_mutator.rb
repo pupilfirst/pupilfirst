@@ -12,6 +12,7 @@ class CreateSubmissionMutator < ApplicationMutator
 
   validate :no_pending_submission_already
   validate :all_files_should_be_new
+  validate :maximum_three_attachments
 
   def no_pending_submission_already
     return if founder.timeline_events.where(target_id: target_id).pending_review.empty?
@@ -22,7 +23,13 @@ class CreateSubmissionMutator < ApplicationMutator
   def all_files_should_be_new
     return if timeline_event_files.where.not(timeline_event_id: nil).empty?
 
-    errors[:base] << 'File attachments have already been linked to a submission'
+    errors[:base] << 'Some file attachments have already been linked to a submission'
+  end
+
+  def maximum_three_attachments
+    return if (file_ids.count + links.count) <= 3
+
+    errors[:base] << 'TooManyAttachments'
   end
 
   def create_submission

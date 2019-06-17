@@ -283,13 +283,17 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
       onChange={updateDescription(send)}
     />
     {attachments(state, send)}
-    <CourseShow__NewAttachment
-      authenticityToken
-      attachingCB={() => send(UpdateFormState(Attaching))}
-      attachFileCB={(id, filename) => send(AttachFile(id, filename))}
-      attachUrlCB={url => send(AttachUrl(url))}
-      disabled={isBusy(state.formState)}
-    />
+    {
+      state.attachments |> List.length >= 3 ?
+        React.null :
+        <CourseShow__NewAttachment
+          authenticityToken
+          attachingCB={() => send(UpdateFormState(Attaching))}
+          attachFileCB={(id, filename) => send(AttachFile(id, filename))}
+          attachUrlCB={url => send(AttachUrl(url))}
+          disabled={isBusy(state.formState)}
+        />
+    }
     <div className="flex mt-3 justify-end">
       <button
         onClick={

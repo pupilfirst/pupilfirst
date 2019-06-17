@@ -86,19 +86,24 @@ let make =
     };
 
   let handleDeleteContentBlock = contentBlock =>
-    switch (contentBlock) {
-    | Some(contentBlock) =>
-      let id = ContentBlock.id(contentBlock);
-      DeleteContentBlockMutation.make(~id, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
-      |> Js.Promise.then_(response => {
-           response##deleteContentBlock##success ?
-             removeTargetContentCB(id) : ();
-           Js.Promise.resolve();
-         })
-      |> ignore;
-    | None => ()
-    };
+    Webapi.Dom.window
+    |> Webapi.Dom.Window.confirm(
+         "Are you sure you want to delete this content?. You cannot undo this.",
+       ) ?
+      switch (contentBlock) {
+      | Some(contentBlock) =>
+        let id = ContentBlock.id(contentBlock);
+        DeleteContentBlockMutation.make(~id, ())
+        |> GraphqlQuery.sendQuery(authenticityToken)
+        |> Js.Promise.then_(response => {
+             response##deleteContentBlock##success ?
+               removeTargetContentCB(id) : ();
+             Js.Promise.resolve();
+           })
+        |> ignore;
+      | None => ()
+      } :
+      ();
 
   <div>
     <CurriculumEditor__ContentTypePicker staticMode=false />

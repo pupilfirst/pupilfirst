@@ -10,7 +10,7 @@ type embedCode = string;
 
 type blockType =
   | Markdown(markdown)
-  | File(fileUrl, fileName, title)
+  | File(fileUrl, title, fileName)
   | Image(fileUrl, caption)
   | Embed(url, embedCode);
 
@@ -38,6 +38,13 @@ let decodeEmdedContent = json => (
 
 let decodeImageContent = json => Json.Decode.(field("caption", string, json));
 
+let create = (id, blockType, sortIndex, targetId) => {
+  id,
+  blockType,
+  sortIndex,
+  targetId,
+};
+
 let decode = json => {
   open Json.Decode;
 
@@ -48,7 +55,7 @@ let decode = json => {
       let title = json |> field("content", decodeFileContent);
       let fileUrl = json |> field("fileUrl", string);
       let fileName = json |> field("fileName", string);
-      File(fileUrl, fileName, title);
+      File(fileUrl, title, fileName);
     | "embed" =>
       let (url, embedCode) = json |> field("content", decodeEmdedContent);
       Embed(url, embedCode);

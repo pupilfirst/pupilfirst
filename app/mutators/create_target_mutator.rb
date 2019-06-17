@@ -9,8 +9,8 @@ class CreateTargetMutator < ApplicationMutator
 
   def create_target
     target = Target.create!(title: title, target_group_id: target_group_id, role: 'founder', target_action_type: 'Todo', visibility: 'draft')
-    ContentBlock.create!(target: target, block_type: 'markdown', sort_index: 1, content: { markdown: content_block_text })
-    target
+    content_block = ContentBlock.create!(target: target, block_type: 'markdown', sort_index: 1, content: { markdown: content_block_text })
+    { id: target.id, content_block_id: content_block.id, sample_content: content_block_text }
   end
 
   def content_block_text

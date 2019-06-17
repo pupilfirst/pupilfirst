@@ -5,13 +5,15 @@
   position: relative;
   height: 0;
   width: 100%;
-  padding-bottom: 56.25%;
+  padding-top: 56.25%;
 }
 
 .content-block__embed > iframe {
   position: absolute;
   width: 100%;
   height: 100%;
+  left: 0;
+  top: 0;
 }
 
 .add-content-block {

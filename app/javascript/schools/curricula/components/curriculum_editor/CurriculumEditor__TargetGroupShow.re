@@ -12,9 +12,12 @@ type state = {
 module CreateTargetMutation = [%graphql
   {|
    mutation($title: String!, $targetGroupId: String!) {
-     createTarget(title: $title, targetGroupId: $targetGroupId ) @bsVariant {
-       targetId
-       errors
+     createTarget(title: $title, targetGroupId: $targetGroupId ) {
+       target {
+         id
+         contentBlockId
+         sampleContent
+       }
      }
    }
    |}
@@ -89,13 +92,13 @@ let make =
         targetsInTG :
         targetsInTG
         |> List.filter(target => !(target |> Target.visibility === Archived));
-    let handleResponseCB = targetId => {
-      let id = targetId;
+    let handleResponseCB = target => {
+      let targetId = target##id;
       let targetGroupId = targetGroup |> TargetGroup.id;
       /* let sortIndex = json |> Json.Decode.(field("sortIndex", int)); */
       let newTarget =
         Target.create(
-          id,
+          targetId,
           targetGroupId,
           state.targetTitle,
           [],
@@ -105,26 +108,29 @@ let make =
           999,
           Draft,
         );
+      let sampleContentBlock =
+        ContentBlock.create(
+          target##contentBlockId,
+          Markdown(target##sampleContent),
+          1,
+          targetId,
+        );
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));
-      updateTargetCB(newTarget);
+      updateTargetCB(newTarget, [sampleContentBlock]);
       showTargetEditorCB(targetGroupId, newTarget);
     };
     let handleCreateTarget = (title, targetGroupId) => {
       send(UpdateTargetSaving);
       CreateTargetMutation.make(~title, ~targetGroupId, ())
       |> GraphqlQuery.sendQuery(authenticityToken)
-      |> Js.Promise.then_(response =>
-           switch (response##createTarget) {
-           | `TargetId(targetId) =>
-             handleResponseCB(targetId);
-             Notification.success("Done!", "Target created successfully.");
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(CreateTargetErrorHandler.Errors(errors))
-           }
-         )
-      |> CreateTargetErrorHandler.catch(() => send(UpdateTargetSaving))
+      |> Js.Promise.then_(response => {
+           switch (response##createTarget##target) {
+           | Some(target) => handleResponseCB(target)
+           | None => ()
+           };
+           Js.Promise.resolve();
+         })
       |> ignore;
     };
 

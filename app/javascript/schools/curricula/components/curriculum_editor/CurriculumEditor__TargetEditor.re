@@ -396,7 +396,7 @@ let make =
         Live,
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget);
+    updateTargetCB(newTarget, []);
   };
   let createTarget = () => {
     dispatch(UpdateSaving);
@@ -470,19 +470,11 @@ let make =
                       </div> :
                       ReasonReact.null
                   }
-                  {
-                    state.contentBlocks
-                    |> List.map(contentBlock =>
-                         <CurriculumEditor__ContentBlockEditor
-                           target
-                           contentBlock={Some(contentBlock)}
-                           blockType={contentBlock |> ContentBlock.blockType}
-                           authenticityToken
-                         />
-                       )
-                    |> Array.of_list
-                    |> React.array
-                  }
+                  <CurriculumEditor__TargetContentEditor
+                    target
+                    contentBlocks
+                    authenticityToken
+                  />
                   <CurriculumEditor__ContentTypePicker staticMode=true />
                 </div>
               </div>

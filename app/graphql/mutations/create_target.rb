@@ -5,16 +5,17 @@ module Mutations
 
     description "Create a new target."
 
-    field :target_id, ID, null: true
-    field :errors, [Types::CreateTargetErrors], null: true
+    field :target, Types::CreateTargetType, null: true
 
     def resolve(params)
       mutator = CreateTargetMutator.new(params, context)
 
       if mutator.valid?
-        { target_id: mutator.create_target.id, errors: [] }
+        mutator.notify(:success, "Done!", "Target created successfully.")
+        { target: mutator.create_target, errors: nil }
       else
-        { target_id: nil, errors: mutator.error_codes }
+        mutator.notify_errors
+        { target: nil, errors: mutator.error_codes }
       end
     end
   end

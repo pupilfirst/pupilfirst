@@ -21,6 +21,7 @@ type state = {
   editorAction,
   levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
+  contentBlocks: list(ContentBlock.t),
   targets: list(Target.t),
   showArchived: bool,
 };
@@ -30,7 +31,7 @@ type action =
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
   | UpdateTargetGroups(TargetGroup.t)
-  | UpdateTarget(Target.t)
+  | UpdateTarget(Target.t, list(ContentBlock.t))
   | UpdateTargets(list(Target.t))
   | ToggleShowArchived;
 
@@ -75,6 +76,7 @@ let make =
       |> List.hd,
     editorAction: Hidden,
     targetGroups,
+    contentBlocks,
     levels,
     targets,
     showArchived: false,
@@ -101,11 +103,16 @@ let make =
         targetGroups: newtargetGroups,
         editorAction: Hidden,
       });
-    | UpdateTarget(target) =>
+    | UpdateTarget(target, contentBlocks) =>
       let newtargets = target |> Target.updateList(state.targets);
+      let newContentBlocks =
+        state.contentBlocks
+        |> List.filter(cb => ContentBlock.targetId(cb) != Target.id(target))
+        |> List.append(contentBlocks);
       ReasonReact.Update({
         ...state,
         targets: newtargets,
+        contentBlocks: newContentBlocks,
         editorAction: Hidden,
       });
     | ToggleShowArchived =>
@@ -136,7 +143,7 @@ let make =
     let showTargetGroupEditorCB = targetGroup =>
       send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
 
-    let updateTargetCB = target => {
+    let updateTargetCB = (target, contentBlocks) => {
       let targetGroup =
         state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
 
@@ -144,7 +151,7 @@ let make =
         target |> Target.visibility === Archived ?
           targetGroup : targetGroup |> TargetGroup.archive(false);
 
-      send(UpdateTarget(target));
+      send(UpdateTarget(target, contentBlocks));
       send(UpdateTargetGroups(newTargetGroup));
     };
 
@@ -180,7 +187,7 @@ let make =
         | Hidden => ReasonReact.null
         | ShowTargetEditor(targetGroupId, target) =>
           let contentBlocks =
-            contentBlocks
+            state.contentBlocks
             |> List.filter(contentBlock =>
                  ContentBlock.targetId(contentBlock) == Target.id(target)
                );

@@ -4,11 +4,24 @@ open CurriculumEditor__Types;
 
 let str = React.string;
 
-/* type blockType =
-   | Markdown(markdown)
-   | File(url, title, filename)
-   | Image(url, caption)
-   | Embed(url, embedCode); */
+type action =
+  | UpdateContentBlockPropertyText(string)
+  | CreateNewContentBlock;
+
+type state = {
+  contentBlockPropertyText: string,
+  contentBlock: option(ContentBlock.t),
+};
+
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateContentBlockPropertyText(text) => {
+      ...state,
+      contentBlockPropertyText: text,
+    }
+  | CreateNewContentBlock => state
+  };
+
 [@react.component]
 let make =
     (
@@ -18,6 +31,18 @@ let make =
       ~sortIndex=?,
       ~authenticityToken,
     ) => {
+  let handleInitialState = {
+    contentBlockPropertyText:
+      switch (blockType) {
+      | Markdown(_markdown) => ""
+      | File(_url, title, _filename) => title
+      | Image(_url, caption) => caption
+      | Embed(_url, embedCode) => embedCode
+      },
+    contentBlock,
+  };
+
+  let (state, dispatch) = React.useReducer(reducer, handleInitialState);
   let updateDescriptionCB = string => Js.log(string);
   let editorButtonText =
     switch (contentBlock) {
@@ -43,12 +68,18 @@ let make =
     | Embed(_url, _embedCode) => false
     | _ => true
     };
+  let updateButtonVisible =
+    switch (blockType) {
+    | Embed(_url, _embedCode) => false
+    | _ => true
+    };
+
   <div>
     <CurriculumEditor__ContentTypePicker staticMode=false />
     <div
       className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
       <div
-        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow">
+        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow z-20">
         /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
            it helps to quickly differentiate who does what */
 
@@ -150,17 +181,30 @@ let make =
               <input
                 className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                 id="captions"
+                onChange={
+                  event =>
+                    dispatch(
+                      UpdateContentBlockPropertyText(
+                        ReactEvent.Form.target(event)##value,
+                      ),
+                    )
+                }
                 type_="text"
+                value={state.contentBlockPropertyText}
                 placeholder=placeHolderText
               />
             </div> :
             React.null
         }
-        <div className="ml-2 text-right">
-          <button className="btn btn-large btn-success disabled">
-            {editorButtonText |> str}
-          </button>
-        </div>
+        {
+          updateButtonVisible ?
+            <div className="ml-2 text-right">
+              <button className="btn btn-large btn-success disabled">
+                {editorButtonText |> str}
+              </button>
+            </div> :
+            React.null
+        }
       </div>
     </div>
   </div>;

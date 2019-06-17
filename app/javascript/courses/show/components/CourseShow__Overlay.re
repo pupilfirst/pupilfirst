@@ -175,11 +175,6 @@ let overlaySelectionOptions =
   </div>;
 };
 
-let showQuizSection = (target, targetDetails, authenticityToken) => {
-  let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
-  <CourseShow__Quiz target quizQuestions authenticityToken />;
-};
-
 let addSubmission =
     (
       target,
@@ -188,8 +183,6 @@ let addSubmission =
       submission,
       submissionAttachments,
     ) => {
-  Js.log("addSubmission in Overlay");
-
   setTargetDetails(targetDetails =>
     switch (targetDetails) {
     | Some(targetDetails) =>
@@ -210,41 +203,24 @@ let addSubmission =
   addSubmissionCB(target |> Target.id |> TargetStatus.makeSubmitted);
 };
 
-let completeSection =
-    (
-      completionType,
-      target,
-      targetDetails,
-      setTargetDetails,
-      authenticityToken,
-      targetStatus,
-      addSubmissionCB,
-    ) =>
-  <div>
-    {
-      switch (
-        targetStatus |> TargetStatus.status,
-        completionType: TargetDetails.completionType,
-      ) {
-      | (Pending, Evaluated) =>
-        <CourseShow__SubmissionForm
-          authenticityToken
-          target
-          addSubmissionCB={
-            addSubmission(target, setTargetDetails, addSubmissionCB)
-          }
-        />
-      | (Pending, TakeQuiz) =>
-        showQuizSection(target, targetDetails, authenticityToken)
-
-      | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
-        <CourseShow__SubmissionsAndFeedbacks targetDetails />
-      | (Submitted | Passed | Failed, LinkToComplete | MarkAsComplete)
-      | (Pending, LinkToComplete | MarkAsComplete)
-      | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
-      }
+let addVerifiedSubmission =
+    (target, setTargetDetails, addSubmissionCB, submission) => {
+  setTargetDetails(targetDetails =>
+    switch (targetDetails) {
+    | Some(targetDetails) =>
+      Some({
+        ...targetDetails,
+        TargetDetails.submissions: [
+          submission,
+          ...targetDetails |> TargetDetails.submissions,
+        ],
+      })
+    | None => None
     }
-  </div>;
+  );
+
+  addSubmissionCB(target |> Target.id |> TargetStatus.makePassed);
+};
 
 let targetStatusClass = (prefix, targetStatus) =>
   prefix
@@ -283,6 +259,78 @@ let pushUrl = (course, selectedTargetId) =>
   | Some(targetId) => ReasonReactRouter.push("/targets/" ++ targetId)
   | None => ReasonReactRouter.push("/courses/" ++ (course |> Course.id))
   };
+let overlayContentClasses = bool => bool ? "" : "hidden";
+
+let learnSection =
+    (target, targetDetails, authenticityToken, targetStatus, overlaySelection) =>
+  <div className={overlayContentClasses(overlaySelection == Learn)}>
+    <CourseShow__Learn targetDetails />
+  </div>;
+
+let discussSection = (target, targetDetails, overlaySelection) =>
+  <div className={overlayContentClasses(overlaySelection == Discuss)}>
+    <CourseShow__Discuss target targetDetails />
+  </div>;
+
+let completeSectionClasses =
+    (overlaySelection, completionType: TargetDetails.completionType) =>
+  switch (overlaySelection, completionType) {
+  | (Learn, Evaluated | TakeQuiz)
+  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
+  | (Learn, MarkAsComplete | LinkToComplete)
+  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""
+  };
+
+let completeSection =
+    (
+      overlaySelection,
+      target,
+      targetDetails,
+      setTargetDetails,
+      authenticityToken,
+      targetStatus,
+      addSubmissionCB,
+    ) => {
+  let completionType = targetDetails |> TargetDetails.computeCompletionType;
+
+  <div className={completeSectionClasses(overlaySelection, completionType)}>
+    {
+      switch (targetStatus |> TargetStatus.status, completionType) {
+      | (Pending, Evaluated) =>
+        <CourseShow__SubmissionForm
+          authenticityToken
+          target
+          addSubmissionCB={
+            addSubmission(target, setTargetDetails, addSubmissionCB)
+          }
+        />
+      | (Pending, TakeQuiz) =>
+        <CourseShow__Quiz
+          target
+          targetDetails
+          authenticityToken
+          addSubmissionCB={
+            addVerifiedSubmission(target, setTargetDetails, addSubmissionCB)
+          }
+        />
+
+      | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
+        <CourseShow__SubmissionsAndFeedbacks targetDetails />
+      | (
+          Pending | Submitted | Passed | Failed,
+          LinkToComplete | MarkAsComplete,
+        ) =>
+        <CourseShow__AutoVerify
+          target
+          targetDetails
+          authenticityToken
+          targetStatus
+        />
+      | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
+      }
+    }
+  </div>;
+};
 
 [@react.component]
 let make =
@@ -296,7 +344,6 @@ let make =
     ) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
-
   let (scrollToSelection, setScrollToSelection) = React.useState(() => false);
 
   React.useEffect1(scrollCompleteButtonIntoView, [|scrollToSelection|]);
@@ -340,23 +387,24 @@ let make =
         }
       </div>
     </div>
-    <div
-      className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 md:px-0 pb-8">
-      {
-        switch (targetDetails) {
-        | Some(targetDetails) =>
-          switch (overlaySelection) {
-          | Learn =>
-            <CourseShow__Learn
-              target
-              targetDetails
-              authenticityToken
-              targetStatus
-            />
-          | Discuss => <CourseShow__Discuss target targetDetails />
-          | Complete(completionType) =>
+    {
+      switch (targetDetails) {
+      | Some(targetDetails) =>
+        <div
+          className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 md:px-0 pb-8">
+          {
+            learnSection(
+              target,
+              targetDetails,
+              authenticityToken,
+              targetStatus,
+              overlaySelection,
+            )
+          }
+          {discussSection(target, targetDetails, overlaySelection)}
+          {
             completeSection(
-              completionType,
+              overlaySelection,
               target,
               targetDetails,
               setTargetDetails,
@@ -365,10 +413,10 @@ let make =
               addSubmissionCB,
             )
           }
+        </div>
 
-        | None => "Loading..." |> str
-        }
+      | None => "Loading..." |> str
       }
-    </div>
+    }
   </div>;
 };

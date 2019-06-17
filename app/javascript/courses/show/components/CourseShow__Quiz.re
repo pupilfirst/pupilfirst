@@ -82,7 +82,8 @@ let handleSubmit =
 };
 
 [@react.component]
-let make = (~target, ~quizQuestions, ~authenticityToken) => {
+let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
+  let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
   let (saving, setSaving) = React.useState(() => false);
   let (selectedQuestion, setSelectedQuestion) =
     React.useState(() => quizQuestions |> List.hd);

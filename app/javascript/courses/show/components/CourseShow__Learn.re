@@ -40,7 +40,7 @@ let embedContentBlock = (_url, embedCode) =>
   <div dangerouslySetInnerHTML={"__html": embedCode} />;
 
 [@react.component]
-let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) =>
+let make = (~targetDetails) =>
   <div id="learn-component">
     {
       targetDetails
@@ -64,18 +64,5 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~targetStatus) =>
          })
       |> Array.of_list
       |> React.array
-    }
-    {
-      switch (TargetDetails.computeCompletionType(targetDetails)) {
-      | LinkToComplete
-      | MarkAsComplete =>
-        <CourseShow__AutoVerify
-          target
-          targetDetails
-          authenticityToken
-          targetStatus
-        />
-      | _ => React.null
-      }
     }
   </div>;

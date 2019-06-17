@@ -19,8 +19,15 @@ let updateSelectedLevel = (levels, setSelectedLevelId, event) => {
   };
 };
 
-let closeOverlay = (setSelectedTargetId, ()) =>
+let closeOverlay = (setSelectedTargetId, ()) => {
   setSelectedTargetId(_ => None);
+  ();
+};
+
+let changeSelectedtarget = (setSelectedTargetId, target) => {
+  setSelectedTargetId(_ => Some(target |> Target.id));
+  ();
+};
 
 let targetStatusClasses = targetStatus => {
   let statusClasses =
@@ -200,6 +207,9 @@ let make =
             closeOverlayCB={closeOverlay(setSelectedTargetId)}
             authenticityToken
             addSubmissionCB={addSubmission(setStatusOfTargets)}
+            targets
+            statusOfTargets
+            changeTargetCB={changeSelectedtarget(setSelectedTargetId)}
           />;
         | None => React.null
         };

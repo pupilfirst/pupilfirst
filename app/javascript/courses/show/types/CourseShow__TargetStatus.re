@@ -178,8 +178,8 @@ let status = t => t.status;
 let lockReasonToString = lr =>
   switch (lr) {
   | CourseLocked => "Course has ended"
-  | AccessLocked => "Student's access to course has ended"
-  | LevelLocked => "Student must level up to access this target"
+  | AccessLocked => "Your access to course has ended"
+  | LevelLocked => "You must level up to access this target"
   | PreviousLevelMilestonesIncomplete => "Previous level's milestone targets have not been reviewed yet"
   | PrerequisitesIncomplete => "This target has pre-requisites that are incomplete"
   };

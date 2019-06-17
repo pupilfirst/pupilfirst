@@ -130,7 +130,7 @@ let overlaySelectionOptions =
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
 
-  <div className="flex justify-between max-w-3xl mx-auto -mb-px">
+  <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {
       selectableTabs(course)
       |> List.map(selection =>
@@ -231,7 +231,7 @@ let targetStatusClasses = targetStatus =>
   ++ targetStatusClass("curriculum__target-status--", targetStatus);
 
 let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card flex justify-between items-center px-3 py-5 md:p-6 mb-5 md:mb-7 "
+  "course-overlay__header-title-card flex justify-between items-center px-3 py-5 md:p-6 "
   ++ targetStatusClass("course-overlay__header-title-card--", targetStatus);
 
 let overlayStatus = (closeOverlayCB, target, targetStatus) =>
@@ -249,10 +249,90 @@ let overlayStatus = (closeOverlayCB, target, targetStatus) =>
         {target |> Target.title |> str}
       </h1>
       <div className={targetStatusClasses(targetStatus)}>
-        {targetStatus |> CourseShow__TargetStatus.statusToString |> str}
+        {targetStatus |> TargetStatus.statusToString |> str}
       </div>
     </div>
   </div>;
+
+let renderLockReason = reason =>
+  <div
+    className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-1 text-sm">
+    <i className="fas fa-lock-alt" />
+    <span className="ml-2">
+      {reason |> TargetStatus.lockReasonToString |> str}
+    </span>
+  </div>;
+
+let prerequisitesIncomplete =
+    (reason, target, targets, statusOfTargets, changeTargetCB) => {
+  let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds;
+  let prerequisiteTargets =
+    targets
+    |> List.filter(target =>
+         (target |> Target.id)->List.mem(prerequisiteTargetIds)
+       );
+  <div>
+    {renderLockReason(reason)}
+    <div
+      className="max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden  mt-6">
+      {
+        prerequisiteTargets
+        |> List.map(target => {
+             let targetStatus =
+               statusOfTargets
+               |> List.find(ts =>
+                    ts |> TargetStatus.targetId == (target |> Target.id)
+                  );
+
+             <div
+               key={target |> Target.id}
+               className="bg-white border-t px-6 py-2 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
+               onClick={_ => changeTargetCB(target)}>
+               <span className="font-semibold text-left leading-snug">
+                 {target |> Target.title |> str}
+               </span>
+               <span className={targetStatusClasses(targetStatus)}>
+                 {targetStatus |> TargetStatus.statusToString |> str}
+               </span>
+             </div>;
+           })
+        |> Array.of_list
+        |> React.array
+      }
+    </div>
+  </div>;
+};
+
+let handleLocked =
+    (
+      targetStatus,
+      target,
+      targets,
+      targetStatus,
+      statusOfTargets,
+      changeTargetCB,
+    ) =>
+  switch (targetStatus |> TargetStatus.status) {
+  | Locked(reason) =>
+    switch (reason) {
+    | PrerequisitesIncomplete =>
+      prerequisitesIncomplete(
+        reason,
+        target,
+        targets,
+        statusOfTargets,
+        changeTargetCB,
+      )
+    | CourseLocked
+    | AccessLocked
+    | LevelLocked
+    | PreviousLevelMilestonesIncomplete => renderLockReason(reason)
+    }
+  | Pending
+  | Submitted
+  | Passed
+  | Failed => React.null
+  };
 
 let pushUrl = (course, selectedTargetId) =>
   switch (selectedTargetId) {
@@ -341,6 +421,9 @@ let make =
       ~authenticityToken,
       ~closeOverlayCB,
       ~addSubmissionCB,
+      ~targets,
+      ~statusOfTargets,
+      ~changeTargetCB,
     ) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
@@ -368,6 +451,16 @@ let make =
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}
+        {
+          handleLocked(
+            targetStatus,
+            target,
+            targets,
+            targetStatus,
+            statusOfTargets,
+            changeTargetCB,
+          )
+        }
         {
           switch (targetDetails) {
           | Some(targetDetails) =>

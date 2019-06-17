@@ -282,6 +282,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
   <div className="bg-gray-200 pt-6 px-4 pb-2 mt-4 shadow rounded-lg">
     <h5 className="pl-1"> {"Work on your submission" |> str} </h5>
     <textarea
+      maxLength=1000
       disabled={isDescriptionDisabled(state.formState)}
       value={state.description}
       className="h-40 w-full rounded-lg mt-4 p-4 border rounded-lg"

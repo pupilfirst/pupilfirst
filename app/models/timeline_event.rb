@@ -157,4 +157,12 @@ class TimelineEvent < ApplicationRecord
   def pending_review?
     passed_at.blank? && evaluator_id.blank?
   end
+
+  def status
+    if passed_at.blank?
+      evaluator_id.present? ? :failed : :pending
+    else
+      evaluator_id.present? ? :passed : :marked_as_complete
+    end
+  end
 end

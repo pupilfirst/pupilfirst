@@ -42,6 +42,7 @@ let createQuizSubmission =
              ~id=submission##id,
              ~description=submission##description,
              ~createdAt=submission##createdAt,
+             ~status=Submission.MarkedAsComplete,
            ),
          )
        | None => setSaving(_ => false)

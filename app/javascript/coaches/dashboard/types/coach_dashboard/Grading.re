@@ -58,3 +58,9 @@ let gradingEncoder = grading =>
       ),
     ])
   );
+
+let make = (~criterionId, ~criterionName, ~grade) => {
+  criterionId,
+  criterionName,
+  grade: Some(grade),
+};

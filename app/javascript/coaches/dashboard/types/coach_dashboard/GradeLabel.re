@@ -22,3 +22,5 @@ let maxGrade = gradeLabels =>
   |> List.rev
   |> List.hd
   |> grade;
+
+let make = (label, grade) => {label, grade};

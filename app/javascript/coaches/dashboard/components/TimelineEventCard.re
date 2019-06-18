@@ -160,7 +160,7 @@ let make =
                   let evaluation = timelineEvent |> TimelineEvent.evaluation;
                   evaluation
                   |> List.map(grading =>
-                       <GradeBar
+                       <GradeBar.Jsx2
                          key={grading |> Grading.criterionId |> string_of_int}
                          grading
                          gradeLabels

@@ -19,3 +19,5 @@ let criterionName: t => string;
 let updateGrade: (int, t) => t;
 
 let gradingEncoder: t => Js.Json.t;
+
+let make: (~criterionId: int, ~criterionName: string, ~grade: int) => t;

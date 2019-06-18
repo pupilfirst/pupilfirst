@@ -4,6 +4,25 @@ let str = React.string;
 
 open CourseShow__Types;
 
+let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
+  let criterion =
+    evaluationCriteria
+    |> ListUtils.findOpt(c =>
+         c
+         |> EvaluationCriterion.id
+         |> string_of_int == (grade |> Grade.evaluationCriterionId)
+       );
+
+  switch (criterion) {
+  | Some(criterion) =>
+    let criterionId = criterion |> EvaluationCriterion.id;
+    let criterionName = criterion |> EvaluationCriterion.name;
+    let grading = Grading.make(~criterionId, ~criterionName, ~grade=2);
+    <GradeBar grading gradeLabels passGrade />;
+  | None => React.null
+  };
+};
+
 let statusBar = (~color, ~text) => {
   let textColor = "text-" ++ color ++ "-500 ";
   let bgColor = "bg-" ++ color ++ "-100 ";
@@ -48,18 +67,24 @@ let submissionStatusIcon = (~passed) => {
   </div>;
 };
 
-let styledGrades = grades =>
-  grades
-  |> List.map(grade =>
-       <div key={grade |> Grade.key}>
-         {grade |> Grade.grade |> string_of_int |> str}
-       </div>
-     )
-  |> Array.of_list
-  |> React.array;
-
 [@react.component]
-let make = (~targetDetails) =>
+let make = (~targetDetails) => {
+  let gradeLabels = [
+    GradeLabel.make("Fail", 1),
+    GradeLabel.make("Pass", 2),
+    GradeLabel.make("Excellent", 3),
+  ];
+
+  let curriedGradeBar =
+    gradeBar(
+      gradeLabels,
+      2,
+      [
+        EvaluationCriterion.make(1, "Quality"),
+        EvaluationCriterion.make(2, "Completeness"),
+      ],
+    );
+
   <div>
     <div className="flex justify-between border-b pb-2">
       <h4> {"Your Submissions" |> str} </h4>
@@ -133,27 +158,28 @@ let make = (~targetDetails) =>
                    {"Undo submission" |> str}
                  </button>
                </div>
-               /* grades |> ListUtils.isEmpty ? React.null : */
-               <div className="p-4 bg-white flex flex-wrap items-center">
-                 <div
-                   className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex">
-                   {submissionStatusIcon(~passed=false)}
-                 </div>
-                 <div className="w-full md:w-1/2 flex-shrink-0 md:order-first">
-                   <h5 className="pb-1 border-b"> {"Grade card" |> str} </h5>
-                   {styledGrades(grades)}
-                 </div>
-               </div>
-               <div className="p-4 bg-white flex flex-wrap items-center">
-                 <div
-                   className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex">
-                   {submissionStatusIcon(~passed=true)}
-                 </div>
-                 <div className="w-full md:w-1/2 flex-shrink-0 md:order-first">
-                   <h5 className="pb-1 border-b"> {"Grade card" |> str} </h5>
-                   {styledGrades(grades)}
-                 </div>
-               </div>
+               {
+                 grades |> ListUtils.isEmpty ?
+                   React.null :
+                   <div className="bg-white flex flex-wrap items-center py-4">
+                     <div
+                       className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-4">
+                       {submissionStatusIcon(~passed=false)}
+                     </div>
+                     <div
+                       className="w-full md:w-1/2 flex-shrink-0 md:order-first p-4">
+                       <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
+                       <div className="mt-3">
+                         {
+                           grades
+                           |> List.map(grade => curriedGradeBar(grade))
+                           |> Array.of_list
+                           |> React.array
+                         }
+                       </div>
+                     </div>
+                   </div>
+               }
              </div>
            </div>;
          })
@@ -161,3 +187,4 @@ let make = (~targetDetails) =>
       |> React.array
     }
   </div>;
+};

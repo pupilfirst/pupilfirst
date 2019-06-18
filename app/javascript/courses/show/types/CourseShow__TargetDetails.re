@@ -1,5 +1,5 @@
 type t = {
-  pendingStudentIds: list(string),
+  pendingUserIds: list(string),
   submissions: list(CourseShow__Submission.t),
   submissionAttachments: list(CourseShow__SubmissionAttachment.t),
   feedback: list(CourseShow__Feedback.t),
@@ -12,6 +12,7 @@ type t = {
 
 let submissions = t => t.submissions;
 let submissionAttachments = t => t.submissionAttachments;
+let pendingUserIds = t => t.pendingUserIds;
 
 type completionType =
   | Evaluated
@@ -21,7 +22,7 @@ type completionType =
 
 let decode = json =>
   Json.Decode.{
-    pendingStudentIds: json |> field("pendingStudentIds", list(string)),
+    pendingUserIds: json |> field("pendingUserIds", list(string)),
     submissions:
       json |> field("submissions", list(CourseShow__Submission.decode)),
     submissionAttachments:

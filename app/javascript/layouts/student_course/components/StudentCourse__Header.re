@@ -5,14 +5,15 @@ module Course = StudentCourse__Course;
 
 let courseOptions = courses =>
   courses
-  |> List.map(course =>
+  |> List.map(course => {
+       let courseId = course |> Course.id;
        <a
-         href={"/courses/" ++ (course |> Course.id)}
-         key={course |> Course.id}
+         key={"course-" ++ courseId}
+         href={"/courses/" ++ courseId}
          className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap">
          <span> {course |> Course.name |> str} </span>
-       </a>
-     )
+       </a>;
+     })
   |> Array.of_list
   |> React.array;
 
@@ -38,6 +39,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
             | otherCourses =>
               [|
                 <button
+                  key={"dropdown-course" ++ (currentCourse |> Course.id)}
                   onClick=(_ => setShowCourses(showCourses => !showCourses))
                   className="dropdown__btn appearance-none flex bg-gray-200 hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
                   <span> {currentCourse |> Course.name |> str} </span>
@@ -47,6 +49,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
                 </button>,
                 showCourses ?
                   <ul
+                    key="dropdown-course-list"
                     className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden min-w-full w-auto z-50">
                     {courseOptions(otherCourses)}
                   </ul> :
@@ -81,7 +84,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
                      };
 
                    <a
-                     key=suffix
+                     key=title
                      href={"/courses/" ++ currentCourseId ++ "/" ++ suffix}
                      className="p-4 hover:bg-grey-200">
                      {title |> str}

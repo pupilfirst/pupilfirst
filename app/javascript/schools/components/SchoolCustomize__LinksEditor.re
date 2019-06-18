@@ -1,5 +1,7 @@
 open SchoolCustomize__Types;
 
+[%bs.raw {|require("./SchoolCustomize__LinksEditor.css")|}];
+
 let str = ReasonReact.string;
 
 type kind =
@@ -139,7 +141,7 @@ let titleInputVisible = state =>
   };
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t border-gray-400 cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-100";
+  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none";
   classes
   ++ (
     selected ?
@@ -315,7 +317,7 @@ let make =
       ReasonReact.Update({...state, deleting: [linkId, ...state.deleting]})
     },
   render: ({state, send}) =>
-    <div className="mt-8 mx-8">
+    <div className="mt-8 mx-8 pb-6">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {"Manage custom links" |> str}
       </h5>
@@ -324,8 +326,7 @@ let make =
           className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
           {"Location of Link" |> str}
         </label>
-        <div
-          className="flex bg-white border border-t-0 border-gray-400 rounded-t mt-2">
+        <div className="flex bg-white border border-t-0 rounded-t mt-2">
           <div
             title="Show header links"
             className={kindClasses(state.kind == HeaderLink)}

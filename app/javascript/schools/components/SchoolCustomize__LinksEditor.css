@@ -1,0 +1,30 @@
+/* Tabs */
+
+.nav-tab-item {
+  position: relative;
+}
+
+.nav-tab-item:first-child {
+  @apply rounded-tl;
+}
+
+.nav-tab-item:last-child {
+  @apply rounded-tr;
+}
+
+.nav-tab-item--selected:before {
+  @apply absolute w-full top-0 left-0;
+  content: '';
+  height: 3px;
+  background-color: theme('colors.primary.500');
+}
+
+.nav-tab-item--selected:after {
+  position: absolute;
+  content: '';
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background-color: white;
+}

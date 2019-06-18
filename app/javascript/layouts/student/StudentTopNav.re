@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./StudentTopNav.css")|}];
 
 let str = React.string;
 
@@ -82,7 +83,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
             {
               switch (logoUrl) {
               | Some(url) =>
-                <img className="h-13" src=url alt={"Logo of " ++ schoolName} />
+                <img className="h-12" src=url alt={"Logo of " ++ schoolName} />
               | None =>
                 <span className="text-2xl text-black">
                   {schoolName |> str}
@@ -95,15 +96,15 @@ let make = (~schoolName, ~logoUrl, ~links) => {
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
                   className={
-                    "student-navbar__toggle focus:outline-none rounded-full "
-                    ++ (menuHidden ? "" : "opened")
+                    "student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full "
+                    ++ (menuHidden ? "" : "open")
                   }>
-                  <span className="sr-only">
+                  /* <span className="sr-only">
                     {"Toggle navigation" |> str}
+                  </span> */
+                  <span className="student-navbar__menu-icon">
+                    <span className="student-navbar__menu-icon-bar" />
                   </span>
-                  <span className="icon-bar top-bar" />
-                  <span className="icon-bar middle-bar" />
-                  <span className="icon-bar bottom-bar" />
                 </div>
               </div> :
               React.null

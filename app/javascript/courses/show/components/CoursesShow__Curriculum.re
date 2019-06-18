@@ -7,18 +7,6 @@ open CourseShow__Types;
 
 let str = React.string;
 
-let updateSelectedLevel = (levels, setSelectedLevelId, event) => {
-  let selectedLevelId = ReactEvent.Form.target(event)##value;
-  let level =
-    levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
-
-  switch (level) {
-  | Some(level) =>
-    level |> Level.isLocked ? () : setSelectedLevelId(_ => selectedLevelId)
-  | None => ()
-  };
-};
-
 let closeOverlay = (setSelectedTargetId, ()) => {
   setSelectedTargetId(_ => None);
   ();
@@ -37,14 +25,14 @@ let targetStatusClasses = targetStatus => {
 };
 
 let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
+  let targetId = target |> Target.id;
   let targetStatus =
-    statusOfTargets
-    |> List.find(ts => ts |> TargetStatus.targetId == (target |> Target.id));
+    statusOfTargets |> List.find(ts => ts |> TargetStatus.targetId == targetId);
 
   <div
-    key={target |> Target.id}
+    key={"target-" ++ targetId}
     className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
-    onClick={_e => setSelectedTargetId(_ => Some(target |> Target.id))}>
+    onClick={_e => setSelectedTargetId(_ => Some(targetId))}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
@@ -60,9 +48,10 @@ let renderTargetGroup =
   let targets =
     targets |> List.filter(t => t |> Target.targetGroupId == targetGroupId);
 
-  <div className="curriculum__target-group-container relative mt-8">
+  <div
+    key={"target-group" ++ targetGroupId}
+    className="curriculum__target-group-container relative mt-8">
     <div
-      key=targetGroupId
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
       <div className="p-6">
         <div className="text-2xl font-bold">
@@ -84,58 +73,6 @@ let renderTargetGroup =
         |> React.array
       }
     </div>
-  </div>;
-};
-
-let levelSelectorClasses = isSelected => {
-  let defaultClasses = "w-1/2 p-2 border rounded-lg outline-none bg-white ";
-  defaultClasses ++ (isSelected ? "bg-gray-500" : "");
-};
-
-let levelSelector = (levels, setSelectedLevelId, selectedLevelId) => {
-  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
-  let isLevelZero =
-    switch (levelZero) {
-    | Some(level) => selectedLevelId == (level |> Level.id)
-    | None => false
-    };
-
-  <div className="flex justify-center max-w-fc mx-auto">
-    {
-      let orderedLevels =
-        levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
-      <select
-        className={levelSelectorClasses(!isLevelZero)}
-        onChange={updateSelectedLevel(levels, setSelectedLevelId)}
-        value=selectedLevelId>
-        {
-          orderedLevels
-          |> List.map(l => {
-               let levelTitle =
-                 "L"
-                 ++ (l |> Level.number |> string_of_int)
-                 ++ ": "
-                 ++ (l |> Level.name);
-               <option value={l |> Level.id} key={l |> Level.id}>
-                 {levelTitle |> str}
-               </option>;
-             })
-          |> Array.of_list
-          |> React.array
-        }
-      </select>;
-    }
-    {
-      switch (levelZero) {
-      | Some(level) =>
-        <button
-          className={"btn ml-2 " ++ levelSelectorClasses(isLevelZero)}
-          onClick=(_e => setSelectedLevelId(_ => level |> Level.id))>
-          {level |> Level.name |> str}
-        </button>
-      | None => React.null
-      }
-    }
   </div>;
 };
 
@@ -185,6 +122,14 @@ let make =
 
   let (selectedTargetId, setSelectedTargetId) =
     React.useState(() => selectedTargetId);
+  let (showLevelZero, setShowLevelZero) = React.useState(() => false);
+  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
+  let currentLevelId =
+    switch (levelZero, showLevelZero) {
+    | (Some(levelZero), true) => levelZero |> Level.id
+    | (Some(_), false)
+    | (None, true | false) => selectedLevelId
+    };
 
   <div className="bg-gray-100 pt-4 pb-8">
     {
@@ -217,10 +162,17 @@ let make =
       | None => React.null
       }
     }
-    {levelSelector(levels, setSelectedLevelId, selectedLevelId)}
+    <CourseShow__LevelSelector
+      levels
+      selectedLevelId
+      setSelectedLevelId
+      showLevelZero
+      setShowLevelZero
+      levelZero
+    />
     {
       targetGroups
-      |> List.filter(tg => tg |> TargetGroup.levelId == selectedLevelId)
+      |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
       |> TargetGroup.sort
       |> List.map(targetGroup =>
            renderTargetGroup(

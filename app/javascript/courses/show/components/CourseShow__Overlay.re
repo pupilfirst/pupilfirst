@@ -20,7 +20,7 @@ module ScrollLock = {
     body[0]->Element.setClassName(classes);
   };
   let activate = () => handleScrollLock(true);
-  let deActivate = () => handleScrollLock(false);
+  let deactivate = () => handleScrollLock(false);
 };
 
 let loadTargetDetails = (target, setTargetDetails, ()) => {
@@ -443,7 +443,7 @@ let make =
 
   React.useEffect(() => {
     ScrollLock.activate();
-    Some(() => ScrollLock.deActivate());
+    Some(() => ScrollLock.deactivate());
   });
 
   <div

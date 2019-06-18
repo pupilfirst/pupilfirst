@@ -25,14 +25,14 @@ let targetStatusClasses = targetStatus => {
 };
 
 let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
+  let targetId = target |> Target.id;
   let targetStatus =
-    statusOfTargets
-    |> List.find(ts => ts |> TargetStatus.targetId == (target |> Target.id));
+    statusOfTargets |> List.find(ts => ts |> TargetStatus.targetId == targetId);
 
   <div
-    key={target |> Target.id}
+    key={"target-" ++ targetId}
     className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
-    onClick={_e => setSelectedTargetId(_ => Some(target |> Target.id))}>
+    onClick={_e => setSelectedTargetId(_ => Some(targetId))}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
@@ -48,9 +48,10 @@ let renderTargetGroup =
   let targets =
     targets |> List.filter(t => t |> Target.targetGroupId == targetGroupId);
 
-  <div className="curriculum__target-group-container relative mt-8">
+  <div
+    key={"target-group" ++ targetGroupId}
+    className="curriculum__target-group-container relative mt-8">
     <div
-      key=targetGroupId
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
       <div className="p-6">
         <div className="text-2xl font-bold">

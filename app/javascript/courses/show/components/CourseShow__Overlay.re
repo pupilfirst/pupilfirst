@@ -394,7 +394,7 @@ let completeSection =
         />
 
       | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
-        <CourseShow__SubmissionsAndFeedbacks targetDetails />
+        <CourseShow__SubmissionsAndFeedback targetDetails />
       | (
           Pending | Submitted | Passed | Failed,
           LinkToComplete | MarkAsComplete,

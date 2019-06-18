@@ -189,9 +189,9 @@ let make =
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 md:hidden shadow border-b">
         <button
-          className="hamburger hamburger--arrow hover:bg-gray-200 focus:outline-none">
-          <span className="hamburger-box">
-            <span className="hamburger-inner" />
+          className="sa-toggle__menu-btn sa-toggle__menu-btn--arrow hover:bg-gray-200 focus:outline-none">
+          <span className="sa-toggle__menu-btn-box">
+            <span className="sa-toggle__menu-btn-inner" />
           </span>
         </button>
       </div>

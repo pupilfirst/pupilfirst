@@ -246,7 +246,7 @@
     margin-bottom: 0.715rem;
 }
 
-.hamburger {
+.sa-toggle__menu-btn {
     @apply p-4 inline-block .cursor-pointer;
     transition-property: opacity, filter;
     transition-duration: 0.15s;
@@ -254,30 +254,30 @@
     overflow: visible;
 }
 
-.hamburger:hover {
+.sa-toggle__menu-btn:hover {
     opacity: 0.7;
 }
 
-.hamburger.is-active:hover {
+.sa-toggle__menu-btn.is-active:hover {
     opacity: 0.7;
 }
 
-.hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner::before, .hamburger.is-active .hamburger-inner::after {
+.sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner, .sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner::before, .sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner::after {
     @apply bg-gray-800;
 }
 
-.hamburger-box {
+.sa-toggle__menu-btn-box {
     width: 20px;
     height: 14px;
     @apply relative inline-block;
 }
 
-.hamburger-inner {
+.sa-toggle__menu-btn-inner {
     display: block;
     top: 50%;
 }
 
-.hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
+.sa-toggle__menu-btn-inner, .sa-toggle__menu-btn-inner::before, .sa-toggle__menu-btn-inner::after {
     width: 20px;
     height: 2px;
     background-color: #000;
@@ -288,43 +288,25 @@
     transition-timing-function: ease;
 }
 
-.hamburger-inner::before, .hamburger-inner::after {
+.sa-toggle__menu-btn-inner::before, .sa-toggle__menu-btn-inner::after {
     content: "";
     display: block;
 }
 
-.hamburger-inner::before {
+.sa-toggle__menu-btn-inner::before {
     top: -6px;
 }
 
-.hamburger-inner::after {
+.sa-toggle__menu-btn-inner::after {
     bottom: -6px;
 }
 
-.hamburger--arrow.is-active .hamburger-inner::before {
+.sa-toggle__menu-btn--arrow.is-active .sa-toggle__menu-btn-inner::before {
     transform: translate3d(-6px, 3px, 0) rotate(-45deg) scale(0.5, 1);
 }
 
-.hamburger--arrow.is-active .hamburger-inner::after {
+.sa-toggle__menu-btn--arrow.is-active .sa-toggle__menu-btn-inner::after {
     transform: translate3d(-6px, -3px, 0) rotate(45deg) scale(0.5, 1);
-}
-
-.course-faculty__list-item:hover .course-faculty__list-item-remove {
-    visibility: visible;
-}
-
-.resources-upload-tab__link {
-    cursor: pointer;
-    @apply border-transparent border-l border-t border-r -mb-px rounded-t;
-}
-
-.resources-upload-tab__link--active {
-    background-color: #F2F8FF;
-    @apply border-gray-400 border-l border-t border-r -mb-px rounded-t;
-}
-
-.resources-upload-tab__body {
-    background-color: #F2F8FF;
 }
 
 .input-file__input {

@@ -1,5 +1,3 @@
-/* Navbar hamburger toggle */
-
 .student-navbar__links-container {
   position: relative;
   transition: all 0.2s ease-in-out;
@@ -34,7 +32,7 @@
   }
 }
 
-/* menu btn */
+/* Toggle menu btn */
 
 .student-navbar__menu-btn.open .student-navbar__menu-icon .student-navbar__menu-icon-bar {
   background: transparent;
@@ -52,7 +50,7 @@
   top: 0;
 }
 
-/* menu icon */
+/* Toggle menu icon */
 
 .student-navbar__menu-icon {
   cursor: pointer;

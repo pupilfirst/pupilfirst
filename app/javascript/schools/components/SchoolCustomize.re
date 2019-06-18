@@ -32,7 +32,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   switch (logoOnLightBg) {
   | Some(logo) =>
     <div className="max-w-xs">
-      <img className="h-13" src={logo |> Customizations.url} />
+      <img className="h-12" src={logo |> Customizations.url} />
     </div>
   | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
   };

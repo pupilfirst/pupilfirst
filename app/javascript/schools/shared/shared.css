@@ -119,41 +119,10 @@
     transition: all 0.6s ease;
 }
 
-@keyframes {
+@keyframes wave {
     50% {
         transform: scale(0.9);
     }
-}
-
-/* Tabs */
-
-.nav-tab-item {
-    position: relative;
-}
-
-.nav-tab-item:first-child {
-    @apply rounded-tl;
-}
-
-.nav-tab-item:last-child {
-    @apply rounded-tr;
-}
-
-.nav-tab-item--selected:before {
-    @apply absolute w-full top-0 left-0;
-    content: '';
-    height: 3px;
-    background-color: theme('colors.primary.500');
-}
-
-.nav-tab-item--selected:after {
-    position: absolute;
-    content: '';
-    bottom: -2px;
-    left: 0;
-    height: 3px;
-    width: 100%;
-    background-color: white;
 }
 
 .global-sidebar__primary-nav {

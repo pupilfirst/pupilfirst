@@ -1,7 +1,11 @@
 <% presenter = ::Layouts::StudentTopNavPresenter.new(self) %>
 
+<% content_for(:head) do %>
+  <%= stylesheet_pack_tag 'StudentTopNavPack', media: 'all' %>
+<% end %>
+
 <% content_for(:tail) do %>
-  <%= javascript_pack_tag 'StudentTopNavPack', 'data-turbolinks-track': 'reload', nonce: true %>
+  <%= javascript_pack_tag 'StudentTopNavPack', nonce: true %>
 <% end %>
 
 <section id="header" class="">

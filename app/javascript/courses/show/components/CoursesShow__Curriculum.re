@@ -50,7 +50,7 @@ let renderTargetGroup =
 
   <div
     key={"target-group" ++ targetGroupId}
-    className="curriculum__target-group-container relative mt-8">
+    className="curriculum__target-group-container relative mt-8 px-3">
     <div
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
       <div className="p-6">

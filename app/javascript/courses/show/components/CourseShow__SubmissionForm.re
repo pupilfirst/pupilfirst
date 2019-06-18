@@ -45,14 +45,10 @@ type id = string;
 type filename = string;
 type url = string;
 
-type attachment =
-  | Link(url)
-  | File(id, filename);
-
 type state = {
   formState,
   description: string,
-  attachments: list(attachment),
+  attachments: list(SubmissionAttachment.attachment),
 };
 
 type action =
@@ -60,7 +56,7 @@ type action =
   | UpdateDescription(string)
   | AttachFile(id, filename)
   | AttachUrl(url)
-  | RemoveAttachment(attachment);
+  | RemoveAttachment(SubmissionAttachment.attachment);
 
 let initialState = {formState: Incomplete, description: "", attachments: []};
 
@@ -88,7 +84,14 @@ let reducer = (state, action) =>
     }
   | AttachFile(id, filename) => {
       ...state,
-      attachments: [File(id, filename), ...state.attachments],
+      attachments: [
+        SubmissionAttachment.File(
+          id,
+          filename,
+          "/timeline_event_files/" ++ id ++ "/download",
+        ),
+        ...state.attachments,
+      ],
       formState: descriptionToFormState(state.description),
     }
   | AttachUrl(url) =>
@@ -96,7 +99,7 @@ let reducer = (state, action) =>
       state.attachments
       |> ListUtils.findOpt(attachment =>
            switch (attachment) {
-           | File(_, _) => false
+           | SubmissionAttachment.File(_, _, _) => false
            | Link(storedUrl) => url == storedUrl
            }
          );
@@ -115,59 +118,6 @@ let removeAttachment = (attachment, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(RemoveAttachment(attachment));
 };
-
-let attachments = (state, send) =>
-  switch (state.attachments) {
-  | [] => React.null
-  | attachments =>
-    <div className="flex flex-wrap">
-      {
-        attachments
-        |> List.map(attachment => {
-             let (key, containerClasses, iconClasses, textClasses, text) =
-               switch (attachment) {
-               | Link(url) => (
-                   url,
-                   "border-blue-200 bg-blue-200",
-                   "bg-blue-200",
-                   "bg-blue-100",
-                   url,
-                 )
-               | File(id, filename) => (
-                   "file-" ++ id,
-                   "border-primary-200 bg-primary-200",
-                   "bg-primary-200",
-                   "bg-primary-100",
-                   filename,
-                 )
-               };
-
-             <span
-               key
-               className={
-                 "mt-2 mr-2 flex items-center border-2 rounded-lg "
-                 ++ containerClasses
-               }>
-               <span
-                 className={"flex p-2 cursor-pointer " ++ iconClasses}
-                 onClick={removeAttachment(attachment, send)}>
-                 <i className="fas fa-times" />
-               </span>
-               <span
-                 className={
-                   "rounded px-2 py-1 truncate rounded-lg " ++ textClasses
-                 }>
-                 <span className="text-xs font-semibold text-primary-600">
-                   {text |> str}
-                 </span>
-               </span>
-             </span>;
-           })
-        |> Array.of_list
-        |> React.array
-      }
-    </div>
-  };
 
 let isBusy = formState =>
   switch (formState) {
@@ -194,7 +144,7 @@ let attachmentValues = attachments =>
   attachments
   |> List.map(attachment =>
        switch (attachment) {
-       | File(id, _) => id
+       | SubmissionAttachment.File(id, _, _) => id
        | Link(url) => url
        }
      )
@@ -209,7 +159,7 @@ let submit = (state, send, authenticityToken, target, addSubmissionCB, event) =>
     state.attachments
     |> List.partition(attachment =>
          switch (attachment) {
-         | File(_, _) => true
+         | SubmissionAttachment.File(_, _, _) => true
          | Link(_) => false
          }
        );
@@ -238,17 +188,7 @@ let submit = (state, send, authenticityToken, target, addSubmissionCB, event) =>
          let newAttachments =
            state.attachments
            |> List.map(attachment =>
-                switch (attachment) {
-                | File(id, filename) =>
-                  SubmissionAttachment.makeFile(
-                    submission##id,
-                    id,
-                    filename,
-                    "/timeline_event_files/" ++ id ++ "/download",
-                  )
-                | Link(url) =>
-                  SubmissionAttachment.makeLink(submission##id, url)
-                }
+                SubmissionAttachment.make(submission##id, attachment)
               );
 
          Js.log("Calling addSubmissionCB in SubmissionForm");
@@ -289,7 +229,12 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
       placeholder="Describe your work, attach any links or files, and then hit submit!"
       onChange={updateDescription(send)}
     />
-    {attachments(state, send)}
+    <CoursesShow__Attachments
+      attachments={state.attachments}
+      removeAttachmentCB={
+        Some(attachment => send(RemoveAttachment(attachment)))
+      }
+    />
     {
       state.attachments |> List.length >= 3 ?
         React.null :

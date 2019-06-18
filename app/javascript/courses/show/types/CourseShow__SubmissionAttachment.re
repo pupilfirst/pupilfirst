@@ -13,6 +13,9 @@ type t = {
   attachment,
 };
 
+let submissionId = t => t.submissionId;
+let attachment = t => t.attachment;
+
 let decode = json => {
   let url = json |> Json.Decode.(field("url", string));
 
@@ -31,9 +34,6 @@ let decode = json => {
   };
 };
 
-let makeFile = (submissionId, id, title, url) => {
-  submissionId,
-  attachment: File(id, title, url),
-};
+let make = (submissionId, attachment) => {submissionId, attachment};
 
-let makeLink = (submissionId, url) => {submissionId, attachment: Link(url)};
+let onlyAttachments = ts => ts |> List.map(t => t |> attachment);

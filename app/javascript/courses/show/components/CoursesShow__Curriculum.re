@@ -155,6 +155,7 @@ let make =
             targets
             statusOfTargets
             changeTargetCB={changeSelectedtarget(setSelectedTargetId)}
+            userProfiles
           />;
         | None => React.null
         };

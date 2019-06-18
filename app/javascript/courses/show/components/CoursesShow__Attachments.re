@@ -62,13 +62,13 @@ let make = (~attachments, ~removeAttachmentCB) =>
              <span
                key
                className={
-                 "mt-2 mr-2 flex items-center border-2 rounded-lg "
+                 "mt-2 mr-2 flex items-center border-2 rounded "
                  ++ containerClasses
                }>
                {iconSpan(removeAttachmentCB, iconClasses, attachment)}
                <span
                  className={
-                   "rounded px-2 py-1 truncate rounded-lg " ++ textClasses
+                   "rounded px-2 py-1 truncate rounded " ++ textClasses
                  }>
                  <a href=url target="_blank" className="course-show-attachments__attachment-title text-xs font-semibold text-primary-600 inline-block truncate align-text-bottom">
                    {text |> str}

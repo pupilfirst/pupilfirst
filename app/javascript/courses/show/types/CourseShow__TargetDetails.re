@@ -1,5 +1,5 @@
 type t = {
-  pendingStudentIds: list(string),
+  pendingUserIds: list(string),
   submissions: list(CourseShow__Submission.t),
   submissionAttachments: list(CourseShow__SubmissionAttachment.t),
   feedback: list(CourseShow__Feedback.t),
@@ -8,10 +8,12 @@ type t = {
   communities: list(CourseShow__Community.t),
   linkToComplete: option(string),
   evaluated: bool,
+  grading: list(CoursesShow__Grade.t),
 };
 
 let submissions = t => t.submissions;
 let submissionAttachments = t => t.submissionAttachments;
+let pendingUserIds = t => t.pendingUserIds;
 
 type completionType =
   | Evaluated
@@ -21,7 +23,7 @@ type completionType =
 
 let decode = json =>
   Json.Decode.{
-    pendingStudentIds: json |> field("pendingStudentIds", list(string)),
+    pendingUserIds: json |> field("pendingUserIds", list(string)),
     submissions:
       json |> field("submissions", list(CourseShow__Submission.decode)),
     submissionAttachments:
@@ -40,6 +42,7 @@ let decode = json =>
     linkToComplete:
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     evaluated: json |> field("evaluated", bool),
+    grading: json |> field("grading", list(CoursesShow__Grade.decode)),
   };
 
 let computeCompletionType = targetDetails => {
@@ -63,3 +66,9 @@ let quizQuestions = t => t.quizQuestions;
 let communities = t => t.communities;
 let linkToComplete = t => t.linkToComplete;
 let evaluated = t => t.evaluated;
+
+let grades = (submissionId, t) =>
+  t.grading
+  |> List.filter(grade =>
+       grade |> CoursesShow__Grade.submissionId == submissionId
+     );

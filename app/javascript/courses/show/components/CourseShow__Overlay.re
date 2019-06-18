@@ -274,7 +274,7 @@ let prerequisitesIncomplete =
   <div>
     {renderLockReason(reason)}
     <div
-      className="max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden  mt-6">
+      className="max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md overflow-hidden mt-6">
       {
         prerequisiteTargets
         |> List.map(target => {
@@ -304,14 +304,7 @@ let prerequisitesIncomplete =
 };
 
 let handleLocked =
-    (
-      targetStatus,
-      target,
-      targets,
-      targetStatus,
-      statusOfTargets,
-      changeTargetCB,
-    ) =>
+    (target, targets, targetStatus, statusOfTargets, changeTargetCB) =>
   switch (targetStatus |> TargetStatus.status) {
   | Locked(reason) =>
     switch (reason) {
@@ -341,8 +334,7 @@ let pushUrl = (course, selectedTargetId) =>
   };
 let overlayContentClasses = bool => bool ? "" : "hidden";
 
-let learnSection =
-    (target, targetDetails, authenticityToken, targetStatus, overlaySelection) =>
+let learnSection = (targetDetails, overlaySelection) =>
   <div className={overlayContentClasses(overlaySelection == Learn)}>
     <CourseShow__Learn targetDetails />
   </div>;
@@ -412,6 +404,44 @@ let completeSection =
   </div>;
 };
 
+let renderPendingStudents = (pendingUserIds, userProfiles) =>
+  <div className="max-w-3xl mx-auto text-center mt-4">
+    <div className="font-semibold text-md">
+      {"You have team members who are yet to complete this target:" |> str}
+    </div>
+    <div className="flex justify-center flex-wrap">
+      {
+        pendingUserIds
+        |> List.map(studentId => {
+             let userProfile =
+               userProfiles
+               |> ListUtils.findOpt(u => u |> UserProfile.userId == studentId);
+
+             switch (userProfile) {
+             | Some(userProfile) =>
+               <div
+                 className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
+                 <img src={userProfile |> UserProfile.avatarUrl} />
+               </div>
+
+             | None => React.null
+             };
+           })
+        |> Array.of_list
+        |> React.array
+      }
+    </div>
+  </div>;
+
+let handlePendingStudents = (targetStatus, targetDetails, userProfiles) =>
+  switch (targetDetails, targetStatus |> TargetStatus.status) {
+  | (Some(targetDetails), Submitted | Passed) =>
+    let pendingUserIds = targetDetails |> TargetDetails.pendingUserIds;
+    pendingUserIds |> ListUtils.isNotEmpty ?
+      renderPendingStudents(pendingUserIds, userProfiles) : React.null;
+  | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
+  };
+
 [@react.component]
 let make =
     (
@@ -424,6 +454,7 @@ let make =
       ~targets,
       ~statusOfTargets,
       ~changeTargetCB,
+      ~userProfiles,
     ) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
@@ -453,7 +484,6 @@ let make =
         {overlayStatus(closeOverlayCB, target, targetStatus)}
         {
           handleLocked(
-            targetStatus,
             target,
             targets,
             targetStatus,
@@ -461,6 +491,7 @@ let make =
             changeTargetCB,
           )
         }
+        {handlePendingStudents(targetStatus, targetDetails, userProfiles)}
         {
           switch (targetDetails) {
           | Some(targetDetails) =>
@@ -485,15 +516,7 @@ let make =
       | Some(targetDetails) =>
         <div
           className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 md:px-0 pb-8">
-          {
-            learnSection(
-              target,
-              targetDetails,
-              authenticityToken,
-              targetStatus,
-              overlaySelection,
-            )
-          }
+          {learnSection(targetDetails, overlaySelection)}
           {discussSection(target, targetDetails, overlaySelection)}
           {
             completeSection(

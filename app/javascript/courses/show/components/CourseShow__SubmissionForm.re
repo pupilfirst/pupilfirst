@@ -184,6 +184,7 @@ let submit = (state, send, authenticityToken, target, addSubmissionCB, event) =>
              ~id=submission##id,
              ~description=state.description,
              ~createdAt=submission##createdAt,
+             ~status=Submission.Pending,
            );
          let newAttachments =
            state.attachments

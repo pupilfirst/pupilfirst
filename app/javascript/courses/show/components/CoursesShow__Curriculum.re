@@ -7,18 +7,6 @@ open CourseShow__Types;
 
 let str = React.string;
 
-let updateSelectedLevel = (levels, setSelectedLevelId, event) => {
-  let selectedLevelId = ReactEvent.Form.target(event)##value;
-  let level =
-    levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
-
-  switch (level) {
-  | Some(level) =>
-    level |> Level.isLocked ? () : setSelectedLevelId(_ => selectedLevelId)
-  | None => ()
-  };
-};
-
 let closeOverlay = (setSelectedTargetId, ()) => {
   setSelectedTargetId(_ => None);
   ();
@@ -87,58 +75,6 @@ let renderTargetGroup =
   </div>;
 };
 
-let levelSelectorClasses = isSelected => {
-  let defaultClasses = "w-1/2 p-2 border rounded-lg outline-none bg-white ";
-  defaultClasses ++ (isSelected ? "bg-gray-500" : "");
-};
-
-let levelSelector = (levels, setSelectedLevelId, selectedLevelId) => {
-  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
-  let isLevelZero =
-    switch (levelZero) {
-    | Some(level) => selectedLevelId == (level |> Level.id)
-    | None => false
-    };
-
-  <div className="flex justify-center max-w-fc mx-auto">
-    {
-      let orderedLevels =
-        levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
-      <select
-        className={levelSelectorClasses(!isLevelZero)}
-        onChange={updateSelectedLevel(levels, setSelectedLevelId)}
-        value=selectedLevelId>
-        {
-          orderedLevels
-          |> List.map(l => {
-               let levelTitle =
-                 "L"
-                 ++ (l |> Level.number |> string_of_int)
-                 ++ ": "
-                 ++ (l |> Level.name);
-               <option value={l |> Level.id} key={l |> Level.id}>
-                 {levelTitle |> str}
-               </option>;
-             })
-          |> Array.of_list
-          |> React.array
-        }
-      </select>;
-    }
-    {
-      switch (levelZero) {
-      | Some(level) =>
-        <button
-          className={"btn ml-2 " ++ levelSelectorClasses(isLevelZero)}
-          onClick=(_e => setSelectedLevelId(_ => level |> Level.id))>
-          {level |> Level.name |> str}
-        </button>
-      | None => React.null
-      }
-    }
-  </div>;
-};
-
 let addSubmission = (setStatusOfTargets, targetStatus) =>
   setStatusOfTargets(statusOfTargets =>
     statusOfTargets
@@ -185,6 +121,14 @@ let make =
 
   let (selectedTargetId, setSelectedTargetId) =
     React.useState(() => selectedTargetId);
+  let (showLevelZero, setShowLevelZero) = React.useState(() => false);
+  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
+  let currentLevelId =
+    switch (levelZero, showLevelZero) {
+    | (Some(levelZero), true) => levelZero |> Level.id
+    | (Some(_), false)
+    | (None, true | false) => selectedLevelId
+    };
 
   <div className="bg-gray-100 pt-4 pb-8">
     {
@@ -217,10 +161,17 @@ let make =
       | None => React.null
       }
     }
-    {levelSelector(levels, setSelectedLevelId, selectedLevelId)}
+    <CourseShow__LevelSelector
+      levels
+      selectedLevelId
+      setSelectedLevelId
+      showLevelZero
+      setShowLevelZero
+      levelZero
+    />
     {
       targetGroups
-      |> List.filter(tg => tg |> TargetGroup.levelId == selectedLevelId)
+      |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
       |> TargetGroup.sort
       |> List.map(targetGroup =>
            renderTargetGroup(

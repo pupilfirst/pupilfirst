@@ -9,7 +9,7 @@ module Targets
 
     def details
       {
-        pending_student_ids: pending_founder_ids,
+        pending_user_ids: pending_user_ids,
         submissions: details_for_submissions,
         submission_attachments: attachments_for_submissions,
         feedback: feedback_for_submissions,
@@ -48,12 +48,12 @@ module Targets
       end
     end
 
-    def pending_founder_ids
+    def pending_user_ids
       return [] unless @target.founder_role?
 
       @founder.startup.founders.where.not(id: @founder).reject do |founder|
         founder.exited? || founder.timeline_events.where(target: @target).passed.exists?
-      end.map(&:id)
+      end.map(&:user_id)
     end
 
     def details_for_submissions

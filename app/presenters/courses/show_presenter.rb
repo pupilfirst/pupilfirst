@@ -99,7 +99,7 @@ module Courses
 
       UserProfile.where(school: current_school, user_id: user_ids).with_attached_avatar.map do |user_profile|
         profile = user_profile.attributes.slice('user_id', 'name')
-        profile['avatar_url'] = user_profile.avatar.attached? ? view.url_for(user_profile.avatar_variant(:thumb)) : nil
+        profile['avatar_url'] = user_profile.avatar.attached? ? view.url_for(user_profile.avatar_variant(:thumb)) : user_profile.initials_avatar
         profile
       end
     end

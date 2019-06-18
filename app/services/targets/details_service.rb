@@ -17,7 +17,8 @@ module Targets
         content_blocks: content_blocks,
         communities: community_details,
         link_to_complete: @target.link_to_complete,
-        evaluated: @target.evaluation_criteria.exists?
+        evaluated: @target.evaluation_criteria.exists?,
+        grading: grading
       }
     end
 
@@ -56,7 +57,14 @@ module Targets
     end
 
     def details_for_submissions
-      submissions.as_json(only: %i[id description created_at])
+      submissions.map do |submission|
+        {
+          id: submission.id,
+          description: submission.description,
+          created_at: submission.created_at,
+          status: submission.status
+        }
+      end
     end
 
     def submissions
@@ -118,6 +126,16 @@ module Targets
           cb['filename'] = content_block.file.filename
         end
         cb
+      end
+    end
+
+    def grading
+      TimelineEventGrade.where(timeline_event_id: submissions.pluck(:id)).map do |submission_grading|
+        {
+          submission_id: submission_grading.timeline_event_id,
+          evaluation_criterion_id: submission_grading.evaluation_criterion_id,
+          grade: submission_grading.grade
+        }
       end
     end
   end

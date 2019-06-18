@@ -30,6 +30,7 @@ let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
       ~id=submission##id,
       ~description=submission##description,
       ~createdAt=submission##createdAt,
+      ~status=Submission.MarkedAsComplete,
     ),
   );
   switch (linkToComplete) {

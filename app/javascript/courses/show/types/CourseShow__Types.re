@@ -13,3 +13,4 @@ module Coach = CourseShow__Coach;
 module UserProfile = CourseShow__UserProfile;
 module QuizQuestion = CourseShow__QuizQuestion;
 module Community = CourseShow__Community;
+module Grade = CoursesShow__Grade;

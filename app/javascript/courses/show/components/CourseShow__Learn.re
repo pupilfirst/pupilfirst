@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CourseShow__Learn.css")|}];
 
 let str = React.string;
 
@@ -6,10 +7,10 @@ open CourseShow__Types;
 
 let renderBlockClasses = block =>
   switch (block |> ContentBlock.blockType) {
-  | Markdown(_) => "mt-4"
-  | File(_) => "mt-4"
-  | Image(_) => "mt-4"
-  | Embed(_) => "flex justify-center mt-4"
+  | Markdown(_) => "mt-6"
+  | File(_) => "mt-6"
+  | Image(_) => "mt-6"
+  | Embed(_) => "mt-6"
   };
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown className="" />;
@@ -26,18 +27,21 @@ let fileContentBlock = (url, title, filename) =>
           </div>
         </div>
       </div>
-      <div> <FaIcon classes="text-2xl far fa-download" /> </div>
+      <div> <FaIcon classes="text-2xl fal fa-download" /> </div>
     </a>
   </div>;
 
 let imageContentBlock = (url, caption) =>
-  <div className="rounded-lg bg-gray-300">
-    <img src=url alt=caption />
+  <div className="rounded-lg bg-white text-center">
+    <img className="mx-auto" src=url alt=caption />
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
 
 let embedContentBlock = (_url, embedCode) =>
-  <div dangerouslySetInnerHTML={"__html": embedCode} />;
+  <div
+    className="learn-content-block__embed"
+    dangerouslySetInnerHTML={"__html": embedCode}
+  />;
 
 [@react.component]
 let make = (~targetDetails) =>

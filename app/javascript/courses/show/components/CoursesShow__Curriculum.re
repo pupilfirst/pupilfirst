@@ -122,6 +122,7 @@ let make =
       ~userProfiles,
       ~currentUserId,
       ~selectedTargetId,
+      ~evaluationCriteria,
     ) => {
   let teamLevel =
     levels |> List.find(l => l |> Level.id == (team |> Team.levelId));
@@ -179,6 +180,7 @@ let make =
             statusOfTargets
             changeTargetCB={changeSelectedtarget(setSelectedTargetId)}
             userProfiles
+            evaluationCriteria
           />;
         | None => React.null
         };

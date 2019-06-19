@@ -64,7 +64,7 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def grade_labels
     grade_labels = @course.grade_labels
-    grade_labels.keys.map { |grade| { grade: grade, label: grade_labels[grade] } }
+    grade_labels.keys.map { |grade| { grade: grade.to_i, label: grade_labels[grade] } }
   end
 
   def avatar_url(founder)

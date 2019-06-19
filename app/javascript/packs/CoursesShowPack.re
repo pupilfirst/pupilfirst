@@ -17,6 +17,7 @@ let decodeProps = json =>
     json |> field("userProfiles", list(UserProfile.decode)),
     json |> field("currentUserId", string),
     json |> field("selectedTargetId", nullable(string)) |> Js.Null.toOption,
+    json |> field("evaluationCriteria", list(EvaluationCriterion.decode)),
   );
 
 let (
@@ -33,6 +34,7 @@ let (
   userProfiles,
   currentUserId,
   selectedTargetId,
+  evaluationCriteria,
 ) =
   DomUtils.parseJsonAttribute() |> decodeProps;
 
@@ -51,6 +53,7 @@ ReactDOMRe.renderToElementWithId(
     userProfiles
     currentUserId
     selectedTargetId
+    evaluationCriteria
   />,
   "react-root",
 );

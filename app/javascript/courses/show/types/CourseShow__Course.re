@@ -22,3 +22,4 @@ let decode = json =>
 let enableDiscuss = t => t.enableDiscuss;
 let endsAt = t => t.endsAt;
 let id = t => t.id;
+let gradeLabels = t => t.gradeLabels;

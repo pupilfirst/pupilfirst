@@ -9,5 +9,3 @@ let label: t => string;
 let labelFor: (list(t), int) => string;
 
 let maxGrade: list(t) => int;
-
-let make: (string, int) => t;

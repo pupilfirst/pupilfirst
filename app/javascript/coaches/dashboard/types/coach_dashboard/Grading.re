@@ -1,12 +1,12 @@
 type t = {
-  criterionId: int,
+  criterionId: string,
   criterionName: string,
   grade: option(int),
 };
 
 let decode = json =>
   Json.Decode.{
-    criterionId: json |> field("criterionId", int),
+    criterionId: json |> field("criterionId", string),
     criterionName: json |> field("criterionName", string),
     grade: json |> field("grade", nullable(int)) |> Js.Null.toOption,
   };
@@ -48,7 +48,7 @@ let updateGrade = (newGrade, t) => {
 let gradingEncoder = grading =>
   Json.Encode.(
     object_([
-      ("criterionId", grading.criterionId |> int),
+      ("criterionId", grading.criterionId |> string),
       (
         "grade",
         switch (grading.grade) {

@@ -34,6 +34,12 @@ class Course < ApplicationRecord
     ends_at.present? && ends_at.past?
   end
 
+  def grade_labels_to_props
+    grade_labels.map do |key, value|
+      { grade: key.to_i, label: value }
+    end
+  end
+
   private
 
   def grade_labels_must_match_grades

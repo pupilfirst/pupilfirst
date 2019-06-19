@@ -6,7 +6,7 @@ type t = {
 let decode = json =>
   Json.Decode.{
     label: json |> field("label", string),
-    grade: json |> field("grade", string) |> int_of_string,
+    grade: json |> field("grade", int),
   };
 
 let grade = t => t.grade;
@@ -22,5 +22,3 @@ let maxGrade = gradeLabels =>
   |> List.rev
   |> List.hd
   |> grade;
-
-let make = (label, grade) => {label, grade};

@@ -8,16 +8,15 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
   let criterion =
     evaluationCriteria
     |> ListUtils.findOpt(c =>
-         c
-         |> EvaluationCriterion.id
-         |> string_of_int == (grade |> Grade.evaluationCriterionId)
+         c |> EvaluationCriterion.id == (grade |> Grade.evaluationCriterionId)
        );
 
   switch (criterion) {
   | Some(criterion) =>
     let criterionId = criterion |> EvaluationCriterion.id;
     let criterionName = criterion |> EvaluationCriterion.name;
-    let grading = Grading.make(~criterionId, ~criterionName, ~grade=2);
+    let grading =
+      Grading.make(~criterionId, ~criterionName, ~grade=grade |> Grade.grade);
     <GradeBar grading gradeLabels passGrade />;
   | None => React.null
   };
@@ -89,22 +88,15 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
   </div>;
 
 [@react.component]
-let make = (~targetDetails, ~targetId, ~authenticityToken) => {
-  let gradeLabels = [
-    GradeLabel.make("Fail", 1),
-    GradeLabel.make("Pass", 2),
-    GradeLabel.make("Excellent", 3),
-  ];
-
-  let curriedGradeBar =
-    gradeBar(
-      gradeLabels,
-      2,
-      [
-        EvaluationCriterion.make(1, "Quality"),
-        EvaluationCriterion.make(2, "Completeness"),
-      ],
-    );
+let make =
+    (
+      ~targetDetails,
+      ~targetId,
+      ~authenticityToken,
+      ~gradeLabels,
+      ~evaluationCriteria,
+    ) => {
+  let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
 
   <div>
     <div className="flex justify-between border-b pb-2">

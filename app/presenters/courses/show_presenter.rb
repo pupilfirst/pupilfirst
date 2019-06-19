@@ -25,8 +25,13 @@ module Courses
         coaches: faculty.map(&:attributes),
         user_profiles: user_profiles,
         current_user_id: current_user.id,
-        selected_target_id: nil
+        selected_target_id: nil,
+        evaluation_criteria: evaluation_criteria
       }
+    end
+
+    def evaluation_criteria
+      @course.evaluation_criteria.as_json(only: %i[id name])
     end
 
     def team_details
@@ -36,10 +41,7 @@ module Courses
     def course_details
       details = @course.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'ends_at')
 
-      details['grade_labels'] = @course.grade_labels.map do |key, value|
-        { grade: key, label: value }
-      end
-
+      details['grade_labels'] = @course.grade_labels_to_props
       details['enable_discuss'] = @course.communities.where(target_linkable: true).exists?
       details
     end

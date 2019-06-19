@@ -156,7 +156,7 @@ let make =
                   evaluation
                   |> List.map(grading =>
                        <GradeBar.Jsx2
-                         key={grading |> Grading.criterionId |> string_of_int}
+                         key={grading |> Grading.criterionId}
                          grading
                          gradeLabels
                          passGrade

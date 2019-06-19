@@ -75,7 +75,7 @@ module CoachDashboard
     def evaluation(timeline_event)
       timeline_event.evaluation_criteria.map do |criterion|
         {
-          criterionId: criterion.id,
+          criterionId: criterion.id.to_s,
           criterionName: criterion.name,
           grade: @review_status == :pending ? nil : grade(timeline_event, criterion)
         }

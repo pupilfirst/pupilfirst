@@ -1,4 +1,9 @@
-open CourseShow__Types;
+module Course = CourseShow__Course;
+module Team = CourseShow__Team;
+module Target = CourseShow__Target;
+module Level = CourseShow__Level;
+module TargetGroup = CourseShow__TargetGroup;
+module LatestSubmission = CourseShow__LatestSubmission;
 
 /*
  * Create a higher level state abstraction here. Let's pre-calculate the status for
@@ -195,3 +200,12 @@ let statusToString = t =>
 
 let makeSubmitted = targetId => {targetId, status: Submitted};
 let makePassed = targetId => {targetId, status: Passed};
+
+let canSubmit = t =>
+  switch (t.status) {
+  | Pending
+  | Passed
+  | Failed => true
+  | Submitted
+  | Locked(_) => false
+  };

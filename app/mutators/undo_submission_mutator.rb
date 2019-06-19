@@ -6,7 +6,14 @@ class UndoSubmissionMutator < ApplicationMutator
   validate :must_have_pending_submission
 
   def undo_submission
-    timeline_event.destroy!
+    TimelineEvent.transaction do
+      # Remove the submission
+      timeline_event.destroy!
+
+      # Set the most recent submission to latest.
+      last_submission = founder.timeline_events.where(target: target).order(created_at: :desc).first
+      last_submission.update!(latest: true) if last_submission.present?
+    end
   end
 
   private
@@ -18,18 +25,22 @@ class UndoSubmissionMutator < ApplicationMutator
   end
 
   def timeline_event
-    @timeline_event ||= target.timeline_events.joins(:founders).where(founders: { id: current_founder }).order(created_at: :DESC).first
+    @timeline_event ||= target.timeline_events.joins(:founders).where(founders: { id: founder }).order(created_at: :DESC).first
   end
 
   def target
     @target ||= Target.find_by(id: target_id)
   end
 
+  def founder
+    @founder ||= current_user.founders.joins(:level).where(levels: { course_id: target.course }).first
+  end
+
   # Founders linked to a timeline event can delete it.
   def authorized?
-    current_founder.present? &&
+    founder.present? &&
       target.present? &&
       timeline_event.present? &&
-      timeline_event.founders.where(id: current_founder).exists?
+      timeline_event.founders.where(id: founder).exists?
   end
 end

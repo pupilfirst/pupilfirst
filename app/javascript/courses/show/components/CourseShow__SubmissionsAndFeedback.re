@@ -87,114 +87,168 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
     </div>
   </div>;
 
+let handleAddAnotherSubmission = (setShowSubmissionForm, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  setShowSubmissionForm(showSubmissionForm => !showSubmissionForm);
+};
+
+let submissions =
+    (
+      target,
+      targetDetails,
+      evaluationCriteria,
+      gradeLabels,
+      authenticityToken,
+    ) => {
+  let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
+
+  targetDetails
+  |> TargetDetails.submissions
+  |> List.sort((s1, s2) => {
+       let s1CreatedAt = s1 |> Submission.createdAtDate;
+       let s2CreatedAt = s2 |> Submission.createdAtDate;
+
+       s1CreatedAt |> DateFns.differenceInSeconds(s2CreatedAt) |> int_of_float;
+     })
+  |> List.map(submission => {
+       let attachments =
+         targetDetails
+         |> TargetDetails.submissionAttachments
+         |> List.filter(a =>
+              a
+              |> SubmissionAttachment.submissionId
+              == (submission |> Submission.id)
+            );
+
+       let grades =
+         targetDetails |> TargetDetails.grades(submission |> Submission.id);
+
+       <div key={submission |> Submission.id} className="mt-4">
+         <div className="text-xs font-bold">
+           {
+             "Submitted on "
+             ++ (submission |> Submission.createdAtPretty)
+             |> str
+           }
+         </div>
+         <div
+           className="mt-2 border-2 rounded-lg bg-gray-200 border-gray-200 shadow">
+           <div className="p-4 whitespace-pre-wrap">
+             {submission |> Submission.description |> str}
+             {
+               attachments |> ListUtils.isEmpty ?
+                 React.null :
+                 <div className="mt-2">
+                   <div className="text-xs font-bold">
+                     {"Attachments" |> str}
+                   </div>
+                   <CoursesShow__Attachments
+                     removeAttachmentCB=None
+                     attachments={
+                       SubmissionAttachment.onlyAttachments(attachments)
+                     }
+                   />
+                 </div>
+             }
+           </div>
+           {
+             switch (submission |> Submission.status) {
+             | MarkedAsComplete =>
+               statusBar(~color="green", ~text="Marked as complete")
+             | Pending =>
+               <div
+                 className="bg-blue-100 px-6 py-4 flex justify-between items-center w-full">
+                 <div
+                   className="text-blue-500 font-bold flex items-center justify-center">
+                   <span className="fa-stack text-blue-500 text-lg mr-1">
+                     <i className="fas fa-circle fa-stack-2x" />
+                     <i
+                       className="fas fa-hourglass-half fa-stack-1x fa-inverse"
+                     />
+                   </span>
+                   {"Review pending" |> str}
+                 </div>
+                 <CoursesShow__UndoButton
+                   authenticityToken
+                   undoSubmissionCB
+                   targetId={target |> Target.id}
+                 />
+               </div>
+             | Passed =>
+               gradingSection(
+                 ~grades,
+                 ~passed=true,
+                 ~gradeBar=curriedGradeBar,
+               )
+             | Failed =>
+               gradingSection(
+                 ~grades,
+                 ~passed=false,
+                 ~gradeBar=curriedGradeBar,
+               )
+             }
+           }
+         </div>
+       </div>;
+     })
+  |> Array.of_list
+  |> React.array;
+};
+
+let addSubmission = (setShowSubmissionForm, addSubmissionCB, submission) => {
+  setShowSubmissionForm(_ => false);
+  addSubmissionCB(submission);
+};
+
 [@react.component]
 let make =
     (
       ~targetDetails,
-      ~targetId,
+      ~target,
       ~authenticityToken,
       ~gradeLabels,
       ~evaluationCriteria,
+      ~addSubmissionCB,
+      ~targetStatus,
     ) => {
-  let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
+  let (showSubmissionForm, setShowSubmissionForm) =
+    React.useState(() => false);
 
   <div>
     <div className="flex justify-between border-b pb-2">
       <h4> {"Your Submissions" |> str} </h4>
-      <button className="btn btn-primary btn-small">
-        <span className="hidden md:inline">
-          {"Add another submission" |> str}
-        </span>
-        <span className="md:hidden"> {"Add another" |> str} </span>
-      </button>
+      {
+        target |> Target.resubmittable && targetStatus |> TargetStatus.canSubmit ?
+          <button
+            className="btn btn-primary btn-small"
+            onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
+            <span className="hidden md:inline">
+              {
+                (showSubmissionForm ? "Cancel" : "Add another submission")
+                |> str
+              }
+            </span>
+            <span className="md:hidden"> {"Add another" |> str} </span>
+          </button> :
+          React.null
+      }
     </div>
     {
-      targetDetails
-      |> TargetDetails.submissions
-      |> List.map(submission => {
-           let attachments =
-             targetDetails
-             |> TargetDetails.submissionAttachments
-             |> List.filter(a =>
-                  a
-                  |> SubmissionAttachment.submissionId
-                  == (submission |> Submission.id)
-                );
-
-           let grades =
-             targetDetails
-             |> TargetDetails.grades(submission |> Submission.id);
-
-           <div key={submission |> Submission.id} className="mt-4">
-             <div className="text-xs font-bold">
-               {
-                 "Submitted on "
-                 ++ (submission |> Submission.createdAtPretty)
-                 |> str
-               }
-             </div>
-             <div
-               className="mt-2 border-2 rounded-lg bg-gray-200 border-gray-200 shadow">
-               <div className="p-4 whitespace-pre-wrap">
-                 {submission |> Submission.description |> str}
-                 {
-                   attachments |> ListUtils.isEmpty ?
-                     React.null :
-                     <div className="mt-2">
-                       <div className="text-xs font-bold">
-                         {"Attachments" |> str}
-                       </div>
-                       <CoursesShow__Attachments
-                         removeAttachmentCB=None
-                         attachments={
-                           SubmissionAttachment.onlyAttachments(attachments)
-                         }
-                       />
-                     </div>
-                 }
-               </div>
-               {
-                 switch (submission |> Submission.status) {
-                 | MarkedAsComplete =>
-                   statusBar(~color="green", ~text="Marked as complete")
-                 | Pending =>
-                   <div
-                     className="bg-blue-100 px-6 py-4 flex justify-between items-center w-full">
-                     <div
-                       className="text-blue-500 font-bold flex items-center justify-center">
-                       <span className="fa-stack text-blue-500 text-lg mr-1">
-                         <i className="fas fa-circle fa-stack-2x" />
-                         <i
-                           className="fas fa-hourglass-half fa-stack-1x fa-inverse"
-                         />
-                       </span>
-                       {"Review pending" |> str}
-                     </div>
-                     <CoursesShow__UndoButton
-                       authenticityToken
-                       undoSubmissionCB
-                       targetId
-                     />
-                   </div>
-                 | Passed =>
-                   gradingSection(
-                     ~grades,
-                     ~passed=true,
-                     ~gradeBar=curriedGradeBar,
-                   )
-                 | Failed =>
-                   gradingSection(
-                     ~grades,
-                     ~passed=false,
-                     ~gradeBar=curriedGradeBar,
-                   )
-                 }
-               }
-             </div>
-           </div>;
-         })
-      |> Array.of_list
-      |> React.array
+      showSubmissionForm ?
+        <CourseShow__SubmissionForm
+          authenticityToken
+          target
+          addSubmissionCB={
+            addSubmission(setShowSubmissionForm, addSubmissionCB)
+          }
+        /> :
+        submissions(
+          target,
+          targetDetails,
+          evaluationCriteria,
+          gradeLabels,
+          authenticityToken,
+        )
     }
   </div>;
 };

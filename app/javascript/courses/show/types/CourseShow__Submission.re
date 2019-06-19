@@ -18,8 +18,10 @@ let description = t => t.description;
 let createdAt = t => t.createdAt;
 let status = t => t.status;
 
+let createdAtDate = t => t |> createdAt |> DateFns.parseString;
+
 let createdAtPretty = t =>
-  t |> createdAt |> DateFns.parseString |> DateFns.format("MMMM D, YYYY");
+  t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
 let decode = json =>
   Json.Decode.{

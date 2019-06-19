@@ -390,10 +390,14 @@ let completeSection =
       | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
         <CourseShow__SubmissionsAndFeedback
           targetDetails
-          targetId={target |> Target.id}
+          target
           authenticityToken
           gradeLabels
           evaluationCriteria
+          addSubmissionCB={
+            addSubmission(target, setTargetDetails, addSubmissionCB)
+          }
+          targetStatus
         />
       | (
           Pending | Submitted | Passed | Failed,

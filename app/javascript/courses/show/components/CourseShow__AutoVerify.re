@@ -21,7 +21,10 @@ module AutoVerifySubmissionQuery = [%graphql
 
 let redirect = link => {
   let window = Webapi.Dom.window;
-  link |> Webapi.Dom.Window.setLocation(window);
+
+  window
+  |> Webapi.Dom.Window.open_(~url=link, ~name="_blank", ~features="")
+  |> ignore;
 };
 
 let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
@@ -63,6 +66,9 @@ let createAutoVerifySubmission =
   |> ignore;
 };
 
+let completeButtonText = (title, iconClasses) =>
+  <span> <i className={iconClasses ++ " mr-2"} /> {title |> str} </span>;
+
 let autoVerify =
     (
       target,
@@ -74,7 +80,7 @@ let autoVerify =
     ) =>
   <button
     disabled=saving
-    className="flex text-white rounded text-lg font-semibold justify-center btn btn-success btn-large w-full"
+    className="flex rounded text-lg justify-center w-full font-bold p-4 text-blue-500 bg-blue-100  "
     onClick={
       createAutoVerifySubmission(
         authenticityToken,
@@ -84,26 +90,44 @@ let autoVerify =
         addSubmissionCB,
       )
     }>
-    {saving ? <i className="fal fa-spinner-third fa-spin" /> : React.null}
-    <span className="ml-2">
-      {
-        (
-          switch (saving, linkToComplete) {
-          | (true, _) => "Saving"
-          | (false, Some(_)) => "Visit Link To Complete"
-          | (false, None) => "Mark As Complete"
-          }
-        )
-        |> str
+    {
+      switch (saving, linkToComplete) {
+      | (true, _) =>
+        completeButtonText("Saving", "fal fa-spinner-third fa-spin")
+      | (false, Some(_)) =>
+        completeButtonText("Visit Link To Complete", "fas fa-external-link")
+      | (false, None) =>
+        completeButtonText("Mark As Complete", "fas fa-check-square")
       }
-    </span>
+    }
   </button>;
 
-let statusBadge = (string, complete) =>
-  <div
-    className="flex text-white rounded text-lg font-semibold justify-center p-2 bg-green-500">
-    {string |> str}
+let statusBar = (string, linkToComplete) => {
+  let defaultClasses = "font-bold p-4 flex w-full items-center text-green-500 bg-green-100 justify-center";
+  let message =
+    <div className="flex items-center">
+      <span className="fa-stack text-lg mr-1 text-green-500">
+        <i className="fas fa-badge fa-stack-2x" />
+        <i className="fas fa-check fa-stack-1x fa-inverse" />
+      </span>
+      <span> {string |> str} </span>
+    </div>;
+  let visitLink = link =>
+    <a className="text-right w-full" href=link target="_blank">
+      <i className="fas fa-external-link mr-2" />
+      {"Visit Link" |> str}
+    </a>;
+
+  <div className=defaultClasses>
+    message
+    {
+      switch (linkToComplete) {
+      | Some(link) => visitLink(link)
+      | None => React.null
+      }
+    }
   </div>;
+};
 
 [@react.component]
 let make =
@@ -129,7 +153,7 @@ let make =
           addSubmissionCB,
         )
       | Locked(_) => React.null
-      | _ => statusBadge("Completed", true)
+      | _ => statusBar("Completed", linkToComplete)
       }
     }
   </div>;

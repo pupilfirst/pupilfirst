@@ -101,6 +101,8 @@ class PopulateContentBlocks < ActiveRecord::Migration[5.2]
 
         content_block.file.attach(resource.file.blob)
       end
+
+      Target.where(link_to_complete: "").update_all(link_to_complete: nil)
     end
   end
 

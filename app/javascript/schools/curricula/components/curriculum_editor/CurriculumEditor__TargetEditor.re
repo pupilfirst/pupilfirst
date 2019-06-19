@@ -305,7 +305,6 @@ let make =
       ~contentBlocks,
       ~evaluationCriteria,
       ~targets,
-      ~handleDeleteContentBlockCB,
       ~targetGroupIdsInLevel,
       ~authenticityToken,
       ~updateTargetCB,
@@ -472,12 +471,11 @@ let make =
                       ReasonReact.null
                   }
                   <CurriculumEditor__TargetContentEditor
+                    key={Random.int(9999) |> string_of_int}
                     target
                     contentBlocks={state.contentBlocks}
-                    handleDeleteContentBlockCB
                     authenticityToken
                   />
-                  <CurriculumEditor__ContentTypePicker staticMode=true />
                 </div>
               </div>
             | TargetActions =>
@@ -832,7 +830,6 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~handleDeleteContentBlockCB,
         _children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -847,7 +844,6 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~handleDeleteContentBlockCB,
         (),
       ),
       _children,

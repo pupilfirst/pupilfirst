@@ -73,3 +73,8 @@ let decode = json => {
     sortIndex: json |> field("sortIndex", int),
   };
 };
+
+let createMarkdownBlock = markdown => Markdown(markdown);
+let createImageBlock = Image("", "");
+let createFileBlock = File("", "", "");
+let createEmbedBlock = Embed("", "");

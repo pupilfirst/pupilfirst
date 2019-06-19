@@ -11,6 +11,7 @@ type action =
 type state = {
   contentBlockPropertyText: string,
   contentBlock: option(ContentBlock.t),
+  sortIndex: int,
 };
 
 let reducer = (state, action) =>
@@ -39,7 +40,8 @@ let make =
       ~contentBlock,
       ~blockType: ContentBlock.blockType,
       ~removeTargetContentCB,
-      ~sortIndex=?,
+      ~sortIndex,
+      ~newContentBlockCB,
       ~authenticityToken,
     ) => {
   let handleInitialState = {
@@ -51,6 +53,7 @@ let make =
       | Embed(_url, embedCode) => embedCode
       },
     contentBlock,
+    sortIndex,
   };
 
   let (state, dispatch) = React.useReducer(reducer, handleInitialState);
@@ -94,19 +97,24 @@ let make =
       | Some(contentBlock) =>
         let id = ContentBlock.id(contentBlock);
         DeleteContentBlockMutation.make(~id, ())
-        |> GraphqlQuery.sendQuery(authenticityToken)
+        |> GraphqlQuery.sendQuery(authenticityToken, ~notify=false)
         |> Js.Promise.then_(response => {
              response##deleteContentBlock##success ?
-               removeTargetContentCB(id) : ();
+               removeTargetContentCB(Some(id), sortIndex) : ();
              Js.Promise.resolve();
            })
         |> ignore;
-      | None => ()
+      | None => removeTargetContentCB(None, sortIndex)
       } :
       ();
 
   <div>
-    <CurriculumEditor__ContentTypePicker staticMode=false />
+    <CurriculumEditor__ContentTypePicker
+      key={sortIndex |> string_of_int}
+      sortIndex
+      newContentBlockCB
+      staticMode=false
+    />
     <div
       className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
       <div
@@ -180,28 +188,85 @@ let make =
               }
             </div>
           | None =>
-            <div
-              className="content-block__content-placeholder text-center p-10">
-              <i className="fas fa-image text-6xl text-gray-500" />
-              <p className="text-xs text-gray-700 mt-1">
-                {"You can upload PNG, JPG, GIF files" |> str}
-              </p>
-              <div className="flex justify-center relative mt-2">
-                <input
-                  id="content-block-image-input"
-                  type_="file"
-                  className="input-file__input cursor-pointer px-4"
+            switch (blockType) {
+            | Markdown(_markdown) =>
+              <div className="w-full">
+                <MarkDownEditor
+                  updateDescriptionCB
+                  value=""
+                  placeholder="You can use Markdown to format this text."
                 />
-                <label
-                  className="btn btn-primary flex absolute"
-                  htmlFor="content-block-image-input">
-                  <i className="fas fa-upload" />
-                  <span className="ml-2 truncate">
-                    {"Select an image" |> str}
-                  </span>
-                </label>
               </div>
-            </div>
+            | File(_url, _title, _filename) =>
+              <div
+                className="content-block__content-placeholder text-center p-10">
+                <i className="fas fa-image text-6xl text-gray-500" />
+                <p className="text-xs text-gray-700 mt-1">
+                  {"You can upload PDF, JPG, ZIP etc." |> str}
+                </p>
+                <div className="flex justify-center relative mt-2">
+                  <input
+                    id="content-block-image-input"
+                    type_="file"
+                    className="input-file__input cursor-pointer px-4"
+                  />
+                  <label
+                    className="btn btn-primary flex absolute"
+                    htmlFor="content-block-image-input">
+                    <i className="fas fa-upload" />
+                    <span className="ml-2 truncate">
+                      {"Select a file" |> str}
+                    </span>
+                  </label>
+                </div>
+              </div>
+            | Image(_url, _caption) =>
+              <div
+                className="content-block__content-placeholder text-center p-10">
+                <i className="fas fa-image text-6xl text-gray-500" />
+                <p className="text-xs text-gray-700 mt-1">
+                  {"You can upload PNG, JPG, GIF files" |> str}
+                </p>
+                <div className="flex justify-center relative mt-2">
+                  <input
+                    id="content-block-image-input"
+                    type_="file"
+                    className="input-file__input cursor-pointer px-4"
+                  />
+                  <label
+                    className="btn btn-primary flex absolute"
+                    htmlFor="content-block-image-input">
+                    <i className="fas fa-upload" />
+                    <span className="ml-2 truncate">
+                      {"Select an image" |> str}
+                    </span>
+                  </label>
+                </div>
+              </div>
+            | Embed(_url, _embedCode) =>
+              <div
+                className="content-block__content-placeholder text-center p-10">
+                <i className="fas fa-image text-6xl text-gray-500" />
+                <p className="text-xs text-gray-700 mt-1">
+                  {"You can upload PNG, JPG, GIF files" |> str}
+                </p>
+                <div className="flex justify-center relative mt-2">
+                  <input
+                    id="content-block-image-input"
+                    type_="file"
+                    className="input-file__input cursor-pointer px-4"
+                  />
+                  <label
+                    className="btn btn-primary flex absolute"
+                    htmlFor="content-block-image-input">
+                    <i className="fas fa-upload" />
+                    <span className="ml-2 truncate">
+                      {"Select an image" |> str}
+                    </span>
+                  </label>
+                </div>
+              </div>
+            }
           }
         }
       </div>

@@ -33,7 +33,6 @@ type action =
   | UpdateTargetGroups(TargetGroup.t)
   | UpdateTarget(Target.t, list(ContentBlock.t))
   | UpdateTargets(list(Target.t))
-  | RemoveContentBlock(string)
   | ToggleShowArchived;
 
 let str = ReasonReact.string;
@@ -119,11 +118,6 @@ let make =
     | ToggleShowArchived =>
       ReasonReact.Update({...state, showArchived: !state.showArchived})
     | UpdateTargets(targets) => ReasonReact.Update({...state, targets})
-    | RemoveContentBlock(contentBlockId) =>
-      let newContentBlocks =
-        state.contentBlocks
-        |> List.filter(cb => ContentBlock.id(cb) != contentBlockId);
-      ReasonReact.Update({...state, contentBlocks: newContentBlocks});
     },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
@@ -179,13 +173,6 @@ let make =
 
       send(UpdateTargetGroups(targetGroup));
     };
-
-    let handleDeleteContentBlockCB = id => {
-      Js.log("Koppu");
-      Js.log(List.length(state.contentBlocks));
-      send(RemoveContentBlock(id));
-      Js.log(List.length(state.contentBlocks));
-    };
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 md:hidden shadow border-b">
         <button
@@ -210,7 +197,6 @@ let make =
             contentBlocks=targetContentBlocks
             evaluationCriteria
             targets={state.targets}
-            handleDeleteContentBlockCB
             targetGroupIdsInLevel
             authenticityToken
             updateTargetCB

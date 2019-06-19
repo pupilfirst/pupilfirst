@@ -17,6 +17,7 @@ let decode = json =>
 let id = t => t.id;
 let name = t => t.name;
 let number = t => t.number;
+let unlockOn = t => t.unlockOn;
 
 let isLocked = t =>
   switch (t.unlockOn) {

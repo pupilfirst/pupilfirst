@@ -25,7 +25,7 @@ module AuthorizeStudent
   end
 
   def target
-    @target ||= Target.find_by(id: target_id)
+    @target ||= Target.find(target_id)
   end
 
   def founders

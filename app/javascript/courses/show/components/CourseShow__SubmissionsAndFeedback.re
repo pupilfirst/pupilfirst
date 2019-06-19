@@ -67,8 +67,10 @@ let submissionStatusIcon = (~passed) => {
   </div>;
 };
 
+let undoSubmissionCB = () => Webapi.Dom.(location |> Location.reload);
+
 [@react.component]
-let make = (~targetDetails) => {
+let make = (~targetDetails, ~targetId, ~authenticityToken) => {
   let gradeLabels = [
     GradeLabel.make("Fail", 1),
     GradeLabel.make("Pass", 2),
@@ -153,10 +155,11 @@ let make = (~targetDetails) => {
                    </span>
                    {"Review pending" |> str}
                  </div>
-                 <button className="btn btn-danger btn-small">
-                   <i className="fas fa-undo-alt mr-2" />
-                   {"Undo submission" |> str}
-                 </button>
+                 <CoursesShow__UndoButton
+                   authenticityToken
+                   undoSubmissionCB
+                   targetId
+                 />
                </div>
                {
                  grades |> ListUtils.isEmpty ?

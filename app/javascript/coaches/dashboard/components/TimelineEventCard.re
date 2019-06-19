@@ -13,17 +13,12 @@ let teLinks = timelineEvent =>
         links
         |> List.map(link =>
              <a
-               href={link |> Link.url}
+               href=link
                target="_blank"
                rel="noopener"
                className="badge badge-secondary font-regular mr-2"
-               key={link |> Link.url}>
-               {
-                 link |> Link.private ?
-                   <i className="fa fa-lock mr-1" /> :
-                   <i className="fa fa-globe mr-1" />
-               }
-               {link |> Link.title |> str}
+               key=link>
+               {link |> str}
              </a>
            )
         |> Array.of_list

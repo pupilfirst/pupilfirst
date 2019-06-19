@@ -386,7 +386,11 @@ let completeSection =
         />
 
       | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
-        <CourseShow__SubmissionsAndFeedback targetDetails />
+        <CourseShow__SubmissionsAndFeedback
+          targetDetails
+          targetId={target |> Target.id}
+          authenticityToken
+        />
       | (
           Pending | Submitted | Passed | Failed,
           LinkToComplete | MarkAsComplete,

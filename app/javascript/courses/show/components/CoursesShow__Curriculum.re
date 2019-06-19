@@ -1,6 +1,8 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesShow__Curriculum.css")|}];
 
+let levelLockedImage: string = [%raw "require('../images/level-lock.svg')"];
+
 module TargetStatus = CourseShow__TargetStatus;
 
 open CourseShow__Types;
@@ -85,6 +87,25 @@ let addSubmission = (setStatusOfTargets, targetStatus) =>
        )
   );
 
+let handleLockedLevel = level =>
+  <div className="max-w-xl mx-auto text-center mt-4">
+    <div className="font-semibold text-2xl"> {"Level Locked" |> str} </div>
+    <img src=levelLockedImage />
+    {
+      switch (level |> Level.unlockOn) {
+      | Some(date) =>
+        <div className="font-semibold text-md">
+          {
+            "The level is currently locked, You can access the content on "
+            ++ (date |> DateTime.stingToFormatedTime(DateTime.OnlyDate))
+            |> str
+          }
+        </div>
+      | None => React.null
+      }
+    }
+  </div>;
+
 [@react.component]
 let make =
     (
@@ -130,6 +151,8 @@ let make =
     | (Some(_), false)
     | (None, true | false) => selectedLevelId
     };
+  let currentLevel =
+    levels |> ListUtils.findOpt(l => l |> Level.id == currentLevelId);
 
   <div className="bg-gray-100 pt-4 pb-8">
     {
@@ -172,19 +195,25 @@ let make =
       levelZero
     />
     {
-      targetGroups
-      |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
-      |> TargetGroup.sort
-      |> List.map(targetGroup =>
-           renderTargetGroup(
-             targetGroup,
-             targets,
-             statusOfTargets,
-             setSelectedTargetId,
-           )
-         )
-      |> Array.of_list
-      |> React.array
+      switch (currentLevel) {
+      | Some(level) =>
+        level |> Level.isLocked ?
+          handleLockedLevel(level) :
+          targetGroups
+          |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
+          |> TargetGroup.sort
+          |> List.map(targetGroup =>
+               renderTargetGroup(
+                 targetGroup,
+                 targets,
+                 statusOfTargets,
+                 setSelectedTargetId,
+               )
+             )
+          |> Array.of_list
+          |> React.array
+      | None => React.null
+      }
     }
   </div>;
 };

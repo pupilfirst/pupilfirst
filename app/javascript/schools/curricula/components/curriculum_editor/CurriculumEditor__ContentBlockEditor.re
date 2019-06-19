@@ -208,8 +208,8 @@ let make =
                     placeholder="You can use Markdown to format this text."
                   />
                 | Image(url, caption) =>
-                  <div className="rounded-lg bg-gray-300">
-                    <img src=url alt=caption />
+                  <div className="bg-white text-center">
+                    <img className="mx-auto" src=url alt=caption />
                     <div className="px-4 py-2 text-sm italic">
                       {caption |> str}
                     </div>

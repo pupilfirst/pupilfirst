@@ -730,7 +730,7 @@ let make =
           }
           <div className="bg-white py-6">
             <div
-              className="flex max-w-3xl w-full justify-between items-center px-6 mx-auto">
+              className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">
               {
                 switch (state.activeStep) {
                 | TargetActions =>
@@ -787,13 +787,14 @@ let make =
               {
                 switch (state.activeStep) {
                 | AddContent =>
-                  <div className="w-auto">
+                  <div className="w-full flex justify-end">
                     <button
                       onClick=(
                         _event => dispatch(UpdateActiveStep(TargetActions))
                       )
-                      className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                      {"Next Step" |> str}
+                      className="btn btn-large btn-primary">
+                      <span className="mr-2"> {"Next Step" |> str} </span>
+                      <i className="far fa-arrow-right text-sm" />
                     </button>
                   </div>
                 | TargetActions =>

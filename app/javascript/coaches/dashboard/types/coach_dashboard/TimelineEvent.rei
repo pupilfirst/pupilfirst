@@ -12,7 +12,7 @@ let description: t => string;
 
 let id: t => int;
 
-let links: t => list(Link.t);
+let links: t => list(string);
 
 let files: t => list(File.t);
 

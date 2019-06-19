@@ -4,7 +4,7 @@ type t = {
   description: string,
   createdAt: DateTime.t,
   founderIds: list(int),
-  links: list(Link.t),
+  links: list(string),
   files: list(File.t),
   latestFeedback: option(string),
   evaluation: list(Grading.t),
@@ -23,7 +23,7 @@ let decode = json =>
     description: json |> field("description", string),
     createdAt: json |> field("createdAt", string) |> DateTime.parse,
     founderIds: json |> field("founderIds", list(int)),
-    links: json |> field("links", list(Link.decode)),
+    links: json |> field("links", list(string)),
     files: json |> field("files", list(File.decode)),
     latestFeedback:
       json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,

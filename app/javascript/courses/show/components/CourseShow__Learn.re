@@ -13,7 +13,8 @@ let renderBlockClasses = block =>
   | Embed(_) => "mt-6"
   };
 
-let markdownContentBlock = markdown => <MarkdownBlock markdown className="" />;
+let markdownContentBlock = markdown =>
+  <MarkdownBlock markdown className="learn-markdown-block" />;
 
 let fileContentBlock = (url, title, filename) =>
   <div className="mt-2 shadow-md border px-6 py-4 rounded-lg">

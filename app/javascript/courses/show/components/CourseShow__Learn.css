@@ -1,0 +1,48 @@
+.learn-content-block__embed {
+  @apply bg-gray-100 relative w-full;
+  height: 0;
+  padding-top: 56.25%;
+}
+
+.learn-content-block__embed>iframe {
+  @apply absolute w-full h-full left-0 top-0 shadow-md;
+  border-radius: 0.75rem;
+}
+
+.learn-markdown-block h1 {
+  font-size: 2.25rem;
+  @apply mt-4;
+}
+
+.learn-markdown-block h2 {
+  font-size: 2rem;
+  @apply mt-3;
+}
+
+.learn-markdown-block h3 {
+  font-size: 1.75rem;
+  @apply mt-3;
+}
+
+.learn-markdown-block h4 {
+  font-size: 1.5rem;
+  @apply mt-3;
+}
+
+.learn-markdown-block h5 {
+  font-size: 1.25rem;
+  @apply mt-3;
+}
+
+.learn-markdown-block h6 {
+  font-size: 1rem;
+  @apply mt-3;
+}
+
+.learn-markdown-block p {
+  @apply mt-1;
+}
+
+.learn-markdown-block ul {
+  @apply ml-10 mt-4 list-disc;
+}

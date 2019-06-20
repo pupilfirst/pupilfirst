@@ -1,5 +1,4 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./CourseShow__Quiz.css")|}];
 
 open CourseShow__Types;
 
@@ -44,7 +43,7 @@ let make =
     levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
   let currentLevel =
     levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
-  <div className="flex justify-center max-w-fc mx-auto">
+  <div className="flex justify-center max-w-fc mx-auto mt-4">
     {
       switch (currentLevel, showLevelZero) {
       | (Some(level), true) =>

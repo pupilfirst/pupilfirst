@@ -3,9 +3,8 @@
 
 let levelLockedImage: string = [%raw "require('../images/level-lock.svg')"];
 
-module TargetStatus = CourseShow__TargetStatus;
-
 open CourseShow__Types;
+module TargetStatus = CourseShow__TargetStatus;
 
 let str = React.string;
 
@@ -106,6 +105,54 @@ let handleLockedLevel = level =>
     }
   </div>;
 
+let handleLevelUp =
+    (
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      course,
+      authenticityToken,
+    ) => {
+  let targetGroupsInLevel =
+    targetGroups
+    |> List.filter(tg => tg |> TargetGroup.levelId == (teamLevel |> Level.id));
+  let milestoneTargetGroupIds =
+    targetGroupsInLevel
+    |> List.filter(tg => tg |> TargetGroup.milestone)
+    |> List.map(tg => tg |> TargetGroup.id);
+
+  let milestoneTargetIds =
+    targets
+    |> List.filter(t =>
+         (t |> Target.targetGroupId)->List.mem(milestoneTargetGroupIds)
+       )
+    |> List.map(t => t |> Target.id);
+
+  let statusOfMilestoneTargets =
+    statusOfTargets
+    |> List.filter(ts =>
+         (ts |> TargetStatus.targetId)->List.mem(milestoneTargetIds)
+       );
+
+  let nextLevelNumber = (teamLevel |> Level.number) + 1;
+
+  let nextLevel =
+    levels |> ListUtils.findOpt(l => l |> Level.number == nextLevelNumber);
+
+  let canLevelUp = statusOfMilestoneTargets |> TargetStatus.canLevelUp;
+
+  switch (nextLevel, canLevelUp) {
+  | (Some(level), true) =>
+    level |> Level.isLocked ?
+      React.null : <CourseShow__LevelUp course authenticityToken />
+  /* Handle course complete */
+  | (None, true)
+  | (Some(_) | None, false) => React.null
+  };
+};
+
 [@react.component]
 let make =
     (
@@ -155,6 +202,10 @@ let make =
   let currentLevel =
     levels |> ListUtils.findOpt(l => l |> Level.id == currentLevelId);
 
+  let targetGroupsInLevel =
+    targetGroups
+    |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
+
   <div className="bg-gray-100 pt-4 pb-8">
     {
       switch (selectedTargetId) {
@@ -188,6 +239,17 @@ let make =
       | None => React.null
       }
     }
+    {
+      handleLevelUp(
+        levels,
+        teamLevel,
+        targetGroups,
+        targets,
+        statusOfTargets,
+        course,
+        authenticityToken,
+      )
+    }
     <CourseShow__LevelSelector
       levels
       selectedLevelId
@@ -201,8 +263,7 @@ let make =
       | Some(level) =>
         level |> Level.isLocked ?
           handleLockedLevel(level) :
-          targetGroups
-          |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
+          targetGroupsInLevel
           |> TargetGroup.sort
           |> List.map(targetGroup =>
                renderTargetGroup(

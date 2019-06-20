@@ -13,6 +13,7 @@ class CreateSubmissionMutator < ApplicationMutator
   validate :no_pending_submission_already
   validate :all_files_should_be_new
   validate :maximum_three_attachments
+  validate :ensure_submittability
 
   def no_pending_submission_already
     return if founder.timeline_events.where(target_id: target_id).pending_review.empty?
@@ -30,6 +31,18 @@ class CreateSubmissionMutator < ApplicationMutator
     return if (file_ids.count + links.count) <= 3
 
     errors[:base] << 'TooManyAttachments'
+  end
+
+  def ensure_submittability
+    submittable = target.evaluation_criteria.exists?
+
+    if founder.timeline_events.where(target_id: target_id).present?
+      return if target.resubmittable? && submittable
+    elsif submittable
+      return
+    end
+
+    errors[:base] << 'NotSubmittable'
   end
 
   def create_submission

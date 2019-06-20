@@ -15,9 +15,16 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
   | Some(criterion) =>
     let criterionId = criterion |> EvaluationCriterion.id;
     let criterionName = criterion |> EvaluationCriterion.name;
+    let gradeNumber = grade |> Grade.grade;
     let grading =
-      Grading.make(~criterionId, ~criterionName, ~grade=grade |> Grade.grade);
-    <GradeBar grading gradeLabels passGrade />;
+      Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
+
+    <GradeBar
+      key={gradeNumber |> string_of_int}
+      grading
+      gradeLabels
+      passGrade
+    />;
   | None => React.null
   };
 };
@@ -69,20 +76,30 @@ let submissionStatusIcon = (~passed) => {
 let undoSubmissionCB = () => Webapi.Dom.(location |> Location.reload);
 
 let gradingSection = (~grades, ~gradeBar, ~passed) =>
-  <div className="bg-white flex flex-wrap items-center py-4">
-    <div
-      className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-4">
-      {submissionStatusIcon(~passed)}
+  <div>
+    <div className="w-full md:hidden">
+      {
+        statusBar(
+          ~color=passed ? "green" : "red",
+          ~text=passed ? "Passed" : "Failed",
+        )
+      }
     </div>
-    <div className="w-full md:w-1/2 flex-shrink-0 md:order-first p-4">
-      <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
-      <div className="mt-3">
-        {
-          grades
-          |> List.map(grade => gradeBar(grade))
-          |> Array.of_list
-          |> React.array
-        }
+    <div className="bg-white flex flex-wrap items-center py-4">
+      <div
+        className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-4">
+        {submissionStatusIcon(~passed)}
+      </div>
+      <div className="w-full md:w-1/2 flex-shrink-0 md:order-first p-4">
+        <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
+        <div className="mt-3">
+          {
+            grades
+            |> List.map(grade => gradeBar(grade))
+            |> Array.of_list
+            |> React.array
+          }
+        </div>
       </div>
     </div>
   </div>;
@@ -160,7 +177,8 @@ let submissions =
                  className="bg-blue-100 px-6 py-4 flex justify-between items-center w-full">
                  <div
                    className="text-blue-500 font-bold flex items-center justify-center">
-                   <span className="fa-stack text-blue-500 text-lg mr-1">
+                   <span
+                     className="fa-stack text-blue-500 text-lg mr-1 flex-shrink-0">
                      <i className="fas fa-circle fa-stack-2x" />
                      <i
                        className="fas fa-hourglass-half fa-stack-1x fa-inverse"
@@ -189,6 +207,12 @@ let submissions =
              }
            }
          </div>
+         <div
+           className="text-center text-3xl my-3 text-gray-600"
+           dangerouslySetInnerHTML={
+             "__html": "&middot;&nbsp;&middot;&nbsp;&middot",
+           }
+         />
        </div>;
      })
   |> Array.of_list

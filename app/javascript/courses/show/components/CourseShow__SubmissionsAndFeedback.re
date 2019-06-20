@@ -209,7 +209,7 @@ let submissions =
            }
          </div>
          <div
-           className="text-center text-3xl my-3 text-gray-600"
+           className="text-center text-3xl mt-4 text-gray-600"
            dangerouslySetInnerHTML={
              "__html": "&middot;&nbsp;&middot;&nbsp;&middot",
            }

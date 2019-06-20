@@ -209,3 +209,11 @@ let canSubmit = t =>
   | Submitted
   | Locked(_) => false
   };
+
+let a = [|Submitted, Passed|] |> Array.to_list;
+
+let canLevelUp = targetStatus => {
+  let attemptedTarget =
+    targetStatus |> List.filter(t => a |> List.mem(t.status));
+  targetStatus == attemptedTarget;
+};

@@ -67,7 +67,7 @@ let createAutoVerifySubmission =
 };
 
 let completeButtonText = (title, iconClasses) =>
-  <span> <i className={iconClasses ++ " mr-2"} /> {title |> str} </span>;
+  <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
 let autoVerify =
     (

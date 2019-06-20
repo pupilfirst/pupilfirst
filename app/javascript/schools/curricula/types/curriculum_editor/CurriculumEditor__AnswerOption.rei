@@ -1,6 +1,8 @@
 type t;
 
-let id: t => int;
+type id = string;
+
+let id: t => string;
 
 let answer: t => string;
 
@@ -10,7 +12,7 @@ let correctAnswer: t => bool;
 
 let decode: Js.Json.t => t;
 
-let empty: (int, bool) => t;
+let empty: (id, bool) => t;
 
 let updateAnswer: (string, t) => t;
 

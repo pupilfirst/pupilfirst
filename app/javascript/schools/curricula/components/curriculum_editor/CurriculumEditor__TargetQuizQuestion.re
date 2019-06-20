@@ -50,7 +50,10 @@ let make =
       |> AnswerOption.id;
     updateQuizQuestionCB(
       quizQuestion |> QuizQuestion.id,
-      quizQuestion |> QuizQuestion.newAnswerOption(lastAnswerOptionID + 1),
+      quizQuestion
+      |> QuizQuestion.newAnswerOption(
+           (lastAnswerOptionID |> int_of_string) + 1 |> string_of_int,
+         ),
     );
   };
   let canBeDeleted =
@@ -100,7 +103,7 @@ let make =
       |> QuizQuestion.answerOptions
       |> List.mapi((index, answerOption) =>
            <CurriculumEditor__TargetQuizAnswer
-             key={answerOption |> AnswerOption.id |> string_of_int}
+             key={answerOption |> AnswerOption.id}
              answerOption
              updateAnswerOptionCB
              removeAnswerOptionCB

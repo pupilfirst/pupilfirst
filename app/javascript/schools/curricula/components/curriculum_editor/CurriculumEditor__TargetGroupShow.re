@@ -88,7 +88,7 @@ let make =
           state.targetTitle,
           [],
           [],
-          [QuizQuestion.empty(0)],
+          [QuizQuestion.empty("0")],
           None,
           999,
           Draft,

@@ -56,8 +56,8 @@ type action =
   | UpdatePrerequisiteTargets(int, string, bool)
   | UpdateMethodOfCompletion(methodOfCompletion)
   | AddQuizQuestion
-  | UpdateQuizQuestion(int, QuizQuestion.t)
-  | RemoveQuizQuestion(int)
+  | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
+  | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateSaving
   | UpdateActiveStep(activeStep)
   | UpdateVisibility(Target.visibility);
@@ -215,7 +215,7 @@ let setPayload = (state, target, authenticityToken) => {
 
 let handleQuiz = target => {
   let quiz = target |> Target.quiz;
-  quiz |> List.length > 0 ? quiz : [QuizQuestion.empty(0)];
+  quiz |> List.length > 0 ? quiz : [QuizQuestion.empty("0")];
 };
 
 let isValidQuiz = quiz =>
@@ -280,7 +280,11 @@ let reducer = (state, action) =>
     let quiz =
       state.quiz
       |> List.rev
-      |> List.append([QuizQuestion.empty(lastQuestionId + 1)])
+      |> List.append([
+           QuizQuestion.empty(
+             (lastQuestionId |> int_of_string) + 1 |> string_of_int,
+           ),
+         ])
       |> List.rev;
     {...state, quiz, dirty: true, isValidQuiz: isValidQuiz(quiz)};
   | UpdateQuizQuestion(id, quizQuestion) =>
@@ -665,7 +669,6 @@ let make =
                                  key={
                                    quizQuestion
                                    |> QuizQuestion.id
-                                   |> string_of_int
                                  }
                                  questionNumber=index
                                  quizQuestion

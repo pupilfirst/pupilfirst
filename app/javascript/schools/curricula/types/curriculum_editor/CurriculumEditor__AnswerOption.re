@@ -1,5 +1,7 @@
+type id = string;
+
 type t = {
-  id: int,
+  id,
   answer: string,
   hint: option(string),
   correctAnswer: bool,
@@ -15,7 +17,7 @@ let correctAnswer = t => t.correctAnswer;
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     answer: json |> field("answer", string),
     hint: json |> field("hint", nullable(string)) |> Js.Null.toOption,
     correctAnswer: json |> field("correctAnswer", bool),

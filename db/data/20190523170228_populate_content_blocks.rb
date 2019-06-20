@@ -101,9 +101,13 @@ class PopulateContentBlocks < ActiveRecord::Migration[5.2]
 
         content_block.file.attach(resource.file.blob)
       end
-
-      Target.where(link_to_complete: "").update_all(link_to_complete: nil)
     end
+
+    puts "Replacing blank link_to_complete with nil-s..."
+    Target.where(link_to_complete: "").update_all(link_to_complete: nil)
+
+    puts "Setting all non-evaluated targets to non-resubmittable..."
+    Target.includes(:evaluation_criteria).where(evaluation_criteria: { id: nil}).update_all(resubmittable: false)
   end
 
   def down

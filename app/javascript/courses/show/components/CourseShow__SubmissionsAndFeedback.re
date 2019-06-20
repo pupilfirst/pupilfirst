@@ -87,10 +87,11 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
     </div>
     <div className="bg-white flex flex-wrap items-center py-4">
       <div
-        className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-4">
+        className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-6">
         {submissionStatusIcon(~passed)}
       </div>
-      <div className="w-full md:w-1/2 flex-shrink-0 md:order-first p-4">
+      <div
+        className="w-full md:w-1/2 flex-shrink-0 md:order-first px-4 md:px-6">
         <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
         <div className="mt-3">
           {
@@ -150,7 +151,7 @@ let submissions =
          </div>
          <div
            className="mt-2 border-2 rounded-lg bg-gray-200 border-gray-200 shadow">
-           <div className="p-4 whitespace-pre-wrap">
+           <div className="p-4 md:p-6 whitespace-pre-wrap">
              {submission |> Submission.description |> str}
              {
                attachments |> ListUtils.isEmpty ?

@@ -14,6 +14,7 @@ type t = {
 let submissions = t => t.submissions;
 let submissionAttachments = t => t.submissionAttachments;
 let pendingUserIds = t => t.pendingUserIds;
+let feedback = t => t.feedback;
 
 type completionType =
   | Evaluated

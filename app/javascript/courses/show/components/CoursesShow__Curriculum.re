@@ -232,6 +232,7 @@ let make =
             changeTargetCB={changeSelectedtarget(setSelectedTargetId)}
             userProfiles
             evaluationCriteria
+            coaches
           />;
         | None => React.null
         };

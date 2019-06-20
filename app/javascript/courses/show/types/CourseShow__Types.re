@@ -15,3 +15,4 @@ module QuizQuestion = CourseShow__QuizQuestion;
 module Community = CourseShow__Community;
 module Grade = CoursesShow__Grade;
 module TargetStatus = CourseShow__TargetStatus;
+module Feedback = CourseShow__Feedback;

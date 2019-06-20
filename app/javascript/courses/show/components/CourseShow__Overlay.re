@@ -364,6 +364,8 @@ let completeSection =
       addSubmissionCB,
       evaluationCriteria,
       gradeLabels,
+      coaches,
+      userProfiles,
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
   let addVerifiedSubmissionCB =
@@ -398,6 +400,8 @@ let completeSection =
             addSubmission(target, setTargetDetails, addSubmissionCB)
           }
           targetStatus
+          coaches
+          userProfiles
         />
       | (
           Pending | Submitted | Passed | Failed,
@@ -468,6 +472,7 @@ let make =
       ~changeTargetCB,
       ~userProfiles,
       ~evaluationCriteria,
+      ~coaches,
     ) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
@@ -542,6 +547,8 @@ let make =
               addSubmissionCB,
               evaluationCriteria,
               course |> Course.gradeLabels,
+              coaches,
+              userProfiles,
             )
           }
         </div>

@@ -117,6 +117,8 @@ let submissions =
       evaluationCriteria,
       gradeLabels,
       authenticityToken,
+      coaches,
+      userProfiles,
     ) => {
   let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
 
@@ -207,6 +209,67 @@ let submissions =
                )
              }
            }
+           {
+             targetDetails
+             |> TargetDetails.feedback
+             |> List.filter(feedback =>
+                  feedback
+                  |> Feedback.submissionId == (submission |> Submission.id)
+                )
+             |> List.map(feedback => {
+                  let coach =
+                    coaches
+                    |> ListUtils.findOpt(c =>
+                         c |> Coach.id == (feedback |> Feedback.coachId)
+                       );
+
+                  let userProfile =
+                    switch (coach) {
+                    | Some(coach) =>
+                      userProfiles
+                      |> ListUtils.findOpt(up =>
+                           up |> UserProfile.userId == (coach |> Coach.userId)
+                         )
+                    | None => None
+                    };
+
+                  let (coachName, coachAvatar) =
+                    switch (userProfile) {
+                    | Some(userProfile) =>
+                      let name = userProfile |> UserProfile.name;
+                      let avatar = userProfile |> UserProfile.avatarUrl;
+                      (
+                        name,
+                        <img className="w-10 h-10 rounded-full" src=avatar />,
+                      );
+                    | None => (
+                        "Unknown Coach",
+                        <div
+                          className="w-10 h-10 rounded-full bg-gray-400 inline-block flex items-center justify-center">
+                          <i className="fas fa-user-times" />
+                        </div>,
+                      )
+                    };
+
+                  <div className="bg-white p-4 md:p-6 flex">
+                    <div className="flex-shrink-0"> coachAvatar </div>
+                    <div className="flex-grow ml-3">
+                      <div className="text-sm">
+                        {"Feedback from:" |> str}
+                      </div>
+                      <div className="font-bold"> {coachName |> str} </div>
+                      <div
+                        className="mt-2"
+                        dangerouslySetInnerHTML={
+                          "__html": feedback |> Feedback.feedback,
+                        }
+                      />
+                    </div>
+                  </div>;
+                })
+             |> Array.of_list
+             |> React.array
+           }
          </div>
          <div
            className="text-center text-3xl mt-4 text-gray-600"
@@ -235,6 +298,8 @@ let make =
       ~evaluationCriteria,
       ~addSubmissionCB,
       ~targetStatus,
+      ~coaches,
+      ~userProfiles,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
@@ -273,6 +338,8 @@ let make =
           evaluationCriteria,
           gradeLabels,
           authenticityToken,
+          coaches,
+          userProfiles,
         )
     }
   </div>;

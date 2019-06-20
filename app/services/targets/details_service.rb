@@ -72,7 +72,13 @@ module Targets
     end
 
     def feedback_for_submissions
-      StartupFeedback.where(timeline_event_id: submissions.pluck(:id)).as_json(only: %i[faculty_id feedback])
+      StartupFeedback.where(timeline_event_id: submissions.pluck(:id)).map do |feedback|
+        {
+          coach_id: feedback.faculty_id,
+          submission_id: feedback.timeline_event_id,
+          feedback: feedback.feedback
+        }
+      end
     end
 
     def attachments_for_submissions

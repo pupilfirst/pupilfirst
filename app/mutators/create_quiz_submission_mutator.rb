@@ -59,31 +59,30 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   def result
     @result ||= begin
       score = 0
-      description_text = ""
-      intro_text = "Target '#{target.title}' was automatically marked complete."
+      intro = "Target '#{target.title}' was completed by answering a quiz:"
 
-      questions.each_with_index do |question, index|
+      body = questions.each_with_index.map do |question, index|
         correct_answer = question.correct_answer
         u_answer = answers_from_user.where(quiz_question: question).first
 
         if correct_answer == u_answer
           score += 1
         end
-        description_text = "#{description_text}Q#{index + 1}: #{question.question} \n#{answer_text(question, correct_answer, u_answer)}\n\n"
-      end
+
+        "\nQ#{index + 1}: #{question.question}\n#{answer_text(question, correct_answer, u_answer)}"
+      end.join("\n")
+
       {
         score: "#{score}/#{number_of_question}",
-        description: "#{intro_text}\n\n#{description_text}"
+        description: "#{intro}\n#{body}"
       }
     end
   end
 
   def answer_text(question, correct_answer, u_answer)
-    description_text = ""
-    question.answer_options.each_with_index do |answer, index|
-      description_text = "#{description_text} #{index + 1}. #{answer.value} #{result_text(answer, correct_answer, u_answer)}\n"
-    end
-    description_text
+    question.answer_options.each_with_index.map do |answer, index|
+      "#{index + 1}. #{answer.value} #{result_text(answer, correct_answer, u_answer)}"
+    end.join("\n")
   end
 
   def result_text(answer, correct_answer, u_answer)

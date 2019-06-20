@@ -10,7 +10,6 @@ module Mutations
       mutator = LevelUpMutator.new(params, context)
 
       if mutator.valid?
-        mutator.notify(:success, "Congratulations!", "Explore your new level")
         { success: mutator.execute }
       else
         mutator.notify_errors

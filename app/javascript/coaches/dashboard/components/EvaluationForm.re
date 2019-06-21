@@ -163,15 +163,16 @@ let make =
         {
           state.evaluation
           |> List.map(grading =>
-               <GradeBar.Jsx2
-                 key={grading |> Grading.criterionId}
-                 grading
-                 gradeLabels
-                 gradeSelectCB=(
-                   newGrading => send(UpdateGrading(newGrading))
-                 )
-                 passGrade
-               />
+               <div key={grading |> Grading.criterionId} className="mx-3 mb-3">
+                 <GradeBar.Jsx2
+                   grading
+                   gradeLabels
+                   gradeSelectCB=(
+                     newGrading => send(UpdateGrading(newGrading))
+                   )
+                   passGrade
+                 />
+               </div>
              )
           |> Array.of_list
           |> ReasonReact.array

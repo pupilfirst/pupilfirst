@@ -4,6 +4,17 @@
   border: 1px solid #D8D8D8;
   border-radius: 3rem;
   box-shadow: 0 2px 4px 0px rgba(0, 0, 0, .05);
+  overflow: hidden;
+}
+
+.grade-bar__track > .grade-bar__grade-pill:not(:last-child), .grade-bar__track > .grade-bar__track:not(:last-child) > .grade-bar__grade-pill {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.grade-bar__track > .grade-bar__grade-pill:not(:first-child), .grade-bar__track > .grade-bar__track:not(:first-child) > .grade-bar__grade-pill {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .grade-bar__grade-label {
@@ -17,6 +28,9 @@
   overflow: hidden;
   color: #999999;
   background-color: #fafafa;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
 
   &:before {
     position: absolute;

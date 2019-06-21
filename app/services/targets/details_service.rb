@@ -74,6 +74,7 @@ module Targets
     def feedback_for_submissions
       StartupFeedback.where(timeline_event_id: submissions.pluck(:id)).map do |feedback|
         {
+          id: feedback.id,
           coach_id: feedback.faculty_id,
           submission_id: feedback.timeline_event_id,
           feedback: feedback.feedback

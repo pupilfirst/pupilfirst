@@ -19,12 +19,9 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
     let grading =
       Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
 
-    <GradeBar
-      key={gradeNumber |> string_of_int}
-      grading
-      gradeLabels
-      passGrade
-    />;
+    <div key={gradeNumber |> string_of_int} className="mb-2">
+      <GradeBar grading gradeLabels passGrade />
+    </div>;
   | None => React.null
   };
 };
@@ -35,7 +32,7 @@ let statusBar = (~color, ~text) => {
 
   <div
     className={
-      "font-bold p-2 py-4 flex w-full items-center justify-center "
+      "font-semibold p-2 py-4 flex w-full items-center justify-center "
       ++ textColor
       ++ bgColor
     }>
@@ -144,7 +141,7 @@ let submissions =
          targetDetails |> TargetDetails.grades(submission |> Submission.id);
 
        <div key={submission |> Submission.id} className="mt-4">
-         <div className="text-xs font-bold">
+         <div className="text-xs font-semibold">
            {
              "Submitted on "
              ++ (submission |> Submission.createdAtPretty)
@@ -152,14 +149,14 @@ let submissions =
            }
          </div>
          <div
-           className="mt-2 border-2 rounded-lg bg-gray-200 border-gray-200 shadow">
+           className="mt-2 border-2 rounded-lg bg-gray-200 border-gray-200 shadow overflow-hidden">
            <div className="p-4 md:p-6 whitespace-pre-wrap">
              {submission |> Submission.description |> str}
              {
                attachments |> ListUtils.isEmpty ?
                  React.null :
                  <div className="mt-2">
-                   <div className="text-xs font-bold">
+                   <div className="text-xs font-semibold">
                      {"Attachments" |> str}
                    </div>
                    <CoursesShow__Attachments
@@ -251,13 +248,15 @@ let submissions =
                       )
                     };
 
-                  <div className="bg-white p-4 md:p-6 flex">
+                  <div
+                    className="bg-white p-4 md:p-6 flex"
+                    key={feedback |> Feedback.id}>
                     <div className="flex-shrink-0"> coachAvatar </div>
                     <div className="flex-grow ml-3">
                       <div className="text-sm">
                         {"Feedback from:" |> str}
                       </div>
-                      <div className="font-bold"> {coachName |> str} </div>
+                      <div className="font-semibold"> {coachName |> str} </div>
                       <div
                         className="mt-2"
                         dangerouslySetInnerHTML={

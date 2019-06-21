@@ -155,12 +155,11 @@ let make =
                   let evaluation = timelineEvent |> TimelineEvent.evaluation;
                   evaluation
                   |> List.map(grading =>
-                       <GradeBar.Jsx2
+                       <div
                          key={grading |> Grading.criterionId}
-                         grading
-                         gradeLabels
-                         passGrade
-                       />
+                         className="mx-3 mb-3">
+                         <GradeBar.Jsx2 grading gradeLabels passGrade />
+                       </div>
                      )
                   |> Array.of_list
                   |> ReasonReact.array;

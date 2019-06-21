@@ -182,7 +182,7 @@ let submit = (state, send, authenticityToken, target, addSubmissionCB, event) =>
          let newSubmission =
            Submission.make(
              ~id=submission##id,
-             ~description=state.description,
+             ~description=state.description |> String.trim,
              ~createdAt=submission##createdAt,
              ~status=Submission.Pending,
            );

@@ -49,7 +49,7 @@ class CreateSubmissionMutator < ApplicationMutator
     TimelineEvent.transaction do
       params = {
         target: target,
-        description: description,
+        description: description.strip,
         links: links
       }
 

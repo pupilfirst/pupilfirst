@@ -25,7 +25,7 @@ let maxGrade = gradeLabels =>
   gradeLabels |> GradeLabel.maxGrade |> string_of_int;
 
 let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
-  let defaultClasses = "btn grade-bar__grade-pill";
+  let defaultClasses = "grade-bar__grade-pill";
   let resultModifier =
     switch (gradeReceived) {
     | None => ""
@@ -90,7 +90,7 @@ let gradeBarPill = (gradeLabel, grading, gradeSelectCB, passGrade) => {
 };
 
 let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
-  <div className="btn-group grade-bar__track" role="group">
+  <div className="grade-bar__track" role="group">
     {
       gradeLabels
       |> List.map(gradeLabel =>
@@ -103,7 +103,7 @@ let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
 
 [@react.component]
 let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade) =>
-  <div className="btn-toolbar flex-column mb-3" role="toolbar">
+  <div className="flex-column" role="toolbar">
     {gradeBarHeader(grading, gradeLabels)}
     {gradeBarPanel(grading, gradeLabels, gradeSelectCB, passGrade)}
   </div>;

@@ -67,7 +67,7 @@
 }
 
 .add-content-block__block-content-type-picker {
-  position: relative;
+  @apply relative cursor-pointer;
 }
 
 .add-content-block__block-content-type-picker:hover {

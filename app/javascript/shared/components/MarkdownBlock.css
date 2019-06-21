@@ -1,17 +1,166 @@
 /*
- * Template styling that should be inherited by specific
- * profile classes;
+ * Template styling that should be
+ * inherited by specific profile classes;
  */
 
-.markdown-block__h1 {}
+.markdown-block__h1 {
+  font-size: 2rem;
+  @apply mt-4 leading-snug;
+}
+
+.markdown-block__h2 {
+  font-size: 1.5rem;
+  @apply mt-4 leading-snug;
+}
+
+.markdown-block__h3 {
+  font-size: 1.17rem;
+  @apply mt-4 leading-snug;
+}
+
+.markdown-block__h4 {
+  font-size: 1.125rem;
+  @apply mt-4 leading-snug;
+}
+
+.markdown-block__h5 {
+  font-size: 0.875rem;
+  @apply mt-4 leading-snug;
+}
+
+.markdown-block__h6 {
+  font-size: 0.75rem;
+  @apply mt-4 leading-snug;
+}
+
+.markdown-block__em {
+  font-style: italic;
+}
+
+.markdown-block__strong {
+  @apply font-bold;
+}
+
+.markdown-block__ul {
+  @apply ml-10 mt-4 list-disc;
+}
+
+.markdown-block__ol {
+  @apply ml-10 mt-4 list-decimal;
+}
+
+.markdown-block__li {
+  @apply pb-2;
+}
+
+.markdown-block__p {
+  @apply pt-1 pb-2;
+}
+
+.markdown-block__strikethrough {
+  @apply line-through;
+}
+
+.markdown-block__a {
+  @apply text-primary-500 underline font-semibold;
+}
+
+.markdown-block__blockquote {
+  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 ml-6 mt-4 text-lg rounded-r font-semibold text-gray-800;
+}
+
+.markdown-block__hr {
+  @apply border-t border-gray-400 mt-6 pb-2;
+}
+
+.markdown-block__span {
+  @apply inline;
+}
+
+.markdown-block__sup-sub {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
 
 /*
  * Permissive styling used in learn section and its preview
  * in the school admin section.
  */
 
-.markdown-block__permissive>h1 {
+.markdown-block__permissive h1 {
   @apply markdown-block__h1;
+}
+
+.markdown-block__permissive h2 {
+  @apply markdown-block__h2;
+}
+
+.markdown-block__permissive h3 {
+  @apply markdown-block__h3;
+}
+
+.markdown-block__permissive h4 {
+  @apply markdown-block__h4;
+}
+
+.markdown-block__permissive h5 {
+  @apply markdown-block__h5;
+}
+
+.markdown-block__permissive h6 {
+  @apply markdown-block__h6;
+}
+
+.markdown-block__permissive s, del {
+  @apply markdown-block__strikethrough;
+}
+
+.markdown-block__permissive ul {
+  @apply markdown-block__ul;
+}
+
+.markdown-block__permissive ol {
+  @apply markdown-block__ol;
+}
+
+.markdown-block__permissive li {
+  @apply markdown-block__li;
+}
+
+.markdown-block__permissive p {
+  @apply markdown-block__p;
+}
+
+.markdown-block__permissive a {
+  @apply markdown-block__a;
+}
+
+.markdown-block__permissive a:hover {
+  @apply no-underline text-primary-600;
+}
+
+.markdown-block__permissive blockquote {
+  @apply markdown-block__blockquote;
+}
+
+.markdown-block__permissive hr {
+  @apply markdown-block__hr;
+}
+
+.markdown-block__permissive span {
+  @apply markdown-block__span;
+}
+
+.markdown-block__permissive sup {
+  @apply markdown-block__sup-sub;
+  top: -0.5em;
+}
+
+.markdown-block__permissive sub {
+  @apply markdown-block__sup-sub;
+  bottom: -0.25em;
 }
 
 /*
@@ -19,7 +168,7 @@
  * community section.
  */
 
-.markdown-block__qna>h1 {
+.markdown-block__qna h1 {
   @apply markdown-block__h1;
 }
 
@@ -27,6 +176,6 @@
  * Styling used in comments in the community section.
  */
 
-.markdown-block__comment>em {
+.markdown-block__comment em {
   @apply markdown-block__em;
 }

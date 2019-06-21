@@ -13,6 +13,7 @@ sanitizationProfiles.permissive = [
   "em",
   "strong",
   "del",
+  "s",
   "ul",
   "ol",
   "li",

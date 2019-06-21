@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./MarkdownBlock.css")|}];
 
 let str = React.string;
 

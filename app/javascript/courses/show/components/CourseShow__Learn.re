@@ -10,14 +10,14 @@ let renderBlockClasses = block =>
   | Markdown(_) => "mt-6"
   | File(_) => "mt-6"
   | Image(_) => "mt-6"
-  | Embed(_) => "mt-6"
+  | Embed(_) => "mt-6 pb-7"
   };
 
 let markdownContentBlock = markdown =>
-  <MarkdownBlock markdown className="learn-markdown-block" />;
+  <MarkdownBlock markdown className="markdown-block__permissive" />;
 
 let fileContentBlock = (url, title, filename) =>
-  <div className="mt-2 shadow-md border px-6 py-4 rounded-lg">
+  <div className="shadow border px-6 py-4 rounded-lg">
     <a className="flex justify-between items-center" href=url>
       <div className="flex items-center">
         <FaIcon classes="text-4xl text-red-600 fal fa-file-pdf" />

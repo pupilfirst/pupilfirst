@@ -313,6 +313,7 @@ let make =
       ~authenticityToken,
       ~updateTargetCB,
       ~hideEditorActionCB,
+      ~updateContentBlockDeletionCB,
     ) => {
   let handleInitialState = {
     title: target |> Target.title,
@@ -475,9 +476,10 @@ let make =
                       ReasonReact.null
                   }
                   <CurriculumEditor__TargetContentEditor
-                    key={Random.int(9999) |> string_of_int}
+                    key={target |> Target.id}
                     target
                     contentBlocks={state.contentBlocks}
+                    updateContentBlockDeletionCB
                     authenticityToken
                   />
                 </div>
@@ -834,6 +836,7 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
+        ~updateContentBlockDeletionCB,
         _children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -848,6 +851,7 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
+        ~updateContentBlockDeletionCB,
         (),
       ),
       _children,

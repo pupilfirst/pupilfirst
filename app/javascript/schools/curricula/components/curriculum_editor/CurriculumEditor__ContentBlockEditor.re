@@ -42,6 +42,8 @@ let make =
       ~removeTargetContentCB,
       ~sortIndex,
       ~newContentBlockCB,
+      ~moveContentUpCB,
+      ~moveContentDownCB,
       ~authenticityToken,
     ) => {
   let handleInitialState = {
@@ -79,10 +81,11 @@ let make =
   let actionBarTextInputVisible =
     switch (blockType) {
     | Markdown(_markdown) => false
-    | Embed(_url, _embedCode) => switch(contentBlock) {
-    | Some(_contentBlock) => false
-    | None => true
-    }
+    | Embed(_url, _embedCode) =>
+      switch (contentBlock) {
+      | Some(_contentBlock) => false
+      | None => true
+      }
     | _ => true
     };
   let updateButtonVisible =
@@ -122,44 +125,73 @@ let make =
       } :
       ();
 
-  let faIcons = switch(blockType) {
+  let faIcons =
+    switch (blockType) {
     | Markdown(_markdown) => React.null
-    | File(_url, _title, _filename) => <i className={"fas fa-file text-6xl text-gray-500"} />
-    | Image(_url, _caption) => <i className={"fas fa-image text-6xl text-gray-500"} />
-    | Embed(_url, _embedCode) =>     [|<i className={"fab fa-slideshare text-6xl text-gray-500"} />,
-    <i className={"fab fa-youtube text-6xl text-gray-500"} />,
-    <i className={"fab fa-vimeo text-6xl text-gray-500"} />|] |> React.array
-  }
+    | File(_url, _title, _filename) =>
+      <i className="fas fa-file text-6xl text-gray-500" />
+    | Image(_url, _caption) =>
+      <i className="fas fa-image text-6xl text-gray-500" />
+    | Embed(_url, _embedCode) =>
+      [|
+        <i
+          key="slideshare-icon"
+          className="fab fa-slideshare text-6xl text-gray-500"
+        />,
+        <i
+          key="youtube-icon"
+          className="fab fa-youtube text-6xl text-gray-500"
+        />,
+        <i key="vimeo-icon" className="fab fa-vimeo text-6xl text-gray-500" />,
+      |]
+      |> React.array
+    };
 
   let contentUploadContainer =
     <div className="content-block__content-placeholder text-center p-10">
-      {faIcons}
+      faIcons
       <p className="text-xs text-gray-700 mt-1">
-        {switch(blockType) {
-        | Markdown(_markdown) => ""
-        | File(_url, _title, _filename) => "You can upload PDF, JPG, ZIP etc."
-        | Image(_url, _caption) => "You can upload PNG, JPG, GIF files"
-        | Embed(_url, _embedCode) => "Paste in a URL to embed"} |> str}
-      </p>
-          {
-      fileUploadButtonVisible ?
-      <div className="flex justify-center relative mt-2">
-        <input
-          id="content-block-image-input"
-          type_="file"
-          className="input-file__input cursor-pointer px-4"
-        />
-        <label
-          className="btn btn-primary flex absolute"
-          htmlFor="content-block-image-input">
-          <i className="fas fa-upload" />
-          <span className="ml-2 truncate"> {switch(blockType) {
+        {
+          (
+            switch (blockType) {
             | Markdown(_markdown) => ""
-            | File(_url, _title, _filename) => "Select a file"
-            | Image(_url, _caption) => "Select an image"
-            | Embed(_url, _embedCode) => ""} |> str} </span>
-        </label>
-      </div> : React.null}
+            | File(_url, _title, _filename) => "You can upload PDF, JPG, ZIP etc."
+            | Image(_url, _caption) => "You can upload PNG, JPG, GIF files"
+            | Embed(_url, _embedCode) => "Paste in a URL to embed"
+            }
+          )
+          |> str
+        }
+      </p>
+      {
+        fileUploadButtonVisible ?
+          <div className="flex justify-center relative mt-2">
+            <input
+              id="content-block-image-input"
+              type_="file"
+              className="input-file__input cursor-pointer px-4"
+            />
+            <label
+              className="btn btn-primary flex absolute"
+              htmlFor="content-block-image-input">
+              <i className="fas fa-upload" />
+              <span className="ml-2 truncate">
+                {
+                  (
+                    switch (blockType) {
+                    | Markdown(_markdown) => ""
+                    | File(_url, _title, _filename) => "Select a file"
+                    | Image(_url, _caption) => "Select an image"
+                    | Embed(_url, _embedCode) => ""
+                    }
+                  )
+                  |> str
+                }
+              </span>
+            </label>
+          </div> :
+          React.null
+      }
     </div>;
 
   <div>
@@ -178,11 +210,13 @@ let make =
 
           <button
             title="Move up"
+            onClick={_event => moveContentUpCB(sortIndex)}
             className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
             <i className="fas fa-arrow-up" />
           </button>
           <button
             title="Move down"
+            onClick={_event => moveContentDownCB(sortIndex)}
             className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
             <i className="fas fa-arrow-down" />
           </button>
@@ -251,8 +285,8 @@ let make =
                   placeholder="You can use Markdown to format this text."
                 />
               </div>
-            | _ => contentUploadContainer}
-
+            | _ => contentUploadContainer
+            }
           }
         }
       </div>

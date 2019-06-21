@@ -26,3 +26,9 @@ let hasBeenEvaluated = t =>
   | Some(_evaluator) => true
   | None => false
   };
+
+let make = (~pending, ~targetId) => {
+  targetId,
+  passedAt: pending ? None : Some(Js.Date.make() |> Js.Date.toISOString),
+  evaluatorId: None,
+};

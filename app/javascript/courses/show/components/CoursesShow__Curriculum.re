@@ -77,14 +77,17 @@ let renderTargetGroup =
   </div>;
 };
 
-let addSubmission = (setStatusOfTargets, targetStatus) =>
-  setStatusOfTargets(statusOfTargets =>
-    statusOfTargets
-    |> List.map(ts =>
-         ts |> TargetStatus.targetId == (targetStatus |> TargetStatus.targetId) ?
-           targetStatus : ts
-       )
-  );
+let addSubmission = (setLatestSubmissions, latestSubmission) =>
+  setLatestSubmissions(submissions => {
+    let withoutSubmissionForThisTarget =
+      submissions
+      |> List.filter(s =>
+           s
+           |> LatestSubmission.targetId
+           != (latestSubmission |> LatestSubmission.targetId)
+         );
+    [latestSubmission, ...withoutSubmissionForThisTarget];
+  });
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
@@ -176,18 +179,37 @@ let make =
 
   let (selectedLevelId, setSelectedLevelId) =
     React.useState(() => teamLevel |> Level.id);
-  let (statusOfTargets, setStatusOfTargets) =
-    React.useState(() =>
-      TargetStatus.compute(
-        team,
-        students,
-        course,
-        levels,
-        targetGroups,
-        targets,
-        submissions,
-      )
+
+  let (latestSubmissions, setLatestSubmissions) =
+    React.useState(() => submissions);
+
+  /* Curried function so that this can be re-used when a new submission is created. */
+  let computeTargetStatus =
+    TargetStatus.compute(
+      team,
+      students,
+      course,
+      levels,
+      targetGroups,
+      targets,
     );
+
+  let initialRender = React.useRef(true);
+
+  let (statusOfTargets, setStatusOfTargets) =
+    React.useState(() => computeTargetStatus(latestSubmissions));
+
+  React.useEffect1(
+    () => {
+      if (initialRender |> React.Ref.current) {
+        initialRender->React.Ref.setCurrent(false);
+      } else {
+        setStatusOfTargets(_ => computeTargetStatus(latestSubmissions));
+      };
+      None;
+    },
+    [|latestSubmissions|],
+  );
 
   let (selectedTargetId, setSelectedTargetId) =
     React.useState(() => selectedTargetId);
@@ -226,7 +248,7 @@ let make =
             targetStatus
             closeOverlayCB={closeOverlay(setSelectedTargetId)}
             authenticityToken
-            addSubmissionCB={addSubmission(setStatusOfTargets)}
+            addSubmissionCB={addSubmission(setLatestSubmissions)}
             targets
             statusOfTargets
             changeTargetCB={changeSelectedtarget(setSelectedTargetId)}

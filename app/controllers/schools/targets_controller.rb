@@ -21,7 +21,7 @@ module Schools
 
       if form.validate(params[:target])
         target = form.save(params[:target])
-        render json: { id: target.id, sortIndex: target.sort_index, error: nil }
+        render json: { id: target.id.to_s, sortIndex: target.sort_index, error: nil }
       else
         render json: { error: form.errors.full_messages.join(', ') }
       end

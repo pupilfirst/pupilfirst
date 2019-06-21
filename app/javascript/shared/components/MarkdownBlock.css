@@ -1,0 +1,32 @@
+/*
+ * Template styling that should be inherited by specific
+ * profile classes;
+ */
+
+.markdown-block__h1 {}
+
+/*
+ * Permissive styling used in learn section and its preview
+ * in the school admin section.
+ */
+
+.markdown-block__permissive>h1 {
+  @apply markdown-block__h1;
+}
+
+/*
+ * Styling used in questions and answer blocks in the
+ * community section.
+ */
+
+.markdown-block__qna>h1 {
+  @apply markdown-block__h1;
+}
+
+/*
+ * Styling used in comments in the community section.
+ */
+
+.markdown-block__comment>em {
+  @apply markdown-block__em;
+}

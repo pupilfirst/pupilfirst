@@ -198,9 +198,6 @@ let statusToString = t =>
   | Locked(_) => "Locked"
   };
 
-let makeSubmitted = targetId => {targetId, status: Submitted};
-let makePassed = targetId => {targetId, status: Passed};
-
 let canSubmit = t =>
   switch (t.status) {
   | Pending

@@ -1,4 +1,7 @@
 [@bs.config {jsx: 3}];
+
+exception UnexpectedSubmissionStatus(string);
+
 [%bs.raw {|require("./CourseShow__Overlay.css")|}];
 
 open CourseShow__Types;
@@ -200,7 +203,28 @@ let addSubmission =
     }
   );
 
-  addSubmissionCB(target |> Target.id |> TargetStatus.makeSubmitted);
+  switch (submission |> Submission.status) {
+  | MarkedAsComplete =>
+    addSubmissionCB(
+      LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
+    )
+  | Pending =>
+    addSubmissionCB(
+      LatestSubmission.make(~pending=true, ~targetId=target |> Target.id),
+    )
+  | Passed =>
+    raise(
+      UnexpectedSubmissionStatus(
+        "CourseShow__Overlay.addSubmission cannot handle a submsision with status Passed",
+      ),
+    )
+  | Failed =>
+    raise(
+      UnexpectedSubmissionStatus(
+        "CourseShow__Overlay.addSubmission cannot handle a submsision with status Failed",
+      ),
+    )
+  };
 };
 
 let addVerifiedSubmission =
@@ -219,7 +243,9 @@ let addVerifiedSubmission =
     }
   );
 
-  addSubmissionCB(target |> Target.id |> TargetStatus.makePassed);
+  addSubmissionCB(
+    LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
+  );
 };
 
 let targetStatusClass = (prefix, targetStatus) =>

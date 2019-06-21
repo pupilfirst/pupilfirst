@@ -173,6 +173,12 @@ let setPayload = (state, target, authenticityToken) => {
   let linkToComplete =
     state.methodOfCompletion == VisitLink ? state.linkToComplete : "";
   let quiz = state.methodOfCompletion == TakeQuiz ? state.quiz : [];
+  let visibility =
+    switch (state.visibility) {
+    | Live => "live"
+    | Archived => "archived"
+    | Draft => "draft"
+    };
 
   Js.Dict.set(
     payload,
@@ -203,6 +209,8 @@ let setPayload = (state, target, authenticityToken) => {
     "link_to_complete",
     linkToComplete |> Js.Json.string,
   );
+
+  Js.Dict.set(targetData, "visibility", visibility |> Js.Json.string);
 
   Js.Dict.set(
     targetData,
@@ -298,7 +306,7 @@ let reducer = (state, action) =>
     {...state, quiz, dirty: true, isValidQuiz: isValidQuiz(quiz)};
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
-  | UpdateVisibility(visibility) => {...state, visibility}
+  | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
   };
 
 [@react.component]
@@ -398,10 +406,10 @@ let make =
         quiz,
         linkToComplete,
         sortIndex,
-        Live,
+        state.visibility,
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget, []);
+    updateTargetCB(newTarget, state.contentBlocks);
   };
   let createTarget = () => {
     dispatch(UpdateSaving);
@@ -668,10 +676,7 @@ let make =
                           state.quiz
                           |> List.mapi((index, quizQuestion) =>
                                <CurriculumEditor__TargetQuizQuestion
-                                 key={
-                                   quizQuestion
-                                   |> QuizQuestion.id
-                                 }
+                                 key={quizQuestion |> QuizQuestion.id}
                                  questionNumber=index
                                  quizQuestion
                                  updateQuizQuestionCB
@@ -794,6 +799,7 @@ let make =
                 | AddContent =>
                   <div className="w-full flex justify-end">
                     <button
+                      key="add-content-step"
                       onClick=(
                         _event => dispatch(UpdateActiveStep(TargetActions))
                       )
@@ -805,6 +811,7 @@ let make =
                 | TargetActions =>
                   <div className="w-auto">
                     <button
+                      key="target-actions-step"
                       disabled={saveDisabled(state)}
                       onClick=(_e => updateTarget(target |> Target.id))
                       className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">

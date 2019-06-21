@@ -4,18 +4,19 @@ module Targets
       @target = target
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def create_or_update(target_params)
       Target.transaction do
-        @target.role = target_params[:role]
+        @target.role = 'founder'
         @target.title = target_params[:title]
         @target.description = target_params[:description]
-        @target.target_action_type = target_params[:target_action_type]
+        @target.target_action_type = 'Todo'
         @target.youtube_video_id = target_params[:youtube_video_id]
         @target.resource_ids = target_params[:resource_ids]
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
         @target.link_to_complete = target_params[:link_to_complete]
+        @target.visibility = target_params[:visibility]
         @target.resubmittable = target_params[:prerequisite_target_ids].present?
         @target.sort_index = sort_index if target_params[:sort_index].blank?
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids] if target_params[:evaluation_criterion_ids].present?
@@ -27,13 +28,13 @@ module Targets
 
         recreate_quiz(target_params[:quiz]) if target_params[:quiz].present?
 
-        archive_target(target_params[:archived])
+        archive_target(target_params[:visibility] == 'archived')
 
         @target
       end
     end
 
-    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     private
 

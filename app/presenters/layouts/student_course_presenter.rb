@@ -24,9 +24,19 @@ module Layouts
       end
     end
 
-    # TODO: StudentCoursePresenter#additional_links should determine which additional links can 'actually' be shown to the user.
     def additional_links
-      %w[calendar leaderboard review]
+      [leaderboard, review_dashboard] - [nil]
+    end
+
+    def review_dashboard
+      if current_coach.present? && @course.in?(current_coach.courses_with_dashboard)
+        "review"
+      end
+    end
+
+    def leaderboard
+      # TODO: Add enable_leaderboard flag to course
+      "leaderboard"
     end
   end
 end

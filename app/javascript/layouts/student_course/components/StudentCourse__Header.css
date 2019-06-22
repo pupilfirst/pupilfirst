@@ -27,7 +27,7 @@
 }
 
 .student-course__nav-tab--active:before {
-  @apply absolute bg-primary-500 bottom-0;
+  @apply absolute bg-primary-500 bottom-0 rounded-t-lg;
   content: '';
   width: 70%;
   height: 3px;

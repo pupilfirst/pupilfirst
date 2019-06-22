@@ -1,12 +1,13 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./courseShow__LevelSelector.css")|}];
 
 open CourseShow__Types;
 
 let str = React.string;
 
 let levelSelectorClasses = isSelected => {
-  let defaultClasses = "w-1/2 p-2 border rounded-lg outline-none bg-white ";
-  defaultClasses ++ (isSelected ? "bg-gray-500" : "");
+  let defaultClasses = "course-level__select w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold ";
+  defaultClasses ++ (isSelected ? "bg-primary-100 text-primary-500" : "");
 };
 
 let updateSelectedLevel =
@@ -43,12 +44,13 @@ let make =
     levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
   let currentLevel =
     levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
-  <div className="flex justify-center max-w-fc mx-auto mt-4">
+  <div
+    className="flex justify-center max-w-sm mx-auto mt-4 rounded-lg overflow-hidden border border-gray-400">
     {
       switch (currentLevel, showLevelZero) {
       | (Some(level), true) =>
         <div
-          className="btn max-w-fc p-2 border rounded-lg outline-none bg-white "
+          className="w-1/2 px-4 py-2 focus:outline-none rounded-l-full text-sm font-semibold "
           onClick=(_ => setShowLevelZero(_ => false))>
           {levelName(level) |> str}
         </div>
@@ -82,7 +84,10 @@ let make =
       switch (levelZero) {
       | Some(level) =>
         <button
-          className={"btn ml-2 " ++ levelSelectorClasses(showLevelZero)}
+          className={
+            "border-l border-gray-400 font-semibold "
+            ++ levelSelectorClasses(showLevelZero)
+          }
           onClick=(_e => setShowLevelZero(_ => true))>
           {level |> Level.name |> str}
         </button>

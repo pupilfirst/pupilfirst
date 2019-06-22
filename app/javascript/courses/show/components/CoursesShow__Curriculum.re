@@ -92,7 +92,7 @@ let addSubmission = (setLatestSubmissions, latestSubmission) =>
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
     <div className="font-semibold text-2xl"> {"Level Locked" |> str} </div>
-    <img src=levelLockedImage />
+    <img className="max-w-sm mx-auto" src=levelLockedImage />
     {
       switch (level |> Level.unlockOn) {
       | Some(date) =>

@@ -50,7 +50,7 @@ let make =
       switch (currentLevel, showLevelZero) {
       | (Some(level), true) =>
         <div
-          className="w-1/2 px-4 py-2 focus:outline-none rounded-l-full text-sm font-semibold "
+          className="w-1/2 px-4 py-2 focus:outline-none rounded-l-full text-sm font-semibold truncate "
           onClick=(_ => setShowLevelZero(_ => false))>
           {levelName(level) |> str}
         </div>
@@ -85,7 +85,7 @@ let make =
       | Some(level) =>
         <button
           className={
-            "border-l border-gray-400 font-semibold "
+            "border-l border-gray-400 font-semibold truncate "
             ++ levelSelectorClasses(showLevelZero)
           }
           onClick=(_e => setShowLevelZero(_ => true))>

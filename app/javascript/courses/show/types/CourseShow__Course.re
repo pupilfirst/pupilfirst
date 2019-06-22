@@ -23,3 +23,9 @@ let enableDiscuss = t => t.enableDiscuss;
 let endsAt = t => t.endsAt;
 let id = t => t.id;
 let gradeLabels = t => t.gradeLabels;
+
+let hasEnded = t =>
+  switch (t.endsAt) {
+  | Some(date) => date |> DateFns.parseString |> DateFns.isPast
+  | None => false
+  };

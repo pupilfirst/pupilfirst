@@ -14,3 +14,9 @@ let decode = json =>
 
 let levelId = t => t.levelId;
 let accessEndsAt = t => t.accessEndsAt;
+
+let accessEnded = t =>
+  switch (t.accessEndsAt) {
+  | Some(date) => date |> DateFns.parseString |> DateFns.isPast
+  | None => false
+  };

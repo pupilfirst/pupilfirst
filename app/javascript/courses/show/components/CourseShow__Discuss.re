@@ -20,20 +20,23 @@ let questionCard = question => {
   <div
     href=questionLink
     key=questionId
-    className="flex justify-between items-center p-3 bg-gray-300 shadow-sm rounded-lg mb-2">
-    <span className="w-3/4">
+    className="flex justify-between items-center p-3 bg-white border-t">
+    <span className="text-md">
       {question |> Community.questionTitle |> str}
     </span>
-    <a href=questionLink className="btn btn-default"> {"View" |> str} </a>
+    <a
+      href=questionLink
+      className="border border-gray-300 bg-gray-200 px-4 py-1 rounded-lg ml-2">
+      {"View" |> str}
+    </a>
   </div>;
 };
 
 let handleEmpty = () =>
-  <div className="flex flex-col justify-center items-center p-3">
-    <i
-      className="target-overlay-community__empty-icon text-5xl mb-2 fa fa-comments"
-    />
-    <div className="target-overlay-community__empty-text text-center">
+  <div
+    className="flex flex-col justify-center items-center bg-white px-3 py-10">
+    <i className="text-5xl mb-2 fa fa-comments" />
+    <div className="text-center">
       <h5 className="font-semibold"> {"There's no one here yet." |> str} </h5>
       <p>
         {
@@ -48,12 +51,12 @@ let actionButtons = (communityId, targetId) =>
   <div className="flex">
     <a
       href={linkToCommunity(communityId, targetId)}
-      className="target-overlay-community__button-default btn btn-default btn-sm mr-3">
+      className="btn btn-default mr-3">
       {React.string("Go to community")}
     </a>
     <a
       href={linkToNewQuestion(communityId, targetId)}
-      className="btn btn-secondary btn-sm">
+      className="btn btn-primary">
       {React.string("Ask a question")}
     </a>
   </div>;
@@ -67,36 +70,38 @@ let communityTitle = community =>
 let make = (~target, ~targetDetails) => {
   let communities = targetDetails |> TargetDetails.communities;
   let targetId = target |> Target.id;
-  <div className="flex justify-center w-full">
-    <div className="w-full max-w-3xl">
-      {
-        communities
-        |> List.map(community => {
-             let communityId = community |> Community.id;
-             <div key=communityId className="mt-12">
-               <div className="flex w-full justify-between pb-3">
-                 <div className="target-overlay-community_title">
-                   {communityTitle(community)}
-                 </div>
-                 {actionButtons(communityId, targetId)}
+  <div className="">
+    {
+      communities
+      |> List.map(community => {
+           let communityId = community |> Community.id;
+           <div
+             key=communityId
+             className="mt-12 bg-gray-200 px-6 py-4 rounded-lg">
+             <div
+               className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
+               <div className="text-md font-semibold">
+                 {communityTitle(community)}
                </div>
-               <div className="justify-between">
-                 {
-                   switch (community |> Community.questions) {
-                   | [] => handleEmpty()
-                   | questions =>
-                     questions
-                     |> List.map(question => questionCard(question))
-                     |> Array.of_list
-                     |> React.array
-                   }
+               {actionButtons(communityId, targetId)}
+             </div>
+             <div
+               className="justify-between rounded-lg border overflow-hidden shadow-lg border-t-0">
+               {
+                 switch (community |> Community.questions) {
+                 | [] => handleEmpty()
+                 | questions =>
+                   questions
+                   |> List.map(question => questionCard(question))
+                   |> Array.of_list
+                   |> React.array
                  }
-               </div>
-             </div>;
-           })
-        |> Array.of_list
-        |> React.array
-      }
-    </div>
+               }
+             </div>
+           </div>;
+         })
+      |> Array.of_list
+      |> React.array
+    }
   </div>;
 };

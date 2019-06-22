@@ -35,4 +35,14 @@ module AuthorizeStudent
       founder.startup.founders
     end
   end
+
+  def ensure_submittability
+    return if target_status == Targets::StatusService::STATUS_PENDING
+
+    errors[:base] << "Target status #{target_status.to_s.humanize}, You cannot submit the target"
+  end
+
+  def target_status
+    @target_status ||= Targets::StatusService.new(target, founder).status
+  end
 end

@@ -8,25 +8,7 @@ class CreateQuizSubmissionMutator < ApplicationMutator
 
   validate :target_should_have_a_quiz
   validate :all_questions_answered
-  validate :pending_submission
-
-  def pending_submission
-    return if founder.timeline_events.where(target_id: target_id).empty?
-
-    errors[:base] << 'You cannot resubmit the target'
-  end
-
-  def target_should_have_a_quiz
-    return if quiz.present?
-
-    errors[:base] << 'Please choose the correct target completion method.'
-  end
-
-  def all_questions_answered
-    return if number_of_question == answers_from_user.count
-
-    errors[:base] << "The answers are incomplete. Please try again."
-  end
+  validate :ensure_submittability
 
   def create_submission
     target.timeline_events.create!(
@@ -39,6 +21,18 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   end
 
   private
+
+  def target_should_have_a_quiz
+    return if quiz.present?
+
+    errors[:base] << 'Please choose the correct target completion method.'
+  end
+
+  def all_questions_answered
+    return if number_of_question == answers_from_user.count
+
+    errors[:base] << "The answers are incomplete. Please try again."
+  end
 
   def number_of_question
     @number_of_question ||= quiz.quiz_questions.count

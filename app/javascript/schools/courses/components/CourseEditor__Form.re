@@ -15,6 +15,7 @@ type state = {
   hasNameError: bool,
   hasDescriptionError: bool,
   hasDateError: bool,
+  enableLeaderboard: bool,
   dirty: bool,
   saving: bool,
 };
@@ -27,12 +28,13 @@ type action =
   | UpdateGradesAndLabels(GradesAndLabels.t)
   | UpdateEndsAt(string, bool)
   | UpdateSaving
-  | UpdateSelectedGrade(int);
+  | UpdateSelectedGrade(int)
+  | UpdateEnableLeaderboard(bool);
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, gradesAndLabels: $gradesAndLabels ) {
+   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: String!, $enableLeaderboard: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard, gradesAndLabels: $gradesAndLabels ) {
        course {
          id
        }
@@ -43,8 +45,8 @@ module CreateCourseQuery = [%graphql
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation($id: ID!, $description: String!, $name: String!, $endsAt: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, gradesAndLabels: $gradesAndLabels){
+   mutation($id: ID!, $description: String!, $name: String!, $endsAt: String!, $enableLeaderboard: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard, gradesAndLabels: $gradesAndLabels){
        course {
          id
        }
@@ -145,6 +147,7 @@ let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
       state.maxGrade,
       state.passGrade,
       state.gradesAndLabels,
+      state.enableLeaderboard,
     );
   newCourse ?
     Notification.success("Success", "Course created successfully") :
@@ -176,6 +179,7 @@ let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
       ~maxGrade=state.maxGrade,
       ~passGrade=state.passGrade,
       ~endsAt,
+      ~enableLeaderboard=state.enableLeaderboard,
       ~gradesAndLabels=jsGradeAndLabelArray,
       (),
     );
@@ -216,6 +220,7 @@ let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => 
       ~name=state.name,
       ~description=state.description,
       ~endsAt,
+      ~enableLeaderboard=state.enableLeaderboard,
       ~gradesAndLabels=jsGradeAndLabelArray,
       (),
     );
@@ -234,6 +239,34 @@ let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => 
      })
   |> ignore;
 };
+
+let booleanButtonClasses = bool => {
+  let classes = "toggle-button__button";
+  classes ++ (bool ? " toggle-button__button--active" : " text-gray-600");
+};
+
+let enableLeaderboardButton = (enableLeaderboard, send) =>
+  <div className="flex items-center mb-6">
+    <label
+      className="block tracking-wide text-gray-800 text-xs font-semibold mr-6"
+      htmlFor="evaluated">
+      {"Enable Leaderboard for this course?" |> str}
+    </label>
+    <div
+      id="evaluated"
+      className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+      <button
+        className={booleanButtonClasses(enableLeaderboard)}
+        onClick={_ => send(UpdateEnableLeaderboard(true))}>
+        {"Yes" |> str}
+      </button>
+      <button
+        className={booleanButtonClasses(!enableLeaderboard)}
+        onClick={_ => send(UpdateEnableLeaderboard(false))}>
+        {"No" |> str}
+      </button>
+    </div>
+  </div>;
 
 let make =
     (
@@ -259,6 +292,7 @@ let make =
         dirty: false,
         saving: false,
         selectedGrade: course |> Course.maxGrade,
+        enableLeaderboard: course |> Course.enableLeaderboard,
       }
     | None => {
         name: "",
@@ -274,6 +308,7 @@ let make =
         dirty: false,
         saving: false,
         selectedGrade: 1,
+        enableLeaderboard: false,
       }
     },
   reducer: (action, state) =>
@@ -299,6 +334,8 @@ let make =
       ReasonReact.Update({...state, maxGrade, dirty: true})
     | UpdatePassGrade(passGrade) =>
       ReasonReact.Update({...state, passGrade, dirty: true})
+    | UpdateEnableLeaderboard(enableLeaderboard) =>
+      ReasonReact.Update({...state, enableLeaderboard, dirty: true})
     | UpdateGradesAndLabels(gradesAndLabel) =>
       let gradesAndLabels =
         state.gradesAndLabels
@@ -417,6 +454,7 @@ let make =
                     </div> :
                     ReasonReact.null
                 }
+                {enableLeaderboardButton(state.enableLeaderboard, send)}
               </div>
             </div>
             <div className="mx-auto">

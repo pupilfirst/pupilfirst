@@ -21,8 +21,8 @@ class UpdateTargetMutator < ApplicationMutator
   property :archived
 
   validates :title, presence: { message: 'TitleBlank' }
-  validates :role, presence: { messaage: 'RoleBlank' }
-  validates :target_action_type, presence: { messaage: 'TargetActionTypeBlank' }
+  validates :role, presence: { message: 'RoleBlank' }
+  validates :target_action_type, presence: { message: 'TargetActionTypeBlank' }
 
   def update_target
     target = Target.update!(title: title, role: role, target_action_type: target_action_type, archived: archived)

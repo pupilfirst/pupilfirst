@@ -86,6 +86,22 @@
               "deprecationReason": null
             },
             {
+              "name": "enableLeaderboard",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "endsAt",
               "description": null,
               "args": [],
@@ -666,6 +682,20 @@
                           "ofType": null
                         }
                       }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "enableLeaderboard",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Boolean",
+                      "ofType": null
                     }
                   },
                   "defaultValue": null
@@ -1345,6 +1375,20 @@
                           "ofType": null
                         }
                       }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "enableLeaderboard",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Boolean",
+                      "ofType": null
                     }
                   },
                   "defaultValue": null

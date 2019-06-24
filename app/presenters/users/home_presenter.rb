@@ -12,7 +12,7 @@ module Users
       course_details = founders.map do |founder|
         course_detail = course_info(founder.course)
         course_detail[:cta] = cta_for_founder(founder)
-        course_detail[:links] = founder.exited ? [] : [curriculum_link(founder), leaderboard_link(founder)]
+        course_detail[:links] = founder.exited ? [] : founder_links(founder)
         course_detail[:founder_exited] = founder.exited
         course_detail
       end
@@ -59,17 +59,6 @@ module Users
     end
 
     private
-
-    def show_leaderboard_link?(course)
-      lts = LeaderboardTimeService.new
-
-      course_entries_last_week = LeaderboardEntry.joins(:course).where(
-        courses: { id: course },
-        period_from: lts.week_start,
-        period_to: lts.week_end
-      )
-      course_entries_last_week.exists?
-    end
 
     def cta_for_founder(founder)
       text = if access_ended?(founder)
@@ -118,6 +107,12 @@ module Users
       course_detail
     end
 
+    def founder_links(founder)
+      return [] if founder.exited?
+
+      [curriculum_link(founder), leaderboard_link(founder)] - [nil]
+    end
+
     def review_link(course, text = 'Review')
       {
         text: text,
@@ -143,11 +138,14 @@ module Users
     end
 
     def leaderboard_link(founder)
-      {
-        text: "Leaderboard",
-        link: view.leaderboard_course_path(founder.course),
-        method: :get
-      }
+      course = founder.course
+      if course.enable_leaderboard
+        {
+          text: "Leaderboard",
+          link: view.leaderboard_course_path(course),
+          method: :get
+        }
+      end
     end
   end
 end

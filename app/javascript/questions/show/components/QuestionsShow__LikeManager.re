@@ -43,7 +43,7 @@ let iconClasses = (liked, saving) => {
   classes
   ++ (
     if (saving) {
-      " fas fa-spinner-third fa-spin";
+      " fas fa-thumbs-up cursor-pointer text-primary-200";
     } else if (liked) {
       " fas fa-thumbs-up cursor-pointer text-primary-400";
     } else {
@@ -105,13 +105,15 @@ let make =
 
   <div className="mr-2">
     <div
-      className="pt-2 px-2 cursor-pointer"
+      className="cursor-pointer"
       title={(liked ? "Unlike" : "Like") ++ " Answer"}
       onClick=handleAnswerLike>
-      <div key={iconClasses(liked, saving)}>
+      <div
+        className="rounded-full hover:bg-gray-100 h-10 w-10 p-2"
+        key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>
-      <p className="text-xs py-1">
+      <p className="text-xs pb-1">
         {
           likes
           |> Like.likesForAnswer(answerId)

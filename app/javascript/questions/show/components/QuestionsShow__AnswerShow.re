@@ -134,11 +134,13 @@ let make =
                         addLikeCB
                         removeLikeCB
                       />
-                      <div className="mr-2 pt-2 px-2">
-                        <i
-                          className="fal fa-comment-lines text-xl text-gray-600"
-                        />
-                        <p className="text-xs py-1">
+                      <div className="mr-2">
+                        <div className="h-10 w-10 p-2">
+                          <i
+                            className="fal fa-comment-lines text-xl text-gray-600"
+                          />
+                        </div>
+                        <p className="text-xs pb-1">
                           {
                             commentsForAnswer
                             |> List.length

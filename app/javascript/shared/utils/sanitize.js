@@ -27,6 +27,43 @@ sanitizationProfiles.permissive = [
   "span"
 ];
 
+sanitizationProfiles.qna = [
+  "p",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "em",
+  "strong",
+  "del",
+  "s",
+  "ul",
+  "ol",
+  "li",
+  "a",
+  "code",
+  "pre",
+  "blockquote",
+  "hr",
+  "sup",
+  "sub",
+  "span"
+];
+
+sanitizationProfiles.comment = [
+  "p",
+  "em",
+  "strong",
+  "del",
+  "s",
+  "a",
+  "code",
+  "sup",
+  "sub"
+];
+
 const allowedCodeClasses = [
   "language-javascript",
   "language-js", // javascript

@@ -40,7 +40,6 @@ class UndoSubmissionMutator < ApplicationMutator
   def authorized?
     founder.present? &&
       target.present? &&
-      timeline_event.present? &&
-      timeline_event.founders.where(id: founder).exists?
+      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED
   end
 end

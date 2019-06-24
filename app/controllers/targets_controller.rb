@@ -49,7 +49,7 @@ class TargetsController < ApplicationController
   # GET /targets/:id/details
   def details_v2
     target = authorize(Target.find(params[:id]))
-    render json: camelize_keys(stringify_ids(Targets::DetailsService.new(target, current_founder).details))
+    render json: camelize_keys(stringify_ids(Targets::DetailsService.new(target, current_student(target)).details))
   end
 
   # GET /targets/:id/details
@@ -64,5 +64,11 @@ class TargetsController < ApplicationController
     target = authorize(Target.find(params[:id]))
     Targets::AutoVerificationService.new(target, current_founder).auto_verify
     head :ok
+  end
+
+  private
+
+  def current_student(target)
+    current_user.founders.joins(:course).where(courses: { id: target.course }).first
   end
 end

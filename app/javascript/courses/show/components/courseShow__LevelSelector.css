@@ -1,3 +1,4 @@
-.course-level__select {
+.course-level-tab__selected {
   -webkit-border-radius: 0px;
+  @apply flex-1;
 }

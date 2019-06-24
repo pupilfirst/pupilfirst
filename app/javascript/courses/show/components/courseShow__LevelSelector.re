@@ -6,8 +6,13 @@ open CourseShow__Types;
 let str = React.string;
 
 let levelSelectorClasses = isSelected => {
-  let defaultClasses = "course-level__select w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold ";
-  defaultClasses ++ (isSelected ? "bg-primary-100 text-primary-500" : "");
+  let defaultClasses = "w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold ";
+  defaultClasses
+  ++ (
+    isSelected ?
+      "course-level-tab__selected bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500" :
+      ""
+  );
 };
 
 let updateSelectedLevel =
@@ -45,12 +50,12 @@ let make =
   let currentLevel =
     levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
   <div
-    className="flex justify-center max-w-sm mx-auto mt-4 rounded-lg overflow-hidden border border-gray-400">
+    className="flex justify-center max-w-sm mx-auto mt-4 rounded-lg overflow-hidden bg-white border border-gray-400 h-11">
     {
       switch (currentLevel, showLevelZero) {
       | (Some(level), true) =>
         <div
-          className="w-1/2 px-4 py-2 focus:outline-none rounded-l-full text-sm font-semibold truncate "
+          className="w-1/2 px-4 py-2 focus:outline-none rounded-l-full text-sm font-semibold hover:bg-gray-100 hover:text-primary-500 truncate leading-loose "
           onClick=(_ => setShowLevelZero(_ => false))>
           {levelName(level) |> str}
         </div>
@@ -85,7 +90,7 @@ let make =
       | Some(level) =>
         <button
           className={
-            "border-l border-gray-400 font-semibold truncate "
+            "border-l border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
             ++ levelSelectorClasses(showLevelZero)
           }
           onClick=(_e => setShowLevelZero(_ => true))>

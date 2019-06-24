@@ -45,7 +45,7 @@ let make = (~course, ~authenticityToken) => {
   <div
     className="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg p-6">
     <img className="w-20 mx-auto" src=levelUpImage />
-    <div className="font-semibold text-2xl">
+    <div className="font-semibold text-2xl font-bold">
       {"Ready to Level Up!" |> str}
     </div>
     <div className="text-sm max-w-xl mx-auto">

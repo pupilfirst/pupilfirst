@@ -91,12 +91,14 @@ let addSubmission = (setLatestSubmissions, latestSubmission) =>
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
-    <div className="font-semibold text-2xl"> {"Level Locked" |> str} </div>
+    <div className="font-semibold text-2xl font-bold px-3">
+      {"Level Locked" |> str}
+    </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
     {
       switch (level |> Level.unlockOn) {
       | Some(date) =>
-        <div className="font-semibold text-md">
+        <div className="font-semibold text-md px-3">
           {
             "The level is currently locked, You can access the content on "
             ++ (date |> DateTime.stingToFormatedTime(DateTime.OnlyDate))
@@ -224,14 +226,16 @@ let make =
       team
       authenticityToken
     />
-    <CourseShow__LevelSelector
-      levels
-      selectedLevelId
-      setSelectedLevelId
-      showLevelZero
-      setShowLevelZero
-      levelZero
-    />
+    <div className="px-3">
+      <CourseShow__LevelSelector
+        levels
+        selectedLevelId
+        setSelectedLevelId
+        showLevelZero
+        setShowLevelZero
+        levelZero
+      />
+    </div>
     {
       switch (currentLevel) {
       | Some(level) =>

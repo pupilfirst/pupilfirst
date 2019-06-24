@@ -69,9 +69,9 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
       switch (additionalLinks) {
       | [] => React.null
       | additionalLinks =>
-        <div className="px-3">
+        <div className="md:px-3">
           <div
-            className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow rounded-lg -mt-7 z-20 relative">
+            className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg -mt-7 z-20 relative">
             <a
               href={"/courses/" ++ currentCourseId}
               className="student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm student-course__nav-tab--active">

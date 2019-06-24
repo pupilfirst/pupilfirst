@@ -230,17 +230,20 @@ let submissions =
                     | None => None
                     };
 
-                  let (coachName, coachAvatar) =
+                  let (coachName, coachTitle, coachAvatar) =
                     switch (userProfile) {
                     | Some(userProfile) =>
                       let name = userProfile |> UserProfile.name;
                       let avatar = userProfile |> UserProfile.avatarUrl;
+                      let title = userProfile |> UserProfile.title;
                       (
                         name,
+                        title,
                         <img className="w-10 h-10 rounded-full" src=avatar />,
                       );
                     | None => (
                         "Unknown Coach",
+                        None,
                         <div
                           className="w-10 h-10 rounded-full bg-gray-400 inline-block flex items-center justify-center">
                           <i className="fas fa-user-times" />
@@ -257,6 +260,13 @@ let submissions =
                         {"Feedback from:" |> str}
                       </div>
                       <div className="font-semibold"> {coachName |> str} </div>
+                      {
+                        switch (coachTitle) {
+                        | Some(title) =>
+                          <div className="text-xs"> {title |> str} </div>
+                        | None => React.null
+                        }
+                      }
                       <div
                         className="mt-2"
                         dangerouslySetInnerHTML={

@@ -9,10 +9,14 @@ FactoryBot.define do
     faculty { create :faculty, category: Faculty::CATEGORY_TEAM }
     sequence(:sort_index)
     session_at { nil }
+    visibility { Target::VISIBILITY_LIVE }
 
     trait :archived do
-      safe_to_archive { true }
-      archived { true }
+      visibility { Target::VISIBILITY_ARCHIVED }
+    end
+
+    trait :draft do
+      visibility { Target::VISIBILITY_DRAFT }
     end
 
     trait :session do

@@ -53,9 +53,11 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (Pending, TakeQuiz) => "Take Quiz"
   | (Pending, LinkToComplete) => "Visit Link to Complete"
   | (Pending, MarkAsComplete) => "Mark as Complete"
-  | (Submitted | Passed | Failed, Evaluated | TakeQuiz) => "Submissions and Review"
+  | (
+      Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
+      Evaluated | TakeQuiz,
+    ) => "Submissions and Review"
   | (Submitted | Passed | Failed, LinkToComplete | MarkAsComplete) => "Completed"
-  /* Locked is an imposible state */
   | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
   };
 
@@ -149,29 +151,33 @@ let overlaySelectionOptions =
     }
     {
       switch (targetStatus |> TargetStatus.status, completionType) {
-      | (Pending | Submitted | Passed | Failed, Evaluated) =>
+      | (Pending | Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
         tabButton(
-          Complete(Evaluated),
+          Complete(completionType),
           overlaySelection,
           setOverlaySelection,
           targetStatus,
         )
-      | (Pending | Submitted | Passed | Failed, TakeQuiz) =>
-        tabButton(
-          Complete(TakeQuiz),
-          overlaySelection,
-          setOverlaySelection,
-          targetStatus,
-        )
-      | (Pending | Submitted | Passed | Failed, _completionTypes) =>
+      | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
+        targetDetails |> TargetDetails.submissions |> ListUtils.isNotEmpty ?
+          tabButton(
+            Complete(completionType),
+            overlaySelection,
+            setOverlaySelection,
+            targetStatus,
+          ) :
+          React.null
+      | (
+          Pending | Submitted | Passed | Failed,
+          LinkToComplete | MarkAsComplete,
+        ) =>
         tabLink(
-          Complete(_completionTypes),
+          Complete(completionType),
           overlaySelection,
           setOverlaySelection,
           targetStatus,
           setScrollToSelection,
         )
-
       | (Locked(_), _) => React.null
       }
     }
@@ -415,7 +421,10 @@ let completeSection =
           addSubmissionCB=addVerifiedSubmissionCB
         />
 
-      | (Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
+      | (
+          Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
+          Evaluated | TakeQuiz,
+        ) =>
         <CourseShow__SubmissionsAndFeedback
           targetDetails
           target

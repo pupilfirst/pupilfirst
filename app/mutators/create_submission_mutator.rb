@@ -34,9 +34,9 @@ class CreateSubmissionMutator < ApplicationMutator
   end
 
   def ensure_submittability
-    if target_status.in?([Targets::StatusService::STATUS_PENDING, Target::STATUS_FAILED])
+    if target_status.in?([Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_FAILED])
       return
-    elsif target.resubmittable? && target_status == Target::StatusService::STATUS_PASSED
+    elsif target.resubmittable? && target_status == Targets::StatusService::STATUS_PASSED
       return
     end
 

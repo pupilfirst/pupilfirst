@@ -317,7 +317,10 @@ let make =
     <div className="flex justify-between border-b pb-2">
       <h4> {"Your Submissions" |> str} </h4>
       {
-        target |> Target.resubmittable && targetStatus |> TargetStatus.canSubmit ?
+        targetStatus
+        |> TargetStatus.canSubmit(
+             ~resubmittable=target |> Target.resubmittable,
+           ) ?
           <button
             className="btn btn-primary btn-small"
             onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>

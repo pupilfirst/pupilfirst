@@ -198,13 +198,14 @@ let statusToString = t =>
   | Locked(_) => "Locked"
   };
 
-let canSubmit = t =>
-  switch (t.status) {
-  | Pending
-  | Passed
-  | Failed => true
-  | Submitted
-  | Locked(_) => false
+let canSubmit = (~resubmittable, t) =>
+  switch (resubmittable, t.status) {
+  | (true, Passed)
+  | (_, Pending)
+  | (_, Failed) => true
+  | (false, Passed)
+  | (_, Submitted)
+  | (_, Locked(_)) => false
   };
 
 let canLevelUp = targetStatus => {

@@ -6,6 +6,7 @@ type t = {
   maxGrade: int,
   passGrade: int,
   gradesAndLabels: list(CourseEditor__GradesAndLabels.t),
+  enableLeaderboard: bool,
 };
 
 let name = t => t.name;
@@ -22,6 +23,8 @@ let passGrade = t => t.passGrade;
 
 let gradesAndLabels = t => t.gradesAndLabels;
 
+let enableLeaderboard = t => t.enableLeaderboard;
+
 let sort = courses => courses |> List.sort((x, y) => x.id - y.id);
 
 let updateList = (courses, course) => {
@@ -30,7 +33,16 @@ let updateList = (courses, course) => {
 };
 
 let create =
-    (id, name, description, endsAt, maxGrade, passGrade, gradesAndLabels) => {
+    (
+      id,
+      name,
+      description,
+      endsAt,
+      maxGrade,
+      passGrade,
+      gradesAndLabels,
+      enableLeaderboard,
+    ) => {
   id,
   name,
   description,
@@ -38,4 +50,5 @@ let create =
   maxGrade,
   passGrade,
   gradesAndLabels,
+  enableLeaderboard,
 };

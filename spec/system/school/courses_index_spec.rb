@@ -41,6 +41,7 @@ feature 'Courses Index' do
     fill_in 'Course Name', with: new_course_name
     fill_in 'Name', with: new_course_name
     fill_in 'Description', with: new_description
+    click_button 'Yes'
     fill_in 'label1', with: grade_label_1
     find('label[for=label2]').click
     fill_in 'label2', with: grade_label_2
@@ -58,6 +59,7 @@ feature 'Courses Index' do
     course = Course.last
     expect(course.name).to eq(new_course_name)
     expect(course.description).to eq(new_description)
+    expect(course.enable_leaderboard).to eq(true)
     expect(course.max_grade).to eq(5)
     expect(course.pass_grade).to eq(2)
     expect(course.grade_labels["1"]).to eq(grade_label_1)
@@ -70,11 +72,13 @@ feature 'Courses Index' do
     fill_in 'Name', with: new_course_name_1, fill_options: { clear: :backspace }
     fill_in 'Description', with: new_description_for_edit, fill_options: { clear: :backspace }
     fill_in 'Course ends at', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
+    click_button 'No'
     click_button 'Update Course'
     expect(page).to have_text("Course updated successfully")
     course.reload
     expect(course.name).to eq(new_course_name_1)
     expect(course.description).to eq(new_description_for_edit)
+    expect(course.enable_leaderboard).to eq(false)
     expect(Date.parse(course.ends_at.strftime("%Y-%m-%d"))).to eq(date)
   end
 end

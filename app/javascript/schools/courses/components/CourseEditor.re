@@ -10,6 +10,7 @@ module CoursesQuery = [%graphql
       endsAt
       maxGrade
       passGrade
+      enableLeaderboard
       gradesAndLabels {
         grade
         label
@@ -82,6 +83,7 @@ let make = (~authenticityToken, _children) => {
                   rawCourse##maxGrade,
                   rawCourse##passGrade,
                   gradesAndLabels,
+                  rawCourse##enableLeaderboard,
                 );
               })
            |> Array.to_list;

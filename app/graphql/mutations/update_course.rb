@@ -5,6 +5,7 @@ module Mutations
     argument :description, String, required: true
     argument :ends_at, String, required: true
     argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
+    argument :enable_leaderboard, Boolean, required: true
 
     description "Update a course."
 

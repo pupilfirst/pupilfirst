@@ -50,16 +50,6 @@ class FoundersController < ApplicationController
     render 'show'
   end
 
-  # POST /founders/:id/select
-  def select
-    # Use the scope from the presenter to ensure that conditions are met.
-    presenter = ::Layouts::TopNavPresenter.new(view_context)
-
-    founder = authorize(presenter.selectable_student_profiles.find(params[:id]))
-    set_cookie(:founder_id, founder.id)
-    redirect_to student_dashboard_url
-  end
-
   private
 
   def skip_container

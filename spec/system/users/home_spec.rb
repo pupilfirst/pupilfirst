@@ -76,7 +76,7 @@ feature 'User Home' do
     within("div[aria-label=\"#{course_4.name}\"]") do
       expect(page).to have_text(course_4.name)
       expect(page).to have_text(course_4.description)
-      expect(page).to have_text("Dropout out")
+      expect(page).to have_text("Dropped out")
     end
 
     expect(page).to have_text(community_1.name)

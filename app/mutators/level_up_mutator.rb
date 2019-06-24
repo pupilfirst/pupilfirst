@@ -29,7 +29,7 @@ class LevelUpMutator < ApplicationMutator
   end
 
   def course
-    @course ||= Course.find_by(id: course_id)
+    @course ||= Course.find(course_id)
   end
 
   def startup

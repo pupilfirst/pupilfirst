@@ -79,10 +79,11 @@ module Users
       else
         'Continue Course'
       end
+
       {
         text: text,
-        link: view.select_founder_path(founder),
-        method: :post
+        link: view.course_path(founder.course),
+        method: :get
       }
     end
 
@@ -136,8 +137,8 @@ module Users
     def curriculum_link(founder)
       {
         text: "Curriculum",
-        link: view.select_founder_path(founder),
-        method: :post
+        link: view.course_path(founder.course),
+        method: :get
       }
     end
 

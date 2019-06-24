@@ -34,11 +34,9 @@ class CreateSubmissionMutator < ApplicationMutator
   end
 
   def ensure_submittability
-    submittable = target.evaluation_criteria.exists?
-
-    if founder.timeline_events.where(target_id: target_id).present?
-      return if target.resubmittable? && submittable
-    elsif submittable
+    if target_status.in?([Targets::StatusService::STATUS_PENDING, Target::STATUS_FAILED])
+      return
+    elsif target.resubmittable? && target_status == Target::StatusService::STATUS_PASSED
       return
     end
 

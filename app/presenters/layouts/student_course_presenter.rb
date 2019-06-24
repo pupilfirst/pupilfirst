@@ -35,8 +35,7 @@ module Layouts
     end
 
     def leaderboard
-      # TODO: Add enable_leaderboard flag to course
-      "leaderboard"
+      @course.enable_leaderboard ? "leaderboard" : nil
     end
   end
 end

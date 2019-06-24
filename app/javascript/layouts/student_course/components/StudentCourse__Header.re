@@ -36,7 +36,9 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
             | [] =>
               <div
                 className="flex bg-gray-200 items-center relative justify-between font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
-                <span> {currentCourse |> Course.name |> str} </span>
+                <span className="truncate w-full text-center">
+                  {currentCourse |> Course.name |> str}
+                </span>
               </div>
             | otherCourses =>
               [|
@@ -44,7 +46,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
                   key={"dropdown-course" ++ (currentCourse |> Course.id)}
                   onClick=(_ => setShowCourses(showCourses => !showCourses))
                   className="dropdown__btn student-course__dropdown-btn text-white appearance-none flex hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
-                  <span className="truncate">
+                  <span className="truncate w-full text-center">
                     {currentCourse |> Course.name |> str}
                   </span>
                   <i

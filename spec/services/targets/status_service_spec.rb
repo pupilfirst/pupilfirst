@@ -14,6 +14,22 @@ describe Targets::StatusService do
 
   describe '#status' do
     context 'when the target has no submissions' do
+      context 'when the course is locked' do
+        let(:course) { create :course, ends_at: 1.day.ago }
+
+        it "returns :course_locked" do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_COURSE_LOCKED)
+        end
+      end
+
+      context "when the student's access has ended" do
+        let(:startup) { create :startup, level: level_2, access_ends_at: 1.day.ago }
+
+        it "returns :access_locked" do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_ACCESS_LOCKED)
+        end
+      end
+
       context 'when the target is not locked for any reason' do
         it 'returns :pending' do
           expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)

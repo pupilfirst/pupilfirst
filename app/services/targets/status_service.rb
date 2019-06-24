@@ -7,6 +7,8 @@ module Targets
     STATUS_LEVEL_LOCKED = :level_locked
     STATUS_PREREQUISITE_LOCKED = :prerequisite_locked
     STATUS_MILESTONE_LOCKED = :milestone_locked
+    STATUS_COURSE_LOCKED = :course_locked
+    STATUS_ACCESS_LOCKED = :access_locked
 
     def initialize(target, founder)
       @target = target
@@ -14,9 +16,11 @@ module Targets
     end
 
     def status
+      return reason_to_lock if reason_to_lock.present?
+
       return status_from_event if linked_event.present?
 
-      reason_to_lock || STATUS_PENDING
+      STATUS_PENDING
     end
 
     private
@@ -31,8 +35,13 @@ module Targets
       linked_event.evaluator_id? ? STATUS_FAILED : STATUS_SUBMITTED
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def reason_to_lock
       @reason_to_lock ||= begin
+        return STATUS_COURSE_LOCKED if @target.course.ends_at&.past?
+
+        return STATUS_ACCESS_LOCKED if @founder.startup.access_ends_at&.past?
+
         return STATUS_LEVEL_LOCKED if target_level_number > founder_level_number
 
         return STATUS_MILESTONE_LOCKED if current_level_milestone? && previous_milestones_incomplete?
@@ -40,6 +49,7 @@ module Targets
         prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
       end
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def founder_level_number
       @founder_level_number ||= @founder.level.number

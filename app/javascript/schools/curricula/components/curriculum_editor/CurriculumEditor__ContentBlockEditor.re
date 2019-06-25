@@ -225,7 +225,7 @@ let make =
       | Some(contentBlock) =>
         let id = ContentBlock.id(contentBlock);
         DeleteContentBlockMutation.make(~id, ())
-        |> GraphqlQuery.sendQuery(authenticityToken, ~notify=false)
+        |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
         |> Js.Promise.then_(response => {
              response##deleteContentBlock##success ?
                removeTargetContentCB(Some(id), sortIndex) : ();

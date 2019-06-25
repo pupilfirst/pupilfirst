@@ -213,7 +213,7 @@ let make =
       sortIndex={
                   let (sortIndex, _, _, _) =
                     sortedContentBlocks |> List.rev |> List.hd;
-                  sortIndex + 2;
+                  sortIndex + 1;
                 }
       staticMode=true
       newContentBlockCB

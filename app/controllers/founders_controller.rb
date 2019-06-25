@@ -38,7 +38,7 @@ class FoundersController < ApplicationController
 
   def events_for_display
     # Only display verified of needs-improvement events if 'current_founder' is not the founder
-    if current_founder != @founder
+    if current_user != @founder.user
       @founder.timeline_events.passed.includes(:target, :timeline_event_files).order(:created_at, :updated_at).reverse_order
     else
       @founder.timeline_events.includes(:target, :timeline_event_files).order(:created_at, :updated_at).reverse_order

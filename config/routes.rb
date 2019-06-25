@@ -28,7 +28,6 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
-  # resource :founder, path: 'student', only: %i[edit update]
 
   resource :user_profile, only: %i[edit update]
 
@@ -110,12 +109,6 @@ Rails.application.routes.draw do
       post 'undo_review'
       post 'send_feedback'
     end
-  end
-
-  scope 'founder/slack', as: 'founder_slack', controller: 'founders/slack_connect' do
-    get 'connect'
-    get 'callback'
-    post 'disconnect'
   end
 
   resource :startup, only: [] do

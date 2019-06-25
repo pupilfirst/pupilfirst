@@ -10,7 +10,6 @@ module Types
     field :create_answer_like, mutation: Mutations::CreateAnswerLike, null: false
     field :destroy_answer_like, mutation: Mutations::DestroyAnswerLike, null: false
     field :undo_submission, mutation: Mutations::UndoSubmission, null: false
-    field :complete_target, mutation: Mutations::CompleteTarget, null: false
     field :create_target, mutation: Mutations::CreateTarget, null: false
     field :update_target, mutation: Mutations::UpdateTarget, null: false
     field :create_question, mutation: Mutations::CreateQuestion, null: false

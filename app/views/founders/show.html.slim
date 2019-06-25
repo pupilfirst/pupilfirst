@@ -11,36 +11,14 @@
     .user-data-card
       .row
         .col-md-2.pr-md-0
-          #complete-profile-left.profile data-toggle='tooltip' data-placement='bottom' title="#{@founder == current_founder ? @founder.profile_completion_instruction : ''}"
-            .founder_profile__avatar
-              == avatar(@founder.name, founder: @founder, background_shape: :square)
-            - if current_founder == @founder && !@founder.exited
-              .progress-container
-                .progress.profile-progress
-                  - if @founder.profile_completion_percentage >= 80
-                    .progress-bar.profile-progress-bar.progress-bar-success aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
-                  - elsif @founder.profile_completion_percentage >= 50
-                    .progress-bar.profile-progress-bar.progress-bar-info aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
-                  - elsif @founder.profile_completion_percentage >= 30
-                    .progress-bar.profile-progress-bar.progress-bar-warning aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
-                  - else
-                    .progress-bar.profile-progress-bar.progress-bar-danger aria-valuemax="100" aria-valuemin="0" aria-valuenow="#{@founder.profile_completion_percentage}" role="progressbar" style="width:#{@founder.profile_completion_percentage}%;"
-                span.progress-value
-                  = @founder.profile_completion_percentage
-                  | % complete
-              - if presenter.incomplete_profile?
-                a.profile-complete-button href=edit_user_profile_path
-                  ' Complete Your Profile
+          .founder_profile__avatar
+            == avatar(@founder.name, founder: @founder, background_shape: :square)
         .col-md-10
           .profile-data
             .profile-head.d-lg-flex
               .col-lg-6.profile-name.px-0.mt-2.mt-md-0.text-center.text-md-left
                 h2
                   = @founder.fullname
-                  - if presenter.edit_profile?
-                    a.profile-edit-button href=edit_user_profile_path title="Edit Your Profile"
-                      i.fa.fa-pencil
-                      | Edit
                 - if @founder.startup.present?
                   span.founder-roll
                     - if @founder.roles.present?

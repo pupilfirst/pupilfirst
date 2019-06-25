@@ -57,12 +57,13 @@ let renderTargetGroup =
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
       {
         targetGroup |> TargetGroup.milestone ?
-          <div className="p-2 bg-yellow-200">
+          <div
+            className="inline-block px-3 py-2 bg-orange-400 font-bold text-sm rounded-b-lg leading-tight text-white uppercase">
             {"Milestone targets" |> str}
           </div> :
           React.null
       }
-      <div className="p-6">
+      <div className="p-6 pt-5">
         <div className="text-2xl font-bold">
           {targetGroup |> TargetGroup.name |> str}
         </div>

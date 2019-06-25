@@ -1,9 +1,8 @@
 module Founders
   class TimelinePanelPresenter < ApplicationPresenter
-    def initialize(event, founder, current_founder)
+    def initialize(event, founder)
       @event = event
       @founder = founder
-      @current_founder = current_founder
     end
 
     def detailed_description
@@ -16,10 +15,6 @@ module Founders
 
     def not_accepted?
       @event.evaluator_id.present? && !@event.passed?
-    end
-
-    def founder_not_exited?
-      @current_founder && !@current_founder.exited && (@current_founder == @founder)
     end
 
     private

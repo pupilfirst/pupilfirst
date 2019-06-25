@@ -22,7 +22,9 @@ let make =
   let (selection, setSelection) = React.useState(() => UploadFile);
 
   <DisablingCover disabled message="Uploading...">
-    <h6 className="pl-1 mt-4"> {"Attach files & links" |> str} </h6>
+    <h6 className="font-semibold pl-1 mt-4">
+      {"Attach files & links" |> str}
+    </h6>
     <ul className="flex border-b mt-2 border-gray-400">
       <li className={tabClasses(selection, UploadFile)}>
         <a

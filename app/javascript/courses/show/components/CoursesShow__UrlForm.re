@@ -46,6 +46,7 @@ let make = (~attachUrlCB) => {
   <div>
     <div className="flex items-center flex-wrap">
       <input
+        id="attachment_url"
         value={state.url}
         type_="text"
         placeholder="Type full URL starting with https://..."

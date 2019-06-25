@@ -99,7 +99,7 @@ Rails.application.routes.draw do
 
   get 'home', controller: "users", action: "home", as: "home"
 
-  resources :timeline_events, only: %i[create] do
+  resources :timeline_events, only: %i[] do
     member do
       post 'review'
       post 'undo_review'

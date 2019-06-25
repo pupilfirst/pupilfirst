@@ -31,6 +31,23 @@
   @apply .border-indigo-400;
 }
 
+.course-overlay__body-tab-item {
+  @apply border border-gray-400;
+}
+
+.course-overlay__body-tab-item:first-child {
+  @apply rounded-tl-lg;
+}
+
+.course-overlay__body-tab-item:last-child {
+  @apply rounded-tr-lg;
+}
+
+.course-overlay__body-tab-item--selected {
+  @apply bg-white text-primary-500;
+  border-bottom-color: transparent;
+}
+
 @keyframes glowing {
   0% {
     box-shadow: 0 0 20px #7886d7;

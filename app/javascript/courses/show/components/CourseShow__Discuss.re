@@ -20,13 +20,11 @@ let questionCard = question => {
   <div
     href=questionLink
     key=questionId
-    className="flex justify-between items-center p-3 bg-white border-t">
-    <span className="text-md">
+    className="flex justify-between items-center px-5 py-4 bg-white border-t">
+    <span className="text-sm font-semibold">
       {question |> Community.questionTitle |> str}
     </span>
-    <a
-      href=questionLink
-      className="border border-gray-300 bg-gray-200 px-4 py-1 rounded-lg ml-2">
+    <a href=questionLink className="btn btn-primary-ghost btn-small">
       {"View" |> str}
     </a>
   </div>;
@@ -35,9 +33,9 @@ let questionCard = question => {
 let handleEmpty = () =>
   <div
     className="flex flex-col justify-center items-center bg-white px-3 py-10">
-    <i className="text-5xl mb-2 fa fa-comments" />
+    <i className="fa fa-comments text-5xl text-gray-600 mb-2 " />
     <div className="text-center">
-      <h5 className="font-semibold"> {"There's no one here yet." |> str} </h5>
+      <h4 className="font-bold"> {"There's no one here yet." |> str} </h4>
       <p>
         {
           "This is where you'll see all the discussion activity happening on this target."
@@ -62,9 +60,9 @@ let actionButtons = (communityId, targetId) =>
   </div>;
 
 let communityTitle = community =>
-  <h4 className="m-0 pull-left font-semibold">
+  <h5 className="font-bold">
     {"Questions from " ++ (community |> Community.name) ++ " community" |> str}
-  </h4>;
+  </h5>;
 
 [@react.component]
 let make = (~target, ~targetDetails) => {
@@ -77,16 +75,14 @@ let make = (~target, ~targetDetails) => {
            let communityId = community |> Community.id;
            <div
              key=communityId
-             className="mt-12 bg-gray-200 px-6 py-4 rounded-lg">
+             className="mt-12 bg-gray-100 px-6 py-4 rounded-lg">
              <div
                className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
-               <div className="text-md font-semibold">
-                 {communityTitle(community)}
-               </div>
+               <div> {communityTitle(community)} </div>
                {actionButtons(communityId, targetId)}
              </div>
              <div
-               className="justify-between rounded-lg border overflow-hidden shadow-lg border-t-0">
+               className="justify-between rounded-lg overflow-hidden shadow">
                {
                  switch (community |> Community.questions) {
                  | [] => handleEmpty()

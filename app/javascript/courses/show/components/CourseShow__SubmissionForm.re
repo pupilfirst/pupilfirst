@@ -220,13 +220,13 @@ let isDescriptionDisabled = formState =>
 let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
-  <div className="bg-gray-200 pt-6 px-4 pb-2 mt-4 shadow rounded-lg">
+  <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 rounded-lg">
     <h5 className="pl-1"> {"Work on your submission" |> str} </h5>
     <textarea
       maxLength=1000
       disabled={isDescriptionDisabled(state.formState)}
       value={state.description}
-      className="h-40 w-full rounded-lg mt-4 p-4 border rounded-lg"
+      className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
       placeholder="Describe your work, attach any links or files, and then hit submit!"
       onChange={updateDescription(send)}
     />

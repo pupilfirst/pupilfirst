@@ -73,10 +73,10 @@ let selectableTabs = course =>
   course |> Course.enableDiscuss ? [Learn, Discuss] : [Learn];
 
 let tabClasses = (selection, overlaySelection) =>
-  "px-3 py-4 flex w-full justify-center text-sm -mx-px border border-gray-400 font-semibold"
+  "course-overlay__body-tab-item px-3 py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold"
   ++ (
     overlaySelection == selection ?
-      " bg-white text-primary-500 border-b-0" :
+      " course-overlay__body-tab-item--selected" :
       " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
   );
 

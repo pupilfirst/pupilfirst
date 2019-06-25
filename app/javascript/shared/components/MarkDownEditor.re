@@ -181,7 +181,7 @@ let buttons =
 };
 
 [@react.component]
-let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?) => {
+let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?, ~profile) => {
   let (description, setDescription) = React.useState(() => value);
   let (preview, setPreview) = React.useState(() => false);
   let (id, _setId) =
@@ -233,6 +233,7 @@ let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?) => {
         <MarkdownBlock
           markdown=description
           className="py-3 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview mt-2"
+          profile
         /> :
         <textarea
           id
@@ -257,10 +258,18 @@ let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?) => {
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("MarkDownEditor");
 
-  let make = (~placeholder, ~updateDescriptionCB, ~value, ~label, children) =>
+  let make =
+      (~placeholder, ~updateDescriptionCB, ~value, ~label, ~profile, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~placeholder, ~updateDescriptionCB, ~value, ~label, ()),
+      makeProps(
+        ~placeholder,
+        ~updateDescriptionCB,
+        ~value,
+        ~label,
+        ~profile,
+        (),
+      ),
       children,
     );
 };

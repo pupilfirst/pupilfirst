@@ -148,8 +148,7 @@ let submissions =
              |> str
            }
          </div>
-         <div
-           className="mt-2 border-2 rounded-lg bg-gray-200 border-gray-200 shadow overflow-hidden">
+         <div className="mt-2 rounded-lg bg-gray-100 shadow overflow-hidden">
            <div className="p-4 md:p-6 whitespace-pre-wrap">
              {submission |> Submission.description |> str}
              {
@@ -174,11 +173,11 @@ let submissions =
                statusBar(~color="green", ~text="Marked as complete")
              | Pending =>
                <div
-                 className="bg-blue-100 px-6 py-4 flex justify-between items-center w-full">
+                 className="bg-white px-6 py-4 flex justify-between items-center w-full">
                  <div
-                   className="text-blue-500 font-bold flex items-center justify-center">
+                   className="text-blue-600 font-bold flex items-center justify-center">
                    <span
-                     className="fa-stack text-blue-500 text-lg mr-1 flex-shrink-0">
+                     className="fa-stack text-blue-600 text-lg mr-1 flex-shrink-0">
                      <i className="fas fa-circle fa-stack-2x" />
                      <i
                        className="fas fa-hourglass-half fa-stack-1x fa-inverse"

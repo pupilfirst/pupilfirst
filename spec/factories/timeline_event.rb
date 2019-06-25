@@ -15,5 +15,9 @@ FactoryBot.define do
     trait :passed do
       passed_at { 1.day.ago }
     end
+
+    trait(:latest) do
+      latest { true }
+    end
   end
 end

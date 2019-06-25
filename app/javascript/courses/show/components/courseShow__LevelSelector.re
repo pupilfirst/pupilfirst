@@ -62,6 +62,7 @@ let make =
       | (None, true)
       | (Some(_) | None, false) =>
         <select
+          name="selected_level"
           className={levelSelectorClasses(!showLevelZero)}
           onChange={
             updateSelectedLevel(

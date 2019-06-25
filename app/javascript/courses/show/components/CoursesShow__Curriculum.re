@@ -32,7 +32,8 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
 
   <div
     key={"target-" ++ targetId}
-    className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
+    className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
+    ariaLabel={"Select Target " ++ targetId}
     onClick={_e => setSelectedTargetId(_ => Some(targetId))}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}

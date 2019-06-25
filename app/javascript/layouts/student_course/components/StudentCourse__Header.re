@@ -29,39 +29,40 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
   <div>
     <div className="student-course__cover svg-bg-pattern-2 pb-22 pt-15 px-3">
       <div className="flex">
-        <div
-          className="student-course__dropdown max-w-xs w-full relative mx-auto">
+        <div className="w-full relative">
           {
             switch (otherCourses) {
             | [] =>
               <div
-                className="flex bg-gray-200 items-center relative justify-between font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
+                className="flex max-w-3xl mx-auto items-center relative justify-between font-semibold relative px-3 py-2 rounded w-full text-2xl text-white">
                 <span className="truncate w-full text-center">
                   {currentCourse |> Course.name |> str}
                 </span>
               </div>
             | otherCourses =>
-              [|
+              <div
+                className="student-course__dropdown max-w-xs relative mx-auto">
                 <button
                   key={"dropdown-course" ++ (currentCourse |> Course.id)}
                   onClick=(_ => setShowCourses(showCourses => !showCourses))
-                  className="dropdown__btn student-course__dropdown-btn text-white appearance-none flex hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
+                  className="dropdown__btn max-w-xs mx-auto student-course__dropdown-btn text-white appearance-none flex hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
                   <span className="truncate w-full text-center">
                     {currentCourse |> Course.name |> str}
                   </span>
                   <i
                     className="far fa-chevron-down text-xs ml-3 font-semibold"
                   />
-                </button>,
-                showCourses ?
-                  <ul
-                    key="dropdown-course-list"
-                    className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden min-w-full w-auto z-20">
-                    {courseOptions(otherCourses)}
-                  </ul> :
-                  React.null,
-              |]
-              |> React.array
+                </button>
+                {
+                  showCourses ?
+                    <ul
+                      key="dropdown-course-list"
+                      className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden min-w-full w-auto z-20">
+                      {courseOptions(otherCourses)}
+                    </ul> :
+                    React.null
+                }
+              </div>
             }
           }
         </div>

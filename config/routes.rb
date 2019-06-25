@@ -80,6 +80,7 @@ Rails.application.routes.draw do
 
     resources :targets, only: %i[update] do
       resource :quiz, only: %i[create]
+      resource :content_block, only: %i[create]
     end
 
     resources :resources, only: %i[create]

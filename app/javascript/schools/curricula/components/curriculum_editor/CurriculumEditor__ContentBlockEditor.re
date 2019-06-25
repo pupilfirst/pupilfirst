@@ -2,16 +2,32 @@
 
 open CurriculumEditor__Types;
 
+exception UnexpectedResponse(int);
+
+let handleApiError =
+  [@bs.open]
+  (
+    fun
+    | UnexpectedResponse(code) => code
+  );
+
 let str = React.string;
 
 type action =
   | UpdateContentBlockPropertyText(string)
-  | CreateNewContentBlock;
+  | UpdateSaving
+  | UpdateMarkdown(string)
+  | UpdateFileName(string)
+  | UpdateEmbedUrl(string);
 
 type state = {
   contentBlockPropertyText: string,
   contentBlock: option(ContentBlock.t),
   sortIndex: int,
+  savingContentBlock: bool,
+  markDownContent: string,
+  fileName: string,
+  embedUrl: string,
 };
 
 let reducer = (state, action) =>
@@ -20,7 +36,10 @@ let reducer = (state, action) =>
       ...state,
       contentBlockPropertyText: text,
     }
-  | CreateNewContentBlock => state
+  | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
+  | UpdateMarkdown(text) => {...state, markDownContent: text}
+  | UpdateFileName(fileName) => {...state, fileName}
+  | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -33,6 +52,81 @@ module DeleteContentBlockMutation = [%graphql
    |}
 ];
 
+let faIcons = (blockType: ContentBlock.blockType) =>
+  switch (blockType) {
+  | Markdown(_markdown) => React.null
+  | File(_url, _title, _filename) =>
+    <i className="fas fa-file text-6xl text-gray-500" />
+  | Image(_url, _caption) =>
+    <i className="fas fa-image text-6xl text-gray-500" />
+  | Embed(_url, _embedCode) =>
+    [|
+      <i
+        key="slideshare-icon"
+        className="fab fa-slideshare text-6xl text-gray-500"
+      />,
+      <i
+        key="youtube-icon"
+        className="fab fa-youtube text-6xl text-gray-500"
+      />,
+      <i key="vimeo-icon" className="fab fa-vimeo text-6xl text-gray-500" />,
+    |]
+    |> React.array
+  };
+
+let fileUploadButtonVisible = (blockType: ContentBlock.blockType) =>
+  switch (blockType) {
+  | File(_url, _title, _filename) => true
+  | Image(_url, _caption) => true
+  | _ => false
+  };
+
+let contentUploadContainer = (blockType, dispatch, state) =>
+  <div className="content-block__content-placeholder text-center p-10">
+    {faIcons(blockType)}
+    <p className="text-xs text-gray-700 mt-1">
+      {
+        (
+          switch (blockType) {
+          | Markdown(_markdown) => ""
+          | File(_url, _title, _filename) => "You can upload PDF, JPG, ZIP etc."
+          | Image(_url, _caption) => "You can upload PNG, JPG, GIF files"
+          | Embed(_url, _embedCode) => "Paste in a URL to embed"
+          }
+        )
+        |> str
+      }
+    </p>
+    {
+      fileUploadButtonVisible(blockType) ?
+        <div className="flex justify-center relative mt-2">
+          <input
+            id="content-block-image-input"
+            type_="file"
+            className="input-file__input cursor-pointer px-4"
+            required=false
+            multiple=false
+            name="content_block[file]"
+            onChange={
+              event =>
+                dispatch(
+                  UpdateFileName(
+                    ReactEvent.Form.target(event)##files[0]##name,
+                  ),
+                )
+            }
+          />
+          <label
+            className="btn btn-primary flex absolute"
+            htmlFor="content-block-image-input">
+            <i className="fas fa-upload" />
+            <span className="ml-2 truncate"> {state.fileName |> str} </span>
+          </label>
+        </div> :
+        React.null
+    }
+  </div>;
+
 [@react.component]
 let make =
     (
@@ -42,6 +136,7 @@ let make =
       ~removeTargetContentCB,
       ~sortIndex,
       ~newContentBlockCB,
+      ~createNewContentCB,
       ~moveContentUpCB,
       ~moveContentDownCB,
       ~authenticityToken,
@@ -56,11 +151,25 @@ let make =
       },
     contentBlock,
     sortIndex,
+    savingContentBlock: false,
+    markDownContent:
+      switch (blockType) {
+      | Markdown(markdown) => markdown
+      | _ => ""
+      },
+    fileName:
+      switch (blockType) {
+      | Markdown(_markdown) => ""
+      | File(_url, _title, _filename) => "Select a file"
+      | Image(_url, _caption) => "Select an image"
+      | Embed(_url, _embedCode) => ""
+      },
+    embedUrl: "",
   };
 
   let (state, dispatch) = React.useReducer(reducer, handleInitialState);
-  let updateDescriptionCB = string => Js.log(string);
-  let editorButtonText =
+  let updateDescriptionCB = string => dispatch(UpdateMarkdown(string));
+  let editorButtonText = contentBlock =>
     switch (contentBlock) {
     | Some(contentBlock) =>
       switch (contentBlock |> ContentBlock.blockType) {
@@ -98,13 +207,6 @@ let make =
     | None => true
     };
 
-  let fileUploadButtonVisible =
-    switch (blockType) {
-    | File(_url, _title, _filename) => true
-    | Image(_url, _caption) => true
-    | _ => false
-    };
-
   let handleDeleteContentBlock = contentBlock =>
     Webapi.Dom.window
     |> Webapi.Dom.Window.confirm(
@@ -124,75 +226,81 @@ let make =
       | None => removeTargetContentCB(None, sortIndex)
       } :
       ();
-
-  let faIcons =
-    switch (blockType) {
-    | Markdown(_markdown) => React.null
-    | File(_url, _title, _filename) =>
-      <i className="fas fa-file text-6xl text-gray-500" />
-    | Image(_url, _caption) =>
-      <i className="fas fa-image text-6xl text-gray-500" />
-    | Embed(_url, _embedCode) =>
-      [|
-        <i
-          key="slideshare-icon"
-          className="fab fa-slideshare text-6xl text-gray-500"
-        />,
-        <i
-          key="youtube-icon"
-          className="fab fa-youtube text-6xl text-gray-500"
-        />,
-        <i key="vimeo-icon" className="fab fa-vimeo text-6xl text-gray-500" />,
-      |]
-      |> React.array
-    };
-
-  let contentUploadContainer =
-    <div className="content-block__content-placeholder text-center p-10">
-      faIcons
-      <p className="text-xs text-gray-700 mt-1">
-        {
-          (
-            switch (blockType) {
-            | Markdown(_markdown) => ""
-            | File(_url, _title, _filename) => "You can upload PDF, JPG, ZIP etc."
-            | Image(_url, _caption) => "You can upload PNG, JPG, GIF files"
-            | Embed(_url, _embedCode) => "Paste in a URL to embed"
-            }
-          )
-          |> str
-        }
-      </p>
-      {
-        fileUploadButtonVisible ?
-          <div className="flex justify-center relative mt-2">
-            <input
-              id="content-block-image-input"
-              type_="file"
-              className="input-file__input cursor-pointer px-4"
-            />
-            <label
-              className="btn btn-primary flex absolute"
-              htmlFor="content-block-image-input">
-              <i className="fas fa-upload" />
-              <span className="ml-2 truncate">
-                {
-                  (
-                    switch (blockType) {
-                    | Markdown(_markdown) => ""
-                    | File(_url, _title, _filename) => "Select a file"
-                    | Image(_url, _caption) => "Select an image"
-                    | Embed(_url, _embedCode) => ""
-                    }
-                  )
-                  |> str
-                }
-              </span>
-            </label>
-          </div> :
-          React.null
+  let decodeContent = (blockType: ContentBlock.blockType, fileUrl, content) =>
+    Json.Decode.(
+      switch (blockType) {
+      | Markdown(_markdown) =>
+        ContentBlock.makeMarkdownBlock(state.markDownContent)
+      | File(_url, _title, _filename) =>
+        ContentBlock.makeFileBlock(
+          fileUrl,
+          content |> field("title", string),
+          state.fileName,
+        )
+      | Image(_url, _caption) =>
+        ContentBlock.makeImageBlock(
+          fileUrl,
+          content |> field("caption", string),
+        )
+      | Embed(_url, _embedCode) =>
+        ContentBlock.makeEmbedBlock(
+          content |> field("url", string),
+          content |> field("embed_code", string),
+        )
       }
-    </div>;
+    );
+
+  let updateContentBlock = json => {
+    open Json.Decode;
+    let id = json |> field("id", string);
+    let fileUrl =
+      switch (blockType) {
+      | File(_url, _title, _filename) => json |> field("fileUrl", string)
+      | Image(_url, _caption) => json |> field("fileUrl", string)
+      | _ => ""
+      };
+    let contentBlockType =
+      json |> field("content", decodeContent(blockType, fileUrl));
+    let newContentBlock =
+      ContentBlock.make(
+        id,
+        contentBlockType,
+        target |> Target.id,
+        state.sortIndex,
+      );
+    createNewContentCB(newContentBlock);
+  };
+
+  let createContentBlock = formData =>
+    SchoolAdmin__Api.sendFormData(
+      "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+      formData,
+      json => {
+        Notification.success("Done!", "Content added successfully.");
+        updateContentBlock(json);
+        dispatch(UpdateSaving);
+      },
+      () => dispatch(UpdateSaving),
+    );
+
+  let submitForm = event => {
+    dispatch(UpdateSaving);
+    ReactEvent.Form.preventDefault(event);
+    switch (contentBlock) {
+    | Some(contentBlock) => Js.log(contentBlock)
+    | None =>
+      let element =
+        ReactDOMRe._getElementById(
+          "content-block-form-" ++ (sortIndex |> string_of_int),
+        );
+      switch (element) {
+      | Some(element) =>
+        let formData = DomUtils.FormData.create(element);
+        createContentBlock(formData);
+      | None => ()
+      };
+    };
+  };
 
   <div>
     <CurriculumEditor__ContentTypePicker
@@ -227,104 +335,153 @@ let make =
             <i className="fas fa-trash-alt" />
           </button>
         </div>
-      <div
-        className="content-block__content bg-gray-200 flex justify-center items-center">
-        {
-          switch (contentBlock) {
-          | Some(contentBlock) =>
-            <div className="w-full">
-              {
-                switch (contentBlock |> ContentBlock.blockType) {
-                | Markdown(markdown) =>
+      <form
+        id={"content-block-form-" ++ (sortIndex |> string_of_int)}
+        key={"content-block-form-" ++ (sortIndex |> string_of_int)}
+        onSubmit={event => submitForm(event)}>
+        <input
+          name="authenticity_token"
+          type_="hidden"
+          value=authenticityToken
+        />
+        <input
+          name="content_block[block_type]"
+          type_="hidden"
+          value={
+            switch (blockType) {
+            | Markdown(_markdown) => "markdown"
+            | File(_url, _title, _filename) => "file"
+            | Image(_url, _caption) => "image"
+            | Embed(_url, _embedCode) => "embed"
+            }
+          }
+        />
+        <input
+          name="content_block[sort_index]"
+          type_="hidden"
+          value={state.sortIndex |> string_of_int}
+        />
+        <div
+          className="content-block__content bg-gray-200 flex justify-center items-center">
+          {
+            switch (contentBlock) {
+            | Some(contentBlock) =>
+              <div className="w-full">
+                {
+                  switch (contentBlock |> ContentBlock.blockType) {
+                  | Markdown(markdown) =>
+                    <MarkDownEditor
+                      updateDescriptionCB
+                      value=markdown
+                      placeholder="You can use Markdown to format this text."
+                      profile=Markdown.Permissive
+                    />
+                  | Image(url, caption) =>
+                    <div className="rounded-lg bg-gray-300">
+                      <img src=url alt=caption />
+                      <div className="px-4 py-2 text-sm italic">
+                        {caption |> str}
+                      </div>
+                    </div>
+                  | Embed(_url, embedCode) =>
+                    <div
+                      className="content-block__embed"
+                      dangerouslySetInnerHTML={"__html": embedCode}
+                    />
+                  | File(url, title, filename) =>
+                    <div
+                      className="bg-white shadow-md border px-6 py-4 rounded-lg">
+                      <a
+                        className="flex justify-between items-center" href=url>
+                        <div className="flex items-center">
+                          <FaIcon
+                            classes="text-4xl text-red-600 fal fa-file-pdf"
+                          />
+                          <div className="pl-4 leading-tight">
+                            <div className="text-lg font-semibold">
+                              {title |> str}
+                            </div>
+                            <div className="text-sm italic text-gray-600">
+                              {filename |> str}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  }
+                }
+              </div>
+            | None =>
+              switch (blockType) {
+              | Markdown(_markdown) =>
+                <div className="w-full">
                   <MarkDownEditor
                     updateDescriptionCB
-                    value=markdown
+                    value=""
                     placeholder="You can use Markdown to format this text."
                     profile=Markdown.Permissive
                   />
-                | Image(url, caption) =>
-                  <div className="bg-white text-center">
-                    <img className="mx-auto" src=url alt=caption />
-                    <div className="px-4 py-2 text-sm italic">
-                      {caption |> str}
-                    </div>
-                  </div>
-                | Embed(_url, embedCode) =>
-                  <div
-                    className="content-block__embed"
-                    dangerouslySetInnerHTML={"__html": embedCode}
-                  />
-                | File(url, title, filename) =>
-                  <div
-                    className="bg-white shadow-md border px-6 py-4 rounded-lg">
-                    <a className="flex justify-between items-center" href=url>
-                      <div className="flex items-center">
-                        <FaIcon
-                          classes="text-4xl text-red-600 fal fa-file-pdf"
-                        />
-                        <div className="pl-4 leading-tight">
-                          <div className="text-lg font-semibold">
-                            {title |> str}
-                          </div>
-                          <div className="text-sm italic text-gray-600">
-                            {filename |> str}
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                }
+                </div>
+              | _ => contentUploadContainer(blockType, dispatch, state)
               }
-            </div>
-          | None =>
-            switch (blockType) {
-            | Markdown(_markdown) =>
-              <div className="w-full">
-                <MarkDownEditor
-                  updateDescriptionCB
-                  value=""
-                  placeholder="You can use Markdown to format this text."
-                  profile=Markdown.Permissive
-                />
-              </div>
-            | _ => contentUploadContainer
             }
           }
-        }
-      </div>
-      <div
-        className="[ content-block__action-bar ] flex p-3 border-t justify-end">
-        {
-          actionBarTextInputVisible ?
-            <div className="flex-1 content-block__action-bar-input">
+          {
+            switch (blockType) {
+            | Markdown(_markdown) =>
               <input
-                className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
-                id="captions"
-                onChange={
-                  event =>
-                    dispatch(
-                      UpdateContentBlockPropertyText(
-                        ReactEvent.Form.target(event)##value,
-                      ),
-                    )
-                }
-                type_="text"
-                value={state.contentBlockPropertyText}
-                placeholder=placeHolderText
+                type_="hidden"
+                name="content_block[markdown]"
+                value={state.markDownContent}
               />
-            </div> :
-            React.null
-        }
-        {
-          updateButtonVisible ?
-            <div className="ml-2 text-right">
-              <button className="btn btn-large btn-success disabled">
-                {editorButtonText |> str}
-              </button>
-            </div> :
-            React.null
-        }
-      </div>
+            | _ => React.null
+            }
+          }
+        </div>
+        <div
+          className="[ content-block__action-bar ] flex p-3 border-t justify-end">
+          {
+            actionBarTextInputVisible ?
+              <div className="flex-1 content-block__action-bar-input">
+                <input
+                  className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                  id="captions"
+                  name={
+                    switch (blockType) {
+                    | File(_url, _title, _filename) => "content_block[title]"
+                    | Image(_url, _caption) => "content_block[caption]"
+                    | Embed(_url, _embedCode) => "content_block[url]"
+                    | Markdown(_markdown) => ""
+                    }
+                  }
+                  onChange={
+                    event =>
+                      dispatch(
+                        UpdateContentBlockPropertyText(
+                          ReactEvent.Form.target(event)##value,
+                        ),
+                      )
+                  }
+                  type_="text"
+                  value={state.contentBlockPropertyText}
+                  placeholder=placeHolderText
+                />
+              </div> :
+              React.null
+          }
+          {
+            updateButtonVisible ?
+              <div className="ml-2 text-right">
+                <button
+                  className="btn btn-large btn-success"
+                  disabled={state.savingContentBlock}>
+                  {editorButtonText(contentBlock) |> str}
+                </button>
+              </div> :
+              React.null
+          }
+        </div>
+      </form>
     </div>
   </div>;
 };

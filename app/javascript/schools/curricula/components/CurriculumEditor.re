@@ -34,7 +34,9 @@ type action =
   | UpdateTarget(Target.t, list(ContentBlock.t))
   | UpdateTargets(list(Target.t))
   | RemoveContentBlock(string)
-  | ToggleShowArchived;
+  | AddContentBlock(ContentBlock.t)
+  | ToggleShowArchived
+  | UpdateContentBlocks(list(ContentBlock.t));
 
 let str = ReasonReact.string;
 
@@ -126,6 +128,13 @@ let make =
           state.contentBlocks
           |> List.filter(cb => ContentBlock.id(cb) != contentBlockId),
       })
+    | AddContentBlock(contentBlock) =>
+      ReasonReact.Update({
+        ...state,
+        contentBlocks: List.append(contentBlocks, [contentBlock]),
+      })
+    | UpdateContentBlocks(contentBlocks) =>
+      ReasonReact.Update({...state, contentBlocks})
     },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
@@ -181,7 +190,14 @@ let make =
 
       send(UpdateTargetGroups(targetGroup));
     };
-    let updateContentBlockDeletionCB = id => send(RemoveContentBlock(id));
+
+    let updateContentBlocksCB = (targetId, contentBlocks) => {
+      let updatedContentBlocks =
+        state.contentBlocks
+        |> List.filter(cb => ContentBlock.targetId(cb) != targetId)
+        |> List.append(contentBlocks);
+      send(UpdateContentBlocks(updatedContentBlocks));
+    };
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 md:hidden shadow border-b">
         <button
@@ -210,7 +226,7 @@ let make =
             authenticityToken
             updateTargetCB
             hideEditorActionCB
-            updateContentBlockDeletionCB
+            updateContentBlocksCB
           />;
         | ShowTargetGroupEditor(targetGroup) =>
           <CurriculumEditor__TargetGroupEditor

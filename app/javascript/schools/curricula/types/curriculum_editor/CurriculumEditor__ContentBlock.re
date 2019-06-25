@@ -38,11 +38,11 @@ let decodeEmdedContent = json => (
 
 let decodeImageContent = json => Json.Decode.(field("caption", string, json));
 
-let create = (id, blockType, sortIndex, targetId) => {
+let make = (id, blockType, targetId, sortIndex) => {
   id,
   blockType,
-  sortIndex,
   targetId,
+  sortIndex,
 };
 
 let decode = json => {
@@ -74,7 +74,8 @@ let decode = json => {
   };
 };
 
-let createMarkdownBlock = markdown => Markdown(markdown);
-let createImageBlock = Image("", "");
-let createFileBlock = File("", "", "");
-let createEmbedBlock = Embed("", "");
+let makeMarkdownBlock = markdown => Markdown(markdown);
+let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
+let makeFileBlock = (fileUrl, title, fileName) =>
+  File(fileUrl, title, fileName);
+let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);

@@ -35,10 +35,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         onClick={
           _event => {
             setVisibility(_ => !visibility);
-            newContentBlockCB(
-              sortIndex,
-              ContentBlock.createMarkdownBlock(""),
-            );
+            newContentBlockCB(sortIndex, ContentBlock.makeMarkdownBlock(""));
           }
         }>
         <i className="fab fa-markdown text-2xl" />
@@ -49,7 +46,10 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         onClick={
           _event => {
             setVisibility(_ => !visibility);
-            newContentBlockCB(sortIndex, ContentBlock.createImageBlock);
+            newContentBlockCB(
+              sortIndex,
+              ContentBlock.makeImageBlock("", ""),
+            );
           }
         }>
         <i className="far fa-image text-2xl" />
@@ -60,7 +60,10 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         onClick={
           _event => {
             setVisibility(_ => !visibility);
-            newContentBlockCB(sortIndex, ContentBlock.createEmbedBlock);
+            newContentBlockCB(
+              sortIndex,
+              ContentBlock.makeEmbedBlock("", ""),
+            );
           }
         }>
         <i className="far fa-code text-2xl" />
@@ -71,7 +74,10 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         onClick={
           _event => {
             setVisibility(_ => !visibility);
-            newContentBlockCB(sortIndex, ContentBlock.createFileBlock);
+            newContentBlockCB(
+              sortIndex,
+              ContentBlock.makeFileBlock("", "", ""),
+            );
           }
         }>
         <i className="far fa-file-alt text-2xl" />

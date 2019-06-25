@@ -321,7 +321,7 @@ let make =
       ~authenticityToken,
       ~updateTargetCB,
       ~hideEditorActionCB,
-      ~updateContentBlockDeletionCB,
+      ~updateContentBlocksCB,
     ) => {
   let handleInitialState = {
     title: target |> Target.title,
@@ -411,13 +411,6 @@ let make =
     Notification.success("Success", "Target updated successfully");
     updateTargetCB(newTarget, state.contentBlocks);
   };
-  let createTarget = () => {
-    dispatch(UpdateSaving);
-    let payload = setPayload(state, target, authenticityToken);
-    let tgId = targetGroupId;
-    let url = "/school/target_groups/" ++ tgId ++ "/targets";
-    Api.create(url, payload, handleResponseCB, handleErrorCB);
-  };
 
   let updateTarget = targetId => {
     dispatch(UpdateSaving);
@@ -487,7 +480,7 @@ let make =
                     key={target |> Target.id}
                     target
                     contentBlocks={state.contentBlocks}
-                    updateContentBlockDeletionCB
+                    updateContentBlocksCB
                     authenticityToken
                   />
                 </div>
@@ -843,7 +836,7 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~updateContentBlockDeletionCB,
+        ~updateContentBlocksCB,
         _children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -858,7 +851,7 @@ module Jsx2 = {
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~updateContentBlockDeletionCB,
+        ~updateContentBlocksCB,
         (),
       ),
       _children,

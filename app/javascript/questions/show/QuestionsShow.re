@@ -234,6 +234,7 @@ let make =
                     <MarkdownBlock
                       markdown={state.question |> Question.description}
                       className="leading-normal text-sm"
+                      profile=Markdown.QuestionAndAnswer
                     />
                     {
                       switch (state.question |> Question.editorId) {

@@ -255,6 +255,7 @@ let make =
                 value=description
                 placeholder="You can use Markdown to format this text."
                 label="Body"
+                profile=Markdown.QuestionAndAnswer
               />
             </DisablingCover>
             <div className="flex justify-end pt-3 border-t">

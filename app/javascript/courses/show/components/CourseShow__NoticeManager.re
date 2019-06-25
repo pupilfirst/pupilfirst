@@ -40,14 +40,14 @@ let courseCompletedMessage = () => {
 };
 
 let courseEndedMessage = () => {
-  let title = "Course Ended ";
+  let title = "Course Ended";
   let description = "The course has ended and submissions are disabled for all targets!";
   showNotice(title, description, AccessEnded);
 };
 
 let accessEndedMessage = () => {
   let title = "Access Ended";
-  let description = "Your access to course has ended";
+  let description = "Your access to course has ended.";
   showNotice(title, description, AccessEnded);
 };
 

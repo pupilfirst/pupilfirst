@@ -30,6 +30,7 @@ let parseMarkdown =
             <MarkdownBlock
               markdown={props.markdown}
               className="leading-normal markdown-sm"
+              profile=Markdown.QuestionAndAnswer
             />,
           );
      });

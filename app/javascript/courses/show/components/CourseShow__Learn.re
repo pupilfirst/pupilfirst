@@ -14,7 +14,11 @@ let renderBlockClasses = block =>
   };
 
 let markdownContentBlock = markdown =>
-  <MarkdownBlock markdown className="markdown-block__permissive" />;
+  <MarkdownBlock
+    markdown
+    className="markdown-block__permissive"
+    profile=Markdown.Permissive
+  />;
 
 let fileContentBlock = (url, title, filename) =>
   <div className="shadow border px-6 py-4 rounded-lg">

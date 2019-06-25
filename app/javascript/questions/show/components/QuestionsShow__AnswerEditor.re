@@ -217,6 +217,7 @@ let make =
             label="Your Answer"
             updateDescriptionCB
             value=description
+            profile=Markdown.QuestionAndAnswer
           />
         </DisablingCover>
         <div className="flex justify-end pt-3 border-t">

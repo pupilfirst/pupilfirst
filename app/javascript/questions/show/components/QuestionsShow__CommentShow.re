@@ -36,19 +36,18 @@ let make =
              className="w-full text-left border border-gray-400 border-t-0">
              <div
                className="flex w-full leading-normal text-xs bg-white justify-between">
-               <span
-                 className="px-4 py-3"
-                 dangerouslySetInnerHTML={
-                   "__html":
-                     (comment |> Comment.value)
-                     ++ " **- "
-                     ++ (
-                       userData
-                       |> UserData.userName(comment |> Comment.creatorId)
-                     )
-                     ++ "**"
-                     |> Markdown.parse,
+               <MarkdownBlock
+                 markdown={
+                   (comment |> Comment.value)
+                   ++ " **- "
+                   ++ (
+                     userData
+                     |> UserData.userName(comment |> Comment.creatorId)
+                   )
+                   ++ "**"
                  }
+                 className="px-4 py-3"
+                 profile=Markdown.Comment
                />
                {
                  isCoach || comment |> Comment.creatorId == currentUserId ?

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Target < ApplicationRecord
-  # Use to allow archival of a target. See Targets::ArchivalService.
+  # Use to allow changing visibility of a target. See Targets::UpdateVisibilityService.
   attr_accessor :safe_to_archive
 
   # Need to allow these two to be read for AA form.
@@ -108,10 +108,10 @@ class Target < ApplicationRecord
   validate :must_be_safe_to_archive
 
   def must_be_safe_to_archive
-    return unless archived_changed? && archived?
+    return unless visibility_changed? && (visibility == VISIBILITY_DRAFT || visibility == VISIBILITY_ARCHIVED)
     return if safe_to_archive
 
-    errors[:archived] << 'cannot be set unsafely'
+    errors[:visibility] << 'cannot be set unsafely'
   end
 
   validate :same_course_for_target_and_evaluation_criteria

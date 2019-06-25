@@ -27,30 +27,7 @@ sanitizationProfiles.permissive = [
   "span"
 ];
 
-sanitizationProfiles.questionAnsAnswer = [
-  "p",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "em",
-  "strong",
-  "del",
-  "s",
-  "ul",
-  "ol",
-  "li",
-  "a",
-  "code",
-  "pre",
-  "blockquote",
-  "hr",
-  "sup",
-  "sub",
-  "span"
-];
+sanitizationProfiles.questionAnsAnswer = sanitizationProfiles.permissive;
 
 sanitizationProfiles.comment = [
   "p",
@@ -79,10 +56,11 @@ const allowedCodeClasses = [
 ];
 
 const sanitizationProfile = profile => {
-  if (profile == "comment") return sanitizationProfiles.comment;
-  else if (profile == "questionAnsAnswer")
-    return sanitizationProfiles.questionAnsAnswer;
-  else return sanitizationProfiles.permissive;
+  if (profile in sanitizationProfiles) {
+    return sanitizationProfiles[profile];
+  } else {
+    return [];
+  }
 };
 
 const allowedPreClasses = ["line-numbers"];

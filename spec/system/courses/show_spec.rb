@@ -35,6 +35,7 @@ feature "Student's view of Course Curriculum" do
   let!(:completed_target_l4) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:pending_target_g1) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM }
   let!(:pending_target_g2) { create :target, target_group: target_group_l4_2, role: Target::ROLE_TEAM }
+  let!(:submitted_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:failed_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_l4_1, prerequisite_targets: [pending_target_g1], role: Target::ROLE_TEAM }
   let!(:level_5_target) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
@@ -45,7 +46,8 @@ feature "Student's view of Course Curriculum" do
   let!(:submission_completed_target_l2) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l2, passed_at: 1.day.ago) }
   let!(:submission_completed_target_l3) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l3, passed_at: 1.day.ago) }
   let!(:submission_completed_target_l4) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l4, passed_at: 1.day.ago, evaluator: faculty) }
-  let!(:submission_failed_target) { create(:timeline_event, :latest, founders: team.founders, target: failed_target) }
+  let!(:submission_submitted_target) { create(:timeline_event, :latest, founders: team.founders, target: submitted_target) }
+  let!(:submission_failed_target) { create(:timeline_event, :latest, founders: team.founders, target: failed_target, evaluator: faculty) }
 
   before do
     # Grading for graded targets
@@ -98,6 +100,39 @@ feature "Student's view of Course Curriculum" do
     # It should be at the fourth level.
     expect(page).to have_content(target_group_l4_1.name)
     expect(page).to have_content(target_group_l4_1.description)
+
+    # All targets should be listed.
+    expect(page).to have_content(completed_target_l4.title)
+    expect(page).to have_content(pending_target_g1.title)
+    expect(page).to have_content(submitted_target.title)
+    expect(page).to have_content(failed_target.title)
+    expect(page).to have_content(target_with_prerequisites.title)
+    expect(page).to have_content(pending_target_g2.title)
+
+    # All targets should have the right status written next to their titles.
+    within("div[aria-label='Select Target #{completed_target_l4.id}']") do
+      expect(page).to have_content('Passed')
+    end
+
+    within("div[aria-label='Select Target #{pending_target_g1.id}']") do
+      expect(page).to have_content('Pending')
+    end
+
+    within("div[aria-label='Select Target #{submitted_target.id}']") do
+      expect(page).to have_content('Submitted')
+    end
+
+    within("div[aria-label='Select Target #{failed_target.id}']") do
+      expect(page).to have_content('Failed')
+    end
+
+    within("div[aria-label='Select Target #{target_with_prerequisites.id}']") do
+      expect(page).to have_content('Locked')
+    end
+
+    within("div[aria-label='Select Target #{pending_target_g2.id}']") do
+      expect(page).to have_content('Pending')
+    end
 
     expect(page).to have_content(target_group_l4_1.name)
     expect(page).to have_content(target_group_l4_1.description)

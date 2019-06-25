@@ -137,7 +137,12 @@ let buttons =
         <button
           key="preview-button"
           className=classes
-          onClick=(_ => setPreview(_ => !preview))>
+          onClick=(
+            event => {
+              ReactEvent.Mouse.preventDefault(event);
+              setPreview(_ => !preview);
+            }
+          )>
           {
             preview ?
               <FaIcon classes="fab fa-markdown" /> :

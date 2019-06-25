@@ -28,6 +28,7 @@ type state = {
   markDownContent: string,
   fileName: string,
   embedUrl: string,
+  formDirty: bool,
 };
 
 let reducer = (state, action) =>
@@ -35,9 +36,14 @@ let reducer = (state, action) =>
   | UpdateContentBlockPropertyText(text) => {
       ...state,
       contentBlockPropertyText: text,
+      formDirty: true,
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
-  | UpdateMarkdown(text) => {...state, markDownContent: text}
+  | UpdateMarkdown(text) => {
+      ...state,
+      markDownContent: text,
+      formDirty: true,
+    }
   | UpdateFileName(fileName) => {...state, fileName}
   | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
@@ -127,6 +133,8 @@ let contentUploadContainer = (blockType, dispatch, state) =>
     }
   </div>;
 
+let saveDisabled = state => !state.formDirty || state.savingContentBlock;
+
 [@react.component]
 let make =
     (
@@ -165,6 +173,7 @@ let make =
       | Embed(_url, _embedCode) => ""
       },
     embedUrl: "",
+    formDirty: false,
   };
 
   let (state, dispatch) = React.useReducer(reducer, handleInitialState);
@@ -474,7 +483,7 @@ let make =
               <div className="ml-2 text-right">
                 <button
                   className="btn btn-large btn-success"
-                  disabled={state.savingContentBlock}>
+                  disabled={saveDisabled(state)}>
                   {editorButtonText(contentBlock) |> str}
                 </button>
               </div> :

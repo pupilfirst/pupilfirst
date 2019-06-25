@@ -98,11 +98,6 @@ Rails.application.routes.draw do
 
   get 'home', controller: "users", action: "home", as: "home"
 
-  scope 'student', controller: 'founders/dashboard', as: 'student' do
-    get 'dashboard'
-    get 'dashboard/targets/:id(/:slug)', action: 'target_overlay', as: 'dashboard_target'
-  end
-
   resources :timeline_events, only: %i[create] do
     member do
       post 'review'
@@ -176,22 +171,14 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  get '/dashboard', to: redirect('/student/dashboard')
-
   scope 'policies', as: 'policies', controller: 'home' do
     get 'privacy'
     get 'terms'
   end
 
   resources :targets, only: %i[show] do
-    get 'select2_search', on: :collection
-
     member do
-      get 'prerequisite_targets'
-      get 'startup_feedback'
-      get 'details'
       get 'details_v2'
-      post 'auto_verify'
       get ':slug', action: 'show'
     end
   end

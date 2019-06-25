@@ -15,7 +15,7 @@ class TimelineEventPolicy < ApplicationPolicy
     end
 
     # Other submissions can be seen only by team members.
-    record.founders.where(id: current_founder).present?
+    record.founders.where(user_id: user&.id).present?
   end
 
   def review?

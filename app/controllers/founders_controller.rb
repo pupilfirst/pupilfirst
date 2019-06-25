@@ -1,5 +1,4 @@
 class FoundersController < ApplicationController
-  before_action :authenticate_founder!, except: %i[show paged_events timeline_event_show]
   before_action :skip_container, only: %i[show paged_events timeline_event_show]
 
   # GET /students/:id
@@ -37,7 +36,7 @@ class FoundersController < ApplicationController
   end
 
   def events_for_display
-    # Only display verified of needs-improvement events if 'current_founder' is not the founder
+    # Only display verified of needs-improvement events if 'current_user' is not the user
     if current_user != @founder.user
       @founder.timeline_events.passed.includes(:target, :timeline_event_files).order(:created_at, :updated_at).reverse_order
     else

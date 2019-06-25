@@ -111,12 +111,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :startup, only: [] do
-    member do
-      post 'level_up'
-    end
-  end
-
   resources :timeline_event_files, only: %i[create] do
     member do
       get 'download'

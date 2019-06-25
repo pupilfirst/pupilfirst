@@ -259,7 +259,7 @@ let targetStatusClass = (prefix, targetStatus) =>
   ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
 
 let targetStatusClasses = targetStatus =>
-  "curriculum__target-status text-xs md:text-sm py-1 px-2 md:px-4 "
+  "curriculum__target-status text-xs py-1 px-2 md:px-4 "
   ++ targetStatusClass("curriculum__target-status--", targetStatus);
 
 let overlayHeaderTitleCardClasses = targetStatus =>
@@ -288,8 +288,8 @@ let overlayStatus = (closeOverlayCB, target, targetStatus) =>
 
 let renderLockReason = reason =>
   <div
-    className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-1 text-sm">
-    <i className="fas fa-lock-alt" />
+    className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
+    <i className="fal fa-lock-alt text-lg" />
     <span className="ml-2">
       {reason |> TargetStatus.lockReasonToString |> str}
     </span>
@@ -303,10 +303,10 @@ let prerequisitesIncomplete =
     |> List.filter(target =>
          (target |> Target.id)->List.mem(prerequisiteTargetIds)
        );
-  <div>
+  <div className="relative px-3 md:px-0">
     {renderLockReason(reason)}
     <div
-      className="max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md overflow-hidden mt-6">
+      className="course-overlay__prerequisite-targets z-10 max-w-3xl mx-auto bg-white text-center rounded-lg overflow-hidden shadow mt-6">
       {
         prerequisiteTargets
         |> List.map(target => {
@@ -318,7 +318,7 @@ let prerequisitesIncomplete =
 
              <div
                key={target |> Target.id}
-               className="bg-white border-t px-6 py-2 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
+               className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
                onClick={_ => changeTargetCB(target)}>
                <span className="font-semibold text-left leading-snug">
                  {target |> Target.title |> str}

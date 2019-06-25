@@ -137,7 +137,7 @@ let renderedMarkdown = language => {
 
   <div className="mt-4">
     <p className="text-xs font-semibold"> {title |> str} </p>
-    <MarkdownBlock markdown className="mt-2" />
+    <MarkdownBlock markdown className="mt-2" profile=Markdown.Permissive />
   </div>;
 };
 

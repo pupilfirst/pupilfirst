@@ -92,6 +92,7 @@ let make =
                   <MarkdownBlock
                     markdown={answer |> Answer.description}
                     className="leading-normal text-sm "
+                    profile=Markdown.QuestionAndAnswer
                   />
                   {
                     switch (answer |> Answer.editorId) {

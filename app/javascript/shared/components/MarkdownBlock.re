@@ -9,8 +9,15 @@ let randomId = () => {
   "markdown-block-" ++ randomComponent;
 };
 
+let profileClasses = (profile: Markdown.profile) =>
+  switch (profile) {
+  | Comment => "markdown-block__comment "
+  | QuestionAndAnswer => "markdown-block__questions-and-answer "
+  | Permissive => "markdown-block__permissive "
+  };
+
 [@react.component]
-let make = (~markdown, ~className) => {
+let make = (~markdown, ~className, ~profile) => {
   let id = randomId();
 
   React.useEffect1(
@@ -22,8 +29,8 @@ let make = (~markdown, ~className) => {
   );
 
   <div
-    className={"markdown-block " ++ className}
+    className={"markdown-block " ++ profileClasses(profile) ++ className}
     id
-    dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse}
+    dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse(profile)}
   />;
 };

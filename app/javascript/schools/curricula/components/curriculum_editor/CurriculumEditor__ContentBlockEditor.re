@@ -240,6 +240,7 @@ let make =
                     updateDescriptionCB
                     value=markdown
                     placeholder="You can use Markdown to format this text."
+                    profile=Markdown.Permissive
                   />
                 | Image(url, caption) =>
                   <div className="bg-white text-center">
@@ -283,6 +284,7 @@ let make =
                   updateDescriptionCB
                   value=""
                   placeholder="You can use Markdown to format this text."
+                  profile=Markdown.Permissive
                 />
               </div>
             | _ => contentUploadContainer

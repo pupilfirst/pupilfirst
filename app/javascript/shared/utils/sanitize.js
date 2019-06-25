@@ -27,7 +27,7 @@ sanitizationProfiles.permissive = [
   "span"
 ];
 
-sanitizationProfiles.qna = [
+sanitizationProfiles.questionAnsAnswer = [
   "p",
   "h1",
   "h2",
@@ -78,11 +78,18 @@ const allowedCodeClasses = [
   "language-mathml" // markup
 ];
 
+const sanitizationProfile = profile => {
+  if (profile == "comment") return sanitizationProfiles.comment;
+  else if (profile == "questionAnsAnswer")
+    return sanitizationProfiles.questionAnsAnswer;
+  else return sanitizationProfiles.permissive;
+};
+
 const allowedPreClasses = ["line-numbers"];
 
-const sanitize = dirtyHtml => {
+const sanitize = (profile, dirtyHtml) => {
   return sanitizeHtml(dirtyHtml, {
-    allowedTags: sanitizationProfiles.permissive,
+    allowedTags: sanitizationProfile(profile),
     allowedClasses: {
       pre: allowedPreClasses,
       code: allowedCodeClasses

@@ -112,7 +112,9 @@ let address = a =>
   | Some(a) =>
     <div
       className="text-sm mt-3 leading-normal"
-      dangerouslySetInnerHTML={"__html": a |> Markdown.parse}
+      dangerouslySetInnerHTML={
+        "__html": a |> Markdown.parse(Markdown.Permissive),
+      }
     />
   | None =>
     <div

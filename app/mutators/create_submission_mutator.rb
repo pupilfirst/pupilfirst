@@ -34,11 +34,11 @@ class CreateSubmissionMutator < ApplicationMutator
   end
 
   def ensure_submittability
-    if target_status.in?([Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_FAILED])
-      return
-    elsif target.resubmittable? && target_status == Targets::StatusService::STATUS_PASSED
-      return
-    end
+    submittable = target.evaluation_criteria.exists?
+    submission_required = target_status.in?([Targets::StatusService::STATUS_PENDING, Targets::StatusService::STATUS_FAILED])
+    submitted_but_resubmittable = target.resubmittable? && target_status == Targets::StatusService::STATUS_PASSED
+
+    return if submittable && (submission_required || submitted_but_resubmittable)
 
     errors[:base] << 'NotSubmittable'
   end

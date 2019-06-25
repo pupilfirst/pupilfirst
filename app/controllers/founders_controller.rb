@@ -17,26 +17,6 @@ class FoundersController < ApplicationController
     render layout: false
   end
 
-  # GET /founder/edit
-  def edit
-    @founder = authorize(current_founder)
-    @form = Founders::EditForm.new(current_founder)
-  end
-
-  # PATCH /founder
-  def update
-    @founder = authorize(current_founder)
-    @form = Founders::EditForm.new(current_founder)
-
-    if @form.validate(params[:founders_edit])
-      @form.save!
-      flash[:success] = 'Your profile has been updated.'
-      redirect_to student_path(id: @founder.id)
-    else
-      render 'edit'
-    end
-  end
-
   # GET /students/:id/:event_title/:event_id
   def timeline_event_show
     # Reuse the startup action, because that's what this page also shows.

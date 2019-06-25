@@ -16,7 +16,7 @@ module Oembed
       resolver = provider
 
       # Fetch embed code using the provider.
-      resolver.new(url).embed_code
+      resolver.new(@url).embed_code
     end
 
     private
@@ -24,11 +24,11 @@ module Oembed
     def provider
       host_name = URI.parse(@url).hostname
       if host_name.include?('youtube')
-        return YoutubeProvider
+        return Oembed::YoutubeProvider
       elsif host_name.include?('vimeo')
-        return VimeoProvider
-      elsif host_name.include?['slideshare']
-        return SlideshareProvider
+        return Oembed::VimeoProvider
+      elsif host_name.include?('slideshare')
+        return Oembed::SlideshareProvider
       else
         raise ProviderNotSupported
       end

@@ -12,11 +12,8 @@ module Oembed
     end
 
     def embed_code
-      # Resolve the provider for the supplied URL. Fail with ProviderNotSupported if one cannot be found.
-      resolver = provider
-
-      # Fetch embed code using the provider.
-      resolver.new(@url).embed_code
+      # Resolve the provider and fetch embed code using the provider.
+      provider.new(@url).embed_code
     end
 
     private

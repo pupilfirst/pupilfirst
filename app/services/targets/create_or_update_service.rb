@@ -4,7 +4,7 @@ module Targets
       @target = target
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def create_or_update(target_params)
       Target.transaction do
         @target.role = 'founder'
@@ -16,7 +16,6 @@ module Targets
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
         @target.link_to_complete = target_params[:link_to_complete]
-        @target.visibility = target_params[:visibility]
         @target.resubmittable = target_params[:prerequisite_target_ids].present?
         @target.sort_index = sort_index if target_params[:sort_index].blank?
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids] if target_params[:evaluation_criterion_ids].present?
@@ -28,13 +27,13 @@ module Targets
 
         recreate_quiz(target_params[:quiz]) if target_params[:quiz].present?
 
-        archive_target(target_params[:visibility] == 'archived')
+        update_visibility(target_params[:visibility])
 
         @target
       end
     end
 
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -62,12 +61,8 @@ module Targets
       @target.quiz.destroy
     end
 
-    def archive_target(archived)
-      if archived
-        ::Targets::ArchivalService.new(@target).archive
-      else
-        ::Targets::ArchivalService.new(@target).unarchive
-      end
+    def update_visibility(visibility)
+      ::Targets::UpdateVisibilityService.new(@target, visibility).execute
     end
 
     def sort_index

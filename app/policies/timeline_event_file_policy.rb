@@ -6,7 +6,7 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return true if current_user_coaches?(record.timeline_event.target.course, founders)
 
     # Team members linked directly to the timeline event can access attached files.
-    founders.where(id: current_founder).exists?
+    founders.where(user_id: user&.id).exists?
   end
 
   def create?

@@ -1,22 +1,5 @@
 class TimelineEventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authenticate_founder!, except: %i[review undo_review send_feedback]
-  # TODO: Move the above 'authorization' checks to policies.
-
-  # POST /timeline_events
-  def create
-    timeline_event = authorize(TimelineEvent.new)
-
-    builder_form = TimelineEvents::BuilderForm.new(timeline_event)
-    builder_form.founder = current_founder
-
-    if builder_form.validate(timeline_builder_params)
-      builder_form.save
-      head :ok
-    else
-      raise "Validation of timeline event creation request failed. Error messages follow: #{builder_form.errors.to_json}"
-    end
-  end
 
   # POST /timeline_events/:id/review
   def review
@@ -63,14 +46,5 @@ class TimelineEventsController < ApplicationController
     )
     StartupFeedbackModule::EmailService.new(startup_feedback, founder: timeline_event.founder).send
     render json: { error: nil }, status: :ok
-  end
-
-  private
-
-  def timeline_builder_params
-    params.require(:timeline_event).permit(
-      :target_id, :description, :image, :links, :files_metadata,
-      files: (params[:timeline_event][:files]&.keys || [])
-    )
   end
 end

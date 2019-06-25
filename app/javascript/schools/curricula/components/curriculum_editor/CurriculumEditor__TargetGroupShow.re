@@ -94,11 +94,11 @@ let make =
           Draft,
         );
       let sampleContentBlock =
-        ContentBlock.create(
+        ContentBlock.make(
           target##contentBlockId,
           Markdown(target##sampleContent),
-          1,
           targetId,
+          1,
         );
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));

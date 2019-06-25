@@ -1,0 +1,22 @@
+module Mutations
+  class SortContentBlocks < GraphQL::Schema::Mutation
+    argument :content_block_ids, [ID], required: true
+
+    description "Sort target content blocks"
+
+    field :success, Boolean, null: false
+
+    def resolve(params)
+      mutator = SortContentBlocksMutator.new(params, context)
+
+      if mutator.valid?
+        mutator.sort
+        mutator.notify(:success, "Done!", "Target content updated successfully")
+        { success: true }
+      else
+        mutator.notify_errors
+        { success: false, errors: mutator.error_codes }
+      end
+    end
+  end
+end

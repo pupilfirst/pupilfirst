@@ -11,16 +11,4 @@ class FounderPolicy < ApplicationPolicy
   def timeline_event_show?
     show?
   end
-
-  def edit?
-    show? && record == current_founder
-  end
-
-  def update?
-    edit?
-  end
-
-  def select?
-    record.present?
-  end
 end

@@ -4,10 +4,10 @@ module Courses
       attr_reader :score, :rank
       attr_accessor :delta
 
-      def initialize(founder, score, rank, current_founder)
+      def initialize(founder, score, rank, current_user)
         @score = score
         @rank = rank
-        @current_founder = current_founder
+        @current_user = current_user
 
         super(founder)
       end
@@ -17,7 +17,7 @@ module Courses
       end
 
       def current_student?
-        @current_student ||= (id == @current_founder&.id)
+        @current_student ||= (user_id == @current_user&.id)
       end
     end
 
@@ -49,7 +49,7 @@ module Courses
     end
 
     def heading
-      if current_founder_is_topper?
+      if current_user_is_topper?
         return '<strong>You</strong> are at the top of the leaderboard. <strong>Congratulations!</strong>'.html_safe
       end
 
@@ -137,8 +137,8 @@ module Courses
       @top_score ||= toppers.first.score
     end
 
-    def current_founder_is_topper?
-      current_founder.present? && current_founder.id.in?(toppers.map(&:id))
+    def current_user_is_topper?
+      current_user.present? && current_user.id.in?(toppers.map(&:user_id))
     end
 
     def page
@@ -171,7 +171,7 @@ module Courses
       course_entries(from, to).order(score: :DESC).each_with_object({}).with_index(1) do |(entry, students), index|
         rank = entry.score < last_score ? index : last_rank
 
-        students[entry.founder.id] = Student.new(entry.founder, entry.score, rank, current_founder)
+        students[entry.founder.id] = Student.new(entry.founder, entry.score, rank, current_user)
 
         last_rank = rank
         last_score = entry.score

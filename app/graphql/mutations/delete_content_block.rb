@@ -11,7 +11,6 @@ module Mutations
 
       if mutator.valid?
         mutator.delete_content_block
-        mutator.notify(:success, "Done!", "Content removed from target.")
         { success: true }
       else
         mutator.notify_errors

@@ -23,5 +23,6 @@ module Types
     field :create_submission, mutation: Mutations::CreateSubmission, null: false
     field :delete_content_block, mutation: Mutations::DeleteContentBlock, null: false
     field :level_up, mutation: Mutations::LevelUp, null: false
+    field :sort_content_blocks, mutation: Mutations::SortContentBlocks, null: false
   end
 end

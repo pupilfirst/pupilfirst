@@ -129,7 +129,7 @@ module Targets
       @target.content_blocks.with_attached_file.map do |content_block|
         cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index')
         if content_block.file.attached?
-          cb['file_url'] = url_helpers.url_for(content_block.file)
+          cb['file_url'] = url_helpers.rails_blob_path(content_block.file, only_path: true)
           cb['filename'] = content_block.file.filename
         end
         cb

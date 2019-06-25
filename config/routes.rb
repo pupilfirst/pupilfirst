@@ -28,7 +28,6 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
-  # resource :founder, path: 'student', only: %i[edit update]
 
   resource :user_profile, only: %i[edit update]
 
@@ -109,12 +108,6 @@ Rails.application.routes.draw do
       post 'review'
       post 'undo_review'
       post 'send_feedback'
-    end
-  end
-
-  resource :startup, only: [] do
-    member do
-      post 'level_up'
     end
   end
 

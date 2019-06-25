@@ -2,13 +2,8 @@ FactoryBot.define do
   factory :target do
     title { Faker::Lorem.words(6).join ' ' }
     role { Target.valid_roles.sample }
-    description { Faker::Lorem.words(200).join ' ' }
-    target_action_type { Target.valid_target_action_types.sample }
-    days_to_complete { session_at.present? ? nil : rand(1..60) }
     target_group
-    faculty { create :faculty, category: Faculty::CATEGORY_TEAM }
     sequence(:sort_index)
-    session_at { nil }
     visibility { Target::VISIBILITY_LIVE }
 
     trait :archived do
@@ -30,6 +25,15 @@ FactoryBot.define do
 
     trait :for_startup do
       role { Target::ROLE_TEAM }
+    end
+
+    trait :with_content do
+      after(:create) do |target|
+        create(:content_block, :embed, target: target)
+        create(:content_block, :markdown, target: target)
+        create(:content_block, :image, target: target)
+        create(:content_block, :file, target: target)
+      end
     end
   end
 end

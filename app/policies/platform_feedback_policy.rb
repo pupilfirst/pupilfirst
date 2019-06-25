@@ -1,5 +1,6 @@
 class PlatformFeedbackPolicy < ApplicationPolicy
   def create?
-    current_founder&.startup&.level&.number&.positive?
+    # marked for removal
+    user&.founders&.first&.startup&.level&.number&.positive?
   end
 end

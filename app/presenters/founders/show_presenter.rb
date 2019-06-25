@@ -13,10 +13,6 @@ module Founders
       !@founder.exited && @founder.profile_completion_percentage < 100
     end
 
-    def edit_profile?
-      view.current_founder == @founder && !@founder.exited
-    end
-
     def public_faculty
       @founder.faculty.where(public: true)
     end

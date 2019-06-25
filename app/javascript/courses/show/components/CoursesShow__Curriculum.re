@@ -50,10 +50,17 @@ let renderTargetGroup =
     targets |> List.filter(t => t |> Target.targetGroupId == targetGroupId);
 
   <div
-    key={"target-group" ++ targetGroupId}
+    key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-8 px-3">
     <div
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
+      {
+        targetGroup |> TargetGroup.milestone ?
+          <div className="p-2 bg-yellow-200">
+            {"Milestone targets" |> str}
+          </div> :
+          React.null
+      }
       <div className="p-6">
         <div className="text-2xl font-bold">
           {targetGroup |> TargetGroup.name |> str}
@@ -98,13 +105,14 @@ let handleLockedLevel = level =>
     {
       switch (level |> Level.unlockOn) {
       | Some(date) =>
+        let dateString =
+          date |> DateFns.parseString |> DateFns.format("MMMM D, YYYY");
         <div className="font-semibold text-md px-3">
-          {
-            "The level is currently locked, You can access the content on "
-            ++ (date |> DateTime.stingToFormatedTime(DateTime.OnlyDate))
-            |> str
-          }
-        </div>
+          <p> {"The level is currently locked!" |> str} </p>
+          <p>
+            {"You can access the content on " ++ dateString ++ "." |> str}
+          </p>
+        </div>;
       | None => React.null
       }
     }

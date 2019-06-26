@@ -2,6 +2,10 @@
   min-height: 14rem;
 }
 
+.content-block__content textarea {
+  @apply border-none;
+}
+
 .content-block__embed {
   position: relative;
   height: 0;

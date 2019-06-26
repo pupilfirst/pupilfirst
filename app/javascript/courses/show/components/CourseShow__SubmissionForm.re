@@ -220,7 +220,7 @@ let isDescriptionDisabled = formState =>
 let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
-  <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 rounded-lg">
+  <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
     <label htmlFor="submission-description" className="font-semibold pl-1">
       {"Work on your submission" |> str}
     </label>

@@ -67,9 +67,12 @@ let make =
   let (targetContentBlocks, updateTargetContentBlocks) =
     React.useState(() =>
       contentBlocks
-      |> List.map(cb =>
+      |> List.sort((x, y) =>
+           ContentBlock.sortIndex(x) - ContentBlock.sortIndex(y)
+         )
+      |> List.mapi((index, cb) =>
            (
-             cb |> ContentBlock.sortIndex,
+             index + 1,
              cb |> ContentBlock.blockType,
              Some(cb),
              cb |> ContentBlock.id,
@@ -245,6 +248,7 @@ let make =
        |> List.map(((sortIndex, blockType, contentBlock, id)) =>
             <CurriculumEditor__ContentBlockEditor
               key=id
+              editorId=id
               target
               contentBlock
               removeTargetContentCB
@@ -253,6 +257,7 @@ let make =
               newContentBlockCB
               createNewContentCB
               updateContentBlockCB
+              blockCount={targetContentBlocks |> List.length}
               moveContentUpCB
               moveContentDownCB
               authenticityToken

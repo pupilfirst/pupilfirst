@@ -7,6 +7,7 @@ FactoryBot.define do
     visibility { Target::VISIBILITY_LIVE }
 
     trait :archived do
+      safe_to_archive { true }
       visibility { Target::VISIBILITY_ARCHIVED }
     end
 

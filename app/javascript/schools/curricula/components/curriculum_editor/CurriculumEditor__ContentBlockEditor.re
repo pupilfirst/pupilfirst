@@ -44,7 +44,7 @@ let reducer = (state, action) =>
       markDownContent: text,
       formDirty: true,
     }
-  | UpdateFileName(fileName) => {...state, fileName}
+  | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
 
@@ -149,11 +149,13 @@ let saveDisabled = state => !state.formDirty || state.savingContentBlock;
 let make =
     (
       ~target,
+      ~editorId,
       ~contentBlock,
       ~blockType: ContentBlock.blockType,
       ~removeTargetContentCB,
       ~sortIndex,
       ~newContentBlockCB,
+      ~blockCount,
       ~createNewContentCB,
       ~moveContentUpCB,
       ~moveContentDownCB,
@@ -282,12 +284,7 @@ let make =
     let contentBlockType =
       json |> field("content", decodeContent(blockType, fileUrl));
     let newContentBlock =
-      ContentBlock.make(
-        id,
-        contentBlockType,
-        target |> Target.id,
-        state.sortIndex,
-      );
+      ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
     createNewContentCB(newContentBlock);
   };
 
@@ -348,9 +345,7 @@ let make =
     | Some(contentBlock) => updateContentBlock(contentBlock)
     | None =>
       let element =
-        ReactDOMRe._getElementById(
-          "content-block-form-" ++ (sortIndex |> string_of_int),
-        );
+        ReactDOMRe._getElementById("content-block-form-" ++ editorId);
       switch (element) {
       | Some(element) =>
         let formData = DomUtils.FormData.create(element);
@@ -370,22 +365,30 @@ let make =
     <div
       className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
       <div
-        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow z-20">
+        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
         /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
            it helps to quickly differentiate who does what */
 
-          <button
-            title="Move up"
-            onClick={_event => moveContentUpCB(sortIndex)}
-            className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-            <i className="fas fa-arrow-up" />
-          </button>
-          <button
-            title="Move down"
-            onClick={_event => moveContentDownCB(sortIndex)}
-            className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-            <i className="fas fa-arrow-down" />
-          </button>
+          {
+            sortIndex != 1 ?
+              <button
+                title="Move up"
+                onClick={_event => moveContentUpCB(sortIndex)}
+                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                <i className="fas fa-arrow-up" />
+              </button> :
+              React.null
+          }
+          {
+            sortIndex != blockCount ?
+              <button
+                title="Move down"
+                onClick={_event => moveContentDownCB(sortIndex)}
+                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                <i className="fas fa-arrow-down" />
+              </button> :
+              React.null
+          }
           <button
             title="Delete block"
             onClick={_event => handleDeleteContentBlock(contentBlock)}
@@ -394,8 +397,8 @@ let make =
           </button>
         </div>
       <form
-        id={"content-block-form-" ++ (sortIndex |> string_of_int)}
-        key={"content-block-form-" ++ (sortIndex |> string_of_int)}
+        id={"content-block-form-" ++ editorId}
+        key={"content-block-form-" ++ editorId}
         onSubmit={event => submitForm(event)}>
         <input
           name="authenticity_token"
@@ -428,9 +431,9 @@ let make =
                       profile=Markdown.Permissive
                     />
                   | Image(url, caption) =>
-                    <div className="rounded-lg bg-gray-300">
-                      <img src=url alt=caption />
-                      <div className="px-4 py-2 text-sm italic">
+                    <div className="rounded-lg bg-white">
+                      <img className="mx-auto" src=url alt=caption />
+                      <div className="px-4 py-2 text-sm italic text-center">
                         {caption |> str}
                       </div>
                     </div>
@@ -440,8 +443,7 @@ let make =
                       dangerouslySetInnerHTML={"__html": embedCode}
                     />
                   | File(url, title, filename) =>
-                    <div
-                      className="bg-white shadow-md border px-6 py-4 rounded-lg">
+                    <div className="bg-white px-6 py-4">
                       <a
                         className="flex justify-between items-center" href=url>
                         <div className="flex items-center">

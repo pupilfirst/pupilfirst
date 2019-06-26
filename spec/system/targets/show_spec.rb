@@ -444,4 +444,54 @@ feature 'Target Overlay', js: true do
       expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
     end
   end
+
+  context 'when the course has a community which accepts linked targets' do
+    scenario 'student uses the discuss feature', js: true, broken: true do
+      sign_in_user(founder_1.user, referer: home_path)
+      expect(page).to have_text(target.title)
+
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+
+      # Expect page to have community tab
+      expect(page).to have_text(community.name)
+      expect(page).to have_text("Go to community")
+      expect(page).to have_text("Ask a question")
+
+      # He can ask a question related to the target in community from target overlay
+      click_link "Ask a question"
+
+      expect(page).to have_text("ASK A NEW QUESTION")
+      expect(page).to have_text(target.title)
+
+      fill_in 'Title', with: question_title
+      fill_in 'Body', with: question_description
+      click_button 'Post Your Question'
+
+      expect(page).to have_text(question_title)
+      expect(page).to have_text(question_description)
+      expect(page).not_to have_text("ASK A NEW QUESTION")
+      expect(Question.where(title: question_title).first.targets.first).to eq(target)
+
+      # He can see the questions related to the target in target overlay
+      sign_in_user(founder_1.user, referer: home_path)
+      find('.founder-dashboard-target-header__headline', text: target.title).click
+      expect(page).to have_text(community.name)
+      expect(page).to have_text(question_title)
+
+      # He can filter all questions linked to the target
+      click_link 'Go to community'
+      expect(page).to have_text('Clear Filter')
+      expect(page).to have_text(question_title)
+      expect(page).not_to have_text(question_1.title)
+      expect(page).not_to have_text(question_2.title)
+      expect(page).not_to have_text(question_3.title)
+
+      # He see all questions in the community by clearing the filter
+      click_link 'Clear Filter'
+      expect(page).to have_text(question_title)
+      expect(page).to have_text(question_1.title)
+      expect(page).to have_text(question_2.title)
+      expect(page).to have_text(question_3.title)
+    end
+  end
 end

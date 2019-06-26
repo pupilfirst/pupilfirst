@@ -1,7 +1,7 @@
 module Layouts
   class TopNavPresenter < ::ApplicationPresenter
     def links
-      l = [{ title: 'Home', url: view.home_path }]
+      l = current_user.present? ? [{ title: 'Home', url: view.home_path }] : []
       l += [{ title: 'Admin', url: view.school_path }] if current_user.present? && current_user.school_admins.where(school: current_school).exists?
       l
     end

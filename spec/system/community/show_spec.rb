@@ -212,7 +212,7 @@ feature 'Community Show' do
   end
 
   scenario 'When an active founder visits student dashboard', js: true do
-    sign_in_user(founder_1.user, referer: student_dashboard_path)
+    sign_in_user(founder_1.user, referer: home_path)
     expect(page).to have_text(target.title)
 
     find('.founder-dashboard-target-header__headline', text: target.title).click
@@ -238,7 +238,7 @@ feature 'Community Show' do
     expect(Question.where(title: question_title).first.targets.first).to eq(target)
 
     # He can see the questions related to the target in target overlay
-    sign_in_user(founder_1.user, referer: student_dashboard_path)
+    sign_in_user(founder_1.user, referer: home_path)
     find('.founder-dashboard-target-header__headline', text: target.title).click
     expect(page).to have_text(community.name)
     expect(page).to have_text(question_title)

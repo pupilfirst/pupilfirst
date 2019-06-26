@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-feature 'Target Overlay' do
-  # TODO: Rewrite a cleaner version
+feature 'Target Overlay', broken: true do
   include UserSpecHelper
 
   let(:course) { create :course }

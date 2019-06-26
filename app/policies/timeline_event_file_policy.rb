@@ -1,7 +1,13 @@
 class TimelineEventFilePolicy < ApplicationPolicy
   def download?
-    founders = record.timeline_event.founders
+    return false if user.blank?
 
+    return false if user.founders.blank? || current_coach.blank?
+
+    timeline_event = record.timeline_event
+    return true if timeline_event.blank?
+
+    founders = timeline_event.founders
     # Coach can view timeline event files.
     return true if current_user_coaches?(record.timeline_event.target.course, founders)
 
@@ -14,9 +20,9 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return false if user.founders.empty?
 
     # At least one of the student profiles must be non-exited AND non-ended (course AND access).
-    user.founders.includes(:startup, :course).one? do |founder|
+    user.founders.includes(:startup, :course) do |founder|
       !(founder.exited? || founder.access_ended? || founder.course.ended?)
-    end
+    end.any?
   end
 
   private

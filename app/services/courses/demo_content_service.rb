@@ -9,8 +9,7 @@ module Courses
       new_target_group = create_target_group(new_level)
       create_target(new_target_group)
       evaluation_criterion("Correctness of implementation")
-      evaluation_criterion("Quality of research")
-      evaluation_criterion("Understanding of subject matter")
+      evaluation_criterion("Quality of Submission")
     end
 
     private
@@ -34,14 +33,18 @@ module Courses
     end
 
     def create_target(target_group)
-      Target.create!(
+      target = Target.create!(
         role: "founder",
         title: "Demo Target",
-        description: "Demo Target Description",
-        completion_instructions: "Click on Mark As Complete",
         target_action_type: "Todo",
         target_group: target_group,
-        sort_index: 1
+        sort_index: 1,
+        visibility: Target::VISIBILITY_LIVE
+      )
+      target.content_blocks.create!(
+        block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
+        content: { markdown: "Demo Target Description" },
+        sort_index: 0
       )
     end
 

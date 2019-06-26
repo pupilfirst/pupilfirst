@@ -30,16 +30,24 @@ let statusBar = (~color, ~text) => {
   let textColor = "text-" ++ color ++ "-500 ";
   let bgColor = "bg-" ++ color ++ "-100 ";
 
+  let icon =
+    switch (color) {
+    | "green" =>
+      <span>
+        <i className="fas fa-badge fa-stack-2x" />
+        <i className="fas fa-check fa-stack-1x fa-inverse" />
+      </span>
+    | _anyOtherColor =>
+      <i className="fas fa-exclamation-triangle text-3xl text-red-500 mx-1" />
+    };
+
   <div
     className={
       "font-semibold p-2 py-4 flex w-full items-center justify-center "
       ++ textColor
       ++ bgColor
     }>
-    <span className={"fa-stack text-lg mr-1 " ++ textColor}>
-      <i className="fas fa-badge fa-stack-2x" />
-      <i className="fas fa-check fa-stack-1x fa-inverse" />
-    </span>
+    <span className={"fa-stack text-lg mr-1 " ++ textColor}> icon </span>
     {text |> str}
   </div>;
 };
@@ -251,7 +259,7 @@ let submissions =
                     };
 
                   <div
-                    className="bg-white p-4 md:p-6 flex"
+                    className="bg-gray-100 border-t p-4 md:p-6 flex"
                     key={feedback |> Feedback.id}>
                     <div className="flex-shrink-0"> coachAvatar </div>
                     <div className="flex-grow ml-3">

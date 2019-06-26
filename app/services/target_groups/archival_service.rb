@@ -7,7 +7,7 @@ module TargetGroups
 
     def archive
       TargetGroup.transaction do
-        @target_group.targets.live.each { |target| Targets::ArchivalService.new(target).archive }
+        @target_group.targets.live.each { |target| Targets::UpdateVisibilityService.new(target, Target::VISIBILITY_ARCHIVED).execute }
         @target_group.update!(safe_to_archive: true, archived: true)
       end
     end

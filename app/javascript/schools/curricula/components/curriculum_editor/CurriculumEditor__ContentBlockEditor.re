@@ -155,6 +155,7 @@ let make =
       ~removeTargetContentCB,
       ~sortIndex,
       ~newContentBlockCB,
+      ~blockCount,
       ~createNewContentCB,
       ~moveContentUpCB,
       ~moveContentDownCB,
@@ -368,18 +369,26 @@ let make =
         /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
            it helps to quickly differentiate who does what */
 
-          <button
-            title="Move up"
-            onClick={_event => moveContentUpCB(sortIndex)}
-            className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-            <i className="fas fa-arrow-up" />
-          </button>
-          <button
-            title="Move down"
-            onClick={_event => moveContentDownCB(sortIndex)}
-            className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-            <i className="fas fa-arrow-down" />
-          </button>
+          {
+            sortIndex != 1 ?
+              <button
+                title="Move up"
+                onClick={_event => moveContentUpCB(sortIndex)}
+                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                <i className="fas fa-arrow-up" />
+              </button> :
+              React.null
+          }
+          {
+            sortIndex != blockCount ?
+              <button
+                title="Move down"
+                onClick={_event => moveContentDownCB(sortIndex)}
+                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                <i className="fas fa-arrow-down" />
+              </button> :
+              React.null
+          }
           <button
             title="Delete block"
             onClick={_event => handleDeleteContentBlock(contentBlock)}

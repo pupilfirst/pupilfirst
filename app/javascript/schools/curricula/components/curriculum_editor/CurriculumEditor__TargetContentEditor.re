@@ -257,6 +257,7 @@ let make =
               newContentBlockCB
               createNewContentCB
               updateContentBlockCB
+              blockCount={targetContentBlocks |> List.length}
               moveContentUpCB
               moveContentDownCB
               authenticityToken

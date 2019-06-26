@@ -368,9 +368,9 @@ let make =
       staticMode=false
     />
     <div
-      className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
+      className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden mb-6">
       <div
-        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl shadow z-20">
+        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
         /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
            it helps to quickly differentiate who does what */
 
@@ -428,9 +428,9 @@ let make =
                       profile=Markdown.Permissive
                     />
                   | Image(url, caption) =>
-                    <div className="rounded-lg bg-gray-300">
-                      <img src=url alt=caption />
-                      <div className="px-4 py-2 text-sm italic">
+                    <div className="rounded-lg bg-white">
+                      <img className="mx-auto" src=url alt=caption />
+                      <div className="px-4 py-2 text-sm italic text-center">
                         {caption |> str}
                       </div>
                     </div>
@@ -440,8 +440,7 @@ let make =
                       dangerouslySetInnerHTML={"__html": embedCode}
                     />
                   | File(url, title, filename) =>
-                    <div
-                      className="bg-white shadow-md border px-6 py-4 rounded-lg">
+                    <div className="bg-white px-6 py-4">
                       <a
                         className="flex justify-between items-center" href=url>
                         <div className="flex items-center">

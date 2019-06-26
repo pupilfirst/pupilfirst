@@ -5,8 +5,8 @@ let str = React.string;
 open CurriculumEditor__Types;
 
 let buttonClasses = (visibility, staticMode) => {
-  let classes = "add-content-block py-3 mt-8";
-  classes ++ (visibility || staticMode ? " add-content-block--open" : " ");
+  let classes = "add-content-block py-3";
+  classes ++ (visibility || staticMode ? " add-content-block--open" : " -mt-6");
 };
 
 [@react.component]

@@ -731,7 +731,7 @@ let make =
               </div>
             }
           }
-          <div className="bg-white py-6">
+          <div className="bg-white pt-4 pb-6">
             <div
               className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">
               {

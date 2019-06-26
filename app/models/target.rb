@@ -2,7 +2,7 @@
 
 class Target < ApplicationRecord
   # Use to allow changing visibility of a target. See Targets::UpdateVisibilityService.
-  attr_accessor :safe_to_archive
+  attr_accessor :safe_to_change_visibility
 
   # Need to allow these two to be read for AA form.
   attr_reader :startup_id, :founder_id
@@ -105,13 +105,13 @@ class Target < ApplicationRecord
     errors[:level] << 'should match level of target group'
   end
 
-  validate :must_be_safe_to_archive
+  validate :must_be_safe_to_change_visibility
 
-  def must_be_safe_to_archive
-    return unless visibility_changed? && (visibility == VISIBILITY_DRAFT || visibility == VISIBILITY_ARCHIVED)
-    return if safe_to_archive
+  def must_be_safe_to_change_visibility
+    return unless visibility_changed? && (visibility.in? [VISIBILITY_DRAFT, VISIBILITY_ARCHIVED])
+    return if safe_to_change_visibility
 
-    errors[:visibility] << 'cannot be set unsafely'
+    errors[:visibility] << 'cannot be modified unsafely'
   end
 
   validate :same_course_for_target_and_evaluation_criteria

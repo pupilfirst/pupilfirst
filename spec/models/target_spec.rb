@@ -4,18 +4,18 @@ RSpec.describe Target, type: :model do
   subject { create :target }
 
   context 'when trying to archive a target' do
-    context 'if safe_to_archive is not set' do
+    context 'if safe_to_change_visibility is not set' do
       it 'fails validation' do
-        subject.update(archived: true)
-        expect(subject.errors.to_a).to include('Archived cannot be set unsafely')
-        expect(subject.reload.archived?).to eq(false)
+        subject.update(visibility: Target::VISIBILITY_ARCHIVED)
+        expect(subject.errors.to_a).to include('Visibility cannot be modified unsafely')
+        expect(subject.reload.visibility).to eq(Target::VISIBILITY_LIVE)
       end
     end
 
-    context 'if safe_to_archive is set' do
+    context 'if safe_to_change_visibility is set' do
       it 'passes validation' do
-        subject.update!(archived: true, safe_to_archive: true)
-        expect(subject.reload.archived?).to eq(true)
+        subject.update!(visibility: Target::VISIBILITY_ARCHIVED, safe_to_change_visibility: true)
+        expect(subject.reload.visibility).to eq(Target::VISIBILITY_ARCHIVED)
       end
     end
   end
@@ -23,9 +23,9 @@ RSpec.describe Target, type: :model do
   context 'when trying to unarchive a target' do
     subject { create :target, :archived }
 
-    it 'unarchives target regardless of safe_to_archive' do
-      subject.update!(archived: false)
-      expect(subject.reload.archived?).to eq(false)
+    it 'unarchives target regardless of safe_to_change_visibility' do
+      subject.update!(visibility: Target::VISIBILITY_LIVE)
+      expect(subject.reload.visibility).to eq(Target::VISIBILITY_LIVE)
     end
   end
 end

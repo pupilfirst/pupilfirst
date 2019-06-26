@@ -7,7 +7,7 @@ FactoryBot.define do
     after(:create) do |faculty|
       UserProfile.where(user: faculty.user, school: faculty.school).first_or_create!(
         name: Faker::Name.name,
-        title: Faker::Lorem.words(3).join(', ')
+        title: Faker::Lorem.words(3).join(' ')
       )
     end
   end

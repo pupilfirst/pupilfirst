@@ -47,7 +47,7 @@ let courseEndedMessage = () => {
 
 let accessEndedMessage = () => {
   let title = "Access Ended";
-  let description = "Your access to course has ended.";
+  let description = "Your access to this course has ended.";
   showNotice(title, description, AccessEnded);
 };
 

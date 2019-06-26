@@ -99,6 +99,7 @@ let buttonClasses = status => {
 let make = (~authenticityToken, ~undoSubmissionCB, ~targetId) => {
   let (status, setStatus) = React.useState(() => Pending);
   <button
+    title="Delete this submission"
     disabled={status |> isDisabled}
     className={buttonClasses(status)}
     onClick={

@@ -140,7 +140,13 @@ let submissions =
        let grades =
          targetDetails |> TargetDetails.grades(submission |> Submission.id);
 
-       <div key={submission |> Submission.id} className="mt-4">
+       <div
+         key={submission |> Submission.id}
+         className="mt-4"
+         ariaLabel={
+           "Details about your submission on "
+           ++ (submission |> Submission.createdAtPretty)
+         }>
          <div className="text-xs font-semibold">
            {
              "Submitted on "

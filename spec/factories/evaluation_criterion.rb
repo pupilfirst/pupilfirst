@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :evaluation_criterion do
-    name { Faker::Lorem.words(2).join(' ') }
+    sequence(:name) { |i| (Faker::Lorem.words(2) + [i.to_s]).join(' ') }
     description { Faker::Lorem.sentence }
   end
 end

@@ -56,7 +56,7 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (
       Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
       Evaluated | TakeQuiz,
-    ) => "Submissions and Review"
+    ) => "Submissions & Feedback"
   | (Submitted | Passed | Failed, LinkToComplete | MarkAsComplete) => "Completed"
   | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
   };
@@ -317,8 +317,9 @@ let prerequisitesIncomplete =
                   );
 
              <div
+               ariaLabel={"Select Target " ++ (target |> Target.id)}
                key={target |> Target.id}
-               className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 "
+               className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
                onClick={_ => changeTargetCB(target)}>
                <span className="font-semibold text-left leading-snug">
                  {target |> Target.title |> str}
@@ -471,6 +472,10 @@ let renderPendingStudents = (pendingUserIds, userProfiles) =>
              switch (userProfile) {
              | Some(userProfile) =>
                <div
+                 title={
+                   (userProfile |> UserProfile.name)
+                   ++ " has not completed this target."
+                 }
                  className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
                  <img src={userProfile |> UserProfile.avatarUrl} />
                </div>

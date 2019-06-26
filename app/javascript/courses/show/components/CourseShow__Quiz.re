@@ -61,7 +61,7 @@ let resultsSectionClasses = selectedAnswer => {
 };
 
 let answerOptionClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "quiz-root__answer bg-white flex items-center font-semibold shadow border border-transparent rounded p-3 mt-3 ";
+  let defaultClasses = "quiz-root__answer bg-white flex items-center font-semibold shadow border border-transparent rounded p-3 mt-3 cursor-pointer ";
   switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
     defaultClasses

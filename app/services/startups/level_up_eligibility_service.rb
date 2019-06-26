@@ -56,7 +56,7 @@ module Startups
 
       return Target.none if milestone_groups.empty?
 
-      Target.where(target_group: milestone_groups).where(archived: false)
+      Target.where(target_group: milestone_groups).live
     end
 
     def target_attempted?(target)

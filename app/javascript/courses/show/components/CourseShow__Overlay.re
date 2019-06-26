@@ -557,8 +557,20 @@ let make =
               setScrollToSelection,
             )
           | None =>
-            <div className="text-center text-sm font-semibold">
-              {"Loading..." |> str}
+            <div
+              className="course-overlay__skeleton-head-container max-w-3xl w-full mx-auto">
+              <div
+                className="course-overlay__skeleton-head-wrapper bg-white h-13 flex items-center justify-between border border-b-0 rounded-t-lg mt-5 md:mt-7">
+                <div
+                  className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
+                />
+                <div
+                  className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
+                />
+                <div
+                  className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
+                />
+              </div>
             </div>
           }
         }
@@ -588,7 +600,43 @@ let make =
           }
         </div>
 
-      | None => "Loading..." |> str
+      | None =>
+        <div
+          className="course-overlay__skeleton-body-container max-w-3xl w-full pb-4 mx-auto">
+          <div
+            className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
+            <div
+              className="course-overlay__skeleton-line-placeholder-md mt-4 w-2/4 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-image-placeholder mt-5 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-2/5 skeleton-animate"
+            />
+          </div>
+          <div
+            className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
+            />
+            <div
+              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
+            />
+          </div>
+        </div>
       }
     }
   </div>;

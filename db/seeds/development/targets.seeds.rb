@@ -28,8 +28,8 @@ after 'development:evaluation_criteria', 'development:target_groups', 'developme
       # Targets.
       2.times do
         target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'live')
-        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'archived')
-        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'draft')
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'archived', safe_to_archive: true)
+        target_group.targets.create!(days_to_complete: [7, 10, 14].sample, title: Faker::Lorem.sentence, role: Target.valid_roles.sample, target_group: target_group, description: paragraph, faculty: faculty, target_action_type: Target::TYPE_TODO, resubmittable: true, visibility: 'draft', safe_to_archive: true)
       end
 
       # Add a target with a link to complete.

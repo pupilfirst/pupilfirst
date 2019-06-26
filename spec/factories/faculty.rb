@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :faculty do
-    user { create :user }
+    user
     category { Faculty::CATEGORY_VR_COACHES }
     school
 

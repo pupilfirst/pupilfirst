@@ -29,6 +29,7 @@ describe TimelineEventFilePolicy do
     context "when the current user is a course coach for the linked course" do
       let(:pundit_user) do
         OpenStruct.new(
+          current_user: course_faculty.user,
           current_coach: course_faculty
         )
       end
@@ -41,6 +42,7 @@ describe TimelineEventFilePolicy do
     context 'when the current user is a startup coach for the linked startup' do
       let(:pundit_user) do
         OpenStruct.new(
+          current_user: startup_faculty.user,
           current_coach: startup_faculty
         )
       end
@@ -51,7 +53,7 @@ describe TimelineEventFilePolicy do
     end
 
     context 'when the current user is one of the founders linked to the timeline event' do
-      let(:pundit_user) { OpenStruct.new(current_founder: startup.founders.first) }
+      let(:pundit_user) { OpenStruct.new(current_user: startup.founders.first.user) }
 
       it 'grants access' do
         expect(subject).to permit(pundit_user, timeline_event_file)
@@ -59,7 +61,7 @@ describe TimelineEventFilePolicy do
     end
 
     context 'for any other user' do
-      let(:pundit_user) { OpenStruct.new(current_founder: another_startup.founders.first) }
+      let(:pundit_user) { OpenStruct.new(current_user: another_startup.founders.first.user) }
 
       it 'denies access' do
         expect(subject).not_to permit(pundit_user, timeline_event_file)

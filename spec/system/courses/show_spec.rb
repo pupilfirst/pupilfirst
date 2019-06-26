@@ -87,7 +87,7 @@ feature "Student's view of Course Curriculum" do
 
     scenario 'student visits course curriculum', js: true do
       sign_in_user student.user, referer: course_path(course)
-      expect(page).to have_text('Your access to course has ended.')
+      expect(page).to have_text('Your access to this course has ended.')
     end
   end
 
@@ -141,7 +141,7 @@ feature "Student's view of Course Curriculum" do
     expect(page).to have_selector('.curriculum__target-group', count: 2)
 
     # ...and only one of thoese should be a milestone target group.
-    expect(page).to have_selector('.curriculum__target-group', text: 'Milestone targets', count: 1)
+    expect(page).to have_selector('.curriculum__target-group', text: 'MILESTONE TARGETS', count: 1)
 
     # The 'current level' should be selected.
     expect(page).to have_select("selected_level", selected: "L4: #{level_4.name}")

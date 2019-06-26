@@ -58,6 +58,16 @@ module DeleteContentBlockMutation = [%graphql
    |}
 ];
 
+module UpdateContentBlockMutation = [%graphql
+  {|
+   mutation($id: ID!, $text: String!, $blockType: String!) {
+    updateContentBlock(id: $id, blockType: $blockType, text: $text ) {
+       success
+   }
+  }
+   |}
+];
+
 let faIcons = (blockType: ContentBlock.blockType) =>
   switch (blockType) {
   | Markdown(_markdown) => React.null
@@ -147,6 +157,7 @@ let make =
       ~createNewContentCB,
       ~moveContentUpCB,
       ~moveContentDownCB,
+      ~updateContentBlockCB,
       ~authenticityToken,
     ) => {
   let handleInitialState = {
@@ -259,7 +270,7 @@ let make =
       }
     );
 
-  let updateContentBlock = json => {
+  let updateNewContentBlock = json => {
     open Json.Decode;
     let id = json |> field("id", string);
     let fileUrl =
@@ -286,17 +297,55 @@ let make =
       formData,
       json => {
         Notification.success("Done!", "Content added successfully.");
-        updateContentBlock(json);
+        updateNewContentBlock(json);
         dispatch(UpdateSaving);
       },
       () => dispatch(UpdateSaving),
     );
+  let updateContentBlock = contentBlock => {
+    let id = contentBlock |> ContentBlock.id;
+    let text =
+      switch (contentBlock |> ContentBlock.blockType) {
+      | Markdown(_markdown) => state.markDownContent
+      | File(_url, _title, _filename) => state.contentBlockPropertyText
+      | Image(_url, _caption) => state.contentBlockPropertyText
+      | Embed(_url, _embedCode) => ""
+      };
+    let blockType =
+      contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
+    UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
+    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+    |> Js.Promise.then_(_response => Js.Promise.resolve())
+    |> ignore;
+    let updatedContentBlockType =
+      switch (contentBlock |> ContentBlock.blockType) {
+      | Markdown(_markdown) =>
+        ContentBlock.makeMarkdownBlock(state.markDownContent)
+      | File(url, _title, filename) =>
+        ContentBlock.makeFileBlock(
+          url,
+          state.contentBlockPropertyText,
+          filename,
+        )
+      | Image(url, _caption) =>
+        ContentBlock.makeImageBlock(url, state.contentBlockPropertyText)
+      | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
+      };
+    let updatedContentBlock =
+      ContentBlock.make(
+        id,
+        updatedContentBlockType,
+        contentBlock |> ContentBlock.targetId,
+        sortIndex,
+      );
+    updateContentBlockCB(updatedContentBlock);
+  };
 
   let submitForm = event => {
     dispatch(UpdateSaving);
     ReactEvent.Form.preventDefault(event);
     switch (contentBlock) {
-    | Some(contentBlock) => Js.log(contentBlock)
+    | Some(contentBlock) => updateContentBlock(contentBlock)
     | None =>
       let element =
         ReactDOMRe._getElementById(
@@ -356,14 +405,7 @@ let make =
         <input
           name="content_block[block_type]"
           type_="hidden"
-          value={
-            switch (blockType) {
-            | Markdown(_markdown) => "markdown"
-            | File(_url, _title, _filename) => "file"
-            | Image(_url, _caption) => "image"
-            | Embed(_url, _embedCode) => "embed"
-            }
-          }
+          value={blockType |> ContentBlock.blockTypeAsString}
         />
         <input
           name="content_block[sort_index]"

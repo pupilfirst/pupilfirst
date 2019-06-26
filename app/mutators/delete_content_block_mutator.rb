@@ -6,7 +6,6 @@ class DeleteContentBlockMutator < ApplicationMutator
   validate :not_the_only_content_block
 
   def delete_content_block
-    content_block = ContentBlock.find(id)
     content_block.destroy!
   end
 

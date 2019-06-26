@@ -79,3 +79,11 @@ let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
 let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
+
+let blockTypeAsString = blockType =>
+  switch (blockType) {
+  | Markdown(_markdown) => "markdown"
+  | File(_url, _title, _filename) => "file"
+  | Image(_url, _caption) => "image"
+  | Embed(_url, _embedCode) => "embed"
+  };

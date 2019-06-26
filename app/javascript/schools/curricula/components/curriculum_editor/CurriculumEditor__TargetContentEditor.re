@@ -151,6 +151,27 @@ let make =
     );
   };
 
+  let updateContentBlockCB = contentBlock => {
+    let newContentBlock = (
+      ContentBlock.sortIndex(contentBlock),
+      ContentBlock.blockType(contentBlock),
+      Some(contentBlock),
+      ContentBlock.id(contentBlock),
+    );
+    let updatedContentBlockList =
+      targetContentBlocks
+      |> List.filter(((_, _, _, id)) =>
+           id != ContentBlock.id(contentBlock)
+         )
+      |> List.append([newContentBlock]);
+    updateTargetContentBlocks(_ => updatedContentBlockList);
+    updateContentBlockMasterList(
+      updatedContentBlockList,
+      updateContentBlocksCB,
+      target |> Target.id,
+    );
+  };
+
   let moveContentDownCB = sortIndex => {
     let (lowerCBs, upperCBs) =
       sortedContentBlocks
@@ -231,6 +252,7 @@ let make =
               sortIndex
               newContentBlockCB
               createNewContentCB
+              updateContentBlockCB
               moveContentUpCB
               moveContentDownCB
               authenticityToken

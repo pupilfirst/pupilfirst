@@ -4,7 +4,7 @@ module Schools
       property :block_type, validates: { presence: true }
       property :target_id, validates: { presence: true }
       property :url, virtual: true
-      property :sort_index
+      property :sort_index, validates: { presence: true }
       property :text, virtual: true
       property :file, virtual: true
 

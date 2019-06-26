@@ -44,7 +44,7 @@ let reducer = (state, action) =>
       markDownContent: text,
       formDirty: true,
     }
-  | UpdateFileName(fileName) => {...state, fileName}
+  | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
 
@@ -149,11 +149,13 @@ let saveDisabled = state => !state.formDirty || state.savingContentBlock;
 let make =
     (
       ~target,
+      ~editorId,
       ~contentBlock,
       ~blockType: ContentBlock.blockType,
       ~removeTargetContentCB,
       ~sortIndex,
       ~newContentBlockCB,
+      ~blockCount,
       ~createNewContentCB,
       ~moveContentUpCB,
       ~moveContentDownCB,
@@ -282,12 +284,7 @@ let make =
     let contentBlockType =
       json |> field("content", decodeContent(blockType, fileUrl));
     let newContentBlock =
-      ContentBlock.make(
-        id,
-        contentBlockType,
-        target |> Target.id,
-        state.sortIndex,
-      );
+      ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
     createNewContentCB(newContentBlock);
   };
 
@@ -348,9 +345,7 @@ let make =
     | Some(contentBlock) => updateContentBlock(contentBlock)
     | None =>
       let element =
-        ReactDOMRe._getElementById(
-          "content-block-form-" ++ (sortIndex |> string_of_int),
-        );
+        ReactDOMRe._getElementById("content-block-form-" ++ editorId);
       switch (element) {
       | Some(element) =>
         let formData = DomUtils.FormData.create(element);
@@ -374,18 +369,26 @@ let make =
         /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
            it helps to quickly differentiate who does what */
 
-          <button
-            title="Move up"
-            onClick={_event => moveContentUpCB(sortIndex)}
-            className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-            <i className="fas fa-arrow-up" />
-          </button>
-          <button
-            title="Move down"
-            onClick={_event => moveContentDownCB(sortIndex)}
-            className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-            <i className="fas fa-arrow-down" />
-          </button>
+          {
+            sortIndex != 1 ?
+              <button
+                title="Move up"
+                onClick={_event => moveContentUpCB(sortIndex)}
+                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                <i className="fas fa-arrow-up" />
+              </button> :
+              React.null
+          }
+          {
+            sortIndex != blockCount ?
+              <button
+                title="Move down"
+                onClick={_event => moveContentDownCB(sortIndex)}
+                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                <i className="fas fa-arrow-down" />
+              </button> :
+              React.null
+          }
           <button
             title="Delete block"
             onClick={_event => handleDeleteContentBlock(contentBlock)}
@@ -394,8 +397,8 @@ let make =
           </button>
         </div>
       <form
-        id={"content-block-form-" ++ (sortIndex |> string_of_int)}
-        key={"content-block-form-" ++ (sortIndex |> string_of_int)}
+        id={"content-block-form-" ++ editorId}
+        key={"content-block-form-" ++ editorId}
         onSubmit={event => submitForm(event)}>
         <input
           name="authenticity_token"

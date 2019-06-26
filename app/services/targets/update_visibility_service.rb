@@ -15,7 +15,7 @@ module Targets
         end
       elsif @visibility == Target::VISIBILITY_LIVE
         TargetGroups::ArchivalService.new(@target.target_group).unarchive
-        @target.update!(visbility: Target::VISIBILITY_LIVE)
+        @target.update!(visibility: Target::VISIBILITY_LIVE)
       end
     end
   end

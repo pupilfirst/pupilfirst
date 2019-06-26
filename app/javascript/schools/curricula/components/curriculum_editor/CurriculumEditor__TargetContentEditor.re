@@ -67,9 +67,12 @@ let make =
   let (targetContentBlocks, updateTargetContentBlocks) =
     React.useState(() =>
       contentBlocks
-      |> List.map(cb =>
+      |> List.sort((x, y) =>
+           ContentBlock.sortIndex(x) - ContentBlock.sortIndex(y)
+         )
+      |> List.mapi((index, cb) =>
            (
-             cb |> ContentBlock.sortIndex,
+             index + 1,
              cb |> ContentBlock.blockType,
              Some(cb),
              cb |> ContentBlock.id,

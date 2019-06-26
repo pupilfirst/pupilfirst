@@ -44,7 +44,7 @@ let reducer = (state, action) =>
       markDownContent: text,
       formDirty: true,
     }
-  | UpdateFileName(fileName) => {...state, fileName}
+  | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
 
@@ -149,6 +149,7 @@ let saveDisabled = state => !state.formDirty || state.savingContentBlock;
 let make =
     (
       ~target,
+      ~editorId,
       ~contentBlock,
       ~blockType: ContentBlock.blockType,
       ~removeTargetContentCB,
@@ -282,12 +283,7 @@ let make =
     let contentBlockType =
       json |> field("content", decodeContent(blockType, fileUrl));
     let newContentBlock =
-      ContentBlock.make(
-        id,
-        contentBlockType,
-        target |> Target.id,
-        state.sortIndex,
-      );
+      ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
     createNewContentCB(newContentBlock);
   };
 
@@ -348,9 +344,7 @@ let make =
     | Some(contentBlock) => updateContentBlock(contentBlock)
     | None =>
       let element =
-        ReactDOMRe._getElementById(
-          "content-block-form-" ++ (sortIndex |> string_of_int),
-        );
+        ReactDOMRe._getElementById("content-block-form-" ++ editorId);
       switch (element) {
       | Some(element) =>
         let formData = DomUtils.FormData.create(element);
@@ -394,8 +388,8 @@ let make =
           </button>
         </div>
       <form
-        id={"content-block-form-" ++ (sortIndex |> string_of_int)}
-        key={"content-block-form-" ++ (sortIndex |> string_of_int)}
+        id={"content-block-form-" ++ editorId}
+        key={"content-block-form-" ++ editorId}
         onSubmit={event => submitForm(event)}>
         <input
           name="authenticity_token"

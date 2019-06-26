@@ -248,6 +248,7 @@ let make =
        |> List.map(((sortIndex, blockType, contentBlock, id)) =>
             <CurriculumEditor__ContentBlockEditor
               key=id
+              editorId=id
               target
               contentBlock
               removeTargetContentCB

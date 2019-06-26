@@ -363,7 +363,7 @@ let make =
       staticMode=false
     />
     <div
-      className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden mb-6">
+      className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
       <div
         className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
         /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,

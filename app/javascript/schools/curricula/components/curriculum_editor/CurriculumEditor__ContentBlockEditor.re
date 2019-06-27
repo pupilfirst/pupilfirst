@@ -429,6 +429,7 @@ let make =
                       value=markdown
                       placeholder="You can use Markdown to format this text."
                       profile=Markdown.Permissive
+                      maxLength=100000
                     />
                   | Image(url, caption) =>
                     <div className="rounded-lg bg-white">
@@ -473,6 +474,7 @@ let make =
                     value=""
                     placeholder="You can use Markdown to format this text."
                     profile=Markdown.Permissive
+                    maxLength=100000
                   />
                 </div>
               | _ => contentUploadContainer(blockType, dispatch, state)

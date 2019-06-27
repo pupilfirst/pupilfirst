@@ -2,6 +2,9 @@
  * Template styling that should be
  * inherited by specific profile classes;
  */
+.markdown-block {
+  overflow-wrap: break-word;
+}
 
 .markdown-block__p {
   @apply pt-1 pb-2;

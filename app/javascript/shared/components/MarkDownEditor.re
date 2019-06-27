@@ -143,11 +143,7 @@ let buttons =
               setPreview(_ => !preview);
             }
           )>
-          {
-            preview ?
-              <FaIcon classes="fab fa-markdown" /> :
-              <FaIcon classes="far fa-eye" />
-          }
+          <FaIcon classes={preview ? "fab fa-markdown" : "far fa-eye"} />
           <span className="ml-2">
             {(preview ? "Edit Markdown" : "Preview") |> str}
           </span>
@@ -161,6 +157,7 @@ let buttons =
     |> Array.map(action =>
          <button
            className=classes
+           disabled=preview
            key={action |> buttonTitle}
            title={action |> buttonTitle}
            onClick={
@@ -186,7 +183,15 @@ let buttons =
 };
 
 [@react.component]
-let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?, ~profile) => {
+let make =
+    (
+      ~placeholder=?,
+      ~updateDescriptionCB,
+      ~value,
+      ~label=?,
+      ~profile,
+      ~maxLength=1000,
+    ) => {
   let (description, setDescription) = React.useState(() => value);
   let (preview, setPreview) = React.useState(() => false);
   let (id, _setId) =
@@ -194,7 +199,6 @@ let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?, ~profile) =>
       "markdown-editor-"
       ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
     );
-
   let (label, previewButtonPosition) =
     switch (label) {
     | Some(label) => (
@@ -242,7 +246,7 @@ let make = (~placeholder=?, ~updateDescriptionCB, ~value, ~label=?, ~profile) =>
         /> :
         <textarea
           id
-          maxLength=1000
+          maxLength
           rows=6
           ?placeholder
           value=description
@@ -264,7 +268,15 @@ module Jsx2 = {
   let component = ReasonReact.statelessComponent("MarkDownEditor");
 
   let make =
-      (~placeholder, ~updateDescriptionCB, ~value, ~label, ~profile, children) =>
+      (
+        ~placeholder,
+        ~updateDescriptionCB,
+        ~value,
+        ~label,
+        ~profile,
+        ~maxLength,
+        children,
+      ) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
       makeProps(
@@ -273,6 +285,7 @@ module Jsx2 = {
         ~value,
         ~label,
         ~profile,
+        ~maxLength,
         (),
       ),
       children,

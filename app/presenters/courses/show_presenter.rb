@@ -42,7 +42,6 @@ module Courses
       details = @course.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'ends_at')
 
       details['grade_labels'] = @course.grade_labels_to_props
-      details['enable_discuss'] = @course.communities.where(target_linkable: true).exists?
       details
     end
 

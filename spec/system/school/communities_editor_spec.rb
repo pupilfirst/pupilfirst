@@ -29,7 +29,7 @@ feature 'SA Communities Editor' do
 
     # Add a new Community
     click_button 'Add New Community'
-    fill_in 'Name', with: new_community_name
+    fill_in 'What do you want to call this community?', with: new_community_name
     click_button 'Create a new community'
     expect(page).to have_text("Community created successfully")
     dismiss_notification
@@ -43,14 +43,14 @@ feature 'SA Communities Editor' do
     find("a", text: new_community_name).click
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_2.name)
-    fill_in 'Name', with: new_community_name_for_edit, fill_options: { clear: :backspace }
+    fill_in 'What do you want to call this community?', with: new_community_name_for_edit
     click_button 'Yes'
     find("div[title=\"#{course_1.name} Course\"]").click
     click_button 'Update Community'
+
     expect(page).to have_text("Community updated successfully")
 
-    community.reload
-    expect(community.target_linkable).to eq(true)
+    expect(community.reload.target_linkable).to eq(true)
     expect(community.courses).to eq([course_1])
   end
 end

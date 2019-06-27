@@ -268,9 +268,7 @@ let make =
                   <div
                     className="flex flex-row justify-between px-3 md:px-6 pb-6">
                     <div className="pr-2 pt-6 text-center">
-                      <i
-                        className="fal fa-comment-lines text-xl text-gray-600"
-                      />
+                      <i className="fal fa-comments text-xl text-gray-600" />
                       <p className="text-xs py-1">
                         {
                           state.comments

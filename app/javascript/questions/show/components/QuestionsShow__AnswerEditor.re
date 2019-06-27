@@ -208,57 +208,58 @@ let make =
     );
   let (saving, setSaving) = React.useState(() => false);
   let updateDescriptionCB = description => setDescription(_ => description);
-  <div
-    className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
-    <div className="flex w-full py-4 px-4">
-      <div className="w-full flex flex-col">
-        <DisablingCover disabled=saving>
+  <DisablingCover disabled=saving>
+    <div
+      className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
+      <div className="flex w-full py-4 px-4">
+        <div className="w-full flex flex-col">
           <MarkDownEditor
             label="Your Answer"
             updateDescriptionCB
             value=description
             profile=Markdown.QuestionAndAnswer
           />
-        </DisablingCover>
-        <div className="flex justify-end pt-3 border-t">
-          {
-            switch (handleCloseCB) {
-            | Some(handleCloseCB) =>
-              <button
-                onClick=(_ => handleCloseCB())
-                className="btn btn-default mr-2">
-                {"Cancel" |> str}
-              </button>
-            | None => React.null
-            }
-          }
-          <button
-            disabled={description == ""}
-            onClick={
-              handleAnswer(
-                description,
-                question,
-                authenticityToken,
-                setSaving,
-                currentUserId,
-                setDescription,
-                handleAnswerCB,
-                answer,
-              )
-            }
-            className="btn btn-primary">
+          <div className="flex justify-end pt-3 border-t">
             {
-              (
-                switch (answer) {
-                | Some(_) => "Update Your Answer"
-                | None => "Post Your Answer"
-                }
-              )
-              |> str
+              switch (handleCloseCB) {
+              | Some(handleCloseCB) =>
+                <button
+                  disabled=saving
+                  onClick=(_ => handleCloseCB())
+                  className="btn btn-default mr-2">
+                  {"Cancel" |> str}
+                </button>
+              | None => React.null
+              }
             }
-          </button>
+            <button
+              disabled=saving
+              onClick={
+                handleAnswer(
+                  description,
+                  question,
+                  authenticityToken,
+                  setSaving,
+                  currentUserId,
+                  setDescription,
+                  handleAnswerCB,
+                  answer,
+                )
+              }
+              className="btn btn-primary">
+              {
+                (
+                  switch (answer) {
+                  | Some(_) => "Update Your Answer"
+                  | None => "Post Your Answer"
+                  }
+                )
+                |> str
+              }
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>;
+  </DisablingCover>;
 };

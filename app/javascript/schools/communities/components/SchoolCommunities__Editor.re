@@ -238,9 +238,10 @@ let make =
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__name">
-            {"Name" |> str}
+            {"What do you want to call this community?" |> str}
           </label>
           <input
+            placeholder="This community needs a name!"
             value=name
             onChange={
               event => {
@@ -293,7 +294,7 @@ let make =
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
-            {"Give Access to students from" |> str}
+            {"Give access to students from:" |> str}
           </label>
           <School__SelectBox items=courseState multiSelectCB />
         </div>
@@ -326,5 +327,11 @@ let make =
         }
       </button>
     </DisablingCover>
+    <div className="mt-3 mb-3 text-xs">
+      <span className="leading-normal">
+        <strong> {"Note:" |> str} </strong>
+        {" Coaches in your school have access to all communities." |> str}
+      </span>
+    </div>
   </div>;
 };

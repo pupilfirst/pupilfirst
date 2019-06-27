@@ -16,7 +16,7 @@ module Schools
       {
         logoOnLightBg: current_school.logo_on_light_bg.attached? ? file_details(current_school.logo_on_light_bg) : nil,
         logoOnDarkBg: current_school.logo_on_dark_bg.attached? ? file_details(current_school.logo_on_dark_bg) : nil,
-        icon: current_school.icon.attached? ? file_details(current_school.icon) : { url: view.image_path('layouts/shared/favicon.png'), filename: 'pupilfirst_icon.png' }
+        icon: current_school.icon.attached? ? file_details(current_school.icon) : { url: '/favicon.png', filename: 'pupilfirst_icon.png' }
       }
     end
 

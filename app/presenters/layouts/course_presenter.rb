@@ -10,9 +10,9 @@ module Layouts
 
     def school_icon_path
       if current_school.icon.attached?
-        current_school.icon_variant("thump")
+        current_school.icon_variant("thumb")
       else
-        'layouts/shared/favicon.png'
+        '/favicon.png'
       end
     end
 

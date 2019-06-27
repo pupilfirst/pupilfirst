@@ -72,7 +72,7 @@ class HomeController < ApplicationController
     if current_school.present? && current_school.icon.attached?
       redirect_to view_context.url_for(current_school.icon_variant(:thumb))
     else
-      redirect_to view_context.image_path('layouts/shared/favicon.png')
+      redirect_to '/favicon.png'
     end
   end
 

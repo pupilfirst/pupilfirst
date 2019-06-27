@@ -12,7 +12,7 @@ module Users
     end
 
     def after_sign_in_path
-      school_admin_path || faculty_path || admin_path || founder_path || exited_founder_path || root_path
+      school_admin_path || home_path
     end
 
     private
@@ -23,39 +23,8 @@ module Users
       url_helpers.school_path
     end
 
-    def faculty_path
-      faculty = @user.faculty.find_by(school: @current_school)
-
-      return if faculty.blank?
-
-      courses_with_review_dashboard = faculty.courses_with_dashboard
-
-      return if courses_with_review_dashboard.blank?
-
-      url_helpers.course_coach_dashboard_path(courses_with_review_dashboard.first)
-    end
-
-    def admin_path
-      return if @user.admin_user.blank?
-
-      url_helpers.admin_dashboard_path
-    end
-
-    def founder_path
-      return if @user.founders.not_exited.blank?
-
+    def home_path
       url_helpers.home_path
-    end
-
-    def exited_founder_path
-      exited_founder = @user.founders.where(exited: true).first
-      return if exited_founder.blank?
-
-      url_helpers.student_path(exited_founder)
-    end
-
-    def root_path
-      url_helpers.root_path
     end
   end
 end

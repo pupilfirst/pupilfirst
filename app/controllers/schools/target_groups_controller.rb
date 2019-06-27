@@ -7,7 +7,7 @@ module Schools
       form = ::Schools::TargetGroups::CreateForm.new(target_group)
       if form.validate(params[:target_group])
         target_group = form.save
-        render json: { id: target_group.id, sortIndex: target_group.sort_index, error: nil }
+        render json: { id: target_group.id.to_s, sortIndex: target_group.sort_index, error: nil }
       else
         render json: { error: form.errors.full_messages.join(', ') }
       end
@@ -19,7 +19,7 @@ module Schools
       form = ::Schools::TargetGroups::UpdateForm.new(target_group)
       if form.validate(params[:target_group])
         target_group = form.save
-        render json: { id: target_group.id, sortIndex: target_group.sort_index, error: nil }
+        render json: { id: target_group.id.to_s, sortIndex: target_group.sort_index, error: nil }
       else
         render json: { error: form.errors.full_messages.join(', ') }
       end

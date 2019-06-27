@@ -71,8 +71,7 @@ module Users
 
       {
         text: text,
-        link: view.course_path(founder.course),
-        method: :get
+        link: view.course_path(founder.course)
       }
     end
 
@@ -116,8 +115,7 @@ module Users
     def review_link(course, text = 'Review')
       {
         text: text,
-        link: view.course_coach_dashboard_path(course),
-        method: :get
+        link: view.course_coach_dashboard_path(course)
       }
     end
 
@@ -132,8 +130,7 @@ module Users
     def curriculum_link(founder)
       {
         text: "Curriculum",
-        link: view.course_path(founder.course),
-        method: :get
+        link: view.course_path(founder.course)
       }
     end
 
@@ -142,8 +139,7 @@ module Users
       if course.enable_leaderboard
         {
           text: "Leaderboard",
-          link: view.leaderboard_course_path(course),
-          method: :get
+          link: view.leaderboard_course_path(course)
         }
       end
     end

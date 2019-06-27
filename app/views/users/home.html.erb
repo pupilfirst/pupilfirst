@@ -43,7 +43,7 @@
                 Dropped out
               </div>
             <% else %>
-              <%= link_to course_detail[:cta][:link], method: course_detail[:cta][:method] do %>
+              <%= link_to course_detail[:cta][:link] do %>
                 <div class="text-white bg-transparent font-semibold hover:text-primary-500 hover:bg-white border border-white text-sm p-2 rounded shadow">
                   <%= course_detail[:cta][:text] %>
                 </div>
@@ -55,7 +55,7 @@
             <div class="text-sm"> <%= course_detail[:course_description] %></div>
             <div class="flex flex-row pt-4 flex-wrap">
               <% course_detail[:links].each do |link| %>
-                <%= link_to link[:link], method: link[:method] do %>
+                <%= link_to link[:link] do %>
                   <div class="text-primary-500 border border-primary-500 hover:bg-primary-100 px-2 py-1 text-sm rounded mt-2 mr-3">
                     <i class="fas fa-book text-sm text-primary-500"></i>
                     <span class="text-xs font-semibold pl-1"> <%= link[:text] %> </span>

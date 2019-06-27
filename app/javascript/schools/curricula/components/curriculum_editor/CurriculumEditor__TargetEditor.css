@@ -1,3 +1,28 @@
+.target-editor__tab-item {
+  @apply flex items-center justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 bg-gray-100 text-gray-600;
+}
+
+.target-editor__tab-item:not(.target-editor__tab-item--selected):hover {
+  @apply bg-gray-200 text-primary-400 text-gray-900;
+}
+
+.target-editor__tab-item--selected {
+  border-bottom-color: white;
+  @apply text-primary-500 bg-white;
+}
+
+.target-editor__tab-item-step-number {
+  @apply flex items-center justify-center w-5 h-5 font-bold text-xs leading-snug rounded-full bg-gray-600 text-white;
+}
+
+.target-editor__tab-item:not(.target-editor__tab-item--selected):hover .target-editor__tab-item-step-number {
+  @apply bg-gray-900;
+}
+
+.target-editor__tab-item--selected .target-editor__tab-item-step-number {
+  @apply bg-primary-500 text-white;
+}
+
 .content-block__content-placeholder {
   min-height: 14rem;
 }

@@ -15,7 +15,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
   <div className={buttonClasses(visibility, staticMode)}>
     {
       staticMode ?
-        React.null :
+        <div className="[ add-content-block__staticmode-spacer ] h-10" /> :
         <div
           className="add-content-block__plus-button-container relative"
           onClick={_event => setVisibility(_ => !visibility)}>

@@ -432,22 +432,28 @@ let make =
       </div>
       <div className={formClasses(state.saving)}>
         <div className="w-full">
-          <ul className="flex flex-wrap max-w-3xl mx-auto mt-4 px-3">
+          <ul className="flex flex-wrap max-w-3xl mx-auto mt-6 px-3 -mb-px">
             <li
               onClick={_event => dispatch(UpdateActiveStep(AddContent))}
-              className="w-1/2 border border-b-0 bg-white rounded-tl-lg p-3 text-center font-semibold text-primary-500">
-              {"1. Add Content" |> str}
+              className="target-editor__tab-item target-editor__tab-item--selected ">
+              <span className="target-editor__tab-item-step-number">
+                {"1" |> str}
+              </span>
+              <span className="ml-2"> {"Add Content" |> str} </span>
             </li>
             <li
               onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
-              className="w-1/2 mr-auto border border-b-0 bg-white rounded-tr-lg p-3 text-center font-semibold -ml-px">
-              {"2. Method of Completion" |> str}
+              className="target-editor__tab-item -ml-px ">
+              <span className="target-editor__tab-item-step-number">
+                {"2" |> str}
+              </span>
+              <span className="ml-2"> {"Method of Completion" |> str} </span>
             </li>
           </ul>
           {
             switch (state.activeStep) {
             | AddContent =>
-              <div className="mx-auto bg-white border-t">
+              <div className="mx-auto bg-white border-t border-gray-400">
                 <div className="max-w-3xl py-6 px-3 mx-auto">
                   <label
                     className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
@@ -456,7 +462,7 @@ let make =
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-6 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
                     id="title"
                     type_="text"
                     placeholder="Type target title here"
@@ -486,7 +492,7 @@ let make =
                 </div>
               </div>
             | TargetActions =>
-              <div className="mx-auto bg-white border-t">
+              <div className="mx-auto bg-white border-t border-gray-400">
                 <div className="max-w-3xl py-6 px-3 mx-auto">
                   {
                     showPrerequisiteTargets ?

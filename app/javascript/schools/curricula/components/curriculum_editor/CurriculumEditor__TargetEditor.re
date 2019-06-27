@@ -424,6 +424,7 @@ let make =
     <div className="drawer-right drawer-right-large">
       <div className="drawer-right__close absolute">
         <button
+          id="target-editor-close"
           title="close"
           onClick={_ => hideEditorActionCB()}
           className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
@@ -435,7 +436,7 @@ let make =
           <ul className="flex flex-wrap max-w-3xl mx-auto mt-6 px-3 -mb-px">
             <li
               onClick={_event => dispatch(UpdateActiveStep(AddContent))}
-              className="target-editor__tab-item target-editor__tab-item--selected ">
+              className={"target-editor__tab-item " ++ (state.activeStep == AddContent ? "target-editor__tab-item--selected": "") }>
               <span className="target-editor__tab-item-step-number">
                 {"1" |> str}
               </span>
@@ -443,7 +444,7 @@ let make =
             </li>
             <li
               onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
-              className="target-editor__tab-item -ml-px ">
+              className={"target-editor__tab-item " ++ (state.activeStep == TargetActions ? "target-editor__tab-item--selected": "") }>
               <span className="target-editor__tab-item-step-number">
                 {"2" |> str}
               </span>

@@ -27,7 +27,7 @@ sanitizationProfiles.permissive = [
   "span"
 ];
 
-sanitizationProfiles.questionAnsAnswer = sanitizationProfiles.permissive;
+sanitizationProfiles.questionsAndAnswer = sanitizationProfiles.permissive;
 
 sanitizationProfiles.comment = [
   "p",

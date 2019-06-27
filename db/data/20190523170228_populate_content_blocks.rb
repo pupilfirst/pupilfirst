@@ -107,7 +107,13 @@ class PopulateContentBlocks < ActiveRecord::Migration[5.2]
     Target.where(link_to_complete: "").update_all(link_to_complete: nil)
 
     puts "Setting all non-evaluated targets to non-resubmittable..."
-    Target.includes(:evaluation_criteria).where(evaluation_criteria: { id: nil}).update_all(resubmittable: false)
+    Target.includes(:evaluation_criteria).where(evaluation_criteria: { id: nil }).update_all(resubmittable: false)
+
+    puts "Updating visibility for all archived targets..."
+    Target.where(archived: true).update_all(visibility: Target::VISIBILITY_ARCHIVED)
+
+    puts "Updating visibility for all non-archived targets..."
+    Target.where.not(archived: true).update_all(visibility: Target::VISIBILITY_LIVE)
   end
 
   def down

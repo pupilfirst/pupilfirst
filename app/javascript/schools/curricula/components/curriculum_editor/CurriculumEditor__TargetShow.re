@@ -15,6 +15,7 @@ let make = (~target, ~targetGroup, ~showTargetEditorCB, _children) => {
   ...component,
   render: _self =>
     <div
+      id={"target-show-" ++ (target |> Target.id)}
       className={archivedClasses(target)}
       onClick={
         _e => showTargetEditorCB(targetGroup |> TargetGroup.id, target)

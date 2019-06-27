@@ -88,7 +88,7 @@ let make =
           state.targetTitle,
           [],
           [],
-          [QuizQuestion.empty("0")],
+          [],
           None,
           999,
           Draft,
@@ -162,7 +162,8 @@ let make =
             className="target-group__target-create flex items-center bg-gray-200 border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
             <i className="fal fa-plus-circle text-lg" />
             <input
-              title="Create target "
+              id="create-target-input"
+              title="Create target"
               value={state.targetTitle}
               onChange={
                 event =>
@@ -171,7 +172,7 @@ let make =
                   )
               }
               placeholder="Create a target"
-              className="community-qa-comment__input text-xs text-left bg-gray-200 py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
+              className="target-create__input text-xs text-left bg-gray-200 py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
             />
             {
               state.validTargetTitle ?

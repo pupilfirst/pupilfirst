@@ -451,7 +451,11 @@ let make =
             <li
               onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
               className={
+<<<<<<< HEAD
                 "target-editor__tab-item -ml-px "
+=======
+                "target-editor__tab-item "
+>>>>>>> Remove unnecessary flex class from course editor note
                 ++ (
                   state.activeStep == TargetActions ?
                     "target-editor__tab-item--selected" : ""

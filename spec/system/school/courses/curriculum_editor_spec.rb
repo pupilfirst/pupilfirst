@@ -23,24 +23,19 @@ feature 'Curriculum Editor' do
 
   # Data for target group
   let(:new_target_group_name) { Faker::Lorem.sentence }
-  let(:new_target_group_description) { Faker::Lorem.sentence }
 
   # Data for a normal target
   let(:new_target_1_title) { Faker::Lorem.sentence }
-  let(:new_target_1_description) { Faker::Lorem.paragraphs.join(" ") }
 
   # Data for a mark as complete target
   let(:new_target_2_title) { Faker::Lorem.sentence }
-  let(:new_target_2_description) { Faker::Lorem.paragraphs.join(" ") }
 
   # Data for a target with link to complete
   let(:new_target_3_title) { Faker::Lorem.sentence }
-  let(:new_target_3_description) { Faker::Lorem.paragraphs.join(" ") }
   let(:link_to_complete) { Faker::Internet.url }
 
   # Data for a target with quiz
   let(:new_target_4_title) { Faker::Lorem.sentence }
-  let(:new_target_4_description) { Faker::Lorem.paragraphs.join(" ") }
 
   let(:quiz_question_1) { Faker::Lorem.sentence }
   let(:quiz_question_1_answer_option_1) { Faker::Lorem.sentence }
@@ -130,38 +125,92 @@ feature 'Curriculum Editor' do
     expect(target_group.description).not_to eq(new_target_group_description)
     expect(target_group.milestone).to eq(false)
 
-    # he should be able to create a target with evaluation criteria and resources
-    find('.target-group__target-create').click
-    expect(page).to have_text("TARGET DETAILS")
-    fill_in 'Title', with: new_target_1_title
-    find('trix-editor').click.set new_target_1_description
-    fill_in 'resource_title', with: 'A PDF File'
-    attach_file 'Choose file to upload', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
-    click_button 'Add Resource'
-    expect(page).to have_text('Add Resource')
-    expect(page).to have_text('A PDF File')
+    # user should be able to create a draft target from the curriculum index
+    find('#create-target-input').click
+    fill_in 'create-target-input', with: new_target_1_title
+    click_button 'Create'
+    expect(page).to have_text('Target created successfully')
+    expect(page).to have_selector('.content-block__content', count: 1)
+    expect(page).to have_selector('.add-content-block--open', count: 1)
+    target = target_group.reload.targets.last
+    expect(target.title).to eq(new_target_1_title)
+    find('#target-editor-close').click
+    expect(page).to have_text(new_target_1_title)
+    within("div#target-show-#{target.id}") do
+      expect(page).to have_text('Draft')
+    end
+  end
 
-    find("a", text: "Add URL").click
-    fill_in 'resource_title', with: 'A Link'
-    fill_in 'link', with: 'https://www.sv.co'
-    click_button 'Add Resource'
-    expect(page).to have_text('Add Resource')
-    expect(page).to have_text('A Link')
+  scenario 'school admin adds content to a target and modifies its properties', js: true, broken: true do
+    sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+
+    target = target_4
+
+    # Change target visibility
+    find('.target-group__target', text: target.title).click
+    expect(page).to have_selector('.add-content-block--open', count: 1)
+    click_button 'Next Step'
+    expect(page).to have_text('Target Visibility')
+    within("div#visibility") do
+      click_button 'Live'
+    end
+    click_button 'Update Target'
+    find('.ui-pnotify-container').click
+    within("div#target-show-#{target.id}") do
+      expect(page).to_not have_text('Draft')
+    end
+    expect(target.reload.visibility).to eq('live')
+    find('.target-group__target', text: target.title).click
+    click_button 'Next Step'
+    within("div#visibility") do
+      click_button 'Archived'
+    end
+    click_button 'Update Target'
+    find('.ui-pnotify-container').click
+    expect(page).to_not have_selector("div#target-show-#{target.id}")
+    click_button 'Show Archived'
+    expect(page).to have_selector("div#target-show-#{target.id}")
+    expect(target.reload.visibility).to eq('archived')
+
+    find('.target-group__target', text: target.title).click
+    click_button 'Next Step'
 
     within("div#evaluated") do
       click_button 'Yes'
     end
-    click_button 'Create Target'
 
-    expect(page).to have_text("Target created successfully")
-    find('.ui-pnotify-container').click
-    target_group.reload
-    target = target_group.targets.last
-    expect(target.title).to eq(new_target_1_title)
-    expect(target.description).to eq("<div>" + new_target_1_description + "</div>")
-    expect(target.evaluation_criteria.last.name).to eq(evaluation_criterion.name)
-    expect(target.resources.count).to eq(2)
-    expect(target.resources.pluck(:title)).to contain_exactly('A PDF File', 'A Link')
+    # # he should be able to create a target with evaluation criteria and resources
+    # find('.target-group__target-create').click
+    # expect(page).to have_text("TARGET DETAILS")
+    # fill_in 'Title', with: new_target_1_title
+    # find('trix-editor').click.set new_target_1_description
+    # fill_in 'resource_title', with: 'A PDF File'
+    # attach_file 'Choose file to upload', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
+    # click_button 'Add Resource'
+    # expect(page).to have_text('Add Resource')
+    # expect(page).to have_text('A PDF File')
+    #
+    # find("a", text: "Add URL").click
+    # fill_in 'resource_title', with: 'A Link'
+    # fill_in 'link', with: 'https://www.sv.co'
+    # click_button 'Add Resource'
+    # expect(page).to have_text('Add Resource')
+    # expect(page).to have_text('A Link')
+    #
+    # within("div#evaluated") do
+    #   click_button 'Yes'
+    # end
+    # click_button 'Create Target'
+    #
+    # expect(page).to have_text("Target created successfully")
+    # find('.ui-pnotify-container').click
+    # target_group.reload
+    # target = target_group.targets.last
+    # expect(target.title).to eq(new_target_1_title)
+    # expect(target.description).to eq("<div>" + new_target_1_description + "</div>")
+    # expect(target.evaluation_criteria.last.name).to eq(evaluation_criterion.name)
+    # expect(target.resources.count).to eq(2)
+    # expect(target.resources.pluck(:title)).to contain_exactly('A PDF File', 'A Link')
   end
 
   scenario "Admin creates a target with a link to complete", js: true, broken: true do

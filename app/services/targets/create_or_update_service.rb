@@ -16,7 +16,7 @@ module Targets
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
         @target.link_to_complete = target_params[:link_to_complete]
-        @target.resubmittable = target_params[:prerequisite_target_ids].present?
+        @target.resubmittable = target_params[:evaluation_criterion_ids].present?
         @target.sort_index = sort_index if target_params[:sort_index].blank?
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids] if target_params[:evaluation_criterion_ids].present?
         @target.link_to_complete = target_params[:link_to_complete] if target_params[:link_to_complete].present?

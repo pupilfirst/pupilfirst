@@ -235,10 +235,13 @@ let make =
     <CurriculumEditor__ContentTypePicker
       key="static-content-picker"
       sortIndex={
-                  let (sortIndex, _, _, _) =
-                    sortedContentBlocks |> List.rev |> List.hd;
-                  sortIndex + 1;
-                }
+        switch (sortedContentBlocks) {
+        | [] => 1
+        | nonEmptyList =>
+          let (sortIndex, _, _, _) = nonEmptyList |> List.rev |> List.hd;
+          sortIndex + 1;
+        }
+      }
       staticMode=true
       newContentBlockCB
     />,

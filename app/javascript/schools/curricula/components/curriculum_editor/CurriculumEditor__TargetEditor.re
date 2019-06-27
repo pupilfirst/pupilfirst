@@ -436,7 +436,13 @@ let make =
           <ul className="flex flex-wrap max-w-3xl mx-auto mt-6 px-3 -mb-px">
             <li
               onClick={_event => dispatch(UpdateActiveStep(AddContent))}
-              className={"target-editor__tab-item " ++ (state.activeStep == AddContent ? "target-editor__tab-item--selected": "") }>
+              className={
+                "target-editor__tab-item "
+                ++ (
+                  state.activeStep == AddContent ?
+                    "target-editor__tab-item--selected" : ""
+                )
+              }>
               <span className="target-editor__tab-item-step-number">
                 {"1" |> str}
               </span>
@@ -444,7 +450,13 @@ let make =
             </li>
             <li
               onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
-              className={"target-editor__tab-item " ++ (state.activeStep == TargetActions ? "target-editor__tab-item--selected": "") }>
+              className={
+                "target-editor__tab-item -ml-px "
+                ++ (
+                  state.activeStep == TargetActions ?
+                    "target-editor__tab-item--selected" : ""
+                )
+              }>
               <span className="target-editor__tab-item-step-number">
                 {"2" |> str}
               </span>
@@ -457,7 +469,7 @@ let make =
               <div className="mx-auto bg-white border-t border-gray-400">
                 <div className="max-w-3xl py-6 px-3 mx-auto">
                   <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-xs font-semibold mb-2"
                     htmlFor="title">
                     {"Title" |> str}
                   </label>
@@ -499,7 +511,7 @@ let make =
                     showPrerequisiteTargets ?
                       <div>
                         <label
-                          className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                          className="block tracking-wide text-xs font-semibold mb-2"
                           htmlFor="prerequisite_targets">
                           {"Any prerequisite targets?" |> str}
                         </label>
@@ -514,7 +526,7 @@ let make =
                   }
                   <div className="flex items-center mb-6">
                     <label
-                      className="block tracking-wide text-gray-800 text-xs font-semibold mr-6"
+                      className="block tracking-wide text-xs font-semibold mr-6"
                       htmlFor="evaluated">
                       {"Is this target reviewed by a faculty?" |> str}
                     </label>
@@ -555,7 +567,7 @@ let make =
                       <div>
                         <div className="mb-6">
                           <label
-                            className="block tracking-wide text-gray-800 text-xs font-semibold mr-6 mb-3"
+                            className="block tracking-wide text-xs font-semibold mr-6 mb-3"
                             htmlFor="method_of_completion">
                             {
                               "How do you want the student to complete the target?"
@@ -638,7 +650,7 @@ let make =
                     | Evaluated =>
                       <div id="evaluation_criteria" className="mb-6">
                         <label
-                          className="block tracking-wide text-gray-800 text-xs font-semibold mr-6 mb-2"
+                          className="block tracking-wide text-xs font-semibold mr-6 mb-2"
                           htmlFor="evaluation_criteria">
                           {"Choose evaluation criteria from your list" |> str}
                         </label>
@@ -658,7 +670,7 @@ let make =
                     | TakeQuiz =>
                       <div>
                         <h3
-                          className="block tracking-wide text-gray-800 font-semibold mb-2"
+                          className="block tracking-wide font-semibold mb-2"
                           htmlFor="Quiz question 1">
                           {"Prepare the quiz now." |> str}
                         </h3>
@@ -704,13 +716,13 @@ let make =
                     | VisitLink =>
                       <div>
                         <label
-                          className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                          className="inline-block tracking-wide text-xs font-semibold mb-2"
                           htmlFor="link_to_complete">
                           {"Link to complete" |> str}
                         </label>
                         <span> {"*" |> str} </span>
                         <input
-                          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           id="link_to_complete"
                           type_="text"
                           placeholder="Paste link to complete"
@@ -746,7 +758,7 @@ let make =
                 | TargetActions =>
                   <div className="flex items-center flex-shrink-0">
                     <label
-                      className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
+                      className="block tracking-wide text-xs font-semibold mr-3"
                       htmlFor="archived">
                       {"Target Visibility" |> str}
                     </label>

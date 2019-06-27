@@ -69,8 +69,9 @@ let selectionToString = (targetStatus, overlaySelection) =>
     completionTypeToString(completionType, targetStatus)
   };
 
-let selectableTabs = course =>
-  course |> Course.enableDiscuss ? [Learn, Discuss] : [Learn];
+let selectableTabs = targetDetails =>
+  targetDetails |> TargetDetails.communities |> ListUtils.isNotEmpty ?
+    [Learn, Discuss] : [Learn];
 
 let tabClasses = (selection, overlaySelection) =>
   "course-overlay__body-tab-item px-3 py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold"
@@ -126,7 +127,6 @@ let tabLink =
 
 let overlaySelectionOptions =
     (
-      course,
       overlaySelection,
       setOverlaySelection,
       targetDetails,
@@ -137,7 +137,7 @@ let overlaySelectionOptions =
 
   <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {
-      selectableTabs(course)
+      selectableTabs(targetDetails)
       |> List.map(selection =>
            tabButton(
              selection,
@@ -554,7 +554,6 @@ let make =
           switch (targetDetails) {
           | Some(targetDetails) =>
             overlaySelectionOptions(
-              course,
               overlaySelection,
               setOverlaySelection,
               targetDetails,

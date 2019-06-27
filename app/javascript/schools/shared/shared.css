@@ -465,7 +465,7 @@
 
 .select-list__item-selected {
     animation: glowing 500ms ease-in;
-    @apply .border-indigo-400;
+    @apply border-primary-400;
 }
 
 @keyframes glowing {

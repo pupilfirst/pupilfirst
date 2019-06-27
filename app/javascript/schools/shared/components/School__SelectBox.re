@@ -21,7 +21,7 @@ let make = (~items, ~multiSelectCB) => {
            )
          )
     };
-  <div>
+  <div className="p-6 border rounded bg-gray-100">
     {
       selectedList |> List.length > 0 ?
         selectedList
@@ -29,9 +29,11 @@ let make = (~items, ~multiSelectCB) => {
         |> List.map(((_key, value, _)) =>
              <div
                key={_key |> string_of_int}
-               className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
+               className="select-list__item-selected flex items-center justify-between bg-white font-semibold text-xs text-gray-700 border rounded px-3 py-2 mb-2">
                {value |> str}
                <button
+                 className="p-1 hover:text-gray-900 focus:otline-none"
+                 title="Remove"
                  onClick={
                    _event => {
                      ReactEvent.Mouse.preventDefault(_event);
@@ -39,22 +41,26 @@ let make = (~items, ~multiSelectCB) => {
                      multiSelectCB(_key, value, false);
                    }
                  }>
-                 <Icon kind=Icon.Delete size="4" opacity=75 />
+                 <i className="fas fa-trash-alt text-base" />
                </button>
              </div>
            )
         |> Array.of_list
         |> React.array :
         <div
-          className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
-          {"None Selected" |> str}
+          className="select-list__item-selected flex flex-col items-center justify-center bg-gray-100 text-gray-600 rounded px-3 pt-3 ">
+          <i className="fal fa-inbox text-3xl" />
+          <h5 className="mt-1 font-semibold"> {"None Selected" |> str} </h5>
+          <span className="text-xs">
+            {"Select from the following list" |> str}
+          </span>
         </div>
     }
     {
       nonSelectedList |> List.length > 0 ?
-        <div className="flex relative">
+        <div className="flex relative pt-4">
           <div
-            className="select-list__group bg-white border rounded rounded-t-none shadow pb-2 w-full">
+            className="select-list__group text-sm bg-white rounded shadow pb-2 w-full">
             {
               nonSelectedList |> List.length > 3 ?
                 <div className="px-3 pt-3 pb-2">
@@ -73,7 +79,7 @@ let make = (~items, ~multiSelectCB) => {
             <div
               className={
                 nonSelectedList |> List.length > 3 ?
-                  "h-24 overflow-y-scroll" : ""
+                  "h-28 overflow-y-scroll" : ""
               }>
               {
                 filteredList
@@ -88,7 +94,7 @@ let make = (~items, ~multiSelectCB) => {
                          }
                        }
                        title=value
-                       className="px-3 py-2 hover:bg-gray-200">
+                       className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500">
                        {value |> str}
                      </div>
                    )

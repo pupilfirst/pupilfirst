@@ -35,29 +35,41 @@ let handleEmpty = () =>
     className="flex flex-col justify-center items-center bg-white px-3 py-10">
     <i className="fa fa-comments text-5xl text-gray-600 mb-2 " />
     <div className="text-center">
-      <h4 className="font-bold"> {"There's no one here yet." |> str} </h4>
+      <h4 className="font-bold">
+        {"There's been no recent discussion about this target." |> str}
+      </h4>
       <p>
         {
-          "This is where you'll see all the discussion activity happening on this target."
+          "Use the community to clear your doubts, and to help your peers!"
           |> str
         }
       </p>
     </div>
   </div>;
 
-let actionButtons = (communityId, targetId) =>
+let actionButtons = (community, targetId) => {
+  let communityId = community |> Community.id;
+  let communityName = community |> Community.name;
+
   <div className="flex">
     <a
+      title={
+        "Browse all questions about this target in the "
+        ++ communityName
+        ++ " community"
+      }
       href={linkToCommunity(communityId, targetId)}
       className="btn btn-default mr-3">
       {React.string("Go to community")}
     </a>
     <a
+      title={"Ask a question in the " ++ communityName ++ " community"}
       href={linkToNewQuestion(communityId, targetId)}
       className="btn btn-primary">
       {React.string("Ask a question")}
     </a>
   </div>;
+};
 
 let communityTitle = community =>
   <h5 className="font-bold">
@@ -79,7 +91,7 @@ let make = (~target, ~targetDetails) => {
              <div
                className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
                <div> {communityTitle(community)} </div>
-               {actionButtons(communityId, targetId)}
+               {actionButtons(community, targetId)}
              </div>
              <div
                className="justify-between rounded-lg overflow-hidden shadow">

@@ -446,19 +446,26 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when the course has a community which accepts linked targets' do
-    scenario 'student uses the discuss feature', js: true, broken: true do
-      sign_in_user(founder_1.user, referer: home_path)
-      expect(page).to have_text(target.title)
+    let!(:community_1) { create :community, :target_linkable, school: course.school, courses: [course] }
+    let!(:community_2) { create :community, :target_linkable, school: course.school, courses: [course] }
+    let!(:question_1) { create :question, community: community_1, creator: student.user }
+    let!(:question_2) { create :question, community: community_1, creator: student.user }
+    let(:question_title) { Faker::Lorem.sentence }
+    let(:question_description) { Faker::Lorem.paragraph }
 
-      find('.founder-dashboard-target-header__headline', text: target.title).click
+    scenario 'student uses the discuss feature' do
+      sign_in_user student.user, referer: target_path(target)
 
-      # Expect page to have community tab
-      expect(page).to have_text(community.name)
-      expect(page).to have_text("Go to community")
-      expect(page).to have_text("Ask a question")
+      # Overlay should have a discuss tab that lists linked communities.
+      find('.course-overlay__body-tab-item', text: 'Discuss').click
+      expect(page).to have_text(community_1.name)
+      expect(page).to have_text(community_2.name)
+      expect(page).to have_link("Go to community", count: 2)
+      expect(page).to have_link("Ask a question", count: 2)
+      expect(page).to have_text("There's been no recent discussion about this target.", count: 2)
 
-      # He can ask a question related to the target in community from target overlay
-      click_link "Ask a question"
+      # Student can ask a question related to the target in community from target overlay.
+      find("a[title='Ask a question in the #{community_1.name} community'").click
 
       expect(page).to have_text("ASK A NEW QUESTION")
       expect(page).to have_text(target.title)
@@ -470,28 +477,29 @@ feature 'Target Overlay', js: true do
       expect(page).to have_text(question_title)
       expect(page).to have_text(question_description)
       expect(page).not_to have_text("ASK A NEW QUESTION")
+
+      # The question should have been linked to the target.
       expect(Question.where(title: question_title).first.targets.first).to eq(target)
 
-      # He can see the questions related to the target in target overlay
-      sign_in_user(founder_1.user, referer: home_path)
-      find('.founder-dashboard-target-header__headline', text: target.title).click
-      expect(page).to have_text(community.name)
+      # Return to the target overlay. Student should be able to their question there now.
+      visit target_path(target)
+      find('.course-overlay__body-tab-item', text: 'Discuss').click
+
+      expect(page).to have_text(community_1.name)
       expect(page).to have_text(question_title)
 
-      # He can filter all questions linked to the target
-      click_link 'Go to community'
+      # Student can filter all questions linked to the target.
+      find("a[title='Browse all questions about this target in the #{community_1.name} community'").click
       expect(page).to have_text('Clear Filter')
       expect(page).to have_text(question_title)
       expect(page).not_to have_text(question_1.title)
       expect(page).not_to have_text(question_2.title)
-      expect(page).not_to have_text(question_3.title)
 
-      # He see all questions in the community by clearing the filter
+      # Student see all questions in the community by clearing the filter.
       click_link 'Clear Filter'
       expect(page).to have_text(question_title)
       expect(page).to have_text(question_1.title)
       expect(page).to have_text(question_2.title)
-      expect(page).to have_text(question_3.title)
     end
   end
 end

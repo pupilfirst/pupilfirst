@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Student's view of Course Curriculum" do
+feature "Student's view of Course Curriculum", js: true do
   include UserSpecHelper
 
   # The basics.
@@ -59,14 +59,14 @@ feature "Student's view of Course Curriculum" do
   # context 'when student has not visited the course curriculum page before' do
   #   let(:dashboard_toured) { false }
   #
-  #   scenario 'student sees tour of the interface', js: true do
+  #   scenario 'student sees tour of the interface' do
   #     sign_in_user founder.user, referer: student_dashboard_path
   #     expect(page).to have_selector('.introjs-overlay')
   #   end
   # end
 
   context 'when student has exited the programme' do
-    scenario 'ex-student attempts to visit course curriculum', js: true do
+    scenario 'ex-student attempts to visit course curriculum' do
       student.update!(exited: true)
       sign_in_user student.user, referer: course_path(course)
       expect(page).to have_content("The page you were looking for doesn't exist!")
@@ -76,7 +76,7 @@ feature "Student's view of Course Curriculum" do
   context 'when the course the student belongs has ended' do
     let(:course) { create :course, ends_at: 1.day.ago }
 
-    scenario 'student visits course curriculum', js: true do
+    scenario 'student visits course curriculum' do
       sign_in_user student.user, referer: course_path(course)
       expect(page).to have_text('The course has ended and submissions are disabled for all targets!')
     end
@@ -85,13 +85,13 @@ feature "Student's view of Course Curriculum" do
   context "when a student's access to a course has ended" do
     let!(:team) { create :startup, level: level_4, access_ends_at: 1.day.ago }
 
-    scenario 'student visits course curriculum', js: true do
+    scenario 'student visits course curriculum' do
       sign_in_user student.user, referer: course_path(course)
       expect(page).to have_text('Your access to this course has ended.')
     end
   end
 
-  scenario 'student visits course curriculum', js: true do
+  scenario 'student visits course curriculum' do
     sign_in_user student.user, referer: course_path(course)
 
     # Course name should be displayed.
@@ -183,7 +183,7 @@ feature "Student's view of Course Curriculum" do
   end
 
   # TODO: Student should be able to trigger an intro to the interface manually.
-  # scenario 'student can trigger the intro manually', js: true do
+  # scenario 'student can trigger the intro manually' do
   #   sign_in_user student.user, referer: student_dashboard_path
   #
   #   # There should be no tour open right now.
@@ -201,7 +201,7 @@ feature "Student's view of Course Curriculum" do
     let(:target_group_l0) { create :target_group, level: level_0 }
     let!(:level_0_target) { create :target, target_group: target_group_l0, role: Target::ROLE_TEAM }
 
-    scenario 'student visits the dashboard', js: true do
+    scenario 'student visits the dashboard' do
       sign_in_user student.user, referer: course_path(course)
 
       expect(page).to have_select('selected_level', selected: "L4: #{level_4.name}")
@@ -224,7 +224,7 @@ feature "Student's view of Course Curriculum" do
   context "when a student's course has an archived target group in it" do
     let!(:target_group_l4_archived) { create :target_group, :archived, level: level_4, milestone: true, description: Faker::Lorem.sentence }
 
-    scenario 'archived target groups are not displayed', js: true do
+    scenario 'archived target groups are not displayed' do
       sign_in_user student.user, referer: course_path(course)
 
       expect(page).to have_content(target_group_l4_1.name)
@@ -242,7 +242,7 @@ feature "Student's view of Course Curriculum" do
       let(:c2_team) { create :startup, level: c2_level_1 }
       let!(:c2_student) { create :founder, startup: c2_team, dashboard_toured: dashboard_toured, user: student.user }
 
-      scenario 'student switches to another course', js: true do
+      scenario 'student switches to another course' do
         # Sign into the first course.
         sign_in_user c2_student.user, referer: course_path(course)
 
@@ -264,7 +264,7 @@ feature "Student's view of Course Curriculum" do
       let(:c2_team) { create :startup, level: c2_level_1 }
       let!(:c2_student) { create :founder, startup: c2_team, dashboard_toured: dashboard_toured, user: student.user }
 
-      scenario 'courses in other schools are not displayed', js: true do
+      scenario 'courses in other schools are not displayed' do
         # Sign into the first course.
         sign_in_user c2_student.user, referer: course_path(course)
 

@@ -169,7 +169,7 @@ RSpec.configure do |config|
 end
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = ENV['CAPYBARA_MAX_WAIT_TIME'].present? ? ENV['CAPYBARA_MAX_WAIT_TIME'].to_i : 5
 
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'

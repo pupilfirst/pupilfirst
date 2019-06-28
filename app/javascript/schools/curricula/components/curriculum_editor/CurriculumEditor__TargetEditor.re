@@ -283,15 +283,11 @@ let reducer = (state, action) =>
       dirty: true,
     }
   | AddQuizQuestion =>
-    let lastQuestionId = state.quiz |> List.rev |> List.hd |> QuizQuestion.id;
-
     let quiz =
       state.quiz
       |> List.rev
       |> List.append([
-           QuizQuestion.empty(
-             (lastQuestionId |> int_of_string) + 1 |> string_of_int,
-           ),
+           QuizQuestion.empty(Js.Date.now() |> Js.Float.toString),
          ])
       |> List.rev;
     {...state, quiz, dirty: true, isValidQuiz: isValidQuiz(quiz)};

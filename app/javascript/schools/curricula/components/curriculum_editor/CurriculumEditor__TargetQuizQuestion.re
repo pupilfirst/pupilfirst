@@ -41,21 +41,12 @@ let make =
       quizQuestion |> QuizQuestion.markAsCorrect(id),
     );
 
-  let addAnswerOption = () => {
-    let lastAnswerOptionID =
-      quizQuestion
-      |> QuizQuestion.answerOptions
-      |> List.rev
-      |> List.hd
-      |> AnswerOption.id;
+  let addAnswerOption = () =>
     updateQuizQuestionCB(
       quizQuestion |> QuizQuestion.id,
       quizQuestion
-      |> QuizQuestion.newAnswerOption(
-           (lastAnswerOptionID |> int_of_string) + 1 |> string_of_int,
-         ),
+      |> QuizQuestion.newAnswerOption(Js.Date.now() |> Js.Float.toString),
     );
-  };
   let canBeDeleted =
     quizQuestion |> QuizQuestion.answerOptions |> List.length > 2;
   let questionId = questionNumber + 1 |> string_of_int;

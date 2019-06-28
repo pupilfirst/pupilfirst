@@ -9,7 +9,7 @@ module Courses
       new_target_group = create_target_group(new_level)
       create_target(new_target_group)
       evaluation_criterion("Correctness of implementation")
-      evaluation_criterion("Quality of Submission")
+      evaluation_criterion("Quality of submission")
     end
 
     private

@@ -1,5 +1,0 @@
----
-timestamp: '2019-05-09T08:04:27Z'
-title: Fixed a bug that prevented the coach review dashboard from loading previously
-  reviewed submissions in some cases.
-category: bugfix

@@ -1,7 +1,0 @@
----
-timestamp: '2019-05-03T13:33:47Z'
-title: Student submissions can now be _un-done_ / deleted right after they are submitted,
-  and directly from the target details overlay. This replaces the old approach of
-  navigating to the student's profile page to be able to delete a submission. Like before,
-  only un-reviewed submissions can be deleted.
-category: ui

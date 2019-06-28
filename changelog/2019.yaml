@@ -1,5 +1,45 @@
 ---
 changelog:
+- timestamp: '2019-06-28T07:38:26Z'
+  changes:
+  - timestamp: '2019-06-28T07:38:10Z'
+    title: The student dashboard has been overhauled with a fresh design, and the
+      target details overlay has been upgraded to allow us to present rich documents as content
+      for students to consume. School admins can now author much larger documents
+      as content for targets, freely introducing blocks of markdown, embeds from various sites,
+      images, or files for students to download.
+    category: feature
+  - timestamp: '2019-06-10T05:21:00Z'
+    title: We have a new home _landing page_ for the signed-in user. Users can now
+      see all the courses and communities they belong to in a single page. All course
+      related links are also directly accessed from this page.
+    category: feature
+  - timestamp: '2019-06-10T04:58:41Z'
+    title: The community feature is now live! This new features enables school admins
+      to create multiple communities in a school where students can discuss target
+      and other doubts with their peers. All communities linked to a course can now be
+      directly accessed from the student dashboard. Students who have access to a
+      community can ask question, answer questions from others, and _upvote_ answers.
+      Coaches act as moderators for the community. The author of the community resource,
+      or any coach, can edit or remove _said_ resources. The content of questions, answers,
+      and comments are versioned, to keep track of changes, and _Markdown_ can be used to
+      format the content of questions, answers and comments.
+    category: feature
+  - timestamp: '2019-05-09T08:04:27Z'
+    title: Fixed a bug that prevented the coach review dashboard from loading previously
+      reviewed submissions in some cases.
+    category: bugfix
+  - timestamp: '2019-05-03T13:33:47Z'
+    title: Student submissions can now be _un-done_ / deleted right after they are
+      submitted, and directly from the target details overlay. This replaces the old
+      approach of navigating to the student's profile page to be able to delete a
+      submission. Like before, only un-reviewed submissions can be deleted.
+    category: ui
+  - timestamp: '2019-04-25T10:12:57Z'
+    title: There's a new customization interface which school admins can use to change
+      various aspects of the school's appearance, from logos and icons, to links and
+      legal agreements.
+    category: feature
 - timestamp: '2019-04-22T08:33:51Z'
   changes:
   - timestamp: '2019-04-22T06:50:58Z'

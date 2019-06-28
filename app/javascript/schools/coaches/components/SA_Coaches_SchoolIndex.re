@@ -81,7 +81,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                          }>
                          <div className="flex">
                            <img
-                             className="w-10 h-10 rounded-full mr-4"
+                             className="w-10 h-10 rounded-full mr-4 object-cover"
                              src={coach |> Coach.imageUrl}
                              alt={"Avatar of " ++ (coach |> Coach.name)}
                            />

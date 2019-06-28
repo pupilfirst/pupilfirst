@@ -14,13 +14,57 @@ class CreateTargetMutator < ApplicationMutator
   end
 
   def content_block_text
-    "## Markdown editor\n\nYou can create your target text content using this editor. Use the preview button to get a \
-    feel of the generated content. Here is a basic guide to format content using markdown:\n\n## HEADERS\n\n# This is an \
-    h1 header\n## This is an h2 header\n###### This is an h6 header\n\n\n\n## EMPHASIS\n\n*This text will be italic*\n_This \
-    will also be italic_\n**This text will be bold**\n__This will also be bold__\n\n\n\n## LINKS\n\nhttp://github.com - \
-    automatic!\n[GitHub](http://github.com)\n\n\n\n## CODE BLOCKS\n\n\n```javascript\nfunction test() \
-    {\n console.log('this is generated using markdown');\n}\n```\n\n\n\n## LISTS\n\nUnordered:\n* Item 1\n* Item 2\n   \
-    * Item 2a\n   * Item 2b\n\nOrdered:\n1. Item 1\n2. Item 2\n3. Item 3\n    * Item 3a\n    * Item 3b\n\nRefer to \
-    [Markdown Guide](https://www.markdownguide.org/cheat-sheet) for more information.\n"
+    <<~PREVIEW_CONTENT
+      ## Markdown editor
+
+      You can create your target text content using this editor. Use the preview button to get a feel of the generated content. Here is a basic guide to format content using markdown:
+
+      ## Headings
+
+      # This is a Level 1 heading
+      ### This is a Level 3 heading
+      ###### This is a Level 6 heading
+
+      ## Emphasis
+
+      *This text will be italic.*
+
+      _This will also be italic._
+
+      **This text will be bold.**
+
+      __This will also be bold.__
+
+      ## Links
+
+      This is how you link to [GitHub](http://github.com).
+
+      ## Code blocks
+
+      ```javascript
+      function test()     {
+       console.log('This is generated using markdown.');
+      }
+      ```
+
+      ## Lists
+
+      Un-ordered:
+
+      * Item 1
+      * Item 2
+        * Item 2a
+        * Item 2b
+
+      Ordered:
+
+      1. Item 1
+      2. Item 2
+      3. Item 3
+          1. Item 3.1
+          2. Item 3.2
+
+      Please refer to [Markdown Guide](https://commonmark.org/help) for more information.
+    PREVIEW_CONTENT
   end
 end

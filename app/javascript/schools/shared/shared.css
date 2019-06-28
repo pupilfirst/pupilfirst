@@ -405,12 +405,12 @@
     visibility: visible;
 }
 
-.quiz-maker__question-container::before {
+.quiz-maker__answers-container::before {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 45%;
     transform: translateY(-50%);
-    height: calc(100% - 110px);
+    height: calc(100% - 45px);
     margin-top: 0.875rem;
     bottom: 0;
     width: 1px;

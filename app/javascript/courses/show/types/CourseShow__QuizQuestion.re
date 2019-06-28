@@ -7,7 +7,6 @@ type answerOption = {
 type t = {
   index: int,
   question: string,
-  description: option(string),
   answerOptions: list(answerOption),
 };
 
@@ -22,16 +21,12 @@ let decode = json =>
   Json.Decode.{
     index: json |> field("index", int),
     question: json |> field("question", string),
-    description:
-      json |> field("description", nullable(string)) |> Js.Null.toOption,
     answerOptions: json |> field("answerOptions", list(decodeAnswerOption)),
   };
 
 let index = t => t.index;
 
 let question = t => t.question;
-
-let description = t => t.description;
 
 let answerOptions = t => t.answerOptions;
 

@@ -163,8 +163,12 @@ let submissions =
            }
          </div>
          <div className="mt-2 rounded-lg bg-gray-100 shadow overflow-hidden">
-           <div className="p-4 md:p-6 whitespace-pre-wrap">
-             {submission |> Submission.description |> str}
+           <div className="p-4 md:p-6">
+             <MarkdownBlock
+               className=""
+               profile=Markdown.Permissive
+               markdown={submission |> Submission.description}
+             />
              {
                attachments |> ListUtils.isEmpty ?
                  React.null :

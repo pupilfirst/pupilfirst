@@ -53,7 +53,7 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   def result
     @result ||= begin
       score = 0
-      intro = "Target '#{target.title}' was completed by answering a quiz:"
+      intro = "Target _#{target.title}_ was completed by answering a quiz:"
 
       body = questions.each_with_index.map do |question, index|
         correct_answer = question.correct_answer
@@ -63,31 +63,31 @@ class CreateQuizSubmissionMutator < ApplicationMutator
           score += 1
         end
 
-        "\nQ#{index + 1}: #{question.question}\n#{answer_text(question, correct_answer, u_answer)}"
-      end.join("\n")
+        stripped_question = question.question.strip
+        end_with_lb_or_space = stripped_question.ends_with?('```') ? "\n\n" : "  \n"
+
+        "### Question #{index + 1}\n#{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
+      end.join("\n\n")
 
       {
         score: "#{score}/#{number_of_question}",
-        description: "#{intro}\n#{body}"
+        description: "#{intro}\n\n#{body}"
       }
     end
   end
 
-  def answer_text(question, correct_answer, u_answer)
-    question.answer_options.each_with_index.map do |answer, index|
-      "#{index + 1}. #{answer.value} #{result_text(answer, correct_answer, u_answer)}"
-    end.join("\n")
+  def pretty_answer(answer)
+    stripped_answer = answer.strip
+    start_with_lb_or_space = stripped_answer.starts_with?('```') ? "\n" : " "
+    end_with_lb_or_space = stripped_answer.ends_with?('```') ? "\n\n" : "  \n"
+    "#{start_with_lb_or_space}#{stripped_answer}#{end_with_lb_or_space}"
   end
 
-  def result_text(answer, correct_answer, u_answer)
-    if (answer == correct_answer) && (answer == u_answer)
-      '(Your correct answer)'
-    elsif (answer == correct_answer) && (answer != u_answer)
-      '(Correct answer)'
-    elsif answer == u_answer
-      '(Your answer)'
+  def answer_text(correct_answer, u_answer)
+    if u_answer == correct_answer
+      "**Your Correct Answer:**#{pretty_answer(u_answer.value)}"
     else
-      ''
+      "**Your Answer:**#{pretty_answer(u_answer.value)}**Correct Answer:**#{pretty_answer(correct_answer.value)}"
     end
   end
 end

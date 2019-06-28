@@ -185,6 +185,7 @@ let buttons =
 [@react.component]
 let make =
     (
+      ~textareaId=?,
       ~placeholder=?,
       ~updateDescriptionCB,
       ~value,
@@ -196,8 +197,12 @@ let make =
   let (preview, setPreview) = React.useState(() => false);
   let (id, _setId) =
     React.useState(() =>
-      "markdown-editor-"
-      ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
+      switch (textareaId) {
+      | Some(id) => id
+      | None =>
+        "markdown-editor-"
+        ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
+      }
     );
   let (label, previewButtonPosition) =
     switch (label) {

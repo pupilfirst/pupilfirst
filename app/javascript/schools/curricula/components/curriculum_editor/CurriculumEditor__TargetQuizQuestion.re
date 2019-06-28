@@ -60,7 +60,7 @@ let make =
     quizQuestion |> QuizQuestion.answerOptions |> List.length > 2;
   let questionId = questionNumber + 1 |> string_of_int;
 
-  <div className="quiz-maker__question-container relative py-4">
+  <div className="quiz-maker__question-container py-4">
     <div className="flex items-end justify-between">
       <label
         className="block tracking-wide uppercase text-gray-800 text-xs font-semibold"
@@ -86,51 +86,50 @@ let make =
         }
       </div>
     </div>
-    <div className="flex relative items-center my-2">
-      <input
-        id={"quiz_question_" ++ questionId}
-        className="w-full text-gray-800 border rounded-lg p-4 focus:outline-none"
-        type_="text"
-        placeholder="Type the question here"
+    <div className="my-2">
+      <MarkDownEditor
+        textareaId={"quiz_question_" ++ questionId}
+        placeholder="Type the question here (supports markdown)"
         value={quizQuestion |> QuizQuestion.question}
-        onChange={
-          event => updateQuestion(ReactEvent.Form.target(event)##value)
-        }
+        updateDescriptionCB=updateQuestion
+        profile=Markdown.Permissive
       />
     </div>
-    {
-      quizQuestion
-      |> QuizQuestion.answerOptions
-      |> List.mapi((index, answerOption) =>
-           <CurriculumEditor__TargetQuizAnswer
-             key={answerOption |> AnswerOption.id}
-             answerOption
-             updateAnswerOptionCB
-             removeAnswerOptionCB
-             canBeDeleted
-             markAsCorrectCB
-             answerOptionId={answerOptionId(questionId, index)}
-           />
-         )
-      |> Array.of_list
-      |> React.array
-    }
-    <div
-      onClick={
-        _event => {
-          ReactEvent.Mouse.preventDefault(_event);
-          addAnswerOption();
-        }
+    <div className="quiz-maker__answers-container relative">
+      {
+        quizQuestion
+        |> QuizQuestion.answerOptions
+        |> List.mapi((index, answerOption) =>
+             <CurriculumEditor__TargetQuizAnswer
+               key={answerOption |> AnswerOption.id}
+               answerOption
+               updateAnswerOptionCB
+               removeAnswerOptionCB
+               canBeDeleted
+               markAsCorrectCB
+               answerOptionId={answerOptionId(questionId, index)}
+             />
+           )
+        |> Array.of_list
+        |> React.array
       }
-      className="quiz-maker__answer-option cursor-pointer relative">
       <div
-        className="quiz-maker__answer-option-pointer quiz-maker__answer-option-pointer--add">
-        <Icon kind=Icon.PlusCircle size="full" />
+        onClick={
+          _event => {
+            ReactEvent.Mouse.preventDefault(_event);
+            addAnswerOption();
+          }
+        }
+        className="quiz-maker__answer-option cursor-pointer relative">
+        <div
+          className="quiz-maker__answer-option-pointer quiz-maker__answer-option-pointer--add">
+          <Icon kind=Icon.PlusCircle size="full" />
+        </div>
+        <a
+          className="flex items-center h-11 bg-white hover:bg-gray-200 border rounded-lg ml-12 py-3 px-4">
+          <p className="text-xs"> {"Add another Answer Option" |> str} </p>
+        </a>
       </div>
-      <a
-        className="flex items-center h-11 bg-white hover:bg-gray-200 border rounded-lg ml-12 py-3 px-4">
-        <p className="text-xs"> {"Add another Answer Option" |> str} </p>
-      </a>
     </div>
   </div>;
 };

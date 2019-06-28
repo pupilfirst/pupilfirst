@@ -232,14 +232,12 @@ feature 'Target Overlay', js: true do
         # Question one
         expect(page).to have_content(/Question #1/i)
         expect(page).to have_content(quiz_question_1.question)
-        expect(page).to have_content(quiz_question_1.description)
         find('.quiz-root__answer', text: q1_answer_1.value).click
         click_button('Next Question')
 
         # Question two
         expect(page).to have_content(/Question #2/i)
         expect(page).to have_content(quiz_question_2.question)
-        expect(page).to have_content(quiz_question_2.description)
         find('.quiz-root__answer', text: q2_answer_4.value).click
         click_button('Submit Quiz')
 
@@ -251,10 +249,10 @@ feature 'Target Overlay', js: true do
         end
 
         # The quiz result should be visible.
-        expect(page).to have_content("Target '#{quiz_target.title}' was completed by answering a quiz")
-        expect(page).to have_content("#{q1_answer_1.value} (Your answer)")
-        expect(page).to have_content(" #{q1_answer_2.value} (Correct answer)")
-        expect(page).to have_content("#{q2_answer_4.value} (Your correct answer)")
+        expect(page).to have_content("Target #{quiz_target.title} was completed by answering a quiz")
+        expect(page).to have_content("Your Answer: #{q1_answer_1.value}")
+        expect(page).to have_content("Correct Answer: #{q1_answer_2.value}")
+        expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
 
         # The score should have stored on the submission.
         expect(TimelineEvent.last.quiz_score).to eq('1/2')

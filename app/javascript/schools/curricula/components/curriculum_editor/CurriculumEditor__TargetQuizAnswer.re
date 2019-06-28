@@ -13,14 +13,7 @@ let make =
       ~canBeDeleted,
       ~markAsCorrectCB,
       ~answerOptionId,
-    ) => {
-  let (hasHint, setHasHint) = React.useState(() => false);
-  let hint =
-    switch (answerOption |> AnswerOption.hint) {
-    | Some(value) => value
-    | None => ""
-    };
-
+    ) =>
   <div className="relative">
     {
       answerOption |> AnswerOption.correctAnswer ?
@@ -43,11 +36,10 @@ let make =
       id={answerOptionId ++ "_block"}
       className="flex flex-col bg-white mb-2 border rounded ml-12">
       <div className="flex">
-        <input
+        <textarea
           id=answerOptionId
           className="appearance-none block w-full bg-white text-gray-800 text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          type_="text"
-          placeholder="Answer option"
+          placeholder="Answer option (supports markdown)"
           value={answerOption |> AnswerOption.answer}
           onChange={
             event =>
@@ -78,17 +70,6 @@ let make =
               "Correct Answer" |> str : "Mark as correct" |> str
           }
         </button>
-        <button
-          onClick={
-            _event => {
-              ReactEvent.Mouse.preventDefault(_event);
-              setHasHint(_ => !hasHint);
-            }
-          }
-          className="flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
-          type_="button">
-          {"Explain" |> str}
-        </button>
         {
           canBeDeleted ?
             <button
@@ -105,27 +86,5 @@ let make =
             ReasonReact.null
         }
       </div>
-      {
-        hasHint ?
-          <textarea
-            className="appearance-none block w-full border-t border-t-1 border-gray-400 bg-white text-gray-800 text-sm rounded rounded-t-none p-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id={answerOptionId ++ "_hint"}
-            placeholder="Type an answer explanation here."
-            value=hint
-            rows=3
-            onChange={
-              event =>
-                updateAnswerOptionCB(
-                  answerOption |> AnswerOption.id,
-                  answerOption
-                  |> AnswerOption.updateHint(
-                       Some(ReactEvent.Form.target(event)##value),
-                     ),
-                )
-            }
-          /> :
-          ReasonReact.null
-      }
     </div>
   </div>;
-};

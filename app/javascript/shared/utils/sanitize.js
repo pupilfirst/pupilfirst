@@ -24,7 +24,8 @@ sanitizationProfiles.permissive = [
   "hr",
   "sup",
   "sub",
-  "span"
+  "span",
+  "br"
 ];
 
 sanitizationProfiles.questionsAndAnswer = sanitizationProfiles.permissive;

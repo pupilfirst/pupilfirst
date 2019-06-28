@@ -61,7 +61,7 @@ let resultsSectionClasses = selectedAnswer => {
 };
 
 let answerOptionClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "quiz-root__answer bg-white flex items-center font-semibold shadow border border-transparent rounded p-3 mt-3 cursor-pointer ";
+  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer ";
   switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
     defaultClasses
@@ -119,16 +119,11 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
         {"Question #" |> str}
         {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
       </span>
-      <h4 className="font-bold">
-        {currentQuestion |> QuizQuestion.question |> str}
-      </h4>
-      {
-        switch (currentQuestion |> QuizQuestion.description) {
-        | None => React.null
-        | Some(description) =>
-          <p className="text-sm"> {description |> str} </p>
-        }
-      }
+      <MarkdownBlock
+        markdown={currentQuestion |> QuizQuestion.question}
+        className=""
+        profile=Markdown.Permissive
+      />
       <div className="pt-2">
         {
           currentQuestion
@@ -141,9 +136,11 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
                  <FaIcon
                    classes={iconClasses(answerOption, selectedAnswer)}
                  />
-                 <span className="ml-2">
-                   {answerOption |> QuizQuestion.answerValue |> str}
-                 </span>
+                 <MarkdownBlock
+                   markdown={answerOption |> QuizQuestion.answerValue}
+                   className="ml-2"
+                   profile=Markdown.Permissive
+                 />
                </div>
              )
           |> Array.of_list

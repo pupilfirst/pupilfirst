@@ -20,15 +20,24 @@ module Oembed
 
     def provider
       host_name = URI.parse(@url).hostname
-      if host_name.include?('youtube')
-        return Oembed::YoutubeProvider
-      elsif host_name.include?('vimeo')
-        return Oembed::VimeoProvider
-      elsif host_name.include?('slideshare')
-        return Oembed::SlideshareProvider
-      else
-        raise ProviderNotSupported
+
+      klass = providers.find do |provider_klass|
+        provider_klass.domains.any? do |domain_regex|
+          host_name.match?(domain_regex)
+        end
       end
+
+      return klass if klass.present?
+
+      raise ProviderNotSupported, "The hostname '#{host_name}' could not be resolved to any known provider."
+    end
+
+    def providers
+      [
+        Oembed::YoutubeProvider,
+        Oembed::VimeoProvider,
+        Oembed::SlideshareProvider
+      ]
     end
   end
 end

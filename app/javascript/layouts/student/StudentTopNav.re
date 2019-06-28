@@ -16,13 +16,17 @@ let headerLink = (key, link) =>
     </a>
   </div>;
 
-let logoutLink = () =>
+let logoutLink = authenticityToken =>
   <div
     key="Logout-button"
     className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <form className="button_to" method="post" action="/users/sign_out">
       <input name="_method" value="delete" type_="hidden" />
-      <input name="authenticity_token" type_="hidden" />
+      <input
+        name="authenticity_token"
+        value=authenticityToken
+        type_="hidden"
+      />
       <div className="flex items-center justify-center">
         <button
           className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
@@ -34,11 +38,10 @@ let logoutLink = () =>
       </div>
     </form>
   </div>;
-/* <a className="no-underline text-black" href="#"> {"Logout" |> str} </a> */
 
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
-let headerLinks = links => {
+let headerLinks = (links, authenticityToken) => {
   let (visibleLinks, dropdownLinks) =
     switch (links, isMobile()) {
     | (links, true) => (links, [])
@@ -58,14 +61,14 @@ let headerLinks = links => {
     ->List.append([
         <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
-    ->List.append([logoutLink()])
+    ->List.append([logoutLink(authenticityToken)])
     |> Array.of_list
     |> ReasonReact.array
   };
 };
 
 [@react.component]
-let make = (~schoolName, ~logoUrl, ~links) => {
+let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile());
 
   React.useEffect(() => {
@@ -99,9 +102,6 @@ let make = (~schoolName, ~logoUrl, ~links) => {
                     "student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full "
                     ++ (menuHidden ? "" : "open")
                   }>
-                  /* <span className="sr-only">
-                    {"Toggle navigation" |> str}
-                  </span> */
                   <span className="student-navbar__menu-icon">
                     <span className="student-navbar__menu-icon-bar" />
                   </span>
@@ -114,7 +114,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
           !menuHidden && !isMobile() ?
             <div
               className="student-navbar__links-container flex justify-end items-center w-4/5 flex-no-wrap flex-shrink-0">
-              {headerLinks(links)}
+              {headerLinks(links, authenticityToken)}
             </div> :
             React.null
         }
@@ -124,7 +124,7 @@ let make = (~schoolName, ~logoUrl, ~links) => {
       isMobile() && !menuHidden ?
         <div
           className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-          {headerLinks(links)}
+          {headerLinks(links, authenticityToken)}
         </div> :
         React.null
     }

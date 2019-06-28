@@ -29,6 +29,7 @@ type state = {
   fileName: string,
   embedUrl: string,
   formDirty: bool,
+  filePresent: bool,
 };
 
 let reducer = (state, action) =>
@@ -36,7 +37,10 @@ let reducer = (state, action) =>
   | UpdateContentBlockPropertyText(text) => {
       ...state,
       contentBlockPropertyText: text,
-      formDirty: true,
+      formDirty: switch(state.contentBlock) {
+      | Some(_contentBlock) => true
+      | None => state.filePresent ? true : false
+      } ,
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
   | UpdateMarkdown(text) => {
@@ -44,7 +48,7 @@ let reducer = (state, action) =>
       markDownContent: text,
       formDirty: true,
     }
-  | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
+  | UpdateFileName(fileName) => {...state, fileName, formDirty: true, filePresent: true}
   | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
 
@@ -187,6 +191,7 @@ let make =
       },
     embedUrl: "",
     formDirty: false,
+    filePresent: false,
   };
 
   let (state, dispatch) = React.useReducer(reducer, handleInitialState);

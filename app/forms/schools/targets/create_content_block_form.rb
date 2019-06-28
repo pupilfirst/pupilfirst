@@ -13,7 +13,7 @@ module Schools
       def image_block_must_have_image_file
         return if block_type != ContentBlock::BLOCK_TYPE_IMAGE
 
-        return if file.content_type.in? ['image/jpeg', 'image/png', 'image/gif']
+        return if file.present? && file.content_type.in?(['image/jpeg', 'image/png', 'image/gif'])
 
         errors[:base] << 'Image content must be JPG, PNG or GIF'
       end

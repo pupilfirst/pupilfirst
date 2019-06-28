@@ -23,13 +23,16 @@ let make = (~courses, ~currentCourse, _children) => {
       ReasonReact.Update({showDropDown: !state.showDropDown})
     },
   render: ({state, send}) =>
-    <div className="flex-1 flex flex-col bg-white mb-3">
-      <div className="inline-block relative">
+    <div className="flex-1 flex flex-col bg-transparent mb-3">
+      <div className="inline-block relative border-b border-gray-400 rounded">
         <button
           onClick={_ => send(ToggleShowDropDown)}
-          className="appearance-none flex items-center justify-between font-medium relative px-4 py-2 rounded w-full">
-          {currentCourse |> Course.name |> str}
-          <i className="far fa-chevron-down text-gray-600" />
+          className="appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2 rounded w-full">
+          <span>
+            <i className="fas fa-book mr-2" />
+            {currentCourse |> Course.name |> str}
+          </span>
+          <i className="far fa-chevron-down text-sm" />
         </button>
         {
           state.showDropDown ?

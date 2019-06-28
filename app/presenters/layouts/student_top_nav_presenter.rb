@@ -4,7 +4,8 @@ module Layouts
       {
         school_name: school_name,
         logo_url: logo_url,
-        links: nav_links
+        links: nav_links,
+        authenticity_token: view.form_authenticity_token
       }
     end
 

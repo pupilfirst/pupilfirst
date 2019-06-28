@@ -40,7 +40,7 @@ describe Courses::DemoContentService do
       # Create 2 evaluation criteria for the course.
       expect(course.evaluation_criteria.count).to eq(2)
       expect(course.evaluation_criteria.first.name).to eq("Correctness of implementation")
-      expect(course.evaluation_criteria.last.name).to eq("Quality of Submission")
+      expect(course.evaluation_criteria.last.name).to eq("Quality of submission")
     end
   end
 end

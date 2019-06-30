@@ -39,7 +39,8 @@ let reducer = (state, action) =>
       contentBlockPropertyText: text,
       formDirty: switch(state.contentBlock) {
       | Some(_contentBlock) => true
-      | None => state.filePresent ? true : false
+      | None => true
+      /* | None => state.filePresent ? true : false */
       } ,
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}

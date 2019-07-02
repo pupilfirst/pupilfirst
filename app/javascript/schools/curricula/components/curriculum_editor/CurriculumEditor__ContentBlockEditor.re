@@ -37,11 +37,12 @@ let reducer = (state, action) =>
   | UpdateContentBlockPropertyText(text) => {
       ...state,
       contentBlockPropertyText: text,
-      formDirty: switch(state.contentBlock) {
-      | Some(_contentBlock) => true
-      | None => true
-      /* | None => state.filePresent ? true : false */
-      } ,
+      formDirty:
+        switch (state.contentBlock) {
+        | Some(_contentBlock) => true
+        | None => true
+        /* | None => state.filePresent ? true : false */
+        },
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
   | UpdateMarkdown(text) => {
@@ -49,7 +50,12 @@ let reducer = (state, action) =>
       markDownContent: text,
       formDirty: true,
     }
-  | UpdateFileName(fileName) => {...state, fileName, formDirty: true, filePresent: true}
+  | UpdateFileName(fileName) => {
+      ...state,
+      fileName,
+      formDirty: true,
+      filePresent: true,
+    }
   | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
   };
 
@@ -149,6 +155,18 @@ let contentUploadContainer = (blockType, dispatch, state) =>
   </div>;
 
 let saveDisabled = state => !state.formDirty || state.savingContentBlock;
+
+let scrollMethod = () => {
+  let scrollContainer =
+    Webapi.Dom.(
+      document |> Document.getElementById("target-editor-scroll-container")
+    );
+
+  switch (scrollContainer) {
+  | Some(element) => MarkdownEditor.TextArea.ScrollElement(element)
+  | None => MarkdownEditor.TextArea.ScrollWindow
+  };
+};
 
 [@react.component]
 let make =
@@ -430,12 +448,13 @@ let make =
                 {
                   switch (contentBlock |> ContentBlock.blockType) {
                   | Markdown(markdown) =>
-                    <MarkDownEditor
+                    <MarkdownEditor
                       updateDescriptionCB
                       value=markdown
                       placeholder="You can use Markdown to format this text."
                       profile=Markdown.Permissive
                       maxLength=100000
+                      scrollMethod={scrollMethod()}
                     />
                   | Image(url, caption) =>
                     <div className="rounded-lg bg-white">
@@ -475,12 +494,13 @@ let make =
               switch (blockType) {
               | Markdown(_markdown) =>
                 <div className="w-full">
-                  <MarkDownEditor
+                  <MarkdownEditor
                     updateDescriptionCB
                     value=""
                     placeholder="You can use Markdown to format this text."
                     profile=Markdown.Permissive
                     maxLength=100000
+                    scrollMethod={scrollMethod()}
                   />
                 </div>
               | _ => contentUploadContainer(blockType, dispatch, state)

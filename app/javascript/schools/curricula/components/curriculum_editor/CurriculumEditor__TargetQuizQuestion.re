@@ -78,7 +78,7 @@ let make =
       </div>
     </div>
     <div className="my-2">
-      <MarkDownEditor
+      <MarkdownEditor
         textareaId={"quiz_question_" ++ questionId}
         placeholder="Type the question here (supports markdown)"
         value={quizQuestion |> QuizQuestion.question}

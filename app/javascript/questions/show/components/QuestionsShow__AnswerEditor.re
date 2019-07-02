@@ -213,7 +213,7 @@ let make =
       className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
       <div className="flex w-full py-4 px-4">
         <div className="w-full flex flex-col">
-          <MarkDownEditor
+          <MarkdownEditor
             label="Your Answer"
             updateDescriptionCB
             value=description

@@ -254,7 +254,7 @@ let make =
               placeholder="Add your title"
             />
             <div className="w-full flex flex-col">
-              <MarkDownEditor
+              <MarkdownEditor
                 updateDescriptionCB
                 value=description
                 placeholder="You can use Markdown to format this text."

@@ -1,8 +1,12 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./MarkDownEditor.css")|}];
+[%bs.raw {|require("./MarkdownEditor.css")|}];
 
 module TextArea = {
   open Webapi.Dom;
+
+  type scrollMethod =
+    | ScrollWindow
+    | ScrollElement(Element.t);
 
   external unsafeAsHtmlInputElement: Dom.element => Dom.htmlInputElement =
     "%identity";
@@ -21,11 +25,15 @@ module TextArea = {
 
   let selectionEnd = id => element(id) |> HtmlInputElement.selectionEnd;
 
-  let fitContent = id => {
+  let fitContent = (id, scrollMethod) => {
     let e = id |> element;
 
-    /* Store the original window scroll height. It'll get messed up when we change the height of the textarea to auto. */
-    let windowScrollHeight = Window.scrollY(window);
+    /* Store the original scroll height. It'll get messed up when we change the height of the textarea to auto. */
+    let scrollHeight =
+      switch (scrollMethod) {
+      | ScrollWindow => Window.scrollY(window)
+      | ScrollElement(e) => Element.scrollTop(e)
+      };
 
     /* Set height of the element to auto to be able to calculate its true scrollHeight. */
     e |> setStyleHeight("auto");
@@ -39,8 +47,11 @@ module TextArea = {
 
     e |> setStyleHeight(height);
 
-    /* Restore original window scroll height. */
-    window |> Window.scrollTo(0.0, windowScrollHeight);
+    /* Restore original scroll height. */
+    switch (scrollMethod) {
+    | ScrollWindow => window |> Window.scrollTo(0.0, scrollHeight)
+    | ScrollElement(e) => e |> Element.scrollTo(0.0, scrollHeight)
+    };
   };
 };
 
@@ -192,6 +203,7 @@ let make =
       ~label=?,
       ~profile,
       ~maxLength=1000,
+      ~scrollMethod=TextArea.ScrollWindow,
     ) => {
   let (description, setDescription) = React.useState(() => value);
   let (preview, setPreview) = React.useState(() => false);
@@ -219,7 +231,7 @@ let make =
 
   React.useEffect(() => {
     if (!preview) {
-      TextArea.fitContent(id);
+      TextArea.fitContent(id, scrollMethod);
     };
 
     None;

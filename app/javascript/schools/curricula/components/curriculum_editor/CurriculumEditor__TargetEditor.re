@@ -427,7 +427,9 @@ let make =
           <i className="fal fa-times text-xl" />
         </button>
       </div>
-      <div className={formClasses(state.saving)}>
+      <div
+        id="target-editor-scroll-container"
+        className={formClasses(state.saving)}>
         <div className="w-full">
           <ul className="flex flex-wrap max-w-3xl mx-auto mt-6 px-3 -mb-px">
             <li

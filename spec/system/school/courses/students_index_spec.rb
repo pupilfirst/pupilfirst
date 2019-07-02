@@ -16,11 +16,11 @@ feature 'School students index' do
   let!(:startup_1) { create :startup, level: level_1 }
   let!(:startup_2) { create :startup, level: level_2 }
 
-  let!(:name_1) { (Faker::Lorem.words(2).join ' ').titleize }
-  let!(:email_1) { Faker::Internet.email }
+  let(:name_1) { Faker::Name.name }
+  let(:email_1) { Faker::Internet.email(name_1) }
 
-  let!(:name_2) { (Faker::Lorem.words(3).join ' ').titleize }
-  let!(:email_2) { Faker::Internet.email }
+  let(:name_2) { Faker::Name.name }
+  let(:email_2) { Faker::Internet.email(name_2) }
 
   let!(:new_team_name) { (Faker::Lorem.words(4).join ' ').titleize }
 

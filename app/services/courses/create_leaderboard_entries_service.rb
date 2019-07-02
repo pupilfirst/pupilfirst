@@ -11,7 +11,7 @@ module Courses
     # @param period_to [ActiveSupport::TimeWithZone] Closing time for the leaderboard.
     def execute(period_from, period_to)
       founders = @course.founders.where(exited: false, excluded_from_leaderboard: false)
-      log("Recording leaderboard entries for #{founders.count} students...")
+      log("Recording leaderboard entries for #{founders.count} students in Course##{@course.id}...")
 
       LeaderboardEntry.transaction do
         entries = founders.each_with_object([]) do |founder, leaderboard_entries|

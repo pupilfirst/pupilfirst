@@ -461,10 +461,12 @@ let make =
               <span className="ml-2"> {"Method of Completion" |> str} </span>
             </li>
           </ul>
-          {
-            switch (state.activeStep) {
-            | AddContent =>
-              <div className="mx-auto bg-white border-t border-gray-400">
+          <div id="target-content-and-properties">
+            {
+              <div className={"mx-auto bg-white border-t border-gray-400 " ++ switch(state.activeStep) {
+              | AddContent => ""
+              | TargetActions => "hidden"
+              }}>
                 <div className="max-w-3xl py-6 px-3 mx-auto">
                   <label
                     className="inline-block tracking-wide text-xs font-semibold mb-2"
@@ -478,13 +480,13 @@ let make =
                     type_="text"
                     placeholder="Type target title here"
                     value={state.title}
-                    onChange=(
+                    onChange={
                       event =>
                         updateTitle(
                           dispatch,
                           ReactEvent.Form.target(event)##value,
                         )
-                    )
+                    }
                   />
                   {
                     state.hasTitleError ?
@@ -502,252 +504,267 @@ let make =
                   />
                 </div>
               </div>
-            | TargetActions =>
-              <div className="mx-auto bg-white border-t border-gray-400">
-                <div className="max-w-3xl py-6 px-3 mx-auto">
-                  {
-                    showPrerequisiteTargets ?
-                      <div>
-                        <label
-                          className="block tracking-wide text-xs font-semibold mb-2"
-                          htmlFor="prerequisite_targets">
-                          {"Any prerequisite targets?" |> str}
-                        </label>
-                        <div id="prerequisite_targets" className="mb-6">
-                          <School__SelectBox
-                            items={state.prerequisiteTargets}
-                            multiSelectCB=multiSelectPrerequisiteTargetsCB
-                          />
-                        </div>
-                      </div> :
-                      ReasonReact.null
-                  }
-                  <div className="flex items-center mb-6">
-                    <label
-                      className="block tracking-wide text-xs font-semibold mr-6"
-                      htmlFor="evaluated">
-                      {"Is this target reviewed by a faculty?" |> str}
-                    </label>
-                    <div
-                      id="evaluated"
-                      className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-                      <button
-                        onClick=(
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            dispatch(UpdateMethodOfCompletion(Evaluated));
-                          }
-                        )
-                        className={
-                          booleanButtonClasses(
-                            state.methodOfCompletion == Evaluated,
-                          )
-                        }>
-                        {"Yes" |> str}
-                      </button>
-                      <button
-                        onClick=(
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            dispatch(
-                              UpdateMethodOfCompletion(MarkAsComplete),
-                            );
-                          }
-                        )
-                        className={booleanButtonClasses(!targetEvaluated())}>
-                        {"No" |> str}
-                      </button>
-                    </div>
-                  </div>
-                  {
-                    targetEvaluated() ?
-                      ReasonReact.null :
-                      <div>
-                        <div className="mb-6">
+                }
+                {
+               <div className={"mx-auto bg-white border-t border-gray-400 " ++ switch(state.activeStep) {
+              | AddContent => "hidden"
+              | TargetActions => ""
+              }}>
+                  <div className="max-w-3xl py-6 px-3 mx-auto">
+                    {
+                      showPrerequisiteTargets ?
+                        <div>
                           <label
-                            className="block tracking-wide text-xs font-semibold mr-6 mb-3"
-                            htmlFor="method_of_completion">
-                            {
-                              "How do you want the student to complete the target?"
-                              |> str
-                            }
+                            className="block tracking-wide text-xs font-semibold mb-2"
+                            htmlFor="prerequisite_targets">
+                            {"Any prerequisite targets?" |> str}
                           </label>
-                          <div
-                            id="method_of_completion" className="flex -mx-2">
-                            <div className="w-1/3 px-2">
-                              <button
-                                onClick=(
-                                  _event => {
-                                    ReactEvent.Mouse.preventDefault(_event);
-                                    dispatch(
-                                      UpdateMethodOfCompletion(
-                                        MarkAsComplete,
-                                      ),
-                                    );
+                          <div id="prerequisite_targets" className="mb-6">
+                            <School__SelectBox
+                              items={state.prerequisiteTargets}
+                              multiSelectCB=multiSelectPrerequisiteTargetsCB
+                            />
+                          </div>
+                        </div> :
+                        ReasonReact.null
+                    }
+                    <div className="flex items-center mb-6">
+                      <label
+                        className="block tracking-wide text-xs font-semibold mr-6"
+                        htmlFor="evaluated">
+                        {"Is this target reviewed by a faculty?" |> str}
+                      </label>
+                      <div
+                        id="evaluated"
+                        className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              dispatch(UpdateMethodOfCompletion(Evaluated));
+                            }
+                          }
+                          className={
+                            booleanButtonClasses(
+                              state.methodOfCompletion == Evaluated,
+                            )
+                          }>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              dispatch(
+                                UpdateMethodOfCompletion(MarkAsComplete),
+                              );
+                            }
+                          }
+                          className={booleanButtonClasses(!targetEvaluated())}>
+                          {"No" |> str}
+                        </button>
+                      </div>
+                    </div>
+                    {
+                      targetEvaluated() ?
+                        ReasonReact.null :
+                        <div>
+                          <div className="mb-6">
+                            <label
+                              className="block tracking-wide text-xs font-semibold mr-6 mb-3"
+                              htmlFor="method_of_completion">
+                              {
+                                "How do you want the student to complete the target?"
+                                |> str
+                              }
+                            </label>
+                            <div
+                              id="method_of_completion" className="flex -mx-2">
+                              <div className="w-1/3 px-2">
+                                <button
+                                  onClick={
+                                    _event => {
+                                      ReactEvent.Mouse.preventDefault(_event);
+                                      dispatch(
+                                        UpdateMethodOfCompletion(
+                                          MarkAsComplete,
+                                        ),
+                                      );
+                                    }
                                   }
-                                )
-                                className={
-                                  completionButtonClasses(
-                                    state.methodOfCompletion == MarkAsComplete,
-                                  )
-                                }>
-                                <div className="mb-1">
-                                  <img className="w-12 h-12" src=markIcon />
-                                </div>
-                                {"Simply mark the target as completed." |> str}
-                              </button>
-                            </div>
-                            <div className="w-1/3 px-2">
-                              <button
-                                onClick=(
-                                  _event => {
-                                    ReactEvent.Mouse.preventDefault(_event);
-                                    dispatch(
-                                      UpdateMethodOfCompletion(VisitLink),
-                                    );
+                                  className={
+                                    completionButtonClasses(
+                                      state.methodOfCompletion
+                                      == MarkAsComplete,
+                                    )
+                                  }>
+                                  <div className="mb-1">
+                                    <img className="w-12 h-12" src=markIcon />
+                                  </div>
+                                  {
+                                    "Simply mark the target as completed."
+                                    |> str
                                   }
-                                )
-                                className={
-                                  completionButtonClasses(
-                                    state.methodOfCompletion == VisitLink,
-                                  )
-                                }>
-                                <div className="mb-1">
-                                  <img className="w-12 h-12" src=linkIcon />
-                                </div>
-                                {"Visit a link to complete the target." |> str}
-                              </button>
-                            </div>
-                            <div className="w-1/3 px-2">
-                              <button
-                                onClick=(
-                                  _event => {
-                                    ReactEvent.Mouse.preventDefault(_event);
-                                    dispatch(
-                                      UpdateMethodOfCompletion(TakeQuiz),
-                                    );
+                                </button>
+                              </div>
+                              <div className="w-1/3 px-2">
+                                <button
+                                  onClick={
+                                    _event => {
+                                      ReactEvent.Mouse.preventDefault(_event);
+                                      dispatch(
+                                        UpdateMethodOfCompletion(VisitLink),
+                                      );
+                                    }
                                   }
-                                )
-                                className={
-                                  completionButtonClasses(
-                                    state.methodOfCompletion == TakeQuiz,
-                                  )
-                                }>
-                                <div className="mb-1">
-                                  <img className="w-12 h-12" src=quizIcon />
-                                </div>
-                                {"Take a quiz to complete the target." |> str}
-                              </button>
+                                  className={
+                                    completionButtonClasses(
+                                      state.methodOfCompletion == VisitLink,
+                                    )
+                                  }>
+                                  <div className="mb-1">
+                                    <img className="w-12 h-12" src=linkIcon />
+                                  </div>
+                                  {
+                                    "Visit a link to complete the target."
+                                    |> str
+                                  }
+                                </button>
+                              </div>
+                              <div className="w-1/3 px-2">
+                                <button
+                                  onClick={
+                                    _event => {
+                                      ReactEvent.Mouse.preventDefault(_event);
+                                      dispatch(
+                                        UpdateMethodOfCompletion(TakeQuiz),
+                                      );
+                                    }
+                                  }
+                                  className={
+                                    completionButtonClasses(
+                                      state.methodOfCompletion == TakeQuiz,
+                                    )
+                                  }>
+                                  <div className="mb-1">
+                                    <img className="w-12 h-12" src=quizIcon />
+                                  </div>
+                                  {
+                                    "Take a quiz to complete the target." |> str
+                                  }
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                  }
-                  {
-                    switch (state.methodOfCompletion) {
-                    | Evaluated =>
-                      <div id="evaluation_criteria" className="mb-6">
-                        <label
-                          className="block tracking-wide text-xs font-semibold mr-6 mb-2"
-                          htmlFor="evaluation_criteria">
-                          {"Choose evaluation criteria from your list" |> str}
-                        </label>
-                        {
-                          validNumberOfEvaluationCriteria ?
-                            ReasonReact.null :
-                            <div className="drawer-right-form__error-msg">
-                              {"Atleast one has to be selected" |> str}
-                            </div>
-                        }
-                        <School__SelectBox
-                          items={state.evaluationCriteria}
-                          multiSelectCB=multiSelectEvaluationCriterionCB
-                        />
-                      </div>
-                    | MarkAsComplete => ReasonReact.null
-                    | TakeQuiz =>
-                      <div>
-                        <h3
-                          className="block tracking-wide font-semibold mb-2"
-                          htmlFor="Quiz question 1">
-                          {"Prepare the quiz now." |> str}
-                        </h3>
-                        {
-                          state.isValidQuiz ?
-                            ReasonReact.null :
-                            <div className="drawer-right-form__error-msg">
-                              {
-                                "All questions must be filled in, and all questions should have at least two answers."
-                                |> str
-                              }
-                            </div>
-                        }
-                        {
-                          state.quiz
-                          |> List.mapi((index, quizQuestion) =>
-                               <CurriculumEditor__TargetQuizQuestion
-                                 key={quizQuestion |> QuizQuestion.id}
-                                 questionNumber=index
-                                 quizQuestion
-                                 updateQuizQuestionCB
-                                 removeQuizQuestionCB
-                                 questionCanBeRemoved
-                               />
-                             )
-                          |> Array.of_list
-                          |> ReasonReact.array
-                        }
-                        <a
-                          onClick=(
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              dispatch(AddQuizQuestion);
-                            }
-                          )
-                          className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
-                          <i className="far fa-plus-circle text-lg" />
-                          <h5 className="font-semibold ml-2">
-                            {"Add another Question" |> str}
-                          </h5>
-                        </a>
-                      </div>
-                    | VisitLink =>
-                      <div>
-                        <label
-                          className="inline-block tracking-wide text-xs font-semibold mb-2"
-                          htmlFor="link_to_complete">
-                          {"Link to complete" |> str}
-                        </label>
-                        <span> {"*" |> str} </span>
-                        <input
-                          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          id="link_to_complete"
-                          type_="text"
-                          placeholder="Paste link to complete"
-                          value={state.linkToComplete}
-                          onChange=(
-                            event =>
-                              updateLinkToComplete(
-                                dispatch,
-                                ReactEvent.Form.target(event)##value,
-                              )
-                          )
-                        />
-                        {
-                          state.hasLinktoCompleteError ?
-                            <div className="drawer-right-form__error-msg">
-                              {"not a valid link" |> str}
-                            </div> :
-                            ReasonReact.null
-                        }
-                      </div>
-                    | NotSelected => ReasonReact.null
                     }
-                  }
+                    {
+                      switch (state.methodOfCompletion) {
+                      | Evaluated =>
+                        <div id="evaluation_criteria" className="mb-6">
+                          <label
+                            className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                            htmlFor="evaluation_criteria">
+                            {
+                              "Choose evaluation criteria from your list" |> str
+                            }
+                          </label>
+                          {
+                            validNumberOfEvaluationCriteria ?
+                              ReasonReact.null :
+                              <div className="drawer-right-form__error-msg">
+                                {"Atleast one has to be selected" |> str}
+                              </div>
+                          }
+                          <School__SelectBox
+                            items={state.evaluationCriteria}
+                            multiSelectCB=multiSelectEvaluationCriterionCB
+                          />
+                        </div>
+                      | MarkAsComplete => ReasonReact.null
+                      | TakeQuiz =>
+                        <div>
+                          <h3
+                            className="block tracking-wide font-semibold mb-2"
+                            htmlFor="Quiz question 1">
+                            {"Prepare the quiz now." |> str}
+                          </h3>
+                          {
+                            state.isValidQuiz ?
+                              ReasonReact.null :
+                              <div className="drawer-right-form__error-msg">
+                                {
+                                  "All questions must be filled in, and all questions should have at least two answers."
+                                  |> str
+                                }
+                              </div>
+                          }
+                          {
+                            state.quiz
+                            |> List.mapi((index, quizQuestion) =>
+                                 <CurriculumEditor__TargetQuizQuestion
+                                   key={quizQuestion |> QuizQuestion.id}
+                                   questionNumber=index
+                                   quizQuestion
+                                   updateQuizQuestionCB
+                                   removeQuizQuestionCB
+                                   questionCanBeRemoved
+                                 />
+                               )
+                            |> Array.of_list
+                            |> ReasonReact.array
+                          }
+                          <a
+                            onClick=(
+                              _event => {
+                                ReactEvent.Mouse.preventDefault(_event);
+                                dispatch(AddQuizQuestion);
+                              }
+                            )
+                            className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
+                            <i className="far fa-plus-circle text-lg" />
+                            <h5 className="font-semibold ml-2">
+                              {"Add another Question" |> str}
+                            </h5>
+                          </a>
+                        </div>
+                      | VisitLink =>
+                        <div>
+                          <label
+                            className="inline-block tracking-wide text-xs font-semibold mb-2"
+                            htmlFor="link_to_complete">
+                            {"Link to complete" |> str}
+                          </label>
+                          <span> {"*" |> str} </span>
+                          <input
+                            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="link_to_complete"
+                            type_="text"
+                            placeholder="Paste link to complete"
+                            value={state.linkToComplete}
+                            onChange=(
+                              event =>
+                                updateLinkToComplete(
+                                  dispatch,
+                                  ReactEvent.Form.target(event)##value,
+                                )
+                            )
+                          />
+                          {
+                            state.hasLinktoCompleteError ?
+                              <div className="drawer-right-form__error-msg">
+                                {"not a valid link" |> str}
+                              </div> :
+                              ReasonReact.null
+                          }
+                        </div>
+                      | NotSelected => ReasonReact.null
+                      }
+                    }
+                  </div>
                 </div>
-              </div>
-            }
-          }
+                  }
+          </div>
           <div className="bg-white pt-4 pb-6">
             <div
               className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">

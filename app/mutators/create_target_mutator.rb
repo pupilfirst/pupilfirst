@@ -8,7 +8,7 @@ class CreateTargetMutator < ApplicationMutator
   validates :target_group_id, presence: { message: 'TargetGroupIdBlank' }
 
   def create_target
-    target = Target.create!(title: title, target_group_id: target_group_id, role: 'founder', target_action_type: 'Todo', visibility: Target::VISIBILITY_DRAFT, safe_to_change_visibility: true)
+    target = Target.create!(title: title, target_group_id: target_group_id, role: 'founder', target_action_type: 'Todo', visibility: Target::VISIBILITY_DRAFT, safe_to_change_visibility: true, sort_index: sort_index)
     content_block = ContentBlock.create!(target: target, block_type: 'markdown', sort_index: 1, content: { markdown: content_block_text })
     { id: target.id, content_block_id: content_block.id, sample_content: content_block_text }
   end
@@ -66,5 +66,10 @@ class CreateTargetMutator < ApplicationMutator
 
       Please refer to [Markdown Guide](https://commonmark.org/help) for more information.
     PREVIEW_CONTENT
+  end
+
+  def sort_index
+    max_index = TargetGroup.joins(:course).where(courses: { school_id: current_school.id }).find(target_group_id).targets.maximum(:sort_index)
+    max_index ? max_index + 1 : 1
   end
 end

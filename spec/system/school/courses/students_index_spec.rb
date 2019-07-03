@@ -49,20 +49,24 @@ feature 'School students index' do
 
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
-    fill_in 'Tags', with: 'abc'
-    find('span[title="Add new tag abc"]').click
-    fill_in 'Tags', with: 'def'
-    find('span[title="Add new tag def"]').click
+    fill_in 'Tags', with: 'Abc'
+    find('span[title="Add new tag Abc"]').click
+    fill_in 'Tags', with: 'Def'
+    find('span[title="Add new tag Def"]').click
     click_button 'Add to List'
 
     fill_in 'Name', with: name_2
     fill_in 'Email', with: email_2
 
     # Remove both tags, then add one back - the unpersisted tag should be suggested.
-    find('span[title="Remove tag abc"]').click
-    find('span[title="Remove tag def"]').click
-    fill_in 'Tags', with: 'ab'
-    find('span[title="Pick tag abc"]').click
+    find('span[title="Remove tag Abc"]').click
+    find('span[title="Remove tag Def"]').click
+    fill_in 'Tags', with: 'ab' # Lowercase search should still list capitalized result.
+    find('span[title="Pick tag Abc"]').click
+    fill_in 'Tags', with: 'DE' # Uppercase search should still list capitalized result.
+    find('span[title="Pick tag Def"]').click
+    fill_in 'Tags', with: 'GHI' # Uppercase search should still list capitalized result.
+    find('span[title="Add new tag GHI"]').click
 
     click_button 'Add to List'
 
@@ -83,8 +87,8 @@ feature 'School students index' do
 
     expect(founder_1.name).to eq(name_1)
     expect(founder_2.name).to eq(name_2)
-    expect(founder_1.tag_list).to contain_exactly('abc', 'def')
-    expect(founder_2.tag_list).to contain_exactly('abc')
+    expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
+    expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI')
 
     # try adding an existing student
     click_button 'Add New Students'

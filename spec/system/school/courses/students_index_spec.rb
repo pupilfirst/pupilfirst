@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'School students index' do
+feature 'School students index', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -36,7 +36,7 @@ feature 'School students index' do
     FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 
-  scenario 'school admin visits a course index', js: true do
+  scenario 'school admin visits a course index' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # list all students
@@ -78,7 +78,8 @@ feature 'School students index' do
     click_button 'Save List'
 
     expect(page).to have_text("Student(s) created successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
+
     expect(page).to have_text(name_1)
     expect(page).to have_text(name_2)
 
@@ -90,15 +91,30 @@ feature 'School students index' do
     expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
     expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI')
 
-    # try adding an existing student
+    name_3 = Faker::Name.name
+
+    # Try adding an existing student and a new student at the same time.
     click_button 'Add New Students'
-    fill_in 'Name', with: name_1
-    fill_in 'Email', with: email_1
-    click_button 'Add to List'
-    click_button 'Save List'
-    expect(page).to have_text("Student(s) with given email(s) already exist in this course!")
-    dismiss_notification
-    click_button 'close'
+
+    expect do
+      # First, an existing student.
+      fill_in 'Name', with: name_1
+      fill_in 'Email', with: email_1
+      click_button 'Add to List'
+
+      # Then a new student.
+      fill_in 'Name', with: name_3
+      fill_in 'Email', with: Faker::Internet.email(name_3)
+      click_button 'Add to List'
+
+      # Try to save both.
+      click_button 'Save List'
+
+      expect(page).to have_text("Student(s) created successfully")
+      dismiss_notification
+    end.to change { Founder.count }.by(1)
+
+    expect(page).to have_text(name_3)
 
     # Update a student
     find("a", text: name_1).click

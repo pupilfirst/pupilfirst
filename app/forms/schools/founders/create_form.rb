@@ -9,24 +9,23 @@ module Schools
         property :tags
       end
 
-      validate :student_does_not_exist
-
       def save
-        ::Courses::AddStudentsService.new(course).add(students)
+        ::Courses::AddStudentsService.new(course).add(new_students)
       end
 
       private
 
-      def course
-        @course ||= Course.find(course_id)
+      def new_students
+        requested_emails = students.map(&:email)
+        enrolled_student_emails = course.founders.joins(:user).where(users: { email: requested_emails }).pluck(:email)
+
+        students.reject do |student|
+          student.email.in?(enrolled_student_emails)
+        end
       end
 
-      def student_does_not_exist
-        existing_student_emails = course.founders.includes(:user).map(&:email)
-
-        if students.map(&:email).any? { |email| email.in?(existing_student_emails) }
-          errors[:base] << 'Student(s) with given email(s) already exist in this course!'
-        end
+      def course
+        @course ||= Course.find(course_id)
       end
     end
   end

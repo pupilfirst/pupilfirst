@@ -338,6 +338,7 @@ let make =
     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
     |> Js.Promise.then_(_response => Js.Promise.resolve())
     |> ignore;
+    dispatch(UpdateSaving);
     let updatedContentBlockType =
       switch (contentBlock |> ContentBlock.blockType) {
       | Markdown(_markdown) =>

@@ -25,7 +25,6 @@ module Courses
         coaches: faculty.map(&:attributes),
         user_profiles: user_profiles,
         current_user_id: current_user.id,
-        selected_target_id: nil,
         evaluation_criteria: evaluation_criteria
       }
     end

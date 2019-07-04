@@ -95,7 +95,7 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
 
 let boolBtnClasses = selected => {
   let classes = "toggle-button__button";
-  classes ++ (selected ? " toggle-button__button--active" : " text-gray-600");
+  classes ++ (selected ? " toggle-button__button--active" : "");
 };
 
 let handleEligibleTeamCoachList =

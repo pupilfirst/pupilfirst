@@ -340,7 +340,7 @@
 }
 
 .toggle-button__button {
-    @apply w-1/2 bg-white text-sm font-semibold py-1 px-6 text-gray-700;
+    @apply w-1/2 bg-white text-sm font-semibold py-1 px-6 text-gray-600;
     transition: .3s cubic-bezier(0, 0, 0, 1);
 }
 
@@ -361,7 +361,7 @@
 }
 
 .toggle-button__button--active:hover {
-    @apply bg-primary-600 text-white shadow-inner;
+    @apply toggle-button__button--active;
 }
 
 .target-group__container> :not(:last-child):before {

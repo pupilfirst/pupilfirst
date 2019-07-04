@@ -17,8 +17,7 @@ type action =
   | UpdateContentBlockPropertyText(string)
   | UpdateSaving
   | UpdateMarkdown(string)
-  | UpdateFileName(string)
-  | UpdateEmbedUrl(string);
+  | UpdateFileName(string);
 
 type state = {
   contentBlockPropertyText: string,
@@ -29,7 +28,6 @@ type state = {
   fileName: string,
   embedUrl: string,
   formDirty: bool,
-  filePresent: bool,
 };
 
 let reducer = (state, action) =>
@@ -41,7 +39,6 @@ let reducer = (state, action) =>
         switch (state.contentBlock) {
         | Some(_contentBlock) => true
         | None => true
-        /* | None => state.filePresent ? true : false */
         },
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
@@ -50,13 +47,7 @@ let reducer = (state, action) =>
       markDownContent: text,
       formDirty: true,
     }
-  | UpdateFileName(fileName) => {
-      ...state,
-      fileName,
-      formDirty: true,
-      filePresent: true,
-    }
-  | UpdateEmbedUrl(embedUrl) => {...state, embedUrl}
+  | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -168,6 +159,238 @@ let scrollMethod = () => {
   };
 };
 
+let updateButtonVisible = (contentBlock, blockType: ContentBlock.blockType) =>
+  switch (contentBlock) {
+  | Some(_contentBlock) =>
+    switch (blockType) {
+    | Embed(_url, _embedCode) => false
+    | _ => true
+    }
+  | None => true
+  };
+
+let editorButtonText = contentBlock =>
+  switch (contentBlock) {
+  | Some(contentBlock) =>
+    switch (contentBlock |> ContentBlock.blockType) {
+    | Markdown(_markdown) => "Update"
+    | File(_url, _title, _filename) => "Update Title"
+    | Image(_url, _caption) => "Update Caption"
+    | Embed(_url, _embedCode) => "Update"
+    }
+  | None => "Save"
+  };
+
+let placeHolderText = (blockType: ContentBlock.blockType) =>
+  switch (blockType) {
+  | Markdown(_markdown) => ""
+  | File(_url, _title, _filename) => "Type title for file"
+  | Image(_url, _caption) => "Type caption for image (optional)"
+  | Embed(_url, _embedCode) => "Paste in a URL to embed"
+  };
+
+let actionBarTextInputVisible =
+    (blockType: ContentBlock.blockType, contentBlock) =>
+  switch (blockType) {
+  | Markdown(_markdown) => false
+  | Embed(_url, _embedCode) =>
+    switch (contentBlock) {
+    | Some(_contentBlock) => false
+    | None => true
+    }
+  | _ => true
+  };
+
+let handleDeleteContentBlock =
+    (contentBlock, authenticityToken, removeTargetContentCB, sortIndex) =>
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm(
+       "Are you sure you want to delete this content?. You cannot undo this.",
+     ) ?
+    switch (contentBlock) {
+    | Some(contentBlock) =>
+      let id = ContentBlock.id(contentBlock);
+      DeleteContentBlockMutation.make(~id, ())
+      |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+      |> Js.Promise.then_(response => {
+           response##deleteContentBlock##success ?
+             removeTargetContentCB(Some(id), sortIndex) : ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    | None => removeTargetContentCB(None, sortIndex)
+    } :
+    ();
+let decodeContent =
+    (blockType: ContentBlock.blockType, fileUrl, state, content) =>
+  Json.Decode.(
+    switch (blockType) {
+    | Markdown(_markdown) =>
+      ContentBlock.makeMarkdownBlock(state.markDownContent)
+    | File(_url, _title, _filename) =>
+      ContentBlock.makeFileBlock(
+        fileUrl,
+        content |> field("title", string),
+        state.fileName,
+      )
+    | Image(_url, _caption) =>
+      ContentBlock.makeImageBlock(
+        fileUrl,
+        content |> field("caption", string),
+      )
+    | Embed(_url, _embedCode) =>
+      ContentBlock.makeEmbedBlock(
+        content |> field("url", string),
+        content |> field("embed_code", string),
+      )
+    }
+  );
+
+let updateNewContentBlock =
+    (
+      json,
+      blockType: ContentBlock.blockType,
+      target,
+      sortIndex,
+      state,
+      createNewContentCB,
+    ) => {
+  open Json.Decode;
+  let id = json |> field("id", string);
+  let fileUrl =
+    switch (blockType) {
+    | File(_url, _title, _filename) => json |> field("fileUrl", string)
+    | Image(_url, _caption) => json |> field("fileUrl", string)
+    | _ => ""
+    };
+  let contentBlockType =
+    json |> field("content", decodeContent(blockType, fileUrl, state));
+  let newContentBlock =
+    ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
+  createNewContentCB(newContentBlock);
+};
+
+let createContentBlock =
+    (
+      formData,
+      target,
+      state,
+      dispatch,
+      blockType,
+      sortIndex,
+      createNewContentCB,
+    ) =>
+  SchoolAdmin__Api.sendFormData(
+    "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+    formData,
+    json => {
+      Notification.success("Done!", "Content added successfully.");
+      updateNewContentBlock(
+        json,
+        blockType,
+        target,
+        sortIndex,
+        state,
+        createNewContentCB,
+      );
+      dispatch(UpdateSaving);
+    },
+    () => dispatch(UpdateSaving),
+  );
+let updateContentBlock =
+    (
+      contentBlock,
+      state,
+      authenticityToken,
+      dispatch,
+      sortIndex,
+      updateContentBlockCB,
+    ) => {
+  let id = contentBlock |> ContentBlock.id;
+  let text =
+    switch (contentBlock |> ContentBlock.blockType) {
+    | Markdown(_markdown) => state.markDownContent
+    | File(_url, _title, _filename) => state.contentBlockPropertyText
+    | Image(_url, _caption) => state.contentBlockPropertyText
+    | Embed(_url, _embedCode) => ""
+    };
+  let blockType =
+    contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
+  UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
+  |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+  |> Js.Promise.then_(_response => Js.Promise.resolve())
+  |> ignore;
+  dispatch(UpdateSaving);
+  let updatedContentBlockType =
+    switch (contentBlock |> ContentBlock.blockType) {
+    | Markdown(_markdown) =>
+      ContentBlock.makeMarkdownBlock(state.markDownContent)
+    | File(url, _title, filename) =>
+      ContentBlock.makeFileBlock(
+        url,
+        state.contentBlockPropertyText,
+        filename,
+      )
+    | Image(url, _caption) =>
+      ContentBlock.makeImageBlock(url, state.contentBlockPropertyText)
+    | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
+    };
+  let updatedContentBlock =
+    ContentBlock.make(
+      id,
+      updatedContentBlockType,
+      contentBlock |> ContentBlock.targetId,
+      sortIndex,
+    );
+  updateContentBlockCB(updatedContentBlock);
+};
+
+let submitForm =
+    (
+      event,
+      state,
+      authenticityToken,
+      blockType,
+      dispatch,
+      contentBlock,
+      target,
+      editorId,
+      sortIndex,
+      createNewContentCB,
+      updateContentBlockCB,
+    ) => {
+  dispatch(UpdateSaving);
+  ReactEvent.Form.preventDefault(event);
+  switch (contentBlock) {
+  | Some(contentBlock) =>
+    updateContentBlock(
+      contentBlock,
+      state,
+      authenticityToken,
+      dispatch,
+      sortIndex,
+      updateContentBlockCB,
+    )
+  | None =>
+    let element =
+      ReactDOMRe._getElementById("content-block-form-" ++ editorId);
+    switch (element) {
+    | Some(element) =>
+      let formData = DomUtils.FormData.create(element);
+      createContentBlock(
+        formData,
+        target,
+        state,
+        dispatch,
+        blockType,
+        sortIndex,
+        createNewContentCB,
+      );
+    | None => ()
+    };
+  };
+};
+
 [@react.component]
 let make =
     (
@@ -185,7 +408,7 @@ let make =
       ~updateContentBlockCB,
       ~authenticityToken,
     ) => {
-  let handleInitialState = {
+  let initialState = {
     contentBlockPropertyText:
       switch (blockType) {
       | Markdown(_markdown) => ""
@@ -210,175 +433,11 @@ let make =
       },
     embedUrl: "",
     formDirty: false,
-    filePresent: false,
   };
 
-  let (state, dispatch) = React.useReducer(reducer, handleInitialState);
+  let (state, dispatch) = React.useReducer(reducer, initialState);
+
   let updateDescriptionCB = string => dispatch(UpdateMarkdown(string));
-  let editorButtonText = contentBlock =>
-    switch (contentBlock) {
-    | Some(contentBlock) =>
-      switch (contentBlock |> ContentBlock.blockType) {
-      | Markdown(_markdown) => "Update"
-      | File(_url, _title, _filename) => "Update Title"
-      | Image(_url, _caption) => "Update Caption"
-      | Embed(_url, _embedCode) => "Update"
-      }
-    | None => "Save"
-    };
-  let placeHolderText =
-    switch (blockType) {
-    | Markdown(_markdown) => ""
-    | File(_url, _title, _filename) => "Type title for file"
-    | Image(_url, _caption) => "Type caption for image (optional)"
-    | Embed(_url, _embedCode) => "Paste in a URL to embed"
-    };
-  let actionBarTextInputVisible =
-    switch (blockType) {
-    | Markdown(_markdown) => false
-    | Embed(_url, _embedCode) =>
-      switch (contentBlock) {
-      | Some(_contentBlock) => false
-      | None => true
-      }
-    | _ => true
-    };
-  let updateButtonVisible =
-    switch (contentBlock) {
-    | Some(_contentBlock) =>
-      switch (blockType) {
-      | Embed(_url, _embedCode) => false
-      | _ => true
-      }
-    | None => true
-    };
-
-  let handleDeleteContentBlock = contentBlock =>
-    Webapi.Dom.window
-    |> Webapi.Dom.Window.confirm(
-         "Are you sure you want to delete this content?. You cannot undo this.",
-       ) ?
-      switch (contentBlock) {
-      | Some(contentBlock) =>
-        let id = ContentBlock.id(contentBlock);
-        DeleteContentBlockMutation.make(~id, ())
-        |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-        |> Js.Promise.then_(response => {
-             response##deleteContentBlock##success ?
-               removeTargetContentCB(Some(id), sortIndex) : ();
-             Js.Promise.resolve();
-           })
-        |> ignore;
-      | None => removeTargetContentCB(None, sortIndex)
-      } :
-      ();
-  let decodeContent = (blockType: ContentBlock.blockType, fileUrl, content) =>
-    Json.Decode.(
-      switch (blockType) {
-      | Markdown(_markdown) =>
-        ContentBlock.makeMarkdownBlock(state.markDownContent)
-      | File(_url, _title, _filename) =>
-        ContentBlock.makeFileBlock(
-          fileUrl,
-          content |> field("title", string),
-          state.fileName,
-        )
-      | Image(_url, _caption) =>
-        ContentBlock.makeImageBlock(
-          fileUrl,
-          content |> field("caption", string),
-        )
-      | Embed(_url, _embedCode) =>
-        ContentBlock.makeEmbedBlock(
-          content |> field("url", string),
-          content |> field("embed_code", string),
-        )
-      }
-    );
-
-  let updateNewContentBlock = json => {
-    open Json.Decode;
-    let id = json |> field("id", string);
-    let fileUrl =
-      switch (blockType) {
-      | File(_url, _title, _filename) => json |> field("fileUrl", string)
-      | Image(_url, _caption) => json |> field("fileUrl", string)
-      | _ => ""
-      };
-    let contentBlockType =
-      json |> field("content", decodeContent(blockType, fileUrl));
-    let newContentBlock =
-      ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
-    createNewContentCB(newContentBlock);
-  };
-
-  let createContentBlock = formData =>
-    SchoolAdmin__Api.sendFormData(
-      "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
-      formData,
-      json => {
-        Notification.success("Done!", "Content added successfully.");
-        updateNewContentBlock(json);
-        dispatch(UpdateSaving);
-      },
-      () => dispatch(UpdateSaving),
-    );
-  let updateContentBlock = contentBlock => {
-    let id = contentBlock |> ContentBlock.id;
-    let text =
-      switch (contentBlock |> ContentBlock.blockType) {
-      | Markdown(_markdown) => state.markDownContent
-      | File(_url, _title, _filename) => state.contentBlockPropertyText
-      | Image(_url, _caption) => state.contentBlockPropertyText
-      | Embed(_url, _embedCode) => ""
-      };
-    let blockType =
-      contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
-    UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
-    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-    |> Js.Promise.then_(_response => Js.Promise.resolve())
-    |> ignore;
-    dispatch(UpdateSaving);
-    let updatedContentBlockType =
-      switch (contentBlock |> ContentBlock.blockType) {
-      | Markdown(_markdown) =>
-        ContentBlock.makeMarkdownBlock(state.markDownContent)
-      | File(url, _title, filename) =>
-        ContentBlock.makeFileBlock(
-          url,
-          state.contentBlockPropertyText,
-          filename,
-        )
-      | Image(url, _caption) =>
-        ContentBlock.makeImageBlock(url, state.contentBlockPropertyText)
-      | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
-      };
-    let updatedContentBlock =
-      ContentBlock.make(
-        id,
-        updatedContentBlockType,
-        contentBlock |> ContentBlock.targetId,
-        sortIndex,
-      );
-    updateContentBlockCB(updatedContentBlock);
-  };
-
-  let submitForm = event => {
-    dispatch(UpdateSaving);
-    ReactEvent.Form.preventDefault(event);
-    switch (contentBlock) {
-    | Some(contentBlock) => updateContentBlock(contentBlock)
-    | None =>
-      let element =
-        ReactDOMRe._getElementById("content-block-form-" ++ editorId);
-      switch (element) {
-      | Some(element) =>
-        let formData = DomUtils.FormData.create(element);
-        createContentBlock(formData);
-      | None => ()
-      };
-    };
-  };
 
   <div>
     <CurriculumEditor__ContentTypePicker
@@ -416,7 +475,15 @@ let make =
           }
           <button
             title="Delete block"
-            onClick={_event => handleDeleteContentBlock(contentBlock)}
+            onClick={
+              _event =>
+                handleDeleteContentBlock(
+                  contentBlock,
+                  authenticityToken,
+                  removeTargetContentCB,
+                  sortIndex,
+                )
+            }
             className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
             <i className="fas fa-trash-alt" />
           </button>
@@ -424,7 +491,22 @@ let make =
       <form
         id={"content-block-form-" ++ editorId}
         key={"content-block-form-" ++ editorId}
-        onSubmit={event => submitForm(event)}>
+        onSubmit={
+          event =>
+            submitForm(
+              event,
+              state,
+              authenticityToken,
+              blockType,
+              dispatch,
+              contentBlock,
+              target,
+              editorId,
+              sortIndex,
+              createNewContentCB,
+              updateContentBlockCB,
+            )
+        }>
         <input
           name="authenticity_token"
           type_="hidden"
@@ -525,7 +607,7 @@ let make =
         <div
           className="[ content-block__action-bar ] flex p-3 border-t justify-end">
           {
-            actionBarTextInputVisible ?
+            actionBarTextInputVisible(blockType, contentBlock) ?
               <div className="flex-1 content-block__action-bar-input">
                 <input
                   className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
@@ -548,13 +630,13 @@ let make =
                   }
                   type_="text"
                   value={state.contentBlockPropertyText}
-                  placeholder=placeHolderText
+                  placeholder={placeHolderText(blockType)}
                 />
               </div> :
               React.null
           }
           {
-            updateButtonVisible ?
+            updateButtonVisible(contentBlock, blockType) ?
               <div className="ml-2 text-right">
                 <button
                   className="btn btn-large btn-success"

@@ -127,7 +127,7 @@
 .markdown-block .line-numbers .line-numbers-rows {
   position: absolute;
   pointer-events: none;
-  top: 0;
+  top: -1px;
   font-size: 100%;
   left: -3.8rem;
   width: 3rem;

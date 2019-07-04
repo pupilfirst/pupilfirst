@@ -2,12 +2,13 @@
  * Template styling that should be
  * inherited by specific profile classes;
  */
+
 .markdown-block {
   overflow-wrap: break-word;
 }
 
 .markdown-block__p {
-  @apply pt-1 pb-2;
+  @apply py-2;
 }
 
 .markdown-block__h1 {
@@ -120,13 +121,11 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__permissive b,
-strong {
+.markdown-block__permissive b, strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__permissive s,
-del {
+.markdown-block__permissive s, del {
   @apply markdown-block__strikethrough;
 }
 
@@ -152,6 +151,10 @@ del {
 
 .markdown-block__permissive blockquote {
   @apply markdown-block__blockquote;
+}
+
+.markdown-block__permissive blockquote code, pre {
+  @apply font-normal text-sm;
 }
 
 .markdown-block__permissive hr {
@@ -211,13 +214,11 @@ del {
   @apply markdown-block__em;
 }
 
-.markdown-block__questions-and-answer b,
-strong {
+.markdown-block__questions-and-answer b, strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__questions-and-answer s,
-del {
+.markdown-block__questions-and-answer s, del {
   @apply markdown-block__strikethrough;
 }
 
@@ -271,13 +272,11 @@ del {
   @apply markdown-block__em;
 }
 
-.markdown-block__comment b,
-strong {
+.markdown-block__comment b, strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__comment s,
-del {
+.markdown-block__comment s, del {
   @apply markdown-block__strikethrough;
 }
 

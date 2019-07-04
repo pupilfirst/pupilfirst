@@ -13,7 +13,7 @@
 }
 
 .markdown-block :not(pre) code:not([class*="language-"]) {
-  @apply whitespace-normal bg-gray-200 mx-1 text-sm rounded overflow-auto px-1 py-px border border-gray-400;
+  @apply whitespace-normal bg-gray-200 text-sm rounded overflow-auto px-1 py-px border border-gray-400;
 }
 
 .markdown-block code[class*="language-"], .markdown-block pre[class*="language-"] {
@@ -21,7 +21,7 @@
   background: none;
   text-shadow: 0 1px rgba(0, 0, 0, 0.3);
   font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-  font-size: 1em;
+  font-size: 1rem;
   text-align: left;
   white-space: pre;
   word-spacing: normal;
@@ -42,7 +42,7 @@
 .markdown-block pre[class*="language-"] {
   @apply mt-2 p-4;
   overflow: auto;
-  border-radius: 0.3em;
+  border-radius: 0.3rem;
 }
 
 .markdown-block :not(pre) code[class*="language-"], .markdown-block pre[class*="language-"] {
@@ -53,7 +53,7 @@
 
 .markdown-block :not(pre) code[class*="language-"] {
   padding: 0.1em;
-  border-radius: 0.3em;
+  border-radius: 0.3rem;
   white-space: normal;
 }
 
@@ -115,7 +115,7 @@
 
 .markdown-block pre[class*="language-"].line-numbers {
   position: relative;
-  padding-left: 3.8em;
+  padding-left: 3.8rem;
   counter-reset: linenumber;
 }
 
@@ -129,8 +129,8 @@
   pointer-events: none;
   top: 0;
   font-size: 100%;
-  left: -3.8em;
-  width: 3em;
+  left: -3.8rem;
+  width: 3rem;
   /* works for line-numbers below 1000 lines */
   letter-spacing: -1px;
   border-right: 1px solid #999;
@@ -150,6 +150,6 @@
   content: counter(linenumber);
   color: #999;
   display: block;
-  padding-right: 0.8em;
+  padding-right: 0.8rem;
   text-align: right;
 }

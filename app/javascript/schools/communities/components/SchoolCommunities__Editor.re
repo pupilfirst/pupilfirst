@@ -161,7 +161,7 @@ let handleQuery =
 
 let booleanButtonClasses = bool => {
   let classes = "toggle-button__button";
-  classes ++ (bool ? " toggle-button__button--active" : " text-gray-600");
+  classes ++ (bool ? " toggle-button__button--active" : "");
 };
 
 let communityCourseIds = courseState =>

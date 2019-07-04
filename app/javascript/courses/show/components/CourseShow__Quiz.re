@@ -76,8 +76,8 @@ let iconClasses = (answerOption, selectedAnswer) => {
   switch (selectedAnswer) {
   | Some(answer) when answer == answerOption =>
     defaultClasses ++ "text-primary-500"
-  | Some(_otherAnswer) => defaultClasses ++ "text-gray-400"
-  | None => defaultClasses ++ "text-gray-400"
+  | Some(_otherAnswer) => defaultClasses ++ "text-gray-500"
+  | None => defaultClasses ++ "text-gray-500"
   };
 };
 
@@ -114,7 +114,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
   let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => []);
   let currentQuestion = selectedQuestion;
   <div className="bg-gray-100 rounded overflow-hidden">
-    <div className="p-5">
+    <div className="p-2 md:p-5">
       <span className="font-semibold text-xs block uppercase text-gray-600">
         {"Question #" |> str}
         {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
@@ -138,7 +138,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
                  />
                  <MarkdownBlock
                    markdown={answerOption |> QuizQuestion.answerValue}
-                   className="ml-2"
+                   className="overflow-auto ml-2"
                    profile=Markdown.Permissive
                  />
                </div>

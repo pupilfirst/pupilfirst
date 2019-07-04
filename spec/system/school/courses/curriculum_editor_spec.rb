@@ -23,6 +23,7 @@ feature 'Curriculum Editor' do
 
   # Data for target group
   let(:new_target_group_name) { Faker::Lorem.sentence }
+  let(:new_target_group_description) { Faker::Lorem.sentence }
 
   # Data for a normal target
   let(:new_target_1_title) { Faker::Lorem.sentence }
@@ -47,9 +48,16 @@ feature 'Curriculum Editor' do
   let(:quiz_question_2_answer_option_1) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
 
+  let(:sample_markdown_text) { Faker::Markdown.sandwich(6) }
+
   before do
     # Create a domain for school
     create :domain, :primary, school: school
+    stub_request(:get, 'https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=3QDYbQIS8cQ').to_return(body: '{"version":"1.0","provider_name":"YouTube","html":"\u003ciframe width=\"480\" height=\"270\" src=\"https:\/\/www.youtube.com\/embed\/3QDYbQIS8cQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen\u003e\u003c\/iframe\u003e","thumbnail_url":"https:\/\/i.ytimg.com\/vi\/3QDYbQIS8cQ\/hqdefault.jpg","provider_url":"https:\/\/www.youtube.com\/","thumbnail_height":360,"type":"video","height":270,"thumbnail_width":480,"author_url":"https:\/\/www.youtube.com\/channel\/UCvsvW3QH1700y-j2VfEnq-A","author_name":"Just smile","title":"Funny And Cute Cats - Funniest Cats Compilation 2019","width":480}', status: 200) # rubocop:disable Metrics/LineLength
+  end
+
+  def file_path(filename)
+    File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
   scenario 'school admin creates the curriculum', js: true, broken: true do
@@ -178,48 +186,83 @@ feature 'Curriculum Editor' do
     within("div#evaluated") do
       click_button 'Yes'
     end
-
-    # # he should be able to create a target with evaluation criteria and resources
-    # find('.target-group__target-create').click
-    # expect(page).to have_text("TARGET DETAILS")
-    # fill_in 'Title', with: new_target_1_title
-    # find('trix-editor').click.set new_target_1_description
-    # fill_in 'resource_title', with: 'A PDF File'
-    # attach_file 'Choose file to upload', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')), visible: false
-    # click_button 'Add Resource'
-    # expect(page).to have_text('Add Resource')
-    # expect(page).to have_text('A PDF File')
-    #
-    # find("a", text: "Add URL").click
-    # fill_in 'resource_title', with: 'A Link'
-    # fill_in 'link', with: 'https://www.sv.co'
-    # click_button 'Add Resource'
-    # expect(page).to have_text('Add Resource')
-    # expect(page).to have_text('A Link')
-    #
-    # within("div#evaluated") do
-    #   click_button 'Yes'
+    expect(page).to have_text('Atleast one has to be selected')
+    # within("div#evaluation_criteria") do
+    #   find('div', text: evaluation_criterion.name).click
     # end
-    # click_button 'Create Target'
-    #
-    # expect(page).to have_text("Target created successfully")
-    # find('.ui-pnotify-container').click
-    # target_group.reload
-    # target = target_group.targets.last
-    # expect(target.title).to eq(new_target_1_title)
-    # expect(target.description).to eq("<div>" + new_target_1_description + "</div>")
-    # expect(target.evaluation_criteria.last.name).to eq(evaluation_criterion.name)
-    # expect(target.resources.count).to eq(2)
-    # expect(target.resources.pluck(:title)).to contain_exactly('A PDF File', 'A Link')
+
+    within("div#evaluated") do
+      click_button 'No'
+    end
+    within("div#method_of_completion") do
+      find('div', text: "Simply mark the target as completed.").click
+    end
+    within("div#visibility") do
+      click_button 'Live'
+    end
+    click_button 'Update Target'
+    find('.ui-pnotify-container').click
+
+    # Add few contents to target
+
+    find('.target-group__target', text: target.title).click
+    within('.add-content-block--open') do
+      find('p', text: 'Markdown').click
+    end
+
+    textarea = find('textarea', match: :first)
+    textarea.fill_in with: sample_markdown_text
+    find('span', text: 'Preview').click
+    click_button 'Save'
+    expect(page).to have_text('Content added successfully')
+    find('.ui-pnotify-container').click
+    expect(target.reload.content_blocks.last.sort_index).to eq(1)
+    expect(target.content_blocks.last.block_type).to eq('markdown')
+
+    within('.add-content-block--open') do
+      find('p', text: 'Image').click
+    end
+    attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
+    click_button 'Save'
+    expect(page).to have_text('Image content must be JPG, PNG or GIF')
+    find('.ui-pnotify-container').click
+    attach_file 'content_block[file]', file_path('high_resolution.png'), visible: false
+    click_button 'Save'
+    expect(page).to have_text('Content added successfully')
+    find('.ui-pnotify-container').click
+    content_block = target.content_blocks.reload.where(block_type: 'image').last
+    expect(content_block.sort_index).to eq(2)
+    expect(content_block.file.filename).to eq('high_resolution.png')
+
+    within('.add-content-block--open') do
+      find('p', text: 'File').click
+    end
+    attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
+    click_button 'Save'
+    expect(page).to have_text('Content added successfully')
+    find('.ui-pnotify-container').click
+    content_block = target.content_blocks.reload.where(block_type: 'file').last
+    expect(content_block.sort_index).to eq(3)
+    expect(content_block.file.filename).to eq('pdf-sample.pdf')
+
+    within('.add-content-block--open') do
+      find('p', text: 'Embed').click
+    end
+    fill_in 'Paste in a URL to embed', with: 'https://www.youtube.com/watch?v=3QDYbQIS8cQ'
+    click_button 'Save'
+    expect(page).to have_text('Content added successfully')
+    find('.ui-pnotify-container').click
+    content_block = target.content_blocks.reload.where(block_type: 'embed').last
+    expect(content_block.sort_index).to eq(4)
   end
 
   scenario "Admin creates a target with a link to complete", js: true, broken: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
-    find('.target-group__target-create').click
-    expect(page).to have_text("TARGET DETAILS")
-    fill_in 'Title', with: new_target_3_title
-    find('trix-editor').click.set new_target_3_description
+    find('#create-target-input').click
+    fill_in 'create-target-input', with: new_target_3_title
+    click_button 'Create'
+    click_button 'Next Step'
     within("div#evaluated") do
       click_button 'No'
     end
@@ -227,13 +270,16 @@ feature 'Curriculum Editor' do
       click_button 'Visit a link to complete the target.'
     end
     fill_in 'Link to complete', with: link_to_complete
-    click_button 'Create Target'
+
+    within("div#visibility") do
+      click_button 'Live'
+    end
+    click_button 'Update Target'
 
     expect(page).to have_text("Target created successfully")
     find('.ui-pnotify-container').click
     expect(page).to have_text("Create a target")
     target = Target.find_by(title: new_target_3_title)
-    expect(target.description).to eq("<div>" + new_target_3_description + "</div>")
     expect(target.evaluation_criteria).to eq([])
     expect(target.link_to_complete).to eq(link_to_complete)
     expect(target.quiz).to eq(nil)
@@ -242,11 +288,10 @@ feature 'Curriculum Editor' do
   scenario "Admin creates a target with a quiz and updates it", js: true, broken: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
-    find('.target-group__target-create').click
-    expect(page).to have_text("TARGET DETAILS")
-    fill_in 'Title', with: new_target_4_title
-    find('trix-editor').click.set new_target_4_description
-
+    find('#create-target-input').click
+    fill_in 'create-target-input', with: new_target_4_title
+    click_button 'Create'
+    click_button 'Next Step'
     within("div#evaluated") do
       click_button 'No'
     end
@@ -264,13 +309,6 @@ feature 'Curriculum Editor' do
 
     within("div#quiz_question_1_answer_option_3_block") do
       click_button 'Mark as correct'
-      click_button 'Explain'
-    end
-
-    fill_in 'quiz_question_1_answer_option_3_hint', with: quiz_question_1_answer_option_3_hint
-
-    within("div#quiz_question_1_answer_option_3_block") do
-      click_button 'Explain'
     end
 
     # Quiz Question 2
@@ -279,13 +317,15 @@ feature 'Curriculum Editor' do
     fill_in 'quiz_question_2_answer_option_1', with: quiz_question_2_answer_option_1
     fill_in 'quiz_question_2_answer_option_2', with: quiz_question_2_answer_option_2
 
-    click_button 'Create Target'
+    within("div#visibility") do
+      click_button 'Live'
+    end
+    click_button 'Update Target'
 
-    expect(page).to have_text("Target created successfully")
+    expect(page).to have_text("Target updated successfully")
     find('.ui-pnotify-container').click
     expect(page).to have_text("Create a target")
     target = Target.find_by(title: new_target_4_title)
-    expect(target.description).to eq("<div>" + new_target_4_description + "</div>")
     expect(target.evaluation_criteria).to eq([])
     expect(target.link_to_complete).to eq(nil)
     expect(target.quiz.title).to eq(new_target_4_title)
@@ -296,7 +336,7 @@ feature 'Curriculum Editor' do
     expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(quiz_question_2_answer_option_1)
 
     find('.target-group__target', text: new_target_4_title).click
-    expect(page).to have_text("TARGET DETAILS")
+    click_button 'Next Step'
     within("div#evaluated") do
       click_button 'No'
     end

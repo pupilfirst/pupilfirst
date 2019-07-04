@@ -127,7 +127,7 @@ feature 'Target Overlay', js: true do
     expect(last_submission.timeline_event_files.first.file.filename).to eq('human.png')
 
     # The status should also be updated on the home page.
-    click_button 'Back'
+    click_button 'Close'
 
     within("div[aria-label='Select Target #{target.id}'") do
       expect(page).to have_content('Submitted')

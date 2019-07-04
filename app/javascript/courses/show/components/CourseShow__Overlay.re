@@ -536,7 +536,7 @@ let make =
   });
 
   <div
-    className="fixed z-20 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container mx-auto">
         {overlayStatus(closeOverlayCB, target, targetStatus)}

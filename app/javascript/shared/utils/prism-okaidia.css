@@ -8,16 +8,15 @@
  * @author ocodia
  */
 
-.markdown-block > pre:not([class*="language-"]) {
+.markdown-block pre:not([class*="language-"]) {
   @apply bg-gray-200 my-3 w-full rounded overflow-auto p-4 border border-gray-400;
 }
 
-.markdown-block > :not(pre) > code:not([class*="language-"]) {
-  @apply whitespace-normal bg-gray-200 mx-1 text-sm rounded overflow-auto px-1 py-1 border border-gray-400;
+.markdown-block :not(pre) code:not([class*="language-"]) {
+  @apply whitespace-normal bg-gray-200 mx-1 text-sm rounded overflow-auto px-1 py-px border border-gray-400;
 }
 
-.markdown-block > code[class*="language-"],
-.markdown-block > pre[class*="language-"] {
+.markdown-block code[class*="language-"], .markdown-block pre[class*="language-"] {
   color: #f8f8f2;
   background: none;
   text-shadow: 0 1px rgba(0, 0, 0, 0.3);
@@ -40,29 +39,25 @@
 
 /* Code blocks */
 
-.markdown-block > pre[class*="language-"] {
+.markdown-block pre[class*="language-"] {
   @apply mt-2 p-4;
   overflow: auto;
   border-radius: 0.3em;
 }
 
-.markdown-block > :not(pre) > code[class*="language-"],
-.markdown-block > pre[class*="language-"] {
+.markdown-block :not(pre) code[class*="language-"], .markdown-block pre[class*="language-"] {
   background: #272822;
 }
 
 /* Inline code */
 
-.markdown-block > :not(pre) > code[class*="language-"] {
+.markdown-block :not(pre) code[class*="language-"] {
   padding: 0.1em;
   border-radius: 0.3em;
   white-space: normal;
 }
 
-.prism-token.prism-comment,
-.prism-token.prism-prolog,
-.prism-token.prism-doctype,
-.prism-token.prism-cdata {
+.prism-token.prism-comment, .prism-token.prism-prolog, .prism-token.prism-doctype, .prism-token.prism-cdata {
   color: slategray;
 }
 
@@ -74,41 +69,23 @@
   opacity: 0.7;
 }
 
-.prism-token.prism-property,
-.prism-token.prism-tag,
-.prism-token.prism-constant,
-.prism-token.prism-symbol,
-.prism-token.prism-deleted {
+.prism-token.prism-property, .prism-token.prism-tag, .prism-token.prism-constant, .prism-token.prism-symbol, .prism-token.prism-deleted {
   color: #f92672;
 }
 
-.prism-token.prism-boolean,
-.prism-token.prism-number {
+.prism-token.prism-boolean, .prism-token.prism-number {
   color: #ae81ff;
 }
 
-.prism-token.prism-selector,
-.prism-token.prism-attr-name,
-.prism-token.prism-string,
-.prism-token.prism-char,
-.prism-token.prism-builtin,
-.prism-token.prism-inserted {
+.prism-token.prism-selector, .prism-token.prism-attr-name, .prism-token.prism-string, .prism-token.prism-char, .prism-token.prism-builtin, .prism-token.prism-inserted {
   color: #a6e22e;
 }
 
-.prism-token.prism-operator,
-.prism-token.prism-entity,
-.prism-token.prism-url,
-.language-css .prism-token.prism-string,
-.prism-style .prism-token.prism-string,
-.prism-token.prism-variable {
+.prism-token.prism-operator, .prism-token.prism-entity, .prism-token.prism-url, .language-css .prism-token.prism-string, .prism-style .prism-token.prism-string, .prism-token.prism-variable {
   color: #f8f8f2;
 }
 
-.prism-token.prism-atrule,
-.prism-token.prism-attr-value,
-.prism-token.prism-function,
-.prism-token.prism-class-name {
+.prism-token.prism-atrule, .prism-token.prism-attr-value, .prism-token.prism-function, .prism-token.prism-class-name {
   color: #e6db74;
 }
 
@@ -116,13 +93,11 @@
   color: #66d9ef;
 }
 
-.prism-token.prism-regex,
-.prism-token.prism-important {
+.prism-token.prism-regex, .prism-token.prism-important {
   color: #fd971f;
 }
 
-.prism-token.prism-important,
-.prism-token.prism-bold {
+.prism-token.prism-important, .prism-token.prism-bold {
   font-weight: bold;
 }
 
@@ -138,18 +113,18 @@
  * Styling for line numbers plugin follows!
  */
 
-.markdown-block > pre[class*="language-"].line-numbers {
+.markdown-block pre[class*="language-"].line-numbers {
   position: relative;
   padding-left: 3.8em;
   counter-reset: linenumber;
 }
 
-.markdown-block > pre[class*="language-"].line-numbers > code {
+.markdown-block pre[class*="language-"].line-numbers>code {
   position: relative;
   white-space: inherit;
 }
 
-.markdown-block > .line-numbers .line-numbers-rows {
+.markdown-block .line-numbers .line-numbers-rows {
   position: absolute;
   pointer-events: none;
   top: 0;
@@ -165,13 +140,13 @@
   user-select: none;
 }
 
-.markdown-block .line-numbers-rows > span {
+.markdown-block .line-numbers-rows>span {
   pointer-events: none;
   display: block;
   counter-increment: linenumber;
 }
 
-.markdown-block .line-numbers-rows > span:before {
+.markdown-block .line-numbers-rows>span:before {
   content: counter(linenumber);
   color: #999;
   display: block;

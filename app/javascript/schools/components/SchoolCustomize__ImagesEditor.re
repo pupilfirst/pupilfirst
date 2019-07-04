@@ -196,40 +196,36 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
       </h5>
       <DisablingCover.Jsx2 disabled={state.updating}>
         <div
-          key="sc-images-editor__logo-on-400-bg-input-group"
-          className="mt-4">
+          key="sc-images-editor__logo-on-400-bg-input-group" className="mt-4">
           <label
             className="block tracking-wide text-gray-800 text-xs font-semibold"
             htmlFor="sc-images-editor__logo-on-400-bg-input">
             {"Logo on a light background" |> str}
           </label>
-          <div
-            className="input-file__container flex items-center relative mt-2">
-            <input
-              disabled={state.updating}
-              className="input-file__input cursor-pointer px-4"
-              name="logo_on_light_bg"
-              type_="file"
-              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__logo-on-400-bg-input"
-              required=false
-              multiple=false
-              onChange={updateLogoOnLightBg(send)}
-            />
-            <label
-              className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-              htmlFor="sc-images-editor__logo-on-400-bg-input">
-              <i className="fas fa-upload" />
-              <span className="ml-2 truncate">
-                {
-                  optionalImageLabelText(
-                    logoOnLightBg,
-                    state.logoOnLightBgFilename,
-                  )
-                }
-              </span>
-            </label>
-          </div>
+          <input
+            disabled={state.updating}
+            className="hidden"
+            name="logo_on_light_bg"
+            type_="file"
+            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+            id="sc-images-editor__logo-on-400-bg-input"
+            required=false
+            multiple=false
+            onChange={updateLogoOnLightBg(send)}
+          />
+          <label
+            className="file-input-label mt-2"
+            htmlFor="sc-images-editor__logo-on-400-bg-input">
+            <i className="fas fa-upload" />
+            <span className="ml-2 truncate">
+              {
+                optionalImageLabelText(
+                  logoOnLightBg,
+                  state.logoOnLightBgFilename,
+                )
+              }
+            </span>
+          </label>
           <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.logoOnLightBgInvalid}
@@ -242,33 +238,30 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
             htmlFor="sc-images-editor__logo-on-600-bg-input">
             {"Logo on a dark background" |> str}
           </label>
-          <div
-            className="input-file__container flex items-center relative mt-2">
-            <input
-              disabled={state.updating}
-              className="input-file__input cursor-pointer px-4"
-              name="logo_on_dark_bg"
-              type_="file"
-              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__logo-on-600-bg-input"
-              required=false
-              multiple=false
-              onChange={updateLogoOnDarkBg(send)}
-            />
-            <label
-              className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-              htmlFor="sc-images-editor__logo-on-600-bg-input">
-              <i className="fas fa-upload" />
-              <span className="ml-2 truncate">
-                {
-                  optionalImageLabelText(
-                    logoOnDarkBg,
-                    state.logoOnDarkBgFilename,
-                  )
-                }
-              </span>
-            </label>
-          </div>
+          <input
+            disabled={state.updating}
+            className="hidden"
+            name="logo_on_dark_bg"
+            type_="file"
+            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+            id="sc-images-editor__logo-on-600-bg-input"
+            required=false
+            multiple=false
+            onChange={updateLogoOnDarkBg(send)}
+          />
+          <label
+            className="file-input-label mt-2"
+            htmlFor="sc-images-editor__logo-on-600-bg-input">
+            <i className="fas fa-upload" />
+            <span className="ml-2 truncate">
+              {
+                optionalImageLabelText(
+                  logoOnDarkBg,
+                  state.logoOnDarkBgFilename,
+                )
+              }
+            </span>
+          </label>
           <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.logoOnDarkBgInvalid}
@@ -280,28 +273,25 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
             htmlFor="sc-images-editor__icon-input">
             {"Icon" |> str}
           </label>
-          <div
-            className="input-file__container flex items-center relative mt-2">
-            <input
-              disabled={state.updating}
-              className="input-file__input cursor-pointer px-4"
-              name="icon"
-              type_="file"
-              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__icon-input"
-              required=false
-              multiple=false
-              onChange={updateIcon(send)}
-            />
-            <label
-              className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-              htmlFor="sc-images-editor__icon-input">
-              <i className="fas fa-upload" />
-              <span className="ml-2 truncate">
-                {iconLabelText(icon, state.iconFilename)}
-              </span>
-            </label>
-          </div>
+          <input
+            disabled={state.updating}
+            className="hidden"
+            name="icon"
+            type_="file"
+            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+            id="sc-images-editor__icon-input"
+            required=false
+            multiple=false
+            onChange={updateIcon(send)}
+          />
+          <label
+            className="file-input-label mt-2"
+            htmlFor="sc-images-editor__icon-input">
+            <i className="fas fa-upload" />
+            <span className="ml-2 truncate">
+              {iconLabelText(icon, state.iconFilename)}
+            </span>
+          </label>
           <School__InputGroupError.Jsx2
             message="must be a JPEG / PNG under 2 MB in size"
             active={state.iconInvalid}

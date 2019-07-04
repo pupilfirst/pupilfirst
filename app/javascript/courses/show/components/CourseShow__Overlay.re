@@ -10,7 +10,7 @@ module TargetStatus = CourseShow__TargetStatus;
 let str = React.string;
 
 let closeOverlay = course =>
-  ReasonReactRouter.push("/courses/" ++ (course |> Course.id)) |> ignore;
+  ReasonReactRouter.push("/courses/" ++ (course |> Course.id));
 
 module ScrollLock = {
   open Webapi.Dom;
@@ -274,9 +274,9 @@ let overlayStatus = (course, target, targetStatus) =>
     <button
       className="xl:absolute pr-4 xl:-ml-20 focus:outline-none"
       onClick={_e => closeOverlay(course)}>
-      <i className="fal fa-arrow-circle-left text-3xl text-gray-800" />
+      <i className="far fa-times text-3xl text-gray-800" />
       <span className="block text-gray-800 font-semibold text-xs uppercase">
-        {"Back" |> str}
+        {"Close" |> str}
       </span>
     </button>
     <div className="w-full flex items-center justify-between relative">

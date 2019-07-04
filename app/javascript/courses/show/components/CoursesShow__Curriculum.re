@@ -9,7 +9,7 @@ module TargetStatus = CourseShow__TargetStatus;
 let str = React.string;
 
 let selectTarget = target =>
-  ReasonReactRouter.push("/targets/" ++ (target |> Target.id)) |> ignore;
+  ReasonReactRouter.push("/targets/" ++ (target |> Target.id));
 
 let targetStatusClasses = targetStatus => {
   let statusClasses =
@@ -110,15 +110,6 @@ let handleLockedLevel = level =>
     }
   </div>;
 
-let handleUrl = (url: ReasonReactRouter.url, setSelectedTargetId, ()) => {
-  switch (url.path) {
-  | ["course", _] => setSelectedTargetId(_ => None)
-  | ["targets", id, ..._] => setSelectedTargetId(_ => Some(id))
-  | _ => setSelectedTargetId(_ => None)
-  };
-  None;
-};
-
 [@react.component]
 let make =
     (
@@ -173,16 +164,6 @@ let make =
     [|latestSubmissions|],
   );
 
-  let url = ReasonReactRouter.useUrl();
-
-  let (selectedTargetId, setSelectedTargetId) =
-    React.useState(() =>
-      switch (url.path) {
-      | ["course", _] => None
-      | ["targets", id, ..._] => Some(id)
-      | _ => None
-      }
-    );
   let (showLevelZero, setShowLevelZero) = React.useState(() => false);
   let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
   let currentLevelId =
@@ -198,12 +179,13 @@ let make =
     targetGroups
     |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
 
-  React.useEffect1(handleUrl(url, setSelectedTargetId), [|url|]);
+  let url = ReasonReactRouter.useUrl();
 
   <div className="bg-gray-100 pt-4 pb-8">
+
     {
-      switch (selectedTargetId) {
-      | Some(targetId) =>
+      switch (url.path) {
+      | ["targets", targetId, ..._] =>
         let selectedTarget =
           targets |> ListUtils.findOpt(t => t |> Target.id == targetId);
         switch (selectedTarget) {
@@ -230,7 +212,7 @@ let make =
         | None => React.null
         };
 
-      | None => React.null
+      | _ => React.null
       }
     }
     <CourseShow__NoticeManager

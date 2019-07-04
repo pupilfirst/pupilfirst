@@ -20,6 +20,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
           className="add-content-block__plus-button-container relative"
           onClick={_event => setVisibility(_ => !visibility)}>
           <div
+            id={"add-block-" ++ (sortIndex |> string_of_int)}
             title="Add block"
             className="add-content-block__plus-button text-gray-700 bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-400 w-7 h-7 flex justify-center items-center mx-auto z-20">
             <i

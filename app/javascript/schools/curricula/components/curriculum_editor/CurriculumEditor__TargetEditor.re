@@ -243,7 +243,9 @@ let completionButtonClasses = value =>
     "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4" :
     "flex flex-col items-center bg-white border border-gray-400 opacity-50 hover:bg-gray-200 text-gray-900 text-sm font-semibold focus:outline-none rounded p-4";
 let formClasses = value =>
-  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
+  value ?
+    "drawer-right-form bg-white w-full opacity-50" :
+    "drawer-right-form bg-white w-full";
 let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>
@@ -431,37 +433,40 @@ let make =
         id="target-editor-scroll-container"
         className={formClasses(state.saving)}>
         <div className="w-full">
-          <ul className="flex flex-wrap max-w-3xl mx-auto mt-6 px-3 -mb-px">
-            <li
-              onClick={_event => dispatch(UpdateActiveStep(AddContent))}
-              className={
-                "target-editor__tab-item "
-                ++ (
-                  state.activeStep == AddContent ?
-                    "target-editor__tab-item--selected" : ""
-                )
-              }>
-              <span className="target-editor__tab-item-step-number">
-                {"1" |> str}
-              </span>
-              <span className="ml-2"> {"Add Content" |> str} </span>
-            </li>
-            <li
-              onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
-              className={
-                "target-editor__tab-item -ml-px "
-                ++ (
-                  state.activeStep == TargetActions ?
-                    "target-editor__tab-item--selected" : ""
-                )
-              }>
-              <span className="target-editor__tab-item-step-number">
-                {"2" |> str}
-              </span>
-              <span className="ml-2"> {"Method of Completion" |> str} </span>
-            </li>
-          </ul>
-          <div id="target-content-and-properties">
+          <div className="bg-gray-200 w-full pt-6">
+            <ul
+              className="flex flex-wrap w-full max-w-3xl mx-auto px-3 -mb-px">
+              <li
+                onClick={_event => dispatch(UpdateActiveStep(AddContent))}
+                className={
+                  "target-editor__tab-item "
+                  ++ (
+                    state.activeStep == AddContent ?
+                      "target-editor__tab-item--selected" : ""
+                  )
+                }>
+                <span className="target-editor__tab-item-step-number">
+                  {"1" |> str}
+                </span>
+                <span className="ml-2"> {"Add Content" |> str} </span>
+              </li>
+              <li
+                onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
+                className={
+                  "target-editor__tab-item -ml-px "
+                  ++ (
+                    state.activeStep == TargetActions ?
+                      "target-editor__tab-item--selected" : ""
+                  )
+                }>
+                <span className="target-editor__tab-item-step-number">
+                  {"2" |> str}
+                </span>
+                <span className="ml-2"> {"Method of Completion" |> str} </span>
+              </li>
+            </ul>
+          </div>
+          <div className="bg-white" id="target-content-and-properties">
             <div
               className={
                 "mx-auto bg-white border-t border-gray-400 "

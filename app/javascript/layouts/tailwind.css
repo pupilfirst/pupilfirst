@@ -46,7 +46,7 @@ h6 {
 /* Button */
 
 .btn {
-  @apply inline-flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded;
+  @apply inline-flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded cursor-pointer;
 }
 
 .btn:focus {

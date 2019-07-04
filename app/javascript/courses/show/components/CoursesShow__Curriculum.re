@@ -8,15 +8,8 @@ module TargetStatus = CourseShow__TargetStatus;
 
 let str = React.string;
 
-let closeOverlay = (setSelectedTargetId, ()) => {
-  setSelectedTargetId(_ => None);
-  ();
-};
-
-let changeSelectedtarget = (setSelectedTargetId, target) => {
-  setSelectedTargetId(_ => Some(target |> Target.id));
-  ();
-};
+let selectTarget = target =>
+  ReasonReactRouter.push("/targets/" ++ (target |> Target.id)) |> ignore;
 
 let targetStatusClasses = targetStatus => {
   let statusClasses =
@@ -25,7 +18,7 @@ let targetStatusClasses = targetStatus => {
   "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses;
 };
 
-let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
+let rendertarget = (target, statusOfTargets) => {
   let targetId = target |> Target.id;
   let targetStatus =
     statusOfTargets |> List.find(ts => ts |> TargetStatus.targetId == targetId);
@@ -34,7 +27,7 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
     key={"target-" ++ targetId}
     className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
     ariaLabel={"Select Target " ++ targetId}
-    onClick={_e => setSelectedTargetId(_ => Some(targetId))}>
+    onClick={_e => selectTarget(target)}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
@@ -44,8 +37,7 @@ let rendertarget = (target, setSelectedTargetId, statusOfTargets) => {
   </div>;
 };
 
-let renderTargetGroup =
-    (targetGroup, targets, statusOfTargets, setSelectedTargetId) => {
+let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
   let targetGroupId = targetGroup |> TargetGroup.id;
   let targets =
     targets |> List.filter(t => t |> Target.targetGroupId == targetGroupId);
@@ -76,9 +68,7 @@ let renderTargetGroup =
         |> List.sort((t1, t2) =>
              (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
            )
-        |> List.map(target =>
-             rendertarget(target, setSelectedTargetId, statusOfTargets)
-           )
+        |> List.map(target => rendertarget(target, statusOfTargets))
         |> Array.of_list
         |> React.array
       }
@@ -120,6 +110,15 @@ let handleLockedLevel = level =>
     }
   </div>;
 
+let handleUrl = (url: ReasonReactRouter.url, setSelectedTargetId, ()) => {
+  switch (url.path) {
+  | ["course", _] => setSelectedTargetId(_ => None)
+  | ["targets", id, ..._] => setSelectedTargetId(_ => Some(id))
+  | _ => setSelectedTargetId(_ => None)
+  };
+  None;
+};
+
 [@react.component]
 let make =
     (
@@ -135,7 +134,6 @@ let make =
       ~coaches,
       ~userProfiles,
       ~currentUserId,
-      ~selectedTargetId,
       ~evaluationCriteria,
     ) => {
   let teamLevel =
@@ -175,8 +173,16 @@ let make =
     [|latestSubmissions|],
   );
 
+  let url = ReasonReactRouter.useUrl();
+
   let (selectedTargetId, setSelectedTargetId) =
-    React.useState(() => selectedTargetId);
+    React.useState(() =>
+      switch (url.path) {
+      | ["course", _] => None
+      | ["targets", id, ..._] => Some(id)
+      | _ => None
+      }
+    );
   let (showLevelZero, setShowLevelZero) = React.useState(() => false);
   let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
   let currentLevelId =
@@ -191,6 +197,8 @@ let make =
   let targetGroupsInLevel =
     targetGroups
     |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
+
+  React.useEffect1(handleUrl(url, setSelectedTargetId), [|url|]);
 
   <div className="bg-gray-100 pt-4 pb-8">
     {
@@ -210,12 +218,11 @@ let make =
             target
             course
             targetStatus
-            closeOverlayCB={closeOverlay(setSelectedTargetId)}
             authenticityToken
             addSubmissionCB={addSubmission(setLatestSubmissions)}
             targets
             statusOfTargets
-            changeTargetCB={changeSelectedtarget(setSelectedTargetId)}
+            changeTargetCB=selectTarget
             userProfiles
             evaluationCriteria
             coaches
@@ -254,12 +261,7 @@ let make =
           targetGroupsInLevel
           |> TargetGroup.sort
           |> List.map(targetGroup =>
-               renderTargetGroup(
-                 targetGroup,
-                 targets,
-                 statusOfTargets,
-                 setSelectedTargetId,
-               )
+               renderTargetGroup(targetGroup, targets, statusOfTargets)
              )
           |> Array.of_list
           |> React.array

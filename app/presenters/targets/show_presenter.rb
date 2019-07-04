@@ -8,7 +8,7 @@ module Targets
     private
 
     def props
-      super.merge(selected_target_id: @target.id)
+      super
     end
   end
 end

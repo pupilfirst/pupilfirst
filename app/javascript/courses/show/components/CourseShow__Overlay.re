@@ -9,6 +9,9 @@ module TargetStatus = CourseShow__TargetStatus;
 
 let str = React.string;
 
+let closeOverlay = course =>
+  ReasonReactRouter.push("/courses/" ++ (course |> Course.id)) |> ignore;
+
 module ScrollLock = {
   open Webapi.Dom;
 
@@ -266,11 +269,11 @@ let overlayHeaderTitleCardClasses = targetStatus =>
   "course-overlay__header-title-card flex justify-between items-center px-3 py-5 md:p-6 "
   ++ targetStatusClass("course-overlay__header-title-card--", targetStatus);
 
-let overlayStatus = (closeOverlayCB, target, targetStatus) =>
+let overlayStatus = (course, target, targetStatus) =>
   <div className={overlayHeaderTitleCardClasses(targetStatus)}>
     <button
       className="xl:absolute pr-4 xl:-ml-20 focus:outline-none"
-      onClick={_e => closeOverlayCB()}>
+      onClick={_e => closeOverlay(course)}>
       <i className="fal fa-arrow-circle-left text-3xl text-gray-800" />
       <span className="block text-gray-800 font-semibold text-xs uppercase">
         {"Back" |> str}
@@ -360,11 +363,6 @@ let handleLocked =
   | Failed => React.null
   };
 
-let pushUrl = (course, selectedTargetId) =>
-  switch (selectedTargetId) {
-  | Some(targetId) => ReasonReactRouter.push("/targets/" ++ targetId)
-  | None => ReasonReactRouter.push("/courses/" ++ (course |> Course.id))
-  };
 let overlayContentClasses = bool => bool ? "" : "hidden";
 
 let learnSection = (targetDetails, overlaySelection) =>
@@ -505,7 +503,6 @@ let make =
       ~course,
       ~targetStatus,
       ~authenticityToken,
-      ~closeOverlayCB,
       ~addSubmissionCB,
       ~targets,
       ~statusOfTargets,
@@ -526,11 +523,6 @@ let make =
   );
 
   React.useEffect(() => {
-    pushUrl(course, Some(target |> Target.id));
-    Some(() => pushUrl(course, None));
-  });
-
-  React.useEffect(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
   });
@@ -539,7 +531,7 @@ let make =
     className="fixed z-20 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container mx-auto">
-        {overlayStatus(closeOverlayCB, target, targetStatus)}
+        {overlayStatus(course, target, targetStatus)}
         {
           handleLocked(
             target,

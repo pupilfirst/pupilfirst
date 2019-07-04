@@ -60,6 +60,10 @@ type action =
   | Italics
   | Code;
 
+type defaultView =
+  | Preview
+  | Edit;
+
 let str = React.string;
 
 let updateDescription = (description, setDescription, updateDescriptionCB) => {
@@ -204,9 +208,16 @@ let make =
       ~profile,
       ~maxLength=1000,
       ~scrollMethod=TextArea.ScrollWindow,
+      ~defaultView,
     ) => {
   let (description, setDescription) = React.useState(() => value);
-  let (preview, setPreview) = React.useState(() => false);
+  let (preview, setPreview) =
+    React.useState(() =>
+      switch (defaultView) {
+      | Preview => true
+      | Edit => false
+      }
+    );
   let (id, _setId) =
     React.useState(() =>
       switch (textareaId) {
@@ -292,6 +303,7 @@ module Jsx2 = {
         ~label,
         ~profile,
         ~maxLength,
+        ~defaultView,
         children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -303,6 +315,7 @@ module Jsx2 = {
         ~label,
         ~profile,
         ~maxLength,
+        ~defaultView,
         (),
       ),
       children,

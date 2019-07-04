@@ -260,6 +260,7 @@ let make =
                 placeholder="You can use Markdown to format this text."
                 label="Body"
                 profile=Markdown.QuestionAndAnswer
+                defaultView=MarkdownEditor.Edit
               />
               <div className="flex justify-end pt-3 border-t">
                 <button

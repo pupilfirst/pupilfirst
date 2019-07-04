@@ -218,6 +218,7 @@ let make =
             updateDescriptionCB
             value=description
             profile=Markdown.QuestionAndAnswer
+            defaultView=MarkdownEditor.Edit
           />
           <div className="flex justify-end pt-3 border-t">
             {

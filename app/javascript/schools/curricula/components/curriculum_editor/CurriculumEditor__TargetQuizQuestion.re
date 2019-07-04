@@ -84,6 +84,7 @@ let make =
         value={quizQuestion |> QuizQuestion.question}
         updateDescriptionCB=updateQuestion
         profile=Markdown.Permissive
+        defaultView=MarkdownEditor.Edit
       />
     </div>
     <div className="quiz-maker__answers-container relative">

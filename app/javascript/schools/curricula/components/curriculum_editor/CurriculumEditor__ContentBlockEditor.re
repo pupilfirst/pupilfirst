@@ -456,6 +456,7 @@ let make =
                       profile=Markdown.Permissive
                       maxLength=100000
                       scrollMethod={scrollMethod()}
+                      defaultView=MarkdownEditor.Preview
                     />
                   | Image(url, caption) =>
                     <div className="rounded-lg bg-white">
@@ -502,6 +503,7 @@ let make =
                     profile=Markdown.Permissive
                     maxLength=100000
                     scrollMethod={scrollMethod()}
+                    defaultView=MarkdownEditor.Edit
                   />
                 </div>
               | _ => contentUploadContainer(blockType, dispatch, state)

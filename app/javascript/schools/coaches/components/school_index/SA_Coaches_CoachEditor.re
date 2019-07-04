@@ -528,36 +528,31 @@ let make =
                     htmlFor="avatarUploader">
                     {"Avatar" |> str}
                   </label>
-                  <div
-                    className="input-file__container flex items-center relative mb-4">
-                    <input
-                      disabled={state.saving}
-                      className="input-file__input cursor-pointer px-4"
-                      name="faculty[image]"
-                      type_="file"
-                      id="coach_avatar"
-                      required=false
-                      multiple=false
-                      onChange={
-                        event =>
-                          send(
-                            UpdateImageFileName(
-                              ReactEvent.Form.target(event)##files[0]##name,
-                            ),
-                          )
-                      }
-                    />
-                    <label
-                      className="input-file__label flex px-4 items-center font-semibold rounded text-sm"
-                      htmlFor="file">
-                      <i
-                        className="fas fa-upload mr-2 text-gray-600 text-lg"
-                      />
-                      <span className="truncate">
-                        {avatarUploaderText() |> str}
-                      </span>
-                    </label>
-                  </div>
+                  <input
+                    disabled={state.saving}
+                    className="hidden"
+                    name="faculty[image]"
+                    type_="file"
+                    id="sa-coach-editor__file-input"
+                    required=false
+                    multiple=false
+                    onChange={
+                      event =>
+                        send(
+                          UpdateImageFileName(
+                            ReactEvent.Form.target(event)##files[0]##name,
+                          ),
+                        )
+                    }
+                  />
+                  <label
+                    className="file-input-label mt-2"
+                    htmlFor="sa-coach-editor__file-input">
+                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                    <span className="truncate">
+                      {avatarUploaderText() |> str}
+                    </span>
+                  </label>
                 </div>
                 <div className="p-6 bg-gray-200">
                   <div className="max-w-2xl px-6 mx-auto">

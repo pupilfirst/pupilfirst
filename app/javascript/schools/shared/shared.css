@@ -309,29 +309,13 @@
     transform: translate3d(-6px, -3px, 0) rotate(45deg) scale(0.5, 1);
 }
 
-.input-file__input {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 43px;
-    margin: 0;
-    opacity: 0;
-}
-
-.input-file__label {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 1;
-    height: 43px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    background-color: #E6F1FF;
+.file-input-label {
+    @apply truncate py-2 cursor-pointer flex px-4 items-center font-semibold rounded text-sm;
     border: 1px dashed #D3D8E1;
+    background-color: #E6F1FF;
 }
 
-.input-file__container:hover .input-file__label {
+.file-input-label:hover {
     @apply .bg-gray-400;
 }
 

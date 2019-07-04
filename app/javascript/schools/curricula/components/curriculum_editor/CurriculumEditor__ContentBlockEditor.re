@@ -117,11 +117,11 @@ let contentUploadContainer = (blockType, dispatch, state) =>
     </p>
     {
       fileUploadButtonVisible(blockType) ?
-        <div className="flex justify-center relative mt-2">
+        <div className="mt-2">
           <input
-            id="content-block-image-input"
+            id="content-block-editor__file-input"
             type_="file"
-            className="input-file__input cursor-pointer px-4"
+            className="hidden"
             required=false
             multiple=false
             name="content_block[file]"
@@ -135,8 +135,8 @@ let contentUploadContainer = (blockType, dispatch, state) =>
             }
           />
           <label
-            className="btn btn-primary flex absolute"
-            htmlFor="content-block-image-input">
+            className="btn btn-primary"
+            htmlFor="content-block-editor__file-input">
             <i className="fas fa-upload" />
             <span className="ml-2 truncate"> {state.fileName |> str} </span>
           </label>

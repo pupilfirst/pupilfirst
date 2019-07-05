@@ -84,6 +84,10 @@
   vertical-align: baseline;
 }
 
+.markdown-block__img {
+  @apply mx-auto;
+}
+
 /*
  * Permissive styling used in learn section and its preview
  * in the school admin section.
@@ -169,6 +173,10 @@
 .markdown-block__permissive sub {
   @apply markdown-block__sup-sub;
   bottom: -0.25em;
+}
+
+.markdown-block__permissive img {
+  @apply markdown-block__img
 }
 
 /*
@@ -258,6 +266,10 @@
 .markdown-block__questions-and-answer sub {
   @apply markdown-block__sup-sub;
   bottom: -0.25em;
+}
+
+.markdown-block__questions-and-answer img {
+  @apply markdown-block__img
 }
 
 /*

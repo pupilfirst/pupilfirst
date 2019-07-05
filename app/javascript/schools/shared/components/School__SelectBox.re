@@ -93,7 +93,7 @@ let make = (~items, ~multiSelectCB) => {
                            multiSelectCB(_key, value, true);
                          }
                        }
-                       title=value
+                       title={"Select " ++ value}
                        className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500">
                        {value |> str}
                      </div>

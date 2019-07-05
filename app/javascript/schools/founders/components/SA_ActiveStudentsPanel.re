@@ -633,14 +633,14 @@ let make =
                                                 |> str
                                               }
                                             </p>
-                                            <div className="flex">
+                                            <div className="flex flex-wrap">
                                               {
                                                 student
                                                 |> Student.tags
                                                 |> List.map(tag =>
                                                      <div
                                                        key=tag
-                                                       className="border border-indigo rounded mt-2 mr-1 py-1 px-2 text-xs text-indigo">
+                                                       className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
                                                        {tag |> str}
                                                      </div>
                                                    )
@@ -664,17 +664,15 @@ let make =
                                isSingleFounder ?
                                  ReasonReact.null :
                                  <div className="students-team--name mb-5">
-                                   <p className="mb-1 text-xs">
-                                     {"Team" |> str}
-                                   </p>
+                                   <p className="text-xs"> {"Team" |> str} </p>
                                    <h4> {team |> Team.name |> str} </h4>
                                  </div>
                              }
                              <div className="coaches-avatar-group">
-                               <p className="mb-2 text-xs">
+                               <p className="text-xs pb-1">
                                  {"Coaches" |> str}
                                </p>
-                               <div className="flex items-center">
+                               <div className="flex items-center flex-wrap">
                                  {
                                    let teamCoachIds =
                                      List.append(
@@ -697,7 +695,7 @@ let make =
                                             |> Coach.userId
                                             |> string_of_int
                                           }
-                                          className="w-6 h-6 rounded-full mr-1"
+                                          className="w-6 h-6 rounded-full mr-1 mt-1"
                                           src={
                                             coach
                                             |> coachUserProfile(

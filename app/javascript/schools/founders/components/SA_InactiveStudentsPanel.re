@@ -279,14 +279,14 @@ let make =
                                                 |> str
                                               }
                                             </p>
-                                            <div className="flex">
+                                            <div className="flex flex-wrap">
                                               {
                                                 student
                                                 |> Student.tags
                                                 |> List.map(tag =>
                                                      <div
                                                        key=tag
-                                                       className="border border-indigo rounded mt-2 mr-1 py-1 px-2 text-xs text-indigo">
+                                                       className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
                                                        {tag |> str}
                                                      </div>
                                                    )

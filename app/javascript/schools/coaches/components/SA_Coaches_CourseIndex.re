@@ -200,7 +200,7 @@ let make =
                            <div className="flex flex-1 justify-between">
                              <div className="flex py-4 px-4">
                                <img
-                                 className="w-10 h-10 rounded-full mr-4"
+                                 className="w-10 h-10 rounded-full mr-4 object-cover"
                                  src={coach |> Coach.imageUrl}
                                  alt={"Avatar of " ++ (coach |> Coach.name)}
                                />
@@ -209,7 +209,7 @@ let make =
                                    {coach |> Coach.name |> str}
                                  </p>
                                  <p
-                                   className="text-gray-600 font-semibold text-xs mt-1">
+                                   className="text-gray-600 font-semibold text-xs mt-px">
                                    {coach |> Coach.title |> str}
                                  </p>
                                </div>
@@ -253,7 +253,7 @@ let make =
                            <div className="flex flex-1 justify-between">
                              <div className="flex pt-4 pb-3 px-4">
                                <img
-                                 className="w-10 h-10 rounded-full mr-4"
+                                 className="w-10 h-10 rounded-full mr-4 object-cover"
                                  src={coach |> Coach.imageUrl}
                                  alt={"Avatar of " ++ Coach.name(coach)}
                                />
@@ -262,7 +262,7 @@ let make =
                                    {coach |> Coach.name |> str}
                                  </p>
                                  <p
-                                   className="text-gray-600 font-semibold text-xs mt-1">
+                                   className="text-gray-600 font-semibold text-xs mt-px">
                                    {coach |> Coach.title |> str}
                                  </p>
                                </div>
@@ -279,11 +279,11 @@ let make =
                                <Icon.Jsx2 kind=Icon.Delete size="4" />
                              </div>
                            </div>
-                           <div className="pt-3 pb-4 px-4">
-                             <h5
+                           <div className="pt-2 pb-4 px-4">
+                             <h6
                                className="font-semibold text-gray-600 border-b pb-1">
                                {"Teams" |> str}
-                             </h5>
+                             </h6>
                              {
                                switch (coach |> Coach.teams) {
                                | None => ReasonReact.null
@@ -295,7 +295,7 @@ let make =
                                      |> List.map(team =>
                                           <span
                                             key={"Team " ++ Team.name(team)}
-                                            className="p-1 border rounded bg-primary-100 mt-1 mr-1">
+                                            className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
                                             {Team.name(team) |> str}
                                           </span>
                                         )

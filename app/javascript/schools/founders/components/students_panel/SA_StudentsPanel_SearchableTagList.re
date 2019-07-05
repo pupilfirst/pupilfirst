@@ -26,9 +26,9 @@ let search =
             title={"Add new tag " ++ searchString}
             key=searchString
             onMouseDown=(_e => handleClick(searchString, send, addTagCB))
-            className="p-2 text-sm hover:text-indigo cursor-pointer">
+            className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 rounded-lg px-2 py-px mt-1 mr-4 text-xs overflow-hidden">
             {searchString |> str}
-            <span className="text-gray"> {" (New)" |> str} </span>
+            <i className="fal fa-plus ml-1 text-sm text-primary-600" />
           </span>,
         ];
       } else {
@@ -46,7 +46,7 @@ let search =
            <span
              title={"Pick tag " ++ tag}
              key=tag
-             className="p-2 text-sm hover:text-indigo cursor-pointer"
+             className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
              onMouseDown=(_e => handleClick(tag, send, addTagCB))>
              {tag |> str}
            </span>
@@ -79,20 +79,20 @@ let make =
     <div className="mt-2">
       {
         if (selectedTags |> ListUtils.isNotEmpty) {
-          <div className="flex">
+          <div className="flex flex-wrap">
             {
               selectedTags
               |> List.sort(String.compare)
               |> List.map(tag =>
                    <div
                      key=tag
-                     className="flex items-center pl-2 border rounded-lg mr-1 text-sm font-semibold focus:outline-none bg-gray-400">
-                     <span> {tag |> str} </span>
+                     className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+                     <span className="px-2 py-px"> {tag |> str} </span>
                      <span
                        title={"Remove tag " ++ tag}
-                       className="cursor-pointer p-2"
+                       className="flex items-center px-2 h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
                        onClick={_e => handleClick(tag, send, removeTagCB)}>
-                       <Icon.Jsx2 kind=Icon.Close size="3" />
+                       <i className="fal fa-times" />
                      </span>
                    </div>
                  )
@@ -117,7 +117,7 @@ let make =
       {
         if (results |> ListUtils.isNotEmpty) {
           <div
-            className="border border-gray-400 bg-white mt-3 rounded-lg max-w-xs searchable-tag-list__dropdown relative px-4 py-2">
+            className="flex flex-wrap border border-gray-400 bg-white mt-3 rounded-lg max-w-xs searchable-tag-list__dropdown relative px-4 py-2">
             {results |> Array.of_list |> ReasonReact.array}
           </div>;
         } else {

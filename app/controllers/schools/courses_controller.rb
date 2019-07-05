@@ -49,9 +49,16 @@ module Schools
       form = Schools::Founders::CreateForm.new(Reform::OpenForm.new)
 
       if form.validate(params)
-        form.save
+        student_count = form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
-        render json: { teams: presenter.teams, students: presenter.students, userProfiles: presenter.user_profiles, error: nil }
+
+        render json: {
+          teams: presenter.teams,
+          students: presenter.students,
+          userProfiles: presenter.user_profiles,
+          error: nil,
+          studentCount: student_count
+        }
       else
         render json: { error: form.errors.full_messages.join(', ') }
       end

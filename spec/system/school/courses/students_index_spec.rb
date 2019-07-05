@@ -77,7 +77,7 @@ feature 'School students index', js: true do
 
     click_button 'Save List'
 
-    expect(page).to have_text("Student(s) created successfully")
+    expect(page).to have_text("All students were created successfully")
     dismiss_notification
 
     expect(page).to have_text(name_1)
@@ -110,7 +110,7 @@ feature 'School students index', js: true do
       # Try to save both.
       click_button 'Save List'
 
-      expect(page).to have_text("Student(s) created successfully")
+      expect(page).to have_text("1 of 2 students were added. Remaining students are already a part of the course")
       dismiss_notification
     end.to change { Founder.count }.by(1)
 

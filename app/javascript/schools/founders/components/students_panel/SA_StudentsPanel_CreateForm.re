@@ -34,10 +34,25 @@ let handleResponseCB = (submitCB, state, json) => {
     json |> Json.Decode.(field("students", list(Student.decode)));
   let userProfiles =
     json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
+  let (studentsAdded, studentsRequested) =
+    json |> Json.Decode.(field("studentCount", pair(int, int)));
   let tags = state.studentsToAdd |> appliedTags;
 
   submitCB(teams, students, userProfiles, tags);
-  Notification.success("Success", "Student(s) created successfully");
+
+  if (studentsAdded == studentsRequested) {
+    Notification.success(
+      "Success",
+      "All students were created successfully.",
+    );
+  } else {
+    let message =
+      (studentsAdded |> string_of_int)
+      ++ " of "
+      ++ (studentsRequested |> string_of_int)
+      ++ " students were added. Remaining students are already a part of the course.";
+    Notification.notice("Partially successful", message);
+  };
 };
 
 let saveStudents = (state, courseId, authenticityToken, responseCB) => {

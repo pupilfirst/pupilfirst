@@ -1,18 +1,22 @@
 open StudentsPanel__Types;
 open SchoolAdmin__Utils;
 
-type state = {studentsToAdd: list(StudentInfo.t)};
+type state = {
+  studentsToAdd: list(StudentInfo.t),
+  saving: bool,
+};
 
 type action =
   | AddStudentInfo(StudentInfo.t)
-  | RemoveStudentInfo(StudentInfo.t);
+  | RemoveStudentInfo(StudentInfo.t)
+  | SetSaving(bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
 let str = ReasonReact.string;
 
 let formInvalid = state => state.studentsToAdd |> ListUtils.isEmpty;
-let handleErrorCB = () => ();
+let handleErrorCB = (send, ()) => send(SetSaving(false));
 
 /* Get the tags applied to a list of students. */
 let appliedTags = students =>
@@ -55,7 +59,10 @@ let handleResponseCB = (submitCB, state, json) => {
   };
 };
 
-let saveStudents = (state, courseId, authenticityToken, responseCB) => {
+let saveStudents =
+    (state, send, courseId, authenticityToken, responseCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send(SetSaving(true));
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
@@ -69,7 +76,7 @@ let saveStudents = (state, courseId, authenticityToken, responseCB) => {
   );
 
   let url = "/school/courses/" ++ (courseId |> string_of_int) ++ "/students";
-  Api.create(url, payload, responseCB, handleErrorCB);
+  Api.create(url, payload, responseCB, handleErrorCB(send));
 };
 
 let make =
@@ -82,21 +89,24 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () => {studentsToAdd: []},
+  initialState: () => {studentsToAdd: [], saving: false},
   reducer: (action, state) =>
     switch (action) {
     | AddStudentInfo(studentInfo) =>
       ReasonReact.Update({
+        ...state,
         studentsToAdd: [studentInfo, ...state.studentsToAdd],
       })
     | RemoveStudentInfo(studentInfo) =>
       ReasonReact.Update({
+        ...state,
         studentsToAdd:
           state.studentsToAdd
           |> List.filter(s =>
                StudentInfo.email(s) !== StudentInfo.email(studentInfo)
              ),
       })
+    | SetSaving(saving) => ReasonReact.Update({...state, saving})
     },
   render: ({state, send}) =>
     <div>
@@ -201,15 +211,17 @@ let make =
                 </div>
                 <div className="flex mt-4">
                   <button
-                    disabled={state.studentsToAdd |> ListUtils.isEmpty}
+                    disabled={
+                      state.saving || state.studentsToAdd |> ListUtils.isEmpty
+                    }
                     onClick={
-                      _e =>
-                        saveStudents(
-                          state,
-                          courseId,
-                          authenticityToken,
-                          handleResponseCB(submitFormCB, state),
-                        )
+                      saveStudents(
+                        state,
+                        send,
+                        courseId,
+                        authenticityToken,
+                        handleResponseCB(submitFormCB, state),
+                      )
                     }
                     className={
                       "w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
@@ -218,7 +230,7 @@ let make =
                           " opacity-50 cursor-not-allowed" : ""
                       )
                     }>
-                    {"Save List" |> str}
+                    {(state.saving ? "Saving..." : "Save List") |> str}
                   </button>
                 </div>
               </div>

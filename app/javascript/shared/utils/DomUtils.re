@@ -22,3 +22,10 @@ module FormData = {
   [@bs.new] external create: Dom.element => t = "FormData";
   [@bs.send] external append: (t, 'a) => unit = "append";
 };
+
+module EventTarget = {
+  type t = Js.t({.});
+
+  /* Be careful when using this function. Event targets need not be an 'element'. */
+  external unsafeToElement: t => Dom.element = "%identity";
+};

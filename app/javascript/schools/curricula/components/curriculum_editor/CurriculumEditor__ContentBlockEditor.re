@@ -373,21 +373,18 @@ let submitForm =
     )
   | None =>
     let element =
-      ReactDOMRe._getElementById("content-block-form-" ++ editorId);
-    switch (element) {
-    | Some(element) =>
-      let formData = DomUtils.FormData.create(element);
-      createContentBlock(
-        formData,
-        target,
-        state,
-        dispatch,
-        blockType,
-        sortIndex,
-        createNewContentCB,
-      );
-    | None => ()
-    };
+      ReactEvent.Form.target(event) |> DomUtils.EventTarget.unsafeToElement;
+
+    let formData = DomUtils.FormData.create(element);
+    createContentBlock(
+      formData,
+      target,
+      state,
+      dispatch,
+      blockType,
+      sortIndex,
+      createNewContentCB,
+    );
   };
 };
 
@@ -489,7 +486,6 @@ let make =
           </button>
         </div>
       <form
-        id={"content-block-form-" ++ editorId}
         key={"content-block-form-" ++ editorId}
         onSubmit={
           event =>

@@ -25,7 +25,8 @@ sanitizationProfiles.permissive = [
   "sup",
   "sub",
   "span",
-  "br"
+  "br",
+  "img"
 ];
 
 sanitizationProfiles.questionsAndAnswer = sanitizationProfiles.permissive;
@@ -69,6 +70,10 @@ const allowedPreClasses = ["line-numbers"];
 const sanitize = (profile, dirtyHtml) => {
   return sanitizeHtml(dirtyHtml, {
     allowedTags: sanitizationProfile(profile),
+    allowedAttributes: {
+      a: ["href", "name", "target"],
+      img: ["src", "title", "alt"]
+    },
     allowedClasses: {
       pre: allowedPreClasses,
       code: allowedCodeClasses

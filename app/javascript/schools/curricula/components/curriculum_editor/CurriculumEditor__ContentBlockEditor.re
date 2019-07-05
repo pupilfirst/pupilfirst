@@ -80,14 +80,17 @@ let faIcons = (blockType: ContentBlock.blockType) =>
   | Embed(_url, _embedCode) =>
     [|
       <i
-        key="slideshare-icon"
-        className="fab fa-slideshare text-6xl text-gray-500"
+        key="youtube-icon"
+        className="fab fa-youtube text-6xl text-gray-500 px-2"
       />,
       <i
-        key="youtube-icon"
-        className="fab fa-youtube text-6xl text-gray-500"
+        key="slideshare-icon"
+        className="fab fa-slideshare text-6xl text-gray-500 px-2"
       />,
-      <i key="vimeo-icon" className="fab fa-vimeo text-6xl text-gray-500" />,
+      <i
+        key="vimeo-icon"
+        className="fab fa-vimeo text-6xl text-gray-500 px-2"
+      />,
     |]
     |> React.array
   };
@@ -100,9 +103,10 @@ let fileUploadButtonVisible = (blockType: ContentBlock.blockType) =>
   };
 
 let contentUploadContainer = (blockType, dispatch, state) =>
-  <div className="content-block__content-placeholder text-center p-10">
-    {faIcons(blockType)}
-    <p className="text-xs text-gray-700 mt-1">
+  <div
+    className="content-block__content-placeholder flex flex-col justify-center text-center p-10">
+    <div> {faIcons(blockType)} </div>
+    <p className="text-xs text-gray-800 mt-1">
       {
         (
           switch (blockType) {
@@ -446,13 +450,12 @@ let make =
       newContentBlockCB
       staticMode=false
     />
+    /* Content block */
     <div
-      className="[ content-block ] relative border border-gray-400 rounded-lg overflow-hidden">
+      className="relative border border-gray-400 rounded-lg overflow-hidden">
+      /* Content block controls */
       <div
-        className="[ content-block__controls ] flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
-        /* Notice the classes [ classname ] do not exists in the CSS file. When scanning HTML,
-           it helps to quickly differentiate who does what */
-
+        className="flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
           {
             sortIndex != 1 ?
               <button
@@ -604,8 +607,9 @@ let make =
             }
           }
         </div>
+        /* Content block action bar */
         <div
-          className="[ content-block__action-bar ] flex p-3 border-t justify-end">
+          className="flex p-3 border-t justify-end">
           {
             actionBarTextInputVisible(blockType, contentBlock) ?
               <div className="flex-1 content-block__action-bar-input">

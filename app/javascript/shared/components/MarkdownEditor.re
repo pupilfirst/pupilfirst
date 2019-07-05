@@ -249,7 +249,7 @@ let make =
   });
 
   <div>
-    <div className="flex justify-between items-end">
+    <div className="flex justify-between items-end bg-white pb-2">
       label
       <div className="flex markdown-button-group">
         {
@@ -269,7 +269,7 @@ let make =
       preview ?
         <MarkdownBlock
           markdown=description
-          className="py-3 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview mt-2"
+          className="pb-3 pt-2 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
           profile
         /> :
         <textarea
@@ -286,7 +286,7 @@ let make =
                 updateDescriptionCB,
               )
           }
-          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500 mt-2"
+          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500"
         />
     }
   </div>;

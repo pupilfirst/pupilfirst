@@ -9,15 +9,14 @@ type state = {
 type action =
   | AddStudentInfo(StudentInfo.t)
   | RemoveStudentInfo(StudentInfo.t)
-  | SetSaving
-  | UnsetSaving;
+  | SetSaving(bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
 let str = ReasonReact.string;
 
 let formInvalid = state => state.studentsToAdd |> ListUtils.isEmpty;
-let handleErrorCB = (send, ()) => send(UnsetSaving);
+let handleErrorCB = (send, ()) => send(SetSaving(false));
 
 /* Get the tags applied to a list of students. */
 let appliedTags = students =>
@@ -63,7 +62,7 @@ let handleResponseCB = (submitCB, state, json) => {
 let saveStudents =
     (state, send, courseId, authenticityToken, responseCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  send(SetSaving);
+  send(SetSaving(true));
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
@@ -107,8 +106,7 @@ let make =
                StudentInfo.email(s) !== StudentInfo.email(studentInfo)
              ),
       })
-    | SetSaving => ReasonReact.Update({...state, saving: true})
-    | UnsetSaving => ReasonReact.Update({...state, saving: false})
+    | SetSaving(saving) => ReasonReact.Update({...state, saving})
     },
   render: ({state, send}) =>
     <div>

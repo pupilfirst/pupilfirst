@@ -60,7 +60,7 @@ feature 'Curriculum Editor' do
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
-  scenario 'school admin creates the curriculum', js: true, broken: true do
+  scenario 'school admin creates the curriculum', js: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
     # he should be on the last level
@@ -149,7 +149,7 @@ feature 'Curriculum Editor' do
     end
   end
 
-  scenario 'school admin adds content to a target and modifies its properties', js: true, broken: true do
+  scenario 'school admin adds content to a target and modifies its properties', js: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
     target = target_4
@@ -256,12 +256,14 @@ feature 'Curriculum Editor' do
     expect(content_block.sort_index).to eq(4)
   end
 
-  scenario "Admin creates a target with a link to complete", js: true, broken: true do
+  scenario "Admin creates a target with a link to complete", js: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
     find('#create-target-input').click
     fill_in 'create-target-input', with: new_target_3_title
     click_button 'Create'
+    expect(page).to have_text("Target created successfully")
+    find('.ui-pnotify-container').click
     click_button 'Next Step'
     within("div#evaluated") do
       click_button 'No'
@@ -276,7 +278,7 @@ feature 'Curriculum Editor' do
     end
     click_button 'Update Target'
 
-    expect(page).to have_text("Target created successfully")
+    expect(page).to have_text("Target updated successfully")
     find('.ui-pnotify-container').click
     expect(page).to have_text("Create a target")
     target = Target.find_by(title: new_target_3_title)
@@ -285,12 +287,13 @@ feature 'Curriculum Editor' do
     expect(target.quiz).to eq(nil)
   end
 
-  scenario "Admin creates a target with a quiz and updates it", js: true, broken: true do
+  scenario "Admin creates a target with a quiz and updates it", js: true do
     sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
     find('#create-target-input').click
     fill_in 'create-target-input', with: new_target_4_title
     click_button 'Create'
+    find('.ui-pnotify-container').click
     click_button 'Next Step'
     within("div#evaluated") do
       click_button 'No'

@@ -22,17 +22,19 @@ class CreateCourseMutator < ApplicationMutator
   end
 
   def create_course
-    course = Course.create!(
-      name: name, description: description,
-      school: current_school,
-      max_grade: max_grade,
-      pass_grade: pass_grade,
-      grade_labels: grade_labels,
-      ends_at: ends_at,
-      enable_leaderboard: enable_leaderboard
-    )
-    Courses::DemoContentService.new(course).execute
-    course
+    Course.transaction do
+      course = Course.create!(
+        name: name, description: description,
+        school: current_school,
+        max_grade: max_grade,
+        pass_grade: pass_grade,
+        grade_labels: grade_labels,
+        ends_at: ends_at,
+        enable_leaderboard: enable_leaderboard
+      )
+      Courses::DemoContentService.new(course).execute
+      course
+    end
   end
 
   private

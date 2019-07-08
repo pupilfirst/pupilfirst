@@ -112,7 +112,6 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
       </span>
       <MarkdownBlock
         markdown={currentQuestion |> QuizQuestion.question}
-        className=""
         profile=Markdown.Permissive
       />
       <div className="pt-2">

@@ -16,8 +16,16 @@ let profileClasses = (profile: Markdown.profile) =>
   | Permissive => "markdown-block__permissive "
   };
 
+let markdownBlockClasses = (profile, className) => {
+  let defaultClasses = "markdown-block " ++ profileClasses(profile);
+  switch (className) {
+  | Some(className) => defaultClasses ++ className
+  | None => defaultClasses
+  };
+};
+
 [@react.component]
-let make = (~markdown, ~className, ~profile) => {
+let make = (~markdown, ~className=?, ~profile) => {
   let id = randomId();
 
   React.useEffect1(
@@ -29,7 +37,7 @@ let make = (~markdown, ~className, ~profile) => {
   );
 
   <div
-    className={"markdown-block " ++ profileClasses(profile) ++ className}
+    className={markdownBlockClasses(profile, className)}
     id
     dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse(profile)}
   />;

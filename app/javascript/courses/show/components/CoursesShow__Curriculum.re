@@ -21,7 +21,11 @@ let targetStatusClasses = targetStatus => {
 let rendertarget = (target, statusOfTargets) => {
   let targetId = target |> Target.id;
   let targetStatus =
-    statusOfTargets |> List.find(ts => ts |> TargetStatus.targetId == targetId);
+    statusOfTargets
+    |> ListUtils.unsafeFind(
+         ts => ts |> TargetStatus.targetId == targetId,
+         "Could not find targetStatus for listed target with ID " ++ targetId,
+       );
 
   <div
     key={"target-" ++ targetId}
@@ -195,8 +199,10 @@ let make =
         | Some(target) =>
           let targetStatus =
             statusOfTargets
-            |> List.find(ts =>
-                 ts |> TargetStatus.targetId == (target |> Target.id)
+            |> ListUtils.unsafeFind(
+                 ts => ts |> TargetStatus.targetId == (target |> Target.id),
+                 "Could not find targetStatus for selectedTarget with ID "
+                 ++ (target |> Target.id),
                );
 
           <CourseShow__Overlay

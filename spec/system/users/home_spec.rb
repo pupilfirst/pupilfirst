@@ -36,10 +36,12 @@ feature 'User Home' do
   let!(:community_2) { create :community, school: school, target_linkable: true }
   let!(:community_3) { create :community, school: school, target_linkable: true }
 
-  let(:coach) { create :faculty, school: school }
+  let(:course_coach) { create :faculty, school: school }
+  let(:student_coach) { create :faculty, school: school }
 
   before do
-    create :faculty_course_enrollment, faculty: coach, course: course_1
+    create :faculty_course_enrollment, faculty: course_coach, course: course_1
+    create :faculty_startup_enrollment, faculty: student_coach, startup: course_2_founder_1.startup
     create :community_course_connection, course: course_1, community: community_1
     create :community_course_connection, course: course_2, community: community_2
 
@@ -84,8 +86,8 @@ feature 'User Home' do
     expect(page).not_to have_text(community_3.name)
   end
 
-  scenario 'When an faculty visits he access courses and community', js: true do
-    sign_in_user(coach.user, referer: home_path)
+  scenario 'When a course coach visits he access courses and community', js: true do
+    sign_in_user(course_coach.user, referer: home_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_1.description)
@@ -96,7 +98,25 @@ feature 'User Home' do
     expect(page).not_to have_text(course_3.name)
     expect(page).not_to have_text(course_4.name)
 
-    # Coach has access to all communities in school
+    # course_coach has access to all communities in school
+    expect(page).to have_text(community_1.name)
+    expect(page).to have_text(community_2.name)
+    expect(page).to have_text(community_3.name)
+  end
+
+  scenario 'When a student coach visits he access courses and community', js: true do
+    sign_in_user(student_coach.user, referer: home_path)
+
+    expect(page).to have_text(course_2.name)
+    expect(page).to have_text(course_2.description)
+    expect(page).to have_link("Review")
+    expect(page).to have_link("Review Submissions")
+
+    expect(page).not_to have_text(course_1.name)
+    expect(page).not_to have_text(course_3.name)
+    expect(page).not_to have_text(course_4.name)
+
+    # course_coach has access to all communities in school
     expect(page).to have_text(community_1.name)
     expect(page).to have_text(community_2.name)
     expect(page).to have_text(community_3.name)

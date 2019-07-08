@@ -118,17 +118,14 @@ let handleLockedLevel = level =>
 let make =
     (
       ~authenticityToken,
-      ~schoolName,
       ~course,
       ~levels,
       ~targetGroups,
       ~targets,
       ~submissions,
       ~team,
-      ~students,
       ~coaches,
       ~userProfiles,
-      ~currentUserId,
       ~evaluationCriteria,
     ) => {
   let teamLevel =
@@ -146,14 +143,7 @@ let make =
 
   /* Curried function so that this can be re-used when a new submission is created. */
   let computeTargetStatus =
-    TargetStatus.compute(
-      team,
-      students,
-      course,
-      levels,
-      targetGroups,
-      targets,
-    );
+    TargetStatus.compute(team, course, levels, targetGroups, targets);
 
   let initialRender = React.useRef(true);
 

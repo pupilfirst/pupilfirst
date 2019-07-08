@@ -14,17 +14,14 @@ module Courses
     def props
       {
         authenticity_token: view.form_authenticity_token,
-        school_name: current_school.name,
         course: course_details,
         levels: levels,
         target_groups: target_groups,
         targets: targets,
         submissions: submissions,
         team: team_details,
-        students: team_members.map(&:attributes),
         coaches: faculty.map(&:attributes),
         user_profiles: user_profiles,
-        current_user_id: current_user.id,
         evaluation_criteria: evaluation_criteria
       }
     end

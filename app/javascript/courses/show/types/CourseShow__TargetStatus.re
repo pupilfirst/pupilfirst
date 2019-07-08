@@ -69,8 +69,7 @@ let allTargetsComplete = (targetCache, targetIds) =>
        cachedTarget.submissionStatus == SubmissionPassed;
      });
 
-let compute =
-    (team, students, course, levels, targetGroups, targets, submissions) =>
+let compute = (team, course, levels, targetGroups, targets, submissions) =>
   /* Eliminate the two course ended and student access ended conditions. */
   if (course |> Course.endsAt |> isPast) {
     lockTargets(targets, CourseLocked);

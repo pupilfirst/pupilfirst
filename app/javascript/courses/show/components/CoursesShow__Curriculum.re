@@ -4,7 +4,6 @@
 let levelLockedImage: string = [%raw "require('../images/level-lock.svg')"];
 
 open CourseShow__Types;
-module TargetStatus = CourseShow__TargetStatus;
 
 let str = React.string;
 
@@ -171,7 +170,11 @@ let make =
     | (None, true | false) => selectedLevelId
     };
   let currentLevel =
-    levels |> ListUtils.findOpt(l => l |> Level.id == currentLevelId);
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == currentLevelId,
+         "Could not find level with id" ++ currentLevelId,
+       );
 
   let targetGroupsInLevel =
     targetGroups
@@ -184,32 +187,34 @@ let make =
       switch (url.path) {
       | ["targets", targetId, ..._] =>
         let selectedTarget =
-          targets |> ListUtils.findOpt(t => t |> Target.id == targetId);
-        switch (selectedTarget) {
-        | Some(target) =>
-          let targetStatus =
-            statusOfTargets
-            |> ListUtils.unsafeFind(
-                 ts => ts |> TargetStatus.targetId == (target |> Target.id),
-                 "Could not find targetStatus for selectedTarget with ID "
-                 ++ (target |> Target.id),
-               );
+          targets
+          |> ListUtils.unsafeFind(
+               t => t |> Target.id == targetId,
+               "Could not find target with ID " ++ targetId,
+             );
 
-          <CourseShow__Overlay
-            target
-            course
-            targetStatus
-            authenticityToken
-            addSubmissionCB={addSubmission(setLatestSubmissions)}
-            targets
-            statusOfTargets
-            changeTargetCB=selectTarget
-            userProfiles
-            evaluationCriteria
-            coaches
-          />;
-        | None => React.null
-        };
+        let targetStatus =
+          statusOfTargets
+          |> ListUtils.unsafeFind(
+               ts =>
+                 ts |> TargetStatus.targetId == (selectedTarget |> Target.id),
+               "Could not find targetStatus for selectedTarget with ID "
+               ++ (selectedTarget |> Target.id),
+             );
+
+        <CourseShow__Overlay
+          target=selectedTarget
+          course
+          targetStatus
+          authenticityToken
+          addSubmissionCB={addSubmission(setLatestSubmissions)}
+          targets
+          statusOfTargets
+          changeTargetCB=selectTarget
+          userProfiles
+          evaluationCriteria
+          coaches
+        />;
 
       | _ => React.null
       }
@@ -235,19 +240,15 @@ let make =
       />
     </div>
     {
-      switch (currentLevel) {
-      | Some(level) =>
-        level |> Level.isLocked ?
-          handleLockedLevel(level) :
-          targetGroupsInLevel
-          |> TargetGroup.sort
-          |> List.map(targetGroup =>
-               renderTargetGroup(targetGroup, targets, statusOfTargets)
-             )
-          |> Array.of_list
-          |> React.array
-      | None => React.null
-      }
+      currentLevel |> Level.isLocked ?
+        handleLockedLevel(currentLevel) :
+        targetGroupsInLevel
+        |> TargetGroup.sort
+        |> List.map(targetGroup =>
+             renderTargetGroup(targetGroup, targets, statusOfTargets)
+           )
+        |> Array.of_list
+        |> React.array
     }
   </div>;
 };

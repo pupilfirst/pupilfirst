@@ -25,17 +25,17 @@ class CreateQuizSubmissionMutator < ApplicationMutator
   def target_should_have_a_quiz
     return if quiz.present?
 
-    errors[:base] << 'Please choose the correct target completion method.'
+    errors[:base] << 'TargetDoesNotHaveQuiz'
   end
 
   def all_questions_answered
-    return if number_of_question == answers_from_user.count
+    return if number_of_questions == answers_from_user.count
 
     errors[:base] << "The answers are incomplete. Please try again."
   end
 
-  def number_of_question
-    @number_of_question ||= quiz.quiz_questions.count
+  def number_of_questions
+    @number_of_questions ||= quiz.quiz_questions.count
   end
 
   def answers_from_user
@@ -70,7 +70,7 @@ class CreateQuizSubmissionMutator < ApplicationMutator
       end.join("\n\n")
 
       {
-        score: "#{score}/#{number_of_question}",
+        score: "#{score}/#{number_of_questions}",
         description: "#{intro}\n\n#{body}"
       }
     end

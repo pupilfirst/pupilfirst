@@ -51,15 +51,6 @@ let createQuizSubmission =
      })
   |> ignore;
 };
-
-let resultsSectionClasses = selectedAnswer => {
-  let defaultClasses = "flex flex-col p-4 text-center bg-gray-200 justify-center";
-  switch (selectedAnswer) {
-  | Some(_answer) => defaultClasses
-  | None => ""
-  };
-};
-
 let answerOptionClasses = (answerOption, selectedAnswer) => {
   let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer ";
   switch (selectedAnswer) {
@@ -148,52 +139,49 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
         }
       </div>
     </div>
-    <div className={resultsSectionClasses(selectedAnswer)}>
-      {
-        switch (selectedAnswer) {
-        | None => React.null
-        | Some(answer) =>
-          <div className="py-4">
-            {
-              currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
+    {
+      switch (selectedAnswer) {
+      | None => React.null
+      | Some(answer) =>
+        <div className="text-center bg-gray-200 py-8">
+          {
+            currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
+              <button
+                disabled=saving
+                className="btn btn-primary"
+                onClick={
+                  handleSubmit(
+                    answer,
+                    authenticityToken,
+                    target,
+                    selectedAnswersIds,
+                    setSaving,
+                    addSubmissionCB,
+                  )
+                }>
+                {str("Submit Quiz")}
+              </button> :
+              {
+                let nextQuestion =
+                  currentQuestion |> QuizQuestion.nextQuestion(quizQuestions);
                 <button
-                  disabled=saving
                   className="btn btn-primary"
-                  onClick={
-                    handleSubmit(
-                      answer,
-                      authenticityToken,
-                      target,
-                      selectedAnswersIds,
-                      setSaving,
-                      addSubmissionCB,
-                    )
-                  }>
-                  {str("Submit Quiz")}
-                </button> :
-                {
-                  let nextQuestion =
-                    currentQuestion
-                    |> QuizQuestion.nextQuestion(quizQuestions);
-                  <button
-                    className="btn btn-primary"
-                    onClick=(
-                      _ => {
-                        setSelectedQuestion(_ => nextQuestion);
-                        setSelectedAnswersIds(_ =>
-                          selectedAnswersIds
-                          |> List.append([answer |> QuizQuestion.answerId])
-                        );
-                        setSelectedAnswer(_ => None);
-                      }
-                    )>
-                    {str("Next Question")}
-                  </button>;
-                }
-            }
-          </div>
-        }
+                  onClick=(
+                    _ => {
+                      setSelectedQuestion(_ => nextQuestion);
+                      setSelectedAnswersIds(_ =>
+                        selectedAnswersIds
+                        |> List.append([answer |> QuizQuestion.answerId])
+                      );
+                      setSelectedAnswer(_ => None);
+                    }
+                  )>
+                  {str("Next Question")}
+                </button>;
+              }
+          }
+        </div>
       }
-    </div>
+    }
   </div>;
 };

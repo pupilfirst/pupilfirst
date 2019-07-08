@@ -10,7 +10,6 @@ module Communities
       {
         authenticityToken: view.form_authenticity_token,
         communityId: @community.id.to_s,
-        communityPath: view.community_path(@community),
         target: @target.present? ? { id: @target.id.to_s, title: @target.title } : nil
       }.to_json
     end

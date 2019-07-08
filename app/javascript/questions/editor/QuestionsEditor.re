@@ -76,6 +76,10 @@ let handleResponseCB = (id, title) => {
   redirectPath |> Webapi.Dom.Window.setLocation(window);
 };
 
+let handleBack = () =>
+  Webapi.Dom.window |> Webapi.Dom.Window.history |> Webapi.Dom.History.back;
+
+
 module CreateQuestionErrorHandler =
   GraphqlErrorHandler.Make(CreateQuestionError);
 
@@ -162,7 +166,7 @@ let make =
     (
       ~authenticityToken,
       ~communityId,
-      ~communityPath=?,
+      ~showBackButton=true,
       ~target,
       ~question=?,
       ~updateQuestionCB=?,
@@ -189,16 +193,14 @@ let make =
       <div className="flex-1 flex flex-col">
         <div>
           {
-            switch (communityPath) {
-            | Some(communityPath) =>
+            showBackButton ?
               <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-                <a className="btn btn-default" href=communityPath>
+                <a className="btn btn-default" onClick={_ => handleBack()}>
                   <i className="far fa-arrow-left" />
-                  <span className="ml-2"> {React.string("Back")} </span>
+                  <span className="ml-2"> {"Back" |> str} </span>
                 </a>
-              </div>
-            | None => React.null
-            }
+              </div> :
+              React.null
           }
         </div>
         {

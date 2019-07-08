@@ -165,6 +165,7 @@ let make =
               authenticityToken
               communityId
               target=None
+              showBackButton=false
               question={state.question}
               updateQuestionCB
             />
@@ -173,7 +174,7 @@ let make =
             <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
               <a className="btn btn-default" href=communityPath>
                 <i className="far fa-arrow-left" />
-                <span className="ml-2"> {React.string("Back")} </span>
+                <span className="ml-2"> {"Back" |> str} </span>
               </a>
             </div>
             <div

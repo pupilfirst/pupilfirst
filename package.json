@@ -18,6 +18,7 @@
     "cloc": "^2.4.0",
     "coffeescript": "1.12.7",
     "date-fns": "^1.29.0",
+    "dotenv": "^8.0.0",
     "markdown-it": "^8.4.2",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",

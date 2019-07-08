@@ -128,7 +128,11 @@ let make =
       ~evaluationCriteria,
     ) => {
   let teamLevel =
-    levels |> List.find(l => l |> Level.id == (team |> Team.levelId));
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == (team |> Team.levelId),
+         "Could not find teamLevel with ID " ++ (team |> Team.levelId),
+       );
 
   let (selectedLevelId, setSelectedLevelId) =
     React.useState(() => teamLevel |> Level.id);
@@ -182,7 +186,6 @@ let make =
   let url = ReasonReactRouter.useUrl();
 
   <div className="bg-gray-100 pt-4 pb-8">
-
     {
       switch (url.path) {
       | ["targets", targetId, ..._] =>

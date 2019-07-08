@@ -34,6 +34,7 @@ Rails.application.config.content_security_policy do |policy|
       media: 'https://js.intercomcdn.com'
     }
   end
+
   # rubocop:enable Metrics/LineLength
 
   def slideshare_csp
@@ -60,12 +61,16 @@ Rails.application.config.content_security_policy do |policy|
     { frame: 'https://player.vimeo.com' }
   end
 
+  def rollbar_csp
+    { connect: 'https://api.rollbar.com' }
+  end
+
   def style_sources
     ['fonts.googleapis.com', 'https://assets.pupilfirst.com']
   end
 
   def connect_sources
-    sources = [*inspectlet_csp[:connect], *intercom_csp[:connect], google_analytics_csp[:connect]]
+    sources = [*inspectlet_csp[:connect], *intercom_csp[:connect], google_analytics_csp[:connect], rollbar_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end
@@ -91,11 +96,11 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   policy.default_src :none
-  policy.img_src     '*', :data, :blob
-  policy.script_src  :unsafe_eval, :unsafe_inline, :strict_dynamic, 'https:', 'http:'
-  policy.style_src   :self, :unsafe_inline, *style_sources
+  policy.img_src '*', :data, :blob
+  policy.script_src :unsafe_eval, :unsafe_inline, :strict_dynamic, 'https:', 'http:'
+  policy.style_src :self, :unsafe_inline, *style_sources
   policy.connect_src :self, *connect_sources
-  policy.font_src    :self, *font_sources
+  policy.font_src :self, *font_sources
   policy.child_src(*child_sources)
   policy.frame_src :data, *frame_sources
   policy.media_src :self, *media_sources

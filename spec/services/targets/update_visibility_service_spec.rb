@@ -17,8 +17,6 @@ describe Targets::UpdateVisibilityService do
     end
 
     it 'updates visibility' do
-      puts "Request visibility is #{visibility}..."
-
       expect do
         subject.new(target, visibility).execute
       end.to change { target.reload.visibility }.from(Target::VISIBILITY_LIVE).to(visibility)

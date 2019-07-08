@@ -89,7 +89,9 @@ Rails.application.routes.draw do
   end
 
   resources :communities, only: %i[show] do
-    resources :questions, only: %i[new]
+    member do
+      get 'new_question', controller: "communities"
+    end
   end
 
   get 'answers/:id/versions', controller: "answers", action: "versions", as: "answer_version"

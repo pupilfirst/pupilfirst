@@ -10,7 +10,7 @@ let linkToCommunity = (communityId, targetId) =>
 let linkToNewQuestion = (communityId, targetId) =>
   "/communities/"
   ++ communityId
-  ++ "/questions/new"
+  ++ "/new_question"
   ++ "?target_id="
   ++ targetId;
 
@@ -60,13 +60,13 @@ let actionButtons = (community, targetId) => {
       }
       href={linkToCommunity(communityId, targetId)}
       className="btn btn-default mr-3">
-      {React.string("Go to community")}
+      {"Go to community" |> str}
     </a>
     <a
       title={"Ask a question in the " ++ communityName ++ " community"}
       href={linkToNewQuestion(communityId, targetId)}
       className="btn btn-primary">
-      {React.string("Ask a question")}
+      {"Ask a question" |> str}
     </a>
   </div>;
 };
@@ -77,9 +77,8 @@ let communityTitle = community =>
   </h5>;
 
 [@react.component]
-let make = (~target, ~targetDetails) => {
+let make = (~targetId, ~targetDetails) => {
   let communities = targetDetails |> TargetDetails.communities;
-  let targetId = target |> Target.id;
   <div className="">
     {
       communities

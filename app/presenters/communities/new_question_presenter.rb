@@ -1,5 +1,5 @@
-module Questions
-  class NewPresenter < ApplicationPresenter
+module Communities
+  class NewQuestionPresenter < ApplicationPresenter
     def initialize(view_context, community, target)
       super(view_context)
       @community = community

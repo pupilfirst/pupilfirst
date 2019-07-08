@@ -9,6 +9,12 @@ class CommunitiesController < ApplicationController
       .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
   end
 
+  # GET /community/:community_id/questions/new
+  def new_question
+    @community = authorize(Community.find(params[:id]))
+    target
+  end
+
   private
 
   def page
@@ -35,11 +41,13 @@ class CommunitiesController < ApplicationController
   end
 
   def target
+    return unless @community.target_linkable?
+
     @target ||= if params[:target_id].present?
       t = Target.find_by(id: params[:target_id])
 
       # Only return the target if the target is in a course that is linked to this community.
-      @community.courses.where(id: t.course).exists? ? t : nil
+      @community.courses.where(id: t&.course).exists? ? t : nil
     end
   end
 end

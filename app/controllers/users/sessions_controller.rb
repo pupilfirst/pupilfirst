@@ -10,9 +10,6 @@ module Users
       if current_user.present?
         flash[:alert] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
-      else
-        form_data = Reform::OpenForm.new(referer: params[:referer])
-        @form = UserSignInForm.new(form_data)
       end
     end
 
@@ -21,11 +18,11 @@ module Users
       @form = UserSignInForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
-      if @form.validate(params[:user_sign_in])
+      if @form.validate(params[:session])
         @form.save(current_domain)
+        render json: { error: nil }
       else
-        @sign_in_error = true
-        render 'new'
+        render json: { error: @form.errors.full_messages.join(', ') }
       end
     end
 
@@ -48,10 +45,16 @@ module Users
     end
 
     # POST /user/sign_in
-    #
-    # This route is disabled for the moment since we do not support logging in with password.
     def create
-      raise_not_found
+      user = User.find_by(email: params[:email])
+      user_profile = user&.user_profiles&.where(school: current_school)&.first
+      if user_profile&.password_digest&.present? && user_profile&.authenticate(params[:password])
+        sign_in user
+        remember_me(user) unless params[:shared_device] == 'true'
+        render json: { error: nil }
+      else
+        render json: { error: "Invalid user name or password" }
+      end
     end
 
     private

@@ -33,21 +33,6 @@ module Users
         @school_name ||= current_school&.name || 'PupilFirst'
       end
 
-      def oauth_url(provider)
-        if view.current_school.nil?
-          # If there is no school, this is a visit to a PupilFirst domain. Just supply a direct OAuth link.
-          OmniauthProviderUrlService.new(provider, view.current_host).oauth_url
-        else
-          view.oauth_url(provider: provider, fqdn: view.current_host, host: oauth_host)
-        end
-      end
-
-      def hidden_sign_in_class(type, link: false)
-        add_class = type == 'federated' ? link : !link
-        add_class = !add_class if @sign_in_error
-        add_class ? 'd-none' : ''
-      end
-
       def fqdn
         if view.current_school.present?
           view.current_host

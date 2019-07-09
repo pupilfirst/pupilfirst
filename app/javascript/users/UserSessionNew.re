@@ -1,13 +1,77 @@
 [@bs.config {jsx: 3}];
 
+open SchoolAdmin__Utils;
 let str = React.string;
+
+type views =
+  | FederatedSignIn
+  | SignInWithPassword
+  | SignInEmailSent;
 
 type omniauthProvider =
   | Google
   | Facebook
   | Github
   | Developer;
-let renderLogo = (iconUrl, schoolName) =>
+
+let handleErrorCB = (setSaving, ()) => setSaving(_ => false);
+let handleSignInWithPasswordCB = _ => {
+  let window = Webapi.Dom.window;
+  "/home" |> Webapi.Dom.Window.setLocation(window);
+};
+let handleSignInWithEmailCB = (setView, _) => setView(_ => SignInEmailSent);
+
+let signInWithPassword = (authenticityToken, email, password, setSaving) => {
+  let setPayload = () => {
+    let payload = Js.Dict.empty();
+    Js.Dict.set(
+      payload,
+      "authenticity_token",
+      authenticityToken |> Js.Json.string,
+    );
+
+    Js.Dict.set(payload, "email", email |> Js.Json.string);
+    Js.Dict.set(payload, "shared_device", "true" |> Js.Json.string);
+    Js.Dict.set(payload, "password", password |> Js.Json.string);
+    payload;
+  };
+  let payload = setPayload();
+  let url = "/users/sign_in";
+  setSaving(_ => true);
+  Api.create(
+    url,
+    payload,
+    handleSignInWithPasswordCB,
+    handleErrorCB(setSaving),
+  );
+};
+
+let sendSignInEmail = (authenticityToken, email, setView, setSaving) => {
+  let setPayload = () => {
+    let payload = Js.Dict.empty();
+    Js.Dict.set(
+      payload,
+      "authenticity_token",
+      authenticityToken |> Js.Json.string,
+    );
+
+    Js.Dict.set(payload, "email", email |> Js.Json.string);
+    Js.Dict.set(payload, "referer", "" |> Js.Json.string);
+    Js.Dict.set(payload, "shared_device", "0" |> Js.Json.string);
+    Js.Dict.set(payload, "username", "" |> Js.Json.string);
+    payload;
+  };
+
+  let payload = setPayload();
+  let url = "/users/send_login_email";
+  Api.create(
+    url,
+    payload,
+    handleSignInWithEmailCB(setView),
+    handleErrorCB(setSaving),
+  );
+};
+let renderIcon = iconUrl =>
   switch (iconUrl) {
   | Some(url) => <img className="mx-auto" src=url />
   | None => React.null
@@ -62,33 +126,35 @@ let iconClasses = provider =>
   | Developer => "fas fa-code"
   };
 
-let renderFederatedlogin = (fqdn, oauthHost, setUseFederatedLogin) =>
-  [|
-    <div className="flex flex-col p-4 items-center max-w-sm mx-auto">
-      {
-        [|Developer, Google, Facebook, Github|]
-        |> Array.map(provider =>
-             <a
-               className={buttonClasses(provider)}
-               href={federatedLoginUrl(oauthHost, fqdn, provider)}>
-               <i className={iconClasses(provider)} />
-               <span className="pl-2"> {buttonText(provider) |> str} </span>
-             </a>
-           )
-        |> React.array
-      }
-    </div>,
-    <div
-      onClick={_ => setUseFederatedLogin(_ => false)}
-      className="text-blue-600 text-center font-semibold hover:text-blue-700">
-      {"Sign in with email" |> str}
-    </div>,
-  |]
-  |> React.array;
+let renderFederatedlogin = (fqdn, oauthHost) =>
+  <div className="flex flex-col p-4 items-center max-w-sm mx-auto">
+    {
+      [|Developer, Google, Facebook, Github|]
+      |> Array.map(provider =>
+           <a
+             className={buttonClasses(provider)}
+             href={federatedLoginUrl(oauthHost, fqdn, provider)}>
+             <i className={iconClasses(provider)} />
+             <span className="pl-2"> {buttonText(provider) |> str} </span>
+           </a>
+         )
+      |> React.array
+    }
+  </div>;
 
 let validPassword = password => password != "";
 
-let renderSignInWithEmail = (email, setEmail, password, setPassword) =>
+let renderSignInWithEmail =
+    (
+      email,
+      setEmail,
+      password,
+      setPassword,
+      authenticityToken,
+      setView,
+      saving,
+      setSaving,
+    ) =>
   <div>
     <label
       className="inline-block tracking-wide text-xs font-semibold mb-2"
@@ -117,32 +183,93 @@ let renderSignInWithEmail = (email, setEmail, password, setPassword) =>
     <div className="text-center">
       {
         validPassword(password) ?
-          <button className="btn btn-primary btn-large">
-            {"Email me a link to sign in" |> str}
-          </button> :
-          <button className="btn btn-primary btn-large">
+          <button
+            disabled=saving
+            onClick={
+              _ =>
+                signInWithPassword(
+                  authenticityToken,
+                  email,
+                  password,
+                  setSaving,
+                )
+            }
+            className="btn btn-primary btn-large">
             {"Sign in with password" |> str}
+          </button> :
+          <button
+            disabled=saving
+            onClick={
+              _ =>
+                sendSignInEmail(authenticityToken, email, setView, setSaving)
+            }
+            className="btn btn-primary btn-large">
+            {"Email me a link to sign in" |> str}
           </button>
+      }
+    </div>
+  </div>;
+
+let renderSignInEmailSent = () =>
+  <div className="text-center">
+    <div className="text-4xl font-semibold mt-4">
+      {"Sign-in link sent!" |> str}
+    </div>
+    <div className="text-sm font-normal mt-4">
+      {
+        "An email with a Sign-in link has been sent to your address. Please visit your inbox and follow the link to sign-in and continue."
+        |> str
       }
     </div>
   </div>;
 
 [@react.component]
 let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
-  let (useFederatedLogin, setUseFederatedLogin) = React.useState(() => true);
+  let (view, setView) = React.useState(() => FederatedSignIn);
   let (email, setEmail) = React.useState(() => "");
   let (password, setPassword) = React.useState(() => "");
-  <div className="bg-gray-100 py-4">
+  let (saving, setSaving) = React.useState(() => false);
+  Js.log(email);
+  <div className="bg-gray-100 py-10 px-2">
     <div
       className="container mx-auto max-w-lg px-4 py-10 bg-white rounded-lg shadow-xl">
-      {renderLogo(iconUrl, schoolName)}
+      {renderIcon(iconUrl)}
       <div className="text-2xl font-light text-center mt-4">
         {"Sign in to " ++ schoolName |> str}
       </div>
       {
-        useFederatedLogin ?
-          renderFederatedlogin(fqdn, oauthHost, setUseFederatedLogin) :
-          renderSignInWithEmail(email, setEmail, password, setPassword)
+        switch (view) {
+        | FederatedSignIn => renderFederatedlogin(fqdn, oauthHost)
+        | SignInWithPassword =>
+          renderSignInWithEmail(
+            email,
+            setEmail,
+            password,
+            setPassword,
+            authenticityToken,
+            setView,
+            saving,
+            setSaving,
+          )
+        | SignInEmailSent => renderSignInEmailSent()
+        }
+      }
+      {
+        switch (view) {
+        | FederatedSignIn =>
+          <div
+            onClick=(_ => setView(_ => SignInWithPassword))
+            className="text-blue-600 text-center font-semibold hover:text-blue-700">
+            {"Sign in with email" |> str}
+          </div>
+        | SignInWithPassword =>
+          <div
+            onClick=(_ => setView(_ => FederatedSignIn))
+            className="text-blue-600 text-center font-semibold hover:text-blue-700 mt-4">
+            {"Sign in with Google, Facebook, or Github" |> str}
+          </div>
+        | SignInEmailSent => React.null
+        }
       }
     </div>
   </div>;

@@ -21,28 +21,3 @@
     left: 0;
     background: linear-gradient(to right, #E4E9F2 80%, #FFFFFF 100%);
 }
-
-.searchable-tag-list__dropdown:after, .searchable-tag-list__dropdown:before {
-    bottom: 100%;
-    left: 10%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-}
-
-.searchable-tag-list__dropdown:after {
-    border-color: rgba(255, 255, 255, 0);
-    border-bottom-color: white;
-    border-width: 10px;
-    margin-left: -10px;
-}
-
-.searchable-tag-list__dropdown:before {
-    border-color: rgba(255, 255, 255, 0);
-    border-bottom-color: #c2e1f5;
-    border-width: 11px;
-    margin-left: -11px;
-}

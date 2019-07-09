@@ -1,8 +1,9 @@
 module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
-
     before_action :skip_container, only: %i[new send_login_email]
+
+    layout 'student', except: %i[token send_login_email create]
 
     # GET /user/sign_in
     def new

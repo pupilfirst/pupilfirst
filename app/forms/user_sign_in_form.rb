@@ -1,6 +1,8 @@
 class UserSignInForm < Reform::Form
   include EmailBounceValidatable
 
+  attr_accessor :current_school
+
   property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
   property :referer
   property :shared_device
@@ -8,10 +10,10 @@ class UserSignInForm < Reform::Form
   # Honeypot field. See validation `detect_honeypot` below.
   property :username
 
-  validate :user_with_email_must_exist
+  validate :user_profile_must_exist
 
-  def user_with_email_must_exist
-    return if user.present? || email.blank?
+  def user_profile_must_exist
+    return if user_profile.present? || email.blank?
 
     errors[:email] << 'Could not find user with this email.'
     errors[:base] << 'Please check the email that you entered.'
@@ -38,7 +40,7 @@ class UserSignInForm < Reform::Form
     errors[:base] << 'Your request has been blocked because it is suspicious.'
   end
 
-  def save(current_school, current_domain)
+  def save(current_domain)
     Users::MailLoginTokenService.new(current_school, current_domain, user, referer, shared_device?).execute
   end
 
@@ -47,6 +49,14 @@ class UserSignInForm < Reform::Form
   def user
     @user ||= begin
       User.with_email(email) if email.present?
+    end
+  end
+
+  def user_profile
+    @user_profile ||= begin
+      if user.present? && current_school.present?
+        user.user_profiles.where(school: current_school).first
+      end
     end
   end
 

@@ -12,7 +12,7 @@ let randomId = () => {
 let profileClasses = (profile: Markdown.profile) =>
   switch (profile) {
   | Comment => "markdown-block__comment "
-  | QuestionAndAnswer => "markdown-block__questions-and-answer "
+  | QuestionAndAnswer => "markdown-block__question-and-answer "
   | Permissive => "markdown-block__permissive "
   };
 

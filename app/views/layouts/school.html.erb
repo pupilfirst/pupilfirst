@@ -6,6 +6,7 @@
 
 <% content_for(:head) do %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
+  <%= stylesheet_pack_tag 'SchoolLayoutPack', media: 'all' %>
 <% end %>
 
 <%=content_for(:tail) do %>
@@ -14,7 +15,7 @@
 
 <% content_for(:wrapper) do %>
   <div class="antialiased flex h-screen overflow-hidden">
-    <div id="school-admin-navbar__root" class="flex global-sidebar" data-json-props="<%= presenter.props_to_json %>"></div>
+    <div id="school-admin-navbar__root" class="flex global-sidebar flex-shrink-0" data-json-props="<%= presenter.props_to_json %>"></div>
     <%= yield %>
   </div>
 <% end %>

@@ -2,6 +2,8 @@ class UserProfile < ApplicationRecord
   belongs_to :user
   belongs_to :school
 
+  has_secure_password
+
   GENDER_MALE = 'male'.freeze
   GENDER_FEMALE = 'female'.freeze
   GENDER_OTHER = 'other'.freeze

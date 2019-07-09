@@ -47,11 +47,7 @@
   <%= yield %>
 <% end %>
 
+<%= yield :footer %>
 <%= yield :tail %>
-
-<% if content_for?(:nav) %>
-  <%= yield :footer %>
-<% end %>
-
 </body>
 </html>

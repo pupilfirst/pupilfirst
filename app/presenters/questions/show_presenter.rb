@@ -47,7 +47,7 @@ module Questions
     end
 
     def comment_data(comment)
-      comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id')
+      comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id', 'created_at')
     end
 
     def user_data

@@ -90,7 +90,7 @@ Rails.application.routes.draw do
 
   resources :communities, only: %i[show] do
     member do
-      get 'new_question', controller: "communities"
+      get 'new_question'
     end
   end
 

@@ -117,6 +117,12 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('Submitted')
     end
 
+    # The submissions should mention that review is pending.
+    expect(page).to have_content('Review pending')
+
+    # The student should be able to undo the submission at this point.
+    expect(page).to have_selector('button[title="Delete this submission"]')
+
     # User should be looking at their submission now.
     expect(page).to have_content('Your Submissions')
 
@@ -412,7 +418,7 @@ feature 'Target Overlay', js: true do
       course.update!(ends_at: 1.day.ago)
     end
 
-    scenario 'student visits a target in a course which has ended' do
+    scenario 'student visits a pending target' do
       sign_in_user student.user, referer: target_path(target)
 
       within('.course-overlay__header-title-card') do
@@ -422,6 +428,27 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_content('The course has ended and submissions are disabled for all targets!')
       expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
+    end
+
+    scenario 'student views a submitted target' do
+      create :timeline_event, :latest, target: target, founders: team.founders
+
+      sign_in_user student.user, referer: target_path(target)
+
+      # The status should read locked.
+      within('.course-overlay__header-title-card') do
+        expect(page).to have_content(target.title)
+        expect(page).to have_content('Locked')
+      end
+
+      # The submissions & feedback sections should be visible.
+      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+
+      # The submissions should mention that review is pending.
+      expect(page).to have_content('Review pending')
+
+      # The student should NOT be able to undo the submission at this point.
+      expect(page).not_to have_selector('button[title="Delete this submission"]')
     end
   end
 

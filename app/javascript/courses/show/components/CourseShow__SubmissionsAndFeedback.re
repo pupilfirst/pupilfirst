@@ -118,6 +118,7 @@ let handleAddAnotherSubmission = (setShowSubmissionForm, event) => {
 let submissions =
     (
       target,
+      targetStatus,
       targetDetails,
       evaluationCriteria,
       gradeLabels,
@@ -202,11 +203,21 @@ let submissions =
                    </span>
                    {"Review pending" |> str}
                  </div>
-                 <CoursesShow__UndoButton
-                   authenticityToken
-                   undoSubmissionCB
-                   targetId={target |> Target.id}
-                 />
+                 {
+                   switch (targetStatus |> TargetStatus.status) {
+                   | Submitted =>
+                     <CoursesShow__UndoButton
+                       authenticityToken
+                       undoSubmissionCB
+                       targetId={target |> Target.id}
+                     />
+
+                   | Pending
+                   | Passed
+                   | Failed
+                   | Locked(_) => React.null
+                   }
+                 }
                </div>
              | Passed =>
                gradingSection(
@@ -362,6 +373,7 @@ let make =
         /> :
         submissions(
           target,
+          targetStatus,
           targetDetails,
           evaluationCriteria,
           gradeLabels,

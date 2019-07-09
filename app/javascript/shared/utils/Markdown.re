@@ -10,7 +10,7 @@ type profile =
 let profileString = profile =>
   switch (profile) {
   | Comment => "comment"
-  | QuestionAndAnswer => "questionsAndAnswer"
+  | QuestionAndAnswer => "questionAndAnswer"
   | Permissive => "permissive"
   };
 

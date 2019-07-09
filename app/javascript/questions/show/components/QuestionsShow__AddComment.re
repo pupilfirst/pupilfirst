@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+[@bs.val] external currentTime: unit => string = "Date.now";
+
 open QuestionsShow__Types;
 
 let str = React.string;
@@ -64,6 +66,7 @@ let make =
         commentableId,
         commentableType,
         false,
+        currentTime(),
       );
     setValue(_ => "");
     setSaving(_ => false);

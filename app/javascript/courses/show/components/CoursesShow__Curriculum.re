@@ -173,7 +173,7 @@ let make =
     levels
     |> ListUtils.unsafeFind(
          l => l |> Level.id == currentLevelId,
-         "Could not find level with id" ++ currentLevelId,
+         "Could not find currentLevel with id " ++ currentLevelId,
        );
 
   let targetGroupsInLevel =
@@ -190,7 +190,7 @@ let make =
           targets
           |> ListUtils.unsafeFind(
                t => t |> Target.id == targetId,
-               "Could not find target with ID " ++ targetId,
+               "Could not find selectedTarget with ID " ++ targetId,
              );
 
         let targetStatus =

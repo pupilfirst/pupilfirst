@@ -372,10 +372,10 @@ let learnSection = (targetDetails, overlaySelection) =>
 
 let discussSection = (target, targetDetails, overlaySelection) =>
   <div className={overlayContentClasses(overlaySelection == Discuss)}>
-    {
-      let targetId = target |> Target.id;
-      <CourseShow__Discuss targetId targetDetails />;
-    }
+    <CourseShow__Discuss
+      targetId={target |> Target.id}
+      communities={targetDetails |> TargetDetails.communities}
+    />
   </div>;
 
 let completeSectionClasses =

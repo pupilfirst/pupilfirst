@@ -5,6 +5,7 @@ type t = {
   commentableType: string,
   creatorId: string,
   archived: bool,
+  createdAt: string,
 };
 
 let decode = json =>
@@ -15,6 +16,7 @@ let decode = json =>
     commentableId: json |> field("commentableId", string),
     commentableType: json |> field("commentableType", string),
     archived: json |> field("archived", bool),
+    createdAt: json |> field("createdAt", string),
   };
 
 let commentableType = t => t.commentableType;
@@ -29,6 +31,7 @@ let id = t => t.id;
 
 let archived = t => t.archived;
 
+let createdAt = t => t.createdAt;
 let commentsForQuestion = comments =>
   comments |> List.filter(comment => comment.commentableType == "Question");
 
@@ -49,13 +52,23 @@ let updateComment = (comments, newComment) =>
 
 let delete = (id, comments) => comments |> List.filter(c => c.id != id);
 
-let create = (id, value, creatorId, commentableId, commentableType, archived) => {
+let create =
+    (
+      id,
+      value,
+      creatorId,
+      commentableId,
+      commentableType,
+      archived,
+      createdAt,
+    ) => {
   id,
   value,
   creatorId,
   commentableId,
   commentableType,
   archived,
+  createdAt,
 };
 
 let sort = comments =>

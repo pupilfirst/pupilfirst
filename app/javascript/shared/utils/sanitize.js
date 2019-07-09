@@ -29,7 +29,7 @@ sanitizationProfiles.permissive = [
   "img"
 ];
 
-sanitizationProfiles.questionsAndAnswer = sanitizationProfiles.permissive;
+sanitizationProfiles.questionAndAnswer = sanitizationProfiles.permissive;
 
 sanitizationProfiles.comment = [
   "p",

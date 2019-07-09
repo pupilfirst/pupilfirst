@@ -319,11 +319,18 @@ let make =
             <div className="community-answer-container">
               {
                 filteredAnswers
-                |> List.map(answer =>
-                     (answer, likesForAnswer(likes, answer |> Answer.id))
+                |> List.sort((answerA, answerB) =>
+                     DateFns.differenceInSeconds(
+                       answerB |> Answer.createdAt |> DateFns.parseString,
+                       answerA |> Answer.createdAt |> DateFns.parseString,
+                     )
+                     |> int_of_float
                    )
-                |> List.sort(((_, likeX), (_, likeY)) => likeY - likeX)
-                |> List.map(((answer, _)) =>
+                |> List.stable_sort((answerA, answerB) =>
+                     likesForAnswer(likes, answerB |> Answer.id)
+                     - likesForAnswer(likes, answerA |> Answer.id)
+                   )
+                |> List.map(answer =>
                      <QuestionsShow__AnswerShow
                        key={answer |> Answer.id}
                        authenticityToken

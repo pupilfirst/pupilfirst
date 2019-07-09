@@ -77,8 +77,7 @@ let communityTitle = community =>
   </h5>;
 
 [@react.component]
-let make = (~targetId, ~targetDetails) => {
-  let communities = targetDetails |> TargetDetails.communities;
+let make = (~targetId, ~communities) =>
   <div className="">
     {
       communities
@@ -111,4 +110,3 @@ let make = (~targetId, ~targetDetails) => {
       |> React.array
     }
   </div>;
-};

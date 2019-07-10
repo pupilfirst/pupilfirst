@@ -12,7 +12,7 @@ let make = (~userProfile, ~createdAt, ~textForTimeStamp) =>
         textForTimeStamp
         ++ " on "
         ++ (
-          createdAt |> DateFns.parseString |> DateFns.format("Do MMMM, YYYY")
+          createdAt |> DateFns.parseString |> DateFns.format("Do MMMM, YYYY HH:mm")
         )
         |> str
       }

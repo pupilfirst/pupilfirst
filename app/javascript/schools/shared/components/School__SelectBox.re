@@ -48,7 +48,7 @@ let make = (~items, ~multiSelectCB) => {
         |> Array.of_list
         |> React.array :
         <div
-          className="select-list__item-selected flex flex-col items-center justify-center bg-gray-100 text-gray-600 rounded px-3 pt-3 ">
+          className="flex flex-col items-center justify-center bg-gray-100 text-gray-600 rounded px-3 pt-3 ">
           <i className="fal fa-inbox text-3xl" />
           <h5 className="mt-1 font-semibold"> {"None Selected" |> str} </h5>
           <span className="text-xs">

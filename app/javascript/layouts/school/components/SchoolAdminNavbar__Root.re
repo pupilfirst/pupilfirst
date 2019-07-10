@@ -1,8 +1,18 @@
 [@bs.config {jsx: 3}];
 
+exception UnknownPathEncountered(list(string));
+
 [%bs.raw {|require("./SchoolAdminNavbar__Root.css")|}];
 
 open SchoolAdminNavbar__Types;
+
+type mainSelection =
+  | Overview
+  | Coaches
+  | Settings
+  | Courses
+  | Communities
+  | Nothing;
 
 let str = React.string;
 
@@ -31,7 +41,35 @@ let headerclasses = shrunk => {
 let imageContainerClasses = shrunk => {
   let defaultClasses = "school-admin-navbar__school-logo-container flex items-center ";
   defaultClasses
-  ++ (shrunk ? "bg-white h-12 w-2/5 rounded" : "justify-center w-16 h-16");
+  ++ (shrunk ? "justify-center w-16 h-16" : "bg-white h-12 w-2/5 rounded");
+};
+
+let bottomLinkClasses = shrunk => {
+  let defaultClasses = "flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center ";
+  defaultClasses ++ (shrunk ? "justify-center" : "");
+};
+
+let bottomLink = (path, shrunk, iconClasses, text) =>
+  <li>
+    <a href=path className={bottomLinkClasses(shrunk)}>
+      <i className={iconClasses ++ " fa-fw"} />
+      {shrunk ? React.null : <span className="ml-2"> {text |> str} </span>}
+    </a>
+  </li>;
+
+let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) => {
+  let defaultClasses = "school-admin-navbar__primary-nav-link py-4 px-5";
+  let classes =
+    defaultClasses
+    ++ (
+      selectedOption == currentOption ?
+        " school-admin-navbar__primary-nav-link--active" : ""
+    );
+  let title = shrunk ? Some(text) : None;
+  <a href=path className=classes ?title>
+    <i className={iconClasses ++ " fa-fw text-lg"} />
+    {shrunk ? React.null : <span className="ml-2"> {text |> str} </span>}
+  </a>;
 };
 
 [@react.component]
@@ -44,12 +82,23 @@ let make =
       ~isStudent,
       ~reviewPath,
     ) => {
-  let shrunk = true;
+  let url = ReasonReactRouter.useUrl();
+  url.path |> Js.log;
+  let (selectedOption, shrunk) =
+    switch (url.path) {
+    | ["school"] => (Overview, false)
+    | ["school", "coaches"] => (Coaches, false)
+    | ["school", "customize"] => (Settings, true)
+    | ["school", "courses"] => (Courses, false)
+    | ["school", "courses", _, _] => (Nothing, true)
+    | ["school", "communities"] => (Communities, false)
+    | _ => raise(UnknownPathEncountered(url.path))
+    };
   [|
     <div key="main-nav" className={containerClasses(shrunk)}>
       <div>
         <div className={headerclasses(shrunk)}>
-          <div className="">
+          <div className={imageContainerClasses(shrunk)}>
             {
               shrunk ?
                 <a
@@ -70,52 +119,52 @@ let make =
            </div> */
         <ul>
           <li>
-            <a
-              href="/school"
-              className="school-admin-navbar__primary-nav-link school-admin-navbar__primary-nav-link--active py-4 px-5">
-              <i className="fal fa-eye fa-fw text-lg" />
-              {
-                shrunk ?
-                  React.null :
-                  <span className="ml-2"> {"Overview" |> str} </span>
-              }
-            </a>
+            {
+              topLink(
+                selectedOption,
+                Overview,
+                "/school",
+                shrunk,
+                "fal fa-eye",
+                "Overview",
+              )
+            }
           </li>
           <li>
-            <a
-              href="/school/coaches"
-              className="school-admin-navbar__primary-nav-link py-4 px-5">
-              <i className="fal fa-chalkboard-teacher fa-fw text-lg" />
-              {
-                shrunk ?
-                  React.null :
-                  <span className="ml-2"> {"Coaches" |> str} </span>
-              }
-            </a>
+            {
+              topLink(
+                selectedOption,
+                Coaches,
+                "/school/coaches",
+                shrunk,
+                "fal fa-chalkboard-teacher",
+                "Coaches",
+              )
+            }
           </li>
           <li>
-            <a
-              href="/school/customize"
-              className="school-admin-navbar__primary-nav-link py-4 px-5">
-              <i className="fal fa-cog fa-fw text-lg" />
-              {
-                shrunk ?
-                  React.null :
-                  <span className="ml-2"> {"Settings" |> str} </span>
-              }
-            </a>
+            {
+              topLink(
+                selectedOption,
+                Settings,
+                "/school/customize",
+                shrunk,
+                "fal fa-cog",
+                "Settings",
+              )
+            }
           </li>
           <li>
-            <a
-              href="/school/courses"
-              className="school-admin-navbar__primary-nav-link py-4 px-5">
-              <i className="fal fa-books fa-fw text-lg" />
-              {
-                shrunk ?
-                  React.null :
-                  <span className="ml-2"> {"Courses" |> str} </span>
-              }
-            </a>
+            {
+              topLink(
+                selectedOption,
+                Courses,
+                "/school/courses",
+                shrunk,
+                "fal fa-books",
+                "Courses",
+              )
+            }
             {
               shrunk ?
                 React.null :
@@ -142,53 +191,34 @@ let make =
             }
           </li>
           <li>
-            <a
-              href="/school/communities"
-              className="school-admin-navbar__primary-nav-link py-4 px-5">
-              <i className="fal fa-users-class fa-fw text-lg" />
-              {
-                shrunk ?
-                  React.null :
-                  <span className="ml-2"> {"Communities" |> str} </span>
-              }
-            </a>
+            {
+              topLink(
+                selectedOption,
+                Communities,
+                "/school/communities",
+                shrunk,
+                "fal fa-users-class",
+                "Communities",
+              )
+            }
           </li>
         </ul>
       </div>
       <ul>
         {
           isStudent ?
-            <li>
-              <a
-                href="/home"
-                className="flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center">
-                <i className="fal fa-home-alt fa-fw" />
-                {
-                  shrunk ?
-                    React.null :
-                    <span className="ml-2"> {"Home" |> str} </span>
-                }
-              </a>
-            </li> :
+            bottomLink("/home", shrunk, "fal fa-home-alt", "Home") :
             React.null
         }
         {
           switch (reviewPath) {
           | Some(path) =>
-            <li>
-              <a
-                href=path
-                className="flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center">
-                <i className="fal fa-clipboard-check fa-fw" />
-                {
-                  shrunk ?
-                    React.null :
-                    <span className="ml-2">
-                      {"Review Submissions" |> str}
-                    </span>
-                }
-              </a>
-            </li>
+            bottomLink(
+              path,
+              shrunk,
+              "fal fa-clipboard-check",
+              "Review Submissions",
+            )
           | None => React.null
           }
         }
@@ -198,7 +228,7 @@ let make =
             /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
             ReasonReact.cloneElement(
               <a
-                className="flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center"
+                className={bottomLinkClasses(shrunk)}
                 rel="nofollow"
                 href="/users/sign_out"
               />,
@@ -214,39 +244,41 @@ let make =
         </li>
       </ul>
     </div>,
-    <div
-      key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
-      <ul className="p-4">
-        <li>
-          <a
-            href="/school/customize"
-            className={secondaryNavOptionClasses(true)}>
-            {"Customization" |> str}
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className={
-              secondaryNavOptionClasses(false) ++ " cursor-not-allowed"
-            }
-            title="WIP">
-            {"Domains" |> str}
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className={
-              secondaryNavOptionClasses(false) ++ " cursor-not-allowed"
-            }
-            title="WIP">
-            {"Homepage" |> str}
-          </a>
-        </li>
-      </ul>
-    </div>,
+    shrunk ?
+      <div
+        key="secondary-nav"
+        className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+        <ul className="p-4">
+          <li>
+            <a
+              href="/school/customize"
+              className={secondaryNavOptionClasses(true)}>
+              {"Customization" |> str}
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              className={
+                secondaryNavOptionClasses(false) ++ " cursor-not-allowed"
+              }
+              title="WIP">
+              {"Domains" |> str}
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              className={
+                secondaryNavOptionClasses(false) ++ " cursor-not-allowed"
+              }
+              title="WIP">
+              {"Homepage" |> str}
+            </a>
+          </li>
+        </ul>
+      </div> :
+      React.null,
   |]
   |> React.array;
 };

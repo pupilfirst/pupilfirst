@@ -36,10 +36,8 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
       <div
         className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
         onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(sortIndex, ContentBlock.makeMarkdownBlock(""));
-          }
+          _event =>
+            newContentBlockCB(sortIndex, ContentBlock.makeMarkdownBlock(""))
         }>
         <i className="fab fa-markdown text-2xl" />
         <p className="font-semibold"> {"Markdown" |> str} </p>
@@ -47,13 +45,8 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
       <div
         className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
         onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(
-              sortIndex,
-              ContentBlock.makeImageBlock("", ""),
-            );
-          }
+          _event =>
+            newContentBlockCB(sortIndex, ContentBlock.makeImageBlock("", ""))
         }>
         <i className="far fa-image text-2xl" />
         <p className="font-semibold"> {"Image" |> str} </p>
@@ -61,13 +54,8 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
       <div
         className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
         onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(
-              sortIndex,
-              ContentBlock.makeEmbedBlock("", ""),
-            );
-          }
+          _event =>
+            newContentBlockCB(sortIndex, ContentBlock.makeEmbedBlock("", ""))
         }>
         <i className="far fa-code text-2xl" />
         <p className="font-semibold"> {"Embed" |> str} </p>
@@ -75,13 +63,11 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
       <div
         className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
         onClick={
-          _event => {
-            setVisibility(_ => !visibility);
+          _event =>
             newContentBlockCB(
               sortIndex,
               ContentBlock.makeFileBlock("", "", ""),
-            );
-          }
+            )
         }>
         <i className="far fa-file-alt text-2xl" />
         <p className="font-semibold"> {"File" |> str} </p>

@@ -452,6 +452,7 @@ let make =
       /* Content block controls */
 
         <div
+          id={"content-block-controls-" ++ (sortIndex |> string_of_int)}
           className="flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
           {
             sortIndex != 1 ?
@@ -489,6 +490,7 @@ let make =
           </button>
         </div>
         <form
+          id={"content-block-form-" ++ (sortIndex |> string_of_int)}
           key={"content-block-form-" ++ editorId}
           onSubmit={
             event =>

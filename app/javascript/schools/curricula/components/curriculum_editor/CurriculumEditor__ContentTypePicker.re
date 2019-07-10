@@ -31,7 +31,8 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         </div>
     }
     <div
-      className="add-content-block__block-content-type hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-3 z-10">
+      className="add-content-block__block-content-type hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-3 z-10"
+      id={"content-type-picker-" ++ (sortIndex |> string_of_int)}>
       <div
         className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
         onClick={

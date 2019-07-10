@@ -162,7 +162,7 @@ let renderSignInWithEmail =
       {"Email" |> str}
     </label>
     <input
-      className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+      className="appearance-none block w-full bg-white text-lg font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
       id="email"
       type_="text"
       onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
@@ -174,7 +174,7 @@ let renderSignInWithEmail =
       {"Password" |> str}
     </label>
     <input
-      className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+      className="appearance-none block w-full bg-white text-lg font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
       id="password"
       type_="password"
       onChange={event => setPassword(ReactEvent.Form.target(event)##value)}

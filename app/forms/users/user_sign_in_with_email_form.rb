@@ -1,4 +1,4 @@
-class UserSignInForm < Reform::Form
+class UserSignInWithEmailForm < Reform::Form
   include EmailBounceValidatable
 
   attr_accessor :current_school

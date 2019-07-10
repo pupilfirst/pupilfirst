@@ -26,6 +26,11 @@ module Users
       end
     end
 
+    # POST /user/send_reset_password_email
+    # def send_reset_password_email
+    #
+    # end
+
     # GET /user/token - link to sign_in user with token in params
     def token
       user = Users::AuthenticationService.new(params[:token]).authenticate

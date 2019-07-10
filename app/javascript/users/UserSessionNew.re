@@ -6,7 +6,8 @@ let str = React.string;
 type views =
   | FederatedSignIn
   | SignInWithPassword
-  | SignInEmailSent;
+  | SignInEmailSent
+  | ForgotPassword;
 
 type omniauthProvider =
   | Google
@@ -78,7 +79,7 @@ let renderIcon = iconUrl =>
   };
 
 let federatedLoginUrl = (oauthHost, fqdn, provider) =>
-  "https://"
+  "//"
   ++ oauthHost
   ++ "/oauth/"
   ++ (
@@ -159,26 +160,28 @@ let renderSignInWithEmail =
     <label
       className="inline-block tracking-wide text-xs font-semibold mb-2"
       htmlFor="email">
-      {"Email" |> str}
+      {"Enter your Email" |> str}
     </label>
     <input
       className="appearance-none block w-full bg-white text-lg font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
       id="email"
+      value=email
       type_="text"
       onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
-      placeholder="Type your email here"
+      placeholder="john@example.com"
     />
     <label
       className="inline-block tracking-wide text-xs font-semibold mb-2"
       htmlFor="password">
-      {"Password" |> str}
+      {"Enter your password" |> str}
     </label>
     <input
       className="appearance-none block w-full bg-white text-lg font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
       id="password"
+      value=password
       type_="password"
       onChange={event => setPassword(ReactEvent.Form.target(event)##value)}
-      placeholder="Type your password here"
+      placeholder="********"
     />
     <div className="text-center">
       {
@@ -208,6 +211,11 @@ let renderSignInWithEmail =
           </button>
       }
     </div>
+    <div
+      onClick={_ => setView(_ => ForgotPassword)}
+      className="text-blue-600 text-center font-semibold hover:text-blue-700 mt-4">
+      {"Fotgot Password" |> str}
+    </div>
   </div>;
 
 let renderSignInEmailSent = () =>
@@ -221,6 +229,29 @@ let renderSignInEmailSent = () =>
         |> str
       }
     </div>
+  </div>;
+
+let renderForgotPassword = (email, setEmail) =>
+  <div className="text-center">
+    <div className="text-4xl font-semibold mt-4">
+      {"Forgot Your Password?" |> str}
+    </div>
+    <div className="text-sm font-normal mt-4">
+      {"To reset your password, please enter your email id. " |> str}
+    </div>
+    <label
+      className="inline-block tracking-wide text-xs font-semibold mb-2"
+      htmlFor="email">
+      {"Enter your Email" |> str}
+    </label>
+    <input
+      className="appearance-none block w-full bg-white text-lg font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+      id="email"
+      value=email
+      type_="text"
+      onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
+      placeholder="john@example.com"
+    />
   </div>;
 
 [@react.component]
@@ -252,6 +283,7 @@ let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
             setSaving,
           )
         | SignInEmailSent => renderSignInEmailSent()
+        | ForgotPassword => renderForgotPassword(email, setEmail)
         }
       }
       {
@@ -262,12 +294,14 @@ let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
             className="text-blue-600 text-center font-semibold hover:text-blue-700">
             {"Sign in with email" |> str}
           </div>
-        | SignInWithPassword =>
+        | SignInWithPassword
+        | ForgotPassword =>
           <div
             onClick=(_ => setView(_ => FederatedSignIn))
             className="text-blue-600 text-center font-semibold hover:text-blue-700 mt-4">
             {"Sign in with Google, Facebook, or Github" |> str}
           </div>
+
         | SignInEmailSent => React.null
         }
       }

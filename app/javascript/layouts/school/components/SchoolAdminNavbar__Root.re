@@ -6,11 +6,22 @@ exception UnknownPathEncountered(list(string));
 
 open SchoolAdminNavbar__Types;
 
-type mainSelection =
+type courseSelection =
+  | Students
+  | CourseCoaches
+  | Curriculum;
+
+type settingsSelection =
+  | Customization
+  | Domains
+  | Homepage;
+
+type selection =
   | Overview
-  | Coaches
-  | Settings
+  | SchoolCoaches
+  | Settings(settingsSelection)
   | Courses
+  | SelectedCourse(Course.id, courseSelection)
   | Communities
   | Nothing;
 
@@ -21,11 +32,6 @@ let containerClasses = shrunk => {
 
   defaultClasses
   ++ (shrunk ? "school-admin-navbar__primary-nav--shrunk" : "overflow-y-auto");
-};
-
-let secondaryNavOptionClasses = selected => {
-  let defaultClasses = "flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1 ";
-  defaultClasses ++ (selected ? defaultClasses ++ "bg-gray-400" : "");
 };
 
 let headerclasses = shrunk => {
@@ -72,6 +78,72 @@ let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) =
   </a>;
 };
 
+let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
+  let defaultClasses = "flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1";
+  let classes =
+    defaultClasses
+    ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "");
+
+  <li> <a href=path className=classes> {text |> str} </a> </li>;
+};
+
+let secondaryNav = (courses, selectedOption) =>
+  switch (selectedOption) {
+  | Settings(settingsSelection) =>
+    <div
+      key="secondary-nav"
+      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+      <ul className="p-4">
+        {
+          secondaryNavOption(
+            "/school/customize",
+            settingsSelection,
+            Customization,
+            "Customization",
+          )
+        }
+      </ul>
+    </div>
+  | SelectedCourse(courseId, courseSelection) =>
+    <div
+      key="secondary-nav"
+      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+      <ul className="p-4">
+        <li>
+          <SchoolAdminNavbar__CourseDropdown
+            courses
+            currentCourseId=courseId
+          />
+        </li>
+        {
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/students",
+            courseSelection,
+            Students,
+            "Students",
+          )
+        }
+        {
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/coaches",
+            courseSelection,
+            CourseCoaches,
+            "Coaches",
+          )
+        }
+        {
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/curriculum",
+            courseSelection,
+            Curriculum,
+            "Curriculum",
+          )
+        }
+      </ul>
+    </div>
+  | _ => React.null
+  };
+
 [@react.component]
 let make =
     (
@@ -83,17 +155,29 @@ let make =
       ~reviewPath,
     ) => {
   let url = ReasonReactRouter.useUrl();
-  url.path |> Js.log;
+
   let (selectedOption, shrunk) =
     switch (url.path) {
     | ["school"] => (Overview, false)
-    | ["school", "coaches"] => (Coaches, false)
-    | ["school", "customize"] => (Settings, true)
+    | ["school", "coaches"] => (SchoolCoaches, false)
+    | ["school", "customize"] => (Settings(Customization), true)
     | ["school", "courses"] => (Courses, false)
-    | ["school", "courses", _, _] => (Nothing, true)
+    | ["school", "courses", courseId, "students"] => (
+        SelectedCourse(courseId, Students),
+        true,
+      )
+    | ["school", "courses", courseId, "coaches"] => (
+        SelectedCourse(courseId, CourseCoaches),
+        true,
+      )
+    | ["school", "courses", courseId, "curriculum"] => (
+        SelectedCourse(courseId, Curriculum),
+        true,
+      )
     | ["school", "communities"] => (Communities, false)
     | _ => raise(UnknownPathEncountered(url.path))
     };
+
   [|
     <div key="main-nav" className={containerClasses(shrunk)}>
       <div>
@@ -134,7 +218,7 @@ let make =
             {
               topLink(
                 selectedOption,
-                Coaches,
+                SchoolCoaches,
                 "/school/coaches",
                 shrunk,
                 "fal fa-chalkboard-teacher",
@@ -146,7 +230,7 @@ let make =
             {
               topLink(
                 selectedOption,
-                Settings,
+                Settings(Customization),
                 "/school/customize",
                 shrunk,
                 "fal fa-cog",
@@ -244,41 +328,7 @@ let make =
         </li>
       </ul>
     </div>,
-    shrunk ?
-      <div
-        key="secondary-nav"
-        className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
-        <ul className="p-4">
-          <li>
-            <a
-              href="/school/customize"
-              className={secondaryNavOptionClasses(true)}>
-              {"Customization" |> str}
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className={
-                secondaryNavOptionClasses(false) ++ " cursor-not-allowed"
-              }
-              title="WIP">
-              {"Domains" |> str}
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className={
-                secondaryNavOptionClasses(false) ++ " cursor-not-allowed"
-              }
-              title="WIP">
-              {"Homepage" |> str}
-            </a>
-          </li>
-        </ul>
-      </div> :
-      React.null,
+    selectedOption |> secondaryNav(courses),
   |]
   |> React.array;
 };

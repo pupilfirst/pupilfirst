@@ -1,37 +1,17 @@
 module Layouts
   class SchoolPresenter < ::ApplicationPresenter
-    def coach_profile?
-      coach_dashboard_path.present?
-    end
-
     def props
       {
         school_name: current_school.name,
         school_logo_path: school_logo_path,
         school_icon_path: school_icon_path,
         courses: courses_in_school,
-        is_student: founder_profile?,
+        is_student: current_user_is_a_student?,
         review_path: coach_dashboard_path
       }
     end
 
-    def founder_profile?
-      current_user.founders.joins(:school).where(schools: { id: current_school }).exists?
-    end
-
-    def coach_dashboard_path
-      @coach_dashboard_path ||= begin
-        faculty = current_user.faculty.find_by(school: current_school)
-
-        if faculty.present?
-          if faculty.courses.exists?
-            view.course_coach_dashboard_path(faculty.courses.first)
-          elsif faculty.startups.exists?
-            view.course_coach_dashboard_path(faculty.startups.first.course)
-          end
-        end
-      end
-    end
+    private
 
     def school_logo_path
       if current_school.logo_on_light_bg.attached?
@@ -49,12 +29,23 @@ module Layouts
       end
     end
 
-    def nav_link_classes(path)
-      default_classes = "global-sidebar__primary-nav-link py-4 px-5"
-      view.current_page?(path) ? default_classes + " global-sidebar__primary-nav-link--active" : default_classes
+    def coach_dashboard_path
+      @coach_dashboard_path ||= begin
+        faculty = current_user.faculty.find_by(school: current_school)
+
+        if faculty.present?
+          if faculty.courses.exists?
+            view.course_coach_dashboard_path(faculty.courses.first)
+          elsif faculty.startups.exists?
+            view.course_coach_dashboard_path(faculty.startups.first.course)
+          end
+        end
+      end
     end
 
-    private
+    def current_user_is_a_student?
+      current_user.founders.joins(:school).where(schools: { id: current_school }).exists?
+    end
 
     def courses_in_school
       current_school.courses.as_json(only: %i[name id])

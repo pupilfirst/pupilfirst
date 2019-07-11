@@ -41,6 +41,7 @@ let button = (sortIndex, newContentBlockCB, kindOfButton) => {
     };
 
   <div
+    key=buttonText
     className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
     onClick={
       event => {
@@ -52,7 +53,6 @@ let button = (sortIndex, newContentBlockCB, kindOfButton) => {
     <p className="font-semibold"> {buttonText |> str} </p>
   </div>;
 };
-
 
 [@react.component]
 let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {

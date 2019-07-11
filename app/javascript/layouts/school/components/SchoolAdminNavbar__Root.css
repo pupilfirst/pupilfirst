@@ -1,0 +1,59 @@
+.school-admin-navbar {
+  width: 264px;
+}
+
+.school-admin-navbar__primary-nav {
+  @apply .w-full;
+}
+
+.school-admin-navbar__primary-nav--shrunk {
+  width: 64px;
+}
+
+.school-admin-navbar__primary-nav-link {
+  @apply flex text-white h-13 text-sm font-semibold items-center;
+  position: relative;
+}
+
+.school-admin-navbar__primary-nav-link:hover {
+  @apply .bg-primary-800;
+}
+
+.school-admin-navbar__primary-nav-link--active {
+  @apply bg-gray-200 text-primary-500;
+  box-shadow: inset 4px 0 0 0 theme("colors.yellow.500");
+  background-image: linear-gradient(
+    to right,
+    theme("colors.white"),
+    theme("colors.gray.200")
+  );
+}
+
+.school-admin-navbar__primary-nav-link--active:before,
+.school-admin-navbar__primary-nav-link--active:after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  width: 16px;
+  height: 16px;
+}
+
+.school-admin-navbar__primary-nav-link--active:before {
+  top: -16px;
+  border-radius: 0 0 50%;
+  border-width: 0px 20px 0 0;
+  box-shadow: 0px 8px theme(colors.gray.200);
+  border-color: transparent;
+}
+
+.school-admin-navbar__primary-nav-link--active:after {
+  bottom: -16px;
+  border-radius: 0 50% 0;
+  border-width: 0 20px 0 0;
+  box-shadow: 0 -8px theme(colors.gray.200);
+  border-color: transparent;
+}
+
+.school-admin-navbar__primary-nav-link--active:hover {
+  @apply .bg-gray-200 .text-primary-500;
+}

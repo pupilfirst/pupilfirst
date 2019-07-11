@@ -3,7 +3,6 @@ module Schools
     # GET /school/coaches
     def school_index
       @school = authorize(current_school, policy_class: Schools::FacultyPolicy)
-      render layout: 'school'
     end
 
     # POST /school/coaches
@@ -33,7 +32,6 @@ module Schools
     def course_index
       @course = courses.find(params[:course_id])
       authorize(current_school, policy_class: Schools::FacultyPolicy)
-      render layout: 'course'
     end
 
     def faculty

@@ -4,13 +4,6 @@ open CurriculumEditor__Types;
 
 exception UnexpectedResponse(int);
 
-let handleApiError =
-  [@bs.open]
-  (
-    fun
-    | UnexpectedResponse(code) => code
-  );
-
 let str = React.string;
 
 type action =

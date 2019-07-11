@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_28_103138) do
+ActiveRecord::Schema.define(version: 2019_07_11_065042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -724,6 +724,25 @@ ActiveRecord::Schema.define(version: 2019_06_28_103138) do
     t.string "email_bounce_type"
     t.datetime "confirmed_at"
     t.datetime "login_mail_sent_at"
+    t.string "name"
+    t.string "phone"
+    t.string "gender"
+    t.string "communication_address"
+    t.string "title"
+    t.string "key_skills"
+    t.text "about"
+    t.string "resume_url"
+    t.string "blog_url"
+    t.string "personal_website_url"
+    t.string "linkedin_url"
+    t.string "twitter_url"
+    t.string "facebook_url"
+    t.string "angel_co_url"
+    t.string "github_url"
+    t.string "behance_url"
+    t.string "skype_id"
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_users_on_school_id"
   end
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
@@ -799,4 +818,5 @@ ActiveRecord::Schema.define(version: 2019_06_28_103138) do
   add_foreign_key "user_activities", "users"
   add_foreign_key "user_profiles", "schools"
   add_foreign_key "user_profiles", "users"
+  add_foreign_key "users", "schools"
 end

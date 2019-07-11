@@ -18,7 +18,7 @@ class CoachDashboardPresenter < ApplicationPresenter
       gradeLabels: grade_labels,
       passGrade: @course.pass_grade,
       courseId: @course.id,
-      coachName: current_coach.name
+      coachName: current_user.name
     }
   end
 
@@ -26,10 +26,11 @@ class CoachDashboardPresenter < ApplicationPresenter
 
   def founder_details
     @founder_details ||= founders.map do |founder|
+      user = founder.user
       {
         id: founder.id,
-        name: founder.name,
-        avatarUrl: avatar_url(founder),
+        name: user.name,
+        avatarUrl: avatar_url(user),
         teamId: founder.startup_id
       }
     end
@@ -45,7 +46,7 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def founders
-    @founders ||= Founder.joins(:startup).where(startups: { id: teams })
+    @founders ||= Founder.joins(:user, :startup).where(startups: { id: teams })
   end
 
   def teams
@@ -67,11 +68,11 @@ class CoachDashboardPresenter < ApplicationPresenter
     grade_labels.keys.map { |grade| { grade: grade.to_i, label: grade_labels[grade] } }
   end
 
-  def avatar_url(founder)
-    if founder.avatar.attached?
-      view.url_for(founder.avatar_variant(:mid))
+  def avatar_url(user)
+    if user.avatar.attached?
+      view.url_for(user.avatar_variant(:mid))
     else
-      founder.initials_avatar
+      user.initials_avatar
     end
   end
 end

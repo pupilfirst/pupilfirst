@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_many :school_admins, dependent: :restrict_with_error
   has_many :user_profiles, dependent: :restrict_with_error
+  has_one :school, dependent: :restrict_with_error
 
   has_secure_token :login_token
 
@@ -88,5 +89,13 @@ class User < ApplicationRecord
   def initials_avatar(background_shape: nil)
     logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
+  end
+
+  def image_or_avatar_url
+    if avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(user.avatar, only_path: true)
+    else
+      initials_avatar
+    end
   end
 end

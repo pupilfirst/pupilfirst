@@ -50,14 +50,15 @@ feature 'Coaches Index' do
     expect(page).to have_text(new_coach_name)
 
     coach = Faculty.last
+    user = coach.user
 
-    expect(coach.name).to eq(new_coach_name.titleize)
-    expect(coach.title).to eq(new_coach_title)
-    expect(coach.user.email).to eq(new_coach_email)
-    expect(coach.linkedin_url).to eq('https://www.linkedin.com/xyz')
-    expect(coach.connect_link).to eq('https://www.connect.com/xyz')
-    expect(coach.image.attached?).to eq(true)
-    expect(coach.image.filename).to eq('human.png')
+    expect(user.name).to eq(new_coach_name.titleize)
+    expect(user.title).to eq(new_coach_title)
+    expect(user.user.email).to eq(new_coach_email)
+    expect(user.linkedin_url).to eq('https://www.linkedin.com/xyz')
+    expect(user.connect_link).to eq('https://www.connect.com/xyz')
+    expect(user.avatar.attached?).to eq(true)
+    expect(user.avatar.filename).to eq('human.png')
 
     find("p", text: new_coach_name).click
     fill_in 'Name', with: updated_coach_name
@@ -66,7 +67,7 @@ feature 'Coaches Index' do
 
     expect(page).to have_text('Coach updated successfully')
 
-    expect(coach.user_profile.reload.name).to eq(updated_coach_name.titleize)
-    expect(coach.reload.title).to eq(updated_coach_title)
+    expect(user.reload.name).to eq(updated_coach_name.titleize)
+    expect(user.title).to eq(updated_coach_title)
   end
 end

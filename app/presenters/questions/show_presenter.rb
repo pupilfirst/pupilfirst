@@ -11,7 +11,7 @@ module Questions
         questions: question_data,
         answers: answer_data,
         comments: comments,
-        userData: user_data,
+        users: users,
         likes: likes,
         currentUser_id: current_user.id,
         community_path: view.community_path(community),
@@ -23,6 +23,8 @@ module Questions
     def page_title
       "#{question_data['title']} | Question"
     end
+
+    private
 
     def question_data
       @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'created_at', 'updated_at')
@@ -50,7 +52,7 @@ module Questions
       comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id', 'created_at')
     end
 
-    def user_data
+    def users
       user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck('creator_id'), answer_data.pluck('editor_id'), comments.pluck('creator_id'), current_user.id]
         .flatten.uniq
 
@@ -72,8 +74,6 @@ module Questions
     def community
       @community ||= @question.community
     end
-
-    private
 
     def title(user)
       title = user.title

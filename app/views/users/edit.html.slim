@@ -4,7 +4,7 @@ title Edit Your Profile
   .content-box.my-3
     h2.mb-3 Edit your profile
 
-    = bootstrap_form_for(@form, url: user_profile_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
+    = bootstrap_form_for(@form, url: user_path, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9') do |f|
       .flex-column
         = f.error_summary
 

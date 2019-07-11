@@ -20,17 +20,17 @@ module Schools
       private
 
       def school_faculty
-        Faculty.where(school: @course.school).where.not(exited: true).includes(:user, :startups, user_profiles: { avatar_attachment: :blob })
+        Faculty.where(school: @course.school).where.not(exited: true).includes(:startups, user: { avatar_attachment: :blob })
       end
 
       def school_faculty_details
         school_faculty.map do |faculty|
           {
             id: faculty.id,
-            name: faculty.name,
+            name: faculty.user.name,
             email: faculty.user.email,
-            title: faculty.title,
-            imageUrl: faculty.image_or_avatar_url,
+            title: faculty.user.title,
+            imageUrl: faculty.user.image_or_avatar_url,
             teams: faculty_team_details(faculty)
           }
         end

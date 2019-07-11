@@ -83,11 +83,13 @@ feature 'School students index', js: true do
     expect(page).to have_text(name_1)
     expect(page).to have_text(name_2)
 
-    founder_1 = User.find_by(email: email_1).founders.first
-    founder_2 = User.find_by(email: email_2).founders.first
+    founder_1_user = User.find_by(email: email_1)
+    founder_1 = founder_1_user.founders.first
+    founder_2_user = User.find_by(email: email_2)
+    founder_2 = founder_2_user.founders.first
 
-    expect(founder_1.name).to eq(name_1)
-    expect(founder_2.name).to eq(name_2)
+    expect(founder_1_user.name).to eq(name_1)
+    expect(founder_2_user.name).to eq(name_2)
     expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
     expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI')
 
@@ -118,9 +120,9 @@ feature 'School students index', js: true do
 
     # Update a student
     find("a", text: name_1).click
-    expect(page).to have_text(founder_1.name)
+    expect(page).to have_text(founder_1_user.name)
     expect(page).to have_text(founder_1.startup.name)
-    fill_in 'Name', with: founder_1.name + " Jr."
+    fill_in 'Name', with: founder_1_user.name + " Jr."
     fill_in 'Team Name', with: new_team_name, fill_options: { clear: :backspace }
     find('button[title="Exclude this student from the leaderboard"]').click
     click_button 'Update Student'
@@ -128,7 +130,7 @@ feature 'School students index', js: true do
     expect(page).to have_text("Student updated successfully")
     dismiss_notification
 
-    expect(founder_1.user_profile.reload.name).to end_with('Jr.')
+    expect(founder_1_user.reload.name).to end_with('Jr.')
     expect(founder_1.reload.startup.name).to eq(new_team_name)
     expect(founder_1.excluded_from_leaderboard).to eq(true)
 
@@ -154,8 +156,9 @@ feature 'School students index', js: true do
 
     # Mark a student as exited
     founder = startup_2.founders.last
-    find("a", text: founder.name).click
-    expect(page).to have_text(founder.name)
+    founder_user = founder.urse
+    find("a", text: founder_user.name).click
+    expect(page).to have_text(founder_user.name)
     expect(page).to have_text(founder.startup.name)
     find('button[title="Prevent this student from accessing the course"]').click
     click_button 'Update Student'
@@ -167,7 +170,7 @@ feature 'School students index', js: true do
 
     # Assign a coach to a team
     founder = startup_2.founders.last
-    find("a", text: founder.name).click
+    find("a", text: founder.user.name).click
     expect(page).to have_text('Course Coaches')
     expect(page).to have_text('Exclusive Team Coaches')
     expect(page).to have_text(course_coach.name)

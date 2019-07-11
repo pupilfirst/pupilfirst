@@ -1,0 +1,22 @@
+.federated-sigin-in__seperator:before {
+  @apply bg-gray-300 absolute;
+  z-index: -1;
+  content: '';
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 1px;
+}
+
+.federated-sigin-in__google-btn {
+  background-color: #4285F4;
+}
+
+.federated-sigin-in__facebook-btn {
+  background-color: #4267B2;
+}
+
+.federated-sigin-in__github-btn {
+  background-color: #333333;
+}

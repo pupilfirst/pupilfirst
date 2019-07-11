@@ -1,5 +1,5 @@
 after 'development:schools', 'development:founders', 'development:faculty', 'development:courses' do
-  puts 'Seeding community'
+  puts 'Seeding communities'
 
   school = School.find_by(name: 'SV.CO')
   john_doe = User.find_by(email: 'johndoe@example.com')

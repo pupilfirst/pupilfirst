@@ -8,16 +8,7 @@ class CreateAnswerMutator < ApplicationMutator
   validates :question_id, presence: { message: 'BlankQuestionId' }
 
   def create_answer
-    answer = Answer.transaction do
-      question.update!(last_activity_at: Time.zone.now)
-
-      Answer.create!(
-        creator: current_user,
-        question: question,
-        description: description
-      )
-    end
-
+    answer = Answers::CreateService.new(current_user, question, description)
     answer.id
   end
 

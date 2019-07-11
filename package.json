@@ -6,7 +6,7 @@
     "@fortawesome/fontawesome-pro": "^5.8.1",
     "@glennsl/bs-json": "^3.0.0",
     "@rails/ujs": "^6.0.0-alpha",
-    "@rails/webpacker": "^4.0.2",
+    "@rails/webpacker": "^4.0.7",
     "babel-plugin-prismjs": "^1.0.2",
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
@@ -41,7 +41,7 @@
     "reason-react": ">=0.7.0",
     "sass-loader": "^7.0.1",
     "tailwindcss": "^1.0.1",
-    "webpack-dev-server": "^3.3.1"
+    "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
     "postinstall": "bsb -clean-world && bsb -make-world"

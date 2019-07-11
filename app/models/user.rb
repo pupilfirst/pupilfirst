@@ -14,6 +14,7 @@ class User < ApplicationRecord
     omniauth_providers: %i[google_oauth2 facebook github]
 
   validates :email, presence: true, uniqueness: true, email: true
+  has_one_attached :avatar
 
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
@@ -34,5 +35,33 @@ class User < ApplicationRecord
 
   def display_name
     email
+  end
+
+  def avatar_variant(version)
+    case version
+      when :mid
+        avatar.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: "center",
+            resize: '200x200^',
+            crop: '200x200+0+0'
+          })
+      when :thumb
+        avatar.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: 'center',
+            resize: '50x50^',
+            crop: '50x50+0+0'
+          })
+      else
+        avatar
+    end
+  end
+
+  def initials_avatar(background_shape: nil)
+    logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
+    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 end

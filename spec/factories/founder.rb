@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :founder do
-    user { create :user, email: Faker::Internet.email }
+    user
     college
     startup
     dashboard_toured { true }
@@ -13,7 +13,7 @@ FactoryBot.define do
 
     after(:create) do |founder|
       UserProfile.where(user: founder.user, school: founder.school).first_or_create!(
-        name: Faker::Name.name
+        name: founder.user.name
       )
     end
   end

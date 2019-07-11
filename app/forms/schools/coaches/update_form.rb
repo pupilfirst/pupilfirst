@@ -14,12 +14,11 @@ module Schools
 
       def save
         Faculty.transaction do
-          user = User.where(email: email).first_or_create!
-          model.update!(faculty_params.merge(user: user))
+          user = User.where(email: email, school: school).first_or_create!
+          user.update!(user_params)
+          user.avatar.attach(image) if image.present?
 
-          user_profile = UserProfile.where(user: user, school: school).first_or_create!
-          user_profile.update!(user_profile_params)
-          user_profile.avatar.attach(image) if image.present?
+          model.update!(faculty_params.merge(user: user))
         end
 
         clear_faculty_enrollments if model.exited?
@@ -33,7 +32,7 @@ module Schools
         School.find_by(id: school_id)
       end
 
-      def user_profile_params
+      def user_params
         {
           name: name,
           title: title,

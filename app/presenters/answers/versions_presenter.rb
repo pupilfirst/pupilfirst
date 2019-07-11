@@ -30,15 +30,10 @@ module Answers
 
     def editor_name_for_answer
       if @answer.editor.present?
-        name(@answer.editor)
-        @answer.editor.user_profiles.where(school: current_school).first.name
+        @answer.editor.name
       else
-        name(@answer.creator)
+        @answer.creator.name
       end
-    end
-
-    def name(user)
-      user.user_profiles.where(school: current_school).first.name
     end
 
     def updated_at(object)

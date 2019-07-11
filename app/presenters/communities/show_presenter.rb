@@ -18,7 +18,7 @@ module Communities
     end
 
     def creator_name(question)
-      question.creator.user_profiles.where(school: current_school).first.name
+      question.creator.name
     end
 
     def comments_count(question)

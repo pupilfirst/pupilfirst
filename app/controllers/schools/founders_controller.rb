@@ -10,7 +10,7 @@ module Schools
       if form.validate(params)
         startup = form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, startup.course)
-        render json: { teams: presenter.teams, students: presenter.students, userProfiles: presenter.user_profiles, error: nil }
+        render json: { teams: presenter.teams, students: presenter.students, error: nil }
       else
         render json: { error: form.errors.full_messages.join(', ') }
       end
@@ -25,7 +25,7 @@ module Schools
       if form.validate(params[:founder].merge(tags: params[:tags], coach_ids: params[:coach_ids], clear_coaches: params[:clear_coaches]))
         form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
-        render json: { teams: presenter.teams, students: presenter.students, userProfiles: presenter.user_profiles, error: nil }
+        render json: { teams: presenter.teams, students: presenter.students, error: nil }
       else
         render json: { error: form.errors.full_messages.join(', ') }
       end

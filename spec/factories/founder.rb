@@ -10,11 +10,5 @@ FactoryBot.define do
       slack_username { 'SLACK_USERNAME' }
       slack_access_token { 'SLACK_ACCESS_TOKEN' }
     end
-
-    after(:create) do |founder|
-      UserProfile.where(user: founder.user, school: founder.school).first_or_create!(
-        name: founder.user.name
-      )
-    end
   end
 end

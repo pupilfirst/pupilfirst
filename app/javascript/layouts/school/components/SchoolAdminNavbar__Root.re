@@ -55,13 +55,16 @@ let bottomLinkClasses = shrunk => {
   defaultClasses ++ (shrunk ? "justify-center" : "");
 };
 
-let bottomLink = (path, shrunk, iconClasses, text) =>
+let bottomLink = (path, shrunk, iconClasses, text) => {
+  let title = shrunk ? Some(text) : None;
+
   <li>
-    <a href=path className={bottomLinkClasses(shrunk)}>
+    <a ?title href=path className={bottomLinkClasses(shrunk)}>
       <i className={iconClasses ++ " fa-fw"} />
       {shrunk ? React.null : <span className="ml-2"> {text |> str} </span>}
     </a>
   </li>;
+};
 
 let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) => {
   let defaultClasses = "school-admin-navbar__primary-nav-link py-4 px-5";
@@ -312,6 +315,7 @@ let make =
             /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
             ReasonReact.cloneElement(
               <a
+                title=?{shrunk ? Some("Log Out") : None}
                 className={bottomLinkClasses(shrunk)}
                 rel="nofollow"
                 href="/users/sign_out"

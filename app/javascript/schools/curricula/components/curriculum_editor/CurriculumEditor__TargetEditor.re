@@ -238,14 +238,15 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " toggle-button__button--active" : "");
 };
 
-let completionButtonClasses = value =>
-  value ?
-    "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-gray-400 opacity-50 hover:bg-gray-200 text-gray-900 text-sm font-semibold focus:outline-none rounded p-4";
-let formClasses = value =>
-  value ?
-    "drawer-right-form bg-white w-full opacity-50" :
-    "drawer-right-form bg-white w-full";
+let completionButtonClasses = value => {
+  let defaultClasses = "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
+  value ? defaultClasses : defaultClasses ++ "opacity-50 text-gray-900";
+};
+
+let formClasses = value => {
+  let defaultClasses = "drawer-right-form bg-white w-full";
+  value ? defaultClasses ++ "opacity-50" : defaultClasses;
+};
 let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>

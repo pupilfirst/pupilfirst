@@ -8,7 +8,6 @@ type state = {
   teams: list(Team.t),
   students: list(Student.t),
   selectedTeams: list(Team.t),
-  userProfiles: list(UserProfile.t),
   searchString: string,
   tags: list(string),
   tagsFilteredBy: list(string),
@@ -25,11 +24,6 @@ let studentsInTeam = (students, team) =>
   students
   |> List.filter(student => Student.teamId(student) === Team.id(team));
 
-let studentUserProfile = (userProfiles, student) =>
-  userProfiles
-  |> List.find(profile =>
-       UserProfile.userId(profile) === Student.userId(student)
-     );
 
 let canBeMarkedActive = (selectedTeams, students) =>
   ListUtils.isEmpty(selectedTeams) ?
@@ -93,7 +87,6 @@ let make =
       ~teams,
       ~courseId,
       ~students,
-      ~userProfiles,
       ~authenticityToken,
       ~studentTags,
       ~isLastPage,
@@ -104,7 +97,6 @@ let make =
   initialState: () => {
     teams,
     students,
-    userProfiles,
     selectedTeams: [],
     searchString: "",
     tagsFilteredBy: [],
@@ -234,36 +226,19 @@ let make =
                              |> List.map(student =>
                                   <div
                                     key={student |> Student.id}
-                                    id={
-                                      student
-                                      |> studentUserProfile(
-                                           state.userProfiles,
-                                         )
-                                      |> UserProfile.name
-                                    }
+                                    id={student |> Student.name}
                                     className="student-team__card flex items-center bg-white pl-4">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
                                         <a
                                           className="flex flex-1 items-center py-4 pr-4"
                                           id={
-                                            (
-                                              student
-                                              |> studentUserProfile(
-                                                   state.userProfiles,
-                                                 )
-                                              |> UserProfile.name
-                                            )
+                                            (student |> Student.name)
                                             ++ "_edit"
                                           }>
                                           <img
                                             className="w-10 h-10 rounded-full mr-4 object-cover"
-                                            src={
-                                              student
-                                              |> studentUserProfile(
-                                                   state.userProfiles,
-                                                 )
-                                              |> UserProfile.avatarUrl
+                                            src={student |> Student.avatarUrl
                                             }
                                           />
                                           <div
@@ -271,12 +246,7 @@ let make =
                                             <p
                                               className="text-black font-semibold inline-block ">
                                               {
-                                                student
-                                                |> studentUserProfile(
-                                                     state.userProfiles,
-                                                   )
-                                                |> UserProfile.name
-                                                |> str
+                                                student |> Student.name |> str
                                               }
                                             </p>
                                             <div className="flex flex-wrap">
@@ -376,7 +346,6 @@ type props = {
   teams: list(Team.t),
   courseId: string,
   students: list(Student.t),
-  userProfiles: list(UserProfile.t),
   studentTags: list(string),
   authenticityToken: string,
   isLastPage: bool,
@@ -388,7 +357,6 @@ let decode = json =>
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", string),
     students: json |> field("students", list(Student.decode)),
-    userProfiles: json |> field("userProfiles", list(UserProfile.decode)),
     studentTags: json |> field("studentTags", list(string)),
     authenticityToken: json |> field("authenticityToken", string),
     currentPage: json |> field("currentPage", int),
@@ -406,7 +374,6 @@ let jsComponent =
         ~currentPage=props.currentPage,
         ~isLastPage=props.isLastPage,
         ~students=props.students,
-        ~userProfiles=props.userProfiles,
         ~studentTags=props.studentTags,
         ~authenticityToken=props.authenticityToken,
         [||],

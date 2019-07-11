@@ -319,7 +319,7 @@ let make =
                           |> Array.of_list
                           |> ReasonReact.array :
                           <div
-                            className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
+                            className="flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
                             {"None Assigned" |> str}
                           </div>
                       }

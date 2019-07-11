@@ -30,25 +30,37 @@ let make =
     className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-3 md:px-8">
     {
       commentsToShow
-      |> List.map(comment =>
+      |> List.sort((commentA, commentB) =>
+           DateFns.differenceInSeconds(
+             commentA |> Comment.createdAt |> DateFns.parseString,
+             commentB |> Comment.createdAt |> DateFns.parseString,
+           )
+           |> int_of_float
+         )
+      |> List.map(comment => {
+           let commentText =
+             (comment |> Comment.value)
+             ++ " - **"
+             ++ (userData |> UserData.userName(comment |> Comment.creatorId))
+             ++ "** on "
+             ++ (
+               comment
+               |> Comment.createdAt
+               |> DateFns.parseString
+               |> DateFns.format("Do MMMM, YYYY")
+             );
+
            <li
              key={comment |> Comment.id}
              className="w-full text-left border border-gray-400 border-t-0">
              <div
                className="flex w-full leading-normal text-xs bg-white justify-between">
-               <MarkdownBlock
-                 markdown={
-                   (comment |> Comment.value)
-                   ++ " **- "
-                   ++ (
-                     userData
-                     |> UserData.userName(comment |> Comment.creatorId)
-                   )
-                   ++ "**"
-                 }
-                 className="px-4 py-3"
-                 profile=Markdown.Comment
-               />
+               <span className="flex items-center px-4 py-3">
+                 <MarkdownBlock
+                   markdown=commentText
+                   profile=Markdown.Comment
+                 />
+               </span>
                {
                  isCoach || comment |> Comment.creatorId == currentUserId ?
                    <QuestionsShow__ArchiveManager
@@ -60,8 +72,8 @@ let make =
                    React.null
                }
              </div>
-           </li>
-         )
+           </li>;
+         })
       |> Array.of_list
       |> ReasonReact.array
     }

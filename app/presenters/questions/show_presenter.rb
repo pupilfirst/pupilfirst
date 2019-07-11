@@ -47,7 +47,7 @@ module Questions
     end
 
     def comment_data(comment)
-      comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id')
+      comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id', 'created_at')
     end
 
     def user_data
@@ -78,10 +78,11 @@ module Questions
     def title(user_profile)
       title = user_profile.title
       title_text = title.present? ? ", #{title}" : ""
+
       if user_profile.user.faculty.any?
-        "Faculty #{title_text}"
+        title.presence || "Coach"
       else
-        "Student #{title_text}"
+        "Student#{title_text}"
       end
     end
 

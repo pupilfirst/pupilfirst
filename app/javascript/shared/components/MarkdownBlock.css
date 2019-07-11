@@ -125,11 +125,13 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__permissive b, strong {
+.markdown-block__permissive b,
+strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__permissive s, del {
+.markdown-block__permissive s,
+del {
   @apply markdown-block__strikethrough;
 }
 
@@ -157,7 +159,8 @@
   @apply markdown-block__blockquote;
 }
 
-.markdown-block__permissive blockquote code, pre {
+.markdown-block__permissive blockquote code,
+pre {
   @apply font-normal text-sm;
 }
 
@@ -176,7 +179,7 @@
 }
 
 .markdown-block__permissive img {
-  @apply markdown-block__img
+  @apply markdown-block__img;
 }
 
 /*
@@ -184,92 +187,94 @@
  * community section.
  */
 
-.markdown-block__questions-and-answer p {
+.markdown-block__question-and-answer p {
   @apply markdown-block__p;
 }
 
-.markdown-block__questions-and-answer h1 {
+.markdown-block__question-and-answer h1 {
   @apply markdown-block__h1;
   font-size: 1.5rem;
 }
 
-.markdown-block__questions-and-answer h2 {
+.markdown-block__question-and-answer h2 {
   @apply markdown-block__h2;
   font-size: 1.25rem;
 }
 
-.markdown-block__questions-and-answer h3 {
+.markdown-block__question-and-answer h3 {
   @apply markdown-block__h3;
   font-size: 1.125rem;
 }
 
-.markdown-block__questions-and-answer h4 {
+.markdown-block__question-and-answer h4 {
   @apply markdown-block__h4;
   font-size: 1rem;
 }
 
-.markdown-block__questions-and-answer h5 {
+.markdown-block__question-and-answer h5 {
   @apply markdown-block__h5;
   font-size: 0.875rem;
 }
 
-.markdown-block__questions-and-answer h6 {
+.markdown-block__question-and-answer h6 {
   @apply markdown-block__h6;
   font-size: 0.75rem;
 }
 
-.markdown-block__questions-and-answer em {
+.markdown-block__question-and-answer em {
   @apply markdown-block__em;
 }
 
-.markdown-block__questions-and-answer b, strong {
+.markdown-block__question-and-answer b,
+strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__questions-and-answer s, del {
+.markdown-block__question-and-answer s,
+del {
   @apply markdown-block__strikethrough;
 }
 
-.markdown-block__questions-and-answer ul {
+.markdown-block__question-and-answer ul {
   @apply markdown-block__ul;
 }
 
-.markdown-block__questions-and-answer ol {
+.markdown-block__question-and-answer ol {
   @apply markdown-block__ol;
 }
 
-.markdown-block__questions-and-answer li {
+.markdown-block__question-and-answer li {
   @apply markdown-block__li;
 }
 
-.markdown-block__questions-and-answer a {
+.markdown-block__question-and-answer a {
   @apply markdown-block__a;
 }
 
-.markdown-block__questions-and-answer a:hover {
+.markdown-block__question-and-answer a:hover {
   @apply bg-primary-100 text-primary-600;
 }
 
-.markdown-block__questions-and-answer blockquote {
+.markdown-block__question-and-answer blockquote {
   @apply markdown-block__blockquote;
 }
 
-.markdown-block__questions-and-answer hr {
+.markdown-block__question-and-answer hr {
   @apply markdown-block__hr;
 }
 
-.markdown-block__questions-and-answer sup {
+.markdown-block__question-and-answer sup {
   @apply markdown-block__sup-sub;
   top: -0.5em;
 }
 
-.markdown-block__questions-and-answer sub {
+.markdown-block__question-and-answer sub {
   @apply markdown-block__sup-sub;
   bottom: -0.25em;
 }
 
-.markdown-block__questions-and-answer img {
-  @apply markdown-block__img
+.markdown-block__question-and-answer img {
+  @apply markdown-block__img;
 }
 
 /*
@@ -284,11 +289,13 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__comment b, strong {
+.markdown-block__comment b,
+strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__comment s, del {
+.markdown-block__comment s,
+del {
   @apply markdown-block__strikethrough;
 }
 

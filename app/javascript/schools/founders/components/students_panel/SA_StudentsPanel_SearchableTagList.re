@@ -26,7 +26,7 @@ let search =
             title={"Add new tag " ++ searchString}
             key=searchString
             onMouseDown=(_e => handleClick(searchString, send, addTagCB))
-            className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 rounded-lg px-2 py-px mt-1 mr-4 text-xs overflow-hidden">
+            className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 rounded-lg px-2 py-px mt-1 mr-2 text-xs overflow-hidden">
             {searchString |> str}
             <i className="fal fa-plus ml-1 text-sm text-primary-600" />
           </span>,
@@ -117,7 +117,7 @@ let make =
       {
         if (results |> ListUtils.isNotEmpty) {
           <div
-            className="flex flex-wrap border border-gray-400 bg-white mt-3 rounded-lg max-w-xs searchable-tag-list__dropdown relative px-4 py-2">
+            className="flex flex-wrap border border-gray-400 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
             {results |> Array.of_list |> ReasonReact.array}
           </div>;
         } else {

@@ -21,7 +21,7 @@ module Courses
         submissions: submissions,
         team: team_details,
         coaches: faculty.map(&:attributes),
-        user_profiles: user_profiles,
+        users: users,
         evaluation_criteria: evaluation_criteria
       }
     end
@@ -91,13 +91,13 @@ module Courses
       @team_members ||= current_student.startup.founders.select(:id, :user_id).load
     end
 
-    def user_profiles
+    def users
       user_ids = (team_members.pluck(:user_id) + faculty.pluck(:user_id)).uniq
 
-      UserProfile.where(school: current_school, user_id: user_ids).with_attached_avatar.map do |user_profile|
-        profile = user_profile.attributes.slice('user_id', 'name', 'title')
-        profile['avatar_url'] = user_profile.avatar.attached? ? view.url_for(user_profile.avatar_variant(:thumb)) : user_profile.initials_avatar
-        profile
+      User.where(id: user_ids).with_attached_avatar.map do |user|
+        details = user.attributes.slice('id', 'name', 'title')
+        details['avatar_url'] = user.avatar.attached? ? view.url_for(user.avatar_variant(:thumb)) : user.initials_avatar
+        details
       end
     end
 

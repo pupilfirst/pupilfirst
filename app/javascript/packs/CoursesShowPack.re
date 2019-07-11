@@ -12,7 +12,7 @@ let decodeProps = json =>
     json |> field("submissions", list(LatestSubmission.decode)),
     json |> field("team", Team.decode),
     json |> field("coaches", list(Coach.decode)),
-    json |> field("userProfiles", list(UserProfile.decode)),
+    json |> field("users", list(User.decode)),
     json |> field("evaluationCriteria", list(EvaluationCriterion.decode)),
   );
 
@@ -25,7 +25,7 @@ let (
   submissions,
   team,
   coaches,
-  userProfiles,
+  users,
   evaluationCriteria,
 ) =
   DomUtils.parseJsonAttribute() |> decodeProps;
@@ -40,7 +40,7 @@ ReactDOMRe.renderToElementWithId(
     submissions
     team
     coaches
-    userProfiles
+    users
     evaluationCriteria
   />,
   "react-root",

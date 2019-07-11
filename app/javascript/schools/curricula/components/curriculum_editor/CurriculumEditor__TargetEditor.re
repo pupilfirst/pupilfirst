@@ -239,8 +239,8 @@ let booleanButtonClasses = bool => {
 };
 
 let completionButtonClasses = value => {
-  let defaultClasses = "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
-  value ? defaultClasses : defaultClasses ++ " opacity-50 text-gray-900";
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
+  value ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500" : defaultClasses ++ " opacity-75 text-gray-900";
 };
 
 let formClasses = value => {

@@ -360,6 +360,14 @@ feature 'Curriculum Editor' do
       find('.ui-pnotify-container').click
       content_block = target.content_blocks.reload.where(block_type: 'embed').last
       expect(content_block.sort_index).to eq(4)
+
+      # Change target title
+      expect(page).to_not have_selector(:button, 'Update')
+      fill_in 'title', with: 'new target title'
+      expect(page).to have_selector(:button, 'Update')
+      click_button 'Update'
+      find('.ui-pnotify-container').click
+      expect(target.reload.title).to eq('new target title')
     end
 
     scenario 'modifies an existing target content', js: true do

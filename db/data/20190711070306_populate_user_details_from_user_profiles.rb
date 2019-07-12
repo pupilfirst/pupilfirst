@@ -24,12 +24,12 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
     sv_school = School.first
 
     sv_school.user_profiles.each do |user_profile|
-      attributes = user_profile.attributes.slice(ATTRIBUTES)
+      attributes = user_profile.slice(ATTRIBUTES)
       user = user_profile.user
 
       user.update!(
         school_id: sv_school.id,
-        **attributes
+        **attributes.symbolize_keys
       )
 
       next unless user_profile.avatar.attached?
@@ -46,11 +46,11 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
     School.where.not(id: sv_school).each do |school|
       school.user_profiles.each do |user_profile|
         old_user = user_profile.user
-        attributes = user_profile.attributes.slice(ATTRIBUTES)
+        attributes = user_profile.slice(ATTRIBUTES)
 
         new_user = school.users.create!(
           email: old_user.email,
-          **attributes
+          **attributes.symbolize_keys
         )
 
         old_user.founders.joins(:school).where(schools: { id: school }).update_all(user: new_user)
@@ -65,6 +65,11 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
           blob: user_profile.avatar.blob
         )
       end
+    end
+
+    # Add email for admin users
+    AdminUser.all.each do |admin_user|
+      admin_user.update!(email: admin_user.user.email)
     end
   end
 

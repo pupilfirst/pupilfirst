@@ -30,11 +30,10 @@ module Courses
 
     def create_new_student(student)
       # Create a user and generate a login token.
-      user = User.with_email(student.email) || User.create!(email: student.email)
+      user = User.where(email: student.email, school: school).first_or_create!
       user.regenerate_login_token if user.login_token.blank?
+      user.update!(name: student.name)
 
-      # Create a user profile for the user.
-      create_user_profile(user, student.name)
       startup = Startup.create!(name: student.name, level: first_level)
 
       # Finally, create a student profile for the user and tag it.
@@ -58,11 +57,6 @@ module Courses
 
     def first_level
       @first_level ||= @course.levels.find_by(number: 1)
-    end
-
-    def create_user_profile(user, name)
-      user_profile = UserProfile.where(user: user, school: school).first_or_create!
-      user_profile.update!(name: name)
     end
   end
 end

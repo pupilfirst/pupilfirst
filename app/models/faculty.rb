@@ -57,7 +57,7 @@ class Faculty < ApplicationRecord
 
   delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :image, :avatar, to: :user_profile
+    :angel_co_url, :github_url, :behance_url, :skype_id, :image, :avatar, to: :user
 
   delegate :email, to: :user
 
@@ -152,8 +152,8 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    if user_profile.avatar.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(user_profile.avatar, only_path: true)
+    if user.avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(user.avatar, only_path: true)
     else
       initials_avatar(background_shape)
     end
@@ -164,11 +164,11 @@ class Faculty < ApplicationRecord
   end
 
   def image_filename
-    user_profile.avatar.attached? ? user_profile.avatar.blob.filename.to_s : nil
+    user.avatar.attached? ? user.avatar.blob.filename.to_s : nil
   end
 
   def image
-    user_profile.avatar
+    user.avatar
   end
 
   private

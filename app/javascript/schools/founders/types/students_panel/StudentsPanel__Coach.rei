@@ -4,4 +4,6 @@ let decode: Js.Json.t => t;
 
 let id: t => int;
 
-let userId: t => int;
+let name: t => string;
+
+let avatarUrl: t => string;

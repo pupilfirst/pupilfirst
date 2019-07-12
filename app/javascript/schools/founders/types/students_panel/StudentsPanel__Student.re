@@ -1,6 +1,7 @@
 type t = {
   id: int,
-  userId: int,
+  name: string,
+  avatarUrl: string,
   teamId: int,
   email: string,
   tags: list(string),
@@ -8,11 +9,11 @@ type t = {
   excludedFromLeaderboard: bool,
 };
 
+let name = t => t.name;
+let avatarUrl = t => t.avatarUrl;
 let id = t => t.id;
 
 let teamId = t => t.teamId;
-
-let userId = t => t.userId;
 
 let email = t => t.email;
 
@@ -32,11 +33,12 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
     teamId: json |> field("teamId", int),
-    userId: json |> field("userId", int),
     email: json |> field("email", string),
     tags: json |> field("tags", list(string)),
     exited: json |> field("exited", bool),
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
+    name: json |> field("name", string),
+    avatarUrl: json |> field("avatarUrl", string),
   };
 
 let encode = (name, teamName, t) =>

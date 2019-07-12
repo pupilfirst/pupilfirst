@@ -57,11 +57,7 @@ class Founder < ApplicationRecord
 
   delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, to: :user_profile
-
-  def user_profile
-    @user_profile ||= school.user_profiles.find_by(user_id: user_id)
-  end
+    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, to: :user
 
   # TODO: Remove all usages of method Founder.with_email and then delete it.
   def self.with_email(email)

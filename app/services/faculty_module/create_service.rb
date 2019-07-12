@@ -9,12 +9,11 @@ module FacultyModule
       User.transaction do
         user = User.where(email: @faculty_params[:email]).first_or_create!
 
-        return user.faculty.where(school: @faculty_params[:school]).first if user.faculty.where(school: @faculty_params[:school]).any?
+        return user.faculty.first if user.faculty.any?
 
         school = @faculty_params[:school]
-        user_profile = UserProfile.where(user: user, school: school).first_or_create!
-        user_profile.update!(name: @faculty_params[:name], title: @faculty_params[:title], linkedin_url: @faculty_params[:linkedin_url])
-        user_profile.avatar.attach(@faculty_params[:image])
+        user.update!(name: @faculty_params[:name], title: @faculty_params[:title], linkedin_url: @faculty_params[:linkedin_url])
+        user.avatar.attach(@faculty_params[:image]) if @faculty_params[:image].present?
 
         faculty = Faculty.create!(
           user: user,

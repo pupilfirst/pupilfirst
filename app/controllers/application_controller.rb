@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
         founder_id = read_cookie(:founder_id)
 
         # Founders in current school for the user
-        founders = current_user.founders.joins(:school).where(schools: { id: current_school })
+        founders = current_user.founders
 
         # Try to select founder from value stored in cookie.
         founder = founder_id.present? ? founders.not_exited.find_by(id: founder_id) : nil

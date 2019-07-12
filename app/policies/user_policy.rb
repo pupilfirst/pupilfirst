@@ -7,6 +7,14 @@ class UserPolicy < ApplicationPolicy
     return true if current_coach.present?
 
     # founder in this school can access home.
-    user.founders.joins(:school).where(schools: { id: current_school }).exists?
+    user.founders.exists?
+  end
+
+  def edit?
+    record&.school_id == current_school.id && record == user
+  end
+
+  def update?
+    edit?
   end
 end

@@ -14,14 +14,14 @@ let make =
       ~currentUserId,
       ~addLikeCB,
       ~removeLikeCB,
-      ~userData,
+      ~users,
       ~comments,
       ~likes,
       ~handleAnswerCB,
       ~isCoach,
       ~archiveCB,
     ) => {
-  let userProfile = userData |> UserData.user(answer |> Answer.creatorId);
+  let user = users |> User.findUser(answer |> Answer.creatorId);
   let commentsForAnswer =
     comments |> Comment.commentsForAnswer(answer |> Answer.id);
   let (showAnswerEdit, toggleShowAnswerEdit) = React.useState(() => false);
@@ -102,7 +102,7 @@ let make =
                           className="text-xs mt-1 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                           <span> {"Last edited by " |> str} </span>
                           <span className="font-semibold">
-                            {userData |> UserData.userName(editorId) |> str}
+                            {users |> User.userName(editorId) |> str}
                           </span>
                           <span>
                             {
@@ -149,7 +149,7 @@ let make =
                     </div>
                   </div>
                   <QuestionsShow__UserShow
-                    userProfile
+                    user
                     createdAt={answer |> Answer.createdAt}
                     textForTimeStamp="Answered"
                   />
@@ -159,7 +159,7 @@ let make =
           </div>
           <QuestionsShow__CommentShow
             comments=commentsForAnswer
-            userData
+            users
             authenticityToken
             commentableType="Answer"
             commentableId={answer |> Answer.id}

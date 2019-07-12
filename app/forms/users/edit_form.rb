@@ -1,4 +1,4 @@
-module UserProfiles
+module Users
   class EditForm < Reform::Form
     property :name, validates: { presence: true }
     property :phone, validates: { mobile_number: true, allow_blank: true }
@@ -15,13 +15,13 @@ module UserProfiles
     property :behance_url, validates: { url: true, allow_blank: true }
 
     def save!
-      UserProfile.transaction do
-        model.update!(user_profile_params)
+      User.transaction do
+        model.update!(user_params)
         model.avatar.attach(avatar) if avatar.present?
       end
     end
 
-    def user_profile_params
+    def user_params
       {
         name: name,
         phone: phone,

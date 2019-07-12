@@ -16,4 +16,15 @@ class UserMailer < SchoolMailer
     @school = @comment.commentable.school
     simple_roadie_mail(comment.commentable.creator.email, 'New comment on your post')
   end
+
+  # Mail sent daily to users when there are new questions posted in communities where they have access.
+  #
+  # @param user [User] user to whom digest is to be sent
+  # @param updates [Hash] digest details
+  def daily_digest(user, updates)
+    @user = user
+    @updates = updates
+    subject = "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
+    simple_roadie_mail(user.email, subject)
+  end
 end

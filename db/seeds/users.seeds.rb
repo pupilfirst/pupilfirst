@@ -1,4 +1,7 @@
-puts 'Seeding users (idempotent)'
+after 'development:schools' do
+  school = School.first
 
-User.where(email: 'admin@example.com').first_or_create!
-User.where(email: 'sa@sv.localhost').first_or_create!
+  puts 'Seeding users (idempotent)'
+
+  school.users.where(email: 'admin@example.com').first_or_create!(name: 'Admin User')
+end

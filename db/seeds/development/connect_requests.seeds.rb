@@ -3,14 +3,14 @@ require_relative 'helper'
 after 'development:connect_slots', 'development:startups' do
   puts 'Seeding connect_requests'
 
-  mickey = User.find_by(email: 'mickeymouse@example.com').faculty.first
-  super_startup = Startup.find_by(name: 'Super Product')
+  coach = Faculty.first
+  team = coach.school.startups.first
 
-  past_slots = mickey.connect_slots.where('slot_at < ?', Time.now)
+  past_slots = coach.connect_slots.where('slot_at < ?', Time.now)
 
   past_slots.each do |past_slot|
     past_slot.create_connect_request!(
-      startup: super_startup,
+      startup: team,
       questions: Faker::Lorem.paragraph,
       status: ConnectRequest::STATUS_CONFIRMED,
       confirmed_at: past_slot.slot_at - 1.day,

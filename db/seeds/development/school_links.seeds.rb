@@ -1,6 +1,6 @@
-puts 'Seeding school_strings (idempotent)'
-
 after 'development:schools' do
+  puts 'Seeding school_strings (idempotent)'
+
   school = School.first
 
   # Header links

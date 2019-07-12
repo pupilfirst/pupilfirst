@@ -1,13 +1,14 @@
-after 'development:courses' do
-  require_relative 'helper'
+require_relative 'helper'
 
+after 'development:courses' do
   puts 'Seeding faculty'
 
   school = School.first
 
   admin = User.find_by(email: 'admin@example.com')
 
-  admin_coach = school.faculty.create!(
+  admin_coach = Faculty.create!(
+    school: school,
     category: 'team',
     user: admin,
     public: false
@@ -15,7 +16,7 @@ after 'development:courses' do
 
   school.courses.each_with_index do |course, index|
     user = User.find_by(email: "coach#{index + 1}@example.com")
-    new_coach = school.faculty.create!(category: 'team',user: user,public: true)
+    new_coach = Faculty.create!(school: school, category: 'team', user: user, public: true)
 
     # Add the new coach to the course.
     FacultyCourseEnrollment.create!(safe_to_create: true, faculty: new_coach, course: course)

@@ -9,7 +9,7 @@ after 'development:levels' do
         name: Faker::Lorem.words(2).join(' '),
         sort_index: index,
         description: Faker::Lorem.sentence,
-        milestone: (milestone % 2 == 0)
+        milestone: (index % 2 == 0)
       )
     end
   end

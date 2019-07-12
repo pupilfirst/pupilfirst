@@ -1,5 +1,5 @@
 after 'users' do
-  puts 'Seeding admin_users (idempotent)'
+  puts 'Seeding admin_users (production) (idempotent)'
 
   user = User.find_by(email: 'admin@example.com')
 

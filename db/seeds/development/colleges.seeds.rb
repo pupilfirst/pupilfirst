@@ -1,3 +1,1 @@
-after 'development:universities' do
-  puts 'Seeding colleges (empty)'
-end
+puts 'Seeding colleges (noop)'

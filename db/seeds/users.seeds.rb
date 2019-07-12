@@ -1,7 +1,7 @@
-after 'development:schools' do
+after 'schools' do
   school = School.first
 
-  puts 'Seeding users (idempotent)'
+  puts 'Seeding users (production) (idempotent)'
 
   school.users.where(email: 'admin@example.com').first_or_create!(name: 'Admin User')
 end

@@ -1,11 +1,11 @@
-require 'helper'
+require_relative 'helper'
 
 after 'development:schools' do
   puts 'Seeding users'
 
-  # Add admin user in all schools.
+  # Add admin user to all schools.
   School.all.each do |school|
-    school.users.create!(email: 'admin@example.com', name: Faker::Lorem.name)
+    school.users.where(email: 'admin@example.com').first_or_create!(name: Faker::Lorem.name)
   end
 
   # Add three student users in the first school.
@@ -13,6 +13,11 @@ after 'development:schools' do
 
   (1..3).each do |index|
     school.users.create!(email: "student#{index}@example.com", name: Faker::Lorem.name)
+  end
+
+  # Add two users to be coaches in first school.
+  (1..2).each do |index|
+    school.users.create!(email: "coach#{index}@example.com", name: Faker::Lorem.name)
   end
 end
 

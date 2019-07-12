@@ -89,8 +89,8 @@ module Users
 
     def user
       @user ||= begin
-        school = current_school || School.joins(:domains).where(domains: { fqdn: oauth_origin[:fqdn] }).first
-        school.users.with_email(@email)
+        school = School.joins(:domains).where(domains: { fqdn: oauth_origin[:fqdn] }).first
+        school.users.with_email(@email).first
       end
     end
 

@@ -20,7 +20,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: { scope: :school_id }
   has_one_attached :avatar
 
-  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase).first } # rubocop:disable Rails/FindBy
+  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
 
   GENDER_MALE = 'male'.freeze
   GENDER_FEMALE = 'female'.freeze

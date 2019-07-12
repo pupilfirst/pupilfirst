@@ -58,7 +58,7 @@ class Feature < ApplicationRecord
   def active_for_admin?(user, parsed_value)
     return false unless parsed_value.include?(:admin)
 
-    user.admin?
+    AdminUser.where(email: user.email).exists?
   end
 
   def active_for_regex?(user, parsed_value)

@@ -52,10 +52,6 @@ class User < ApplicationRecord
     confirmed_at.present?
   end
 
-  def admin?
-    admin_user.present?
-  end
-
   def display_name
     email
   end

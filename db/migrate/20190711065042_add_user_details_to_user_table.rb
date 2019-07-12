@@ -19,5 +19,6 @@ class AddUserDetailsToUserTable < ActiveRecord::Migration[5.2]
     add_column :users, :behance_url, :string
     add_column :users, :skype_id, :string
     add_reference :users, :school, foreign_key: true, index: true
+    add_column :admin_users, :email, :string
   end
 end

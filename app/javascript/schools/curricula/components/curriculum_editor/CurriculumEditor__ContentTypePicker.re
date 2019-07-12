@@ -4,9 +4,54 @@ let str = React.string;
 
 open CurriculumEditor__Types;
 
+type kindOfButton =
+  | MarkdownButton
+  | FileButton
+  | ImageButton
+  | EmbedButton;
+
 let buttonClasses = (visibility, staticMode) => {
   let classes = "add-content-block py-3";
   classes ++ (visibility || staticMode ? " add-content-block--open" : " ");
+};
+
+let button = (sortIndex, newContentBlockCB, kindOfButton) => {
+  let (faIcon, buttonText, newBlock) =
+    switch (kindOfButton) {
+    | MarkdownButton => (
+        "fab fa-markdown",
+        "Markdown",
+        (() => ContentBlock.makeMarkdownBlock("")),
+      )
+    | FileButton => (
+        "far fa-file-alt",
+        "File",
+        (() => ContentBlock.makeFileBlock("", "", "")),
+      )
+    | ImageButton => (
+        "far fa-image",
+        "Image",
+        (() => ContentBlock.makeImageBlock("", "")),
+      )
+    | EmbedButton => (
+        "far fa-code",
+        "Embed",
+        (() => ContentBlock.makeEmbedBlock("", "")),
+      )
+    };
+
+  <div
+    key=buttonText
+    className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
+    onClick={
+      event => {
+        event |> ReactEvent.Mouse.preventDefault;
+        newContentBlockCB(sortIndex, newBlock());
+      }
+    }>
+    <i className={faIcon ++ " text-2xl"} />
+    <p className="font-semibold"> {buttonText |> str} </p>
+  </div>;
 };
 
 [@react.component]
@@ -33,59 +78,11 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
     <div
       className="add-content-block__block-content-type hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-3 z-10"
       id={"content-type-picker-" ++ (sortIndex |> string_of_int)}>
-      <div
-        className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
-        onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(sortIndex, ContentBlock.makeMarkdownBlock(""));
-          }
-        }>
-        <i className="fab fa-markdown text-2xl" />
-        <p className="font-semibold"> {"Markdown" |> str} </p>
-      </div>
-      <div
-        className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
-        onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(
-              sortIndex,
-              ContentBlock.makeImageBlock("", ""),
-            );
-          }
-        }>
-        <i className="far fa-image text-2xl" />
-        <p className="font-semibold"> {"Image" |> str} </p>
-      </div>
-      <div
-        className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
-        onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(
-              sortIndex,
-              ContentBlock.makeEmbedBlock("", ""),
-            );
-          }
-        }>
-        <i className="far fa-code text-2xl" />
-        <p className="font-semibold"> {"Embed" |> str} </p>
-      </div>
-      <div
-        className="add-content-block__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
-        onClick={
-          _event => {
-            setVisibility(_ => !visibility);
-            newContentBlockCB(
-              sortIndex,
-              ContentBlock.makeFileBlock("", "", ""),
-            );
-          }
-        }>
-        <i className="far fa-file-alt text-2xl" />
-        <p className="font-semibold"> {"File" |> str} </p>
-      </div>
+      {
+        [|MarkdownButton, ImageButton, EmbedButton, FileButton|]
+        |> Array.map(button(sortIndex, newContentBlockCB))
+        |> React.array
+      }
     </div>
   </div>;
 };

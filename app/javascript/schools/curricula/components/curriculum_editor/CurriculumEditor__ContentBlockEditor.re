@@ -4,18 +4,12 @@ open CurriculumEditor__Types;
 
 exception UnexpectedResponse(int);
 
-let handleApiError =
-  [@bs.open]
-  (
-    fun
-    | UnexpectedResponse(code) => code
-  );
-
 let str = React.string;
 
 type action =
   | UpdateContentBlockPropertyText(string)
   | UpdateSaving
+  | DoneUpdating
   | UpdateMarkdown(string)
   | UpdateFileName(string);
 
@@ -48,6 +42,7 @@ let reducer = (state, action) =>
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
+  | DoneUpdating => {...state, formDirty: false, savingContentBlock: false}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -322,9 +317,11 @@ let updateContentBlock =
     contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
   UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
   |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-  |> Js.Promise.then_(_response => Js.Promise.resolve())
+  |> Js.Promise.then_(_response => {
+       dispatch(DoneUpdating);
+       Js.Promise.resolve();
+     })
   |> ignore;
-  dispatch(UpdateSaving);
   let updatedContentBlockType =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) =>
@@ -439,216 +436,219 @@ let make =
 
   let updateDescriptionCB = string => dispatch(UpdateMarkdown(string));
 
-  <div>
-    <CurriculumEditor__ContentTypePicker
-      key={sortIndex |> string_of_int}
-      sortIndex
-      newContentBlockCB
-      staticMode=false
-    />
-    /* Content block */
-    <div
-      className="relative border border-gray-400 rounded-lg overflow-hidden">
-      /* Content block controls */
+  <DisablingCover message="Saving..." disabled={state.savingContentBlock}>
+    <div>
+      <CurriculumEditor__ContentTypePicker
+        key={sortIndex |> string_of_int}
+        sortIndex
+        newContentBlockCB
+        staticMode=false
+      />
+      /* Content block */
+      <div
+        className="relative border border-gray-400 rounded-lg overflow-hidden">
+        /* Content block controls */
 
-        <div
-          id={"content-block-controls-" ++ (sortIndex |> string_of_int)}
-          className="flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
-          {
-            sortIndex != 1 ?
-              <button
-                title="Move up"
-                onClick={_event => moveContentUpCB(sortIndex)}
-                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-                <i className="fas fa-arrow-up" />
-              </button> :
-              React.null
-          }
-          {
-            sortIndex != blockCount ?
-              <button
-                title="Move down"
-                onClick={_event => moveContentDownCB(sortIndex)}
-                className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-                <i className="fas fa-arrow-down" />
-              </button> :
-              React.null
-          }
-          <button
-            title="Delete block"
-            onClick={
-              _event =>
-                handleDeleteContentBlock(
-                  contentBlock,
-                  authenticityToken,
-                  removeTargetContentCB,
-                  sortIndex,
-                )
-            }
-            className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
-            <i className="fas fa-trash-alt" />
-          </button>
-        </div>
-        <form
-          id={"content-block-form-" ++ (sortIndex |> string_of_int)}
-          key={"content-block-form-" ++ editorId}
-          onSubmit={
-            event =>
-              submitForm(
-                event,
-                state,
-                authenticityToken,
-                blockType,
-                dispatch,
-                contentBlock,
-                target,
-                sortIndex,
-                createNewContentCB,
-                updateContentBlockCB,
-              )
-          }>
-          <input
-            name="authenticity_token"
-            type_="hidden"
-            value=authenticityToken
-          />
-          <input
-            name="content_block[block_type]"
-            type_="hidden"
-            value={blockType |> ContentBlock.blockTypeAsString}
-          />
-          <input
-            name="content_block[sort_index]"
-            type_="hidden"
-            value={state.sortIndex |> string_of_int}
-          />
           <div
-            className="content-block__content bg-gray-200 flex justify-center items-center">
+            id={"content-block-controls-" ++ (sortIndex |> string_of_int)}
+            className="flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
             {
-              switch (contentBlock) {
-              | Some(contentBlock) =>
-                <div className="w-full">
-                  {
-                    switch (contentBlock |> ContentBlock.blockType) {
-                    | Markdown(markdown) =>
+              sortIndex != 1 ?
+                <button
+                  title="Move up"
+                  onClick={_event => moveContentUpCB(sortIndex)}
+                  className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                  <i className="fas fa-arrow-up" />
+                </button> :
+                React.null
+            }
+            {
+              sortIndex != blockCount ?
+                <button
+                  title="Move down"
+                  onClick={_event => moveContentDownCB(sortIndex)}
+                  className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                  <i className="fas fa-arrow-down" />
+                </button> :
+                React.null
+            }
+            <button
+              title="Delete block"
+              onClick={
+                _event =>
+                  handleDeleteContentBlock(
+                    contentBlock,
+                    authenticityToken,
+                    removeTargetContentCB,
+                    sortIndex,
+                  )
+              }
+              className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
+              <i className="fas fa-trash-alt" />
+            </button>
+          </div>
+          <form
+            id={"content-block-form-" ++ (sortIndex |> string_of_int)}
+            key={"content-block-form-" ++ editorId}
+            onSubmit={
+              event =>
+                submitForm(
+                  event,
+                  state,
+                  authenticityToken,
+                  blockType,
+                  dispatch,
+                  contentBlock,
+                  target,
+                  sortIndex,
+                  createNewContentCB,
+                  updateContentBlockCB,
+                )
+            }>
+            <input
+              name="authenticity_token"
+              type_="hidden"
+              value=authenticityToken
+            />
+            <input
+              name="content_block[block_type]"
+              type_="hidden"
+              value={blockType |> ContentBlock.blockTypeAsString}
+            />
+            <input
+              name="content_block[sort_index]"
+              type_="hidden"
+              value={state.sortIndex |> string_of_int}
+            />
+            <div
+              className="content-block__content bg-gray-200 flex justify-center items-center">
+              {
+                switch (contentBlock) {
+                | Some(contentBlock) =>
+                  <div className="w-full">
+                    {
+                      switch (contentBlock |> ContentBlock.blockType) {
+                      | Markdown(markdown) =>
+                        <MarkdownEditor
+                          updateDescriptionCB
+                          value=markdown
+                          placeholder="You can use Markdown to format this text."
+                          profile=Markdown.Permissive
+                          maxLength=100000
+                          scrollMethod={scrollMethod()}
+                          defaultView=MarkdownEditor.Preview
+                        />
+                      | Image(url, caption) =>
+                        <div className="rounded-lg bg-white">
+                          <img className="mx-auto" src=url alt=caption />
+                          <div
+                            className="px-4 py-2 text-sm italic text-center">
+                            {caption |> str}
+                          </div>
+                        </div>
+                      | Embed(_url, embedCode) =>
+                        <div
+                          className="content-block__embed"
+                          dangerouslySetInnerHTML={"__html": embedCode}
+                        />
+                      | File(url, title, filename) =>
+                        <div className="bg-white px-6 py-4">
+                          <a
+                            className="flex justify-between items-center"
+                            href=url>
+                            <div className="flex items-center">
+                              <FaIcon
+                                classes="text-4xl text-red-600 fal fa-file-pdf"
+                              />
+                              <div className="pl-4 leading-tight">
+                                <div className="text-lg font-semibold">
+                                  {title |> str}
+                                </div>
+                                <div className="text-sm italic text-gray-600">
+                                  {filename |> str}
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+                      }
+                    }
+                  </div>
+                | None =>
+                  switch (blockType) {
+                  | Markdown(_markdown) =>
+                    <div className="w-full">
                       <MarkdownEditor
                         updateDescriptionCB
-                        value=markdown
+                        value=""
                         placeholder="You can use Markdown to format this text."
                         profile=Markdown.Permissive
                         maxLength=100000
                         scrollMethod={scrollMethod()}
-                        defaultView=MarkdownEditor.Preview
+                        defaultView=MarkdownEditor.Edit
                       />
-                    | Image(url, caption) =>
-                      <div className="rounded-lg bg-white">
-                        <img className="mx-auto" src=url alt=caption />
-                        <div className="px-4 py-2 text-sm italic text-center">
-                          {caption |> str}
-                        </div>
-                      </div>
-                    | Embed(_url, embedCode) =>
-                      <div
-                        className="content-block__embed"
-                        dangerouslySetInnerHTML={"__html": embedCode}
-                      />
-                    | File(url, title, filename) =>
-                      <div className="bg-white px-6 py-4">
-                        <a
-                          className="flex justify-between items-center"
-                          href=url>
-                          <div className="flex items-center">
-                            <FaIcon
-                              classes="text-4xl text-red-600 fal fa-file-pdf"
-                            />
-                            <div className="pl-4 leading-tight">
-                              <div className="text-lg font-semibold">
-                                {title |> str}
-                              </div>
-                              <div className="text-sm italic text-gray-600">
-                                {filename |> str}
-                              </div>
-                            </div>
-                          </div>
-                        </a>
-                      </div>
-                    }
+                    </div>
+                  | _ => contentUploadContainer(blockType, dispatch, state)
                   }
-                </div>
-              | None =>
-                switch (blockType) {
-                | Markdown(_markdown) =>
-                  <div className="w-full">
-                    <MarkdownEditor
-                      updateDescriptionCB
-                      value=""
-                      placeholder="You can use Markdown to format this text."
-                      profile=Markdown.Permissive
-                      maxLength=100000
-                      scrollMethod={scrollMethod()}
-                      defaultView=MarkdownEditor.Edit
-                    />
-                  </div>
-                | _ => contentUploadContainer(blockType, dispatch, state)
                 }
               }
-            }
-            {
-              switch (blockType) {
-              | Markdown(_markdown) =>
-                <input
-                  type_="hidden"
-                  name="content_block[markdown]"
-                  value={state.markDownContent}
-                />
-              | _ => React.null
-              }
-            }
-          </div>
-          /* Content block action bar */
-          <div className="flex p-3 border-t justify-end">
-            {
-              actionBarTextInputVisible(blockType, contentBlock) ?
-                <div className="flex-1 content-block__action-bar-input">
+              {
+                switch (blockType) {
+                | Markdown(_markdown) =>
                   <input
-                    className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
-                    id="captions"
-                    name={
-                      switch (blockType) {
-                      | File(_url, _title, _filename) => "content_block[title]"
-                      | Image(_url, _caption) => "content_block[caption]"
-                      | Embed(_url, _embedCode) => "content_block[url]"
-                      | Markdown(_markdown) => ""
-                      }
-                    }
-                    onChange={
-                      event =>
-                        dispatch(
-                          UpdateContentBlockPropertyText(
-                            ReactEvent.Form.target(event)##value,
-                          ),
-                        )
-                    }
-                    type_="text"
-                    value={state.contentBlockPropertyText}
-                    placeholder={placeHolderText(blockType)}
+                    type_="hidden"
+                    name="content_block[markdown]"
+                    value={state.markDownContent}
                   />
-                </div> :
-                React.null
-            }
-            {
-              updateButtonVisible(contentBlock, blockType) ?
-                <div className="ml-2 text-right">
-                  <button
-                    className="btn btn-large btn-success"
-                    disabled={saveDisabled(state)}>
-                    {editorButtonText(contentBlock) |> str}
-                  </button>
-                </div> :
-                React.null
-            }
-          </div>
-        </form>
-      </div>
-  </div>;
+                | _ => React.null
+                }
+              }
+            </div>
+            /* Content block action bar */
+            <div className="flex p-3 border-t justify-end">
+              {
+                actionBarTextInputVisible(blockType, contentBlock) ?
+                  <div className="flex-1 content-block__action-bar-input">
+                    <input
+                      className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                      id="captions"
+                      name={
+                        switch (blockType) {
+                        | File(_url, _title, _filename) => "content_block[title]"
+                        | Image(_url, _caption) => "content_block[caption]"
+                        | Embed(_url, _embedCode) => "content_block[url]"
+                        | Markdown(_markdown) => ""
+                        }
+                      }
+                      onChange={
+                        event =>
+                          dispatch(
+                            UpdateContentBlockPropertyText(
+                              ReactEvent.Form.target(event)##value,
+                            ),
+                          )
+                      }
+                      type_="text"
+                      value={state.contentBlockPropertyText}
+                      placeholder={placeHolderText(blockType)}
+                    />
+                  </div> :
+                  React.null
+              }
+              {
+                updateButtonVisible(contentBlock, blockType) ?
+                  <div className="ml-2 text-right">
+                    <button
+                      className="btn btn-large btn-success"
+                      disabled={saveDisabled(state)}>
+                      {editorButtonText(contentBlock) |> str}
+                    </button>
+                  </div> :
+                  React.null
+              }
+            </div>
+          </form>
+        </div>
+    </div>
+  </DisablingCover>;
 };

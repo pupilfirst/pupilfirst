@@ -1,7 +1,5 @@
 module Schools
   class FoundersController < SchoolsController
-    layout 'course'
-
     # POST /school/students/team_up?founder_ids=&team_name=
     def team_up
       authorize(founders.first, policy_class: Schools::FounderPolicy)

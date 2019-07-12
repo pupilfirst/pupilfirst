@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_065042) do
     t.string "fullname"
     t.string "admin_type"
     t.integer "user_id"
+    t.string "email"
     t.index ["user_id"], name: "index_admin_users_on_user_id"
   end
 

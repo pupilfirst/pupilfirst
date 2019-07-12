@@ -1,8 +1,9 @@
 module Schools
   class CoursesController < SchoolsController
+    layout 'school'
+
     def index
       authorize current_school
-      render layout: 'school'
     end
 
     # POST /school/courses/:course_id/delete_coach_enrollment
@@ -28,7 +29,6 @@ module Schools
 
     def students
       @course = authorize(courses.find(params[:course_id]), policy_class: Schools::CoursePolicy)
-      render layout: 'course'
     end
 
     def inactive_students
@@ -38,8 +38,8 @@ module Schools
       else
         Startup.joins(:course).inactive.where(courses: { id: @course }).to_a
       end
+
       @teams = Kaminari.paginate_array(inactive_teams).page(params[:page]).per(20)
-      render layout: 'course'
     end
 
     # POST /school/courses/:course_id/students?students[]=

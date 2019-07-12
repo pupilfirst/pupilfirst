@@ -1,0 +1,5 @@
+---
+timestamp: '2019-07-11T09:38:23Z'
+title: "Quizzes now support markdown content in both questions and answers. This allows
+  the quiz to include code snippets, images, etc."
+category: feature

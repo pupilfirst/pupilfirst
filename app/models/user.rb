@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_many :school_admins, dependent: :restrict_with_error
   has_many :user_profiles, dependent: :restrict_with_error
-  has_one :school, dependent: :restrict_with_error
+  belongs_to :school
 
   has_secure_token :login_token
 
@@ -19,6 +19,7 @@ class User < ApplicationRecord
     :angel_co_url, :github_url, :behance_url, :skype_id
 
   validates :email, presence: true, email: true
+  validates :email, uniqueness: { scope: :school_id }
   has_one_attached :avatar
 
   def self.with_email(email)

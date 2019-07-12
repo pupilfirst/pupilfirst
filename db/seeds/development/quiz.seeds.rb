@@ -3,73 +3,60 @@ require_relative "helper"
 after "development:targets" do
   puts "Seeding quiz"
 
-  course = Course.find_by(name: "VR")
-  level = course.levels.where.not(number: 0).first
-  target_group = level.target_groups.first
-  # Auto verify target for Quiz.
-  target = target_group.targets.create!(days_to_complete: [7, 10, 14].sample,
-                                        title: "Quiz target for VR course",
-                                        role: Target.valid_roles.sample,
-                                        target_group: target_group,
-                                        description: paragraph,
-                                        faculty: Faculty.first,
-                                        target_action_type: Target::TYPE_TODO,
-                                        visibility: 'live'
-  )
-  quiz = Quiz.create!(
-    title: Faker::Lorem.sentence,
-    target: target,
-  )
 
-  question = QuizQuestion.create!(
-    question: "Is Fin Robotics a successful business?",
-    description: Faker::Lorem.sentence,
-    quiz: quiz,
-  )
+  Target.where('title LIKE ?', 'Quiz: %').each do |target|
+    quiz = Quiz.create!(
+      title: Faker::Lorem.sentence,
+      target: target,
+    )
 
-  question.answer_options.create!(
-    value: "Yes. They raised funding!",
-    hint: "Raising funding is not a measure of success. Its only a measure of early validation. That somebody - aside from yourself - believes in your product enough to invest money in you. To become a successful business, you have to generate returns for your shareholders.",
-  )
+    question_text = <<~MARKDOWN
+      What is the output to STDOUT for the following block of code?
 
-  question.answer_options.create!(
-    value: "Yes. The founders learnt a lot.",
-    hint: "Learning is a good goal to have when starting up. Even at a failed startup, founders learn a lot.",
-  )
+      ```ruby
+        def foo(a, b)
+          a + b
+        end
 
-  question.answer_options.create!(value: "No. They havent generated profits for shareholders.")
+        puts foo(1, 2)
+      ```
+    MARKDOWN
 
-  correct_answer = question.answer_options.create!(
-    value: "Cant Say. They still have a long way to go.",
-    hint: "Thats right, they still have a long way to go.",
-  )
+    question_1 = quiz.quiz_questions.create!(question: question_text)
 
-  question.update!(correct_answer: correct_answer)
+    question_1.answer_options.create!(value: "12")
+    question_1.answer_options.create!(value: "1 + 2")
+    correct_answer_1 = question.answer_options.create!(value: "3")
+    question_1.answer_options.create!(value: "None of these.")
 
-  question = QuizQuestion.create!(
-    question: "Fin Robotics went through four failed products before building Fin. Was that a good thing?",
-    quiz: quiz,
-  )
+    question_1.update(correct_answer: correct_answer_1)
 
-  question.answer_options.create!(
-    value: "No. Failure is never good.",
-    hint: "Failure is at times a learning experience. Most good startups fail before they succeed.",
-  )
+    question_2 = quiz.quiz_questions.create!(question: "Which of the following functions will print 11 to STDOUT?")
 
-  correct_answer = question.answer_options.create!(
-    value: "Yes. Each failure taught Rohildev lots of valuable skills.",
-    hint: "This is correct. Failure by itself is not a thing to look forward to. But each unsuccessful try teaches founders lots of valuable lessons. This could be information about their market segment, or their customers. Or how to build a different product from the information they learnt.",
-  )
+    correct_answer_2 = question_2.answer_options.create!(
+      value: <<~MARKDOWN
+        ```ruby
+        def foo(a, b)
+          "#{a}#{b}"
+        end
 
-  question.answer_options.create!(
-    value: "Yes. Failure is cool!",
-    hint: "Failure is not cool. Of a thousand startups, maybe 1 or 2 succeed and we hear about their success stories in newspapers and on TV. We never hear about failures and the difficult times founders go through. The only thing good about failures is when you use that opportunity to learn from failure.",
-  )
+        puts foo(1, 1)
+        ```ruby
+      MARKDOWN
+    )
 
-  question.answer_options.create!(
-    value: "I don't know the answer",
-    hint: "Half correct! Failure by itself is not cool in any way. Of a thousand startups, maybe 1 or 2 succeed and we hear about their success stories in newspapers and on TV. We never hear about failures and the difficult times founders go through. The only thing good about failures is when you use that opportunity to learn from failure.",
-  )
+    question_2.answer_options.create!(
+      value: <<~MARKDOWN
+        ```ruby
+        def foo(a, b)
+          "Nope"
+        end
 
-  question.update!(correct_answer: correct_answer)
+        puts foo(1, 1)
+        ```
+      MARKDOWN
+    )
+
+    question_2.update!(correct_answer: correct_answer_2)
+  end
 end

@@ -18,7 +18,7 @@ class User < ApplicationRecord
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id
 
-  validates :email, presence: true, uniqueness: true, email: true
+  validates :email, presence: true, email: true
   has_one_attached :avatar
 
   def self.with_email(email)

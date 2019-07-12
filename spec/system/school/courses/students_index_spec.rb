@@ -156,7 +156,7 @@ feature 'School students index', js: true do
 
     # Mark a student as exited
     founder = startup_2.founders.last
-    founder_user = founder.urse
+    founder_user = founder.user
     find("a", text: founder_user.name).click
     expect(page).to have_text(founder_user.name)
     expect(page).to have_text(founder.startup.name)

@@ -14,11 +14,11 @@ module Schools
 
       def save
         Faculty.transaction do
-          user = User.where(email: email, school: school).first_or_create!
+          user = model.user
           user.update!(user_params)
           user.avatar.attach(image) if image.present?
 
-          model.update!(faculty_params.merge(user: user))
+          model.update!(faculty_params)
         end
 
         clear_faculty_enrollments if model.exited?
@@ -42,7 +42,6 @@ module Schools
 
       def faculty_params
         {
-          school: school,
           connect_link: connect_link,
           public: public,
           notify_for_submission: notify_for_submission,

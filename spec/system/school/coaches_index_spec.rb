@@ -54,9 +54,9 @@ feature 'Coaches Index' do
 
     expect(user.name).to eq(new_coach_name.titleize)
     expect(user.title).to eq(new_coach_title)
-    expect(user.user.email).to eq(new_coach_email)
+    expect(user.email).to eq(new_coach_email)
     expect(user.linkedin_url).to eq('https://www.linkedin.com/xyz')
-    expect(user.connect_link).to eq('https://www.connect.com/xyz')
+    expect(coach.connect_link).to eq('https://www.connect.com/xyz')
     expect(user.avatar.attached?).to eq(true)
     expect(user.avatar.filename).to eq('human.png')
 

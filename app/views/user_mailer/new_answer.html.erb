@@ -2,7 +2,7 @@
   question = @answer.question
   recipient_name = question.creator.user_profiles.find_by(school: @school)&.name || ""
   answer_from = @answer.creator.user_profiles.find_by(school: @school)&.name || "A user"
-  community_name = commentable.community.name
+  community_name = question.community.name
 %>
 
 <% content_for :title do %>

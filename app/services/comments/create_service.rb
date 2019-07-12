@@ -15,13 +15,13 @@ module Comments
         @commentable.update!(last_activity_at: Time.zone.now) if commentable_type == Question.name
 
         comment = Comment.create!(
-          creator: current_user,
-          commentable: commentable,
-          value: value
+          creator: @user,
+          commentable: @commentable,
+          value: @value
         )
 
-        # Notify the author of the commentable about the new comment.
-        UserMailer.new_comment(comment).deliver_later
+        # If author of comment is different from author of commentable, notify them by mail.
+        UserMailer.new_comment(comment).deliver_later if @user != @commentable.creator
 
         comment
       end

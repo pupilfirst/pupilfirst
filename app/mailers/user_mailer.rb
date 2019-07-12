@@ -14,6 +14,6 @@ class UserMailer < SchoolMailer
   def new_comment(comment)
     @comment = comment
     @school = @comment.commentable.school
-    simple_roadie_mail(comment.commentable.creator.email, 'New answer for your question')
+    simple_roadie_mail(comment.commentable.creator.email, 'New comment on your post')
   end
 end

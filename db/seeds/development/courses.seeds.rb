@@ -10,7 +10,7 @@ after 'development:schools' do
 
   school = School.first
 
-  4.times do
+  2.times do
     school.courses.create!(
       name: Faker::Lorem.words(2).join(' '),
       description: Faker::Lorem.paragraph,

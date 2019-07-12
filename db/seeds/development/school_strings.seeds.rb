@@ -1,28 +1,28 @@
-puts 'Seeding school_strings (idempotent)'
+puts 'Seeding school_strings'
 
 after 'development:schools' do
-  sv = School.find_by(name: 'SV.CO')
+  school = School.first
 
-  sv.school_strings.where(key: 'coaches_index_subheading')
-    .first_or_create!(value: "We've assembled some of the best engineers from the industry as coaches to provide 1-on-1 guidance to students.")
+  school.school_strings.where(key: 'coaches_index_subheading')
+    .first_or_create!(value: Faker::Lorem.sentence)
 
-  sv.school_strings.where(key: 'library_index_subheading')
-    .first_or_create!(value: "This is just a small sample of resources available in the SV.CO Library. Approved teams get access to exclusive content produced by our coaches, including presentations, video and audio clips.")
+  school.school_strings.where(key: 'library_index_subheading')
+    .first_or_create!(value: Faker::Lorem.sentence)
 
-  sv.school_strings.where(key: 'email_address')
-    .first_or_create!(value: 'help@sv.co')
+  school.school_strings.where(key: 'email_address')
+    .first_or_create!(value: Faker::Internet.email)
 
-  sv.school_strings.where(key: 'address')
-    .first_or_create!(value: "SV.CO, #360, 6th Main Road  \n1<sup>st</sup> Block, Koramangala  \nBengaluru &mdash; 560034")
+  school.school_strings.where(key: 'address')
+    .first_or_create!(value: Faker::Address.full_address)
 
-  sv.school_strings.where(key: 'description')
-    .first_or_create!(value: "SV.CO's 6-month product school for student developers helps them build modern tech-products with industry-guidance and get premium jobs.")
+  school.school_strings.where(key: 'description')
+    .first_or_create!(value: Faker::Lorem.sentence)
 
   privacy_policy = File.read(Rails.root.join('privacy_policy.md'))
 
-  sv.school_strings.where(key: 'privacy_policy').first_or_create!(value: privacy_policy)
+  school.school_strings.where(key: 'privacy_policy').first_or_create!(value: privacy_policy)
 
   terms_of_use = File.read(Rails.root.join('terms_of_use.md'))
 
-  sv.school_strings.where(key: 'terms_of_use').first_or_create!(value: terms_of_use)
+  school.school_strings.where(key: 'terms_of_use').first_or_create!(value: terms_of_use)
 end

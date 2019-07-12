@@ -3,24 +3,13 @@ require_relative 'helper'
 after 'development:levels' do
   puts 'Seeding target_groups'
 
-  # TODO: Improve the target group titles here when we have more info on customer-facing program.
-  group_data = {
-    0 => ['Sessions'],
-    1 => ['Engineering & Design First Steps', 'Level Up'],
-    2 => ['Put up a Coming Soon Page', 'Level Up'],
-    3 => ['Get First Feedback', 'Level Up'],
-    4 => ['Reflect on your Progress', 'Level Up']
-  }
-
   Level.all.each do |level|
-    group_data[level.number].each_with_index do |group_name, index|
-      milestone = index == 1 # Second group from data is marked as the milestone group.
-
+    (1..2).each do |index|
       level.target_groups.create!(
-        name: group_name,
-        sort_index: index + 1,
-        description: Faker::Lorem.words(10).join(' '),
-        milestone: milestone
+        name: Faker::Lorem.words(2).join(' '),
+        sort_index: index,
+        description: Faker::Lorem.sentence,
+        milestone: (milestone % 2 == 0)
       )
     end
   end

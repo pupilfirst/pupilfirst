@@ -26,6 +26,10 @@
   @apply bg-gray-200 border-gray-600;
 }
 
+.course-overlay__close-button:hover .course-overlay__close-button-icon {
+  @apply bg-gray-900 text-white border-gray-900;
+}
+
 .complete-button-selected {
   animation: completeButtonGlowing 500ms ease-in;
   @apply .border-indigo-400;

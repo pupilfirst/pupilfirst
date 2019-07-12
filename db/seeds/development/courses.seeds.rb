@@ -1,19 +1,21 @@
 after 'development:schools' do
-  puts 'Seeding courses (idempotent)'
+  puts 'Seeding courses'
 
   grade_labels = {
     1 => 'Not Accepted',
     2 => 'Needs Improvement',
-    3 => 'Good',
-    4 => 'Great',
-    5 => 'Wow'
+    3 => 'Meets Expectations',
+    4 => 'Exceeds Expectations'
   }
 
-  sv = School.find_by(name: 'SV.CO')
+  school = School.first
 
-
-  Course.create!(name: 'Startup', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'Developer', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'VR', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 2, grade_labels: grade_labels, school: sv)
-  Course.create!(name: 'iOS', description: Faker::Lorem.paragraph, max_grade: 5, pass_grade: 3, grade_labels: grade_labels, school: sv)
+  4.times do
+    school.courses.create!(
+      name: Faker::Lorem.words(2).join(' '),
+      description: Faker::Lorem.paragraph,
+      max_grade: 4, pass_grade: 2,
+      grade_labels: grade_labels,
+    )
+  end
 end

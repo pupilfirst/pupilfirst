@@ -1,37 +1,30 @@
-puts 'Seeding schools (idempotent)'
+puts 'Seeding schools'
 
-school_1 = School.where(name: Faker::Lorem.word.capitalize).first_or_create!
+school = School.where(name: Faker::Lorem.word.capitalize).first_or_create!
 
-# Attach a logo (on light) for school_1.
-unless school_1.logo_on_light_bg.attached?
-  school_1.logo_on_light_bg.attach(
+# Attach a logo (on light) for school.
+unless school.logo_on_light_bg.attached?
+  school.logo_on_light_bg.attach(
     io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'logo_sv_on_light_bg.png')),
     filename: 'logo_sv_on_light_bg.png'
   )
 end
 
-# Attach a logo (on dark) for school_1.
-unless school_1.logo_on_dark_bg.attached?
-  school_1.logo_on_dark_bg.attach(
+# Attach a logo (on dark) for school.
+unless school.logo_on_dark_bg.attached?
+  school.logo_on_dark_bg.attach(
     io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'logo_sv_on_dark_bg.png')),
     filename: 'logo_sv_on_dark_bg.png'
   )
 end
 
-# Attach an icon for school_1.
-unless school_1.icon.attached?
-  school_1.icon.attach(
+# Attach an icon for school.
+unless school.icon.attached?
+  school.icon.attach(
     io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'icon_sv.png')),
     filename: 'icon_sv.png'
   )
 end
 
-school_2 = School.where(name: Faker::Lorem.word.capitalize).first_or_create!
-
-# Attach a logo for Hackkar.
-unless school_2.logo_on_light_bg.attached?
-  school_2.logo_on_light_bg.attach(
-    io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'logo_hackkar.png')),
-    filename: 'logo_hackkar.png'
-  )
-end
+# Create another school without any customizations.
+School.where(name: Faker::Lorem.word.capitalize).first_or_create!

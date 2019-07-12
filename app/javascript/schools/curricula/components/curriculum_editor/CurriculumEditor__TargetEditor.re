@@ -238,14 +238,15 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " toggle-button__button--active" : "");
 };
 
-let completionButtonClasses = value =>
-  value ?
-    "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-gray-400 opacity-50 hover:bg-gray-200 text-gray-900 text-sm font-semibold focus:outline-none rounded p-4";
-let formClasses = value =>
-  value ?
-    "drawer-right-form bg-white w-full opacity-50" :
-    "drawer-right-form bg-white w-full";
+let completionButtonClasses = value => {
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
+  value ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500" : defaultClasses ++ " opacity-75 text-gray-900";
+};
+
+let formClasses = value => {
+  let defaultClasses = "drawer-right-form bg-white w-full ";
+  value ? defaultClasses ++ "opacity-50" : defaultClasses;
+};
 let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>
@@ -479,7 +480,7 @@ let make =
               }>
               <div className="max-w-3xl py-6 px-3 mx-auto">
                 <label
-                  className="inline-block tracking-wide text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
                   {"Title" |> str}
                 </label>
@@ -529,7 +530,7 @@ let make =
                   showPrerequisiteTargets ?
                     <div>
                       <label
-                        className="block tracking-wide text-xs font-semibold mb-2"
+                        className="block tracking-wide text-sm font-semibold mb-2"
                         htmlFor="prerequisite_targets">
                         {"Any prerequisite targets?" |> str}
                       </label>
@@ -544,7 +545,7 @@ let make =
                 }
                 <div className="flex items-center mb-6">
                   <label
-                    className="block tracking-wide text-xs font-semibold mr-6"
+                    className="block tracking-wide text-sm font-semibold mr-6"
                     htmlFor="evaluated">
                     {"Is this target reviewed by a faculty?" |> str}
                   </label>
@@ -583,7 +584,7 @@ let make =
                     <div>
                       <div className="mb-6">
                         <label
-                          className="block tracking-wide text-xs font-semibold mr-6 mb-3"
+                          className="block tracking-wide text-sm font-semibold mr-6 mb-3"
                           htmlFor="method_of_completion">
                           {
                             "How do you want the student to complete the target?"
@@ -663,7 +664,7 @@ let make =
                   | Evaluated =>
                     <div id="evaluation_criteria" className="mb-6">
                       <label
-                        className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                        className="block tracking-wide text-sm font-semibold mr-6 mb-2"
                         htmlFor="evaluation_criteria">
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
@@ -729,7 +730,7 @@ let make =
                   | VisitLink =>
                     <div>
                       <label
-                        className="inline-block tracking-wide text-xs font-semibold mb-2"
+                        className="inline-block tracking-wide text-sm font-semibold mb-2"
                         htmlFor="link_to_complete">
                         {"Link to complete" |> str}
                       </label>
@@ -770,7 +771,7 @@ let make =
                 | TargetActions =>
                   <div className="flex items-center flex-shrink-0">
                     <label
-                      className="block tracking-wide text-xs font-semibold mr-3"
+                      className="block tracking-wide text-sm font-semibold mr-3"
                       htmlFor="archived">
                       {"Target Visibility" |> str}
                     </label>

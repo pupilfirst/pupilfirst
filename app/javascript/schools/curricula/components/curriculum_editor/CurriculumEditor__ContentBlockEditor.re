@@ -4,18 +4,12 @@ open CurriculumEditor__Types;
 
 exception UnexpectedResponse(int);
 
-let handleApiError =
-  [@bs.open]
-  (
-    fun
-    | UnexpectedResponse(code) => code
-  );
-
 let str = React.string;
 
 type action =
   | UpdateContentBlockPropertyText(string)
   | UpdateSaving
+  | DoneUpdating
   | UpdateMarkdown(string)
   | UpdateFileName(string);
 
@@ -48,6 +42,7 @@ let reducer = (state, action) =>
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
+  | DoneUpdating => {...state, formDirty: false, savingContentBlock: false}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -323,7 +318,7 @@ let updateContentBlock =
   UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
   |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
   |> Js.Promise.then_(_response => {
-       dispatch(UpdateSaving);
+       dispatch(DoneUpdating);
        Js.Promise.resolve();
      })
   |> ignore;

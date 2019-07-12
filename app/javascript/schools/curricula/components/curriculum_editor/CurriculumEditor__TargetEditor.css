@@ -114,6 +114,23 @@
   background-color: rgba(55, 36, 89, 0.9);
 }
 
+.target-editor__completion-button--selected:before {
+  @apply absolute left-0 top-0;
+  content: '';
+  width: 0;
+  height: 0;
+  border-top: 30px solid #6025C0;
+  border-right: 30px solid transparent;
+}
+
+.target-editor__completion-button--selected:after {
+  @apply absolute left-0 top-0 text-white w-4 h-4 text-xs flex justify-center items-center;
+  font-family: "FontAwesome";
+  font-weight: 300;
+  content: "\f00c";
+  padding: 10px;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-10%);

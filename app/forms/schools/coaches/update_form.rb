@@ -9,7 +9,7 @@ module Schools
       property :notify_for_submission
       property :exited
       property :public
-      property :image, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.megabytes } }
+      property :image, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes }, allow_blank: true }
       property :school_id, virtual: true, validates: { presence: true }
 
       def save

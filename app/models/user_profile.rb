@@ -19,7 +19,6 @@ class UserProfile < ApplicationRecord
   end
 
   validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
-  validates :avatar, content_type: %w[image/png image/jpg image/jpeg image/gif], size: { less_than: 2.megabytes, message: 'is not given between size' }
 
   before_save :capitalize_name_fragments
 

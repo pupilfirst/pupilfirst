@@ -88,7 +88,7 @@ module Users
     end
 
     def user
-      @user ||= User.with_email(@email)
+      @user ||= current_school.users.where(email: @email).first
     end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.

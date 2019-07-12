@@ -28,7 +28,7 @@ class FacultyPolicy < ApplicationPolicy
       # Pupilfirst doesn't have coaches.
       return scope.none if current_school.blank?
 
-      scope.where(school: current_school, public: true)
+      current_school.faculty.where(public: true)
     end
   end
 end

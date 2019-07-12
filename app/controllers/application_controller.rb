@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_coach
-    @current_coach ||= current_user.present? ? current_user.faculty.find_by(school: current_school) : nil
+    @current_coach ||= current_user&.faculty
   end
 
   def current_founder

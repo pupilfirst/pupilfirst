@@ -1,15 +1,14 @@
 class School < ApplicationRecord
+  has_many :users, dependent: :destroy
   has_many :courses, dependent: :restrict_with_error
   has_many :startups, through: :courses
-  has_many :founders, through: :courses
+  has_many :founders, through: :users
+  has_many :faculty, through: :users
   has_many :school_admins, dependent: :destroy
   has_many :domains, dependent: :destroy
-  has_many :faculty, dependent: :destroy
   has_many :school_strings, dependent: :destroy
   has_many :school_links, dependent: :destroy
   has_many :communities, dependent: :destroy
-  has_many :user_profiles, dependent: :destroy
-  has_many :users, dependent: :destroy
 
   acts_as_taggable_on :founder_tags
 

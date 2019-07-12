@@ -18,15 +18,15 @@ class Founder < ApplicationRecord
 
   serialize :roles
 
+  belongs_to :user
+  has_one :school, through: :user
   has_many :public_slack_messages, dependent: :nullify
   belongs_to :startup
   has_one :level, through: :startup
   has_one :course, through: :level
-  has_one :school, through: :course
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
   has_many :platform_feedback, dependent: :nullify
-  belongs_to :user
   belongs_to :college, optional: true
   has_one :university, through: :college
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
@@ -53,16 +53,9 @@ class Founder < ApplicationRecord
   }
   scope :not_exited, -> { where.not(exited: true) }
 
-  delegate :email, to: :user
-
-  delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
+  delegate :email, :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, to: :user
-
-  # TODO: Remove all usages of method Founder.with_email and then delete it.
-  def self.with_email(email)
-    User.find_by(email: email)&.founders&.first
-  end
 
   def self.ransackable_scopes(_auth)
     %i[ransack_tagged_with]

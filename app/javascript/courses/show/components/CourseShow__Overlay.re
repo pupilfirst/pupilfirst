@@ -274,9 +274,9 @@ let overlayStatus = (course, target, targetStatus) =>
     <button
       className="xl:absolute pr-4 xl:-ml-20 focus:outline-none"
       onClick={_e => closeOverlay(course)}>
-      <i className="far fa-times text-3xl text-gray-800" />
-      <span className="block text-gray-800 font-semibold text-xs uppercase">
-        {"Close" |> str}
+      <i className="fal fa-times text-2xl text-gray-800" />
+      <span className="block text-gray-600 font-semibold text-xs">
+        {"close" |> str}
       </span>
     </button>
     <div className="w-full flex items-center justify-between relative">

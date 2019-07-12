@@ -440,7 +440,7 @@ let make =
               <li
                 onClick={_event => dispatch(UpdateActiveStep(AddContent))}
                 className={
-                  "target-editor__tab-item "
+                  "target-editor__tab-item cursor-pointer "
                   ++ (
                     state.activeStep == AddContent ?
                       "target-editor__tab-item--selected" : ""
@@ -454,7 +454,7 @@ let make =
               <li
                 onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
                 className={
-                  "target-editor__tab-item -ml-px "
+                  "target-editor__tab-item cursor-pointer -ml-px "
                   ++ (
                     state.activeStep == TargetActions ?
                       "target-editor__tab-item--selected" : ""

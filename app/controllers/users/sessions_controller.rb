@@ -18,9 +18,9 @@ module Users
     # POST /user/send_email - find or create user from email received
     def send_login_email
       @form = UserSignInForm.new(Reform::OpenForm.new)
-
+      @form.current_school = current_school
       if @form.validate(params[:user_sign_in])
-        @form.save(current_school, current_domain)
+        @form.save(current_domain)
       else
         @sign_in_error = true
         render 'new'

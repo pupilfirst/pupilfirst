@@ -1,5 +1,5 @@
 class UserSignInForm < Reform::Form
-  include EmailBounceValidatable
+  attr_accessor :current_school
 
   property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
   property :referer
@@ -9,6 +9,15 @@ class UserSignInForm < Reform::Form
   property :username
 
   validate :user_with_email_must_exist
+  validate :ensure_time_between_requests
+  validate :detect_honeypot
+  validate :email_should_not_have_bounced
+
+  def save(current_domain)
+    Users::MailLoginTokenService.new(current_school, current_domain, user, referer, shared_device?).execute
+  end
+
+  private
 
   def user_with_email_must_exist
     return if user.present? || email.blank?
@@ -16,8 +25,6 @@ class UserSignInForm < Reform::Form
     errors[:email] << 'Could not find user with this email.'
     errors[:base] << 'Please check the email that you entered.'
   end
-
-  validate :ensure_time_between_requests
 
   def ensure_time_between_requests
     return if user.blank?
@@ -30,23 +37,24 @@ class UserSignInForm < Reform::Form
     errors[:base] << "Please wait for a few minutes before trying again."
   end
 
-  validate :detect_honeypot
-
   def detect_honeypot
     return if username.blank?
 
     errors[:base] << 'Your request has been blocked because it is suspicious.'
   end
 
-  def save(current_school, current_domain)
-    Users::MailLoginTokenService.new(current_school, current_domain, user, referer, shared_device?).execute
-  end
+  def email_should_not_have_bounced
+    return if email.blank?
 
-  private
+    return unless user&.email_bounced?
+
+    errors[:base] << "The email address you supplied cannot be used because an email we'd sent earlier bounced."
+    errors[:email] << 'is an address which bounced'
+  end
 
   def user
     @user ||= begin
-      User.with_email(email) if email.present?
+      current_school.users.with_email(email) if email.present?
     end
   end
 

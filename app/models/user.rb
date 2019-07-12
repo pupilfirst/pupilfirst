@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   has_many :founders, dependent: :restrict_with_error
-  has_one :admin_user, dependent: :restrict_with_error
   has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
@@ -21,9 +20,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: { scope: :school_id }
   has_one_attached :avatar
 
-  def self.with_email(email)
-    where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
-  end
+  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase).first } # rubocop:disable Rails/FindBy
 
   GENDER_MALE = 'male'.freeze
   GENDER_FEMALE = 'female'.freeze

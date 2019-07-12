@@ -88,7 +88,10 @@ module Users
     end
 
     def user
-      @user ||= current_school.users.where(email: @email).first
+      @user ||= begin
+        school = current_school || School.joins(:domains).where(domains: { fqdn: oauth_origin[:fqdn] }).first
+        school.users.with_email(@email)
+      end
     end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.

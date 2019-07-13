@@ -9,12 +9,4 @@ class UserPolicy < ApplicationPolicy
     # founder in this school can access home.
     user.founders.exists?
   end
-
-  def edit?
-    record&.school_id == current_school.id && record == user
-  end
-
-  def update?
-    edit?
-  end
 end

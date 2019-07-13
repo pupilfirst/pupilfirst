@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
   def current_school_admin
     @current_school_admin ||= begin
       if current_user.present? && current_school.present?
-        current_user.school_admins.find_by(school: current_school)
+        current_user.school_admin
       end
     end
   end

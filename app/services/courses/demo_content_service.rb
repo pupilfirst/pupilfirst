@@ -5,16 +5,18 @@ module Courses
     end
 
     def execute
-      new_level = create_level
-      new_target_group = create_target_group(new_level)
-      create_target(new_target_group)
-      evaluation_criterion("Correctness of implementation")
-      evaluation_criterion("Quality of submission")
+      Course.transaction do
+        level_one = create_level_one
+        new_target_group = create_target_group(level_one)
+        create_target(new_target_group)
+        create_evaluation_criterion("Correctness of implementation")
+        create_evaluation_criterion("Quality of submission")
+      end
     end
 
     private
 
-    def create_level
+    def create_level_one
       Level.create!(
         name: 'Level 1',
         number: 1,
@@ -25,7 +27,7 @@ module Courses
     def create_target_group(level)
       TargetGroup.create!(
         name: "Demo Target Group",
-        description: "Demo Target Group Description",
+        description: "Description of demo target group",
         sort_index: 1,
         milestone: true,
         level: level
@@ -41,14 +43,10 @@ module Courses
         sort_index: 1,
         visibility: Target::VISIBILITY_LIVE
       )
-      target.content_blocks.create!(
-        block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
-        content: { markdown: "Demo Target Description" },
-        sort_index: 0
-      )
+      ContentBlocks::DemoMarkdownBlockService.new(target).execute
     end
 
-    def evaluation_criterion(name)
+    def create_evaluation_criterion(name)
       EvaluationCriterion.create!(
         description: name,
         name: name,

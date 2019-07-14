@@ -100,7 +100,7 @@ let make =
       );
     <div className="coach-dashboard__container container">
       <div className="row">
-        <div className="col-md-3">
+        <div className="col-lg-3 d-none d-lg-block">
           <FoundersList
             teams
             founders
@@ -109,7 +109,7 @@ let make =
             clearFounderCB
           />
         </div>
-        <div className="col-md-9">
+        <div className="col-lg-9">
           <TimelineEventsPanel
             timelineEvents={state.timelineEvents}
             morePendingSubmissionsAfter={state.morePendingSubmissionsAfter}

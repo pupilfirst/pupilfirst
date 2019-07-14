@@ -11,7 +11,7 @@ type kindOfButton =
   | EmbedButton;
 
 let buttonClasses = (visibility, staticMode) => {
-  let classes = "add-content-block py-3";
+  let classes = "add-content-block py-3 cursor-pointer";
   classes ++ (visibility || staticMode ? " add-content-block--open" : " ");
 };
 

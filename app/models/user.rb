@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  belongs_to :school
   has_many :founders, dependent: :restrict_with_error
   has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy

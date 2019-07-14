@@ -5,7 +5,6 @@ class User < ApplicationRecord
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_one :school_admin, dependent: :restrict_with_error
-  belongs_to :school
 
   has_secure_token :login_token
 

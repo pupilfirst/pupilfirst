@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  belongs_to :school
   has_many :founders, dependent: :restrict_with_error
   has_one :admin_user, dependent: :restrict_with_error
   has_many :faculty, dependent: :restrict_with_error
@@ -13,7 +14,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable,
     omniauth_providers: %i[google_oauth2 facebook github]
 
-  validates :email, presence: true, uniqueness: true, email: true
+  validates :email, presence: true, email: true
+  validates :email, uniqueness: { scope: :school_id }
 
   def self.with_email(email)
     where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy

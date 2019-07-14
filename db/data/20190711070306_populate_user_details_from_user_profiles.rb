@@ -53,8 +53,8 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
           **attributes.symbolize_keys
         )
 
-        old_user.founders.joins(:school).where(schools: { id: school }).update_all(user: new_user)
-        old_user.faculty.where(school: school).update_all(user: new_user)
+        old_user.founders.joins(:school).where(schools: { id: school }).update_all(user_id: new_user.id)
+        old_user.faculty.where(school: school).update_all(user_id: new_user.id)
 
         next unless user_profile.avatar.attached?
 

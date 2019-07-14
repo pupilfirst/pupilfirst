@@ -60,7 +60,7 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
 
         ActiveStorage::Attachment.where(
           name: 'avatar',
-          record: user
+          record: new_user
         ).first_or_create!(
           blob: user_profile.avatar.blob
         )

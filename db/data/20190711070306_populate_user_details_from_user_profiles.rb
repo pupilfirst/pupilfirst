@@ -49,7 +49,7 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
         attributes = user_profile.slice(ATTRIBUTES)
 
         new_user = User.create!(
-          school: school,
+          school_id: school.id,
           email: old_user.email,
           **attributes.symbolize_keys
         )

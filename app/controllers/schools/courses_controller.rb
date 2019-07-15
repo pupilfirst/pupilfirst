@@ -55,7 +55,6 @@ module Schools
         render json: {
           teams: presenter.teams,
           students: presenter.students,
-          userProfiles: presenter.user_profiles,
           error: nil,
           studentCount: student_count
         }

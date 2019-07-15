@@ -124,7 +124,7 @@ let submissions =
       gradeLabels,
       authenticityToken,
       coaches,
-      userProfiles,
+      users,
     ) => {
   let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
 
@@ -247,22 +247,22 @@ let submissions =
                          c |> Coach.id == (feedback |> Feedback.coachId)
                        );
 
-                  let userProfile =
+                  let user =
                     switch (coach) {
                     | Some(coach) =>
-                      userProfiles
+                      users
                       |> ListUtils.findOpt(up =>
-                           up |> UserProfile.userId == (coach |> Coach.userId)
+                           up |> User.id == (coach |> Coach.userId)
                          )
                     | None => None
                     };
 
                   let (coachName, coachTitle, coachAvatar) =
-                    switch (userProfile) {
-                    | Some(userProfile) =>
-                      let name = userProfile |> UserProfile.name;
-                      let avatar = userProfile |> UserProfile.avatarUrl;
-                      let title = userProfile |> UserProfile.title;
+                    switch (user) {
+                    | Some(user) =>
+                      let name = user |> User.name;
+                      let avatar = user |> User.avatarUrl;
+                      let title = user |> User.title;
                       (
                         name,
                         title,
@@ -335,7 +335,7 @@ let make =
       ~addSubmissionCB,
       ~targetStatus,
       ~coaches,
-      ~userProfiles,
+      ~users,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
@@ -379,7 +379,7 @@ let make =
           gradeLabels,
           authenticityToken,
           coaches,
-          userProfiles,
+          users,
         )
     }
   </div>;

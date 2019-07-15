@@ -124,7 +124,7 @@ let make =
       ~submissions,
       ~team,
       ~coaches,
-      ~userProfiles,
+      ~users,
       ~evaluationCriteria,
     ) => {
   let teamLevel =
@@ -211,7 +211,7 @@ let make =
           targets
           statusOfTargets
           changeTargetCB=selectTarget
-          userProfiles
+          users
           evaluationCriteria
           coaches
         />;

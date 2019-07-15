@@ -4,14 +4,13 @@ class Faculty < ApplicationRecord
   has_secure_token
 
   belongs_to :user
-  belongs_to :school
+  has_one :school, through: :user
   has_many :startup_feedback, dependent: :restrict_with_error
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :courses, through: :faculty_course_enrollments
-  has_many :user_profiles, through: :user
 
   # Startups whose timeline events this faculty can review.
   has_many :faculty_startup_enrollments, dependent: :destroy
@@ -55,15 +54,9 @@ class Faculty < ApplicationRecord
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
 
-  delegate :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
+  delegate :email, :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :image, :avatar, to: :user_profile
-
-  delegate :email, to: :user
-
-  def user_profile
-    @user_profile ||= user_profiles.find_by(school_id: school_id)
-  end
+    :angel_co_url, :github_url, :behance_url, :skype_id, :image, :avatar, to: :user
 
   # This method sets the label used for object by Active Admin.
   def display_name
@@ -152,8 +145,8 @@ class Faculty < ApplicationRecord
   end
 
   def image_or_avatar_url(background_shape: :circle)
-    if user_profile.avatar.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(user_profile.avatar, only_path: true)
+    if user.avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(user.avatar, only_path: true)
     else
       initials_avatar(background_shape)
     end
@@ -164,11 +157,11 @@ class Faculty < ApplicationRecord
   end
 
   def image_filename
-    user_profile.avatar.attached? ? user_profile.avatar.blob.filename.to_s : nil
+    user.avatar.attached? ? user.avatar.blob.filename.to_s : nil
   end
 
   def image
-    user_profile.avatar
+    user.avatar
   end
 
   private

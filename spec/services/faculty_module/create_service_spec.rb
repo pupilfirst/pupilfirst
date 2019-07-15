@@ -26,7 +26,7 @@ describe FacultyModule::CreateService do
         faculty_params = { name: name, email: email, school: school, title: title }
         user = faculty.user
 
-        expect { subject.new(faculty_params).create }.not_to(change { user.faculty.count })
+        expect { subject.new(faculty_params).create }.not_to(change { user.faculty })
       end
     end
   end

@@ -7,7 +7,7 @@ ActiveAdmin.register AdminUser do
 
   menu parent: 'Dashboard'
 
-  filter :user_email, as: :string
+  filter :email, as: :string
   filter :fullname
   filter :admin_type, as: :select, collection: -> { AdminUser.admin_user_types }
 

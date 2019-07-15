@@ -3,7 +3,7 @@ ActiveAdmin.register TimelineEvent do
   permit_params :description, :serialized_links,
     :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
 
-  filter :founders_name, as: :string
+  filter :founders_user_name, as: :string
   filter :evaluated
   filter :created_at
 

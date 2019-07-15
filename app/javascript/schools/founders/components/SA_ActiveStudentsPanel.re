@@ -13,7 +13,6 @@ type state = {
   teams: list(Team.t),
   students: list(Student.t),
   selectedStudents: list(Student.t),
-  userProfiles: list(UserProfile.t),
   searchString: string,
   formVisible,
   selectedLevelNumber: option(int),
@@ -25,8 +24,7 @@ type state = {
 type action =
   | UpdateTeams(list(Team.t))
   | UpdateStudents(list(Student.t))
-  | UpdateUserProfiles(list(UserProfile.t))
-  | RefreshData(list(Team.t), list(Student.t), list(UserProfile.t))
+  | RefreshData(list(Team.t), list(Student.t))
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
   | SelectAllStudents
@@ -80,18 +78,6 @@ let isGroupable = (selectedStudents, teams, students) =>
     || selectedPartialTeam(selectedStudents, teams, students)
   );
 
-let studentUserProfile = (userProfiles, student) =>
-  userProfiles
-  |> List.find(profile =>
-       UserProfile.userId(profile) === Student.userId(student)
-     );
-
-let coachUserProfile = (userProfiles, coach) =>
-  userProfiles
-  |> List.find(profile =>
-       UserProfile.userId(profile) === Coach.userId(coach)
-     );
-
 let isMoveOutable = (selectedStudents, teams, students) =>
   selectedStudents
   |> List.length == 1
@@ -130,7 +116,7 @@ let filteredTeams = state => {
        team
        |> studentsInTeam(state.students)
        |> List.map(s =>
-            s |> studentUserProfile(state.userProfiles) |> UserProfile.name
+            s |> Student.name
           )
        |> List.filter(n =>
             n
@@ -145,9 +131,7 @@ let handleTeamUpResponse = (send, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   let students =
     json |> Json.Decode.(field("students", list(Student.decode)));
-  let userProfiles =
-    json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
-  send(RefreshData(teams, students, userProfiles));
+  send(RefreshData(teams, students));
   send(DeselectAllStudents);
   Notification.success("Success!", "Teams updated successfully");
 };
@@ -177,7 +161,6 @@ let make =
       ~teams,
       ~courseId,
       ~students,
-      ~userProfiles,
       ~courseCoachIds,
       ~schoolCoaches,
       ~authenticityToken,
@@ -189,7 +172,7 @@ let make =
   initialState: () => {
     teams,
     students,
-    userProfiles,
+
     selectedStudents: [],
     searchString: "",
     formVisible: None,
@@ -200,13 +183,11 @@ let make =
   },
   reducer: (action, state) =>
     switch (action) {
-    | RefreshData(teams, students, userProfiles) =>
-      ReasonReact.Update({...state, teams, students, userProfiles})
+    | RefreshData(teams, students) =>
+      ReasonReact.Update({...state, teams, students})
 
     | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
     | UpdateStudents(students) => ReasonReact.Update({...state, students})
-    | UpdateUserProfiles(userProfiles) =>
-      ReasonReact.Update({...state, userProfiles})
     | SelectStudent(student) =>
       ReasonReact.Update({
         ...state,
@@ -258,8 +239,8 @@ let make =
     <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
       {
         let closeFormCB = () => send(UpdateFormVisible(None));
-        let submitFormCB = (teams, students, userProfiles, tags) => {
-          send(RefreshData(teams, students, userProfiles));
+        let submitFormCB = (teams, students, tags) => {
+          send(RefreshData(teams, students));
           send(AddNewTags(tags));
           send(UpdateFormVisible(None));
         };
@@ -284,7 +265,6 @@ let make =
             teams={state.teams}
             studentTags={state.tags}
             teamCoachIds
-            userProfiles={state.userProfiles}
             courseCoachIds
             schoolCoaches
             closeFormCB
@@ -540,13 +520,7 @@ let make =
                                     key={
                                       student |> Student.id |> string_of_int
                                     }
-                                    id={
-                                      student
-                                      |> studentUserProfile(
-                                           state.userProfiles,
-                                         )
-                                      |> UserProfile.name
-                                    }
+                                    id={student |> Student.name}
                                     className="student-team__card cursor-pointer flex items-center bg-white hover:bg-gray-100">
                                     <div className="flex-1 w-3/5">
                                       <div className="flex items-center">
@@ -576,13 +550,7 @@ let make =
                                         <a
                                           className="flex flex-1 items-center py-4 pr-4"
                                           id={
-                                            (
-                                              student
-                                              |> studentUserProfile(
-                                                   state.userProfiles,
-                                                 )
-                                              |> UserProfile.name
-                                            )
+                                            (student |> Student.name)
                                             ++ "_edit"
                                           }
                                           onClick={
@@ -595,13 +563,7 @@ let make =
                                           }>
                                           <img
                                             className="w-10 h-10 rounded-full mr-4 object-cover"
-                                            src={
-                                              student
-                                              |> studentUserProfile(
-                                                   state.userProfiles,
-                                                 )
-                                              |> UserProfile.avatarUrl
-                                            }
+                                            src={student |> Student.avatarUrl}
                                           />
                                           <div
                                             className="text-sm flex flex-col">
@@ -612,10 +574,7 @@ let make =
                                                   state.searchString
                                                   |> String.length > 0
                                                   && student
-                                                  |> studentUserProfile(
-                                                       state.userProfiles,
-                                                     )
-                                                  |> UserProfile.name
+                                                  |> Student.name
                                                   |> String.lowercase
                                                   |> Js.String.includes(
                                                        state.searchString
@@ -626,10 +585,7 @@ let make =
                                               }>
                                               {
                                                 student
-                                                |> studentUserProfile(
-                                                     state.userProfiles,
-                                                   )
-                                                |> UserProfile.name
+                                                |> Student.name
                                                 |> str
                                               }
                                             </p>
@@ -692,25 +648,19 @@ let make =
                                         <img
                                           key={
                                             coach
-                                            |> Coach.userId
+                                            |> Coach.id
                                             |> string_of_int
                                           }
                                           className="w-6 h-6 rounded-full mr-1 mt-1"
                                           src={
                                             coach
-                                            |> coachUserProfile(
-                                                 state.userProfiles,
-                                               )
-                                            |> UserProfile.avatarUrl
+                                            |> Coach.avatarUrl
                                           }
                                           alt={
                                             "Avatar of "
                                             ++ (
                                               coach
-                                              |> coachUserProfile(
-                                                   state.userProfiles,
-                                                 )
-                                              |> UserProfile.name
+                                              |> Coach.name
                                             )
                                           }
                                         />
@@ -757,7 +707,6 @@ type props = {
   teams: list(Team.t),
   courseId: int,
   students: list(Student.t),
-  userProfiles: list(UserProfile.t),
   courseCoachIds: list(int),
   schoolCoaches: list(Coach.t),
   levels: list(Level.t),
@@ -770,7 +719,6 @@ let decode = json =>
     teams: json |> field("teams", list(Team.decode)),
     courseId: json |> field("courseId", int),
     students: json |> field("students", list(Student.decode)),
-    userProfiles: json |> field("userProfiles", list(UserProfile.decode)),
     courseCoachIds: json |> field("courseCoachIds", list(int)),
     schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     levels: json |> field("levels", list(Level.decode)),
@@ -788,7 +736,6 @@ let jsComponent =
         ~courseId=props.courseId,
         ~students=props.students,
         ~courseCoachIds=props.courseCoachIds,
-        ~userProfiles=props.userProfiles,
         ~schoolCoaches=props.schoolCoaches,
         ~levels=props.levels,
         ~studentTags=props.studentTags,

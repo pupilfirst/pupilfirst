@@ -26,14 +26,10 @@ module Questions
 
     def editor_name_for_question
       if @question.editor.present?
-        name(@question.editor)
+        @question.editor.name
       else
-        name(@question.creator)
+        @question.creator.name
       end
-    end
-
-    def name(user)
-      user.user_profiles.where(school: current_school).first.name
     end
 
     def question_updated_at

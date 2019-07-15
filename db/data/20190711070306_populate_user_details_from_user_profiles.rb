@@ -1,24 +1,4 @@
 class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
-  ATTRIBUTES = %i[
-    name
-    gender
-    phone
-    communication_address
-    title
-    key_skills
-    about
-    resume_url
-    blog_url
-    personal_website_url
-    linkedin_url
-    twitter_url
-    facebook_url
-    angel_co_url
-    github_url
-    behance_url
-    skype_id
-  ]
-
   def up
     # Populate data for users in SV School
     sv_school = School.first
@@ -26,7 +6,6 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
     sv_school.user_profiles.each do |user_profile|
       attributes = user_profile.slice(ATTRIBUTES)
       user = user_profile.user
-
       user.update!(
         school_id: sv_school.id,
         **attributes.symbolize_keys
@@ -77,5 +56,4 @@ class PopulateUserDetailsFromUserProfiles < ActiveRecord::Migration[5.2]
   def down
     raise ActiveRecord::IrreversibleMigration
   end
-
 end

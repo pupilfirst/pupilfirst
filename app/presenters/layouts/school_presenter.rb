@@ -31,7 +31,7 @@ module Layouts
 
     def coach_dashboard_path
       @coach_dashboard_path ||= begin
-        faculty = current_user.faculty.find_by(school: current_school)
+        faculty = current_user.faculty
 
         if faculty.present?
           if faculty.courses.exists?
@@ -44,7 +44,7 @@ module Layouts
     end
 
     def current_user_is_a_student?
-      current_user.founders.joins(:school).where(schools: { id: current_school }).exists?
+      current_user.founders.exists?
     end
 
     def courses_in_school

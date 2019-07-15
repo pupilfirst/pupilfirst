@@ -7,13 +7,12 @@ ActiveAdmin.register User do
   filter :email
   filter :founders_id_not_null, label: 'Is a founder', as: :boolean
   filter :faculty_id_not_null, label: 'Is a faculty', as: :boolean
-  filter :admin_user_id_not_null, label: 'Is an admin', as: :boolean
 
   controller do
     include DisableIntercom
 
     def scoped_collection
-      super.includes({ founders: { startup: :course } }, { faculty: :school }, :admin_user)
+      super.includes({ founders: { startup: :course } }, faculty: :school)
     end
   end
 
@@ -27,12 +26,8 @@ ActiveAdmin.register User do
     end
 
     column :faculty do |user|
-      none_one_or_many(self, user.faculty) do |faculty|
-        link_to "#{faculty.name} (#{faculty.school.name})", admin_faculty_path(faculty)
-      end
+      link_to "#{user.name} (#{user.school.name})", admin_faculty_path(user.faculty) if user.faculty.present?
     end
-
-    column :admin_user
 
     actions
   end
@@ -45,12 +40,8 @@ ActiveAdmin.register User do
         render('founders', user: user) if user.founders.exists?
       end
 
-      row :admin_user
-
       row :faculty do |user|
-        none_one_or_many(self, user.faculty) do |faculty|
-          link_to "#{faculty.name} (#{faculty.school.name})", admin_faculty_path(faculty)
-        end
+        link_to "#{user.name} (#{user.school.name})", admin_faculty_path(user.faculty) if user.faculty.present?
       end
 
       row :sign_out_at_next_request do |user|
@@ -102,7 +93,7 @@ ActiveAdmin.register User do
     stop_impersonating_user
 
     if can? :impersonate, User
-      if user.admin_user.present?
+      if AdminUser.where(email: user.email).exists?
         flash[:error] = 'You may not impersonate another admin user!'
       else
         impersonate_user(user)

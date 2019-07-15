@@ -8,7 +8,7 @@ let str = React.string;
 let make =
     (
       ~comments,
-      ~userData,
+      ~users,
       ~authenticityToken,
       ~commentableType,
       ~commentableId,
@@ -41,7 +41,7 @@ let make =
            let commentText =
              (comment |> Comment.value)
              ++ " - **"
-             ++ (userData |> UserData.userName(comment |> Comment.creatorId))
+             ++ (users |> User.userName(comment |> Comment.creatorId))
              ++ "** on "
              ++ (
                comment

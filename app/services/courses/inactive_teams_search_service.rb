@@ -5,10 +5,10 @@ module Courses
     end
 
     def find_teams(term)
-      inactive_teams = Startup.inactive.joins(:course).where(courses: { id: @course }).joins(founders: [user: :user_profiles])
+      inactive_teams = Startup.inactive.joins(:course).where(courses: { id: @course }).joins(founders: :user)
       query_words = term.split
       query_words.each do |query|
-        inactive_teams = inactive_teams.where('startups.name ILIKE ?', "%#{query}%").or(inactive_teams.where('user_profiles.name ILIKE ?', "%#{term}%"))
+        inactive_teams = inactive_teams.where('startups.name ILIKE ?', "%#{query}%").or(inactive_teams.where('user.name ILIKE ?', "%#{term}%"))
       end
       inactive_teams.uniq
     end

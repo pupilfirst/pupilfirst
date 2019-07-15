@@ -18,7 +18,7 @@ module Users
     private
 
     def school_admin_path
-      return if @user.school_admins.find_by(school: @current_school).blank?
+      return if @user.school_admin.blank?
 
       url_helpers.school_path
     end

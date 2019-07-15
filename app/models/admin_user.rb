@@ -4,9 +4,6 @@ class AdminUser < ApplicationRecord
   TYPE_SUPERADMIN = 'superadmin'
   TYPE_FACULTY = 'faculty'
 
-  belongs_to :user
-  has_one :faculty, through: :user
-
   normalize_attribute :fullname
 
   def self.admin_user_types
@@ -16,19 +13,9 @@ class AdminUser < ApplicationRecord
   validates :fullname, presence: true
   validates :admin_type, inclusion: { in: admin_user_types }, allow_nil: true
 
-  before_validation :link_to_user
-
-  def link_to_user
-    user = User.with_email(email)
-    user = User.create!(email: email) if user.blank?
-    self.user = user
-  end
-
   def display_name
-    email
+    fullname
   end
-
-  delegate :email, to: :user
 
   def superadmin?
     admin_type == TYPE_SUPERADMIN

@@ -50,9 +50,8 @@ let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   let students =
     json |> Json.Decode.(field("students", list(Student.decode)));
-  let userProfiles =
-    json |> Json.Decode.(field("userProfiles", list(UserProfile.decode)));
-  submitCB(teams, students, userProfiles, state.tagsToApply);
+
+  submitCB(teams, students, state.tagsToApply);
   Notification.success("Success", "Student updated successfully");
 };
 
@@ -99,7 +98,7 @@ let boolBtnClasses = selected => {
 };
 
 let handleEligibleTeamCoachList =
-    (schoolCoaches, courseCoachIds, teamCoachIds, userProfiles) => {
+    (schoolCoaches, courseCoachIds, teamCoachIds) => {
   let selectedTeamCoachIds = teamCoachIds |> Array.of_list;
   let allowedTeamCoaches =
     schoolCoaches
@@ -116,26 +115,10 @@ let handleEligibleTeamCoachList =
          selectedTeamCoachIds
          |> Js.Array.findIndex(selectedCoachId => coachId == selectedCoachId)
          > (-1);
-       let coachUserProfile =
-         userProfiles
-         |> List.find(profile =>
-              UserProfile.userId(profile) === Coach.userId(coach)
-            );
-       (coach |> Coach.id, coachUserProfile |> UserProfile.name, selected);
+
+       (coach |> Coach.id, coach |> Coach.name, selected);
      });
 };
-
-let coachUserProfile = (userProfiles, coach) =>
-  userProfiles
-  |> List.find(profile =>
-       UserProfile.userId(profile) === Coach.userId(coach)
-     );
-
-let studentUserProfile = (userProfiles, student) =>
-  userProfiles
-  |> List.find(profile =>
-       UserProfile.userId(profile) === Student.userId(student)
-     );
 
 let studentTeam = (teams, student) =>
   teams |> List.find(team => Team.id(team) === Student.teamId(student));
@@ -147,7 +130,6 @@ let make =
       ~studentTags,
       ~teamCoachIds,
       ~courseCoachIds,
-      ~userProfiles,
       ~schoolCoaches,
       ~closeFormCB,
       ~submitFormCB,
@@ -156,7 +138,7 @@ let make =
     ) => {
   ...component,
   initialState: () => {
-    name: student |> studentUserProfile(userProfiles) |> UserProfile.name,
+    name: student |> Student.name,
     teamName: student |> studentTeam(teams) |> Team.name,
     hasNameError: false,
     hasTeamNameError: false,
@@ -167,7 +149,6 @@ let make =
         schoolCoaches,
         courseCoachIds,
         teamCoachIds,
-        userProfiles,
       ),
     coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
@@ -203,11 +184,7 @@ let make =
   render: ({state, send}) => {
     let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
       send(UpdateCoachesList(key, value, selected));
-    let studentUserProfile =
-      userProfiles
-      |> List.find(profile =>
-           UserProfile.userId(profile) === Student.userId(student)
-         );
+
     <div>
       <div className="blanket" />
       <div className="drawer-right">
@@ -225,11 +202,11 @@ let make =
               <div className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
                 <img
                   className="w-12 h-12 rounded-full mr-4"
-                  src={studentUserProfile |> UserProfile.avatarUrl}
+                  src={student |> Student.avatarUrl}
                 />
                 <div className="text-sm flex flex-col justify-center">
                   <div className="text-black font-bold inline-block">
-                    {studentUserProfile |> UserProfile.name |> str}
+                    {student |> Student.name |> str}
                   </div>
                   <div className="text-gray-600 inline-block">
                     {student |> Student.email |> str}
@@ -310,8 +287,7 @@ let make =
                                    |> List.find(coach =>
                                         Coach.id(coach) == coachId
                                       )
-                                   |> coachUserProfile(userProfiles)
-                                   |> UserProfile.name
+                                   |> Coach.name
                                    |> str
                                  }
                                </div>

@@ -12,10 +12,7 @@ module Schools
       def save
         Founder.transaction do
           school = model.school
-
-          user_profile = UserProfile.find_by(user: model.user, school: school)
-          user_profile.name = name
-          user_profile.save!
+          model.user.update!(name: name)
 
           model.startup.update!(name: team_name)
           model.tag_list = tags

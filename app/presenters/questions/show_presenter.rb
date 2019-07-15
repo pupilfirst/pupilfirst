@@ -11,7 +11,7 @@ module Questions
         questions: question_data,
         answers: answer_data,
         comments: comments,
-        userData: user_data,
+        users: users,
         likes: likes,
         currentUser_id: current_user.id,
         community_path: view.community_path(community),
@@ -23,6 +23,8 @@ module Questions
     def page_title
       "#{question_data['title']} | Question"
     end
+
+    private
 
     def question_data
       @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'created_at', 'updated_at')
@@ -50,15 +52,15 @@ module Questions
       comment.attributes.slice('id', 'value', 'creator_id', 'archived', 'commentable_type', 'commentable_id', 'created_at')
     end
 
-    def user_data
+    def users
       user_ids = [@question.creator_id, @question.editor_id, answer_data.pluck('creator_id'), answer_data.pluck('editor_id'), comments.pluck('creator_id'), current_user.id]
         .flatten.uniq
 
-      UserProfile.where(user_id: user_ids, school: current_school).with_attached_avatar
-        .includes([user: :faculty]).map do |user_profile|
-        user_profile.attributes.slice('user_id', 'name').merge(
-          avatar_url: avatar_url(user_profile),
-          title: title(user_profile)
+      User.where(id: user_ids).with_attached_avatar
+        .includes(:faculty).map do |user|
+        user.attributes.slice('id', 'name').merge(
+          avatar_url: avatar_url(user),
+          title: title(user)
         )
       end
     end
@@ -73,24 +75,22 @@ module Questions
       @community ||= @question.community
     end
 
-    private
-
-    def title(user_profile)
-      title = user_profile.title
+    def title(user)
+      title = user.title
       title_text = title.present? ? ", #{title}" : ""
 
-      if user_profile.user.faculty.any?
+      if user.faculty.present?
         title.presence || "Coach"
       else
         "Student#{title_text}"
       end
     end
 
-    def avatar_url(user_profile)
-      if user_profile.avatar.attached?
-        view.url_for(user_profile.avatar_variant(:mid))
+    def avatar_url(user)
+      if user.avatar.attached?
+        view.url_for(user.avatar_variant(:mid))
       else
-        user_profile.initials_avatar
+        user.initials_avatar
       end
     end
   end

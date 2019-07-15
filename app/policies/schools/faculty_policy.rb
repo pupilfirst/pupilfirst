@@ -6,7 +6,7 @@ module Schools
     end
 
     def school_index?
-      user.school_admins.where(school: record).present?
+      user.school_admin.present?
     end
 
     def update_enrollments?

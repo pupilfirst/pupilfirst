@@ -1,27 +1,23 @@
 after 'development:schools' do
   puts 'Seeding domains (idempotent)'
 
-  # Domains for school SV.CO.
-  sv = School.find_by(name: 'SV.CO')
+  # Domains for school.
+  school_1 = School.first
 
-  %w[sv.pupilfirst.localhost school.sv.localhost].each do |sv_domain|
-    sv.domains.where(
-      fqdn: sv_domain,
-      primary: sv_domain == 'school.sv.localhost'
+  %w[school1.pupilfirst.localhost school1.localhost www.school1.localhost].each do |school_1_domain|
+    school_1.domains.where(
+      fqdn: school_1_domain,
+      primary: school_1_domain == 'www.school1.localhost'
     ).first_or_create!
   end
 
-  # Domains for school Hackkar.
-  hackkar = School.find_by(name: 'Hackkar')
+  # Domains for second school.
+  school_2 = School.last
 
-  %w[hackkar.pupilfirst.localhost hackkar.localhost www.hackkar.localhost].each do |hackkar_domain|
-    hackkar.domains.where(
-      fqdn: hackkar_domain,
-      primary: hackkar_domain == 'www.hackkar.localhost'
+  %w[school2.pupilfirst.localhost school2.localhost www.school2.localhost].each do |school_2_domain|
+    school_2.domains.where(
+      fqdn: school_2_domain,
+      primary: school_2_domain == 'www.school2.localhost'
     ).first_or_create!
   end
-
-  # Domains for school Demo.
-  demo = School.find_by(name: 'Demo')
-  demo.domains.create!(fqdn: 'demo.pupilfirst.localhost', primary: true)
 end

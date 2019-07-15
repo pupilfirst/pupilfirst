@@ -12,7 +12,6 @@ module Schools
           teams: team_details(@teams),
           course_id: @course.id,
           students: students,
-          user_profiles: user_profiles,
           student_tags: founder_tags,
           current_page: @teams.current_page,
           is_last_page: @teams.last_page?,
@@ -28,31 +27,25 @@ module Schools
 
       def students
         @students ||=
-          founders.includes(:user, taggings: :tag).map do |student|
-            student.attributes.slice('id', 'email', 'team_id', 'tags', 'user_id')
+          founders.includes(user: :avatar_attachment, taggings: :tag).map do |student|
             {
               id: student.id,
               email: student.email,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
               team_id: student.startup_id,
-              user_id: student.user_id
+              name: student.user.name,
+              avatar_url: avatar_url(student.user)
             }
           end
       end
 
-      def user_profiles
-        UserProfile.with_attached_avatar.where(user_id: students.pluck(:user_id), school: current_school).uniq.map do |profile|
-          profile.attributes.slice('user_id', 'name').merge(avatar_url: avatar_url(profile))
-        end
-      end
-
       private
 
-      def avatar_url(user_profile)
-        if user_profile.avatar.attached?
-          view.url_for(user_profile.avatar_variant(:mid))
+      def avatar_url(user)
+        if user.avatar.attached?
+          view.url_for(user.avatar_variant(:mid))
         else
-          user_profile.initials_avatar
+          user.initials_avatar
         end
       end
 

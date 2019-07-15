@@ -1,1 +1,0 @@
-module Course = Layouts__Course;

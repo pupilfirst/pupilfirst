@@ -272,10 +272,12 @@ let overlayHeaderTitleCardClasses = targetStatus =>
 let overlayStatus = (course, target, targetStatus) =>
   <div className={overlayHeaderTitleCardClasses(targetStatus)}>
     <button
-      className="xl:absolute pr-4 xl:-ml-20 focus:outline-none"
+      className="course-overlay__close-button xl:absolute pr-4 xl:-ml-20 text-gray-600 hover:text-gray-900 focus:outline-none"
       onClick={_e => closeOverlay(course)}>
-      <i className="far fa-times text-3xl text-gray-800" />
-      <span className="block text-gray-800 font-semibold text-xs uppercase">
+      <span className="course-overlay__close-button-icon w-8 h-8 bg-gray-200 text-gray-700 border border-gray-400 rounded-full flex justify-center items-center">
+        <i className="fal fa-times text-xl" />
+      </span>
+      <span className="block font-semibold text-xs">
         {"Close" |> str}
       </span>
     </button>
@@ -399,7 +401,7 @@ let completeSection =
       evaluationCriteria,
       gradeLabels,
       coaches,
-      userProfiles,
+      users,
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
   let addVerifiedSubmissionCB =
@@ -438,7 +440,7 @@ let completeSection =
           }
           targetStatus
           coaches
-          userProfiles
+          users
         />
       | (
           Pending | Submitted | Passed | Failed,
@@ -457,7 +459,7 @@ let completeSection =
   </div>;
 };
 
-let renderPendingStudents = (pendingUserIds, userProfiles) =>
+let renderPendingStudents = (pendingUserIds, users) =>
   <div className="max-w-3xl mx-auto text-center mt-4">
     <div className="font-semibold text-md">
       {"You have team members who are yet to complete this target:" |> str}
@@ -466,23 +468,20 @@ let renderPendingStudents = (pendingUserIds, userProfiles) =>
       {
         pendingUserIds
         |> List.map(studentId => {
-             let userProfile =
-               userProfiles
-               |> ListUtils.findOpt(u => u |> UserProfile.userId == studentId);
+             let user =
+               users
+               |> ListUtils.unsafeFind(
+                    u => u |> User.id == studentId,
+                    "Unable to find user with id "
+                    ++ studentId
+                    ++ "in courseShow__Overlay",
+                  );
 
-             switch (userProfile) {
-             | Some(userProfile) =>
-               <div
-                 title={
-                   (userProfile |> UserProfile.name)
-                   ++ " has not completed this target."
-                 }
-                 className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
-                 <img src={userProfile |> UserProfile.avatarUrl} />
-               </div>
-
-             | None => React.null
-             };
+             <div
+               title={(user |> User.name) ++ " has not completed this target."}
+               className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
+               <img src={user |> User.avatarUrl} />
+             </div>;
            })
         |> Array.of_list
         |> React.array
@@ -490,12 +489,12 @@ let renderPendingStudents = (pendingUserIds, userProfiles) =>
     </div>
   </div>;
 
-let handlePendingStudents = (targetStatus, targetDetails, userProfiles) =>
+let handlePendingStudents = (targetStatus, targetDetails, users) =>
   switch (targetDetails, targetStatus |> TargetStatus.status) {
   | (Some(targetDetails), Submitted | Passed) =>
     let pendingUserIds = targetDetails |> TargetDetails.pendingUserIds;
     pendingUserIds |> ListUtils.isNotEmpty ?
-      renderPendingStudents(pendingUserIds, userProfiles) : React.null;
+      renderPendingStudents(pendingUserIds, users) : React.null;
   | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
   };
 
@@ -510,7 +509,7 @@ let make =
       ~targets,
       ~statusOfTargets,
       ~changeTargetCB,
-      ~userProfiles,
+      ~users,
       ~evaluationCriteria,
       ~coaches,
     ) => {
@@ -544,7 +543,7 @@ let make =
             changeTargetCB,
           )
         }
-        {handlePendingStudents(targetStatus, targetDetails, userProfiles)}
+        {handlePendingStudents(targetStatus, targetDetails, users)}
         {
           switch (targetDetails) {
           | Some(targetDetails) =>
@@ -594,7 +593,7 @@ let make =
               evaluationCriteria,
               course |> Course.gradeLabels,
               coaches,
-              userProfiles,
+              users,
             )
           }
         </div>

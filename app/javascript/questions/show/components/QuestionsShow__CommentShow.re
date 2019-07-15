@@ -8,7 +8,7 @@ let str = React.string;
 let make =
     (
       ~comments,
-      ~userData,
+      ~users,
       ~authenticityToken,
       ~commentableType,
       ~commentableId,
@@ -37,7 +37,19 @@ let make =
            )
            |> int_of_float
          )
-      |> List.map(comment =>
+      |> List.map(comment => {
+           let commentText =
+             (comment |> Comment.value)
+             ++ " - **"
+             ++ (users |> User.userName(comment |> Comment.creatorId))
+             ++ "** on "
+             ++ (
+               comment
+               |> Comment.createdAt
+               |> DateFns.parseString
+               |> DateFns.format("Do MMMM, YYYY")
+             );
+
            <li
              key={comment |> Comment.id}
              className="w-full text-left border border-gray-400 border-t-0">
@@ -45,29 +57,9 @@ let make =
                className="flex w-full leading-normal text-xs bg-white justify-between">
                <span className="flex items-center px-4 py-3">
                  <MarkdownBlock
-                   markdown={comment |> Comment.value}
+                   markdown=commentText
                    profile=Markdown.Comment
                  />
-                 <span>
-                   <span className="font-semibold pl-1">
-                     {
-                       "- "
-                       ++ (
-                         userData
-                         |> UserData.userName(comment |> Comment.creatorId)
-                       )
-                       |> str
-                     }
-                   </span>
-                   <span className="pl-1">
-                     {
-                       comment
-                       |> Comment.createdAt
-                       |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
-                       |> str
-                     }
-                   </span>
-                 </span>
                </span>
                {
                  isCoach || comment |> Comment.creatorId == currentUserId ?
@@ -80,8 +72,8 @@ let make =
                    React.null
                }
              </div>
-           </li>
-         )
+           </li>;
+         })
       |> Array.of_list
       |> ReasonReact.array
     }

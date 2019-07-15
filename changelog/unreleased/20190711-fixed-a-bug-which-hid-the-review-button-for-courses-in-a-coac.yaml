@@ -1,0 +1,5 @@
+---
+timestamp: '2019-07-11T09:40:05Z'
+title: Fixed a bug which hid the review button for courses in a coach's home page
+  under certain conditions.
+category: bugfix

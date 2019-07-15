@@ -30,7 +30,7 @@ type action =
   | SelectLevel(Level.t)
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
-  | UpdateTargetGroups(TargetGroup.t)
+  | UpdateTargetGroups(TargetGroup.t, editorAction)
   | UpdateTarget(Target.t, list(ContentBlock.t))
   | UpdateTargets(list(Target.t))
   | RemoveContentBlock(string)
@@ -98,13 +98,13 @@ let make =
         editorAction: Hidden,
         selectedLevel: level,
       });
-    | UpdateTargetGroups(targetGroup) =>
+    | UpdateTargetGroups(targetGroup, action) =>
       let newtargetGroups =
         targetGroup |> TargetGroup.updateList(state.targetGroups);
       ReasonReact.Update({
         ...state,
         targetGroups: newtargetGroups,
-        editorAction: Hidden,
+        editorAction: action,
       });
     | UpdateTarget(target, contentBlocks) =>
       let newtargets = target |> Target.updateList(state.targets);
@@ -116,7 +116,6 @@ let make =
         ...state,
         targets: newtargets,
         contentBlocks: newContentBlocks,
-        editorAction: Hidden,
       });
     | ToggleShowArchived =>
       ReasonReact.Update({...state, showArchived: !state.showArchived})
@@ -160,7 +159,7 @@ let make =
     let showTargetGroupEditorCB = targetGroup =>
       send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
 
-    let updateTargetCB = (target, contentBlocks) => {
+    let updateTargetCB = (target, contentBlocks, closeEditor) => {
       let targetGroup =
         state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
 
@@ -168,8 +167,12 @@ let make =
         target |> Target.visibility === Archived ?
           targetGroup : targetGroup |> TargetGroup.archive(false);
 
+      let editorAction =
+        closeEditor ?
+          Hidden : ShowTargetEditor(newTargetGroup |> TargetGroup.id, target);
+
       send(UpdateTarget(target, contentBlocks));
-      send(UpdateTargetGroups(newTargetGroup));
+      send(UpdateTargetGroups(newTargetGroup, editorAction));
     };
 
     let updateTargetGroupsCB = targetGroup => {
@@ -188,7 +191,7 @@ let make =
         } :
         ();
 
-      send(UpdateTargetGroups(targetGroup));
+      send(UpdateTargetGroups(targetGroup, Hidden));
     };
 
     let updateContentBlocksCB = (targetId, contentBlocks) => {

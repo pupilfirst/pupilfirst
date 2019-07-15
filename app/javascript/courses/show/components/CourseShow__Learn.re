@@ -21,20 +21,18 @@ let markdownContentBlock = markdown =>
   />;
 
 let fileContentBlock = (url, title, filename) =>
-  <div className="shadow border px-6 py-4 rounded-lg">
-    <a className="flex justify-between items-center" href=url>
-      <div className="flex items-center">
-        <FaIcon classes="text-4xl text-red-600 fal fa-file-pdf" />
-        <div className="pl-4 leading-tight">
-          <div className="text-lg font-semibold"> {title |> str} </div>
-          <div className="text-sm italic text-gray-600">
-            {filename |> str}
-          </div>
+  <a className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md" target="_blank" href=url>
+    <div className="flex items-center">
+      <FaIcon classes="text-4xl text-gray-800 fal fa-file-alt" />
+      <div className="pl-4 leading-tight">
+        <div className="text-lg font-semibold"> {title |> str} </div>
+        <div className="text-sm italic text-gray-600">
+          {filename |> str}
         </div>
       </div>
-      <div> <FaIcon classes="text-2xl fal fa-download" /> </div>
-    </a>
-  </div>;
+    </div>
+    <div> <FaIcon classes="text-2xl fal fa-download" /> </div>
+  </a>;
 
 let imageContentBlock = (url, caption) =>
   <div className="rounded-lg bg-white text-center">

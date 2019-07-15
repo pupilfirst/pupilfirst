@@ -94,7 +94,7 @@ let make =
       ~question,
       ~answers,
       ~comments,
-      ~userData,
+      ~users,
       ~likes,
       ~currentUserId,
       ~communityPath,
@@ -245,7 +245,7 @@ let make =
                             className="text-xs mt-2 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                             <span> {"Last edited by " |> str} </span>
                             <span className="font-semibold">
-                              {userData |> UserData.userName(editorId) |> str}
+                              {users |> User.userName(editorId) |> str}
                             </span>
                             <span>
                               {
@@ -281,9 +281,9 @@ let make =
                       </p>
                     </div>
                     <QuestionsShow__UserShow
-                      userProfile={
-                        userData
-                        |> UserData.user(state.question |> Question.creatorId)
+                      user={
+                        users
+                        |> User.findUser(state.question |> Question.creatorId)
                       }
                       createdAt={state.question |> Question.createdAt}
                       textForTimeStamp="Asked"
@@ -294,7 +294,7 @@ let make =
             </div>
             <QuestionsShow__CommentShow
               comments={state.comments |> Comment.commentsForQuestion}
-              userData
+              users
               authenticityToken
               commentableType="Question"
               commentableId={state.question |> Question.id}
@@ -340,7 +340,7 @@ let make =
                        currentUserId
                        addLikeCB
                        removeLikeCB
-                       userData
+                       users
                        comments={state.comments}
                        likes={state.likes}
                        handleAnswerCB

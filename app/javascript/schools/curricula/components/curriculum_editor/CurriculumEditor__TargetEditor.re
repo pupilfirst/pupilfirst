@@ -238,14 +238,18 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " toggle-button__button--active" : "");
 };
 
-let completionButtonClasses = value =>
+let completionButtonClasses = value => {
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
   value ?
-    "flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4" :
-    "flex flex-col items-center bg-white border border-gray-400 opacity-50 hover:bg-gray-200 text-gray-900 text-sm font-semibold focus:outline-none rounded p-4";
-let formClasses = value =>
-  value ?
-    "drawer-right-form bg-white w-full opacity-50" :
-    "drawer-right-form bg-white w-full";
+    defaultClasses
+    ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500" :
+    defaultClasses ++ " opacity-75 text-gray-900";
+};
+
+let formClasses = value => {
+  let defaultClasses = "drawer-right-form bg-white w-full ";
+  value ? defaultClasses ++ "opacity-50" : defaultClasses;
+};
 let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>
@@ -368,7 +372,7 @@ let make =
     dispatch(UpdateQuizQuestion(id, quizQuestion));
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
-  let handleResponseCB = json => {
+  let handleResponseCB = (closeEditor, dispatch, json) => {
     let id = json |> Json.Decode.(field("id", string));
     let sortIndex = json |> Json.Decode.(field("sortIndex", int));
     let prerequisiteTargets =
@@ -407,14 +411,20 @@ let make =
         state.visibility,
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget, state.contentBlocks);
+    updateTargetCB(newTarget, state.contentBlocks, closeEditor);
+    closeEditor ? () : dispatch(UpdateSaving);
   };
 
-  let updateTarget = targetId => {
+  let updateTarget = (closeEditor, targetId) => {
     dispatch(UpdateSaving);
     let payload = setPayload(state, target, authenticityToken);
     let url = "/school/targets/" ++ targetId;
-    Api.update(url, payload, handleResponseCB, handleErrorCB);
+    Api.update(
+      url,
+      payload,
+      handleResponseCB(closeEditor, dispatch),
+      handleErrorCB,
+    );
   };
   let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
   <div>
@@ -439,7 +449,7 @@ let make =
               <li
                 onClick={_event => dispatch(UpdateActiveStep(AddContent))}
                 className={
-                  "target-editor__tab-item "
+                  "target-editor__tab-item cursor-pointer "
                   ++ (
                     state.activeStep == AddContent ?
                       "target-editor__tab-item--selected" : ""
@@ -453,7 +463,7 @@ let make =
               <li
                 onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
                 className={
-                  "target-editor__tab-item -ml-px "
+                  "target-editor__tab-item cursor-pointer -ml-px "
                   ++ (
                     state.activeStep == TargetActions ?
                       "target-editor__tab-item--selected" : ""
@@ -479,25 +489,40 @@ let make =
               }>
               <div className="max-w-3xl py-6 px-3 mx-auto">
                 <label
-                  className="inline-block tracking-wide text-xs font-semibold mb-2"
+                  className="inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
                   {"Title" |> str}
                 </label>
                 <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="title"
-                  type_="text"
-                  placeholder="Type target title here"
-                  value={state.title}
-                  onChange={
-                    event =>
-                      updateTitle(
-                        dispatch,
-                        ReactEvent.Form.target(event)##value,
-                      )
+                <div
+                  className="flex items-center border-b border-gray-400 pb-2 mb-4">
+                  <input
+                    className="appearance-none block w-full bg-white text-2xl pr-4 font-semibold text-gray-900 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="title"
+                    type_="text"
+                    placeholder="Type target title here"
+                    value={state.title}
+                    onChange={
+                      event =>
+                        updateTitle(
+                          dispatch,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                  {
+                    state.title != (target |> Target.title)
+                    && !state.hasTitleError ?
+                      <button
+                        onClick={
+                          _e => updateTarget(false, target |> Target.id)
+                        }
+                        className="btn btn-success">
+                        {"Update" |> str}
+                      </button> :
+                      React.null
                   }
-                />
+                </div>
                 {
                   state.hasTitleError ?
                     <div className="drawer-right-form__error-msg">
@@ -529,7 +554,7 @@ let make =
                   showPrerequisiteTargets ?
                     <div>
                       <label
-                        className="block tracking-wide text-xs font-semibold mb-2"
+                        className="block tracking-wide text-sm font-semibold mb-2"
                         htmlFor="prerequisite_targets">
                         {"Any prerequisite targets?" |> str}
                       </label>
@@ -544,7 +569,7 @@ let make =
                 }
                 <div className="flex items-center mb-6">
                   <label
-                    className="block tracking-wide text-xs font-semibold mr-6"
+                    className="block tracking-wide text-sm font-semibold mr-6"
                     htmlFor="evaluated">
                     {"Is this target reviewed by a faculty?" |> str}
                   </label>
@@ -583,7 +608,7 @@ let make =
                     <div>
                       <div className="mb-6">
                         <label
-                          className="block tracking-wide text-xs font-semibold mr-6 mb-3"
+                          className="block tracking-wide text-sm font-semibold mr-6 mb-3"
                           htmlFor="method_of_completion">
                           {
                             "How do you want the student to complete the target?"
@@ -663,7 +688,7 @@ let make =
                   | Evaluated =>
                     <div id="evaluation_criteria" className="mb-6">
                       <label
-                        className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                        className="block tracking-wide text-sm font-semibold mr-6 mb-2"
                         htmlFor="evaluation_criteria">
                         {"Choose evaluation criteria from your list" |> str}
                       </label>
@@ -729,7 +754,7 @@ let make =
                   | VisitLink =>
                     <div>
                       <label
-                        className="inline-block tracking-wide text-xs font-semibold mb-2"
+                        className="inline-block tracking-wide text-sm font-semibold mb-2"
                         htmlFor="link_to_complete">
                         {"Link to complete" |> str}
                       </label>
@@ -770,7 +795,7 @@ let make =
                 | TargetActions =>
                   <div className="flex items-center flex-shrink-0">
                     <label
-                      className="block tracking-wide text-xs font-semibold mr-3"
+                      className="block tracking-wide text-sm font-semibold mr-3"
                       htmlFor="archived">
                       {"Target Visibility" |> str}
                     </label>
@@ -837,7 +862,7 @@ let make =
                     <button
                       key="target-actions-step"
                       disabled={saveDisabled(state)}
-                      onClick=(_e => updateTarget(target |> Target.id))
+                      onClick=(_e => updateTarget(true, target |> Target.id))
                       className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                       {"Update Target" |> str}
                     </button>

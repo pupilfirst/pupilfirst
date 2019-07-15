@@ -16,6 +16,8 @@ feature 'Curriculum Editor' do
   let!(:target_2) { create :target, target_group: target_group_1 }
   let!(:target_3) { create :target, target_group: target_group_2 }
   let!(:target_4) { create :target, target_group: target_group_2 }
+  # Target with contents
+  let!(:target_5) { create :target, :with_content, target_group: target_group_2 }
 
   # Data for level
   let(:new_level_name) { Faker::Lorem.sentence }
@@ -60,299 +62,410 @@ feature 'Curriculum Editor' do
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
-  scenario 'school admin creates the curriculum', js: true do
-    sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+  context 'school admin creates the curriculum' do
+    scenario 'creates a basic course framework by creating level, target group and target', js: true do
+      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
-    # he should be on the last level
-    expect(page).to have_text("Level 2: " + level_2.name)
+      # he should be on the last level
+      expect(page).to have_text("Level 2: " + level_2.name)
 
-    # all targets and target groups on that level should be visible
-    expect(page).to have_text(target_group_2.name)
-    expect(page).to have_text(target_3.title)
-    expect(page).to have_text(target_4.title)
+      # all targets and target groups on that level should be visible
+      expect(page).to have_text(target_group_2.name)
+      expect(page).to have_text(target_3.title)
+      expect(page).to have_text(target_4.title)
 
-    # targets and target groups from other levels should not be visible
-    expect(page).not_to have_text(target_group_1.name)
-    expect(page).not_to have_text(target_1.title)
-    expect(page).not_to have_text(target_2.title)
+      # targets and target groups from other levels should not be visible
+      expect(page).not_to have_text(target_group_1.name)
+      expect(page).not_to have_text(target_1.title)
+      expect(page).not_to have_text(target_2.title)
 
-    # he should be able to create a new level
-    click_button 'Create Level'
-    expect(page).to have_text("Level Name")
-    fill_in 'Level Name', with: new_level_name
-    fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
-    click_button 'Create New Level'
-    expect(page).to have_text("Level created successfully")
-    find('.ui-pnotify-container').click
+      # he should be able to create a new level
+      click_button 'Create Level'
+      expect(page).to have_text("Level Name")
+      fill_in 'Level Name', with: new_level_name
+      fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
+      click_button 'Create New Level'
+      expect(page).to have_text("Level created successfully")
+      find('.ui-pnotify-container').click
 
-    course.reload
-    level = course.levels.last
-    expect(level.name).to eq(new_level_name)
-    expect(level.unlock_on).to eq(date)
+      course.reload
+      level = course.levels.last
+      expect(level.name).to eq(new_level_name)
+      expect(level.unlock_on).to eq(date)
 
-    # he should be able to edit the level
-    click_button 'edit'
-    expect(page).to have_text(new_level_name)
-    fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
-    click_button 'Update Level'
-    expect(page).to have_text("Level updated successfully")
-    find('.ui-pnotify-container').click
+      # he should be able to edit the level
+      click_button 'edit'
+      expect(page).to have_text(new_level_name)
+      fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
+      click_button 'Update Level'
+      expect(page).to have_text('Level updated successfully')
+      find('.ui-pnotify-container').click
 
-    level.reload
-    expect(level.unlock_on).not_to eq(date)
+      level.reload
+      expect(level.unlock_on).not_to eq(date)
 
-    # he should be able to create a new target group
-    find('.target-group__create').click
-    expect(page).to have_text("TARGET GROUP DETAILS")
-    fill_in 'Title', with: new_target_group_name
-    fill_in 'Description', with: new_target_group_description
-    click_button 'Yes'
-    click_button 'Create Target Group'
-    expect(page).to have_text("Target Group created successfully")
-    find('.ui-pnotify-container').click
-
-    level.reload
-    target_group = level.target_groups.last
-    expect(target_group.name).to eq(new_target_group_name)
-    expect(target_group.description).to eq(new_target_group_description)
-    expect(target_group.milestone).to eq(true)
-
-    # he should be able to update a target group
-    find('.target-group__header', text: target_group.name).click
-    expect(page).to have_text(target_group.name)
-    expect(page).to have_text(target_group.description)
-    fill_in 'Description', with: '', fill_options: { clear: :backspace }
-    within('.milestone') do
-      click_button 'No'
-    end
-    click_button 'Update Target Group'
-    expect(page).to have_text("Target Group updated successfully")
-    find('.ui-pnotify-container').click
-
-    target_group.reload
-    expect(target_group.description).not_to eq(new_target_group_description)
-    expect(target_group.milestone).to eq(false)
-
-    # user should be able to create a draft target from the curriculum index
-    find('#create-target-input').click
-    fill_in 'create-target-input', with: new_target_1_title
-    click_button 'Create'
-    expect(page).to have_text('Target created successfully')
-    expect(page).to have_selector('.content-block__content', count: 1)
-    expect(page).to have_selector('.add-content-block--open', count: 1)
-    target = target_group.reload.targets.last
-    expect(target.title).to eq(new_target_1_title)
-    find('#target-editor-close').click
-    expect(page).to have_text(new_target_1_title)
-    within("div#target-show-#{target.id}") do
-      expect(page).to have_text('Draft')
-    end
-  end
-
-  scenario 'school admin adds content to a target and modifies its properties', js: true do
-    sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
-
-    target = target_4
-
-    # Change target visibility
-    find('.target-group__target', text: target.title).click
-    expect(page).to have_selector('.add-content-block--open', count: 1)
-    click_button 'Next Step'
-    expect(page).to have_text('Target Visibility')
-    within("div#visibility") do
-      click_button 'Live'
-    end
-    click_button 'Update Target'
-    find('.ui-pnotify-container').click
-    within("div#target-show-#{target.id}") do
-      expect(page).to_not have_text('Draft')
-    end
-    expect(target.reload.visibility).to eq('live')
-    find('.target-group__target', text: target.title).click
-    click_button 'Next Step'
-    within("div#visibility") do
-      click_button 'Archived'
-    end
-    click_button 'Update Target'
-    find('.ui-pnotify-container').click
-    expect(page).to_not have_selector("div#target-show-#{target.id}")
-    click_button 'Show Archived'
-    expect(page).to have_selector("div#target-show-#{target.id}")
-    expect(target.reload.visibility).to eq('archived')
-
-    find('.target-group__target', text: target.title).click
-    click_button 'Next Step'
-
-    within("div#evaluated") do
+      # he should be able to create a new target group
+      find('.target-group__create').click
+      expect(page).to have_text('TARGET GROUP DETAILS')
+      fill_in 'Title', with: new_target_group_name
+      fill_in 'Description', with: new_target_group_description
       click_button 'Yes'
-    end
-    expect(page).to have_text('Atleast one has to be selected')
-    # within("div#evaluation_criteria") do
-    #   find('div', text: evaluation_criterion.name).click
-    # end
+      click_button 'Create Target Group'
+      expect(page).to have_text('Target Group created successfully')
+      find('.ui-pnotify-container').click
 
-    within("div#evaluated") do
-      click_button 'No'
-    end
-    within("div#method_of_completion") do
-      find('div', text: "Simply mark the target as completed.").click
-    end
-    within("div#visibility") do
-      click_button 'Live'
-    end
-    click_button 'Update Target'
-    find('.ui-pnotify-container').click
+      level.reload
+      target_group = level.target_groups.last
+      expect(target_group.name).to eq(new_target_group_name)
+      expect(target_group.description).to eq(new_target_group_description)
+      expect(target_group.milestone).to eq(true)
 
-    # Add few contents to target
+      # he should be able to update a target group
+      find('.target-group__header', text: target_group.name).click
+      expect(page).to have_text(target_group.name)
+      expect(page).to have_text(target_group.description)
+      fill_in 'Description', with: '', fill_options: { clear: :backspace }
+      within('.milestone') do
+        click_button 'No'
+      end
+      click_button 'Update Target Group'
+      expect(page).to have_text("Target Group updated successfully")
+      find('.ui-pnotify-container').click
 
-    find('.target-group__target', text: target.title).click
-    within('.add-content-block--open') do
-      find('p', text: 'Markdown').click
+      target_group.reload
+      expect(target_group.description).not_to eq(new_target_group_description)
+      expect(target_group.milestone).to eq(false)
+
+      # user should be able to create a draft target from the curriculum index
+      find('#create-target-input').click
+      fill_in 'create-target-input', with: new_target_1_title
+      click_button 'Create'
+      expect(page).to have_text('Target created successfully')
+      expect(page).to have_selector('.content-block__content', count: 1)
+      expect(page).to have_selector('.add-content-block--open', count: 1)
+      target = target_group.reload.targets.last
+      expect(target.title).to eq(new_target_1_title)
+      find('#target-editor-close').click
+      expect(page).to have_text(new_target_1_title)
+      within("div#target-show-#{target.id}") do
+        expect(page).to have_text('Draft')
+      end
     end
-
-    textarea = find('textarea', match: :first)
-    textarea.fill_in with: sample_markdown_text
-    find('span', text: 'Preview').click
-    click_button 'Save'
-    expect(page).to have_text('Content added successfully')
-    find('.ui-pnotify-container').click
-    expect(target.reload.content_blocks.last.sort_index).to eq(1)
-    expect(target.content_blocks.last.block_type).to eq('markdown')
-
-    within('.add-content-block--open') do
-      find('p', text: 'Image').click
-    end
-    attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
-    click_button 'Save'
-    expect(page).to have_text('Image content must be JPG, PNG or GIF')
-    find('.ui-pnotify-container').click
-    attach_file 'content_block[file]', file_path('high_resolution.png'), visible: false
-    click_button 'Save'
-    expect(page).to have_text('Content added successfully')
-    find('.ui-pnotify-container').click
-    content_block = target.content_blocks.reload.where(block_type: 'image').last
-    expect(content_block.sort_index).to eq(2)
-    expect(content_block.file.filename).to eq('high_resolution.png')
-
-    within('.add-content-block--open') do
-      find('p', text: 'File').click
-    end
-    attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
-    click_button 'Save'
-    expect(page).to have_text('Content added successfully')
-    find('.ui-pnotify-container').click
-    content_block = target.content_blocks.reload.where(block_type: 'file').last
-    expect(content_block.sort_index).to eq(3)
-    expect(content_block.file.filename).to eq('pdf-sample.pdf')
-
-    within('.add-content-block--open') do
-      find('p', text: 'Embed').click
-    end
-    fill_in 'Paste in a URL to embed', with: 'https://www.youtube.com/watch?v=3QDYbQIS8cQ'
-    click_button 'Save'
-    expect(page).to have_text('Content added successfully')
-    find('.ui-pnotify-container').click
-    content_block = target.content_blocks.reload.where(block_type: 'embed').last
-    expect(content_block.sort_index).to eq(4)
   end
 
-  scenario "Admin creates a target with a link to complete", js: true do
-    sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+  context 'school admin creates different types of targets' do
+    scenario 'Admin creates a target with a link to complete', js: true do
+      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
-    find('#create-target-input').click
-    fill_in 'create-target-input', with: new_target_3_title
-    click_button 'Create'
-    expect(page).to have_text("Target created successfully")
-    find('.ui-pnotify-container').click
-    click_button 'Next Step'
-    within("div#evaluated") do
-      click_button 'No'
-    end
-    within("div#method_of_completion") do
-      click_button 'Visit a link to complete the target.'
-    end
-    fill_in 'Link to complete', with: link_to_complete
+      find('#create-target-input').click
+      fill_in 'create-target-input', with: new_target_3_title
+      click_button 'Create'
+      expect(page).to have_text("Target created successfully")
+      find('.ui-pnotify-container').click
+      click_button 'Next Step'
+      within("div#evaluated") do
+        click_button 'No'
+      end
+      within("div#method_of_completion") do
+        click_button 'Visit a link to complete the target.'
+      end
+      fill_in 'Link to complete', with: link_to_complete
 
-    within("div#visibility") do
-      click_button 'Live'
-    end
-    click_button 'Update Target'
+      within("div#visibility") do
+        click_button 'Live'
+      end
+      click_button 'Update Target'
 
-    expect(page).to have_text("Target updated successfully")
-    find('.ui-pnotify-container').click
-    expect(page).to have_text("Create a target")
-    target = Target.find_by(title: new_target_3_title)
-    expect(target.evaluation_criteria).to eq([])
-    expect(target.link_to_complete).to eq(link_to_complete)
-    expect(target.quiz).to eq(nil)
+      expect(page).to have_text("Target updated successfully")
+      find('.ui-pnotify-container').click
+      expect(page).to have_text("Create a target")
+      target = Target.find_by(title: new_target_3_title)
+      expect(target.evaluation_criteria).to eq([])
+      expect(target.link_to_complete).to eq(link_to_complete)
+      expect(target.quiz).to eq(nil)
+    end
+
+    scenario 'Admin creates a target with a quiz', js: true do
+      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+
+      find('#create-target-input').click
+      fill_in 'create-target-input', with: new_target_4_title
+      click_button 'Create'
+      find('.ui-pnotify-container').click
+      click_button 'Next Step'
+      within("div#evaluated") do
+        click_button 'No'
+      end
+
+      within("div#method_of_completion") do
+        click_button 'Take a quiz to complete the target.'
+      end
+
+      # Quiz Question 1
+      fill_in 'Question 1', with: quiz_question_1
+      fill_in 'quiz_question_1_answer_option_1', with: quiz_question_1_answer_option_1
+      fill_in 'quiz_question_1_answer_option_2', with: quiz_question_1_answer_option_2
+      find("a", text: "Add another Answer Option").click
+      fill_in 'quiz_question_1_answer_option_3', with: quiz_question_1_answer_option_3
+
+      within("div#quiz_question_1_answer_option_3_block") do
+        click_button 'Mark as correct'
+      end
+
+      # Quiz Question 2
+      find("a", text: "Add another Question").click
+      fill_in 'Question 2', with: quiz_question_2
+      fill_in 'quiz_question_2_answer_option_1', with: quiz_question_2_answer_option_1
+      fill_in 'quiz_question_2_answer_option_2', with: quiz_question_2_answer_option_2
+
+      within("div#visibility") do
+        click_button 'Live'
+      end
+      click_button 'Update Target'
+
+      expect(page).to have_text("Target updated successfully")
+      find('.ui-pnotify-container').click
+      expect(page).to have_text("Create a target")
+      target = Target.find_by(title: new_target_4_title)
+      expect(target.evaluation_criteria).to eq([])
+      expect(target.link_to_complete).to eq(nil)
+      expect(target.quiz.title).to eq(new_target_4_title)
+      expect(target.quiz.quiz_questions.count).to eq(2)
+      expect(target.quiz.quiz_questions.first.question).to eq(quiz_question_1)
+      expect(target.quiz.quiz_questions.first.correct_answer.value).to eq(quiz_question_1_answer_option_3)
+      expect(target.quiz.quiz_questions.last.question).to eq(quiz_question_2)
+      expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(quiz_question_2_answer_option_1)
+
+      find('.target-group__target', text: new_target_4_title).click
+      click_button 'Next Step'
+      within("div#evaluated") do
+        click_button 'No'
+      end
+      within("div#method_of_completion") do
+        click_button 'Simply mark the target as completed.'
+      end
+      click_button 'Update Target'
+
+      expect(page).to have_text("Target updated successfully")
+      find('.ui-pnotify-container').click
+      target.reload
+      expect(target.evaluation_criteria).to eq([])
+      expect(target.link_to_complete).to eq(nil)
+      expect(target.quiz).to eq(nil)
+    end
   end
 
-  scenario "Admin creates a target with a quiz and updates it", js: true do
-    sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+  context 'School admin modifies a target' do
+    scenario 'school admin adds content to a target and modifies its properties', js: true do
+      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
 
-    find('#create-target-input').click
-    fill_in 'create-target-input', with: new_target_4_title
-    click_button 'Create'
-    find('.ui-pnotify-container').click
-    click_button 'Next Step'
-    within("div#evaluated") do
-      click_button 'No'
+      target = target_4
+
+      # Change target visibility
+      find('.target-group__target', text: target.title).click
+      expect(page).to have_selector('.add-content-block--open', count: 1)
+      click_button 'Next Step'
+      expect(page).to have_text('Target Visibility')
+      within("div#visibility") do
+        click_button 'Live'
+      end
+      click_button 'Update Target'
+      find('.ui-pnotify-container').click
+      within("div#target-show-#{target.id}") do
+        expect(page).to_not have_text('Draft')
+      end
+      expect(target.reload.visibility).to eq('live')
+      find('.target-group__target', text: target.title).click
+      click_button 'Next Step'
+      within("div#visibility") do
+        click_button 'Archived'
+      end
+      click_button 'Update Target'
+      find('.ui-pnotify-container').click
+      expect(page).to_not have_selector("div#target-show-#{target.id}")
+      click_button 'Show Archived'
+      expect(page).to have_selector("div#target-show-#{target.id}")
+      expect(target.reload.visibility).to eq('archived')
+
+      find('.target-group__target', text: target.title).click
+      click_button 'Next Step'
+
+      within("div#evaluated") do
+        click_button 'Yes'
+      end
+      expect(page).to have_text('Atleast one has to be selected')
+
+      find("div[title='Select #{evaluation_criterion.name}']").click
+
+      within("div#evaluated") do
+        click_button 'No'
+      end
+      within("div#method_of_completion") do
+        find('div', text: "Simply mark the target as completed.").click
+      end
+      within("div#visibility") do
+        click_button 'Live'
+      end
+      click_button 'Update Target'
+      find('.ui-pnotify-container').click
+
+      # Add few contents to target
+
+      find('.target-group__target', text: target.title).click
+      within('.add-content-block--open') do
+        find('p', text: 'Markdown').click
+      end
+
+      textarea = find('textarea', match: :first)
+      textarea.fill_in with: sample_markdown_text
+      find('span', text: 'Preview').click
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      find('.ui-pnotify-container').click
+      expect(target.reload.content_blocks.last.sort_index).to eq(1)
+      expect(target.content_blocks.last.block_type).to eq('markdown')
+
+      within('.add-content-block--open') do
+        find('p', text: 'Image').click
+      end
+      attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
+      click_button 'Save'
+      expect(page).to have_text('Image content must be JPG, PNG or GIF')
+      find('.ui-pnotify-container').click
+      attach_file 'content_block[file]', file_path('high_resolution.png'), visible: false
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      find('.ui-pnotify-container').click
+      content_block = target.content_blocks.reload.where(block_type: 'image').last
+      expect(content_block.sort_index).to eq(2)
+      expect(content_block.file.filename).to eq('high_resolution.png')
+
+      within('.add-content-block--open') do
+        find('p', text: 'File').click
+      end
+      attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      find('.ui-pnotify-container').click
+      content_block = target.content_blocks.reload.where(block_type: 'file').last
+      expect(content_block.sort_index).to eq(3)
+      expect(content_block.file.filename).to eq('pdf-sample.pdf')
+
+      within('.add-content-block--open') do
+        find('p', text: 'Embed').click
+      end
+      fill_in 'Paste in a URL to embed', with: 'https://www.youtube.com/watch?v=3QDYbQIS8cQ'
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      find('.ui-pnotify-container').click
+      content_block = target.content_blocks.reload.where(block_type: 'embed').last
+      expect(content_block.sort_index).to eq(4)
+
+      # Change target title
+      expect(page).to_not have_selector(:button, 'Update')
+      fill_in 'title', with: 'new target title'
+      expect(page).to have_selector(:button, 'Update')
+      click_button 'Update'
+      find('.ui-pnotify-container').click
+      expect(target.reload.title).to eq('new target title')
     end
 
-    within("div#method_of_completion") do
-      click_button 'Take a quiz to complete the target.'
+    scenario 'modifies an existing target content', js: true do
+      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+
+      target = target_5
+
+      # Open the target editor
+      find('.target-group__target', text: target.title).click
+      expect(page).to have_selector('.content-block__content', count: 4)
+      find("div#add-block-1", visible: false).click
+
+      within("div#content-type-picker-1") do
+        find('p', text: 'Markdown').click
+      end
+      expect(page).to have_selector('.content-block__content', count: 5)
+      textarea = find('textarea', match: :first)
+      textarea.fill_in with: sample_markdown_text
+      find('span', text: 'Preview').click
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      find('.ui-pnotify-container').click
+
+      content_blocks = target.content_blocks.reload
+      expect(content_blocks.count).to eq(5)
+      expect(content_blocks.pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
+      expect(content_blocks.find_by(block_type: 'embed').sort_index).to eq(2)
+      expect(content_blocks.find_by(block_type: 'file').sort_index).to eq(5)
+
+      # Move a block down
+      within('#content-block-controls-1') do
+        find_button('Move down').click
+      end
+      # Moving blocks has no message in the UI to be checked. Do some action before checking changes in DB
+      within('#content-block-form-3') do
+        find('span', text: 'Edit Markdown').click
+        find('textarea').fill_in with: sample_markdown_text
+        click_button 'Update'
+      end
+
+      expect(page).to have_text('Content updated successfully')
+      find('.ui-pnotify-container').click
+      expect(target.content_blocks.reload.find_by(block_type: 'embed').sort_index).to eq(1)
+      expect(target.content_blocks.find_by(sort_index: 2).block_type).to eq('markdown')
+
+      # Move a block up
+      within('#content-block-controls-5') do
+        find_button('Move up').click
+      end
+      within('#content-block-form-2') do
+        find('span', text: 'Edit Markdown').click
+        find('textarea').fill_in with: sample_markdown_text
+        click_button 'Update'
+      end
+
+      expect(page).to have_text('Content updated successfully')
+      find('.ui-pnotify-container').click
+      expect(target.content_blocks.reload.find_by(block_type: 'file').sort_index).to eq(4)
+      expect(target.content_blocks.find_by(block_type: 'image').sort_index).to eq(5)
+
+      # Update a file title
+      within('#content-block-form-4') do
+        fill_in 'content_block[title]', with: 'new file title'
+        click_button 'Update Title'
+      end
+      expect(page).to have_text('Content updated successfully')
+      find('.ui-pnotify-container').click
+      expect(target.content_blocks.reload.find_by(block_type: 'file').content['title']).to eq('new file title')
+
+      # Update an image caption
+      within('#content-block-form-5') do
+        fill_in 'content_block[caption]', with: 'new image caption'
+        click_button 'Update Caption'
+      end
+      expect(page).to have_text('Content updated successfully')
+      find('.ui-pnotify-container').click
+      expect(target.content_blocks.reload.find_by(block_type: 'image').content['caption']).to eq('new image caption')
+
+      # Delete few content block
+      accept_confirm do
+        within('#content-block-controls-5') do
+          find_button('Delete block').click
+        end
+      end
+
+      expect(page).to have_selector('.content-block__content', count: 4)
+      expect(target.content_blocks.reload.find_by(block_type: 'image')).to eq(nil)
+      expect(target.content_blocks.pluck(:sort_index).sort).to eq([1, 2, 3, 4])
+
+      accept_confirm do
+        within('#content-block-controls-3') do
+          find_button('Delete block').click
+        end
+      end
+      click_button 'Next Step'
+      find('span', text: 'Add Content').click
+      expect(page).to have_selector('.content-block__content', count: 3)
+      expect(target.content_blocks.reload.pluck(:sort_index).sort).to eq([1, 2, 3])
     end
-
-    # Quiz Question 1
-    fill_in 'Question 1', with: quiz_question_1
-    fill_in 'quiz_question_1_answer_option_1', with: quiz_question_1_answer_option_1
-    fill_in 'quiz_question_1_answer_option_2', with: quiz_question_1_answer_option_2
-    find("a", text: "Add another Answer Option").click
-    fill_in 'quiz_question_1_answer_option_3', with: quiz_question_1_answer_option_3
-
-    within("div#quiz_question_1_answer_option_3_block") do
-      click_button 'Mark as correct'
-    end
-
-    # Quiz Question 2
-    find("a", text: "Add another Question").click
-    fill_in 'Question 2', with: quiz_question_2
-    fill_in 'quiz_question_2_answer_option_1', with: quiz_question_2_answer_option_1
-    fill_in 'quiz_question_2_answer_option_2', with: quiz_question_2_answer_option_2
-
-    within("div#visibility") do
-      click_button 'Live'
-    end
-    click_button 'Update Target'
-
-    expect(page).to have_text("Target updated successfully")
-    find('.ui-pnotify-container').click
-    expect(page).to have_text("Create a target")
-    target = Target.find_by(title: new_target_4_title)
-    expect(target.evaluation_criteria).to eq([])
-    expect(target.link_to_complete).to eq(nil)
-    expect(target.quiz.title).to eq(new_target_4_title)
-    expect(target.quiz.quiz_questions.count).to eq(2)
-    expect(target.quiz.quiz_questions.first.question).to eq(quiz_question_1)
-    expect(target.quiz.quiz_questions.first.correct_answer.value).to eq(quiz_question_1_answer_option_3)
-    expect(target.quiz.quiz_questions.last.question).to eq(quiz_question_2)
-    expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(quiz_question_2_answer_option_1)
-
-    find('.target-group__target', text: new_target_4_title).click
-    click_button 'Next Step'
-    within("div#evaluated") do
-      click_button 'No'
-    end
-    within("div#method_of_completion") do
-      click_button 'Simply mark the target as completed.'
-    end
-    click_button 'Update Target'
-
-    expect(page).to have_text("Target updated successfully")
-    find('.ui-pnotify-container').click
-    target.reload
-    expect(target.evaluation_criteria).to eq([])
-    expect(target.link_to_complete).to eq(nil)
-    expect(target.quiz).to eq(nil)
   end
 end

@@ -27,7 +27,7 @@ module CoachDashboard
         filtered_events.includes(:timeline_event_owners, :timeline_event_files, :startup_feedback, :timeline_event_grades)
           .includes(target: :level)
           .includes(:target_evaluation_criteria, :evaluation_criteria)
-          .includes(evaluator: { user_profiles: :avatar_attachment })
+          .includes(evaluator: { user: :avatar_attachment })
           .order(created_at: :DESC).limit(@limit)
       end
     end
@@ -69,7 +69,7 @@ module CoachDashboard
     end
 
     def files(timeline_event)
-      timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } }
+      timeline_event.timeline_event_files.map { |file| { title: file.file.filename, id: file.id } }
     end
 
     def evaluation(timeline_event)

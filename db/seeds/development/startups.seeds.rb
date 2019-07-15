@@ -1,56 +1,17 @@
 require_relative 'helper'
 
-after 'development:levels' do
+after 'development:levels', 'development:users' do
   puts 'Seeding startups'
 
-  # Load levels.
-  startup_course_level_1 = Level.find_by(name: 'Wireframe')
-  developer_course_level_1 = Level.find_by(name: 'Planning')
-  vr_course_level_1 = Level.find_by(name: 'New Realities')
-  ios_course_level_1 = Level.find_by(name: 'iOS First Level')
-  ios_course_level_2 = Level.find_by(name: 'iOS Second Level')
+  admin_user = User.find_by(email: 'admin@example.com')
 
-  # Startup with live agreement.
-  Startup.create!(
-    level: startup_course_level_1,
-    name: 'Super Product',
-  )
-
-  # A second 'Avengers' startup.
-  Startup.create!(
-    level: startup_course_level_1,
-    name: 'The Avengers'
-  )
-
-  # Third startup 'Justice League' for developer course
-  Startup.create!(
-    level: developer_course_level_1,
-    name: 'Justice League'
-  )
-
-  # Fourth startup 'Guardians of the Galaxy' for VR course
-  Startup.create!(
-    level: vr_course_level_1,
-    name: 'Guardians of the Galaxy'
-  )
-
-  ['iOS Guy 2', 'iOS Guy 3'].each do |startup_name|
-    Startup.create!(
-      name: startup_name,
-      level: ios_course_level_1
-    )
+  admin_user.school.courses.each do |course|
+    Startup.create!(name: admin_user.name, level: course.levels.first)
   end
 
-  ['iOS Startup', 'iOS Startup 2'].each do |startup_name|
-    Startup.create!(
-      name: startup_name,
-      level: ios_course_level_2
-    )
+  (1..3).each do |index|
+    student_user = User.find_by(email: "student#{index}@example.com")
+    level = student_user.school.courses.first.levels.first
+    Startup.create!(name: student_user.name, level: level)
   end
-
-  # A startup for Admin in VR course
-  Startup.create!(
-    level: vr_course_level_1,
-    name: 'School Admin'
-  )
 end

@@ -45,7 +45,7 @@ feature 'SA Communities Editor' do
     expect(page).to have_text(course_2.name)
     fill_in 'What do you want to call this community?', with: new_community_name_for_edit
     click_button 'Yes'
-    find("div[title=\"#{course_1.name} Course\"]").click
+    find("div[title=\"Select #{course_1.name} Course\"]").click
     click_button 'Update Community'
 
     expect(page).to have_text("Community updated successfully")

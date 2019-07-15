@@ -9,11 +9,10 @@ module Users
     def execute
       User.transaction do
         # Create the user.
-        user = User.where(email: @email).first_or_create!
+        user = User.where(email: @email, school: @startup.school).first_or_create!
+        user.update!(name: @name, title: 'Test Account')
 
         Rails.logger.info("User with email address '#{@email}' created: ##{user.id}.")
-
-        create_user_profile(user)
 
         # Create the founder in the startup.
         founder = Founder.create!(user: user, startup: @startup)
@@ -31,13 +30,6 @@ module Users
 
         Rails.logger.info("Faculty for user created: ##{faculty.id}), and added as coach for Startup##{@startup.id}.")
       end
-    end
-
-    private
-
-    def create_user_profile(user)
-      user_profile = UserProfile.where(user: user, school: @startup.school).first_or_create!
-      user_profile.update!(name: @name, title: 'Test Account')
     end
   end
 end

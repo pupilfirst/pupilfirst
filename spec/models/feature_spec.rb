@@ -25,7 +25,8 @@ RSpec.describe Feature, type: :model do
 
       it 'returns true for admin users' do
         admin_user = create(:admin_user)
-        expect(Feature.active?(:test_feature, admin_user.user)).to eq(true)
+        user = create(:user, email: admin_user.email)
+        expect(Feature.active?(:test_feature, user)).to eq(true)
       end
 
       it 'returns false for non-admin users' do

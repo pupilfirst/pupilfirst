@@ -3,7 +3,7 @@ ActiveAdmin.register StartupFeedback do
   permit_params :feedback, :reference_url, :startup_id, :send_email, :faculty_id, :activity_type, :timeline_event_id
 
   filter :startup_name, as: :string
-  filter :faculty_name, as: :string
+  filter :faculty_user_name, as: :string
   filter :created_at
   filter :sent_at
   filter :activity_type

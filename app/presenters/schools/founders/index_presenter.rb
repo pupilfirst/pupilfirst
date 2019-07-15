@@ -12,7 +12,6 @@ module Schools
           teams: teams,
           courseId: @course.id,
           students: students,
-          userProfiles: user_profiles,
           courseCoachIds: @course.faculty.pluck(:id),
           schoolCoaches: coach_details,
           levels: levels,
@@ -34,37 +33,29 @@ module Schools
 
       def students
         @students ||=
-          founders.includes(:user, taggings: :tag).map do |student|
+          founders.includes(user: :avatar_attachment, taggings: :tag).map do |student|
             {
               id: student.id,
+              name: student.user.name,
+              avatarUrl: avatar_url(student.user),
               email: student.user.email,
               teamId: student.startup_id,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
               exited: student.exited,
-              excludedFromLeaderboard: student.excluded_from_leaderboard,
-              userId: student.user_id
+              excludedFromLeaderboard: student.excluded_from_leaderboard
             }
           end
-      end
-
-      def user_profiles
-        UserProfile.with_attached_avatar.where(user_id: (students.pluck(:userId) + coach_details.pluck(:userId)), school: current_school).uniq.map do |profile|
-          {
-            userId: profile.user_id,
-            name: profile.name,
-            avatarUrl: avatar_url(profile)
-          }
-        end
       end
 
       private
 
       def coach_details
         @coach_details ||=
-          current_school.faculty.where.not(exited: true).map do |coach|
+          current_school.faculty.where.not(exited: true).includes(user: :avatar_attachment).map do |coach|
             {
               id: coach.id,
-              userId: coach.user_id
+              name: coach.user.name,
+              avatarUrl: avatar_url(coach.user)
             }
           end
       end
@@ -78,11 +69,11 @@ module Schools
         end
       end
 
-      def avatar_url(user_profile)
-        if user_profile.avatar.attached?
-          view.url_for(user_profile.avatar_variant(:mid))
+      def avatar_url(user)
+        if user.avatar.attached?
+          view.url_for(user.avatar_variant(:mid))
         else
-          user_profile.initials_avatar
+          user.initials_avatar
         end
       end
 

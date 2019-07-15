@@ -1,0 +1,5 @@
+---
+timestamp: '2019-07-11T09:42:18Z'
+title: Fixed a crash which could occur when users uploaded a profile pictures between
+  2 and 5 megabytes. The form now correctly limits the file size to 5 MB.
+category: bugfix

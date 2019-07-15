@@ -9,17 +9,16 @@ module Schools
       property :notify_for_submission
       property :exited
       property :public
-      property :image, virtual: true, validates: { file_content_type: { allow: ['image/jpeg', 'image/png'] }, file_size: { less_than: 2.megabytes } }
+      property :image, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes }, allow_blank: true }
       property :school_id, virtual: true, validates: { presence: true }
 
       def save
         Faculty.transaction do
-          user = User.where(email: email).first_or_create!
-          model.update!(faculty_params.merge(user: user))
+          user = model.user
+          user.update!(user_params)
+          user.avatar.attach(image) if image.present?
 
-          user_profile = UserProfile.where(user: user, school: school).first_or_create!
-          user_profile.update!(user_profile_params)
-          user_profile.avatar.attach(image) if image.present?
+          model.update!(faculty_params)
         end
 
         clear_faculty_enrollments if model.exited?
@@ -33,7 +32,7 @@ module Schools
         School.find_by(id: school_id)
       end
 
-      def user_profile_params
+      def user_params
         {
           name: name,
           title: title,
@@ -43,7 +42,6 @@ module Schools
 
       def faculty_params
         {
-          school: school,
           connect_link: connect_link,
           public: public,
           notify_for_submission: notify_for_submission,

@@ -37,9 +37,7 @@
 <body data-env="<%= Rails.env %>">
 <%= render 'layouts/pretender_tailwind' if @pretender %>
 
-<% if content_for?(:nav) %>
-  <%= yield :nav %>
-<% end %>
+<%= yield :nav %>
 
 <% if content_for?(:wrapper) %>
   <%= yield :wrapper %>
@@ -47,11 +45,7 @@
   <%= yield %>
 <% end %>
 
+<%= yield :footer %>
 <%= yield :tail %>
-
-<% if content_for?(:nav) %>
-  <%= yield :footer %>
-<% end %>
-
 </body>
 </html>

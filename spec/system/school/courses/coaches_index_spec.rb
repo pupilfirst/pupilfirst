@@ -39,7 +39,7 @@ feature 'Course Coaches Index' do
 
     click_button 'Assign Coaches to Course'
 
-    expect(page).to have_selector('.select-list__item-selected', count: 1)
+    expect(page).to have_text('None Selected')
 
     within '.select-list__group' do
       expect(page).to_not have_selector('.px-3', text: coach_5.name)

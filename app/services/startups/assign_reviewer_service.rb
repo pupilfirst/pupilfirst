@@ -5,7 +5,9 @@ module Startups
     end
 
     def assign(faculty_ids)
-      raise 'Faculty must in same school as team' if faculty_to_assign(faculty_ids).pluck(:school_id).uniq != [@startup.school.id]
+      @faculty_to_assign = @startup.school.faculty.where(id: faculty_ids)
+
+      raise 'Faculty must in same school as team' if @faculty_to_assign.count != [faculty_ids].flatten.count
 
       FacultyStartupEnrollment.transaction do
         FacultyStartupEnrollment.where(startup: @startup).destroy_all
@@ -19,12 +21,6 @@ module Startups
           )
         end
       end
-    end
-
-    private
-
-    def faculty_to_assign(faculty_ids)
-      @faculty_to_assign ||= Faculty.where(id: faculty_ids)
     end
   end
 end

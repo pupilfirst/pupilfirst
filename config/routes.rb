@@ -30,8 +30,6 @@ Rails.application.routes.draw do
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
 
-  resource :user_profile, only: %i[edit update]
-
   resource :school, only: %i[show update] do
     get 'customize'
     post 'images'
@@ -101,6 +99,8 @@ Rails.application.routes.draw do
   get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
   get 'home', controller: "users", action: "home", as: "home"
+
+  resource :user, only: %i[edit update]
 
   resources :timeline_events, only: %i[] do
     member do

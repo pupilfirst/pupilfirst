@@ -26,19 +26,15 @@ module Users
       @founders ||= current_user.founders.joins(:school).where(schools: { id: current_school })
     end
 
-    def show_profile_edit?
+    def show_user_edit?
       founders.where(exited: false).any?
     end
 
-    def user_profile
-      @user_profile ||= UserProfile.where(user: current_user, school: current_school).first
-    end
-
     def avatar
-      if user_profile.avatar.attached?
-        view.url_for(user_profile.avatar_variant(:mid))
+      if current_user.avatar.attached?
+        view.url_for(current_user.avatar_variant(:mid))
       else
-        user_profile.initials_avatar
+        current_user.initials_avatar
       end
     end
 

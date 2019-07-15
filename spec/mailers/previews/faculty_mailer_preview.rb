@@ -14,7 +14,8 @@ class FacultyMailerPreview < ActionMailer::Preview
   end
 
   def student_submission_notification
-    founder = Founder.with_email('ios@example.org')
+    user = current_school.users.where(email: 'ios@example.org')
+    founder = user.founders.first
     timeline_event = founder.timeline_events.first
     faculty = founder.school.faculty.first
 

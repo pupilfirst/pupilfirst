@@ -8,7 +8,7 @@ ActiveAdmin.register ConnectRequest do
   scope :requested
   scope :cancelled
 
-  filter :connect_slot_faculty_name, as: :string, label: 'Name of Faculty'
+  filter :connect_slot_faculty_user_name, as: :string, label: 'Name of Faculty'
   filter :startup_name, as: :string
   filter :questions
   filter :status, as: :select, collection: -> { ConnectRequest.valid_statuses }

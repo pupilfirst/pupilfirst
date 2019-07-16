@@ -213,11 +213,11 @@ let handleDeleteContentBlock =
       |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
       |> Js.Promise.then_(response => {
            response##deleteContentBlock##success ?
-             removeTargetContentCB(Some(id), sortIndex) : ();
+             removeTargetContentCB(sortIndex) : ();
            Js.Promise.resolve();
          })
       |> ignore;
-    | None => removeTargetContentCB(None, sortIndex)
+    | None => removeTargetContentCB(sortIndex)
     } :
     ();
 let decodeContent =

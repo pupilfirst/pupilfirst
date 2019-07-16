@@ -117,7 +117,7 @@ let eligibleTargets = (targets, targetGroupIds) =>
      )
   |> List.filter(target => !(target |> Target.visibility === Archived));
 
-let handleEC = (evaluationCriteria, target) => {
+let cacheCurrentEvaluationCriteria = (evaluationCriteria, target) => {
   let selectedEcIds = target |> Target.evaluationCriteria |> Array.of_list;
 
   evaluationCriteria
@@ -137,7 +137,7 @@ let handleEC = (evaluationCriteria, target) => {
      });
 };
 
-let handlePT = (targets, target) => {
+let cachePrerequisiteTargets = (targets, target) => {
   let selectedTargetIds =
     target |> Target.prerequisiteTargets |> Array.of_list;
 
@@ -340,10 +340,10 @@ let make =
     ) => {
   let initialState = {
     title: target |> Target.title,
-    evaluationCriteria: handleEC(evaluationCriteria, target),
+    evaluationCriteria: cacheCurrentEvaluationCriteria(evaluationCriteria, target),
     contentBlocks,
     prerequisiteTargets:
-      handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
+    cachePrerequisiteTargets(eligibleTargets(targets, targetGroupIdsInLevel), target),
     quiz: handleQuiz(target),
     linkToComplete:
       switch (target |> Target.linkToComplete) {

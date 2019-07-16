@@ -7,7 +7,7 @@ ActiveAdmin.register ConnectSlot do
 
   menu parent: 'Faculty'
 
-  filter :faculty_name, as: :string
+  filter :faculty_user_name, as: :string
   filter :faculty_category_eq, label: 'Facutly Type', as: :select, collection: -> { Faculty.valid_categories }
   filter :slot_at
 

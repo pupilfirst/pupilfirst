@@ -7,7 +7,6 @@ ActiveAdmin.register PlatformFeedback do
 
   permit_params :founder_id, :feedback_type, :description, :promoter_score, :notes
 
-  filter :founder_name, as: :string
   filter :feedback_type
   filter :created_at
   filter :notes

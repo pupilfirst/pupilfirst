@@ -69,7 +69,7 @@ module CoachDashboard
     end
 
     def files(timeline_event)
-      timeline_event.timeline_event_files.map { |file| { title: file.title, id: file.id } }
+      timeline_event.timeline_event_files.map { |file| { title: file.file.filename, id: file.id } }
     end
 
     def evaluation(timeline_event)

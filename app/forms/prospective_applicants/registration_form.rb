@@ -2,7 +2,6 @@ module ProspectiveApplicants
   class RegistrationForm < Reform::Form
     include CollegeAddable
     include AdmissionsPrepopulatable
-    include EmailBounceValidatable
 
     property :name, validates: { presence: true, length: { maximum: 250 } }
     property :email, validates: { presence: true, email: true, length: { maximum: 250 } }

@@ -47,6 +47,7 @@ type state = {
   saving: bool,
   activeStep,
   visibility: Target.visibility,
+  contentEditorDirty: bool,
 };
 
 type action =
@@ -60,7 +61,8 @@ type action =
   | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateSaving
   | UpdateActiveStep(activeStep)
-  | UpdateVisibility(Target.visibility);
+  | UpdateVisibility(Target.visibility)
+  | UpdateContentEditorDirty(bool);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -240,7 +242,10 @@ let booleanButtonClasses = bool => {
 
 let completionButtonClasses = value => {
   let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
-  value ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500" : defaultClasses ++ " opacity-75 text-gray-900";
+  value ?
+    defaultClasses
+    ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500" :
+    defaultClasses ++ " opacity-75 text-gray-900";
 };
 
 let formClasses = value => {
@@ -306,6 +311,17 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateContentEditorDirty(contentEditorDirty) => {...state, contentEditorDirty}
+  };
+
+let handleEditorClosure = (hideEditorActionCB, state) => {
+    switch(state.contentEditorDirty || state.dirty) {
+    | false => hideEditorActionCB()
+    | true => Webapi.Dom.window
+    |> Webapi.Dom.Window.confirm(
+         " There are unsaved changes! Are you sure you want to close the editor?",
+       ) ? hideEditorActionCB() : ()
+    }
   };
 
 [@react.component]
@@ -322,7 +338,7 @@ let make =
       ~hideEditorActionCB,
       ~updateContentBlocksCB,
     ) => {
-  let handleInitialState = {
+  let initialState = {
     title: target |> Target.title,
     evaluationCriteria: handleEC(evaluationCriteria, target),
     contentBlocks,
@@ -342,9 +358,10 @@ let make =
     saving: false,
     activeStep: AddContent,
     visibility: target |> Target.visibility,
+    contentEditorDirty: false,
   };
 
-  let (state, dispatch) = React.useReducer(reducer, handleInitialState);
+  let (state, dispatch) = React.useReducer(reducer, initialState);
 
   let targetEvaluated = () =>
     switch (state.methodOfCompletion) {
@@ -367,9 +384,11 @@ let make =
   let removeQuizQuestionCB = id => dispatch(RemoveQuizQuestion(id));
   let updateQuizQuestionCB = (id, quizQuestion) =>
     dispatch(UpdateQuizQuestion(id, quizQuestion));
+  let updateContentEditorDirtyCB = contentEditorDirty =>
+    dispatch(UpdateContentEditorDirty(contentEditorDirty));
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
-  let handleResponseCB = json => {
+  let handleResponseCB = (closeEditor, dispatch, json) => {
     let id = json |> Json.Decode.(field("id", string));
     let sortIndex = json |> Json.Decode.(field("sortIndex", int));
     let prerequisiteTargets =
@@ -408,14 +427,20 @@ let make =
         state.visibility,
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget, state.contentBlocks);
+    updateTargetCB(newTarget, state.contentBlocks, closeEditor);
+    closeEditor ? () : dispatch(UpdateSaving);
   };
 
-  let updateTarget = targetId => {
+  let updateTarget = (closeEditor, targetId) => {
     dispatch(UpdateSaving);
     let payload = setPayload(state, target, authenticityToken);
     let url = "/school/targets/" ++ targetId;
-    Api.update(url, payload, handleResponseCB, handleErrorCB);
+    Api.update(
+      url,
+      payload,
+      handleResponseCB(closeEditor, dispatch),
+      handleErrorCB,
+    );
   };
   let showPrerequisiteTargets = state.prerequisiteTargets |> List.length > 0;
   <div>
@@ -425,7 +450,7 @@ let make =
         <button
           id="target-editor-close"
           title="close"
-          onClick={_ => hideEditorActionCB()}
+          onClick={_ => handleEditorClosure(hideEditorActionCB, state)}
           className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
           <i className="fal fa-times text-xl" />
         </button>
@@ -440,7 +465,7 @@ let make =
               <li
                 onClick={_event => dispatch(UpdateActiveStep(AddContent))}
                 className={
-                  "target-editor__tab-item "
+                  "target-editor__tab-item cursor-pointer "
                   ++ (
                     state.activeStep == AddContent ?
                       "target-editor__tab-item--selected" : ""
@@ -454,7 +479,7 @@ let make =
               <li
                 onClick={_event => dispatch(UpdateActiveStep(TargetActions))}
                 className={
-                  "target-editor__tab-item -ml-px "
+                  "target-editor__tab-item cursor-pointer -ml-px "
                   ++ (
                     state.activeStep == TargetActions ?
                       "target-editor__tab-item--selected" : ""
@@ -485,20 +510,35 @@ let make =
                   {"Title" |> str}
                 </label>
                 <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white text-2xl font-semibold text-gray-900 border-b border-gray-400 pb-2 mb-4 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="title"
-                  type_="text"
-                  placeholder="Type target title here"
-                  value={state.title}
-                  onChange={
-                    event =>
-                      updateTitle(
-                        dispatch,
-                        ReactEvent.Form.target(event)##value,
-                      )
+                <div
+                  className="flex items-center border-b border-gray-400 pb-2 mb-4">
+                  <input
+                    className="appearance-none block w-full bg-white text-2xl pr-4 font-semibold text-gray-900 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="title"
+                    type_="text"
+                    placeholder="Type target title here"
+                    value={state.title}
+                    onChange={
+                      event =>
+                        updateTitle(
+                          dispatch,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                  {
+                    state.title != (target |> Target.title)
+                    && !state.hasTitleError ?
+                      <button
+                        onClick={
+                          _e => updateTarget(false, target |> Target.id)
+                        }
+                        className="btn btn-success">
+                        {"Update" |> str}
+                      </button> :
+                      React.null
                   }
-                />
+                </div>
                 {
                   state.hasTitleError ?
                     <div className="drawer-right-form__error-msg">
@@ -511,6 +551,7 @@ let make =
                   target
                   contentBlocks={state.contentBlocks}
                   updateContentBlocksCB
+                  updateContentEditorDirtyCB
                   authenticityToken
                 />
               </div>
@@ -822,7 +863,13 @@ let make =
               {
                 switch (state.activeStep) {
                 | AddContent =>
-                  <div className="w-full flex justify-end">
+                  <div className="w-full flex items-center justify-end">
+                    { state.contentEditorDirty ?
+                    <div className="w-full flex items-center bg-orange-100 border border-orange-400 rounded py-2 px-3 mr-4 text-orange-800 font-semibold">
+                      <i className="fas fa-exclamation-triangle"></i>
+                      <span className="ml-2">{"You have unsaved changes in this step" |> str}</span>
+                    </div> : React.null
+                    }
                     <button
                       key="add-content-step"
                       onClick=(
@@ -838,7 +885,7 @@ let make =
                     <button
                       key="target-actions-step"
                       disabled={saveDisabled(state)}
-                      onClick=(_e => updateTarget(target |> Target.id))
+                      onClick=(_e => updateTarget(true, target |> Target.id))
                       className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                       {"Update Target" |> str}
                     </button>

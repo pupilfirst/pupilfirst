@@ -1,12 +1,10 @@
 class User < ApplicationRecord
+  belongs_to :school
   has_many :founders, dependent: :restrict_with_error
-  has_one :admin_user, dependent: :restrict_with_error
-  has_many :faculty, dependent: :restrict_with_error
+  has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
-  has_many :school_admins, dependent: :restrict_with_error
-  has_many :user_profiles, dependent: :restrict_with_error
-  belongs_to :school
+  has_one :school_admin, dependent: :restrict_with_error
 
   has_secure_token :login_token
 
@@ -22,9 +20,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: { scope: :school_id }
   has_one_attached :avatar
 
-  def self.with_email(email)
-    where('lower(email) = ?', email.downcase).first # rubocop:disable Rails/FindBy
-  end
+  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
 
   GENDER_MALE = 'male'.freeze
   GENDER_FEMALE = 'female'.freeze
@@ -54,10 +50,6 @@ class User < ApplicationRecord
   # True if the user has ever signed in, handled by Users::ConfirmationService.
   def confirmed?
     confirmed_at.present?
-  end
-
-  def admin?
-    admin_user.present?
   end
 
   def display_name

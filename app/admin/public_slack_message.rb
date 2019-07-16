@@ -2,7 +2,7 @@ ActiveAdmin.register PublicSlackMessage do
   menu parent: 'Founders'
   actions :index
 
-  filter :founder_name, as: :string
+  filter :founder_user_name, as: :string
   filter :slack_username, as: :string
   filter :channel, as: :string
   filter :created_at

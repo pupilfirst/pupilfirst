@@ -46,7 +46,12 @@ let updateContentBlockSorting =
 };
 
 let updateContentBlockMasterList =
-    (sortedContentBlocks, updateContentBlocksCB, targetId) => {
+    (
+      sortedContentBlocks,
+      updateContentBlocksCB,
+      updateContentEditorDirtyCB,
+      targetId,
+    ) => {
   let updatedCBs =
     sortedContentBlocks
     |> List.filter(((_, _, cb, _)) =>
@@ -58,12 +63,21 @@ let updateContentBlockMasterList =
     |> List.map(((sortIndex, blockType, _, id)) =>
          ContentBlock.make(id, blockType, targetId, sortIndex)
        );
+  let contentEditorDirty =
+    sortedContentBlocks |> List.exists(((_, _, cb, _)) => cb == None);
+  updateContentEditorDirtyCB(contentEditorDirty);
   updateContentBlocksCB(targetId, updatedCBs);
 };
 
 [@react.component]
 let make =
-    (~target, ~contentBlocks, ~updateContentBlocksCB, ~authenticityToken) => {
+    (
+      ~target,
+      ~contentBlocks,
+      ~updateContentBlocksCB,
+      ~updateContentEditorDirtyCB,
+      ~authenticityToken,
+    ) => {
   let (targetContentBlocks, updateTargetContentBlocks) =
     React.useState(() =>
       contentBlocks
@@ -94,16 +108,13 @@ let make =
     let updatedContentBlockList =
       targetContentBlocks
       |> List.filter(((index, _, _, _)) => sortIndex != index);
-    switch (contentBlockId) {
-    | Some(_contentBlockId) =>
       updateTargetContentBlocks(_ => updatedContentBlockList);
       updateContentBlockMasterList(
         updatedContentBlockList,
         updateContentBlocksCB,
+        updateContentEditorDirtyCB,
         target |> Target.id,
       );
-    | None => updateTargetContentBlocks(_ => updatedContentBlockList)
-    };
     toggleSortContentBlock(sortContentBlock => !sortContentBlock);
   };
 
@@ -117,7 +128,7 @@ let make =
     [|sortContentBlock|],
   );
 
-  let newContentBlockCB = (sortIndex, blockType: ContentBlock.blockType) =>
+  let newContentBlockCB = (sortIndex, blockType: ContentBlock.blockType) => {
     updateTargetContentBlocks(targetContentBlocks => {
       let (lowerCBs, upperCBs) =
         targetContentBlocks
@@ -131,6 +142,8 @@ let make =
         |> List.append([(sortIndex, blockType, None, newComponentKey)]);
       List.append(lowerCBs, updatedUpperCBs);
     });
+    updateContentEditorDirtyCB(true);
+  };
 
   let createNewContentCB = contentBlock => {
     let newContentBlock = (
@@ -150,6 +163,7 @@ let make =
     updateContentBlockMasterList(
       updatedContentBlockList,
       updateContentBlocksCB,
+      updateContentEditorDirtyCB,
       target |> Target.id,
     );
   };
@@ -171,61 +185,40 @@ let make =
     updateContentBlockMasterList(
       updatedContentBlockList,
       updateContentBlocksCB,
+      updateContentEditorDirtyCB,
       target |> Target.id,
     );
   };
 
-  let moveContentDownCB = sortIndex => {
-    let (lowerCBs, upperCBs) =
+  let swapContentBlockCB = (upperSortIndex, lowerSortIndex) => {
+    let upperContentBlock =
       sortedContentBlocks
-      |> List.partition(((index, _, _, _)) => index <= sortIndex);
-    let currentCB = lowerCBs |> List.rev |> List.hd;
-    let contentBlockToSwap = upperCBs |> List.hd;
-    let (sortIndex1, blockType1, cb1, id1) = contentBlockToSwap;
-    let (sortIndex2, blockType2, cb2, id2) = currentCB;
-    let updatedlowerCBs =
-      lowerCBs
-      |> List.rev
-      |> List.tl
-      |> List.append([(sortIndex2, blockType1, cb1, id1)]);
-    let updatedUpperCBs =
-      upperCBs
-      |> List.tl
-      |> List.append([(sortIndex1, blockType2, cb2, id2)]);
+      |> ListUtils.unsafeFind(
+           ((index, _, _, _)) => index == upperSortIndex,
+           "Unable to find content block with this sort index",
+         );
+    let lowerContentBlock =
+      sortedContentBlocks
+      |> ListUtils.unsafeFind(
+           ((index, _, _, _)) => index == lowerSortIndex,
+           "Unable to find content block with this sort index",
+         );
+    let (sortIndex1, blockType1, cb1, id1) = lowerContentBlock;
+    let (sortIndex2, blockType2, cb2, id2) = upperContentBlock;
     let updatedContentBlockList =
-      List.append(updatedlowerCBs, updatedUpperCBs);
+      sortedContentBlocks
+      |> List.filter(((index, _, _, _)) =>
+           !([lowerSortIndex, upperSortIndex] |> List.mem(index))
+         )
+      |> List.append([
+           (sortIndex1, blockType2, cb2, id2),
+           (sortIndex2, blockType1, cb1, id1),
+         ]);
     updateTargetContentBlocks(_ => updatedContentBlockList);
     updateContentBlockMasterList(
       updatedContentBlockList,
       updateContentBlocksCB,
-      target |> Target.id,
-    );
-    toggleSortContentBlock(sortContentBlock => !sortContentBlock);
-  };
-
-  let moveContentUpCB = sortIndex => {
-    let (lowerCBs, upperCBs) =
-      sortedContentBlocks
-      |> List.partition(((index, _, _, _)) => index < sortIndex);
-    let currentCB = upperCBs |> List.hd;
-    let contentBlockToSwap = lowerCBs |> List.rev |> List.hd;
-    let (sortIndex1, blockType1, cb1, id1) = contentBlockToSwap;
-    let (sortIndex2, blockType2, cb2, id2) = currentCB;
-    let updatedlowerCBs =
-      lowerCBs
-      |> List.rev
-      |> List.tl
-      |> List.append([(sortIndex1, blockType2, cb2, id2)]);
-    let updatedUpperCBs =
-      upperCBs
-      |> List.tl
-      |> List.append([(sortIndex2, blockType1, cb1, id1)]);
-    let updatedContentBlockList =
-      List.append(updatedlowerCBs, updatedUpperCBs);
-    updateTargetContentBlocks(_ => updatedContentBlockList);
-    updateContentBlockMasterList(
-      updatedContentBlockList,
-      updateContentBlocksCB,
+      updateContentEditorDirtyCB,
       target |> Target.id,
     );
     toggleSortContentBlock(sortContentBlock => !sortContentBlock);
@@ -261,8 +254,7 @@ let make =
               createNewContentCB
               updateContentBlockCB
               blockCount={targetContentBlocks |> List.length}
-              moveContentUpCB
-              moveContentDownCB
+              swapContentBlockCB
               authenticityToken
             />
           )

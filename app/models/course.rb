@@ -9,6 +9,7 @@ class Course < ApplicationRecord
   has_many :levels, dependent: :restrict_with_error
   has_many :startups, through: :levels
   has_many :founders, through: :startups
+  has_many :users, through: :founders
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
   has_many :evaluation_criteria, dependent: :restrict_with_error

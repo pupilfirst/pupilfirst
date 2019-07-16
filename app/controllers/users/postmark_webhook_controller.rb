@@ -4,7 +4,7 @@ module Users
     http_basic_authenticate_with name: ENV['POSTMARK_HOOK_ID'], password: ENV['POSTMARK_HOOK_SECRET']
 
     def email_bounce
-      @user = User.find_by(email: params[:Email])
+      @user = current_school&.users&.find_by(email: params[:Email])
       return unless @user.present? && params[:Type].in?(target_bounce_types)
 
       mark_user_unemailable

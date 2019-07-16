@@ -1,147 +1,27 @@
-after 'development:courses' do
-  require_relative 'helper'
+require_relative 'helper'
 
+after 'development:courses' do
   puts 'Seeding faculty'
 
-  sv = School.find_by(name: 'SV.CO')
-
-  sanjay = User.create(email: 'mickeymouse@example.com')
-
-  UserProfile.create!(
-    user: sanjay,
-    school: sv,
-    name: 'Sanjay Vijayakumar',
-    title: 'CEO SV.CO',
-    linkedin_url: 'https://linkedin.com',
-    key_skills: Faker::Lorem.words(3).join(', ')
-  )
-
-  faculty = Faculty.create!(
-    category: 'team',
-    sort_index: 1,
-    user: sanjay,
-    school: sv,
-    public: true
-  )
-
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: faculty,
-    course: Course.find_by(name: 'Startup')
-  )
-
-
-  vishnu = User.create(email: 'minniemouse@example.com')
-
-  UserProfile.create!(
-    user: vishnu,
-    school: sv,
-    name: 'Vishnu Gopal',
-    title: 'CTO',
-    linkedin_url: 'https://linkedin.com',
-    key_skills: Faker::Lorem.words(3).join(', ')
-  )
-
-  faculty = Faculty.create!(
-    category: 'team',
-    sort_index: 2,
-    user: vishnu,
-    school: sv,
-    public: true
-  )
-
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: faculty,
-    course: Course.find_by(name: 'Developer')
-  )
-
-  gautham = User.create(email: 'donaldduck@example.com')
-
-  UserProfile.create!(
-    user: gautham,
-    school: sv,
-    name: 'Gautham',
-    title: 'COO SV.CO',
-    linkedin_url: 'https://linkedin.com',
-    key_skills: Faker::Lorem.words(3).join(', ')
-  )
-
-  faculty = Faculty.create!(
-    category: 'developer_coaches',
-    sort_index: 3,
-    user: gautham,
-    school: sv,
-    public: true
-  )
-
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: faculty,
-    course: Course.find_by(name: 'Startup')
-  )
-
-  hari = User.create(email: 'goofy@example.com')
-
-  UserProfile.create!(
-    user: hari,
-    school: sv,
-    name: 'Hari Gopal',
-    title: 'Engineering Lead',
-    key_skills: 'Looting, pillaging, etc.'
-  )
-
-  faculty = Faculty.create!(
-    category: 'visiting_coaches',
-    user: hari,
-    school: sv,
-    public: true
-  )
-
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: faculty,
-    course: Course.find_by(name: 'VR')
-  )
-
-  ios_coach = User.create(email: 'ioscoach@example.com')
-
-  UserProfile.create!(
-    user: ios_coach,
-    school: sv,
-    name: 'iOS Coach',
-    title: 'Coaching Expert',
-    about: "This is just a demo coach. The about field is required for Faculty#show to be available - that's why this text is here.",
-  )
-
-  faculty = Faculty.create!(
-    category: 'vr_coaches',
-    user: ios_coach,
-    school: sv,
-    public: true
-  )
+  school = School.first
 
   admin = User.find_by(email: 'admin@example.com')
 
-  admin_profile = UserProfile.where(user: admin, school: sv).first_or_create!
-  admin_profile.update!(name: 'School Admin', title: 'School Admin')
-
   admin_coach = Faculty.create!(
+    school: school,
     category: 'team',
     user: admin,
-    school: sv
+    public: false
   )
 
-  # Enroll admin@example.com as coach on iOS and VR courses.
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: admin_coach,
-    course: Course.find_by(name: 'iOS')
-  )
+  school.courses.each_with_index do |course, index|
+    user = User.find_by(email: "coach#{index + 1}@example.com")
+    new_coach = Faculty.create!(school: school, category: 'team', user: user, public: true)
 
-  FacultyCourseEnrollment.create!(
-    safe_to_create: true,
-    faculty: admin_coach,
-    course: Course.find_by(name: 'VR')
-  )
+    # Add the new coach to the course.
+    FacultyCourseEnrollment.create!(safe_to_create: true, faculty: new_coach, course: course)
+
+    # Add admin@example.com as a coach for every course.
+    FacultyCourseEnrollment.create!(safe_to_create: true, faculty: admin_coach, course: course)
+  end
 end

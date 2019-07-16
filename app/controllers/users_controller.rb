@@ -9,14 +9,12 @@ class UsersController < ApplicationController
 
   # GET /user/edit
   def edit
-    @user = authorize(current_user)
-    @form = Users::EditForm.new(@user)
+    @form = Users::EditForm.new(current_user)
   end
 
   # PATCH /user
   def update
-    @user = authorize(current_user)
-    @form = Users::EditForm.new(@user)
+    @form = Users::EditForm.new(current_user)
 
     if @form.validate(params[:users_edit])
       @form.save!

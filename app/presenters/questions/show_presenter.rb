@@ -79,7 +79,7 @@ module Questions
       title = user.title
       title_text = title.present? ? ", #{title}" : ""
 
-      if user.faculty.any?
+      if user.faculty.present?
         title.presence || "Coach"
       else
         "Student#{title_text}"

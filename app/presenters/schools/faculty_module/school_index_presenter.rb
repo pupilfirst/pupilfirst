@@ -8,7 +8,7 @@ module Schools
       end
 
       def faculty
-        Faculty.where(school: @school).includes(:user)
+        current_school.faculty.includes(:user)
       end
 
       def react_props

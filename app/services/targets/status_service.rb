@@ -68,7 +68,7 @@ module Targets
 
       previous_level = @target.course.levels.where(number: founder_level_number - 1)
 
-      previous_level_milestones = Target.joins(:target_group).where(
+      previous_level_milestones = Target.live.joins(:target_group).where(
         target_groups: {
           level: previous_level,
           milestone: true

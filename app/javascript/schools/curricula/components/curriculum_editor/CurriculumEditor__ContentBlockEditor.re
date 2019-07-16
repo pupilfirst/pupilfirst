@@ -400,8 +400,7 @@ let make =
       ~newContentBlockCB,
       ~blockCount,
       ~createNewContentCB,
-      ~moveContentUpCB,
-      ~moveContentDownCB,
+      ~swapContentBlockCB,
       ~updateContentBlockCB,
       ~authenticityToken,
     ) => {
@@ -456,7 +455,9 @@ let make =
               sortIndex != 1 ?
                 <button
                   title="Move up"
-                  onClick={_event => moveContentUpCB(sortIndex)}
+                  onClick={
+                    _event => swapContentBlockCB(sortIndex, sortIndex - 1)
+                  }
                   className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
                   <i className="fas fa-arrow-up" />
                 </button> :
@@ -466,7 +467,9 @@ let make =
               sortIndex != blockCount ?
                 <button
                   title="Move down"
-                  onClick={_event => moveContentDownCB(sortIndex)}
+                  onClick={
+                    _event => swapContentBlockCB(sortIndex + 1, sortIndex)
+                  }
                   className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
                   <i className="fas fa-arrow-down" />
                 </button> :
@@ -552,25 +555,24 @@ let make =
                           dangerouslySetInnerHTML={"__html": embedCode}
                         />
                       | File(url, title, filename) =>
-                        <div className="bg-white px-6 py-4">
-                          <a
-                            className="flex justify-between items-center"
-                            href=url>
-                            <div className="flex items-center">
-                              <FaIcon
-                                classes="text-4xl text-red-600 fal fa-file-pdf"
-                              />
-                              <div className="pl-4 leading-tight">
-                                <div className="text-lg font-semibold">
-                                  {title |> str}
-                                </div>
-                                <div className="text-sm italic text-gray-600">
-                                  {filename |> str}
-                                </div>
+                        <a
+                          className="flex justify-between items-center bg-white px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
+                          target="_blank"
+                          href=url>
+                          <div className="flex items-center">
+                            <FaIcon
+                              classes="text-4xl text-gray-800 fal fa-file-alt"
+                            />
+                            <div className="pl-4 leading-tight">
+                              <div className="text-lg font-semibold">
+                                {title |> str}
+                              </div>
+                              <div className="text-sm italic text-gray-600">
+                                {filename |> str}
                               </div>
                             </div>
-                          </a>
-                        </div>
+                          </div>
+                        </a>
                       }
                     }
                   </div>

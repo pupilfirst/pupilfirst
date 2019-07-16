@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user = user.admin_user if user.is_a?(User)
+    user = AdminUser.find_by(email: user.email) if user.is_a?(User)
 
     case user.admin_type
       when AdminUser::TYPE_SUPERADMIN

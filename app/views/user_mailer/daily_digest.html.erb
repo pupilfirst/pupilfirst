@@ -27,25 +27,22 @@
 <% content_for :body do %>
   <p>
     There <%= "#{questions_article} #{question_count}" %> new <%= 'question'.pluralize(question_count) %> from
-    <%= pluralize(community_count, 'community') %>.
+    <%= pluralize(community_count, 'community') %> in <%= school_name %>.
   </p>
 
   <% @updates.each do |community_id, community_updates| %>
-    <table>
-      <% community_updates[:questions].each do |question| %>
-        <tr>
-          <td><%= question[:title] %></td>
-          <td>
-            <%= link_to 'View Question', question_url(question[:id]) %>
-          </td>
-        </tr>
-      <% end %>
+    <ul style="padding: 0; list-style-type: none;">
+      <p style="border-bottom: 1px solid lightgrey;">
+        <%= link_to community_updates[:community_name], community_url(community_id), style: 'text-decoration: none; font-size: 150%; line-height: 1.75;' %>
+      </p>
 
-      <tr>
-        <td colspan="2">
-          <%= link_to 'See all questions in community', community_url(community_id) %>
-        </td>
-      </tr>
-    </table>
+      <% community_updates[:questions].each do |question| %>
+        <li style="padding-left: 10px;"><%= link_to question[:title], question_url(question[:id]), style: 'text-decoration: none;' %></li>
+      <% end %>
+    </ul>
   <% end %>
+<% end %>
+
+<% content_for(:signature) do %>
+  <div></div>
 <% end %>

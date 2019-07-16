@@ -3,8 +3,8 @@
   commentable_article = commentable.is_a?(Question) ? 'a' : 'an'
   commentable_type = commentable.is_a?(Question) ? 'question' : 'answer'
   question = commentable.is_a?(Question) ? commentable : commentable.question
-  recipient_name = commentable.creator.user_profiles.find_by(school: @school)&.name || ""
-  comment_from = @comment.creator.user_profiles.find_by(school: @school)&.name || "A user"
+  recipient_name = commentable.creator&.name || ""
+  comment_from = @comment.creator&.name || "A user"
   community_name = commentable.community.name
 %>
 

@@ -56,7 +56,11 @@
 
               <%= yield :body %>
 
-              <p class="mailer-body__signature"><%= presenter.school_name %></p>
+              <% if content_for?(:signature) %>
+                <%= yield :signature %>
+              <% else %>
+                <p class="mailer-body__signature"><%= presenter.school_name %></p>
+              <% end %>
             </td>
           </tr>
 

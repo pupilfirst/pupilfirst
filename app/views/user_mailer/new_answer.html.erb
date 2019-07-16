@@ -1,7 +1,7 @@
 <%
   question = @answer.question
-  recipient_name = question.creator.user_profiles.find_by(school: @school)&.name || ""
-  answer_from = @answer.creator.user_profiles.find_by(school: @school)&.name || "A user"
+  recipient_name = question.creator&.name || ""
+  answer_from = @answer.creator&.name || "A user"
   community_name = question.community.name
 %>
 

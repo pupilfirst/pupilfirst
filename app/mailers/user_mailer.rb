@@ -24,6 +24,7 @@ class UserMailer < SchoolMailer
   def daily_digest(user, updates)
     @user = user
     @updates = updates
+    @school = user.school
     subject = "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
     simple_roadie_mail(user.email, subject)
   end

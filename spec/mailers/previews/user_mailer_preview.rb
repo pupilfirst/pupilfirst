@@ -6,4 +6,30 @@ class UserMailerPreview < ActionMailer::Preview
   def new_comment
     UserMailer.new_comment(Comment.order('RANDOM()').first)
   end
+
+  def daily_digest
+    user = Founder.last.user
+
+    updates = {
+      1 => community_digest(2),
+      2 => community_digest(1, 3)
+    }
+
+    UserMailer.daily_digest(user, updates)
+  end
+
+  private
+
+  def community_digest(count, starting_id = 1)
+    {
+      community_name: Faker::Lorem.words(2).join(' ').titleize,
+      questions: (1..count).map do |id|
+        {
+          id: starting_id + id - 1,
+          title: Faker::Lorem.sentence,
+          author: Faker::Name.name
+        }
+      end
+    }
+  end
 end

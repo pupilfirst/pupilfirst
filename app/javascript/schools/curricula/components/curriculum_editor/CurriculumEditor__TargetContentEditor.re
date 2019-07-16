@@ -104,7 +104,7 @@ let make =
          x - y;
        });
 
-  let removeTargetContentCB = (contentBlockId, sortIndex) => {
+  let removeTargetContentCB = (sortIndex) => {
     let updatedContentBlockList =
       targetContentBlocks
       |> List.filter(((index, _, _, _)) => sortIndex != index);

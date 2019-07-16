@@ -705,7 +705,6 @@ ActiveRecord::Schema.define(version: 2019_07_11_065042) do
     t.string "skype_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest"
     t.index ["school_id", "user_id"], name: "index_user_profiles_on_school_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_user_profiles_on_user_id"
   end

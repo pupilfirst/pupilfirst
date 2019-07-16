@@ -1,6 +1,4 @@
 class UserSignInWithEmailForm < Reform::Form
-  include EmailBounceValidatable
-
   attr_accessor :current_school
 
   property :email, validates: { presence: true, length: { maximum: 250 }, email: true }

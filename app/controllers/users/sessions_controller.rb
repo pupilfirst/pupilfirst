@@ -15,7 +15,7 @@ module Users
 
     # POST /user/send_email - find or create user from email received
     def send_login_email
-      @form = UserSignInWithEmailForm.new(Reform::OpenForm.new)
+      @form = Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
       if @form.validate(params[:session])
@@ -51,12 +51,12 @@ module Users
 
     # POST /user/sign_in
     def create
-      @form = UserSignInWithPasswordForm.new(Reform::OpenForm.new)
+      @form = Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
       if @form.validate(params[:session])
         sign_in @form.user
-        remember_me(@form.user) unless params[:shared_device] == 'true'
+        remember_me(@form.user) unless @form.shared_device?
         render json: { error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }

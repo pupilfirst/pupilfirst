@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_065042) do
+ActiveRecord::Schema.define(version: 2019_07_16_073236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -743,6 +743,9 @@ ActiveRecord::Schema.define(version: 2019_07_11_065042) do
     t.string "behance_url"
     t.string "skype_id"
     t.bigint "school_id"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 

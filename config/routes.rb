@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     post 'users/send_login_email', controller: 'users/sessions', action: 'send_login_email', as: 'user_send_login_email'
     post 'users/send_reset_password_email', controller: 'users/sessions', action: 'send_reset_password_email', as: 'user_send_reset_password_email'
     get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
+    get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
+    post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
 
     if Rails.env.development?
       get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'

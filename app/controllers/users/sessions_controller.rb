@@ -27,9 +27,17 @@ module Users
     end
 
     # POST /user/send_reset_password_email
-    # def send_reset_password_email
-    #
-    # end
+    def send_reset_password_email
+      @form = Users::Sessions::SendResetPasswordEmailForm.new(Reform::OpenForm.new)
+      @form.current_school = current_school
+
+      if @form.validate(params[:session])
+        @form.save(current_domain)
+        render json: { error: nil }
+      else
+        render json: { error: @form.errors.full_messages.join(', ') }
+      end
+    end
 
     # GET /user/token - link to sign_in user with token in params
     def token
@@ -46,6 +54,28 @@ module Users
         # Show an error message.
         flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
         redirect_to new_user_session_path(referer: params[:referer])
+      end
+    end
+
+    # GET /user/reset_password
+    def reset_password
+      user = User.find_by(reset_password_token: params[:token])
+      if user.present?
+        @token = params[:token]
+      end
+    end
+
+    def update_password
+      if current_user.present?
+        redirect_to after_sign_in_path_for(current_user)
+      else
+        @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
+        if @form.validate(params[:session]) && @form.save
+          sign_in @form.user
+          render json: { error: nil }
+        else
+          render json: { error: @form.errors.full_messages.join(', ') }
+        end
       end
     end
 

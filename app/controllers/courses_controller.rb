@@ -1,11 +1,9 @@
 class CoursesController < ApplicationController
-  layout 'student_course', only: :show
-  layout 'student', only: :enroll
-
   # GET /courses/:id/(:slug)
   def show
     @course = authorize(Course.find(params[:id]))
     @presenter = Courses::ShowPresenter.new(view_context, @course)
+    render layout: 'student_course'
   end
 
   # GET /courses/:id/leaderboard?weeks_before=
@@ -16,5 +14,6 @@ class CoursesController < ApplicationController
   # GET /courses/:id/enroll
   def enroll
     @course = authorize(Course.find(params[:id]))
+    render layout: 'student'
   end
 end

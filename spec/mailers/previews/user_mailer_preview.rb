@@ -12,7 +12,8 @@ class UserMailerPreview < ActionMailer::Preview
 
     updates = {
       1 => community_digest(2),
-      2 => community_digest(1, 3)
+      2 => community_digest(1, 3),
+      3 => community_digest(3, 4, true)
     }
 
     UserMailer.daily_digest(user, updates)
@@ -20,14 +21,16 @@ class UserMailerPreview < ActionMailer::Preview
 
   private
 
-  def community_digest(count, starting_id = 1)
+  def community_digest(count, starting_id = 1, unanswered = false)
     {
       community_name: Faker::Lorem.words(2).join(' ').titleize,
       questions: (1..count).map do |id|
         {
           id: starting_id + id - 1,
           title: Faker::Lorem.sentence,
-          author: Faker::Name.name
+          author: Faker::Name.name,
+          days_ago: unanswered ? rand(1..6) : 0,
+          type: unanswered ? :unanswered : :new
         }
       end
     }

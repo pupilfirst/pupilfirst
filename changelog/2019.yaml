@@ -1,13 +1,42 @@
 ---
 changelog:
+- timestamp: '2019-07-16T10:01:44Z'
+  changes:
+  - timestamp: '2019-07-16T08:12:40Z'
+    title: The back button on the _New Question_ page now takes the user back to where
+      they came from (community index, or target details page), instead of always
+      linking to the community index.
+    category: ui
+  - timestamp: '2019-07-16T07:46:18Z'
+    title: The ordering of answers in the community section has been improved; answers
+      with more _likes_ are listed first, and if two have the same number of likes, the
+      newest is preferred.
+    category: ui
+  - timestamp: '2019-07-11T09:42:18Z'
+    title: Fixed a crash which could occur when users uploaded a profile pictures
+      between 2 and 5 megabytes. The form now correctly limits the file size to 5
+      MB.
+    category: bugfix
+  - timestamp: '2019-07-11T09:40:05Z'
+    title: Fixed a bug which hid the review button for courses in a coach's home page
+      under certain conditions.
+    category: bugfix
+  - timestamp: '2019-07-11T09:38:23Z'
+    title: Quizzes now support markdown content in both questions and answers. This
+      allows the quiz to include code snippets, images, etc.
+    category: feature
+  - timestamp: '2019-07-02T07:52:41Z'
+    title: The generation of leaderboard entries can now be controlled, per-course,
+      from the admin interface.
+    category: feature
 - timestamp: '2019-06-28T07:38:26Z'
   changes:
   - timestamp: '2019-06-28T07:38:10Z'
     title: The student dashboard has been overhauled with a fresh design, and the
-      target details overlay has been upgraded to allow us to present rich documents as content
-      for students to consume. School admins can now author much larger documents
-      as content for targets, freely introducing blocks of markdown, embeds from various sites,
-      images, or files for students to download.
+      target details overlay has been upgraded to allow us to present rich documents
+      as content for students to consume. School admins can now author much larger
+      documents as content for targets, freely introducing blocks of markdown, embeds
+      from various sites, images, or files for students to download.
     category: feature
   - timestamp: '2019-06-10T05:21:00Z'
     title: We have a new home _landing page_ for the signed-in user. Users can now
@@ -17,13 +46,13 @@ changelog:
   - timestamp: '2019-06-10T04:58:41Z'
     title: The community feature is now live! This new features enables school admins
       to create multiple communities in a school where students can discuss target
-      and other doubts with their peers. All communities linked to a course can now be
-      directly accessed from the student dashboard. Students who have access to a
-      community can ask question, answer questions from others, and _upvote_ answers.
+      and other doubts with their peers. All communities linked to a course can now
+      be directly accessed from the student dashboard. Students who have access to
+      a community can ask question, answer questions from others, and _upvote_ answers.
       Coaches act as moderators for the community. The author of the community resource,
-      or any coach, can edit or remove _said_ resources. The content of questions, answers,
-      and comments are versioned, to keep track of changes, and _Markdown_ can be used to
-      format the content of questions, answers and comments.
+      or any coach, can edit or remove _said_ resources. The content of questions,
+      answers, and comments are versioned, to keep track of changes, and _Markdown_
+      can be used to format the content of questions, answers and comments.
     category: feature
   - timestamp: '2019-05-09T08:04:27Z'
     title: Fixed a bug that prevented the coach review dashboard from loading previously

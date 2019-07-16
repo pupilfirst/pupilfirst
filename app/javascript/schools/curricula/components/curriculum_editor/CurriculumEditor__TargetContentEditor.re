@@ -175,25 +175,33 @@ let make =
     );
   };
 
-  let moveContentDownCB = sortIndex => {
-    let (lowerCBs, upperCBs) =
+  let swapContentBlockCB = (upperSortIndex, lowerSortIndex) => {
+    let upperContentBlock =
       sortedContentBlocks
-      |> List.partition(((index, _, _, _)) => index <= sortIndex);
-    let currentCB = lowerCBs |> List.rev |> List.hd;
-    let contentBlockToSwap = upperCBs |> List.hd;
-    let (sortIndex1, blockType1, cb1, id1) = contentBlockToSwap;
-    let (sortIndex2, blockType2, cb2, id2) = currentCB;
-    let updatedlowerCBs =
-      lowerCBs
-      |> List.rev
-      |> List.tl
-      |> List.append([(sortIndex2, blockType1, cb1, id1)]);
-    let updatedUpperCBs =
-      upperCBs
-      |> List.tl
-      |> List.append([(sortIndex1, blockType2, cb2, id2)]);
+      |> ListUtils.unsafeFind(
+           ((index, _, _, _)) => index == upperSortIndex,
+           "Unable to find content block with this sort index",
+         );
+    let lowerContentBlock =
+      sortedContentBlocks
+      |> ListUtils.unsafeFind(
+           ((index, _, _, _)) => index == lowerSortIndex,
+           "Unable to find content block with this sort index",
+         );
+    let (sortIndex1, blockType1, cb1, id1) = lowerContentBlock;
+    let (sortIndex2, blockType2, cb2, id2) = upperContentBlock;
     let updatedContentBlockList =
-      List.append(updatedlowerCBs, updatedUpperCBs);
+      sortedContentBlocks
+      |> List.filter(((index, _, _, _)) =>
+           !(
+             [lowerSortIndex, upperSortIndex]
+             |> List.mem(index)
+           )
+         )
+      |> List.append([
+           (sortIndex1, blockType2, cb2, id2),
+           (sortIndex2, blockType1, cb1, id1),
+         ]);
     updateTargetContentBlocks(_ => updatedContentBlockList);
     updateContentBlockMasterList(
       updatedContentBlockList,
@@ -203,33 +211,6 @@ let make =
     toggleSortContentBlock(sortContentBlock => !sortContentBlock);
   };
 
-  let moveContentUpCB = sortIndex => {
-    let (lowerCBs, upperCBs) =
-      sortedContentBlocks
-      |> List.partition(((index, _, _, _)) => index < sortIndex);
-    let currentCB = upperCBs |> List.hd;
-    let contentBlockToSwap = lowerCBs |> List.rev |> List.hd;
-    let (sortIndex1, blockType1, cb1, id1) = contentBlockToSwap;
-    let (sortIndex2, blockType2, cb2, id2) = currentCB;
-    let updatedlowerCBs =
-      lowerCBs
-      |> List.rev
-      |> List.tl
-      |> List.append([(sortIndex1, blockType2, cb2, id2)]);
-    let updatedUpperCBs =
-      upperCBs
-      |> List.tl
-      |> List.append([(sortIndex2, blockType1, cb1, id1)]);
-    let updatedContentBlockList =
-      List.append(updatedlowerCBs, updatedUpperCBs);
-    updateTargetContentBlocks(_ => updatedContentBlockList);
-    updateContentBlockMasterList(
-      updatedContentBlockList,
-      updateContentBlocksCB,
-      target |> Target.id,
-    );
-    toggleSortContentBlock(sortContentBlock => !sortContentBlock);
-  };
 
   [|
     <CurriculumEditor__ContentTypePicker
@@ -261,8 +242,7 @@ let make =
               createNewContentCB
               updateContentBlockCB
               blockCount={targetContentBlocks |> List.length}
-              moveContentUpCB
-              moveContentDownCB
+              swapContentBlockCB
               authenticityToken
             />
           )

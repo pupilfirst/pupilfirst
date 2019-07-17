@@ -1,5 +1,5 @@
 var _rollbarConfig = {
-  accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+  accessToken: process.env.ROLLBAR_CLIENT_TOKEN,
   captureUncaught: process.env.ROLLBAR_CAPTURE_UNCAUGHT === "true",
   captureUnhandledRejections:
     process.env.ROLLBAR_CAPTURE_UNHANDLED_REJECTIONS === "true",

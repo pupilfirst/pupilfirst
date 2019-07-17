@@ -10,7 +10,7 @@ let headerLink = (key, link) =>
     key
     className="md:ml-5 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <a
-      className="no-underline bg-gray-100 md:bg-white text-black hover:text-primary w-full p-4 md:p-2"
+      className="no-underline bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full p-4 md:p-2"
       href={link |> NavLink.url}>
       {link |> NavLink.title |> str}
     </a>
@@ -86,7 +86,11 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken) => {
             {
               switch (logoUrl) {
               | Some(url) =>
-                <img className="h-12" src=url alt={"Logo of " ++ schoolName} />
+                <img
+                  className="h-12 object-contain"
+                  src=url
+                  alt={"Logo of " ++ schoolName}
+                />
               | None =>
                 <span className="text-2xl text-black">
                   {schoolName |> str}

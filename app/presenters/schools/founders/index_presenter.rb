@@ -33,11 +33,11 @@ module Schools
 
       def students
         @students ||=
-          founders.includes(user: :avatar_attachment, taggings: :tag).map do |student|
+          founders.includes(taggings: :tag, user: { avatar_attachment: :blob }).map do |student|
             {
               id: student.id,
               name: student.user.name,
-              avatarUrl: avatar_url(student.user),
+              avatarUrl: student.user.image_or_avatar_url,
               email: student.user.email,
               teamId: student.startup_id,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
@@ -51,11 +51,11 @@ module Schools
 
       def coach_details
         @coach_details ||=
-          current_school.faculty.where.not(exited: true).includes(user: :avatar_attachment).map do |coach|
+          current_school.faculty.where.not(exited: true).includes(user: { avatar_attachment: :blob }).map do |coach|
             {
               id: coach.id,
               name: coach.user.name,
-              avatarUrl: avatar_url(coach.user)
+              avatarUrl: coach.user.image_or_avatar_url
             }
           end
       end
@@ -66,14 +66,6 @@ module Schools
             name: level.name,
             number: level.number
           }
-        end
-      end
-
-      def avatar_url(user)
-        if user.avatar.attached?
-          view.url_for(user.avatar_variant(:mid))
-        else
-          user.initials_avatar
         end
       end
 

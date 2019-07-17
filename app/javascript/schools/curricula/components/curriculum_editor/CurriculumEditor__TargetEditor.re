@@ -47,6 +47,7 @@ type state = {
   saving: bool,
   activeStep,
   visibility: Target.visibility,
+  contentEditorDirty: bool,
 };
 
 type action =
@@ -60,7 +61,8 @@ type action =
   | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateSaving
   | UpdateActiveStep(activeStep)
-  | UpdateVisibility(Target.visibility);
+  | UpdateVisibility(Target.visibility)
+  | UpdateContentEditorDirty(bool);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -115,7 +117,7 @@ let eligibleTargets = (targets, targetGroupIds) =>
      )
   |> List.filter(target => !(target |> Target.visibility === Archived));
 
-let handleEC = (evaluationCriteria, target) => {
+let cacheCurrentEvaluationCriteria = (evaluationCriteria, target) => {
   let selectedEcIds = target |> Target.evaluationCriteria |> Array.of_list;
 
   evaluationCriteria
@@ -135,7 +137,7 @@ let handleEC = (evaluationCriteria, target) => {
      });
 };
 
-let handlePT = (targets, target) => {
+let cachePrerequisiteTargets = (targets, target) => {
   let selectedTargetIds =
     target |> Target.prerequisiteTargets |> Array.of_list;
 
@@ -309,6 +311,17 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateContentEditorDirty(contentEditorDirty) => {...state, contentEditorDirty}
+  };
+
+let handleEditorClosure = (hideEditorActionCB, state) => {
+    switch(state.contentEditorDirty || state.dirty) {
+    | false => hideEditorActionCB()
+    | true => Webapi.Dom.window
+    |> Webapi.Dom.Window.confirm(
+         " There are unsaved changes! Are you sure you want to close the editor?",
+       ) ? hideEditorActionCB() : ()
+    }
   };
 
 [@react.component]
@@ -325,12 +338,12 @@ let make =
       ~hideEditorActionCB,
       ~updateContentBlocksCB,
     ) => {
-  let handleInitialState = {
+  let initialState = {
     title: target |> Target.title,
-    evaluationCriteria: handleEC(evaluationCriteria, target),
+    evaluationCriteria: cacheCurrentEvaluationCriteria(evaluationCriteria, target),
     contentBlocks,
     prerequisiteTargets:
-      handlePT(eligibleTargets(targets, targetGroupIdsInLevel), target),
+    cachePrerequisiteTargets(eligibleTargets(targets, targetGroupIdsInLevel), target),
     quiz: handleQuiz(target),
     linkToComplete:
       switch (target |> Target.linkToComplete) {
@@ -345,9 +358,10 @@ let make =
     saving: false,
     activeStep: AddContent,
     visibility: target |> Target.visibility,
+    contentEditorDirty: false,
   };
 
-  let (state, dispatch) = React.useReducer(reducer, handleInitialState);
+  let (state, dispatch) = React.useReducer(reducer, initialState);
 
   let targetEvaluated = () =>
     switch (state.methodOfCompletion) {
@@ -370,6 +384,8 @@ let make =
   let removeQuizQuestionCB = id => dispatch(RemoveQuizQuestion(id));
   let updateQuizQuestionCB = (id, quizQuestion) =>
     dispatch(UpdateQuizQuestion(id, quizQuestion));
+  let updateContentEditorDirtyCB = contentEditorDirty =>
+    dispatch(UpdateContentEditorDirty(contentEditorDirty));
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
   let handleResponseCB = (closeEditor, dispatch, json) => {
@@ -434,7 +450,7 @@ let make =
         <button
           id="target-editor-close"
           title="close"
-          onClick={_ => hideEditorActionCB()}
+          onClick={_ => handleEditorClosure(hideEditorActionCB, state)}
           className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
           <i className="fal fa-times text-xl" />
         </button>
@@ -535,6 +551,7 @@ let make =
                   target
                   contentBlocks={state.contentBlocks}
                   updateContentBlocksCB
+                  updateContentEditorDirtyCB
                   authenticityToken
                 />
               </div>
@@ -846,7 +863,13 @@ let make =
               {
                 switch (state.activeStep) {
                 | AddContent =>
-                  <div className="w-full flex justify-end">
+                  <div className="w-full flex items-center justify-end">
+                    { state.contentEditorDirty ?
+                    <div className="w-full flex items-center bg-orange-100 border border-orange-400 rounded py-2 px-3 mr-4 text-orange-800 font-semibold">
+                      <i className="fas fa-exclamation-triangle"></i>
+                      <span className="ml-2">{"You have unsaved changes in this step" |> str}</span>
+                    </div> : React.null
+                    }
                     <button
                       key="add-content-step"
                       onClick=(

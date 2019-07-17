@@ -21,4 +21,6 @@ class CoursePolicy < ApplicationPolicy
     # Students enrolled in the current course can view the leaderboard.
     show?
   end
+
+  alias enroll? show?
 end

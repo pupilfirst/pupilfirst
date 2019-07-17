@@ -1,6 +1,25 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./UserSessionNew.css")|}];
 
+module ENV = {
+  open Webapi.Dom;
+  exception RootAttributeMissing(string);
+  let isDevelopment = () => {
+    let body =
+      document
+      |> Document.getElementsByTagName("body")
+      |> HtmlCollection.toArray;
+
+    (
+      switch (body[0] |> Element.getAttribute("data-env")) {
+      | Some(props) => props
+      | None => raise(RootAttributeMissing("data-env"))
+      }
+    )
+    == "development";
+  };
+};
+
 let federatedSignInIcon: string = [%raw
   "require('./images/sign-in-icon.png')"
 ];
@@ -87,6 +106,7 @@ let sendSignInEmail =
     payload;
   };
 
+  setSaving(_ => true);
   let payload = setPayload();
   let url = "/users/send_login_email";
   Api.create(
@@ -111,6 +131,7 @@ let sendResetPasswordEmail = (authenticityToken, email, setView, setSaving) => {
     payload;
   };
 
+  setSaving(_ => true);
   let payload = setPayload();
   let url = "/users/send_reset_password_email";
   Api.create(
@@ -189,12 +210,18 @@ let iconClasses = provider =>
   | Developer => "fas fa-laptop-code"
   };
 
+let providers = () => {
+  let defaultProvides = [|Google, Facebook, Github|];
+  ENV.isDevelopment() ?
+    defaultProvides |> Array.append([|Developer|]) : defaultProvides;
+};
 let renderFederatedlogin = (fqdn, oauthHost) =>
   <div className="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
     {
-      [|Developer, Google, Facebook, Github|]
+      providers()
       |> Array.map(provider =>
            <a
+             key={buttonText(provider)}
              className={buttonClasses(provider)}
              href={federatedLoginUrl(oauthHost, fqdn, provider)}>
              <span className="w-1/5 text-right text-lg">
@@ -210,6 +237,11 @@ let renderFederatedlogin = (fqdn, oauthHost) =>
   </div>;
 
 let validPassword = password => password != "";
+
+let validateEmail = email => {
+  let regex = [%re {|/.+@.+\..+/i|}];
+  !Js.Re.test_(regex, email);
+};
 
 let renderSignInWithEmail =
     (
@@ -235,21 +267,30 @@ let renderSignInWithEmail =
         className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
         id="email"
         value=email
+        disabled=saving
         type_="text"
         onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
         placeholder="john@example.com"
       />
     </div>
     <div className="mt-4">
-      <label
-        className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
-        htmlFor="password">
-        {"Password" |> str}
-      </label>
+      <div className="flex justify-between">
+        <label
+          className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
+          htmlFor="password">
+          {"Password" |> str}
+        </label>
+        <span
+          onClick={_ => setView(_ => ForgotPassword)}
+          className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline inline">
+          {"Set a New Password" |> str}
+        </span>
+      </div>
       <input
         className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
         id="password"
         value=password
+        disabled=saving
         type_="password"
         onChange={event => setPassword(ReactEvent.Form.target(event)##value)}
         placeholder="Type your password"
@@ -264,6 +305,7 @@ let renderSignInWithEmail =
           className="leading-tight"
           id="sharedDevice"
           checked=sharedDevice
+          disabled=saving
           type_="checkbox"
         />
         <label
@@ -271,11 +313,6 @@ let renderSignInWithEmail =
           htmlFor="sharedDevice">
           {"Are you using a shared device?" |> str}
         </label>
-      </div>
-      <div
-        onClick={_ => setView(_ => ForgotPassword)}
-        className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline">
-        {"Forgot Password" |> str}
       </div>
     </div>
     <div className="mt-5">
@@ -294,7 +331,14 @@ let renderSignInWithEmail =
                 )
             }
             className="btn btn-success btn-large text-center w-full">
-            {"Sign in with password" |> str}
+            <FaIcon
+              classes={
+                saving ? "fal fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
+              }
+            />
+            <span className="ml-2">
+              {(saving ? "Singing in" : "Sign in with password") |> str}
+            </span>
           </button> :
           <button
             disabled=saving
@@ -309,7 +353,14 @@ let renderSignInWithEmail =
                 )
             }
             className="btn btn-primary btn-large text-center w-full">
-            {"Email me a link to sign in" |> str}
+            <FaIcon
+              classes={
+                saving ? "fal fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
+              }
+            />
+            <span className="ml-2">
+              {(saving ? "Singing in" : "Email me a link to sign in") |> str}
+            </span>
           </button>
       }
     </div>
@@ -341,6 +392,7 @@ let renderForgotPassword =
       id="email"
       value=email
       type_="text"
+      disabled=saving
       onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
       placeholder="john@example.com"
     />
@@ -350,14 +402,20 @@ let renderForgotPassword =
         _ =>
           sendResetPasswordEmail(authenticityToken, email, setView, setSaving)
       }
-      className="btn btn-primary btn-large text-center w-full mt-4">
+      className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
       {"Send Email" |> str}
+      <FaIcon
+        classes={
+          saving ?
+            "svg-inline--fa fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
+        }
+      />
     </button>
   </div>;
 
 [@react.component]
 let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
-  let (view, setView) = React.useState(() => FederatedSignIn);
+  let (view, setView) = React.useState(() => SignInWithPassword);
   let (email, setEmail) = React.useState(() => "");
   let (password, setPassword) = React.useState(() => "");
   let (sharedDevice, setSharedDevice) = React.useState(() => false);

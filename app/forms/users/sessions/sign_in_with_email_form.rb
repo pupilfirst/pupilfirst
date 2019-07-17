@@ -24,7 +24,7 @@ module Users
       def user_with_email_must_exist
         return if user.present? || email.blank?
 
-        errors[:base] << 'Could not find user with this email. Please check the email that you entered.'
+        errors[:base] << 'Could not find user with this email. Please check the email that you entered'
       end
 
       def ensure_time_between_requests
@@ -34,13 +34,13 @@ module Users
         time_since_last_mail = Time.zone.now - user.login_mail_sent_at
         return if time_since_last_mail > 2.minutes
 
-        errors[:base] << 'An email was sent less than two minutes ago. Please wait for a few minutes before trying again.'
+        errors[:base] << 'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
       end
 
       def detect_honeypot
         return if username.blank?
 
-        errors[:base] << 'Your request has been blocked because it is suspicious.'
+        errors[:base] << 'Your request has been blocked because it is suspicious'
       end
 
       def email_should_not_have_bounced
@@ -48,7 +48,7 @@ module Users
 
         return unless user&.email_bounced?
 
-        errors[:email] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+        errors[:base] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
       end
 
       def user

@@ -15,18 +15,9 @@ module Users
         {
           authenticity_token: view.form_authenticity_token,
           school_name: school_name,
-          icon_url: icon_url,
           fqdn: fqdn,
           oauth_host: oauth_host
         }
-      end
-
-      def icon_url
-        if current_school.present? && current_school.icon.attached?
-          view.url_for(current_school.icon_variant(:thumb))
-        else
-          view.image_path('shared/pupilfirst-icon.svg')
-        end
       end
 
       def school_name

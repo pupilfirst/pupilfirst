@@ -3,20 +3,17 @@
 
 module ENV = {
   open Webapi.Dom;
-  exception RootAttributeMissing(string);
   let isDevelopment = () => {
     let body =
       document
       |> Document.getElementsByTagName("body")
       |> HtmlCollection.toArray;
 
-    (
-      switch (body[0] |> Element.getAttribute("data-env")) {
-      | Some(props) => props
-      | None => raise(RootAttributeMissing("data-env"))
-      }
-    )
-    == "development";
+    switch (body[0] |> Element.getAttribute("data-env")) {
+    | Some(props) when props == "development" => true
+    | Some(_)
+    | None => false
+    };
   };
 };
 
@@ -238,10 +235,7 @@ let renderFederatedlogin = (fqdn, oauthHost) =>
 
 let validPassword = password => password != "";
 
-let validateEmail = email => {
-  let regex = [%re {|/.+@.+\..+/i|}];
-  !Js.Re.test_(regex, email);
-};
+let validEmail = email => email |> EmailUtils.isInvalid(~allowBlank=false);
 
 let renderSignInWithEmail =
     (
@@ -281,7 +275,7 @@ let renderSignInWithEmail =
           {"Password" |> str}
         </label>
         <span
-          onClick={_ => setView(_ => ForgotPassword)}
+          onClick={_ => saving ? () : setView(_ => ForgotPassword)}
           className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline inline">
           {"Set a New Password" |> str}
         </span>
@@ -319,7 +313,7 @@ let renderSignInWithEmail =
       {
         validPassword(password) ?
           <button
-            disabled=saving
+            disabled={saving || validEmail(email)}
             onClick={
               _ =>
                 signInWithPassword(
@@ -337,11 +331,11 @@ let renderSignInWithEmail =
               }
             />
             <span className="ml-2">
-              {(saving ? "Singing in" : "Sign in with password") |> str}
+              {(saving ? "Signing in" : "Sign in with password") |> str}
             </span>
           </button> :
           <button
-            disabled=saving
+            disabled={saving || validEmail(email)}
             onClick={
               _ =>
                 sendSignInEmail(
@@ -359,7 +353,7 @@ let renderSignInWithEmail =
               }
             />
             <span className="ml-2">
-              {(saving ? "Singing in" : "Email me a link to sign in") |> str}
+              {(saving ? "Signing in" : "Email me a link to sign in") |> str}
             </span>
           </button>
       }
@@ -397,25 +391,26 @@ let renderForgotPassword =
       placeholder="john@example.com"
     />
     <button
-      disabled=saving
+      disabled={saving || validEmail(email)}
       onClick={
         _ =>
           sendResetPasswordEmail(authenticityToken, email, setView, setSaving)
       }
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
-      {"Send Email" |> str}
       <FaIcon
         classes={
-          saving ?
-            "svg-inline--fa fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
+          saving ? "fal fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
         }
       />
+      <span className="ml-2">
+        {(saving ? "Dispatching email" : "Send Email") |> str}
+      </span>
     </button>
   </div>;
 
 [@react.component]
-let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
-  let (view, setView) = React.useState(() => SignInWithPassword);
+let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
+  let (view, setView) = React.useState(() => FederatedSignIn);
   let (email, setEmail) = React.useState(() => "");
   let (password, setPassword) = React.useState(() => "");
   let (sharedDevice, setSharedDevice) = React.useState(() => false);
@@ -463,7 +458,8 @@ let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
               className="federated-sigin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
               <span className="bg-white px-2"> {"OR" |> str} </span>
             </span>
-            <div
+            <button
+              disabled=saving
               onClick=(_ => setView(_ => SignInWithPassword))
               className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 rounded-lg cursor-pointer font-semibold mt-4 w-full">
               <span className="w-1/5 text-right text-lg">
@@ -472,16 +468,17 @@ let make = (~schoolName, ~iconUrl, ~authenticityToken, ~fqdn, ~oauthHost) => {
               <span className="w-4/5 pl-3 text-left">
                 {"Continue with email" |> str}
               </span>
-            </div>
+            </button>
           </div>
         | SignInWithPassword
         | ForgotPassword =>
           <div className="max-w-sm mx-auto md:px-9">
-            <div
+            <button
+              disabled=saving
               onClick=(_ => setView(_ => FederatedSignIn))
               className="p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200">
               {"Sign in with Google, Facebook, or Github" |> str}
-            </div>
+            </button>
           </div>
 
         | SignInEmailSent => React.null

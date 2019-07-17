@@ -165,7 +165,8 @@ let make =
     | ["school", "coaches"] => (SchoolCoaches, false)
     | ["school", "customize"] => (Settings(Customization), true)
     | ["school", "courses"] => (Courses, false)
-    | ["school", "courses", courseId, "students"] => (
+    | ["school", "courses", courseId, "students"]
+    | ["school", "courses", courseId, "inactive_students"] => (
         SelectedCourse(courseId, Students),
         true,
       )
@@ -178,7 +179,12 @@ let make =
         true,
       )
     | ["school", "communities"] => (Communities, false)
-    | _ => raise(UnknownPathEncountered(url.path))
+    | _ =>
+      Rollbar.critical(
+        "Unknown path encountered by SA navbar: "
+        ++ (url.path |> Array.of_list |> Js.Array.joinWith("/")),
+      );
+      raise(UnknownPathEncountered(url.path));
     };
 
   [|

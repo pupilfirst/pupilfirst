@@ -30,8 +30,8 @@ let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
   archived ?
-    "target-group__header hover:bg-gray-200 target-group__header--archived p-6 border border-b-0 text-center rounded-lg rounded-b-none" :
-    "target-group__header hover:bg-gray-200 bg-white p-6 border border-b-0 text-center rounded-lg rounded-b-none";
+    "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 target-group__header--archived px-6 pb-5 text-center rounded-lg rounded-b-none" :
+    "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 bg-white px-6 pb-5 text-center rounded-lg rounded-b-none";
 
 let make =
     (
@@ -118,13 +118,20 @@ let make =
       |> ignore;
     };
 
-    <div className="target-group__box relative mt-12 rounded-lg">
+    <div className="target-group__box relative mt-12 rounded-lg shadow">
       <div
         id="target_group"
         className={archivedClasses(targetGroup |> TargetGroup.archived)}
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
-        {milestone ? <div> {"Milestone" |> str} </div> : ReasonReact.null}
-        <div className="target-group__title">
+        {
+          milestone ?
+            <div
+              className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+              {"Milestone Targets" |> str}
+            </div> :
+            ReasonReact.null
+        }
+        <div className="target-group__title pt-5">
           <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
         <div className="target-group__description pt-1">

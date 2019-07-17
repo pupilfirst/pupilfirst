@@ -6,7 +6,7 @@
   background-color: #f2f8ff;
 }
 
-.target-group__container > :not(:last-child):before {
+.target-group__container> :not(:last-child):before {
   content: "";
   position: absolute;
   top: 0;
@@ -15,7 +15,7 @@
   transform: translateX(-50%);
   width: 4px;
   z-index: -1;
-  @apply bg-gray-400;
+  @apply bg-primary-400;
 }
 
 .target-group__box {

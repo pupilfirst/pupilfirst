@@ -7,8 +7,8 @@ let component =
 
 let archivedClasses = target =>
   switch (target |> Target.visibility) {
-  | Archived => "target-group__target flex justify-between items-center hover:bg-gray-200 target-group__target--archived border border-b-0 px-5 py-4"
-  | _ => "target-group__target flex justify-between items-center hover:bg-gray-200 bg-white border border-b-0 px-5 py-6"
+  | Archived => "target-group__target flex justify-between items-center hover:bg-gray-100 hover:text-primary-500 target-group__target--archived border-t px-5 py-4"
+  | _ => "target-group__target flex justify-between items-center hover:bg-gray-100 hover:text-primary-500 bg-white border-t px-5 py-6"
   };
 
 let make = (~target, ~targetGroup, ~showTargetEditorCB, _children) => {

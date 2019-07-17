@@ -36,6 +36,13 @@ describe DailyDigestService do
   let!(:question_c3_1) { create :question, community: community_3, creator: t3_user, created_at: 2.days.ago }
   let!(:question_c3_2) { create :question, community: community_3, creator: t3_user, created_at: 8.days.ago }
 
+  before do
+    # Activate daily digest emails for three of the four users.
+    [t1_user, t2_user_1, t3_user].each do |user|
+      user.update!(preferences: { daily_digest: true })
+    end
+  end
+
   describe '#execute' do
     it 'sends digest emails containing details about new and unanswered questions' do
       subject.execute
@@ -76,6 +83,10 @@ describe DailyDigestService do
       expect(b2).to include(question_c2_2.title)
       expect(b2).to include(question_c3_1.title)
       expect(b2).not_to include(question_c3_2.title)
+
+      # Second user in second course shouldn't receive any email because daily digest hasn't been turned on.
+      open_email(t2_user_2.email)
+      expect(current_email).to eq(nil)
 
       open_email(t3_user.email)
 

@@ -5,7 +5,8 @@ class DailyDigestService
     updates = questions_from_today
     updates = add_unanswered_questions(updates)
 
-    User.joins(:communities).includes(:communities, :school).each do |user|
+    User.joins(:communities).includes(:communities, :school)
+      .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
       updates_for_user = user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
         updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
       end

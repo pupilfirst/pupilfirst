@@ -120,13 +120,7 @@ If _puma-dev_ crashes when starting the application with `bundle: not found` in 
 
 #### Install Heroku CLI
 
-Follow [official instructions](https://devcenter.heroku.com/articles/heroku-cli) install the CLI.
-
-Login with your 'Heroku' credentials and follow the instrutions recived on the onbarding Email.
-
-Load environment key for Rollbar from Heroku with:
-
-    heroku config -s --app sv-co | grep ROLLBAR_ACCESS_TOKEN >> .env
+Follow [official instructions](https://devcenter.heroku.com/articles/heroku-cli) to install the CLI.
 
 ## Testing
 

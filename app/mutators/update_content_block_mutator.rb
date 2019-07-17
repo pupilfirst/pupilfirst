@@ -6,7 +6,14 @@ class UpdateContentBlockMutator < ApplicationMutator
 
   validates :id, presence: true
   validates :block_type, presence: true
-  validates :text, presence: true
+  validate :text_must_be_present_for_markdown
+
+  def text_must_be_present_for_markdown
+    return if text.present?
+    return if block_type.in? %w[image file]
+
+    errors[:base] << 'Markdown content cannot be blank'
+  end
 
   def update_content_block
     case block_type

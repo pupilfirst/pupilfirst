@@ -39,9 +39,9 @@
       <% community_updates[:questions].each do |question| %>
         <li style="padding-left: 10px;">
           <%= link_to question[:title], question_url(question[:id]), style: 'text-decoration: none;' %>
-          <span style="font-size: 75%; float: right;">
-            Posted by <strong><%= question[:author] %></strong>
-            <%= question[:type] == :new ? 'today' : "#{pluralize(question[:days_ago], 'day')} ago (unanswered)" %>.
+          <span style="font-size: 75%;">
+            &mdash; <strong><%= question[:author] %></strong>
+            <%= question[:type] == :new ? '' : "(unanswered, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
           </span>
         </li>
       <% end %>

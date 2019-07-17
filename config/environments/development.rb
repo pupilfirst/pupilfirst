@@ -59,7 +59,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.action_mailer.default_url_options = { host: 'school.sv.localhost' }
+  config.action_mailer.default_url_options = { host: 'school1.localhost' }
 
   # for detecting n + 1 queries using Bullet
   Bullet.enable = true
@@ -67,7 +67,7 @@ Rails.application.configure do
   Bullet.rails_logger = true
 
   # Roadie asset host.
-  config.roadie.url_options = { host: 'school.sv.localhost', scheme: 'http' }
+  config.roadie.url_options = { host: 'school1.localhost', scheme: 'http' }
 
   # Oink::Middleware logs memory and activerecord usage by default.
   config.middleware.use Oink::Middleware

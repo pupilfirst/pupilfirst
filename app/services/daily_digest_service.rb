@@ -1,7 +1,12 @@
 # Sends daily digest mails to users who are part of a community, that mentions new questions that have been asked and
 # new responses to any of their posts.
 class DailyDigestService
+  def initialize(debug: false)
+    @debug = debug
+  end
+
   def execute
+    debug_value = {}
     updates = questions_from_today
     updates = add_unanswered_questions(updates)
 
@@ -13,8 +18,14 @@ class DailyDigestService
 
       next if updates_for_user.blank?
 
-      UserMailer.daily_digest(user, updates_for_user).deliver_later
+      if @debug
+        debug_value[user.id] = updates_for_user
+      else
+        UserMailer.daily_digest(user, updates_for_user).deliver_later
+      end
     end
+
+    debug_value
   end
 
   private

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :school
   has_many :founders, dependent: :restrict_with_error
+  has_many :communities, through: :founders
   has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user

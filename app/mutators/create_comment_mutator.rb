@@ -10,7 +10,7 @@ class CreateCommentMutator < ApplicationMutator
   validates :commentable_id, presence: { message: 'BlankCommentableId' }
 
   def create_comment
-    comment = Comments::CreateService.new(current_user, commentable, value)
+    comment = Comments::CreateService.new(current_user, commentable, value).create
     comment.id
   end
 

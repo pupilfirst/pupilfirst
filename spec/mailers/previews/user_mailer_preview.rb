@@ -30,7 +30,7 @@ class UserMailerPreview < ActionMailer::Preview
           title: Faker::Lorem.sentence,
           author: Faker::Name.name,
           days_ago: unanswered ? rand(1..6) : 0,
-          type: unanswered ? :unanswered : :new
+          type: unanswered ? 'unanswered' : 'new'
         }
       end
     }

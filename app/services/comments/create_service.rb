@@ -3,7 +3,7 @@ module Comments
     # @param user [User] user who is posting the comment
     # @param commentable [Question, Answer] question or answer on which the comment is being posted
     # @param value [String] body of the comment
-    def new(user, commentable, value)
+    def initialize(user, commentable, value)
       @user = user
       @commentable = commentable
       @value = value
@@ -12,7 +12,7 @@ module Comments
     def create
       Comment.transaction do
         # Update the commentable's last activity time.
-        @commentable.update!(last_activity_at: Time.zone.now) if commentable_type == Question.name
+        @commentable.update!(last_activity_at: Time.zone.now) if @commentable.is_a?(Question)
 
         comment = Comment.create!(
           creator: @user,

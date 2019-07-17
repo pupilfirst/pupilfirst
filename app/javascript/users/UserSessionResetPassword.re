@@ -19,6 +19,10 @@ let handleUpdatePasswordCB = _ => {
   "/home" |> Webapi.Dom.Window.setLocation(window);
 };
 
+let validPassword = password => {
+  let length = password |> String.length;
+  length >= 8 && length < 128;
+};
 let updatePassword =
     (
       authenticityToken,
@@ -75,8 +79,25 @@ let headerText = view =>
   | ResetPassword => "Set new password"
   | InvalidToken => "User authentication failed"
   };
-let validPassword = password => password != "";
 
+let isDisabled = (saving, newPassword, confirmPassword) =>
+  !validPassword(newPassword) || newPassword != confirmPassword || saving;
+
+let submitButtonText = (saving, newPassword, confirmPassword) =>
+  switch (
+    saving,
+    newPassword == "",
+    !validPassword(newPassword),
+    confirmPassword == "",
+    newPassword != confirmPassword,
+  ) {
+  | (true, _, _, _, _) => "Updating password..."
+  | (_, true, _, _, _) => "Enter new password"
+  | (_, _, true, _, _) => "Password is too short"
+  | (_, _, _, true, _) => "Confirm your password"
+  | (_, _, _, _, true) => "Passwords do not match"
+  | _ => "Update Password"
+  };
 let renderUpdatePassword =
     (
       authenticityToken,
@@ -100,10 +121,12 @@ let renderUpdatePassword =
       id="new-password"
       value=newPassword
       type_="password"
-      placeholder="********"
-      onChange={event => setNewPassword(ReactEvent.Form.target(event)##value)}
+      placeholder="Enter a strong password"
+      onChange={
+        event => setNewPassword(ReactEvent.Form.target(event)##value)
+      }
     />
-    <label className=labelClasses htmlFor="confirm password">
+    <label className={labelClasses ++ " mt-2"} htmlFor="confirm password">
       {"Confirm Password" |> str}
     </label>
     <input
@@ -111,11 +134,13 @@ let renderUpdatePassword =
       id="confirm password"
       value=confirmPassword
       type_="password"
-      placeholder="********"
-      onChange={event => setConfirmPassword(ReactEvent.Form.target(event)##value)}
+      placeholder="Please re-enter your password"
+      onChange={
+        event => setConfirmPassword(ReactEvent.Form.target(event)##value)
+      }
     />
     <button
-      disabled=saving
+      disabled={isDisabled(saving, newPassword, confirmPassword)}
       onClick={
         _ =>
           updatePassword(
@@ -128,7 +153,12 @@ let renderUpdatePassword =
           )
       }
       className="btn btn-success btn-large text-center w-full mt-4">
-      {"Update password" |> str}
+      <FaIcon
+        classes={saving ? "fal fa-spinner-third fa-spin" : "fas fa-lock-alt"}
+      />
+      <span className="ml-2">
+        {submitButtonText(saving, newPassword, confirmPassword) |> str}
+      </span>
     </button>
   </div>;
 };
@@ -143,7 +173,7 @@ let renderInvalidToken = () =>
 let selectView = token =>
   switch (token) {
   | Some(_) => ResetPassword
-  | None => InvalidToken
+  | None => ResetPassword
   };
 
 [@react.component]

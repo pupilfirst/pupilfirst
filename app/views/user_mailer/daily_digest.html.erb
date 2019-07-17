@@ -1,0 +1,54 @@
+<%
+  school_name = @user.school.name
+  community_count = @updates.length
+  question_count = @updates.values.map { |v| v[:questions].length }.sum
+  questions_article = question_count > 1 ? 'are' : 'is'
+  recipient_name = @user.name
+%>
+
+<% content_for :title do %>
+  Daily community digest from <%= school_name %>
+<% end %>
+
+<% content_for :subtitle do %>
+  There are new questions in <%= community_count.humanize %> <%= 'community'.pluralize(community_count) %>.
+<% end %>
+
+<% content_for :title_button_text do %>
+  Visit <%= school_name %> homepage
+<% end %>
+
+<% content_for(:title_button_link, home_url) %>
+
+<% content_for :salutation do %>
+  Hello <%= recipient_name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    There <%= "#{questions_article} #{question_count}" %> new <%= 'question'.pluralize(question_count) %> from
+    <%= pluralize(community_count, 'community') %> in <%= school_name %>.
+  </p>
+
+  <% @updates.each do |community_id, community_updates| %>
+    <ul style="padding: 0; list-style-type: none;">
+      <p style="border-bottom: 1px solid lightgrey;">
+        <%= link_to community_updates[:community_name], community_url(community_id), style: 'text-decoration: none; font-size: 150%; line-height: 1.75;' %>
+      </p>
+
+      <% community_updates[:questions].each do |question| %>
+        <li style="padding-left: 10px;">
+          <%= link_to question[:title], question_url(question[:id]), style: 'text-decoration: none;' %>
+          <span style="font-size: 75%;">
+            &mdash; <strong><%= question[:author] %></strong>
+            <%= question[:type] == 'new' ? '' : "(unanswered, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
+
+<% content_for(:signature) do %>
+  <div></div>
+<% end %>

@@ -46,6 +46,8 @@ Metrics/BlockLength:
     - 'spec/**/*_spec.rb'
     - 'config/**/*'
     - 'spec/factories/*'
+Lint/ShadowingOuterLocalVariable: # shadowing is a language feature - we should use it where appropriate.
+  Enabled: false
 
 # Concessions (remove these if possible / appropriate).
 

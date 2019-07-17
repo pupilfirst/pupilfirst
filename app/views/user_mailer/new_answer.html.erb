@@ -1,0 +1,32 @@
+<%
+  question = @answer.question
+  recipient_name = question.creator&.name || ""
+  answer_from = @answer.creator&.name || "A user"
+  community_name = question.community.name
+%>
+
+<% content_for :title do %>
+  New answer for your question
+<% end %>
+
+<% content_for :subtitle do %>
+  <%= answer_from %> has posted an answer to one of your questions.
+<% end %>
+
+<% content_for :title_button_text do %>
+  View Answer
+<% end %>
+
+<% content_for(:title_button_link, question_url(question)) %>
+
+<% content_for :salutation do %>
+  Hello <%= recipient_name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p><%= answer_from %> has posted an answer to a question that you posted on the <%= community_name %> community.</p>
+
+  <p>You can view the answer by clicking on the link above.</p>
+
+  <%= render 'mailers/link_fallback', url: question_url(question) %>
+<% end %>

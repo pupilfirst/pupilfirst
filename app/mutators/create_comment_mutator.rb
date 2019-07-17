@@ -10,16 +10,7 @@ class CreateCommentMutator < ApplicationMutator
   validates :commentable_id, presence: { message: 'BlankCommentableId' }
 
   def create_comment
-    comment = Comment.transaction do
-      @commentable.update!(last_activity_at: Time.zone.now) if commentable_type == Question.name
-
-      Comment.create!(
-        creator: current_user,
-        commentable: commentable,
-        value: value
-      )
-    end
-
+    comment = Comments::CreateService.new(current_user, commentable, value).create
     comment.id
   end
 

@@ -113,32 +113,36 @@ let renderUpdatePassword =
   let inputClasses = "appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400";
   let labelClasses = "inline-block tracking-wide text-gray-900 text-xs font-semibold";
   <div className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
-    <label className=labelClasses htmlFor="new-password">
-      {"New Password" |> str}
-    </label>
-    <input
-      className=inputClasses
-      id="new-password"
-      value=newPassword
-      type_="password"
-      placeholder="Enter a strong password"
-      onChange={
-        event => setNewPassword(ReactEvent.Form.target(event)##value)
-      }
-    />
-    <label className={labelClasses ++ " mt-2"} htmlFor="confirm password">
-      {"Confirm Password" |> str}
-    </label>
-    <input
-      className=inputClasses
-      id="confirm password"
-      value=confirmPassword
-      type_="password"
-      placeholder="Please re-enter your password"
-      onChange={
-        event => setConfirmPassword(ReactEvent.Form.target(event)##value)
-      }
-    />
+    <div>
+      <label className=labelClasses htmlFor="new-password">
+        {"New Password" |> str}
+      </label>
+      <input
+        className=inputClasses
+        id="new-password"
+        value=newPassword
+        type_="password"
+        placeholder="Enter a strong password"
+        onChange={
+          event => setNewPassword(ReactEvent.Form.target(event)##value)
+        }
+      />
+    </div>
+    <div className="mt-4">
+      <label className={labelClasses ++ " mt-2"} htmlFor="confirm password">
+        {"Confirm Password" |> str}
+      </label>
+      <input
+        className=inputClasses
+        id="confirm password"
+        value=confirmPassword
+        type_="password"
+        placeholder="Please re-enter your password"
+        onChange={
+          event => setConfirmPassword(ReactEvent.Form.target(event)##value)
+        }
+      />
+    </div>
     <button
       disabled={isDisabled(saving, newPassword, confirmPassword)}
       onClick={

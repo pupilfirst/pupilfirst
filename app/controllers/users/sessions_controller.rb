@@ -70,7 +70,7 @@ module Users
           sign_in @form.user
           render json: { error: nil, path: after_sign_in_path_for(current_user) }
         else
-          render json: { error: @form.errors.full_messages.join(', ') }
+          render json: { error: @form.errors.full_messages.join(', '), path: nil }
         end
       end
     end
@@ -85,7 +85,7 @@ module Users
         remember_me(@form.user) unless @form.shared_device?
         render json: { error: nil, path: after_sign_in_path_for(current_user) }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        render json: { error: @form.errors.full_messages.join(', '), path: nil }
       end
     end
 

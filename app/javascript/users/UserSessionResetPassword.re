@@ -14,8 +14,16 @@ type views =
 
 let handleErrorCB = (setSaving, ()) => setSaving(_ => false);
 
-let handleUpdatePasswordCB = response =>
-  DomUtils.redirect(response |> Json.Decode.(field("path", string)));
+let handleUpdatePasswordCB = response => {
+  let path =
+    response
+    |> Json.Decode.(field("path", nullable(string)))
+    |> Js.Null.toOption;
+  switch (path) {
+  | Some(path) => DomUtils.redirect(path)
+  | None => ()
+  };
+};
 
 let validPassword = password => {
   let length = password |> String.length;

@@ -46,8 +46,16 @@ type omniauthProvider =
   | Developer;
 
 let handleErrorCB = (setSaving, ()) => setSaving(_ => false);
-let handleSignInWithPasswordCB = response =>
-  DomUtils.redirect(response |> Json.Decode.(field("path", string)));
+let handleSignInWithPasswordCB = response => {
+  let path =
+    response
+    |> Json.Decode.(field("path", nullable(string)))
+    |> Js.Null.toOption;
+  switch (path) {
+  | Some(path) => DomUtils.redirect(path)
+  | None => ()
+  };
+};
 let handleSignInWithEmailCB = (setView, _) => setView(_ => SignInEmailSent);
 
 let signInWithPassword =
@@ -220,7 +228,7 @@ let renderFederatedlogin = (fqdn, oauthHost) =>
              className={buttonClasses(provider)}
              href={federatedLoginUrl(oauthHost, fqdn, provider)}>
              <span className="w-1/5 text-right text-lg">
-               <i className={iconClasses(provider)} />
+               <FaIcon classes={iconClasses(provider)} />
              </span>
              <span className="w-4/5 pl-3 text-left">
                {buttonText(provider) |> str}
@@ -324,7 +332,7 @@ let renderSignInWithEmail =
             className="btn btn-success btn-large text-center w-full">
             {
               saving ?
-                <i className="fal fa-spinner-third fa-spin mr-2" /> :
+                <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
                 ReasonReact.null
             }
             <span>
@@ -346,7 +354,7 @@ let renderSignInWithEmail =
             className="btn btn-primary btn-large text-center w-full">
             {
               saving ?
-                <i className="fal fa-spinner-third fa-spin mr-2" /> :
+                <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
                 ReasonReact.null
             }
             <span>
@@ -396,7 +404,7 @@ let renderForgotPassword =
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
       {
         saving ?
-          <i className="fal fa-spinner-third fa-spin mr-2" /> :
+          <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
           ReasonReact.null
       }
       <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
@@ -459,7 +467,7 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
               onClick=(_ => setView(_ => SignInWithPassword))
               className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 focus:bg-gray-200 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full">
               <span className="w-1/5 text-right text-lg">
-                <i className="fas fa-envelope" />
+                <FaIcon classes="fas fa-envelope" />
               </span>
               <span className="w-4/5 pl-3 text-left">
                 {"Continue with email" |> str}

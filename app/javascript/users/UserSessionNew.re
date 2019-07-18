@@ -274,11 +274,12 @@ let renderSignInWithEmail =
           htmlFor="password">
           {"Password" |> str}
         </label>
-        <span
+        <button
+          disabled=saving
           onClick={_ => saving ? () : setView(_ => ForgotPassword)}
           className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline inline">
           {"Set a New Password" |> str}
-        </span>
+        </button>
       </div>
       <input
         className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
@@ -415,6 +416,7 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
   let (password, setPassword) = React.useState(() => "");
   let (sharedDevice, setSharedDevice) = React.useState(() => false);
   let (saving, setSaving) = React.useState(() => false);
+
   <div className="bg-gray-100 sm:py-10">
     <div
       className="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">

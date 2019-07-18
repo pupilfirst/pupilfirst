@@ -97,7 +97,7 @@ let fileUploadButtonVisible = (blockType: ContentBlock.blockType) =>
   | _ => false
   };
 
-let contentUploadContainer = (blockType, dispatch, state) =>
+let contentUploadContainer = (blockType, dispatch, state, editorId) =>
   <div
     className="content-block__content-placeholder flex flex-col justify-center text-center p-10">
     <div> {faIcons(blockType)} </div>
@@ -118,7 +118,7 @@ let contentUploadContainer = (blockType, dispatch, state) =>
       fileUploadButtonVisible(blockType) ?
         <div className="mt-2">
           <input
-            id="content-block-editor__file-input"
+            id={"content-block-editor__file-input-" ++ editorId}
             type_="file"
             className="hidden"
             required=false
@@ -135,7 +135,7 @@ let contentUploadContainer = (blockType, dispatch, state) =>
           />
           <label
             className="btn btn-primary"
-            htmlFor="content-block-editor__file-input">
+            htmlFor={"content-block-editor__file-input-" ++ editorId}>
             <i className="fas fa-upload" />
             <span className="ml-2 truncate"> {state.fileName |> str} </span>
           </label>
@@ -590,7 +590,7 @@ let make =
                         defaultView=MarkdownEditor.Edit
                       />
                     </div>
-                  | _ => contentUploadContainer(blockType, dispatch, state)
+                  | _ => contentUploadContainer(blockType, dispatch, state, editorId)
                   }
                 }
               }

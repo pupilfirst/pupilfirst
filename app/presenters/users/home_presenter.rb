@@ -23,7 +23,7 @@ module Users
     end
 
     def founders
-      @founders ||= current_user.founders.joins(:school).where(schools: { id: current_school })
+      @founders ||= current_user.founders.joins(:school).where(schools: { id: current_school }).includes(:course, :startup)
     end
 
     def show_user_edit?

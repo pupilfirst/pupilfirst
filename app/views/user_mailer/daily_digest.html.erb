@@ -26,19 +26,23 @@
 
 <% content_for :body do %>
   <p>
-    There <%= "#{questions_article} #{question_count}" %> new <%= 'question'.pluralize(question_count) %> from
-    <%= pluralize(community_count, 'community') %> in <%= school_name %>.
+    This daily update contains new questions that were asked today and a selection of unanswered questions from the
+    past week.
+  </p>
+
+  <p>
+    There <%= questions_article %> <strong><%= question_count %></strong> new
+    <%= 'question'.pluralize(question_count) %> in <%= pluralize(community_count, 'community') %> that you are a
+    part of.
   </p>
 
   <% @updates.each do |community_id, community_updates| %>
-    <ul style="padding: 0; list-style-type: none;">
-      <p style="border-bottom: 1px solid lightgrey;">
-        <%= link_to community_updates[:community_name], community_url(community_id), style: 'text-decoration: none; font-size: 150%; line-height: 1.75;' %>
-      </p>
+    <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 150%;' %>
 
+    <ul style="padding: 0; margin-top: 0; list-style-type: none;">
       <% community_updates[:questions].each do |question| %>
-        <li style="padding-left: 10px;">
-          <%= link_to question[:title], question_url(question[:id]), style: 'text-decoration: none;' %>
+        <li style="padding-left: 15px;">
+          <%= link_to question[:title], question_url(question[:id]) %>
           <span style="font-size: 75%;">
             &mdash; <strong><%= question[:author] %></strong>
             <%= question[:type] == 'new' ? '' : "(unanswered, asked #{pluralize(question[:days_ago], 'day')} ago)" %>

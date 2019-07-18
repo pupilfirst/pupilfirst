@@ -291,24 +291,22 @@ let renderSignInWithEmail =
     </div>
     <div
       className="flex justify-between items-center leading-snug mt-4 flex-col flex-col-reverse sm:flex-row">
-      <div
-        className="flex items-center text-gray-700 hover:text-gray-900 pt-4 sm:pt-0">
+      <div className="flex items-strecth text-gray-700 hover:text-gray-900">
         <input
           onChange={_ => setSharedDevice(sharedDevice => !sharedDevice)}
-          className="leading-tight"
           id="sharedDevice"
           checked=sharedDevice
           disabled=saving
           type_="checkbox"
         />
         <label
-          className="block pl-2 font-semibold leading-tight cursor-pointer text-xs select-none whitespace-no-wrap"
+          className="block pl-2 font-semibold cursor-pointer text-xs select-none whitespace-no-wrap"
           htmlFor="sharedDevice">
           {"Are you using a shared device?" |> str}
         </label>
       </div>
     </div>
-    <div className="mt-5">
+    <div className="mt-6">
       {
         validPassword(password) ?
           <button
@@ -324,12 +322,12 @@ let renderSignInWithEmail =
                 )
             }
             className="btn btn-success btn-large text-center w-full">
-            <FaIcon
-              classes={
-                saving ? "fal fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
-              }
-            />
-            <span className="ml-2">
+            {
+              saving ?
+                <i className="fal fa-spinner-third fa-spin mr-2" /> :
+                ReasonReact.null
+            }
+            <span>
               {(saving ? "Signing in" : "Sign in with password") |> str}
             </span>
           </button> :
@@ -346,12 +344,12 @@ let renderSignInWithEmail =
                 )
             }
             className="btn btn-primary btn-large text-center w-full">
-            <FaIcon
-              classes={
-                saving ? "fal fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
-              }
-            />
-            <span className="ml-2">
+            {
+              saving ?
+                <i className="fal fa-spinner-third fa-spin mr-2" /> :
+                ReasonReact.null
+            }
+            <span>
               {(saving ? "Signing in" : "Email me a link to sign in") |> str}
             </span>
           </button>
@@ -396,14 +394,12 @@ let renderForgotPassword =
           sendResetPasswordEmail(authenticityToken, email, setView, setSaving)
       }
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
-      <FaIcon
-        classes={
-          saving ? "fal fa-spinner-third fa-spin" : "fas fa-sign-in-alt"
-        }
-      />
-      <span className="ml-2">
-        {(saving ? "Dispatching email" : "Send Email") |> str}
-      </span>
+      {
+        saving ?
+          <i className="fal fa-spinner-third fa-spin mr-2" /> :
+          ReasonReact.null
+      }
+      <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
     </button>
   </div>;
 
@@ -461,7 +457,7 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
             <button
               disabled=saving
               onClick=(_ => setView(_ => SignInWithPassword))
-              className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 rounded-lg cursor-pointer font-semibold mt-4 w-full">
+              className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 focus:bg-gray-200 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full">
               <span className="w-1/5 text-right text-lg">
                 <i className="fas fa-envelope" />
               </span>
@@ -476,7 +472,7 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
             <button
               disabled=saving
               onClick=(_ => setView(_ => FederatedSignIn))
-              className="p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200">
+              className="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none">
               {"Sign in with Google, Facebook, or Github" |> str}
             </button>
           </div>

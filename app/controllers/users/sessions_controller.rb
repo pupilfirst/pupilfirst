@@ -8,7 +8,6 @@ module Users
     # GET /user/sign_in
     def new
       if current_user.present?
-        flash[:alert] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -48,12 +47,9 @@ module Users
         remember_me(user) unless params[:shared_device] == 'true'
         Users::ConfirmationService.new(user).execute
 
-        flash[:success] = 'User authenticated successfully.'
         redirect_to after_sign_in_path_for(user)
       else
-        # Show an error message.
-        flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
-        redirect_to new_user_session_path(referer: params[:referer])
+        redirect_to reset_password_path
       end
     end
 
@@ -72,7 +68,7 @@ module Users
         @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
         if @form.validate(params[:session]) && @form.save
           sign_in @form.user
-          render json: { error: nil }
+          render json: { error: nil, path: after_sign_in_path_for(current_user) }
         else
           render json: { error: @form.errors.full_messages.join(', ') }
         end
@@ -87,7 +83,7 @@ module Users
       if @form.validate(params[:session])
         sign_in @form.user
         remember_me(@form.user) unless @form.shared_device?
-        render json: { error: nil }
+        render json: { error: nil, path: after_sign_in_path_for(current_user) }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
       end

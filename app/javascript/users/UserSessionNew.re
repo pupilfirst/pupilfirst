@@ -46,10 +46,8 @@ type omniauthProvider =
   | Developer;
 
 let handleErrorCB = (setSaving, ()) => setSaving(_ => false);
-let handleSignInWithPasswordCB = _ => {
-  let window = Webapi.Dom.window;
-  "/home" |> Webapi.Dom.Window.setLocation(window);
-};
+let handleSignInWithPasswordCB = response =>
+  DomUtils.redirect(response |> Json.Decode.(field("path", string)));
 let handleSignInWithEmailCB = (setView, _) => setView(_ => SignInEmailSent);
 
 let signInWithPassword =

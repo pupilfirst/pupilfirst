@@ -14,10 +14,8 @@ type views =
 
 let handleErrorCB = (setSaving, ()) => setSaving(_ => false);
 
-let handleUpdatePasswordCB = _ => {
-  let window = Webapi.Dom.window;
-  "/home" |> Webapi.Dom.Window.setLocation(window);
-};
+let handleUpdatePasswordCB = response =>
+  DomUtils.redirect(response |> Json.Decode.(field("path", string)));
 
 let validPassword = password => {
   let length = password |> String.length;

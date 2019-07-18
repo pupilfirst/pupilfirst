@@ -16,6 +16,7 @@ let parseJsonAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
   )
   |> Json.parseOrRaise;
 
+let redirect = path => path |> Webapi.Dom.Window.setLocation(window);
 module FormData = {
   type t = Fetch.formData;
 

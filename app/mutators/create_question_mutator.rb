@@ -7,7 +7,7 @@ class CreateQuestionMutator < ApplicationMutator
   attr_accessor :target_id
 
   validates :title, length: { minimum: 1, maximum: 250, message: 'InvalidLengthTitle' }, allow_nil: false
-  validates :description, length: { minimum: 1, message: 'InvalidLengthDescription' }, allow_nil: false
+  validates :description, length: { minimum: 1, maximum: 15_000, message: 'InvalidLengthDescription' }, allow_nil: false
   validates :community_id, presence: { message: 'BlankCommunityID' }
 
   def create_question

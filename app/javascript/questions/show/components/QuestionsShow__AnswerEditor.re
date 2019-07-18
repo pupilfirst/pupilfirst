@@ -219,6 +219,7 @@ let make =
             value=description
             profile=Markdown.QuestionAndAnswer
             defaultView=MarkdownEditor.Edit
+            maxLength=10000
           />
           <div className="flex justify-end pt-3 border-t">
             {

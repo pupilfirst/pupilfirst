@@ -4,7 +4,7 @@ class CreateAnswerMutator < ApplicationMutator
   attr_accessor :description
   attr_accessor :question_id
 
-  validates :description, length: { minimum: 1, maximum: 5000, message: 'InvalidLengthDescription' }
+  validates :description, length: { minimum: 1, maximum: 15_000, message: 'InvalidLengthDescription' }
   validates :question_id, presence: { message: 'BlankQuestionId' }
 
   def create_answer

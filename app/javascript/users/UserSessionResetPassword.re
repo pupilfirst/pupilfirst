@@ -173,7 +173,7 @@ let renderInvalidToken = () =>
 let selectView = token =>
   switch (token) {
   | Some(_) => ResetPassword
-  | None => ResetPassword
+  | None => InvalidToken
   };
 
 [@react.component]

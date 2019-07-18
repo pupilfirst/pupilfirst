@@ -7,6 +7,7 @@ type props = {
   logoUrl: option(string),
   links: list(NavLink.t),
   authenticityToken: string,
+  isCurrentUser: bool,
 };
 
 let decodeProps = json =>
@@ -15,6 +16,7 @@ let decodeProps = json =>
     logoUrl: json |> field("logoUrl", nullable(string)) |> Js.Null.toOption,
     links: json |> field("links", list(NavLink.decode)),
     authenticityToken: json |> field("authenticityToken", string),
+    isCurrentUser: json |> field("isCurrentUser", bool),
   };
 
 let props =
@@ -31,6 +33,7 @@ ReactDOMRe.renderToElementWithId(
     logoUrl={props.logoUrl}
     links={props.links}
     authenticityToken={props.authenticityToken}
+    isCurrentUser={props.isCurrentUser}
   />,
   "student-top-nav",
 );

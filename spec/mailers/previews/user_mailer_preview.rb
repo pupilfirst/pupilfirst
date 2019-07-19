@@ -21,7 +21,7 @@ class UserMailerPreview < ActionMailer::Preview
 
   private
 
-  def community_digest(count, starting_id = 1, unanswered = false)
+  def community_digest(count, starting_id = 1, no_activity = false)
     {
       community_name: Faker::Lorem.words(2).join(' ').titleize,
       questions: (1..count).map do |id|
@@ -29,8 +29,8 @@ class UserMailerPreview < ActionMailer::Preview
           id: starting_id + id - 1,
           title: Faker::Lorem.sentence,
           author: Faker::Name.name,
-          days_ago: unanswered ? rand(1..6) : 0,
-          type: unanswered ? 'unanswered' : 'new'
+          days_ago: no_activity ? rand(1..6) : 0,
+          type: no_activity ? 'no_activity' : 'new'
         }
       end
     }

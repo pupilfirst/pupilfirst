@@ -105,14 +105,16 @@ describe DailyDigestService do
       expect(b3).not_to include(question_c3_2.title)
     end
 
-    context 'when there are more than 5 unanswered questions in the past seven days' do
-      let!(:question_c3_3) { create :question, community: community_3, creator: t3_user, created_at: 2.days.ago }
-      let!(:question_c3_4) { create :question, community: community_3, creator: t3_user, created_at: 3.days.ago }
-      let!(:question_c3_5) { create :question, community: community_3, creator: t3_user, created_at: 4.days.ago }
+    context 'when there are more than 5 questions with no activity in the past seven days' do
+      let!(:question_c3_3) { create :question, community: community_3, creator: t1_user, created_at: 2.days.ago }
+      let!(:question_c3_4) { create :question, community: community_3, creator: t2_user_1, created_at: 3.days.ago }
+      let!(:question_c3_5) { create :question, community: community_3, creator: t2_user_2, created_at: 4.days.ago }
       let!(:question_c3_6) { create :question, community: community_3, creator: t3_user, created_at: 5.days.ago }
-      let!(:question_c3_7) { create :question, community: community_3, creator: t3_user, created_at: 6.days.ago }
+      let!(:question_c3_7) { create :question, community: community_3, creator: t1_user, created_at: 6.days.ago }
+      let!(:question_c3_8) { create :question, community: community_3, creator: t2_user_1, created_at: 6.days.ago }
+      let!(:comment) { create :comment, commentable: question_c3_6, creator: t1_user }
 
-      it 'only mails up to 5 unanswered questions' do
+      it 'only mails up to 5 such questions' do
         subject.execute
 
         open_email(t3_user.email)
@@ -127,8 +129,9 @@ describe DailyDigestService do
         expect(b).to include(question_c3_3.title)
         expect(b).to include(question_c3_4.title)
         expect(b).to include(question_c3_5.title)
-        expect(b).to include(question_c3_6.title)
-        expect(b).not_to include(question_c3_7.title)
+        expect(b).not_to include(question_c3_6.title) # question was commented on.
+        expect(b).to include(question_c3_7.title)
+        expect(b).not_to include(question_c3_8.title)
       end
     end
   end

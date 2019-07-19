@@ -58,5 +58,4 @@
 //= require founders
 //= require story
 //= require resources
-//= require users
 //= require intercom_settings

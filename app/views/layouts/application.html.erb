@@ -1,7 +1,7 @@
 <% presenter = ::Layouts::ApplicationPresenter.new(self) %>
 
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='en' data-flash="<%= presenter.flash_messages %>">
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -11,10 +11,12 @@
 
   <!-- Styles -->
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-
   <!-- Scripts -->
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
+
+  <%= javascript_pack_tag 'shared/flashes','data-turbolinks-track': 'reload', nonce: true %>
+  <%= stylesheet_pack_tag 'shared/flashes', media: 'all' %>
 
   <%= csrf_meta_tags %>
 

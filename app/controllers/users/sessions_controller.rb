@@ -8,6 +8,7 @@ module Users
     # GET /user/sign_in
     def new
       if current_user.present?
+        flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -49,7 +50,8 @@ module Users
 
         redirect_to after_sign_in_path_for(user)
       else
-        redirect_to reset_password_path
+        flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
+        redirect_to new_user_session_path
       end
     end
 

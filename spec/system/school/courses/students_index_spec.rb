@@ -16,6 +16,9 @@ feature 'School students index', js: true do
   let!(:startup_1) { create :startup, level: level_1 }
   let!(:startup_2) { create :startup, level: level_2 }
 
+  let(:team_with_lone_student) { create :team, level: level_2 }
+  let!(:lone_student) { create :founder, startup: team_with_lone_student }
+
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
 
@@ -206,5 +209,19 @@ feature 'School students index', js: true do
 
     # The student's team name should now be the student's own name.
     expect(founder.startup.name).to eq(founder_user.name)
+
+    # Mark a student who is alone in a team as dropped out.
+    lone_user = lone_student.user
+    find("a", text: lone_student.name).click
+
+    find('button[title="Prevent this student from accessing the course"]').click
+    click_button 'Update Student'
+    expect(page).to have_text("Student updated successfully")
+    dismiss_notification
+
+    # The student's team should not have changed.
+    expect(lone_user.reload.founders.first.startup).to eq(team_with_lone_student)
+
+    # All coaches should have been removed from the team.
   end
 end

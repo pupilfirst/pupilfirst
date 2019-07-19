@@ -8,9 +8,10 @@ class User < ApplicationRecord
   has_one :school_admin, dependent: :restrict_with_error
 
   has_secure_token :login_token
+  has_secure_token :reset_password_token
 
   # database_authenticable is required by devise_for to generate the session routes
-  devise :database_authenticatable, :trackable, :rememberable, :omniauthable,
+  devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
     omniauth_providers: %i[google_oauth2 facebook github]
 
   normalize_attribute :name, :gender, :phone, :communication_address, :title, :key_skills, :about,

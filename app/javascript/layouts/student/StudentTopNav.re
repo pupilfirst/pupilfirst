@@ -16,32 +16,46 @@ let headerLink = (key, link) =>
     </a>
   </div>;
 
-let logoutLink = authenticityToken =>
-  <div
-    key="Logout-button"
-    className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
-    <form className="button_to" method="post" action="/users/sign_out">
-      <input name="_method" value="delete" type_="hidden" />
-      <input
-        name="authenticity_token"
-        value=authenticityToken
-        type_="hidden"
-      />
+let logoutLink = (isCurrentUser, authenticityToken) =>
+  isCurrentUser ?
+    <div
+      key="Logout-button"
+      className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+      <form className="button_to" method="post" action="/users/sign_out">
+        <input name="_method" value="delete" type_="hidden" />
+        <input
+          name="authenticity_token"
+          value=authenticityToken
+          type_="hidden"
+        />
+        <div className="flex items-center justify-center">
+          <button
+            className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
+            type_="submit"
+            value="Submit">
+            <FaIcon classes="far fa-power-off" />
+            <span className="ml-2"> {"Sign Out" |> str} </span>
+          </button>
+        </div>
+      </form>
+    </div> :
+    <div
+      key="SignIn-button"
+      className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
       <div className="flex items-center justify-center">
-        <button
+        <a
           className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
-          type_="submit"
-          value="Submit">
+          href="/users/sign_in"
+          >
           <FaIcon classes="far fa-power-off" />
-          <span className="ml-2"> {"Logout" |> str} </span>
-        </button>
+          <span className="ml-2"> {"Sign In" |> str} </span>
+        </a>
       </div>
-    </form>
-  </div>;
+    </div>;
 
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
-let headerLinks = (links, authenticityToken) => {
+let headerLinks = (links, authenticityToken, isCurrentUser) => {
   let (visibleLinks, dropdownLinks) =
     switch (links, isMobile()) {
     | (links, true) => (links, [])
@@ -61,14 +75,14 @@ let headerLinks = (links, authenticityToken) => {
     ->List.append([
         <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
-    ->List.append([logoutLink(authenticityToken)])
+    ->List.append([logoutLink(isCurrentUser, authenticityToken)])
     |> Array.of_list
     |> ReasonReact.array
   };
 };
 
 [@react.component]
-let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken) => {
+let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isCurrentUser) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile());
 
   React.useEffect(() => {
@@ -118,7 +132,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken) => {
           !menuHidden && !isMobile() ?
             <div
               className="student-navbar__links-container flex justify-end items-center w-4/5 flex-no-wrap flex-shrink-0">
-              {headerLinks(links, authenticityToken)}
+              {headerLinks(links, authenticityToken, isCurrentUser)}
             </div> :
             React.null
         }
@@ -128,7 +142,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken) => {
       isMobile() && !menuHidden ?
         <div
           className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-          {headerLinks(links, authenticityToken)}
+          {headerLinks(links, authenticityToken, isCurrentUser)}
         </div> :
         React.null
     }

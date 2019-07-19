@@ -5,7 +5,8 @@ module Layouts
         school_name: school_name,
         logo_url: logo_url,
         links: nav_links,
-        authenticity_token: view.form_authenticity_token
+        authenticity_token: view.form_authenticity_token,
+        is_current_user: current_user.present?
       }
     end
 
@@ -25,25 +26,30 @@ module Layouts
 
     def nav_links
       @nav_links ||= begin
-        # Admin link
-        links = [admin_link] - [nil]
-
         # ...and the custom links.
         custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).order(created_at: :DESC).map do |school_link|
           { title: school_link.title, url: school_link.url }
         end
 
         # Both, with the user-based links at the front.
-        links + home_link + custom_links
+        admin_link + home_link + custom_links
       end
     end
 
     def admin_link
-      { title: 'Admin', url: '/school' } if current_school.present? && view.policy(current_school).show?
+      if current_school.present? && view.policy(current_school).show?
+        [{ title: 'Admin', url: '/school' }]
+      else
+        []
+      end
     end
 
     def home_link
-      [{ title: 'Home', url: '/home' }]
+      if current_user.present?
+        [{ title: 'Home', url: '/home' }]
+      else
+        []
+      end
     end
   end
 end

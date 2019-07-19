@@ -13,6 +13,16 @@ class UserSessionMailer < ActionMailer::Base
     end
   end
 
+  def send_reset_password_token(email, school, reset_password_url)
+    @school = school
+    @school_name = school.present? ? school.name : 'PupilFirst'
+    @reset_password_url = reset_password_url
+
+    roadie_mail({ from: from, to: email, subject: "#{@school_name} account recovery" }, roadie_options_for(school)) do |format|
+      format.html { render layout: school.present? ? 'mail/school' : 'mail/pupil_first' }
+    end
+  end
+
   private
 
   def from

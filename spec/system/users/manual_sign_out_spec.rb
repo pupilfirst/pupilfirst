@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Manual User Sign Out' do
+feature 'Manual User Sign Out', js: true do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:startup) { create :startup }
@@ -8,7 +8,7 @@ feature 'Manual User Sign Out' do
 
   scenario 'active user session is interrupted by the setting of the flag' do
     # Log in the user.
-    visit user_token_url(token: user.login_token, referer: edit_user_path)
+    visit user_token_path(token: user.login_token, referer: edit_user_path)
 
     expect(page).to have_content('profile')
 
@@ -19,12 +19,12 @@ feature 'Manual User Sign Out' do
       visit edit_user_path
 
       # User should be signed out.
-      expect(page).to have_selector('#users-sessions__new')
+      expect(page).to have_text('Continue with email')
 
       # Log the user in again.
       user.regenerate_login_token
 
-      visit user_token_url(token: user.login_token, referer: edit_user_path)
+      visit user_token_path(token: user.login_token, referer: edit_user_path)
 
       expect(page).to have_content('profile')
     end
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out' do
       visit edit_user_path
 
       # User should be signed out.
-      expect(page).to have_selector('#users-sessions__new')
+      expect(page).to have_text('Continue with email')
     end
   end
 
@@ -44,7 +44,7 @@ feature 'Manual User Sign Out' do
     end
 
     scenario 'user signs in as usual' do
-      visit user_token_url(token: user.login_token, referer: edit_user_path)
+      visit user_token_path(token: user.login_token, referer: edit_user_path)
 
       expect(page).to have_content('profile')
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out' do
         visit edit_user_path
 
         # User should be signed out.
-        expect(page).to have_selector('#users-sessions__new')
+        expect(page).to have_text('Continue with email')
       end
     end
   end

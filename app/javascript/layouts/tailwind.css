@@ -46,7 +46,7 @@ h6 {
 /* Button */
 
 .btn {
-  @apply inline-flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded cursor-pointer;
+  @apply inline-flex items-center justify-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded cursor-pointer;
 }
 
 .btn:focus {
@@ -69,14 +69,17 @@ h6 {
 
 .btn-primary {
   @apply bg-primary-500 text-white shadow;
+  background-image: linear-gradient(135deg, rgba(96, 37, 192, 1) 0%, rgba(77, 30, 154, 1) 100%);
 }
 
 .btn-primary:hover {
   @apply bg-primary-600;
+  background-image: linear-gradient(135deg, rgba(77, 30, 154, 1) 0%, rgba(56, 13, 128, 1) 100%);
 }
 
 .btn-primary:focus {
   @apply bg-primary-800;
+  background-image: none;
 }
 
 .btn-primary-ghost {
@@ -93,46 +96,57 @@ h6 {
 
 .btn-secondary {
   @apply bg-secondary-500 text-white;
+  background-image: linear-gradient(135deg, rgba(246, 16, 103, 1) 0%, rgba(172, 6, 69, 1) 100%);
 }
 
 .btn-secondary:hover {
   @apply bg-secondary-600;
+  background-image: linear-gradient(135deg, rgba(172, 6, 69, 1) 0%, rgba(123, 5, 49, 1) 100%);
 }
 
 .btn-secondary:focus {
   @apply bg-secondary-800;
+  background-image: none;
 }
 
 .btn-success {
   @apply bg-green-500 text-white;
+  background-image: linear-gradient(135deg, rgba(72, 187, 120, 1) 0%, rgba(56, 161, 105, 1) 100%);
 }
 
 .btn-success:hover {
   @apply bg-green-600;
+  background-image: linear-gradient(135deg, rgba(56, 161, 105, 1) 0%, rgba(47, 133, 90, 1) 100%);
 }
 
 .btn-success:focus {
   @apply bg-green-800;
+  background-image: none;
 }
 
 .btn-danger {
   @apply bg-red-500 text-white;
+  background-image: linear-gradient(135deg, rgba(245, 101, 101, 1) 0%, rgba(229, 62, 62, 1) 100%);
 }
 
 .btn-danger:hover {
   @apply bg-red-600;
+  background-image: linear-gradient(135deg, rgba(229, 62, 62, 1) 0%, rgba(197, 48, 48, 1) 100%);
 }
 
 .btn-danger:focus {
   @apply bg-red-800;
+  background-image: none;
 }
 
 button:disabled, .disabled {
   @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
+  background-image: none;
 }
 
 button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   @apply bg-gray-300 text-gray-500 border-transparent shadow-none;
+  background-image: none;
 }
 
 .btn-small {

@@ -1,39 +1,34 @@
 [@bs.config {jsx: 3}];
 
-open StudentTopNav__Types;
-
 type props = {
   schoolName: string,
-  logoUrl: option(string),
-  links: list(NavLink.t),
   authenticityToken: string,
-  isCurrentUser: bool,
+  fqdn: option(string),
+  oauthHost: string,
 };
 
 let decodeProps = json =>
   Json.Decode.{
     schoolName: json |> field("schoolName", string),
-    logoUrl: json |> field("logoUrl", nullable(string)) |> Js.Null.toOption,
-    links: json |> field("links", list(NavLink.decode)),
     authenticityToken: json |> field("authenticityToken", string),
-    isCurrentUser: json |> field("isCurrentUser", bool),
+    fqdn: json |> field("fqdn", nullable(string)) |> Js.Null.toOption,
+    oauthHost: json |> field("oauthHost", string),
   };
 
 let props =
   DomUtils.parseJsonAttribute(
-    ~id="student-top-nav",
+    ~id="user-session-new",
     ~attribute="data-json-props",
     (),
   )
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <StudentTopNav
+  <UserSessionNew
     schoolName={props.schoolName}
-    logoUrl={props.logoUrl}
-    links={props.links}
     authenticityToken={props.authenticityToken}
-    isCurrentUser={props.isCurrentUser}
+    fqdn={props.fqdn}
+    oauthHost={props.oauthHost}
   />,
-  "student-top-nav",
+  "user-session-new",
 );

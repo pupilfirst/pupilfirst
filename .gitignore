@@ -27,6 +27,7 @@ tags
 
 # Ignore public packs.
 /public/packs
+/public/assets
 /public/packs-test
 yarn-debug.log*
 .yarn-integrity

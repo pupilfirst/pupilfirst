@@ -743,7 +743,10 @@ ActiveRecord::Schema.define(version: 2019_07_17_130302) do
     t.string "behance_url"
     t.string "skype_id"
     t.bigint "school_id"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.jsonb "preferences", default: "{}", null: false
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 

@@ -36,7 +36,7 @@ feature 'School students index', js: true do
     FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 
-  scenario 'school admin visits a course index' do
+  scenario 'school admin manages students on the course student page' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # list all students
@@ -154,30 +154,18 @@ feature 'School students index', js: true do
     founder_2.reload
     expect(founder_1.startup.id).not_to eq(founder_2.startup.id)
 
-    # Mark a student as exited
-    founder = startup_2.founders.last
-    founder_user = founder.user
-    find("a", text: founder_user.name).click
-    expect(page).to have_text(founder_user.name)
-    expect(page).to have_text(founder.startup.name)
-    find('button[title="Prevent this student from accessing the course"]').click
-    click_button 'Update Student'
-
-    expect(page).to have_text("Student updated successfully")
-    dismiss_notification
-    founder.reload
-    expect(founder.exited).to eq(true)
-
     # Assign a coach to a team
     founder = startup_2.founders.last
     find("a", text: founder.user.name).click
     expect(page).to have_text('Course Coaches')
     expect(page).to have_text('Exclusive Team Coaches')
     expect(page).to have_text(course_coach.name)
+
     within '.select-list__group' do
       expect(page).to_not have_text(exited_coach.name)
       find('.px-3', text: coach.name).click
     end
+
     click_button 'Update Student'
     expect(page).to have_text("Student updated successfully")
     dismiss_notification
@@ -194,5 +182,29 @@ feature 'School students index', js: true do
     expect(page).to have_text("Teams marked active successfully!")
     visit school_course_students_path(course)
     expect(page).to have_text(inactive_team_1.founders.first.name)
+  end
+
+  scenario 'school admin marks students as dropped out' do
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # Mark a student in a team of more than one students as dropped out.
+    founder = startup_2.founders.last
+    founder_user = founder.user
+
+    find("a", text: founder_user.name).click
+
+    expect(page).to have_text(founder_user.name)
+    expect(page).to have_text(founder.startup.name)
+
+    find('button[title="Prevent this student from accessing the course"]').click
+    click_button 'Update Student'
+    expect(page).to have_text("Student updated successfully")
+    dismiss_notification
+
+    # The student should have been marked as exited.
+    expect(founder.reload.exited).to eq(true)
+
+    # The student's team name should now be the student's own name.
+    expect(founder.startup.name).to eq(founder_user.name)
   end
 end

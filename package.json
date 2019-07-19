@@ -43,6 +43,13 @@
     "tailwindcss": "^1.0.5",
     "webpack-dev-server": "^3.7.2"
   },
+  "resolutions": {
+    "lodash.mergewith": "^4.6.2",
+    "lodash": "^4.17.13",
+    "lodash.template": "^4.5.0",
+    "fstream": "^1.0.12",
+    "sshpk": "^1.13.2"
+  },
   "scripts": {
     "postinstall": "bsb -clean-world && bsb -make-world"
   }

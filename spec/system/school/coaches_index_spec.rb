@@ -10,12 +10,12 @@ feature 'Coaches Index' do
   let!(:coach_2) { create :faculty, school: school }
   let!(:coach_3) { create :faculty, school: school_1 }
 
-  let!(:new_coach_name) { Faker::Lorem.words(2).join ' ' }
-  let!(:new_coach_email) { Faker::Internet.email }
-  let!(:new_coach_title) { Faker::Lorem.words(2).join ' ' }
+  let(:new_coach_name) { Faker::Name.name }
+  let(:new_coach_email) { Faker::Internet.email(new_coach_name) }
+  let(:new_coach_title) { Faker::Lorem.words(2).join(' ') }
 
-  let!(:updated_coach_name) { Faker::Lorem.words(2).join ' ' }
-  let!(:updated_coach_title) { Faker::Lorem.words(2).join ' ' }
+  let(:updated_coach_name) { Faker::Name.name }
+  let(:updated_coach_title) { Faker::Lorem.words(2).join(' ') }
 
   let!(:school_admin) { create :school_admin, school: school }
 
@@ -33,15 +33,12 @@ feature 'Coaches Index' do
     expect(page).to have_text(coach_2.name)
     expect(page).to_not have_text(coach_3.name)
 
-    # Add a new course
+    # Add a coach with minimum required fields.
     click_button 'Add New Coach'
 
     fill_in 'Name', with: new_coach_name
     fill_in 'Email', with: new_coach_email
     fill_in 'Title', with: new_coach_title
-    fill_in 'LinkedIn', with: 'https://www.linkedin.com/xyz'
-    fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
-    attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
 
     click_button 'Create Coach'
 
@@ -55,18 +52,23 @@ feature 'Coaches Index' do
     expect(user.name).to eq(new_coach_name.titleize)
     expect(user.title).to eq(new_coach_title)
     expect(user.email).to eq(new_coach_email)
-    expect(user.linkedin_url).to eq('https://www.linkedin.com/xyz')
-    expect(coach.connect_link).to eq('https://www.connect.com/xyz')
-    expect(user.avatar.attached?).to eq(true)
-    expect(user.avatar.filename).to eq('human.png')
 
+    # Edit the coach to add remaining fields.
     find("p", text: new_coach_name).click
+
+    fill_in 'LinkedIn', with: 'https://www.linkedin.com/xyz'
+    fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
+    attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
     fill_in 'Name', with: updated_coach_name
     fill_in 'Title', with: updated_coach_title
     click_button 'Update Coach'
 
     expect(page).to have_text('Coach updated successfully')
 
+    expect(user.reload.linkedin_url).to eq('https://www.linkedin.com/xyz')
+    expect(coach.reload.connect_link).to eq('https://www.connect.com/xyz')
+    expect(user.avatar.attached?).to eq(true)
+    expect(user.avatar.filename).to eq('human.png')
     expect(user.reload.name).to eq(updated_coach_name.titleize)
     expect(user.title).to eq(updated_coach_title)
   end

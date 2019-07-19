@@ -226,7 +226,7 @@ let make =
                         React.null
                     }
                   </div>
-                  <div className="pt-7 mx-6 flex flex-col">
+                  <div className="pt-7 px-3 md:px-6 flex flex-col">
                     <h1 className="text-xl text-black font-semibold">
                       {state.question |> Question.title |> str}
                     </h1>

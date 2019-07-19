@@ -235,7 +235,7 @@ let make =
               }
             }
             <button
-              disabled=saving
+              disabled={saving || description == ""}
               onClick={
                 handleAnswer(
                   description,

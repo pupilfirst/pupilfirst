@@ -231,7 +231,7 @@ let make =
     switch (label) {
     | Some(label) => (
         <label
-          className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
+          className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
           htmlFor=id>
           {label |> str}
         </label>,
@@ -286,7 +286,7 @@ let make =
                 updateDescriptionCB,
               )
           }
-          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-800 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500"
+          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-900 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500"
         />
     }
   </div>;

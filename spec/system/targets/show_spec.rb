@@ -495,8 +495,8 @@ feature 'Target Overlay', js: true do
       expect(page).to have_text("ASK A NEW QUESTION")
       expect(page).to have_text(target.title)
 
-      fill_in 'Title', with: question_title
-      fill_in 'Body', with: question_description
+      fill_in 'Question', with: question_title
+      fill_in 'Description', with: question_description
       click_button 'Post Your Question'
 
       expect(page).to have_text(question_title)

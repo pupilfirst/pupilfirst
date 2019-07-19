@@ -45,7 +45,7 @@
           <%= link_to question[:title], question_url(question[:id]) %>
           <span style="font-size: 75%;">
             &mdash; <strong><%= question[:author] %></strong>
-            <%= question[:type] == 'new' ? '' : "(unanswered, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
+            <%= question[:type] == 'new' ? '' : "(no activity, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
           </span>
         </li>
       <% end %>

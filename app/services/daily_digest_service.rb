@@ -8,7 +8,7 @@ class DailyDigestService
   def execute
     debug_value = {}
     updates = questions_from_today
-    updates = add_unanswered_questions(updates)
+    updates = add_questions_with_no_activity(updates)
 
     User.joins(:communities).includes(:communities, :school)
       .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
@@ -52,11 +52,11 @@ class DailyDigestService
     end
   end
 
-  # Return up to 5 additional, most recent, unanswered questions from communities.
-  def add_unanswered_questions(updates)
+  # Return up to 5 additional, most recent, questions with no activity from communities.
+  def add_questions_with_no_activity(updates)
     Question.where('questions.created_at > ?', 1.week.ago)
       .where('questions.created_at < ?', 1.day.ago)
-      .includes(:answers).where(answers: { id: nil })
+      .includes(:answers, :comments).where(answers: { id: nil }, comments: { id: nil })
       .order('questions.created_at DESC').limit(5)
       .includes(:community, :creator).each_with_object(updates) do |question, updates|
       community = question.community
@@ -72,7 +72,7 @@ class DailyDigestService
         title: question.title,
         days_ago: (Date.today - question.created_at.to_date).to_i,
         author: question.creator&.name || "a user",
-        type: 'unanswered'
+        type: 'no_activity'
       }
     end
   end

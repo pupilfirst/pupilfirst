@@ -18,16 +18,16 @@ module ENV = {
 };
 
 let federatedSignInIcon: string = [%raw
-  "require('./images/sign-in-icon.png')"
+  "require('./images/federated-sign-in-icon.svg')"
 ];
 let signInWithPasswordIcon: string = [%raw
-  "require('./images/continue-with-email-icon.png')"
+  "require('./images/continue-with-email-icon.svg')"
 ];
 let signInEmailSentIcon: string = [%raw
-  "require('./images/magic-link-sent-icon.png')"
+  "require('./images/email-sent-icon.svg')"
 ];
 let forgotPasswordIcon: string = [%raw
-  "require('./images/continue-with-email-icon.png')"
+  "require('./images/reset-password-icon.svg')"
 ];
 
 open SchoolAdmin__Utils;
@@ -153,7 +153,7 @@ let renderIcon = view => {
     | SignInEmailSent => signInEmailSentIcon
     | ForgotPassword => forgotPasswordIcon
     };
-  <img className="mx-auto h-20 sm:h-30" src=iconUrl />;
+  <img className="mx-auto h-22 sm:h-32" src=iconUrl />;
 };
 
 let headerText = (view, schoolName) =>

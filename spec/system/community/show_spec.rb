@@ -1,11 +1,12 @@
 require 'rails_helper'
 
-feature 'Community Show' do
+feature 'Community Show', js: true do
   include UserSpecHelper
   include NotificationHelper
 
   # Setup a course with founders and target for community.
   let(:school) { create :school, :current }
+  let!(:domain) { create :domain, :primary, school: school }
   let(:course) { create :course, school: school }
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1 }
@@ -32,14 +33,14 @@ feature 'Community Show' do
     create :community_course_connection, course: course, community: community
   end
 
-  scenario 'when an unknown user visits a community' do
+  scenario 'an unknown user visits a community' do
     visit community_path(community)
 
     # Should 404.
     expect(page).to have_content("The page you were looking for doesn't exist")
   end
 
-  scenario 'When an active founder visits his community', js: true do
+  scenario 'an active founder visits his community' do
     sign_in_user(founder_1.user, referer: community_path(community))
 
     # All questions should be visible.
@@ -49,7 +50,7 @@ feature 'Community Show' do
     expect(page).to have_text(question_3.title)
   end
 
-  scenario 'When an active founder creates a question in his community', js: true do
+  scenario 'an active founder creates a question in his community' do
     sign_in_user(founder_1.user, referer: community_path(community))
     expect(page).to have_text(community.name)
 
@@ -64,7 +65,7 @@ feature 'Community Show' do
     expect(page).not_to have_text("ASK A NEW QUESTION")
   end
 
-  scenario 'When an active founder clicks on a question', js: true do
+  scenario 'an active founder participates in a question thread' do
     sign_in_user(founder_2.user, referer: community_path(community))
     expect(page).to have_text(community.name)
 
@@ -83,6 +84,12 @@ feature 'Community Show' do
     click_button 'Post Your Answer'
 
     dismiss_notification
+
+    # A notification should have been mailed to the question author.
+    open_email(question_1.creator.email)
+    expect(current_email.subject).to eq('New answer for your question')
+    expect(current_email.body).to include("#{founder_2.user.name} has posted an answer to a question that you posted on the #{community.name} community")
+    expect(current_email.body).to include("/questions/#{question_1.id}")
 
     expect(page).to have_text("2 Answers")
     new_answer = question_1.reload.answers.last
@@ -122,6 +129,13 @@ feature 'Community Show' do
 
     dismiss_notification
 
+    # A mail should have been sent to question author.
+    open_email(question_1.creator.email)
+    expect(current_email.subject).to eq('New comment on your post')
+    expect(current_email.body).to include("New comment on your question")
+    expect(current_email.body).to include("#{founder_2.user.name} has posted a comment to a question that you posted on the #{community.name} community")
+    expect(current_email.body).to include("/questions/#{question_1.id}")
+
     comment_1 = Comment.where(commentable_id: question_1.id, commentable_type: "Question").last
     expect(comment_1.value).to eq(comment_for_question)
 
@@ -140,6 +154,13 @@ feature 'Community Show' do
     click_button 'Comment'
 
     dismiss_notification
+
+    # A mail should have been sent to answer author.
+    open_email(answer_1.creator.email)
+    expect(current_email.subject).to eq('New comment on your post')
+    expect(current_email.body).to include("New comment on your answer")
+    expect(current_email.body).to include("#{founder_2.user.name} has posted a comment to an answer that you posted on the #{community.name} community")
+    expect(current_email.body).to include("/questions/#{question_1.id}")
 
     comment_2 = Comment.where(commentable_id: answer_1.id, commentable_type: "Answer").last
     expect(comment_2.value).to eq(comment_for_answer)
@@ -165,7 +186,7 @@ feature 'Community Show' do
     end
   end
 
-  scenario 'When an active faculty visits community', js: true do
+  scenario 'an active faculty visits community' do
     sign_in_user(coach.user, referer: community_path(community))
     expect(page).to have_text(community.name)
 

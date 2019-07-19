@@ -1,0 +1,35 @@
+<%
+  commentable = @comment.commentable
+  commentable_article = commentable.is_a?(Question) ? 'a' : 'an'
+  commentable_type = commentable.is_a?(Question) ? 'question' : 'answer'
+  question = commentable.is_a?(Question) ? commentable : commentable.question
+  recipient_name = commentable.creator&.name || ""
+  comment_from = @comment.creator&.name || "A user"
+  community_name = commentable.community.name
+%>
+
+<% content_for :title do %>
+  New comment on your <%= commentable_type %>
+<% end %>
+
+<% content_for :subtitle do %>
+  <%= comment_from %> has posted a new comment on your <%= commentable_type %>.
+<% end %>
+
+<% content_for :title_button_text do %>
+  View Comment
+<% end %>
+
+<% content_for(:title_button_link, question_url(question)) %>
+
+<% content_for :salutation do %>
+  Hello <%= recipient_name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p><%= comment_from %> has posted a comment to <%= commentable_article %> <%= commentable_type %> that you posted on the <%= community_name %> community.</p>
+
+  <p>You can view the comment by clicking on the link above.</p>
+
+  <%= render 'mailers/link_fallback', url: question_url(question) %>
+<% end %>

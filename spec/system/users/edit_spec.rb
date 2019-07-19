@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-feature 'User Profile Edit' do
+feature 'User Edit' do
   include UserSpecHelper
+  include NotificationHelper
 
   let(:startup) { create :startup }
   let(:founder) { create :founder }
@@ -33,13 +34,13 @@ feature 'User Profile Edit' do
       expect(page).to have_content("Name can't be blank")
     end
 
-    scenario 'Founder fills in all fields and submits' do
+    scenario 'Founder fills in all fields and submits', js: true do
       sign_in_user(founder.user, referer: edit_user_path)
       expect(page).to have_text('Edit').and have_text('profile')
 
       fill_in 'users_edit_name', with: founder_name
       fill_in 'users_edit_phone', with: phone
-      attach_file 'users_edit_avatar', upload_path('faculty/donald_duck.jpg')
+      attach_file 'Avatar', upload_path('faculty/donald_duck.jpg'), visible: false
       fill_in 'users_edit_about', with: about
       fill_in 'users_edit_skype_id', with: username
       fill_in 'users_edit_communication_address', with: communication_address
@@ -50,11 +51,12 @@ feature 'User Profile Edit' do
       fill_in 'users_edit_angel_co_url', with: "https://angel.co/#{username}"
       fill_in 'users_edit_github_url', with: "https://github.com/#{username}"
       fill_in 'users_edit_behance_url', with: "https://behance.net/#{username}"
+      select 'Send me a daily email', from: 'Community Digest'
 
       click_button 'Save Changes'
 
-      expect(page).to have_text(founder_name)
-      expect(page).to have_text('All Courses')
+      expect(page).to have_text('Your profile has been updated')
+      dismiss_notification
 
       # Confirm that founder has, indeed, been updated.
       expect(founder.reload).to have_attributes(
@@ -73,6 +75,7 @@ feature 'User Profile Edit' do
       )
 
       expect(founder.avatar.filename).to eq('donald_duck.jpg')
+      expect(founder.user.preferences['daily_digest']).to eq(true)
     end
   end
 end

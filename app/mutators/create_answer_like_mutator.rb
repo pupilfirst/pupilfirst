@@ -4,19 +4,12 @@ class CreateAnswerLikeMutator < ApplicationMutator
   attr_accessor :answer_id
 
   validates :answer_id, presence: { message: 'BlankAnswerId' }
-  validate :like_should_not_exist
-
-  def like_should_not_exist
-    return if answer.answer_likes.where(user: current_user).empty?
-
-    errors[:base] << 'LikeExists'
-  end
 
   def create_answer_like
-    AnswerLike.create!(
+    AnswerLike.where(
       user: current_user,
       answer: answer
-    ).id
+    ).first_or_create!.id
   end
 
   private

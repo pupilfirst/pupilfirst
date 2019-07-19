@@ -79,7 +79,6 @@ let handleResponseCB = (id, title) => {
 let handleBack = () =>
   Webapi.Dom.window |> Webapi.Dom.Window.history |> Webapi.Dom.History.back;
 
-
 module CreateQuestionErrorHandler =
   GraphqlErrorHandler.Make(CreateQuestionError);
 
@@ -263,6 +262,7 @@ let make =
                 label="Body"
                 profile=Markdown.QuestionAndAnswer
                 defaultView=MarkdownEditor.Edit
+                maxLength=10000
               />
               <div className="flex justify-end pt-3 border-t">
                 <button

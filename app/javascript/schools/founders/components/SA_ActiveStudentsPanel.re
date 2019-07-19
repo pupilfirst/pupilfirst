@@ -115,9 +115,7 @@ let filteredTeams = state => {
   |> List.filter(team =>
        team
        |> studentsInTeam(state.students)
-       |> List.map(s =>
-            s |> Student.name
-          )
+       |> List.map(s => s |> Student.name)
        |> List.filter(n =>
             n
             |> String.lowercase
@@ -172,7 +170,6 @@ let make =
   initialState: () => {
     teams,
     students,
-
     selectedStudents: [],
     searchString: "",
     formVisible: None,
@@ -502,10 +499,10 @@ let make =
                          key={team |> Team.id |> string_of_int}
                          id={team |> Team.name}
                          className={
-                           "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
+                           "student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden"
                            ++ (isSingleFounder ? " hover:bg-gray-100" : "")
                          }>
-                         <div className="flex-1 w-3/5">
+                         <div className="flex flex-col flex-1 w-3/5">
                            {
                              team
                              |> studentsInTeam(state.students)
@@ -521,11 +518,12 @@ let make =
                                       student |> Student.id |> string_of_int
                                     }
                                     id={student |> Student.name}
-                                    className="student-team__card cursor-pointer flex items-center bg-white hover:bg-gray-100">
-                                    <div className="flex-1 w-3/5">
-                                      <div className="flex items-center">
+                                    className="student-team__card h-full cursor-pointer flex items-center bg-white hover:bg-gray-100">
+                                    <div className="flex flex-1 w-3/5 h-full">
+                                      <div
+                                        className="flex items-center w-full">
                                         <label
-                                          className="block text-gray-500 leading-tight font-bold px-4 py-5"
+                                          className="flex items-center h-full text-gray-500 leading-tight font-bold px-4 py-5"
                                           htmlFor=checkboxId>
                                           <input
                                             className="leading-tight"
@@ -583,11 +581,7 @@ let make =
                                                     "bg-yellow-400" : ""
                                                 )
                                               }>
-                                              {
-                                                student
-                                                |> Student.name
-                                                |> str
-                                              }
+                                              {student |> Student.name |> str}
                                             </p>
                                             <div className="flex flex-wrap">
                                               {
@@ -647,21 +641,13 @@ let make =
                                    |> List.map(coach =>
                                         <img
                                           key={
-                                            coach
-                                            |> Coach.id
-                                            |> string_of_int
+                                            coach |> Coach.id |> string_of_int
                                           }
                                           className="w-6 h-6 rounded-full mr-1 mt-1"
-                                          src={
-                                            coach
-                                            |> Coach.avatarUrl
-                                          }
+                                          src={coach |> Coach.avatarUrl}
                                           alt={
                                             "Avatar of "
-                                            ++ (
-                                              coach
-                                              |> Coach.name
-                                            )
+                                            ++ (coach |> Coach.name)
                                           }
                                         />
                                       )
@@ -673,11 +659,11 @@ let make =
                            </div>
                            <div className="w-2/5 text-center">
                              <span
-                               className="inline-flex flex-col rounded bg-indigo-100 px-2 py-1">
-                               <div className="text-xs">
+                               className="inline-flex flex-col items-center rounded bg-primary-100 px-2 pt-2 pb-1 border border-primary-200">
+                               <div className="text-xs font-semibold">
                                  {"Level" |> str}
                                </div>
-                               <div className="text-xl font-semibold">
+                               <div className="font-bold">
                                  {
                                    team
                                    |> Team.levelNumber

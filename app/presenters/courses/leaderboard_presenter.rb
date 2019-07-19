@@ -108,7 +108,7 @@ module Courses
     end
 
     def course_entries(from, to)
-      LeaderboardEntry.where(founder: founders, period_from: from, period_to: to)
+      LeaderboardEntry.where(founder: founders, period_from: from, period_to: to).includes(founder: %i[user level])
     end
 
     def rank_change_icon(delta)

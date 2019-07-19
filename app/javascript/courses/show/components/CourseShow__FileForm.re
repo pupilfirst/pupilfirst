@@ -96,7 +96,10 @@ let submitForm = (filename, formId, send, addFileAttachmentCB) => {
 };
 
 let attachFile = (state, send, attachingCB, attachFileCB, event) => {
-  let file = ReactEvent.Form.target(event)##files[0];
+  switch(ReactEvent.Form.target(event)##files) {
+  | [||] => ()
+  | files =>
+  let file = files[0];
   let maxFileSize = 5 * 1024 * 1024;
 
   let errors =
@@ -109,7 +112,8 @@ let attachFile = (state, send, attachingCB, attachFileCB, event) => {
     submitForm(filename, state.formId, send, attachFileCB);
   } else {
     send(SelectFile(file##name, errors));
-  };
+  }
+  }
 };
 
 [@react.component]

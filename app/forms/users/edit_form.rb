@@ -13,6 +13,7 @@ module Users
     property :angel_co_url, validates: { url: true, allow_blank: true }
     property :github_url, validates: { url: true, allow_blank: true }
     property :behance_url, validates: { url: true, allow_blank: true }
+    property :daily_digest, validates: { presence: true }, virtual: true
 
     def save!
       User.transaction do
@@ -34,7 +35,10 @@ module Users
         blog_url: blog_url,
         angel_co_url: angel_co_url,
         github_url: github_url,
-        behance_url: behance_url
+        behance_url: behance_url,
+        preferences: {
+          daily_digest: daily_digest == "1"
+        }
       }
     end
   end

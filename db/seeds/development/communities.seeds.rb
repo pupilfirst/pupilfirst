@@ -1,10 +1,10 @@
 after 'development:schools', 'development:founders', 'development:faculty', 'development:courses' do
-  puts 'Seeding community'
+  puts 'Seeding communities'
 
   school = School.first
   course = Course.first
 
-  community = school.communities.create!(name: Faker::Lorem.words(2).join('').titleize)
+  community = school.communities.create!(name: Faker::Lorem.words(2).join(' ').titleize)
   CommunityCourseConnection.create!(course: course, community: community)
   community_users = community.users.first(5)
 

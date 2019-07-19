@@ -38,7 +38,6 @@ type state = {
   prerequisiteTargets: list(prerequisiteTarget),
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
-  contentBlocks: list(ContentBlock.t),
   linkToComplete: string,
   hasTitleError: bool,
   hasLinktoCompleteError: bool,
@@ -260,7 +259,6 @@ let reducer = (state, action) =>
       ...state,
       title,
       hasTitleError,
-      dirty: true,
     }
   | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) => {
       ...state,
@@ -341,7 +339,6 @@ let make =
   let initialState = {
     title: target |> Target.title,
     evaluationCriteria: cacheCurrentEvaluationCriteria(evaluationCriteria, target),
-    contentBlocks,
     prerequisiteTargets:
     cachePrerequisiteTargets(eligibleTargets(targets, targetGroupIdsInLevel), target),
     quiz: handleQuiz(target),
@@ -427,7 +424,7 @@ let make =
         state.visibility,
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget, state.contentBlocks, closeEditor);
+    updateTargetCB(newTarget, contentBlocks, closeEditor);
     closeEditor ? () : dispatch(UpdateSaving);
   };
 
@@ -549,7 +546,7 @@ let make =
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
                   target
-                  contentBlocks={state.contentBlocks}
+                  contentBlocks
                   updateContentBlocksCB
                   updateContentEditorDirtyCB
                   authenticityToken

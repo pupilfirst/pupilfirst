@@ -1,6 +1,4 @@
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -36,18 +34,18 @@
   transform: scale(0);
 }
 
-.toggle-input:checked + .toggle-label:before {
+.toggle-input:checked+.toggle-label:before {
   @apply bg-primary-400;
 }
 
-.toggle-input:checked + .toggle-label span {
+.toggle-input:checked+.toggle-label span {
   @apply bg-primary-500;
   transform: translateX(20px);
   transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
   box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
 }
 
-.toggle-input:checked + .toggle-label span:before {
+.toggle-input:checked+.toggle-label span:before {
   transform: scale(1);
   opacity: 0;
   transition: all 0.4s ease;
@@ -102,16 +100,16 @@
   @apply bg-primary-100 border-primary-500;
 }
 
-.checkbox-input:checked + .checkbox-label span:first-child {
+.checkbox-input:checked+.checkbox-label span:first-child {
   @apply bg-primary-500 border-primary-500;
   animation: wave 0.4s ease;
 }
 
-.checkbox-input:checked + .checkbox-label span:first-child svg {
+.checkbox-input:checked+.checkbox-label span:first-child svg {
   stroke-dashoffset: 0;
 }
 
-.checkbox-input:checked + .checkbox-label span:first-child:before {
+.checkbox-input:checked+.checkbox-label span:first-child:before {
   transform: scale(3.5);
   opacity: 0;
   transition: all 0.6s ease;
@@ -153,12 +151,7 @@
   top: 50%;
   transform: translateY(-50%);
   background: rgb(255, 255, 255);
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(191, 184, 204, 1) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient( 90deg, rgba(255, 255, 255, 0) 0%, rgba(191, 184, 204, 1) 50%, rgba(255, 255, 255, 0) 100%);
   width: 100%;
 }
 
@@ -214,9 +207,7 @@
   opacity: 0.7;
 }
 
-.sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner,
-.sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner::before,
-.sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner::after {
+.sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner, .sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner::before, .sa-toggle__menu-btn.is-active .sa-toggle__menu-btn-inner::after {
   @apply bg-gray-800;
 }
 
@@ -231,9 +222,7 @@
   top: 50%;
 }
 
-.sa-toggle__menu-btn-inner,
-.sa-toggle__menu-btn-inner::before,
-.sa-toggle__menu-btn-inner::after {
+.sa-toggle__menu-btn-inner, .sa-toggle__menu-btn-inner::before, .sa-toggle__menu-btn-inner::after {
   width: 20px;
   height: 2px;
   background-color: #000;
@@ -244,8 +233,7 @@
   transition-timing-function: ease;
 }
 
-.sa-toggle__menu-btn-inner::before,
-.sa-toggle__menu-btn-inner::after {
+.sa-toggle__menu-btn-inner::before, .sa-toggle__menu-btn-inner::after {
   content: "";
   display: block;
 }
@@ -305,7 +293,7 @@
   @apply toggle-button__button--active;
 }
 
-.target-group__container > :not(:last-child):before {
+.target-group__container> :not(:last-child):before {
   content: "";
   position: absolute;
   top: 0;
@@ -314,7 +302,7 @@
   transform: translateX(-50%);
   width: 4px;
   z-index: -1;
-  @apply bg-gray-400;
+  @apply bg-primary-400;
 }
 
 .target-group__box {
@@ -323,34 +311,23 @@
 
 .target-group__target {
   width: 100%;
+  cursor: pointer;
   transition: all 0.2s;
 }
 
-.target-group__header--archived,
-.target-group__target--archived {
+.target-group__header--archived, .target-group__target--archived {
   background-color: #fdfae5;
-  background-image: linear-gradient(
-    to bottom right,
-    rgba(0, 0, 0, 0.05) 25%,
-    transparent 0,
-    transparent 50%,
-    rgba(0, 0, 0, 0.05) 0,
-    rgba(0, 0, 0, 0.05) 75%,
-    transparent 0,
-    transparent
-  );
+  background-image: linear-gradient( to bottom right, rgba(0, 0, 0, 0.05) 25%, transparent 0, transparent 50%, rgba(0, 0, 0, 0.05) 0, rgba(0, 0, 0, 0.05) 75%, transparent 0, transparent);
   background-repeat: repeat;
   background-size: 10px 10px;
   box-shadow: inset 0 2px 10px -6px rgba(0, 0, 0, 0.5);
 }
 
-.target-group__create,
-.target-group__target-create {
+.target-group__create, .target-group__target-create {
   transition: all 0.2s;
 }
 
-.target-group__create:hover,
-.target-group__target-create:hover {
+.target-group__create:hover, .target-group__target-create:hover {
   @apply .shadow-lg;
 }
 

@@ -11,6 +11,7 @@ type action =
   | UpdateSaving
   | DoneUpdating
   | UpdateMarkdown(string)
+  | ResetFormDirty
   | UpdateFileName(string);
 
 type state = {
@@ -43,6 +44,7 @@ let reducer = (state, action) =>
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | DoneUpdating => {...state, formDirty: false, savingContentBlock: false}
+  | ResetFormDirty => {...state, formDirty: false}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -97,7 +99,25 @@ let fileUploadButtonVisible = (blockType: ContentBlock.blockType) =>
   | _ => false
   };
 
-let contentUploadContainer = (blockType, dispatch, state) =>
+let uploadButtonText = blockType =>
+  switch (blockType) {
+  | ContentBlock.Markdown(_markdown) => ""
+  | File(_url, _title, _filename) => "Select a file"
+  | Image(_url, _caption) => "Select an image"
+  | Embed(_url, _embedCode) => ""
+  };
+
+let handleFileUpload = (dispatch, event, blockType) =>
+  switch (ReactEvent.Form.target(event)##files) {
+  | [||] =>
+    dispatch(UpdateFileName(uploadButtonText(blockType)));
+    dispatch(ResetFormDirty);
+  | files =>
+    let file = files[0];
+    dispatch(UpdateFileName(file##name));
+  };
+
+let contentUploadContainer = (blockType, dispatch, state, editorId) =>
   <div
     className="content-block__content-placeholder flex flex-col justify-center text-center p-10">
     <div> {faIcons(blockType)} </div>
@@ -118,24 +138,17 @@ let contentUploadContainer = (blockType, dispatch, state) =>
       fileUploadButtonVisible(blockType) ?
         <div className="mt-2">
           <input
-            id="content-block-editor__file-input"
+            id={"content-block-editor__file-input-" ++ editorId}
             type_="file"
             className="hidden"
             required=false
             multiple=false
             name="content_block[file]"
-            onChange={
-              event =>
-                dispatch(
-                  UpdateFileName(
-                    ReactEvent.Form.target(event)##files[0]##name,
-                  ),
-                )
-            }
+            onChange={event => handleFileUpload(dispatch, event, blockType)}
           />
           <label
             className="btn btn-primary"
-            htmlFor="content-block-editor__file-input">
+            htmlFor={"content-block-editor__file-input-" ++ editorId}>
             <i className="fas fa-upload" />
             <span className="ml-2 truncate"> {state.fileName |> str} </span>
           </label>
@@ -296,6 +309,7 @@ let createContentBlock =
     },
     () => dispatch(UpdateSaving),
   );
+
 let updateContentBlock =
     (
       contentBlock,
@@ -420,13 +434,7 @@ let make =
       | Markdown(markdown) => markdown
       | _ => ""
       },
-    fileName:
-      switch (blockType) {
-      | Markdown(_markdown) => ""
-      | File(_url, _title, _filename) => "Select a file"
-      | Image(_url, _caption) => "Select an image"
-      | Embed(_url, _embedCode) => ""
-      },
+    fileName: uploadButtonText(blockType),
     embedUrl: "",
     formDirty: false,
   };
@@ -590,7 +598,13 @@ let make =
                         defaultView=MarkdownEditor.Edit
                       />
                     </div>
-                  | _ => contentUploadContainer(blockType, dispatch, state)
+                  | _ =>
+                    contentUploadContainer(
+                      blockType,
+                      dispatch,
+                      state,
+                      editorId,
+                    )
                   }
                 }
               }

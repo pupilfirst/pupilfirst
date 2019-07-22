@@ -330,15 +330,15 @@ feature 'Curriculum Editor' do
       end
       attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
       click_button 'Save'
-      expect(page).to have_text('Image content must be JPG, PNG or GIF')
+      expect(page).to have_text('File must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high')
       find('.ui-pnotify-container').click
-      attach_file 'content_block[file]', file_path('high_resolution.png'), visible: false
+      attach_file 'content_block[file]', file_path('logo_hackkar.png'), visible: false
       click_button 'Save'
       expect(page).to have_text('Content added successfully')
       find('.ui-pnotify-container').click
       content_block = target.content_blocks.reload.where(block_type: 'image').last
       expect(content_block.sort_index).to eq(2)
-      expect(content_block.file.filename).to eq('high_resolution.png')
+      expect(content_block.file.filename).to eq('logo_hackkar.png')
 
       within('.add-content-block--open') do
         find('p', text: 'File').click

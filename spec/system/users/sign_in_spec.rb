@@ -69,6 +69,7 @@ feature 'User signing in by supplying email address', js: true do
         fill_in 'Confirm Password', with: password
         click_button 'Update Password'
         expect(page).to have_content(user.founders.first.course.name)
+        expect(user.reload.reset_password_token).to eq(nil)
 
         # can sign in with the same password
         click_button "Sign Out"

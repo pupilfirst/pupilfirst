@@ -31,7 +31,7 @@ module Schools
         errors[:base] << 'More than one method of completion'
       end
 
-      def save(target_params)
+      def save
         ::Targets::CreateOrUpdateService.new(model).create_or_update(target_params)
       end
 
@@ -39,6 +39,25 @@ module Schools
 
       def target_group
         @target_group ||= TargetGroup.find_by(id: target_group_id)
+      end
+
+      def target_params
+        {
+          role: role,
+          title: title,
+          visibility: visibility,
+          description: description,
+          target_action_type: target_action_type,
+          target_group_id: target_group_id,
+          sort_index: sort_index,
+          youtube_video_id: youtube_video_id,
+          resource_ids: resource_ids,
+          prerequisite_target_ids: prerequisite_target_ids,
+          evaluation_criterion_ids: evaluation_criterion_ids,
+          quiz: quiz,
+          link_to_complete: link_to_complete,
+          archived: archived
+        }
       end
     end
   end

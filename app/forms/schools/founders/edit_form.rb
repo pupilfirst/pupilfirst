@@ -6,7 +6,6 @@ module Schools
       property :exited, validates: { inclusion: { in: [true, false] } }
       property :excluded_from_leaderboard, validates: { inclusion: { in: [true, false] } }
       property :tags
-      property :clear_coaches, virtual: true
       property :coach_ids, virtual: true
 
       def save
@@ -23,7 +22,6 @@ module Schools
           school.save!
 
           handle_exited(model, exited)
-          handle_coaches(clear_coaches, coach_ids)
         end
       end
 
@@ -33,15 +31,11 @@ module Schools
         if exited
           ::Founders::MarkAsExitedService.new(model.id).execute
         else
-          founder.update!(exited: exited)
-        end
-      end
+          # Re-assign team coaches.
+          ::Startups::AssignReviewerService.new(founder.startup).assign(coach_ids)
 
-      def handle_coaches(clear_coaches, coach_ids)
-        if clear_coaches
-          model.startup.faculty_ids = []
-        elsif coach_ids.present?
-          ::Startups::AssignReviewerService.new(model.startup).assign(coach_ids)
+          # Reset exited if it has changed.
+          founder.update!(exited: false) if founder.exited?
         end
       end
     end

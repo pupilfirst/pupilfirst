@@ -188,6 +188,11 @@ feature 'School students index', js: true do
   end
 
   scenario 'school admin marks students as dropped out' do
+    # Enroll the coach as a team coach in all three teams.
+    create :faculty_startup_enrollment, faculty: coach, startup: startup_1
+    create :faculty_startup_enrollment, faculty: coach, startup: startup_2
+    create :faculty_startup_enrollment, faculty: coach, startup: team_with_lone_student
+
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # Mark a student in a team of more than one students as dropped out.
@@ -198,6 +203,7 @@ feature 'School students index', js: true do
 
     expect(page).to have_text(founder_user.name)
     expect(page).to have_text(founder.startup.name)
+    expect(coach.startups.count).to eq(3)
 
     find('button[title="Prevent this student from accessing the course"]').click
     click_button 'Update Student'
@@ -210,8 +216,15 @@ feature 'School students index', js: true do
     # The student's team name should now be the student's own name.
     expect(founder.startup.name).to eq(founder_user.name)
 
+    # The student should be in a team without any directly linked coaches.
+    expect(founder.startup.faculty.count).to eq(0)
+
+    # However the coach should still be linked to the same number of teams.
+    expect(coach.startups.count).to eq(3)
+
     # Mark a student who is alone in a team as dropped out.
-    lone_user = lone_student.user
+    expect(team_with_lone_student.faculty.count).to eq(1)
+
     find("a", text: lone_student.name).click
 
     find('button[title="Prevent this student from accessing the course"]').click
@@ -220,8 +233,11 @@ feature 'School students index', js: true do
     dismiss_notification
 
     # The student's team should not have changed.
-    expect(lone_user.reload.founders.first.startup).to eq(team_with_lone_student)
+    lone_user_team = lone_student.reload.startup
+    expect(lone_user_team).to eq(team_with_lone_student)
 
     # All coaches should have been removed from the team.
+    expect(lone_user_team.faculty.count).to eq(0)
+    expect(coach.startups.count).to eq(2)
   end
 end

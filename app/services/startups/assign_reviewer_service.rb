@@ -11,6 +11,7 @@ module Startups
 
       FacultyStartupEnrollment.transaction do
         FacultyStartupEnrollment.where(startup: @startup).destroy_all
+
         @faculty_to_assign.each do |faculty|
           next if faculty.courses.where(id: @startup.level.course).exists?
 

@@ -28,6 +28,8 @@ module ContentBlocks
           { title: @params[:title] }
         when 'embed'
           { url: @params[:url], embed_code: embed_code }
+        else
+          raise "Encountered unexpected block_type when creating content block: #{block_type}"
       end
     end
 

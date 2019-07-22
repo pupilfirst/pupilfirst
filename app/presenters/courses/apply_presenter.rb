@@ -14,6 +14,7 @@ module Courses
     def props
       {
         authenticity_token: view.form_authenticity_token,
+        course_id: @course.id,
         course_name: @course.name,
         course_description: @course.description
       }

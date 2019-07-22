@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2019_07_22_073728) do
     t.datetime "ends_at"
     t.string "description"
     t.boolean "enable_leaderboard", default: false
+    t.boolean "enable_public_signup", default: false
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 

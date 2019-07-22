@@ -1,4 +1,4 @@
-class RegisteredUser
+class RegisteredUser < ApplicationRecord
   belongs_to :course
 
   validates :email, presence: true, email: true

@@ -7,7 +7,7 @@ class AddRegisteredUsers < ActiveRecord::Migration[5.2]
       t.references :course, foreign_key: true
       t.timestamps
     end
-
+    add_column :courses, :enable_public_signup, :boolean, default: false
     add_index :registered_users, :login_token, :unique => true
   end
 

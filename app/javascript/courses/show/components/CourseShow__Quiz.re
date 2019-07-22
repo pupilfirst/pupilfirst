@@ -104,7 +104,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
   let (selectedAnswer, setSelectedAnswer) = React.useState(() => None);
   let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => []);
   let currentQuestion = selectedQuestion;
-  <div className="bg-gray-100 rounded overflow-hidden">
+  <div className="bg-gray-100 rounded overflow-hidden relative mb-18">
     <div className="p-2 md:p-5">
       <span className="font-semibold text-xs block uppercase text-gray-600">
         {"Question #" |> str}
@@ -112,6 +112,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
       </span>
       <MarkdownBlock
         markdown={currentQuestion |> QuizQuestion.question}
+        className="font-semibold text-lg md:text-xl"
         profile=Markdown.Permissive
       />
       <div className="pt-2">
@@ -128,7 +129,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
                  />
                  <MarkdownBlock
                    markdown={answerOption |> QuizQuestion.answerValue}
-                   className="overflow-auto ml-2"
+                   className="overflow-auto ml-2 w-full"
                    profile=Markdown.Permissive
                  />
                </div>
@@ -142,7 +143,8 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
       switch (selectedAnswer) {
       | None => React.null
       | Some(answer) =>
-        <div className="text-center bg-gray-200 py-8">
+        <div
+          className="quiz-root__answer-submit-section text-center py-4 border-t border-gray-400 fixed z-10 left-0 right-0 bottom-0 w-full">
           {
             currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
               <button

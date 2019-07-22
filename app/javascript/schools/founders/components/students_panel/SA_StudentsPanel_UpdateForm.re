@@ -83,11 +83,6 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     "coach_ids",
     enrolledCoachIds |> Json.Encode.(list(int)),
   );
-  Js.Dict.set(
-    payload,
-    "clear_coaches",
-    List.length(enrolledCoachIds) < 1 |> Json.Encode.(bool),
-  );
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
   Api.update(url, payload, responseCB, handleErrorCB);
 };

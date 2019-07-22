@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_093124) do
+ActiveRecord::Schema.define(version: 2019_07_22_073728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -412,6 +412,17 @@ ActiveRecord::Schema.define(version: 2019_07_19_093124) do
     t.index ["target_id"], name: "index_quizzes_on_target_id"
   end
 
+  create_table "registered_users", force: :cascade do |t|
+    t.string "email"
+    t.string "login_token"
+    t.datetime "login_token_sent_at"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_registered_users_on_course_id"
+    t.index ["login_token"], name: "index_registered_users_on_login_token", unique: true
+  end
+
   create_table "resources", id: :serial, force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -778,6 +789,7 @@ ActiveRecord::Schema.define(version: 2019_07_19_093124) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
+  add_foreign_key "registered_users", "courses"
   add_foreign_key "school_admins", "schools"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"

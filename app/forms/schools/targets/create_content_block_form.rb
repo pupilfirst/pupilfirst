@@ -4,8 +4,7 @@ module Schools
       property :block_type, validates: { presence: true }
       property :target_id, validates: { presence: true }
       property :url, virtual: true
-      property :sort_index, validates: { presence: true }
-      property :text, virtual: true
+      property :content_sort_indices, virtual: true, validates: { presence: true }
       property :file, virtual: true, validates: { file_size: { less_than: 10.megabytes } }
 
       validate :image_block_must_have_image_file

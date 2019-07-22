@@ -390,6 +390,7 @@ let submitForm =
       ReactEvent.Form.target(event) |> DomUtils.EventTarget.unsafeToElement;
 
     let formData = DomUtils.FormData.create(element);
+
     createContentBlock(
       formData,
       target,
@@ -400,6 +401,28 @@ let submitForm =
       createNewContentCB,
     );
   };
+};
+
+let content_sort_indices = (sortIndex, targetContentBlocks) => {
+  let sort_indices = Js.Dict.empty();
+  Js.Dict.set(
+    sort_indices,
+    "new",
+    sortIndex |> string_of_int |> Js.Json.string,
+  );
+  targetContentBlocks
+  |> List.iter(((index, _, cb, id)) =>
+       switch (cb) {
+       | Some(_cb) =>
+         Js.Dict.set(
+           sort_indices,
+           id,
+           index |> string_of_int |> Js.Json.string,
+         )
+       | None => ()
+       }
+     );
+  Js.Json.stringify(Js.Json.object_(sort_indices));
 };
 
 [@react.component]
@@ -416,6 +439,7 @@ let make =
       ~createNewContentCB,
       ~swapContentBlockCB,
       ~updateContentBlockCB,
+      ~targetContentBlocks,
       ~authenticityToken,
     ) => {
   let initialState = {
@@ -520,6 +544,11 @@ let make =
               name="authenticity_token"
               type_="hidden"
               value=authenticityToken
+            />
+            <input
+              name="content_sort_indices"
+              type_="hidden"
+              value={content_sort_indices(sortIndex, targetContentBlocks)}
             />
             <input
               name="content_block[block_type]"

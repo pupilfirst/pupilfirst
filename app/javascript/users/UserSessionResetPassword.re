@@ -1,8 +1,10 @@
 [@bs.config {jsx: 3}];
 let resetPasswordIcon: string = [%raw
-  "require('./images/continue-with-email-icon.png')"
+  "require('./images/set-new-password-icon.svg')"
 ];
-let invalidTokenIcon: string = [%raw "require('./images/sign-in-icon.png')"];
+let invalidTokenIcon: string = [%raw
+  "require('./images/invalid-token-icon.png')"
+];
 
 open SchoolAdmin__Utils;
 
@@ -77,7 +79,7 @@ let renderIcon = view => {
     | InvalidToken => invalidTokenIcon
     };
 
-  <img className="mx-auto h-20 sm:h-30" src=icon />;
+  <img className="mx-auto h-20 sm:h-32" src=icon />;
 };
 
 let headerText = view =>

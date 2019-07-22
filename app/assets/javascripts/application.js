@@ -7,15 +7,6 @@
 //= require turbolinks
 //= require turbolinks_compatibility
 
-// Require PNotify (rails asset), unobtrusive flash (rubygems), and flashes (local code) early so that notifications
-// render as quickly as possible.
-// TODO: Remove require pnotify/pnotify.js when possible.
-// The extra require is needed to avoid issue with incorrect require-order in main file.
-//= require pnotify/pnotify.js
-//= require pnotify
-//= require flashes
-//= require unobtrusive_flash
-
 // XDAN's datetimepicker
 //= require datetimepicker
 //= require xdan_datetimepicker

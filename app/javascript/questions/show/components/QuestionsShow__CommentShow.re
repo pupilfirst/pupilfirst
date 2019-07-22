@@ -27,7 +27,7 @@ let make =
     };
 
   <ul
-    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-3 md:px-8">
+    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-2 md:px-3 md:px-8">
     {
       commentsToShow
       |> List.sort((commentA, commentB) =>
@@ -55,7 +55,7 @@ let make =
              className="w-full text-left border border-gray-400 border-t-0">
              <div
                className="flex w-full leading-normal text-xs bg-white justify-between">
-               <span className="flex items-center px-4 py-3">
+               <span className="flex items-center px-2 py-1 md:px-4 md:py-2">
                  <MarkdownBlock
                    markdown=commentText
                    profile=Markdown.Comment

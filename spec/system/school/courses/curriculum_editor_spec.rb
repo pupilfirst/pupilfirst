@@ -363,7 +363,7 @@ feature 'Curriculum Editor' do
 
       # Change target title
       expect(page).to_not have_selector(:button, 'Update')
-      fill_in 'title', with: 'new target title'
+      fill_in 'title', with: 'new target title', fill_options: { clear: :backspace }
       expect(page).to have_selector(:button, 'Update')
       click_button 'Update'
       find('.ui-pnotify-container').click
@@ -430,7 +430,7 @@ feature 'Curriculum Editor' do
 
       # Update a file title
       within('#content-block-form-4') do
-        fill_in 'content_block[title]', with: 'new file title'
+        fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
         click_button 'Update Title'
       end
       expect(page).to have_text('Content updated successfully')
@@ -439,7 +439,7 @@ feature 'Curriculum Editor' do
 
       # Update an image caption
       within('#content-block-form-5') do
-        fill_in 'content_block[caption]', with: 'new image caption'
+        fill_in 'content_block[caption]', with: 'new image caption', fill_options: { clear: :backspace }
         click_button 'Update Caption'
       end
       expect(page).to have_text('Content updated successfully')

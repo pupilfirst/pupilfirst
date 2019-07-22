@@ -6,8 +6,8 @@ module Schools
     def create
       form = ::Schools::Targets::CreateContentBlockForm.new(ContentBlock.new)
 
-      if form.validate(params[:content_block].merge(target_id: params[:target_id]))
-        content_block = form.save(params[:content_block])
+      if form.validate(content_block_params)
+        content_block = form.save(content_block_params)
         render json: content_block_data(content_block)
       else
         render json: { error: form.errors.full_messages.join(', ') }
@@ -23,6 +23,10 @@ module Schools
     def content_block_data(content_block)
       content_block_data = { id: content_block.id.to_s, content: content_block.content, error: nil }
       content_block.file.attached? ? content_block_data.merge(fileUrl: url_for(content_block.file)) : content_block_data
+    end
+
+    def content_block_params
+      params[:content_block].merge(target_id: params[:target_id], content_sort_indices: JSON.parse(params[:content_sort_indices]))
     end
   end
 end

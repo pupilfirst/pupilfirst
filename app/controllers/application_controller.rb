@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   impersonates :user
 
   before_action :prepare_platform_feedback
-  after_action :prepare_unobtrusive_flash
   before_action :sign_out_if_required
   before_action :pretender
 

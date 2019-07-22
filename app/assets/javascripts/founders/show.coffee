@@ -33,7 +33,7 @@ handleLoadMoreEvents = ->
     $.get(
       loadUrl
     ).done((data) ->
-# Remove listeners.
+      # Remove listeners.
       unbindListeners()
 
       # Delete the container of old button.
@@ -45,13 +45,6 @@ handleLoadMoreEvents = ->
       # Reset listeners.
       bindListeners()
     ).fail((data) ->
-# Display an alert message.
-      new PNotify(
-        type: 'error',
-        title: 'Failed to load events!',
-        text: 'Something went wrong when we tried to load more events. The SV.CO team has been notified of this error.'
-      )
-
       # Enable the button again.
       loadLink.text('Load more events')
       loadLink.removeClass('disabled')

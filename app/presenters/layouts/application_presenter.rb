@@ -21,5 +21,14 @@ module Layouts
     def meta_description
       @meta_description ||= Layouts::TailwindPresenter.new(view).meta_description
     end
+
+    def flash_messages
+      view.flash.map do |type, message|
+        {
+          type: type,
+          message: message
+        }
+      end.to_json
+    end
   end
 end

@@ -46,11 +46,6 @@ gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
 gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
-
-# Let's not deal with flash messages, yeah? Tracking modified github master with early rendering fix. See link below.
-# https://github.com/mobmewireless/unobtrusive_flash/commit/24e7787d16db66f7956747444433a4e47278193a
-gem 'unobtrusive_flash', '= 3.1.0', github: 'mobmewireless/unobtrusive_flash', branch: 'master'
-
 gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
@@ -108,7 +103,6 @@ gem 'graphql', '~> 1.9' # Ruby implementation of GraphQL http://graphql-ruby.org
 
 # Rails assets!
 source 'https://rails-assets.org' do
-  gem 'rails-assets-pnotify', '~> 3.0' # Superb notifications library. http://sciactive.github.io/pnotify/
   gem 'rails-assets-trix', '~> 1.0' # rich text editor from basecamp ( used for eg in the description for targets)
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-masonry', '~> 4.1' # Masonry works by placing elements in optimal position based on available vertical space.

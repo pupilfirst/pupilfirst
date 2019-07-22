@@ -16,7 +16,9 @@ let archive =
     (authenticityToken, id, resourceType, archiveCB, setSaving, event) =>
   Webapi.Dom.window
   |> Webapi.Dom.Window.confirm(
-       "Are you sure you want to delete this " ++ (resourceType |> Js.String.toLowerCase) ++ ". You cannot undo this.",
+       "Are you sure you want to delete this "
+       ++ (resourceType |> Js.String.toLowerCase)
+       ++ ". You cannot undo this.",
      ) ?
     {
       event |> ReactEvent.Mouse.preventDefault;
@@ -28,7 +30,7 @@ let archive =
              {
                Notification.success(
                  "Success",
-                 (resourceType ++ " archived successfully")
+                 resourceType ++ " archived successfully",
                );
                archiveCB(id, resourceType);
              } :
@@ -56,8 +58,9 @@ let make = (~authenticityToken, ~id, ~resourceType, ~archiveCB) => {
         <FaIcon classes="fal fa-spinner-third fa-spin" /> :
         <FaIcon classes="fas fa-trash-alt" />
     }
-    <span className="ml-1">
-      {resourceType == "Comment" ? React.null : "Delete" |> str}
-    </span>
+    {
+      resourceType == "Comment" ?
+        React.null : <span className="ml-1"> {"Delete" |> str} </span>
+    }
   </a>;
 };

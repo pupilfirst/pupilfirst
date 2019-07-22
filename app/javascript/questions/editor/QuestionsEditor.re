@@ -189,7 +189,7 @@ let make =
   let saveDisabled = description == "" || title == "";
   <DisablingCover disabled=saving>
     <div title="Question Editor" className="bg-gray-100">
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col px-2">
         <div>
           {
             showBackButton ?
@@ -241,25 +241,25 @@ let make =
               }
             </h5>
             <label
-              className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
+              className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
               htmlFor="title">
-              {"Title" |> str}
+              {"Question" |> str}
             </label>
             <input
               id="title"
               value=title
-              className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               onChange={
                 event => setTitle(ReactEvent.Form.target(event)##value)
               }
-              placeholder="Add your title"
+              placeholder="Ask your question here briefly."
             />
             <div className="w-full flex flex-col">
               <MarkdownEditor
                 updateDescriptionCB
                 value=description
-                placeholder="You can use Markdown to format this text."
-                label="Body"
+                placeholder="Your description gives people the information they need to help you answer your question. You can use Markdown to format this text."
+                label="Description"
                 profile=Markdown.QuestionAndAnswer
                 defaultView=MarkdownEditor.Edit
                 maxLength=10000

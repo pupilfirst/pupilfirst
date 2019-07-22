@@ -22,5 +22,7 @@ class CoursePolicy < ApplicationPolicy
     show?
   end
 
-  alias enroll? show?
+  def apply?
+    true
+  end
 end

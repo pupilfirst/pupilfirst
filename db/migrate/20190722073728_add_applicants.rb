@@ -1,6 +1,6 @@
-class AddRegisteredUsers < ActiveRecord::Migration[5.2]
+class AddApplicants < ActiveRecord::Migration[5.2]
   def up
-    create_table :registered_users do |t|
+    create_table :applicants do |t|
       t.string :email
       t.string :login_token
       t.datetime :login_token_sent_at
@@ -8,10 +8,11 @@ class AddRegisteredUsers < ActiveRecord::Migration[5.2]
       t.timestamps
     end
     add_column :courses, :enable_public_signup, :boolean, default: false
-    add_index :registered_users, :login_token, :unique => true
+    add_index :applicants, :login_token, :unique => true
   end
 
   def down
-    drop_table :registered_users
+    remove_column :courses, :enable_public_signup
+    drop_table :applicants
   end
 end

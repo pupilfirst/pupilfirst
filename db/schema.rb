@@ -108,6 +108,17 @@ ActiveRecord::Schema.define(version: 2019_07_22_073728) do
     t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
+  create_table "applicants", force: :cascade do |t|
+    t.string "email"
+    t.string "login_token"
+    t.datetime "login_token_sent_at"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_applicants_on_course_id"
+    t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+  end
+
   create_table "colleges", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "also_known_as"
@@ -411,17 +422,6 @@ ActiveRecord::Schema.define(version: 2019_07_22_073728) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["target_id"], name: "index_quizzes_on_target_id"
-  end
-
-  create_table "registered_users", force: :cascade do |t|
-    t.string "email"
-    t.string "login_token"
-    t.datetime "login_token_sent_at"
-    t.bigint "course_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_registered_users_on_course_id"
-    t.index ["login_token"], name: "index_registered_users_on_login_token", unique: true
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|
@@ -769,6 +769,7 @@ ActiveRecord::Schema.define(version: 2019_07_22_073728) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
+  add_foreign_key "applicants", "courses"
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
@@ -790,7 +791,6 @@ ActiveRecord::Schema.define(version: 2019_07_22_073728) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "registered_users", "courses"
   add_foreign_key "school_admins", "schools"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"

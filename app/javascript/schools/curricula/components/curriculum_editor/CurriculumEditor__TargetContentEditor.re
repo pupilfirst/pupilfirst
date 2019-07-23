@@ -62,22 +62,10 @@ let updateContentBlockMasterList =
 };
 
 let removeTargetContentCB =
-    (
-      targetContentBlocks,
-      updateTargetContentBlocks,
-      updateContentBlocksCB,
-      target,
-      toggleSortContentBlock,
-      sortIndex,
-    ) => {
+    (updateTargetContentBlocks, toggleSortContentBlock, sortIndex) => {
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
     |> List.filter(((index, _, _, _)) => sortIndex != index)
-  );
-  updateContentBlockMasterList(
-    targetContentBlocks,
-    updateContentBlocksCB,
-    target |> Target.id,
   );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
 };
@@ -102,8 +90,6 @@ let swapContentBlockCB =
     (
       targetContentBlocks,
       updateTargetContentBlocks,
-      updateContentBlocksCB,
-      target,
       toggleSortContentBlock,
       upperSortIndex,
       lowerSortIndex,
@@ -133,22 +119,10 @@ let swapContentBlockCB =
          (sortIndex2, blockType1, cb1, id1),
        ])
   );
-  updateContentBlockMasterList(
-    targetContentBlocks,
-    updateContentBlocksCB,
-    target |> Target.id,
-  );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
 };
 
-let createNewContentCB =
-    (
-      targetContentBlocks,
-      updateTargetContentBlocks,
-      updateContentBlocksCB,
-      target,
-      contentBlock,
-    ) => {
+let createNewContentCB = (updateTargetContentBlocks, contentBlock) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -162,21 +136,9 @@ let createNewContentCB =
        )
     |> List.append([newContentBlock])
   );
-  updateContentBlockMasterList(
-    targetContentBlocks,
-    updateContentBlocksCB,
-    target |> Target.id,
-  );
 };
 
-let updateContentBlockCB =
-    (
-      targetContentBlocks,
-      updateTargetContentBlocks,
-      updateContentBlocksCB,
-      target,
-      contentBlock,
-    ) => {
+let updateContentBlockCB = (updateTargetContentBlocks, contentBlock) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -188,11 +150,6 @@ let updateContentBlockCB =
     targetContentBlocks
     |> List.filter(((_, _, _, id)) => id != ContentBlock.id(contentBlock))
     |> List.append([newContentBlock])
-  );
-  updateContentBlockMasterList(
-    targetContentBlocks,
-    updateContentBlocksCB,
-    target |> Target.id,
   );
 };
 
@@ -245,6 +202,11 @@ let make =
     let contentEditorDirty =
       targetContentBlocks |> List.exists(((_, _, cb, _)) => cb == None);
     updateContentEditorDirtyCB(contentEditorDirty);
+    updateContentBlockMasterList(
+      targetContentBlocks,
+      updateContentBlocksCB,
+      target |> Target.id,
+    );
     None;
   });
 
@@ -273,10 +235,7 @@ let make =
               contentBlock
               removeTargetContentCB={
                 removeTargetContentCB(
-                  targetContentBlocks,
                   updateTargetContentBlocks,
-                  updateContentBlocksCB,
-                  target,
                   toggleSortContentBlock,
                 )
               }
@@ -285,18 +244,12 @@ let make =
               newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
               createNewContentCB={
                 createNewContentCB(
-                  targetContentBlocks,
                   updateTargetContentBlocks,
-                  updateContentBlocksCB,
-                  target,
                 )
               }
               updateContentBlockCB={
                 updateContentBlockCB(
-                  targetContentBlocks,
                   updateTargetContentBlocks,
-                  updateContentBlocksCB,
-                  target,
                 )
               }
               blockCount={targetContentBlocks |> List.length}
@@ -304,8 +257,6 @@ let make =
                 swapContentBlockCB(
                   targetContentBlocks,
                   updateTargetContentBlocks,
-                  updateContentBlocksCB,
-                  target,
                   toggleSortContentBlock,
                 )
               }

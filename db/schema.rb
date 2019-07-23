@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_093124) do
+ActiveRecord::Schema.define(version: 2019_07_22_075655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -189,6 +189,16 @@ ActiveRecord::Schema.define(version: 2019_07_19_093124) do
     t.datetime "updated_at", null: false
     t.index ["block_type"], name: "index_content_blocks_on_block_type"
     t.index ["target_id"], name: "index_content_blocks_on_target_id"
+  end
+
+  create_table "course_authors", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "course_id"
+    t.boolean "exited"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_authors_on_course_id"
+    t.index ["user_id"], name: "index_course_authors_on_user_id"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -764,6 +774,8 @@ ActiveRecord::Schema.define(version: 2019_07_19_093124) do
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
   add_foreign_key "content_blocks", "targets"
+  add_foreign_key "course_authors", "courses"
+  add_foreign_key "course_authors", "users"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty", "schools"

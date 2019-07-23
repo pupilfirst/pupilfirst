@@ -69,7 +69,7 @@ feature 'Coaches Index' do
     expect(coach.reload.connect_link).to eq('https://www.connect.com/xyz')
     expect(user.avatar.attached?).to eq(true)
     expect(user.avatar.filename).to eq('human.png')
-    expect(user.reload.name).to eq(updated_coach_name.titleize)
+    expect(user.reload.name).to eq(updated_coach_name)
     expect(user.title).to eq(updated_coach_title)
   end
 end

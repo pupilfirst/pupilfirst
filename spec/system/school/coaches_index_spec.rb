@@ -49,7 +49,7 @@ feature 'Coaches Index' do
     coach = Faculty.last
     user = coach.user
 
-    expect(user.name).to eq(new_coach_name.titleize)
+    expect(user.name).to eq(new_coach_name)
     expect(user.title).to eq(new_coach_title)
     expect(user.email).to eq(new_coach_email)
 

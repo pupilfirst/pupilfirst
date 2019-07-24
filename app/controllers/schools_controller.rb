@@ -1,7 +1,6 @@
 class SchoolsController < ApplicationController
   layout 'school'
 
-  before_action :authenticate_school_admin!
   before_action :courses, :teams
 
   # Enforce authorization with Pundit in all school administration routes.

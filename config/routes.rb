@@ -84,8 +84,6 @@ Rails.application.routes.draw do
       resource :content_block, only: %i[create]
     end
 
-    resources :resources, only: %i[create]
-
     resources :communities, only: %i[index]
   end
 

@@ -1,8 +1,7 @@
 module Schools
   class TargetGroupPolicy < ApplicationPolicy
     def create?
-      # All school admins can create new target group.
-      CoursePolicy.new(@pundit_user, record.course).update?
+      CurriculaPolicy.new(@pundit_user, record.course).show? && !record.course.ended?
     end
 
     alias update? create?

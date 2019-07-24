@@ -10,7 +10,7 @@ module Users
       validate :user_must_exist
 
       def save
-        @user.update!(password: new_password)
+        @user.update!(password: new_password, reset_password_token: nil)
       end
 
       def user

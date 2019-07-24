@@ -7,7 +7,7 @@ module Schools
       form = ::Schools::Targets::CreateContentBlockForm.new(ContentBlock.new)
 
       if form.validate(content_block_params)
-        content_block = form.save(content_block_params)
+        content_block = form.save
         render json: content_block_data(content_block)
       else
         render json: { error: form.errors.full_messages.join(', ') }

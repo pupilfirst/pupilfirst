@@ -1,5 +1,4 @@
 module FacultyModule
-  # TODO: Spec FacultyModule::CreateService
   class CreateService
     def initialize(faculty_params)
       @faculty_params = faculty_params

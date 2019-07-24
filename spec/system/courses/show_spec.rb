@@ -270,6 +270,10 @@ feature "Student's view of Course Curriculum", js: true do
 
         # There should be no option to switch to course in second school.
         expect(page).not_to have_selector('button.student-course__dropdown-btn')
+
+        # Attempting to visit the course page directly should show a 404.
+        visit course_path(course_2)
+        expect(page).to have_text("The page you were looking for doesn't exist!")
       end
     end
   end

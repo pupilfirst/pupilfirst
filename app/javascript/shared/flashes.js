@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const message = JSON.parse(
     document.documentElement.getAttribute("data-flash")
   );
-  console.log("a");
   message.map(flash);
 
   function flash(flash) {

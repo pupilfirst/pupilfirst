@@ -59,15 +59,10 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.action_mailer.default_url_options = { host: 'school1.localhost' }
-
   # for detecting n + 1 queries using Bullet
   Bullet.enable = true
   Bullet.bullet_logger = true
   Bullet.rails_logger = true
-
-  # Roadie asset host.
-  config.roadie.url_options = { host: 'school1.localhost', scheme: 'http' }
 
   # Oink::Middleware logs memory and activerecord usage by default.
   config.middleware.use Oink::Middleware
@@ -75,5 +70,3 @@ Rails.application.configure do
   # In development , let's have ActiveStorage store everything on local disk
   config.active_storage.service = :local
 end
-
-Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

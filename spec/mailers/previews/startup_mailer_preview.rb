@@ -8,18 +8,34 @@ class StartupMailerPreview < ActionMailer::Preview
         founders: [Founder.first],
         target: Target.new(id: 1, title: 'Super Cool Target')
       ),
-      faculty: Faculty.new(
-        name: 'C V Raman'
-      ),
-      startup: Startup.first
+      faculty: Faculty.last,
+      startup: Startup.last
     )
 
     StartupMailer.feedback_as_email(startup_feedback)
   end
 
   def connect_request_confirmed
-    connect_request = ConnectRequest.first
-
     StartupMailer.connect_request_confirmed(connect_request)
+  end
+
+  private
+
+  def connect_request
+    ConnectRequest.new(
+      id: 1,
+      connect_slot: connect_slot,
+      startup: Startup.last,
+      questions: Faker::Lorem.paragraphs(2).join("\n\n"),
+      status: ConnectRequest::STATUS_CONFIRMED,
+      meeting_link: 'https://example.com/meeting_url'
+    )
+  end
+
+  def connect_slot
+    ConnectSlot.new(
+      faculty: Faculty.first,
+      slot_at: 2.days.from_now
+    )
   end
 end

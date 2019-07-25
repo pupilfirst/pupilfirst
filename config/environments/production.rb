@@ -103,8 +103,13 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_mailer.default_url_options = { host: 'https://school.sv.co' }
+
   # Let's use delayed job in production to process background jobs.
   config.active_job.queue_adapter = :delayed_job
+
+  # Roadie asset URL.
+  config.roadie.url_options = { host: 'school.sv.co', scheme: 'https' }
 
   # Do not display runtime information in production.
   config.middleware.delete(Rack::Runtime)
@@ -134,3 +139,5 @@ Rails.application.configure do
     end
   end
 end
+
+Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

@@ -12,7 +12,7 @@
     ' The connect session request created by #{@connect_request.startup.name} with our coach
     | #{@connect_request.faculty.name}, has just been confirmed for <strong>#{@connect_request.connect_slot} IST</strong>.
 
-  - meeting_url = connect_request_join_session_url(@connect_request)
+  - meeting_url = connect_request_join_session_url(@connect_request, **host_options)
 
   p You can #{link_to 'click here', meeting_url} to join the meeting when it&rsquo;s time.
 

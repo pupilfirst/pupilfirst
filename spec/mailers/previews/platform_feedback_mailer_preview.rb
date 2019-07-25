@@ -1,19 +1,11 @@
 class PlatformFeedbackMailerPreview < ActionMailer::Preview
   def new_platform_feedback
+    platform_feedback = PlatformFeedback.last
     PlatformFeedbackMailer.new_platform_feedback(platform_feedback)
   end
 
   def acknowledgement
+    platform_feedback = PlatformFeedback.last
     PlatformFeedbackMailer.acknowledgement(platform_feedback)
-  end
-
-  private
-
-  def platform_feedback
-    PlatformFeedback.new(
-      founder: Founder.last,
-      feedback_type: PlatformFeedback.types_of_feedback.sample,
-      description: Faker::Lorem.paragraphs(2).join("\n\n")
-    )
   end
 end

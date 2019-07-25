@@ -10,7 +10,7 @@ class AdminUserMailerPreview < ActionMailer::Preview
 
   def google_calendar_invite_success
     admin_user = AdminUser.first
-    target = Target.first
+    target = Target.sessions.first
     html_link = 'https://google.com'
 
     AdminUserMailer.google_calendar_invite_success(admin_user, target, html_link)

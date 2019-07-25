@@ -45,12 +45,8 @@ class FacultyConnectSessionReminderJob < ApplicationJob
     @founder_name ||= founder.name
   end
 
-  def url_options
-    @url_options ||= { host: founder.school.domains.primary.fqdn }
-  end
-
   def founder_url
-    @founder_url ||= Rails.application.routes.url_helpers.student_url(founder.id, **url_options)
+    @founder_url ||= Rails.application.routes.url_helpers.student_url(founder.id)
   end
 
   def faculty_name
@@ -58,15 +54,15 @@ class FacultyConnectSessionReminderJob < ApplicationJob
   end
 
   def coach_url
-    @coach_url ||= Rails.application.routes.url_helpers.coach_url(connect_request.faculty, **url_options)
+    @coach_url ||= Rails.application.routes.url_helpers.coach_url(connect_request.faculty)
   end
 
   def founder_join_session_link
-    @founder_join_session_link ||= Rails.application.routes.url_helpers.connect_request_join_session_url(connect_request, **url_options)
+    @founder_join_session_link ||= Rails.application.routes.url_helpers.connect_request_join_session_url(connect_request)
   end
 
   def faculty_join_session_link
-    @faculty_join_session_link ||= Rails.application.routes.url_helpers.connect_request_join_session_url(connect_request, token: connect_request.faculty.token, **url_options)
+    @faculty_join_session_link ||= Rails.application.routes.url_helpers.connect_request_join_session_url(connect_request, token: connect_request.faculty.token)
   end
 
   def questions

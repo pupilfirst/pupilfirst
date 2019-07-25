@@ -20,10 +20,6 @@ feature 'Founder Show' do
   let!(:timeline_event_2) { create :timeline_event, target: target_2, passed_at: 1.day.ago, founders: [founder] }
   let!(:timeline_event_3) { create :timeline_event, target: target_3, founders: [founder] }
 
-  before do
-    create :domain, :primary, school: school
-  end
-
   scenario 'Public user visits a student profile' do
     visit student_path(founder.id)
     # ensure founder is on his profile

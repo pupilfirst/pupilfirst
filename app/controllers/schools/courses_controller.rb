@@ -3,7 +3,7 @@ module Schools
     layout 'school'
 
     def index
-      authorize current_school
+      authorize(current_school, policy_class: Schools::CoursePolicy)
     end
 
     # POST /school/courses/:course_id/delete_coach_enrollment

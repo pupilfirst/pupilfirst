@@ -5,10 +5,9 @@ module Layouts
         school_name: current_school.name,
         school_logo_path: school_logo_path,
         school_icon_path: school_icon_path,
-        courses: courses,
+        courses: courses_in_school,
         is_student: current_user_is_a_student?,
-        review_path: coach_dashboard_path,
-        is_course_author: current_user_is_a_course_author?
+        review_path: coach_dashboard_path
       }
     end
 
@@ -48,16 +47,8 @@ module Layouts
       current_user.founders.exists?
     end
 
-    def courses
-      if current_user.school_admin.present?
-        current_school.courses.as_json(only: %i[name id])
-      elsif current_user.course_authors.any?
-        current_school.courses.where(id: current_user.course_authors.pluck(:course_id)).as_json(only: %i[name id])
-      end
-    end
-
-    def current_user_is_a_course_author?
-      current_user.course_authors.where(course: current_school.courses).exists? && current_user.school_admin.blank?
+    def courses_in_school
+      current_school.courses.as_json(only: %i[name id])
     end
   end
 end

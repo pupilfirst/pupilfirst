@@ -47,7 +47,7 @@ let make = (~courses, ~currentCourseId) => {
                      href={
                        "/school/courses/"
                        ++ (course |> Course.id)
-                       ++ "/curriculum"
+                       ++ "/students"
                      }>
                      {course |> Course.name |> str}
                    </a>

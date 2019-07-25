@@ -16,14 +16,10 @@ type settingsSelection =
   | Domains
   | Homepage;
 
-type userRole =
-  | SchoolAdmin
-  | CourseAuthor;
-
 type selection =
   | Overview
   | SchoolCoaches
-  | Settings(settingsSelection)/Users/maheshk/Developer/SV.CO/sv.co/app/policies/schools/course_policy.rb
+  | Settings(settingsSelection)
   | Courses
   | SelectedCourse(Course.id, courseSelection)
   | Communities
@@ -94,7 +90,7 @@ let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
   <li> <a href=path className=classes> {text |> str} </a> </li>;
 };
 
-let secondaryNav = (courses, userRole, selectedOption) =>
+let secondaryNav = (courses, selectedOption) =>
   switch (selectedOption) {
   | Settings(settingsSelection) =>
     <div
@@ -123,40 +119,28 @@ let secondaryNav = (courses, userRole, selectedOption) =>
           />
         </li>
         {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/students",
-              courseSelection,
-              Students,
-              "Students",
-            )
-          | CourseAuthor => React.null
-          }
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/students",
+            courseSelection,
+            Students,
+            "Students",
+          )
         }
         {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/coaches",
-              courseSelection,
-              CourseCoaches,
-              "Coaches",
-            )
-          | CourseAuthor => React.null
-          }
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/coaches",
+            courseSelection,
+            CourseCoaches,
+            "Coaches",
+          )
         }
         {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/curriculum",
-              courseSelection,
-              Curriculum,
-              "Curriculum",
-            )
-          | CourseAuthor => React.null
-          }
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/curriculum",
+            courseSelection,
+            Curriculum,
+            "Curriculum",
+          )
         }
       </ul>
     </div>
@@ -171,12 +155,9 @@ let make =
       ~schoolIconPath,
       ~courses,
       ~isStudent,
-      ~isCourseAuthor,
       ~reviewPath,
     ) => {
   let url = ReasonReactRouter.useUrl();
-
-  let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin;
 
   let (selectedOption, shrunk) =
     switch (url.path) {
@@ -229,102 +210,96 @@ let make =
                <i className="fas fa-search" />
              </div>
            </div> */
-        {
-          switch (userRole) {
-          | SchoolAdmin =>
-            <ul>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Overview,
-                    "/school",
-                    shrunk,
-                    "fal fa-eye",
-                    "Overview",
-                  )
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    SchoolCoaches,
-                    "/school/coaches",
-                    shrunk,
-                    "fal fa-chalkboard-teacher",
-                    "Coaches",
-                  )
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Settings(Customization),
-                    "/school/customize",
-                    shrunk,
-                    "fal fa-cog",
-                    "Settings",
-                  )
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Courses,
-                    "/school/courses",
-                    shrunk,
-                    "fal fa-books",
-                    "Courses",
-                  )
-                }
-                {
-                  shrunk ?
-                    React.null :
-                    <ul className="pr-4 pb-4 ml-10 mt-1">
-                      {
-                        courses
-                        |> List.map(course =>
-                             <li key={course |> Course.id}>
-                               <a
-                                 href={
-                                   "/school/courses/"
-                                   ++ (course |> Course.id)
-                                   ++ "/students"
-                                 }
-                                 className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
-                                 {course |> Course.name |> str}
-                               </a>
-                             </li>
-                           )
-                        |> Array.of_list
-                        |> React.array
-                      }
-                    </ul>
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Communities,
-                    "/school/communities",
-                    shrunk,
-                    "fal fa-users-class",
-                    "Communities",
-                  )
-                }
-              </li>
-            </ul>
-          | CourseAuthor => React.null
-          }
-        }
+        <ul>
+          <li>
+            {
+              topLink(
+                selectedOption,
+                Overview,
+                "/school",
+                shrunk,
+                "fal fa-eye",
+                "Overview",
+              )
+            }
+          </li>
+          <li>
+            {
+              topLink(
+                selectedOption,
+                SchoolCoaches,
+                "/school/coaches",
+                shrunk,
+                "fal fa-chalkboard-teacher",
+                "Coaches",
+              )
+            }
+          </li>
+          <li>
+            {
+              topLink(
+                selectedOption,
+                Settings(Customization),
+                "/school/customize",
+                shrunk,
+                "fal fa-cog",
+                "Settings",
+              )
+            }
+          </li>
+          <li>
+            {
+              topLink(
+                selectedOption,
+                Courses,
+                "/school/courses",
+                shrunk,
+                "fal fa-books",
+                "Courses",
+              )
+            }
+            {
+              shrunk ?
+                React.null :
+                <ul className="pr-4 pb-4 ml-10 mt-1">
+                  {
+                    courses
+                    |> List.map(course =>
+                         <li key={course |> Course.id}>
+                           <a
+                             href={
+                               "/school/courses/"
+                               ++ (course |> Course.id)
+                               ++ "/students"
+                             }
+                             className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                             {course |> Course.name |> str}
+                           </a>
+                         </li>
+                       )
+                    |> Array.of_list
+                    |> React.array
+                  }
+                </ul>
+            }
+          </li>
+          <li>
+            {
+              topLink(
+                selectedOption,
+                Communities,
+                "/school/communities",
+                shrunk,
+                "fal fa-users-class",
+                "Communities",
+              )
+            }
+          </li>
+        </ul>
       </div>
       <ul>
         {
-          isStudent || isCourseAuthor ?
+          isStudent ?
             bottomLink("/home", shrunk, "fal fa-home-alt", "Home") :
             React.null
         }
@@ -363,7 +338,7 @@ let make =
         </li>
       </ul>
     </div>,
-    selectedOption |> secondaryNav(courses, userRole),
+    selectedOption |> secondaryNav(courses),
   |]
   |> React.array;
 };

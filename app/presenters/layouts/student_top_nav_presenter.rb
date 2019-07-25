@@ -38,9 +38,7 @@ module Layouts
 
     def admin_link
       if current_school.present? && view.policy(current_school).show?
-        [{ title: 'Admin', url: view.school_path }]
-      elsif current_user.present? && course_authors.any?
-        [{ title: 'Admin', url: view.school_course_curriculum_path(course_authors.first.course) }]
+        [{ title: 'Admin', url: '/school' }]
       else
         []
       end
@@ -52,10 +50,6 @@ module Layouts
       else
         []
       end
-    end
-
-    def course_authors
-      @course_authors ||= current_user.course_authors.where(course: current_school.courses)
     end
   end
 end

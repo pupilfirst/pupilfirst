@@ -1,9 +1,5 @@
 module Schools
   class CoursePolicy < ApplicationPolicy
-    def index?
-      return true if user.school_admin.present? && record.present?
-    end
-
     def show?
       # Can be shown to all school admins.
       return true if user.school_admin.present? && record.in?(current_school.courses)

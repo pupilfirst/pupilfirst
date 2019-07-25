@@ -82,8 +82,8 @@ ActiveAdmin.register User do
     redirect_to action: :show
   end
 
-  action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
-    link_to 'Impersonate', impersonate_admin_user_path(user), method: :post
+  action_item :impersonate, only: :show do
+    link_to('Impersonate', impersonate_admin_user_path(user), method: :post) if AdminUser.where(email: user.email).empty?
   end
 
   member_action :impersonate, method: :post do
@@ -92,16 +92,12 @@ ActiveAdmin.register User do
     # clear any previous impersonations
     stop_impersonating_user
 
-    if can? :impersonate, User
-      if AdminUser.where(email: user.email).exists?
-        flash[:error] = 'You may not impersonate another admin user!'
-      else
-        impersonate_user(user)
-        redirect_to params[:referer] || root_url
-        return
-      end
+    if AdminUser.where(email: user.email).exists?
+      flash[:error] = 'You may not impersonate another admin user!'
     else
-      flash[:error] = 'You are not allowed to access that!'
+      impersonate_user(user)
+      redirect_to params[:referer] || root_url
+      return
     end
 
     redirect_to admin_user_path(user)

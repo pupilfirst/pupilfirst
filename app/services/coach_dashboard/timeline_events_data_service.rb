@@ -27,7 +27,7 @@ module CoachDashboard
         filtered_events.includes(:timeline_event_owners, :timeline_event_files, :startup_feedback, :timeline_event_grades)
           .includes(target: :level)
           .includes(:target_evaluation_criteria, :evaluation_criteria)
-          .includes(evaluator: { user: :avatar_attachment })
+          .includes(evaluator: { user: { avatar_attachment: :blob } })
           .order(created_at: :DESC).limit(@limit)
       end
     end

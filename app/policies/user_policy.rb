@@ -9,4 +9,10 @@ class UserPolicy < ApplicationPolicy
     # founder in this school can access home.
     user.founders.exists?
   end
+
+  def edit?
+    user.founders.where(exited: false).any?
+  end
+
+  alias show? edit?
 end

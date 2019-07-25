@@ -12,7 +12,7 @@ module Users
       course_details = founders.map do |founder|
         course_detail = course_info(founder.course)
         course_detail[:cta] = cta_for_founder(founder)
-        course_detail[:links] = founder.exited ? [] : founder_links(founder)
+        course_detail[:links] = founder_links(founder)
         course_detail[:founder_exited] = founder.exited
         course_detail
       end
@@ -44,12 +44,16 @@ module Users
 
     def communities
       @communities ||= begin
+        # All communities in school.
         communities_in_school = Community.where(school: current_school)
 
         if current_school_admin.present? || current_coach.present?
+          # Coaches and school admins can access all communities in a school.
           communities_in_school
         else
-          communities_in_school.joins(:courses).where(courses: { id: student_courses.pluck(:id) }).distinct
+          # Students can access communities linked to their courses, as long as they haven't dropped out.
+          active_courses = Course.joins(founders: :user).where(users: { id: current_user }).where(founders: { exited: false })
+          communities_in_school.joins(:courses).where(courses: { id: active_courses }).distinct
         end
       end
     end
@@ -69,10 +73,6 @@ module Users
         text: text,
         link: view.course_path(founder.course)
       }
-    end
-
-    def student_courses
-      @student_courses = current_school&.courses&.where(id: current_user.founders.joins(:course).pluck(:course_id))
     end
 
     def access_ended?(founder)

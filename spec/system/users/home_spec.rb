@@ -28,13 +28,14 @@ feature 'User Home' do
   # Course 4 - Founder Exited
   let(:course_4) { create :course, school: school }
   let(:course_4_level_1) { create :level, :one, course: course_4 }
-  let(:course_4_startup_1) { create :startup, level: course_4_level_1 }
+  let(:course_4_startup_1) { create :team, level: course_4_level_1 }
   let!(:course_4_founder_1) { create :founder, startup: course_4_startup_1, user: founder.user, exited: true }
 
   # seed community
   let!(:community_1) { create :community, school: school, target_linkable: true }
   let!(:community_2) { create :community, school: school, target_linkable: true }
   let!(:community_3) { create :community, school: school, target_linkable: true }
+  let!(:community_4) { create :community, school: school, target_linkable: true }
 
   let(:course_coach) { create :faculty, school: school }
   let(:student_coach) { create :faculty, school: school }
@@ -44,6 +45,8 @@ feature 'User Home' do
     create :faculty_startup_enrollment, faculty: student_coach, startup: course_2_founder_1.startup
     create :community_course_connection, course: course_1, community: community_1
     create :community_course_connection, course: course_2, community: community_2
+    create :community_course_connection, course: course_3, community: community_3
+    create :community_course_connection, course: course_4, community: community_4
 
     # Create a domain for school.
     create :domain, :primary, school: school
@@ -52,7 +55,7 @@ feature 'User Home' do
   scenario 'When an active user visits he access courses and community', js: true do
     sign_in_user(founder.user, referer: home_path)
 
-    # New Course
+    # A new course.
     within("div[aria-label=\"#{course_1.name}\"]") do
       expect(page).to have_text(course_1.name)
       expect(page).to have_text(course_1.description)
@@ -60,30 +63,35 @@ feature 'User Home' do
       expect(page).to have_link("Start Course")
     end
 
-    # Existing Course
+    # A course which is going on.
     within("div[aria-label=\"#{course_2.name}\"]") do
       expect(page).to have_text(course_2.name)
       expect(page).to have_text(course_2.description)
       expect(page).to have_link("Continue Course")
     end
 
-    # Ended Course
+    # A course which has ended.
     within("div[aria-label=\"#{course_3.name}\"]") do
       expect(page).to have_text(course_3.name)
       expect(page).to have_text(course_3.description)
       expect(page).to have_link("Course Ended")
     end
 
-    # Founder profile archived
+    # Course from which student has dropped out.
     within("div[aria-label=\"#{course_4.name}\"]") do
       expect(page).to have_text(course_4.name)
       expect(page).to have_text(course_4.description)
       expect(page).to have_text("Dropped out")
     end
 
+    # Students should have access to communities which are linked to their courses,
+    # regardless of whether the course is active...
     expect(page).to have_text(community_1.name)
     expect(page).to have_text(community_2.name)
-    expect(page).not_to have_text(community_3.name)
+    expect(page).to have_text(community_3.name)
+
+    # ...but not if they've dropped out from a course.
+    expect(page).not_to have_text(community_4.name)
   end
 
   scenario 'When a course coach visits he access courses and community', js: true do
@@ -102,6 +110,7 @@ feature 'User Home' do
     expect(page).to have_text(community_1.name)
     expect(page).to have_text(community_2.name)
     expect(page).to have_text(community_3.name)
+    expect(page).to have_text(community_4.name)
   end
 
   scenario 'When a student coach visits he access courses and community', js: true do
@@ -120,5 +129,6 @@ feature 'User Home' do
     expect(page).to have_text(community_1.name)
     expect(page).to have_text(community_2.name)
     expect(page).to have_text(community_3.name)
+    expect(page).to have_text(community_4.name)
   end
 end

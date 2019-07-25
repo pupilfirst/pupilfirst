@@ -103,13 +103,13 @@ let make =
     };
   };
 
-  <div className="mr-2">
+  <div className="mr-1 md:mr-2">
     <div
       className="cursor-pointer"
       title={(liked ? "Unlike" : "Like") ++ " Answer"}
       onClick=handleAnswerLike>
       <div
-        className="rounded-full hover:bg-gray-100 h-10 w-10 p-2"
+        className="flex items-center justify-center rounded-full hover:bg-gray-100 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2"
         key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>

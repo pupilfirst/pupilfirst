@@ -321,7 +321,7 @@ let make =
             /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
             ReasonReact.cloneElement(
               <a
-                title=?{shrunk ? Some("Log Out") : None}
+                title=?{shrunk ? Some("Sign Out") : None}
                 className={bottomLinkClasses(shrunk)}
                 rel="nofollow"
                 href="/users/sign_out"
@@ -331,7 +331,7 @@ let make =
                 <i className="fal fa-sign-out fa-fw" />,
                 shrunk ?
                   React.null :
-                  <span className="ml-2"> {"Log Out" |> str} </span>,
+                  <span className="ml-2"> {"Sign Out" |> str} </span>,
               |],
             )
           }

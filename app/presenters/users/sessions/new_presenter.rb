@@ -15,19 +15,13 @@ module Users
         {
           authenticity_token: view.form_authenticity_token,
           school_name: school_name,
-          fqdn: fqdn,
+          fqdn: view.current_host,
           oauth_host: oauth_host
         }
       end
 
       def school_name
-        @school_name ||= current_school&.name || 'PupilFirst'
-      end
-
-      def fqdn
-        if view.current_school.present?
-          view.current_host
-        end
+        @school_name ||= current_school.name
       end
 
       def oauth_host

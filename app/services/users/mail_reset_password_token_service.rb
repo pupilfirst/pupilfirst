@@ -3,7 +3,7 @@ module Users
   class MailResetPasswordTokenService
     include RoutesResolvable
 
-    # @param school [School, nil] The current school.
+    # @param school [School] The current school.
     # @param domain [Domain, nil] The current domain.
     # @param user [User] The user, identified by supplied email address.
     def initialize(school, domain, user)
@@ -19,11 +19,9 @@ module Users
       # Update the time at which last reset password mail was sent.
       @user.update!(reset_password_sent_at: Time.zone.now)
 
-      host = @domain&.fqdn || 'www.pupilfirst.com'
-
       url_options = {
         token: @user.reset_password_token,
-        host: host,
+        host: @domain&.fqdn,
         protocol: 'https'
       }
 

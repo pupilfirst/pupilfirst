@@ -1,7 +1,5 @@
 open StudentsPanel__Types;
 
-open SchoolAdmin__Utils;
-
 type teamCoachlist = (int, string, bool);
 
 type state = {

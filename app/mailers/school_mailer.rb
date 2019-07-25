@@ -14,10 +14,10 @@ class SchoolMailer < ActionMailer::Base
     }
   end
 
-  def from_options
+  def from_options(enable_reply)
     options = { from: "#{@school.name} <noreply@pupilfirst.com>" }
     reply_to = SchoolString::EmailAddress.for(@school)
-    options[:reply_to] = reply_to if reply_to.present?
+    options[:reply_to] = reply_to if reply_to.present? && enable_reply
     options
   end
 
@@ -27,12 +27,12 @@ class SchoolMailer < ActionMailer::Base
 
   # @param email_address [String] email address to send email to
   # @param subject [String] subject of the email
-  def simple_roadie_mail(email_address, subject)
+  def simple_roadie_mail(email_address, subject, enable_reply: true)
     roadie_mail(
       {
         to: email_address,
         subject: subject,
-        **from_options
+        **from_options(enable_reply)
       },
       roadie_options_for_school
     )

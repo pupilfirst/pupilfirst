@@ -1,22 +1,6 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./UserSessionNew.css")|}];
 
-module ENV = {
-  open Webapi.Dom;
-  let isDevelopment = () => {
-    let body =
-      document
-      |> Document.getElementsByTagName("body")
-      |> HtmlCollection.toArray;
-
-    switch (body[0] |> Element.getAttribute("data-env")) {
-    | Some(props) when props == "development" => true
-    | Some(_)
-    | None => false
-    };
-  };
-};
-
 let federatedSignInIcon: string = [%raw
   "require('./images/federated-sign-in-icon.svg')"
 ];
@@ -30,7 +14,6 @@ let forgotPasswordIcon: string = [%raw
   "require('./images/reset-password-icon.svg')"
 ];
 
-open SchoolAdmin__Utils;
 let str = React.string;
 
 type views =
@@ -60,26 +43,22 @@ let handleSignInWithEmailCB = (setView, _) => setView(_ => SignInEmailSent);
 
 let signInWithPassword =
     (authenticityToken, email, password, setSaving, sharedDevice) => {
-  let setPayload = () => {
-    let payload = Js.Dict.empty();
-    Js.Dict.set(
-      payload,
-      "authenticity_token",
-      authenticityToken |> Js.Json.string,
-    );
-
-    Js.Dict.set(payload, "email", email |> Js.Json.string);
-    Js.Dict.set(
-      payload,
-      "shared_device",
-      (sharedDevice ? "1" : "0") |> Js.Json.string,
-    );
-    Js.Dict.set(payload, "password", password |> Js.Json.string);
-    payload;
-  };
-  let payload = setPayload();
+  let payload = Js.Dict.empty();
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "email", email |> Js.Json.string);
+  Js.Dict.set(
+    payload,
+    "shared_device",
+    (sharedDevice ? "1" : "0") |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "password", password |> Js.Json.string);
   let url = "/users/sign_in";
   setSaving(_ => true);
+
   Api.create(
     url,
     payload,
@@ -90,28 +69,23 @@ let signInWithPassword =
 
 let sendSignInEmail =
     (authenticityToken, email, setView, setSaving, sharedDevice) => {
-  let setPayload = () => {
-    let payload = Js.Dict.empty();
-    Js.Dict.set(
-      payload,
-      "authenticity_token",
-      authenticityToken |> Js.Json.string,
-    );
-
-    Js.Dict.set(payload, "email", email |> Js.Json.string);
-    Js.Dict.set(payload, "referer", "" |> Js.Json.string);
-    Js.Dict.set(
-      payload,
-      "shared_device",
-      (sharedDevice ? "1" : "0") |> Js.Json.string,
-    );
-    Js.Dict.set(payload, "username", "" |> Js.Json.string);
-    payload;
-  };
-
+  let payload = Js.Dict.empty();
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "email", email |> Js.Json.string);
+  Js.Dict.set(payload, "referer", "" |> Js.Json.string);
+  Js.Dict.set(
+    payload,
+    "shared_device",
+    (sharedDevice ? "1" : "0") |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "username", "" |> Js.Json.string);
   setSaving(_ => true);
-  let payload = setPayload();
   let url = "/users/send_login_email";
+
   Api.create(
     url,
     payload,
@@ -121,22 +95,17 @@ let sendSignInEmail =
 };
 
 let sendResetPasswordEmail = (authenticityToken, email, setView, setSaving) => {
-  let setPayload = () => {
-    let payload = Js.Dict.empty();
-    Js.Dict.set(
-      payload,
-      "authenticity_token",
-      authenticityToken |> Js.Json.string,
-    );
-
-    Js.Dict.set(payload, "email", email |> Js.Json.string);
-    Js.Dict.set(payload, "username", "" |> Js.Json.string);
-    payload;
-  };
-
+  let payload = Js.Dict.empty();
+  Js.Dict.set(
+    payload,
+    "authenticity_token",
+    authenticityToken |> Js.Json.string,
+  );
+  Js.Dict.set(payload, "email", email |> Js.Json.string);
+  Js.Dict.set(payload, "username", "" |> Js.Json.string);
   setSaving(_ => true);
-  let payload = setPayload();
   let url = "/users/send_reset_password_email";
+
   Api.create(
     url,
     payload,
@@ -176,12 +145,8 @@ let federatedLoginUrl = (oauthHost, fqdn, provider) =>
     | Developer => "developer"
     }
   )
-  ++ (
-    switch (fqdn) {
-    | Some(host) => "?fqdn=" ++ host
-    | None => ""
-    }
-  );
+  ++ "?fqdn="
+  ++ fqdn;
 
 let buttonText = provider =>
   "Continue "
@@ -215,7 +180,7 @@ let iconClasses = provider =>
 
 let providers = () => {
   let defaultProvides = [|Google, Facebook, Github|];
-  ENV.isDevelopment() ?
+  DomUtils.isDevelopment() ?
     defaultProvides |> Array.append([|Developer|]) : defaultProvides;
 };
 let renderFederatedlogin = (fqdn, oauthHost) =>

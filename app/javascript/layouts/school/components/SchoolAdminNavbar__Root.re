@@ -147,16 +147,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
           }
         }
         {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/curriculum",
-              courseSelection,
-              Curriculum,
-              "Curriculum",
-            )
-          | CourseAuthor => React.null
-          }
+          secondaryNavOption(
+            "/school/courses/" ++ courseId ++ "/curriculum",
+            courseSelection,
+            Curriculum,
+            "Curriculum",
+          )
         }
       </ul>
     </div>

@@ -10,8 +10,10 @@ class DailyDigestService
     updates = questions_from_today
     updates = add_questions_with_no_activity(updates)
 
-    User.joins(:communities).includes(:communities, :school)
-      .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
+    User.joins(:communities).includes(:communities, :school).joins(:founders)
+      .where('preferences @> ?', { daily_digest: true }.to_json)
+      .where(founders: { exited: false })
+      .where(email_bounced_at: nil).each do |user|
       updates_for_user = user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
         updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
       end

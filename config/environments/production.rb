@@ -103,6 +103,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_mailer.default_url_options = { host: 'https://school.sv.co' }
+
   # Let's use delayed job in production to process background jobs.
   config.active_job.queue_adapter = :delayed_job
 

@@ -29,7 +29,6 @@ gem 'slim', '~> 4.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
-gem 'cancancan', '~> 2.0' # Used to manage administrator types and roles in the ActiveAdmin interface.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 
 gem 'bootstrap', '>= 4.3.1' # Official Sass port of Bootstrap.

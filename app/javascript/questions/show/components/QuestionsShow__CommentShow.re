@@ -41,7 +41,11 @@ let make =
            let commentText =
              (comment |> Comment.value)
              ++ " - **"
-             ++ (users |> User.userName(comment |> Comment.creatorId))
+             ++ (
+               users
+               |> User.findById(comment |> Comment.creatorId)
+               |> User.name
+             )
              ++ "** on "
              ++ (
                comment

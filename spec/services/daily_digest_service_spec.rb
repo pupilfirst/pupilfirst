@@ -18,17 +18,25 @@ describe DailyDigestService do
   let!(:domain) { create :domain, :primary, school: school }
 
   let(:team_1) { create :startup }
-  let(:team_2) { create :startup }
+  let(:team_2) { create :team }
   let(:team_3) { create :startup }
+  let(:team_4) { create :team }
+
+  let(:t2_student_regular) { create :founder, startup: team_2 }
+  let(:t2_student_digest_inactive) { create :founder, startup: team_2 }
+  let(:t2_student_bounced) { create :founder, startup: team_2 }
+  let(:t4_student_dropped_out) { create :founder, startup: team_4, exited: true }
 
   let(:community_1) { create :community, school: school, courses: [team_1.course] }
   let(:community_2) { create :community, school: school, courses: [team_1.course, team_2.course] }
-  let(:community_3) { create :community, school: school, courses: [team_1.course, team_2.course, team_3.course] }
+  let(:community_3) { create :community, school: school, courses: [team_1.course, team_2.course, team_3.course, team_4.course] }
 
   let(:t1_user) { team_1.founders.first.user }
-  let(:t2_user_1) { team_2.founders.first.user }
-  let(:t2_user_2) { team_2.founders.last.user }
+  let(:t2_user_1) { t2_student_regular.user }
+  let(:t2_user_2) { t2_student_digest_inactive.user }
+  let(:t2_user_3) { t2_student_bounced.user }
   let(:t3_user) { team_3.founders.first.user }
+  let(:t4_user) { t4_student_dropped_out.user }
 
   let!(:question_c1) { create :question, community: community_1, creator: t1_user }
   let!(:question_c2_1) { create :question, community: community_2, creator: t2_user_1 }
@@ -38,9 +46,12 @@ describe DailyDigestService do
 
   before do
     # Activate daily digest emails for three of the four users.
-    [t1_user, t2_user_1, t3_user].each do |user|
+    [t1_user, t2_user_1, t2_user_3, t3_user, t4_user].each do |user|
       user.update!(preferences: { daily_digest: true })
     end
+
+    # Set email_bounced_at for t2_student_bounced.
+    t2_student_bounced.user.update!(email_bounced_at: 1.week.ago)
   end
 
   describe '#execute' do
@@ -84,8 +95,16 @@ describe DailyDigestService do
       expect(b2).to include(question_c3_1.title)
       expect(b2).not_to include(question_c3_2.title)
 
-      # Second user in second course shouldn't receive any email because daily digest hasn't been turned on.
+      # User from team 2 with daily digest turned off shouldn't receive the mail.
       open_email(t2_user_2.email)
+      expect(current_email).to eq(nil)
+
+      # User from team 2 whose email bounced shouldn't receive email.
+      open_email(t2_user_3.email)
+      expect(current_email).to eq(nil)
+
+      # Dropped out user shouldn't receive email.
+      open_email(t4_user.email)
       expect(current_email).to eq(nil)
 
       open_email(t3_user.email)

@@ -145,10 +145,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_ability
-    @current_ability ||= ::Ability.new(true_user)
-  end
-
   def pundit_user
     OpenStruct.new(
       current_user: current_user,

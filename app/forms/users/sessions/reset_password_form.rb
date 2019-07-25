@@ -22,7 +22,7 @@ module Users
       def user_must_exist
         return if user.present?
 
-        errors[:base] << 'Invalid user, Please refresh the page and try again'
+        errors[:base] << "Your token doesn't appear to be valid. Please refresh the page and try again."
       end
 
       def password_should_match

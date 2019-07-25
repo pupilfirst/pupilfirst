@@ -1,3 +1,8 @@
+body, html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   background-color: #f5f5f5;
   padding: 15px;
@@ -39,7 +44,7 @@ table table table {
 
 .mailer-button {
   background: white;
-  color: #087CAA !important;
+  color: #6025C0 !important;
   border-radius: 5px;
   padding: 10px 40px;
   margin-top: 10px;
@@ -60,7 +65,7 @@ table table table {
 }
 
 .mailer-head__data {
-  padding: 20px 30px;
+  padding: 20px 24px;
   text-align: center;
 }
 
@@ -77,7 +82,7 @@ table table table {
 }
 
 .mailer-body__hero {
-  padding: 25px 30px;
+  padding: 24px;
   color: white;
   text-align: center;
   background-color: #0F9D58;
@@ -105,16 +110,18 @@ table table table {
 .mailer-body__content {
   font-size: 16px;
   line-height: 1.4;
-  padding: 30px;
-  color: #333333;
+  padding: 24px;
+  color: #453C52;
 
   p {
     margin: 0 0 15px;
   }
   a {
-    font-size: 18px;
     font-weight: 600;
-    color: #0775E9 !important;
+    color: #6025C0;
+    background-color: #ffffff;
+    border-radius: 4px;
+    text-decoration: none;
   }
 }
 
@@ -150,6 +157,7 @@ p.monospace, pre.monospace {
 .monospace {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 90%;
+  color: #6025C0;
 }
 
 .monospace-block {

@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'DM Startup Feedback', broken: true do
   include UserSpecHelper
 
-  let!(:admin) { create :admin_user, admin_type: 'superadmin' }
+  let!(:admin) { create :admin_user }
   let!(:startup) { create :startup }
   let!(:faculty) { create :faculty, slack_user_id: 'ABCDEFG' }
   let!(:startup_feedback) { create :startup_feedback, faculty: faculty, startup: startup }

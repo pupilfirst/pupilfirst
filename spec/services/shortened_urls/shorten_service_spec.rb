@@ -1,32 +1,32 @@
 require 'rails_helper'
 
 describe ShortenedUrls::ShortenService do
-  subject { described_class.new(full_url) }
+  subject { described_class.new(full_url, host: 'example.com') }
 
   let(:full_url) { 'https://www.google.com' }
 
   describe '#short_url' do
     it 'returns a shortened URL for a given link' do
       short_url = subject.short_url
-      expect(short_url).to match(%r(^http://localhost:3000/r/[a-z0-9]{6}$))
+      expect(short_url).to match(%r(^http://example.com/r/[a-z0-9]{6}$))
     end
 
     it 'returns the same shortened URL for the same link, no matter how many times its called' do
       short_url = subject.short_url
-      expect(short_url).to eq("http://localhost:3000/r/#{ShortenedUrl.last.unique_key}")
+      expect(short_url).to eq("http://example.com/r/#{ShortenedUrl.last.unique_key}")
 
       # Generate with the same full URL.
-      expect(described_class.new(full_url).short_url).to eq(short_url)
+      expect(described_class.new(full_url, host: 'example.com').short_url).to eq(short_url)
 
       # Try another URL. It should change.
-      expect(described_class.new('https://www.twitter.com')).not_to eq(short_url)
+      expect(described_class.new('https://www.twitter.com', host: 'example.com').short_url).not_to eq(short_url)
     end
 
     context 'when a generated unique key has already been used' do
       it 'generates another unique key' do
         allow(subject).to receive(:unique_key).and_return('foobar', 'foobaz')
         create(:shortened_url, unique_key: 'foobar')
-        expect(subject.short_url).to eq('http://localhost:3000/r/foobaz')
+        expect(subject.short_url).to eq('http://example.com/r/foobaz')
       end
     end
 
@@ -45,10 +45,10 @@ describe ShortenedUrls::ShortenService do
     end
 
     context 'when a unique key is supplied' do
-      subject { described_class.new(full_url, unique_key: 'unique-key') }
+      subject { described_class.new(full_url, unique_key: 'unique-key', host: 'example.com') }
 
       it 'uses the supplied unique key' do
-        expect(subject.short_url).to eq('http://localhost:3000/r/unique-key')
+        expect(subject.short_url).to eq('http://example.com/r/unique-key')
       end
 
       context 'when a different unique key is supplied for existing URL' do
@@ -70,7 +70,7 @@ describe ShortenedUrls::ShortenService do
   describe '#shortened_url' do
     context 'when expires_at is supplied' do
       let(:one_day_from_now) { Time.parse('2017-06-14 17:00:00 +0530') }
-      subject { described_class.new(full_url, expires_at: one_day_from_now) }
+      subject { described_class.new(full_url, expires_at: one_day_from_now, host: 'example.com') }
 
       it 'sets the expiration time for new URL' do
         expect(subject.shortened_url.expires_at).to eq(one_day_from_now)

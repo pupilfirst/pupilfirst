@@ -492,8 +492,17 @@ feature 'Target Overlay', js: true do
       # Student can ask a question related to the target in community from target overlay.
       find("a[title='Ask a question in the #{community_1.name} community'").click
 
-      expect(page).to have_text("ASK A NEW QUESTION")
       expect(page).to have_text(target.title)
+      expect(page).to have_text("ASK A NEW QUESTION")
+
+      # Try clearing the linking.
+      click_link 'Clear'
+
+      expect(page).not_to have_text(target.title)
+      expect(page).to have_text("ASK A NEW QUESTION")
+
+      # Let's go back to linked state and try creating a linked question.
+      visit(new_question_community_path(community_1, target_id: target.id))
 
       fill_in 'Question', with: question_title
       fill_in 'Description', with: question_description

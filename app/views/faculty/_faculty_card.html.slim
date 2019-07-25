@@ -8,10 +8,10 @@
           i.fa.fa-user
           | &nbsp;View Profile
 
-        = image_tag coach.image_or_avatar_url(background_shape: :square)
+        = image_tag coach.user.image_or_avatar_url(background_shape: :square)
     - else
       .faculty-image
-        = image_tag coach.image_or_avatar_url(background_shape: :square)
+        = image_tag coach.user.image_or_avatar_url(background_shape: :square)
 
     .faculty-card-info.d-flex.flex-column.align-items-center
       .faculty-card-info__content

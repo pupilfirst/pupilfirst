@@ -33,8 +33,12 @@ describe User, type: :model do
         user.save!
       end
 
-      it 'returns the image url' do
+      it 'returns the image blob url' do
         expect(user.image_or_avatar_url).to match(%r{rails/active_storage/blobs\/.+\.jpg})
+      end
+
+      it 'returns the image representation when a variant is specified' do
+        expect(user.image_or_avatar_url(variant: :thumb)).to match(%r{rails/active_storage/representations\/.+\.jpg})
       end
     end
   end

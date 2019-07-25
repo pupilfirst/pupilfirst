@@ -4,7 +4,7 @@ module Users
     include RoutesResolvable
 
     # @param school [School] The current school.
-    # @param domain [Domain, nil] The current domain.
+    # @param domain [Domain] The current domain.
     # @param user [User] The user, identified by supplied email address.
     def initialize(school, domain, user)
       @school = school
@@ -21,7 +21,7 @@ module Users
 
       url_options = {
         token: @user.reset_password_token,
-        host: @domain&.fqdn,
+        host: @domain.fqdn,
         protocol: 'https'
       }
 

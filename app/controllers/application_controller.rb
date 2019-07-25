@@ -65,7 +65,13 @@ class ApplicationController < ActionController::Base
   end
 
   def current_domain
-    @current_domain ||= Domain.find_by(fqdn: current_host)
+    @current_domain ||= begin
+      if Rails.env.test?
+        Domain.first
+      else
+        Domain.find_by(fqdn: current_host)
+      end
+    end
   end
 
   # Returns nil, if on a PupilFirst page, or a School, if on a school domain. Raises an error if request is from an

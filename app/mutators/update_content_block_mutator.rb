@@ -33,4 +33,8 @@ class UpdateContentBlockMutator < ApplicationMutator
   def content_block
     @content_block ||= ContentBlock.find(id)
   end
+
+  def authorized?
+    current_school_admin.present? || current_user.course_authors.where(course: content_block.target.level.course).exists?
+  end
 end

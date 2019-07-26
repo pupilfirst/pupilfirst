@@ -6,8 +6,13 @@ feature 'Curriculum Editor' do
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
+  let!(:course_2) { create :course, school: school }
+  let!(:course_3) { create :course, school: school }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
   let!(:school_admin) { create :school_admin, school: school }
+  let!(:faculty) { create :faculty, school: school }
+  let!(:course_author) { create :course_author, course: course, user: faculty.user }
+  let!(:course_author_2) { create :course_author, course: course_2, user: faculty.user }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
   let!(:target_group_1) { create :target_group, level: level_1 }
@@ -62,9 +67,17 @@ feature 'Curriculum Editor' do
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
-  context 'school admin creates the curriculum' do
-    scenario 'creates a basic course framework by creating level, target group and target', js: true do
-      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+  def admin_user(user_type)
+    if user_type == :admin
+      school_admin.user
+    elsif user_type == :course_author
+      course_author.user
+    end
+  end
+
+  shared_examples 'authorized users creates the curriculum' do |user_type|
+    scenario 'creates a basic course framework by adding level, target group and targets', js: true do
+      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       # he should be on the last level
       expect(page).to have_text("Level 2: " + level_2.name)
@@ -153,9 +166,9 @@ feature 'Curriculum Editor' do
     end
   end
 
-  context 'school admin creates different types of targets' do
-    scenario 'Admin creates a target with a link to complete', js: true do
-      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+  shared_examples 'authorized users creates different types of targets' do |user_type|
+    scenario 'creates a target with a link to complete', js: true do
+      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       find('#create-target-input').click
       fill_in 'create-target-input', with: new_target_3_title
@@ -185,8 +198,8 @@ feature 'Curriculum Editor' do
       expect(target.quiz).to eq(nil)
     end
 
-    scenario 'Admin creates a target with a quiz', js: true do
-      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+    scenario 'creates a target with a quiz', js: true do
+      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       find('#create-target-input').click
       fill_in 'create-target-input', with: new_target_4_title
@@ -255,9 +268,9 @@ feature 'Curriculum Editor' do
     end
   end
 
-  context 'School admin modifies a target' do
-    scenario 'school admin adds content to a target and modifies its properties', js: true do
-      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+  shared_examples 'authorized users modifies a target' do |user_type|
+    scenario 'adds content to a target and modifies its properties', js: true do
+      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       target = target_4
 
@@ -371,7 +384,7 @@ feature 'Curriculum Editor' do
     end
 
     scenario 'modifies an existing target content', js: true do
-      sign_in_user school_admin.user, referer: school_course_curriculum_path(course)
+      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       target = target_5
 
@@ -466,6 +479,39 @@ feature 'Curriculum Editor' do
       find('span', text: 'Add Content').click
       expect(page).to have_selector('.content-block__content', count: 3)
       expect(target.content_blocks.reload.pluck(:sort_index).sort).to eq([1, 2, 3])
+    end
+  end
+
+  context 'school admin uses the curriculum editor' do
+    include_examples 'authorized users creates the curriculum', :admin
+    include_examples 'authorized users creates different types of targets', :admin
+    include_examples 'authorized users modifies a target', :admin
+  end
+
+  context 'course author uses the curriculum editor' do
+    include_examples 'authorized users creates the curriculum', :course_author
+    include_examples 'authorized users creates different types of targets', :course_author
+    include_examples 'authorized users modifies a target', :course_author
+
+    scenario 'user can navigate only to assigned courses and not to school admin pages', js: true do
+      sign_in_user course_author.user, referer: school_course_curriculum_path(course)
+      expect(page).to have_button(course.name)
+      click_button course.name
+      expect(page).to have_link(course_2.name, href: "/school/courses/#{course_2.id}/curriculum")
+      expect(page).to_not have_link(course_3.name, href: "/school/courses/#{course_3.id}/curriculum")
+      click_link course_2.name
+      expect(page).to have_button(course_2.name)
+
+      expect(page).to_not have_link(href: '/school/coaches')
+      expect(page).to_not have_link(href: '/school/customize')
+      expect(page).to_not have_link(href: '/school/courses')
+      expect(page).to_not have_link(href: '/school/communities')
+      expect(page).to have_link(href: '/home')
+
+      [school_path, school_course_curriculum_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
+        visit path
+        expect(page).to have_text("The page you were looking for doesn't exist!")
+      end
     end
   end
 end

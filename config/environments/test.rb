@@ -40,8 +40,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
-
   # Override Rails 5's default of :async, and force jobs to run inline.
   test_adapter = ActiveJob::QueueAdapters::TestAdapter.new
   test_adapter.perform_enqueued_jobs = true
@@ -50,5 +48,3 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 end
-
-Rails.application.default_url_options = Rails.application.config.action_mailer.default_url_options

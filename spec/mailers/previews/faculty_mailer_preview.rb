@@ -1,7 +1,5 @@
 class FacultyMailerPreview < ActionMailer::Preview
   def connect_request_confirmed
-    connect_request = ConnectRequest.last
-
     FacultyMailer.connect_request_confirmed(connect_request)
   end
 
@@ -10,15 +8,39 @@ class FacultyMailerPreview < ActionMailer::Preview
   end
 
   def connect_request_feedback
-    FacultyMailer.connect_request_feedback(ConnectRequest.first)
+    FacultyMailer.connect_request_feedback(connect_request)
   end
 
   def student_submission_notification
-    user = current_school.users.where(email: 'ios@example.org')
-    founder = user.founders.first
-    timeline_event = founder.timeline_events.first
+    founder = Founder.first
+
+    timeline_event = TimelineEvent.new(
+      founders: founder.startup.founders,
+      target: founder.course.targets.first
+    )
+
     faculty = founder.school.faculty.first
 
     FacultyMailer.student_submission_notification(timeline_event, faculty)
+  end
+
+  private
+
+  def connect_request
+    ConnectRequest.new(
+      id: 1,
+      connect_slot: connect_slot,
+      startup: Startup.last,
+      questions: Faker::Lorem.paragraphs(2).join("\n\n"),
+      status: ConnectRequest::STATUS_CONFIRMED,
+      meeting_link: 'https://example.com/meeting_url'
+    )
+  end
+
+  def connect_slot
+    ConnectSlot.new(
+      faculty: Faculty.first,
+      slot_at: 2.days.from_now
+    )
   end
 end

@@ -5,6 +5,10 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
 Rails.application.config.content_security_policy do |policy|
+  def asset_host
+    Rails.application.config.action_controller.asset_host
+  end
+
   def google_analytics_csp
     {
       connect: 'https://www.google-analytics.com'
@@ -66,7 +70,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def style_sources
-    ['fonts.googleapis.com', 'https://assets.pupilfirst.com']
+    ['fonts.googleapis.com', asset_host]
   end
 
   def connect_sources
@@ -76,7 +80,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def font_sources
-    ['fonts.gstatic.com', intercom_csp[:font], 'https://assets.pupilfirst.com']
+    ['fonts.gstatic.com', intercom_csp[:font], asset_host]
   end
 
   def child_sources

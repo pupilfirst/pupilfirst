@@ -15,7 +15,7 @@ class SchoolMailer < ActionMailer::Base
   end
 
   def from_options(enable_reply)
-    options = { from: "#{@school.name} <noreply@pupilfirst.com>" }
+    options = { from: "#{school_name} <noreply@pupilfirst.com>" }
     reply_to = SchoolString::EmailAddress.for(@school)
     options[:reply_to] = reply_to if reply_to.present? && enable_reply
     options
@@ -36,5 +36,12 @@ class SchoolMailer < ActionMailer::Base
       },
       roadie_options_for_school
     )
+  end
+
+  private
+
+  def school_name
+    # sanitize school name to remove special characters
+    @school.name.gsub(/[^0-9A-Za-z ]/, '')
   end
 end

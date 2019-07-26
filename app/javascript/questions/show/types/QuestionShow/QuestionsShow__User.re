@@ -19,13 +19,9 @@ let avatarUrl = t => t.avatarUrl;
 
 let title = t => t.title;
 
-let findUser = (id, users) =>
+let findById = (id, users) =>
   users
   |> ListUtils.unsafeFind(
        user => user.id == id,
        "Unable to find user with id " ++ id ++ "in QuestionShow__UserData",
      );
-
-let userName = (id, users) => findUser(id, users) |> name;
-
-let userAvatarUrl = (id, users) => findUser(id, users) |> avatarUrl;

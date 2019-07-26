@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_093124) do
+ActiveRecord::Schema.define(version: 2019_07_25_093850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 2019_07_19_093124) do
     t.datetime "updated_at"
     t.string "username"
     t.string "fullname"
-    t.string "admin_type"
     t.integer "user_id"
     t.string "email"
     t.index ["user_id"], name: "index_admin_users_on_user_id"

@@ -28,24 +28,4 @@ describe Faculty, type: :model do
       end
     end
   end
-
-  describe '#image_or_avatar_url' do
-    context 'when the faculty has no uploaded image' do
-      it 'returns a generated initials avatar' do
-        expect(faculty.image_or_avatar_url).to match(%r{data:image\/svg\+xml;base64.+})
-      end
-    end
-
-    context 'when the faculty has an uploaded image' do
-      before do
-        faculty_image = File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'donald_duck.jpg'))
-        faculty.image.attach(io: faculty_image, filename: 'donald_duck.jpg')
-        faculty.save!
-      end
-
-      it 'returns the image url' do
-        expect(faculty.image_or_avatar_url).to match(%r{rails/active_storage/blobs\/.+\.jpg})
-      end
-    end
-  end
 end

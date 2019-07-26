@@ -10,13 +10,6 @@ class FounderMailer < SchoolMailer
     @founder = connect_request.startup.founders.first
     @school = @founder.school
 
-    roadie_mail(
-      {
-        to: @founder.email,
-        subject: "Feedback for your recent office hour with coach #{@faculty.name}",
-        **from_options
-      },
-      roadie_options_for_school
-    )
+    simple_roadie_mail(@founder.email, "Feedback for your recent office hour with coach #{@faculty.name}")
   end
 end

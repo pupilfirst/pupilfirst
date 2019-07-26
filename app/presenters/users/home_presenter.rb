@@ -27,15 +27,7 @@ module Users
     end
 
     def show_user_edit?
-      founders.where(exited: false).any?
-    end
-
-    def avatar
-      if current_user.avatar.attached?
-        view.url_for(current_user.avatar_variant(:mid))
-      else
-        current_user.initials_avatar
-      end
+      view.policy(current_user).edit?
     end
 
     def show_communities?

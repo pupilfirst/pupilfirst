@@ -59,7 +59,7 @@ module Questions
       User.where(id: user_ids).with_attached_avatar
         .includes(:faculty).map do |user|
         user.attributes.slice('id', 'name').merge(
-          avatar_url: avatar_url(user),
+          avatar_url: user.image_or_avatar_url,
           title: title(user)
         )
       end
@@ -83,14 +83,6 @@ module Questions
         title.presence || "Coach"
       else
         "Student#{title_text}"
-      end
-    end
-
-    def avatar_url(user)
-      if user.avatar.attached?
-        view.url_for(user.avatar_variant(:mid))
-      else
-        user.initials_avatar
       end
     end
   end

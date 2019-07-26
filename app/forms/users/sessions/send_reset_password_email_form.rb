@@ -53,10 +53,6 @@ module Users
           current_school.users.with_email(email).first if email.present?
         end
       end
-
-      def shared_device?
-        shared_device == '1'
-      end
     end
   end
 end

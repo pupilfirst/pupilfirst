@@ -3,7 +3,7 @@
 type props = {
   schoolName: string,
   authenticityToken: string,
-  fqdn: option(string),
+  fqdn: string,
   oauthHost: string,
 };
 
@@ -11,7 +11,7 @@ let decodeProps = json =>
   Json.Decode.{
     schoolName: json |> field("schoolName", string),
     authenticityToken: json |> field("authenticityToken", string),
-    fqdn: json |> field("fqdn", nullable(string)) |> Js.Null.toOption,
+    fqdn: json |> field("fqdn", string),
     oauthHost: json |> field("oauthHost", string),
   };
 

@@ -1,13 +1,13 @@
 [@bs.config {jsx: 3}];
 
 type props = {
-  token: option(string),
+  token: string,
   authenticityToken: string,
 };
 
 let decodeProps = json =>
   Json.Decode.{
-    token: json |> field("token", nullable(string)) |> Js.Null.toOption,
+    token: json |> field("token", string),
     authenticityToken: json |> field("authenticityToken", string),
   };
 

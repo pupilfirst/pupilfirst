@@ -25,12 +25,12 @@ class CoachDashboardPresenter < ApplicationPresenter
   private
 
   def founder_details
-    @founder_details ||= founders.map do |founder|
+    @founder_details ||= founders.includes(user: { avatar_attachment: :blob }).map do |founder|
       user = founder.user
       {
         id: founder.id,
         name: user.name,
-        avatarUrl: avatar_url(user),
+        avatarUrl: user.image_or_avatar_url,
         teamId: founder.startup_id
       }
     end
@@ -66,13 +66,5 @@ class CoachDashboardPresenter < ApplicationPresenter
   def grade_labels
     grade_labels = @course.grade_labels
     grade_labels.keys.map { |grade| { grade: grade.to_i, label: grade_labels[grade] } }
-  end
-
-  def avatar_url(user)
-    if user.avatar.attached?
-      view.url_for(user.avatar_variant(:mid))
-    else
-      user.initials_avatar
-    end
   end
 end

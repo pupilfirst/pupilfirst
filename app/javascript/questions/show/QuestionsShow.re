@@ -245,7 +245,12 @@ let make =
                             className="text-xs mt-2 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                             <span> {"Last edited by " |> str} </span>
                             <span className="font-semibold">
-                              {users |> User.userName(editorId) |> str}
+                              {
+                                users
+                                |> User.findById(editorId)
+                                |> User.name
+                                |> str
+                              }
                             </span>
                             <span>
                               {
@@ -283,7 +288,7 @@ let make =
                     <QuestionsShow__UserShow
                       user={
                         users
-                        |> User.findUser(state.question |> Question.creatorId)
+                        |> User.findById(state.question |> Question.creatorId)
                       }
                       createdAt={state.question |> Question.createdAt}
                       textForTimeStamp="Asked"

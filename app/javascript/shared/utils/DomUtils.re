@@ -17,6 +17,16 @@ let parseJsonAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
   |> Json.parseOrRaise;
 
 let redirect = path => path |> Webapi.Dom.Window.setLocation(window);
+
+let isDevelopment = () =>
+  switch (
+    document |> Document.documentElement |> Element.getAttribute("data-env")
+  ) {
+  | Some(props) when props == "development" => true
+  | Some(_)
+  | None => false
+  };
+
 module FormData = {
   type t = Fetch.formData;
 
@@ -28,5 +38,6 @@ module EventTarget = {
   type t = Js.t({.});
 
   /* Be careful when using this function. Event targets need not be an 'element'. */
+
   external unsafeToElement: t => Dom.element = "%identity";
 };

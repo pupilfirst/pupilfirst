@@ -1,7 +1,5 @@
 open InactiveStudentsPanel__Types;
 
-open SchoolAdmin__Utils;
-
 let str = ReasonReact.string;
 
 type state = {
@@ -23,7 +21,6 @@ type action =
 let studentsInTeam = (students, team) =>
   students
   |> List.filter(student => Student.teamId(student) === Team.id(team));
-
 
 let canBeMarkedActive = (selectedTeams, students) =>
   ListUtils.isEmpty(selectedTeams) ?
@@ -238,16 +235,13 @@ let make =
                                           }>
                                           <img
                                             className="w-10 h-10 rounded-full mr-4 object-cover"
-                                            src={student |> Student.avatarUrl
-                                            }
+                                            src={student |> Student.avatarUrl}
                                           />
                                           <div
                                             className="text-sm flex flex-col">
                                             <p
                                               className="text-black font-semibold inline-block ">
-                                              {
-                                                student |> Student.name |> str
-                                              }
+                                              {student |> Student.name |> str}
                                             </p>
                                             <div className="flex flex-wrap">
                                               {

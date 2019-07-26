@@ -6,7 +6,11 @@ class SchoolMailer < ActionMailer::Base
   protected
 
   def default_url_options
-    { host: @school.domains.primary.fqdn }
+    primary_fqdn = @school.domains.primary.fqdn
+
+    raise "School##{@school.id} does not have any primary FQDN. Cannot send email." if primary_fqdn.blank?
+
+    { host: primary_fqdn }
   end
 
   def from_options(enable_reply)

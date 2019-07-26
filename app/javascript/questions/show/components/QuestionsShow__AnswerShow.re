@@ -130,7 +130,7 @@ let make =
                 </div>
                 <div
                   className="flex flex-row justify-between items-center pl-2 px-3 md:px-6 pb-4">
-                  <div className="pt-4 text-center">
+                  <div className="text-center">
                     <div className="flex flex-row">
                       <QuestionsShow__LikeManager
                         authenticityToken

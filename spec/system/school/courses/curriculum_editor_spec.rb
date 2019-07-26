@@ -73,7 +73,7 @@ feature 'Curriculum Editor' do
   end
 
   shared_examples 'authorized users creates the curriculum' do |user_type|
-    scenario 'creates a basic course framework by creating level, target group and target', js: true do
+    scenario 'creates a basic course framework by adding level, target group and targets', js: true do
       sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       # he should be on the last level
@@ -164,7 +164,7 @@ feature 'Curriculum Editor' do
   end
 
   shared_examples 'authorized users creates different types of targets' do |user_type|
-    scenario 'Admin creates a target with a link to complete', js: true do
+    scenario 'creates a target with a link to complete', js: true do
       sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       find('#create-target-input').click
@@ -195,7 +195,7 @@ feature 'Curriculum Editor' do
       expect(target.quiz).to eq(nil)
     end
 
-    scenario 'Admin creates a target with a quiz', js: true do
+    scenario 'creates a target with a quiz', js: true do
       sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       find('#create-target-input').click
@@ -266,7 +266,7 @@ feature 'Curriculum Editor' do
   end
 
   shared_examples 'authorized users modifies a target' do |user_type|
-    scenario 'school admin adds content to a target and modifies its properties', js: true do
+    scenario 'adds content to a target and modifies its properties', js: true do
       sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
       target = target_4

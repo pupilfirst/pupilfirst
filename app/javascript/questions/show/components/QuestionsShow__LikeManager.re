@@ -70,44 +70,50 @@ let make =
     setSaving(_ => false);
     addLikeCB(like);
   };
-  let handleAnswerLike = event => {
+  let handleAnswerLike = (saving, event) => {
     event |> ReactEvent.Mouse.preventDefault;
-    setSaving(_ => true);
-    if (liked) {
-      let id =
-        Like.likeByCurrentUser(answerId, currentUserId, likes)
-        |> List.hd
-        |> Like.id;
-      DestroyAnswerLikeQuery.make(~id, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
-      |> Js.Promise.then_(_response => {
-           removeLikeCB(id);
-           setSaving(_ => false);
-           Js.Promise.resolve();
-         })
-      |> ignore;
-    } else {
-      CreateAnswerLikeQuery.make(~answerId, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
-      |> Js.Promise.then_(response =>
-           switch (response##createAnswerLike) {
-           | `AnswerLikeId(answerLikeId) =>
-             handleCreateResponse(answerLikeId);
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(CreateAnswerLikeErrorHandler.Errors(errors))
-           }
-         )
-      |> CreateAnswerLikeErrorHandler.catch(() => setSaving(_ => false))
-      |> ignore;
-    };
+    saving ?
+      () :
+      {
+        setSaving(_ => true);
+        if (liked) {
+          let id =
+            Like.likeByCurrentUser(answerId, currentUserId, likes)
+            |> List.hd
+            |> Like.id;
+          DestroyAnswerLikeQuery.make(~id, ())
+          |> GraphqlQuery.sendQuery(authenticityToken)
+          |> Js.Promise.then_(_response => {
+               removeLikeCB(id);
+               setSaving(_ => false);
+               Js.Promise.resolve();
+             })
+          |> ignore;
+        } else {
+          CreateAnswerLikeQuery.make(~answerId, ())
+          |> GraphqlQuery.sendQuery(authenticityToken)
+          |> Js.Promise.then_(response =>
+               switch (response##createAnswerLike) {
+               | `AnswerLikeId(answerLikeId) =>
+                 handleCreateResponse(answerLikeId);
+                 Js.Promise.resolve();
+               | `Errors(errors) =>
+                 Js.Promise.reject(
+                   CreateAnswerLikeErrorHandler.Errors(errors),
+                 )
+               }
+             )
+          |> CreateAnswerLikeErrorHandler.catch(() => setSaving(_ => false))
+          |> ignore;
+        };
+      };
   };
 
   <div className="mr-1 md:mr-2">
     <div
       className="cursor-pointer"
       title={(liked ? "Unlike" : "Like") ++ " Answer"}
-      onClick=handleAnswerLike>
+      onClick={handleAnswerLike(saving)}>
       <div
         className="flex items-center justify-center rounded-full hover:bg-gray-100 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2"
         key={iconClasses(liked, saving)}>

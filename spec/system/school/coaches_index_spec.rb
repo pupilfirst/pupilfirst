@@ -5,7 +5,7 @@ feature 'Coaches Index' do
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
-  let!(:school_1) { create :school, :current }
+  let!(:school_1) { create :school }
   let!(:coach_1) { create :faculty, school: school }
   let!(:coach_2) { create :faculty, school: school }
   let!(:coach_3) { create :faculty, school: school_1 }
@@ -18,11 +18,6 @@ feature 'Coaches Index' do
   let(:updated_coach_title) { Faker::Lorem.words(2).join(' ') }
 
   let!(:school_admin) { create :school_admin, school: school }
-
-  before do
-    # Create a domain for school
-    create :domain, :primary, school: school
-  end
 
   scenario 'school admin visits coaches and creates a coach', js: true do
     sign_in_user school_admin.user, referer: school_coaches_path

@@ -15,8 +15,6 @@ describe DailyDigestService do
 
   let(:school) { create :school, :current }
 
-  let!(:domain) { create :domain, :primary, school: school }
-
   let(:team_1) { create :startup }
   let(:team_2) { create :team }
   let(:team_3) { create :startup }

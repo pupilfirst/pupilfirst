@@ -5,7 +5,7 @@ feature 'Course Coaches Index' do
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
-  let!(:school_2) { create :school, :current }
+  let!(:school_2) { create :school }
   let!(:course_1) { create :course, school: school }
   let!(:course_2) { create :course, school: school }
 
@@ -22,8 +22,6 @@ feature 'Course Coaches Index' do
   let!(:school_admin) { create :school_admin, school: school }
 
   before do
-    # Create a domain for school
-    create :domain, :primary, school: school
     FacultyCourseEnrollment.create(faculty: coach_1, course: course_1, safe_to_create: true)
     FacultyCourseEnrollment.create(faculty: coach_2, course: course_1, safe_to_create: true)
   end

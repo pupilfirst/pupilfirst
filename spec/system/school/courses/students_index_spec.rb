@@ -34,8 +34,6 @@ feature 'School students index', js: true do
   let!(:exited_coach) { create :faculty, school: school, exited: true }
 
   before do
-    # Create a domain for school
-    create :domain, :primary, school: school
     FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 

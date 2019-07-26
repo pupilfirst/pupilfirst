@@ -5,16 +5,15 @@ module ShortenedUrls
 
     include RoutesResolvable
 
-    def initialize(url, expires_at: nil, unique_key: nil, host: 'sv.co')
+    def initialize(url, expires_at: nil, unique_key: nil)
       @url = url
       @expires_at = expires_at
       @unique_key = unique_key
-      @host = host
     end
 
     # @return [String] Return a shortened URL of the form sv.co/r/xxxxxx
     def short_url
-      url_helpers.short_redirect_url(unique_key: shortened_url.unique_key, host: @host)
+      url_helpers.short_redirect_url(unique_key: shortened_url.unique_key)
     end
 
     # @return [ShortenedUrl] Return an instance of Shortened URL corresponding to supplied URL.

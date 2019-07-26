@@ -6,7 +6,7 @@ module Layouts
         logo_url: logo_url,
         links: nav_links,
         authenticity_token: view.form_authenticity_token,
-        is_current_user: current_user.present?
+        is_logged_in: current_user.present?
       }
     end
 

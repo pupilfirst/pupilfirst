@@ -294,7 +294,7 @@ let createContentBlock =
       sortIndex,
       createNewContentCB,
     ) =>
-  SchoolAdmin__Api.sendFormData(
+  Api.sendFormData(
     "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
     formData,
     json => {

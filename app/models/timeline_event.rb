@@ -122,8 +122,7 @@ class TimelineEvent < ApplicationRecord
     Rails.application.routes.url_helpers.student_timeline_event_show_url(
       id: founder.id,
       event_id: id,
-      event_title: title.parameterize,
-      host: founders.first.school.domains.primary.fqdn
+      event_title: title.parameterize
     )
   end
 

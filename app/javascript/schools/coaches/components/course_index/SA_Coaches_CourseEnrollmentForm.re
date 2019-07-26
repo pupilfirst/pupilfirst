@@ -1,7 +1,5 @@
 open CoachesCourseIndex__Types;
 
-open SchoolAdmin__Utils;
-
 type courseCoachlist = (int, string, bool);
 
 type action =

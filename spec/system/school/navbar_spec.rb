@@ -33,8 +33,8 @@ feature 'School Admin Navbar', js: true do
     # Courses from other schools should not be listed.
     expect(page).not_to have_link(course_3.name)
 
-    # There should also be a link to log out.
-    expect(page).to have_link('Log Out')
+    # There should also be a link to Sign Out
+    expect(page).to have_link('Sign Out')
 
     # Check out the settings submenu.
     click_link('Settings')

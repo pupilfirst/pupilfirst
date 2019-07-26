@@ -26,21 +26,5 @@ describe Users::MailLoginTokenService do
       expect(current_email.body).to include("referer=#{CGI.escape(referer)}")
       expect(current_email.body).to include("token=#{user.reload.login_token}")
     end
-
-    context 'when there is no school, domain, or referer' do
-      let(:school) { nil }
-      let(:domain) { nil }
-      let(:referer) { nil }
-
-      it 'uses default school name and domain' do
-        subject.execute
-
-        open_email(user.email)
-
-        expect(current_email.subject).to eq("Log in to PupilFirst")
-        expect(current_email.body).to include('https://www.pupilfirst.com/users/token?')
-        expect(current_email.body).not_to include('referer=')
-      end
-    end
   end
 end

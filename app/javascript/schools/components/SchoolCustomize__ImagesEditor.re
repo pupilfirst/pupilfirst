@@ -34,7 +34,7 @@ let handleUpdateImages = (send, updateImagesCB, event) => {
   let element = ReactDOMRe._getElementById(formId);
   switch (element) {
   | Some(element) =>
-    SchoolAdmin__Api.sendFormData(
+    Api.sendFormData(
       "/school/images",
       DomUtils.FormData.create(element),
       json => {

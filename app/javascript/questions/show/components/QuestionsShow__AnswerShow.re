@@ -130,7 +130,7 @@ let make =
                 </div>
                 <div
                   className="flex flex-row justify-between items-center pl-2 px-3 md:px-6 pb-4">
-                  <div className="pt-4 text-center">
+                  <div className="text-center">
                     <div className="flex flex-row">
                       <QuestionsShow__LikeManager
                         authenticityToken
@@ -140,9 +140,14 @@ let make =
                         addLikeCB
                         removeLikeCB
                       />
-                      <div className="mr-2 pt-2 px-2">
-                        <i className="fal fa-comments text-xl text-gray-600" />
-                        <p className="text-xs py-1">
+                      <div className="mr-1 md:mr-2">
+                        <div
+                          className="flex items-end justify-center h-8 w-8 md:h-10 md:w-10 p-1 md:p-2">
+                          <i
+                            className="fal fa-comments text-xl text-gray-600"
+                          />
+                        </div>
+                        <p className="text-xs pb-1">
                           {
                             commentsForAnswer
                             |> List.length

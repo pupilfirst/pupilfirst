@@ -2,7 +2,6 @@
 [%bs.raw {|require("./CurriculumEditor__TargetEditor.css")|}];
 
 open CurriculumEditor__Types;
-open SchoolAdmin__Utils;
 
 let markIcon: string = [%raw
   "require('./images/target-complete-mark-icon.svg')"
@@ -255,11 +254,7 @@ let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateTitle(title, hasTitleError) => {
-      ...state,
-      title,
-      hasTitleError,
-    }
+  | UpdateTitle(title, hasTitleError) => {...state, title, hasTitleError}
   | UpdateLinkToComplete(linkToComplete, hasLinktoCompleteError) => {
       ...state,
       linkToComplete,
@@ -309,17 +304,21 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
-  | UpdateContentEditorDirty(contentEditorDirty) => {...state, contentEditorDirty}
+  | UpdateContentEditorDirty(contentEditorDirty) => {
+      ...state,
+      contentEditorDirty,
+    }
   };
 
-let handleEditorClosure = (hideEditorActionCB, state) => {
-    switch(state.contentEditorDirty || state.dirty) {
-    | false => hideEditorActionCB()
-    | true => Webapi.Dom.window
+let handleEditorClosure = (hideEditorActionCB, state) =>
+  switch (state.contentEditorDirty || state.dirty) {
+  | false => hideEditorActionCB()
+  | true =>
+    Webapi.Dom.window
     |> Webapi.Dom.Window.confirm(
          " There are unsaved changes! Are you sure you want to close the editor?",
-       ) ? hideEditorActionCB() : ()
-    }
+       ) ?
+      hideEditorActionCB() : ()
   };
 
 [@react.component]
@@ -338,9 +337,13 @@ let make =
     ) => {
   let initialState = {
     title: target |> Target.title,
-    evaluationCriteria: cacheCurrentEvaluationCriteria(evaluationCriteria, target),
+    evaluationCriteria:
+      cacheCurrentEvaluationCriteria(evaluationCriteria, target),
     prerequisiteTargets:
-    cachePrerequisiteTargets(eligibleTargets(targets, targetGroupIdsInLevel), target),
+      cachePrerequisiteTargets(
+        eligibleTargets(targets, targetGroupIdsInLevel),
+        target,
+      ),
     quiz: handleQuiz(target),
     linkToComplete:
       switch (target |> Target.linkToComplete) {
@@ -861,11 +864,16 @@ let make =
                 switch (state.activeStep) {
                 | AddContent =>
                   <div className="w-full flex items-center justify-end">
-                    { state.contentEditorDirty ?
-                    <div className="w-full flex items-center bg-orange-100 border border-orange-400 rounded py-2 px-3 mr-4 text-orange-800 font-semibold">
-                      <i className="fas fa-exclamation-triangle"></i>
-                      <span className="ml-2">{"You have unsaved changes in this step" |> str}</span>
-                    </div> : React.null
+                    {
+                      state.contentEditorDirty ?
+                        <div
+                          className="w-full flex items-center bg-orange-100 border border-orange-400 rounded py-2 px-3 mr-4 text-orange-800 font-semibold">
+                          <i className="fas fa-exclamation-triangle" />
+                          <span className="ml-2">
+                            {"You have unsaved changes in this step" |> str}
+                          </span>
+                        </div> :
+                        React.null
                     }
                     <button
                       key="add-content-step"

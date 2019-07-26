@@ -7,13 +7,13 @@ class PupilFirstMailer < ActionMailer::Base
 
   protected
 
-  def default_url_options
-    { host: Rails.env.production? ? 'www.pupilfirst.com' : 'www.pupilfirst.localhost' }
-  end
-
   def roadie_options
-    host_options = default_url_options.merge(protocol: Rails.env.production? ? 'https' : 'http')
+    url_options = if Rails.env.production?
+      { protocol: 'https', host: 'www.pupilfirst.com' }
+    else
+      { protocol: 'http', host: 'www.pupilfirst.localhost' }
+    end
 
-    super.merge(url_options: host_options)
+    super.merge(url_options: url_options)
   end
 end

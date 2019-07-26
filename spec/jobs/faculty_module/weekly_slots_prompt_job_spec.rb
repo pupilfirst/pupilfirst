@@ -3,7 +3,7 @@ require 'rails_helper'
 describe FacultyModule::WeeklySlotsPromptJob do
   subject { described_class }
 
-  let!(:school) { create :school }
+  let!(:school) { create :school, :current }
   let!(:faculty_non_self_service) { create :faculty, school: school, self_service: false }
   let!(:faculty_self_service) { create :faculty, school: school, self_service: true }
   let!(:another_faculty) { create :faculty, school: school, self_service: true }
@@ -12,9 +12,6 @@ describe FacultyModule::WeeklySlotsPromptJob do
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_non_self_service
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: faculty_self_service
     create :connect_slot, slot_at: 1.5.weeks.ago, faculty: another_faculty
-
-    # Create a domain for school
-    create :domain, :primary, school: school
   end
 
   describe '#perform' do

@@ -4,11 +4,10 @@ module Users
     include RoutesResolvable
 
     # @param school [School] The current school.
-    # @param domain [Domain] The current domain.
     # @param user [User] The user, identified by supplied email address.
-    def initialize(school, domain, user)
+    def initialize(school, user)
       @school = school
-      @domain = domain
+      @domain = school.domains.where(primary: true).first
       @user = user
     end
 

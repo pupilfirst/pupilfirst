@@ -19,7 +19,7 @@ module Users
       @form.current_school = current_school
 
       if @form.validate(params[:session])
-        @form.save(current_domain)
+        @form.save
         render json: { error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
@@ -32,7 +32,7 @@ module Users
       @form.current_school = current_school
 
       if @form.validate(params[:session])
-        @form.save(current_domain)
+        @form.save
         render json: { error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }

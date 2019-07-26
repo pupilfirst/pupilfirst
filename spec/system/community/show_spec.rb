@@ -6,7 +6,6 @@ feature 'Community Show', js: true do
 
   # Setup a course with founders and target for community.
   let(:school) { create :school, :current }
-  let!(:domain) { create :domain, :primary, school: school }
   let(:course) { create :course, school: school }
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1 }

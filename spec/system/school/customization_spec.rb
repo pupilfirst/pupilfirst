@@ -8,11 +8,6 @@ feature 'School Customization' do
   let!(:school) { create :school, :current }
   let!(:school_admin) { create :school_admin, school: school }
 
-  before do
-    # Create a domain for school
-    create :domain, :primary, school: school
-  end
-
   def image_path(filename)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end

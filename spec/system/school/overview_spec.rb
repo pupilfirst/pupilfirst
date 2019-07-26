@@ -43,11 +43,6 @@ feature 'School Overview' do
   let!(:c2_timeline_event_3) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_2.founders, target: c2_target_1 }
   let!(:c2_timeline_event_4) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_3.founders, target: c2_target_1 }
 
-  before do
-    # Create a domain for school
-    create :domain, :primary, school: school
-  end
-
   scenario 'school admin visit the school overview', js: true do
     sign_in_user school_admin.user, referer: school_path
     expect(page).to have_text(school.name)

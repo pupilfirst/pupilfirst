@@ -3,14 +3,13 @@ module Users
   class MailLoginTokenService
     include RoutesResolvable
 
-    # @param school [School, nil] The current school.
-    # @param domain [Domain, nil] The current domain.
+    # @param school [School] The current school.
     # @param user [User] The user, identified by supplied email address.
     # @param referer [String, nil] Referer, if any.
     # @param shared_device [true, false] If the user is logging in from a shared device.
-    def initialize(school, domain, user, referer, shared_device)
+    def initialize(school, user, referer, shared_device)
       @school = school
-      @domain = domain
+      @domain = school.domains.where(primary: true).first
       @user = user
       @referer = referer
       @shared_device = shared_device
@@ -23,12 +22,10 @@ module Users
       # Update the time at which last login mail was sent.
       @user.update!(login_mail_sent_at: Time.zone.now)
 
-      host = @domain&.fqdn || 'www.pupilfirst.com'
-
       url_options = {
         token: @user.login_token,
         shared_device: @shared_device,
-        host: host,
+        host: @domain.fqdn,
         protocol: 'https'
       }
 

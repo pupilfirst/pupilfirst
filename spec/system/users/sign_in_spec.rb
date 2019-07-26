@@ -3,10 +3,6 @@ require 'rails_helper'
 feature 'User signing in by supplying email address', js: true do
   let!(:school) { create :school, :current }
 
-  before do
-    create :domain, :primary, school: school
-  end
-
   context 'when a user exists' do
     let(:user) { create :user }
 

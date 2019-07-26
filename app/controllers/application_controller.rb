@@ -61,17 +61,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_host
-    @current_host ||= request.host
+    @current_host ||= Rails.env.test? ? 'test.host' : request.host
   end
 
   def current_domain
-    @current_domain ||= begin
-      if Rails.env.test?
-        Domain.first
-      else
-        Domain.find_by(fqdn: current_host)
-      end
-    end
+    @current_domain ||= Domain.find_by(fqdn: current_host)
   end
 
   # Returns nil, if on a PupilFirst page, or a School, if on a school domain. Raises an error if request is from an
@@ -80,9 +74,7 @@ class ApplicationController < ActionController::Base
     @current_school ||= begin
       resolved_school = current_domain&.school
 
-      if Rails.env.test?
-        School.find_by(name: 'test')
-      elsif current_host.in?(Rails.application.secrets.pupilfirst_domains)
+      if current_host.in?(Rails.application.secrets.pupilfirst_domains)
         nil
       elsif resolved_school.present?
         resolved_school

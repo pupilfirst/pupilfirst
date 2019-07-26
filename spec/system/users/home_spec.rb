@@ -47,9 +47,6 @@ feature 'User Home' do
     create :community_course_connection, course: course_2, community: community_2
     create :community_course_connection, course: course_3, community: community_3
     create :community_course_connection, course: course_4, community: community_4
-
-    # Create a domain for school.
-    create :domain, :primary, school: school
   end
 
   scenario 'When an active user visits he access courses and community', js: true do

@@ -12,8 +12,8 @@ module Users
       # Honeypot field. See validation `detect_honeypot` below.
       property :username
 
-      def save(current_domain)
-        Users::MailResetPasswordTokenService.new(current_school, current_domain, user).execute
+      def save
+        Users::MailResetPasswordTokenService.new(current_school, user).execute
       end
 
       private

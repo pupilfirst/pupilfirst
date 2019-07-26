@@ -14,8 +14,8 @@ module Users
       validate :detect_honeypot
       validate :email_should_not_have_bounced
 
-      def save(current_domain)
-        Users::MailLoginTokenService.new(current_school, current_domain, user, referer, shared_device?).execute
+      def save
+        Users::MailLoginTokenService.new(current_school, user, referer, shared_device?).execute
       end
 
       private

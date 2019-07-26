@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Users::MailLoginTokenService do
-  subject { described_class.new(school, domain, user, referer, shared_device) }
+  subject { described_class.new(school, user, referer, shared_device) }
 
-  let(:user) { create :user }
-  let(:school) { create :school }
-  let(:domain) { create :domain, :primary, school: school }
+  let(:school) { create :school, :current }
+  let(:user) { create :user, school: school }
   let(:shared_device) { [true, false].sample }
+  let(:domain) { school.domains.where(primary: true).first }
   let(:referer) { Faker::Internet.url(domain.fqdn) }
 
   describe '#execute' do

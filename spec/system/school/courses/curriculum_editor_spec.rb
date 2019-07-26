@@ -6,10 +6,13 @@ feature 'Curriculum Editor' do
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
+  let!(:course_2) { create :course, school: school }
+  let!(:course_3) { create :course, school: school }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
   let!(:school_admin) { create :school_admin, school: school }
   let!(:faculty) { create :faculty, school: school }
   let!(:course_author) { create :course_author, course: course, user: faculty.user }
+  let!(:course_author_2) { create :course_author, course: course_2, user: faculty.user }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
   let!(:target_group_1) { create :target_group, level: level_1 }
@@ -489,5 +492,26 @@ feature 'Curriculum Editor' do
     include_examples 'authorized users creates the curriculum', :course_author
     include_examples 'authorized users creates different types of targets', :course_author
     include_examples 'authorized users modifies a target', :course_author
+
+    scenario 'user can navigate only to assigned courses and not to school admin pages', js: true do
+      sign_in_user course_author.user, referer: school_course_curriculum_path(course)
+      expect(page).to have_button(course.name)
+      click_button course.name
+      expect(page).to have_link(course_2.name, href: "/school/courses/#{course_2.id}/curriculum")
+      expect(page).to_not have_link(course_3.name, href: "/school/courses/#{course_3.id}/curriculum")
+      click_link course_2.name
+      expect(page).to have_button(course_2.name)
+
+      expect(page).to_not have_link(href: '/school/coaches')
+      expect(page).to_not have_link(href: '/school/customize')
+      expect(page).to_not have_link(href: '/school/courses')
+      expect(page).to_not have_link(href: '/school/communities')
+      expect(page).to have_link(href: '/home')
+
+      [school_path, school_course_curriculum_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
+        visit path
+        expect(page).to have_text("The page you were looking for doesn't exist!")
+      end
+    end
   end
 end

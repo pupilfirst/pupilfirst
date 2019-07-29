@@ -8,8 +8,6 @@ const onChange = (onChangeCB, setEditorState, editorState) => {
 };
 
 const handleKeyCommand = (onChangeCB, editorState, setEditorState, command) => {
-  console.log(command);
-
   switch (command) {
     case "bold":
       setBold(onChangeCB, editorState, setEditorState);
@@ -25,6 +23,11 @@ const handleKeyCommand = (onChangeCB, editorState, setEditorState, command) => {
 const updateSelection = (editorState, delimiter, filler, onChangeCB, setEditorState) => {
   const selectionState = editorState.getSelection();
   const anchorKey = selectionState.getAnchorKey();
+
+  if (anchorKey !== selectionState.getFocusKey()) {
+    return
+  }
+
   const currentContent = editorState.getCurrentContent();
   const currentContentBlock = currentContent.getBlockForKey(anchorKey);
   const start = selectionState.getStartOffset();

@@ -1,101 +1,69 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./apply.css")|}];
+let emailSentIcon: string = [%raw "require('./images/email-sent-icon.svg')"];
 let str = React.string;
+
+module Applicant = CoursesApply__Applicant;
 
 type views =
   | Apply
   | EmailSent
-  | Enroll;
-
-module CreateApplicantQuery = [%graphql
-  {|
-   mutation($courseId: ID!, $email: String!) {
-    createApplicant(courseId: $courseId, email: $email){
-      success
-     }
-   }
- |}
-];
-
-let createApplicantQuery =
-    (authenticityToken, courseId, email, setSaving, setView, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  setSaving(_ => true);
-  CreateApplicantQuery.make(~courseId, ~email, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
-  |> Js.Promise.then_(response => {
-       response##createApplicant##success ?
-         setView(_ => EmailSent) : setSaving(_ => false);
-       Js.Promise.resolve();
-     })
-  |> ignore;
-};
-
-let renderApply =
-    (
-      courseId,
-      courseName,
-      email,
-      setEmail,
-      saving,
-      setSaving,
-      setView,
-      authenticityToken,
-    ) =>
-  <div className="flex flex-col">
-    <h4 className="font-bold">
-      {"Enroll to" ++ courseName ++ " course" |> str}
-    </h4>
-    <div className="w-full mt-4">
-      <label
-        className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
-        {"Email" |> str}
-      </label>
-      <input
-        className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
-        type_="text"
-        value=email
-        disabled=saving
-        onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
-        placeholder="johnDoe@example.com"
-      />
-    </div>
-    <button
-      disabled=saving
-      onClick={
-        createApplicantQuery(
-          authenticityToken,
-          courseId,
-          email,
-          setSaving,
-          setView,
-        )
-      }
-      className="btn btn-primary justify-center shadow-lg mt-6">
-      {
-        saving ?
-          <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
-          ReasonReact.null
-      }
-      <span> {(saving ? "Applying" : "Apply") |> str} </span>
-    </button>
-  </div>;
+  | Enroll(Applicant.t);
+let setViewEmailSent = (setView, ()) => setView(_ => EmailSent);
 
 let renderEmailSent = () =>
   <div className="max-w-sm mx-auto">
+    <img src=emailSentIcon />
+    <div className="text-lg sm:text-2xl font-bold text-center mt-4">
+      {"We've sent you a magic link!" |> str}
+    </div>
     <p className="mt-4 text-center">
       {
-        "It should reach you in less than a minute. Click the link in the email, and you'll be signed in."
+        "It should reach you in less than a minute. Click the link in the email to sign up"
         |> str
       }
     </p>
   </div>;
 
+let tabClasses = bool =>
+  "w-1/3 text-center border border-t-0 py-2 " ++ (bool ? "bg-gray-300" : "");
+
+let renderTabs = view =>
+  <div className="flex justify-between">
+    <div
+      className={
+        tabClasses(view == Apply || view != Apply && view != EmailSent)
+      }>
+      {"1: Add your Email" |> str}
+    </div>
+    <div className={tabClasses(view != Apply && view != EmailSent)}>
+      {"2: Verify your Email" |> str}
+    </div>
+    <div className={tabClasses(false)}> {"3: Start Learning" |> str} </div>
+  </div>;
+
+let computeView = applicant =>
+  switch (applicant) {
+  | Some(applicant) => Enroll(applicant)
+  | None => Apply
+  };
+
 [@react.component]
-let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
-  let (view, setView) = React.useState(() => Apply);
-  let (email, setEmail) = React.useState(() => "");
-  let (saving, setSaving) = React.useState(() => false);
+let make =
+    (
+      ~authenticityToken,
+      ~courseName,
+      ~courseDescription,
+      ~courseId,
+      ~applicant,
+    ) => {
+  let (view, setView) =
+    React.useState(() =>
+      switch (applicant) {
+      | Some(applicant) => Enroll(applicant)
+      | None => Apply
+      }
+    );
 
   <div className="bg-gray-100 py-8">
     <div className="container mx-auto px-3 max-w-6xl">
@@ -108,24 +76,24 @@ let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
             <p> {courseDescription |> str} </p>
           </div>
         </div>
-        <div className="md:w-1/2 p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">
-          {
-            switch (view) {
-            | Apply =>
-              renderApply(
-                courseId,
-                courseName,
-                email,
-                setEmail,
-                saving,
-                setSaving,
-                setView,
-                authenticityToken,
-              )
-            | EmailSent => renderEmailSent()
-            | Enroll => React.null
+        <div className="md:w-1/2">
+          {renderTabs(view)}
+          <div className="p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">
+            {
+              switch (view) {
+              | Apply =>
+                <CoursesApply__Form
+                  authenticityToken
+                  courseName
+                  courseId
+                  setViewEmailSent={setViewEmailSent(setView)}
+                />
+              | EmailSent => renderEmailSent()
+              | Enroll(applicant) =>
+                <CoursesApply__Enroll authenticityToken courseName applicant />
+              }
             }
-          }
+          </div>
         </div>
       </div>
     </div>

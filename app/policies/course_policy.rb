@@ -23,6 +23,6 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def apply?
-    true
+    record.enable_public_signup
   end
 end

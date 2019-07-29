@@ -165,10 +165,16 @@ let make =
         targetGroupArchived ?
           ReasonReact.null :
           <div
-            className="target-group__target-create flex items-center bg-gray-200 border-2 border-dashed p-5 rounded-lg rounded-t-none cursor-pointer">
-            <i className="fal fa-plus-circle text-lg" />
+            className="target-group__target-create relative bg-gray-100 flex items-center border border-dashed border-gray-400 text-gray-700 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
+            <label
+              htmlFor={
+                "create-target-input" ++ (targetGroup |> TargetGroup.id)
+              }
+              className="absolute flex items-center h-full cursor-pointer pl-4">
+              <i className="fal fa-plus-circle text-2xl" />
+            </label>
             <input
-              id="create-target-input"
+              id={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
               title="Create target"
               value={state.targetTitle}
               onChange={
@@ -177,8 +183,8 @@ let make =
                     UpdateTargetTitle(ReactEvent.Form.target(event)##value),
                   )
               }
-              placeholder="Create a target"
-              className="target-create__input text-xs text-left bg-gray-200 py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
+              placeholder="Create a target..."
+              className="target-create__input text-xs text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
             />
             {
               state.validTargetTitle ?
@@ -191,7 +197,7 @@ let make =
                       )
                   }
                   disabled={state.savingNewTarget}
-                  className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 btn-primary appearance-none focus:outline-none text-center">
+                  className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
                   {"Create" |> str}
                 </button> :
                 ReasonReact.null

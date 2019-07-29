@@ -76,7 +76,7 @@ export default function ReactDraftEditor(props) {
   }, [props.command, props.commandAt]);
 
   return (
-    <div onClick={focusEditor} style={{ minHeight: "10rem" }}>
+    <div placeholder={props.placeholder} onClick={focusEditor} style={{ minHeight: "10rem" }}>
       <Editor
         ref={editor}
         handleKeyCommand={(command, editorState) => handleKeyCommand(props.onChange, editorState, setEditorState, command)}

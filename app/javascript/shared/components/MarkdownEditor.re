@@ -1,12 +1,16 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./MarkdownEditor.css")|}];
 
+module DraftEditor = {
+  type editorState;
+
+  [@bs.module "./ReactDraftEditor"] [@react.component]
+  external make: (~content: string, ~onChange: string => unit) => React.element =
+    "default";
+};
+
 module TextArea = {
   open Webapi.Dom;
-
-  type scrollMethod =
-    | ScrollWindow
-    | ScrollElement(Element.t);
 
   external unsafeAsHtmlInputElement: Dom.element => Dom.htmlInputElement =
     "%identity";
@@ -24,35 +28,6 @@ module TextArea = {
   let selectionStart = id => element(id) |> HtmlInputElement.selectionStart;
 
   let selectionEnd = id => element(id) |> HtmlInputElement.selectionEnd;
-
-  let fitContent = (id, scrollMethod) => {
-    let e = id |> element;
-
-    /* Store the original scroll height. It'll get messed up when we change the height of the textarea to auto. */
-    let scrollHeight =
-      switch (scrollMethod) {
-      | ScrollWindow => Window.scrollY(window)
-      | ScrollElement(e) => Element.scrollTop(e)
-      };
-
-    /* Set height of the element to auto to be able to calculate its true scrollHeight. */
-    e |> setStyleHeight("auto");
-
-    /*
-     * Calculate true height, adding an additional 18 pixels to make sure that
-     * addition of line breaks does not cause the textarea to scroll up.
-     */
-    let height =
-      ((e |> HtmlInputElement.scrollHeight) + 18 |> string_of_int) ++ "px";
-
-    e |> setStyleHeight(height);
-
-    /* Restore original scroll height. */
-    switch (scrollMethod) {
-    | ScrollWindow => window |> Window.scrollTo(0.0, scrollHeight)
-    | ScrollElement(e) => e |> Element.scrollTo(0.0, scrollHeight)
-    };
-  };
 };
 
 type action =
@@ -207,7 +182,6 @@ let make =
       ~label=?,
       ~profile,
       ~maxLength=1000,
-      ~scrollMethod=TextArea.ScrollWindow,
       ~defaultView,
     ) => {
   let (description, setDescription) = React.useState(() => value);
@@ -240,14 +214,6 @@ let make =
     | None => (React.null, PositionRight)
     };
 
-  React.useEffect(() => {
-    if (!preview) {
-      TextArea.fitContent(id, scrollMethod);
-    };
-
-    None;
-  });
-
   <div>
     <div className="flex justify-between items-end bg-white pb-2">
       label
@@ -272,21 +238,12 @@ let make =
           className="pb-3 pt-2 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
           profile
         /> :
-        <textarea
-          id
-          maxLength
-          rows=6
-          ?placeholder
-          value=description
+        <DraftEditor
+          content=description
           onChange={
-            event =>
-              updateDescription(
-                ReactEvent.Form.target(event)##value,
-                setDescription,
-                updateDescriptionCB,
-              )
+            content =>
+              updateDescription(content, setDescription, updateDescriptionCB)
           }
-          className="overflow-y-hidden appearance-none block w-full text-sm bg-white text-gray-900 border border-gray-400 rounded p-3 leading-normal focus:outline-none focus:bg-white focus:border-gray-500"
         />
     }
   </div>;

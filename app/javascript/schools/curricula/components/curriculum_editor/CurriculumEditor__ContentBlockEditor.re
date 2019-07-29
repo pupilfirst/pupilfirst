@@ -161,18 +161,6 @@ let contentUploadContainer = (blockType, dispatch, state, editorId) =>
 
 let saveDisabled = state => !state.formDirty || state.savingContentBlock;
 
-let scrollMethod = () => {
-  let scrollContainer =
-    Webapi.Dom.(
-      document |> Document.getElementById("target-editor-scroll-container")
-    );
-
-  switch (scrollContainer) {
-  | Some(element) => MarkdownEditor.TextArea.ScrollElement(element)
-  | None => MarkdownEditor.TextArea.ScrollWindow
-  };
-};
-
 let updateButtonVisible = (contentBlock, blockType: ContentBlock.blockType) =>
   switch (contentBlock) {
   | Some(_contentBlock) =>
@@ -577,7 +565,6 @@ let make =
                           placeholder="You can use Markdown to format this text."
                           profile=Markdown.Permissive
                           maxLength=100000
-                          scrollMethod={scrollMethod()}
                           defaultView=MarkdownEditor.Preview
                         />
                       | Image(url, caption) =>
@@ -625,7 +612,6 @@ let make =
                         placeholder="You can use Markdown to format this text."
                         profile=Markdown.Permissive
                         maxLength=100000
-                        scrollMethod={scrollMethod()}
                         defaultView=MarkdownEditor.Edit
                       />
                     </div>

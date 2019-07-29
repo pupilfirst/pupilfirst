@@ -11,10 +11,10 @@ module Mutations
       mutator = CreateApplicantMutator.new(params, context)
 
       if mutator.valid?
-        { success: mutator.create_applicant }
+        { success: mutator.save }
       else
         mutator.notify_errors
-        { submission: false }
+        { success: false }
       end
     end
   end

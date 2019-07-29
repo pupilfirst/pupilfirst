@@ -148,7 +148,7 @@ feature 'Curriculum Editor' do
       expect(target_group.milestone).to eq(false)
 
       # user should be able to create a draft target from the curriculum index
-      find('#create-target-input').click
+      find("#create-target-input#{target_group.id}").click
       fill_in 'create-target-input', with: new_target_1_title
       click_button 'Create'
       expect(page).to have_text('Target created successfully')
@@ -168,7 +168,7 @@ feature 'Curriculum Editor' do
     scenario 'creates a target with a link to complete', js: true do
       sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
-      find('#create-target-input').click
+      find("#create-target-input#{target_group.id}").click
       fill_in 'create-target-input', with: new_target_3_title
       click_button 'Create'
       expect(page).to have_text("Target created successfully")
@@ -199,7 +199,7 @@ feature 'Curriculum Editor' do
     scenario 'creates a target with a quiz', js: true do
       sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
 
-      find('#create-target-input').click
+      find("#create-target-input#{target_group.id}").click
       fill_in 'create-target-input', with: new_target_4_title
       click_button 'Create'
       find('.ui-pnotify-container').click

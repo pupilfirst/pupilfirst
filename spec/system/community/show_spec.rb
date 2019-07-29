@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Community Show', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include MarkdownEditorHelper
 
   # Setup a course with founders and target for community.
   let(:school) { create :school, :current }
@@ -56,7 +57,7 @@ feature 'Community Show', js: true do
     click_link 'Ask a question'
     expect(page).to have_text("ASK A NEW QUESTION")
     fill_in 'Question', with: question_title
-    fill_in 'Description', with: question_description
+    replace_markdown question_description
     click_button 'Post Your Question'
 
     expect(page).to have_text(question_title)
@@ -79,7 +80,7 @@ feature 'Community Show', js: true do
     expect(page).not_to have_text("Delete")
 
     # any one with access to the community can answer a question
-    fill_in 'Your Answer', with: answer_description
+    replace_markdown answer_description
     click_button 'Post Your Answer'
 
     dismiss_notification
@@ -96,7 +97,7 @@ feature 'Community Show', js: true do
 
     # can edit his answer
     find('a[title="Edit Answer"]').click
-    fill_in 'Your Answer', with: answer_description_for_edit
+    replace_markdown answer_description_for_edit
     click_button 'Update Your Answer'
 
     dismiss_notification
@@ -213,7 +214,7 @@ feature 'Community Show', js: true do
     end
 
     old_description = question_1.description
-    fill_in 'Description', with: question_description_for_edit
+    replace_markdown question_description_for_edit
     click_button 'Update Question'
 
     dismiss_notification

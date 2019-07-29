@@ -9,6 +9,7 @@ module DraftEditor = {
     (
       ~content: string,
       ~onChange: string => unit,
+      ~ariaLabelledBy: string=?,
       ~placeholder: string=?,
       ~command: string=?,
       ~commandAt: string=?
@@ -192,6 +193,7 @@ let make =
           };
 
         <DraftEditor
+          ariaLabelledBy=id
           ?placeholder
           content=description
           onChange={

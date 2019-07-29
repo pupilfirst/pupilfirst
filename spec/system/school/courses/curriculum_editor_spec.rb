@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Curriculum Editor' do
   include UserSpecHelper
+  include MarkdownEditorHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -213,7 +214,8 @@ feature 'Curriculum Editor' do
       end
 
       # Quiz Question 1
-      fill_in 'Question 1', with: quiz_question_1
+      replace_markdown(quiz_question_1)
+      click_button 'Preview'
       fill_in 'quiz_question_1_answer_option_1', with: quiz_question_1_answer_option_1
       fill_in 'quiz_question_1_answer_option_2', with: quiz_question_1_answer_option_2
       find("a", text: "Add another Answer Option").click
@@ -225,7 +227,7 @@ feature 'Curriculum Editor' do
 
       # Quiz Question 2
       find("a", text: "Add another Question").click
-      fill_in 'Question 2', with: quiz_question_2
+      replace_markdown(quiz_question_2)
       fill_in 'quiz_question_2_answer_option_1', with: quiz_question_2_answer_option_1
       fill_in 'quiz_question_2_answer_option_2', with: quiz_question_2_answer_option_2
 
@@ -327,8 +329,7 @@ feature 'Curriculum Editor' do
         find('p', text: 'Markdown').click
       end
 
-      textarea = find('textarea', match: :first)
-      textarea.fill_in with: sample_markdown_text
+      replace_markdown(sample_markdown_text)
       find('span', text: 'Preview').click
       click_button 'Save'
       expect(page).to have_text('Content added successfully')
@@ -395,8 +396,8 @@ feature 'Curriculum Editor' do
         find('p', text: 'Markdown').click
       end
       expect(page).to have_selector('.content-block__content', count: 5)
-      textarea = find('textarea', match: :first)
-      textarea.fill_in with: sample_markdown_text
+
+      replace_markdown(sample_markdown_text)
       find('span', text: 'Preview').click
       click_button 'Save'
       expect(page).to have_text('Content added successfully')
@@ -415,7 +416,7 @@ feature 'Curriculum Editor' do
       # Moving blocks has no message in the UI to be checked. Do some action before checking changes in DB
       within('#content-block-form-3') do
         find('span', text: 'Edit Markdown').click
-        find('textarea').fill_in with: sample_markdown_text
+        replace_markdown(sample_markdown_text)
         click_button 'Update'
       end
 
@@ -430,7 +431,7 @@ feature 'Curriculum Editor' do
       end
       within('#content-block-form-2') do
         find('span', text: 'Edit Markdown').click
-        find('textarea').fill_in with: sample_markdown_text
+        replace_markdown(sample_markdown_text)
         click_button 'Update'
       end
 

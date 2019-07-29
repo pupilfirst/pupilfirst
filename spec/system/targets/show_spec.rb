@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Target Overlay', js: true do
   include UserSpecHelper
+  include MarkdownEditorHelper
 
   let(:course) { create :course }
   let!(:criterion_1) { create :evaluation_criterion, course: course }
@@ -505,7 +506,7 @@ feature 'Target Overlay', js: true do
       visit(new_question_community_path(community_1, target_id: target.id))
 
       fill_in 'Question', with: question_title
-      fill_in 'Description', with: question_description
+      replace_markdown(question_description)
       click_button 'Post Your Question'
 
       expect(page).to have_text(question_title)

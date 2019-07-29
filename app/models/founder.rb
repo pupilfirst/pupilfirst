@@ -56,7 +56,7 @@ class Founder < ApplicationRecord
 
   delegate :email, :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, to: :user
+    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, :initials_avatar, to: :user
 
   def self.ransackable_scopes(_auth)
     %i[ransack_tagged_with]
@@ -176,11 +176,6 @@ class Founder < ApplicationRecord
 
     scope = Faculty.left_joins(:startups, :courses)
     scope.where(startups: { id: startup }).or(scope.where(courses: { id: startup.level.course })).distinct
-  end
-
-  def initials_avatar
-    logo = Scarf::InitialAvatar.new(name)
-    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 
   def access_ended?

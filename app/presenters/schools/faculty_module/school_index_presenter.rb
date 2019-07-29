@@ -8,7 +8,7 @@ module Schools
       end
 
       def faculty
-        current_school.faculty.includes(:user)
+        current_school.faculty.includes(user: { avatar_attachment: :blob })
       end
 
       def react_props
@@ -24,7 +24,7 @@ module Schools
             name: faculty.name,
             email: faculty.user.email,
             title: faculty.title,
-            imageUrl: faculty.image_or_avatar_url,
+            imageUrl: faculty.user.image_or_avatar_url,
             linkedinUrl: faculty.linkedin_url,
             public: faculty.public,
             connectLink: faculty.connect_link,

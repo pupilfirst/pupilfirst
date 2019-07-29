@@ -12,7 +12,7 @@ module Schools
 
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
-        render json: { id: faculty.id, image_url: faculty.image_or_avatar_url, error: nil }
+        render json: { id: faculty.id, image_url: faculty.user.image_or_avatar_url, error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
       end
@@ -23,7 +23,7 @@ module Schools
 
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
-        render json: { id: faculty.id, image_url: faculty.image_or_avatar_url, error: nil }
+        render json: { id: faculty.id, image_url: faculty.user.image_or_avatar_url, error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
       end

@@ -205,18 +205,19 @@ let make =
         {
           switch (target) {
           | Some(target) =>
-            <div className="max-w-3xl w-full mt-5 mx-auto px-3 md:px-0">
+            <div className="max-w-3xl w-full mt-5 mx-auto">
               <div
-                className="flex py-4 px-4 md:px-6 w-full bg-yellow-100 border border-dashed border-yellow-400 rounded justify-between items-center">
-                <p className="w-3/5 md:w-4/5 font-semibold text-sm">
-                  {
-                    "Target:"
-                    ++ (target |> QuestionsEditor__Target.title)
-                    |> str
-                  }
+                className="flex py-3 px-3 md:px-4 w-full bg-yellow-100 border border-dashed border-yellow-400 rounded justify-between items-center mb-2">
+                <p className="w-3/5 md:w-4/5 text-sm">
+                  <span className="font-semibold">
+                    {"Linked Target: " |> str}
+                  </span>
+                  <span>
+                    {target |> QuestionsEditor__Target.title |> str}
+                  </span>
                 </p>
                 <a
-                  href="./new"
+                  href="./new_question"
                   className="no-underline bg-yellow-100 border border-yellow-400 px-3 py-2 hover:bg-yellow-200 rounded-lg cursor-pointer text-xs font-semibold">
                   {"Clear" |> str}
                 </a>

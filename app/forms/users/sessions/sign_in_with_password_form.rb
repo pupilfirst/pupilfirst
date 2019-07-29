@@ -33,7 +33,7 @@ module Users
 
         return if user.valid_password?(password)
 
-        errors[:base] << "Invalid email or password"
+        errors[:base] << 'The supplied password is incorrect. Please check and try again.'
       end
     end
   end

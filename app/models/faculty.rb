@@ -144,14 +144,6 @@ class Faculty < ApplicationRecord
     (courses + startup_courses).uniq
   end
 
-  def image_or_avatar_url(background_shape: :circle)
-    if user.avatar.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(user.avatar, only_path: true)
-    else
-      initials_avatar(background_shape)
-    end
-  end
-
   def connect_link?
     connect_link.present?
   end
@@ -162,12 +154,5 @@ class Faculty < ApplicationRecord
 
   def image
     user.avatar
-  end
-
-  private
-
-  def initials_avatar(background_shape)
-    logo = Scarf::InitialAvatar.new(name, background_shape: background_shape)
-    "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 end

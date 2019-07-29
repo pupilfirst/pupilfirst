@@ -2,8 +2,8 @@ module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
     before_action :skip_container, only: %i[new send_login_email]
-
-    layout 'student', except: %i[token send_login_email create]
+    before_action :must_have_current_school
+    layout 'student'
 
     # GET /user/sign_in
     def new
@@ -19,7 +19,7 @@ module Users
       @form.current_school = current_school
 
       if @form.validate(params[:session])
-        @form.save(current_domain)
+        @form.save
         render json: { error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
@@ -32,7 +32,7 @@ module Users
       @form.current_school = current_school
 
       if @form.validate(params[:session])
-        @form.save(current_domain)
+        @form.save
         render json: { error: nil }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
@@ -57,18 +57,23 @@ module Users
 
     # GET /user/reset_password
     def reset_password
-      user = User.find_by(reset_password_token: params[:token])
+      user = Users::ValidateResetTokenService.new(params[:token]).authenticate
       if user.present?
         @token = params[:token]
+      else
+        flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
+        redirect_to new_user_session_path
       end
     end
 
+    # Post /users/update_password
     def update_password
       if current_user.present?
         redirect_to after_sign_in_path_for(current_user)
       else
         @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
-        if @form.validate(params[:session]) && @form.save
+        if @form.validate(params[:session])
+          @form.save
           sign_in @form.user
           render json: { error: nil, path: after_sign_in_path_for(current_user) }
         else
@@ -95,6 +100,10 @@ module Users
 
     def skip_container
       @skip_container = true
+    end
+
+    def must_have_current_school
+      raise_not_found if current_school.blank?
     end
   end
 end

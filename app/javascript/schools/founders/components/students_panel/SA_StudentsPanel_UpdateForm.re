@@ -1,7 +1,5 @@
 open StudentsPanel__Types;
 
-open SchoolAdmin__Utils;
-
 type teamCoachlist = (int, string, bool);
 
 type state = {
@@ -82,11 +80,6 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     payload,
     "coach_ids",
     enrolledCoachIds |> Json.Encode.(list(int)),
-  );
-  Js.Dict.set(
-    payload,
-    "clear_coaches",
-    List.length(enrolledCoachIds) < 1 |> Json.Encode.(bool),
   );
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
   Api.update(url, payload, responseCB, handleErrorCB);

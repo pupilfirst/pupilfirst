@@ -11,16 +11,16 @@
       <div class="w-full lg:max-w-3xl flex flex-row justify-between text-white items-center">
         <div class="flex flex-row items-center">
           <div class="w-18 h-18 rounded-full bg-gray-500 text-white border-2 shadow border-white flex items-center justify-center overflow-hidden">
-            <img src="<%= presenter.avatar %>">
+            <img src="<%= current_user.image_or_avatar_url %>">
           </div>
           <div class="pl-4">
             <div class="text-lg md:text-2xl font-bold leading-tight"><%= current_user.name %></div>
-            <div class="text-sm"><%= presenter.current_user.title %></div>
+            <div class="text-sm"><%= current_user.title %></div>
           </div>
         </div>
         <div>
           <% if presenter.show_user_edit? %>
-            <a class="no-underline text-white border p-2 text-sm rounded mt-2" href="<%= edit_user_path(current_user) %>">
+            <a class="no-underline text-white border p-2 text-sm rounded mt-2" href="<%= edit_user_path %>">
               <i class="fas fa-edit text-sm text-white"></i>
               Edit Profile
             </a>

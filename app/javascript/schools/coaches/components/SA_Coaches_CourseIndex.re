@@ -1,7 +1,5 @@
 open CoachesCourseIndex__Types;
-open SchoolAdmin__Utils;
 
-/* open SchoolAdmin__Utils; */
 let str = ReasonReact.string;
 
 type formVisible =

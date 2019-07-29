@@ -7,6 +7,7 @@ let decodeProps = json =>
     json |> field("schoolIconPath", string),
     json |> field("courses", list(SchoolAdminNavbar__Course.decode)),
     json |> field("isStudent", bool),
+    json |> field("isCourseAuthor", bool),
     json |> field("reviewPath", nullable(string)) |> Js.Null.toOption,
   );
 
@@ -16,6 +17,7 @@ let (
   schoolIconPath,
   courses,
   isStudent,
+  isCourseAuthor,
   reviewPath,
 ) =
   DomUtils.parseJsonAttribute(~id="school-admin-navbar__root", ())
@@ -28,6 +30,7 @@ ReactDOMRe.renderToElementWithId(
     schoolIconPath
     courses
     isStudent
+    isCourseAuthor
     reviewPath
   />,
   "school-admin-navbar__root",

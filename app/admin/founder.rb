@@ -199,8 +199,8 @@ ActiveAdmin.register Founder do
     active_admin_comments
   end
 
-  action_item :impersonate, only: :show, if: proc { can? :impersonate, User } do
-    link_to 'Impersonate', impersonate_admin_user_path(founder.user), method: :post
+  action_item :impersonate, only: :show do
+    link_to('Impersonate', impersonate_admin_user_path(founder.user), method: :post) if AdminUser.where(email: founder.user.email).empty?
   end
 
   form partial: 'admin/founders/form'

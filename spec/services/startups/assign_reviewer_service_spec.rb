@@ -8,7 +8,9 @@ describe Startups::AssignReviewerService do
 
   describe '#assign' do
     context 'if the faculty is in a different school' do
-      let(:faculty) { create :faculty }
+      let(:new_school) { create :school }
+      let(:faculty_user_in_new_school) { create :user, school_id: new_school.id }
+      let(:faculty) { create :faculty, user: faculty_user_in_new_school }
 
       it 'raises exception' do
         expect { subject.assign(faculty) }.to raise_exception('Faculty must in same school as team')

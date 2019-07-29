@@ -11,7 +11,7 @@ type action =
   | UpdateSaving
   | DoneUpdating
   | UpdateMarkdown(string)
-  | ResetFormDirty
+  | ResetFormDirty(string)
   | UpdateFileName(string);
 
 type state = {
@@ -44,7 +44,11 @@ let reducer = (state, action) =>
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | DoneUpdating => {...state, formDirty: false, savingContentBlock: false}
-  | ResetFormDirty => {...state, formDirty: false}
+  | ResetFormDirty(buttonText) => {
+      ...state,
+      formDirty: false,
+      fileName: buttonText,
+    }
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -109,9 +113,7 @@ let uploadButtonText = blockType =>
 
 let handleFileUpload = (dispatch, event, blockType) =>
   switch (ReactEvent.Form.target(event)##files) {
-  | [||] =>
-    dispatch(UpdateFileName(uploadButtonText(blockType)));
-    dispatch(ResetFormDirty);
+  | [||] => dispatch(ResetFormDirty(uploadButtonText(blockType)))
   | files =>
     let file = files[0];
     dispatch(UpdateFileName(file##name));
@@ -292,7 +294,7 @@ let createContentBlock =
       sortIndex,
       createNewContentCB,
     ) =>
-  SchoolAdmin__Api.sendFormData(
+  Api.sendFormData(
     "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
     formData,
     json => {

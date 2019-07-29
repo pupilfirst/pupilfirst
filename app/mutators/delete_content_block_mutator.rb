@@ -1,5 +1,4 @@
 class DeleteContentBlockMutator < ApplicationMutator
-  include AuthorizeSchoolAdmin
   attr_accessor :id
 
   validates :id, presence: true
@@ -17,5 +16,11 @@ class DeleteContentBlockMutator < ApplicationMutator
 
   def content_block
     @content_block ||= ContentBlock.find(id)
+  end
+
+  private
+
+  def authorized?
+    current_school_admin.present? || current_user.course_authors.where(course: content_block.target.level.course).exists?
   end
 end

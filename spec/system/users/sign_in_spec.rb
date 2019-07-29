@@ -3,10 +3,6 @@ require 'rails_helper'
 feature 'User signing in by supplying email address', js: true do
   let!(:school) { create :school, :current }
 
-  before do
-    create :domain, :primary, school: school
-  end
-
   context 'when a user exists' do
     let(:user) { create :user }
 
@@ -62,6 +58,7 @@ feature 'User signing in by supplying email address', js: true do
       end
       scenario 'allow to change password with a valid token' do
         user.regenerate_reset_password_token
+        user.update!(reset_password_sent_at: Time.zone.now)
         visit reset_password_path(token: user.reset_password_token)
 
         password = "MyNewPassword@123"
@@ -69,6 +66,7 @@ feature 'User signing in by supplying email address', js: true do
         fill_in 'Confirm Password', with: password
         click_button 'Update Password'
         expect(page).to have_content(user.founders.first.course.name)
+        expect(user.reload.reset_password_token).to eq(nil)
 
         # can sign in with the same password
         click_button "Sign Out"

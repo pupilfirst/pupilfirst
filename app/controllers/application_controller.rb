@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_host
-    @current_host ||= request.host
+    @current_host ||= Rails.env.test? ? 'test.host' : request.host
   end
 
   def current_domain
@@ -74,9 +74,7 @@ class ApplicationController < ActionController::Base
     @current_school ||= begin
       resolved_school = current_domain&.school
 
-      if Rails.env.test?
-        School.find_by(name: 'test')
-      elsif current_host.in?(Rails.application.secrets.pupilfirst_domains)
+      if current_host.in?(Rails.application.secrets.pupilfirst_domains)
         nil
       elsif resolved_school.present?
         resolved_school
@@ -143,10 +141,6 @@ class ApplicationController < ActionController::Base
     else
       redirect_to(url)
     end
-  end
-
-  def current_ability
-    @current_ability ||= ::Ability.new(true_user)
   end
 
   def pundit_user

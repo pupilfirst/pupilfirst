@@ -10,7 +10,7 @@ module Courses
       query_words.each do |query|
         inactive_teams = inactive_teams.where('startups.name ILIKE ?', "%#{query}%").or(inactive_teams.where('user.name ILIKE ?', "%#{term}%"))
       end
-      inactive_teams.uniq
+      inactive_teams.distinct
     end
   end
 end

@@ -14,11 +14,6 @@ feature 'SA Communities Editor' do
   let!(:new_community_name) { Faker::Lorem.words(2).join ' ' }
   let!(:new_community_name_for_edit) { Faker::Lorem.words(2).join ' ' }
 
-  before do
-    # Create a domain for school
-    create :domain, :primary, school: school
-  end
-
   scenario 'school admin visits a community editor', js: true do
     sign_in_user school_admin.user, referer: school_communities_path
 

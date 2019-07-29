@@ -16,6 +16,10 @@ type settingsSelection =
   | Domains
   | Homepage;
 
+type userRole =
+  | SchoolAdmin
+  | CourseAuthor;
+
 type selection =
   | Overview
   | SchoolCoaches
@@ -90,7 +94,7 @@ let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
   <li> <a href=path className=classes> {text |> str} </a> </li>;
 };
 
-let secondaryNav = (courses, selectedOption) =>
+let secondaryNav = (courses, userRole, selectedOption) =>
   switch (selectedOption) {
   | Settings(settingsSelection) =>
     <div
@@ -119,20 +123,28 @@ let secondaryNav = (courses, selectedOption) =>
           />
         </li>
         {
-          secondaryNavOption(
-            "/school/courses/" ++ courseId ++ "/students",
-            courseSelection,
-            Students,
-            "Students",
-          )
+          switch (userRole) {
+          | SchoolAdmin =>
+            secondaryNavOption(
+              "/school/courses/" ++ courseId ++ "/students",
+              courseSelection,
+              Students,
+              "Students",
+            )
+          | CourseAuthor => React.null
+          }
         }
         {
-          secondaryNavOption(
-            "/school/courses/" ++ courseId ++ "/coaches",
-            courseSelection,
-            CourseCoaches,
-            "Coaches",
-          )
+          switch (userRole) {
+          | SchoolAdmin =>
+            secondaryNavOption(
+              "/school/courses/" ++ courseId ++ "/coaches",
+              courseSelection,
+              CourseCoaches,
+              "Coaches",
+            )
+          | CourseAuthor => React.null
+          }
         }
         {
           secondaryNavOption(
@@ -155,9 +167,12 @@ let make =
       ~schoolIconPath,
       ~courses,
       ~isStudent,
+      ~isCourseAuthor,
       ~reviewPath,
     ) => {
   let url = ReasonReactRouter.useUrl();
+
+  let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin;
 
   let (selectedOption, shrunk) =
     switch (url.path) {
@@ -210,96 +225,102 @@ let make =
                <i className="fas fa-search" />
              </div>
            </div> */
-        <ul>
-          <li>
-            {
-              topLink(
-                selectedOption,
-                Overview,
-                "/school",
-                shrunk,
-                "fal fa-eye",
-                "Overview",
-              )
-            }
-          </li>
-          <li>
-            {
-              topLink(
-                selectedOption,
-                SchoolCoaches,
-                "/school/coaches",
-                shrunk,
-                "fal fa-chalkboard-teacher",
-                "Coaches",
-              )
-            }
-          </li>
-          <li>
-            {
-              topLink(
-                selectedOption,
-                Settings(Customization),
-                "/school/customize",
-                shrunk,
-                "fal fa-cog",
-                "Settings",
-              )
-            }
-          </li>
-          <li>
-            {
-              topLink(
-                selectedOption,
-                Courses,
-                "/school/courses",
-                shrunk,
-                "fal fa-books",
-                "Courses",
-              )
-            }
-            {
-              shrunk ?
-                React.null :
-                <ul className="pr-4 pb-4 ml-10 mt-1">
-                  {
-                    courses
-                    |> List.map(course =>
-                         <li key={course |> Course.id}>
-                           <a
-                             href={
-                               "/school/courses/"
-                               ++ (course |> Course.id)
-                               ++ "/students"
-                             }
-                             className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
-                             {course |> Course.name |> str}
-                           </a>
-                         </li>
-                       )
-                    |> Array.of_list
-                    |> React.array
-                  }
-                </ul>
-            }
-          </li>
-          <li>
-            {
-              topLink(
-                selectedOption,
-                Communities,
-                "/school/communities",
-                shrunk,
-                "fal fa-users-class",
-                "Communities",
-              )
-            }
-          </li>
-        </ul>
+        {
+          switch (userRole) {
+          | SchoolAdmin =>
+            <ul>
+              <li>
+                {
+                  topLink(
+                    selectedOption,
+                    Overview,
+                    "/school",
+                    shrunk,
+                    "fal fa-eye",
+                    "Overview",
+                  )
+                }
+              </li>
+              <li>
+                {
+                  topLink(
+                    selectedOption,
+                    SchoolCoaches,
+                    "/school/coaches",
+                    shrunk,
+                    "fal fa-chalkboard-teacher",
+                    "Coaches",
+                  )
+                }
+              </li>
+              <li>
+                {
+                  topLink(
+                    selectedOption,
+                    Settings(Customization),
+                    "/school/customize",
+                    shrunk,
+                    "fal fa-cog",
+                    "Settings",
+                  )
+                }
+              </li>
+              <li>
+                {
+                  topLink(
+                    selectedOption,
+                    Courses,
+                    "/school/courses",
+                    shrunk,
+                    "fal fa-books",
+                    "Courses",
+                  )
+                }
+                {
+                  shrunk ?
+                    React.null :
+                    <ul className="pr-4 pb-4 ml-10 mt-1">
+                      {
+                        courses
+                        |> List.map(course =>
+                             <li key={course |> Course.id}>
+                               <a
+                                 href={
+                                   "/school/courses/"
+                                   ++ (course |> Course.id)
+                                   ++ "/students"
+                                 }
+                                 className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                                 {course |> Course.name |> str}
+                               </a>
+                             </li>
+                           )
+                        |> Array.of_list
+                        |> React.array
+                      }
+                    </ul>
+                }
+              </li>
+              <li>
+                {
+                  topLink(
+                    selectedOption,
+                    Communities,
+                    "/school/communities",
+                    shrunk,
+                    "fal fa-users-class",
+                    "Communities",
+                  )
+                }
+              </li>
+            </ul>
+          | CourseAuthor => React.null
+          }
+        }
       </div>
       <ul>
         {
-          isStudent ?
+          isStudent || isCourseAuthor ?
             bottomLink("/home", shrunk, "fal fa-home-alt", "Home") :
             React.null
         }
@@ -321,7 +342,7 @@ let make =
             /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
             ReasonReact.cloneElement(
               <a
-                title=?{shrunk ? Some("Log Out") : None}
+                title=?{shrunk ? Some("Sign Out") : None}
                 className={bottomLinkClasses(shrunk)}
                 rel="nofollow"
                 href="/users/sign_out"
@@ -331,14 +352,14 @@ let make =
                 <i className="fal fa-sign-out fa-fw" />,
                 shrunk ?
                   React.null :
-                  <span className="ml-2"> {"Log Out" |> str} </span>,
+                  <span className="ml-2"> {"Sign Out" |> str} </span>,
               |],
             )
           }
         </li>
       </ul>
     </div>,
-    selectedOption |> secondaryNav(courses),
+    selectedOption |> secondaryNav(courses, userRole),
   |]
   |> React.array;
 };

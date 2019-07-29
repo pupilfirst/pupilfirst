@@ -22,11 +22,6 @@ feature 'Courses Index' do
 
   let(:date) { Date.today }
 
-  before do
-    # Create a domain for school
-    create :domain, :primary, school: school
-  end
-
   scenario 'school admin visits courses and create a course', js: true do
     sign_in_user school_admin.user, referer: school_courses_path
 

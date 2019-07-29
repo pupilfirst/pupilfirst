@@ -23,12 +23,17 @@ let make = (~courses, ~currentCourseId) => {
     <div className="inline-block relative border-b border-gray-400 rounded">
       <button
         onClick={handleClick(setShowDropdown)}
+        title={currentCourse |> Course.name}
         className="appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2 rounded w-full">
-        <span>
-          <i className="fas fa-book mr-2" />
-          {currentCourse |> Course.name |> str}
+        <span className="w-5/6 flex items-center">
+          <i className="fas fa-book" />
+          <span className="truncate ml-2 text-left">
+            {currentCourse |> Course.name |> str}
+          </span>
         </span>
-        <i className="far fa-chevron-down text-sm" />
+        <span className="w-1/6 text-right">
+          <i className="far fa-chevron-down text-sm" />
+        </span>
       </button>
       {
         showDropdown ?
@@ -47,7 +52,7 @@ let make = (~courses, ~currentCourseId) => {
                      href={
                        "/school/courses/"
                        ++ (course |> Course.id)
-                       ++ "/students"
+                       ++ "/curriculum"
                      }>
                      {course |> Course.name |> str}
                    </a>

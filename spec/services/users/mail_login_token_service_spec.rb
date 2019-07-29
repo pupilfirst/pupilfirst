@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Users::MailLoginTokenService do
-  subject { described_class.new(school, domain, user, referer, shared_device) }
+  subject { described_class.new(school, user, referer, shared_device) }
 
-  let(:user) { create :user }
-  let(:school) { create :school }
-  let(:domain) { create :domain, :primary, school: school }
+  let(:school) { create :school, :current }
+  let(:user) { create :user, school: school }
   let(:shared_device) { [true, false].sample }
+  let(:domain) { school.domains.where(primary: true).first }
   let(:referer) { Faker::Internet.url(domain.fqdn) }
 
   describe '#execute' do
@@ -25,22 +25,6 @@ describe Users::MailLoginTokenService do
       expect(current_email.body).to include("https://#{domain.fqdn}/users/token?")
       expect(current_email.body).to include("referer=#{CGI.escape(referer)}")
       expect(current_email.body).to include("token=#{user.reload.login_token}")
-    end
-
-    context 'when there is no school, domain, or referer' do
-      let(:school) { nil }
-      let(:domain) { nil }
-      let(:referer) { nil }
-
-      it 'uses default school name and domain' do
-        subject.execute
-
-        open_email(user.email)
-
-        expect(current_email.subject).to eq("Log in to PupilFirst")
-        expect(current_email.body).to include('https://www.pupilfirst.com/users/token?')
-        expect(current_email.body).not_to include('referer=')
-      end
     end
   end
 end

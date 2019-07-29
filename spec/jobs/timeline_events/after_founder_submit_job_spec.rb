@@ -2,17 +2,11 @@ require 'rails_helper'
 
 describe TimelineEvents::AfterFounderSubmitJob do
   subject { described_class }
-
   let(:faculty_with_notifications) { create :faculty, notify_for_submission: true }
   let(:another_faculty) { create :faculty }
   let(:startup) { create :startup }
   let(:timeline_event) { create :timeline_event, founders: startup.founders }
   let(:mock_service) { instance_double(TimelineEvents::MarkAsImprovedTargetService, execute: nil) }
-
-  before do
-    # Create domain for school.
-    create :domain, :primary, school: faculty_with_notifications.school
-  end
 
   describe '#perform' do
     before do

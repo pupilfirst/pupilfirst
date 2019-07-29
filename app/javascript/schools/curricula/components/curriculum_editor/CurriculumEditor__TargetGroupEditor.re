@@ -1,5 +1,4 @@
 open CurriculumEditor__Types;
-open SchoolAdmin__Utils;
 
 let str = ReasonReact.string;
 type state = {

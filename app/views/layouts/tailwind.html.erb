@@ -1,7 +1,7 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
 
 <!DOCTYPE html>
-<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>">
+<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>">
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -34,7 +34,7 @@
   <link rel="icon" href="/favicon.ico"/>
 </head>
 
-<body data-env="<%= Rails.env %>">
+<body>
 <%= render 'layouts/pretender_tailwind' if @pretender %>
 
 <%= yield :nav %>

@@ -3,6 +3,10 @@ require 'rails_helper'
 describe FacultyConnectSessionReminderJob do
   subject { described_class }
 
+  before do
+    create :domain, :primary, school: connect_request.startup.school
+  end
+
   context 'when the job is no longer relevant' do
     let(:connect_request) { create :connect_request, status: ConnectRequest::STATUS_REQUESTED }
 

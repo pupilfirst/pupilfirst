@@ -1,6 +1,4 @@
 class CreateTargetMutator < ApplicationMutator
-  include AuthorizeSchoolAdmin
-
   attr_accessor :title
   attr_accessor :target_group_id
 
@@ -21,5 +19,9 @@ class CreateTargetMutator < ApplicationMutator
   def sort_index
     max_index = TargetGroup.joins(:course).where(courses: { school_id: current_school.id }).find(target_group_id).targets.maximum(:sort_index)
     max_index ? max_index + 1 : 1
+  end
+
+  def authorized?
+    current_school_admin.present? || current_user.course_authors.where(course: TargetGroup.find(target_group_id).level.course).exists?
   end
 end

@@ -21,7 +21,7 @@ let make =
       ~isCoach,
       ~archiveCB,
     ) => {
-  let user = users |> User.findUser(answer |> Answer.creatorId);
+  let user = users |> User.findById(answer |> Answer.creatorId);
   let commentsForAnswer =
     comments |> Comment.commentsForAnswer(answer |> Answer.id);
   let (showAnswerEdit, toggleShowAnswerEdit) = React.useState(() => false);
@@ -102,7 +102,12 @@ let make =
                           className="text-xs mt-1 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                           <span> {"Last edited by " |> str} </span>
                           <span className="font-semibold">
-                            {users |> User.userName(editorId) |> str}
+                            {
+                              users
+                              |> User.findById(editorId)
+                              |> User.name
+                              |> str
+                            }
                           </span>
                           <span>
                             {
@@ -125,7 +130,7 @@ let make =
                 </div>
                 <div
                   className="flex flex-row justify-between items-center pl-2 px-3 md:px-6 pb-4">
-                  <div className="pt-4 text-center">
+                  <div className="text-center">
                     <div className="flex flex-row">
                       <QuestionsShow__LikeManager
                         authenticityToken
@@ -135,9 +140,14 @@ let make =
                         addLikeCB
                         removeLikeCB
                       />
-                      <div className="mr-2 pt-2 px-2">
-                        <i className="fal fa-comments text-xl text-gray-600" />
-                        <p className="text-xs py-1">
+                      <div className="mr-1 md:mr-2">
+                        <div
+                          className="flex items-end justify-center h-8 w-8 md:h-10 md:w-10 p-1 md:p-2">
+                          <i
+                            className="fal fa-comments text-xl text-gray-600"
+                          />
+                        </div>
+                        <p className="text-xs pb-1">
                           {
                             commentsForAnswer
                             |> List.length

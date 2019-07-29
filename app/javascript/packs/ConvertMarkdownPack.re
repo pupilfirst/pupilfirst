@@ -29,7 +29,7 @@ let parseMarkdown =
        |> ReactDOMRe.render(
             <MarkdownBlock
               markdown={props.markdown}
-              className="leading-normal markdown-sm"
+              className="leading-normal text-sm"
               profile=Markdown.QuestionAndAnswer
             />,
           );

@@ -1,21 +1,22 @@
 module Schools
   class CoursePolicy < ApplicationPolicy
+    def index?
+      # Can be shown only to school admins.
+      user.school_admin.present? && record.present?
+    end
+
     def show?
       # Can be shown to all school admins.
-      record.in?(current_school.courses)
+      user.school_admin.present? && record.in?(current_school.courses)
     end
 
     def update?
       # Closed courses shouldn't be updated
-      !record.ended?
+      !record.ended? && show?
     end
 
     alias close? update?
-
-    def delete_coach_enrollment?
-      record.in?(current_school.courses) && !record.ended?
-    end
-
+    alias delete_coach_enrollment? update?
     alias update_coach_enrollments? delete_coach_enrollment?
     alias students? show?
     alias inactive_students? show?

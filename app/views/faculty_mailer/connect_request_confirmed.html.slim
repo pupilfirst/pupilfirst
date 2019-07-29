@@ -12,7 +12,7 @@
     ' The office hour request created by #{@connect_request.startup.display_name} has just been confirmed for
     strong #{@connect_request.connect_slot} IST.
 
-  - meeting_url = connect_request_join_session_url(@connect_request, token: @connect_request.faculty.token, **host_options)
+  - meeting_url = connect_request_join_session_url(@connect_request, token: @connect_request.faculty.token)
 
   p You can #{link_to 'click here', meeting_url} to join the meeting when it&rsquo;s time!
 

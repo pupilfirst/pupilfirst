@@ -3,26 +3,19 @@ module Users
     include Devise::Controllers::Rememberable
 
     skip_before_action :verify_authenticity_token, only: [:developer] # rubocop:disable Rails/LexicallyScopedActionFilter
-
     # GET /users/auth/:action/callback
     def oauth_callback
       @email = email_from_auth_hash
 
-      if @email.blank?
-        if oauth_origin.present?
-          redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "We're sorry, but we did not receive your email address from #{provider_name}")
-        else
-          flash[:error] = email_blank_flash
-          redirect_to new_user_session_path
-        end
-
-        return
-      end
-
       if oauth_origin.present?
-        sign_in_at_oauth_origin
+        if @email.blank?
+          redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)
+          return
+        else
+          sign_in_at_oauth_origin
+        end
       else
-        sign_into_current_domain
+        render 'oauth_origin_missing', layout: 'error'
       end
     end
 
@@ -73,17 +66,6 @@ module Users
         redirect_to user_token_url(token_url_options)
       else
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "Your email address: #{@email} is unregistered.")
-      end
-    end
-
-    def sign_into_current_domain
-      if user.present?
-        sign_in user
-        remember_me user
-        redirect_to origin || after_sign_in_path_for(user)
-      else
-        flash[:notice] = "Your email address: #{@email} is unregistered."
-        redirect_to new_user_session_path
       end
     end
 

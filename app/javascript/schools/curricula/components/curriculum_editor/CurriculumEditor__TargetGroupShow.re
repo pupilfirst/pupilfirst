@@ -183,7 +183,7 @@ let make =
                     UpdateTargetTitle(ReactEvent.Form.target(event)##value),
                   )
               }
-              placeholder="Create a target..."
+              placeholder="Create a target"
               className="target-create__input text-xs text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
             />
             {

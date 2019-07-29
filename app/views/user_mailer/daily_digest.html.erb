@@ -37,7 +37,7 @@
   </p>
 
   <% @updates.each do |community_id, community_updates| %>
-    <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 120%; color: #6025C0; border-radius: 8px; padding: 0px 4px; background-color: #F7F5FA;' %>
+    <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 120%; color: #6025C0; border-radius: 8px; padding: 0px 4px;' %>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
       <% community_updates[:questions].each do |question| %>

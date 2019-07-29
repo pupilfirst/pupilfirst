@@ -51,7 +51,7 @@ let headerclasses = shrunk => {
 let imageContainerClasses = shrunk => {
   let defaultClasses = "school-admin-navbar__school-logo-container flex items-center ";
   defaultClasses
-  ++ (shrunk ? "justify-center w-16 h-16" : "bg-white h-12 w-2/5 rounded");
+  ++ (shrunk ? "justify-center w-16 h-16" : "bg-white h-8 w-3/5 rounded");
 };
 
 let bottomLinkClasses = shrunk => {
@@ -214,7 +214,11 @@ let make =
                   className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
                   <img src=schoolIconPath alt=schoolName />
                 </a> :
-                <img src=schoolLogoPath alt=schoolName />
+                <img
+                  className="h-full object-contain"
+                  src=schoolLogoPath
+                  alt=schoolName
+                />
             }
           </div>
         </div>

@@ -5,35 +5,25 @@ module DraftEditor = {
   type editorState;
 
   [@bs.module "./ReactDraftEditor"] [@react.component]
-  external make: (~content: string, ~onChange: string => unit) => React.element =
+  external make:
+    (
+      ~content: string,
+      ~onChange: string => unit,
+      ~command: string=?,
+      ~commandAt: string=?
+    ) =>
+    React.element =
     "default";
 };
 
-module TextArea = {
-  open Webapi.Dom;
-
-  external unsafeAsHtmlInputElement: Dom.element => Dom.htmlInputElement =
-    "%identity";
-
-  let setStyleHeight: (string, Dom.htmlInputElement) => unit = [%raw
-    "(height, element) => { element.style.height = height; return }"
-  ];
-
-  let element = id =>
-    document
-    |> Document.getElementById(id)
-    |> OptionUtils.unwrapUnsafely
-    |> unsafeAsHtmlInputElement;
-
-  let selectionStart = id => element(id) |> HtmlInputElement.selectionStart;
-
-  let selectionEnd = id => element(id) |> HtmlInputElement.selectionEnd;
-};
-
-type action =
+type command =
   | Bold
-  | Italics
-  | Code;
+  | Italic;
+
+type commandPair = {
+  command: option(command),
+  commandAt: option(string),
+};
 
 type defaultView =
   | Preview
@@ -46,77 +36,38 @@ let updateDescription = (description, setDescription, updateDescriptionCB) => {
   updateDescriptionCB(description);
 };
 
-let handleClick =
-    (id, description, setDescription, updateDescriptionCB, action, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-
-  let actionString =
-    switch (action) {
-    | Bold => "**"
-    | Italics => "*"
-    | Code => "`"
-    };
-
-  let start = TextArea.selectionStart(id);
-  let finish = TextArea.selectionEnd(id);
-  let sel = Js.String.substring(~from=start, ~to_=finish, description);
-
-  let newText =
-    if (start != finish) {
-      Js.String.substring(~from=0, ~to_=start, description)
-      ++ actionString
-      ++ sel
-      ++ actionString
-      ++ Js.String.substring(
-           ~from=finish,
-           ~to_=description |> Js.String.length,
-           description,
-         );
-    } else {
-      description
-      ++ (
-        switch (action) {
-        | Bold => " **strong text** "
-        | Italics => " *emphasized text* "
-        | Code => " `enter code here` "
-        }
-      );
-    };
-  updateDescription(newText, setDescription, updateDescriptionCB);
-};
-
-let buttonTitle = action =>
-  switch (action) {
-  | Bold => "Bold"
-  | Italics => "Italics"
-  | Code => "Code"
-  };
-
-let buttonIcon = action =>
-  <span>
-    {
-      switch (action) {
-      | Bold => <i className="far fa-bold" />
-      | Italics => <i className="far fa-italic" />
-      | Code => <i className="far fa-code" />
-      }
-    }
-  </span>;
-
 type previewButtonPosition =
   | PositionRight
   | PositionLeft;
 
+let commandIcon = command =>
+  switch (command) {
+  | Bold => <i className="far fa-bold" />
+  | Italic => <i className="far fa-italic" />
+  };
+
+let commandToTitle = command =>
+  switch (command) {
+  | Bold => "Bold"
+  | Italic => "Italic"
+  };
+
+let commandToString = command =>
+  switch (command) {
+  | Bold => "bold"
+  | Italic => "italic"
+  };
+
+let handleCommandClick = (command, setCommandPair, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  let timeString = Js.Date.now() |> Js.Float.toString;
+  setCommandPair(_ =>
+    {command: Some(command), commandAt: Some(timeString)}
+  );
+};
+
 let buttons =
-    (
-      id,
-      description,
-      setDescription,
-      updateDescriptionCB,
-      preview,
-      setPreview,
-      previewButtonPosition,
-    ) => {
+    (description, setCommandPair, preview, setPreview, previewButtonPosition) => {
   let classes = "markdown-button-group__button hover:bg-primary-100 hover:text-primary-400 focus:outline-none focus:text-primary-600";
 
   let previewOrEditButton =
@@ -143,23 +94,15 @@ let buttons =
     |> Array.make(1);
 
   let styleButtons =
-    [|Bold, Italics, Code|]
-    |> Array.map(action =>
+    [|Bold, Italic|]
+    |> Array.map(command =>
          <button
            className=classes
            disabled=preview
-           key={action |> buttonTitle}
-           title={action |> buttonTitle}
-           onClick={
-             handleClick(
-               id,
-               description,
-               setDescription,
-               updateDescriptionCB,
-               action,
-             )
-           }>
-           {action |> buttonIcon}
+           key={command |> commandToString}
+           title={command |> commandToTitle}
+           onClick={handleCommandClick(command, setCommandPair)}>
+           {command |> commandIcon}
          </button>
        );
 
@@ -201,6 +144,10 @@ let make =
         ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
       }
     );
+
+  let (commandPair, setCommandPair) =
+    React.useState(() => {command: None, commandAt: None});
+
   let (label, previewButtonPosition) =
     switch (label) {
     | Some(label) => (
@@ -220,10 +167,8 @@ let make =
       <div className="flex markdown-button-group">
         {
           buttons(
-            id,
             description,
-            setDescription,
-            updateDescriptionCB,
+            setCommandPair,
             preview,
             setPreview,
             previewButtonPosition,
@@ -232,19 +177,29 @@ let make =
       </div>
     </div>
     {
-      preview ?
+      if (preview) {
         <MarkdownBlock
           markdown=description
           className="pb-3 pt-2 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
           profile
-        /> :
+        />;
+      } else {
+        let command =
+          switch (commandPair.command) {
+          | None => None
+          | Some(c) => Some(c |> commandToString)
+          };
+
         <DraftEditor
           content=description
           onChange={
             content =>
               updateDescription(content, setDescription, updateDescriptionCB)
           }
-        />
+          ?command
+          commandAt=?{commandPair.commandAt}
+        />;
+      }
     }
   </div>;
 };

@@ -1,6 +1,6 @@
 module Schools
-  module Curricula
-    class ShowPresenter < ApplicationPresenter
+  module Courses
+    class CurriculumPresenter < ApplicationPresenter
       include RoutesResolvable
 
       def initialize(view_context, course)

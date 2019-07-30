@@ -45,7 +45,10 @@ Rails.application.routes.draw do
     end
 
     resources :courses, only: %i[index] do
-      resource :curriculum, only: %i[show]
+      member do
+        get 'curriculum'
+      end
+
       resources :evaluation_criteria, only: %i[create]
       resources :levels, only: %i[create]
 

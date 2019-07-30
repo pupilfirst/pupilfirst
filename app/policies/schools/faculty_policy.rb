@@ -1,16 +1,13 @@
 module Schools
   class FacultyPolicy < ApplicationPolicy
-    def create?
-      # All school admins can add faculty.
-      return true if user.school_admin.present?
-    end
-
+    # All school admins can access faculty.
     def school_index?
-      user.school_admin.present?
+      user&.school_admin.present?
     end
 
+    alias create? school_index?
     alias course_index? school_index?
-    alias update? create?
+    alias update? school_index?
 
     class Scope < Scope
       def resolve

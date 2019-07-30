@@ -6,6 +6,12 @@ module Schools
       authorize(current_school, policy_class: Schools::CoursePolicy)
     end
 
+    # GET /courses/:id/curriculum
+    def curriculum
+      course = courses.where(id: params[:id]).includes([:evaluation_criteria, :levels, :target_groups, targets: [:evaluation_criteria, :prerequisite_targets, :resources, quiz: { quiz_questions: %I[answer_options correct_answer] }]]).first
+      @course = authorize(course, policy_class: Schools::CoursePolicy)
+    end
+
     # POST /school/courses/:course_id/delete_coach_enrollment
     def delete_coach_enrollment
       coach = Faculty.find(params[:coach_id])

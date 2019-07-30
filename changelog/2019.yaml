@@ -1,5 +1,41 @@
 ---
 changelog:
+- timestamp: '2019-07-30T07:36:10Z'
+  changes:
+  - timestamp: '2019-07-30T07:24:00Z'
+    title: Corrected the link of the _Clear_ button that removes the link between
+      a target and a new community question.
+    category: bugfix
+  - timestamp: '2019-07-30T07:22:39Z'
+    title: Fixed crashes caused by invalid attempts to generate links to user avatars.
+    category: bugfix
+  - timestamp: '2019-07-30T07:21:01Z'
+    title: Removed links to course communities for dropped out students from their
+      home page.
+    category: ui
+  - timestamp: '2019-07-29T06:19:39Z'
+    title: Fixed a crash that could occur if the _like_ button on community answers
+      was clicked in quick succession. The button has also been updated to disable
+      itself while a network request is ongoing.
+    category: bugfix
+  - timestamp: '2019-07-29T06:14:55Z'
+    title: Fixed a crash that would occur when trying to download files that were
+      attached to submissions.
+    category: bugfix
+  - timestamp: '2019-07-19T10:23:03Z'
+    title: Users can now set a new password for signing in, or request a password
+      reset from the sign in menu. Using any of the federated sign-in methods (Google,
+      Facebook, Github) is still preferred, as it is the most secure option; however
+      signing in with passwords is convenient when the email isn't linked with any
+      of the providers.
+    category: feature
+  - timestamp: '2019-07-18T09:55:49Z'
+    title: Email notifications have been enabled for community updates. Answers to
+      your questions or comments on your questions or answers will trigger an immediate
+      email. An additional _community digest_ email will also be sent daily, listing
+      new questions and unanswered questions from the past week. The diget email can
+      be controlled from the edit user profile page.
+    category: feature
 - timestamp: '2019-07-16T10:01:44Z'
   changes:
   - timestamp: '2019-07-16T08:12:40Z'
@@ -9,8 +45,8 @@ changelog:
     category: ui
   - timestamp: '2019-07-16T07:46:18Z'
     title: The ordering of answers in the community section has been improved; answers
-      with more _likes_ are listed first, and if two have the same number of likes, the
-      newest is preferred.
+      with more _likes_ are listed first, and if two have the same number of likes,
+      the newest is preferred.
     category: ui
   - timestamp: '2019-07-11T09:42:18Z'
     title: Fixed a crash which could occur when users uploaded a profile pictures

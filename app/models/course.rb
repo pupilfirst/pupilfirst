@@ -18,6 +18,8 @@ class Course < ApplicationRecord
   has_many :community_course_connections, dependent: :restrict_with_error
   has_many :communities, through: :community_course_connections
 
+  normalize_attribute :about
+
   def short_name
     name[0..2].upcase.strip
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'School students index', js: true do
+feature 'School students index' do
   include UserSpecHelper
   include NotificationHelper
 
@@ -37,7 +37,7 @@ feature 'School students index', js: true do
     FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 
-  scenario 'school admin manages students on the course student page' do
+  scenario 'school admin manages students on the course student page', js: true do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # list all students
@@ -185,7 +185,7 @@ feature 'School students index', js: true do
     expect(page).to have_text(inactive_team_1.founders.first.name)
   end
 
-  scenario 'school admin marks students as dropped out' do
+  scenario 'school admin marks students as dropped out', js: true do
     # Enroll the coach as a team coach in all three teams.
     create :faculty_startup_enrollment, faculty: coach, startup: startup_1
     create :faculty_startup_enrollment, faculty: coach, startup: startup_2
@@ -237,5 +237,10 @@ feature 'School students index', js: true do
     # All coaches should have been removed from the team.
     expect(lone_user_team.faculty.count).to eq(0)
     expect(coach.startups.count).to eq(2)
+  end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_course_students_path(course)
+    expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

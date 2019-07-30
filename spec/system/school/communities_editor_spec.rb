@@ -48,4 +48,9 @@ feature 'SA Communities Editor' do
     expect(community.reload.target_linkable).to eq(true)
     expect(community.courses).to eq([course_1])
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_communities_path
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

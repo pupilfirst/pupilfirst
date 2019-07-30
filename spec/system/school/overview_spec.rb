@@ -88,4 +88,9 @@ feature 'School Overview' do
       expect(page).to have_text("4/4 submissions reviewed.")
     end
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_path
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

@@ -512,4 +512,9 @@ feature 'Curriculum Editor' do
       end
     end
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_course_curriculum_path(course)
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

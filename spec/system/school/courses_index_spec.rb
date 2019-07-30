@@ -76,4 +76,9 @@ feature 'Courses Index' do
     expect(course.enable_leaderboard).to eq(false)
     expect(Date.parse(course.ends_at.strftime("%Y-%m-%d"))).to eq(date)
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_courses_path
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

@@ -125,9 +125,9 @@ let renderIcon = view => {
   <img className="mx-auto h-22 sm:h-32" src=iconUrl />;
 };
 
-let headerText = (view, schoolName) =>
+let headerText = view =>
   switch (view) {
-  | FederatedSignIn => "Sign in to " ++ schoolName
+  | FederatedSignIn => "Sign in to "
   | SignInWithPassword => "Continue with email"
   | SignInEmailSent => "We've sent you a magic link!"
   | ForgotPassword => "Reset password"
@@ -388,8 +388,10 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
     <div
       className="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
       {renderIcon(view)}
-      <div className="text-lg sm:text-2xl font-bold text-center mt-4">
-        {headerText(view, schoolName) |> str}
+      <div
+        className="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4">
+        <span> {headerText(view) |> str} </span>
+        <span className="inline-block"> {schoolName |> str} </span>
       </div>
       {
         switch (view) {

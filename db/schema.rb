@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 2019_07_25_093850) do
 
   create_table "applicants", force: :cascade do |t|
     t.string "email"
+    t.string "name"
     t.string "login_token"
     t.datetime "login_token_sent_at"
     t.bigint "course_id"
@@ -223,6 +224,7 @@ ActiveRecord::Schema.define(version: 2019_07_25_093850) do
     t.string "description"
     t.boolean "enable_leaderboard", default: false
     t.boolean "enable_public_signup", default: false
+    t.text "about"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 

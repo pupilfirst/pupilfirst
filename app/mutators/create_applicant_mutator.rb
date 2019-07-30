@@ -1,9 +1,11 @@
 class CreateApplicantMutator < ApplicationMutator
   attr_accessor :course_id
   attr_accessor :email
+  attr_accessor :name
 
   validates :email, presence: true, length: { maximum: 128 }, email: true
   validates :course_id, presence: { message: 'BlankCourseId' }
+  validates :name, presence: true, length: { maximum: 128 }
 
   validate :course_must_exist
   validate :ensure_time_between_requests
@@ -11,7 +13,7 @@ class CreateApplicantMutator < ApplicationMutator
 
   def save
     Applicant.transaction do
-      applicant = persisted_applicant || Applicant.create!(email: email, course: course)
+      applicant = persisted_applicant || Applicant.create!(email: email, course: course, name: name)
       Applicants::MailLoginTokenService.new(applicant).execute
     end
   end

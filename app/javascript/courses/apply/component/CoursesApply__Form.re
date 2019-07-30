@@ -3,8 +3,8 @@ let str = React.string;
 
 module CreateApplicantQuery = [%graphql
   {|
-   mutation($courseId: ID!, $email: String!) {
-    createApplicant(courseId: $courseId, email: $email){
+   mutation($courseId: ID!, $email: String!, $name: String!) {
+    createApplicant(courseId: $courseId, email: $email, name: $name){
       success
      }
    }
@@ -12,10 +12,18 @@ module CreateApplicantQuery = [%graphql
 ];
 
 let createApplicantQuery =
-    (authenticityToken, courseId, email, setSaving, setViewEmailSent, event) => {
+    (
+      authenticityToken,
+      courseId,
+      email,
+      name,
+      setSaving,
+      setViewEmailSent,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
-  CreateApplicantQuery.make(~courseId, ~email, ())
+  CreateApplicantQuery.make(~courseId, ~email, ~name, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##createApplicant##success ?
@@ -27,19 +35,22 @@ let createApplicantQuery =
 
 let isInvalidEmail = email =>
   email |> EmailUtils.isInvalid(~allowBlank=false);
-let saveDisabled = (email, saving) => isInvalidEmail(email) || saving;
+let saveDisabled = (email, name, saving) =>
+  isInvalidEmail(email) || saving || name == "";
 
-let buttonText = (email, saving) =>
-  switch (saving, email == "", isInvalidEmail(email)) {
-  | (true, false | true, false | true) => "Saving"
-  | (false, true, false | true) => "Enter your Email"
-  | (false, false, true) => "Enter a valid Email"
-  | (false, false, false) => "Apply"
+let buttonText = (email, name, saving) =>
+  switch (saving, email == "", isInvalidEmail(email), name == "") {
+  | (true, false | true, false | true, false | true) => "Saving"
+  | (false, true, false | true, false | true) => "Enter your Email"
+  | (false, false, true, false | true) => "Enter a valid Email"
+  | (false, false, false, true) => "Enter your full name"
+  | (false, false, false, false) => "Apply"
   };
 
 [@react.component]
 let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
   let (email, setEmail) = React.useState(() => "");
+  let (name, setName) = React.useState(() => "");
   let (saving, setSaving) = React.useState(() => false);
   <div className="flex flex-col">
     <h4 className="font-bold">
@@ -47,25 +58,44 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
     </h4>
     <div className="w-full mt-4">
       <label
+        htmlFor="email"
         className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
         {"Email" |> str}
       </label>
       <input
         className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
         type_="text"
+        id="email"
+        maxLength=128
         value=email
         disabled=saving
         onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
         placeholder="johnDoe@example.com"
       />
+      <label
+        htmlFor="name"
+        className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+        {"Name" |> str}
+      </label>
+      <input
+        className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+        type_="text"
+        id="name"
+        value=name
+        maxLength=128
+        disabled=saving
+        onChange={event => setName(ReactEvent.Form.target(event)##value)}
+        placeholder="John Doe"
+      />
     </div>
     <button
-      disabled={saveDisabled(email, saving)}
+      disabled={saveDisabled(email, name, saving)}
       onClick={
         createApplicantQuery(
           authenticityToken,
           courseId,
           email,
+          name,
           setSaving,
           setViewEmailSent,
         )
@@ -76,7 +106,7 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
           <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
           ReasonReact.null
       }
-      <span> {buttonText(email, saving) |> str} </span>
+      <span> {buttonText(email, name, saving) |> str} </span>
     </button>
   </div>;
 };

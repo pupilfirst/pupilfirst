@@ -12,7 +12,7 @@ module Users
     end
 
     def after_sign_in_path
-      school_admin_path || home_path
+      school_admin_path || home_path || course_author_path
     end
 
     private
@@ -24,7 +24,13 @@ module Users
     end
 
     def home_path
+      return if @user.faculty.blank? && @user.founders.blank?
+
       url_helpers.home_path
+    end
+
+    def course_author_path
+      url_helpers.curriculum_school_course_path(@user.course_authors.first.course)
     end
   end
 end

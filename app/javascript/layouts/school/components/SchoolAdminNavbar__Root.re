@@ -209,11 +209,16 @@ let make =
           <div className={imageContainerClasses(shrunk)}>
             {
               shrunk ?
-                <a
-                  href="/school"
+                <div
                   className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
-                  <img src=schoolIconPath alt=schoolName />
-                </a> :
+                  {
+                    !isCourseAuthor ?
+                      <a href="/school">
+                        <img src=schoolIconPath alt=schoolName />
+                      </a> :
+                      <img src=schoolIconPath alt=schoolName />
+                  }
+                </div> :
                 <img
                   className="h-full object-contain"
                   src=schoolLogoPath

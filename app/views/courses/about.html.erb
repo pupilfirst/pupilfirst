@@ -1,0 +1,37 @@
+<% presenter = Courses::ApplyPresenter.new(self, @course) %>
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'courses/shared', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'shared/markdownBlockCSS', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<div class="bg-gray-100 py-8">
+  <div class="container mx-auto px-3 max-w-6xl">
+    <div
+      class="shadow-xl rounded-lg overflow-hidden bg-white border">
+      <div
+        class="enroll-left__container svg-bg-pattern-4 relative p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32 text-white">
+        <div class="">
+          <h1 class="font-bold"> <%= @course.name %></h1>
+          <p><%= @course.description %> </p>
+          <a href="./apply" class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
+        </div>
+      </div>
+    </div>
+    <% if presenter.show_about? %>
+      <div class="max-w-3xl mt-10 mx-auto">
+        <div class="shadow-xl rounded-lg overflow-hidden bg-white border">
+          <div class="bg-white p-4 markdown-block markdown-block__permissive">
+            <%= sanitize(presenter.about) %>
+          </div>
+          <div class="bg-blue-600 p-4 py-12 text-center">
+            <div class="text-2xl text-white font-bold">
+              Apply to <%= @course.name %>
+            </div>
+            <a href="./apply" class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -25,4 +25,6 @@ class CoursePolicy < ApplicationPolicy
   def apply?
     record.enable_public_signup
   end
+
+  alias about? apply?
 end

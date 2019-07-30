@@ -16,4 +16,9 @@ class CoursesController < ApplicationController
     @course = authorize(Course.find(params[:id]))
     render layout: 'student'
   end
+
+  def about
+    @course = authorize(Course.find(params[:id]))
+    render layout: 'student'
+  end
 end

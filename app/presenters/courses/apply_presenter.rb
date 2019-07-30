@@ -9,6 +9,16 @@ module Courses
       "Enroll to #{@course.name} | #{current_school.name}"
     end
 
+    def about
+      if show_about?
+        MarkdownIt::Parser.new(:commonmark).render(@course.about)
+      end
+    end
+
+    def show_about?
+      @course.about.present?
+    end
+
     private
 
     def props

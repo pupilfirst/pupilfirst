@@ -10,7 +10,9 @@ module TargetStatus = CoursesCurriculum__TargetStatus;
 let str = React.string;
 
 let closeOverlay = course =>
-  ReasonReactRouter.push("/courses/" ++ (course |> Course.id));
+  ReasonReactRouter.push(
+    "/courses/" ++ (course |> Course.id) ++ "/curriculum",
+  );
 
 module ScrollLock = {
   open Webapi.Dom;

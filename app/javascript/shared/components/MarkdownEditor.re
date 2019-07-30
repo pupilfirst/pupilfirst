@@ -166,7 +166,7 @@ let make =
   <div>
     <div className="flex justify-between items-end bg-white pb-2">
       label
-      <div className="flex markdown-button-group">
+      <div className="flex markdown-button-group h-9">
         {
           buttons(
             description,

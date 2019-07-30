@@ -1,5 +1,6 @@
 import React from 'react';
 import { Editor, EditorState, ContentState, Modifier } from 'draft-js';
+import 'draft-js/dist/Draft.css';
 
 const onChange = (onChangeCB, setEditorState, editorState) => {
   const text = editorState.getCurrentContent().getPlainText();
@@ -76,10 +77,11 @@ export default function ReactDraftEditor(props) {
   }, [props.command, props.commandAt]);
 
   return (
-    <div placeholder={props.placeholder} onClick={focusEditor} style={{ minHeight: "10rem" }}>
+    <div className="markdown-draft-editor__container px-3 py-4 text-sm border border-gray-400 rounded" onClick={focusEditor}>
       <Editor
         ariaLabelledBy={props.ariaLabelledBy}
         ref={editor}
+        placeholder={props.placeholder}
         handleKeyCommand={(command, editorState) => handleKeyCommand(props.onChange, editorState, setEditorState, command)}
         editorState={editorState}
         onChange={editorState => onChange(props.onChange, setEditorState, editorState)}

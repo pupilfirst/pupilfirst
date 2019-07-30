@@ -1,8 +1,7 @@
 module Courses
   class ApplyPresenter < ApplicationPresenter
-    def initialize(view_context, course, applicant)
+    def initialize(view_context, course)
       @course = course
-      @applicant = applicant
       super(view_context)
     end
 

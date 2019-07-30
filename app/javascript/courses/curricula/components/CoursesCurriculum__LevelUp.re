@@ -2,7 +2,7 @@
 
 let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let str = React.string;
 

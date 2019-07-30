@@ -9,7 +9,7 @@ class TargetsController < ApplicationController
     target = authorize(Target.find(params[:id]))
     @course = target.course
     @presenter = Targets::ShowPresenter.new(view_context, target)
-    render 'courses/show', layout: 'student_course'
+    render 'courses/curriculum', layout: 'student_course'
   end
 
   # GET /targets/:id/details

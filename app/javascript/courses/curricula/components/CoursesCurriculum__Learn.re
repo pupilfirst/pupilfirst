@@ -1,9 +1,9 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./CourseShow__Learn.css")|}];
+[%bs.raw {|require("./CoursesCurriculum__Learn.css")|}];
 
 let str = React.string;
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let renderBlockClasses = block =>
   switch (block |> ContentBlock.blockType) {
@@ -21,14 +21,15 @@ let markdownContentBlock = markdown =>
   />;
 
 let fileContentBlock = (url, title, filename) =>
-  <a className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md" target="_blank" href=url>
+  <a
+    className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md"
+    target="_blank"
+    href=url>
     <div className="flex items-center">
       <FaIcon classes="text-4xl text-gray-800 fal fa-file-alt" />
       <div className="pl-4 leading-tight">
         <div className="text-lg font-semibold"> {title |> str} </div>
-        <div className="text-sm italic text-gray-600">
-          {filename |> str}
-        </div>
+        <div className="text-sm italic text-gray-600"> {filename |> str} </div>
       </div>
     </div>
     <div> <FaIcon classes="text-2xl fal fa-download" /> </div>

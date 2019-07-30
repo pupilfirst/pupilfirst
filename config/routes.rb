@@ -200,6 +200,7 @@ Rails.application.routes.draw do
     member do
       get 'leaderboard', action: 'leaderboard'
       get 'enroll', action: 'enroll'
+      get 'curriculum', action: 'curriculum'
     end
 
     resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do

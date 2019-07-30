@@ -1,10 +1,10 @@
 [@bs.config {jsx: 3}];
 
-[%bs.raw {|require("./CoursesShow__Attachments.css")|}];
+[%bs.raw {|require("./CoursesCurriculum__Attachments.css")|}];
 
 let str = React.string;
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let handleClick = (cb, attachment, event) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -55,7 +55,7 @@ let make = (~attachments, ~removeAttachmentCB) =>
                    "bg-primary-200",
                    "bg-primary-100",
                    title,
-                   url
+                   url,
                  )
                };
 
@@ -70,7 +70,10 @@ let make = (~attachments, ~removeAttachmentCB) =>
                  className={
                    "rounded px-2 py-1 truncate rounded " ++ textClasses
                  }>
-                 <a href=url target="_blank" className="course-show-attachments__attachment-title text-xs font-semibold text-primary-600 inline-block truncate align-text-bottom">
+                 <a
+                   href=url
+                   target="_blank"
+                   className="course-show-attachments__attachment-title text-xs font-semibold text-primary-600 inline-block truncate align-text-bottom">
                    {text |> str}
                  </a>
                </span>

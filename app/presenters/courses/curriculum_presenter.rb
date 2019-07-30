@@ -1,5 +1,5 @@
 module Courses
-  class ShowPresenter < ApplicationPresenter
+  class CurriculumPresenter < ApplicationPresenter
     def initialize(view_context, course)
       @course = course
       super(view_context)

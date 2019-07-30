@@ -1,7 +1,7 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./courseShow__LevelSelector.css")|}];
+[%bs.raw {|require("./CoursesCurriculum__LevelSelector.css")|}];
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let str = React.string;
 

@@ -1,9 +1,9 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./CoursesShow__Curriculum.css")|}];
+[%bs.raw {|require("./CoursesCurriculum.css")|}];
 
 let levelLockedImage: string = [%raw "require('../images/level-lock.svg')"];
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let str = React.string;
 
@@ -202,7 +202,7 @@ let make =
                ++ (selectedTarget |> Target.id),
              );
 
-        <CourseShow__Overlay
+        <CoursesCurriculum__Overlay
           target=selectedTarget
           course
           targetStatus
@@ -219,7 +219,7 @@ let make =
       | _ => React.null
       }
     }
-    <CourseShow__NoticeManager
+    <CoursesCurriculum__NoticeManager
       levels
       teamLevel
       targetGroups
@@ -230,7 +230,7 @@ let make =
       authenticityToken
     />
     <div className="px-3">
-      <CourseShow__LevelSelector
+      <CoursesCurriculum__LevelSelector
         levels
         selectedLevelId
         setSelectedLevelId

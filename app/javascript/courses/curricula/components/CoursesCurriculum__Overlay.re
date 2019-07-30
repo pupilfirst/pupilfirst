@@ -2,10 +2,10 @@
 
 exception UnexpectedSubmissionStatus(string);
 
-[%bs.raw {|require("./CourseShow__Overlay.css")|}];
+[%bs.raw {|require("./CoursesCurriculum__Overlay.css")|}];
 
-open CourseShow__Types;
-module TargetStatus = CourseShow__TargetStatus;
+open CoursesCurriculum__Types;
+module TargetStatus = CoursesCurriculum__TargetStatus;
 
 let str = React.string;
 
@@ -224,13 +224,13 @@ let addSubmission =
   | Passed =>
     raise(
       UnexpectedSubmissionStatus(
-        "CourseShow__Overlay.addSubmission cannot handle a submsision with status Passed",
+        "CoursesCurriculum__Overlay.addSubmission cannot handle a submsision with status Passed",
       ),
     )
   | Failed =>
     raise(
       UnexpectedSubmissionStatus(
-        "CourseShow__Overlay.addSubmission cannot handle a submsision with status Failed",
+        "CoursesCurriculum__Overlay.addSubmission cannot handle a submsision with status Failed",
       ),
     )
   };
@@ -274,12 +274,11 @@ let overlayStatus = (course, target, targetStatus) =>
     <button
       className="course-overlay__close-button xl:absolute pr-4 xl:-ml-20 text-gray-600 hover:text-gray-900 focus:outline-none"
       onClick={_e => closeOverlay(course)}>
-      <span className="course-overlay__close-button-icon w-8 h-8 bg-gray-200 text-gray-700 border border-gray-400 rounded-full flex justify-center items-center">
+      <span
+        className="course-overlay__close-button-icon w-8 h-8 bg-gray-200 text-gray-700 border border-gray-400 rounded-full flex justify-center items-center">
         <i className="fal fa-times text-xl" />
       </span>
-      <span className="block font-semibold text-xs">
-        {"Close" |> str}
-      </span>
+      <span className="block font-semibold text-xs"> {"Close" |> str} </span>
     </button>
     <div className="w-full flex items-center justify-between relative">
       <h1 className="text-base leading-snug mr-3 md:text-xl">
@@ -369,12 +368,12 @@ let overlayContentClasses = bool => bool ? "" : "hidden";
 
 let learnSection = (targetDetails, overlaySelection) =>
   <div className={overlayContentClasses(overlaySelection == Learn)}>
-    <CourseShow__Learn targetDetails />
+    <CoursesCurriculum__Learn targetDetails />
   </div>;
 
 let discussSection = (target, targetDetails, overlaySelection) =>
   <div className={overlayContentClasses(overlaySelection == Discuss)}>
-    <CourseShow__Discuss
+    <CoursesCurriculum__Discuss
       targetId={target |> Target.id}
       communities={targetDetails |> TargetDetails.communities}
     />
@@ -410,7 +409,7 @@ let completeSection =
     {
       switch (targetStatus |> TargetStatus.status, completionType) {
       | (Pending, Evaluated) =>
-        <CourseShow__SubmissionForm
+        <CoursesCurriculum__SubmissionForm
           authenticityToken
           target
           addSubmissionCB={
@@ -418,7 +417,7 @@ let completeSection =
           }
         />
       | (Pending, TakeQuiz) =>
-        <CourseShow__Quiz
+        <CoursesCurriculum__Quiz
           target
           targetDetails
           authenticityToken
@@ -429,7 +428,7 @@ let completeSection =
           Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
           Evaluated | TakeQuiz,
         ) =>
-        <CourseShow__SubmissionsAndFeedback
+        <CoursesCurriculum__SubmissionsAndFeedback
           targetDetails
           target
           authenticityToken
@@ -446,7 +445,7 @@ let completeSection =
           Pending | Submitted | Passed | Failed,
           LinkToComplete | MarkAsComplete,
         ) =>
-        <CourseShow__AutoVerify
+        <CoursesCurriculum__AutoVerify
           target
           targetDetails
           authenticityToken
@@ -474,7 +473,7 @@ let renderPendingStudents = (pendingUserIds, users) =>
                     u => u |> User.id == studentId,
                     "Unable to find user with id "
                     ++ studentId
-                    ++ "in courseShow__Overlay",
+                    ++ "in CoursesCurriculum__Overlay",
                   );
 
              <div

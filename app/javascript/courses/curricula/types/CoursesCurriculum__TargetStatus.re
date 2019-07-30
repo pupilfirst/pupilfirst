@@ -1,9 +1,9 @@
-module Course = CourseShow__Course;
-module Team = CourseShow__Team;
-module Target = CourseShow__Target;
-module Level = CourseShow__Level;
-module TargetGroup = CourseShow__TargetGroup;
-module LatestSubmission = CourseShow__LatestSubmission;
+module Course = CoursesCurriculum__Course;
+module Team = CoursesCurriculum__Team;
+module Target = CoursesCurriculum__Target;
+module Level = CoursesCurriculum__Level;
+module TargetGroup = CoursesCurriculum__TargetGroup;
+module LatestSubmission = CoursesCurriculum__LatestSubmission;
 
 /*
  * Create a higher level state abstraction here. Let's pre-calculate the status for

@@ -1,14 +1,14 @@
 type t = {
   pendingUserIds: list(string),
-  submissions: list(CourseShow__Submission.t),
-  submissionAttachments: list(CourseShow__SubmissionAttachment.t),
-  feedback: list(CourseShow__Feedback.t),
-  quizQuestions: list(CourseShow__QuizQuestion.t),
-  contentBlocks: list(CourseShow__ContentBlock.t),
-  communities: list(CourseShow__Community.t),
+  submissions: list(CoursesCurriculum__Submission.t),
+  submissionAttachments: list(CoursesCurriculum__SubmissionAttachment.t),
+  feedback: list(CoursesCurriculum__Feedback.t),
+  quizQuestions: list(CoursesCurriculum__QuizQuestion.t),
+  contentBlocks: list(CoursesCurriculum__ContentBlock.t),
+  communities: list(CoursesCurriculum__Community.t),
   linkToComplete: option(string),
   evaluated: bool,
-  grading: list(CoursesShow__Grade.t),
+  grading: list(CoursesCurriculum__Grade.t),
 };
 
 let submissions = t => t.submissions;
@@ -26,24 +26,28 @@ let decode = json =>
   Json.Decode.{
     pendingUserIds: json |> field("pendingUserIds", list(string)),
     submissions:
-      json |> field("submissions", list(CourseShow__Submission.decode)),
+      json
+      |> field("submissions", list(CoursesCurriculum__Submission.decode)),
     submissionAttachments:
       json
       |> field(
            "submissionAttachments",
-           list(CourseShow__SubmissionAttachment.decode),
+           list(CoursesCurriculum__SubmissionAttachment.decode),
          ),
-    feedback: json |> field("feedback", list(CourseShow__Feedback.decode)),
+    feedback:
+      json |> field("feedback", list(CoursesCurriculum__Feedback.decode)),
     quizQuestions:
-      json |> field("quizQuestions", list(CourseShow__QuizQuestion.decode)),
+      json
+      |> field("quizQuestions", list(CoursesCurriculum__QuizQuestion.decode)),
     contentBlocks:
-      json |> field("contentBlocks", list(CourseShow__ContentBlock.decode)),
+      json
+      |> field("contentBlocks", list(CoursesCurriculum__ContentBlock.decode)),
     communities:
-      json |> field("communities", list(CourseShow__Community.decode)),
+      json |> field("communities", list(CoursesCurriculum__Community.decode)),
     linkToComplete:
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     evaluated: json |> field("evaluated", bool),
-    grading: json |> field("grading", list(CoursesShow__Grade.decode)),
+    grading: json |> field("grading", list(CoursesCurriculum__Grade.decode)),
   };
 
 let computeCompletionType = targetDetails => {
@@ -71,5 +75,5 @@ let evaluated = t => t.evaluated;
 let grades = (submissionId, t) =>
   t.grading
   |> List.filter(grade =>
-       grade |> CoursesShow__Grade.submissionId == submissionId
+       grade |> CoursesCurriculum__Grade.submissionId == submissionId
      );

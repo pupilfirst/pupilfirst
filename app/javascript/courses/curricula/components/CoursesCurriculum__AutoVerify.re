@@ -2,8 +2,8 @@
 
 let str = React.string;
 
-open CourseShow__Types;
-module TargetStatus = CourseShow__TargetStatus;
+open CoursesCurriculum__Types;
+module TargetStatus = CoursesCurriculum__TargetStatus;
 
 module AutoVerifySubmissionQuery = [%graphql
   {|

@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let str = React.string;
 
@@ -233,7 +233,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
       placeholder="Describe your work, attach any links or files, and then hit submit!"
       onChange={updateDescription(send)}
     />
-    <CoursesShow__Attachments
+    <CoursesCurriculum__Attachments
       attachments={state.attachments}
       removeAttachmentCB={
         Some(attachment => send(RemoveAttachment(attachment)))
@@ -242,7 +242,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
     {
       state.attachments |> List.length >= 3 ?
         React.null :
-        <CourseShow__NewAttachment
+        <CoursesCurriculum__NewAttachment
           authenticityToken
           attachingCB={() => send(UpdateFormState(Attaching))}
           attachFileCB={(id, filename) => send(AttachFile(id, filename))}

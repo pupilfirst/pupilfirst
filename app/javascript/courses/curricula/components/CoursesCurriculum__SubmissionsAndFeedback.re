@@ -2,7 +2,7 @@
 
 let str = React.string;
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
   let criterion =
@@ -176,7 +176,7 @@ let submissions =
                    <div className="text-xs font-semibold">
                      {"Attachments" |> str}
                    </div>
-                   <CoursesShow__Attachments
+                   <CoursesCurriculum__Attachments
                      removeAttachmentCB=None
                      attachments={
                        SubmissionAttachment.onlyAttachments(attachments)
@@ -206,7 +206,7 @@ let submissions =
                  {
                    switch (targetStatus |> TargetStatus.status) {
                    | Submitted =>
-                     <CoursesShow__UndoButton
+                     <CoursesCurriculum__UndoButton
                        authenticityToken
                        undoSubmissionCB
                        targetId={target |> Target.id}
@@ -364,7 +364,7 @@ let make =
     </div>
     {
       showSubmissionForm ?
-        <CourseShow__SubmissionForm
+        <CoursesCurriculum__SubmissionForm
           authenticityToken
           target
           addSubmissionCB={

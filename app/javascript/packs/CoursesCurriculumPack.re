@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let decodeProps = json =>
   Json.Decode.(
@@ -31,7 +31,7 @@ let (
   DomUtils.parseJsonAttribute() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoursesShow__Curriculum
+  <CoursesCurriculum
     authenticityToken
     course
     levels

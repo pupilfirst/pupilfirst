@@ -2,7 +2,7 @@
 
 let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 type notice =
   | CourseEnded
@@ -126,7 +126,7 @@ let make =
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()
-  | LevelUp => <CourseShow__LevelUp course authenticityToken />
+  | LevelUp => <CoursesCurriculum__LevelUp course authenticityToken />
   | None => React.null
   };
 };

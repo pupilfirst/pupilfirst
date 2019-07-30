@@ -2,7 +2,7 @@
 
 let str = React.string;
 
-open CourseShow__Types;
+open CoursesCurriculum__Types;
 
 let linkToCommunity = (communityId, targetId) =>
   "/communities/" ++ communityId ++ "?target_id=" ++ targetId;

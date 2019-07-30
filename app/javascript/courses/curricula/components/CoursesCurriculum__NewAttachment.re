@@ -46,8 +46,12 @@ let make =
       {
         switch (selection) {
         | UploadFile =>
-          <CourseShow__FileForm authenticityToken attachFileCB attachingCB />
-        | AddUrl => <CoursesShow__UrlForm attachUrlCB />
+          <CoursesCurriculum__FileForm
+            authenticityToken
+            attachFileCB
+            attachingCB
+          />
+        | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB />
         }
       }
     </div>

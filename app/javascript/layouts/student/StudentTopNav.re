@@ -97,7 +97,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
     <div className="container mx-auto px-6 max-w-6xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-xs" href="/">
+          <a className="max-w-sm" href="/">
             {
               switch (logoUrl) {
               | Some(url) =>
@@ -107,9 +107,12 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
                   alt={"Logo of " ++ schoolName}
                 />
               | None =>
-                <span className="text-2xl text-black">
-                  {schoolName |> str}
-                </span>
+                <div
+                  className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-600">
+                  <span className="text-xl font-bold leading-tight">
+                    {schoolName |> str}
+                  </span>
+                </div>
               }
             }
           </a>
@@ -132,7 +135,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
         {
           !menuHidden && !isMobile() ?
             <div
-              className="student-navbar__links-container flex justify-end items-center w-4/5 flex-no-wrap flex-shrink-0">
+              className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
               {headerLinks(links, authenticityToken, isLoggedIn)}
             </div> :
             React.null

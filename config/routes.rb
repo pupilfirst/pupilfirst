@@ -203,7 +203,7 @@ Rails.application.routes.draw do
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
       get 'apply', action: 'apply'
-      get 'about', action: 'about'
+      get '/(:name)', action: 'show'
     end
 
     resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do

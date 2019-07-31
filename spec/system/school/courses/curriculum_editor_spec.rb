@@ -504,7 +504,7 @@ feature 'Curriculum Editor' do
       expect(page).to_not have_link(href: '/school/customize')
       expect(page).to_not have_link(href: '/school/courses')
       expect(page).to_not have_link(href: '/school/communities')
-      expect(page).to have_link(href: '/home')
+      expect(page).to_not have_link(href: '/home')
 
       [school_path, curriculum_school_course_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
         visit path

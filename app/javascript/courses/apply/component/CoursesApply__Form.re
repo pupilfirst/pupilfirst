@@ -56,37 +56,41 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
     <h4 className="font-bold">
       {"Enroll to " ++ courseName ++ " course" |> str}
     </h4>
-    <div className="w-full mt-4">
-      <label
-        htmlFor="email"
-        className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
-        {"Email" |> str}
-      </label>
-      <input
-        className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
-        type_="text"
-        id="email"
-        maxLength=128
-        value=email
-        disabled=saving
-        onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
-        placeholder="johnDoe@example.com"
-      />
-      <label
-        htmlFor="name"
-        className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
-        {"Name" |> str}
-      </label>
-      <input
-        className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
-        type_="text"
-        id="name"
-        value=name
-        maxLength=128
-        disabled=saving
-        onChange={event => setName(ReactEvent.Form.target(event)##value)}
-        placeholder="John Doe"
-      />
+    <div className="w-full">
+      <div className="mt-4">
+        <label
+          htmlFor="email"
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+          {"Email" |> str}
+        </label>
+        <input
+          className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+          type_="text"
+          id="email"
+          maxLength=128
+          value=email
+          disabled=saving
+          onChange={event => setEmail(ReactEvent.Form.target(event)##value)}
+          placeholder="johnDoe@example.com"
+        />
+      </div>
+      <div className="mt-4">
+        <label
+          htmlFor="name"
+          className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+          {"Name" |> str}
+        </label>
+        <input
+          className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+          type_="text"
+          id="name"
+          value=name
+          maxLength=128
+          disabled=saving
+          onChange={event => setName(ReactEvent.Form.target(event)##value)}
+          placeholder="John Doe"
+        />
+      </div>
     </div>
     <button
       disabled={saveDisabled(email, name, saving)}
@@ -100,7 +104,7 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
           setViewEmailSent,
         )
       }
-      className="btn btn-primary justify-center shadow-lg mt-6">
+      className="btn btn-primary btn-large text-center w-full mt-6">
       {
         saving ?
           <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :

@@ -1,1 +1,1 @@
-import "courses/apply/apply.css";
+import "courses/shared/shared.css";

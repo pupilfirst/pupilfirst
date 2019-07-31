@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("../shared/shared.css")|}];
 [%bs.raw {|require("./apply.css")|}];
 let emailSentIcon: string = [%raw "require('./images/email-sent-icon.svg')"];
 let str = React.string;
@@ -11,7 +12,7 @@ let setViewEmailSent = (setView, ()) => setView(_ => EmailSent);
 
 let renderEmailSent = () =>
   <div className="max-w-sm mx-auto">
-    <img src=emailSentIcon />
+    <img className="mx-auto w-44 sm:w-48" src=emailSentIcon />
     <div className="text-lg sm:text-2xl font-bold text-center mt-4">
       {"We've sent you a magic link!" |> str}
     </div>
@@ -30,13 +31,17 @@ let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
   <div className="bg-gray-100 py-8">
     <div className="container mx-auto px-3 max-w-6xl">
       <div
-        className="flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
+        className="course-apply flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
         <div
-          className="md:w-1/2 enroll-left__container svg-bg-pattern-4 relative p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32 text-white">
-          <div className="">
-            <h1 className="font-bold"> {courseName |> str} </h1>
-            <p> {courseDescription |> str} </p>
+          className="md:w-1/2 flex flex-col justify-between course-apply-left__container svg-bg-pattern-4 relative text-white">
+          <div
+            className="px-4 pt-5 pb-6 md:px-14 md:py-14 lg:px-28 lg:pt-32 lg:pb-10">
+            <h1 className="font-bold leading-tight"> {courseName |> str} </h1>
+            <p className="mt-2"> {courseDescription |> str} </p>
           </div>
+          <div
+            className="course-apply-left__bg-pattern hidden sm:block w-full"
+          />
         </div>
         <div className="md:w-1/2">
           <div className="p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">

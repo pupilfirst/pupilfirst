@@ -2,33 +2,32 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
   <%= stylesheet_pack_tag 'courses/shared', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'courses/show', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'shared/markdownBlockCSS', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
 <div class="bg-gray-100 py-8">
   <div class="container mx-auto px-3 max-w-6xl">
     <div
-      class="shadow-xl rounded-lg overflow-hidden bg-white border">
-      <div
-        class="enroll-left__container svg-bg-pattern-4 relative p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32 text-white">
-        <div class="">
-          <h1 class="font-bold"> <%= @course.name %></h1>
-          <p><%= @course.description %> </p>
-          <a href="./apply" class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
-        </div>
+      class="course-show__hero svg-bg-pattern-4 shadow-xl overflow-hidden border relative text-white">
+      <div class="max-w-4xl mx-auto text-center px-4 pt-5 pb-6 md:px-14 md:py-9 lg:px-28 lg:pt-18 lg:pb-11">
+        <h1 class="font-bold"> <%= @course.name %></h1>
+        <p><%= @course.description %> </p>
+        <a href="./apply" class="btn btn-large font-bold bg-yellow-400 text-yellow-900 shadow mt-4">Apply Now</a>
       </div>
+      <div class="course-show__hero-bg-pattern w-full"></div>
     </div>
     <% if presenter.show_about? %>
-      <div class="max-w-3xl mt-10 mx-auto">
+      <div class="max-w-3xl mt-6 md:mt-10 mx-auto">
         <div class="shadow-xl rounded-lg overflow-hidden bg-white border">
-          <div class="bg-white p-4 markdown-block markdown-block__permissive">
+          <div class="bg-white p-4 md:p-8 markdown-block markdown-block__permissive">
             <%= sanitize(presenter.about) %>
           </div>
-          <div class="bg-blue-600 p-4 py-12 text-center">
+          <div class="course-show__footer-cta svg-bg-pattern-4 p-4 py-12 text-center">
             <div class="text-2xl text-white font-bold">
               Apply to <%= @course.name %>
             </div>
-            <a href="./apply" class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
+            <a href="./apply" class="btn btn-large font-bold bg-yellow-400 text-yellow-900 shadow mt-4 mt-4">Apply Now</a>
           </div>
         </div>
       </div>

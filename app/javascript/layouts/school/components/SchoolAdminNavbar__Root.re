@@ -329,7 +329,7 @@ let make =
       </div>
       <ul>
         {
-          isStudent || isCourseAuthor ?
+          isStudent ?
             bottomLink("/home", shrunk, "fal fa-home-alt", "Home") :
             React.null
         }

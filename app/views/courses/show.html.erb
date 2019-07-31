@@ -14,7 +14,7 @@
         <div class="">
           <h1 class="font-bold"> <%= @course.name %></h1>
           <p><%= @course.description %> </p>
-          <a href="./apply" class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
+          <a href=<%= apply_course_path(@course) %> class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
             <div class="text-2xl text-white font-bold">
               Apply to <%= @course.name %>
             </div>
-            <a href="./apply" class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
+            <a href=<%= apply_course_path(@course) %>class="btn bg-yellow-400 mt-4 px-4">Apply Now</a>
           </div>
         </div>
       </div>

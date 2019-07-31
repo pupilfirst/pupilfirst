@@ -56,22 +56,22 @@ feature 'User Home' do
     within("div[aria-label=\"#{course_1.name}\"]") do
       expect(page).to have_text(course_1.name)
       expect(page).to have_text(course_1.description)
-      expect(page).to have_link("Curriculum", href: course_path(course_1))
-      expect(page).to have_link("Start Course", href: course_path(course_1))
+      expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
+      expect(page).to have_link("Start Course", href: curriculum_course_path(course_1))
     end
 
     # A course which is going on.
     within("div[aria-label=\"#{course_2.name}\"]") do
       expect(page).to have_text(course_2.name)
       expect(page).to have_text(course_2.description)
-      expect(page).to have_link("Continue Course", href: course_path(course_2))
+      expect(page).to have_link("Continue Course", href: curriculum_course_path(course_2))
     end
 
     # A course which has ended.
     within("div[aria-label=\"#{course_3.name}\"]") do
       expect(page).to have_text(course_3.name)
       expect(page).to have_text(course_3.description)
-      expect(page).to have_link("Course Ended", href: course_path(course_3))
+      expect(page).to have_link("Course Ended", href: curriculum_course_path(course_3))
     end
 
     # Course from which student has dropped out.

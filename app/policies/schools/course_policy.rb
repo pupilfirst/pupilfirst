@@ -2,17 +2,27 @@ module Schools
   class CoursePolicy < ApplicationPolicy
     def index?
       # Can be shown only to school admins.
-      user.school_admin.present? && record.present?
+      user&.school_admin.present?
     end
 
     def show?
       # Can be shown to all school admins.
-      user.school_admin.present? && record.in?(current_school.courses)
+      user&.school_admin.present? && record.in?(current_school.courses)
     end
 
     def update?
       # Closed courses shouldn't be updated
-      !record.ended? && show?
+      record.present? && !record.ended? && show?
+    end
+
+    def curriculum?
+      return false if user.blank?
+
+      # All school admins can view the curricula
+      return true if user.school_admin.present?
+
+      # All course authors can view the curricula
+      user.course_authors.where(course: record).present?
     end
 
     alias close? update?

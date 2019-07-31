@@ -63,7 +63,7 @@ module Users
 
       {
         text: text,
-        link: view.course_path(founder.course)
+        link: view.curriculum_course_path(founder.course)
       }
     end
 
@@ -118,7 +118,7 @@ module Users
     def curriculum_link(founder)
       {
         text: "Curriculum",
-        link: view.course_path(founder.course)
+        link: view.curriculum_course_path(founder.course)
       }
     end
 

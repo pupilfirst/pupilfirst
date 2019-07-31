@@ -2,18 +2,16 @@ module Schools
   class FounderPolicy < ApplicationPolicy
     def index?
       # All school admins can list founders in a course.
-      return true if user.school_admin.present?
-    end
-
-    def team_up?
-      # All school admins can team up founders as the course hasn't ended.
-      index? && !record.course.ended?
+      user&.school_admin.present?
     end
 
     def update?
       # School admins can edit details of students in their open courses.
-      index? && !record.course.ended?
+      index? && record.present? && !record.course.ended?
     end
+
+    # All school admins can team up founders if the course hasn't ended.
+    alias team_up? update?
 
     class Scope < Scope
       def resolve

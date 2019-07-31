@@ -182,4 +182,9 @@ feature 'School Customization' do
     expect(SchoolString::PrivacyPolicy.for(school)).to eq(privacy_policy)
     expect(SchoolString::TermsOfUse.for(school)).to eq(terms_of_use)
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit customize_school_path
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

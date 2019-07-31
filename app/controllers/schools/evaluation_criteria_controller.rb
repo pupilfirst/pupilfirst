@@ -8,7 +8,7 @@ module Schools
       form = ::Schools::EvaluationCriteria::CreateForm.new(EvaluationCriterion.new)
       if form.validate(create_params)
         form.save
-        redirect_back(fallback_location: school_course_curriculum_path(params[:course_id]))
+        redirect_back(fallback_location: curriculum_school_course_path(params[:course_id]))
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -19,7 +19,7 @@ module Schools
       form = ::Schools::EvaluationCriteria::UpdateForm.new(criterion)
       if form.validate(update_params)
         form.save
-        redirect_back(fallback_location: school_course_curriculum_path(criterion.course))
+        redirect_back(fallback_location: curriculum_school_course_path(criterion.course))
       else
         raise form.errors.full_messages.join(', ')
       end
@@ -29,7 +29,7 @@ module Schools
     def destroy
       course = criterion.course
       criterion.destroy!
-      redirect_back(fallback_location: school_course_curriculum_path(course))
+      redirect_back(fallback_location: curriculum_school_course_path(course))
     end
 
     private

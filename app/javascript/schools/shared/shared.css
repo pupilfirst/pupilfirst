@@ -327,10 +327,6 @@
   transition: all 0.2s;
 }
 
-.target-group__create:hover, .target-group__target-create:hover {
-  @apply .shadow-lg;
-}
-
 .quiz-maker__question-container:hover .quiz-maker__question-remove-button {
   visibility: visible;
 }

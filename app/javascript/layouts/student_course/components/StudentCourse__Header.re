@@ -10,7 +10,7 @@ let courseOptions = courses =>
        let courseId = course |> Course.id;
        <a
          key={"course-" ++ courseId}
-         href={"/courses/" ++ courseId}
+         href={"/courses/" ++ courseId ++ "/curriculum"}
          className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap">
          <span> {course |> Course.name |> str} </span>
        </a>;
@@ -76,7 +76,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
           <div
             className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg -mt-7 z-10 relative">
             <a
-              href={"/courses/" ++ currentCourseId}
+              href={"/courses/" ++ currentCourseId ++ "/curriculum"}
               className="student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm student-course__nav-tab--active">
               {"Curriculum" |> str}
             </a>

@@ -11,7 +11,7 @@
 
 .student-navbar__links-container:before {
   top: -10px;
-  right: 27px;
+  right: 31px;
   border-right: 10px solid transparent;
   border-bottom: 10px solid theme("colors.gray.400");
   border-left: 10px solid transparent;
@@ -20,7 +20,7 @@
 
 .student-navbar__links-container:after {
   top: -9px;
-  right: 28px;
+  right: 32px;
   border-right: 9px solid transparent;
   border-bottom: 9px solid theme("colors.gray.100");
   border-left: 9px solid transparent;

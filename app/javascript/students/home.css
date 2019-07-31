@@ -15,6 +15,12 @@
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+@screen md {
+  .student-home-course__container {
+    min-height: 12rem;
+  }
+}
+
 .student-home-course__cover {
   background-repeat: no-repeat;
   background-position: center center;

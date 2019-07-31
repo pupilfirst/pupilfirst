@@ -33,7 +33,7 @@ feature 'Target Overlay', js: true do
   end
 
   scenario 'student selects a target to view its content' do
-    sign_in_user student.user, referer: course_path(course)
+    sign_in_user student.user, referer: curriculum_course_path(course)
 
     # The target should be listed as part of the curriculum.
     expect(page).to have_content(target_group_1.name)

@@ -1,8 +1,8 @@
 class CoursesController < ApplicationController
-  # GET /courses/:id/(:slug)
-  def show
+  # GET /courses/:id/curriculum
+  def curriculum
     @course = authorize(Course.find(params[:id]))
-    @presenter = Courses::ShowPresenter.new(view_context, @course)
+    @presenter = Courses::CurriculumPresenter.new(view_context, @course)
     render layout: 'student_course'
   end
 

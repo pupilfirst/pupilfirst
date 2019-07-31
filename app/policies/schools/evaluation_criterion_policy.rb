@@ -2,7 +2,7 @@ module Schools
   class EvaluationCriterionPolicy < ApplicationPolicy
     def create?
       # All school admins can create new criteria.
-      return true if user.school_admin.present?
+      user&.school_admin.present?
     end
 
     alias update? create?

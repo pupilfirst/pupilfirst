@@ -40,7 +40,7 @@ module Layouts
       if current_school.present? && view.policy(current_school).show?
         [{ title: 'Admin', url: view.school_path }]
       elsif current_user.present? && course_authors.any?
-        [{ title: 'Admin', url: view.school_course_curriculum_path(course_authors.first.course) }]
+        [{ title: 'Admin', url: view.curriculum_school_course_path(course_authors.first.course) }]
       else
         []
       end

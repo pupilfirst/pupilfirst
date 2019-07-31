@@ -67,4 +67,9 @@ feature 'Coaches Index' do
     expect(user.reload.name).to eq(updated_coach_name)
     expect(user.title).to eq(updated_coach_title)
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_coaches_path
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

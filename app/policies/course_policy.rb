@@ -1,5 +1,5 @@
 class CoursePolicy < ApplicationPolicy
-  def show?
+  def curriculum?
     # PupilFirst does not have any courses.
     return false unless record.present? && record.school == current_school
 
@@ -19,8 +19,8 @@ class CoursePolicy < ApplicationPolicy
     return true if current_school_admin.present?
 
     # Students enrolled in the current course can view the leaderboard.
-    show?
+    curriculum?
   end
 
-  alias enroll? show?
+  alias enroll? curriculum?
 end

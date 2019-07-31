@@ -45,7 +45,10 @@ Rails.application.routes.draw do
     end
 
     resources :courses, only: %i[index] do
-      resource :curriculum, only: %i[show]
+      member do
+        get 'curriculum'
+      end
+
       resources :evaluation_criteria, only: %i[create]
       resources :levels, only: %i[create]
 
@@ -197,6 +200,7 @@ Rails.application.routes.draw do
     member do
       get 'leaderboard', action: 'leaderboard'
       get 'enroll', action: 'enroll'
+      get 'curriculum', action: 'curriculum'
     end
 
     resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do

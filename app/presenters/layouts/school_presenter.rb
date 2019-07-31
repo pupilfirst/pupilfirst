@@ -18,7 +18,7 @@ module Layouts
       if current_school.logo_on_light_bg.attached?
         view.rails_blob_path(current_school.logo_variant("thumb"), only_path: true)
       else
-        view.image_path('shared/pupilfirst-icon.svg')
+        view.image_path('shared/pupilfirst-logo.svg')
       end
     end
 

@@ -1,5 +1,5 @@
 module Targets
-  class ShowPresenter < Courses::ShowPresenter
+  class ShowPresenter < Courses::CurriculumPresenter
     def initialize(view_context, target)
       @target = target
       super(view_context, target.course)

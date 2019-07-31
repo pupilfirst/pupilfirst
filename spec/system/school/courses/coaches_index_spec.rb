@@ -108,4 +108,9 @@ feature 'Course Coaches Index' do
     expect(page).to_not have_text(coach_1.name)
     expect(course_1.faculty.count).to eq(1)
   end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit school_course_coaches_path(course_1)
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 end

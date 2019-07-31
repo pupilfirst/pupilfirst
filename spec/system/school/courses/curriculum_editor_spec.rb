@@ -76,7 +76,7 @@ feature 'Curriculum Editor' do
 
   shared_examples 'authorized users creates the curriculum' do |user_type|
     scenario 'creates a basic course framework by adding level, target group and targets', js: true do
-      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
+      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       # he should be on the last level
       expect(page).to have_text("Level 2: " + level_2.name)
@@ -149,8 +149,8 @@ feature 'Curriculum Editor' do
       expect(target_group.milestone).to eq(false)
 
       # user should be able to create a draft target from the curriculum index
-      find('#create-target-input').click
-      fill_in 'create-target-input', with: new_target_1_title
+      find("#create-target-input#{target_group.id}").click
+      fill_in "create-target-input#{target_group.id}", with: new_target_1_title
       click_button 'Create'
       expect(page).to have_text('Target created successfully')
       expect(page).to have_selector('.content-block__content', count: 1)
@@ -167,10 +167,10 @@ feature 'Curriculum Editor' do
 
   shared_examples 'authorized users creates different types of targets' do |user_type|
     scenario 'creates a target with a link to complete', js: true do
-      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
+      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
-      find('#create-target-input').click
-      fill_in 'create-target-input', with: new_target_3_title
+      find("#create-target-input#{target_group_2.id}").click
+      fill_in "create-target-input#{target_group_2.id}", with: new_target_3_title
       click_button 'Create'
       expect(page).to have_text("Target created successfully")
       find('.ui-pnotify-container').click
@@ -198,10 +198,10 @@ feature 'Curriculum Editor' do
     end
 
     scenario 'creates a target with a quiz', js: true do
-      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
+      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
-      find('#create-target-input').click
-      fill_in 'create-target-input', with: new_target_4_title
+      find("#create-target-input#{target_group_2.id}").click
+      fill_in "create-target-input#{target_group_2.id}", with: new_target_4_title
       click_button 'Create'
       find('.ui-pnotify-container').click
       click_button 'Next Step'
@@ -270,7 +270,7 @@ feature 'Curriculum Editor' do
 
   shared_examples 'authorized users modifies a target' do |user_type|
     scenario 'adds content to a target and modifies its properties', js: true do
-      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
+      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       target = target_4
 
@@ -383,7 +383,7 @@ feature 'Curriculum Editor' do
     end
 
     scenario 'modifies an existing target content', js: true do
-      sign_in_user admin_user(user_type), referer: school_course_curriculum_path(course)
+      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       target = target_5
 
@@ -493,7 +493,7 @@ feature 'Curriculum Editor' do
     include_examples 'authorized users modifies a target', :course_author
 
     scenario 'user can navigate only to assigned courses and not to school admin pages', js: true do
-      sign_in_user course_author.user, referer: school_course_curriculum_path(course)
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
       expect(page).to have_button(course.name)
       click_button course.name
       expect(page).to have_link(course_2.name, href: "/school/courses/#{course_2.id}/curriculum")
@@ -505,12 +505,17 @@ feature 'Curriculum Editor' do
       expect(page).to_not have_link(href: '/school/customize')
       expect(page).to_not have_link(href: '/school/courses')
       expect(page).to_not have_link(href: '/school/communities')
-      expect(page).to have_link(href: '/home')
+      expect(page).to_not have_link(href: '/home')
 
-      [school_path, school_course_curriculum_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
+      [school_path, curriculum_school_course_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
         visit path
         expect(page).to have_text("The page you were looking for doesn't exist!")
       end
     end
+  end
+
+  scenario 'user who is not logged in gets a 404' do
+    visit curriculum_school_course_path(course)
+    expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

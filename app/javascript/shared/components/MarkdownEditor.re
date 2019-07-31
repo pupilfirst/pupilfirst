@@ -33,8 +33,36 @@ type defaultView =
 
 let str = React.string;
 
-let updateDescription = (description, setDescription, updateDescriptionCB) => {
-  setDescription(_ => description);
+type state = {
+  description: string,
+  preview: bool,
+  commandPair,
+};
+
+type action =
+  | UpdateDescription(string)
+  | TogglePreview
+  | SetCommand(command);
+
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateDescription(description) => {...state, description}
+  | TogglePreview => {
+      ...state,
+      preview: !state.preview,
+      commandPair: {
+        command: None,
+        commandAt: None,
+      },
+    }
+  | SetCommand(command) =>
+    let commandAt = Js.Date.now() |> Js.Float.toString;
+    let commandPair = {command: Some(command), commandAt: Some(commandAt)};
+    {...state, commandPair};
+  };
+
+let updateDescription = (description, send, updateDescriptionCB) => {
+  send(UpdateDescription(description));
   updateDescriptionCB(description);
 };
 
@@ -60,21 +88,17 @@ let commandToString = command =>
   | Italic => "italic"
   };
 
-let handleCommandClick = (command, setCommandPair, event) => {
+let handleCommandClick = (command, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  let timeString = Js.Date.now() |> Js.Float.toString;
-  setCommandPair(_ =>
-    {command: Some(command), commandAt: Some(timeString)}
-  );
+  send(SetCommand(command));
 };
 
-let buttons =
-    (description, setCommandPair, preview, setPreview, previewButtonPosition) => {
+let buttons = (state, send, previewButtonPosition) => {
   let classes = "markdown-button-group__button hover:bg-primary-100 hover:text-primary-400 focus:outline-none focus:text-primary-600";
 
   let previewOrEditButton =
     (
-      switch (description) {
+      switch (state.description) {
       | "" => React.null
       | _someDescription =>
         <button
@@ -83,12 +107,12 @@ let buttons =
           onClick=(
             event => {
               ReactEvent.Mouse.preventDefault(event);
-              setPreview(_ => !preview);
+              send(TogglePreview);
             }
           )>
-          <FaIcon classes={preview ? "fab fa-markdown" : "far fa-eye"} />
+          <FaIcon classes={state.preview ? "fab fa-markdown" : "far fa-eye"} />
           <span className="ml-2">
-            {(preview ? "Edit Markdown" : "Preview") |> str}
+            {(state.preview ? "Edit Markdown" : "Preview") |> str}
           </span>
         </button>
       }
@@ -100,10 +124,10 @@ let buttons =
     |> Array.map(command =>
          <button
            className=classes
-           disabled=preview
+           disabled={state.preview}
            key={command |> commandToString}
            title={command |> commandToTitle}
-           onClick={handleCommandClick(command, setCommandPair)}>
+           onClick={handleCommandClick(command, send)}>
            {command |> commandIcon}
          </button>
        );
@@ -129,33 +153,41 @@ let make =
       ~maxLength=1000,
       ~defaultView,
     ) => {
-  let (description, setDescription) = React.useState(() => value);
-  let (preview, setPreview) =
-    React.useState(() =>
-      switch (defaultView) {
-      | Preview => true
-      | Edit => false
-      }
+  let (state, send) =
+    React.useReducer(
+      reducer,
+      {
+        description: value,
+        preview:
+          switch (defaultView) {
+          | Preview => true
+          | Edit => false
+          },
+        commandPair: {
+          command: None,
+          commandAt: None,
+        },
+      },
     );
+
   let (id, _setId) =
     React.useState(() =>
       switch (textareaId) {
       | Some(id) => id
       | None =>
         "markdown-editor-"
+        ++ (Js.Date.now() |> Js.Float.toString)
+        ++ "-"
         ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
       }
     );
-
-  let (commandPair, setCommandPair) =
-    React.useState(() => {command: None, commandAt: None});
 
   let (label, previewButtonPosition) =
     switch (label) {
     | Some(label) => (
         <label
           className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
-          htmlFor=id>
+          id>
           {label |> str}
         </label>,
         PositionLeft,
@@ -167,27 +199,19 @@ let make =
     <div className="flex justify-between items-end bg-white pb-2">
       label
       <div className="flex markdown-button-group h-9">
-        {
-          buttons(
-            description,
-            setCommandPair,
-            preview,
-            setPreview,
-            previewButtonPosition,
-          )
-        }
+        {buttons(state, send, previewButtonPosition)}
       </div>
     </div>
     {
-      if (preview) {
+      if (state.preview) {
         <MarkdownBlock
-          markdown=description
+          markdown={state.description}
           className="pb-3 pt-2 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
           profile
         />;
       } else {
         let command =
-          switch (commandPair.command) {
+          switch (state.commandPair.command) {
           | None => None
           | Some(c) => Some(c |> commandToString)
           };
@@ -195,13 +219,12 @@ let make =
         <DraftEditor
           ariaLabelledBy=id
           ?placeholder
-          content=description
+          content={state.description}
           onChange={
-            content =>
-              updateDescription(content, setDescription, updateDescriptionCB)
+            content => updateDescription(content, send, updateDescriptionCB)
           }
           ?command
-          commandAt=?{commandPair.commandAt}
+          commandAt=?{state.commandPair.commandAt}
         />;
       }
     }

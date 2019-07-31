@@ -254,11 +254,11 @@ let enablePublicSignupButton = (enablePublicSignup, send) =>
   <div className="flex items-center mb-6">
     <label
       className="block tracking-wide text-gray-800 text-xs font-semibold mr-6"
-      htmlFor="public signup">
+      htmlFor="public-signup">
       {"Enable public signup for this course?" |> str}
     </label>
     <div
-      id="public signup"
+      id="public-signup"
       className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
       <button
         className={booleanButtonClasses(enablePublicSignup)}

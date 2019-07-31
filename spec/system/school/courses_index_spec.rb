@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Courses Index' do
   include UserSpecHelper
+  include NotificationHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -49,7 +50,8 @@ feature 'Courses Index' do
     click_button 'Create Course'
 
     expect(page).to have_text("Course created successfully")
-    find('.ui-pnotify-container').click
+    dismiss_notification
+
     expect(page).to have_text(new_course_name)
     course = Course.last
     expect(course.name).to eq(new_course_name)

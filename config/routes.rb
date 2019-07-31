@@ -199,15 +199,15 @@ Rails.application.routes.draw do
   end
 
   resources :courses, only: %i[show] do
+    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do
+      get 'timeline_events'
+    end
+
     member do
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
       get 'apply', action: 'apply'
       get '/(:name)', action: 'show'
-    end
-
-    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do
-      get 'timeline_events'
     end
   end
 

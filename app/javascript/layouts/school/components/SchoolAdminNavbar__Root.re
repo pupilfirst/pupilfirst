@@ -212,11 +212,11 @@ let make =
                 <div
                   className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
                   {
-                    !isCourseAuthor ?
+                    isCourseAuthor ?
+                      <img src=schoolIconPath alt=schoolName /> :
                       <a href="/school">
                         <img src=schoolIconPath alt=schoolName />
-                      </a> :
-                      <img src=schoolIconPath alt=schoolName />
+                      </a>
                   }
                 </div> :
                 <img

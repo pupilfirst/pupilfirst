@@ -158,13 +158,17 @@ feature 'Curriculum Editor' do
       find("#create-target-input#{target_group.id}").click
       fill_in "create-target-input#{target_group.id}", with: new_target_1_title
       click_button 'Create'
+
       expect(page).to have_text('Target created successfully')
+      dismiss_notification
+
       expect(page).to have_selector('.content-block__content', count: 1)
       expect(page).to have_selector('.add-content-block--open', count: 1)
       target = target_group.reload.targets.last
       expect(target.title).to eq(new_target_1_title)
       find('#target-editor-close').click
       expect(page).to have_text(new_target_1_title)
+
       within("div#target-show-#{target.id}") do
         expect(page).to have_text('Draft')
       end

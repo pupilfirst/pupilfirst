@@ -56,6 +56,6 @@ class CreateApplicantMutator < ApplicationMutator
 
     return unless course.users.where(email: email).any?
 
-    errors[:base] << 'This email is already registered'
+    errors[:base] << "Already enrolled in #{course.name} course"
   end
 end

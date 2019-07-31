@@ -23,7 +23,9 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def apply?
-    record.enable_public_signup && record.school == current_school
+    return false unless record.present? && record.school == current_school
+
+    record.enable_public_signup
   end
 
   alias show? apply?

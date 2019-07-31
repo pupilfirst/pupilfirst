@@ -198,17 +198,22 @@ let make =
     [|sortContentBlock|],
   );
 
-  React.useEffect(() => {
-    let contentEditorDirty =
-      targetContentBlocks |> List.exists(((_, _, cb, _)) => cb == None);
-    updateContentEditorDirtyCB(contentEditorDirty);
-    updateContentBlockMasterList(
-      targetContentBlocks,
-      updateContentBlocksCB,
-      target |> Target.id,
-    );
-    None;
-  });
+  let contentEditorDirty =
+    targetContentBlocks |> List.exists(((_, _, cb, _)) => cb == None);
+
+  React.useEffect1(
+    () => {
+      updateContentEditorDirtyCB(contentEditorDirty);
+
+      updateContentBlockMasterList(
+        targetContentBlocks,
+        updateContentBlocksCB,
+        target |> Target.id,
+      );
+      None;
+    },
+    [|contentEditorDirty|],
+  );
 
   [|
     <CurriculumEditor__ContentTypePicker
@@ -243,14 +248,10 @@ let make =
               sortIndex
               newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
               createNewContentCB={
-                createNewContentCB(
-                  updateTargetContentBlocks,
-                )
+                createNewContentCB(updateTargetContentBlocks)
               }
               updateContentBlockCB={
-                updateContentBlockCB(
-                  updateTargetContentBlocks,
-                )
+                updateContentBlockCB(updateTargetContentBlocks)
               }
               blockCount={targetContentBlocks |> List.length}
               swapContentBlockCB={

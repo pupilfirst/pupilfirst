@@ -26,5 +26,5 @@ class CoursePolicy < ApplicationPolicy
     record.enable_public_signup && record.school == current_school
   end
 
-  alias about? apply?
+  alias show? apply?
 end

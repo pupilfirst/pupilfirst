@@ -6,7 +6,7 @@ module Courses
     end
 
     def page_title
-      "Enroll to #{@course.name} | #{current_school.name}"
+      "#{@course.name} | #{current_school.name}"
     end
 
     def about
@@ -17,17 +17,6 @@ module Courses
 
     def show_about?
       @course.about.present?
-    end
-
-    private
-
-    def props
-      {
-        authenticity_token: view.form_authenticity_token,
-        course_id: @course.id,
-        course_name: @course.name,
-        course_description: @course.description
-      }
     end
   end
 end

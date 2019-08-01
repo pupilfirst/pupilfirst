@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Courses Index' do
   include UserSpecHelper
   include NotificationHelper
+  include MarkdownEditorHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -77,7 +78,7 @@ feature 'Courses Index' do
     fill_in 'Name', with: new_course_name_1, fill_options: { clear: :backspace }
     fill_in 'Description', with: new_description_for_edit, fill_options: { clear: :backspace }
     fill_in 'Course ends at', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
-    fill_in 'About', with: new_about
+    replace_markdown new_about
     within('div#leaderboard') do
       click_button 'No'
     end

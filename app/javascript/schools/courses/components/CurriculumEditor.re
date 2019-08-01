@@ -347,7 +347,7 @@ let make =
               _ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))
             }
             className="target-group__create flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 hover:border-primary-400 rounded-lg mt-12 cursor-pointer">
-            <span className="bg-gray-200 p-2 rounded-full">
+            <span className="flex bg-gray-200 p-2 rounded-full">
               <i className="fal fa-plus-circle text-2xl" />
             </span>
             <h4 className="font-semibold ml-2">

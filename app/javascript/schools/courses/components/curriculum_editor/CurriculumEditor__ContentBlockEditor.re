@@ -568,12 +568,19 @@ let make =
                           defaultView=MarkdownEditor.Preview
                         />
                       | Image(url, caption) =>
-                        <div className="rounded-lg bg-white">
+                        <div className="rounded-t-lg bg-white">
                           <img className="mx-auto" src=url alt=caption />
-                          <div
-                            className="px-4 py-2 text-sm italic text-center">
-                            {caption |> str}
-                          </div>
+                          {
+                            switch (caption) {
+                            | "" => React.null
+
+                            | caption =>
+                              <div
+                                className="px-4 py-2 text-sm italic text-center">
+                                {caption |> str}
+                              </div>
+                            }
+                          }
                         </div>
                       | Embed(_url, embedCode) =>
                         <div
@@ -638,12 +645,13 @@ let make =
               }
             </div>
             /* Content block action bar */
-            <div className="flex p-3 border-t justify-end">
+            <div className="flex border-t justify-end">
               {
                 actionBarTextInputVisible(blockType, contentBlock) ?
-                  <div className="flex-1 content-block__action-bar-input">
+                  <div
+                    className="flex-1 content-block__action-bar-input p-3 pr-0">
                     <input
-                      className="appearance-none block w-full h-10 bg-white text-gray-800 border border-transparent rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                      className="appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
                       id="captions"
                       name={
                         switch (blockType) {
@@ -670,9 +678,9 @@ let make =
               }
               {
                 updateButtonVisible(contentBlock, blockType) ?
-                  <div className="ml-2 text-right">
+                  <div className="text-right py-3 pl-2 pr-3">
                     <button
-                      className="btn btn-large btn-success"
+                      className="btn btn-success h-10"
                       disabled={saveDisabled(state)}>
                       {editorButtonText(contentBlock) |> str}
                     </button>

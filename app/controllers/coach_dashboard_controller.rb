@@ -11,9 +11,9 @@ class CoachDashboardController < ApplicationController
     service = CoachDashboard::TimelineEventsDataService.new(
       current_coach,
       @course,
-      params[:reviewStatus].to_sym,
-      excluded_ids,
-      params[:limit]
+      review_status: params[:reviewStatus].to_sym,
+      excluded_ids: excluded_ids,
+      limit: params[:limit]
     )
 
     render(

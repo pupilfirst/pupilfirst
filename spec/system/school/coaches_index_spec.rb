@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Coaches Index' do
   include UserSpecHelper
+  include NotificationHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -38,7 +39,8 @@ feature 'Coaches Index' do
     click_button 'Create Coach'
 
     expect(page).to have_text('Coach created successfully')
-    find('.ui-pnotify-container').click
+    dismiss_notification
+
     expect(page).to have_text(new_coach_name)
 
     coach = Faculty.last

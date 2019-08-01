@@ -3,7 +3,7 @@
 }
 
 .markdown-button-group__button {
-  @apply border-r px-3 py-2 flex items-center whitespace-no-wrap text-sm font-semibold;
+  @apply border-r px-3 flex items-center whitespace-no-wrap text-sm font-semibold;
 }
 
 .markdown-button-group__button:last-child {
@@ -11,5 +11,9 @@
 }
 
 .markdown-editor-preview {
+  min-height: 10.5rem;
+}
+
+.markdown-draft-editor__container {
   min-height: 10.5rem;
 }

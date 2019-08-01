@@ -27,8 +27,9 @@
   min-height: 14rem;
 }
 
-.content-block__content textarea {
-  @apply border-none;
+.content-block__content .markdown-draft-editor__container {
+  @apply border-transparent bg-gray-100 rounded-none;
+  border-top-color: theme(colors.gray.300);
 }
 
 .content-block__embed {

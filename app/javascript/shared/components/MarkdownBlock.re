@@ -26,7 +26,7 @@ let markdownBlockClasses = (profile, className) => {
 
 [@react.component]
 let make = (~markdown, ~className=?, ~profile) => {
-  let id = randomId();
+  let (id, _setId) = React.useState(() => randomId());
 
   React.useEffect1(
     () => {

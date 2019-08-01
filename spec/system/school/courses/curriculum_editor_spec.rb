@@ -2,6 +2,8 @@ require 'rails_helper'
 
 feature 'Curriculum Editor' do
   include UserSpecHelper
+  include MarkdownEditorHelper
+  include NotificationHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -96,8 +98,9 @@ feature 'Curriculum Editor' do
       fill_in 'Level Name', with: new_level_name
       fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
       click_button 'Create New Level'
+
       expect(page).to have_text("Level created successfully")
-      find('.ui-pnotify-container').click
+      dismiss_notification
 
       course.reload
       level = course.levels.last
@@ -109,11 +112,11 @@ feature 'Curriculum Editor' do
       expect(page).to have_text(new_level_name)
       fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
       click_button 'Update Level'
-      expect(page).to have_text('Level updated successfully')
-      find('.ui-pnotify-container').click
 
-      level.reload
-      expect(level.unlock_on).not_to eq(date)
+      expect(page).to have_text('Level updated successfully')
+      dismiss_notification
+
+      expect(level.reload.unlock_on).not_to eq(date)
 
       # he should be able to create a new target group
       find('.target-group__create').click
@@ -122,8 +125,9 @@ feature 'Curriculum Editor' do
       fill_in 'Description', with: new_target_group_description
       click_button 'Yes'
       click_button 'Create Target Group'
+
       expect(page).to have_text('Target Group created successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
 
       level.reload
       target_group = level.target_groups.last
@@ -136,12 +140,15 @@ feature 'Curriculum Editor' do
       expect(page).to have_text(target_group.name)
       expect(page).to have_text(target_group.description)
       fill_in 'Description', with: '', fill_options: { clear: :backspace }
+
       within('.milestone') do
         click_button 'No'
       end
+
       click_button 'Update Target Group'
+
       expect(page).to have_text("Target Group updated successfully")
-      find('.ui-pnotify-container').click
+      dismiss_notification
 
       target_group.reload
       expect(target_group.description).not_to eq(new_target_group_description)
@@ -151,13 +158,17 @@ feature 'Curriculum Editor' do
       find("#create-target-input#{target_group.id}").click
       fill_in "create-target-input#{target_group.id}", with: new_target_1_title
       click_button 'Create'
+
       expect(page).to have_text('Target created successfully')
+      dismiss_notification
+
       expect(page).to have_selector('.content-block__content', count: 1)
       expect(page).to have_selector('.add-content-block--open', count: 1)
       target = target_group.reload.targets.last
       expect(target.title).to eq(new_target_1_title)
       find('#target-editor-close').click
       expect(page).to have_text(new_target_1_title)
+
       within("div#target-show-#{target.id}") do
         expect(page).to have_text('Draft')
       end
@@ -171,24 +182,31 @@ feature 'Curriculum Editor' do
       find("#create-target-input#{target_group_2.id}").click
       fill_in "create-target-input#{target_group_2.id}", with: new_target_3_title
       click_button 'Create'
+
       expect(page).to have_text("Target created successfully")
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       click_button 'Next Step'
+
       within("div#evaluated") do
         click_button 'No'
       end
+
       within("div#method_of_completion") do
         click_button 'Visit a link to complete the target.'
       end
+
       fill_in 'Link to complete', with: link_to_complete
 
       within("div#visibility") do
         click_button 'Live'
       end
+
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(page).to have_text("Create a target")
       target = Target.find_by(title: new_target_3_title)
       expect(target.evaluation_criteria).to eq([])
@@ -201,9 +219,12 @@ feature 'Curriculum Editor' do
 
       find("#create-target-input#{target_group_2.id}").click
       fill_in "create-target-input#{target_group_2.id}", with: new_target_4_title
+
       click_button 'Create'
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       click_button 'Next Step'
+
       within("div#evaluated") do
         click_button 'No'
       end
@@ -213,7 +234,8 @@ feature 'Curriculum Editor' do
       end
 
       # Quiz Question 1
-      fill_in 'Question 1', with: quiz_question_1
+      replace_markdown(quiz_question_1)
+      click_button 'Preview'
       fill_in 'quiz_question_1_answer_option_1', with: quiz_question_1_answer_option_1
       fill_in 'quiz_question_1_answer_option_2', with: quiz_question_1_answer_option_2
       find("a", text: "Add another Answer Option").click
@@ -225,18 +247,21 @@ feature 'Curriculum Editor' do
 
       # Quiz Question 2
       find("a", text: "Add another Question").click
-      fill_in 'Question 2', with: quiz_question_2
+      replace_markdown(quiz_question_2)
       fill_in 'quiz_question_2_answer_option_1', with: quiz_question_2_answer_option_1
       fill_in 'quiz_question_2_answer_option_2', with: quiz_question_2_answer_option_2
 
       within("div#visibility") do
         click_button 'Live'
       end
+
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(page).to have_text("Create a target")
+
       target = Target.find_by(title: new_target_4_title)
       expect(target.evaluation_criteria).to eq([])
       expect(target.link_to_complete).to eq(nil)
@@ -249,18 +274,21 @@ feature 'Curriculum Editor' do
 
       find('.target-group__target', text: new_target_4_title).click
       click_button 'Next Step'
+
       within("div#evaluated") do
         click_button 'No'
       end
+
       within("div#method_of_completion") do
         click_button 'Simply mark the target as completed.'
       end
+
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
-      find('.ui-pnotify-container').click
-      target.reload
-      expect(target.evaluation_criteria).to eq([])
+      dismiss_notification
+
+      expect(target.reload.evaluation_criteria).to eq([])
       expect(target.link_to_complete).to eq(nil)
       expect(target.quiz).to eq(nil)
     end
@@ -277,22 +305,29 @@ feature 'Curriculum Editor' do
       expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
       expect(page).to have_text('Target Visibility')
+
       within("div#visibility") do
         click_button 'Live'
       end
+
       click_button 'Update Target'
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       within("div#target-show-#{target.id}") do
         expect(page).to_not have_text('Draft')
       end
+
       expect(target.reload.visibility).to eq('live')
       find('.target-group__target', text: target.title).click
       click_button 'Next Step'
+
       within("div#visibility") do
         click_button 'Archived'
       end
+
       click_button 'Update Target'
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(page).to_not have_selector("div#target-show-#{target.id}")
       click_button 'Show Archived'
       expect(page).to have_selector("div#target-show-#{target.id}")
@@ -304,6 +339,7 @@ feature 'Curriculum Editor' do
       within("div#evaluated") do
         click_button 'Yes'
       end
+
       expect(page).to have_text('Atleast one has to be selected')
 
       find("div[title='Select #{evaluation_criterion.name}']").click
@@ -311,42 +347,52 @@ feature 'Curriculum Editor' do
       within("div#evaluated") do
         click_button 'No'
       end
+
       within("div#method_of_completion") do
         find('div', text: "Simply mark the target as completed.").click
       end
+
       within("div#visibility") do
         click_button 'Live'
       end
+
       click_button 'Update Target'
-      find('.ui-pnotify-container').click
+      dismiss_notification
 
       # Add few contents to target
 
       find('.target-group__target', text: target.title).click
+
       within('.add-content-block--open') do
         find('p', text: 'Markdown').click
       end
 
-      textarea = find('textarea', match: :first)
-      textarea.fill_in with: sample_markdown_text
+      replace_markdown(sample_markdown_text)
       find('span', text: 'Preview').click
       click_button 'Save'
+
       expect(page).to have_text('Content added successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(target.reload.content_blocks.last.sort_index).to eq(1)
       expect(target.content_blocks.last.block_type).to eq('markdown')
 
       within('.add-content-block--open') do
         find('p', text: 'Image').click
       end
+
       attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
       click_button 'Save'
+
       expect(page).to have_text('File must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       attach_file 'content_block[file]', file_path('logo_hackkar.png'), visible: false
       click_button 'Save'
+
       expect(page).to have_text('Content added successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       content_block = target.content_blocks.reload.where(block_type: 'image').last
       expect(content_block.sort_index).to eq(2)
       expect(content_block.file.filename).to eq('logo_hackkar.png')
@@ -354,10 +400,13 @@ feature 'Curriculum Editor' do
       within('.add-content-block--open') do
         find('p', text: 'File').click
       end
+
       attach_file 'content_block[file]', file_path('pdf-sample.pdf'), visible: false
       click_button 'Save'
+
       expect(page).to have_text('Content added successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       content_block = target.content_blocks.reload.where(block_type: 'file').last
       expect(content_block.sort_index).to eq(3)
       expect(content_block.file.filename).to eq('pdf-sample.pdf')
@@ -365,19 +414,23 @@ feature 'Curriculum Editor' do
       within('.add-content-block--open') do
         find('p', text: 'Embed').click
       end
+
       fill_in 'Paste in a URL to embed', with: 'https://www.youtube.com/watch?v=3QDYbQIS8cQ'
       click_button 'Save'
+
       expect(page).to have_text('Content added successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       content_block = target.content_blocks.reload.where(block_type: 'embed').last
       expect(content_block.sort_index).to eq(4)
 
       # Change target title
       expect(page).to_not have_selector(:button, 'Update')
       fill_in 'title', with: 'new target title', fill_options: { clear: :backspace }
-      expect(page).to have_selector(:button, 'Update')
       click_button 'Update'
-      find('.ui-pnotify-container').click
+
+      dismiss_notification
+
       expect(target.reload.title).to eq('new target title')
     end
 
@@ -394,13 +447,15 @@ feature 'Curriculum Editor' do
       within("div#content-type-picker-1") do
         find('p', text: 'Markdown').click
       end
+
       expect(page).to have_selector('.content-block__content', count: 5)
-      textarea = find('textarea', match: :first)
-      textarea.fill_in with: sample_markdown_text
+
+      replace_markdown(sample_markdown_text)
       find('span', text: 'Preview').click
       click_button 'Save'
+
       expect(page).to have_text('Content added successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
 
       content_blocks = target.content_blocks.reload
       expect(content_blocks.count).to eq(5)
@@ -412,15 +467,17 @@ feature 'Curriculum Editor' do
       within('#content-block-controls-1') do
         find_button('Move down').click
       end
+
       # Moving blocks has no message in the UI to be checked. Do some action before checking changes in DB
       within('#content-block-form-3') do
         find('span', text: 'Edit Markdown').click
-        find('textarea').fill_in with: sample_markdown_text
+        replace_markdown(sample_markdown_text)
         click_button 'Update'
       end
 
       expect(page).to have_text('Content updated successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(target.content_blocks.reload.find_by(block_type: 'embed').sort_index).to eq(1)
       expect(target.content_blocks.find_by(sort_index: 2).block_type).to eq('markdown')
 
@@ -428,14 +485,16 @@ feature 'Curriculum Editor' do
       within('#content-block-controls-5') do
         find_button('Move up').click
       end
+
       within('#content-block-form-2') do
         find('span', text: 'Edit Markdown').click
-        find('textarea').fill_in with: sample_markdown_text
+        replace_markdown(sample_markdown_text)
         click_button 'Update'
       end
 
       expect(page).to have_text('Content updated successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(target.content_blocks.reload.find_by(block_type: 'file').sort_index).to eq(4)
       expect(target.content_blocks.find_by(block_type: 'image').sort_index).to eq(5)
 
@@ -444,8 +503,10 @@ feature 'Curriculum Editor' do
         fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
         click_button 'Update Title'
       end
+
       expect(page).to have_text('Content updated successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(target.content_blocks.reload.find_by(block_type: 'file').content['title']).to eq('new file title')
 
       # Update an image caption
@@ -453,8 +514,10 @@ feature 'Curriculum Editor' do
         fill_in 'content_block[caption]', with: 'new image caption', fill_options: { clear: :backspace }
         click_button 'Update Caption'
       end
+
       expect(page).to have_text('Content updated successfully')
-      find('.ui-pnotify-container').click
+      dismiss_notification
+
       expect(target.content_blocks.reload.find_by(block_type: 'image').content['caption']).to eq('new image caption')
 
       # Delete few content block
@@ -473,8 +536,10 @@ feature 'Curriculum Editor' do
           find_button('Delete block').click
         end
       end
+
       click_button 'Next Step'
       find('span', text: 'Add Content').click
+
       expect(page).to have_selector('.content-block__content', count: 3)
       expect(target.content_blocks.reload.pluck(:sort_index).sort).to eq([1, 2, 3])
     end

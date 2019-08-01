@@ -94,7 +94,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
   });
 
   <div className="border-b">
-    <div className="container mx-auto px-6 max-w-6xl">
+    <div className="container mx-auto px-4 md:px-6 max-w-6xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm" href="/">
@@ -102,7 +102,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
               switch (logoUrl) {
               | Some(url) =>
                 <img
-                  className="h-12 object-contain"
+                  className="h-9 md:h-12 object-contain"
                   src=url
                   alt={"Logo of " ++ schoolName}
                 />

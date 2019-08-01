@@ -1,0 +1,36 @@
+<%
+  school_name = @school.name
+%>
+
+<% content_for :title do %>
+  Verify Your Email Address
+<% end %>
+
+<% content_for :subtitle do %>
+  We're happy you're here. Let's get your email address verified:
+<% end %>
+
+<% content_for :title_button_text do %>
+  Click to Verify Email
+<% end %>
+
+<% content_for(:title_button_link, @login_url) %>
+
+<% content_for :salutation do %>
+  Hello,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    To activate your  <%= school_name %> Account, please verify your email address.
+    Your account will not be created until your email address is confirmed.
+  </p>
+
+  <%= render 'mailers/link_fallback', url: @login_url %>
+<% end %>
+
+<% content_for(:signature) do %>
+  <div>
+    <%= school_name %>
+  </div>
+<% end %>

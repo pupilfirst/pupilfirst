@@ -122,7 +122,7 @@ let renderIcon = view => {
     | SignInEmailSent => signInEmailSentIcon
     | ForgotPassword => forgotPasswordIcon
     };
-  <img className="mx-auto h-22 sm:h-32" src=iconUrl />;
+  <img className="mx-auto w-32 sm:w-42" src=iconUrl />;
 };
 
 let headerText = view =>

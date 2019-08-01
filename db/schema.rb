@@ -107,6 +107,18 @@ ActiveRecord::Schema.define(version: 2019_07_30_074408) do
     t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
+  create_table "applicants", force: :cascade do |t|
+    t.string "email"
+    t.string "name"
+    t.string "login_token"
+    t.datetime "login_token_sent_at"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_applicants_on_course_id"
+    t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+  end
+
   create_table "colleges", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "also_known_as"
@@ -211,6 +223,8 @@ ActiveRecord::Schema.define(version: 2019_07_30_074408) do
     t.datetime "ends_at"
     t.string "description"
     t.boolean "enable_leaderboard", default: false
+    t.boolean "enable_public_signup", default: false
+    t.text "about"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -764,6 +778,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_074408) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
+  add_foreign_key "applicants", "courses"
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"

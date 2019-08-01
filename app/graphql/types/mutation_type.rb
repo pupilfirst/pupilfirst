@@ -24,5 +24,6 @@ module Types
     field :level_up, mutation: Mutations::LevelUp, null: false
     field :sort_content_blocks, mutation: Mutations::SortContentBlocks, null: false
     field :update_content_block, mutation: Mutations::UpdateContentBlock, null: false
+    field :create_applicant, mutation: Mutations::CreateApplicant, null: false
   end
 end

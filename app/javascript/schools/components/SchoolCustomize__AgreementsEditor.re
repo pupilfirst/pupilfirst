@@ -173,7 +173,7 @@ let make =
               updateTermsOfUseCB,
             )
           }
-          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+          className="w-full btn btn-large btn-primary mt-4">
           {updateAgreementText(state.updating, kind) |> str}
         </button>
       </DisablingCover.Jsx2>

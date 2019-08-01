@@ -140,7 +140,7 @@ let make =
       };
     <div>
       <div className="blanket" />
-      <div className="drawer-right">
+      <div className="drawer-right drawer-right-small">
         <div className="drawer-right__close absolute">
           <button
             title="close"
@@ -153,61 +153,67 @@ let make =
           <div className="w-full">
             <div className="mx-auto bg-white">
               <div className="max-w-2xl p-6 mx-auto">
-                <h5
-                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+                <h5 className="uppercase text-center border-b pb-2 mb-4">
                   {"Level Details" |> str}
                 </h5>
-                <label
-                  className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                  htmlFor="name">
-                  {"Level Name" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="name"
-                  type_="text"
-                  placeholder="Type level name here"
-                  value={state.name}
-                  onChange={
-                    event =>
-                      updateName(send, ReactEvent.Form.target(event)##value)
+                <div className="mt-4">
+                  <label
+                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+                    htmlFor="name">
+                    {"Level Name" |> str}
+                  </label>
+                  <span> {"*" |> str} </span>
+                  <input
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="name"
+                    type_="text"
+                    placeholder="Type level name here"
+                    value={state.name}
+                    onChange={
+                      event =>
+                        updateName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                  {
+                    state.hasNameError ?
+                      <div className="drawer-right-form__error-msg">
+                        {"not a valid name" |> str}
+                      </div> :
+                      ReasonReact.null
                   }
-                />
-                {
-                  state.hasNameError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid name" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <label
-                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                  htmlFor="date">
-                  {"Unlock level on" |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="date"
-                  type_="text"
-                  placeholder="DD/MM/YYYY"
-                  value=unlockOn
-                  onChange={
-                    event =>
-                      updateUnlockOn(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
+                </div>
+                <div className="mt-4">
+                  <label
+                    className="block tracking-wide text-gray-800 text-xs font-semibold"
+                    htmlFor="date">
+                    {"Unlock level on" |> str}
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="date"
+                    type_="text"
+                    placeholder="DD/MM/YYYY"
+                    value=unlockOn
+                    onChange={
+                      event =>
+                        updateUnlockOn(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                  {
+                    state.hasDateError ?
+                      <div className="drawer-right-form__error-msg">
+                        {"not a valid date" |> str}
+                      </div> :
+                      ReasonReact.null
                   }
-                />
-                {
-                  state.hasDateError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid date" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <div className="flex">
+                </div>
+                <div className="flex mt-4">
                   {
                     switch (level) {
                     | Some(level) =>
@@ -217,7 +223,7 @@ let make =
                         onClick=(
                           _event => updateLevel(authenticityToken, id, state)
                         )
-                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                        className="w-full btn btn-large btn-primary">
                         {"Update Level" |> str}
                       </button>;
 
@@ -228,7 +234,7 @@ let make =
                           _event =>
                             createLevel(authenticityToken, course, state)
                         )
-                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+                        className="w-full btn btn-large btn-primary">
                         {"Create New Level" |> str}
                       </button>
                     }

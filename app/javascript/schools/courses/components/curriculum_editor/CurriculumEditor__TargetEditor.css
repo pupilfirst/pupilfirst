@@ -28,7 +28,7 @@
 }
 
 .content-block__content .markdown-draft-editor__container {
-  @apply border-transparent bg-gray-100 rounded-none;
+  @apply border-transparent bg-white rounded-none;
   border-top-color: theme(colors.gray.300);
 }
 

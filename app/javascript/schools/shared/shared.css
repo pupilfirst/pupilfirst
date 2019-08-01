@@ -159,11 +159,17 @@
   .drawer-right {
     @apply .w-4/5;
   }
+  .drawer-right-small {
+    width: 32rem;
+  }
 }
 
 @screen xl {
   .drawer-right {
     width: 48rem;
+  }
+  .drawer-right-small {
+    width: 36rem;
   }
   .drawer-right-large {
     width: 64rem;

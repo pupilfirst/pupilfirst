@@ -315,7 +315,7 @@ let make =
           )
         }
         key="communities-editor__update-button"
-        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full btn btn-large btn-primary mt-3">
         {
           (
             switch (community) {

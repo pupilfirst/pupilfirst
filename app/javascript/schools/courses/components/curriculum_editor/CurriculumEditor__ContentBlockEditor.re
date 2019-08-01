@@ -680,7 +680,7 @@ let make =
                 updateButtonVisible(contentBlock, blockType) ?
                   <div className="text-right py-3 pl-2 pr-3">
                     <button
-                      className="btn btn-success h-10"
+                      className="btn btn-large btn-success"
                       disabled={saveDisabled(state)}>
                       {editorButtonText(contentBlock) |> str}
                     </button>

@@ -5,7 +5,8 @@ class StartupMailer < SchoolMailer
     send_to = founder&.email || startup_feedback.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     @school = startup_feedback.startup.school
 
-    simple_roadie_mail(send_to, 'Feedback from Team SV')
+    subject = "New feedback from #{startup_feedback.faculty.name} on your submission"
+    simple_roadie_mail(send_to, subject)
   end
 
   # Mail sent to startup founders once a connect request is confirmed.

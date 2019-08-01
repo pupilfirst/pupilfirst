@@ -60,11 +60,11 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
       <div className="mt-4">
         <label
           htmlFor="email"
-          className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+          className="inline-block tracking-wide text-xs font-semibold">
           {"Email" |> str}
         </label>
         <input
-          className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+          className="appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           type_="text"
           id="email"
           maxLength=128
@@ -77,11 +77,11 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
       <div className="mt-4">
         <label
           htmlFor="name"
-          className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+          className="inline-block tracking-wide text-xs font-semibold">
           {"Name" |> str}
         </label>
         <input
-          className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+          className="appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           type_="text"
           id="name"
           value=name

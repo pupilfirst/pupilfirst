@@ -159,17 +159,11 @@
   .drawer-right {
     @apply .w-4/5;
   }
-  .drawer-right-small {
-    width: 32rem;
-  }
 }
 
 @screen xl {
   .drawer-right {
     width: 48rem;
-  }
-  .drawer-right-small {
-    width: 36rem;
   }
   .drawer-right-large {
     width: 64rem;
@@ -182,7 +176,7 @@
 }
 
 .drawer-right-form {
-  background-color: #f7f5fa;
+  background-color: #FBFAFC;
   overflow-x: hidden;
   overflow-y: scroll;
   @apply .text-sm;
@@ -193,8 +187,7 @@
 }
 
 .drawer-right-form__error-msg {
-  color: red;
-  margin-bottom: 0.715rem;
+  @apply mt-1 px-1 py-px rounded text-xs font-semibold text-red-600 bg-red-100 inline-flex items-center;
 }
 
 .sa-toggle__menu-btn {
@@ -284,11 +277,11 @@
 }
 
 .toggle-button__button:hover {
-  @apply bg-primary-100 text-primary-600;
+  @apply bg-primary-100 text-primary-600 shadow-inner;
 }
 
 .toggle-button__button:focus {
-  @apply outline-none;
+  @apply outline-none shadow-inner;
 }
 
 .toggle-button__button--active {

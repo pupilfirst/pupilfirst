@@ -140,7 +140,7 @@ let make =
       };
     <div>
       <div className="blanket" />
-      <div className="drawer-right drawer-right-small">
+      <div className="drawer-right">
         <div className="drawer-right__close absolute">
           <button
             title="close"
@@ -156,15 +156,15 @@ let make =
                 <h5 className="uppercase text-center border-b pb-2 mb-4">
                   {"Level Details" |> str}
                 </h5>
-                <div className="mt-4">
+                <div className="mt-5">
                   <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+                    className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="name">
                     {"Level Name" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="name"
                     type_="text"
                     placeholder="Type level name here"
@@ -185,14 +185,14 @@ let make =
                       ReasonReact.null
                   }
                 </div>
-                <div className="mt-4">
+                <div className="mt-5">
                   <label
-                    className="block tracking-wide text-gray-800 text-xs font-semibold"
+                    className="block tracking-wide text-xs font-semibold"
                     htmlFor="date">
                     {"Unlock level on" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="date"
                     type_="text"
                     placeholder="DD/MM/YYYY"
@@ -213,7 +213,7 @@ let make =
                       ReasonReact.null
                   }
                 </div>
-                <div className="flex mt-4">
+                <div className="flex mt-5">
                   {
                     switch (level) {
                     | Some(level) =>

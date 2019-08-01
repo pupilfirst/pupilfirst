@@ -322,8 +322,7 @@ let make =
         {"Manage custom links" |> str}
       </h5>
       <div className="mt-3">
-        <label
-          className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+        <label className="inline-block tracking-wide text-xs font-semibold">
           {"Location of Link" |> str}
         </label>
         <div className="flex bg-white border border-t-0 rounded-t mt-2">
@@ -349,7 +348,7 @@ let make =
       </div>
       <div className="p-5 border border-t-0 rounded-b">
         <label
-          className="inline-block tracking-wide text-gray-800 text-xs font-semibold mt-4">
+          className="inline-block tracking-wide text-xs font-semibold mt-4">
           {linksTitle(state.kind)}
         </label>
         {
@@ -368,12 +367,12 @@ let make =
               if (state |> titleInputVisible) {
                 <div className="flex-grow mr-4">
                   <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+                    className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="link-title">
                     {"Title" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="link-title"
                     type_="text"
                     placeholder="A short title for a new link"
@@ -392,12 +391,12 @@ let make =
             }
             <div className="flex-grow">
               <label
-                className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+                className="inline-block tracking-wide text-xs font-semibold"
                 htmlFor="link-full-url">
                 {"Full URL" |> str}
               </label>
               <input
-                className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="link-full-url"
                 type_="text"
                 placeholder="Full URL, staring with https://"

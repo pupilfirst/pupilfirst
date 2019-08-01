@@ -5,8 +5,11 @@ let str = React.string;
 [@react.component]
 let make = (~message, ~active) =>
   if (active) {
-    <div className="mt-2 text-red inline-flex items-center">
-      <span className="ml-4 mr-2"> <Icon kind=Icon.Alert size="3" /> </span>
+    <div
+      className="mt-1 px-1 py-px rounded text-xs font-semibold text-red-600 bg-red-100 inline-flex items-center">
+      <span className="mr-2">
+        <i className="fas fa-exclamation-triangle" />
+      </span>
       <span> {message |> str} </span>
     </div>;
   } else {

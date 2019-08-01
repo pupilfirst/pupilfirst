@@ -209,7 +209,7 @@ let make =
               <div className="max-w-2xl p-6 mx-auto">
                 <div>
                   <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-xs font-semibold mb-2"
                     htmlFor="name">
                     {"Name" |> str}
                   </label>
@@ -224,7 +224,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="name"
                     type_="text"
                     placeholder="Student name here"
@@ -234,9 +234,9 @@ let make =
                     active={state.hasNameError}
                   />
                 </div>
-                <div className="mt-6">
+                <div className="mt-5">
                   <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                    className="inline-block tracking-wide text-xs font-semibold mb-2"
                     htmlFor="team_name">
                     {"Team Name" |> str}
                   </label>
@@ -251,7 +251,7 @@ let make =
                           ReactEvent.Form.target(event)##value,
                         )
                     }
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="team_name"
                     type_="text"
                     placeholder="Team name here"
@@ -261,7 +261,7 @@ let make =
                     active={state.hasTeamNameError}
                   />
                 </div>
-                <div className="mt-6">
+                <div className="mt-5">
                   <div className="border-b border-gray-400 pb-2 mb-2 ">
                     <span
                       className="inline-block mr-1 text-gray-800 text-xs font-semibold">
@@ -307,7 +307,7 @@ let make =
                     </div>
                   </div>
                 </div>
-                <div className="mt-6">
+                <div className="mt-5">
                   <div className="mb-2"> {"Tags applied:" |> str} </div>
                   <SA_StudentsPanel_SearchableTagList
                     unselectedTags={
@@ -322,17 +322,17 @@ let make =
                     allowNewTags=true
                   />
                 </div>
-                <div className="mt-6">
+                <div className="mt-5">
                   <div className="flex items-center flex-shrink-0">
                     <label
-                      className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
+                      className="block tracking-wide text-xs font-semibold mr-3">
                       {
                         "Should this student be excluded from leaderboards?"
                         |> str
                       }
                     </label>
                     <div
-                      className="flex flex-shrink-0 rounded-lg overflow-hidden border">
+                      className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                       <button
                         title="Exclude this student from the leaderboard"
                         onClick={
@@ -363,17 +363,18 @@ let make =
                   </div>
                 </div>
               </div>
-              <div className="p-6 bg-gray-200">
+              <div className="p-6 bg-gray-100 border-t">
                 <div className="max-w-2xl px-6 mx-auto">
                   <div
                     className="flex max-w-2xl w-full justify-between items-center mx-auto">
-                    <div className="flex items-center flex-shrink-0">
+                    <div
+                      className="flex items-center flex-shrink-0 bg-red-100 py-1 px-1 rounded">
                       <label
-                        className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
+                        className="block tracking-wide text-red-600 text-xs font-semibold mr-3">
                         {"Has this student dropped out?" |> str}
                       </label>
                       <div
-                        className="flex flex-shrink-0 rounded-lg overflow-hidden border">
+                        className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           title="Prevent this student from accessing the course"
                           onClick={

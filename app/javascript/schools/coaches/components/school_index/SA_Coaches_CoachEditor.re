@@ -304,9 +304,9 @@ let make =
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-2xl p-6 mx-auto">
+              <div className="max-w-2xl px-6 pt-5 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2">
                   {"Coach Details" |> str}
                 </h5>
               </div>
@@ -316,243 +316,261 @@ let make =
                   type_="hidden"
                   value=authenticityToken
                 />
-                <div className="max-w-2xl p-6 mx-auto">
-                  <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                    htmlFor="name">
-                    {"Name" |> str}
-                  </label>
-                  <span> {"*" |> str} </span>
-                  <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="name"
-                    type_="text"
-                    name="faculty[name]"
-                    placeholder="Coach Name"
-                    value={state.name}
-                    onChange={
-                      event =>
-                        updateName(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid name"
-                    active={state.hasNameError}
-                  />
-                  <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                    htmlFor="email">
-                    {"Email" |> str}
-                  </label>
-                  <span> {"*" |> str} </span>
-                  <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="email"
-                    type_="email"
-                    name="faculty[email]"
-                    placeholder="Coach email address"
-                    value={state.email}
-                    onChange={
-                      event =>
-                        updateEmail(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid email"
-                    active={state.hasEmailError}
-                  />
-                  <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                    htmlFor="title">
-                    {"Title" |> str}
-                  </label>
-                  <span> {"*" |> str} </span>
-                  <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="title"
-                    type_="text"
-                    name="faculty[title]"
-                    placeholder="Coach Title/Expertise"
-                    value={state.title}
-                    onChange={
-                      event =>
-                        updateTitle(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid title"
-                    active={state.hasTitleError}
-                  />
-                  <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                    htmlFor="linkedIn">
-                    {"LinkedIn" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="linkedIn"
-                    type_="text"
-                    name="faculty[linkedin_url]"
-                    placeholder="LinkedIn Profile URL"
-                    value={state.linkedinUrl}
-                    onChange={
-                      event =>
-                        updateLinkedInUrl(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid LinkedIn URL"
-                    active={state.hasLinkedInUrlError}
-                  />
-                  <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                    htmlFor="connectLink">
-                    {"Connect Link" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="connectLink"
-                    type_="text"
-                    name="faculty[connect_link]"
-                    placeholder="Student connect request link for the coach"
-                    value={state.connectLink}
-                    onChange={
-                      event =>
-                        updateConnectLink(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid connect url"
-                    active={state.hasConnectLinkError}
-                  />
-                  <div className="flex items-center mb-6">
+                <div className="max-w-2xl px-6 pb-6 mx-auto">
+                  <div className="mt-5">
                     <label
-                      className="block w-1/2 tracking-wide text-gray-800 text-xs font-semibold mr-6"
-                      htmlFor="evaluated">
-                      {"Should the coach profile be public?" |> str}
+                      className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
+                      htmlFor="name">
+                      {"Name" |> str}
                     </label>
-                    <div
-                      id="notification"
-                      className="inline-flex w-1/2 rounded-lg overflow-hidden border">
-                      <button
-                        type_="submit"
-                        onClick={
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            send(UpdatePublic(true));
-                          }
-                        }
-                        name="faculty[public]"
-                        value="true"
-                        className={booleanButtonClasses(state.public)}>
-                        {"Yes" |> str}
-                      </button>
-                      <button
-                        onClick={
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            send(UpdatePublic(false));
-                          }
-                        }
-                        className={booleanButtonClasses(!state.public)}>
-                        {"No" |> str}
-                      </button>
-                      <input
-                        type_="hidden"
-                        name="faculty[public]"
-                        value={state.public |> string_of_bool}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center mb-6">
-                    <label
-                      className="w-1/2 block tracking-wide text-gray-800 text-xs font-semibold mr-6"
-                      htmlFor="evaluated">
-                      {
-                        "Should the coach be notified of student submissions?"
-                        |> str
+                    <span> {"*" |> str} </span>
+                    <input
+                      className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="name"
+                      type_="text"
+                      name="faculty[name]"
+                      placeholder="Coach Name"
+                      value={state.name}
+                      onChange={
+                        event =>
+                          updateName(
+                            send,
+                            ReactEvent.Form.target(event)##value,
+                          )
                       }
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid name"
+                      active={state.hasNameError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold"
+                      htmlFor="email">
+                      {"Email" |> str}
                     </label>
-                    <div
-                      id="notification"
-                      className="inline-flex w-1/2 rounded-lg overflow-hidden border">
-                      <button
-                        onClick={
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            send(UpdateNotifyForSubmission(true));
+                    <span> {"*" |> str} </span>
+                    <input
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="email"
+                      type_="email"
+                      name="faculty[email]"
+                      placeholder="Coach email address"
+                      value={state.email}
+                      onChange={
+                        event =>
+                          updateEmail(
+                            send,
+                            ReactEvent.Form.target(event)##value,
+                          )
+                      }
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid email"
+                      active={state.hasEmailError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold"
+                      htmlFor="title">
+                      {"Title" |> str}
+                    </label>
+                    <span> {"*" |> str} </span>
+                    <input
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="title"
+                      type_="text"
+                      name="faculty[title]"
+                      placeholder="Coach Title/Expertise"
+                      value={state.title}
+                      onChange={
+                        event =>
+                          updateTitle(
+                            send,
+                            ReactEvent.Form.target(event)##value,
+                          )
+                      }
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid title"
+                      active={state.hasTitleError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold"
+                      htmlFor="linkedIn">
+                      {"LinkedIn" |> str}
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="linkedIn"
+                      type_="text"
+                      name="faculty[linkedin_url]"
+                      placeholder="LinkedIn Profile URL"
+                      value={state.linkedinUrl}
+                      onChange={
+                        event =>
+                          updateLinkedInUrl(
+                            send,
+                            ReactEvent.Form.target(event)##value,
+                          )
+                      }
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid LinkedIn URL"
+                      active={state.hasLinkedInUrlError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold"
+                      htmlFor="connectLink">
+                      {"Connect Link" |> str}
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="connectLink"
+                      type_="text"
+                      name="faculty[connect_link]"
+                      placeholder="Student connect request link for the coach"
+                      value={state.connectLink}
+                      onChange={
+                        event =>
+                          updateConnectLink(
+                            send,
+                            ReactEvent.Form.target(event)##value,
+                          )
+                      }
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid connect url"
+                      active={state.hasConnectLinkError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <div className="flex items-center">
+                      <label
+                        className="block w-1/2 tracking-wide text-xs font-semibold mr-6"
+                        htmlFor="evaluated">
+                        {"Should the coach profile be public?" |> str}
+                      </label>
+                      <div
+                        id="notification"
+                        className="inline-flex w-1/2 rounded-lg overflow-hidden border">
+                        <button
+                          type_="submit"
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdatePublic(true));
+                            }
                           }
-                        }
-                        name="faculty[notify_for_submission]"
-                        className={
-                          booleanButtonClasses(state.notifyForSubmission)
-                        }>
-                        {"Yes" |> str}
-                      </button>
-                      <button
-                        onClick={
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            send(UpdateNotifyForSubmission(false));
+                          name="faculty[public]"
+                          value="true"
+                          className={booleanButtonClasses(state.public)}>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdatePublic(false));
+                            }
                           }
-                        }
-                        className={
-                          booleanButtonClasses(!state.notifyForSubmission)
-                        }>
-                        {"No" |> str}
-                      </button>
-                      <input
-                        type_="hidden"
-                        name="faculty[notify_for_submission]"
-                        value={state.notifyForSubmission |> string_of_bool}
-                      />
+                          className={booleanButtonClasses(!state.public)}>
+                          {"No" |> str}
+                        </button>
+                        <input
+                          type_="hidden"
+                          name="faculty[public]"
+                          value={state.public |> string_of_bool}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <label
-                    className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                    htmlFor="avatarUploader">
-                    {"Avatar" |> str}
-                  </label>
-                  <input
-                    disabled={state.saving}
-                    className="hidden"
-                    name="faculty[image]"
-                    type_="file"
-                    id="sa-coach-editor__file-input"
-                    required=false
-                    multiple=false
-                    onChange={
-                      event =>
-                        send(
-                          UpdateImageFileName(
-                            ReactEvent.Form.target(event)##files[0]##name,
-                          ),
-                        )
-                    }
-                  />
-                  <label
-                    className="file-input-label mt-2"
-                    htmlFor="sa-coach-editor__file-input">
-                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-                    <span className="truncate">
-                      {avatarUploaderText() |> str}
-                    </span>
-                  </label>
+                  <div className="mt-5">
+                    <div className="flex items-center">
+                      <label
+                        className="w-1/2 block tracking-wide text-xs font-semibold mr-6"
+                        htmlFor="evaluated">
+                        {
+                          "Should the coach be notified of student submissions?"
+                          |> str
+                        }
+                      </label>
+                      <div
+                        id="notification"
+                        className="inline-flex w-1/2 rounded-lg overflow-hidden border">
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateNotifyForSubmission(true));
+                            }
+                          }
+                          name="faculty[notify_for_submission]"
+                          className={
+                            booleanButtonClasses(state.notifyForSubmission)
+                          }>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick={
+                            _event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateNotifyForSubmission(false));
+                            }
+                          }
+                          className={
+                            booleanButtonClasses(!state.notifyForSubmission)
+                          }>
+                          {"No" |> str}
+                        </button>
+                        <input
+                          type_="hidden"
+                          name="faculty[notify_for_submission]"
+                          value={state.notifyForSubmission |> string_of_bool}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="block tracking-wide text-xs font-semibold"
+                      htmlFor="avatarUploader">
+                      {"Avatar" |> str}
+                    </label>
+                    <input
+                      disabled={state.saving}
+                      className="hidden"
+                      name="faculty[image]"
+                      type_="file"
+                      id="sa-coach-editor__file-input"
+                      required=false
+                      multiple=false
+                      onChange={
+                        event =>
+                          send(
+                            UpdateImageFileName(
+                              ReactEvent.Form.target(event)##files[0]##name,
+                            ),
+                          )
+                      }
+                    />
+                    <label
+                      className="file-input-label mt-2"
+                      htmlFor="sa-coach-editor__file-input">
+                      <i
+                        className="fas fa-upload mr-2 text-gray-600 text-lg"
+                      />
+                      <span className="truncate">
+                        {avatarUploaderText() |> str}
+                      </span>
+                    </label>
+                  </div>
                 </div>
                 <div className="p-6 bg-gray-200">
                   <div className="max-w-2xl px-6 mx-auto">
@@ -563,13 +581,13 @@ let make =
                         | Some(_coach) =>
                           <div className="flex items-center flex-shrink-0">
                             <label
-                              className="block tracking-wide text-gray-800 text-xs font-semibold mr-3"
+                              className="block tracking-wide  text-xs font-semibold mr-3"
                               htmlFor="evaluated">
                               {"Has the coach left the school?" |> str}
                             </label>
                             <div
                               id="exited"
-                              className="flex flex-shrink-0 rounded-lg overflow-hidden border">
+                              className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                               <button
                                 onClick=(
                                   _event => {

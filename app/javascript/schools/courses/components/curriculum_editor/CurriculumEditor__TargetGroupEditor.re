@@ -43,10 +43,10 @@ let setPayload = (authenticityToken, state) => {
   payload;
 };
 
-let booleanButtonClasses = bool =>
-  bool ?
-    "w-1/2 bg-white text-purple-500 hover:text-purple-600 shadow-inner text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white text-gray-600 hover:text-purple-600 text-sm font-semibold py-2 px-6 focus:outline-none";
+let booleanButtonClasses = selected => {
+  let classes = "toggle-button__button";
+  classes ++ (selected ? " toggle-button__button--active" : "");
+};
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
@@ -154,15 +154,15 @@ let make =
                   className="uppercase text-center border-b border-gray-400 pb-2">
                   {"Target Group Details" |> str}
                 </h5>
-                <div className="mt-6">
+                <div className="mt-5">
                   <label
-                    className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+                    className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="name">
                     {"Title" |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="name"
                     type_="text"
                     placeholder="Type target group name here"
@@ -178,19 +178,22 @@ let make =
                   {
                     state.hasNameError ?
                       <div className="drawer-right-form__error-msg">
-                        {"not a valid Title" |> str}
+                        <span className="mr-2">
+                          <i className="fas fa-exclamation-triangle" />
+                        </span>
+                        <span> {"not a valid Title" |> str} </span>
                       </div> :
                       ReasonReact.null
                   }
                 </div>
-                <div className="mt-6">
+                <div className="mt-5">
                   <label
-                    className="block tracking-wide text-gray-800 text-xs font-semibold"
+                    className="block tracking-wide text-xs font-semibold"
                     htmlFor="description">
                     {" Description" |> str}
                   </label>
                   <textarea
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="description"
                     placeholder="Type target group description"
                     value={state.description}
@@ -206,50 +209,52 @@ let make =
                     cols=33
                   />
                 </div>
-                <div className="flex items-center mt-6">
-                  <label
-                    className="block tracking-wide text-gray-800 text-xs font-semibold mr-3">
-                    {"Is this a milestone target group?" |> str}
-                  </label>
-                  <div
-                    className="milestone toggle-button__group inline-flex flex-shrink-0 rounded-lg overflow-hidden">
-                    <button
-                      onClick={
-                        _event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdateMilestone(true));
+                <div className="mt-5">
+                  <div className="flex items-center flex-shrink-0">
+                    <label
+                      className="block tracking-wide text-xs font-semibold mr-3">
+                      {"Is this a milestone target group?" |> str}
+                    </label>
+                    <div
+                      className="milestone flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
+                      <button
+                        onClick={
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateMilestone(true));
+                          }
                         }
-                      }
-                      className={
-                        booleanButtonClasses(state.milestone == true)
-                      }>
-                      {"Yes" |> str}
-                    </button>
-                    <button
-                      onClick={
-                        _event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdateMilestone(false));
+                        className={
+                          booleanButtonClasses(state.milestone == true)
+                        }>
+                        {"Yes" |> str}
+                      </button>
+                      <button
+                        onClick={
+                          _event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateMilestone(false));
+                          }
                         }
-                      }
-                      className={
-                        booleanButtonClasses(state.milestone == false)
-                      }>
-                      {"No" |> str}
-                    </button>
+                        className={
+                          booleanButtonClasses(state.milestone == false)
+                        }>
+                        {"No" |> str}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="max-w-2xl p-6 mx-auto">
+              <div className="border-t bg-gray-100 mt-5">
                 <div
-                  className="flex w-full justify-between items-center pt-6 border-t">
+                  className="max-w-2xl p-6 mx-auto flex w-full justify-between items-center">
                   {
                     switch (targetGroup) {
                     | Some(_) =>
                       <div className="flex items-center mr-2">
                         <label
-                          className="block tracking-wide text-gray-800 text-xs font-semibold mr-6">
-                          {"Is this target group archived" |> str}
+                          className="block tracking-wide text-xs font-semibold mr-6">
+                          {"Is this target group archived?" |> str}
                         </label>
                         <div
                           className="toggle-button__group archived inline-flex flex-shrink-0 rounded-lg overflow-hidden">
@@ -290,7 +295,7 @@ let make =
                         <button
                           disabled={saveDisabled(state)}
                           onClick=(_e => updateTargetGroup(id))
-                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none">
+                          className="btn btn-primary btn-large">
                           {"Update Target Group" |> str}
                         </button>
                       </div>;
@@ -300,7 +305,7 @@ let make =
                         <button
                           disabled={saveDisabled(state)}
                           onClick=(_e => createTargetGroup())
-                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none">
+                          className="w-full btn btn-primary btn-large">
                           {"Create Target Group" |> str}
                         </button>
                       </div>

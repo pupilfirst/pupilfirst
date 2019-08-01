@@ -150,7 +150,7 @@ let make =
       <DisablingCover.Jsx2 disabled={state.updating}>
         <div key="contacts-editor__address-input-group" className="mt-3">
           <label
-            className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+            className="inline-block tracking-wide text-xs font-semibold"
             htmlFor="contacts-editor__address">
             {"Contact Address " |> str}
             <i className="fab fa-markdown text-base" />
@@ -168,7 +168,7 @@ let make =
         </div>
         <div key="contacts-editor__email-address-input-group" className="mt-3">
           <label
-            className="inline-block tracking-wide text-gray-800 text-xs font-semibold"
+            className="inline-block tracking-wide text-xs font-semibold"
             htmlFor="contacts-editor__email-address">
             {"Email Address" |> str}
           </label>

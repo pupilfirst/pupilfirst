@@ -138,9 +138,9 @@ let make =
                   }
                 />
                 <div>
-                  <div className="mt-6">
+                  <div className="mt-5">
                     <div
-                      className="inline-block tracking-wide text-gray-800 text-xs font-semibold">
+                      className="inline-block tracking-wide text-xs font-semibold">
                       {
                         "These new students will be added to the course:" |> str
                       }
@@ -160,44 +160,45 @@ let make =
                         |> List.map(studentInfo =>
                              <div
                                key={studentInfo |> StudentInfo.email}
-                               className="select-list__item-selected flex items-center justify-between bg-gray-100 border rounded p-3 mt-2">
+                               className="flex justify-between bg-white-100 border shadow rounded-lg mt-2">
                                <div
-                                 className="flex flex flex-wrap pr-3 items-center">
-                                 <div className="mr-1">
-                                   {studentInfo |> StudentInfo.name |> str}
+                                 className="flex flex-col flex-1 flex-wrap p-3">
+                                 <div className="flex items-center">
+                                   <div className="mr-1 font-semibold">
+                                     {studentInfo |> StudentInfo.name |> str}
+                                   </div>
+                                   <div className="text-xs text-gray-600">
+                                     {
+                                       " ("
+                                       ++ (studentInfo |> StudentInfo.email)
+                                       ++ ")"
+                                       |> str
+                                     }
+                                   </div>
                                  </div>
-                                 <div className="text-xs text-gray-600">
+                                 <div className="flex flex-wrap">
                                    {
-                                     " ("
-                                     ++ (studentInfo |> StudentInfo.email)
-                                     ++ ")"
-                                     |> str
+                                     studentInfo
+                                     |> StudentInfo.tags
+                                     |> List.map(tag =>
+                                          <div
+                                            key=tag
+                                            className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+                                            {tag |> str}
+                                          </div>
+                                        )
+                                     |> Array.of_list
+                                     |> ReasonReact.array
                                    }
                                  </div>
-                                 {
-                                   studentInfo
-                                   |> StudentInfo.tags
-                                   |> List.map(tag =>
-                                        <div
-                                          key=tag
-                                          className="flex items-center px-2 py-1 border rounded-lg ml-1 text-sm font-semibold focus:outline-none bg-gray-400">
-                                          {tag |> str}
-                                        </div>
-                                      )
-                                   |> Array.of_list
-                                   |> ReasonReact.array
-                                 }
                                </div>
                                <button
+                                 className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                                  onClick=(
                                    _event =>
                                      send(RemoveStudentInfo(studentInfo))
                                  )>
-                                 <Icon.Jsx2
-                                   kind=Icon.Delete
-                                   size="4"
-                                   opacity=75
-                                 />
+                                 <i className="fas fa-trash-alt" />
                                </button>
                              </div>
                            )
@@ -222,11 +223,8 @@ let make =
                       )
                     }
                     className={
-                      "w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3"
-                      ++ (
-                        formInvalid(state) ?
-                          " opacity-50 cursor-not-allowed" : ""
-                      )
+                      "w-full btn btn-primary btn-large mt-3"
+                      ++ (formInvalid(state) ? " disabled" : "")
                     }>
                     {(state.saving ? "Saving..." : "Save List") |> str}
                   </button>

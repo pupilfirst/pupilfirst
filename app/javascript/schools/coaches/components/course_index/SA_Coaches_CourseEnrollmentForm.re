@@ -118,7 +118,7 @@ let make =
         <div className="drawer-right-form w-full">
           <div className="w-full">
             <div className="mx-auto bg-white">
-              <div className="max-w-2xl p-6 mx-auto">
+              <div className="max-w-2xl pt-6 px-6 mx-auto">
                 <h5
                   className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                   {"ADD NEW COACHES TO THE COURSE" |> str}
@@ -126,7 +126,7 @@ let make =
                 {
                   showCoachesList ?
                     <div>
-                      <div id="course_coaches" className="mb-6">
+                      <div id="course_coaches">
                         <School__SelectBox.Jsx2
                           items={state.courseCoaches}
                           multiSelectCB=multiSelectCoachEnrollmentsCB
@@ -136,11 +136,11 @@ let make =
                     ReasonReact.null
                 }
               </div>
-              <div className="flex max-w-2xl w-full px-6 pb-5 mx-auto">
+              <div className="flex max-w-2xl w-full mt-5 px-6 pb-5 mx-auto">
                 <button
                   disabled=saveDisabled
                   onClick={_e => updateCourseCoaches(courseId, state)}
-                  className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                  className="w-full btn btn-primary btn-large">
                   {"Add Course Coaches" |> str}
                 </button>
               </div>

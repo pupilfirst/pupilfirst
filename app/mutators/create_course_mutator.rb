@@ -8,6 +8,8 @@ class CreateCourseMutator < ApplicationMutator
   attr_accessor :ends_at
   attr_accessor :description
   attr_accessor :enable_leaderboard
+  attr_accessor :enable_public_signup
+  attr_accessor :about
 
   validates :name, presence: { message: 'NameBlank' }
   validates :max_grade, presence: { message: 'MaxGradeBlank' }
@@ -30,7 +32,9 @@ class CreateCourseMutator < ApplicationMutator
         pass_grade: pass_grade,
         grade_labels: grade_labels,
         ends_at: ends_at,
-        enable_leaderboard: enable_leaderboard
+        enable_leaderboard: enable_leaderboard,
+        enable_public_signup: enable_public_signup,
+        about: about
       )
       Courses::DemoContentService.new(course).execute
       course

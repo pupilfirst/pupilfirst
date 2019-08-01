@@ -54,7 +54,7 @@ class CoachDashboardPresenter < ApplicationPresenter
   end
 
   def timeline_events_service
-    @timeline_events_service ||= CoachDashboard::TimelineEventsDataService.new(current_coach, @course)
+    @timeline_events_service ||= CoachDashboard::TimelineEventsDataService.new(current_coach, @course, limit: 100)
   end
 
   def evaluated_submissions_exist?

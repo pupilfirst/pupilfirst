@@ -1,0 +1,44 @@
+.course-apply-left__container {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.course-apply-left__container:before {
+  position: absolute;
+  @apply left-0 w-full;
+  content: '';
+  background-image: url('../shared/images/courses-apply-pattern.svg');
+  background-repeat: repeat-x;
+  background-size: 50%;
+  background-position: center bottom;
+}
+
+.course-apply-left__container:before {
+  @apply h-3 top-0;
+  opacity: 0.5;
+}
+
+.course-apply-left__bg-pattern {
+  height: 14rem;
+  background-image: url('../shared/images/courses-apply-pattern.svg');
+  opacity: 0.4;
+  background-repeat: repeat-x;
+  background-position: top center;
+}
+
+@screen md {
+  .course-apply-left__container:after {
+    @apply bottom-0;
+    height: 32rem;
+    opacity: 0.5;
+  }
+}
+
+@screen lg {
+  .course-apply {
+    position: relative;
+    min-height: 32rem;
+  }
+}

@@ -22,5 +22,11 @@ class CoursePolicy < ApplicationPolicy
     curriculum?
   end
 
-  alias enroll? curriculum?
+  def apply?
+    return false unless record.present? && record.school == current_school
+
+    record.enable_public_signup
+  end
+
+  alias show? apply?
 end

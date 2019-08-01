@@ -7,6 +7,8 @@ type t = {
   passGrade: int,
   gradesAndLabels: list(CourseEditor__GradesAndLabels.t),
   enableLeaderboard: bool,
+  about: option(string),
+  enablePublicSignup: bool,
 };
 
 let name = t => t.name;
@@ -14,6 +16,10 @@ let name = t => t.name;
 let id = t => t.id;
 
 let endsAt = t => t.endsAt;
+
+let about = t => t.about;
+
+let enablePublicSignup = t => t.enablePublicSignup;
 
 let description = t => t.description;
 
@@ -42,6 +48,8 @@ let create =
       passGrade,
       gradesAndLabels,
       enableLeaderboard,
+      about,
+      enablePublicSignup,
     ) => {
   id,
   name,
@@ -51,4 +59,6 @@ let create =
   passGrade,
   gradesAndLabels,
   enableLeaderboard,
+  about,
+  enablePublicSignup,
 };

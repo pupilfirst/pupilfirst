@@ -1,0 +1,11 @@
+<% presenter = Courses::ApplyPresenter.new(self, @course) %>
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'CoursesApplyPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'CoursesApplyPack', nonce: true %>
+<% end %>
+
+<div id="courses-apply" data-json-props="<%= presenter.props_to_json %>"></div>

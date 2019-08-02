@@ -61,10 +61,13 @@ let reducer = (state, action) =>
     {...state, commandPair};
   };
 
-let updateDescription = (description, send, updateDescriptionCB) => {
-  send(UpdateDescription(description));
-  updateDescriptionCB(description);
-};
+let updateDescription = (value, description, send, updateDescriptionCB) =>
+  value == description ?
+    () :
+    {
+      send(UpdateDescription(description));
+      updateDescriptionCB(description);
+    };
 
 type previewButtonPosition =
   | PositionRight
@@ -221,7 +224,8 @@ let make =
           ?placeholder
           content={state.description}
           onChange={
-            content => updateDescription(content, send, updateDescriptionCB)
+            content =>
+              updateDescription(value, content, send, updateDescriptionCB)
           }
           ?command
           commandAt=?{state.commandPair.commandAt}

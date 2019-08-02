@@ -77,6 +77,24 @@ let saveStudents =
   Api.create(url, payload, responseCB, handleErrorCB(send));
 };
 
+let renderTitleAndAffiliation = (title, affiliation) => {
+  let text =
+    switch (title == "", affiliation == "") {
+    | (true, true) => None
+    | (true, false) => Some(affiliation)
+    | (false, true) => Some(title)
+    | (false, false) => Some(title ++ ", " ++ affiliation)
+    };
+
+  switch (text) {
+  | Some(text) =>
+    <div className="flex items-center">
+      <div className="mr-1 text-xs text-gray-600"> {text |> str} </div>
+    </div>
+  | None => React.null
+  };
+};
+
 let make =
     (
       ~courseId,
@@ -176,6 +194,12 @@ let make =
                                      }
                                    </div>
                                  </div>
+                                 {
+                                   renderTitleAndAffiliation(
+                                     studentInfo |> StudentInfo.title,
+                                     studentInfo |> StudentInfo.affiliation,
+                                   )
+                                 }
                                  <div className="flex flex-wrap">
                                    {
                                      studentInfo

@@ -6,6 +6,10 @@ let email: t => string;
 
 let tags: t => list(string);
 
+let title: t => string;
+
+let affiliation: t => string;
+
 let encode: t => Js.Json.t;
 
-let create: (string, string, list(string)) => t;
+let create: (string, string, string, string, list(string)) => t;

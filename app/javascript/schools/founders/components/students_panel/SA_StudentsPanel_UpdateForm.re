@@ -325,10 +325,6 @@ let make =
                       type_="text"
                       placeholder="Acme Inc., Acme University, etc."
                     />
-                    <School__InputGroupError.Jsx2
-                      message="is not a valid team name"
-                      active={state.hasTeamNameError}
-                    />
                   </div>
                   <div className="mt-5">
                     <div className="border-b border-gray-400 pb-2 mb-2 ">

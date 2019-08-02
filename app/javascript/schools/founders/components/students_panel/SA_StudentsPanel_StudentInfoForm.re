@@ -3,6 +3,8 @@ open StudentsPanel__Types;
 type state = {
   name: string,
   email: string,
+  title: string,
+  affiliation: string,
   hasNameError: bool,
   hasEmailError: bool,
   tagsToApply: list(string),
@@ -11,6 +13,8 @@ type state = {
 type action =
   | UpdateName(string, bool)
   | UpdateEmail(string, bool)
+  | UpdateTitle(string)
+  | UpdateAffiliation(string)
   | ResetForm
   | AddTag(string)
   | RemoveTag(string);
@@ -40,7 +44,13 @@ let formInvalid = state =>
 let handleAdd = (state, send, addToListCB) =>
   if (!formInvalid(state)) {
     addToListCB(
-      StudentInfo.create(state.name, state.email, state.tagsToApply),
+      StudentInfo.create(
+        state.name,
+        state.email,
+        state.title,
+        state.affiliation,
+        state.tagsToApply,
+      ),
     );
     send(ResetForm);
   };
@@ -50,6 +60,8 @@ let make = (~addToListCB, ~studentTags, _children) => {
   initialState: () => {
     name: "",
     email: "",
+    title: "",
+    affiliation: "",
     hasNameError: false,
     hasEmailError: false,
     tagsToApply: [],
@@ -60,10 +72,15 @@ let make = (~addToListCB, ~studentTags, _children) => {
       ReasonReact.Update({...state, name, hasNameError})
     | UpdateEmail(email, hasEmailError) =>
       ReasonReact.Update({...state, email, hasEmailError})
+    | UpdateTitle(title) => ReasonReact.Update({...state, title})
+    | UpdateAffiliation(affiliation) =>
+      ReasonReact.Update({...state, affiliation})
     | ResetForm =>
       ReasonReact.Update({
         name: "",
         email: "",
+        title: state.title,
+        affiliation: state.affiliation,
         hasNameError: false,
         hasEmailError: false,
         tagsToApply: state.tagsToApply,
@@ -123,6 +140,41 @@ let make = (~addToListCB, ~studentTags, _children) => {
         <School__InputGroupError.Jsx2
           message="is too short"
           active={state.hasEmailError}
+        />
+      </div>
+      <div className="mt-5">
+        <label
+          className="inline-block tracking-wide text-xs font-semibold mb-2"
+          htmlFor="title">
+          {"Title" |> str}
+        </label>
+        <input
+          value={state.title}
+          onChange={
+            event => send(UpdateTitle(ReactEvent.Form.target(event)##value))
+          }
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="title"
+          type_="text"
+          placeholder="Student, Coach, CEO, etc."
+        />
+      </div>
+      <div className="mt-5">
+        <label
+          className="inline-block tracking-wide text-xs font-semibold mb-2"
+          htmlFor="affiliation">
+          {"Affiliation" |> str}
+        </label>
+        <input
+          value={state.affiliation}
+          onChange={
+            event =>
+              send(UpdateAffiliation(ReactEvent.Form.target(event)##value))
+          }
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="affiliation"
+          type_="text"
+          placeholder="Acme Inc., Acme University, etc."
         />
       </div>
       <div className="mt-5">

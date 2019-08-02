@@ -2,6 +2,7 @@
 - timeline_event = @startup_feedback.timeline_event
 - target = @startup_feedback.timeline_event&.target
 - target_url = target_url(target) if target.present?
+- coach_name = @startup_feedback.faculty.name
 
 = content_for :title do
   | Feedback from coach
@@ -20,9 +21,8 @@
 
 = content_for :body do
   - update_for = timeline_event.present? ? 'recent submission' : 'recent updates'
-  - update_link = timeline_event.present? ? @startup_feedback.timeline_event.share_url : @startup_feedback.reference_url
 
-  p Here is some feedback from #{@startup_feedback.faculty.name} on your #{link_to(update_for, update_link)}:
+  p Here is some feedback from #{coach_name} on your #{update_for}:
 
   blockquote = simple_format(@startup_feedback.feedback)
 

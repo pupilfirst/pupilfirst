@@ -72,7 +72,7 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
                          setEditorAction(_ => ShowEditor(Some(community)));
                        }
                      }
-                     className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-200">
+                     className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-100">
                      <div className="flex">
                        <div className="text-sm justify-between">
                          <span className="text-black font-semibold">

@@ -81,10 +81,10 @@ let updateConnectLink = (send, connectLink) => {
   send(UpdateConnectLink(connectLink, hasError));
 };
 
-let booleanButtonClasses = bool =>
-  bool ?
-    "w-1/2 bg-gray-500 hover:bg-gray-500 text-gray-900 text-sm font-semibold py-2 px-6 focus:outline-none" :
-    "w-1/2 bg-white hover:bg-gray-500 text-gray-900 text-sm font-semibold py-2 px-6 focus:outline-none";
+let booleanButtonClasses = selected => {
+  let classes = "toggle-button__button";
+  classes ++ (selected ? " toggle-button__button--active" : "");
+};
 
 let saveDisabled = state =>
   state.hasTitleError
@@ -451,15 +451,15 @@ let make =
                     />
                   </div>
                   <div className="mt-5">
-                    <div className="flex items-center">
+                    <div className="flex items-center flex-shrink-0">
                       <label
-                        className="block w-1/2 tracking-wide text-xs font-semibold mr-6"
+                        className="block tracking-wide text-xs font-semibold mr-3"
                         htmlFor="evaluated">
                         {"Should the coach profile be public?" |> str}
                       </label>
                       <div
                         id="notification"
-                        className="inline-flex w-1/2 rounded-lg overflow-hidden border">
+                        className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           type_="submit"
                           onClick={
@@ -492,9 +492,9 @@ let make =
                     </div>
                   </div>
                   <div className="mt-5">
-                    <div className="flex items-center">
+                    <div className="flex items-center flex-shrink-0">
                       <label
-                        className="w-1/2 block tracking-wide text-xs font-semibold mr-6"
+                        className="block tracking-wide text-xs font-semibold mr-3"
                         htmlFor="evaluated">
                         {
                           "Should the coach be notified of student submissions?"
@@ -503,7 +503,7 @@ let make =
                       </label>
                       <div
                         id="notification"
-                        className="inline-flex w-1/2 rounded-lg overflow-hidden border">
+                        className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           onClick={
                             _event => {
@@ -626,13 +626,13 @@ let make =
                         | Some(_coach) =>
                           <button
                             disabled={saveDisabled(state)}
-                            className="w-auto bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            className="w-auto btn btn-large btn-primary">
                             {"Update Coach" |> str}
                           </button>
                         | None =>
                           <button
                             disabled={saveDisabled(state)}
-                            className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                            className="w-full btn btn-large btn-primary">
                             {"Create Coach" |> str}
                           </button>
                         }

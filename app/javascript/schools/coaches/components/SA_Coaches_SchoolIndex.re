@@ -54,7 +54,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                 send(UpdateFormVisible(CoachEditor(None)));
               }
             }
-            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-gray-200 hover:bg-gray-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hove:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-20 cursor-pointer">
             <i className="far fa-plus-circle text-lg" />
             <h5 className="font-semibold ml-2"> {"Add New Coach" |> str} </h5>
           </button>
@@ -70,7 +70,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                      className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
                      <div className="course-faculty__list-item flex w-full">
                        <div
-                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-200"
+                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-100"
                          onClick={
                            _event => {
                              ReactEvent.Mouse.preventDefault(_event);

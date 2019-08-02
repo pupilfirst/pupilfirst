@@ -7,11 +7,13 @@ module Schools
       property :excluded_from_leaderboard, validates: { inclusion: { in: [true, false] } }
       property :tags
       property :coach_ids, virtual: true
+      property :title, virtual: true, validates: { presence: true }
+      property :affiliation, virtual: true, validates: { presence: true }
 
       def save
         Founder.transaction do
           school = model.school
-          model.user.update!(name: name)
+          model.user.update!(name: name, title: title, affiliation: affiliation)
 
           model.startup.update!(name: team_name)
           model.tag_list = tags

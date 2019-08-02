@@ -12,6 +12,9 @@ type state = {
   teamCoaches: list(teamCoachlist),
   coachEnrollmentsChanged: bool,
   excludedFromLeaderboard: bool,
+  title: string,
+  affiliation: string,
+  saving: bool,
 };
 
 type action =
@@ -22,7 +25,10 @@ type action =
   | RemoveTag(string)
   | UpdateExited(bool)
   | UpdateCoachesList(int, string, bool)
-  | UpdateExcludedFromLeaderboard(bool);
+  | UpdateExcludedFromLeaderboard(bool)
+  | UpdateTitle(string)
+  | UpdateAffiliation(string)
+  | UpdateSaving(bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
@@ -42,7 +48,7 @@ let updateTeamName = (send, state, teamName) => {
 
 let formInvalid = state => state.hasNameError || state.hasTeamNameError;
 
-let handleErrorCB = () => ();
+let handleErrorCB = (send, ()) => send(UpdateSaving(false));
 
 let handleResponseCB = (submitCB, state, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
@@ -53,7 +59,8 @@ let handleResponseCB = (submitCB, state, json) => {
   Notification.success("Success", "Student updated successfully");
 };
 
-let updateStudent = (student, state, authenticityToken, responseCB) => {
+let updateStudent = (student, state, send, authenticityToken, responseCB) => {
+  send(UpdateSaving(true));
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
@@ -65,7 +72,13 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
   let updatedStudent =
-    student |> Student.updateInfo(state.exited, state.excludedFromLeaderboard);
+    student
+    |> Student.updateInfo(
+         state.exited,
+         state.excludedFromLeaderboard,
+         Some(state.title),
+         Some(state.affiliation),
+       );
   Js.Dict.set(
     payload,
     "founder",
@@ -82,7 +95,7 @@ let updateStudent = (student, state, authenticityToken, responseCB) => {
     enrolledCoachIds |> Json.Encode.(list(int)),
   );
   let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
-  Api.update(url, payload, responseCB, handleErrorCB);
+  Api.update(url, payload, responseCB, handleErrorCB(send));
 };
 
 let boolBtnClasses = selected => {
@@ -145,6 +158,9 @@ let make =
       ),
     coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
+    title: StringUtils.optionToString(student |> Student.title),
+    affiliation: StringUtils.optionToString(student |> Student.affiliation),
+    saving: false,
   },
   reducer: (action, state) =>
     switch (action) {
@@ -173,6 +189,10 @@ let make =
       });
     | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) =>
       ReasonReact.Update({...state, excludedFromLeaderboard})
+    | UpdateTitle(title) => ReasonReact.Update({...state, title})
+    | UpdateAffiliation(affiliation) =>
+      ReasonReact.Update({...state, affiliation})
+    | UpdateSaving(bool) => ReasonReact.Update({...state, saving: bool})
     },
   render: ({state, send}) => {
     let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
@@ -191,234 +211,285 @@ let make =
         </div>
         <div className="drawer-right-form w-full">
           <div className="w-full">
-            <div className="mx-auto bg-white">
-              <div className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
-                <img
-                  className="w-12 h-12 rounded-full mr-4"
-                  src={student |> Student.avatarUrl}
-                />
-                <div className="text-sm flex flex-col justify-center">
-                  <div className="text-black font-bold inline-block">
-                    {student |> Student.name |> str}
-                  </div>
-                  <div className="text-gray-600 inline-block">
-                    {student |> Student.email |> str}
-                  </div>
-                </div>
-              </div>
-              <div className="max-w-2xl p-6 mx-auto">
-                <div>
-                  <label
-                    className="inline-block tracking-wide text-xs font-semibold mb-2"
-                    htmlFor="name">
-                    {"Name" |> str}
-                  </label>
-                  <span> {"*" |> str} </span>
-                  <input
-                    value={state.name}
-                    onChange={
-                      event =>
-                        updateName(
-                          send,
-                          state,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="name"
-                    type_="text"
-                    placeholder="Student name here"
+            <DisablingCover.Jsx2 disabled={state.saving}>
+              <div className="mx-auto bg-white">
+                <div className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
+                  <img
+                    className="w-12 h-12 rounded-full mr-4"
+                    src={student |> Student.avatarUrl}
                   />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid name"
-                    active={state.hasNameError}
-                  />
-                </div>
-                <div className="mt-5">
-                  <label
-                    className="inline-block tracking-wide text-xs font-semibold mb-2"
-                    htmlFor="team_name">
-                    {"Team Name" |> str}
-                  </label>
-                  <span> {"*" |> str} </span>
-                  <input
-                    value={state.teamName}
-                    onChange={
-                      event =>
-                        updateTeamName(
-                          send,
-                          state,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="team_name"
-                    type_="text"
-                    placeholder="Team name here"
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="is not a valid team name"
-                    active={state.hasTeamNameError}
-                  />
-                </div>
-                <div className="mt-5">
-                  <div className="border-b border-gray-400 pb-2 mb-2 ">
-                    <span
-                      className="inline-block mr-1 text-gray-800 text-xs font-semibold">
-                      {"Course Coaches:" |> str}
-                    </span>
-                    <div className="mt-2">
-                      {
-                        courseCoachIds |> List.length > 0 ?
-                          courseCoachIds
-                          |> List.map(coachId =>
-                               <div
-                                 key={coachId |> string_of_int}
-                                 className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
-                                 {
-                                   schoolCoaches
-                                   |> List.find(coach =>
-                                        Coach.id(coach) == coachId
-                                      )
-                                   |> Coach.name
-                                   |> str
-                                 }
-                               </div>
-                             )
-                          |> Array.of_list
-                          |> ReasonReact.array :
-                          <div
-                            className="flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
-                            {"None Assigned" |> str}
-                          </div>
-                      }
+                  <div className="text-sm flex flex-col justify-center">
+                    <div className="text-black font-bold inline-block">
+                      {student |> Student.name |> str}
                     </div>
-                  </div>
-                  <div className="border-b border-gray-400 pb-2 mb-2 ">
-                    <span
-                      className="inline-block mr-1 text-gray-800 text-xs font-semibold">
-                      {"Exclusive Team Coaches:" |> str}
-                    </span>
-                    <div className="mt-2">
-                      <SA_StudentsPanel_SelectBox
-                        items={state.teamCoaches}
-                        multiSelectCB=multiSelectCoachEnrollmentsCB
-                      />
+                    <div className="text-gray-600 inline-block">
+                      {student |> Student.email |> str}
                     </div>
                   </div>
                 </div>
-                <div className="mt-5">
-                  <div className="mb-2"> {"Tags applied:" |> str} </div>
-                  <SA_StudentsPanel_SearchableTagList
-                    unselectedTags={
-                      studentTags
-                      |> List.filter(tag =>
-                           !(state.tagsToApply |> List.mem(tag))
-                         )
-                    }
-                    selectedTags={state.tagsToApply}
-                    addTagCB={tag => send(AddTag(tag))}
-                    removeTagCB={tag => send(RemoveTag(tag))}
-                    allowNewTags=true
-                  />
-                </div>
-                <div className="mt-5">
-                  <div className="flex items-center flex-shrink-0">
+                <div className="max-w-2xl p-6 mx-auto">
+                  <div>
                     <label
-                      className="block tracking-wide text-xs font-semibold mr-3">
-                      {
-                        "Should this student be excluded from leaderboards?"
-                        |> str
-                      }
+                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      htmlFor="name">
+                      {"Name" |> str}
                     </label>
-                    <div
-                      className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                      <button
-                        title="Exclude this student from the leaderboard"
-                        onClick={
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            send(UpdateExcludedFromLeaderboard(true));
-                          }
+                    <span> {"*" |> str} </span>
+                    <input
+                      value={state.name}
+                      onChange={
+                        event =>
+                          updateName(
+                            send,
+                            state,
+                            ReactEvent.Form.target(event)##value,
+                          )
+                      }
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="name"
+                      type_="text"
+                      placeholder="Student name here"
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid name"
+                      active={state.hasNameError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      htmlFor="team_name">
+                      {"Team Name" |> str}
+                    </label>
+                    <span> {"*" |> str} </span>
+                    <input
+                      value={state.teamName}
+                      onChange={
+                        event =>
+                          updateTeamName(
+                            send,
+                            state,
+                            ReactEvent.Form.target(event)##value,
+                          )
+                      }
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="team_name"
+                      type_="text"
+                      placeholder="Team name here"
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid team name"
+                      active={state.hasTeamNameError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      htmlFor="title">
+                      {"Title" |> str}
+                    </label>
+                    <input
+                      value={state.title}
+                      onChange={
+                        event =>
+                          send(
+                            UpdateTitle(
+                              ReactEvent.Form.target(event)##value,
+                            ),
+                          )
+                      }
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="title"
+                      type_="text"
+                      placeholder="Student, Coach, CEO, etc."
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      htmlFor="affiliation">
+                      {"Affiliation" |> str}
+                    </label>
+                    <input
+                      value={state.affiliation}
+                      onChange={
+                        event =>
+                          send(
+                            UpdateAffiliation(
+                              ReactEvent.Form.target(event)##value,
+                            ),
+                          )
+                      }
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="affiliation"
+                      type_="text"
+                      placeholder="Acme Inc., Acme University, etc."
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="is not a valid team name"
+                      active={state.hasTeamNameError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <div className="border-b border-gray-400 pb-2 mb-2 ">
+                      <span
+                        className="inline-block mr-1 text-gray-800 text-xs font-semibold">
+                        {"Course Coaches:" |> str}
+                      </span>
+                      <div className="mt-2">
+                        {
+                          courseCoachIds |> List.length > 0 ?
+                            courseCoachIds
+                            |> List.map(coachId =>
+                                 <div
+                                   key={coachId |> string_of_int}
+                                   className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
+                                   {
+                                     schoolCoaches
+                                     |> List.find(coach =>
+                                          Coach.id(coach) == coachId
+                                        )
+                                     |> Coach.name
+                                     |> str
+                                   }
+                                 </div>
+                               )
+                            |> Array.of_list
+                            |> ReasonReact.array :
+                            <div
+                              className="flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
+                              {"None Assigned" |> str}
+                            </div>
                         }
-                        className={
-                          boolBtnClasses(state.excludedFromLeaderboard)
-                        }>
-                        {"Yes" |> str}
-                      </button>
-                      <button
-                        title="Include this student in the leaderboard"
-                        onClick={
-                          _event => {
-                            ReactEvent.Mouse.preventDefault(_event);
-                            send(UpdateExcludedFromLeaderboard(false));
-                          }
-                        }
-                        className={
-                          boolBtnClasses(!state.excludedFromLeaderboard)
-                        }>
-                        {"No" |> str}
-                      </button>
+                      </div>
+                    </div>
+                    <div className="border-b border-gray-400 pb-2 mb-2 ">
+                      <span
+                        className="inline-block mr-1 text-gray-800 text-xs font-semibold">
+                        {"Exclusive Team Coaches:" |> str}
+                      </span>
+                      <div className="mt-2">
+                        <SA_StudentsPanel_SelectBox
+                          items={state.teamCoaches}
+                          multiSelectCB=multiSelectCoachEnrollmentsCB
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="p-6 bg-gray-100 border-t">
-                <div className="max-w-2xl px-6 mx-auto">
-                  <div
-                    className="flex max-w-2xl w-full justify-between items-center mx-auto">
-                    <div
-                      className="flex items-center flex-shrink-0 bg-red-100 py-1 px-1 rounded">
+                  <div className="mt-5">
+                    <div className="mb-2"> {"Tags applied:" |> str} </div>
+                    <SA_StudentsPanel_SearchableTagList
+                      unselectedTags={
+                        studentTags
+                        |> List.filter(tag =>
+                             !(state.tagsToApply |> List.mem(tag))
+                           )
+                      }
+                      selectedTags={state.tagsToApply}
+                      addTagCB={tag => send(AddTag(tag))}
+                      removeTagCB={tag => send(RemoveTag(tag))}
+                      allowNewTags=true
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <div className="flex items-center flex-shrink-0">
                       <label
-                        className="block tracking-wide text-red-600 text-xs font-semibold mr-3">
-                        {"Has this student dropped out?" |> str}
+                        className="block tracking-wide text-xs font-semibold mr-3">
+                        {
+                          "Should this student be excluded from leaderboards?"
+                          |> str
+                        }
                       </label>
                       <div
                         className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
-                          title="Prevent this student from accessing the course"
+                          title="Exclude this student from the leaderboard"
                           onClick={
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateExited(true));
+                              send(UpdateExcludedFromLeaderboard(true));
                             }
                           }
-                          className={boolBtnClasses(state.exited)}>
+                          className={
+                            boolBtnClasses(state.excludedFromLeaderboard)
+                          }>
                           {"Yes" |> str}
                         </button>
                         <button
-                          title="Allow this student to access the course"
+                          title="Include this student in the leaderboard"
                           onClick={
                             _event => {
                               ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateExited(false));
+                              send(UpdateExcludedFromLeaderboard(false));
                             }
                           }
-                          className={boolBtnClasses(!state.exited)}>
+                          className={
+                            boolBtnClasses(!state.excludedFromLeaderboard)
+                          }>
                           {"No" |> str}
                         </button>
                       </div>
                     </div>
-                    <div className="w-auto">
-                      <button
-                        disabled={formInvalid(state)}
-                        onClick={
-                          _e =>
-                            updateStudent(
-                              student,
-                              state,
-                              authenticityToken,
-                              handleResponseCB(submitFormCB, state),
-                            )
-                        }
-                        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                        {"Update Student" |> str}
-                      </button>
+                  </div>
+                </div>
+                <div className="p-6 bg-gray-100 border-t">
+                  <div className="max-w-2xl px-6 mx-auto">
+                    <div
+                      className="flex max-w-2xl w-full justify-between items-center mx-auto">
+                      <div
+                        className="flex items-center flex-shrink-0 bg-red-100 py-1 px-1 rounded">
+                        <label
+                          className="block tracking-wide text-red-600 text-xs font-semibold mr-3">
+                          {"Has this student dropped out?" |> str}
+                        </label>
+                        <div
+                          className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
+                          <button
+                            title="Prevent this student from accessing the course"
+                            onClick={
+                              _event => {
+                                ReactEvent.Mouse.preventDefault(_event);
+                                send(UpdateExited(true));
+                              }
+                            }
+                            className={boolBtnClasses(state.exited)}>
+                            {"Yes" |> str}
+                          </button>
+                          <button
+                            title="Allow this student to access the course"
+                            onClick={
+                              _event => {
+                                ReactEvent.Mouse.preventDefault(_event);
+                                send(UpdateExited(false));
+                              }
+                            }
+                            className={boolBtnClasses(!state.exited)}>
+                            {"No" |> str}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="w-auto">
+                        <button
+                          disabled={formInvalid(state)}
+                          onClick={
+                            _e =>
+                              updateStudent(
+                                student,
+                                state,
+                                send,
+                                authenticityToken,
+                                handleResponseCB(submitFormCB, state),
+                              )
+                          }
+                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                          {"Update Student" |> str}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </DisablingCover.Jsx2>
           </div>
         </div>
       </div>

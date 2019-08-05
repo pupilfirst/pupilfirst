@@ -53,7 +53,7 @@ module CoachDashboard
         founderIds: founder_ids(timeline_event),
         links: timeline_event.links,
         files: files(timeline_event),
-        latestFeedback: timeline_event.startup_feedback.order(created_at: :DESC).first&.feedback,
+        feedback: timeline_event.startup_feedback.order(created_at: :DESC).pluck(:feedback),
         evaluation: evaluation(timeline_event),
         rubric: rubric(timeline_event),
         evaluator: evaluator(timeline_event)

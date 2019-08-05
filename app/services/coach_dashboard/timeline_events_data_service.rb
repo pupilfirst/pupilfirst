@@ -53,7 +53,7 @@ module CoachDashboard
         founderIds: founder_ids(timeline_event),
         links: timeline_event.links,
         files: files(timeline_event),
-        latestFeedback: timeline_event.startup_feedback&.last&.feedback,
+        latestFeedback: timeline_event.startup_feedback.order(created_at: :DESC).first&.feedback,
         evaluation: evaluation(timeline_event),
         rubric: rubric(timeline_event),
         evaluator: evaluator(timeline_event)
@@ -69,7 +69,7 @@ module CoachDashboard
     end
 
     def files(timeline_event)
-      timeline_event.timeline_event_files.map { |file| { title: file.file.filename, id: file.id } }
+      timeline_event.timeline_event_files.with_attached_file.map { |file| { title: file.file.filename, id: file.id } }
     end
 
     def evaluation(timeline_event)

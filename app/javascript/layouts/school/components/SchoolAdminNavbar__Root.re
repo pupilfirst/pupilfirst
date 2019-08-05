@@ -44,7 +44,7 @@ let headerclasses = shrunk => {
   ++ (
     shrunk ?
       "mx-auto" :
-      "px-5 py-2 relative z-20 border-r border-b bg-white flex h-16 items-center"
+      "px-5 py-2 relative z-20 border-r border-b border-gray-400 bg-white flex h-16 items-center"
   );
 };
 

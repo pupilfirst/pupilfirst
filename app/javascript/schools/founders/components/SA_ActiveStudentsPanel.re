@@ -657,7 +657,7 @@ let make =
                            </div>
                            <div className="w-2/5 text-center">
                              <span
-                               className="inline-flex flex-col items-center rounded bg-primary-100 px-2 pt-2 pb-1 border border-primary-200">
+                               className="inline-flex flex-col items-center rounded bg-gray-200 px-2 pt-2 pb-1 border">
                                <div className="text-xs font-semibold">
                                  {"Level" |> str}
                                </div>

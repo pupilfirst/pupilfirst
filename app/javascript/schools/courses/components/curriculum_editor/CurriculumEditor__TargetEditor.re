@@ -769,15 +769,15 @@ let make =
                       </a>
                     </div>
                   | VisitLink =>
-                    <div>
+                    <div className="mt-5">
                       <label
-                        className="inline-block tracking-wide text-sm font-semibold mb-2"
+                        className="inline-block tracking-wide text-sm font-semibold"
                         htmlFor="link_to_complete">
                         {"Link to complete" |> str}
                       </label>
                       <span> {"*" |> str} </span>
                       <input
-                        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="link_to_complete"
                         type_="text"
                         placeholder="Paste link to complete"

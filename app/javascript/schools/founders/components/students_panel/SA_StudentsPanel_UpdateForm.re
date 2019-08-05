@@ -477,7 +477,7 @@ let make =
                                 handleResponseCB(submitFormCB, state),
                               )
                           }
-                          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                          className="w-full btn btn-large btn-primary">
                           {"Update Student" |> str}
                         </button>
                       </div>

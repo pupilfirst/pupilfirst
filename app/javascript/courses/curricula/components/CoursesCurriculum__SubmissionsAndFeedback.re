@@ -295,7 +295,7 @@ let submissions =
                         }
                       }
                       <div
-                        className="mt-2"
+                        className="mt-2 markdown-block markdown-block__permissive"
                         dangerouslySetInnerHTML={
                           "__html": feedback |> Feedback.feedback,
                         }

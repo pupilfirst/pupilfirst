@@ -43,7 +43,7 @@ let handleResponseJSON = (state, send, te, replaceTimelineEvent, json) =>
       "Your feedback has been recorded and emailed to the student(s)",
     );
     te
-    |> TimelineEvent.updateFeedback(state.feedbackHTML)
+    |> TimelineEvent.addFeedback(state.feedbackHTML)
     |> replaceTimelineEvent;
     clearFeedback(send, ());
   };
@@ -120,19 +120,21 @@ let make =
     },
   render: ({state, send}) => {
     let updateFeedbackCB = updateFeedback(send);
-    let latestFeedback = timelineEvent |> TimelineEvent.latestFeedback;
     <div className="feedback-form__container mt-3 w-100">
       {
-        switch (latestFeedback) {
-        | None => ReasonReact.null
-        | Some(feedback) =>
-          <div className="timeline-event-card__field-box mx-3 mt-3 p-3">
-            <h5 className="timeline-event-card__field-header font-bold mt-0">
-              {"Latest Feedback Sent:" |> str}
-            </h5>
-            <div dangerouslySetInnerHTML={"__html": feedback} />
-          </div>
-        }
+        timelineEvent
+        |> TimelineEvent.feedback
+        |> List.map(feedback =>
+             <div className="timeline-event-card__field-box mx-3 mt-3 p-3">
+               <h5
+                 className="timeline-event-card__field-header font-bold mt-0">
+                 {"Feedback Sent:" |> str}
+               </h5>
+               <div dangerouslySetInnerHTML={"__html": feedback} />
+             </div>
+           )
+        |> Array.of_list
+        |> ReasonReact.array
       }
       {
         if (state.showForm) {
@@ -164,10 +166,8 @@ let make =
             onClick={toggleForm(send)}>
             <i className="fa fa-envelope mr-1" />
             {
-              switch (latestFeedback) {
-              | None => "Email Feedback" |> str
-              | Some(_feedback) => "Email New Feedback" |> str
-              }
+              timelineEvent |> TimelineEvent.feedback |> ListUtils.isEmpty ?
+                "Email Feedback" |> str : "Email New Feedback" |> str
             }
           </button>;
         }

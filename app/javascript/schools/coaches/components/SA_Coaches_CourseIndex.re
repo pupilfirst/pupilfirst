@@ -156,7 +156,7 @@ let make =
                       send(UpdateFormVisible(CoachEnrollmentForm));
                     }
                   }
-                  className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-gray-200 hover:bg-gray-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
+                  className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hove:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-20 cursor-pointer">
                   <i className="far fa-user-plus text-lg" />
                   <h5 className="font-semibold ml-2">
                     {"Assign Coaches to Course" |> str}
@@ -213,7 +213,7 @@ let make =
                                </div>
                              </div>
                              <div
-                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                               className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
                                ariaLabel={"Delete " ++ (coach |> Coach.name)}
                                onClick={
                                  _event => {
@@ -221,7 +221,7 @@ let make =
                                    removeCoach(coach);
                                  }
                                }>
-                               <Icon.Jsx2 kind=Icon.Delete size="4" />
+                               <i className="fas fa-trash-alt" />
                              </div>
                            </div>
                          </div>
@@ -267,14 +267,14 @@ let make =
                              </div>
                              <div
                                ariaLabel={"Delete " ++ (coach |> Coach.name)}
-                               className="w-10 text-xs course-faculty__list-item-remove cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                               className="w-10 text-xs text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
                                onClick={
                                  _event => {
                                    ReactEvent.Mouse.preventDefault(_event);
                                    removeCoach(coach);
                                  }
                                }>
-                               <Icon.Jsx2 kind=Icon.Delete size="4" />
+                               <i className="fas fa-trash-alt" />
                              </div>
                            </div>
                            <div className="pt-2 pb-4 px-4">

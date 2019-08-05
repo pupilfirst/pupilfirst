@@ -6,7 +6,7 @@ type t = {
   founderIds: list(int),
   links: list(string),
   files: list(File.t),
-  latestFeedback: option(string),
+  feedback: list(string),
   evaluation: list(Grading.t),
   rubric: option(string),
   evaluator: option(string),
@@ -25,8 +25,7 @@ let decode = json =>
     founderIds: json |> field("founderIds", list(int)),
     links: json |> field("links", list(string)),
     files: json |> field("files", list(File.decode)),
-    latestFeedback:
-      json |> field("latestFeedback", nullable(string)) |> Js.Null.toOption,
+    feedback: json |> field("feedback", list(string)),
     evaluation: json |> field("evaluation", list(Grading.decode)),
     rubric: json |> field("rubric", nullable(string)) |> Js.Null.toOption,
     evaluator:
@@ -50,13 +49,13 @@ let links = t => t.links;
 
 let files = t => t.files;
 
-let latestFeedback = t => t.latestFeedback;
+let feedback = t => t.feedback;
 
 let updateEvaluation = (evaluation, t) => {...t, evaluation};
 
-let updateFeedback = (latestFeedback, t) => {
+let addFeedback = (latestFeedback, t) => {
   ...t,
-  latestFeedback: Some(latestFeedback),
+  feedback: [latestFeedback, ...t.feedback],
 };
 
 let updateEvaluator = (evaluator, t) => {...t, evaluator: Some(evaluator)};

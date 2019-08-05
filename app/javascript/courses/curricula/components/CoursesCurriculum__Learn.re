@@ -14,11 +14,7 @@ let renderBlockClasses = block =>
   };
 
 let markdownContentBlock = markdown =>
-  <MarkdownBlock
-    markdown
-    className="markdown-block__permissive"
-    profile=Markdown.Permissive
-  />;
+  <MarkdownBlock markdown profile=Markdown.Permissive />;
 
 let fileContentBlock = (url, title, filename) =>
   <a

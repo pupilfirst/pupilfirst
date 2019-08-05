@@ -50,11 +50,11 @@
 }
 
 .markdown-block__ul {
-  @apply ml-10 mt-4 list-disc;
+  @apply ml-10 mt-3 list-disc;
 }
 
 .markdown-block__ol {
-  @apply ml-10 mt-4 list-decimal;
+  @apply ml-10 mt-3 list-decimal;
 }
 
 .markdown-block__li {
@@ -94,7 +94,7 @@
  */
 
 .markdown-block__permissive p {
-  @apply markdown-block__p;
+  @apply markdown-block__p leading-relaxed;
 }
 
 .markdown-block__permissive h1 {
@@ -125,13 +125,11 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__permissive b,
-strong {
+.markdown-block__permissive b, strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__permissive s,
-del {
+.markdown-block__permissive s, del {
   @apply markdown-block__strikethrough;
 }
 
@@ -159,8 +157,7 @@ del {
   @apply markdown-block__blockquote;
 }
 
-.markdown-block__permissive blockquote code,
-pre {
+.markdown-block__permissive blockquote code, pre {
   @apply font-normal text-sm;
 }
 
@@ -225,13 +222,11 @@ pre {
   @apply markdown-block__em;
 }
 
-.markdown-block__question-and-answer b,
-strong {
+.markdown-block__question-and-answer b, strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__question-and-answer s,
-del {
+.markdown-block__question-and-answer s, del {
   @apply markdown-block__strikethrough;
 }
 
@@ -289,13 +284,11 @@ del {
   @apply markdown-block__em;
 }
 
-.markdown-block__comment b,
-strong {
+.markdown-block__comment b, strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__comment s,
-del {
+.markdown-block__comment s, del {
   @apply markdown-block__strikethrough;
 }
 

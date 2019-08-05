@@ -7,7 +7,7 @@
 }
 
 .leaderboard__winner-avatar {
-  @apply w-16 h-16 border-2 border-white overflow-hidden rounded-full bg-white mx-2 shadow-md;
+  @apply w-16 h-16 flex items-center justify-center border-2 border-white overflow-hidden rounded-full bg-white mx-2 shadow-md;
 }
 
 .leaderboard__students-count-container {

@@ -182,7 +182,7 @@ let make =
 
   let url = ReasonReactRouter.useUrl();
 
-  <div className="bg-gray-100 pt-4 pb-8">
+  <div className="bg-gray-100 pt-11 pb-8 -mt-7">
     {
       switch (url.path) {
       | ["targets", targetId, ..._] =>

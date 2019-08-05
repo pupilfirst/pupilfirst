@@ -64,10 +64,14 @@ feature 'Course leaderboard' do
     # The leaderboard shouldn't include excluded-from-leaderboard students in counts.
 
     # There should be 3 active students - 'student', and members of 'other_team_1'.
-    expect(page).to have_css('.leaderboard__students-count', text: '3')
+    within("div[data-t='active students count']") do
+      expect(page).to have_text(3)
+    end
 
     # There should be 4 inactive students - other members of "student"'s team, and members of 'other_team_2'
-    expect(page).to have_css('.leaderboard__students-count', text: '4')
+    within("div[data-t='inactive students count']") do
+      expect(page).to have_text(4)
+    end
 
     # The leaderboard from two weeks ago should include all students.
     visit leaderboard_course_path(student.course, page: 1)

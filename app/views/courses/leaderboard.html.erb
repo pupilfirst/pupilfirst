@@ -9,7 +9,8 @@
     <div class="max-w-3xl mx-auto">
       <div class="text-center mx-3">
         <p class="inline-block bg-orange-100 text-orange-900 border border-orange-500 text-xs mx-auto text-center px-4 py-2 rounded-lg">
-          This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
+          This leaderboard shows students <strong>who have improved the most</strong> compared to the previous
+          leaderboard.
         </p>
       </div>
       <div class="w-full md:px-4 text-center mt-4">
@@ -38,11 +39,11 @@
                 <h4 class="leaderboard__winner-title pb-3 mt-3 font-normal leading-snug text-primary-900"><%= presenter.heading %></h4>
 
                 <div class="leaderboard__students-count-container bg-gray-100 flex mx-auto overflow-hidden border rounded-lg justify-center">
-                  <div class="w-1/2 px-2 pt-2 pb-1">
+                  <div class="w-1/2 px-2 pt-2 pb-1" data-t='active students count'>
                     <p class="text-xs">Active Students</p>
                     <span class="text-xl font-semibold"><%= presenter.students.count %></span>
                   </div>
-                  <div class="w-1/2 px-2 pt-2 pb-1">
+                  <div class="w-1/2 px-2 pt-2 pb-1" data-t='inactive students count'>
                     <p class="text-xs">Inactive Students</p>
                     <span class="text-xl font-semibold"><%= presenter.inactive_students_count %></span>
                   </div>
@@ -107,7 +108,7 @@
 
                 <td class="py-3 px-3 border-b text-left text-sm">
                   <span class="font-semibold inline-block leading-tight"><%= student.name %></span>
-                  <span class="leaderboard__student-affiliation block text-xs text-gray-700 leading-tight"> <%= student.user.affiliation%></span>
+                  <span class="leaderboard__student-affiliation block text-xs text-gray-700 leading-tight"> <%= student.user.affiliation %></span>
                 </td>
                 <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.level_number %></td>
                 <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.score %></td>

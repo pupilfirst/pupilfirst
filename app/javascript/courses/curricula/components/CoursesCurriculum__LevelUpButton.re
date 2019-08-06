@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
-
 open CoursesCurriculum__Types;
 
 let str = React.string;
@@ -42,23 +40,10 @@ let createLevelUpQuery = (authenticityToken, course, setSaving, event) => {
 [@react.component]
 let make = (~course, ~authenticityToken) => {
   let (saving, setSaving) = React.useState(() => false);
-  <div
-    className="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg p-6">
-    <img className="w-20 mx-auto" src=levelUpImage />
-    <div className="font-semibold text-2xl font-bold">
-      {"Ready to Level Up!" |> str}
-    </div>
-    <div className="text-sm max-w-xl mx-auto">
-      {
-        "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!"
-        |> str
-      }
-    </div>
     <button
       disabled=saving
       onClick={createLevelUpQuery(authenticityToken, course, setSaving)}
       className="btn btn-success mt-4">
       {handleSubmitButton(saving)}
-    </button>
-  </div>;
+    </button>;
 };

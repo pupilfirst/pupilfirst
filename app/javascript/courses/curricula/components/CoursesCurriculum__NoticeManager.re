@@ -1,5 +1,10 @@
 [@bs.config {jsx: 3}];
 
+let courseEndedImage: string = [%raw "require('../images/course-ended.svg')"];
+let courseCompleteImage: string = [%raw
+  "require('../images/course-complete.svg')"
+];
+let accessEndedImage: string = [%raw "require('../images/access-ended.svg')"];
 let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
 
 open CoursesCurriculum__Types;
@@ -15,40 +20,57 @@ let str = React.string;
 
 let iconsForNotice = showNotice =>
   switch (showNotice) {
-  | CourseEnded
-  | CourseComplete
-  | AccessEnded
-  | LevelUp
+  | CourseEnded => courseEndedImage
+  | CourseComplete => courseCompleteImage
+  | AccessEnded => accessEndedImage
+  | LevelUp => levelUpImage
   | None => levelUpImage
   };
 
-let showNotice = (title, description, showNotice) =>
-  <div
-    className="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg p-6">
-    <img className="w-20 mx-auto" src={iconsForNotice(showNotice)} />
-    <div className="max-w-xl font-semibold text-2xl mx-auto">
+let showNotice =
+    (
+      ~title,
+      ~description,
+      ~noticeType,
+      ~classes="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg px-6 pt-4 pb-8",
+      (),
+    ) =>
+  <div className=classes>
+    <img className="w-64 mx-auto" src={iconsForNotice(noticeType)} />
+    <div
+      className="max-w-xl font-semibold text-2xl mx-auto mt-1 leading-tight">
       {title |> str}
     </div>
-    <div className="text-sm max-w-xl mx-auto"> {description |> str} </div>
+    <div className="text-sm max-w-lg mx-auto mt-2"> {description |> str} </div>
   </div>;
 
 let courseCompletedMessage = () => {
   let title = "Congratulations! You have completed all milestone targets in this course.";
   let description = "You've completed our Level Framework, but you know by now that this is just the beginning of your journey.
   Feel free to complete targets that you might have left out, read up on attached links and resources, and work on the breadth and depth of your skills.";
-  showNotice(title, description, CourseComplete);
+  showNotice(~title, ~description, ~noticeType=CourseComplete, ());
 };
 
 let courseEndedMessage = () => {
   let title = "Course Ended";
   let description = "The course has ended and submissions are disabled for all targets!";
-  showNotice(title, description, AccessEnded);
+  showNotice(~title, ~description, ~noticeType=CourseEnded, ());
 };
 
 let accessEndedMessage = () => {
   let title = "Access Ended";
   let description = "Your access to this course has ended.";
-  showNotice(title, description, AccessEnded);
+  showNotice(~title, ~description, ~noticeType=AccessEnded, ());
+};
+
+let renderLevelUp = (course, authenticityToken) => {
+  let title = "Ready to Level Up!";
+  let description = "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!";
+  <div
+    className="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg px-6 pt-4 pb-8">
+    {showNotice(~title, ~description, ~noticeType=LevelUp, ~classes="", ())}
+    <CoursesCurriculum__LevelUpButton course authenticityToken />
+  </div>;
 };
 
 let computeLevelUp =
@@ -126,7 +148,7 @@ let make =
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()
-  | LevelUp => <CoursesCurriculum__LevelUp course authenticityToken />
+  | LevelUp => renderLevelUp(course, authenticityToken)
   | None => React.null
   };
 };

@@ -21,9 +21,8 @@ module Courses
       end
     end
 
-    def initialize(view_context, course, page: nil)
+    def initialize(view_context, course)
       @course = course
-      @page = page
 
       super(view_context)
     end
@@ -87,28 +86,27 @@ module Courses
     end
 
     def previous_page?
-      page < 8
+      difference_in_days < 120
     end
 
     def next_page?
-      page.positive?
+      difference_in_days.positive?
     end
 
     def previous_page_link
-      view.leaderboard_course_path(page: page + 1)
-      "?page=#{page + 1}"
+      "?on=#{parameterize_time(on - 1.week)}"
     end
 
     def next_page_link
-      if page == 1
+      if difference_in_days < 8
         view.leaderboard_course_path
       else
-        view.leaderboard_course_path(page: page - 1)
+        "?on=#{parameterize_time(on + 1.week)}"
       end
     end
 
     def course_entries(from, to)
-      LeaderboardEntry.where(founder: founders, period_from: from, period_to: to).includes(founder: %i[user level])
+      LeaderboardEntry.where(founder: founders, period_from: from, period_to: to).includes(founder: [:level, user: { avatar_attachment: :blob }])
     end
 
     def rank_change_icon(delta)
@@ -133,6 +131,16 @@ module Courses
 
     private
 
+    def difference_in_days
+      @difference_in_days = (Time.now.to_date - on.to_date).to_i
+    end
+
+    def parameterize_time(time)
+      month = format '%02d', time.month
+      day = format '%02d', time.day
+      time.year.to_s + month + day
+    end
+
     def top_score
       @top_score ||= toppers.first.score
     end
@@ -141,19 +149,22 @@ module Courses
       current_user.present? && current_user.id.in?(toppers.map(&:user_id))
     end
 
-    def page
-      @page ||= begin
-        parsed_page = view.params[:page].to_i
-        parsed_page.between?(0, 12) ? parsed_page : 0
+    def on
+      @on ||= begin
+        if view.params[:on].present? && !!(view.params[:on] =~ /\A20\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\Z/)
+          Time.parse(view.params[:on]).end_of_day
+        else
+          Time.now.end_of_day
+        end
       end
     end
 
     def lts
-      @lts ||= LeaderboardTimeService.new(page)
+      @lts ||= LeaderboardTimeService.new(on)
     end
 
     def founders
-      @course.founders.not_exited.where(excluded_from_leaderboard: false)
+      @founders ||= @course.founders.not_exited.where(excluded_from_leaderboard: false)
     end
 
     def current_leaderboard

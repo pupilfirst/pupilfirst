@@ -132,7 +132,7 @@ module Courses
     private
 
     def difference_in_days
-      @difference_in_days = (Time.now.to_date - on.to_date).to_i
+      @difference_in_days = (Time.zone.now.to_date - on.to_date).to_i
     end
 
     def parameterize_time(time)
@@ -154,7 +154,7 @@ module Courses
         if view.params[:on].present? && !!(view.params[:on] =~ /\A20\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\Z/)
           Time.parse(view.params[:on]).end_of_day
         else
-          Time.now.end_of_day
+          Time.zone.now.end_of_day
         end
       end
     end

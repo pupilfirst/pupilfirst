@@ -76,7 +76,7 @@ module Questions
     end
 
     def title(user)
-      title_text(user).presence || user.faculty.present? ? "Coach" : "Student"
+      title_text(user).presence || (user.faculty.present? ? "Coach" : "Student")
     end
 
     def title_text(user)

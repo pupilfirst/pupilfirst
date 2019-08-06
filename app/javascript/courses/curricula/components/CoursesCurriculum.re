@@ -59,10 +59,10 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
           React.null
       }
       <div className="p-6 pt-5">
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold leading-snug">
           {targetGroup |> TargetGroup.name |> str}
         </div>
-        <div className="text-sm">
+        <div className="text-sm max-w-md mx-auto leading-snug mt-1">
           {targetGroup |> TargetGroup.description |> str}
         </div>
       </div>
@@ -182,7 +182,7 @@ let make =
 
   let url = ReasonReactRouter.useUrl();
 
-  <div className="bg-gray-100 pt-4 pb-8">
+  <div className="bg-gray-100 pt-11 pb-8 -mt-7">
     {
       switch (url.path) {
       | ["targets", targetId, ..._] =>

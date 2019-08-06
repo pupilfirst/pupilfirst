@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   normalize_attribute :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id
+    :angel_co_url, :github_url, :behance_url, :skype_id, :affiliation
 
   validates :email, presence: true, email: true
   validates :email, uniqueness: { scope: :school_id }

@@ -21,6 +21,8 @@ feature 'School students index' do
 
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
+  let(:title_1) { Faker::Lorem.words(2).join(" ") }
+  let(:affiliation_1) { Faker::Lorem.words(2).join(" ") }
 
   let(:name_2) { Faker::Name.name }
   let(:email_2) { Faker::Internet.email(name_2) }
@@ -50,6 +52,8 @@ feature 'School students index' do
 
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
+    fill_in 'Title', with: title_1
+    fill_in 'Affiliation', with: affiliation_1
     fill_in 'Tags', with: 'Abc'
     find('span[title="Add new tag Abc"]').click
     fill_in 'Tags', with: 'Def'
@@ -58,6 +62,15 @@ feature 'School students index' do
 
     fill_in 'Name', with: name_2
     fill_in 'Email', with: email_2
+
+    # title and affiliation should have persisted values
+    expect(page.find_field("title").value).to eq(title_1)
+    expect(page.find_field("affiliation").value).to eq(affiliation_1)
+
+    # Clear title
+    fill_in 'Title', with: ''
+    # Clear affiliation
+    fill_in 'Affiliation', with: ''
 
     # Remove both tags, then add one back - the unpersisted tag should be suggested.
     find('span[title="Remove tag Abc"]').click
@@ -73,6 +86,7 @@ feature 'School students index' do
 
     expect(page).to have_text(name_1.to_s)
     expect(page).to have_text("(#{email_1})")
+    expect(page).to have_text("#{title_1}, #{affiliation_1}")
     expect(page).to have_text(name_2.to_s)
     expect(page).to have_text("(#{email_2})")
 
@@ -91,6 +105,10 @@ feature 'School students index' do
 
     expect(founder_1_user.name).to eq(name_1)
     expect(founder_2_user.name).to eq(name_2)
+    expect(founder_1_user.title).to eq(title_1)
+    expect(founder_2_user.title).to eq(nil)
+    expect(founder_1_user.affiliation).to eq(affiliation_1)
+    expect(founder_2_user.affiliation).to eq(nil)
     expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
     expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI')
 
@@ -123,8 +141,12 @@ feature 'School students index' do
     find("a", text: name_1).click
     expect(page).to have_text(founder_1_user.name)
     expect(page).to have_text(founder_1.startup.name)
+    expect(page.find_field("title").value).to eq(founder_1_user.title)
+    expect(page.find_field("affiliation").value).to eq(founder_1_user.affiliation)
     fill_in 'Name', with: founder_1_user.name + " Jr."
     fill_in 'Team Name', with: new_team_name, fill_options: { clear: :backspace }
+    fill_in 'Title', with: ''
+    fill_in 'Affiliation', with: ''
     find('button[title="Exclude this student from the leaderboard"]').click
     click_button 'Update Student'
 
@@ -132,6 +154,8 @@ feature 'School students index' do
     dismiss_notification
 
     expect(founder_1_user.reload.name).to end_with('Jr.')
+    expect(founder_1_user.title).to eq(nil)
+    expect(founder_1_user.affiliation).to eq(nil)
     expect(founder_1.reload.startup.name).to eq(new_team_name)
     expect(founder_1.excluded_from_leaderboard).to eq(true)
 

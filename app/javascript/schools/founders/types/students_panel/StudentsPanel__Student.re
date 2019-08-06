@@ -7,13 +7,21 @@ type t = {
   tags: list(string),
   exited: bool,
   excludedFromLeaderboard: bool,
+  title: option(string),
+  affiliation: option(string),
 };
 
 let name = t => t.name;
+
 let avatarUrl = t => t.avatarUrl;
+
 let id = t => t.id;
 
 let teamId = t => t.teamId;
+
+let title = t => t.title;
+
+let affiliation = t => t.affiliation;
 
 let email = t => t.email;
 
@@ -23,10 +31,12 @@ let exited = t => t.exited;
 
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
-let updateInfo = (exited, excludedFromLeaderboard, t) => {
+let updateInfo = (exited, excludedFromLeaderboard, title, affiliation, t) => {
   ...t,
   exited,
   excludedFromLeaderboard,
+  title,
+  affiliation,
 };
 
 let decode = json =>
@@ -39,6 +49,9 @@ let decode = json =>
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
     name: json |> field("name", string),
     avatarUrl: json |> field("avatarUrl", string),
+    title: json |> field("title", nullable(string)) |> Js.Null.toOption,
+    affiliation:
+      json |> field("affiliation", nullable(string)) |> Js.Null.toOption,
   };
 
 let encode = (name, teamName, t) =>
@@ -51,5 +64,7 @@ let encode = (name, teamName, t) =>
       ("email", t.email |> string),
       ("exited", t.exited |> bool),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
+      ("title", t.title |> StringUtils.optionToString |> string),
+      ("affiliation", t.affiliation |> StringUtils.optionToString |> string),
     ])
   );

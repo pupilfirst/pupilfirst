@@ -32,7 +32,7 @@ module Courses
       # Create a user and generate a login token.
       user = User.where(email: student.email, school: school).first_or_create!
       user.regenerate_login_token if user.login_token.blank?
-      user.update!(name: student.name)
+      user.update!(name: student.name, title: student.title, affiliation: student.affiliation)
 
       startup = Startup.create!(name: student.name, level: first_level)
 

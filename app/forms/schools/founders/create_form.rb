@@ -6,6 +6,8 @@ module Schools
       collection :students, populate_if_empty: OpenStruct, virtual: true, default: [] do
         property :name, validates: { presence: true, length: { maximum: 250 } }
         property :email, validates: { presence: true, length: { maximum: 250 }, format: { with: EmailValidator::REGULAR_EXPRESSION, message: "doesn't look like an email" } }
+        property :title
+        property :affiliation
         property :tags
       end
 

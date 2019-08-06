@@ -50,23 +50,23 @@ module Courses
 
     def heading
       if current_user_is_topper?
-        return '<strong>You</strong> are at the top of the leaderboard. <strong>Congratulations!</strong>'.html_safe
+        return '<span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>'.html_safe
       end
 
       multiple_mid_text = 'are at the top of the leaderboard this week, sharing a score of '
 
       h = if toppers.count == 1
-        "<strong>#{toppers.first.name}</strong> is at the top of the leaderboard this week with a score of "
+        "<span class='font-bold'>#{toppers.first.name}</span> is at the top of the leaderboard this week with a score of "
       elsif toppers.count < 4
-        names = toppers.map { |s| "<strong>#{s.name}</strong>" }
+        names = toppers.map { |s| "<span class='font-bold'>#{s.name}</span>" }
         "#{names.to_sentence} #{multiple_mid_text}"
       else
         others_count = toppers.count - 2
-        names = toppers[0..1].map { |s| "<strong>#{s.name}</strong>" }
-        "#{names.join(', ')} and <strong>#{others_count} others</strong> #{multiple_mid_text}"
+        names = toppers[0..1].map { |s| "<span class='font-bold'>#{s.name}</span>" }
+        "#{names.join(', ')} and <span class='font-bold'>#{others_count} others</span> #{multiple_mid_text}"
       end
 
-      (h + "<strong>#{top_score}</strong>.").html_safe
+      (h + "<span class='font-bold'>#{top_score}</span>.").html_safe
     end
 
     def students
@@ -113,15 +113,15 @@ module Courses
 
     def rank_change_icon(delta)
       if delta >= 10
-        view.image_tag('courses/leaderboard/rank-change-up-double.svg', class: 'img-fluid', alt: 'Rank change up double')
+        view.image_tag('courses/leaderboard/rank-change-up-double.svg', alt: 'Rank change up double')
       elsif delta.positive?
-        view.image_tag('courses/leaderboard/rank-change-up.svg', class: 'img-fluid', alt: 'Rank change up')
+        view.image_tag('courses/leaderboard/rank-change-up.svg', alt: 'Rank change up')
       elsif delta.zero?
-        view.image_tag('courses/leaderboard/rank-no-change.svg', class: 'img-fluid', alt: 'Rank no change')
+        view.image_tag('courses/leaderboard/rank-no-change.svg', alt: 'Rank no change')
       elsif delta > -10
-        view.image_tag('courses/leaderboard/rank-change-down.svg', class: 'img-fluid', alt: 'Rank change down')
+        view.image_tag('courses/leaderboard/rank-change-down.svg', alt: 'Rank change down')
       else
-        view.image_tag('courses/leaderboard/rank-change-down-double.svg', class: 'img-fluid', alt: 'Rank change down double')
+        view.image_tag('courses/leaderboard/rank-change-down-double.svg', alt: 'Rank change down double')
       end
     end
 

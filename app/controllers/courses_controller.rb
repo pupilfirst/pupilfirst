@@ -9,6 +9,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/leaderboard?weeks_before=
   def leaderboard
     @course = authorize(Course.find(params[:id]))
+    render layout: 'student_course'
   end
 
   # GET /courses/:id/apply

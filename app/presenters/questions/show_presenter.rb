@@ -76,13 +76,17 @@ module Questions
     end
 
     def title(user)
-      title = user.title
-      title_text = title.present? ? ", #{title}" : ""
+      title_text(user).presence || (user.faculty.present? ? "Coach" : "Student")
+    end
 
-      if user.faculty.present?
-        title.presence || "Coach"
+    def title_text(user)
+      title = user.title
+      affiliation = user.affiliation
+
+      if title.present? && affiliation.present?
+        "#{title}, #{affiliation}"
       else
-        "Student#{title_text}"
+        title.presence || affiliation.presence
       end
     end
   end

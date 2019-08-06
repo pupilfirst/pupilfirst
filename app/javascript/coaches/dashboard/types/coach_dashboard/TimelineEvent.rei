@@ -24,9 +24,9 @@ let reviewComplete: list(t) => list(t);
 
 let decode: Js.Json.t => t;
 
-let latestFeedback: t => option(string);
+let feedback: t => list(string);
 
-let updateFeedback: (string, t) => t;
+let addFeedback: (string, t) => t;
 
 let updateEvaluator: (string, t) => t;
 

@@ -10,7 +10,7 @@ let email: t => string;
 
 let tags: t => list(string);
 
-let updateInfo: (bool, bool, t) => t;
+let updateInfo: (bool, bool, option(string), option(string), t) => t;
 
 let encode: (string, string, t) => Js.Json.t;
 
@@ -21,3 +21,7 @@ let excludedFromLeaderboard: t => bool;
 let name: t => string;
 
 let avatarUrl: t => string;
+
+let title: t => option(string);
+
+let affiliation: t => option(string);

@@ -99,6 +99,7 @@ gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling C
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.2' # Create beautiful charts with one line of JavaScript.
 gem 'graphql', '~> 1.9' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 
 # Rails assets!
 source 'https://rails-assets.org' do

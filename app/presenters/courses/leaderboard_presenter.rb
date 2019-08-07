@@ -152,7 +152,7 @@ module Courses
     def on
       @on ||= begin
         if view.params[:on].present? && !!(view.params[:on] =~ /\A20\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\Z/)
-          Time.parse(view.params[:on]).end_of_day
+          Time.zone.parse(view.params[:on]).end_of_day
         else
           Time.zone.now.end_of_day
         end

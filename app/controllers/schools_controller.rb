@@ -1,8 +1,6 @@
 class SchoolsController < ApplicationController
   layout 'school'
 
-  before_action :courses, :teams
-
   # Enforce authorization with Pundit in all school administration routes.
   after_action :verify_authorized
 
@@ -32,15 +30,5 @@ class SchoolsController < ApplicationController
     else
       render json: { error: form.errors.full_messages.join(", ") }
     end
-  end
-
-  private
-
-  def courses
-    @courses ||= policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope)
-  end
-
-  def teams
-    @teams ||= policy_scope(Startup, policy_scope_class: Schools::StartupPolicy::Scope)
   end
 end

@@ -30,7 +30,7 @@ module Schools
     end
 
     def course_index
-      @course = courses.find(params[:course_id])
+      @course = policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope).find(params[:course_id])
       authorize(current_school, policy_class: Schools::FacultyPolicy)
     end
 

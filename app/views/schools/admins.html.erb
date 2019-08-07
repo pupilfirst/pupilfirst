@@ -1,1 +1,8 @@
+<% content_for(:tail) do %>
+  <%#= stylesheet_pack_tag 'SchoolAdminsPack', media: 'all' %>
+  <%= javascript_pack_tag 'SchoolAdminsPack', 'data-turbolinks-track': 'reload', nonce: true %>
+<% end %>
+
+<% presenter = Schools::AdminsPresenter.new(self, current_school) %>
+<div id="school-admins" class="flex flex-1 h-screen" data-json-props="<%= presenter.props_to_json %>"></div>
 

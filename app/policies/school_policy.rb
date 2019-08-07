@@ -5,11 +5,7 @@ class SchoolPolicy < ApplicationPolicy
     user.school_admin.present?
   end
 
-  def customize?
-    show?
-  end
-
-  def images?
-    customize?
-  end
+  alias customize? show?
+  alias images? show?
+  alias admins? show?
 end

@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
   resource :school, only: %i[show update] do
     get 'customize'
+    get 'admins'
     post 'images'
   end
 

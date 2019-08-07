@@ -34,6 +34,11 @@ class SchoolsController < ApplicationController
     end
   end
 
+  # GET /school/admins
+  def admins
+    authorize current_school
+  end
+
   private
 
   def courses

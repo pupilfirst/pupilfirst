@@ -8,6 +8,7 @@ module CourseReports
 
     def execute
       spreadsheet = RODF::Spreadsheet.new
+      add_custom_styles(spreadsheet)
 
       spreadsheet.table 'Targets' do |table|
         populate_targets_table(table)
@@ -32,6 +33,20 @@ module CourseReports
 
     private
 
+    def add_custom_styles(spreadsheet)
+      spreadsheet.office_style 'passing-grade', family: :cell do
+        property :cell, 'background-color' => "#9AE6B4"
+      end
+
+      spreadsheet.office_style 'failing-grade', family: :cell do
+        property :cell, 'background-color' => "#FEB2B2"
+      end
+
+      spreadsheet.office_style 'pending-grade', family: :cell do
+        property :cell, 'background-color' => "#FAF089"
+      end
+    end
+
     def filename
       name = "#{@course.name}-#{Time.zone.now.iso8601}".parameterize
       "#{name}.ods"
@@ -40,7 +55,7 @@ module CourseReports
     def populate_targets_table(table)
       target_rows = @course.targets.live.includes(:level, :evaluation_criteria, :quiz, :target_group).map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
-        [target.id, target.level.number, target.title, target_type(target), milestone]
+        [target_id(target), target.level.number, target.title, target_type(target), milestone]
       end
 
       sorted_target_rows = target_rows.sort_by { |data| data[1] }
@@ -55,54 +70,85 @@ module CourseReports
     def populate_students_table(table)
       student_rows = students.map do |student|
         user = student.user
-        [student.id, user.email, user.name, user.title, user.affiliation, student.tags.pluck(:name).join(', ')]
+        [user.email, user.name, user.title, user.affiliation, student.tags.pluck(:name).join(', ')]
       end
 
       table.row do |row|
-        row.add_cells ["ID", "Email Address", "Name", "Title", "Affiliation", "Tags"]
+        row.add_cells ["Email Address", "Name", "Title", "Affiliation", "Tags"]
       end
 
       table.add_rows student_rows
     end
 
     def populate_submissions_table(table)
-      # Lay out the target IDs.
+      # Lay out the top row of target IDs.
       table.row do |row|
-        row.cell 'Student ID / Target ID'
-        row.add_cells target_ids
+        row.cell 'Student Email / Target ID'
+
+        formatted_target_ids = targets.map do |target|
+          target_id(target)
+        end
+
+        row.add_cells(formatted_target_ids)
       end
+
+      target_ids = targets.pluck(:id)
 
       # Now populate status for each student.
       students.each do |student|
-        grading = []
-
-        TimelineEvent.where(latest: true).where.not(passed_at: nil).includes(:timeline_event_grades)
-          .joins(:founders).where(founders: { id: student.id }).distinct.each do |submission|
-          evaluation_grade = submission.timeline_event_grades.pluck(:grade).sum
-          grade = evaluation_grade.zero? ? 1 : evaluation_grade
-          grade_index = target_ids.index(submission.target_id)
-
-          next if grade_index.nil?
-
-          grading[grade_index] = grade
-        end
+        grading = compute_grading_for_submissions(student, target_ids)
 
         table.row do |row|
-          row.add_cells([student.id] + grading)
+          row.add_cells([student.user.email] + grading)
         end
       end
     end
+
+    # rubocop:disable Metrics/CyclomaticComplexity
+    def compute_grading_for_submissions(student, target_ids)
+      TimelineEvent.where(latest: true).includes(:timeline_event_grades)
+        .joins(:founders).where(founders: { id: student.id }).distinct
+        .each_with_object([]) do |submission, grading|
+        grade_index = target_ids.index(submission.target_id)
+
+        # We can't record grades for submissions where the target has been archived.
+        next if grade_index.nil?
+
+        evaluation_grade = submission.timeline_event_grades.pluck(:grade).join(',')
+
+        grade, style = case [submission.passed_at.present?, evaluation_grade.empty?]
+          when [true, true]
+            [submission.quiz_score || '✓', '']
+          when [true, false]
+            [evaluation_grade, 'passing-grade']
+          when [false, true]
+            ['RP', 'pending-grade']
+          when [false, false]
+            [evaluation_grade, 'failing-grade']
+        end
+
+        grading[grade_index] = { value: grade, style: style }
+      end
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def students
       @students ||= begin
         # Only scan 'active' students. Also filter by tag, if applicable.
-        scope = @course.founders.active
+        scope = @course.founders.active.includes(:user)
         @tag.present? ? scope.tagged_with(@tag) : scope
       end
     end
 
-    def target_ids
-      @target_ids ||= @course.targets.live.joins(:level).order('levels.number ASC').pluck(:id)
+    def targets
+      @targets ||= @course.targets.live
+        .joins(:level)
+        .includes(:level, :evaluation_criteria, :quiz, :target_group)
+        .order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+    end
+
+    def target_id(target)
+      "L#{target.level.number}T#{target.id}"
     end
 
     def target_type(target)

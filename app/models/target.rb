@@ -37,6 +37,7 @@ class Target < ApplicationRecord
   has_many :content_blocks, dependent: :destroy
   has_many :target_questions, dependent: :destroy
   has_many :questions, through: :target_questions
+  has_many :target_content_versions, dependent: :destroy
 
   acts_as_taggable
 

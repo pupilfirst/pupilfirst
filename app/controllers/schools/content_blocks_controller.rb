@@ -2,7 +2,7 @@ module Schools
   class ContentBlocksController < SchoolsController
     before_action :authorize_target
 
-    # POST /school/target_groups/:target_group_id/targets(.:format)
+    # POST /school/targets/:target_id/content_block
     def create
       form = ::Schools::Targets::CreateContentBlockForm.new(ContentBlock.new)
 

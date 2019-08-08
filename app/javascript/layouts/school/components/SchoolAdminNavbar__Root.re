@@ -9,7 +9,8 @@ open SchoolAdminNavbar__Types;
 type courseSelection =
   | Students
   | CourseCoaches
-  | Curriculum;
+  | Curriculum
+  | CourseExports;
 
 type settingsSelection =
   | Customization
@@ -123,36 +124,39 @@ let secondaryNav = (courses, userRole, selectedOption) =>
           />
         </li>
         {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/students",
-              courseSelection,
-              Students,
-              "Students",
-            )
-          | CourseAuthor => React.null
-          }
-        }
-        {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/coaches",
-              courseSelection,
-              CourseCoaches,
-              "Coaches",
-            )
-          | CourseAuthor => React.null
-          }
-        }
-        {
           secondaryNavOption(
             "/school/courses/" ++ courseId ++ "/curriculum",
             courseSelection,
             Curriculum,
             "Curriculum",
           )
+        }
+        {
+          switch (userRole) {
+          | SchoolAdmin =>
+            [|
+              secondaryNavOption(
+                "/school/courses/" ++ courseId ++ "/students",
+                courseSelection,
+                Students,
+                "Students",
+              ),
+              secondaryNavOption(
+                "/school/courses/" ++ courseId ++ "/coaches",
+                courseSelection,
+                CourseCoaches,
+                "Coaches",
+              ),
+              secondaryNavOption(
+                "/school/courses/" ++ courseId ++ "/exports",
+                courseSelection,
+                CourseExports,
+                "Exports",
+              ),
+            |]
+            |> React.array
+          | CourseAuthor => React.null
+          }
         }
       </ul>
     </div>
@@ -297,7 +301,7 @@ let make =
                                  href={
                                    "/school/courses/"
                                    ++ (course |> Course.id)
-                                   ++ "/students"
+                                   ++ "/curriculum"
                                  }
                                  className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
                                  {course |> Course.name |> str}

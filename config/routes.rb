@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     resources :courses, only: %i[index] do
       member do
         get 'curriculum'
+        get 'exports'
       end
 
       resources :levels, only: %i[create]

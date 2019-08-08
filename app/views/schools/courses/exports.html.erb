@@ -1,0 +1,7 @@
+<%= content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolsCoursesExportsPack', nonce: true %>
+<% end %>
+
+<% presenter = Schools::Courses::ExportsPresenter.new(self, @course) %>
+
+<div id="schools-courses-exports__root" class="flex flex-1 h-screen bg-gray-100" data-props="<%= presenter.props_to_json %>"></div>

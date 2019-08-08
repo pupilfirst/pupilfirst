@@ -1,12 +1,12 @@
-module CourseReports
-  class PrepareService
+module CourseExports
+  class CreateService
     def initialize(course, user, tag: nil)
       @course = course
       @user = user
       @tag = tag
     end
 
-    def execute
+    def create
       spreadsheet = RODF::Spreadsheet.new
       add_custom_styles(spreadsheet)
 
@@ -24,10 +24,10 @@ module CourseReports
 
       io = StringIO.new(spreadsheet.bytes)
 
-      CourseReport.transaction do
-        course_report = CourseReport.create!(course: @course, user: @user, token: SecureRandom.urlsafe_base64(32))
-        course_report.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
-        course_report
+      CourseExport.transaction do
+        course_export = CourseExport.create!(course: @course, user: @user)
+        course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
+        course_export
       end
     end
 

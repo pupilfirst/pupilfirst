@@ -212,17 +212,13 @@ ActiveRecord::Schema.define(version: 2019_08_06_105633) do
     t.index ["user_id"], name: "index_course_authors_on_user_id"
   end
 
-  create_table "course_reports", force: :cascade do |t|
-    t.text "csv"
+  create_table "course_exports", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "course_id"
-    t.string "token"
-    t.datetime "prepared_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_course_reports_on_course_id"
-    t.index ["token"], name: "index_course_reports_on_token", unique: true
-    t.index ["user_id"], name: "index_course_reports_on_user_id"
+    t.index ["course_id"], name: "index_course_exports_on_course_id"
+    t.index ["user_id"], name: "index_course_exports_on_user_id"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -802,8 +798,8 @@ ActiveRecord::Schema.define(version: 2019_08_06_105633) do
   add_foreign_key "content_blocks", "targets"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
-  add_foreign_key "course_reports", "courses"
-  add_foreign_key "course_reports", "users"
+  add_foreign_key "course_exports", "courses"
+  add_foreign_key "course_exports", "users"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty", "schools"

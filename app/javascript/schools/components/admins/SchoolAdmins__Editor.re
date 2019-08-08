@@ -39,9 +39,18 @@ let renderAdmin = (admin, setEditorAction) =>
     </div>
   </div>;
 
+let handleUpdate = (admin, admins, setAdmins, setEditorAction) => {
+  setAdmins(_ => admins |> SchoolAdmin.update(admin));
+  setEditorAction(_ => Hidden);
+};
+
 [@react.component]
 let make = (~authenticityToken, ~admins) => {
   let (editorAction, setEditorAction) = React.useState(() => Hidden);
+  let (admins, setAdmins) = React.useState(() => admins);
+  let updateCB = admin =>
+    handleUpdate(admin, admins, setAdmins, setEditorAction);
+
   <div className="flex-1 flex flex-col overflow-x-scroll">
     {
       switch (editorAction) {
@@ -49,7 +58,7 @@ let make = (~authenticityToken, ~admins) => {
       | ShowEditor(admin) =>
         <SchoolAdmin__EditorDrawer
           closeDrawerCB=(() => setEditorAction(_ => Hidden))>
-          <SchoolAdmins__Form authenticityToken admin />
+          <SchoolAdmins__Form authenticityToken admin updateCB />
         </SchoolAdmin__EditorDrawer>
       }
     }

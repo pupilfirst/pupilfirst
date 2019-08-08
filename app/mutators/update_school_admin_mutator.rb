@@ -16,7 +16,7 @@ class UpdateSchoolAdminMutator < ApplicationMutator
   private
 
   def record_must_exists
-    return if school_admin.blank?
+    return if school_admin.present?
 
     errors[:base] << 'IncorrectSchoolAdminId'
   end

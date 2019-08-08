@@ -5,16 +5,16 @@ module Mutations
 
     description "Create a new school admin"
 
-    field :avatar_url, String, null: true
+    field :school_admin, Types::CreateSchoolAdminType, null: true
 
     def resolve(params)
       mutator = CreateSchoolAdminMutator.new(params, context)
 
       if mutator.valid?
-        { avatar_url: mutator.save }
+        { school_admin: mutator.save }
       else
         mutator.notify_errors
-        { avatar_url: nil }
+        { school_admin: nil }
       end
     end
   end

@@ -20,3 +20,8 @@ let decode = json =>
     name: json |> field("name", string),
     avatarUrl: json |> field("avatarUrl", string),
   };
+
+let create = (id, name, email, avatarUrl) => {id, name, email, avatarUrl};
+
+let update = (admin, admins) =>
+  admins |> List.filter(a => a.id != admin.id) |> List.append([admin]);

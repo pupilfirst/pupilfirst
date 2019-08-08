@@ -7,10 +7,9 @@ type editorAction =
   | Hidden;
 
 let renderAdmin = (admin, setEditorAction) =>
-  <div
-    key={admin |> SchoolAdmin.id}
-    className="flex shadow bg-white rounded-lg mb-4 overflow-hidden hover:bg-gray-100 p-2">
-    <div className="w-full">
+  <div key={admin |> SchoolAdmin.id} className="w-1/2 px-2">
+    <div
+      className="flex shadow bg-white rounded-lg mb-4 overflow-hidden hover:bg-gray-100 p-2">
       <a
         className="w-full cursor-pointer"
         onClick={
@@ -73,7 +72,7 @@ let make = (~authenticityToken, ~admins) => {
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
-      <div className="max-w-3xl w-full mx-auto relative">
+      <div className="max-w-3xl w-full mx-auto flex flex-wrap">
         {
           admins
           |> List.map(admin => renderAdmin(admin, setEditorAction))

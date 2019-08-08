@@ -227,8 +227,6 @@ Rails.application.routes.draw do
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
-  get '/school_admin', to: 'school_admins#dashboard'
-
   get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: PupilFirstConstraint.new
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
 

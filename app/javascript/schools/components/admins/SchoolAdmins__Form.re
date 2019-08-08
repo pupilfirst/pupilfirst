@@ -40,7 +40,11 @@ let createSchoolAdminQuery =
              email,
              schoolAdmin##avatarUrl,
            ),
-         )
+         );
+         Notification.success(
+           "Success",
+           "School Admin created successfully.",
+         );
        | None => setSaving(_ => false)
        };
        Js.Promise.resolve();
@@ -56,14 +60,20 @@ let updateSchoolAdminQuery =
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##updateSchoolAdmin##success ?
-         updateCB(
-           SchoolAdmin.create(
-             id,
-             name,
-             email,
-             admin |> SchoolAdmin.avatarUrl,
-           ),
-         ) :
+         {
+           updateCB(
+             SchoolAdmin.create(
+               id,
+               name,
+               email,
+               admin |> SchoolAdmin.avatarUrl,
+             ),
+           );
+           Notification.success(
+             "Success",
+             "School Admin updated successfully.",
+           );
+         } :
          setSaving(_ => false);
        Js.Promise.resolve();
      })

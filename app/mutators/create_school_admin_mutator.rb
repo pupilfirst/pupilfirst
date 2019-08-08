@@ -17,7 +17,8 @@ class CreateSchoolAdminMutator < ApplicationMutator
 
   def save
     SchoolAdmin.transaction do
-      user = persisted_user || User.create!(email: email, school: current_school, name: name)
+      user = persisted_user || User.create!(email: email, school: current_school)
+      user.update!(name: name)
       SchoolAdmin.create!(user: user, school: current_school)
     end
   end

@@ -20,7 +20,7 @@ let props =
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <SchoolAdmin__Editor
+  <SchoolAdmins__Editor
     authenticityToken={props.authenticityToken}
     admins={props.admins}
   />,

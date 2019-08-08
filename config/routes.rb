@@ -51,7 +51,6 @@ Rails.application.routes.draw do
         get 'curriculum'
       end
 
-      resources :evaluation_criteria, only: %i[create]
       resources :levels, only: %i[create]
 
       resources :faculty, as: 'coaches', path: 'coaches', only: [] do
@@ -73,8 +72,6 @@ Rails.application.routes.draw do
         post 'team_up'
       end
     end
-
-    resources :evaluation_criteria, only: %i[update destroy]
 
     resources :levels, only: %i[update] do
       resources :target_groups, only: %i[create]

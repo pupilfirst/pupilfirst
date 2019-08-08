@@ -29,4 +29,10 @@ class CoursePolicy < ApplicationPolicy
   end
 
   alias show? apply?
+
+  class Scope < Scope
+    def resolve
+      current_school.courses
+    end
+  end
 end

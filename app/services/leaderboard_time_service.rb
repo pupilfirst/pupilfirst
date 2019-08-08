@@ -1,6 +1,6 @@
 class LeaderboardTimeService
-  def initialize(week_delta = 0)
-    @week_delta = week_delta
+  def initialize(leaderboard_at = Time.zone.now)
+    @leaderboard_at = leaderboard_at
   end
 
   def week_start
@@ -21,12 +21,8 @@ class LeaderboardTimeService
 
   private
 
-  def leaderboard_at
-    @leaderboard_at ||= Time.zone.now - @week_delta.weeks
-  end
-
   def adjusted_time(week_minus)
-    week_beginning(leaderboard_at - week_minus.weeks).in_time_zone('Asia/Calcutta') + 12.hours
+    week_beginning(@leaderboard_at - week_minus.weeks).in_time_zone('Asia/Calcutta') + 12.hours
   end
 
   def week_beginning(time)

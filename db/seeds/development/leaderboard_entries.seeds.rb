@@ -5,7 +5,7 @@ after 'development:founders' do
   other_students = student_1.course.founders.where.not(id: student_1)
 
   # Add entries for last week
-  lts = LeaderboardTimeService.new(0)
+  lts = LeaderboardTimeService.new
   student_1.leaderboard_entries.create!(period_from: lts.week_start, period_to: lts.week_end, score: 10)
 
   other_students.each do |other_founder|
@@ -20,7 +20,7 @@ after 'development:founders' do
   end
 
   # Add entries for three weeks before
-  lts = LeaderboardTimeService.new(2)
+  lts = LeaderboardTimeService.new(2.weeks.ago)
 
   other_students.each do |other_founder|
     other_founder.leaderboard_entries.create!(period_from: lts.week_start, period_to: lts.week_end, score: 10)

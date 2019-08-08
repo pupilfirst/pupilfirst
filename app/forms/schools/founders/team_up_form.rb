@@ -5,12 +5,20 @@ module Schools
 
       validate :founders_must_be_in_same_level
       validate :at_least_one_founder
+      validate :founders_must_be_active
 
       def founders_must_be_in_same_level
         return if founders.blank?
         return if founders.joins(startup: :level).distinct('levels.id').pluck('levels.id').one?
 
         errors[:base] << 'Students in different levels cannot be teamed up'
+      end
+
+      def founders_must_be_active
+        # TODO: This should be comparing against founders.active.count
+        return if founders.count == founders.not_exited.count
+
+        errors[:base] << 'Can only team up active students'
       end
 
       def at_least_one_founder

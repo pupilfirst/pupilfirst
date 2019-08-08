@@ -43,7 +43,7 @@ describe LeaderboardTimeService do
   end
 
   context 'when delta is two weeks' do
-    subject { LeaderboardTimeService.new(2) }
+    subject { LeaderboardTimeService.new(2.weeks.ago) }
 
     describe '#week_start' do
       it 'returns start of week' do

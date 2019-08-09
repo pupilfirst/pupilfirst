@@ -193,4 +193,9 @@ class Target < ApplicationRecord
       grades[te_grade.evaluation_criterion_id] = te_grade.grade
     end
   end
+
+  def latest_content_version
+    latest_version = target_content_versions.order('updated_at DESC').last
+    return if latest_version.blank?
+  end
 end

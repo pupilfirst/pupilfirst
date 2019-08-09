@@ -27,6 +27,11 @@ module Schools
       end
     end
 
+    # GET /school/targets/:id/content_details
+    def content_details
+      render json: camelize_keys(stringify_ids(Targets::ContentDataService.new(@target).details))
+    end
+
     protected
 
     def load_new_target

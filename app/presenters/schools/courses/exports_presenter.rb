@@ -9,12 +9,17 @@ module Schools
 
       def props
         {
+          tags: tag_details,
           course: course_details,
           exports: course_export_details
         }
       end
 
       private
+
+      def tag_details
+        @course.school.founder_tags.as_json(only: %i[id name])
+      end
 
       def course_details
         {
@@ -34,15 +39,15 @@ module Schools
 
           {
             id: export.id,
-            username: user.name,
             created_at: export.created_at,
-            file: file
+            file: file,
+            tags: export.tag_list
           }
         end
       end
 
       def course_exports
-        @course_exports ||= @course.course_exports.order(created_at: :DESC).with_attached_file.includes(:user).limit(50).load
+        @course_exports ||= @course.course_exports.order(created_at: :DESC).with_attached_file.limit(50).load
       end
     end
   end

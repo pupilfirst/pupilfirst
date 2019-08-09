@@ -1,12 +1,10 @@
 module CourseExports
-  class CreateService
-    def initialize(course, user, tag: nil)
-      @course = course
-      @user = user
-      @tag = tag
+  class PrepareService
+    def initialize(course_export)
+      @course_export = course_export
     end
 
-    def create
+    def execute
       spreadsheet = RODF::Spreadsheet.new
       add_custom_styles(spreadsheet)
 
@@ -24,14 +22,19 @@ module CourseExports
 
       io = StringIO.new(spreadsheet.bytes)
 
-      CourseExport.transaction do
-        course_export = CourseExport.create!(course: @course, user: @user)
-        course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
-        course_export
-      end
+      @course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
+      @course_export
     end
 
     private
+
+    def course
+      @course_export.course
+    end
+
+    def tags
+      @course_export.tags.pluck(:name)
+    end
 
     def add_custom_styles(spreadsheet)
       spreadsheet.office_style 'passing-grade', family: :cell do
@@ -48,12 +51,12 @@ module CourseExports
     end
 
     def filename
-      name = "#{@course.name}-#{Time.zone.now.iso8601}".parameterize
+      name = "#{course.name}-#{Time.zone.now.iso8601}".parameterize
       "#{name}.ods"
     end
 
     def populate_targets_table(table)
-      target_rows = @course.targets.live.includes(:level, :evaluation_criteria, :quiz, :target_group).map do |target|
+      target_rows = course.targets.live.includes(:level, :evaluation_criteria, :quiz, :target_group).map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
         [target_id(target), target.level.number, target.title, target_type(target), milestone]
       end
@@ -135,13 +138,13 @@ module CourseExports
     def students
       @students ||= begin
         # Only scan 'active' students. Also filter by tag, if applicable.
-        scope = @course.founders.active.includes(:user)
-        @tag.present? ? scope.tagged_with(@tag) : scope
+        scope = course.founders.active.includes(:user)
+        tags.present? ? scope.tagged_with(tags, any: true) : scope
       end
     end
 
     def targets
-      @targets ||= @course.targets.live
+      @targets ||= course.targets.live
         .joins(:level)
         .includes(:level, :evaluation_criteria, :quiz, :target_group)
         .order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load

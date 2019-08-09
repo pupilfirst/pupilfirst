@@ -7,10 +7,17 @@ type file = {
 
 type t = {
   id,
-  username: string,
   createdAt: string,
   file: option(file),
+  tags: array(string),
 };
+
+let id = t => t.id;
+let createdAt = t => t.createdAt;
+let file = t => t.file;
+let tags = t => t.tags;
+let fileCreatedAt = (file: file) => file.createdAt;
+let filePath = file => file.path;
 
 let decodeFile = json =>
   Json.Decode.{
@@ -21,7 +28,7 @@ let decodeFile = json =>
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    username: json |> field("username", string),
     createdAt: json |> field("createdAt", string),
     file: json |> field("file", nullable(decodeFile)) |> Js.Null.toOption,
+    tags: json |> field("tags", array(string)),
   };

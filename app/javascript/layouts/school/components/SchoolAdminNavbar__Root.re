@@ -92,7 +92,7 @@ let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
     defaultClasses
     ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "");
 
-  <li> <a href=path className=classes> {text |> str} </a> </li>;
+  <li key=text> <a href=path className=classes> {text |> str} </a> </li>;
 };
 
 let secondaryNav = (courses, userRole, selectedOption) =>
@@ -195,6 +195,10 @@ let make =
       )
     | ["school", "courses", courseId, "curriculum"] => (
         SelectedCourse(courseId, Curriculum),
+        true,
+      )
+    | ["school", "courses", courseId, "exports"] => (
+        SelectedCourse(courseId, CourseExports),
         true,
       )
     | ["school", "communities"] => (Communities, false)

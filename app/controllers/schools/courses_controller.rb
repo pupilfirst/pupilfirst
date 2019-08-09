@@ -85,7 +85,7 @@ module Schools
 
     # GET /school/courses/:id/exports
     def exports
-      @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
+      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
     end
 
     private

@@ -5,7 +5,7 @@ open CourseExports__Types;
 let decodeProps = json =>
   Json.Decode.(
     json |> field("course", Course.decode),
-    json |> field("exports", CourseExport.decode),
+    json |> field("exports", array(CourseExport.decode)),
   );
 
 let (course, exports) =

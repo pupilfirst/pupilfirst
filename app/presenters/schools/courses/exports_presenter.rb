@@ -1,7 +1,7 @@
 module Schools
   module Courses
     class ExportsPresenter < ApplicationPresenter
-      def intialize(course, view_context)
+      def initialize(view_context, course)
         @course = course
 
         super(view_context)

@@ -4,4 +4,4 @@
 
 <% presenter = Schools::Courses::ExportsPresenter.new(self, @course) %>
 
-<div id="schools-courses-exports__root" class="flex flex-1 h-screen bg-gray-100" data-props="<%= presenter.props_to_json %>"></div>
+<div id="schools-courses-exports__root" class="flex flex-1 h-screen bg-gray-100" data-json-props="<%= presenter.props_to_json %>"></div>

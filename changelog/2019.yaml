@@ -2,6 +2,39 @@
 changelog:
 - timestamp: '2019-08-12T07:27:08Z'
   changes:
+  - timestamp: '2019-08-12T07:53:54Z'
+    title: We've added a number of new illustrations for notice messages on the student
+      dashboard.
+    category: ui
+  - timestamp: '2019-08-12T07:52:48Z'
+    title: We've fixed a number of bugs related to the markdown editor that is used
+      in community pages and in the school administration interface by replacing the
+      _textarea_-based implementation with one that uses Facebook's _Draft.js_ library.
+    category: bugfix
+  - timestamp: '2019-08-12T07:50:15Z'
+    title: Added the ability for school administators to open up a course for public
+      registration.
+    category: feature
+  - timestamp: '2019-08-12T07:45:38Z'
+    title: Leaderboard _pagination_ links are now permalinks. The leaderboard navigation
+      links used to use a page number for navigation, because of which, a paginated
+      link would show a different leaderboard every week. This parameter has been
+      replaced with a date, which allows leaderboard paginated links to always show
+      the same leaderboard.
+    category: feature
+  - timestamp: '2019-08-12T07:43:30Z'
+    title: The design for the leaderboard has been updated and merged into the student
+      dashboard.
+    category: ui
+  - timestamp: '2019-08-12T07:35:04Z'
+    title: The coach review dashboard now shows _all_ feedback sent for a student
+      submission, instead of just the latest one.
+    category: ui
+  - timestamp: '2019-08-12T07:34:04Z'
+    title: Added the field _affiliation_ to students - this allows differentiation
+      between student groups outside the school administration interface. It is currently
+      displayed on the leaderboard and on tcommunity question pages.
+    category: feature
   - timestamp: '2019-08-12T07:26:48Z'
     title: Added a placeholder logo on the school administration interface when the
       school does not have a custom image.

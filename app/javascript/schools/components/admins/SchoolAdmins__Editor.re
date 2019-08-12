@@ -71,10 +71,11 @@ let make = (~authenticityToken, ~admins) => {
         </h4>
       </button>
     </div>
-    <div className="px-6 pb-4 mt-5 flex flex-1">
+    <div className="px-6 pb-4 mt-5 flex" >
       <div className="max-w-3xl w-full mx-auto flex flex-wrap">
         {
           admins
+          |> SchoolAdmin.sort
           |> List.map(admin => renderAdmin(admin, setEditorAction))
           |> Array.of_list
           |> ReasonReact.array

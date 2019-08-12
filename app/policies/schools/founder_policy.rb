@@ -10,8 +10,8 @@ module Schools
       index? && record.present? && !record.course.ended?
     end
 
-    # All school admins can team up founders if the course hasn't ended.
-    alias team_up? update?
+    # All school admins can team up founders.
+    alias team_up? index?
 
     class Scope < Scope
       def resolve

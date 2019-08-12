@@ -7,7 +7,7 @@ module Schools
 
     def show?
       # Can be shown to all school admins.
-      user&.school_admin.present? && record.in?(current_school.courses)
+      user&.school_admin.present?
     end
 
     def update?
@@ -25,7 +25,6 @@ module Schools
       user.course_authors.where(course: record).present?
     end
 
-    alias close? update?
     alias delete_coach_enrollment? update?
     alias update_coach_enrollments? delete_coach_enrollment?
     alias students? show?
@@ -33,10 +32,7 @@ module Schools
     alias create_students? delete_coach_enrollment?
     alias mark_teams_active? delete_coach_enrollment?
 
-    class Scope < Scope
-      def resolve
-        current_school.courses
-      end
+    class Scope < ::CoursePolicy::Scope
     end
   end
 end

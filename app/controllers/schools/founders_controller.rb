@@ -2,8 +2,8 @@ module Schools
   class FoundersController < SchoolsController
     # POST /school/students/team_up?founder_ids=&team_name=
     def team_up
-      authorize(founders.first, policy_class: Schools::FounderPolicy)
-      form = Schools::Founders::TeamUpForm.new(OpenStruct.new)
+      authorize(Founder, policy_class: Schools::FounderPolicy)
+      form = Schools::Founders::TeamUpForm.new(Reform::OpenForm.new)
 
       if form.validate(params)
         startup = form.save
@@ -16,7 +16,7 @@ module Schools
 
     # PATCH /school/students/:id
     def update
-      student = authorize(current_school.founders.find(params[:id]), policy_class: Schools::FounderPolicy)
+      student = authorize(scope.find(params[:id]), policy_class: Schools::FounderPolicy)
       @course = student.course
 
       form = Schools::Founders::EditForm.new(student)
@@ -32,8 +32,8 @@ module Schools
 
     private
 
-    def founders
-      Founder.where(id: params[:founder_ids])
+    def scope
+      policy_scope(Founder, policy_scope_class: Schools::FounderPolicy::Scope)
     end
   end
 end

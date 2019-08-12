@@ -21,7 +21,9 @@ let courseOptions = courses =>
 let renderCourseSelector =
     (currentCourseId, courses, showCourses, setShowCourses) => {
   let currentCourse =
-    courses |> List.find(c => c |> Course.id == currentCourseId);
+    courses |> ListUtils.unsafeFind(c =>c |> Course.id == currentCourseId,
+      "Could not find current course with ID "
+      ++ (currentCourseId) ++ " in StudentCourse__Header");
   let otherCourses =
     courses |> List.filter(c => c |> Course.id != currentCourseId);
   <div className="student-course__cover svg-bg-pattern-2 pb-22 pt-15 px-3">

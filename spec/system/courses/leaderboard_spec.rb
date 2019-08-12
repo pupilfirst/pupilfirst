@@ -43,8 +43,8 @@ feature 'Course leaderboard' do
   scenario 'School admin visits leaderboard' do
     sign_in_user(school_admin.user, referer: leaderboard_course_path(student.course))
 
-    # Should be shown the leaderboard.
-    expect(page).to have_content("#{student.name} is at the top of the leaderboard this week")
+    # Should see 404.
+    expect(page).to have_content("The page you were looking for doesn't exist")
   end
 
   scenario 'Student visits leaderboard' do

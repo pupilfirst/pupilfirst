@@ -1,5 +1,23 @@
 ---
 changelog:
+- timestamp: '2019-08-12T07:27:08Z'
+  changes:
+  - timestamp: '2019-08-12T07:26:48Z'
+    title: Added a placeholder logo on the school administration interface when the
+      school does not have a custom image.
+    category: ui
+  - timestamp: '2019-08-12T07:25:03Z'
+    title: The coach review dashboard has been updated to load up to 100 pending submissions
+      (previously 20).
+    category: ui
+  - timestamp: '2019-08-12T07:23:56Z'
+    title: Longer school names are now handled correctly on the top navigation bar
+      and the sign in page.
+    category: ui
+  - timestamp: '2019-08-12T07:21:02Z'
+    title: The email sent when a coach adds feedback for a student submission has
+      been updated to include a more helpful subject and up-to-date links.
+    category: ui
 - timestamp: '2019-07-30T07:36:10Z'
   changes:
   - timestamp: '2019-07-30T07:24:00Z'

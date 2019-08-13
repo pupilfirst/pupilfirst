@@ -15,9 +15,6 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def leaderboard?
-    # School admins can view the leaderboard.
-    return true if current_school_admin.present?
-
     # Students enrolled in the current course can view the leaderboard.
     curriculum?
   end

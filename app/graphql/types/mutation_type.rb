@@ -25,5 +25,7 @@ module Types
     field :sort_content_blocks, mutation: Mutations::SortContentBlocks, null: false
     field :update_content_block, mutation: Mutations::UpdateContentBlock, null: false
     field :create_applicant, mutation: Mutations::CreateApplicant, null: false
+    field :create_school_admin, mutation: Mutations::CreateSchoolAdmin, null: false
+    field :update_school_admin, mutation: Mutations::UpdateSchoolAdmin, null: false
   end
 end

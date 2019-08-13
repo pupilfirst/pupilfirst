@@ -31,4 +31,9 @@ class SchoolsController < ApplicationController
       render json: { error: form.errors.full_messages.join(", ") }
     end
   end
+
+  # GET /school/admins
+  def admins
+    authorize current_school
+  end
 end

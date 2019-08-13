@@ -15,7 +15,8 @@ type courseSelection =
 type settingsSelection =
   | Customization
   | Domains
-  | Homepage;
+  | Homepage
+  | Admins;
 
 type userRole =
   | SchoolAdmin
@@ -110,6 +111,14 @@ let secondaryNav = (courses, userRole, selectedOption) =>
             "Customization",
           )
         }
+        {
+          secondaryNavOption(
+            "/school/admins",
+            settingsSelection,
+            Admins,
+            "Admins",
+          )
+        }
       </ul>
     </div>
   | SelectedCourse(courseId, courseSelection) =>
@@ -202,6 +211,7 @@ let make =
         true,
       )
     | ["school", "communities"] => (Communities, false)
+    | ["school", "admins"] => (Settings(Admins), true)
     | _ =>
       Rollbar.critical(
         "Unknown path encountered by SA navbar: "

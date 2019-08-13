@@ -33,7 +33,7 @@ changelog:
   - timestamp: '2019-08-12T07:34:04Z'
     title: Added the field _affiliation_ to students - this allows differentiation
       between student groups outside the school administration interface. It is currently
-      displayed on the leaderboard and on tcommunity question pages.
+      displayed on the leaderboard and on community question pages.
     category: feature
   - timestamp: '2019-08-12T07:26:48Z'
     title: Added a placeholder logo on the school administration interface when the

@@ -95,14 +95,14 @@ module Courses
     end
 
     def previous_page_link
-      "?on=#{(on - 1.week).strftime("%Y%m%d")}"
+      "?on=#{(on - 1.week).strftime('%Y%m%d')}"
     end
 
     def next_page_link
       if difference_in_days < 8
         view.leaderboard_course_path
       else
-        "?on=#{(on + 1.week).strftime("%Y%m%d")}"
+        "?on=#{(on + 1.week).strftime('%Y%m%d')}"
       end
     end
 

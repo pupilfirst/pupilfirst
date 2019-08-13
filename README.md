@@ -1,6 +1,7 @@
 # SV.CO
 
-[ ![TeamCity Status for SVdotCO/sv.co](https://ci.sv.co/app/rest/builds/buildType:(id:SvCoWebapp_Build)/statusIcon)](https://codeship.com/projects/170220)  [![codecov](https://codecov.io/gh/SVdotCO/sv.co/branch/master/graph/badge.svg?token=CfU4IX7vvK)](https://codecov.io/gh/SVdotCO/sv.co)
+![TeamCity Status for SVdotCO/pupilfirst](https://ci.sv.co/app/rest/builds/buildType:(id:PupilFirst_ContinuousIntegration)/statusIcon)
+[![codecov](https://codecov.io/gh/SVdotCO/pupilfirst/branch/master/graph/badge.svg?token=WkjxHcrnL4)](https://codecov.io/gh/SVdotCO/pupilfirst)
 
 ## Setup for development
 

@@ -1,4 +1,4 @@
-<% presenter = Courses::LeaderboardPresenter.new(self, @course) %>
+<% presenter = Courses::LeaderboardPresenter.new(self, @course, @on) %>
 
 <% content_for(:head) do %>
   <title>Leaderboard | <%= presenter.school_name %></title>

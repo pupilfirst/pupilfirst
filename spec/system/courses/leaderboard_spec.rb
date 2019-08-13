@@ -73,7 +73,7 @@ feature 'Course leaderboard' do
       expect(page).to have_text(4)
     end
     # The leaderboard from two weeks ago should include all students.
-    visit leaderboard_course_path(student.course, on: (1.week.ago.year.to_s + format('%02d', 1.week.ago.month) + format('%02d', 1.week.ago.day)))
+    visit leaderboard_course_path(student.course, on: 1.week.ago.strftime("%Y%m%d"))
 
     ([student] + other_team_1.founders + other_team_2.founders).each do |leaderboard_founder|
       expect(page).to have_content(leaderboard_founder.name)

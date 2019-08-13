@@ -9,6 +9,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/leaderboard?weeks_before=
   def leaderboard
     @course = authorize(policy_scope(Course).find(params[:id]))
+    @on = params[:on]
     render layout: 'student_course'
   end
 

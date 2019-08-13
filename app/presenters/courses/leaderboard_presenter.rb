@@ -21,8 +21,9 @@ module Courses
       end
     end
 
-    def initialize(view_context, course)
+    def initialize(view_context, course, params_on)
       @course = course
+      @params_on = params_on
 
       super(view_context)
     end
@@ -94,14 +95,14 @@ module Courses
     end
 
     def previous_page_link
-      "?on=#{parameterize_time(on - 1.week)}"
+      "?on=#{(on - 1.week).strftime("%Y%m%d")}"
     end
 
     def next_page_link
       if difference_in_days < 8
         view.leaderboard_course_path
       else
-        "?on=#{parameterize_time(on + 1.week)}"
+        "?on=#{(on + 1.week).strftime("%Y%m%d")}"
       end
     end
 
@@ -135,12 +136,6 @@ module Courses
       @difference_in_days = (Time.zone.now.to_date - on.to_date).to_i
     end
 
-    def parameterize_time(time)
-      month = format '%02d', time.month
-      day = format '%02d', time.day
-      time.year.to_s + month + day
-    end
-
     def top_score
       @top_score ||= toppers.first.score
     end
@@ -151,8 +146,8 @@ module Courses
 
     def on
       @on ||= begin
-        if view.params[:on].present? && !!(view.params[:on] =~ /\A20\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\Z/)
-          Time.zone.parse(view.params[:on]).end_of_day
+        if @params_on.present? && @params_on.match?(/\A20\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\Z/)
+          Time.zone.parse(@params_on).end_of_day
         else
           Time.zone.now.end_of_day
         end

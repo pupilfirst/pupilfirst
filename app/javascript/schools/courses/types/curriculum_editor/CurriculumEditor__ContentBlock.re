@@ -80,6 +80,8 @@ let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
 let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
 
+let sort = blocks => blocks |> List.sort((x, y) => x.sortIndex - y.sortIndex);
+
 let blockTypeAsString = blockType =>
   switch (blockType) {
   | Markdown(_markdown) => "markdown"

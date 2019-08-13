@@ -86,6 +86,9 @@ Rails.application.routes.draw do
     resources :targets, only: %i[update] do
       resource :quiz, only: %i[create]
       resource :content_block, only: %i[create]
+      member do
+        get 'content'
+      end
     end
 
     resources :communities, only: %i[index]

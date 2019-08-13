@@ -1,0 +1,10 @@
+.learn-content-block__embed {
+  @apply bg-gray-100 relative w-full;
+  height: 0;
+  padding-top: 56.25%;
+}
+
+.learn-content-block__embed>iframe {
+  @apply absolute w-full h-full left-0 top-0 shadow-md;
+  border-radius: 0.75rem;
+}

@@ -37,6 +37,7 @@ class Target < ApplicationRecord
   has_many :content_blocks, dependent: :destroy
   has_many :target_questions, dependent: :destroy
   has_many :questions, through: :target_questions
+  has_many :target_content_versions, dependent: :destroy
 
   acts_as_taggable
 
@@ -191,5 +192,10 @@ class Target < ApplicationRecord
     latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
       grades[te_grade.evaluation_criterion_id] = te_grade.grade
     end
+  end
+
+  def latest_content_version
+    latest_version = target_content_versions.order('updated_at DESC').last
+    return if latest_version.blank?
   end
 end

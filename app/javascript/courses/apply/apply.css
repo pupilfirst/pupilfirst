@@ -1,11 +1,11 @@
-.course-apply-left__container {
+.course-apply__left-container {
   position: relative;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 
-.course-apply-left__container:before {
+.course-apply__left-container:before {
   position: absolute;
   @apply left-0 w-full;
   content: '';
@@ -15,12 +15,12 @@
   background-position: center bottom;
 }
 
-.course-apply-left__container:before {
+.course-apply__left-container:before {
   @apply h-3 top-0;
   opacity: 0.5;
 }
 
-.course-apply-left__bg-pattern {
+.course-apply__left-bg-pattern {
   height: 14rem;
   background-image: url('../shared/images/courses-apply-pattern.svg');
   opacity: 0.4;
@@ -29,7 +29,7 @@
 }
 
 @screen md {
-  .course-apply-left__container:after {
+  .course-apply__left-container:after {
     @apply bottom-0;
     height: 32rem;
     opacity: 0.5;

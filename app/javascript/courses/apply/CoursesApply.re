@@ -33,14 +33,14 @@ let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
       <div
         className="course-apply flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
         <div
-          className="md:w-1/2 flex flex-col justify-between course-apply-left__container svg-bg-pattern-4 relative text-white">
+          className="md:w-1/2 flex flex-col justify-between course-apply__left-container svg-bg-pattern-4 relative text-white">
           <div
             className="px-4 pt-5 pb-6 md:px-14 md:py-14 lg:px-28 lg:pt-32 lg:pb-10">
             <h1 className="font-bold leading-tight"> {courseName |> str} </h1>
             <p className="mt-2"> {courseDescription |> str} </p>
           </div>
           <div
-            className="course-apply-left__bg-pattern hidden sm:block w-full"
+            className="course-apply__left-bg-pattern hidden sm:block w-full"
           />
         </div>
         <div className="md:w-1/2">

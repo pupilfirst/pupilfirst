@@ -12,11 +12,13 @@ class Course < ApplicationRecord
   has_many :users, through: :founders
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
+  has_many :timeline_events, through: :targets
   has_many :evaluation_criteria, dependent: :restrict_with_error
   has_many :faculty_course_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_course_enrollments
   has_many :community_course_connections, dependent: :restrict_with_error
   has_many :communities, through: :community_course_connections
+  has_many :course_exports, dependent: :destroy
 
   normalize_attribute :about
 

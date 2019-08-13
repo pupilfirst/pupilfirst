@@ -52,7 +52,10 @@ class Founder < ApplicationRecord
   scope :inactive, lambda {
     admitted.where(exited: false).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
+
   scope :not_exited, -> { where.not(exited: true) }
+  scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
+  scope :active, -> { joins(:startup).not_exited.access_active }
 
   delegate :email, :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,

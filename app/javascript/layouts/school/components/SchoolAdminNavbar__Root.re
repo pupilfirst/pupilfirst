@@ -9,7 +9,8 @@ open SchoolAdminNavbar__Types;
 type courseSelection =
   | Students
   | CourseCoaches
-  | Curriculum;
+  | Curriculum
+  | CourseExports;
 
 type settingsSelection =
   | Customization
@@ -92,7 +93,7 @@ let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
     defaultClasses
     ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "");
 
-  <li> <a href=path className=classes> {text |> str} </a> </li>;
+  <li key=text> <a href=path className=classes> {text |> str} </a> </li>;
 };
 
 let secondaryNav = (courses, userRole, selectedOption) =>
@@ -132,36 +133,39 @@ let secondaryNav = (courses, userRole, selectedOption) =>
           />
         </li>
         {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/students",
-              courseSelection,
-              Students,
-              "Students",
-            )
-          | CourseAuthor => React.null
-          }
-        }
-        {
-          switch (userRole) {
-          | SchoolAdmin =>
-            secondaryNavOption(
-              "/school/courses/" ++ courseId ++ "/coaches",
-              courseSelection,
-              CourseCoaches,
-              "Coaches",
-            )
-          | CourseAuthor => React.null
-          }
-        }
-        {
           secondaryNavOption(
             "/school/courses/" ++ courseId ++ "/curriculum",
             courseSelection,
             Curriculum,
             "Curriculum",
           )
+        }
+        {
+          switch (userRole) {
+          | SchoolAdmin =>
+            [|
+              secondaryNavOption(
+                "/school/courses/" ++ courseId ++ "/students",
+                courseSelection,
+                Students,
+                "Students",
+              ),
+              secondaryNavOption(
+                "/school/courses/" ++ courseId ++ "/coaches",
+                courseSelection,
+                CourseCoaches,
+                "Coaches",
+              ),
+              secondaryNavOption(
+                "/school/courses/" ++ courseId ++ "/exports",
+                courseSelection,
+                CourseExports,
+                "Exports",
+              ),
+            |]
+            |> React.array
+          | CourseAuthor => React.null
+          }
         }
       </ul>
     </div>
@@ -200,6 +204,10 @@ let make =
       )
     | ["school", "courses", courseId, "curriculum"] => (
         SelectedCourse(courseId, Curriculum),
+        true,
+      )
+    | ["school", "courses", courseId, "exports"] => (
+        SelectedCourse(courseId, CourseExports),
         true,
       )
     | ["school", "communities"] => (Communities, false)
@@ -307,7 +315,7 @@ let make =
                                  href={
                                    "/school/courses/"
                                    ++ (course |> Course.id)
-                                   ++ "/students"
+                                   ++ "/curriculum"
                                  }
                                  className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
                                  {course |> Course.name |> str}

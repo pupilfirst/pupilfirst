@@ -87,7 +87,7 @@ Rails.application.routes.draw do
       resource :quiz, only: %i[create]
       resource :content_block, only: %i[create]
       member do
-        get 'content_details'
+        get 'content'
       end
     end
 

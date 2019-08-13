@@ -195,7 +195,8 @@ class Target < ApplicationRecord
   end
 
   def latest_content_version
-    latest_version = target_content_versions.order('updated_at DESC').last
-    return if latest_version.blank?
+    return if target_content_versions.blank?
+
+    target_content_versions.order('updated_at DESC').last
   end
 end

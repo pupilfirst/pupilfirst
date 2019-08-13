@@ -1,5 +1,5 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("../shared/shared.css")|}];
+[%bs.raw {|require("../shared/background_patterns.css")|}];
 [%bs.raw {|require("./apply.css")|}];
 let emailSentIcon: string = [%raw "require('./images/email-sent-icon.svg')"];
 let str = React.string;

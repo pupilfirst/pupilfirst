@@ -1,1 +1,1 @@
-import "courses/shared/shared.css";
+import "courses/shared/background_patterns.css";

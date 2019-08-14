@@ -219,7 +219,7 @@ let make =
          )
     );
 
-  let multiSelectCB = (id, name, selected) => {
+  let selectCB = (id, name, selected) => {
     let oldCourses =
       courseState |> List.filter(((courseId, _, _)) => courseId !== id);
     setCourseState(_ => [(id, name, selected), ...oldCourses]);
@@ -296,7 +296,10 @@ let make =
             htmlFor="communities-editor__course-targetLinkable">
             {"Give access to students from:" |> str}
           </label>
-          <School__SelectBox items=courseState multiSelectCB />
+          <School__SelectBox
+            items={courseState |> School__SelectBox.convertOldItems}
+            selectCB={School__SelectBox.convertOldCallback(selectCB)}
+          />
         </div>
       </div>
       <button

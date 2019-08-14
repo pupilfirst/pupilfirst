@@ -2,9 +2,23 @@
 
 let str = React.string;
 
+type key = string;
+type value = string;
+type selected = bool;
+type item = (key, value, selected);
+
+let convertOldItems = items =>
+  items
+  |> List.map(((key, value, selected)) =>
+       (key |> string_of_int, value, selected)
+     );
+
+let convertOldCallback = (cb, key, value, selected) =>
+  cb(key |> int_of_string, value, selected);
+
 [@react.component]
-let make = (~items, ~multiSelectCB) => {
-  let (searchKey, setSearchKey) = React.useState(() => "");
+let make = (~items: list(item), ~selectCB: (key, value, selected) => unit) => {
+  let (searchString, setSearchString) = React.useState(() => "");
   let selectedList =
     items |> List.filter(((_, _, selected)) => selected == true);
   let nonSelectedList =
@@ -14,21 +28,22 @@ let make = (~items, ~multiSelectCB) => {
     | [] => []
     | someList =>
       someList
-      |> List.filter(((_key, value, _)) =>
+      |> List.filter(((_, value, _)) =>
            Js.String.includes(
-             String.lowercase(searchKey),
+             String.lowercase(searchString),
              String.lowercase(value),
            )
          )
     };
+
   <div className="p-6 border rounded bg-gray-100">
     {
       selectedList |> List.length > 0 ?
         selectedList
         |> List.rev
-        |> List.map(((_key, value, _)) =>
+        |> List.map(((key, value, _)) =>
              <div
-               key={_key |> string_of_int}
+               key
                className="select-list__item-selected flex items-center justify-between bg-white font-semibold text-xs text-gray-700 border rounded px-3 py-2 mb-2">
                {value |> str}
                <button
@@ -37,8 +52,8 @@ let make = (~items, ~multiSelectCB) => {
                  onClick={
                    _event => {
                      ReactEvent.Mouse.preventDefault(_event);
-                     setSearchKey(_ => "");
-                     multiSelectCB(_key, value, false);
+                     setSearchString(_ => "");
+                     selectCB(key, value, false);
                    }
                  }>
                  <i className="fas fa-trash-alt text-base" />
@@ -70,7 +85,7 @@ let make = (~items, ~multiSelectCB) => {
                     placeholder="Type to Search"
                     onChange={
                       event =>
-                        setSearchKey(ReactEvent.Form.target(event)##value)
+                        setSearchString(ReactEvent.Form.target(event)##value)
                     }
                   />
                 </div> :
@@ -83,14 +98,14 @@ let make = (~items, ~multiSelectCB) => {
               }>
               {
                 filteredList
-                |> List.map(((_key, value, _)) =>
+                |> List.map(((key, value, _)) =>
                      <div
-                       key={_key |> string_of_int}
+                       key
                        onClick={
                          _event => {
                            ReactEvent.Mouse.preventDefault(_event);
-                           setSearchKey(_ => "");
-                           multiSelectCB(_key, value, true);
+                           setSearchString(_ => "");
+                           selectCB(key, value, true);
                          }
                        }
                        title={"Select " ++ value}
@@ -113,10 +128,10 @@ module Jsx2 = {
   let component =
     ReasonReact.statelessComponent("CurriculumEditor__SelectBox");
 
-  let make = (~items, ~multiSelectCB, children) =>
+  let make = (~items, ~selectCB, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~items, ~multiSelectCB, ()),
+      makeProps(~items, ~selectCB, ()),
       children,
     );
 };

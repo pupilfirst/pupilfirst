@@ -22,9 +22,22 @@ let readinessString = courseExport =>
     "Prepared " ++ timeDistance;
   };
 
+let updateTagSelection = (setTagsSelection, key, value, selected) =>
+  setTagsSelection(tags =>
+    tags
+    |> Array.map(tagSelection => {
+         let (tagId, tagName, _selected) = tagSelection;
+         tagId == key ? (tagId, tagName, selected) : tagSelection;
+       })
+  );
+
 [@react.component]
 let make = (~course, ~exports, ~tags) => {
   let (formVisible, setFormVisible) = React.useState(() => false);
+  let (tagsSelection, setTagsSelection) =
+    React.useState(() =>
+      tags |> Array.map(tag => (tag |> Tag.id, tag |> Tag.name, false))
+    );
 
   <div
     key="School admin coaches course index"
@@ -42,11 +55,18 @@ let make = (~course, ~exports, ~tags) => {
                 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
                 {"Export course data" |> str}
               </h5>
+              <label
+                className="block tracking-wide text-xs font-semibold mb-2">
+                {"Export only students with the following tags:" |> str}
+              </label>
               <School__SelectBox
-                items=[("1", "One", true), ("2", "Two", false)]
-                selectCB=((_, _, _) => ())
+                items={tagsSelection |> Array.to_list}
+                selectCB={updateTagSelection(setTagsSelection)}
+                noSelectionHeading="All students are selected"
+                noSelectionDescription="Select tags from the list to limit results to a select set of students."
+                emptyListDescription="You haven't tagged any student yet."
               />
-              <div className="flex max-w-2xl w-full mt-5 px-6 pb-5 mx-auto">
+              <div className="flex max-w-2xl w-full mt-5 pb-5 mx-auto">
                 <button className="w-full btn btn-primary btn-large">
                   {"Create Export" |> str}
                 </button>

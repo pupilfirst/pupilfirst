@@ -6,6 +6,7 @@ feature 'Course leaderboard' do
   let(:student) { create :founder }
   let(:other_team_1) { create :startup, level: student.level }
   let(:other_team_2) { create :startup, level: student.level }
+  let(:inactive_team) { create :startup, level: student.level, access_ends_at: 1.day.ago }
   let!(:excluded_team) { create :startup, level: student.level }
   let(:school_admin) { create :school_admin, school: student.school }
   let(:lts) { LeaderboardTimeService.new }
@@ -59,7 +60,7 @@ feature 'Course leaderboard' do
       expect(page).not_to have_content(absent_founder.name)
     end
 
-    # The leaderboard shouldn't include excluded-from-leaderboard students in counts.
+    # The leaderboard shouldn't include excluded-from-leaderboard and inactive students in counts.
 
     # There should be 3 active students - 'student', and members of 'other_team_1'.
     within("div[data-t='active students count']") do

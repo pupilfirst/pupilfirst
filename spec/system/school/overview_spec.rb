@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'School Overview' do
+feature 'School Overview', js: true do
   include UserSpecHelper
 
   # Setup a course 1
@@ -43,7 +43,7 @@ feature 'School Overview' do
   let!(:c2_timeline_event_3) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_2.founders, target: c2_target_1 }
   let!(:c2_timeline_event_4) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_3.founders, target: c2_target_1 }
 
-  scenario 'school admin visit the school overview', js: true do
+  scenario 'school admin visit the school overview' do
     sign_in_user school_admin.user, referer: school_path
     expect(page).to have_text(school.name)
 
@@ -89,8 +89,8 @@ feature 'School Overview' do
     end
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_path
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

@@ -18,14 +18,6 @@ describe TimelineEventFilePolicy do
     let!(:course_enrollment) { create :faculty_course_enrollment, faculty: course_faculty, course: startup.course }
     let!(:startup_enrollment) { create :faculty_startup_enrollment, faculty: startup_faculty, startup: startup }
 
-    context 'for the public' do
-      let(:pundit_user) { OpenStruct.new }
-
-      it 'denies access' do
-        expect(subject).not_to permit(pundit_user, timeline_event_file)
-      end
-    end
-
     context "when the current user is a course coach for the linked course" do
       let(:pundit_user) do
         OpenStruct.new(

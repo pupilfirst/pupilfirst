@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Curriculum Editor' do
+feature 'Curriculum Editor', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
@@ -76,7 +76,7 @@ feature 'Curriculum Editor' do
   end
 
   shared_examples 'authorized users creates the curriculum' do |user_type|
-    scenario 'creates a basic course framework by adding level, target group and targets', js: true do
+    scenario 'creates a basic course framework by adding level, target group and targets' do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       # he should be on the last level
@@ -176,7 +176,7 @@ feature 'Curriculum Editor' do
   end
 
   shared_examples 'authorized users creates different types of targets' do |user_type|
-    scenario 'creates a target with a link to complete', js: true do
+    scenario 'creates a target with a link to complete' do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       find("#create-target-input#{target_group_2.id}").click
@@ -214,7 +214,7 @@ feature 'Curriculum Editor' do
       expect(target.quiz).to eq(nil)
     end
 
-    scenario 'creates a target with a quiz', js: true do
+    scenario 'creates a target with a quiz' do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       find("#create-target-input#{target_group_2.id}").click
@@ -295,7 +295,7 @@ feature 'Curriculum Editor' do
   end
 
   shared_examples 'authorized users modifies a target' do |user_type|
-    scenario 'adds content to a target and modifies its properties', js: true do
+    scenario 'adds content to a target and modifies its properties' do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       target = target_4
@@ -434,7 +434,7 @@ feature 'Curriculum Editor' do
       expect(target.reload.title).to eq('new target title')
     end
 
-    scenario 'modifies an existing target content', js: true do
+    scenario 'modifies an existing target content' do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       target = target_5
@@ -556,7 +556,7 @@ feature 'Curriculum Editor' do
     include_examples 'authorized users creates different types of targets', :course_author
     include_examples 'authorized users modifies a target', :course_author
 
-    scenario 'user can navigate only to assigned courses and not to school admin pages', js: true do
+    scenario 'user can navigate only to assigned courses and not to school admin pages' do
       sign_in_user course_author.user, referer: curriculum_school_course_path(course)
       expect(page).to have_button(course.name)
       click_button course.name
@@ -578,8 +578,8 @@ feature 'Curriculum Editor' do
     end
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit curriculum_school_course_path(course)
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

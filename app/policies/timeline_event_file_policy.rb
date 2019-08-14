@@ -1,7 +1,5 @@
 class TimelineEventFilePolicy < ApplicationPolicy
   def download?
-    return false if user.blank?
-
     return false if user.founders.blank? && current_coach.blank?
 
     timeline_event = record.timeline_event

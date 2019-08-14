@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'School admins Editor' do
+feature 'School admins Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -15,7 +15,7 @@ feature 'School admins Editor' do
   let(:user) { create :user }
   let(:name_for_user) { Faker::Name.name }
 
-  scenario 'school admin visits a school admin editor', js: true do
+  scenario 'school admin visits a school admin editor' do
     sign_in_user school_admin_1.user, referer: admins_school_path
 
     # list all school admins
@@ -64,8 +64,8 @@ feature 'School admins Editor' do
     expect(user.reload.name).to eq(name_for_user)
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit admins_school_path
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

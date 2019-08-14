@@ -33,11 +33,9 @@ feature 'Course leaderboard' do
     create :leaderboard_entry, period_from: lts.last_week_start, period_to: lts.last_week_end, founder: student, score: 4
   end
 
-  scenario 'Public visits leaderboard' do
+  scenario 'user who is not logged in visits leaderboard', js: true do
     visit leaderboard_course_path(student.course)
-
-    # Should see 404.
-    expect(page).to have_content("The page you were looking for doesn't exist")
+    expect(page).to have_text("Please sign in to continue.")
   end
 
   scenario 'School admin visits leaderboard' do

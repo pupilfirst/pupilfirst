@@ -33,11 +33,9 @@ feature 'Community Show', js: true do
     create :community_course_connection, course: course, community: community
   end
 
-  scenario 'an unknown user visits a community' do
+  scenario 'user who is not logged in tries to visit community' do
     visit community_path(community)
-
-    # Should 404.
-    expect(page).to have_content("The page you were looking for doesn't exist")
+    expect(page).to have_text("Please sign in to continue.")
   end
 
   scenario 'an active founder visits his community' do

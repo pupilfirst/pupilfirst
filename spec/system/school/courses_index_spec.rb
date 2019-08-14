@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Courses Index' do
+feature 'Courses Index', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
@@ -25,7 +25,7 @@ feature 'Courses Index' do
 
   let(:date) { Date.today }
 
-  scenario 'school admin visits courses and create a course', js: true do
+  scenario 'school admin visits courses and create a course' do
     sign_in_user school_admin.user, referer: school_courses_path
 
     # list all courses
@@ -96,8 +96,8 @@ feature 'Courses Index' do
     expect(Date.parse(course.ends_at.strftime("%Y-%m-%d"))).to eq(date)
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_courses_path
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

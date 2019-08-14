@@ -14,6 +14,37 @@ module SortContentBlockMutation = [%graphql
    |}
 ];
 
+module ContentBlocksQuery = [%graphql
+  {|
+    query($targetId: ID!, $versionId: ID) {
+      contentBlocks(targetId: $targetId, versionId: $versionId) {
+        id
+        blockType
+        sortIndex
+        file {
+          url
+          name
+        }
+        content {
+          ... on ImageBlock {
+            caption
+          }
+          ... on FileBlock {
+            title
+          }
+          ... on MarkdownBlock {
+            markdown
+          }
+          ... on EmbedBlock {
+            url
+            embedCode
+          }
+        }
+      }
+  }
+|}
+];
+
 let updateContentBlockSorting =
     (
       contentBlocks,

@@ -4,12 +4,15 @@ module Types
     field :block_type, String, null: false
     field :sort_index, Integer, null: false
     field :content, Types::ContentType, null: false
-    field :file, Types::ContentFileAttachmentType, null: true
 
-    def file
-      return unless object.file.attached?
+    def content
+      content = { block_type: object.block_type }.merge(object.content)
+      content.merge!(file_details) if object.file.attached?
+      content
+    end
 
-      { url: url_helpers.rails_blob_path(object.file, only_path: true), name: object.file.filename }
+    def file_details
+      { url: Rails.application.routes.url_helpers.rails_blob_path(object.file, only_path: true), filename: object.file.filename.to_s }
     end
   end
 end

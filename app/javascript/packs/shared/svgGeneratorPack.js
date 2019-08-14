@@ -1,1 +1,0 @@
-import "shared/svgGenerator.js";

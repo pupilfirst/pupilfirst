@@ -4,6 +4,12 @@ open CourseExports__Types;
 
 let str = React.string;
 
+type formState = {
+  visible: bool,
+  tagsSelection: array((Tag.id, string, bool)),
+  saving: bool,
+};
+
 let readinessString = courseExport =>
   switch (courseExport |> CourseExport.file) {
   | None =>
@@ -22,32 +28,117 @@ let readinessString = courseExport =>
     "Prepared " ++ timeDistance;
   };
 
-let updateTagSelection = (setTagsSelection, key, value, selected) =>
-  setTagsSelection(tags =>
-    tags
-    |> Array.map(tagSelection => {
-         let (tagId, tagName, _selected) = tagSelection;
-         tagId == key ? (tagId, tagName, selected) : tagSelection;
-       })
+let updateTagSelection = (setFormState, key, _value, selected) =>
+  setFormState(formState =>
+    {
+      ...formState,
+      tagsSelection:
+        formState.tagsSelection
+        |> Array.map(tagSelection => {
+             let (tagId, tagName, _selected) = tagSelection;
+             tagId == key ? (tagId, tagName, selected) : tagSelection;
+           }),
+    }
   );
 
+module CreateCoruseExportQuery = [%graphql
+  {|
+ mutation($courseId: ID!, $tagIds: [ID!]!) {
+  createCourseExport(courseId: $courseId, tagIds: $tagIds){
+    courseExport {
+      id
+      createdAt
+      tags
+    }
+   }
+ }
+|}
+];
+
+let deselectedTags = tags =>
+  tags |> Array.map(tag => (tag |> Tag.id, tag |> Tag.name, false));
+
+let createCourseExport =
+    (
+      authenticityToken,
+      course,
+      tags,
+      tagsSelection,
+      setCourseExports,
+      setFormState,
+      event,
+    ) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  setFormState(formState => {...formState, saving: true});
+
+  let tagIds =
+    tagsSelection
+    |> Array.to_list
+    |> List.filter(((_, _, selected)) => selected)
+    |> List.map(((tagId, _, _)) => tagId)
+    |> Array.of_list;
+
+  CreateCoruseExportQuery.make(~courseId=course |> Course.id, ~tagIds, ())
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       switch (response##createCourseExport##courseExport) {
+       | Some(export) =>
+         /* Add the new course export to the list of exports known by this component. */
+         let courseExport =
+           CourseExport.make(
+             ~id=export##id,
+             ~createdAt=export##createdAt,
+             ~tags=export##tags,
+           );
+
+         setCourseExports(oldExports =>
+           [|courseExport|] |> Array.append(oldExports)
+         );
+
+         /* Then hide the form. */
+         setFormState(_ =>
+           {
+             tagsSelection: tags |> deselectedTags,
+             visible: false,
+             saving: false,
+           }
+         );
+       | None => setFormState(formState => {...formState, saving: false})
+       };
+
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(_ => {
+       setFormState(formState => {...formState, saving: false});
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 [@react.component]
-let make = (~course, ~exports, ~tags) => {
-  let (formVisible, setFormVisible) = React.useState(() => false);
-  let (tagsSelection, setTagsSelection) =
+let make = (~authenticityToken, ~course, ~exports, ~tags) => {
+  let (formState, setFormState) =
     React.useState(() =>
-      tags |> Array.map(tag => (tag |> Tag.id, tag |> Tag.name, false))
+      {
+        visible: false,
+        tagsSelection:
+          tags |> Array.map(tag => (tag |> Tag.id, tag |> Tag.name, false)),
+        saving: false,
+      }
     );
+  let (courseExports, setCourseExports) = React.useState(() => exports);
 
   <div
     key="School admin coaches course index"
     className="flex flex-1 h-screen overflow-y-scroll">
     {
-      switch (formVisible) {
+      switch (formState.visible) {
       | false => ReasonReact.null
       | true =>
         <SchoolAdmin__EditorDrawer
-          closeDrawerCB=(() => setFormVisible(_ => false))
+          closeDrawerCB=(
+            () => setFormState(formState => {...formState, visible: false})
+          )
           closeButtonTitle="Close Export Form">
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
@@ -60,15 +151,38 @@ let make = (~course, ~exports, ~tags) => {
                 {"Export only students with the following tags:" |> str}
               </label>
               <School__SelectBox
-                items={tagsSelection |> Array.to_list}
-                selectCB={updateTagSelection(setTagsSelection)}
+                items={formState.tagsSelection |> Array.to_list}
+                selectCB={updateTagSelection(setFormState)}
                 noSelectionHeading="All students are selected"
                 noSelectionDescription="Select tags from the list to limit results to a select set of students."
                 emptyListDescription="You haven't tagged any student yet."
               />
               <div className="flex max-w-2xl w-full mt-5 pb-5 mx-auto">
-                <button className="w-full btn btn-primary btn-large">
-                  {"Create Export" |> str}
+                <button
+                  disabled={formState.saving}
+                  className="w-full btn btn-primary btn-large"
+                  onClick={
+                    createCourseExport(
+                      authenticityToken,
+                      course,
+                      tags,
+                      formState.tagsSelection,
+                      setCourseExports,
+                      setFormState,
+                    )
+                  }>
+                  {
+                    if (formState.saving) {
+                      <span>
+                        <FaIcon classes="fas fa-spinner fa-pulse" />
+                        <span className="ml-2">
+                          {"Setting up an export..." |> str}
+                        </span>
+                      </span>;
+                    } else {
+                      "Create Export" |> str;
+                    }
+                  }
                 </button>
               </div>
             </div>
@@ -82,7 +196,7 @@ let make = (~course, ~exports, ~tags) => {
           onClick={
             event => {
               ReactEvent.Mouse.preventDefault(event);
-              setFormVisible(_ => true);
+              setFormState(formState => {...formState, visible: true});
             }
           }
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-20 cursor-pointer">
@@ -93,7 +207,7 @@ let make = (~course, ~exports, ~tags) => {
         </button>
       </div>
       {
-        switch (exports) {
+        switch (courseExports) {
         | [||] =>
           <div
             className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">

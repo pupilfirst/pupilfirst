@@ -23,7 +23,6 @@ module CourseExports
       io = StringIO.new(spreadsheet.bytes)
 
       @course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
-      @course_export
     end
 
     private

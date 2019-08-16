@@ -29,7 +29,7 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
     setStateConnections(_ => connections);
     setEditorAction(_ => Hidden);
   };
-  <div className="flex-1 flex flex-col">
+  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">
     {
       switch (editorAction) {
       | Hidden => React.null
@@ -50,13 +50,13 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
     <div className="flex px-6 py-2 items-center justify-between">
       <button
         onClick={_ => setEditorAction(_ => ShowEditor(None))}
-        className="max-w-3xl w-full flex mx-auto items-center justify-center relative bg-gray-200 hover:bg-gray-400 hover:shadow-md border-2 border-dashed p-6 rounded-lg mt-12 cursor-pointer">
-        <i className="material-icons"> {"add_circle_outline" |> str} </i>
-        <h4 className="font-semibold ml-2"> {"Add New Community" |> str} </h4>
+        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+        <i className="fas fa-plus-circle" />
+        <h5 className="font-semibold ml-2"> {"Add New Community" |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
-      <div className="max-w-3xl w-full mx-auto relative">
+      <div className="max-w-2xl w-full mx-auto relative">
         {
           stateCommunities
           |> List.map(community =>
@@ -72,22 +72,27 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
                          setEditorAction(_ => ShowEditor(Some(community)));
                        }
                      }
-                     className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-100">
-                     <div className="flex">
-                       <div className="text-sm justify-between">
-                         <span className="text-black font-semibold">
-                           {community |> Community.name |> str}
-                         </span>
-                       </div>
+                     className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
+                     <div className="flex w-full text-sm justify-between">
+                       <span className="flex-1 font-semibold py-5 px-5">
+                         {community |> Community.name |> str}
+                       </span>
+                       <span
+                         className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
+                         <i className="fas fa-edit text-normal" />
+                         <span className="ml-1"> {"Edit" |> str} </span>
+                       </span>
                      </div>
                    </a>
-                   <div>
-                     <a
-                       href={"/communities/" ++ (community |> Community.id)}
-                       className="text-black font-semibold px-4">
-                       {"View" |> str}
-                     </a>
-                   </div>
+                   <a
+                     target="_blank"
+                     href={"/communities/" ++ (community |> Community.id)}
+                     className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-100 hover:text-primary-500 font-semibold px-5 py-5">
+                     <i
+                       className="fas fa-external-link-square-alt text-normal"
+                     />
+                     <span className="ml-1"> {"View" |> str} </span>
+                   </a>
                  </div>
                </div>
              )

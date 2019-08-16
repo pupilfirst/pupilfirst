@@ -102,7 +102,7 @@ let make = (~authenticityToken, _children) => {
       send(UpdateCourse(course));
       send(UpdateEditorAction(Hidden));
     };
-    <div className="flex flex-1 h-screen bg-gray-200 overflow-y-scroll">
+    <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
       {
         switch (state.editorAction) {
         | Hidden => ReasonReact.null

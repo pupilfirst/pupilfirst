@@ -153,7 +153,7 @@ let make = (~authenticityToken, ~course, ~exports, ~tags) => {
               <School__SelectBox
                 items={formState.tagsSelection |> Array.to_list}
                 selectCB={updateTagSelection(setFormState)}
-                noSelectionHeading="All students are selected"
+                noSelectionHeading="No tags selected"
                 noSelectionDescription="Select tags from the list to limit results to a select set of students."
                 emptyListDescription="You haven't tagged any student yet."
               />
@@ -200,7 +200,7 @@ let make = (~authenticityToken, ~course, ~exports, ~tags) => {
             }
           }
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-20 cursor-pointer">
-          <i className="far fa-user-plus text-lg" />
+          <i className="far fa-file-export text-lg" />
           <h5 className="font-semibold ml-2">
             {"Create a new export" |> str}
           </h5>

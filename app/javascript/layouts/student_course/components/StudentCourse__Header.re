@@ -54,7 +54,7 @@ let renderCourseSelector =
                   {currentCourse |> Course.name |> str}
                 </span>
                 <i
-                  className="far fa-chevron-down text-xs ml-3 font-semibold"
+                  className="fas fa-chevron-down text-xs ml-3 font-semibold"
                 />
               </button>
               {

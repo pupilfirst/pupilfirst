@@ -151,7 +151,7 @@ let editIcon = (additionalClasses, clickHandler, title) =>
     }
     title
     onClick=clickHandler>
-    <i className="fas fa-pencil text-xs" />
+    <i className="fas fa-pencil-alt text-xs" />
     <span className="text-xs font-semibold ml-2"> {"Edit" |> str} </span>
   </div>;
 

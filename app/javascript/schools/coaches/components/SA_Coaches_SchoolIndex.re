@@ -55,7 +55,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
               }
             }
             className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hove:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-20 cursor-pointer">
-            <i className="far fa-plus-circle text-lg" />
+            <i className="fas fa-plus-circle text-lg" />
             <h5 className="font-semibold ml-2"> {"Add New Coach" |> str} </h5>
           </button>
         </div>

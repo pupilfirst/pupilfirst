@@ -32,7 +32,7 @@ let make = (~courses, ~currentCourseId) => {
           </span>
         </span>
         <span className="w-1/6 text-right">
-          <i className="far fa-chevron-down text-sm" />
+          <i className="fas fa-chevron-down text-sm" />
         </span>
       </button>
       {

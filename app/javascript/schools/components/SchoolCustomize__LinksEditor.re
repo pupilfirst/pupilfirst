@@ -108,7 +108,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
                    </span>,
                    <i
                      key="link-editor-entry__icon"
-                     className="far fa-link mx-2"
+                     className="fas fa-link mx-2"
                    />,
                    <code key="link-editor-entry__url"> {url |> str} </code>,
                  |]

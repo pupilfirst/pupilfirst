@@ -22,13 +22,13 @@ let fileContentBlock = (url, title, filename) =>
     target="_blank"
     href=url>
     <div className="flex items-center">
-      <FaIcon classes="text-4xl text-gray-800 fal fa-file-alt" />
+      <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />
       <div className="pl-4 leading-tight">
         <div className="text-lg font-semibold"> {title |> str} </div>
         <div className="text-sm italic text-gray-600"> {filename |> str} </div>
       </div>
     </div>
-    <div> <FaIcon classes="text-2xl fal fa-download" /> </div>
+    <div> <FaIcon classes="text-2xl fas fa-download" /> </div>
   </a>;
 
 let imageContentBlock = (url, caption) =>

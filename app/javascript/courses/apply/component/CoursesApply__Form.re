@@ -107,8 +107,7 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
       className="btn btn-primary btn-large text-center w-full mt-6">
       {
         saving ?
-          <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
-          ReasonReact.null
+          <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null
       }
       <span> {buttonText(email, name, saving) |> str} </span>
     </button>

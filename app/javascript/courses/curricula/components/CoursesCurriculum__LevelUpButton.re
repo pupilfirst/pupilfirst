@@ -19,8 +19,8 @@ let handleSubmitButton = saving => {
     <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
   saving ?
-    submitButtonText("Saving", "fal fa-spinner-third fa-spin") :
-    submitButtonText("Level Up", "fas fa-pennant");
+    submitButtonText("Saving", "fas fa-spinner fa-spin") :
+    submitButtonText("Level Up", "fas fa-flag");
 };
 
 let refreshPage = () => Webapi.Dom.(location |> Location.reload);
@@ -40,10 +40,10 @@ let createLevelUpQuery = (authenticityToken, course, setSaving, event) => {
 [@react.component]
 let make = (~course, ~authenticityToken) => {
   let (saving, setSaving) = React.useState(() => false);
-    <button
-      disabled=saving
-      onClick={createLevelUpQuery(authenticityToken, course, setSaving)}
-      className="btn btn-success mt-4">
-      {handleSubmitButton(saving)}
-    </button>;
+  <button
+    disabled=saving
+    onClick={createLevelUpQuery(authenticityToken, course, setSaving)}
+    className="btn btn-success mt-4">
+    {handleSubmitButton(saving)}
+  </button>;
 };

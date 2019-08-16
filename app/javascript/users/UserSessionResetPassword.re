@@ -115,9 +115,7 @@ let renderUpdatePassword =
           )
       }
       className="btn btn-success btn-large text-center w-full mt-4">
-      <FaIcon
-        classes={saving ? "fal fa-spinner-third fa-spin" : "fas fa-lock-alt"}
-      />
+      <FaIcon classes={saving ? "fas fa-spinner fa-spin" : "fas fa-lock"} />
       <span className="ml-2">
         {submitButtonText(saving, newPassword, confirmPassword) |> str}
       </span>

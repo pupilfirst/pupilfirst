@@ -92,8 +92,7 @@ let autoVerify =
     }>
     {
       switch (saving, linkToComplete) {
-      | (true, _) =>
-        completeButtonText("Saving", "fal fa-spinner-third fa-spin")
+      | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
       | (false, Some(_)) =>
         completeButtonText("Visit Link To Complete", "fas fa-external-link")
       | (false, None) =>
@@ -107,7 +106,7 @@ let statusBar = (string, linkToComplete) => {
   let message =
     <div className="flex items-center">
       <span className="fa-stack text-lg mr-1 text-green-500">
-        <i className="fas fa-badge fa-stack-2x" />
+        <i className="fas fa-certificate fa-stack-2x" />
         <i className="fas fa-check fa-stack-1x fa-inverse" />
       </span>
       <span> {string |> str} </span>

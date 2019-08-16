@@ -34,7 +34,7 @@ let button = (sortIndex, newContentBlockCB, kindOfButton) => {
         (() => ContentBlock.makeImageBlock("", "")),
       )
     | EmbedButton => (
-        "far fa-code",
+        "fas fa-code",
         "Embed",
         (() => ContentBlock.makeEmbedBlock("", "")),
       )
@@ -70,7 +70,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
             title="Add block"
             className="add-content-block__plus-button text-gray-700 bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-400 w-7 h-7 flex justify-center items-center mx-auto z-20">
             <i
-              className="fal fa-plus text-base add-content-block__plus-button-icon"
+              className="fas fa-plus text-base add-content-block__plus-button-icon"
             />
           </div>
         </div>

@@ -95,26 +95,25 @@ let submitForm = (filename, formId, send, addFileAttachmentCB) => {
   };
 };
 
-let attachFile = (state, send, attachingCB, attachFileCB, event) => {
-  switch(ReactEvent.Form.target(event)##files) {
+let attachFile = (state, send, attachingCB, attachFileCB, event) =>
+  switch (ReactEvent.Form.target(event)##files) {
   | [||] => ()
   | files =>
-  let file = files[0];
-  let maxFileSize = 5 * 1024 * 1024;
+    let file = files[0];
+    let maxFileSize = 5 * 1024 * 1024;
 
-  let errors =
-    file##size > maxFileSize ? ["The maximum file size is 5 MB."] : [];
+    let errors =
+      file##size > maxFileSize ? ["The maximum file size is 5 MB."] : [];
 
-  if (errors |> ListUtils.isEmpty) {
-    let filename = file##name;
-    attachingCB();
-    send(AttachFile(filename));
-    submitForm(filename, state.formId, send, attachFileCB);
-  } else {
-    send(SelectFile(file##name, errors));
-  }
-  }
-};
+    if (errors |> ListUtils.isEmpty) {
+      let filename = file##name;
+      attachingCB();
+      send(AttachFile(filename));
+      submitForm(filename, state.formId, send, attachFileCB);
+    } else {
+      send(SelectFile(file##name, errors));
+    };
+  };
 
 [@react.component]
 let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
@@ -157,7 +156,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
       state.errors
       |> List.map(error =>
            <div className="px-4 mt-2 text-red-600 text-sm" key=error>
-             <i className="fal fa-exclamation-circle mr-2" />
+             <i className="fas fa-exclamation-circle mr-2" />
              <span> {error |> str} </span>
            </div>
          )

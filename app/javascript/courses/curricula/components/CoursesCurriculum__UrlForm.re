@@ -64,7 +64,7 @@ let make = (~attachUrlCB) => {
       state.errors
       |> List.map(error =>
            <div className="px-4 mt-2 text-red-600 text-sm" key=error>
-             <i className="fal fa-exclamation-circle mr-2" />
+             <i className="fas fa-exclamation-circle mr-2" />
              <span> {error |> str} </span>
            </div>
          )

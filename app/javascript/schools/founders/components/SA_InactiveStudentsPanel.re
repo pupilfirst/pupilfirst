@@ -306,7 +306,7 @@ let make =
                             ++ "/inactive_students?page="
                             ++ (currentPage - 1 |> string_of_int)
                           }>
-                          <i className="far fa-arrow-left" />
+                          <i className="fas fa-arrow-left" />
                           <span className="ml-2"> {"Prev" |> str} </span>
                         </a> :
                         ReasonReact.null
@@ -323,7 +323,7 @@ let make =
                             ++ (currentPage + 1 |> string_of_int)
                           }>
                           <span className="mr-2"> {"Next" |> str} </span>
-                          <i className="far fa-arrow-right" />
+                          <i className="fas fa-arrow-right" />
                         </a>
                     }
                   </div> :

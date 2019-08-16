@@ -59,7 +59,7 @@ let buttonContents = status =>
   switch (status) {
   | Undoing =>
     <span>
-      <FaIcon classes="fal fa-spinner-third fa-spin mr-2" />
+      <FaIcon classes="fas fa-spinner fa-spin mr-2" />
       {"Undoing..." |> str}
     </span>
   | Pending =>

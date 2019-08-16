@@ -14,9 +14,9 @@ let buttonContents = formState => {
   let icon =
     switch (formState) {
     | Attaching
-    | Saving => <FaIcon classes="fal fa-spinner-third fa-spin mr-2" />
+    | Saving => <FaIcon classes="fas fa-spinner fa-spin mr-2" />
     | Incomplete
-    | Ready => <FaIcon classes="fas fa-cloud-upload mr-2" />
+    | Ready => <FaIcon classes="fas fa-cloud-upload-alt mr-2" />
     };
 
   let text =

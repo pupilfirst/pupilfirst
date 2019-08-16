@@ -62,7 +62,7 @@ let make =
                         }
                         title="Edit History"
                         className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
-                        <i className="far fa-history text-sm" />
+                        <i className="fas fa-history text-sm" />
                         <span className="ml-2"> {"History" |> str} </span>
                       </a>
                     | None => React.null
@@ -75,7 +75,7 @@ let make =
                           title="Edit Answer"
                           onClick={_ => toggleShowAnswerEdit(_ => true)}
                           className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-700 border-r border-gray-400 cursor-pointer">
-                          <i className="far fa-pen-square text-sm" />
+                          <i className="fas fa-edit text-sm" />
                           <span className="ml-2"> {"Edit" |> str} </span>
                         </a>
                         <QuestionsShow__ArchiveManager
@@ -144,7 +144,7 @@ let make =
                         <div
                           className="flex items-end justify-center h-8 w-8 md:h-10 md:w-10 p-1 md:p-2">
                           <i
-                            className="fal fa-comments text-xl text-gray-600"
+                            className="far fa-comments text-xl text-gray-600"
                           />
                         </div>
                         <p className="text-xs pb-1">

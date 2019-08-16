@@ -195,7 +195,7 @@ let make =
             showBackButton ?
               <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
                 <a className="btn btn-default" onClick={_ => handleBack()}>
-                  <i className="far fa-arrow-left" />
+                  <i className="fas fa-arrow-left" />
                   <span className="ml-2"> {"Back" |> str} </span>
                 </a>
               </div> :

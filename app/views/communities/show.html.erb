@@ -19,7 +19,7 @@
           <% end %>
           <%= text_field_tag :search, @search, placeholder: "Search...", class: "appearance-none block w-full shadow bg-white text-gray-700 border border-primary-200 rounded py-3 pl-4 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-primary-400 focus:shadow-md" %>
           <%= button_tag(type: "submit", class: "absolute right-0 w-8 h-8 mr-3 rounded-full bg-gray-200 text-gray-600 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-center focus:outline-none focus:text-primary-500") do %>
-            <i title="Search" class="far fa-arrow-right text-lg"></i>
+            <i title="Search" class="fas fa-search text-lg"></i>
           <% end %>
         <% end %>
       </div>
@@ -41,7 +41,7 @@
         <a class="no-underline btn btn-primary btn-large"
            href=<%= new_question_community_path(@community) %>
         >
-          <i class="fal fa-plus-circle text-lg"></i>
+          <i class="fas fa-plus-circle text-lg"></i>
           <span class="font-semibold ml-2">
             Ask a question
           </span>
@@ -67,7 +67,7 @@
                       <span class="block md:inline-block md:border-l mt-1 md:mt-0 md:pl-2 md:ml-2">
                         <% if question.last_activity_at.present? %>
                         <span class='hidden md:inline-block'>updated </span>
-                        <i class='fal fa-history mr-1 md:hidden'></i>   <%= presenter.activity(question) %>
+                        <i class='fas fa-history mr-1 md:hidden'></i>   <%= presenter.activity(question) %>
                           <span> ago </span>
                         <% end %>
                       </span>
@@ -78,11 +78,11 @@
                       <div class="bg-green-600 text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
                     <% else %>
                       <div class="px-4 text-center">
-                        <i class="fal fa-thumbs-up text-xl text-gray-600"></i>
+                        <i class="far fa-thumbs-up text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= presenter.comment_likes(question) %></p>
                       </div>
                       <div class="px-2 text-center">
-                        <i class="fal fa-comment-check text-xl text-gray-600"></i>
+                        <i class="far fa-comment-dots text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= presenter.comments_count(question) %></p>
                       </div>
                     <% end %>
@@ -103,7 +103,7 @@
     <div class="max-w-3xl w-full flex flex-row mx-auto justify-center pb-8">
       <% if presenter.show_prev_page? %>
         <a class="block btn btn-default no-underline border shadow mx-2" href=<%= presenter.prev_page_path %>>
-          <i class="far fa-arrow-left"></i>
+          <i class="fas fa-arrow-left"></i>
           <span class="ml-2">
           Prev
         </span>
@@ -114,7 +114,7 @@
         <span class="mr-2">
           Next
         </span>
-          <i class="far fa-arrow-right"></i>
+          <i class="fas fa-arrow-right"></i>
         </a>
       <% end %>
     </div>

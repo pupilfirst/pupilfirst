@@ -157,7 +157,7 @@ let make =
                     dispatch(UpdateShowQuestionEdit(false));
                   }
                 }>
-                <i className="far fa-arrow-left" />
+                <i className="fas fa-arrow-left" />
                 <span className="ml-2"> {"Close" |> str} </span>
               </a>
             </div>
@@ -173,7 +173,7 @@ let make =
           <div className="flex flex-col">
             <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
               <a className="btn btn-default" href=communityPath>
-                <i className="far fa-arrow-left" />
+                <i className="fas fa-arrow-left" />
                 <span className="ml-2"> {"Back" |> str} </span>
               </a>
             </div>
@@ -196,7 +196,7 @@ let make =
                           }
                           title="Edit History"
                           className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
-                          <i className="far fa-history text-sm" />
+                          <i className="fas fa-history text-sm" />
                           <span className="ml-2"> {"History" |> str} </span>
                         </a>
                       | None => React.null
@@ -213,7 +213,7 @@ let make =
                             }
                             title="Edit Question"
                             className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-700 border-r border-gray-400 cursor-pointer">
-                            <i className="far fa-pen-square text-sm" />
+                            <i className="fas fa-edit text-sm" />
                             <span className="ml-2"> {"Edit" |> str} </span>
                           </a>
                           <QuestionsShow__ArchiveManager
@@ -274,7 +274,7 @@ let make =
                   <div
                     className="flex flex-row justify-between px-3 md:px-6 pb-6">
                     <div className="pr-2 pt-6 text-center">
-                      <i className="fal fa-comments text-xl text-gray-600" />
+                      <i className="far fa-comments text-xl text-gray-600" />
                       <p className="text-xs py-1">
                         {
                           state.comments

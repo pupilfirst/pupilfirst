@@ -32,3 +32,5 @@ let decode = json =>
     file: json |> field("file", nullable(decodeFile)) |> Js.Null.toOption,
     tags: json |> field("tags", array(string)),
   };
+
+let make = (~id, ~createdAt, ~tags) => {id, createdAt, tags, file: None};

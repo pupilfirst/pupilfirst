@@ -27,5 +27,6 @@ module Types
     field :create_applicant, mutation: Mutations::CreateApplicant, null: false
     field :create_school_admin, mutation: Mutations::CreateSchoolAdmin, null: false
     field :update_school_admin, mutation: Mutations::UpdateSchoolAdmin, null: false
+    field :create_course_export, mutation: Mutations::CreateCourseExport, null: false
   end
 end

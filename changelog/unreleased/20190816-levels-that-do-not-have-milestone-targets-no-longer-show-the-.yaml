@@ -1,0 +1,6 @@
+---
+timestamp: '2019-08-16T09:47:56Z'
+title: Levels that do not have milestone targets no longer show the option to level
+  up - the level up button wouldn't have worked, but it obviously didn't make sense
+  to show the option either.
+category: bugfix

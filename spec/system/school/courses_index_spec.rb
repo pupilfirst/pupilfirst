@@ -65,7 +65,7 @@ feature 'Courses Index', js: true do
     expect(course.description).to eq(new_description)
     expect(course.about).to eq(nil)
     expect(course.enable_leaderboard).to eq(true)
-    expect(course.enable_public_signup).to eq(false)
+    expect(course.public_signup).to eq(false)
     expect(course.max_grade).to eq(5)
     expect(course.pass_grade).to eq(2)
     expect(course.grade_labels["1"]).to eq(grade_label_1)
@@ -92,7 +92,7 @@ feature 'Courses Index', js: true do
     expect(course.description).to eq(new_description_for_edit)
     expect(course.about).to eq(new_about)
     expect(course.enable_leaderboard).to eq(false)
-    expect(course.enable_public_signup).to eq(true)
+    expect(course.public_signup).to eq(true)
     expect(Date.parse(course.ends_at.strftime("%Y-%m-%d"))).to eq(date)
   end
 

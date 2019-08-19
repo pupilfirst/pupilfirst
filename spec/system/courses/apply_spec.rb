@@ -6,10 +6,10 @@ feature "Apply for public courses", js: true do
   # The basics.
   let(:school) { create :school, :current }
   let(:school_2) { create :school }
-  let(:public_course) { create :course, school: school, enable_public_signup: true }
+  let(:public_course) { create :course, school: school, public_signup: true }
   let!(:level_one) { create :level, course: public_course }
   let(:private_course) { create :course, school: school }
-  let(:public_course_in_school_2) { create :course, school: school_2, enable_public_signup: true }
+  let(:public_course_in_school_2) { create :course, school: school_2, public_signup: true }
   let(:name) { Faker::Name.name }
   let(:email) { Faker::Internet.email(name) }
   let(:name_2) { Faker::Name.name }
@@ -31,9 +31,9 @@ feature "Apply for public courses", js: true do
       applicant = Applicant.where(email: email).first
       expect(applicant.name).to eq(name)
       expect(applicant.email).to eq(email)
-      expect(applicant.login_token_sent_at).not_to eq(nil)
+      expect(applicant.login_mail_sent_at).not_to eq(nil)
 
-      visit enroll_path(applicant.login_token)
+      visit enroll_applicants_path(applicant.login_token)
       expect(page).to have_content(applicant.name)
       expect(page).to have_content(public_course.name)
     end
@@ -88,7 +88,7 @@ feature "Apply for public courses", js: true do
 
   context 'when public user visits enroll page without a valid token' do
     scenario 'The page should redirect to signin' do
-      visit enroll_path(token)
+      visit enroll_applicants_path(token)
 
       expect(page).to have_text("Sign in")
       expect(page).to have_text('User authentication failed. The link you followed appears to be invalid.')

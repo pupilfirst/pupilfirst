@@ -1,7 +1,7 @@
 class ApplicantsController < ApplicationController
   # GET /enroll/:token
   def enroll
-    @applicant = Applicant.find_by(login_token: params[:token])
+    @applicant = authorize(policy_scope(Applicant).find_by!(login_token: params[:token]))
     if valid_applicant?
       user = Applicants::CreateStudentService.new(@applicant).execute
       sign_in user
@@ -16,10 +16,7 @@ class ApplicantsController < ApplicationController
   private
 
   def valid_applicant?
-    if @applicant.present?
-      @applicant.course.in? current_school.courses.where(enable_public_signup: true)
-    else
-      false
-    end
+    public_courses = current_school.courses.where(public_signup: true)
+    @applicant.present? && public_courses.where(id: @applicant.course_id).exists?
   end
 end

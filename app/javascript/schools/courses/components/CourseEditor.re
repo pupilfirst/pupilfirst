@@ -12,7 +12,7 @@ module CoursesQuery = [%graphql
       passGrade
       enableLeaderboard
       about
-      enablePublicSignup
+      publicSignup
       gradesAndLabels {
         grade
         label
@@ -87,7 +87,7 @@ let make = (~authenticityToken, _children) => {
                   gradesAndLabels,
                   rawCourse##enableLeaderboard,
                   rawCourse##about,
-                  rawCourse##enablePublicSignup,
+                  rawCourse##publicSignup,
                 );
               })
            |> Array.to_list;

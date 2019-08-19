@@ -6,9 +6,9 @@ feature "Public view of Course", js: true do
   # The basics.
   let(:school) { create :school, :current }
   let(:school_2) { create :school }
-  let(:public_course) { create :course, school: school, enable_public_signup: true }
+  let(:public_course) { create :course, school: school, public_signup: true }
   let(:private_course) { create :course, school: school }
-  let(:public_course_in_school_2) { create :course, school: school_2, enable_public_signup: true }
+  let(:public_course_in_school_2) { create :course, school: school_2, public_signup: true }
   let(:new_about) { Faker::Lorem.paragraph }
 
   context 'when public user visits a public course' do

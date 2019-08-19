@@ -101,7 +101,11 @@ let computeLevelUp =
   let nextLevel =
     levels |> ListUtils.findOpt(l => l |> Level.number == nextLevelNumber);
 
-  let canLevelUp = statusOfMilestoneTargets |> TargetStatus.canLevelUp;
+  let canLevelUp =
+    statusOfMilestoneTargets
+    |> ListUtils.isNotEmpty
+    && statusOfMilestoneTargets
+    |> TargetStatus.canLevelUp;
 
   switch (nextLevel, canLevelUp) {
   | (Some(level), true) => level |> Level.isLocked ? None : LevelUp

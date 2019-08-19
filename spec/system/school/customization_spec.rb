@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'School Customization' do
+feature 'School Customization', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -12,7 +12,7 @@ feature 'School Customization' do
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
-  scenario 'school admin sets custom images', js: true do
+  scenario 'school admin sets custom images' do
     sign_in_user school_admin.user, referer: customize_school_path
 
     find('div[title="Edit logo (on light backgrounds)"]').click
@@ -38,7 +38,7 @@ feature 'School Customization' do
     expect(school.icon.filename).to eq('icon_sv.png')
   end
 
-  scenario 'school admin sets custom links', js: true do
+  scenario 'school admin sets custom links' do
     sign_in_user school_admin.user, referer: customize_school_path
 
     expect(page).to have_content("You can customize links on the header.")
@@ -130,7 +130,7 @@ feature 'School Customization' do
     expect(social_links.first.url).to eq('http://twitter.com')
   end
 
-  scenario 'school admin customizes strings', js: true do
+  scenario 'school admin customizes strings' do
     sign_in_user school_admin.user, referer: customize_school_path
 
     expect(page).to have_content("Add an address?")
@@ -183,8 +183,8 @@ feature 'School Customization' do
     expect(SchoolString::TermsOfUse.for(school)).to eq(terms_of_use)
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit customize_school_path
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

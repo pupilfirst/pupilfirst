@@ -128,8 +128,14 @@ let make =
                     <div>
                       <div id="course_coaches">
                         <School__SelectBox.Jsx2
-                          items={state.courseCoaches}
-                          multiSelectCB=multiSelectCoachEnrollmentsCB
+                          items={
+                            state.courseCoaches
+                            |> School__SelectBox.convertOldItems
+                          }
+                          selectCB={
+                            multiSelectCoachEnrollmentsCB
+                            |> School__SelectBox.convertOldCallback
+                          }
                         />
                       </div>
                     </div> :

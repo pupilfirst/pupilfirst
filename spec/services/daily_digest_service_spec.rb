@@ -39,8 +39,9 @@ describe DailyDigestService do
   let!(:question_c1) { create :question, community: community_1, creator: t1_user }
   let!(:question_c2_1) { create :question, community: community_2, creator: t2_user_1 }
   let!(:question_c2_2) { create :question, community: community_2, creator: t2_user_2 }
-  let!(:question_c3_1) { create :question, community: community_3, creator: t3_user, created_at: 2.days.ago }
-  let!(:question_c3_2) { create :question, community: community_3, creator: t3_user, created_at: 8.days.ago }
+  let!(:question_c3_1) { create :question, community: community_3, creator: t3_user, created_at: 2.days.ago, archived: true }
+  let!(:question_c3_2) { create :question, community: community_3, creator: t3_user, created_at: 3.days.ago }
+  let!(:question_c3_3) { create :question, community: community_3, creator: t3_user, created_at: 8.days.ago }
 
   before do
     # Activate daily digest emails for three of the four users.
@@ -70,12 +71,13 @@ describe DailyDigestService do
       expect(b1).to include(community_2.name)
       expect(b1).to include(community_3.name)
 
-      # It should include all questions except the one from 8 days ago.
+      # It should include all questions except the archived one and the one from 8 days ago.
       expect(b1).to include(question_c1.title)
       expect(b1).to include(question_c2_1.title)
       expect(b1).to include(question_c2_2.title)
-      expect(b1).to include(question_c3_1.title)
-      expect(b1).not_to include(question_c3_2.title)
+      expect(b1).to include(question_c3_2.title)
+      expect(b1).not_to include(question_c3_1.title)
+      expect(b1).not_to include(question_c3_3.title)
 
       open_email(t2_user_1.email)
 
@@ -90,8 +92,9 @@ describe DailyDigestService do
       expect(b2).not_to include(question_c1.title)
       expect(b2).to include(question_c2_1.title)
       expect(b2).to include(question_c2_2.title)
-      expect(b2).to include(question_c3_1.title)
-      expect(b2).not_to include(question_c3_2.title)
+      expect(b2).to include(question_c3_2.title)
+      expect(b2).not_to include(question_c3_1.title)
+      expect(b2).not_to include(question_c3_3.title)
 
       # User from team 2 with daily digest turned off shouldn't receive the mail.
       open_email(t2_user_2.email)
@@ -118,12 +121,14 @@ describe DailyDigestService do
       expect(b3).not_to include(question_c1.title)
       expect(b3).not_to include(question_c2_1.title)
       expect(b3).not_to include(question_c2_2.title)
-      expect(b3).to include(question_c3_1.title)
-      expect(b3).not_to include(question_c3_2.title)
+      expect(b3).to include(question_c3_2.title)
+      expect(b3).not_to include(question_c3_1.title)
+      expect(b3).not_to include(question_c3_3.title)
     end
 
     context 'when there are more than 5 questions with no activity in the past seven days' do
       let!(:question_c3_3) { create :question, community: community_3, creator: t1_user, created_at: 2.days.ago }
+      let!(:question_c3_archived) { create :question, community: community_3, creator: t2_user_1, created_at: 3.days.ago, archived: true }
       let!(:question_c3_4) { create :question, community: community_3, creator: t2_user_1, created_at: 3.days.ago }
       let!(:question_c3_5) { create :question, community: community_3, creator: t2_user_2, created_at: 4.days.ago }
       let!(:question_c3_6) { create :question, community: community_3, creator: t3_user, created_at: 5.days.ago }
@@ -141,9 +146,10 @@ describe DailyDigestService do
         expect(b).not_to include(question_c1.title)
         expect(b).not_to include(question_c2_1.title)
         expect(b).not_to include(question_c2_2.title)
-        expect(b).to include(question_c3_1.title)
-        expect(b).not_to include(question_c3_2.title)
+        expect(b).to include(question_c3_2.title)
+        expect(b).not_to include(question_c3_archived.title) # question was archived.
         expect(b).to include(question_c3_3.title)
+        expect(b).not_to include(question_c3_8.title)
         expect(b).to include(question_c3_4.title)
         expect(b).to include(question_c3_5.title)
         expect(b).not_to include(question_c3_6.title) # question was commented on.

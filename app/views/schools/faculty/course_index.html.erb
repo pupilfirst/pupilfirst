@@ -5,4 +5,4 @@
 
 <% @presenter = Schools::FacultyModule::CourseIndexPresenter.new(self, @course) %>
 
-<div id="sa-coaches-enrollment-panel" class="flex flex-1 h-screen" data-props="<%= @presenter.react_props.to_json %>"></div>
+<div id="sa-coaches-enrollment-panel" class="flex flex-1 h-full" data-props="<%= @presenter.react_props.to_json %>"></div>

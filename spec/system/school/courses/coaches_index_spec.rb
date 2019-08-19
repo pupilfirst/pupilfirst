@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Course Coaches Index' do
+feature 'Course Coaches Index', js: true do
   include UserSpecHelper
 
   # Setup a course with a single founder target, ...
@@ -26,7 +26,7 @@ feature 'Course Coaches Index' do
     FacultyCourseEnrollment.create(faculty: coach_2, course: course_1, safe_to_create: true)
   end
 
-  scenario 'school admin assigns faculty to a course', js: true do
+  scenario 'school admin assigns faculty to a course' do
     sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
 
     # list all coaches
@@ -59,7 +59,7 @@ feature 'Course Coaches Index' do
     FacultyStartupEnrollment.create(faculty: coach_3, startup: startup, safe_to_create: true)
   end
 
-  scenario 'school admin assigns faculty to a course who already had a team enrollment', js: true do
+  scenario 'school admin assigns faculty to a course who already had a team enrollment' do
     sign_in_user school_admin.user, referer: school_course_coaches_path(course_2)
 
     # list all coaches
@@ -82,7 +82,7 @@ feature 'Course Coaches Index' do
     expect(startup.faculty.count).to eq(0)
   end
 
-  scenario 'school admin removes a startup coach', js: true do
+  scenario 'school admin removes a startup coach' do
     sign_in_user school_admin.user, referer: school_course_coaches_path(course_2)
 
     # list all coaches
@@ -97,7 +97,7 @@ feature 'Course Coaches Index' do
     expect(startup.faculty.count).to eq(0)
   end
 
-  scenario 'school admin removes a course coach', js: true do
+  scenario 'school admin removes a course coach' do
     sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
 
     # list all coaches
@@ -109,8 +109,8 @@ feature 'Course Coaches Index' do
     expect(course_1.faculty.count).to eq(1)
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_course_coaches_path(course_1)
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

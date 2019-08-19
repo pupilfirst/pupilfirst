@@ -11,4 +11,9 @@ FactoryBot.define do
       slack_access_token { 'SLACK_ACCESS_TOKEN' }
     end
   end
+
+  factory :student, class: 'Founder' do
+    user
+    startup { create :team }
+  end
 end

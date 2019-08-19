@@ -1,4 +1,6 @@
 class CoursesController < ApplicationController
+  before_action :authenticate_user!, except: %i[show apply]
+
   # GET /courses/:id/curriculum
   def curriculum
     @course = authorize(policy_scope(Course).find(params[:id]))

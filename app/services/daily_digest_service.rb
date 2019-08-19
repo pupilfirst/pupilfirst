@@ -34,48 +34,40 @@ class DailyDigestService
 
   # Returns the new questions asked today.
   def questions_from_today
-    Question.where('questions.created_at > ?', 1.day.ago)
+    Question.live.where('questions.created_at > ?', 1.day.ago)
       .includes(:community, :creator).each_with_object({}) do |question, updates|
       community = question.community
 
-      updates[community.id] ||= {
-        community_name: community.name,
-        questions: []
-      }
-
-      # Increment the number of questions
-      updates[community.id][:questions] << {
-        id: question.id,
-        title: question.title,
-        days_ago: (question.created_at.to_date - Date.today).to_i,
-        author: question.creator&.name || "a user",
-        type: 'new'
-      }
+      add_updates(community, question, updates, question.created_at.to_date, 'new')
     end
   end
 
   # Return up to 5 additional, most recent, questions with no activity from communities.
   def add_questions_with_no_activity(updates)
-    Question.where('questions.created_at > ?', 1.week.ago)
+    Question.live.where('questions.created_at > ?', 1.week.ago)
       .where('questions.created_at < ?', 1.day.ago)
       .includes(:answers, :comments).where(answers: { id: nil }, comments: { id: nil })
       .order('questions.created_at DESC').limit(5)
       .includes(:community, :creator).each_with_object(updates) do |question, updates|
       community = question.community
 
-      updates[community.id] ||= {
-        community_name: community.name,
-        questions: []
-      }
-
-      # Increment the number of questions
-      updates[community.id][:questions] << {
-        id: question.id,
-        title: question.title,
-        days_ago: (Date.today - question.created_at.to_date).to_i,
-        author: question.creator&.name || "a user",
-        type: 'no_activity'
-      }
+      add_updates(community, question, updates, Date.today, 'no_activity')
     end
+  end
+
+  def add_updates(community, question, updates, from, type)
+    updates[community.id] ||= {
+      community_name: community.name,
+      questions: []
+    }
+
+    # Increment the number of questions
+    updates[community.id][:questions] << {
+      id: question.id,
+      title: question.title,
+      days_ago: (from - question.created_at.to_date).to_i,
+      author: question.creator&.name || "a user",
+      type: type
+    }
   end
 end

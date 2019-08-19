@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'SA Communities Editor' do
+feature 'SA Communities Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -14,7 +14,7 @@ feature 'SA Communities Editor' do
   let!(:new_community_name) { Faker::Lorem.words(2).join ' ' }
   let!(:new_community_name_for_edit) { Faker::Lorem.words(2).join ' ' }
 
-  scenario 'school admin visits a community editor', js: true do
+  scenario 'school admin visits a community editor' do
     sign_in_user school_admin.user, referer: school_communities_path
 
     # list all communities
@@ -49,8 +49,8 @@ feature 'SA Communities Editor' do
     expect(community.courses).to eq([course_1])
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_communities_path
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

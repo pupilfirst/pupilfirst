@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Coaches Index' do
+feature 'Coaches Index', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -20,7 +20,7 @@ feature 'Coaches Index' do
 
   let!(:school_admin) { create :school_admin, school: school }
 
-  scenario 'school admin visits coaches and creates a coach', js: true do
+  scenario 'school admin visits coaches and creates a coach' do
     sign_in_user school_admin.user, referer: school_coaches_path
 
     # list all coaches
@@ -70,8 +70,8 @@ feature 'Coaches Index' do
     expect(user.title).to eq(updated_coach_title)
   end
 
-  scenario 'user who is not logged in gets a 404' do
+  scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_coaches_path
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

@@ -21,6 +21,7 @@ module FacultyHelper
     stars_html.join("\n").html_safe
   end
 
+  # rubocop:disable Rails/HelperInstanceVariable
   def past_connect_requests
     @faculty.past_connect_requests
   end
@@ -45,4 +46,5 @@ module FacultyHelper
   def tooltip_for_compensation
     @faculty.compensation
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 end

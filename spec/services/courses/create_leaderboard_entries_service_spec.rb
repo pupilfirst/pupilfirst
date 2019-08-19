@@ -19,6 +19,7 @@ describe Courses::CreateLeaderboardEntriesService do
   let(:startup_1) { create :startup, level: level_1, name: 's1' }
   let(:startup_2) { create :startup, level: level_1, name: 's2' }
   let(:startup_3) { create :startup, level: level_1, name: 's3' }
+  let(:startup_4) { create :startup, level: level_1, name: 's4', access_ends_at: 1.day.ago }
 
   let(:lts) { LeaderboardTimeService.new }
 
@@ -46,6 +47,8 @@ describe Courses::CreateLeaderboardEntriesService do
 
     complete_target(startup_3.founders.first, target_4, passed_at: just_before, grade: 3)
     complete_target(startup_3.founders.first, target_5, passed_at: just_after, grade: 3)
+    complete_target(startup_4.founders.first, target_4, passed_at: passed_at, grade: 2)
+    complete_target(startup_4.founders.first, target_5, passed_at: passed_at, grade: 3)
   end
 
   describe '#execute' do
@@ -58,6 +61,9 @@ describe Courses::CreateLeaderboardEntriesService do
 
       # There should be no entry on the leaderboard for members of startup_3.
       expect(LeaderboardEntry.joins(:founder).where(founders: { id: startup_3.founders }).count).to eq(0)
+
+      # There should be no entry on the leaderboard for inactive students.
+      expect(LeaderboardEntry.joins(:founder).where(founders: { id: startup_4.founders }).count).to eq(0)
 
       # Verify the score of all other entries.
       expect(LeaderboardEntry.joins(:founder).where(founders: { id: startup_1.founders }).pluck(:score)).to eq([3] * startup_1.founders.count)

@@ -32,7 +32,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
   render: ({state, send}) => {
     let closeFormCB = () => send(UpdateFormVisible(None));
     let updateCoachCB = coach => send(UpdateCoaches(coach));
-    <div className="flex flex-1 h-screen overflow-y-scroll">
+    <div className="flex flex-1 h-full overflow-y-scroll">
       {
         switch (state.formVisible) {
         | None => ReasonReact.null

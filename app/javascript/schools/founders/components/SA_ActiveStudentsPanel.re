@@ -328,7 +328,7 @@ let make =
         </div>
       </div>
       <div className="overflow-y-scroll">
-        <div className="px-3">
+        <div className="px-6">
           <div
             className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
             <div className="flex">
@@ -458,7 +458,7 @@ let make =
             </div>
           </div>
         </div>
-        <div className="flex bg-gray-100 pb-6">
+        <div className="flex bg-gray-100 pb-6 px-6">
           <div className="flex flex-col max-w-3xl mx-auto w-full">
             {
               state.filterVisible && state.tags |> List.length > 0 ?

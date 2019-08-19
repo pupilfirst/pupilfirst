@@ -1,0 +1,38 @@
+<%
+  course = @course_export.course
+  user = @course_export.user
+  link = exports_school_course_url(course)
+%>
+
+<% content_for :title do %>
+  Export of course is ready
+<% end %>
+
+<% content_for :subtitle do %>
+  The export of data from course <%= course.name %> is ready for download.
+<% end %>
+
+<% content_for :title_button_text do %>
+  Visit Exports Page
+<% end %>
+
+<% content_for(:title_button_link, link) %>
+
+<% content_for :salutation do %>
+  Hello <%= user.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    The export that you requested for the course <%= course.name %> on
+    <%= @course_export.created_at.strftime('%b %e, %l:%M %p') %> is now ready for download. Please visit the course
+    exports page using the link above to download the export.
+  </p>
+
+  <p>
+    The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all
+    popular spreadsheet applications.
+  </p>
+
+  <%= render 'mailers/link_fallback', url: link %>
+<% end %>

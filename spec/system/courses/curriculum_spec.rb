@@ -277,4 +277,48 @@ feature "Student's view of Course Curriculum", js: true do
       end
     end
   end
+
+  context 'when student is in level one with milestone targets complete' do
+    let(:team_l1) { create :team, level: level_1 }
+    let(:student_tl1) { create :student, startup: team_l1 }
+
+    before do
+      # Create the submission...
+      submission = create(:timeline_event, :latest, founders: [student_tl1], target: completed_target_l1, passed_at: 1.day.ago)
+      # ...and grade it.
+      create(:timeline_event_grade, timeline_event: submission, evaluation_criterion: evaluation_criterion, grade: 2)
+    end
+
+    scenario 'student levels up' do
+      sign_in_user student_tl1.user, referer: curriculum_course_path(course)
+
+      # Student should be on shown level 1.
+      expect(page).to have_text(completed_target_l1.title)
+
+      # There should be a level up notice on the page.
+      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
+      click_button('Level Up')
+
+      # Student should be on level 2 page.
+      expect(page).to have_text(completed_target_l2.title)
+
+      # The team should have leveled up.
+      expect(team_l1.reload.level).to eq(level_2)
+    end
+
+    context "when the level doesn't have any milestone target group" do
+      let!(:target_group_l1) { create :target_group, level: level_1, milestone: false }
+
+      scenario 'student cannot level up' do
+        sign_in_user student_tl1.user, referer: curriculum_course_path(course)
+
+        # Student should be on shown level 1.
+        expect(page).to have_text(completed_target_l1.title)
+
+        # There should be no level up notice or a button.
+        expect(page).not_to have_button('Level Up')
+        expect(page).not_to have_text('You have successfully completed all milestone targets required to level up.')
+      end
+    end
+  end
 end

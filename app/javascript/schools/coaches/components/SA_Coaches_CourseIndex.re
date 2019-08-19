@@ -126,7 +126,7 @@ let make =
     <DisablingCover.Jsx2 containerClasses="w-full" disabled={state.saving}>
       <div
         key="School admin coaches course index"
-        className="flex flex-1 h-screen overflow-y-scroll">
+        className="flex flex-1 h-full overflow-y-scroll bg-gray-100">
         {
           switch (state.formVisible) {
           | None => ReasonReact.null
@@ -143,7 +143,7 @@ let make =
             />;
           }
         }
-        <div className="flex-1 flex flex-col bg-gray-100">
+        <div className="flex-1 flex flex-col">
           {
             List.length(schoolCoaches) == List.length(state.courseCoaches)
             || ListUtils.isEmpty(schoolCoaches) ?
@@ -175,7 +175,7 @@ let make =
               </div> :
               ReasonReact.null
           }
-          <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
+          <div className="px-6 pb-4 mt-5 flex flex-1">
             <div className="max-w-2xl w-full mx-auto relative">
               {
                 state.courseCoaches |> ListUtils.isEmpty ?

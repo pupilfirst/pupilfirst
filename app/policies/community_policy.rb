@@ -12,9 +12,6 @@ class CommunityPolicy < ApplicationPolicy
       # Pupilfirst doesn't have community.
       return scope.none if current_school.blank?
 
-      # Community is not open for public.
-      return scope.none if user.blank?
-
       # Coach has access to all communities in a school.
       return scope.where(school: current_school) if current_coach.present?
 

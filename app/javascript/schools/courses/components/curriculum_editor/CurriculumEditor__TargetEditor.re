@@ -577,8 +577,14 @@ let make =
                       </label>
                       <div id="prerequisite_targets" className="mb-6">
                         <School__SelectBox
-                          items={state.prerequisiteTargets}
-                          multiSelectCB=multiSelectPrerequisiteTargetsCB
+                          items={
+                            state.prerequisiteTargets
+                            |> School__SelectBox.convertOldItems
+                          }
+                          selectCB={
+                            multiSelectPrerequisiteTargetsCB
+                            |> School__SelectBox.convertOldCallback
+                          }
                         />
                       </div>
                     </div> :
@@ -717,8 +723,14 @@ let make =
                           </div>
                       }
                       <School__SelectBox
-                        items={state.evaluationCriteria}
-                        multiSelectCB=multiSelectEvaluationCriterionCB
+                        items={
+                          state.evaluationCriteria
+                          |> School__SelectBox.convertOldItems
+                        }
+                        selectCB={
+                          multiSelectEvaluationCriterionCB
+                          |> School__SelectBox.convertOldCallback
+                        }
                       />
                     </div>
                   | MarkAsComplete => ReasonReact.null

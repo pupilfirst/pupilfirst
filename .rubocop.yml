@@ -8,8 +8,8 @@ AllCops:
 
 # Rails specific
 
-Rails:
-  Enabled: true
+require: rubocop-rails
+
 Rails/OutputSafety:
   Enabled: false # This disallows .html_safe
 Rails/TimeZone:
@@ -28,6 +28,8 @@ Style/FormatStringToken:
 Style/DoubleNegation:
   Enabled: false
 Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+Layout/AlignArguments:
   EnforcedStyle: with_fixed_indentation
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
@@ -51,6 +53,8 @@ Lint/ShadowingOuterLocalVariable: # shadowing is a language feature - we should 
 
 # Concessions (remove these if possible / appropriate).
 
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: false # TODO: Enable this once it stops begin buggy. https://github.com/rubocop-hq/rubocop/issues/7212
 Bundler/OrderedGems:
   Enabled: false # we have a ton of gems, grouped arbitrarily. Could be tackled later.
 Style/FrozenStringLiteralComment:

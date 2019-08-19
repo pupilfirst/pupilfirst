@@ -302,7 +302,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken, _children) => 
             type_="submit"
             key="sc-images-editor__update-button"
             disabled={updateButtonDisabled(state)}
-            className="btn btn-primary-500 btn-large mt-6">
+            className="btn btn-primary btn-large mt-6">
             {updateButtonText(state.updating) |> str}
           </button>
         </div>

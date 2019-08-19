@@ -21,10 +21,6 @@ module ContentBlocksQuery = [%graphql
         id
         blockType
         sortIndex
-        file {
-          url
-          name
-        }
         content {
           ... on ImageBlock {
             caption

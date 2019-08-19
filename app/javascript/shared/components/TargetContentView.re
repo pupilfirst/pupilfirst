@@ -3,8 +3,6 @@
 
 let str = React.string;
 
-open CoursesCurriculum__Types;
-
 let renderBlockClasses = block =>
   switch (block |> ContentBlock.blockType) {
   | Markdown(_) => "mt-6"

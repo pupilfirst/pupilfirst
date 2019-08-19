@@ -252,7 +252,6 @@ let updateNewContentBlock =
     (
       json,
       blockType: ContentBlock.blockType,
-      target,
       sortIndex,
       state,
       createNewContentCB,
@@ -267,8 +266,7 @@ let updateNewContentBlock =
     };
   let contentBlockType =
     json |> field("content", decodeContent(blockType, fileUrl, state));
-  let newContentBlock =
-    ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
+  let newContentBlock = ContentBlock.make(id, contentBlockType, sortIndex);
   createNewContentCB(newContentBlock);
 };
 
@@ -290,7 +288,6 @@ let createContentBlock =
       updateNewContentBlock(
         json,
         blockType,
-        target,
         sortIndex,
         state,
         createNewContentCB,
@@ -341,12 +338,7 @@ let updateContentBlock =
     | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
     };
   let updatedContentBlock =
-    ContentBlock.make(
-      id,
-      updatedContentBlockType,
-      contentBlock |> ContentBlock.targetId,
-      sortIndex,
-    );
+    ContentBlock.make(id, updatedContentBlockType, sortIndex);
   updateContentBlockCB(updatedContentBlock);
 };
 

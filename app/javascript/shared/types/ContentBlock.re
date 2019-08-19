@@ -63,3 +63,20 @@ let sort = blocks => blocks |> List.sort((x, y) => x.sortIndex - y.sortIndex);
 let id = t => t.id;
 let blockType = t => t.blockType;
 let sortIndex = t => t.sortIndex;
+
+let makeMarkdownBlock = markdown => Markdown(markdown);
+let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
+let makeFileBlock = (fileUrl, title, fileName) =>
+  File(fileUrl, title, fileName);
+let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
+
+let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
+
+
+let blockTypeAsString = blockType =>
+  switch (blockType) {
+  | Markdown(_markdown) => "markdown"
+  | File(_url, _title, _filename) => "file"
+  | Image(_url, _caption) => "image"
+  | Embed(_url, _embedCode) => "embed"
+  };

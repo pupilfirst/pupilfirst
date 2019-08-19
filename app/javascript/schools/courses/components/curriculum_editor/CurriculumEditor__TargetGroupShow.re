@@ -92,16 +92,9 @@ let make =
           999,
           Draft,
         );
-      let sampleContentBlock =
-        ContentBlock.make(
-          target##contentBlockId,
-          Markdown(target##sampleContent),
-          targetId,
-          1,
-        );
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));
-      updateTargetCB(newTarget, [sampleContentBlock], false);
+      updateTargetCB(newTarget, false);
       showTargetEditorCB(targetGroupId, newTarget);
     };
     let handleCreateTarget = (title, targetGroupId) => {

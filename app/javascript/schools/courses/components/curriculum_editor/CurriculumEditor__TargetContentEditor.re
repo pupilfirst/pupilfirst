@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-open CurriculumEditor__Types;
-
 let str = React.string;
 
 module SortContentBlockMutation = [%graphql
@@ -24,9 +22,13 @@ module ContentBlocksQuery = [%graphql
         content {
           ... on ImageBlock {
             caption
+            url
+            filename
           }
           ... on FileBlock {
             title
+            url
+            filename
           }
           ... on MarkdownBlock {
             markdown
@@ -70,22 +72,6 @@ let updateContentBlockSorting =
     ();
   };
   None;
-};
-
-let updateContentBlockMasterList =
-    (sortedContentBlocks, updateContentBlocksCB, targetId) => {
-  let updatedCBs =
-    sortedContentBlocks
-    |> List.filter(((_, _, cb, _)) =>
-         switch (cb) {
-         | Some(_) => true
-         | None => false
-         }
-       )
-    |> List.map(((sortIndex, blockType, _, id)) =>
-         ContentBlock.make(id, blockType, targetId, sortIndex)
-       );
-  updateContentBlocksCB(targetId, updatedCBs);
 };
 
 let removeTargetContentCB =
@@ -182,28 +168,9 @@ let updateContentBlockCB = (updateTargetContentBlocks, contentBlock) => {
 
 [@react.component]
 let make =
-    (
-      ~target,
-      ~contentBlocks,
-      ~updateContentBlocksCB,
-      ~updateContentEditorDirtyCB,
-      ~authenticityToken,
-    ) => {
+    (~target, ~contentBlocks, ~updateContentEditorDirtyCB, ~authenticityToken) => {
   let (targetContentBlocks, updateTargetContentBlocks) =
-    React.useState(() =>
-      contentBlocks
-      |> List.sort((x, y) =>
-           ContentBlock.sortIndex(x) - ContentBlock.sortIndex(y)
-         )
-      |> List.mapi((index, cb) =>
-           (
-             index + 1,
-             cb |> ContentBlock.blockType,
-             Some(cb),
-             cb |> ContentBlock.id,
-           )
-         )
-    );
+    React.useState(() => []);
   let (sortContentBlock, toggleSortContentBlock) =
     React.useState(() => false);
 
@@ -231,15 +198,36 @@ let make =
   React.useEffect1(
     () => {
       updateContentEditorDirtyCB(contentEditorDirty);
-
-      updateContentBlockMasterList(
-        targetContentBlocks,
-        updateContentBlocksCB,
-        target |> Target.id,
-      );
       None;
     },
     [|contentEditorDirty|],
+  );
+
+  let initialRender = React.useRef(true);
+
+  React.useEffect1(
+    () => {
+      if (initialRender |> React.Ref.current) {
+        initialRender->React.Ref.setCurrent(false);
+      } else {
+        let cachedContentBlocks =
+          contentBlocks
+          |> List.sort((x, y) =>
+               ContentBlock.sortIndex(x) - ContentBlock.sortIndex(y)
+             )
+          |> List.mapi((index, cb) =>
+               (
+                 index + 1,
+                 cb |> ContentBlock.blockType,
+                 Some(cb),
+                 cb |> ContentBlock.id,
+               )
+             );
+        updateTargetContentBlocks(_ => cachedContentBlocks);
+      };
+      None;
+    },
+    [|contentBlocks|],
   );
 
   [|

@@ -35,6 +35,7 @@ type state = {
   title: string,
   evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
+  contentBlocks: list(ContentBlock.t),
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
   linkToComplete: string,
@@ -60,7 +61,8 @@ type action =
   | UpdateSaving
   | UpdateActiveStep(activeStep)
   | UpdateVisibility(Target.visibility)
-  | UpdateContentEditorDirty(bool);
+  | UpdateContentEditorDirty(bool)
+  | UpdateContentBlocks(list(ContentBlock.t));
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -308,6 +310,7 @@ let reducer = (state, action) =>
       ...state,
       contentEditorDirty,
     }
+  | UpdateContentBlocks(contentBlocks) => {...state, contentBlocks}
   };
 
 let handleEditorClosure = (hideEditorActionCB, state) =>
@@ -321,19 +324,81 @@ let handleEditorClosure = (hideEditorActionCB, state) =>
       hideEditorActionCB() : ()
   };
 
+module ContentBlocksQuery = [%graphql
+  {|
+    query($targetId: ID!, $versionId: ID) {
+      contentBlocks(targetId: $targetId, versionId: $versionId) {
+        id
+        blockType
+        sortIndex
+        content {
+          ... on ImageBlock {
+            caption
+            url
+            filename
+          }
+          ... on FileBlock {
+            title
+            url
+            filename
+          }
+          ... on MarkdownBlock {
+            markdown
+          }
+          ... on EmbedBlock {
+            url
+            embedCode
+          }
+        }
+      }
+  }
+|}
+];
+
+let loadContentBlocks = (target, send, authenticityToken, ()) => {
+  let targetId = target |> Target.id;
+  let response =
+    ContentBlocksQuery.make(~targetId, ())
+    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
+  response
+  |> Js.Promise.then_(result => {
+       let contentBlocks =
+         result##contentBlocks
+         |> Js.Array.map(rawContentBlock => {
+              let id = rawContentBlock##id;
+              let sortIndex = rawContentBlock##sortIndex;
+              let blockType =
+                switch (rawContentBlock##content) {
+                | `MarkdownBlock(content) =>
+                  ContentBlock.Markdown(content##markdown)
+                | `FileBlock(content) =>
+                  File(content##url, content##title, content##filename)
+                | `ImageBlock(content) =>
+                  Image(content##url, content##caption)
+                | `EmbedBlock(content) =>
+                  Embed(content##url, content##embedCode)
+                };
+              ContentBlock.make(id, blockType, sortIndex);
+            })
+         |> Array.to_list;
+       send(UpdateContentBlocks(contentBlocks));
+       Js.Promise.resolve();
+     })
+  |> ignore;
+  None;
+};
+
 [@react.component]
 let make =
     (
       ~target,
       ~targetGroupId,
-      ~contentBlocks,
       ~evaluationCriteria,
       ~targets,
       ~targetGroupIdsInLevel,
       ~authenticityToken,
       ~updateTargetCB,
       ~hideEditorActionCB,
-      ~updateContentBlocksCB,
     ) => {
   let initialState = {
     title: target |> Target.title,
@@ -344,6 +409,7 @@ let make =
         eligibleTargets(targets, targetGroupIdsInLevel),
         target,
       ),
+    contentBlocks: [],
     quiz: handleQuiz(target),
     linkToComplete:
       switch (target |> Target.linkToComplete) {
@@ -362,6 +428,11 @@ let make =
   };
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
+
+  React.useEffect1(
+    loadContentBlocks(target, dispatch, authenticityToken),
+    [|target |> Target.id|],
+  );
 
   let targetEvaluated = () =>
     switch (state.methodOfCompletion) {
@@ -427,7 +498,7 @@ let make =
         state.visibility,
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget, contentBlocks, closeEditor);
+    updateTargetCB(newTarget, closeEditor);
     closeEditor ? () : dispatch(UpdateSaving);
   };
 
@@ -549,8 +620,7 @@ let make =
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
                   target
-                  contentBlocks
-                  updateContentBlocksCB
+                  contentBlocks={state.contentBlocks}
                   updateContentEditorDirtyCB
                   authenticityToken
                 />
@@ -925,14 +995,12 @@ module Jsx2 = {
       (
         ~target,
         ~targetGroupId,
-        ~contentBlocks,
         ~evaluationCriteria,
         ~targets,
         ~targetGroupIdsInLevel,
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~updateContentBlocksCB,
         _children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -940,14 +1008,12 @@ module Jsx2 = {
       makeProps(
         ~target,
         ~targetGroupId,
-        ~contentBlocks,
         ~evaluationCriteria,
         ~targets,
         ~targetGroupIdsInLevel,
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~updateContentBlocksCB,
         (),
       ),
       _children,

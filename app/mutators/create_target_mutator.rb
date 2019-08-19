@@ -10,6 +10,7 @@ class CreateTargetMutator < ApplicationMutator
       target = Target.create!(title: title, target_group_id: target_group_id, role: 'founder', target_action_type: 'Todo', visibility: Target::VISIBILITY_DRAFT, safe_to_change_visibility: true, sort_index: sort_index)
       demo_content_block_service = ContentBlocks::DemoMarkdownBlockService.new(target)
       content_block = demo_content_block_service.execute
+      target.target_content_versions.create!(content_blocks: [content_block.id])
       { id: target.id, content_block_id: content_block.id, sample_content: demo_content_block_service.content_block_text }
     end
   end

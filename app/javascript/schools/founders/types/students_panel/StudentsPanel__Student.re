@@ -65,7 +65,7 @@ let encode = (name, teamName, t) =>
       ("email", t.email |> string),
       ("exited", t.exited |> bool),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
-      ("title", t.title |> StringUtils.optionToString |> string),
-      ("affiliation", t.affiliation |> StringUtils.optionToString |> string),
+      ("title", t.title |> OptionUtils.toString |> string),
+      ("affiliation", t.affiliation |> OptionUtils.toString |> string),
     ])
   );

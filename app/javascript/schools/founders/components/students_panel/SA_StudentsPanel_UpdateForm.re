@@ -158,8 +158,8 @@ let make =
       ),
     coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
-    title: StringUtils.optionToString(student |> Student.title),
-    affiliation: StringUtils.optionToString(student |> Student.affiliation),
+    title: student |> Student.title |> OptionUtils.toString,
+    affiliation: student |> Student.affiliation |> OptionUtils.toString,
     saving: false,
   },
   reducer: (action, state) =>

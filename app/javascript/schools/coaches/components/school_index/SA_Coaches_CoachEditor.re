@@ -152,7 +152,7 @@ let make =
           | Some(imageFileName) => imageFileName
           | None => ""
           },
-        affiliation: StringUtils.optionToString(coach |> Coach.affiliation),
+        affiliation: coach |> Coach.affiliation |> OptionUtils.toString,
       }
     },
   reducer: (action, state) =>

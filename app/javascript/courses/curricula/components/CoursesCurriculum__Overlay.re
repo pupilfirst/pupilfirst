@@ -295,7 +295,7 @@ let overlayStatus = (course, target, targetStatus) =>
 let renderLockReason = reason =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fas fa-lock-alt text-lg" />
+    <i className="fas fa-lock text-lg" />
     <span className="ml-2">
       {reason |> TargetStatus.lockReasonToString |> str}
     </span>

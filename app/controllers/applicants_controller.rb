@@ -1,7 +1,7 @@
 class ApplicantsController < ApplicationController
   # GET /enroll/:token
   def enroll
-    @applicant = authorize(policy_scope(Applicant).find_by!(login_token: params[:token]))
+    @applicant = Applicant.find_by(login_token: params[:token])
     if valid_applicant?
       user = Applicants::CreateStudentService.new(@applicant).execute
       sign_in user

@@ -10,7 +10,15 @@ let email: t => string;
 
 let tags: t => list(string);
 
-let updateInfo: (bool, bool, option(string), option(string), t) => t;
+let updateInfo:
+  (
+    ~exited: bool,
+    ~excludedFromLeaderboard: bool,
+    ~title: option(string),
+    ~affiliation: option(string),
+    ~student: t
+  ) =>
+  t;
 
 let encode: (string, string, t) => Js.Json.t;
 

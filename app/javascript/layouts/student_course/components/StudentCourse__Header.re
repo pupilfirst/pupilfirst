@@ -74,18 +74,19 @@ let renderCourseSelector =
   </div>;
 };
 
+let tabClasses = (url: ReasonReactRouter.url, linkTitle) => {
+  let defaultClasses = "student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm ";
+  switch (url.path) {
+  | ["courses", _targetId, pageTitle, ..._] when pageTitle == linkTitle =>
+    defaultClasses ++ "student-course__nav-tab--active"
+  | _ => defaultClasses
+  };
+};
+
 [@react.component]
 let make = (~currentCourseId, ~courses, ~additionalLinks) => {
   let (showCourses, setShowCourses) = React.useState(() => false);
   let url = ReasonReactRouter.useUrl();
-  let tabClasses = linkTitle => {
-    let defaultClasses = "student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm ";
-    switch (url.path) {
-    | ["courses", _targetId, pageTitle, ..._] when pageTitle == linkTitle =>
-      defaultClasses ++ "student-course__nav-tab--active"
-    | _ => defaultClasses
-    };
-  };
 
   <div>
     {
@@ -119,7 +120,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
                    <a
                      key=title
                      href={"/courses/" ++ currentCourseId ++ "/" ++ suffix}
-                     className={tabClasses(suffix)}>
+                     className={tabClasses(url, suffix)}>
                      {title |> str}
                    </a>;
                  })

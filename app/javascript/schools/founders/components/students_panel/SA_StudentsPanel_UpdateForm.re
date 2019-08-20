@@ -72,13 +72,13 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
   let updatedStudent =
-    student
-    |> Student.updateInfo(
-         state.exited,
-         state.excludedFromLeaderboard,
-         Some(state.title),
-         Some(state.affiliation),
-       );
+    Student.updateInfo(
+      ~exited=state.exited,
+      ~excludedFromLeaderboard=state.excludedFromLeaderboard,
+      ~title=Some(state.title),
+      ~affiliation=Some(state.affiliation),
+      ~student,
+    );
   Js.Dict.set(
     payload,
     "founder",

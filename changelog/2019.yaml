@@ -1,5 +1,22 @@
 ---
 changelog:
+- timestamp: '2019-08-20T06:02:52Z'
+  changes:
+  - timestamp: '2019-08-20T06:02:13Z'
+    title: School administrators can now invite others to become admins.
+    category: feature
+  - timestamp: '2019-08-16T09:47:56Z'
+    title: Levels that do not have milestone targets no longer show the option to
+      level up - the level up button wouldn't have worked, but it obviously didn't
+      make sense to show the option either.
+    category: bugfix
+  - timestamp: '2019-08-16T07:50:45Z'
+    title: Schools admins can now export data about student submissions from the administartion
+      interface.
+    category: feature
+  - timestamp: '2019-08-16T07:49:13Z'
+    title: Removed links to archived questions from the community daily digest mail.
+    category: bugfix
 - timestamp: '2019-08-12T07:27:08Z'
   changes:
   - timestamp: '2019-08-12T07:53:54Z'

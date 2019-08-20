@@ -84,5 +84,4 @@ feature "Apply for public courses", js: true do
     expect(page).to have_text("Sign in")
     expect(page).to have_text('User authentication failed. The link you followed appears to be invalid.')
   end
-
 end

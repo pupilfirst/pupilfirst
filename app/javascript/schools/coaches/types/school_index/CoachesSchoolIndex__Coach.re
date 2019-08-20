@@ -10,6 +10,7 @@ type t = {
   connectLink: option(string),
   notifyForSubmission: bool,
   imageFileName: option(string),
+  affiliation: option(string),
 };
 
 let name = t => t.name;
@@ -34,6 +35,8 @@ let exited = t => t.exited;
 
 let imageFileName = t => t.imageFileName;
 
+let affiliation = t => t.affiliation;
+
 let updateInfo = (name, coach) => {...coach, name};
 
 let decode = json =>
@@ -52,21 +55,24 @@ let decode = json =>
     exited: json |> field("exited", bool),
     imageFileName:
       json |> field("imageFileName", nullable(string)) |> Js.Null.toOption,
+    affiliation:
+      json |> field("affiliation", nullable(string)) |> Js.Null.toOption,
   };
 
-let create =
+let make =
     (
-      id,
-      name,
-      imageUrl,
-      email,
-      title,
-      linkedinUrl,
-      public,
-      connectLink,
-      notifyForSubmission,
-      exited,
-      imageFileName,
+      ~id,
+      ~name,
+      ~imageUrl,
+      ~email,
+      ~title,
+      ~linkedinUrl,
+      ~public,
+      ~connectLink,
+      ~notifyForSubmission,
+      ~exited,
+      ~imageFileName,
+      ~affiliation,
     ) => {
   id,
   name,
@@ -79,6 +85,7 @@ let create =
   notifyForSubmission,
   exited,
   imageFileName,
+  affiliation,
 };
 
 let updateList = (coaches, coach) => {

@@ -30,7 +30,8 @@ module Schools
             connectLink: faculty.connect_link,
             notifyForSubmission: faculty.notify_for_submission,
             exited: faculty.exited,
-            imageFileName: faculty.image_filename
+            imageFileName: faculty.image_filename,
+            affiliation: faculty.user.affiliation
           }
         end
       end

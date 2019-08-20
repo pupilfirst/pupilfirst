@@ -26,20 +26,23 @@ let updateInfo: (string, t) => t;
 
 let updateList: (list(t), t) => list(t);
 
+let affiliation: t => option(string);
+
 let imageFileName: t => option(string);
 
-let create:
+let make:
   (
-    int,
-    string,
-    string,
-    string,
-    string,
-    option(string),
-    bool,
-    option(string),
-    bool,
-    bool,
-    option(string)
+    ~id: int,
+    ~name: string,
+    ~imageUrl: string,
+    ~email: string,
+    ~title: string,
+    ~linkedinUrl: option(string),
+    ~public: bool,
+    ~connectLink: option(string),
+    ~notifyForSubmission: bool,
+    ~exited: bool,
+    ~imageFileName: option(string),
+    ~affiliation: option(string)
   ) =>
   t;

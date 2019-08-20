@@ -8,9 +8,10 @@ describe Applicants::CreateStudentService do
   let!(:level_one) { create :level, course: course }
   let(:applicant) { create :applicant, course: course }
 
-  describe '#execute' do
+  describe '#create' do
     it 'create a student account for the applicant' do
-      user = subject.execute
+      student = subject.create
+      user = student.user
 
       # The user should have same name and email
       expect(user.name).to eq(applicant.name)
@@ -24,10 +25,6 @@ describe Applicants::CreateStudentService do
       expect(startup.name).to eq(applicant.name)
       expect(startup.founders.count).to eq(1)
       expect(startup.level).to eq(level_one)
-
-      # Startup should have a founder
-      founder = startup.founders.first
-      expect(founder.user).to eq(user)
 
       # Founder should have tag "Public Signup"
       expect(founder.tag_list).to eq(["Public Signup"])

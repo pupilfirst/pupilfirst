@@ -11,7 +11,7 @@ module CreateApplicantQuery = [%graphql
  |}
 ];
 
-let createApplicantQuery =
+let createApplicant =
     (
       authenticityToken,
       courseId,
@@ -40,9 +40,9 @@ let saveDisabled = (email, name, saving) =>
 
 let buttonText = (email, name, saving) =>
   switch (saving, email == "", isInvalidEmail(email), name == "") {
-  | (true, false | true, false | true, false | true) => "Saving"
-  | (false, true, false | true, false | true) => "Enter your Email"
-  | (false, false, true, false | true) => "Enter a valid Email"
+  | (true, _, _, _) => "Saving"
+  | (false, true, _, _) => "Enter your Email"
+  | (false, false, true, _) => "Enter a valid Email"
   | (false, false, false, true) => "Enter your full name"
   | (false, false, false, false) => "Apply"
   };
@@ -95,7 +95,7 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
     <button
       disabled={saveDisabled(email, name, saving)}
       onClick={
-        createApplicantQuery(
+        createApplicant(
           authenticityToken,
           courseId,
           email,

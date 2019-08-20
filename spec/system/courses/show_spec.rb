@@ -12,16 +12,16 @@ feature "Public view of Course", js: true do
   let(:new_about) { Faker::Lorem.paragraph }
 
   context 'when public user visits a public course' do
+    before do
+      # Update course description
+      public_course.update!(about: new_about)
+    end
+
     scenario 'He can see the course name and link to apply' do
       visit course_path(public_course)
 
       expect(page).to have_content(public_course.name)
       expect(page).to have_link("Apply Now", href: apply_course_path(public_course))
-    end
-
-    before do
-      # update course description
-      public_course.update!(about: new_about)
     end
 
     scenario 'He can see the course about when an about exists' do

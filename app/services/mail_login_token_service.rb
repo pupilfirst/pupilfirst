@@ -1,5 +1,4 @@
 class MailLoginTokenService
-
   # @param resource [User/Applicant]
   # @param referer [String, nil] Referer, if any.
   # @param shared_device [true, false] If the user is logging in from a shared device.

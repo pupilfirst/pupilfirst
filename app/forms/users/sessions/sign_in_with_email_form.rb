@@ -15,7 +15,7 @@ module Users
       validate :email_should_not_have_bounced
 
       def save
-        Mailers::MailLoginTokenService.new(user, referer, shared_device?).execute
+        MailLoginTokenService.new(user, referer, shared_device?).execute
       end
 
       private

@@ -13,7 +13,7 @@ module Schools
       property :prerequisite_target_ids
       property :evaluation_criterion_ids
       property :quiz
-      property :link_to_complete
+      property :link_to_complete, validates: { url: true, allow_blank: true }
       property :archived
 
       validate :target_group_exists

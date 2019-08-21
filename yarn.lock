@@ -780,10 +780,10 @@
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
 
-"@fortawesome/fontawesome-pro@^5.9.0":
-  version "5.9.0"
-  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/fontawesome-pro-5.9.0.tgz#ee27f6c3958e1e6f07ae6d157d017b98a9fc0608"
-  integrity sha512-vb7MJ0S+4FWZajv+iWKikG3QzX0oIAI+tYtlMBVwAyUmddESL/w5/2LCzbc81Vs4esGz0gr+bIem6BeMkIg+Mw==
+"@fortawesome/fontawesome-free@^5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.10.1.tgz#dec28ee02c3fc51da46d53ce4da9d5787312fbd7"
+  integrity sha512-PYncBhgN1l02mwHmczukexmu4yRTjRDAAdcK62jdWSAW8epcnZ9K2win/7rMrffiv/c7XLVDA8vD+yi6WyvbGQ==
 
 "@glennsl/bs-json@^4.0.0":
   version "4.0.0"

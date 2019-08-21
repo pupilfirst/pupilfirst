@@ -278,7 +278,7 @@ let overlayStatus = (course, target, targetStatus) =>
       onClick={_e => closeOverlay(course)}>
       <span
         className="course-overlay__close-button-icon w-8 h-8 bg-gray-200 text-gray-700 border border-gray-400 rounded-full flex justify-center items-center">
-        <i className="fal fa-times text-xl" />
+        <i className="fas fa-times text-xl" />
       </span>
       <span className="block font-semibold text-xs"> {"Close" |> str} </span>
     </button>
@@ -295,7 +295,7 @@ let overlayStatus = (course, target, targetStatus) =>
 let renderLockReason = reason =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fal fa-lock-alt text-lg" />
+    <i className="fas fa-lock text-lg" />
     <span className="ml-2">
       {reason |> TargetStatus.lockReasonToString |> str}
     </span>

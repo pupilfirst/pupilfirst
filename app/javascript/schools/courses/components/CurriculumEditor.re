@@ -259,14 +259,14 @@ let make =
                       ),
                     )
                 }>
-                <i title="edit" className="fas fa-pencil" />
+                <i title="edit" className="fas fa-pencil-alt" />
               </button>
               <button
                 className="btn btn-primary ml-4"
                 onClick={
                   _ => send(UpdateEditorAction(ShowLevelEditor(None)))
                 }>
-                <i className="fal fa-layer-plus mr-2 text-lg" />
+                <i className="fas fa-plus-square mr-2 text-lg" />
                 <span> {"Create Level" |> str} </span>
               </button>
             </div>
@@ -309,7 +309,7 @@ let make =
             }
             className="target-group__create flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 hover:border-primary-400 rounded-lg mt-12 cursor-pointer">
             <span className="flex bg-gray-200 p-2 rounded-full">
-              <i className="fal fa-plus-circle text-2xl" />
+              <i className="fas fa-plus-circle text-2xl" />
             </span>
             <h4 className="font-semibold ml-2">
               {"Create a target group" |> str}

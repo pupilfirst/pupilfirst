@@ -34,7 +34,7 @@ let statusBar = (~color, ~text) => {
     switch (color) {
     | "green" =>
       <span>
-        <i className="fas fa-badge fa-stack-2x" />
+        <i className="fas fa-certificate fa-stack-2x" />
         <i className="fas fa-check fa-stack-1x fa-inverse" />
       </span>
     | _anyOtherColor =>
@@ -64,7 +64,7 @@ let submissionStatusIcon = (~passed) => {
       {
         passed ?
           <span className="fa-stack text-green-500 text-lg">
-            <i className="fas fa-badge fa-stack-2x" />
+            <i className="fas fa-certificate fa-stack-2x" />
             <i className="fas fa-check fa-stack-1x fa-inverse" />
           </span> :
           <i

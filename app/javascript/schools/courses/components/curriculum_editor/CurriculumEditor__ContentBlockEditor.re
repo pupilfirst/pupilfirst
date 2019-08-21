@@ -586,7 +586,7 @@ let make =
                           href=url>
                           <div className="flex items-center">
                             <FaIcon
-                              classes="text-4xl text-gray-800 fal fa-file-alt"
+                              classes="text-4xl text-gray-800 far fa-file-alt"
                             />
                             <div className="pl-4 leading-tight">
                               <div className="text-lg font-semibold">

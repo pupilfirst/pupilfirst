@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_16_090723) do
+ActiveRecord::Schema.define(version: 2019_08_19_120730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_090723) do
     t.string "email"
     t.string "name"
     t.string "login_token"
-    t.datetime "login_token_sent_at"
+    t.datetime "login_mail_sent_at"
     t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -232,7 +232,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_090723) do
     t.datetime "ends_at"
     t.string "description"
     t.boolean "enable_leaderboard", default: false
-    t.boolean "enable_public_signup", default: false
+    t.boolean "public_signup", default: false
     t.text "about"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end

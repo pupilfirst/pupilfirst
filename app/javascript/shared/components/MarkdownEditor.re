@@ -75,8 +75,8 @@ type previewButtonPosition =
 
 let commandIcon = command =>
   switch (command) {
-  | Bold => <i className="far fa-bold" />
-  | Italic => <i className="far fa-italic" />
+  | Bold => <i className="fas fa-bold" />
+  | Italic => <i className="fas fa-italic" />
   };
 
 let commandToTitle = command =>

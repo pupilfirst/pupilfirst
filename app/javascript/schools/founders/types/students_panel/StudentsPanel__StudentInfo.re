@@ -27,7 +27,7 @@ let encode = t =>
     ])
   );
 
-let create = (name, email, title, affiliation, tags) => {
+let make = (name, email, title, affiliation, tags) => {
   name,
   email,
   title,

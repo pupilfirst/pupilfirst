@@ -32,7 +32,7 @@ let signOutLink = authenticityToken =>
           className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
           type_="submit"
           value="Submit">
-          <FaIcon classes="far fa-power-off" />
+          <FaIcon classes="fas fa-power-off" />
           <span className="ml-2"> {"Sign Out" |> str} </span>
         </button>
       </div>
@@ -47,7 +47,7 @@ let signInLink = () =>
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
         href="/users/sign_in">
-        <FaIcon classes="far fa-power-off" />
+        <FaIcon classes="fas fa-power-off" />
         <span className="ml-2"> {"Sign In" |> str} </span>
       </a>
     </div>

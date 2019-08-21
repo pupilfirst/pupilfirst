@@ -14,6 +14,7 @@ feature 'Coaches Index', js: true do
   let(:new_coach_name) { Faker::Name.name }
   let(:new_coach_email) { Faker::Internet.email(new_coach_name) }
   let(:new_coach_title) { Faker::Lorem.words(2).join(' ') }
+  let(:new_coach_affiliation) { Faker::Lorem.words(2).join(" ") }
 
   let(:updated_coach_name) { Faker::Name.name }
   let(:updated_coach_title) { Faker::Lorem.words(2).join(' ') }
@@ -35,6 +36,7 @@ feature 'Coaches Index', js: true do
     fill_in 'Name', with: new_coach_name
     fill_in 'Email', with: new_coach_email
     fill_in 'Title', with: new_coach_title
+    fill_in 'Affiliation', with: new_coach_affiliation
 
     click_button 'Create Coach'
 
@@ -49,6 +51,7 @@ feature 'Coaches Index', js: true do
     expect(user.name).to eq(new_coach_name)
     expect(user.title).to eq(new_coach_title)
     expect(user.email).to eq(new_coach_email)
+    expect(user.affiliation).to eq(new_coach_affiliation)
 
     # Edit the coach to add remaining fields.
     find("p", text: new_coach_name).click
@@ -58,6 +61,7 @@ feature 'Coaches Index', js: true do
     attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
     fill_in 'Name', with: updated_coach_name
     fill_in 'Title', with: updated_coach_title
+    fill_in 'Affiliation', with: ''
     click_button 'Update Coach'
 
     expect(page).to have_text('Coach updated successfully')
@@ -68,6 +72,7 @@ feature 'Coaches Index', js: true do
     expect(user.avatar.filename).to eq('human.png')
     expect(user.reload.name).to eq(updated_coach_name)
     expect(user.title).to eq(updated_coach_title)
+    expect(user.affiliation).to eq(nil)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

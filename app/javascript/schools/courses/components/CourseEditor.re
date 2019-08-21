@@ -12,7 +12,7 @@ module CoursesQuery = [%graphql
       passGrade
       enableLeaderboard
       about
-      enablePublicSignup
+      publicSignup
       gradesAndLabels {
         grade
         label
@@ -87,7 +87,7 @@ let make = (~authenticityToken, _children) => {
                   gradesAndLabels,
                   rawCourse##enableLeaderboard,
                   rawCourse##about,
-                  rawCourse##enablePublicSignup,
+                  rawCourse##publicSignup,
                 );
               })
            |> Array.to_list;
@@ -120,7 +120,7 @@ let make = (~authenticityToken, _children) => {
           <button
             className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer"
             onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
-            <i className="far fa-plus-circle text-lg" />
+            <i className="fas fa-plus-circle text-lg" />
             <span className="font-semibold ml-2">
               {"Add New Course" |> str}
             </span>

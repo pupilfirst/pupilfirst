@@ -23,7 +23,7 @@ let iconSpan = (removeAttachmentCB, iconClasses, attachment) =>
     let faClasses =
       switch (attachment) {
       | SubmissionAttachment.File(_, _, _) => "far fa-file"
-      | Link(_) => "far fa-link"
+      | Link(_) => "fas fa-link"
       };
     <span className={"flex p-2 " ++ iconClasses}>
       <i className=faClasses />

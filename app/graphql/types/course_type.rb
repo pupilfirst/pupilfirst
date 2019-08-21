@@ -9,7 +9,7 @@ module Types
     field :grades_and_labels, [Types::GradeAndLabelType], null: false
     field :enable_leaderboard, Boolean, null: false
     field :about, String, null: true
-    field :enable_public_signup, Boolean, null: false
+    field :public_signup, Boolean, null: false
 
     def grades_and_labels
       object.grade_labels.map do |grade, label|

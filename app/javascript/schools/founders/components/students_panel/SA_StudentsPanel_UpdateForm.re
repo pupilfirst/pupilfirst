@@ -72,13 +72,13 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
   let updatedStudent =
-    student
-    |> Student.updateInfo(
-         state.exited,
-         state.excludedFromLeaderboard,
-         Some(state.title),
-         Some(state.affiliation),
-       );
+    Student.updateInfo(
+      ~exited=state.exited,
+      ~excludedFromLeaderboard=state.excludedFromLeaderboard,
+      ~title=Some(state.title),
+      ~affiliation=Some(state.affiliation),
+      ~student,
+    );
   Js.Dict.set(
     payload,
     "founder",
@@ -158,8 +158,8 @@ let make =
       ),
     coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
-    title: StringUtils.optionToString(student |> Student.title),
-    affiliation: StringUtils.optionToString(student |> Student.affiliation),
+    title: student |> Student.title |> OptionUtils.toString,
+    affiliation: student |> Student.affiliation |> OptionUtils.toString,
     saving: false,
   },
   reducer: (action, state) =>
@@ -206,7 +206,7 @@ let make =
             title="close"
             onClick={_e => closeFormCB()}
             className="flex items-center justify-center bg-gray-200 text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-            <i className="fal fa-times text-xl" />
+            <i className="fas fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">

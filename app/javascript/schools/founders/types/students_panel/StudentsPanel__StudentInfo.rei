@@ -12,4 +12,4 @@ let affiliation: t => string;
 
 let encode: t => Js.Json.t;
 
-let create: (string, string, string, string, list(string)) => t;
+let make: (string, string, string, string, list(string)) => t;

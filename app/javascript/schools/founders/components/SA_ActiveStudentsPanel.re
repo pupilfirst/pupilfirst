@@ -414,7 +414,7 @@ let make =
                   <button
                     onClick={_e => send(UpdateFormVisible(CreateForm))}
                     className="btn btn-primary ml-4">
-                    <i className="far fa-user-plus mr-2" />
+                    <i className="fas fa-user-plus mr-2" />
                     <span> {"Add New Students" |> str} </span>
                   </button>
               }
@@ -447,7 +447,7 @@ let make =
                 </p>
                 <FaIcon.Jsx2
                   classes={
-                    "far ml-1 text-sm"
+                    "fas ml-1 text-sm"
                     ++ (
                       state.filterVisible ?
                         " fa-chevron-up" : " fa-chevron-down"

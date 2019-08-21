@@ -13,9 +13,9 @@ class CreateApplicantMutator < ApplicationMutator
 
   def save
     Applicant.transaction do
-      applicant = persisted_applicant || Applicant.create!(email: email, course: course, name: name)
-      Applicants::MailLoginTokenService.new(applicant).execute
+      MailLoginTokenService.new(applicant).execute
     end
+    true
   end
 
   private
@@ -25,12 +25,16 @@ class CreateApplicantMutator < ApplicationMutator
     true
   end
 
+  def applicant
+    @applicant ||= Applicant.with_email(email).where(course: course).first_or_create!(email: email, course: course, name: name)
+  end
+
   def persisted_applicant
     @persisted_applicant ||= Applicant.with_email(email).where(course: course).first
   end
 
   def course
-    @course ||= current_school.courses.where(id: course_id, enable_public_signup: true).first
+    @course ||= current_school.courses.where(id: course_id, public_signup: true).first
   end
 
   def course_must_exist
@@ -40,11 +44,9 @@ class CreateApplicantMutator < ApplicationMutator
   end
 
   def ensure_time_between_requests
-    return if persisted_applicant.blank?
+    return if persisted_applicant.blank? && persisted_applicant&.login_mail_sent_at.blank?
 
-    return if persisted_applicant.login_token_sent_at.blank?
-
-    time_since_last_mail = Time.zone.now - persisted_applicant.login_token_sent_at
+    time_since_last_mail = Time.zone.now - persisted_applicant.login_mail_sent_at
 
     return if time_since_last_mail > 2.minutes
 
@@ -54,7 +56,7 @@ class CreateApplicantMutator < ApplicationMutator
   def not_a_student
     return if course.blank?
 
-    return unless course.users.where(email: email).any?
+    return if course.users.where(email: email).empty?
 
     errors[:base] << "Already enrolled in #{course.name} course"
   end

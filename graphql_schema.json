@@ -163,22 +163,6 @@
               "deprecationReason": null
             },
             {
-              "name": "enablePublicSignup",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "endsAt",
               "description": null,
               "args": [],
@@ -272,6 +256,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "publicSignup",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
                   "ofType": null
                 }
               },
@@ -1114,7 +1114,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "enablePublicSignup",
+                  "name": "publicSignup",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -2031,7 +2031,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "enablePublicSignup",
+                  "name": "publicSignup",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

@@ -297,7 +297,7 @@ let renderSignInWithEmail =
             className="btn btn-success btn-large text-center w-full">
             {
               saving ?
-                <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
+                <FaIcon classes="fas fa-spinner fa-spin mr-2" /> :
                 ReasonReact.null
             }
             <span>
@@ -319,7 +319,7 @@ let renderSignInWithEmail =
             className="btn btn-primary btn-large text-center w-full">
             {
               saving ?
-                <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
+                <FaIcon classes="fas fa-spinner fa-spin mr-2" /> :
                 ReasonReact.null
             }
             <span>
@@ -369,8 +369,7 @@ let renderForgotPassword =
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
       {
         saving ?
-          <FaIcon classes="fal fa-spinner-third fa-spin mr-2" /> :
-          ReasonReact.null
+          <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null
       }
       <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
     </button>

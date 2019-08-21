@@ -6,22 +6,22 @@ feature "Public view of Course", js: true do
   # The basics.
   let(:school) { create :school, :current }
   let(:school_2) { create :school }
-  let(:public_course) { create :course, school: school, enable_public_signup: true }
+  let(:public_course) { create :course, school: school, public_signup: true }
   let(:private_course) { create :course, school: school }
-  let(:public_course_in_school_2) { create :course, school: school_2, enable_public_signup: true }
+  let(:public_course_in_school_2) { create :course, school: school_2, public_signup: true }
   let(:new_about) { Faker::Lorem.paragraph }
 
   context 'when public user visits a public course' do
+    before do
+      # Update course description
+      public_course.update!(about: new_about)
+    end
+
     scenario 'He can see the course name and link to apply' do
       visit course_path(public_course)
 
       expect(page).to have_content(public_course.name)
       expect(page).to have_link("Apply Now", href: apply_course_path(public_course))
-    end
-
-    before do
-      # update course description
-      public_course.update!(about: new_about)
     end
 
     scenario 'He can see the course about when an about exists' do

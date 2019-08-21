@@ -7,7 +7,7 @@ module Mutations
     argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
     argument :enable_leaderboard, Boolean, required: true
     argument :about, String, required: true
-    argument :enable_public_signup, Boolean, required: true
+    argument :public_signup, Boolean, required: true
 
     description "Update a course."
 

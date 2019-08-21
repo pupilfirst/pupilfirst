@@ -31,8 +31,9 @@ let exited = t => t.exited;
 
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
-let updateInfo = (exited, excludedFromLeaderboard, title, affiliation, t) => {
-  ...t,
+let updateInfo =
+    (~exited, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+  ...student,
   exited,
   excludedFromLeaderboard,
   title,
@@ -64,7 +65,7 @@ let encode = (name, teamName, t) =>
       ("email", t.email |> string),
       ("exited", t.exited |> bool),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
-      ("title", t.title |> StringUtils.optionToString |> string),
-      ("affiliation", t.affiliation |> StringUtils.optionToString |> string),
+      ("title", t.title |> OptionUtils.toString |> string),
+      ("affiliation", t.affiliation |> OptionUtils.toString |> string),
     ])
   );

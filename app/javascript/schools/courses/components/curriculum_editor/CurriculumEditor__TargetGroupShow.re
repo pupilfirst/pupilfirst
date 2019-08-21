@@ -164,7 +164,7 @@ let make =
                 "create-target-input" ++ (targetGroup |> TargetGroup.id)
               }
               className="absolute flex items-center h-full cursor-pointer pl-4">
-              <i className="fal fa-plus-circle text-2xl" />
+              <i className="fas fa-plus-circle text-2xl" />
             </label>
             <input
               id={"create-target-input" ++ (targetGroup |> TargetGroup.id)}

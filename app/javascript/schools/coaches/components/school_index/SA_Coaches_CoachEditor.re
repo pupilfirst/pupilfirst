@@ -27,6 +27,7 @@ type state = {
   hasEmailError: bool,
   hasLinkedInUrlError: bool,
   hasConnectLinkError: bool,
+  affiliation: string,
 };
 
 type action =
@@ -39,6 +40,7 @@ type action =
   | UpdateNotifyForSubmission(bool)
   | UpdateImageFileName(string)
   | UpdateExited(bool)
+  | UpdateAffiliation(string)
   | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("SA_Coaches_CoachEditor");
@@ -118,6 +120,7 @@ let make =
         hasLinkedInUrlError: false,
         hasConnectLinkError: false,
         imageFileName: "",
+        affiliation: "",
       }
     | Some(coach) => {
         name: coach |> Coach.name,
@@ -149,6 +152,7 @@ let make =
           | Some(imageFileName) => imageFileName
           | None => ""
           },
+        affiliation: coach |> Coach.affiliation |> OptionUtils.toString,
       }
     },
   reducer: (action, state) =>
@@ -182,6 +186,8 @@ let make =
       ReasonReact.Update({...state, imageFileName, dirty: true})
     | UpdateExited(exited) =>
       ReasonReact.Update({...state, exited, dirty: true})
+    | UpdateAffiliation(affiliation) =>
+      ReasonReact.Update({...state, affiliation, dirty: true})
     },
   render: ({state, send}) => {
     let formId = "coach-create-form";
@@ -189,18 +195,19 @@ let make =
       let id = json |> Json.Decode.(field("id", int));
       let imageUrl = json |> Json.Decode.(field("image_url", string));
       let newCoach =
-        Coach.create(
-          id,
-          state.name,
-          imageUrl,
-          state.email,
-          state.title,
-          Some(state.linkedinUrl),
-          state.public,
-          Some(state.connectLink),
-          state.notifyForSubmission,
-          state.exited,
-          Some(state.imageFileName),
+        Coach.make(
+          ~id,
+          ~name=state.name,
+          ~imageUrl,
+          ~email=state.email,
+          ~title=state.title,
+          ~linkedinUrl=Some(state.linkedinUrl),
+          ~public=state.public,
+          ~connectLink=Some(state.connectLink),
+          ~notifyForSubmission=state.notifyForSubmission,
+          ~exited=state.exited,
+          ~imageFileName=Some(state.imageFileName),
+          ~affiliation=Some(state.affiliation),
         );
       switch (coach) {
       | Some(_) =>
@@ -298,7 +305,7 @@ let make =
             title="close"
             onClick={_e => closeFormCB()}
             className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-            <i className="fal fa-times text-xl" />
+            <i className="fas fa-times text-xl" />
           </button>
         </div>
         <div className="drawer-right-form w-full">
@@ -396,6 +403,29 @@ let make =
                     <School__InputGroupError.Jsx2
                       message="is not a valid title"
                       active={state.hasTitleError}
+                    />
+                  </div>
+                  <div className="mt-5">
+                    <label
+                      className="inline-block tracking-wide text-xs font-semibold"
+                      htmlFor="affiliation">
+                      {"Affiliation" |> str}
+                    </label>
+                    <input
+                      value={state.affiliation}
+                      onChange={
+                        event =>
+                          send(
+                            UpdateAffiliation(
+                              ReactEvent.Form.target(event)##value,
+                            ),
+                          )
+                      }
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="affiliation"
+                      name="faculty[affiliation]"
+                      type_="text"
+                      placeholder="Acme Inc., Acme University, etc."
                     />
                   </div>
                   <div className="mt-5">

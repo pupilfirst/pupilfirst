@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("../shared/background_patterns.css")|}];
-[%bs.raw {|require("./apply.css")|}];
+[%bs.raw {|require("./CoursesApply__Root.css")|}];
 let emailSentIcon: string = [%raw "require('./images/email-sent-icon.svg')"];
 let str = React.string;
 
@@ -10,7 +10,7 @@ type views =
 
 let setViewEmailSent = (setView, ()) => setView(_ => EmailSent);
 
-let renderEmailSent = () =>
+let emailSentMessage = () =>
   <div className="max-w-sm mx-auto">
     <img className="mx-auto w-44 sm:w-48" src=emailSentIcon />
     <div className="text-lg sm:text-2xl font-bold text-center mt-4">
@@ -54,7 +54,7 @@ let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
                   courseId
                   setViewEmailSent={setViewEmailSent(setView)}
                 />
-              | EmailSent => renderEmailSent()
+              | EmailSent => emailSentMessage()
               }
             }
           </div>

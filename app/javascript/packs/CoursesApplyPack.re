@@ -16,15 +16,10 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
-    ~id="courses-apply",
-    ~attribute="data-json-props",
-    (),
-  )
-  |> decodeProps;
+  DomUtils.parseJsonAttribute(~id="courses-apply", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoursesApply
+  <CoursesApply__Root
     authenticityToken={props.authenticityToken}
     courseName={props.courseName}
     courseDescription={props.courseDescription}

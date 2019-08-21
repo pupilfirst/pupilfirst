@@ -523,7 +523,7 @@ let make =
           title="close"
           onClick={_ => handleEditorClosure(hideEditorActionCB, state)}
           className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-          <i className="fal fa-times text-xl" />
+          <i className="fas fa-times text-xl" />
         </button>
       </div>
       <div
@@ -844,7 +844,7 @@ let make =
                           }
                         )
                         className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
-                        <i className="far fa-plus-circle text-lg" />
+                        <i className="fas fa-plus-circle text-lg" />
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}
                         </h5>
@@ -964,7 +964,7 @@ let make =
                       )
                       className="btn btn-large btn-primary">
                       <span className="mr-2"> {"Next Step" |> str} </span>
-                      <i className="far fa-arrow-right text-sm" />
+                      <i className="fas fa-arrow-right text-sm" />
                     </button>
                   </div>
                 | TargetActions =>

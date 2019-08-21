@@ -1,18 +1,17 @@
 <%
-  school_name = @school.name
-  login_url = enroll_applicants_url(@applicant.login_token)
+  login_url = user_token_url(@url_options)
 %>
 
 <% content_for :title do %>
-  Verify Your Email Address
+  Sign In to <%= @school_name%>
 <% end %>
 
 <% content_for :subtitle do %>
-  We're happy you're here. Let's get your email address verified:
+  This is a one-time link to sign in to <%= @school_name%>
 <% end %>
 
 <% content_for :title_button_text do %>
-  Click to Verify Email
+  Sign In
 <% end %>
 
 <% content_for(:title_button_link, login_url) %>
@@ -23,15 +22,18 @@
 
 <% content_for :body do %>
   <p>
-    To activate your  <%= school_name %> Account, please verify your email address.
-    Your account will not be created until your email address is confirmed.
+    Please <%= link_to 'click here', login_url%> to login to your <%= @school_name%> account.
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>
+
+  <p>
+    Please note that this is a private URL and should not be shared.
+  </p>
 <% end %>
 
 <% content_for(:signature) do %>
   <div>
-    <%= school_name %>
+    <%= @school_name %>
   </div>
 <% end %>

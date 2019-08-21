@@ -263,7 +263,7 @@ let make =
                     Overview,
                     "/school",
                     shrunk,
-                    "fal fa-eye",
+                    "fas fa-eye",
                     "Overview",
                   )
                 }
@@ -275,7 +275,7 @@ let make =
                     SchoolCoaches,
                     "/school/coaches",
                     shrunk,
-                    "fal fa-chalkboard-teacher",
+                    "fas fa-chalkboard-teacher",
                     "Coaches",
                   )
                 }
@@ -287,7 +287,7 @@ let make =
                     Settings(Customization),
                     "/school/customize",
                     shrunk,
-                    "fal fa-cog",
+                    "fas fa-cog",
                     "Settings",
                   )
                 }
@@ -299,7 +299,7 @@ let make =
                     Courses,
                     "/school/courses",
                     shrunk,
-                    "fal fa-books",
+                    "fas fa-book",
                     "Courses",
                   )
                 }
@@ -335,7 +335,7 @@ let make =
                     Communities,
                     "/school/communities",
                     shrunk,
-                    "fal fa-users-class",
+                    "fas fa-users",
                     "Communities",
                   )
                 }
@@ -348,8 +348,7 @@ let make =
       <ul>
         {
           isStudent ?
-            bottomLink("/home", shrunk, "fal fa-home-alt", "Home") :
-            React.null
+            bottomLink("/home", shrunk, "fas fa-home", "Home") : React.null
         }
         {
           switch (reviewPath) {
@@ -357,7 +356,7 @@ let make =
             bottomLink(
               path,
               shrunk,
-              "fal fa-clipboard-check",
+              "fas fa-clipboard-check",
               "Review Submissions",
             )
           | None => React.null
@@ -376,7 +375,7 @@ let make =
               />,
               ~props={"data-method": "delete"},
               [|
-                <i className="fal fa-sign-out fa-fw" />,
+                <i className="fas fa-sign-out-alt fa-fw" />,
                 shrunk ?
                   React.null :
                   <span className="ml-2"> {"Sign Out" |> str} </span>,

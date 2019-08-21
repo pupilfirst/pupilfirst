@@ -44,7 +44,7 @@ let formInvalid = state =>
 let handleAdd = (state, send, addToListCB) =>
   if (!formInvalid(state)) {
     addToListCB(
-      StudentInfo.create(
+      StudentInfo.make(
         state.name,
         state.email,
         state.title,

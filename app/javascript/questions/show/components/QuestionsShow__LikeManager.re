@@ -47,7 +47,7 @@ let iconClasses = (liked, saving) => {
     } else if (liked) {
       " fas fa-thumbs-up cursor-pointer text-primary-400";
     } else {
-      " fal fa-thumbs-up cursor-pointer";
+      " far fa-thumbs-up cursor-pointer";
     }
   );
 };

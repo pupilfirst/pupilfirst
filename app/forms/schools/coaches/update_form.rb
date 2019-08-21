@@ -11,6 +11,7 @@ module Schools
       property :public
       property :image, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes }, allow_blank: true }
       property :school_id, virtual: true, validates: { presence: true }
+      property :affiliation, virtual: true
 
       def save
         Faculty.transaction do
@@ -36,7 +37,8 @@ module Schools
         {
           name: name,
           title: title,
-          linkedin_url: linkedin_url
+          linkedin_url: linkedin_url,
+          affiliation: affiliation
         }
       end
 

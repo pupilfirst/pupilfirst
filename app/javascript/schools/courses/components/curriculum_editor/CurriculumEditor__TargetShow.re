@@ -28,7 +28,7 @@ let make = (~target, ~targetGroup, ~showTargetEditorCB, _children) => {
         | Draft =>
           <span
             className="target-group__target-draft-pill items-center leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400">
-            <i className="far fa-file-signature text-sm" />
+            <i className="fas fa-file-signature text-sm" />
             <span className="ml-1"> {"Draft" |> str} </span>
           </span>
         | _ => React.null

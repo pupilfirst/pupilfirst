@@ -28,7 +28,7 @@ let search =
             onMouseDown=(_e => handleClick(searchString, send, addTagCB))
             className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 rounded-lg px-2 py-px mt-1 mr-2 text-xs overflow-hidden">
             {searchString |> str}
-            <i className="fal fa-plus ml-1 text-sm text-primary-600" />
+            <i className="fas fa-plus ml-1 text-sm text-primary-600" />
           </span>,
         ];
       } else {
@@ -92,7 +92,7 @@ let make =
                        title={"Remove tag " ++ tag}
                        className="flex items-center px-2 h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
                        onClick={_e => handleClick(tag, send, removeTagCB)}>
-                       <i className="fal fa-times" />
+                       <i className="fas fa-times" />
                      </span>
                    </div>
                  )

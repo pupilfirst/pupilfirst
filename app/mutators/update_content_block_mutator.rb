@@ -16,17 +16,19 @@ class UpdateContentBlockMutator < ApplicationMutator
   end
 
   def update_content_block
-    case block_type
-      when 'markdown'
-        content_block.update!(content: { markdown: text })
-      when 'image'
-        content_block.update!(content: { caption: text })
-      when 'file'
-        content_block.update!(content: { title: text })
-      else
-        raise 'Not a valid block type'
+    ContentBlock.transaction do
+      case block_type
+        when 'markdown'
+          content_block.update!(content: { markdown: text })
+        when 'image'
+          content_block.update!(content: { caption: text })
+        when 'file'
+          content_block.update!(content: { title: text })
+        else
+          raise 'Not a valid block type'
+      end
+      handle_content_version
     end
-    handle_content_version
   end
 
   private

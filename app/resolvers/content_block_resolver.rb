@@ -1,10 +1,11 @@
 class ContentBlockResolver < ApplicationResolver
   def collection(target_id, version_id)
     if authorized?(target_id)
+      target = Target.find(target_id.to_i)
       if version_id.present?
-        ContentBlock.where(id: TargetContentVersion.find(version_id).content_blocks).with_attached_file
+        ContentBlock.where(id: target.target_content_versions.find(version_id)&.content_blocks).with_attached_file
       else
-        ContentBlock.where(id: Target.find(target_id.to_i).latest_content_version&.content_blocks).with_attached_file
+        ContentBlock.where(id: target.latest_content_version&.content_blocks).with_attached_file
       end
     else
       School.none

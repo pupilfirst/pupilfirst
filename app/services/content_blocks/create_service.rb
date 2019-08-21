@@ -50,7 +50,7 @@ module ContentBlocks
     end
 
     def handle_content_version(content_sort_indices, new_content_block)
-      if latest_content_version.updated_at.to_date == Date.today
+      if latest_content_version.present? && latest_content_version.updated_at.to_date == Date.today
         sort_content_blocks(content_sort_indices)
         latest_content_version.content_blocks << new_content_block.id
         latest_content_version.save!

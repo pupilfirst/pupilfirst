@@ -438,7 +438,6 @@ feature 'Curriculum Editor', js: true do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       target = target_5
-
       # Open the target editor
       find('.target-group__target', text: target.title).click
       expect(page).to have_selector('.content-block__content', count: 4)

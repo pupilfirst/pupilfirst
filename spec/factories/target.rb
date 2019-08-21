@@ -35,6 +35,7 @@ FactoryBot.define do
         create(:content_block, :markdown, target: target)
         create(:content_block, :image, target: target)
         create(:content_block, :file, target: target)
+        target.target_content_versions.create!(content_blocks: target.content_blocks.pluck(:id))
       end
     end
   end

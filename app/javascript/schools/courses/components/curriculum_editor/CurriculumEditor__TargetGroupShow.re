@@ -42,6 +42,7 @@ let make =
       ~updateTargetCB,
       ~showArchived,
       ~authenticityToken,
+      ~updateTagetSortIndexCB,
       _children,
     ) => {
   ...component,
@@ -150,12 +151,15 @@ let make =
       </div>
       {
         targetsToDisplay
-        |> List.map(target =>
+        |> List.mapi((index, target) =>
              <CurriculumEditor__TargetShow
+               index
                key={target |> Target.id}
                target
                targetGroup
                showTargetEditorCB
+               targets=targetsToDisplay
+               updateTagetSortIndexCB
              />
            )
         |> Array.of_list

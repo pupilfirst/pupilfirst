@@ -60,6 +60,16 @@ let showArchivedButton = (targetGroupsInLevel, targets) => {
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
 };
 
+let updateTagetSortIndexCB = (state, send, sortedTargets) => {
+  let oldTargets =
+    state.targets |> List.filter(t => !(sortedTargets |> List.mem(t)));
+  send(
+    UpdateTargets(
+      oldTargets |> List.append(sortedTargets |> Target.updateSortIndex),
+    ),
+  );
+};
+
 let make =
     (
       ~course,
@@ -341,6 +351,9 @@ let make =
                    updateTargetCB
                    showArchived={state.showArchived}
                    authenticityToken
+                   updateTagetSortIndexCB={
+                     updateTagetSortIndexCB(state, send)
+                   }
                  />
                )
             |> Array.of_list

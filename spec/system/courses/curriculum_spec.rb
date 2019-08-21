@@ -173,7 +173,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(target_group_l5.description)
     expect(page).to have_content(level_5_target.title)
     find("div[aria-label='Select Target #{level_5_target.id}'").click
-    expect(page).to have_content('You must level up to access this target.')
+    expect(page).to have_content('You must level up to complete this target.')
 
     # Ensure level 6 is displayed as locked.
     select("L6: #{locked_level_6.name}", from: 'selected_level')

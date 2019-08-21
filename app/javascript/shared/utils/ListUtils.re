@@ -34,3 +34,21 @@ let distinct = l => {
 
   aux(l, []);
 };
+
+let swap = (index, up, l) => {
+  let el = l->List.nth(index);
+  let maxIndex = (l |> List.length) - 1;
+  l
+  |> List.mapi((i, t) =>
+       switch (i, up) {
+       | (0, true) when index == 0 => t
+       | (i, false) when i == maxIndex && index == maxIndex - 1 => el
+       | (i, false) when i == maxIndex => t
+       | (i, true) when i == index => l->List.nth(index - 1)
+       | (i, false) when i == index => l->List.nth(index + 1)
+       | (i, true) when i == index - 1 => el
+       | (i, false) when i == index + 1 => el
+       | (_, _) => t
+       }
+     );
+};

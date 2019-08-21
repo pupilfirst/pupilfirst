@@ -97,3 +97,19 @@ let removeTarget = (target, targets) =>
 
 let targetIdsInTargetGroup = (id, targets) =>
   targets |> List.filter(t => t.targetGroupId == id) |> List.map(t => t.id);
+
+let updateSortIndex = sortedTargets =>
+  sortedTargets
+  |> List.mapi((sortIndex, t) =>
+       create(
+         t.id,
+         t.targetGroupId,
+         t.title,
+         t.evaluationCriteria,
+         t.prerequisiteTargets,
+         t.quiz,
+         t.linkToComplete,
+         sortIndex,
+         t.visibility,
+       )
+     );

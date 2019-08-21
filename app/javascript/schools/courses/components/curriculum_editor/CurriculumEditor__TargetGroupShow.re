@@ -29,19 +29,28 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
-  archived ?
-    "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 target-group__header--archived px-6 pb-5 text-center rounded-lg rounded-b-none" :
-    "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 bg-white px-6 pb-5 text-center rounded-lg rounded-b-none";
+  "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 px-6 pb-5 text-center rounded-lg rounded-b-none w-full "
+  ++ (archived ? "target-group__header--archived" : "bg-white ");
+
+let updateSortIndex = (targetGroups, index, up, updateTagetGroupSortIndexCB) => {
+  let newTargetGroups = targetGroups |> ListUtils.swap(index, up);
+
+  updateTagetGroupSortIndexCB(newTargetGroups);
+};
 
 let make =
     (
+      ~index,
       ~targetGroup,
+      ~targetGroups,
       ~targets,
       ~showTargetGroupEditorCB,
       ~showTargetEditorCB,
       ~updateTargetCB,
       ~showArchived,
       ~authenticityToken,
+      ~updateTagetSortIndexCB,
+      ~updateTagetGroupSortIndexCB,
       _children,
     ) => {
   ...component,
@@ -119,43 +128,76 @@ let make =
     };
 
     <div className="target-group__box relative mt-12 rounded-lg shadow">
-      <div
-        id="target_group"
-        className={archivedClasses(targetGroup |> TargetGroup.archived)}
-        onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
-        {
-          milestone ?
-            <div
-              className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-              {"Milestone Targets" |> str}
-            </div> :
-            ReasonReact.null
-        }
-        <div className="target-group__title pt-5">
-          <h4> {targetGroup |> TargetGroup.name |> str} </h4>
+      <div className="flex w-ful">
+        <div
+          id="target_group"
+          className={archivedClasses(targetGroup |> TargetGroup.archived)}
+          onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
+          {
+            milestone ?
+              <div
+                className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+                {"Milestone Targets" |> str}
+              </div> :
+              ReasonReact.null
+          }
+          <div className="target-group__title pt-5">
+            <h4> {targetGroup |> TargetGroup.name |> str} </h4>
+          </div>
+          <div className="target-group__description pt-1">
+            <p>
+              {
+                (
+                  switch (targetGroup |> TargetGroup.description) {
+                  | Some(description) => description
+                  | None => ""
+                  }
+                )
+                |> str
+              }
+            </p>
+          </div>
         </div>
-        <div className="target-group__description pt-1">
-          <p>
-            {
-              (
-                switch (targetGroup |> TargetGroup.description) {
-                | Some(description) => description
-                | None => ""
-                }
-              )
-              |> str
-            }
-          </p>
+        <div className="flex flex-col justify-between bg-white">
+          <div
+            className="px-1 bg-gray-200"
+            onClick={
+              _ =>
+                updateSortIndex(
+                  targetGroups,
+                  index,
+                  true,
+                  updateTagetGroupSortIndexCB,
+                )
+            }>
+            <i className="fas fa-chevron-up" />
+          </div>
+          <div
+            className="px-1 bg-gray-200 mt-2"
+            onClick={
+              _ =>
+                updateSortIndex(
+                  targetGroups,
+                  index,
+                  false,
+                  updateTagetGroupSortIndexCB,
+                )
+            }>
+            <i className="fas fa-chevron-down" />
+          </div>
         </div>
       </div>
       {
         targetsToDisplay
-        |> List.map(target =>
+        |> List.mapi((index, target) =>
              <CurriculumEditor__TargetShow
+               index
                key={target |> Target.id}
                target
                targetGroup
                showTargetEditorCB
+               targets=targetsToDisplay
+               updateTagetSortIndexCB
              />
            )
         |> Array.of_list

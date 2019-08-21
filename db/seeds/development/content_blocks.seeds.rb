@@ -35,5 +35,11 @@ after 'development:targets' do
       ContentBlock.create!(target: target, sort_index: content_sort_index[3], block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code] })
     end
   end
+
+  # Create target content version
+
+  Target.all.each do |target|
+    target.target_content_versions.create!(content_blocks: target.content_blocks.pluck(:id))
+  end
 end
 

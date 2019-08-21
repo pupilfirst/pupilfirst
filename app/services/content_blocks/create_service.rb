@@ -20,16 +20,16 @@ module ContentBlocks
 
     def content
       case @params[:block_type]
-      when 'markdown'
-        { markdown: @params[:markdown] }
-      when 'image'
-        { caption: @params[:caption] }
-      when 'file'
-        { title: @params[:title] }
-      when 'embed'
-        { url: @params[:url], embed_code: embed_code }
-      else
-        raise "Encountered unexpected block_type when creating content block: #{block_type}"
+        when 'markdown'
+          { markdown: @params[:markdown] }
+        when 'image'
+          { caption: @params[:caption] }
+        when 'file'
+          { title: @params[:title] }
+        when 'embed'
+          { url: @params[:url], embed_code: embed_code }
+        else
+          raise "Encountered unexpected block_type when creating content block: #{block_type}"
       end
     end
 

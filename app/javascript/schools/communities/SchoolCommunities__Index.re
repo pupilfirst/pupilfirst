@@ -88,9 +88,7 @@ let make = (~authenticityToken, ~communities, ~courses, ~connections) => {
                      target="_blank"
                      href={"/communities/" ++ (community |> Community.id)}
                      className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-100 hover:text-primary-500 font-semibold px-5 py-5">
-                     <i
-                       className="fas fa-external-link-square-alt text-normal"
-                     />
+                     <i className="fas fa-external-link-alt text-normal" />
                      <span className="ml-1"> {"View" |> str} </span>
                    </a>
                  </div>

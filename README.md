@@ -14,6 +14,7 @@
 3. [Setup Overcommit](#setup-overcommit)
 4. [Seed local database](#seed-local-database)
 5. [Set up a reverse-proxy using Nginx](#set-up-a-reverse-proxy-using-nginx)
+6. [Compile ReasonML, run Webpack Dev Server, and run the Rails Server](#compile-reasonml-run-webpack-dev-server-and-run-the-rails-server)
 
 ### Install Dependencies
 
@@ -41,12 +42,12 @@ Once Ruby is installed, fetch all gems using Bundler:
 
 If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
 
-**On OSX:**
+##### On OSX:
 
     find /Applications -name pg_config
     gem install pg -- --with-pg-config=/path/to/pg_config
 
-**On Ubuntu:**
+##### On Ubuntu:
 
     sudo apt-get install libpq-dev
 
@@ -69,9 +70,9 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
 
 #### Setup ReasonML environment
 
-If you're installed all node modules using _Yarn_, then the basic environment should be ready at this point. However,
+If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point. However,
 you'll also need to install the [Reason CLI toolchain](https://github.com/reasonml/reason-cli) to get all add-on
-features to work in VSCode.
+features to work properly in VSCode:
 
 `npm install -g reason-cli@latest-macos` (OSX) or `@latest-linux` (Linux)
 
@@ -103,6 +104,9 @@ This will also seed data useful for development. Once you've started the server,
 Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your web application running on port 3000
 (the default Rails server port). Use following server configuration as an example:
 
+Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (OSX) or at
+`/etc/nginx/sites-enabled/pupilfirst` (Linux).
+
     server {
       listen 80;
       server_name school1.localhost www.school1.localhost school2.localhost www.school2.localhost sso.pupilfirst.localhost;
@@ -113,13 +117,30 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
       }
     }
 
-#### OSX
+You _may_ also need to point local school domains such as `school1.localhost` and `school2.localhost` domains
+(and `www` subdomains) to `127.0.0.1` in the `/etc/hosts` file:
 
-After installing Nginx, place the above configuration in a new file at `/usr/local/etc/nginx/servers/pupilfirst`.
+    127.0.0.1       school1.localhost
+    127.0.0.1       www.school1.localhost
 
-#### Ubuntu
+### Compile ReasonML, run Webpack Dev Server, and run the Rails Server
 
-After installing Nginx, place the above configuration in a new file at `/etc/nginx/sites-enabled/pupilfirst`.
+Compile and watch ReasonML files for changes:
+
+    yarn run bsb -make-world -w
+
+On another tab or window, start the Webpack Dev Server:
+
+    bin/webpack-dev-server
+
+On another tab or window, run the Rails server:
+
+    bundle exec rails server
+
+You'll want all three of these processes running for best performance when developing.
+
+If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
+`https://www.school1.localhost`.
 
 ## Testing
 
@@ -135,12 +156,12 @@ To generate spec coverage report, run:
 
     COVERAGE=true rspec
 
-This will generate a __simplecov__ HTML coverage report within `/coverage`
+This will generate coverage report as HTML within the `/coverage` directory.
 
 ## Services
 
-Background jobs are written as Rails ActiveJob-s, and deferred using
-[delayed_job](https://github.com/collectiveidea/delayed_job) in the production environment.
+Background jobs are written using [Rails ActiveJob](https://guides.rubyonrails.org/active_job_basics.html), and deferred
+using [delayed_job](https://github.com/collectiveidea/delayed_job) in the production environment.
 
 By default, the development and test environment run jobs in-line with a request. If you've manually configured the
 application to defer them instead, you can execute the jobs with:

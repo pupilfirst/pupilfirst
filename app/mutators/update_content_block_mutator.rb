@@ -26,15 +26,44 @@ class UpdateContentBlockMutator < ApplicationMutator
       else
         raise 'Not a valid block type'
     end
+    handle_content_version
   end
 
   private
 
   def content_block
-    @content_block ||= ContentBlock.find(id)
+    @content_block ||= begin
+      if latest_content_version.updated_at.to_date == Date.today
+        current_content_block
+      else
+        new_content_block = current_content_block.dup
+        new_content_block.save!
+        new_content_block.file.attach(current_content_block.file.blob) if current_content_block.file.attached?
+        new_content_block
+      end
+    end
   end
 
   def authorized?
     current_school_admin.present? || current_user.course_authors.where(course: content_block.target.level.course).exists?
+  end
+
+  def latest_content_version
+    @latest_content_version ||= target.target_content_versions.order('updated_at desc').first
+  end
+
+  def target
+    @target ||= current_content_block.target
+  end
+
+  def current_content_block
+    @current_content_block ||= ContentBlock.find(id)
+  end
+
+  def handle_content_version
+    return if latest_content_version.updated_at.to_date == Date.today
+
+    updated_content_block_ids = latest_content_version.content_blocks - [id.to_i] + [content_block.id]
+    target.target_content_versions.create!(content_blocks: updated_content_block_ids)
   end
 end

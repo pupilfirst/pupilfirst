@@ -32,9 +32,17 @@ let archivedClasses = archived =>
   "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 px-6 pb-5 text-center rounded-lg rounded-b-none w-full "
   ++ (archived ? "target-group__header--archived" : "bg-white ");
 
-let updateSortIndex = (targetGroups, index, up, updateTagetGroupSortIndexCB) => {
+let updateSortIndex =
+    (targetGroups, index, up, updateTagetGroupSortIndexCB, authenticityToken) => {
   let newTargetGroups = targetGroups |> ListUtils.swap(index, up);
 
+  let targetGroupIds =
+    newTargetGroups |> List.map(t => t |> TargetGroup.id) |> Array.of_list;
+  targetGroupIds
+  |> CurriculumEditor__SortResourcesMutation.sort(
+       CurriculumEditor__SortResourcesMutation.TargetGroup,
+       authenticityToken,
+     );
   updateTagetGroupSortIndexCB(newTargetGroups);
 };
 
@@ -51,6 +59,7 @@ let make =
       ~authenticityToken,
       ~updateTagetSortIndexCB,
       ~updateTagetGroupSortIndexCB,
+      ~authenticityToken,
       _children,
     ) => {
   ...component,
@@ -168,6 +177,7 @@ let make =
                   index,
                   true,
                   updateTagetGroupSortIndexCB,
+                  authenticityToken,
                 )
             }>
             <i className="fas fa-chevron-up" />
@@ -181,6 +191,7 @@ let make =
                   index,
                   false,
                   updateTagetGroupSortIndexCB,
+                  authenticityToken,
                 )
             }>
             <i className="fas fa-chevron-down" />
@@ -198,6 +209,7 @@ let make =
                showTargetEditorCB
                targets=targetsToDisplay
                updateTagetSortIndexCB
+               authenticityToken
              />
            )
         |> Array.of_list

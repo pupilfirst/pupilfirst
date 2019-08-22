@@ -11,9 +11,15 @@ let archivedClasses = target =>
   | _ => "target-group__target flex justify-between items-center hover:bg-gray-100 hover:text-primary-500 bg-white border-t px-5 py-6"
   };
 
-let updateSortIndex = (targets, index, up, updateTagetSortIndexCB) => {
+let updateSortIndex =
+    (targets, index, up, updateTagetSortIndexCB, authenticityToken) => {
   let newTargets = targets |> ListUtils.swap(index, up);
-
+  let targetIds = newTargets |> List.map(t => t |> Target.id) |> Array.of_list;
+  targetIds
+  |> CurriculumEditor__SortResourcesMutation.sort(
+       CurriculumEditor__SortResourcesMutation.Target,
+       authenticityToken,
+     );
   updateTagetSortIndexCB(newTargets);
 };
 
@@ -25,6 +31,7 @@ let make =
       ~showTargetEditorCB,
       ~targets,
       ~updateTagetSortIndexCB,
+      ~authenticityToken,
       _children,
     ) => {
   ...component,
@@ -55,7 +62,14 @@ let make =
         <div
           className="px-1 bg-gray-200"
           onClick={
-            _ => updateSortIndex(targets, index, true, updateTagetSortIndexCB)
+            _ =>
+              updateSortIndex(
+                targets,
+                index,
+                true,
+                updateTagetSortIndexCB,
+                authenticityToken,
+              )
           }>
           <i className="fas fa-chevron-up" />
         </div>
@@ -63,7 +77,13 @@ let make =
           className="px-1 bg-gray-200 mt-2"
           onClick={
             _ =>
-              updateSortIndex(targets, index, false, updateTagetSortIndexCB)
+              updateSortIndex(
+                targets,
+                index,
+                false,
+                updateTagetSortIndexCB,
+                authenticityToken,
+              )
           }>
           <i className="fas fa-chevron-down" />
         </div>

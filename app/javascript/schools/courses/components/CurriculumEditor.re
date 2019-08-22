@@ -372,6 +372,7 @@ let make =
                    updateTagetGroupSortIndexCB={
                      updateTagetGroupSortIndex(state, send)
                    }
+                   authenticityToken
                  />
                )
             |> Array.of_list

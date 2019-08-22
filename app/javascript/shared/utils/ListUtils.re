@@ -35,6 +35,21 @@ let distinct = l => {
   aux(l, []);
 };
 
+let swapDown = (l, head) => {
+  let rec aux = (prev, l, head) =>
+    switch (l) {
+    | [] => prev
+    | [hd, ...fullTail] =>
+      switch (fullTail) {
+      | [] => prev @ [hd]
+      | [nxt, ...partTail] when hd == head => prev @ [nxt, hd, ...partTail]
+      | [nxt, ...partTail] => aux(prev @ [hd], fullTail, head)
+      }
+    };
+
+  aux([], l, head);
+};
+
 let swap = (index, up, l) => {
   let el = l->List.nth(index);
   let maxIndex = (l |> List.length) - 1;
@@ -51,4 +66,14 @@ let swap = (index, up, l) => {
        | (_, _) => t
        }
      );
+  /* swapDown(l, el); */
 };
+
+/* prev = []
+   [hd, nxt, ...tail]
+
+
+   [...prev, nxt, hd, ...tail]
+
+
+   [hd, []] => [...prev, hd] */

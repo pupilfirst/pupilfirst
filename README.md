@@ -5,36 +5,41 @@
 ---
 ## Setup for development
 
-1. [Install and configure dependencies](#install-dependencies)
-    1. [Install Rubygems](#install-rubygems)
-    2. [Set credentials for local database](#set-credentials-for-local-database)
-    3. [Setup Javascript Environment](#setup-javascript-environment)
+1. [Install and configure dependencies](#install-and-configure-dependencies)
+    1. [Install third-party software](#install-third-party-software)
+    2. [Install Ruby environment](#install-ruby-and-rubygems)
+    3. [Setup Javascript environment](#setup-javascript-environment)
     4. [Setup ReasonML environment](#setup-reasonml-environment)
-2. [Configure application environment variables](#configure-application-environment-variables)
-3. [Setup Overcommit](#setup-overcommit)
-4. [Seed local database](#seed-local-database)
-5. [Set up a reverse-proxy using Nginx](#set-up-a-reverse-proxy-using-nginx)
-6. [Compile ReasonML, run Webpack Dev Server, and run the Rails Server](#compile-reasonml-run-webpack-dev-server-and-run-the-rails-server)
+2. [Set credentials for local database](#set-credentials-for-local-database)
+3. [Configure application environment variables](#configure-application-environment-variables)
+4. [Setup Overcommit](#setup-overcommit)
+5. [Seed local database](#seed-local-database)
+6. [Set up a reverse-proxy using Nginx](#set-up-a-reverse-proxy-using-nginx)
+7. [Compile ReasonML, run Webpack Dev Server, and run the Rails Server](#compile-reasonml-run-webpack-dev-server-and-run-the-rails-server)
 
-### Install Dependencies
+### Install and configure dependencies
 
-#### On OSX
+#### Install third-party software
 
-  * Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
+##### On OSX
+
+We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on OSX:
+
   * imagemagick - `brew install imagemagick`
-  * postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
   * redis - `brew install redis`
   * nginx - `brew install nginx`
+  * postgresql - Install [Postgres.app](http://postgresapp.com) and follow its instructions.
 
-#### On Ubuntu
+##### On Ubuntu
 
-  * Install Ruby with [rbenv](https://github.com/rbenv/rbenv), as above.
-  * Install dependencies:
-
+The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
+adapt the command to work with the package manager available with your distribution.
 
     sudo apt-get install imagemagick redis-server postgresql postgresql-contrib autoconf libtool nginx
 
-#### Install Rubygems
+#### Install Ruby and Rubygems
+
+Use [rbenv](https://github.com/rbenv/rbenv) to install the version of Ruby specified in the `.ruby-version` file.
 
 Once Ruby is installed, fetch all gems using Bundler:
 
@@ -51,7 +56,23 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
 
     sudo apt-get install libpq-dev
 
-#### Set credentials for local database
+#### Setup Javascript Environment
+
+1. Install NVM following instructions on the [offical repository.](https://github.com/creationix/nvm)
+2. Install the LTS version of NodeJS: `nvm install --lts`
+3. Install Yarn following [offical instructions.](https://yarnpkg.com/en/docs/install). Make sure you do not install
+   NodeJS again along with it (read Yarn instructions).
+4. Install all node modules with `yarn` command.
+
+#### Setup ReasonML environment
+
+If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point. However,
+you'll also need to install the [Reason CLI toolchain](https://github.com/reasonml/reason-cli) to get all add-on
+features to work properly in VSCode:
+
+`npm install -g reason-cli@latest-macos` (OSX) or `@latest-linux` (Linux)
+
+### Set credentials for local database
 
     # Run psql command as postgres user.
     sudo -u postgres psql postgres
@@ -62,27 +83,14 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
     # Quit.
     \q
 
-#### Setup Javascript Environment
-
-1. Install NVM following instructions on the [offical repository.](https://github.com/creationix/nvm)
-2. Install Yarn following [offical instructions.](https://yarnpkg.com/en/docs/install)
-3. Install all node modules with `yarn` command.
-
-#### Setup ReasonML environment
-
-If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point. However,
-you'll also need to install the [Reason CLI toolchain](https://github.com/reasonml/reason-cli) to get all add-on
-features to work properly in VSCode:
-
-`npm install -g reason-cli@latest-macos` (OSX) or `@latest-linux` (Linux)
-
 ### Configure application environment variables
 
 Copy `example.env` to `.env`.
 
     $ cp example.env .env
 
-Now, edit `.env` and set values for database username and password that you used in the previous step.
+The file contains documentation explaining where you should source its values from. At minimum, edit `.env` and set
+values for Postgres DB username and password that you used in the previous step.
 
 ### Setup Overcommit
 

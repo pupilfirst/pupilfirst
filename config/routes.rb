@@ -222,8 +222,6 @@ Rails.application.routes.draw do
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
-
   # Handle incoming unsubscribe webhooks from SendInBlue
   post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 

@@ -7,8 +7,8 @@ let component =
 
 let archivedClasses = target =>
   switch (target |> Target.visibility) {
-  | Archived => "target-group__target flex justify-between items-center hover:bg-gray-100 hover:text-primary-500 target-group__target--archived border-t px-5 py-4"
-  | _ => "target-group__target flex justify-between items-center hover:bg-gray-100 hover:text-primary-500 bg-white border-t px-5 py-6"
+  | Archived => "target-group__target flex justify-between items-center target-group__target--archived border-t px-5 py-4"
+  | _ => "target-group__target flex justify-between items-center border-t px-5 py-6"
   };
 
 let updateSortIndex =
@@ -36,7 +36,8 @@ let make =
     ) => {
   ...component,
   render: _self =>
-    <div className="flex">
+    <div
+      className="flex target-group__target-container bg-white relative hover:bg-gray-100 hover:text-primary-500">
       <div
         id={"target-show-" ++ (target |> Target.id)}
         className={archivedClasses(target)}
@@ -50,7 +51,7 @@ let make =
           switch (target |> Target.visibility) {
           | Draft =>
             <span
-              className="target-group__target-draft-pill items-center leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400">
+              className="target-group__target-draft-pill flex-shrink-0 items-center leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400">
               <i className="fas fa-file-signature text-sm" />
               <span className="ml-1"> {"Draft" |> str} </span>
             </span>
@@ -58,9 +59,11 @@ let make =
           }
         }
       </div>
-      <div className="flex flex-col justify-between bg-white">
+      <div
+        className="target-group__target-reorder invisible flex absolute z-50 h-full px-3 text-gray-700 right-0 top-0 justify-between items-center bg-gray-100">
         <div
-          className="px-1 bg-gray-200"
+          title="Move Up"
+          className="w-9 h-9 p-2 mr-1 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
           onClick={
             _ =>
               updateSortIndex(
@@ -71,10 +74,11 @@ let make =
                 authenticityToken,
               )
           }>
-          <i className="fas fa-chevron-up" />
+          <i className="fas fa-arrow-up" />
         </div>
         <div
-          className="px-1 bg-gray-200 mt-2"
+          title="Move Down"
+          className="w-9 h-9 p-2 mr-1 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
           onClick={
             _ =>
               updateSortIndex(
@@ -85,7 +89,7 @@ let make =
                 authenticityToken,
               )
           }>
-          <i className="fas fa-chevron-down" />
+          <i className="fas fa-arrow-down" />
         </div>
       </div>
     </div>,

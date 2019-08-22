@@ -29,8 +29,8 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
-  "target-group__header cursor-pointer hover:bg-gray-100 hover:text-primary-500 px-6 pb-5 text-center rounded-lg rounded-b-none w-full "
-  ++ (archived ? "target-group__header--archived" : "bg-white ");
+  "target-group__header relative cursor-pointer px-6 pb-5 text-center rounded-lg rounded-b-none w-full "
+  ++ (archived ? "target-group__header--archived" : " ");
 
 let updateSortIndex =
     (targetGroups, index, up, updateTagetGroupSortIndexCB, authenticityToken) => {
@@ -137,7 +137,8 @@ let make =
     };
 
     <div className="target-group__box relative mt-12 rounded-lg shadow">
-      <div className="flex w-ful">
+      <div
+        className="flex w-full target-group__header-container relative bg-white hover:bg-gray-100 hover:text-primary-500">
         <div
           id="target_group"
           className={archivedClasses(targetGroup |> TargetGroup.archived)}
@@ -167,9 +168,11 @@ let make =
             </p>
           </div>
         </div>
-        <div className="flex flex-col justify-between bg-white">
+        <div
+          className="target-group__group-reorder invisible flex absolute z-50 h-full px-3 text-gray-700 right-0 top-0 justify-between items-center bg-gray-100">
           <div
-            className="px-1 bg-gray-200"
+            title="Move Up"
+            className="w-9 h-9 p-2 mr-1 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
             onClick={
               _ =>
                 updateSortIndex(
@@ -180,10 +183,11 @@ let make =
                   authenticityToken,
                 )
             }>
-            <i className="fas fa-chevron-up" />
+            <i className="fas fa-arrow-up" />
           </div>
           <div
-            className="px-1 bg-gray-200 mt-2"
+            title="Move Down"
+            className="w-9 h-9 p-2 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
             onClick={
               _ =>
                 updateSortIndex(
@@ -194,7 +198,7 @@ let make =
                   authenticityToken,
                 )
             }>
-            <i className="fas fa-chevron-down" />
+            <i className="fas fa-arrow-down" />
           </div>
         </div>
       </div>

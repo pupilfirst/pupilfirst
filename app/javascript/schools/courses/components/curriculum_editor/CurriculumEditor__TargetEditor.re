@@ -1,4 +1,7 @@
 [@bs.config {jsx: 3}];
+
+exception SetPayloadCalledWithoutMethodOfCompletion;
+
 [%bs.raw {|require("./CurriculumEditor__TargetEditor.css")|}];
 
 open CurriculumEditor__Types;
@@ -160,19 +163,12 @@ let cachePrerequisiteTargets = (targets, target) => {
 let setPayload = (state, target, authenticityToken) => {
   let payload = Js.Dict.empty();
   let targetData = Js.Dict.empty();
+
   let prerequisiteTargetIds =
     state.prerequisiteTargets
     |> List.filter(((_, _, selected)) => selected == true)
     |> List.map(((key, _, _)) => key);
-  let evaluationCriteriaIds =
-    state.methodOfCompletion == Evaluated ?
-      state.evaluationCriteria
-      |> List.filter(((_, _, selected)) => selected == true)
-      |> List.map(((key, _, _)) => key) :
-      [];
-  let linkToComplete =
-    state.methodOfCompletion == VisitLink ? state.linkToComplete : "";
-  let quiz = state.methodOfCompletion == TakeQuiz ? state.quiz : [];
+
   let visibility =
     switch (state.visibility) {
     | Live => "live"
@@ -198,6 +194,31 @@ let setPayload = (state, target, authenticityToken) => {
     prerequisiteTargetIds |> Json.Encode.(list(int)),
   );
 
+  Js.Dict.set(targetData, "visibility", visibility |> Js.Json.string);
+
+  let (evaluationCriteriaIds, linkToComplete, quiz) =
+    switch (state.methodOfCompletion) {
+    | NotSelected =>
+      Rollbar.error(
+        "TargetEditor.setPayload was called when methodOfCompletion was NotSelected",
+      );
+      Notification.error(
+        "Error!",
+        "Something went wrong. Please reload the page before trying again.",
+      );
+      raise(SetPayloadCalledWithoutMethodOfCompletion);
+    | Evaluated =>
+      let evaluationCriteriaIds =
+        state.evaluationCriteria
+        |> List.filter(((_, _, selected)) => selected == true)
+        |> List.map(((key, _, _)) => key);
+
+      (evaluationCriteriaIds, "", []);
+    | VisitLink => ([], state.linkToComplete, [])
+    | TakeQuiz => ([], "", state.quiz)
+    | MarkAsComplete => ([], "", [])
+    };
+
   Js.Dict.set(
     targetData,
     "evaluation_criterion_ids",
@@ -210,14 +231,14 @@ let setPayload = (state, target, authenticityToken) => {
     linkToComplete |> Js.Json.string,
   );
 
-  Js.Dict.set(targetData, "visibility", visibility |> Js.Json.string);
-
   Js.Dict.set(
     targetData,
     "quiz",
     quiz |> Json.Encode.(list(QuizQuestion.encoder)),
   );
+
   Js.Dict.set(payload, "target", targetData |> Js.Json.object_);
+
   payload;
 };
 
@@ -281,7 +302,14 @@ let reducer = (state, action) =>
   | UpdateMethodOfCompletion(methodOfCompletion) => {
       ...state,
       methodOfCompletion,
-      dirty: true,
+      dirty:
+        switch (methodOfCompletion) {
+        | NotSelected => false
+        | VisitLink => state.linkToComplete |> String.length > 0
+        | Evaluated
+        | TakeQuiz
+        | MarkAsComplete => true
+        },
     }
   | AddQuizQuestion =>
     let quiz =

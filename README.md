@@ -1,50 +1,57 @@
-# SV.CO
-
+![PupilFirst Logo](https://s3.amazonaws.com/public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
+---
 ![TeamCity Status for SVdotCO/pupilfirst](https://ci.sv.co/app/rest/builds/buildType:(id:PupilFirst_ContinuousIntegration)/statusIcon)
 [![codecov](https://codecov.io/gh/SVdotCO/pupilfirst/branch/master/graph/badge.svg?token=WkjxHcrnL4)](https://codecov.io/gh/SVdotCO/pupilfirst)
-
+---
 ## Setup for development
+
+1. [Install and configure dependencies](#install-dependencies)
+    1. [Install Rubygems](#install-rubygems)
+    2. [Set credentials for local database](#set-credentials-for-local-database)
+    3. [Setup Javascript Environment](#setup-javascript-environment)
+    4. [Setup ReasonML environment](#setup-reasonml-environment)
+2. [Configure application environment variables](#configure-application-environment-variables)
+3. [Setup Overcommit](#setup-overcommit)
+4. [Seed local database](#seed-local-database)
+5. [Set up a reverse-proxy using Nginx](#set-up-a-reverse-proxy-using-nginx)
+6. [Compile ReasonML, run Webpack Dev Server, and run the Rails Server](#compile-reasonml-run-webpack-dev-server-and-run-the-rails-server)
 
 ### Install Dependencies
 
-#### OSX
+#### On OSX
 
-  *  Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
-  *  imagemagick - `brew install imagemagick`
-  *  postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
-  *  puma-dev - `brew install puma/puma/puma-dev`
-  *  redis - `brew install redis`
+  * Ruby - Use [rbenv](https://github.com/rbenv/rbenv) to install version specified in `.ruby-version`.
+  * imagemagick - `brew install imagemagick`
+  * postgresql - Install [Postgres.app](http://postgresapp.com) and follow instructions.
+  * redis - `brew install redis`
+  * nginx - `brew install nginx`
 
-#### Ubuntu
+#### On Ubuntu
 
   * Install Ruby with [rbenv](https://github.com/rbenv/rbenv), as above.
   * Install dependencies:
 
-```
-sudo apt-get install imagemagick redis-server postgresql postgresql-contrib autoconf libtool
-```
-#### Fetch Gems
 
-You need to install `bundler` before you install the required gems.
+    sudo apt-get install imagemagick redis-server postgresql postgresql-contrib autoconf libtool nginx
 
-     $ gem install bundler
+#### Install Rubygems
 
-Install all Gems using bundler
+Once Ruby is installed, fetch all gems using Bundler:
 
     $ bundle install
 
 If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
 
-**On OSX:**
+##### On OSX:
 
     find /Applications -name pg_config
     gem install pg -- --with-pg-config=/path/to/pg_config
 
-**On Ubuntu:**
+##### On Ubuntu:
 
     sudo apt-get install libpq-dev
 
-#### Set a password for the default 'postgres' user
+#### Set credentials for local database
 
     # Run psql command as postgres user.
     sudo -u postgres psql postgres
@@ -55,73 +62,85 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
     # Quit.
     \q
 
-### Configure
+#### Setup Javascript Environment
+
+1. Install NVM following instructions on the [offical repository.](https://github.com/creationix/nvm)
+2. Install Yarn following [offical instructions.](https://yarnpkg.com/en/docs/install)
+3. Install all node modules with `yarn` command.
+
+#### Setup ReasonML environment
+
+If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point. However,
+you'll also need to install the [Reason CLI toolchain](https://github.com/reasonml/reason-cli) to get all add-on
+features to work properly in VSCode:
+
+`npm install -g reason-cli@latest-macos` (OSX) or `@latest-linux` (Linux)
+
+### Configure application environment variables
 
 Copy `example.env` to `.env`.
 
     $ cp example.env .env
 
-Now, edit `.env` and set values for Database username and password that you used in the previous step.
+Now, edit `.env` and set values for database username and password that you used in the previous step.
 
-### Overcommit
+### Setup Overcommit
+
+[Overcommit](https://github.com/sds/overcommit) adds automatic checks that prevents us from making silly mistakes when
+committing changes.
 
     $ overcommit --install
     $ overcommit --sign
 
-### Setup Javascript Environment
-
-1. intsall NVM following instructions on the [offical repository.](https://github.com/creationix/nvm)
-2. Install Yarn following [offical instructions.](https://yarnpkg.com/en/docs/install)
-3. Intsall all node modules with `yarn` command.
-
-### Database setup
+### Seed local database
 
     $ rails db:setup
 
-This will also seed data useful for development. To view the admin interface, (once you've started the server), visit
-the sign in page, and use the _development_ option to sign in as `admin@example.com`.
+This will also seed data useful for development. Once you've started the server, you should be able to sign in as
+`admin@example.com` (use the _Continue as Developer_ option in dev env), to test access to all interfaces.
 
-### Use [puma-dev](https://github.com/puma/puma-dev) to run the application.
+### Set up a reverse-proxy using Nginx
 
-When installing puma-dev, make sure that you set it up to listen on the `.localhost` domain, and not the default `.dev` domain.
+Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your web application running on port 3000
+(the default Rails server port). Use following server configuration as an example:
 
-After installing puma-dev using its instructions:
+Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (OSX) or at
+`/etc/nginx/sites-enabled/pupilfirst` (Linux).
 
-    cd ~/.puma-dev
-    ln -s ~/path/to/sv_repository sv
+    server {
+      listen 80;
+      server_name school1.localhost www.school1.localhost school2.localhost www.school2.localhost sso.pupilfirst.localhost;
 
-It's useful to have puma-dev's log file in easy reach:
+      location / {
+        proxy_pass http://localhost:3000/;
+        proxy_set_header Host $host;
+      }
+    }
 
-    OSX Specific: ln -s ~/Library/Logs/puma-dev.log log/
+You _may_ also need to point local school domains such as `school1.localhost` and `school2.localhost` domains
+(and `www` subdomains) to `127.0.0.1` in the `/etc/hosts` file:
 
-To restart the server:
+    127.0.0.1       school1.localhost
+    127.0.0.1       www.school1.localhost
 
-    touch tmp/restart.txt
+### Compile ReasonML, run Webpack Dev Server, and run the Rails Server
 
-If it crashes, gets stuck, etc., kill the master process.
+Compile and watch ReasonML files for changes:
 
-    ps -ef | grep puma
-    kill -9 [PUMA_PROCESS_ID]
+    yarn run bsb -make-world -w
 
-#### puma-dev on Ubuntu
+On another tab or window, start the Webpack Dev Server:
 
-Running puma-dev on Ubuntu will require that you download the `puma-dev` binary, and run it manually. There are other setup requirements detailed in the official docs (linked above.)
+    bin/webpack-dev-server
 
-Use the following command to run puma-dev with correct configuration for dev environment.
+On another tab or window, run the Rails server:
 
-    puma-dev -d localhost -http-port 80 -https-port 443
+    bundle exec rails server
 
-You'll probably want to convert this to an _alias_ to make starting the server simple.
+You'll want all three of these processes running for best performance when developing.
 
-#### Troubleshooting `puma-dev`
-
-If _puma-dev_ crashes when starting the application with `bundle: not found` in the logs, create a `.powenv` file in the root of the repository and add commands to load the _rbenv_ environment.
-
-### Optional extra
-
-#### Install Heroku CLI
-
-Follow [official instructions](https://devcenter.heroku.com/articles/heroku-cli) to install the CLI.
+If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
+`https://www.school1.localhost`.
 
 ## Testing
 
@@ -137,62 +156,14 @@ To generate spec coverage report, run:
 
     COVERAGE=true rspec
 
-This will generate a __simplecov__ HTML coverage report within `/coverage`
-
-__Note:__ Code coverage is automatically generated by the CI server, and monitored using [Codecov](https://codecov.io).
+This will generate coverage report as HTML within the `/coverage` directory.
 
 ## Services
 
-Background jobs are written as Rails ActiveJob-s, and deferred using Delayed::Job in the production environment.
+Background jobs are written using [Rails ActiveJob](https://guides.rubyonrails.org/active_job_basics.html), and deferred
+using [delayed_job](https://github.com/collectiveidea/delayed_job) in the production environment.
 
-By default, the development and test environment run jobs in-line. If you've manually configured the application to defer them instead, you can execute the jobs with:
+By default, the development and test environment run jobs in-line with a request. If you've manually configured the
+application to defer them instead, you can execute the jobs with:
 
     $ rake jobs:workoff
-
-## Deployment
-
-[TeamCity](https://ci.sv.co) runs specs once commit are pushed to Github. When push is to the `master` branch, and if specs pass, TeamCity marks the commit as successful on Github. This prompts Heroku to pick up the commit and deploy a new instance - so the entire process is automated.
-
-We use two buildpacks at Heroku:
-
-  1. Heroku's default ruby buildpack: https://github.com/heroku/heroku-buildpack-ruby
-  2. Custom rake tasks (to run DB migrations): https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks
-
-### Manual deployment
-
-Set up Heroku to have access to sv-co app.
-
-Add heroku remote:
-
-    $ git remote add heroku git@heroku.com:sv-co.git
-
-Then, to deploy:
-
-* From `master` branch, `git push heroku` will push local master to production (sv.co)
-
-To safely deploy:
-
-    $ rspec && git push heroku && heroku run rake db:migrate --app sv-co && heroku restart --app sv-co
-
-## Coding style conventions
-
-Basic coding conventions are defined in the .editorconfig file. Download plugin for your editor of choice. http://editorconfig.org/
-
-### General
-
-* One blank line between discrete blocks of code.
-* No more than one blank line between blocks / segments of code.
-
-### Ruby
-
-* Naming: Underscored variables and methods. CamelCase class names - `some_variable, some_method, SomeClass`
-
-### Javascript
-
-* Use Coffeescript wherever possible.
-* Naming: CamelCase variables and function - `someVariable, someFunction`
-
-### CSS
-
-* Use SCSS everywhere.
-* Use [BEM](http://getbem.com) for naming classes - `block__element`, or `block__element--modifier`

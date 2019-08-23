@@ -46,8 +46,6 @@ let swapDown = (e, l) => {
   aux([], l, e);
 };
 
-let swapUp = (e,l) => l |> List.rev |> swapDown(e) |> List.rev;
+let swapUp = (e, l) => l |> List.rev |> swapDown(e) |> List.rev;
 
-let swap = (up,e, l) => {
-  up ? l |> swapUp(e) : l|> swapDown(e);
-};
+let swap = (up, e, l) => up ? l |> swapUp(e) : l |> swapDown(e);

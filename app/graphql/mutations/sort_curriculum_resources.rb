@@ -12,7 +12,7 @@ module Mutations
 
       if mutator.valid?
         mutator.sort
-        mutator.notify(:success, "Done!", "Target content updated successfully")
+        mutator.notify(:success, "Done!", "sort_index updated successfully")
         { success: true }
       else
         mutator.notify_errors

@@ -29,7 +29,7 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
-  "target-group__header relative cursor-pointer px-6 pb-5 text-center rounded-lg rounded-b-none w-full "
+  "target-group__header relative cursor-pointer px-6 pb-5 text-center rounded-lg rounded-b-none overflow-hidden w-full "
   ++ (archived ? "target-group__header--archived" : " ");
 
 let updateSortIndex =
@@ -138,7 +138,7 @@ let make =
 
     <div className="target-group__box relative mt-12 rounded-lg shadow">
       <div
-        className="flex w-full target-group__header-container relative bg-white hover:bg-gray-100 hover:text-primary-500">
+        className="flex w-full target-group__header-container overflow-hidden rounded-lg rounded-b-none items-center relative bg-white hover:bg-gray-100 hover:text-primary-500">
         <div
           id="target_group"
           className={archivedClasses(targetGroup |> TargetGroup.archived)}
@@ -169,10 +169,10 @@ let make =
           </div>
         </div>
         <div
-          className="target-group__group-reorder invisible flex absolute z-50 h-full px-3 text-gray-700 right-0 top-0 justify-between items-center bg-gray-100">
+          className="target-group__group-reorder flex flex-col rounded-r absolute left-0 z-50 h-full border border-l-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
           <div
             title="Move Up"
-            className="w-9 h-9 p-2 mr-1 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
+            className="target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
             onClick={
               _ =>
                 updateSortIndex(
@@ -183,11 +183,11 @@ let make =
                   authenticityToken,
                 )
             }>
-            <i className="fas fa-arrow-up" />
+            <i className="fas fa-arrow-up text-sm" />
           </div>
           <div
             title="Move Down"
-            className="w-9 h-9 p-2 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
+            className="target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
             onClick={
               _ =>
                 updateSortIndex(
@@ -198,7 +198,7 @@ let make =
                   authenticityToken,
                 )
             }>
-            <i className="fas fa-arrow-down" />
+            <i className="fas fa-arrow-down text-sm" />
           </div>
         </div>
       </div>

@@ -308,6 +308,10 @@
   z-index: 10;
 }
 
+.target-group__target-container {
+  transition: all 0.2s;
+}
+
 .target-group__target {
   width: 100%;
   cursor: pointer;
@@ -322,13 +326,86 @@
   box-shadow: inset 0 2px 10px -6px rgba(0, 0, 0, 0.5);
 }
 
-.target-group__header-container:hover .target-group__group-reorder {
-  visibility: visible;
+.target-group__group-reorder {
+  max-height: 4.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.target-group__group-reorder-up {
+  transform: translateY(15px);
+  transition: transform 0.2s;
+}
+
+.target-group__group-reorder-down {
+  transform: translateY(-15px);
+  transition: transform 0.2s;
+}
+
+.target-group__target-reorder-up {
+  transform: translateY(15px);
+  transition: transform 0.2s;
+}
+
+.target-group__target-reorder-down {
+  transform: translateY(-15px);
+  transition: transform 0.2s;
+}
+
+.target-group__header-container:hover .target-group__group-reorder:before {
+  position: absolute;
+  content: '';
+  @apply bg-gray-300;
+  height: 1px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+}
+
+.target-group__header-container:hover .target-group__group-reorder-up {
+  transform: translateY(0px);
+  @apply text-gray-700;
+}
+
+.target-group__header-container:hover .target-group__group-reorder-down {
+  transform: translateY(0px);
+  @apply text-gray-700;
 }
 
 .target-group__target-container:hover .target-group__target-reorder {
   visibility: visible;
+  @apply border-r border-gray-300;
 }
+
+.target-group__target-container:hover .target-group__target-reorder:before {
+  position: absolute;
+  content: '';
+  @apply bg-gray-300;
+  height: 1px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+}
+
+.target-group__target-container:hover .target-group__target-reorder-up {
+  transform: translateY(0px);
+  @apply text-gray-700;
+}
+
+.target-group__target-container:hover .target-group__target-reorder-down {
+  transform: translateY(0px);
+  @apply text-gray-700;
+}
+
+.target-group__target-container:hover .target-group__target-reorder-up:hover, .target-group__target-container:hover .target-group__target-reorder-down:hover {
+  @apply text-gray-900;
+}
+
+/* .target-group__target-container:hover .target-group__target-draft-pill {
+  visibility: hidden;
+} */
 
 .target-group__create, .target-group__target-create {
   transition: all 0.2s;

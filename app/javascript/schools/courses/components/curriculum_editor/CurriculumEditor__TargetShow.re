@@ -7,8 +7,8 @@ let component =
 
 let archivedClasses = target =>
   switch (target |> Target.visibility) {
-  | Archived => "target-group__target flex justify-between items-center target-group__target--archived border-t px-5 py-4"
-  | _ => "target-group__target flex justify-between items-center border-t px-5 py-6"
+  | Archived => "target-group__target flex justify-between items-center target-group__target--archived pl-2 pr-5 py-4"
+  | _ => "target-group__target flex justify-between items-center pl-2 pr-5 py-6"
   };
 
 let updateSortIndex =
@@ -37,7 +37,40 @@ let make =
   ...component,
   render: _self =>
     <div
-      className="flex target-group__target-container bg-white relative hover:bg-gray-100 hover:text-primary-500">
+      className="flex target-group__target-container border-t bg-white overflow-hidden items-center relative hover:bg-gray-100 hover:text-primary-500">
+      <div
+        className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
+        <div
+          title="Move Up"
+          className="target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+          onClick={
+            _ =>
+              updateSortIndex(
+                targets,
+                index,
+                true,
+                updateTagetSortIndexCB,
+                authenticityToken,
+              )
+          }>
+          <i className="fas fa-arrow-up text-sm" />
+        </div>
+        <div
+          title="Move Down"
+          className="target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200"
+          onClick={
+            _ =>
+              updateSortIndex(
+                targets,
+                index,
+                false,
+                updateTagetSortIndexCB,
+                authenticityToken,
+              )
+          }>
+          <i className="fas fa-arrow-down text-sm" />
+        </div>
+      </div>
       <div
         id={"target-show-" ++ (target |> Target.id)}
         className={archivedClasses(target)}
@@ -58,39 +91,6 @@ let make =
           | _ => React.null
           }
         }
-      </div>
-      <div
-        className="target-group__target-reorder invisible flex absolute z-50 h-full px-3 text-gray-700 right-0 top-0 justify-between items-center bg-gray-100">
-        <div
-          title="Move Up"
-          className="w-9 h-9 p-2 mr-1 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
-          onClick={
-            _ =>
-              updateSortIndex(
-                targets,
-                index,
-                true,
-                updateTagetSortIndexCB,
-                authenticityToken,
-              )
-          }>
-          <i className="fas fa-arrow-up" />
-        </div>
-        <div
-          title="Move Down"
-          className="w-9 h-9 p-2 mr-1 text-center rounded bg-gray-200 hover:bg-gray-300 hover:text-gray-900"
-          onClick={
-            _ =>
-              updateSortIndex(
-                targets,
-                index,
-                false,
-                updateTagetSortIndexCB,
-                authenticityToken,
-              )
-          }>
-          <i className="fas fa-arrow-down" />
-        </div>
       </div>
     </div>,
 };

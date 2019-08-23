@@ -356,10 +356,9 @@ let make =
           className="target-group__container max-w-3xl mt-5 mx-auto relative">
           {
             targetGroupsToDisplay
-            |> List.mapi((index, targetGroup) =>
+            |> List.map(targetGroup =>
                  <CurriculumEditor__TargetGroupShow
                    key={targetGroup |> TargetGroup.id}
-                   index
                    targetGroup
                    targetGroups=targetGroupsToDisplay
                    targets={state.targets}

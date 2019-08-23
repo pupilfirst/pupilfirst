@@ -35,45 +35,19 @@ let distinct = l => {
   aux(l, []);
 };
 
-let swapDown = (l, head) => {
-  let rec aux = (prev, l, head) =>
+let swapDown = (e, l) => {
+  let rec aux = (prev, l, e) =>
     switch (l) {
+    | [head, next, ...tail] when head == e => prev @ [next, head, ...tail]
+    | [head, ...tail] => aux(prev @ [head], tail, e)
     | [] => prev
-    | [hd, ...fullTail] =>
-      switch (fullTail) {
-      | [] => prev @ [hd]
-      | [nxt, ...partTail] when hd == head => prev @ [nxt, hd, ...partTail]
-      | [nxt, ...partTail] => aux(prev @ [hd], fullTail, head)
-      }
     };
 
-  aux([], l, head);
+  aux([], l, e);
 };
 
-let swap = (index, up, l) => {
-  let el = l->List.nth(index);
-  let maxIndex = (l |> List.length) - 1;
-  l
-  |> List.mapi((i, t) =>
-       switch (i, up) {
-       | (0, true) when index == 0 => t
-       | (i, false) when i == maxIndex && index == maxIndex - 1 => el
-       | (i, false) when i == maxIndex => t
-       | (i, true) when i == index => l->List.nth(index - 1)
-       | (i, false) when i == index => l->List.nth(index + 1)
-       | (i, true) when i == index - 1 => el
-       | (i, false) when i == index + 1 => el
-       | (_, _) => t
-       }
-     );
-  /* swapDown(l, el); */
+let swapUp = (e,l) => l |> List.rev |> swapDown(e) |> List.rev;
+
+let swap = (up,e, l) => {
+  up ? l |> swapUp(e) : l|> swapDown(e);
 };
-
-/* prev = []
-   [hd, nxt, ...tail]
-
-
-   [...prev, nxt, hd, ...tail]
-
-
-   [hd, []] => [...prev, hd] */

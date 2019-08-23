@@ -33,8 +33,14 @@ let archivedClasses = archived =>
   ++ (archived ? "target-group__header--archived" : " ");
 
 let updateSortIndex =
-    (targetGroups, index, up, updateTagetGroupSortIndexCB, authenticityToken) => {
-  let newTargetGroups = targetGroups |> ListUtils.swap(index, up);
+    (
+      targetGroups,
+      targetGroup,
+      up,
+      updateTagetGroupSortIndexCB,
+      authenticityToken,
+    ) => {
+  let newTargetGroups = targetGroups |> ListUtils.swap(up, targetGroup);
 
   let targetGroupIds =
     newTargetGroups |> List.map(t => t |> TargetGroup.id) |> Array.of_list;
@@ -48,7 +54,6 @@ let updateSortIndex =
 
 let make =
     (
-      ~index,
       ~targetGroup,
       ~targetGroups,
       ~targets,
@@ -177,7 +182,7 @@ let make =
               _ =>
                 updateSortIndex(
                   targetGroups,
-                  index,
+                  targetGroup,
                   true,
                   updateTagetGroupSortIndexCB,
                   authenticityToken,
@@ -192,7 +197,7 @@ let make =
               _ =>
                 updateSortIndex(
                   targetGroups,
-                  index,
+                  targetGroup,
                   false,
                   updateTagetGroupSortIndexCB,
                   authenticityToken,
@@ -204,9 +209,8 @@ let make =
       </div>
       {
         targetsToDisplay
-        |> List.mapi((index, target) =>
+        |> List.map(target =>
              <CurriculumEditor__TargetShow
-               index
                key={target |> Target.id}
                target
                targetGroup

@@ -12,8 +12,8 @@ let archivedClasses = target =>
   };
 
 let updateSortIndex =
-    (targets, index, up, updateTagetSortIndexCB, authenticityToken) => {
-  let newTargets = targets |> ListUtils.swap(index, up);
+    (targets, target, up, updateTagetSortIndexCB, authenticityToken) => {
+  let newTargets = targets |> ListUtils.swap(up, target);
   let targetIds = newTargets |> List.map(t => t |> Target.id) |> Array.of_list;
   targetIds
   |> CurriculumEditor__SortResourcesMutation.sort(
@@ -25,7 +25,6 @@ let updateSortIndex =
 
 let make =
     (
-      ~index,
       ~target,
       ~targetGroup,
       ~showTargetEditorCB,
@@ -47,7 +46,7 @@ let make =
             _ =>
               updateSortIndex(
                 targets,
-                index,
+                target,
                 true,
                 updateTagetSortIndexCB,
                 authenticityToken,
@@ -62,7 +61,7 @@ let make =
             _ =>
               updateSortIndex(
                 targets,
-                index,
+                target,
                 false,
                 updateTagetSortIndexCB,
                 authenticityToken,

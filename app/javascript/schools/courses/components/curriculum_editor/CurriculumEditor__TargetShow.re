@@ -41,6 +41,7 @@ let make =
         className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
         <div
           title="Move Up"
+          id={"target-move-up-" ++ (target |> Target.id)}
           className="target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
           onClick={
             _ =>
@@ -56,6 +57,7 @@ let make =
         </div>
         <div
           title="Move Down"
+          id={"target-move-down-" ++ (target |> Target.id)}
           className="target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200"
           onClick={
             _ =>

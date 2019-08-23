@@ -177,6 +177,7 @@ let make =
           className="target-group__group-reorder flex flex-col rounded-r absolute left-0 z-50 h-full border border-l-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
           <div
             title="Move Up"
+            id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
             className="target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
             onClick={
               _ =>
@@ -192,6 +193,7 @@ let make =
           </div>
           <div
             title="Move Down"
+            id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
             className="target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
             onClick={
               _ =>

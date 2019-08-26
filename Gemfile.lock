@@ -196,10 +196,6 @@ GEM
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     cliver (0.3.2)
-    codecov (0.1.14)
-      json
-      simplecov
-      url
     coderay (1.1.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -261,7 +257,7 @@ GEM
       declarative-option (< 0.2.0)
       representable (>= 2.4.0, <= 3.1.0)
       uber (< 0.2.0)
-    docile (1.3.1)
+    docile (1.3.2)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.2)
@@ -707,7 +703,7 @@ GEM
       faraday (~> 0.9)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    simplecov (0.16.1)
+    simplecov (0.17.0)
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
@@ -742,7 +738,6 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.6.0)
     uniform_notifier (1.12.1)
-    url (0.3.2)
     url_mount (0.2.1)
       rack
     user_agent_parser (2.5.1)
@@ -800,7 +795,6 @@ DEPENDENCIES
   capybara-email (~> 3.0)
   capybara-screenshot (~> 1.0)
   chartkick (~> 3.2)
-  codecov (~> 0.1)
   coderay (~> 1.1)
   coffee-rails (~> 4.2.0)
   cuprite (~> 0.5)
@@ -896,6 +890,7 @@ DEPENDENCIES
   seedbank (~> 0.4)
   select2-rails (~> 4.0)
   sendinblue (~> 2.4)
+  simplecov (~> 0.17)
   slim (~> 4.0)
   stackprof (~> 0.2)
   titleize (~> 1.4)

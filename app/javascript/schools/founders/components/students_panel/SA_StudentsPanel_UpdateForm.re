@@ -213,7 +213,8 @@ let make =
           <div className="w-full">
             <DisablingCover.Jsx2 disabled={state.saving}>
               <div className="mx-auto bg-white">
-                <div className="flex items-centre py-6 pl-16 mb-4 bg-gray-200">
+                <div
+                  className="flex items-centre py-6 pl-16 mb-4 border-b bg-gray-100">
                   <img
                     className="w-12 h-12 rounded-full mr-4"
                     src={student |> Student.avatarUrl}

@@ -30,9 +30,12 @@ feature 'Curriculum Editor', js: true do
   let(:new_level_name) { Faker::Lorem.sentence }
   let(:date) { Date.today }
 
-  # Data for target group
+  # Data for target group 1
   let(:new_target_group_name) { Faker::Lorem.sentence }
   let(:new_target_group_description) { Faker::Lorem.sentence }
+
+  # Data for target group 2
+  let(:new_target_group_name_2) { Faker::Lorem.sentence }
 
   # Data for a normal target
   let(:new_target_1_title) { Faker::Lorem.sentence }
@@ -154,6 +157,24 @@ feature 'Curriculum Editor', js: true do
       expect(target_group.description).not_to eq(new_target_group_description)
       expect(target_group.milestone).to eq(false)
 
+      # he should be able to create another target group
+      find('.target-group__create').click
+      expect(page).to have_text('TARGET GROUP DETAILS')
+      fill_in 'Title', with: new_target_group_name_2
+      click_button 'Yes'
+      click_button 'Create Target Group'
+
+      expect(page).to have_text('Target Group created successfully')
+      dismiss_notification
+
+      # Update sort index
+      page.execute_script("document.querySelector('#target-group-move-down-#{target_group.id}').click()")
+      sleep 2
+      expect(target_group.reload.sort_index).to eq(1)
+      page.execute_script("document.querySelector('#target-group-move-up-#{target_group.id}').click()")
+      sleep 2
+      expect(target_group.reload.sort_index).to eq(0)
+
       # user should be able to create a draft target from the curriculum index
       find("#create-target-input#{target_group.id}").click
       fill_in "create-target-input#{target_group.id}", with: new_target_1_title
@@ -212,6 +233,14 @@ feature 'Curriculum Editor', js: true do
       expect(target.evaluation_criteria).to eq([])
       expect(target.link_to_complete).to eq(link_to_complete)
       expect(target.quiz).to eq(nil)
+
+      # Update sort index
+      page.execute_script("document.querySelector('#target-move-up-#{target.id}').click()")
+      sleep 2
+      expect(target.reload.sort_index).to eq(2)
+      page.execute_script("document.querySelector('#target-move-down-#{target.id}').click()")
+      sleep 2
+      expect(target.reload.sort_index).to eq(3)
     end
 
     scenario 'creates a target with a quiz' do

@@ -14,8 +14,8 @@ let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", ~children) =>
             }
           }
           title=closeButtonTitle
-          className="flex items-center justify-center bg-white text-gray-800 font-bold py-3 px-5 rounded-l-full rounded-r-none focus:outline-none mt-4">
-          <i className="fas fa-times text-2xl" />
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+          <i className="fas fa-times text-xl" />
         </button>
       </div>
       <div className="w-full overflow-y-scroll"> children </div>

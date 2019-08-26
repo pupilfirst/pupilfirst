@@ -1,7 +1,8 @@
 ![PupilFirst Logo](https://s3.amazonaws.com/public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
 ---
 ![TeamCity Status for SVdotCO/pupilfirst](https://ci.sv.co/app/rest/builds/buildType:(id:PupilFirst_ContinuousIntegration)/statusIcon)
-[![codecov](https://codecov.io/gh/SVdotCO/pupilfirst/branch/master/graph/badge.svg?token=WkjxHcrnL4)](https://codecov.io/gh/SVdotCO/pupilfirst)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e1b6a2e1d15fba19e49e/maintainability)](https://codeclimate.com/repos/5d638348e7bd3c018b001e28/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e1b6a2e1d15fba19e49e/test_coverage)](https://codeclimate.com/repos/5d638348e7bd3c018b001e28/test_coverage)
 ---
 ## Setup for development
 

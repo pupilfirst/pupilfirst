@@ -149,19 +149,19 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
   <div className="w-full">
     <DisablingCover disabled=saving>
       <div className="mx-auto bg-white">
-        <div
-          className="flex items-centre font-bold py-6 pl-16 mb-4 bg-gray-200">
-          {
-            (
-              switch (admin) {
-              | Some(_) => "Update school admin"
-              | None => "Add new school admin"
-              }
-            )
-            |> str
-          }
-        </div>
         <div className="max-w-2xl p-6 mx-auto">
+          <h5
+            className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+            {
+              (
+                switch (admin) {
+                | Some(_) => "Update school admin"
+                | None => "Add new school admin"
+                }
+              )
+              |> str
+            }
+          </h5>
           <div>
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2"

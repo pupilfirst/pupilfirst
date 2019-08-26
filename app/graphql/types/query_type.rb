@@ -3,7 +3,7 @@ module Types
     field :courses, [Types::CourseType], null: false
     field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true
-      argument :version_id, ID, required: false
+      argument :version_on, String, required: false
     end
 
     def courses
@@ -11,7 +11,7 @@ module Types
     end
 
     def content_blocks(args)
-      ContentBlockResolver.new(context).collection(args[:target_id], args[:version_id])
+      ContentBlockResolver.new(context).collection(args[:target_id], args[:version_on])
     end
   end
 end

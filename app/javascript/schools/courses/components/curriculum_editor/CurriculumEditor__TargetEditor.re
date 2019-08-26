@@ -326,8 +326,8 @@ let handleEditorClosure = (hideEditorActionCB, state) =>
 
 module ContentBlocksQuery = [%graphql
   {|
-    query($targetId: ID!, $versionId: ID) {
-      contentBlocks(targetId: $targetId, versionId: $versionId) {
+    query($targetId: ID!, $versionOn: String) {
+      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
         id
         blockType
         sortIndex

@@ -5,11 +5,12 @@ module ContentBlocks
     end
 
     def execute
-      @target.content_blocks.create!(
+      content_block = ContentBlock.create!(
         block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
-        content: { markdown: content_block_text },
-        sort_index: 1
+        content: { markdown: content_block_text }
       )
+      @target.content_versions.create!(content_block: content_block, sort_index: 1, version_on: Date.today)
+      content_block
     end
 
     def content_block_text

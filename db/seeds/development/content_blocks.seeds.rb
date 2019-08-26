@@ -16,30 +16,27 @@ after 'development:targets' do
     course.targets.each do |target|
       content_sort_index = sort_index
       embed = embed_codes.sample
-
-      ContentBlock.create!(target: target, sort_index: content_sort_index[0], block_type: 'markdown', content: { markdown: Faker::Markdown.sandwich(6, 3) })
-      image_cb = ContentBlock.create!(target: target, sort_index: content_sort_index[1], block_type: 'image', content: { caption: Faker::Lorem.sentence(3) })
+      markdown_cb = ContentBlock.create!(block_type: 'markdown', content: { markdown: Faker::Markdown.sandwich(6, 3) })
+      image_cb = ContentBlock.create!(block_type: 'image', content: { caption: Faker::Lorem.sentence(3) })
 
       image_cb.file.attach(
         io: File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'jack_sparrow.png')),
         filename: 'jack_sparrow.png'
       )
 
-      file_cb = ContentBlock.create!(target: target, sort_index: content_sort_index[2], block_type: 'file', content: { title: Faker::Lorem.sentence(3) })
+      file_cb = ContentBlock.create!(block_type: 'file', content: { title: Faker::Lorem.sentence(3) })
 
       file_cb.file.attach(
         io: File.open(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')),
         filename: 'pdf-sample.pdf'
       )
 
-      ContentBlock.create!(target: target, sort_index: content_sort_index[3], block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code] })
+      embed_cb = ContentBlock.create!(block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code] })
+      version_date = [1.day.ago, Date.today].sample
+      [markdown_cb, image_cb, file_cb, embed_cb].each_with_index do |cb, index|
+        ContentVersion.create!(target: target, content_block: cb, sort_index: content_sort_index[index], version_on: version_date)
+      end
     end
-  end
-
-  # Create target content version
-
-  Target.all.each do |target|
-    target.target_content_versions.create!(content_blocks: target.content_blocks.pluck(:id))
   end
 end
 

@@ -53,11 +53,11 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "versionId",
+                  "name": "versionOn",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "ID",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null

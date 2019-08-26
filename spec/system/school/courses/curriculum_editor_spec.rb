@@ -75,6 +75,10 @@ feature 'Curriculum Editor', js: true do
     end
   end
 
+  def latest_content_versions(target)
+    target.reload.content_versions.where(version_on: target.latest_content_version_date)
+  end
+
   shared_examples 'authorized users creates the curriculum' do |user_type|
     scenario 'creates a basic course framework by adding level, target group and targets' do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
@@ -374,8 +378,8 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content added successfully')
       dismiss_notification
 
-      expect(target.reload.content_blocks.last.sort_index).to eq(1)
-      expect(target.content_blocks.last.block_type).to eq('markdown')
+      expect(target.content_versions.last.sort_index).to eq(1)
+      expect(target.content_versions.last.content_block.block_type).to eq('markdown')
 
       within('.add-content-block--open') do
         find('p', text: 'Image').click
@@ -393,8 +397,8 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content added successfully')
       dismiss_notification
 
-      content_block = target.content_blocks.reload.where(block_type: 'image').last
-      expect(content_block.sort_index).to eq(2)
+      content_block = target.content_versions.reload.last.content_block
+      expect(target.content_versions.last.sort_index).to eq(2)
       expect(content_block.file.filename).to eq('logo_hackkar.png')
 
       within('.add-content-block--open') do
@@ -407,8 +411,8 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content added successfully')
       dismiss_notification
 
-      content_block = target.content_blocks.reload.where(block_type: 'file').last
-      expect(content_block.sort_index).to eq(3)
+      content_block = target.content_versions.reload.last.content_block
+      expect(target.content_versions.last.sort_index).to eq(3)
       expect(content_block.file.filename).to eq('pdf-sample.pdf')
 
       within('.add-content-block--open') do
@@ -421,8 +425,9 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content added successfully')
       dismiss_notification
 
-      content_block = target.content_blocks.reload.where(block_type: 'embed').last
-      expect(content_block.sort_index).to eq(4)
+      content_block = target.content_versions.reload.last.content_block
+      expect(target.content_versions.last.sort_index).to eq(4)
+      expect(content_block.block_type).to eq('embed')
 
       # Change target title
       expect(page).to_not have_selector(:button, 'Update')
@@ -456,11 +461,10 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content added successfully')
       dismiss_notification
 
-      content_blocks = target.content_blocks.reload
-      expect(content_blocks.count).to eq(5)
-      expect(content_blocks.pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
-      expect(content_blocks.find_by(block_type: 'embed').sort_index).to eq(2)
-      expect(content_blocks.find_by(block_type: 'file').sort_index).to eq(5)
+      expect(latest_content_versions(target).count).to eq(5)
+      expect(latest_content_versions(target).pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(2)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(5)
 
       # Move a block down
       within('#content-block-controls-1') do
@@ -477,8 +481,8 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(target.content_blocks.reload.find_by(block_type: 'embed').sort_index).to eq(1)
-      expect(target.content_blocks.find_by(sort_index: 2).block_type).to eq('markdown')
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(1)
+      expect(latest_content_versions(target).find_by(sort_index: 2).content_block.block_type).to eq('markdown')
 
       # Move a block up
       within('#content-block-controls-5') do
@@ -494,8 +498,8 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(target.content_blocks.reload.find_by(block_type: 'file').sort_index).to eq(4)
-      expect(target.content_blocks.find_by(block_type: 'image').sort_index).to eq(5)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(4)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'image' }).last.sort_index).to eq(5)
 
       # Update a file title
       within('#content-block-form-4') do
@@ -506,7 +510,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(target.content_blocks.reload.find_by(block_type: 'file').content['title']).to eq('new file title')
+      expect(target.reload.current_content_blocks.find_by(block_type: 'file').content['title']).to eq('new file title')
 
       # Update an image caption
       within('#content-block-form-5') do
@@ -517,7 +521,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(target.content_blocks.reload.find_by(block_type: 'image').content['caption']).to eq('new image caption')
+      expect(target.reload.current_content_blocks.find_by(block_type: 'image').content['caption']).to eq('new image caption')
 
       # Delete few content block
       accept_confirm do
@@ -527,8 +531,8 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_selector('.content-block__content', count: 4)
-      expect(target.content_blocks.reload.find_by(block_type: 'image')).to eq(nil)
-      expect(target.content_blocks.pluck(:sort_index).sort).to eq([1, 2, 3, 4])
+      expect(target.reload.current_content_blocks.find_by(block_type: 'image')).to eq(nil)
+      expect(latest_content_versions(target).pluck(:sort_index).sort).to eq([1, 2, 3, 4])
 
       accept_confirm do
         within('#content-block-controls-3') do
@@ -540,7 +544,7 @@ feature 'Curriculum Editor', js: true do
       find('span', text: 'Add Content').click
 
       expect(page).to have_selector('.content-block__content', count: 3)
-      expect(target.content_blocks.reload.pluck(:sort_index).sort).to eq([1, 2, 3])
+      expect(latest_content_versions(target).pluck(:sort_index).sort).to eq([1, 2, 3])
     end
   end
 

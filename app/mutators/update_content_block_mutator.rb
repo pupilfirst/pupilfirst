@@ -17,6 +17,7 @@ class UpdateContentBlockMutator < ApplicationMutator
 
   def update_content_block
     ContentBlock.transaction do
+      handle_content_version
       case block_type
         when 'markdown'
           content_block.update!(content: { markdown: text })
@@ -27,7 +28,6 @@ class UpdateContentBlockMutator < ApplicationMutator
         else
           raise 'Not a valid block type'
       end
-      handle_content_version
     end
   end
 
@@ -35,37 +35,52 @@ class UpdateContentBlockMutator < ApplicationMutator
 
   def content_block
     @content_block ||= begin
-      if latest_content_version.updated_at.to_date == Date.today
-        current_content_block
+      if target.latest_content_version_date == Date.today
+        current_content_block.created_at.to_date == Date.today ? current_content_block : duplicate_block(current_content_block)
       else
-        new_content_block = current_content_block.dup
-        new_content_block.save!
-        new_content_block.file.attach(current_content_block.file.blob) if current_content_block.file.attached?
-        new_content_block
+        duplicate_block(current_content_block)
       end
     end
   end
 
   def authorized?
-    current_school_admin.present? || current_user.course_authors.where(course: content_block.target.level.course).exists?
-  end
-
-  def latest_content_version
-    @latest_content_version ||= target.target_content_versions.order('updated_at desc').first
+    current_school_admin.present? || current_user.course_authors.where(course: target.level.course).exists?
   end
 
   def target
-    @target ||= current_content_block.target
+    @target ||= current_content_block.content_versions.last.target
   end
 
   def current_content_block
     @current_content_block ||= ContentBlock.find(id)
   end
 
-  def handle_content_version
-    return if latest_content_version.updated_at.to_date == Date.today
+  def duplicate_block(current_block)
+    new_content_block = current_block.dup
+    new_content_block.save!
+    new_content_block.file.attach(current_content_block.file.blob) if current_content_block.file.attached?
+    new_content_block
+  end
 
-    updated_content_block_ids = latest_content_version.content_blocks - [id.to_i] + [content_block.id]
-    target.target_content_versions.create!(content_blocks: updated_content_block_ids)
+  def handle_content_version
+    latest_version_date = target.latest_content_version_date
+
+    if latest_version_date == Date.today
+      sort_index = ContentVersion.where(content_block_id: id, version_on: latest_version_date).last.sort_index
+      target.content_versions.where(content_block: content_block, version_on: Date.today, sort_index: sort_index).first_or_create!
+    else
+      create_new_version(latest_version_date)
+    end
+  end
+
+  def create_new_version(last_version_date)
+    previous_version = target.content_versions.where(version_on: last_version_date)
+    previous_version.each do |content_version|
+      next if content_version.content_block_id == id.to_i
+
+      target.content_versions.create!(content_block_id: content_version.content_block_id, version_on: Date.today, sort_index: content_version.sort_index)
+    end
+    new_content_block_index = ContentVersion.where(content_block_id: id, version_on: last_version_date).last.sort_index
+    target.content_versions.create!(content_block: content_block, version_on: Date.today, sort_index: new_content_block_index)
   end
 end

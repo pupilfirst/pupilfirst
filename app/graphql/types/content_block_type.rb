@@ -6,13 +6,7 @@ module Types
     field :content, Types::ContentType, null: false
 
     def content
-      content = { block_type: object.block_type }.merge(object.content)
-      content.merge!(file_details) if object.file.attached?
-      content
-    end
-
-    def file_details
-      { url: Rails.application.routes.url_helpers.rails_blob_path(object.file, only_path: true), filename: object.file.filename.to_s }
+      object.slice(:block_type, :url, :filename).merge(object[:content])
     end
   end
 end

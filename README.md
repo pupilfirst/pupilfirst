@@ -118,7 +118,7 @@ Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (
 
     server {
       listen 80;
-      server_name school1.localhost www.school1.localhost school2.localhost www.school2.localhost sso.pupilfirst.localhost;
+      server_name school.localhost www.school.localhost sso.school.localhost;
 
       location / {
         proxy_pass http://localhost:3000/;

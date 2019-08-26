@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
 
   # Redirect all requests from unknown domains to service homepage.
   rescue_from RequestFromUnknownDomain do
-    redirect_to 'https://www.pupilfirst.com'
+    redirect_to "https://www.pupilfirst.com?redirect_from=#{current_host}"
   end
 
   def raise_not_found
@@ -74,13 +74,9 @@ class ApplicationController < ActionController::Base
     @current_school ||= begin
       resolved_school = current_domain&.school
 
-      if current_host.in?(Rails.application.secrets.pupilfirst_domains)
-        nil
-      elsif resolved_school.present?
-        resolved_school
-      else
-        raise RequestFromUnknownDomain
-      end
+      raise RequestFromUnknownDomain if resolved_school.blank?
+
+      resolved_school
     end
   end
 

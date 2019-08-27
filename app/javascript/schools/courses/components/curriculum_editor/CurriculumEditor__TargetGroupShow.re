@@ -161,8 +161,11 @@ let make =
           }
           <div className="target-group__title pt-5">
             <h4> {targetGroup |> TargetGroup.name |> str} </h4>
+            <i title="arrow" className="fas fa-arrow-up" />
           </div>
           <div className="target-group__description">
+            <i title="arroamdshfdw" className="pfi pf-plus text-lg" />
+            <i title="arrow" className="fas fa-arrow-up fa-fw" />
             <p className="pt-1">
               {
                 (
@@ -176,55 +179,49 @@ let make =
             </p>
           </div>
         </div>
-        {
-          targetGroups |> List.length == 1 ?
-            React.null :
-            <div
-              className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
-              <div
-                title="Move Up"
-                id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
-                className={
-                  "target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
-                  ++ sortIndexHiddenClass(index == 0)
-                }
-                onClick={
-                  _ =>
-                    updateSortIndex(
-                      targetGroups,
-                      targetGroup,
-                      true,
-                      updateTagetGroupSortIndexCB,
-                      authenticityToken,
-                    )
-                }>
-                <i className="fas fa-arrow-up text-sm" />
-              </div>
-              <div
-                title="Move Down"
-                id={
-                  "target-group-move-down-" ++ (targetGroup |> TargetGroup.id)
-                }
-                className={
-                  "target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
-                  ++ sortIndexHiddenClass(
-                       index + 1 == (targetGroups |> List.length),
-                     )
-                }
-                onClick={
-                  _ =>
-                    updateSortIndex(
-                      targetGroups,
-                      targetGroup,
-                      false,
-                      updateTagetGroupSortIndexCB,
-                      authenticityToken,
-                    )
-                }>
-                <i className="fas fa-arrow-down text-sm" />
-              </div>
-            </div>
-        }
+        <div
+          className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
+          <div
+            title="Move Up"
+            id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
+            className={
+              "target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+              ++ sortIndexHiddenClass(index == 0)
+            }
+            onClick={
+              _ =>
+                updateSortIndex(
+                  targetGroups,
+                  targetGroup,
+                  true,
+                  updateTagetGroupSortIndexCB,
+                  authenticityToken,
+                )
+            }>
+            <i className="fas fa-arrow-up text-sm" />
+          </div>
+          <div
+            title="Move Down"
+            id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
+            className={
+              "target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+              ++ sortIndexHiddenClass(
+                   index + 1 == (targetGroups |> List.length),
+                 )
+            }
+            onClick={
+              _ =>
+                updateSortIndex(
+                  targetGroups,
+                  targetGroup,
+                  false,
+                  updateTagetGroupSortIndexCB,
+                  authenticityToken,
+                )
+            }>
+            <i className="fas fa-arrow-down text-sm" />
+          </div>
+        </div>
       </div>
       {
         targetsToDisplay

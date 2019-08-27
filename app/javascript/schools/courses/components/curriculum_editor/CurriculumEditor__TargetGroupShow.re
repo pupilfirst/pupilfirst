@@ -52,6 +52,7 @@ let updateSortIndex =
   updateTagetGroupSortIndexCB(newTargetGroups);
 };
 
+let sortIndexHiddenClass = bool => bool ? " invisible" : "";
 let make =
     (
       ~targetGroup,
@@ -65,6 +66,7 @@ let make =
       ~updateTagetSortIndexCB,
       ~updateTagetGroupSortIndexCB,
       ~authenticityToken,
+      ~index,
       _children,
     ) => {
   ...component,
@@ -179,7 +181,10 @@ let make =
           <div
             title="Move Up"
             id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
-            className="target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+            className={
+              "target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+              ++ sortIndexHiddenClass(index == 0)
+            }
             onClick={
               _ =>
                 updateSortIndex(
@@ -195,7 +200,12 @@ let make =
           <div
             title="Move Down"
             id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
-            className="target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+            className={
+              "target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+              ++ sortIndexHiddenClass(
+                   index + 1 == (targetGroups |> List.length),
+                 )
+            }
             onClick={
               _ =>
                 updateSortIndex(
@@ -212,7 +222,7 @@ let make =
       </div>
       {
         targetsToDisplay
-        |> List.map(target =>
+        |> List.mapi((index, target) =>
              <CurriculumEditor__TargetShow
                key={target |> Target.id}
                target
@@ -221,6 +231,7 @@ let make =
                targets=targetsToDisplay
                updateTagetSortIndexCB
                authenticityToken
+               index
              />
            )
         |> Array.of_list

@@ -356,7 +356,7 @@ let make =
           className="target-group__container max-w-3xl mt-5 mx-auto relative">
           {
             targetGroupsToDisplay
-            |> List.map(targetGroup =>
+            |> List.mapi((index, targetGroup) =>
                  <CurriculumEditor__TargetGroupShow
                    key={targetGroup |> TargetGroup.id}
                    targetGroup
@@ -372,6 +372,7 @@ let make =
                      updateTagetGroupSortIndex(state, send)
                    }
                    authenticityToken
+                   index
                  />
                )
             |> Array.of_list

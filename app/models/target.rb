@@ -204,4 +204,10 @@ class Target < ApplicationRecord
 
     ContentBlock.where(id: content_versions.where(version_on: latest_content_version_date))
   end
+
+  def latest_content_versions
+    return if content_versions.blank?
+
+    content_versions.where(version_on: latest_content_version_date)
+  end
 end

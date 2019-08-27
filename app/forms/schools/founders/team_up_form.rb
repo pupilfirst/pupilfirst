@@ -15,8 +15,7 @@ module Schools
       end
 
       def founders_must_be_active
-        # TODO: This should be comparing against founders.active.count
-        return if founders.count == founders.not_exited.count
+        return if founders.count == founders.active.count
 
         errors[:base] << 'Can only team up active students'
       end

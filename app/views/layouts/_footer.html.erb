@@ -62,10 +62,10 @@
 
         <div class="col text-right">
           <% if presenter.privacy_policy? %>
-            <%= link_to 'Privacy Policy', policies_privacy_path, target: "_blank", class: "cursor-pointer footer-bottom__link mr-3 text-reset" %>
+            <%= link_to 'Privacy Policy', agreement_path(agreement_type: 'privacy-policy'), target: "_blank", class: "cursor-pointer footer-bottom__link mr-3 text-reset" %>
           <% end %>
           <% if presenter.terms_of_use? %>
-            <%= link_to 'Terms of Use', policies_terms_path, target: "_blank", class: "cursor-pointer footer-bottom__link mr-3 text-reset" %>
+            <%= link_to 'Terms of Use', agreement_path(agreement_type: 'terms-of-use'), target: "_blank", class: "cursor-pointer footer-bottom__link mr-3 text-reset" %>
           <% end %>
           <span class="footer-bottom__copyright mr-3">&copy; <%= Time.now.year %> <%= presenter.school_name %>.</span>
         </div>

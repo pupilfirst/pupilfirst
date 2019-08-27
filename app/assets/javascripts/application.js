@@ -39,7 +39,6 @@
 // Shared
 //= require _shared
 //= require navbar
-//= require footer
 
 // Components
 //= require components

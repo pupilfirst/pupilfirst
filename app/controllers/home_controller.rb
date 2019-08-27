@@ -1,8 +1,6 @@
 class HomeController < ApplicationController
   def index
-    if current_school.blank?
-      render 'pupilfirst', layout: 'tailwind'
-    elsif current_user.present?
+    if current_user.present?
       redirect_to after_sign_in_path_for(current_user)
     else
       redirect_to new_user_session_path
@@ -15,28 +13,22 @@ class HomeController < ApplicationController
     render layout: 'tailwind'
   end
 
-  # GET /policies/privacy
-  def privacy
-    @privacy_policy = if current_school.present?
-      SchoolString::PrivacyPolicy.for(current_school)
-    else
-      File.read(Rails.root.join('privacy_policy.md'))
+  # GET /agreements/:agreement_type
+  def agreement
+    klass = case params[:agreement_type]
+      when 'privacy-policy'
+        SchoolString::PrivacyPolicy
+      when 'terms-of-use'
+        SchoolString::TermsOfUse
+      else
+        raise_not_found
     end
 
-    raise_not_found if @privacy_policy.blank?
+    @agreement_text = klass.for(current_school)
 
-    render layout: 'student'
-  end
+    raise_not_found if @agreement_text.blank?
 
-  # GET /policies/terms
-  def terms
-    @terms_of_use = if current_school.present?
-      SchoolString::TermsOfUse.for(current_school)
-    else
-      File.read(Rails.root.join('terms_of_use.md'))
-    end
-
-    raise_not_found if @terms_of_use.blank?
+    @agreement_type = klass.name.demodulize.titleize
 
     render layout: 'student'
   end

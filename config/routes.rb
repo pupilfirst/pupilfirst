@@ -181,10 +181,11 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  scope 'policies', as: 'policies', controller: 'home' do
-    get 'privacy'
-    get 'terms'
-  end
+  get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
+
+  # TODO: Remove the backwards-compatibility paths after a while.
+  get 'policies/privacy', to: redirect('/agreements/privacy-policy')
+  get 'policies/terms', to: redirect('/agreements/terms-of-use')
 
   resources :targets, only: %i[show] do
     member do

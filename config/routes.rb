@@ -177,9 +177,6 @@ Rails.application.routes.draw do
     get '/:id/e/:event_id(/:event_title)', action: 'timeline_event_show', as: 'student_timeline_event_show'
   end
 
-  # PupilFirst landing page
-  get 'pupilfirst', to: 'home#pupilfirst'
-
   get 'styleguide', to: 'home#styleguide', constraints: DevelopmentConstraint.new
 
   root 'home#index'

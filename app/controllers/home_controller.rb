@@ -9,12 +9,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def pupilfirst
-    @skip_container = true
-    @hide_layout_header = true
-    render layout: 'tailwind'
-  end
-
   def styleguide
     @skip_container = true
     @hide_layout_header = true

@@ -126,11 +126,12 @@ Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (
       }
     }
 
-You _may_ also need to point local school domains such as `school1.localhost` and `school2.localhost` domains
-(and `www` subdomains) to `127.0.0.1` in the `/etc/hosts` file:
+You _may_ also need to point the local school domains `school.localhost`, and the `www` and `sso` subdomains, to
+`127.0.0.1` in the `/etc/hosts` file:
 
-    127.0.0.1       school1.localhost
-    127.0.0.1       www.school1.localhost
+    127.0.0.1       school.localhost
+    127.0.0.1       www.school.localhost
+    127.0.0.1       sso.school.localhost
 
 ### Compile ReasonML, run Webpack Dev Server, and run the Rails Server
 
@@ -149,7 +150,7 @@ On another tab or window, run the Rails server:
 You'll want all three of these processes running for best performance when developing.
 
 If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
-`https://www.school1.localhost`.
+`https://www.school.localhost`.
 
 ## Testing
 

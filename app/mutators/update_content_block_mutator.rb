@@ -68,6 +68,7 @@ class UpdateContentBlockMutator < ApplicationMutator
     if latest_version_date == Date.today
       sort_index = ContentVersion.where(content_block_id: id, version_on: latest_version_date).last.sort_index
       target.content_versions.where(content_block: content_block, version_on: Date.today, sort_index: sort_index).first_or_create!
+      target.content_versions.where(content_block: current_content_block, version_on: Date.today).first.destroy! unless current_content_block.created_at.to_date == Date.today
     else
       create_new_version(latest_version_date)
     end

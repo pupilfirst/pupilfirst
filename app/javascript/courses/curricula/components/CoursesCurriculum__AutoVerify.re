@@ -131,6 +131,12 @@ let statusBar = (string, linkToComplete) => {
   </div>;
 };
 
+let completionInstructionText = linkToComplete =>
+  switch (linkToComplete) {
+  | Some(_) => "Before visiting the link..."
+  | None => "Before marking as complete..."
+  };
+
 [@react.component]
 let make =
     (
@@ -143,7 +149,10 @@ let make =
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
   [|
-    <CourseCurriculum__CompletionInstructions targetDetails />,
+    <CourseCurriculum__CompletionInstructions
+      targetDetails
+      title={completionInstructionText(linkToComplete)}
+    />,
     <div className="mt-4" id="auto-verify-target">
       {
         switch (targetStatus |> TargetStatus.status) {

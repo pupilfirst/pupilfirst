@@ -126,7 +126,7 @@ Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (
       }
     }
 
-You _may_ also need to point the local school domains `school.localhost`, and the `www` and `sso` subdomains, to
+You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to
 `127.0.0.1` in the `/etc/hosts` file:
 
     127.0.0.1       school.localhost
@@ -150,7 +150,7 @@ On another tab or window, run the Rails server:
 You'll want all three of these processes running for best performance when developing.
 
 If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
-`https://www.school.localhost`.
+`http://www.school.localhost`.
 
 ## Testing
 

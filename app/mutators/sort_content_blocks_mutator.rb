@@ -10,7 +10,7 @@ class SortContentBlocksMutator < ApplicationMutator
   private
 
   def target
-    ContentBlock.find(content_block_ids.first).target
+    ContentVersion.where(content_block_id: content_block_ids).first.target
   end
 
   def authorized?

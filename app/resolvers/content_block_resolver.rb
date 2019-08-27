@@ -29,7 +29,7 @@ class ContentBlockResolver < ApplicationResolver
   def content_data(content_versions)
     ContentBlock.where(
       id: content_versions.select(:content_block_id)
-    ).map do |content_block|
+    ).with_attached_file.map do |content_block|
       content_block_data = content_block.attributes.slice('id', 'block_type', 'content').merge(content_versions.find_by(content_block: content_block).slice('sort_index'))
       content_block_data.merge!(file_details(content_block)) if content_block.file.attached?
       content_block_data.symbolize_keys

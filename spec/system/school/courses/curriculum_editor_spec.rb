@@ -76,7 +76,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   def latest_content_versions(target)
-    target.reload.content_versions.where(version_on: target.latest_content_version_date)
+    target.content_versions.reload.where(version_on: target.latest_content_version_date)
   end
 
   shared_examples 'authorized users creates the curriculum' do |user_type|
@@ -510,7 +510,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(target.reload.current_content_blocks.find_by(block_type: 'file').content['title']).to eq('new file title')
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.content_block.content['title']).to eq('new file title')
 
       # Update an image caption
       within('#content-block-form-5') do
@@ -521,7 +521,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(target.reload.current_content_blocks.find_by(block_type: 'image').content['caption']).to eq('new image caption')
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'image' }).last.content_block.content['caption']).to eq('new image caption')
 
       # Delete few content block
       accept_confirm do

@@ -1,11 +1,11 @@
 module Targets
-  class CreateOrUpdateService
+  class UpdateService
     def initialize(target)
       @target = target
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def create_or_update(target_params)
+    # rubocop:disable Metrics/AbcSize
+    def execute(target_params)
       Target.transaction do
         @target.role = 'founder'
         @target.title = target_params[:title]
@@ -17,7 +17,6 @@ module Targets
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
         @target.link_to_complete = target_params[:link_to_complete]
         @target.resubmittable = target_params[:evaluation_criterion_ids].present?
-        @target.sort_index = sort_index if target_params[:sort_index].blank?
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids] if target_params[:evaluation_criterion_ids].present?
         @target.link_to_complete = target_params[:link_to_complete] if target_params[:link_to_complete].present?
         @target.completion_instructions = target_params[:completion_instructions]
@@ -34,7 +33,7 @@ module Targets
       end
     end
 
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -64,11 +63,6 @@ module Targets
 
     def update_visibility(visibility)
       ::Targets::UpdateVisibilityService.new(@target, visibility).execute
-    end
-
-    def sort_index
-      max_index = @target.target_group.targets.maximum(:sort_index)
-      max_index ? max_index + 1 : 1
     end
   end
 end

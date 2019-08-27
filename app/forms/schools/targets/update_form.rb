@@ -1,13 +1,12 @@
 module Schools
   module Targets
-    class CreateOrUpdateForm < Reform::Form
+    class UpdateForm < Reform::Form
       property :role, validates: { presence: true }
       property :title, validates: { presence: true, length: { maximum: 250 } }
       property :visibility, validates: { presence: true }
       property :description
       property :target_action_type
       property :target_group_id, validates: { presence: true }
-      property :sort_index
       property :youtube_video_id
       property :resource_ids
       property :prerequisite_target_ids
@@ -33,7 +32,7 @@ module Schools
       end
 
       def save
-        ::Targets::CreateOrUpdateService.new(model).create_or_update(target_params)
+        ::Targets::UpdateService.new(model).execute(target_params)
       end
 
       private
@@ -50,7 +49,6 @@ module Schools
           description: description,
           target_action_type: target_action_type,
           target_group_id: target_group_id,
-          sort_index: sort_index,
           youtube_video_id: youtube_video_id,
           resource_ids: resource_ids,
           prerequisite_target_ids: prerequisite_target_ids,

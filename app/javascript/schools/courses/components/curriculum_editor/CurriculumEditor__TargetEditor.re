@@ -183,11 +183,7 @@ let setPayload = (state, target, authenticityToken) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
-  Js.Dict.set(
-    targetData,
-    "sort_index",
-    target |> Target.sortIndex |> string_of_int |> Js.Json.string,
-  );
+
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
 
   Js.Dict.set(
@@ -431,9 +427,7 @@ let make =
     dispatch(UpdateContentEditorDirty(contentEditorDirty));
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
-  let handleResponseCB = (closeEditor, dispatch, json) => {
-    let id = json |> Json.Decode.(field("id", string));
-    let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+  let handleResponseCB = (closeEditor, dispatch, _json) => {
     let prerequisiteTargets =
       state.prerequisiteTargets
       |> List.filter(((_, _, selected)) => selected)
@@ -459,14 +453,14 @@ let make =
       };
     let newTarget =
       Target.create(
-        ~id,
+        ~id=target |> Target.id,
         ~targetGroupId,
         ~title=state.title,
         ~evaluationCriteria,
         ~prerequisiteTargets,
         ~quiz,
         ~linkToComplete,
-        ~sortIndex,
+        ~sortIndex=target |> Target.sortIndex,
         ~visibility=state.visibility,
         ~completionInstructions=Some(state.completionInstructions),
       );

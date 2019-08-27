@@ -180,7 +180,7 @@ Rails.application.routes.draw do
   # PupilFirst landing page
   get 'pupilfirst', to: 'home#pupilfirst'
 
-  get 'styleguide', to: 'home#styleguide'
+  get 'styleguide', to: 'home#styleguide', constraints: DevelopmentConstraint.new
 
   root 'home#index'
 

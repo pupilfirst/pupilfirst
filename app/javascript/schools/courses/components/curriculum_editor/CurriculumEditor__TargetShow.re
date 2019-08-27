@@ -23,6 +23,8 @@ let updateSortIndex =
   updateTagetSortIndexCB(newTargets);
 };
 
+let sortIndexHiddenClass = bool => bool ? " invisible" : "";
+
 let make =
     (
       ~target,
@@ -31,6 +33,7 @@ let make =
       ~targets,
       ~updateTagetSortIndexCB,
       ~authenticityToken,
+      ~index,
       _children,
     ) => {
   ...component,
@@ -42,7 +45,10 @@ let make =
         <div
           title="Move Up"
           id={"target-move-up-" ++ (target |> Target.id)}
-          className="target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+          className={
+            "target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+            ++ sortIndexHiddenClass(index == 0)
+          }
           onClick={
             _ =>
               updateSortIndex(
@@ -58,7 +64,10 @@ let make =
         <div
           title="Move Down"
           id={"target-move-down-" ++ (target |> Target.id)}
-          className="target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200"
+          className={
+            "target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200"
+            ++ sortIndexHiddenClass(index + 1 == (targets |> List.length))
+          }
           onClick={
             _ =>
               updateSortIndex(

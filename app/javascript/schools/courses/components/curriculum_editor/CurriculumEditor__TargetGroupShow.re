@@ -29,7 +29,7 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
-  "target-group__header relative cursor-pointer px-6 pb-5 text-center rounded-lg rounded-b-none overflow-hidden w-full "
+  "target-group__header relative cursor-pointer px-20 pb-5 text-center rounded-lg rounded-b-none overflow-hidden w-full "
   ++ (archived ? "target-group__header--archived" : " ");
 
 let updateSortIndex =
@@ -52,6 +52,7 @@ let updateSortIndex =
   updateTagetGroupSortIndexCB(newTargetGroups);
 };
 
+let sortIndexHiddenClass = bool => bool ? " invisible" : "";
 let make =
     (
       ~targetGroup,
@@ -65,6 +66,7 @@ let make =
       ~updateTagetSortIndexCB,
       ~updateTagetGroupSortIndexCB,
       ~authenticityToken,
+      ~index,
       _children,
     ) => {
   ...component,
@@ -141,9 +143,10 @@ let make =
       |> ignore;
     };
 
-    <div className="target-group__box relative mt-12 rounded-lg shadow">
+    <div
+      className="target-group__box relative mt-12 rounded-lg border border-b-0 border-gray-300 shadow-md">
       <div
-        className="flex w-full target-group__header-container overflow-hidden rounded-lg rounded-b-none items-center relative bg-white hover:bg-gray-100 hover:text-primary-500">
+        className="flex w-full target-group__header-container rounded-lg rounded-b-none items-center relative bg-white hover:bg-gray-100 hover:text-primary-500">
         <div
           id="target_group"
           className={archivedClasses(targetGroup |> TargetGroup.archived)}
@@ -159,8 +162,8 @@ let make =
           <div className="target-group__title pt-5">
             <h4> {targetGroup |> TargetGroup.name |> str} </h4>
           </div>
-          <div className="target-group__description pt-1">
-            <p>
+          <div className="target-group__description">
+            <p className="pt-1">
               {
                 (
                   switch (targetGroup |> TargetGroup.description) {
@@ -173,45 +176,59 @@ let make =
             </p>
           </div>
         </div>
-        <div
-          className="target-group__group-reorder flex flex-col rounded-r absolute left-0 z-50 h-full border border-l-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
-          <div
-            title="Move Up"
-            id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
-            className="target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
-            onClick={
-              _ =>
-                updateSortIndex(
-                  targetGroups,
-                  targetGroup,
-                  true,
-                  updateTagetGroupSortIndexCB,
-                  authenticityToken,
-                )
-            }>
-            <i className="fas fa-arrow-up text-sm" />
-          </div>
-          <div
-            title="Move Down"
-            id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
-            className="target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
-            onClick={
-              _ =>
-                updateSortIndex(
-                  targetGroups,
-                  targetGroup,
-                  false,
-                  updateTagetGroupSortIndexCB,
-                  authenticityToken,
-                )
-            }>
-            <i className="fas fa-arrow-down text-sm" />
-          </div>
-        </div>
+        {
+          targetGroups |> List.length == 1 ?
+            React.null :
+            <div
+              className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
+              <div
+                title="Move Up"
+                id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
+                className={
+                  "target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+                  ++ sortIndexHiddenClass(index == 0)
+                }
+                onClick={
+                  _ =>
+                    updateSortIndex(
+                      targetGroups,
+                      targetGroup,
+                      true,
+                      updateTagetGroupSortIndexCB,
+                      authenticityToken,
+                    )
+                }>
+                <i className="fas fa-arrow-up text-sm" />
+              </div>
+              <div
+                title="Move Down"
+                id={
+                  "target-group-move-down-" ++ (targetGroup |> TargetGroup.id)
+                }
+                className={
+                  "target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+                  ++ sortIndexHiddenClass(
+                       index + 1 == (targetGroups |> List.length),
+                     )
+                }
+                onClick={
+                  _ =>
+                    updateSortIndex(
+                      targetGroups,
+                      targetGroup,
+                      false,
+                      updateTagetGroupSortIndexCB,
+                      authenticityToken,
+                    )
+                }>
+                <i className="fas fa-arrow-down text-sm" />
+              </div>
+            </div>
+        }
       </div>
       {
         targetsToDisplay
-        |> List.map(target =>
+        |> List.mapi((index, target) =>
              <CurriculumEditor__TargetShow
                key={target |> Target.id}
                target
@@ -220,6 +237,7 @@ let make =
                targets=targetsToDisplay
                updateTagetSortIndexCB
                authenticityToken
+               index
              />
            )
         |> Array.of_list

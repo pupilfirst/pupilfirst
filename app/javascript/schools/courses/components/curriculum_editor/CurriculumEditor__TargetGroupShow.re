@@ -161,11 +161,8 @@ let make =
           }
           <div className="target-group__title pt-5">
             <h4> {targetGroup |> TargetGroup.name |> str} </h4>
-            <i title="arrow" className="fas fa-arrow-up" />
           </div>
           <div className="target-group__description">
-            <i title="arroamdshfdw" className="pfi pf-plus text-lg" />
-            <i title="arrow" className="fas fa-arrow-up fa-fw" />
             <p className="pt-1">
               {
                 (

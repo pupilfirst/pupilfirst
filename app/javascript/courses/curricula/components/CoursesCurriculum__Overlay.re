@@ -411,20 +411,28 @@ let completeSection =
     {
       switch (targetStatus |> TargetStatus.status, completionType) {
       | (Pending, Evaluated) =>
-        <CoursesCurriculum__SubmissionForm
-          authenticityToken
-          target
-          addSubmissionCB={
-            addSubmission(target, setTargetDetails, addSubmissionCB)
-          }
-        />
+        [|
+          <CourseCurriculum__CompletionInstructions targetDetails />,
+          <CoursesCurriculum__SubmissionForm
+            authenticityToken
+            target
+            addSubmissionCB={
+              addSubmission(target, setTargetDetails, addSubmissionCB)
+            }
+          />,
+        |]
+        |> React.array
       | (Pending, TakeQuiz) =>
-        <CoursesCurriculum__Quiz
-          target
-          targetDetails
-          authenticityToken
-          addSubmissionCB=addVerifiedSubmissionCB
-        />
+        [|
+          <CourseCurriculum__CompletionInstructions targetDetails />,
+          <CoursesCurriculum__Quiz
+            target
+            targetDetails
+            authenticityToken
+            addSubmissionCB=addVerifiedSubmissionCB
+          />,
+        |]
+        |> React.array
 
       | (
           Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),

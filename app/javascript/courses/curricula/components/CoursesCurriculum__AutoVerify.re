@@ -142,21 +142,25 @@ let make =
     ) => {
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
-  <div className="mt-4" id="auto-verify-target">
-    {
-      switch (targetStatus |> TargetStatus.status) {
-      | Pending =>
-        autoVerify(
-          target,
-          linkToComplete,
-          saving,
-          setSaving,
-          authenticityToken,
-          addSubmissionCB,
-        )
-      | Locked(_) => React.null
-      | _ => statusBar("Completed", linkToComplete)
+  [|
+    <CourseCurriculum__CompletionInstructions targetDetails />,
+    <div className="mt-4" id="auto-verify-target">
+      {
+        switch (targetStatus |> TargetStatus.status) {
+        | Pending =>
+          autoVerify(
+            target,
+            linkToComplete,
+            saving,
+            setSaving,
+            authenticityToken,
+            addSubmissionCB,
+          )
+        | Locked(_) => React.null
+        | _ => statusBar("Completed", linkToComplete)
+        }
       }
-    }
-  </div>;
+    </div>,
+  |]
+  |> React.array;
 };

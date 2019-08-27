@@ -15,6 +15,7 @@ module Schools
       property :quiz
       property :link_to_complete, validates: { url: true, allow_blank: true }
       property :archived
+      property :completion_instructions, validates: { presence: true, length: { maximum: 250 }, allow_blank: true }
 
       validate :target_group_exists
       validate :only_one_method_of_completion
@@ -56,7 +57,8 @@ module Schools
           evaluation_criterion_ids: evaluation_criterion_ids,
           quiz: quiz,
           link_to_complete: link_to_complete,
-          archived: archived
+          archived: archived,
+          completion_instructions: completion_instructions
         }
       end
     end

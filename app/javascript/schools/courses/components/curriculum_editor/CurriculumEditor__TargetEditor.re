@@ -49,6 +49,7 @@ type state = {
   activeStep,
   visibility: Target.visibility,
   contentEditorDirty: bool,
+  completionInstructions: string,
 };
 
 type action =
@@ -63,7 +64,8 @@ type action =
   | UpdateSaving
   | UpdateActiveStep(activeStep)
   | UpdateVisibility(Target.visibility)
-  | UpdateContentEditorDirty(bool);
+  | UpdateContentEditorDirty(bool)
+  | UpdateCompletionInstructions(string);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -195,6 +197,12 @@ let setPayload = (state, target, authenticityToken) => {
   );
 
   Js.Dict.set(targetData, "visibility", visibility |> Js.Json.string);
+
+  Js.Dict.set(
+    targetData,
+    "completion_instructions",
+    state.completionInstructions |> Js.Json.string,
+  );
 
   let (evaluationCriteriaIds, linkToComplete, quiz) =
     switch (state.methodOfCompletion) {
@@ -332,6 +340,11 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateCompletionInstructions(completionInstructions) => {
+      ...state,
+      completionInstructions,
+      dirty: true,
+    }
   | UpdateContentEditorDirty(contentEditorDirty) => {
       ...state,
       contentEditorDirty,
@@ -387,6 +400,8 @@ let make =
     activeStep: AddContent,
     visibility: target |> Target.visibility,
     contentEditorDirty: false,
+    completionInstructions:
+      target |> Target.completionInstructions |> OptionUtils.toString,
   };
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
@@ -444,15 +459,16 @@ let make =
       };
     let newTarget =
       Target.create(
-        id,
-        targetGroupId,
-        state.title,
-        evaluationCriteria,
-        prerequisiteTargets,
-        quiz,
-        linkToComplete,
-        sortIndex,
-        state.visibility,
+        ~id,
+        ~targetGroupId,
+        ~title=state.title,
+        ~evaluationCriteria,
+        ~prerequisiteTargets,
+        ~quiz,
+        ~linkToComplete,
+        ~sortIndex,
+        ~visibility=state.visibility,
+        ~completionInstructions=Some(state.completionInstructions),
       );
     Notification.success("Success", "Target updated successfully");
     updateTargetCB(newTarget, contentBlocks, closeEditor);
@@ -652,6 +668,41 @@ let make =
                       {"No" |> str}
                     </button>
                   </div>
+                </div>
+                <div className="mb-6">
+                  <label
+                    className="block tracking-wide text-sm font-semibold mr-6"
+                    htmlFor="completion-instructions">
+                    {
+                      "Do you have any completion instructions for the student?"
+                      |> str
+                    }
+                    <span className="ml-1 text-xs font-normal">
+                      {"(optional)" |> str}
+                    </span>
+                  </label>
+                  <div className="text-xs mt-1 text-gray-800">
+                    {
+                      "These instructions will be displayed close to where students complete the target."
+                      |> str
+                    }
+                  </div>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="completion-instructions"
+                    type_="text"
+                    maxLength=255
+                    placeholder="Do these specific things to complete this target!"
+                    value={state.completionInstructions}
+                    onChange={
+                      event =>
+                        dispatch(
+                          UpdateCompletionInstructions(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
+                    }
+                  />
                 </div>
                 {
                   targetEvaluated() ?

@@ -4,7 +4,7 @@ module Targets
       @target = target
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def create_or_update(target_params)
       Target.transaction do
         @target.role = 'founder'
@@ -20,6 +20,7 @@ module Targets
         @target.sort_index = sort_index if target_params[:sort_index].blank?
         @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids] if target_params[:evaluation_criterion_ids].present?
         @target.link_to_complete = target_params[:link_to_complete] if target_params[:link_to_complete].present?
+        @target.completion_instructions = target_params[:completion_instructions]
 
         @target.save!
 
@@ -33,7 +34,7 @@ module Targets
       end
     end
 
-    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     private
 

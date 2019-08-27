@@ -40,47 +40,51 @@ let make =
   render: _self =>
     <div
       className="flex target-group__target-container border-t bg-white overflow-hidden items-center relative hover:bg-gray-100 hover:text-primary-500">
-      <div
-        className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
-        <div
-          title="Move Up"
-          id={"target-move-up-" ++ (target |> Target.id)}
-          className={
-            "target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
-            ++ sortIndexHiddenClass(index == 0)
-          }
-          onClick={
-            _ =>
-              updateSortIndex(
-                targets,
-                target,
-                true,
-                updateTagetSortIndexCB,
-                authenticityToken,
-              )
-          }>
-          <i className="fas fa-arrow-up text-sm" />
-        </div>
-        <div
-          title="Move Down"
-          id={"target-move-down-" ++ (target |> Target.id)}
-          className={
-            "target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200"
-            ++ sortIndexHiddenClass(index + 1 == (targets |> List.length))
-          }
-          onClick={
-            _ =>
-              updateSortIndex(
-                targets,
-                target,
-                false,
-                updateTagetSortIndexCB,
-                authenticityToken,
-              )
-          }>
-          <i className="fas fa-arrow-down text-sm" />
-        </div>
-      </div>
+      {
+        targets |> List.length == 1 ?
+          React.null :
+          <div
+            className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
+            <div
+              title="Move Up"
+              id={"target-move-up-" ++ (target |> Target.id)}
+              className={
+                "target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200"
+                ++ sortIndexHiddenClass(index == 0)
+              }
+              onClick={
+                _ =>
+                  updateSortIndex(
+                    targets,
+                    target,
+                    true,
+                    updateTagetSortIndexCB,
+                    authenticityToken,
+                  )
+              }>
+              <i className="fas fa-arrow-up text-sm" />
+            </div>
+            <div
+              title="Move Down"
+              id={"target-move-down-" ++ (target |> Target.id)}
+              className={
+                "target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200"
+                ++ sortIndexHiddenClass(index + 1 == (targets |> List.length))
+              }
+              onClick={
+                _ =>
+                  updateSortIndex(
+                    targets,
+                    target,
+                    false,
+                    updateTagetSortIndexCB,
+                    authenticityToken,
+                  )
+              }>
+              <i className="fas fa-arrow-down text-sm" />
+            </div>
+          </div>
+      }
       <div
         id={"target-show-" ++ (target |> Target.id)}
         className={archivedClasses(target)}

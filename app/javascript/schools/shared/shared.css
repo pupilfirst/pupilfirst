@@ -424,62 +424,64 @@
   visibility: visible;
 }
 
+.quiz-maker__answer-option-correct {
+  @apply bg-green-400 rounded-lg border border-green-500 shadow-md;
+}
+
+.quiz-maker__answer-option-correct .quiz-maker__answer-option-answer {
+  @apply border-transparent;
+}
+
 .quiz-maker__answers-container::before {
   content: "";
-  position: absolute;
+  @apply absolute bg-gray-400;
   top: 45%;
   transform: translateY(-50%);
   height: calc(100% - 45px);
   margin-top: 0.875rem;
   bottom: 0;
   width: 1px;
-  background: #afdcf8;
   left: 1.5rem;
 }
 
 .quiz-maker__answer-option-pointer {
   width: 1.375rem;
   height: 1.375rem;
-  position: absolute;
-  color: #fff;
-  overflow: hidden;
-  background: #fff;
+  @apply absolute rounded-full overflow-hidden text-center text-white bg-white border border-gray-400;
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  text-align: center;
-  border: 1px solid #fff;
   left: 13px;
-  top: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   margin: 0;
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
+}
+
+.quiz-maker__answer-option-pointer--correct {
+  background: #10ab4c;
+  @apply border border-white;
 }
 
 .quiz-maker__answer-option-pointer:hover {
   box-shadow: 0 3px 3px 1px rgba(0, 0, 0, 0.1), inset 0 0 0 4px #39b54a;
 }
 
-.quiz-maker__answer-option-pointer--add {
+.quiz-maker__add-answer-option-pointer {
   width: 1.75rem;
   height: 1.75rem;
+  @apply bg-white absolute rounded-full;
   left: 10px;
-  top: 8px;
+  top: 50%;
+  box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-50%);
   border: 0;
 }
 
-.quiz-maker__answer-option:hover .quiz-maker__answer-option-pointer--add {
+.quiz-maker__add-answer-option-pointer:hover .quiz-maker__add-answer-option-pointer {
   box-shadow: 0 3px 3px 1px rgba(0, 0, 0, 0.1);
 }
 
-.quiz-maker__answer-option:hover .quiz-maker__answer-option-pointer--add img {
+.quiz-maker__add-answer-option:hover .quiz-maker__add-answer-option-pointer img {
   filter: invert(1);
-}
-
-.quiz-maker__answer-option-pointer-img {
-  width: 10px;
-}
-
-.quiz-maker__answer-option-pointer--correct {
-  background: #10ab4c;
 }
 
 .select-list__item-selected {

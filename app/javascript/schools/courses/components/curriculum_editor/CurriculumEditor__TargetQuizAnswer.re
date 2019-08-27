@@ -4,6 +4,10 @@ open CurriculumEditor__Types;
 
 let str = React.string;
 
+let correctAnswerOptionClasses = bool =>
+  "relative mb-2 overflow-hidden "
+  ++ (bool ? "quiz-maker__answer-option-correct" : "");
+
 [@react.component]
 let make =
     (
@@ -14,7 +18,10 @@ let make =
       ~markAsCorrectCB,
       ~answerOptionId,
     ) =>
-  <div className="relative">
+  <div
+    className={
+      correctAnswerOptionClasses(answerOption |> AnswerOption.correctAnswer)
+    }>
     {
       answerOption |> AnswerOption.correctAnswer ?
         <div
@@ -34,11 +41,11 @@ let make =
     }
     <div
       id={answerOptionId ++ "_block"}
-      className="flex flex-col bg-white mb-2 border rounded ml-12">
+      className="quiz-maker__answer-option-answer flex flex-col bg-white border border-gray-400 rounded-lg ml-12">
       <div className="flex">
         <textarea
           id=answerOptionId
-          className="appearance-none block w-full bg-white text-gray-800 text-sm rounded px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white text-gray-800 text-sm rounded-lg px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           placeholder="Answer option (supports markdown)"
           value={answerOption |> AnswerOption.answer}
           onChange={
@@ -55,8 +62,8 @@ let make =
         <button
           className={
             answerOption |> AnswerOption.correctAnswer ?
-              "w-28 flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-green-500 font-semibold cursor-default focus:outline-none text-xs py-1 px-2" :
-              "w-28 flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
+              "w-28 flex-shrink-0 border-l border-gray-400 text-green-600 font-semibold cursor-default focus:outline-none text-xs py-1 px-2" :
+              "w-28 flex-shrink-0 border-l border-gray-400 text-gray-800 hover:text-gray-900 focus:outline-none text-xs py-1 px-2"
           }
           type_="button"
           onClick={
@@ -73,7 +80,7 @@ let make =
         {
           canBeDeleted ?
             <button
-              className="flex-shrink-0 border border-l-1 border-r-0 border-t-0 border-b-0 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
+              className="flex-shrink-0 border-l border-gray-400 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
               type_="button"
               onClick={
                 event => {

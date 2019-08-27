@@ -801,7 +801,7 @@ let make =
                             dispatch(AddQuizQuestion);
                           }
                         )
-                        className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
+                        className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
                         <i className="fas fa-plus-circle text-lg" />
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}

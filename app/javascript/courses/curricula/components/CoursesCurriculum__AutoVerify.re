@@ -94,7 +94,10 @@ let autoVerify =
       switch (saving, linkToComplete) {
       | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
       | (false, Some(_)) =>
-        completeButtonText("Visit Link To Complete", "fas fa-external-link")
+        completeButtonText(
+          "Visit Link To Complete",
+          "fas fa-external-link-alt",
+        )
       | (false, None) =>
         completeButtonText("Mark As Complete", "fas fa-check-square")
       }
@@ -113,7 +116,7 @@ let statusBar = (string, linkToComplete) => {
     </div>;
   let visitLink = link =>
     <a className="text-right w-full" href=link target="_blank">
-      <i className="fas fa-external-link mr-2" />
+      <i className="fas fa-external-link-alt mr-2" />
       {"Visit Link" |> str}
     </a>;
 

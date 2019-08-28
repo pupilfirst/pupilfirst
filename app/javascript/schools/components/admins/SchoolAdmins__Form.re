@@ -103,8 +103,21 @@ let handleButtonClick =
     )
   };
 };
+
 let isInvalidEmail = email =>
   email |> EmailUtils.isInvalid(~allowBlank=false);
+
+let showInvalidEmailError = (email, admin) =>
+  switch (admin) {
+  | Some(_) => isInvalidEmail(email)
+  | None => email == "" ? false : isInvalidEmail(email)
+  };
+
+let showInvalidNameError = (name, admin) =>
+  switch (admin) {
+  | Some(_) => name == ""
+  | None => false
+  };
 let saveDisabled = (email, name, saving, admin) => {
   let dirty =
     switch (admin) {
@@ -116,17 +129,11 @@ let saveDisabled = (email, name, saving, admin) => {
   isInvalidEmail(email) || saving || name == "" || dirty;
 };
 
-let buttonText = (email, name, saving, admin) =>
-  switch (saving, email == "", isInvalidEmail(email), name == "") {
-  | (true, false | true, false | true, false | true) => "Saving"
-  | (false, true, false | true, false | true) => "Enter Email"
-  | (false, false, true, false | true) => "Enter a valid Email"
-  | (false, false, false, true) => "Enter full name"
-  | (false, false, false, false) =>
-    switch (admin) {
-    | Some(_) => "Update School Admin"
-    | None => "Create School Admin"
-    }
+let buttonText = (saving, admin) =>
+  switch (saving, admin) {
+  | (true, _) => "Saving"
+  | (false, Some(_)) => "Update School Admin"
+  | (false, None) => "Create School Admin"
   };
 
 [@react.component]
@@ -149,19 +156,19 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
   <div className="w-full">
     <DisablingCover disabled=saving>
       <div className="mx-auto bg-white">
-        <div
-          className="flex items-centre font-bold py-6 pl-16 mb-4 bg-gray-200">
-          {
-            (
-              switch (admin) {
-              | Some(_) => "Update school admin"
-              | None => "Add new school admin"
-              }
-            )
-            |> str
-          }
-        </div>
         <div className="max-w-2xl p-6 mx-auto">
+          <h5
+            className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+            {
+              (
+                switch (admin) {
+                | Some(_) => "Update school admin"
+                | None => "Add new school admin"
+                }
+              )
+              |> str
+            }
+          </h5>
           <div>
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2"
@@ -179,6 +186,10 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               type_="email"
               placeholder="Add email here"
             />
+            <School__InputGroupError
+              message="Enter a valid Email"
+              active={showInvalidEmailError(email, admin)}
+            />
           </div>
           <div className="mt-5">
             <label
@@ -195,7 +206,11 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="name"
               type_="text"
-              placeholder="add name here"
+              placeholder="Add name here"
+            />
+            <School__InputGroupError
+              message="Enter a valid name"
+              active={showInvalidNameError(name, admin)}
             />
           </div>
           <div className="w-auto mt-8">
@@ -212,7 +227,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
                 )
               }
               className="w-full btn btn-large btn-primary">
-              {buttonText(email, name, saving, admin) |> str}
+              {buttonText(saving, admin) |> str}
             </button>
           </div>
         </div>

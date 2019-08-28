@@ -34,3 +34,18 @@ let distinct = l => {
 
   aux(l, []);
 };
+
+let swapDown = (e, l) => {
+  let rec aux = (prev, l, e) =>
+    switch (l) {
+    | [head, next, ...tail] when head == e => prev @ [next, head, ...tail]
+    | [head, ...tail] => aux(prev @ [head], tail, e)
+    | [] => prev
+    };
+
+  aux([], l, e);
+};
+
+let swapUp = (e, l) => l |> List.rev |> swapDown(e) |> List.rev;
+
+let swap = (up, e, l) => up ? l |> swapUp(e) : l |> swapDown(e);

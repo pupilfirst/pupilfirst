@@ -4,14 +4,6 @@ ENV['RACK_ENV'] = ENV['RAILS_ENV'] ||= 'test'
 # Enable coverage checking when requested.
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
-
-  # Also send coverage data to Codecov if running in a CI.
-  if ENV['CI'] == 'true'
-    require 'codecov'
-
-    SimpleCov.formatter = SimpleCov::Formatter::Codecov
-  end
-
   SimpleCov.start('rails')
 end
 

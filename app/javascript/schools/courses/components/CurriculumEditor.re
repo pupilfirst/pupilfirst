@@ -28,7 +28,8 @@ type action =
   | SelectLevel(Level.t)
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
-  | UpdateTargetGroups(TargetGroup.t, editorAction)
+  | UpdateTargetGroup(TargetGroup.t, editorAction)
+  | UpdateTargetGroups(list(TargetGroup.t))
   | UpdateTarget(Target.t)
   | UpdateTargets(list(Target.t))
   | ToggleShowArchived;
@@ -53,6 +54,28 @@ let showArchivedButton = (targetGroupsInLevel, targets) => {
     |> List.length;
 
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
+};
+
+let updateTagetSortIndex = (state, send, sortedTargets) => {
+  let oldTargets =
+    state.targets |> List.filter(t => !(sortedTargets |> List.mem(t)));
+  send(
+    UpdateTargets(
+      oldTargets |> List.append(sortedTargets |> Target.updateSortIndex),
+    ),
+  );
+};
+
+let updateTagetGroupSortIndex = (state, send, sortedTargetGroups) => {
+  let oldTargetGroups =
+    state.targetGroups
+    |> List.filter(t => !(sortedTargetGroups |> List.mem(t)));
+  send(
+    UpdateTargetGroups(
+      oldTargetGroups
+      |> List.append(sortedTargetGroups |> TargetGroup.updateSortIndex),
+    ),
+  );
 };
 
 let make =
@@ -91,7 +114,7 @@ let make =
         editorAction: Hidden,
         selectedLevel: level,
       });
-    | UpdateTargetGroups(targetGroup, action) =>
+    | UpdateTargetGroup(targetGroup, action) =>
       let newtargetGroups =
         targetGroup |> TargetGroup.updateList(state.targetGroups);
       ReasonReact.Update({
@@ -99,6 +122,8 @@ let make =
         targetGroups: newtargetGroups,
         editorAction: action,
       });
+    | UpdateTargetGroups(targetGroups) =>
+      ReasonReact.Update({...state, targetGroups})
     | UpdateTarget(target) =>
       let newtargets = target |> Target.updateList(state.targets);
       ReasonReact.Update({...state, targets: newtargets});
@@ -143,7 +168,7 @@ let make =
           Hidden : ShowTargetEditor(newTargetGroup |> TargetGroup.id, target);
 
       send(UpdateTarget(target));
-      send(UpdateTargetGroups(newTargetGroup, editorAction));
+      send(UpdateTargetGroup(newTargetGroup, editorAction));
     };
 
     let updateTargetGroupsCB = targetGroup => {
@@ -162,7 +187,7 @@ let make =
         } :
         ();
 
-      send(UpdateTargetGroups(targetGroup, Hidden));
+      send(UpdateTargetGroup(targetGroup, Hidden));
     };
 
     <div className="flex-1 flex flex-col">
@@ -288,16 +313,23 @@ let make =
           className="target-group__container max-w-3xl mt-5 mx-auto relative">
           {
             targetGroupsToDisplay
-            |> List.map(targetGroup =>
+            |> List.mapi((index, targetGroup) =>
                  <CurriculumEditor__TargetGroupShow
                    key={targetGroup |> TargetGroup.id}
                    targetGroup
+                   targetGroups=targetGroupsToDisplay
                    targets={state.targets}
                    showTargetGroupEditorCB
                    showTargetEditorCB
                    updateTargetCB
                    showArchived={state.showArchived}
                    authenticityToken
+                   updateTagetSortIndexCB={updateTagetSortIndex(state, send)}
+                   updateTagetGroupSortIndexCB={
+                     updateTagetGroupSortIndex(state, send)
+                   }
+                   authenticityToken
+                   index
                  />
                )
             |> Array.of_list

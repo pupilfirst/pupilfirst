@@ -56,3 +56,17 @@ let sort = targetGroups =>
 let archive = (archived, t) => {...t, archived};
 
 let find = (id, targetGroups) => targetGroups |> List.find(tg => tg.id == id);
+
+let updateSortIndex = sortedTargetGroups =>
+  sortedTargetGroups
+  |> List.mapi((sortIndex, t) =>
+       create(
+         t.id,
+         t.name,
+         t.description,
+         t.milestone,
+         t.levelId,
+         sortIndex,
+         t.archived,
+       )
+     );

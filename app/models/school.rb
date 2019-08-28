@@ -9,6 +9,9 @@ class School < ApplicationRecord
   has_many :school_strings, dependent: :destroy
   has_many :school_links, dependent: :destroy
   has_many :communities, dependent: :destroy
+  has_many :levels, through: :courses
+  has_many :target_groups, through: :levels
+  has_many :targets, through: :target_groups
 
   acts_as_taggable_on :founder_tags
 

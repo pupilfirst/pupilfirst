@@ -1,1 +1,3 @@
-import "shared/pupilFirstIcons.js";
+import { addListener } from "shared/pupilFirstIcons.js";
+
+addListener();

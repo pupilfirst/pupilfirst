@@ -26,7 +26,7 @@ let make =
       answerOption |> AnswerOption.correctAnswer ?
         <div
           className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct">
-          <Icon kind=Icon.Check size="2" />
+          <Icon className="pfi pf-check" />
         </div> :
         <div
           onClick={

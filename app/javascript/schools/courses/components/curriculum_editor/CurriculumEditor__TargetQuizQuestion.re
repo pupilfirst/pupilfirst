@@ -115,11 +115,11 @@ let make =
         }
         className="quiz-maker__add-answer-option cursor-pointer relative">
         <div
-          className="quiz-maker__add-answer-option-pointer quiz-maker__add-answer-option-pointer">
-          <Icon kind=Icon.PlusCircle size="full" />
+          className="flex items-center border border-dashed border-primary-500 justify-center text-gray-600 quiz-maker__add-answer-option-pointer quiz-maker__add-answer-option-pointer">
+          <i className="fas fa-plus" />
         </div>
         <a
-          className="flex items-center h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4">
+          className="quiz-maker__add-answer-option-button flex items-center h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4">
           <p className="text-xs"> {"Add another Answer Option" |> str} </p>
         </a>
       </div>

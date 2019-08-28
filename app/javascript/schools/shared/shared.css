@@ -473,15 +473,15 @@
   top: 50%;
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.1);
   transform: translateY(-50%);
-  border: 0;
 }
 
-.quiz-maker__add-answer-option-pointer:hover .quiz-maker__add-answer-option-pointer {
+.quiz-maker__add-answer-option:hover .quiz-maker__add-answer-option-pointer {
   box-shadow: 0 3px 3px 1px rgba(0, 0, 0, 0.1);
+  @apply text-primary-500 border-primary-500;
 }
 
-.quiz-maker__add-answer-option:hover .quiz-maker__add-answer-option-pointer img {
-  filter: invert(1);
+.quiz-maker__add-answer-option:hover:hover .quiz-maker__add-answer-option-button {
+  @apply bg-white text-primary-500 shadow-md;
 }
 
 .select-list__item-selected {

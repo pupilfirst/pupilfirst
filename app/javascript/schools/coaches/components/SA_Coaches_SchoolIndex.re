@@ -70,7 +70,7 @@ let make = (~coaches, ~authenticityToken, _children) => {
                      className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
                      <div className="course-faculty__list-item flex w-full">
                        <div
-                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer py-4 px-4 hover:bg-gray-100"
+                         className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer hover:bg-gray-100 hover:text-primary-500"
                          onClick={
                            _event => {
                              ReactEvent.Mouse.preventDefault(_event);
@@ -79,14 +79,14 @@ let make = (~coaches, ~authenticityToken, _children) => {
                              );
                            }
                          }>
-                         <div className="flex">
+                         <div className="flex flex-1 py-4 px-4">
                            <img
                              className="w-10 h-10 rounded-full mr-4 object-cover"
                              src={coach |> Coach.imageUrl}
                              alt={"Avatar of " ++ (coach |> Coach.name)}
                            />
                            <div className="text-sm">
-                             <p className="text-black font-semibold">
+                             <p className="font-semibold">
                                {coach |> Coach.name |> str}
                              </p>
                              <p
@@ -95,10 +95,11 @@ let make = (~coaches, ~authenticityToken, _children) => {
                              </p>
                            </div>
                          </div>
-                         <div
-                           className="w-7 course-faculty__list-item-edit flex items-center justify-center invisible">
-                           <Icon.Jsx2 kind=Icon.Edit size="4" />
-                         </div>
+                         <span
+                           className="flex items-center flex-shrink-0 ml-2 py-4 px-4 font-semibold text-gray-700 hover:text-primary-500 text-sm">
+                           <i className="fas fa-edit text-normal" />
+                           <span className="ml-1"> {"Edit" |> str} </span>
+                         </span>
                        </div>
                      </div>
                    </div>

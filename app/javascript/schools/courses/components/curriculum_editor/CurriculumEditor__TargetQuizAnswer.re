@@ -80,15 +80,16 @@ let make =
         {
           canBeDeleted ?
             <button
-              className="flex-shrink-0 border-l border-gray-400 text-gray-500 hover:text-gray-800 focus:outline-none text-xs py-1 px-2"
+              className="flex-shrink-0 border-l border-gray-400 text-gray-600 hover:text-gray-900 focus:outline-none text-xs py-1 px-3"
               type_="button"
+              title="Remove this answer option"
               onClick={
                 event => {
                   ReactEvent.Mouse.preventDefault(event);
                   removeAnswerOptionCB(answerOption |> AnswerOption.id);
                 }
               }>
-              {"Remove" |> str}
+              <i className="fas fa-trash-alt text-sm" />
             </button> :
             ReasonReact.null
         }

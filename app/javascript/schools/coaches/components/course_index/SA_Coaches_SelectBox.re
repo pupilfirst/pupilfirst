@@ -46,7 +46,7 @@ let make = (~items, ~multiSelectCB, _children) => {
                        multiSelectCB(_key, value, false);
                      }
                    }>
-                   <Icon.Jsx2 kind=Icon.Delete size="4" opacity=75 />
+                   <i className="fas fa-trash-alt text-base" />
                  </button>
                </div>
              )

@@ -5,11 +5,16 @@ let str = ReasonReact.string;
 let component =
   ReasonReact.statelessComponent("CurriculumEditor__TargetShow");
 
-let archivedClasses = target =>
-  switch (target |> Target.visibility) {
-  | Archived => "target-group__target flex justify-between items-center target-group__target--archived pl-2 pr-5 py-4"
-  | _ => "target-group__target flex justify-between items-center pl-2 pr-5 py-6"
-  };
+let targetClasses = (target, targets) =>
+  "target-group__target flex justify-between items-center pl-2 pr-5 "
+  ++ (
+    switch (targets |> List.length == 1, target |> Target.visibility) {
+    | (true, Archived) => "target-group__target--archived py-4 pl-5"
+    | (false, Archived) => "target-group__target--archived py-4"
+    | (true, _) => "py-6 pl-5"
+    | (false, _) => "py-6"
+    }
+  );
 
 let updateSortIndex =
     (targets, target, up, updateTagetSortIndexCB, authenticityToken) => {
@@ -87,7 +92,7 @@ let make =
       }
       <div
         id={"target-show-" ++ (target |> Target.id)}
-        className={archivedClasses(target)}
+        className={targetClasses(target, targets)}
         onClick={
           _e => showTargetEditorCB(targetGroup |> TargetGroup.id, target)
         }>

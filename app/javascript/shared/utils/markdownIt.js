@@ -13,7 +13,13 @@ const md = require("markdown-it")({
   }
 });
 
-md.use(require("markdown-it-sub")).use(require("markdown-it-sup"));
+const subscriptPlugin = require("markdown-it-sub");
+const superscriptPlugin = require("markdown-it-sup");
+const tablePlugin = require("markdown-it-multimd-table");
+
+md.use(subscriptPlugin)
+  .use(superscriptPlugin)
+  .use(tablePlugin);
 
 const parse = markdown => {
   return md.render(markdown);

@@ -21,6 +21,7 @@
     "dotenv": "^8.0.0",
     "draft-js": "^0.11.0",
     "markdown-it": "^8.4.2",
+    "markdown-it-multimd-table": "^3.2.3",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "pnotify": "^4.0.0",

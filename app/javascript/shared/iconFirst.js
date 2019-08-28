@@ -1,4 +1,4 @@
-import "./pupilFirstIcons.css";
+import "./iconFirst.css";
 let iconData = require("./svgPaths.json");
 
 function getIconData(iconName) {
@@ -9,25 +9,25 @@ function getIconData(iconName) {
 function viewboxClass(width) {
   switch (width) {
     case 448:
-      return " pfi-w-14";
+      return " if-w-14";
     case 576:
-      return " pfi-w-18";
+      return " if-w-18";
     case 640:
-      return " pfi-w-20";
+      return " if-w-20";
     default:
-      return " pfi-w-16";
+      return " if-w-16";
   }
 }
 
 const createSvg = className => {
   const xmlns = "http://www.w3.org/2000/svg";
   const title = title;
-  const icon = getIconData(className.match(/pf-([a-zA-z0-9\-]+)/)[1]);
+  const icon = getIconData(className.match(/i-([a-zA-z0-9\-]+)/)[1]);
   const el = document.createElementNS(xmlns, "svg");
   el.setAttribute(
     "class",
     className
-      .replace("pfi", "pfi-svg-icon__baseline")
+      .replace("if", "if-svg-icon__baseline")
       .concat(viewboxClass(icon[0]))
   );
   el.setAttribute("role", "img");
@@ -42,7 +42,7 @@ const createSvg = className => {
 };
 
 export const transformIcons = () => {
-  const elements = Array.from(document.getElementsByClassName("pfi"));
+  const elements = Array.from(document.getElementsByClassName("if"));
   elements.map(element => {
     if (element.tagName == "I") {
       element.parentNode.replaceChild(createSvg(element.className), element);

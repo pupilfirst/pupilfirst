@@ -13,7 +13,7 @@ let make = (~targetDetails, ~title) =>
       <div
         className="bg-yellow-500 p-4 sm:py-8 sm:px-7 flex-shrink-0 text-center">
         <Icon
-          className="pfi pf-lamp-solid text-3xl sm:text-5xl text-yellow-800"
+          className="if i-lamp-solid text-3xl sm:text-5xl text-yellow-800"
         />
       </div>
       <div className="p-5 text-center sm:text-left">

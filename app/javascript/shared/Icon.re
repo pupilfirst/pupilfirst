@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
-[@bs.module "./pupilFirstIcons"]
+[@bs.module "./iconFirst"]
 external transformIcons: unit => unit = "transformIcons";
 
 [@react.component]

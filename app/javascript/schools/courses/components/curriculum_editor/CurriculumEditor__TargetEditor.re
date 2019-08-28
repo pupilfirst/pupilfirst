@@ -39,6 +39,9 @@ type state = {
   evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
   contentBlocks: list(ContentBlock.t),
+  versions: array(string),
+  selectedVersion: string,
+  previewMode: bool,
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
   linkToComplete: string,
@@ -65,7 +68,9 @@ type action =
   | UpdateActiveStep(activeStep)
   | UpdateVisibility(Target.visibility)
   | UpdateContentEditorDirty(bool)
-  | UpdateContentBlocks(list(ContentBlock.t));
+  | UpdateContentBlocks(list(ContentBlock.t), array(string))
+  | SwitchPreviewMode
+  | SelectVersion(string);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -338,7 +343,14 @@ let reducer = (state, action) =>
       ...state,
       contentEditorDirty,
     }
-  | UpdateContentBlocks(contentBlocks) => {...state, contentBlocks}
+  | UpdateContentBlocks(contentBlocks, versions) => {
+      ...state,
+      contentBlocks,
+      versions,
+      selectedVersion: versions[0],
+    }
+  | SelectVersion(selectedVersion) => {...state, selectedVersion, previewMode: true}
+  | SwitchPreviewMode => {...state, previewMode: !state.previewMode}
   };
 
 let handleEditorClosure = (hideEditorActionCB, state) =>
@@ -379,6 +391,7 @@ module ContentBlocksQuery = [%graphql
           }
         }
       }
+      versions(targetId: $targetId)
   }
 |}
 ];
@@ -409,7 +422,10 @@ let loadContentBlocks = (target, send, authenticityToken, ()) => {
               ContentBlock.make(id, blockType, sortIndex);
             })
          |> Array.to_list;
-       send(UpdateContentBlocks(contentBlocks));
+       let versions =
+         result##versions
+         |> Array.map(version => version |> Json.Decode.string);
+       send(UpdateContentBlocks(contentBlocks, versions));
        Js.Promise.resolve();
      })
   |> ignore;
@@ -438,6 +454,8 @@ let make =
         target,
       ),
     contentBlocks: [],
+    versions: [||],
+    selectedVersion: "",
     quiz: handleQuiz(target),
     linkToComplete:
       switch (target |> Target.linkToComplete) {
@@ -447,6 +465,7 @@ let make =
     methodOfCompletion: handleMethodOfCompletion(target),
     hasTitleError: false,
     hasLinktoCompleteError: false,
+    previewMode: false,
     dirty: false,
     isValidQuiz: true,
     saving: false,
@@ -648,6 +667,7 @@ let make =
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
                   target
+                  previewMode={state.previewMode}
                   contentBlocks={state.contentBlocks}
                   updateContentEditorDirtyCB
                   authenticityToken

@@ -4,7 +4,7 @@ class ContentVersionResolver < ApplicationResolver
       target = Target.find(target_id.to_i)
 
       if target.content_versions.present?
-        target.content_versions.distinct(:version_on).pluck(:version_on)
+        target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
       end
     else
       School.none

@@ -12,37 +12,6 @@ module SortContentBlockMutation = [%graphql
    |}
 ];
 
-module ContentBlocksQuery = [%graphql
-  {|
-    query($targetId: ID!, $versionOn: String) {
-      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
-        id
-        blockType
-        sortIndex
-        content {
-          ... on ImageBlock {
-            caption
-            url
-            filename
-          }
-          ... on FileBlock {
-            title
-            url
-            filename
-          }
-          ... on MarkdownBlock {
-            markdown
-          }
-          ... on EmbedBlock {
-            url
-            embedCode
-          }
-        }
-      }
-  }
-|}
-];
-
 let updateContentBlockSorting =
     (
       contentBlocks,
@@ -168,7 +137,13 @@ let updateContentBlockCB = (updateTargetContentBlocks, contentBlock) => {
 
 [@react.component]
 let make =
-    (~target, ~contentBlocks, ~updateContentEditorDirtyCB, ~authenticityToken) => {
+    (
+      ~target,
+      ~previewMode,
+      ~contentBlocks,
+      ~updateContentEditorDirtyCB,
+      ~authenticityToken,
+    ) => {
   let (targetContentBlocks, updateTargetContentBlocks) =
     React.useState(() => []);
   let (sortContentBlock, toggleSortContentBlock) =
@@ -229,58 +204,73 @@ let make =
     },
     [|contentBlocks|],
   );
-
-  [|
-    <CurriculumEditor__ContentTypePicker
-      key="static-content-picker"
-      sortIndex={
-        switch (sortedContentBlocks) {
-        | [] => 1
-        | nonEmptyList =>
-          let (sortIndex, _, _, _) = nonEmptyList |> List.rev |> List.hd;
-          sortIndex + 1;
+  switch (previewMode) {
+  | false =>
+    [|
+      <CurriculumEditor__ContentTypePicker
+        key="static-content-picker"
+        sortIndex={
+          switch (sortedContentBlocks) {
+          | [] => 1
+          | nonEmptyList =>
+            let (sortIndex, _, _, _) = nonEmptyList |> List.rev |> List.hd;
+            sortIndex + 1;
+          }
         }
-      }
-      staticMode=true
-      newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
-    />,
-  |]
-  |> Array.append(
-       sortedContentBlocks
-       |> List.map(((sortIndex, blockType, contentBlock, id)) =>
-            <CurriculumEditor__ContentBlockEditor
-              key=id
-              editorId=id
-              target
-              contentBlock
-              removeTargetContentCB={
-                removeTargetContentCB(
-                  updateTargetContentBlocks,
-                  toggleSortContentBlock,
-                )
-              }
-              blockType
-              sortIndex
-              newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
-              createNewContentCB={
-                createNewContentCB(updateTargetContentBlocks)
-              }
-              updateContentBlockCB={
-                updateContentBlockCB(updateTargetContentBlocks)
-              }
-              blockCount={targetContentBlocks |> List.length}
-              swapContentBlockCB={
-                swapContentBlockCB(
-                  targetContentBlocks,
-                  updateTargetContentBlocks,
-                  toggleSortContentBlock,
-                )
-              }
-              targetContentBlocks
-              authenticityToken
-            />
-          )
-       |> Array.of_list,
-     )
-  |> React.array;
+        staticMode=true
+        newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
+      />,
+    |]
+    |> Array.append(
+         sortedContentBlocks
+         |> List.map(((sortIndex, blockType, contentBlock, id)) =>
+              <CurriculumEditor__ContentBlockEditor
+                key=id
+                editorId=id
+                target
+                contentBlock
+                removeTargetContentCB={
+                  removeTargetContentCB(
+                    updateTargetContentBlocks,
+                    toggleSortContentBlock,
+                  )
+                }
+                blockType
+                sortIndex
+                newContentBlockCB={
+                  newContentBlockCB(updateTargetContentBlocks)
+                }
+                createNewContentCB={
+                  createNewContentCB(updateTargetContentBlocks)
+                }
+                updateContentBlockCB={
+                  updateContentBlockCB(updateTargetContentBlocks)
+                }
+                blockCount={targetContentBlocks |> List.length}
+                swapContentBlockCB={
+                  swapContentBlockCB(
+                    targetContentBlocks,
+                    updateTargetContentBlocks,
+                    toggleSortContentBlock,
+                  )
+                }
+                targetContentBlocks
+                authenticityToken
+              />
+            )
+         |> Array.of_list,
+       )
+    |> React.array
+  | true =>
+    let persistedBlocks =
+      sortedContentBlocks
+      |> List.map(((_, _, cb, _)) =>
+           switch (cb) {
+           | Some(cb) => [cb]
+           | None => []
+           }
+         )
+      |> List.flatten;
+    <TargetContentView contentBlocks=persistedBlocks />;
+  };
 };

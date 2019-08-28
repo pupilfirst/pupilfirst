@@ -23,7 +23,6 @@
 
   <!-- Scripts -->
   <%= javascript_pack_tag 'layouts/tailwind', nonce: true %>
-  <%= javascript_pack_tag 'pupilFirstIconPack', nonce: true %>
 
   <%= csrf_meta_tags %>
 
@@ -48,5 +47,6 @@
 
 <%= yield :tail %>
 <%= yield :footer %>
+<%= javascript_pack_tag 'pupilFirstIconPack', nonce: true %>
 </body>
 </html>

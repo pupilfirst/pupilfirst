@@ -20,7 +20,7 @@ function createSvg(className) {
   return el;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const elements = Array.from(document.getElementsByClassName("pfi"));
   elements.map(element => {
     if (element.tagName == "I") {

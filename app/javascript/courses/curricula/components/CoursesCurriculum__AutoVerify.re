@@ -80,7 +80,7 @@ let autoVerify =
     ) =>
   <button
     disabled=saving
-    className="flex rounded text-lg justify-center w-full font-bold p-4 text-blue-500 bg-blue-100  "
+    className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
     onClick={
       createAutoVerifySubmission(
         authenticityToken,
@@ -153,7 +153,7 @@ let make =
       targetDetails
       title={completionInstructionText(linkToComplete)}
     />,
-    <div className="mt-4" id="auto-verify-target">
+    <div className="mt-5" id="auto-verify-target">
       {
         switch (targetStatus |> TargetStatus.status) {
         | Pending =>

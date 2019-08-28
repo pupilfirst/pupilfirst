@@ -150,10 +150,11 @@ let make =
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
   [|
     <CourseCurriculum__CompletionInstructions
+      key="completion-instructions"
       targetDetails
       title={completionInstructionText(linkToComplete)}
     />,
-    <div className="mt-5" id="auto-verify-target">
+    <div className="mt-5" id="auto-verify-target" key="completion-button">
       {
         switch (targetStatus |> TargetStatus.status) {
         | Pending =>

@@ -413,10 +413,12 @@ let completeSection =
       | (Pending, Evaluated) =>
         [|
           <CourseCurriculum__CompletionInstructions
+            key="completion-instructions"
             targetDetails
             title="Instructions"
           />,
           <CoursesCurriculum__SubmissionForm
+            key="courses-curriculum-submission-form"
             authenticityToken
             target
             addSubmissionCB={
@@ -428,10 +430,12 @@ let completeSection =
       | (Pending, TakeQuiz) =>
         [|
           <CourseCurriculum__CompletionInstructions
+            key="completion-instructions"
             targetDetails
             title="Instructions"
           />,
           <CoursesCurriculum__Quiz
+            key="courses-curriculum-quiz"
             target
             targetDetails
             authenticityToken

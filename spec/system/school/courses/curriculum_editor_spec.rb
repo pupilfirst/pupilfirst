@@ -490,7 +490,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content added successfully')
       dismiss_notification
 
-      expect(latest_content_versions(target).count).to eq(5)
+      expect(target.reload.current_content_blocks.count).to eq(5)
       expect(latest_content_versions(target).pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(2)
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(5)

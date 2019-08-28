@@ -202,7 +202,7 @@ class Target < ApplicationRecord
   def current_content_blocks
     return if content_versions.blank?
 
-    ContentBlock.where(id: content_versions.where(version_on: latest_content_version_date))
+    ContentBlock.where(id: content_versions.where(version_on: latest_content_version_date).select(:content_block_id))
   end
 
   def latest_content_versions

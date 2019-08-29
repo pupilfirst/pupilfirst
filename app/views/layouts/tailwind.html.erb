@@ -20,10 +20,10 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <%= stylesheet_pack_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'IconFirstPack', media: 'all' %>
 
   <!-- Scripts -->
   <%= javascript_pack_tag 'layouts/tailwind', nonce: true %>
-  <%= javascript_pack_tag 'pupilFirstIconPack', nonce: true %>
 
   <%= csrf_meta_tags %>
 
@@ -48,5 +48,7 @@
 
 <%= yield :tail %>
 <%= yield :footer %>
+<!-- Scripts -->
+<%= javascript_pack_tag 'IconFirstPack', nonce: true %>
 </body>
 </html>

@@ -51,10 +51,11 @@ let make =
     quizQuestion |> QuizQuestion.answerOptions |> List.length > 2;
   let questionId = questionNumber + 1 |> string_of_int;
 
-  <div className="quiz-maker__question-container py-4">
-    <div className="flex items-end justify-between">
+  <div
+    className="quiz-maker__question-container p-4 bg-gray-100 rounded-lg border mt-4">
+    <div className="flex items-center justify-between">
       <label
-        className="block tracking-wide uppercase text-gray-800 text-xs font-semibold"
+        className="block tracking-wide uppercase text-gray-800 text-sm font-bold"
         htmlFor={"quiz_question_" ++ questionId}>
         {"Question " ++ questionId |> str}
       </label>
@@ -77,7 +78,7 @@ let make =
         }
       </div>
     </div>
-    <div className="my-2">
+    <div className="my-2 bg-white">
       <MarkdownEditor
         textareaId={"quiz_question_" ++ questionId}
         placeholder="Type the question here (supports markdown)"
@@ -112,13 +113,13 @@ let make =
             addAnswerOption();
           }
         }
-        className="quiz-maker__answer-option cursor-pointer relative">
+        className="quiz-maker__add-answer-option cursor-pointer relative">
         <div
-          className="quiz-maker__answer-option-pointer quiz-maker__answer-option-pointer--add">
-          <Icon kind=Icon.PlusCircle size="full" />
+          className="flex items-center border border-dashed border-primary-500 justify-center text-gray-600 quiz-maker__add-answer-option-pointer quiz-maker__add-answer-option-pointer">
+          <i className="fas fa-plus" />
         </div>
         <a
-          className="flex items-center h-11 bg-white hover:bg-gray-200 border rounded-lg ml-12 py-3 px-4">
+          className="quiz-maker__add-answer-option-button flex items-center h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4">
           <p className="text-xs"> {"Add another Answer Option" |> str} </p>
         </a>
       </div>

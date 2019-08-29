@@ -81,9 +81,7 @@ Rails.application.routes.draw do
       resources :target_groups, only: %i[create]
     end
 
-    resources :target_groups, only: %i[update] do
-      resources :targets, only: %i[create]
-    end
+    resources :target_groups, only: %i[update]
 
     resources :targets, only: %i[update] do
       resource :quiz, only: %i[create]

@@ -49,6 +49,7 @@ type state = {
   activeStep,
   visibility: Target.visibility,
   contentEditorDirty: bool,
+  completionInstructions: string,
 };
 
 type action =
@@ -63,7 +64,8 @@ type action =
   | UpdateSaving
   | UpdateActiveStep(activeStep)
   | UpdateVisibility(Target.visibility)
-  | UpdateContentEditorDirty(bool);
+  | UpdateContentEditorDirty(bool)
+  | UpdateCompletionInstructions(string);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -181,11 +183,7 @@ let setPayload = (state, target, authenticityToken) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
-  Js.Dict.set(
-    targetData,
-    "sort_index",
-    target |> Target.sortIndex |> string_of_int |> Js.Json.string,
-  );
+
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
 
   Js.Dict.set(
@@ -195,6 +193,12 @@ let setPayload = (state, target, authenticityToken) => {
   );
 
   Js.Dict.set(targetData, "visibility", visibility |> Js.Json.string);
+
+  Js.Dict.set(
+    targetData,
+    "completion_instructions",
+    state.completionInstructions |> Js.Json.string,
+  );
 
   let (evaluationCriteriaIds, linkToComplete, quiz) =
     switch (state.methodOfCompletion) {
@@ -332,6 +336,11 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateCompletionInstructions(completionInstructions) => {
+      ...state,
+      completionInstructions,
+      dirty: true,
+    }
   | UpdateContentEditorDirty(contentEditorDirty) => {
       ...state,
       contentEditorDirty,
@@ -387,6 +396,8 @@ let make =
     activeStep: AddContent,
     visibility: target |> Target.visibility,
     contentEditorDirty: false,
+    completionInstructions:
+      target |> Target.completionInstructions |> OptionUtils.toString,
   };
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
@@ -416,9 +427,7 @@ let make =
     dispatch(UpdateContentEditorDirty(contentEditorDirty));
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
-  let handleResponseCB = (closeEditor, dispatch, json) => {
-    let id = json |> Json.Decode.(field("id", string));
-    let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+  let handleResponseCB = (closeEditor, dispatch, _json) => {
     let prerequisiteTargets =
       state.prerequisiteTargets
       |> List.filter(((_, _, selected)) => selected)
@@ -444,15 +453,16 @@ let make =
       };
     let newTarget =
       Target.create(
-        id,
-        targetGroupId,
-        state.title,
-        evaluationCriteria,
-        prerequisiteTargets,
-        quiz,
-        linkToComplete,
-        sortIndex,
-        state.visibility,
+        ~id=target |> Target.id,
+        ~targetGroupId,
+        ~title=state.title,
+        ~evaluationCriteria,
+        ~prerequisiteTargets,
+        ~quiz,
+        ~linkToComplete,
+        ~sortIndex=target |> Target.sortIndex,
+        ~visibility=state.visibility,
+        ~completionInstructions=Some(state.completionInstructions),
       );
     Notification.success("Success", "Target updated successfully");
     updateTargetCB(newTarget, contentBlocks, closeEditor);
@@ -653,6 +663,41 @@ let make =
                     </button>
                   </div>
                 </div>
+                <div className="mb-6">
+                  <label
+                    className="block tracking-wide text-sm font-semibold mr-6"
+                    htmlFor="completion-instructions">
+                    {
+                      "Do you have any completion instructions for the student?"
+                      |> str
+                    }
+                    <span className="ml-1 text-xs font-normal">
+                      {"(optional)" |> str}
+                    </span>
+                  </label>
+                  <div className="text-xs mt-1 text-gray-800">
+                    {
+                      "These instructions will be displayed close to where students complete the target."
+                      |> str
+                    }
+                  </div>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="completion-instructions"
+                    type_="text"
+                    maxLength=255
+                    placeholder="Do these specific things to complete this target!"
+                    value={state.completionInstructions}
+                    onChange={
+                      event =>
+                        dispatch(
+                          UpdateCompletionInstructions(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
+                    }
+                  />
+                </div>
                 {
                   targetEvaluated() ?
                     ReasonReact.null :
@@ -801,7 +846,7 @@ let make =
                             dispatch(AddQuizQuestion);
                           }
                         )
-                        className="flex items-center bg-gray-200 hover:bg-gray-400 border-2 border-dashed rounded-lg p-3 cursor-pointer mb-5">
+                        className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
                         <i className="fas fa-plus-circle text-lg" />
                         <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}

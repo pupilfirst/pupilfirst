@@ -36,9 +36,9 @@ let make = (~items, ~multiSelectCB, _children) => {
           |> List.map(((_key, value, _)) =>
                <div
                  key={_key |> string_of_int}
-                 className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
-                 {value |> str}
-                 <button
+                 className="select-list__item-selected flex justify-between bg-gray-100 text-xs text-gray-600 border rounded mb-2 ">
+                 <div className="p-3 flex-1"> {value |> str} </div>
+                 <button className="flex p-3 hover:text-gray-900"
                    onClick={
                      _event => {
                        ReactEvent.Mouse.preventDefault(_event);
@@ -46,7 +46,7 @@ let make = (~items, ~multiSelectCB, _children) => {
                        multiSelectCB(_key, value, false);
                      }
                    }>
-                   <Icon.Jsx2 kind=Icon.Delete size="4" opacity=75 />
+                   <i className="fas fa-trash-alt text-base" />
                  </button>
                </div>
              )

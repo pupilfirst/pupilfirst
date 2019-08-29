@@ -121,7 +121,7 @@ let createNewContentCB = (reloadVersionsCB, updateTargetContentBlocks, contentBl
   reloadVersionsCB();
 };
 
-let updateContentBlockCB = (addNewVersionCB, updateTargetContentBlocks, contentBlock) => {
+let updateContentBlockCB = (addNewVersionCB, updateTargetContentBlocks, contentBlock, currentId) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -131,7 +131,7 @@ let updateContentBlockCB = (addNewVersionCB, updateTargetContentBlocks, contentB
 
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
-    |> List.filter(((_, _, _, id)) => id != ContentBlock.id(contentBlock))
+    |> List.filter(((_, _, _, id)) => id != currentId)
     |> List.append([newContentBlock])
   );
   addNewVersionCB();

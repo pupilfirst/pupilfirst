@@ -28,6 +28,7 @@ class UpdateContentBlockMutator < ApplicationMutator
         else
           raise 'Not a valid block type'
       end
+      content_block
     end
   end
 
@@ -81,7 +82,7 @@ class UpdateContentBlockMutator < ApplicationMutator
 
       target.content_versions.create!(content_block_id: content_version.content_block_id, version_on: Date.today, sort_index: content_version.sort_index)
     end
-    new_content_block_index = ContentVersion.where(content_block_id: id, version_on: last_version_date).last.sort_index
+    new_content_block_index = previous_version.find_by(content_block_id: id).sort_index
     target.content_versions.create!(content_block: content_block, version_on: Date.today, sort_index: new_content_block_index)
   end
 end

@@ -349,7 +349,11 @@ let reducer = (state, action) =>
       ...state,
       contentBlocks,
       versions,
-      selectedVersion: versions[0],
+      selectedVersion:
+        switch (versions) {
+        | [||] => ""
+        | versions => versions[0]
+        },
     }
   | LoadOldVersion(contentBlocks) => {
       ...state,
@@ -362,7 +366,11 @@ let reducer = (state, action) =>
       previewMode: true,
     }
   | SwitchPreviewMode => {...state, previewMode: !state.previewMode}
-  | UpdateVersions(versions) => {...state, versions, selectedVersion: versions[0]}
+  | UpdateVersions(versions) => {
+      ...state,
+      versions,
+      selectedVersion: versions[0],
+    }
   };
 
 let handleEditorClosure = (hideEditorActionCB, state) =>
@@ -508,12 +516,15 @@ let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
   None;
 };
 
-let addNewVersionCB = (state,dispatch, ()) => {
+let addNewVersionCB = (state, dispatch, ()) => {
   let currentDate = Js.Date.toDateString(Js.Date.fromFloat(Js.Date.now()));
-  let latestVersionDate = Js.Date.toDateString(Js.Date.fromString(state.versions[0]));
+  let latestVersionDate =
+    Js.Date.toDateString(Js.Date.fromString(state.versions[0]));
   if (latestVersionDate != currentDate) {
-    dispatch(UpdateVersions(Array.append([|currentDate|], state.versions)))
-  }
+    dispatch(
+      UpdateVersions(Array.append([|currentDate|], state.versions)),
+    );
+  };
 };
 
 [@react.component]
@@ -752,7 +763,7 @@ let make =
                   key={target |> Target.id}
                   target
                   previewMode={state.previewMode}
-                  addNewVersionCB={addNewVersionCB(state,dispatch)}
+                  addNewVersionCB={addNewVersionCB(state, dispatch)}
                   contentBlocks={state.contentBlocks}
                   updateContentEditorDirtyCB
                   authenticityToken

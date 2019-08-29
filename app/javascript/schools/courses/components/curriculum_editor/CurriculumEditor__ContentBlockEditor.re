@@ -9,12 +9,13 @@ let str = React.string;
 type action =
   | UpdateContentBlockPropertyText(string)
   | UpdateSaving
-  | DoneUpdating
+  | DoneUpdating(string)
   | UpdateMarkdown(string)
   | ResetFormDirty(string)
   | UpdateFileName(string);
 
 type state = {
+  id: string,
   contentBlockPropertyText: string,
   contentBlock: option(ContentBlock.t),
   sortIndex: int,
@@ -43,7 +44,7 @@ let reducer = (state, action) =>
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
-  | DoneUpdating => {...state, formDirty: false, savingContentBlock: false}
+  | DoneUpdating(id) => {...state, formDirty: false, savingContentBlock: false, id}
   | ResetFormDirty(buttonText) => {
       ...state,
       formDirty: false,
@@ -66,6 +67,7 @@ module UpdateContentBlockMutation = [%graphql
    mutation($id: ID!, $text: String!, $blockType: String!) {
     updateContentBlock(id: $id, blockType: $blockType, text: $text ) {
        success
+       id
    }
   }
    |}
@@ -306,7 +308,7 @@ let updateContentBlock =
       sortIndex,
       updateContentBlockCB,
     ) => {
-  let id = contentBlock |> ContentBlock.id;
+  let id = state.id;
   let text =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) => state.markDownContent
@@ -318,8 +320,9 @@ let updateContentBlock =
     contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
   UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
   |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-  |> Js.Promise.then_(_response => {
-       dispatch(DoneUpdating);
+  |> Js.Promise.then_(response => {
+       let responseId = response##updateContentBlock##id;
+       dispatch(DoneUpdating(responseId));
        Js.Promise.resolve();
      })
   |> ignore;
@@ -338,8 +341,9 @@ let updateContentBlock =
     | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
     };
   let updatedContentBlock =
-    ContentBlock.make(id, updatedContentBlockType, sortIndex);
-  updateContentBlockCB(updatedContentBlock);
+    ContentBlock.make(state.id, updatedContentBlockType, sortIndex);
+  let currentId = contentBlock |> ContentBlock.id;
+  updateContentBlockCB(updatedContentBlock, currentId);
 };
 
 let submitForm =
@@ -425,6 +429,9 @@ let make =
       ~authenticityToken,
     ) => {
   let initialState = {
+    id: switch(contentBlock) {
+    | Some(contentBlock) => contentBlock |> ContentBlock.id
+    | None => "" },
     contentBlockPropertyText:
       switch (blockType) {
       | Markdown(_markdown) => ""

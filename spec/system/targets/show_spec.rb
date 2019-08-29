@@ -11,11 +11,11 @@ feature 'Target Overlay', js: true do
   let!(:team) { create :startup, level: level_1 }
   let!(:student) { team.founders.first }
   let!(:target_group_1) { create :target_group, level: level_1, milestone: true }
-  let!(:target) { create :target, :with_content, target_group: target_group_1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2] }
+  let!(:target) { create :target, :with_content, target_group: target_group_1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence }
   let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_1, role: Target::ROLE_TEAM }
 
   # Quiz target
-  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false }
+  let!(:quiz_target) { create :target, target_group: target_group_1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence }
   let!(:quiz) { create :quiz, target: quiz_target }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -71,7 +71,8 @@ feature 'Target Overlay', js: true do
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
-
+    # completion instructions should be show on complete section for evaluated targets
+    expect(page).to have_text(target.completion_instructions)
     bad_description = 'Sum deskripshun. Oops. Typoos aplenty.'
     link_1 = 'https://example.com?q=1'
     link_2 = 'https://example.com?q=2'
@@ -166,13 +167,17 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when the target is auto-verified' do
-    let!(:target) { create :target, :with_content, target_group: target_group_1, role: Target::ROLE_TEAM }
+    let!(:target) { create :target, :with_content, target_group: target_group_1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 
     scenario 'student completes an auto-verified target' do
       sign_in_user student.user, referer: target_path(target)
 
       # There should be a mark as complete button on the learn page.
       expect(page).to have_button('Mark As Complete')
+
+      # Completion instructions should be show on learn section for auto-verified targets
+      expect(page).to have_text("Before marking as complete")
+      expect(page).to have_text(target.completion_instructions)
 
       # The complete button should not be highlighted.
       expect(page).not_to have_selector('.complete-button-selected')
@@ -195,7 +200,7 @@ feature 'Target Overlay', js: true do
 
     context 'when the target requires student to visit a link to complete it' do
       let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) { create :target, target_group: target_group_1, link_to_complete: link_to_complete }
+      let!(:target_with_link) { create :target, target_group: target_group_1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'student completes a target by visiting a link' do
         sign_in_user student.user, referer: target_path(target_with_link)
@@ -203,6 +208,10 @@ feature 'Target Overlay', js: true do
         # There should be a un-highligted button on the learn page that lets student complete the target.
         expect(page).to have_button('Visit Link To Complete')
         expect(page).not_to have_selector('.complete-button-selected')
+
+        # Completion instructions should be show on learn section for targets with link to complete
+        expect(page).to have_text("Before visiting the link")
+        expect(page).to have_text(target_with_link.completion_instructions)
 
         # Clicking the tab should highlight the button.
         find('.course-overlay__body-tab-item', text: 'Visit Link to Complete').click
@@ -235,6 +244,10 @@ feature 'Target Overlay', js: true do
         end
 
         find('.course-overlay__body-tab-item', text: 'Take Quiz').click
+
+        # Completion instructions should be show on Take Quiz section for targets with quiz
+        expect(page).to have_text("Instructions")
+        expect(page).to have_text(quiz_target.completion_instructions)
 
         # Question one
         expect(page).to have_content(/Question #1/i)

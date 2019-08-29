@@ -104,7 +104,7 @@ let swapContentBlockCB =
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
 };
 
-let createNewContentCB = (updateTargetContentBlocks, contentBlock) => {
+let createNewContentCB = (reloadVersionsCB, updateTargetContentBlocks, contentBlock) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -118,9 +118,10 @@ let createNewContentCB = (updateTargetContentBlocks, contentBlock) => {
        )
     |> List.append([newContentBlock])
   );
+  reloadVersionsCB();
 };
 
-let updateContentBlockCB = (updateTargetContentBlocks, contentBlock) => {
+let updateContentBlockCB = (addNewVersionCB, updateTargetContentBlocks, contentBlock) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -133,6 +134,7 @@ let updateContentBlockCB = (updateTargetContentBlocks, contentBlock) => {
     |> List.filter(((_, _, _, id)) => id != ContentBlock.id(contentBlock))
     |> List.append([newContentBlock])
   );
+  addNewVersionCB();
 };
 
 [@react.component]
@@ -141,6 +143,7 @@ let make =
       ~target,
       ~previewMode,
       ~contentBlocks,
+      ~addNewVersionCB,
       ~updateContentEditorDirtyCB,
       ~authenticityToken,
     ) => {
@@ -241,10 +244,10 @@ let make =
                   newContentBlockCB(updateTargetContentBlocks)
                 }
                 createNewContentCB={
-                  createNewContentCB(updateTargetContentBlocks)
+                  createNewContentCB(addNewVersionCB,updateTargetContentBlocks)
                 }
                 updateContentBlockCB={
-                  updateContentBlockCB(updateTargetContentBlocks)
+                  updateContentBlockCB(addNewVersionCB,updateTargetContentBlocks)
                 }
                 blockCount={targetContentBlocks |> List.length}
                 swapContentBlockCB={

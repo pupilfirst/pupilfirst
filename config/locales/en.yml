@@ -104,8 +104,6 @@ en:
 
   presenters:
     layouts:
-      application:
-        pupil_first_meta_description: "Teaching is difficult. Teaching online even more so. PupilFirst gives you a proven method to keep your students engaged while keeping you, the teacher, always in the loop."
       footer:
         address_html: "#360, 6th Main Road<br/>1<sup>st</sup> Block, Koramangala,<br/>Bengaluru &mdash; 560034"
         email_address: support@pupilfirst.com

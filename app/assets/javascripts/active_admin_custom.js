@@ -23,8 +23,3 @@
 
 // Local files
 //= require_tree ./admin
-
-// Chartkick
-//= require moment
-//= require Chart.bundle
-//= require chartkick

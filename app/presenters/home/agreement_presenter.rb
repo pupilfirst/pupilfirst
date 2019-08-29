@@ -7,7 +7,7 @@ module Home
     end
 
     def page_title
-      current_school.blank? ? 'PupilFirst' : current_school.name
+      current_school.name
     end
 
     def agreement_html

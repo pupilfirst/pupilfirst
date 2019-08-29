@@ -10,11 +10,8 @@
 <main class="min-h-screen flex flex-col">
   <section class="w-full flex-grow mx-auto">
     <header class="'w-full text-center border-b">
-      <div class="container max-w-2xl mx-auto px-4">
-        <nav class="flex py-5 justify-between items-center">
-          <%= image_tag 'home/pupilfirst/pupilfirst-logo.svg', class: 'w-48', alt: 'PupilFirst' %>
-          <h5>Style Guide</h5>
-        </nav>
+      <div class="container max-w-2xl mx-auto px-4 py-4">
+        <h5>Style Guide</h5>
       </div>
     </header>
     <div class="container max-w-2xl mx-auto p-4">
@@ -112,7 +109,7 @@
         <h5 class="pl-1">Toggle</h5>
         <div class="bg-white border p-6 rounded-lg mt-2">
           <div class="flex flex-col">
-          <%# Toggle %>
+            <%# Toggle %>
             <div>
               <input type="checkbox" class="hidden toggle-input" id="ToggleID"/>
               <label for="ToggleID" class="toggle-label"><span></span></label>
@@ -124,7 +121,7 @@
         <h5 class="pl-1">Checkbox</h5>
         <div class="bg-white border p-6 rounded-lg mt-2">
           <div class="flex flex-col">
-          <%#  Checkbox %>
+            <%#  Checkbox %>
             <div>
               <input class="hidden checkbox-input" id="CheckboxID" type="checkbox"/>
               <label class="checkbox-label" for="CheckboxID">
@@ -333,27 +330,4 @@
       </div>
     </div>
   </section>
-
-  <footer class="bg-primary-900 w-full text-center border-t border-gray-500 p-4">
-    <div class="container max-w-2xl mx-auto px-4 py-6 flex items-center justify-between">
-      <%= image_tag 'home/pupilfirst/pupilfirst-logo-footer.svg', class: 'w-32 opacity-75', alt: 'PupilFirst' %>
-      <ul class="footer__social-list flex">
-        <li>
-          <a class="footer__social-list__icon inline-block opacity-75" href="#">
-            <%= image_tag 'home/pupilfirst/facebook-social-icon.svg', class: 'w-6', alt: 'PupilFirst' %>
-          </a>
-        </li>
-        <li class="ml-4">
-          <a class="footer__social-list__icon inline-block opacity-75" href="#">
-            <%= image_tag 'home/pupilfirst/instagram-social-icon.svg', class: 'w-6', alt: 'PupilFirst' %>
-          </a>
-        </li>
-        <li class="ml-4">
-          <a class="footer__social-list__icon inline-block opacity-75" href="#">
-            <%= image_tag 'home/pupilfirst/slack-social-icon.svg', class: 'w-6', alt: 'PupilFirst' %>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </footer>
 </main>

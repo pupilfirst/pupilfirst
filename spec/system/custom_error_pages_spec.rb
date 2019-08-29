@@ -1,13 +1,8 @@
 require 'rails_helper'
 
 feature 'Custom Error Pages' do
-  around do |example|
-    original_pupilfirst_domains = Rails.application.secrets.pupilfirst_domains
-    Rails.application.secrets.pupilfirst_domains = %w[test.host]
-
-    example.run
-
-    Rails.application.secrets.pupilfirst_domains = original_pupilfirst_domains
+  before do
+    create :school, :current
   end
 
   scenario 'User visits non-existent page' do

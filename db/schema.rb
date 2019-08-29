@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_120730) do
+ActiveRecord::Schema.define(version: 2019_08_22_100429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -265,11 +265,6 @@ ActiveRecord::Schema.define(version: 2019_08_19_120730) do
     t.boolean "primary", default: false
     t.index ["fqdn"], name: "index_domains_on_fqdn", unique: true
     t.index ["school_id"], name: "index_domains_on_school_id"
-  end
-
-  create_table "engineering_metrics", id: :serial, force: :cascade do |t|
-    t.json "metrics", default: {}, null: false
-    t.datetime "week_start_at"
   end
 
   create_table "evaluation_criteria", force: :cascade do |t|

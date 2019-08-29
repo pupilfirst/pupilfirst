@@ -518,8 +518,7 @@ let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
 
 let addNewVersionCB = (state, dispatch, ()) => {
   let currentDate = Js.Date.toDateString(Js.Date.fromFloat(Js.Date.now()));
-  let latestVersionDate =
-    Js.Date.toDateString(Js.Date.fromString(state.versions[0]));
+  let latestVersionDate = (Array.length(state.versions) > 0 ) ? Js.Date.toDateString(Js.Date.fromString(state.versions[0])) : "";
   if (latestVersionDate != currentDate) {
     dispatch(
       UpdateVersions(Array.append([|currentDate|], state.versions)),

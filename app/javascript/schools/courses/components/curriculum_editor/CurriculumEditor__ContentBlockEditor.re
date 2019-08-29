@@ -44,7 +44,12 @@ let reducer = (state, action) =>
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
-  | DoneUpdating(id) => {...state, formDirty: false, savingContentBlock: false, id}
+  | DoneUpdating(id) => {
+      ...state,
+      formDirty: false,
+      savingContentBlock: false,
+      id,
+    }
   | ResetFormDirty(buttonText) => {
       ...state,
       formDirty: false,
@@ -429,9 +434,11 @@ let make =
       ~authenticityToken,
     ) => {
   let initialState = {
-    id: switch(contentBlock) {
-    | Some(contentBlock) => contentBlock |> ContentBlock.id
-    | None => "" },
+    id:
+      switch (contentBlock) {
+      | Some(contentBlock) => contentBlock |> ContentBlock.id
+      | None => ""
+      },
     contentBlockPropertyText:
       switch (blockType) {
       | Markdown(_markdown) => ""

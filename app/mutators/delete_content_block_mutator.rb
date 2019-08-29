@@ -2,6 +2,7 @@ class DeleteContentBlockMutator < ApplicationMutator
   attr_accessor :id
 
   validates :id, presence: true
+  validate :not_the_only_content_block
 
   def delete_content_block
     ContentBlock.transaction do
@@ -11,6 +12,12 @@ class DeleteContentBlockMutator < ApplicationMutator
         handle_new_version
       end
     end
+  end
+
+  def not_the_only_content_block
+    return unless ContentVersion.where(target: target, version_on: latest_version_date).one?
+
+    errors[:base] << 'Target must have at-least one content block'
   end
 
   def content_block

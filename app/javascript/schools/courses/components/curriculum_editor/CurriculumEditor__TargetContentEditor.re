@@ -104,7 +104,8 @@ let swapContentBlockCB =
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
 };
 
-let createNewContentCB = (reloadVersionsCB, updateTargetContentBlocks, contentBlock) => {
+let createNewContentCB =
+    (addNewVersionCB, updateTargetContentBlocks, contentBlock) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -118,10 +119,11 @@ let createNewContentCB = (reloadVersionsCB, updateTargetContentBlocks, contentBl
        )
     |> List.append([newContentBlock])
   );
-  reloadVersionsCB();
+  addNewVersionCB();
 };
 
-let updateContentBlockCB = (addNewVersionCB, updateTargetContentBlocks, contentBlock, currentId) => {
+let updateContentBlockCB =
+    (addNewVersionCB, updateTargetContentBlocks, contentBlock, currentId) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -244,10 +246,16 @@ let make =
                   newContentBlockCB(updateTargetContentBlocks)
                 }
                 createNewContentCB={
-                  createNewContentCB(addNewVersionCB,updateTargetContentBlocks)
+                  createNewContentCB(
+                    addNewVersionCB,
+                    updateTargetContentBlocks,
+                  )
                 }
                 updateContentBlockCB={
-                  updateContentBlockCB(addNewVersionCB,updateTargetContentBlocks)
+                  updateContentBlockCB(
+                    addNewVersionCB,
+                    updateTargetContentBlocks,
+                  )
                 }
                 blockCount={targetContentBlocks |> List.length}
                 swapContentBlockCB={

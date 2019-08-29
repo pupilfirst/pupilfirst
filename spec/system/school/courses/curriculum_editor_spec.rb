@@ -427,7 +427,7 @@ feature 'Curriculum Editor', js: true do
       dismiss_notification
 
       content_block = target.content_versions.reload.last.content_block
-      expect(target.content_versions.last.sort_index).to eq(2)
+      expect(target.content_versions.reload.last.sort_index).to eq(2)
       expect(content_block.file.filename).to eq('logo_hackkar.png')
 
       within('.add-content-block--open') do

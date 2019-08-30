@@ -56,15 +56,15 @@ h6 {
 /* Button Styles */
 
 .btn-default {
-  @apply bg-gray-300 text-gray-800;
+  @apply bg-gray-300 text-primary-500;
 }
 
 .btn-default:hover {
-  @apply bg-primary-100 text-primary-400;
+  @apply bg-primary-400 text-primary-600;
 }
 
 .btn-default:focus {
-  @apply bg-primary-100 text-primary-500;
+  @apply bg-gray-400 text-primary-700;
 }
 
 .btn-primary {
@@ -121,6 +121,21 @@ h6 {
 
 .btn-success:focus {
   @apply bg-green-800;
+  background-image: none;
+}
+
+.btn-warning {
+  @apply bg-yellow-500 text-white;
+  background-image: linear-gradient(135deg, rgba(237, 137, 54, 1) 0%, rgba(221, 107, 32, 1) 100%);
+}
+
+.btn-warning:hover {
+  @apply bg-yellow-600;
+  background-image: linear-gradient(135deg, rgba(221, 107, 32, 1) 0%, rgba(192, 86, 33, 1) 100%);
+}
+
+.btn-warning:focus {
+  @apply bg-yellow-800;
   background-image: none;
 }
 

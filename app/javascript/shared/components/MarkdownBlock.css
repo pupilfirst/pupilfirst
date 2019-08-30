@@ -125,11 +125,11 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__permissive b, strong {
+.markdown-block__permissive b, .markdown-block__permissive strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__permissive s, del {
+.markdown-block__permissive s, .markdown-block__permissive del {
   @apply markdown-block__strikethrough;
 }
 
@@ -157,7 +157,7 @@
   @apply markdown-block__blockquote;
 }
 
-.markdown-block__permissive blockquote code, pre {
+.markdown-block__permissive blockquote code, .markdown-block__permissive blockquote pre {
   @apply font-normal text-sm;
 }
 
@@ -222,11 +222,11 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__question-and-answer b, strong {
+.markdown-block__question-and-answer b, .markdown-block__question-and-answer strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__question-and-answer s, del {
+.markdown-block__question-and-answer s, .markdown-block__question-and-answer del {
   @apply markdown-block__strikethrough;
 }
 

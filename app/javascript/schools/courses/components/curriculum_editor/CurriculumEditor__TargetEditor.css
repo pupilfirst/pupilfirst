@@ -23,6 +23,16 @@
   @apply bg-primary-500 text-white;
 }
 
+@screen md {
+  .target-editor__version-dropdown-button {
+    min-width: 14rem;
+  }
+}
+
+.target-editor__version-dropdown-list-item:hover .target-editor__version-dropdown-list-item-button {
+  @apply visible;
+}
+
 .content-block__content-placeholder {
   min-height: 14rem;
 }

@@ -60,7 +60,7 @@ h6 {
 }
 
 .btn-default:hover {
-  @apply bg-primary-400 text-primary-600;
+  @apply bg-gray-400 text-primary-600;
 }
 
 .btn-default:focus {

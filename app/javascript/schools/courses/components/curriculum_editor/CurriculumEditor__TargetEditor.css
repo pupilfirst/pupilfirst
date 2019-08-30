@@ -23,6 +23,10 @@
   @apply bg-primary-500 text-white;
 }
 
+.target-editor__version-dropdown-list {
+  max-height: 18rem;
+}
+
 @screen md {
   .target-editor__version-dropdown-button {
     min-width: 14rem;

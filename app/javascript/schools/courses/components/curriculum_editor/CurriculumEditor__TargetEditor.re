@@ -774,7 +774,7 @@ let make =
                           </span>
                         </button>
                       </div>
-                      <ul className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-hidden min-w-full w-auto z-20">
+                      <ul className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
                         <li className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
                           {"May 28, 2019, 11:11" |> str}
                           <span className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">{"View" |> str}</span>

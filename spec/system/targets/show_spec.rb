@@ -94,7 +94,15 @@ feature 'Target Overlay', js: true do
     fill_in 'attachment_url', with: 'foobar'
     expect(page).to have_content('does not look like a valid URL')
     fill_in 'attachment_url', with: 'https://example.com?q=1'
+
+    # The submit button should be disabled when the link is being typed in.
+    expect(page).not_to have_button('Submit')
+    expect(page).to have_button('Finish adding link...', disabled: true)
+
     click_button 'Attach link'
+
+    # The submit button should be enabled again now.
+    expect(page).to have_button('Submit')
 
     find('a', text: 'Upload File').click
     attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false

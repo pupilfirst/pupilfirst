@@ -13,8 +13,15 @@ type action =
   | UpdateUrl(string)
   | ResetForm;
 
-let validate = url =>
-  UrlUtils.isInvalid(url) ? ["does not look like a valid URL"] : [];
+let validate = url => {
+  let urlLength = url |> String.length;
+
+  if (UrlUtils.isInvalid(url) && urlLength > 0) {
+    ["does not look like a valid URL"];
+  } else {
+    [];
+  };
+};
 
 let reducer = (_state, action) =>
   switch (action) {
@@ -22,8 +29,9 @@ let reducer = (_state, action) =>
   | ResetForm => initialState
   };
 
-let updateUrl = (send, event) => {
-  let value = ReactEvent.Form.target(event)##value;
+let updateUrl = (send, typingCB, event) => {
+  let value = ReactEvent.Form.target(event)##value |> Js.String.trim;
+  typingCB(value |> String.length > 0);
   send(UpdateUrl(value));
 };
 
@@ -40,7 +48,7 @@ let attachUrl = (state, send, attachUrlCB, event) => {
 };
 
 [@react.component]
-let make = (~attachUrlCB) => {
+let make = (~attachUrlCB, ~typingCB) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <div>
@@ -51,7 +59,7 @@ let make = (~attachUrlCB) => {
         type_="text"
         placeholder="Type full URL starting with https://..."
         className="mt-2 cursor-pointer truncate h-10 border border-grey-400 border-dashed flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
-        onChange={updateUrl(send)}
+        onChange={updateUrl(send, typingCB)}
       />
       <button
         onClick={attachUrl(state, send, attachUrlCB)}

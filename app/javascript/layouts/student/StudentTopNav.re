@@ -31,7 +31,7 @@ let signOutLink = authenticityToken =>
         <button
           className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
           type_="submit"
-          value="Submit">
+          value="Sign Out">
           <FaIcon classes="fas fa-power-off" />
           <span className="ml-2"> {"Sign Out" |> str} </span>
         </button>
@@ -98,57 +98,49 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm" href="/">
-            {
-              switch (logoUrl) {
-              | Some(url) =>
-                <img
-                  className="h-9 md:h-12 object-contain"
-                  src=url
-                  alt={"Logo of " ++ schoolName}
-                />
-              | None =>
-                <div
-                  className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-600">
-                  <span className="text-xl font-bold leading-tight">
-                    {schoolName |> str}
-                  </span>
-                </div>
-              }
-            }
+            {switch (logoUrl) {
+             | Some(url) =>
+               <img
+                 className="h-9 md:h-12 object-contain"
+                 src=url
+                 alt={"Logo of " ++ schoolName}
+               />
+             | None =>
+               <div
+                 className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-600">
+                 <span className="text-xl font-bold leading-tight">
+                   {schoolName |> str}
+                 </span>
+               </div>
+             }}
           </a>
-          {
-            isMobile() ?
-              <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
-                <div
-                  className={
-                    "student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full "
-                    ++ (menuHidden ? "" : "open")
-                  }>
-                  <span className="student-navbar__menu-icon">
-                    <span className="student-navbar__menu-icon-bar" />
-                  </span>
-                </div>
-              </div> :
-              React.null
-          }
+          {isMobile()
+             ? <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
+                 <div
+                   className={
+                     "student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full "
+                     ++ (menuHidden ? "" : "open")
+                   }>
+                   <span className="student-navbar__menu-icon">
+                     <span className="student-navbar__menu-icon-bar" />
+                   </span>
+                 </div>
+               </div>
+             : React.null}
         </div>
-        {
-          !menuHidden && !isMobile() ?
-            <div
-              className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
-              {headerLinks(links, authenticityToken, isLoggedIn)}
-            </div> :
-            React.null
-        }
+        {!menuHidden && !isMobile()
+           ? <div
+               className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
+               {headerLinks(links, authenticityToken, isLoggedIn)}
+             </div>
+           : React.null}
       </nav>
     </div>
-    {
-      isMobile() && !menuHidden ?
-        <div
-          className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-          {headerLinks(links, authenticityToken, isLoggedIn)}
-        </div> :
-        React.null
-    }
+    {isMobile() && !menuHidden
+       ? <div
+           className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
+           {headerLinks(links, authenticityToken, isLoggedIn)}
+         </div>
+       : React.null}
   </div>;
 };

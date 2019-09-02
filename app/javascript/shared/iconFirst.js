@@ -21,7 +21,6 @@ function viewboxClass(width) {
 
 const createSvg = className => {
   const xmlns = "http://www.w3.org/2000/svg";
-  const title = title;
   const icon = getIconData(className.match(/i-([a-zA-z0-9\-]+)/)[1]);
   const el = document.createElementNS(xmlns, "svg");
   el.setAttribute(

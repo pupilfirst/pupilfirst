@@ -1,6 +1,0 @@
----
-timestamp: '2019-08-30T11:41:56Z'
-title: The student submission form is now disabled when the attachment form contains
-  a link that hasn't been _attached_ yet. The form now lets the user know that the
-  link needs to be at_attached_ for it to count as a part of the submission.
-category: ui

@@ -1,5 +1,24 @@
 ---
 changelog:
+- timestamp: '2019-09-02T11:35:11Z'
+  changes:
+  - timestamp: '2019-09-02T11:33:25Z'
+    title: PupilFirst is now [open-source](https://git.pupilfirst.com)! This project's
+      overall goal has always been to make modern tooling available in the field of
+      education, and to do so in a manner that promotes effective techniques for
+      improving student outcome. Going open-source allows us to be transparent about
+      the work that we do, and the changes we're making to the platform to aid that goal.
+  - timestamp: '2019-09-02T10:31:45Z'
+    title: The quiz editor in the school admin interface now has improved styling
+      that makes the selected answer stand out in the list of possible answers - this
+      decreases the likelihood that the target author will forget to select the right
+      answer before moving on.
+    category: ui
+  - timestamp: '2019-08-30T11:41:56Z'
+    title: The student submission form is now disabled when the attachment form contains
+      a link that hasn't been _attached_ yet. The form now lets the user know that
+      the link needs to be at _attached_ for it to count as a part of the submission.
+    category: ui
 - timestamp: '2019-08-28T08:21:04Z'
   changes:
   - timestamp: '2019-08-28T08:21:00Z'
@@ -23,8 +42,8 @@ changelog:
       haven't logged in (instead of 404-ing).
     category: ui
   - timestamp: '2019-08-28T08:14:15Z'
-    title: Improved the informational message displayed when students are prevented from
-      completing a target when they're in a lower level.
+    title: Improved the informational message displayed when students are prevented
+      from completing a target when they're in a lower level.
     category: ui
   - timestamp: '2019-08-28T08:13:10Z'
     title: School admins can no longer submit the target editor form with a blank

@@ -7,7 +7,8 @@ class DeleteContentBlockMutator < ApplicationMutator
   def delete_content_block
     ContentBlock.transaction do
       if latest_version_date == Date.today
-        content_block.created_at == Date.today ? content_block.destroy! : ContentVersion.where(content_block_id: id, version_on: Date.today).first.destroy!
+        ContentVersion.where(content_block_id: id, version_on: Date.today).first.destroy!
+        content_block.destroy! if content_block.created_at.to_date == Date.today
       else
         handle_new_version
       end
@@ -20,11 +21,19 @@ class DeleteContentBlockMutator < ApplicationMutator
     errors[:base] << 'Target must have at-least one content block'
   end
 
+  def current_version
+    @current_version ||= ContentVersion.where(content_block: content_block, version_on: latest_version_date).first
+  end
+
   def content_block
     @content_block ||= ContentBlock.find(id)
   end
 
   private
+
+  def delete_content_version
+    current_version.destroy if latest_version_date == Date.today
+  end
 
   def authorized?
     current_school_admin.present? || current_user.course_authors.where(course: target.level.course).exists?
@@ -35,7 +44,7 @@ class DeleteContentBlockMutator < ApplicationMutator
   end
 
   def latest_version_date
-    @latest_version_date ||= content_block.content_versions.maximum(:version_on)
+    @latest_version_date ||= target.content_versions.maximum(:version_on)
   end
 
   def handle_new_version

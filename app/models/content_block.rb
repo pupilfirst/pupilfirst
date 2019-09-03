@@ -5,7 +5,7 @@ class ContentBlock < ApplicationRecord
   BLOCK_TYPE_FILE = -'file'
 
   has_one_attached :file
-  has_many :content_versions, dependent: :destroy
+  has_many :content_versions, dependent: :restrict_with_error
 
   def self.valid_block_types
     [BLOCK_TYPE_MARKDOWN, BLOCK_TYPE_IMAGE, BLOCK_TYPE_EMBED, BLOCK_TYPE_FILE]

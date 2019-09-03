@@ -537,6 +537,15 @@ let addNewVersionCB = (state, dispatch, ()) => {
   };
 };
 
+let selectVersionCB =
+    (target, state, send, authenticityToken, selectedVersion) => {
+  let encodedVersion = selectedVersion |> Js.Json.string;
+  selectedVersion == state.versions[0] ?
+    loadContentBlocks(target, send, authenticityToken, ()) :
+    loadOldVersions(target, send, encodedVersion, authenticityToken, ());
+  send(SelectVersion(selectedVersion));
+};
+
 [@react.component]
 let make =
     (
@@ -770,64 +779,22 @@ let make =
                     </div> :
                     ReasonReact.null
                 }
-                <div className="flex justify-between items-end">
-                  <div className="flex items-end">
-                    <div className="relative">
-                      <div className="inline-block">
-                        <label className="text-xs block text-gray-600 mb-1">
-                          {"Current version" |> str}
-                        </label>
-                        <button
-                          className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
-                          <span className="flex items-center px-3 py-2">
-                            <span className="truncate text-left">
-                              {"May 28, 2019, 11:11" |> str}
-                            </span>
-                          </span>
-                          <span
-                            className="text-right px-3 py-2 border-l border-orange-400">
-                            <i className="fas fa-chevron-down text-sm" />
-                          </span>
-                        </button>
-                      </div>
-                      <ul
-                        className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
-                        <li
-                          className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
-                          {"May 28, 2019, 11:11" |> str}
-                          <span
-                            className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
-                            {"View" |> str}
-                          </span>
-                        </li>
-                        <li
-                          className="target-editor__version-dropdown-list-item flex flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
-                          {"May 28, 2019, 11:11" |> str}
-                          <span
-                            className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
-                            {"View" |> str}
-                          </span>
-                        </li>
-                        <li
-                          className="target-editor__version-dropdown-list-item flex flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
-                          {"May 28, 2019, 11:11" |> str}
-                          <span
-                            className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
-                            {"View" |> str}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button
-                      className="btn btn-warning border border-orange-500 ml-4">
-                      {"Restore to this version" |> str}
-                    </button>
-                  </div>
-                  <button
-                    className="btn btn-default border border-transparent ml-4">
-                    {"Edit" |> str}
-                  </button>
-                </div>
+                {
+                  state.versions |> Array.length > 1 ?
+                    <CurriculumEditor__TargetVersionSelector
+                      selectVersionCB={
+                        selectVersionCB(
+                          target,
+                          state,
+                          dispatch,
+                          authenticityToken,
+                        )
+                      }
+                      versions={state.versions}
+                      selectedVersion={state.selectedVersion}
+                    /> :
+                    React.null
+                }
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
                   target

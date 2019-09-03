@@ -18,7 +18,8 @@ module Targets
         communities: community_details,
         link_to_complete: @target.link_to_complete,
         evaluated: @target.evaluation_criteria.exists?,
-        grading: grading
+        grading: grading,
+        completion_instructions: @target.completion_instructions
       }
     end
 

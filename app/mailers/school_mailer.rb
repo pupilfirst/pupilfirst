@@ -1,3 +1,4 @@
+# TODO: The SchoolMailer class should be renamed to ApplicationMailer.
 class SchoolMailer < ActionMailer::Base
   include Roadie::Rails::Mailer
 

@@ -5,6 +5,7 @@ open CoursesCurriculum__Types;
 let str = React.string;
 
 type formState =
+  | TypingLink
   | Attaching
   | Saving
   | Incomplete
@@ -13,6 +14,7 @@ type formState =
 let buttonContents = formState => {
   let icon =
     switch (formState) {
+    | TypingLink => <FaIcon classes="fas fa-keyboard mr-2" />
     | Attaching
     | Saving => <FaIcon classes="fas fa-spinner fa-spin mr-2" />
     | Incomplete
@@ -22,6 +24,7 @@ let buttonContents = formState => {
   let text =
     (
       switch (formState) {
+      | TypingLink => "Finish adding link..."
       | Attaching => "Attaching..."
       | Saving => "Submitting..."
       | Incomplete
@@ -35,6 +38,7 @@ let buttonContents = formState => {
 
 let isButtonDisabled = formState =>
   switch (formState) {
+  | TypingLink
   | Attaching
   | Saving
   | Incomplete => true
@@ -52,6 +56,7 @@ type state = {
 };
 
 type action =
+  | SetTypingLink(bool)
   | UpdateFormState(formState)
   | UpdateDescription(string)
   | AttachFile(id, filename)
@@ -71,6 +76,17 @@ let updateDescription = (send, event) => {
 let reducer = (state, action) =>
   switch (action) {
   | UpdateFormState(formState) => {...state, formState}
+  | SetTypingLink(typing) => {
+      ...state,
+      formState:
+        switch (typing, state.formState) {
+        | (typing, Incomplete)
+        | (typing, Ready) => typing ? TypingLink : Ready
+        | (typing, TypingLink) =>
+          typing ? TypingLink : descriptionToFormState(state.description)
+        | (_, otherState) => otherState
+        },
+    }
   | UpdateDescription(description) => {
       ...state,
       description,
@@ -78,8 +94,7 @@ let reducer = (state, action) =>
         switch (state.formState) {
         | Incomplete
         | Ready => descriptionToFormState(description)
-        | Attaching => Attaching
-        | Saving => Saving
+        | otherState => otherState
         },
     }
   | AttachFile(id, filename) => {
@@ -106,7 +121,11 @@ let reducer = (state, action) =>
 
     switch (attachment) {
     | Some(_attachment) => state
-    | None => {...state, attachments: [Link(url), ...state.attachments]}
+    | None => {
+        ...state,
+        attachments: [Link(url), ...state.attachments],
+        formState: descriptionToFormState(state.description),
+      }
     };
   | RemoveAttachment(attachment) => {
       ...state,
@@ -123,6 +142,7 @@ let isBusy = formState =>
   switch (formState) {
   | Attaching
   | Saving => true
+  | TypingLink
   | Incomplete
   | Ready => false
   };
@@ -211,6 +231,7 @@ let submit = (state, send, authenticityToken, target, addSubmissionCB, event) =>
 let isDescriptionDisabled = formState =>
   switch (formState) {
   | Saving => true
+  | TypingLink
   | Attaching
   | Incomplete
   | Ready => false
@@ -245,6 +266,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
         <CoursesCurriculum__NewAttachment
           authenticityToken
           attachingCB={() => send(UpdateFormState(Attaching))}
+          typingCB={typing => send(SetTypingLink(typing))}
           attachFileCB={(id, filename) => send(AttachFile(id, filename))}
           attachUrlCB={url => send(AttachUrl(url))}
           disabled={isBusy(state.formState)}

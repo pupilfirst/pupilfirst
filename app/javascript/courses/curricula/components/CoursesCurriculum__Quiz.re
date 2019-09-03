@@ -104,7 +104,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
   let (selectedAnswer, setSelectedAnswer) = React.useState(() => None);
   let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => []);
   let currentQuestion = selectedQuestion;
-  <div className="bg-gray-100 rounded overflow-hidden relative mb-18">
+  <div className="bg-gray-100 rounded overflow-hidden relative mb-18 mt-4">
     <div className="p-2 md:p-5">
       <span className="font-semibold text-xs block uppercase text-gray-600">
         {"Question #" |> str}

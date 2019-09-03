@@ -61,6 +61,7 @@ feature 'Curriculum Editor', js: true do
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
 
   let(:sample_markdown_text) { Faker::Markdown.sandwich(6) }
+  let(:completion_instructions) { Faker::Lorem.sentence }
 
   before do
     stub_request(:get, 'https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=3QDYbQIS8cQ').to_return(body: '{"version":"1.0","provider_name":"YouTube","html":"\u003ciframe width=\"480\" height=\"270\" src=\"https:\/\/www.youtube.com\/embed\/3QDYbQIS8cQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen\u003e\u003c\/iframe\u003e","thumbnail_url":"https:\/\/i.ytimg.com\/vi\/3QDYbQIS8cQ\/hqdefault.jpg","provider_url":"https:\/\/www.youtube.com\/","thumbnail_height":360,"type":"video","height":270,"thumbnail_width":480,"author_url":"https:\/\/www.youtube.com\/channel\/UCvsvW3QH1700y-j2VfEnq-A","author_name":"Just smile","title":"Funny And Cute Cats - Funniest Cats Compilation 2019","width":480}', status: 200) # rubocop:disable Metrics/LineLength
@@ -332,6 +333,28 @@ feature 'Curriculum Editor', js: true do
       sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
 
       target = target_4
+
+      # update target completion_instructions
+      find('.target-group__target', text: target.title).click
+      expect(page).to have_selector('.add-content-block--open', count: 1)
+      click_button 'Next Step'
+      expect(page).to have_text('Do you have any completion instructions for the student?')
+      fill_in 'completion-instructions', with: completion_instructions
+
+      click_button 'Update Target'
+      dismiss_notification
+
+      expect(target.reload.completion_instructions).to eq(completion_instructions)
+
+      find('.target-group__target', text: target.title).click
+      click_button 'Next Step'
+      expect(page).to have_text('Do you have any completion instructions for the student?')
+      fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
+
+      click_button 'Update Target'
+      dismiss_notification
+
+      expect(target.reload.completion_instructions).to eq(nil)
 
       # Change target visibility
       find('.target-group__target', text: target.title).click

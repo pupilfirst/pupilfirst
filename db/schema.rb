@@ -277,11 +277,6 @@ ActiveRecord::Schema.define(version: 2019_08_22_175152) do
     t.index ["school_id"], name: "index_domains_on_school_id"
   end
 
-  create_table "engineering_metrics", id: :serial, force: :cascade do |t|
-    t.json "metrics", default: {}, null: false
-    t.datetime "week_start_at"
-  end
-
   create_table "evaluation_criteria", force: :cascade do |t|
     t.string "description"
     t.datetime "created_at", null: false
@@ -577,6 +572,14 @@ ActiveRecord::Schema.define(version: 2019_08_22_175152) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "target_content_versions", force: :cascade do |t|
+    t.bigint "target_id"
+    t.integer "content_blocks", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_id"], name: "index_target_content_versions_on_target_id"
+  end
+
   create_table "target_evaluation_criteria", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "evaluation_criterion_id"
@@ -835,6 +838,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_175152) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
+  add_foreign_key "target_content_versions", "targets"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

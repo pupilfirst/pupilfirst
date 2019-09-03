@@ -80,7 +80,7 @@ let autoVerify =
     ) =>
   <button
     disabled=saving
-    className="flex rounded text-lg justify-center w-full font-bold p-4 text-blue-500 bg-blue-100  "
+    className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
     onClick={
       createAutoVerifySubmission(
         authenticityToken,
@@ -131,6 +131,12 @@ let statusBar = (string, linkToComplete) => {
   </div>;
 };
 
+let completionInstructionText = linkToComplete =>
+  switch (linkToComplete) {
+  | Some(_) => "Before visiting the link..."
+  | None => "Before marking as complete..."
+  };
+
 [@react.component]
 let make =
     (
@@ -142,21 +148,29 @@ let make =
     ) => {
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
-  <div className="mt-4" id="auto-verify-target">
-    {
-      switch (targetStatus |> TargetStatus.status) {
-      | Pending =>
-        autoVerify(
-          target,
-          linkToComplete,
-          saving,
-          setSaving,
-          authenticityToken,
-          addSubmissionCB,
-        )
-      | Locked(_) => React.null
-      | _ => statusBar("Completed", linkToComplete)
+  [|
+    <CoursesCurriculum__CompletionInstructions
+      key="completion-instructions"
+      targetDetails
+      title={completionInstructionText(linkToComplete)}
+    />,
+    <div className="mt-5" id="auto-verify-target" key="completion-button">
+      {
+        switch (targetStatus |> TargetStatus.status) {
+        | Pending =>
+          autoVerify(
+            target,
+            linkToComplete,
+            saving,
+            setSaving,
+            authenticityToken,
+            addSubmissionCB,
+          )
+        | Locked(_) => React.null
+        | _ => statusBar("Completed", linkToComplete)
+        }
       }
-    }
-  </div>;
+    </div>,
+  |]
+  |> React.array;
 };

@@ -53,6 +53,7 @@ type state = {
   activeStep,
   visibility: Target.visibility,
   contentEditorDirty: bool,
+  completionInstructions: string,
 };
 
 type action =
@@ -72,7 +73,8 @@ type action =
   | SwitchPreviewMode
   | LoadOldVersion(list(ContentBlock.t))
   | SelectVersion(string)
-  | UpdateVersions(array(string));
+  | UpdateVersions(array(string))
+  | UpdateCompletionInstructions(string);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -190,11 +192,7 @@ let setPayload = (state, target, authenticityToken) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
-  Js.Dict.set(
-    targetData,
-    "sort_index",
-    target |> Target.sortIndex |> string_of_int |> Js.Json.string,
-  );
+
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
 
   Js.Dict.set(
@@ -204,6 +202,12 @@ let setPayload = (state, target, authenticityToken) => {
   );
 
   Js.Dict.set(targetData, "visibility", visibility |> Js.Json.string);
+
+  Js.Dict.set(
+    targetData,
+    "completion_instructions",
+    state.completionInstructions |> Js.Json.string,
+  );
 
   let (evaluationCriteriaIds, linkToComplete, quiz) =
     switch (state.methodOfCompletion) {
@@ -341,6 +345,11 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateActiveStep(step) => {...state, activeStep: step}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateCompletionInstructions(completionInstructions) => {
+      ...state,
+      completionInstructions,
+      dirty: true,
+    }
   | UpdateContentEditorDirty(contentEditorDirty) => {
       ...state,
       contentEditorDirty,
@@ -518,7 +527,9 @@ let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
 
 let addNewVersionCB = (state, dispatch, ()) => {
   let currentDate = Js.Date.toDateString(Js.Date.fromFloat(Js.Date.now()));
-  let latestVersionDate = (Array.length(state.versions) > 0 ) ? Js.Date.toDateString(Js.Date.fromString(state.versions[0])) : "";
+  let latestVersionDate =
+    Array.length(state.versions) > 0 ?
+      Js.Date.toDateString(Js.Date.fromString(state.versions[0])) : "";
   if (latestVersionDate != currentDate) {
     dispatch(
       UpdateVersions(Array.append([|currentDate|], state.versions)),
@@ -566,6 +577,8 @@ let make =
     activeStep: AddContent,
     visibility: target |> Target.visibility,
     contentEditorDirty: false,
+    completionInstructions:
+      target |> Target.completionInstructions |> OptionUtils.toString,
   };
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
@@ -600,9 +613,7 @@ let make =
     dispatch(UpdateContentEditorDirty(contentEditorDirty));
   let questionCanBeRemoved = state.quiz |> List.length > 1;
   let handleErrorCB = () => dispatch(UpdateSaving);
-  let handleResponseCB = (closeEditor, dispatch, json) => {
-    let id = json |> Json.Decode.(field("id", string));
-    let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+  let handleResponseCB = (closeEditor, dispatch, _json) => {
     let prerequisiteTargets =
       state.prerequisiteTargets
       |> List.filter(((_, _, selected)) => selected)
@@ -628,15 +639,16 @@ let make =
       };
     let newTarget =
       Target.create(
-        id,
-        targetGroupId,
-        state.title,
-        evaluationCriteria,
-        prerequisiteTargets,
-        quiz,
-        linkToComplete,
-        sortIndex,
-        state.visibility,
+        ~id=target |> Target.id,
+        ~targetGroupId,
+        ~title=state.title,
+        ~evaluationCriteria,
+        ~prerequisiteTargets,
+        ~quiz,
+        ~linkToComplete,
+        ~sortIndex=target |> Target.sortIndex,
+        ~visibility=state.visibility,
+        ~completionInstructions=Some(state.completionInstructions),
       );
     Notification.success("Success", "Target updated successfully");
     updateTargetCB(newTarget, closeEditor);
@@ -762,36 +774,59 @@ let make =
                   <div className="flex items-end">
                     <div className="relative">
                       <div className="inline-block">
-                        <label className="text-xs block text-gray-600 mb-1">{"Current version" |> str}</label>
-                        <button className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
+                        <label className="text-xs block text-gray-600 mb-1">
+                          {"Current version" |> str}
+                        </label>
+                        <button
+                          className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
                           <span className="flex items-center px-3 py-2">
                             <span className="truncate text-left">
                               {"May 28, 2019, 11:11" |> str}
                             </span>
                           </span>
-                          <span className="text-right px-3 py-2 border-l border-orange-400">
+                          <span
+                            className="text-right px-3 py-2 border-l border-orange-400">
                             <i className="fas fa-chevron-down text-sm" />
                           </span>
                         </button>
                       </div>
-                      <ul className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
-                        <li className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
+                      <ul
+                        className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
+                        <li
+                          className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
                           {"May 28, 2019, 11:11" |> str}
-                          <span className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">{"View" |> str}</span>
-                          </li>
-                        <li className="target-editor__version-dropdown-list-item flex flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
+                          <span
+                            className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
+                            {"View" |> str}
+                          </span>
+                        </li>
+                        <li
+                          className="target-editor__version-dropdown-list-item flex flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
                           {"May 28, 2019, 11:11" |> str}
-                          <span className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">{"View" |> str}</span>
-                          </li>
-                        <li className="target-editor__version-dropdown-list-item flex flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
+                          <span
+                            className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
+                            {"View" |> str}
+                          </span>
+                        </li>
+                        <li
+                          className="target-editor__version-dropdown-list-item flex flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
                           {"May 28, 2019, 11:11" |> str}
-                          <span className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">{"View" |> str}</span>
+                          <span
+                            className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
+                            {"View" |> str}
+                          </span>
                         </li>
                       </ul>
                     </div>
-                    <button className="btn btn-warning border border-orange-500 ml-4">{"Restore to this version" |> str}</button>
+                    <button
+                      className="btn btn-warning border border-orange-500 ml-4">
+                      {"Restore to this version" |> str}
+                    </button>
                   </div>
-                    <button className="btn btn-default border border-transparent ml-4">{"Edit" |> str}</button>
+                  <button
+                    className="btn btn-default border border-transparent ml-4">
+                    {"Edit" |> str}
+                  </button>
                 </div>
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
@@ -872,6 +907,41 @@ let make =
                       {"No" |> str}
                     </button>
                   </div>
+                </div>
+                <div className="mb-6">
+                  <label
+                    className="block tracking-wide text-sm font-semibold mr-6"
+                    htmlFor="completion-instructions">
+                    {
+                      "Do you have any completion instructions for the student?"
+                      |> str
+                    }
+                    <span className="ml-1 text-xs font-normal">
+                      {"(optional)" |> str}
+                    </span>
+                  </label>
+                  <div className="text-xs mt-1 text-gray-800">
+                    {
+                      "These instructions will be displayed close to where students complete the target."
+                      |> str
+                    }
+                  </div>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="completion-instructions"
+                    type_="text"
+                    maxLength=255
+                    placeholder="Do these specific things to complete this target!"
+                    value={state.completionInstructions}
+                    onChange={
+                      event =>
+                        dispatch(
+                          UpdateCompletionInstructions(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
+                    }
+                  />
                 </div>
                 {
                   targetEvaluated() ?

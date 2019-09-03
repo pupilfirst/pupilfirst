@@ -25,7 +25,7 @@ module Users
       end
 
       def oauth_host
-        @oauth_host ||= "sso.pupilfirst.#{Rails.env.production? ? 'com' : 'localhost'}"
+        @oauth_host ||= Rails.application.secrets.sso_domain
       end
     end
   end

@@ -11,14 +11,13 @@
 
   <!-- Styles -->
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'IconFirstPack', media: 'all' %>
+  <%= stylesheet_pack_tag 'shared/flashes', media: 'all' %>
   <!-- Scripts -->
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
-  <%= javascript_pack_tag 'pupilFirstIconPack', 'data-turbolinks-track': 'reload', nonce: true %>
-  <%= stylesheet_pack_tag 'pupilFirstIconPack', media: 'all' %>
-
+  <%= javascript_pack_tag 'IconFirstPack', 'data-turbolinks-track': 'reload', nonce: true %>
   <%= javascript_pack_tag 'shared/flashes','data-turbolinks-track': 'reload', nonce: true %>
-  <%= stylesheet_pack_tag 'shared/flashes', media: 'all' %>
 
   <%= csrf_meta_tags %>
 

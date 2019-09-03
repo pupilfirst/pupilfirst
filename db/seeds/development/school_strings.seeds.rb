@@ -1,5 +1,16 @@
 puts 'Seeding school_strings'
 
+def agreement_text
+  <<~AGREEMENT
+    #{Faker::Lorem.paragraph(30)}
+
+    #{Faker::Markdown.ordered_list}
+    #{Faker::Lorem.paragraph(20)}
+
+    #{Faker::Markdown.unordered_list}
+  AGREEMENT
+end
+
 after 'development:schools' do
   school = School.first
 
@@ -18,11 +29,6 @@ after 'development:schools' do
   school.school_strings.where(key: 'description')
     .first_or_create!(value: Faker::Lorem.sentence)
 
-  privacy_policy = File.read(Rails.root.join('privacy_policy.md'))
-
-  school.school_strings.where(key: 'privacy_policy').first_or_create!(value: privacy_policy)
-
-  terms_of_use = File.read(Rails.root.join('terms_of_use.md'))
-
-  school.school_strings.where(key: 'terms_of_use').first_or_create!(value: terms_of_use)
+  school.school_strings.where(key: 'privacy_policy').first_or_create!(value: agreement_text)
+  school.school_strings.where(key: 'terms_of_use').first_or_create!(value: agreement_text)
 end

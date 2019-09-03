@@ -9,6 +9,7 @@ type t = {
   linkToComplete: option(string),
   evaluated: bool,
   grading: list(CoursesCurriculum__Grade.t),
+  completionInstructions: option(string),
 };
 
 let submissions = t => t.submissions;
@@ -46,6 +47,10 @@ let decode = json =>
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     evaluated: json |> field("evaluated", bool),
     grading: json |> field("grading", list(CoursesCurriculum__Grade.decode)),
+    completionInstructions:
+      json
+      |> field("completionInstructions", nullable(string))
+      |> Js.Null.toOption,
   };
 
 let computeCompletionType = targetDetails => {
@@ -69,6 +74,8 @@ let quizQuestions = t => t.quizQuestions;
 let communities = t => t.communities;
 let linkToComplete = t => t.linkToComplete;
 let evaluated = t => t.evaluated;
+
+let completionInstructions = t => t.completionInstructions;
 
 let grades = (submissionId, t) =>
   t.grading

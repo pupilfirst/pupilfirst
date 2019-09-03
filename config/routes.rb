@@ -81,9 +81,7 @@ Rails.application.routes.draw do
       resources :target_groups, only: %i[create]
     end
 
-    resources :target_groups, only: %i[update] do
-      resources :targets, only: %i[create]
-    end
+    resources :target_groups, only: %i[update]
 
     resources :targets, only: %i[update] do
       resource :quiz, only: %i[create]
@@ -177,17 +175,15 @@ Rails.application.routes.draw do
     get '/:id/e/:event_id(/:event_title)', action: 'timeline_event_show', as: 'student_timeline_event_show'
   end
 
-  # PupilFirst landing page
-  get 'pupilfirst', to: 'home#pupilfirst'
-
-  get 'styleguide', to: 'home#styleguide'
+  get 'styleguide', to: 'home#styleguide', constraints: DevelopmentConstraint.new
 
   root 'home#index'
 
-  scope 'policies', as: 'policies', controller: 'home' do
-    get 'privacy'
-    get 'terms'
-  end
+  get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
+
+  # TODO: Remove the backwards-compatibility paths after a while.
+  get 'policies/privacy', to: redirect('/agreements/privacy-policy')
+  get 'policies/terms', to: redirect('/agreements/terms-of-use')
 
   resources :targets, only: %i[show] do
     member do
@@ -222,15 +218,13 @@ Rails.application.routes.draw do
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
-  post '/heroku/deploy_webhook', to: 'heroku#deploy_webhook'
-
   # Handle incoming unsubscribe webhooks from SendInBlue
   post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
 
-  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: PupilFirstConstraint.new
+  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: SsoConstraint.new
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
 
   # Allow developers to simulate the error pages.

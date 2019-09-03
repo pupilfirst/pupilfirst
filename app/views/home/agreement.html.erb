@@ -1,14 +1,14 @@
-<% presenter = ::Home::AgreementPresenter.new(self, @terms_of_use) %>
+<% presenter = ::Home::AgreementPresenter.new(self, @agreement_text) %>
 
 <% content_for(:head) do %>
-  <title><%= presenter.page_title %> Terms of Use</title>
+  <title><%= presenter.page_title %> | <%= @agreement_type %></title>
   <%= stylesheet_pack_tag 'home/policies', media: 'all' %>
 <% end %>
 
 <div class="flex flex-col bg-gray-100 items-center justify-center">
   <div class="my-6 md:my-10 px-3 max-w-3xl">
     <h2 class="policy-header text-xl md:text-3xl font-bold py-1 px-2">
-      Terms of Use
+      <%= @agreement_type %>
     </h2>
     <div class="policy-body bg-white rounded-lg shadow p-4 md:p-6 mt-2 leading-normal text-sm">
       <%= presenter.agreement_html %>

@@ -271,7 +271,7 @@ let make =
                 </select>
                 <div
                   className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-800">
-                  <Icon.Jsx2 kind=Icon.Down size="3" />
+                  <i className="fas fa-chevron-down text-xs" />
                 </div>
               </div>
               <button

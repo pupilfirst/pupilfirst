@@ -15,11 +15,14 @@ type t = {
   linkToComplete: option(string),
   sortIndex: int,
   visibility,
+  completionInstructions: option(string),
 };
 
 let id = t => t.id;
 
 let title = t => t.title;
+
+let completionInstructions = t => t.completionInstructions;
 
 let targetGroupId = t => t.targetGroupId;
 
@@ -55,6 +58,10 @@ let decode = json =>
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     sortIndex: json |> field("sortIndex", int),
     visibility: decodeVisbility(json |> field("visibility", string)),
+    completionInstructions:
+      json
+      |> field("completionInstructions", nullable(string))
+      |> Js.Null.toOption,
   };
 
 let updateList = (targets, target) => {
@@ -64,15 +71,16 @@ let updateList = (targets, target) => {
 
 let create =
     (
-      id,
-      targetGroupId,
-      title,
-      evaluationCriteria,
-      prerequisiteTargets,
-      quiz,
-      linkToComplete,
-      sortIndex,
-      visibility,
+      ~id,
+      ~targetGroupId,
+      ~title,
+      ~evaluationCriteria,
+      ~prerequisiteTargets,
+      ~quiz,
+      ~linkToComplete,
+      ~sortIndex,
+      ~visibility,
+      ~completionInstructions,
     ) => {
   id,
   targetGroupId,
@@ -83,6 +91,7 @@ let create =
   linkToComplete,
   sortIndex,
   visibility,
+  completionInstructions,
 };
 
 let sort = targets =>
@@ -111,5 +120,6 @@ let updateSortIndex = sortedTargets =>
          t.linkToComplete,
          sortIndex,
          t.visibility,
+         t.completionInstructions,
        )
      );

@@ -18,7 +18,14 @@ let tabClasses = (currentSelection, inspectedSelection) => {
 
 [@react.component]
 let make =
-    (~authenticityToken, ~attachFileCB, ~attachUrlCB, ~attachingCB, ~disabled) => {
+    (
+      ~authenticityToken,
+      ~attachFileCB,
+      ~attachUrlCB,
+      ~attachingCB,
+      ~typingCB,
+      ~disabled,
+    ) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
   <DisablingCover disabled message="Uploading...">
@@ -51,7 +58,7 @@ let make =
             attachFileCB
             attachingCB
           />
-        | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB />
+        | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB typingCB />
         }
       }
     </div>

@@ -29,18 +29,6 @@ Rails.application.config.content_security_policy do |policy|
     { frame: 'https://svlabs.typeform.com' }
   end
 
-  # rubocop:disable Metrics/LineLength
-  def intercom_csp
-    {
-      connect: %w[https://api.intercom.io https://api-iam.intercom.io https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io https://nexus-long-poller-a.intercom.io https://nexus-long-poller-b.intercom.io wss://nexus-websocket-a.intercom.io wss://nexus-websocket-b.intercom.io https://uploads.intercomcdn.com https://uploads.intercomusercontent.com https://app.getsentry.com],
-      child: %w[https://share.intercom.io https://intercom-sheets.com https://www.youtube.com https://player.vimeo.com https://fast.wistia.net],
-      font: 'https://js.intercomcdn.com',
-      media: 'https://js.intercomcdn.com'
-    }
-  end
-
-  # rubocop:enable Metrics/LineLength
-
   def slideshare_csp
     { frame: %w[slideshare.net *.slideshare.net] }
   end
@@ -74,17 +62,17 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def connect_sources
-    sources = [*inspectlet_csp[:connect], *intercom_csp[:connect], google_analytics_csp[:connect], rollbar_csp[:connect]]
+    sources = [*inspectlet_csp[:connect], google_analytics_csp[:connect], rollbar_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end
 
   def font_sources
-    ['fonts.gstatic.com', intercom_csp[:font], asset_host] - [nil]
+    ['fonts.gstatic.com', asset_host] - [nil]
   end
 
   def child_sources
-    ['https://www.youtube.com', *intercom_csp[:child]]
+    ['https://www.youtube.com']
   end
 
   def frame_sources
@@ -96,7 +84,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def media_sources
-    [*resource_csp[:media], intercom_csp[:media]]
+    [*resource_csp[:media]]
   end
 
   policy.default_src :none

@@ -74,7 +74,8 @@ module Schools
             role: target.role,
             targetActionType: target.target_action_type,
             sortIndex: target.sort_index,
-            visibility: target.visibility
+            visibility: target.visibility,
+            completionInstructions: target.completion_instructions
           }
         end
       end

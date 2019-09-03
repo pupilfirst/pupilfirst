@@ -1,5 +1,55 @@
 ---
 changelog:
+- timestamp: '2019-09-02T11:35:11Z'
+  changes:
+  - timestamp: '2019-09-02T11:33:25Z'
+    title: PupilFirst is now [open-source](https://git.pupilfirst.com)! This project's
+      overall goal has always been to make modern tooling available in the field of
+      education, and to do so in a manner that promotes effective techniques for
+      improving student outcome. Going open-source allows us to be transparent about
+      the work that we do, and the changes we're making to the platform to aid that goal.
+  - timestamp: '2019-09-02T10:31:45Z'
+    title: The quiz editor in the school admin interface now has improved styling
+      that makes the selected answer stand out in the list of possible answers - this
+      decreases the likelihood that the target author will forget to select the right
+      answer before moving on.
+    category: ui
+  - timestamp: '2019-08-30T11:41:56Z'
+    title: The student submission form is now disabled when the attachment form contains
+      a link that hasn't been _attached_ yet. The form now lets the user know that
+      the link needs to be at _attached_ for it to count as a part of the submission.
+    category: ui
+- timestamp: '2019-08-28T08:21:04Z'
+  changes:
+  - timestamp: '2019-08-28T08:21:00Z'
+    title: School admins can now sort targets and target groups using the curriculum
+      editor, similar to how target content blocks are sorted.
+    category: feature
+  - timestamp: '2019-08-28T08:19:30Z'
+    title: School admins can now alter the _affiliation_ property when editing the
+      details of a coach.
+    category: feature
+  - timestamp: '2019-08-28T08:18:36Z'
+    title: The leaderboard now properly excludes _inactive_ students from the aggregate
+      counts displayed.
+    category: bugfix
+  - timestamp: '2019-08-28T08:17:31Z'
+    title: Fixed incorrect page rendering that could occur when school admins attempt
+      to visit the leaderboard page without having a student profile.
+    category: bugfix
+  - timestamp: '2019-08-28T08:15:42Z'
+    title: Many pages have been updated to redirect users to the sign in page if they
+      haven't logged in (instead of 404-ing).
+    category: ui
+  - timestamp: '2019-08-28T08:14:15Z'
+    title: Improved the informational message displayed when students are prevented
+      from completing a target when they're in a lower level.
+    category: ui
+  - timestamp: '2019-08-28T08:13:10Z'
+    title: School admins can no longer submit the target editor form with a blank
+      _link-to-complete_. The form now proplerly blocks the user from submitting the
+      form without the link.
+    category: bugfix
 - timestamp: '2019-08-20T06:02:52Z'
   changes:
   - timestamp: '2019-08-20T06:02:13Z'

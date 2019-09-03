@@ -149,7 +149,7 @@ let make =
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
   [|
-    <CourseCurriculum__CompletionInstructions
+    <CoursesCurriculum__CompletionInstructions
       key="completion-instructions"
       targetDetails
       title={completionInstructionText(linkToComplete)}

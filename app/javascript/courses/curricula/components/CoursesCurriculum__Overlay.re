@@ -412,7 +412,7 @@ let completeSection =
       switch (targetStatus |> TargetStatus.status, completionType) {
       | (Pending, Evaluated) =>
         [|
-          <CourseCurriculum__CompletionInstructions
+          <CoursesCurriculum__CompletionInstructions
             key="completion-instructions"
             targetDetails
             title="Instructions"
@@ -429,7 +429,7 @@ let completeSection =
         |> React.array
       | (Pending, TakeQuiz) =>
         [|
-          <CourseCurriculum__CompletionInstructions
+          <CoursesCurriculum__CompletionInstructions
             key="completion-instructions"
             targetDetails
             title="Instructions"

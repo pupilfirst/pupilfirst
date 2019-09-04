@@ -188,6 +188,8 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Target created successfully')
       dismiss_notification
 
+      click_button 'Edit'
+
       expect(page).to have_selector('.content-block__content', count: 1)
       expect(page).to have_selector('.add-content-block--open', count: 1)
       target = target_group.reload.targets.last

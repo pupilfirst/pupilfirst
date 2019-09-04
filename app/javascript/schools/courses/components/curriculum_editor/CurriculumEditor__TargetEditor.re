@@ -363,6 +363,7 @@ let reducer = (state, action) =>
         | [||] => ""
         | versions => versions[0]
         },
+      previewMode: contentBlocks |> List.length > 0 ? true : false,
     }
   | LoadOldVersion(contentBlocks) => {
       ...state,

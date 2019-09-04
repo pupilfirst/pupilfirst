@@ -546,6 +546,8 @@ let selectVersionCB =
   send(SelectVersion(selectedVersion));
 };
 
+let switchViewModeCB = (send, ()) => send(SwitchPreviewMode);
+
 [@react.component]
 let make =
     (
@@ -579,7 +581,7 @@ let make =
     methodOfCompletion: handleMethodOfCompletion(target),
     hasTitleError: false,
     hasLinktoCompleteError: false,
-    previewMode: false,
+    previewMode: true,
     dirty: false,
     isValidQuiz: true,
     saving: false,
@@ -780,7 +782,7 @@ let make =
                     ReasonReact.null
                 }
                 {
-                  state.versions |> Array.length > 1 ?
+                  state.versions |> Array.length > 0 ?
                     <CurriculumEditor__TargetVersionSelector
                       selectVersionCB={
                         selectVersionCB(
@@ -792,6 +794,8 @@ let make =
                       }
                       versions={state.versions}
                       selectedVersion={state.selectedVersion}
+                      previewMode={state.previewMode}
+                      switchViewModeCB={switchViewModeCB(dispatch)}
                     /> :
                     React.null
                 }

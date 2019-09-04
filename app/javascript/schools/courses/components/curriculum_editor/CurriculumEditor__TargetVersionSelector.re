@@ -14,13 +14,28 @@ let handleVersionSelect =
   selectVersionCB(selectedVersion);
 };
 
+let handleViewMode = (switchViewModeCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  switchViewModeCB();
+};
+
 [@react.component]
-let make = (~versions, ~selectedVersion, ~selectVersionCB) => {
+let make =
+    (
+      ~versions,
+      ~selectedVersion,
+      ~selectVersionCB,
+      ~previewMode,
+      ~switchViewModeCB,
+    ) => {
   let (showDropdown, setShowDropdown) = React.useState(() => false);
   <div className="flex justify-between items-end">
     <div className="flex items-end">
       <div className="relative">
         <div className="inline-block">
+          <label className="text-xs block text-gray-600 mb-1">
+            {"Versions" |> str}
+          </label>
           <button
             onClick={handleClick(setShowDropdown)}
             className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
@@ -77,8 +92,10 @@ let make = (~versions, ~selectedVersion, ~selectVersionCB) => {
     </div>
     {
       selectedVersion == versions[0] ?
-        <button className="btn btn-default border border-transparent ml-4">
-          {"Edit" |> str}
+        <button
+          onClick={handleViewMode(switchViewModeCB)}
+          className="btn btn-default border border-transparent ml-4">
+          {(previewMode ? "Edit" : "Preview") |> str}
         </button> :
         React.null
     }

@@ -497,6 +497,7 @@ feature 'Curriculum Editor', js: true do
       target = target_5
       # Open the target editor
       find('.target-group__target', text: target.title).click
+      click_button 'Edit'
       expect(page).to have_selector('.content-block__content', count: 4)
       find("div#add-block-1", visible: false).click
 

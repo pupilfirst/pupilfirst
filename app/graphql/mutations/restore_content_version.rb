@@ -11,7 +11,7 @@ module Mutations
       mutator = RestoreContentVersionMutator.new(params, context)
 
       if mutator.valid?
-        mutator.notify(:success, "Done!", "Content updated successfully.")
+        mutator.notify(:success, "Done!", "Version restored successfully.")
         mutator.restore
         { success: true }
       else

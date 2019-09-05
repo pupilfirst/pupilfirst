@@ -19,6 +19,9 @@ let createdAtDate = t => t |> createdAt |> DateFns.parseString;
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
+let timeDistance = t =>
+  t |> createdAtDate |> DateFns.distanceInWordsToNow(~addSuffix=true);
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),

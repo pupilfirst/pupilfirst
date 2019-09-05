@@ -29,5 +29,6 @@ module Types
     field :update_school_admin, mutation: Mutations::UpdateSchoolAdmin, null: false
     field :create_course_export, mutation: Mutations::CreateCourseExport, null: false
     field :sort_curriculum_resources, mutation: Mutations::SortCurriculumResources, null: false
+    field :restore_content_version, mutation: Mutations::RestoreContentVersion, null: false
   end
 end

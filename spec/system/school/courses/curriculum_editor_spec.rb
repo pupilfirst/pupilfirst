@@ -215,6 +215,7 @@ feature 'Curriculum Editor', js: true do
       dismiss_notification
 
       click_button 'Next Step'
+      expect(page).to have_text('Any prerequisite targets?')
 
       within("div#evaluated") do
         click_button 'No'
@@ -310,6 +311,8 @@ feature 'Curriculum Editor', js: true do
 
       find('.target-group__target', text: new_target_4_title).click
       click_button 'Next Step'
+
+      expect(page).to have_text('Any prerequisite targets?')
 
       within("div#evaluated") do
         click_button 'No'

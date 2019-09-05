@@ -562,10 +562,19 @@ let handleRestoreVersionCB =
     ();
 
 let addNewVersionCB = (state, dispatch, ()) =>
-  if (state.versions[0] != currentDateString()) {
+  switch (state.versions) {
+  | [||] =>
     dispatch(
       UpdateVersions(Array.append([|currentDateString()|], state.versions)),
-    );
+    )
+  | versions =>
+    versions[0] != currentDateString() ?
+      dispatch(
+        UpdateVersions(
+          Array.append([|currentDateString()|], state.versions),
+        ),
+      ) :
+      ()
   };
 
 let selectVersionCB =

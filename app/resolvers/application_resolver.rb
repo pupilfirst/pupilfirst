@@ -14,8 +14,11 @@ class ApplicationResolver
     context[:current_school]
   end
 
+  def current_user
+    context[:current_user]
+  end
+
   # current_school: current_school,
-  # current_user: current_user,
   # current_founder: current_founder,
   # current_coach: current_school,
   # current_domain: current_domain,

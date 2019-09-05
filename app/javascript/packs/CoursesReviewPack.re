@@ -6,7 +6,7 @@ let decodeProps = json =>
   Json.Decode.(
     json |> field("authenticityToken", string),
     json |> field("levels", list(Level.decode)),
-    json |> field("pendingSubmissions", array(PendingSubmission.decode)),
+    json |> field("pendingSubmissions", list(PendingSubmission.decode)),
     json |> field("users", list(User.decode)),
   );
 

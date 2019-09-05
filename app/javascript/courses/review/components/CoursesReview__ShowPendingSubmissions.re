@@ -9,12 +9,36 @@ let showUsers = (users, userIds) =>
   |> List.map(u => u |> User.name)
   |> String.concat(", ");
 
+let levelNumber = (levels, levelId) =>
+  "Level "
+  ++ (
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == levelId,
+         "Unable to find level with id "
+         ++ levelId
+         ++ "in CoursesReview__ShowPendingSubmissions",
+       )
+    |> Level.number
+    |> string_of_int
+  );
+
 [@react.component]
-let make = (~authenticityToken, ~pendingSubmissions, ~users) =>
+let make =
+    (~authenticityToken, ~pendingSubmissions, ~users, ~levels, ~selectedLevel) => {
+  let submissionToShow =
+    switch (selectedLevel) {
+    | None => pendingSubmissions
+    | Some(level) =>
+      pendingSubmissions
+      |> List.filter(l =>
+           l |> PendingSubmission.levelId == (level |> Level.id)
+         )
+    };
   <div>
     {
-      pendingSubmissions
-      |> Array.map(submission =>
+      submissionToShow
+      |> List.map(submission =>
            <div
              key={submission |> PendingSubmission.id}
              className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer bg-white text-center rounded-lg shadow-md mt-2">
@@ -22,7 +46,12 @@ let make = (~authenticityToken, ~pendingSubmissions, ~users) =>
                <div className="flex items-center text-sm">
                  <span
                    className="bg-gray-400 py-px px-2 rounded-lg font-semibold">
-                   {"Level 1" |> str}
+                   {
+                     submission
+                     |> PendingSubmission.levelId
+                     |> levelNumber(levels)
+                     |> str
+                   }
                  </span>
                  <span className="ml-2 font-semibold">
                    {submission |> PendingSubmission.title |> str}
@@ -51,6 +80,8 @@ let make = (~authenticityToken, ~pendingSubmissions, ~users) =>
              </div>
            </div>
          )
+      |> Array.of_list
       |> React.array
     }
   </div>;
+};

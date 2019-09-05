@@ -3,18 +3,50 @@
 open CoursesReview__Types;
 let str = React.string;
 
-let showDropDown = levels => {
+let dropDownButtonText = level =>
+  "Level "
+  ++ (level |> Level.number |> string_of_int)
+  ++ " | "
+  ++ (level |> Level.name);
+
+let dropdownShowAllButton = (selectedLevel, setSelectedLevel) =>
+  switch (selectedLevel) {
+  | Some(_) => [
+      <button
+        className="p-3 w-full text-left focus:outline-none"
+        onClick=(_ => setSelectedLevel(_ => None))>
+        {"All Levels" |> str}
+      </button>,
+    ]
+  | None => []
+  };
+
+let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
   let contents =
-    levels
-    |> List.map(level =>
-         <button className="p-3 w-full text-left focus:outline-none">
-           {level |> Level.name |> str}
-         </button>
-       )
+    dropdownShowAllButton(selectedLevel, setSelectedLevel)
+    ->List.append(
+        levels
+        |> List.map(level =>
+             <button
+               className="p-3 w-full text-left focus:outline-none"
+               onClick={_ => setSelectedLevel(_ => Some(level))}>
+               {dropDownButtonText(level) |> str}
+             </button>
+           ),
+      )
     |> Array.of_list;
+
   let selected =
     <button className="bg-white p-3 focus:outline-none">
-      {"All Levels" |> str}
+      {
+        (
+          switch (selectedLevel) {
+          | None => "All Levels"
+          | Some(level) => dropDownButtonText(level)
+          }
+        )
+        |> str
+      }
       <i className="ml-2 fas fa-chevron-down text-sm" />
     </button>;
 
@@ -27,6 +59,7 @@ let buttonClasses = selected =>
 [@react.component]
 let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
   let (showPending, setShowPending) = React.useState(() => true);
+  let (selectedLevel, setSelectedLevel) = React.useState(() => None);
   <div className="bg-gray-100 py-8">
     <div className="max-w-3xl mx-auto">
       <div className="flex justify-between">
@@ -42,7 +75,7 @@ let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
             {"Reviewed" |> str}
           </button>
         </div>
-        <div> {showDropDown(levels)} </div>
+        <div> {showDropdown(levels, selectedLevel, setSelectedLevel)} </div>
       </div>
       {
         showPending ?
@@ -50,6 +83,8 @@ let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
             authenticityToken
             users
             pendingSubmissions
+            levels
+            selectedLevel
           /> :
           <CoursesReview__ShowReviewedSubmissions
             authenticityToken

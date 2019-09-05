@@ -26,4 +26,9 @@ class CoursesController < ApplicationController
     @course = authorize(policy_scope(Course).find(params[:id]))
     render layout: 'student'
   end
+
+  def review
+    @course = authorize(policy_scope(Course).find(params[:id]))
+    render layout: 'student_course'
+  end
 end

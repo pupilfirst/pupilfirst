@@ -19,6 +19,10 @@ class CoursePolicy < ApplicationPolicy
     curriculum?
   end
 
+  def review?
+    true
+  end
+
   def apply?
     record&.school == current_school && record.public_signup?
   end

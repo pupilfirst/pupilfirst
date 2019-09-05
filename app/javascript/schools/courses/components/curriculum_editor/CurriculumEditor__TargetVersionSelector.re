@@ -19,6 +19,11 @@ let handleViewMode = (switchViewModeCB, event) => {
   switchViewModeCB();
 };
 
+let handleRestoreVersion = (handleRestoreVersionCB, versionOn, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  handleRestoreVersionCB(versionOn);
+};
+
 [@react.component]
 let make =
     (
@@ -27,6 +32,7 @@ let make =
       ~selectVersionCB,
       ~previewMode,
       ~switchViewModeCB,
+      ~handleRestoreVersionCB,
     ) => {
   let (showDropdown, setShowDropdown) = React.useState(() => false);
   <div className="flex justify-between items-end">
@@ -41,7 +47,11 @@ let make =
             className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
             <span className="flex items-center px-3 py-2">
               <span className="truncate text-left">
-                {selectedVersion |> str}
+                {
+                  selectedVersion
+                  |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
+                  |> str
+                }
               </span>
             </span>
             <span className="text-right px-3 py-2 border-l border-orange-400">
@@ -68,11 +78,11 @@ let make =
                          )
                        }
                        className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
-                       {version |> str}
-                       <span
-                         className="target-editor__version-dropdown-list-item-button px-2 py-px border bg-white ml-3 rounded text-xs border-orange-400 invisible">
-                         {"View" |> str}
-                       </span>
+                       {
+                         version
+                         |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
+                         |> str
+                       }
                      </li>
                    )
                 |> Array.of_list
@@ -85,8 +95,15 @@ let make =
       {
         selectedVersion == versions[0] ?
           React.null :
-          <button className="btn btn-warning border border-orange-500 ml-4">
-            {"Restore to this version" |> str}
+          <button
+            onClick={
+              handleRestoreVersion(
+                handleRestoreVersionCB,
+                selectedVersion |> Js.Json.string,
+              )
+            }
+            className="btn btn-warning border border-orange-500 ml-4">
+            {"Restore this version" |> str}
           </button>
       }
     </div>

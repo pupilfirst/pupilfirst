@@ -457,6 +457,16 @@ module ContentBlocksVersionQuery = [%graphql
 |}
 ];
 
+module RestoreContentVersionMutation = [%graphql
+  {|
+   mutation($targetId: ID!, $versionOn: Date!) {
+    restoreContentVersion(targetId: $targetId, versionOn: $versionOn) {
+       success
+     }
+   }
+   |}
+];
+
 let loadContentBlocks = (target, send, authenticityToken, ()) => {
   let targetId = target |> Target.id;
   let response =
@@ -525,25 +535,46 @@ let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
   |> ignore;
   None;
 };
+let currentDateString = () => Js.Date.make() |> DateFns.format("YYYY-MM-DD");
 
-let addNewVersionCB = (state, dispatch, ()) => {
-  let currentDate = Js.Date.toDateString(Js.Date.fromFloat(Js.Date.now()));
-  let latestVersionDate =
-    Array.length(state.versions) > 0 ?
-      Js.Date.toDateString(Js.Date.fromString(state.versions[0])) : "";
-  if (latestVersionDate != currentDate) {
+let handleRestoreVersionCB =
+    (target, send, state, authenticityToken, versionOn) =>
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm(
+       "Are you sure you want to set this as the current version?",
+     ) ?
+    {
+      let targetId = Target.id(target);
+      RestoreContentVersionMutation.make(~targetId, ~versionOn, ())
+      |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+      |> Js.Promise.then_(response => {
+           response##restoreContentVersion##success ?
+             send(
+               UpdateVersions(
+                 Array.append([|currentDateString()|], state.versions),
+               ),
+             ) :
+             ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    } :
+    ();
+
+let addNewVersionCB = (state, dispatch, ()) =>
+  if (state.versions[0] != currentDateString()) {
     dispatch(
-      UpdateVersions(Array.append([|currentDate|], state.versions)),
+      UpdateVersions(Array.append([|currentDateString()|], state.versions)),
     );
   };
-};
 
 let selectVersionCB =
     (target, state, send, authenticityToken, selectedVersion) => {
   let encodedVersion = selectedVersion |> Js.Json.string;
   selectedVersion == state.versions[0] ?
-    loadContentBlocks(target, send, authenticityToken, ()) :
-    loadOldVersions(target, send, encodedVersion, authenticityToken, ());
+    loadContentBlocks(target, send, authenticityToken, ()) |> ignore :
+    loadOldVersions(target, send, encodedVersion, authenticityToken, ())
+    |> ignore;
   send(SelectVersion(selectedVersion));
 };
 
@@ -797,6 +828,14 @@ let make =
                       selectedVersion={state.selectedVersion}
                       previewMode={state.previewMode}
                       switchViewModeCB={switchViewModeCB(dispatch)}
+                      handleRestoreVersionCB={
+                        handleRestoreVersionCB(
+                          target,
+                          dispatch,
+                          state,
+                          authenticityToken,
+                        )
+                      }
                     /> :
                     React.null
                 }

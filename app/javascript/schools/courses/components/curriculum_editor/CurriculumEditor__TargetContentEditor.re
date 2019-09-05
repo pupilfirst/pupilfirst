@@ -44,12 +44,22 @@ let updateContentBlockSorting =
 };
 
 let removeTargetContentCB =
-    (updateTargetContentBlocks, toggleSortContentBlock, sortIndex) => {
+    (
+      contentBlock,
+      addNewVersionCB,
+      updateTargetContentBlocks,
+      toggleSortContentBlock,
+      sortIndex,
+    ) => {
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
     |> List.filter(((index, _, _, _)) => sortIndex != index)
   );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
+  switch (contentBlock) {
+  | Some(_cb) => addNewVersionCB()
+  | None => ()
+  };
 };
 
 let newContentBlockCB =
@@ -71,6 +81,7 @@ let newContentBlockCB =
 let swapContentBlockCB =
     (
       targetContentBlocks,
+      addNewVersionCB,
       updateTargetContentBlocks,
       toggleSortContentBlock,
       upperSortIndex,
@@ -102,6 +113,10 @@ let swapContentBlockCB =
        ])
   );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
+  switch(cb1, cb2) {
+  | (Some(_cb1), Some(_cb2)) => addNewVersionCB()
+  | _ => ()
+  }
 };
 
 let createNewContentCB =
@@ -236,6 +251,8 @@ let make =
                 contentBlock
                 removeTargetContentCB={
                   removeTargetContentCB(
+                    contentBlock,
+                    addNewVersionCB,
                     updateTargetContentBlocks,
                     toggleSortContentBlock,
                   )
@@ -261,6 +278,7 @@ let make =
                 swapContentBlockCB={
                   swapContentBlockCB(
                     targetContentBlocks,
+                    addNewVersionCB,
                     updateTargetContentBlocks,
                     toggleSortContentBlock,
                   )
@@ -275,9 +293,9 @@ let make =
   | true =>
     let persistedBlocks =
       sortedContentBlocks
-      |> List.map(((_, _, cb, _)) =>
+      |> List.map(((sortIndex, blockType, cb, _)) =>
            switch (cb) {
-           | Some(cb) => [cb]
+           | Some(cb) => [ContentBlock.make(cb |> ContentBlock.id, blockType, sortIndex )]
            | None => []
            }
          )

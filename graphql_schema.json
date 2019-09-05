@@ -59,7 +59,7 @@
               "deprecationReason": null
             },
             {
-              "name": "reviewedSubmission",
+              "name": "reviewedSubmissions",
               "description": null,
               "args": [
                 {

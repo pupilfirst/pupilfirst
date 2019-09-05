@@ -1,4 +1,4 @@
-class ReviewedSubmissionResolver < ApplicationResolver
+class ReviewedSubmissionsResolver < ApplicationResolver
   def collection(course_id, page)
     if authorized?(course_id)
       Course.find(course_id).timeline_events.evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).page(page.to_i).per(30)

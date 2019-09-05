@@ -3,27 +3,26 @@
 open CoursesReview__Types;
 let str = React.string;
 
-/* let contents = [|
-  <button className="bg-gray-500 py-2 px-6"> {"Pending" |> str} </button>,
-  <button className="bg-white py-2 px-6"> {"Reviewed" |> str} </button>,
-|];
-
-let selected =
-  <button className="bg-white p-2">
-    {"Filter" |> str}
-    <i className="fas fa-chevron-down text-sm" />
-  </button>; */
-
-let showDropDown = (levels) => {
-  let contents = { levels |> List.map(level => <button className="p-3 w-full text-left focus:outline-none">{level |> Level.name |> str} </button>) |> Array.of_list};
+let showDropDown = levels => {
+  let contents =
+    levels
+    |> List.map(level =>
+         <button className="p-3 w-full text-left focus:outline-none">
+           {level |> Level.name |> str}
+         </button>
+       )
+    |> Array.of_list;
   let selected =
-  <button className="bg-white p-3 focus:outline-none">
-    {"All Levels" |> str}
-    <i className="ml-2 fas fa-chevron-down text-sm" />
-  </button>;
+    <button className="bg-white p-3 focus:outline-none">
+      {"All Levels" |> str}
+      <i className="ml-2 fas fa-chevron-down text-sm" />
+    </button>;
 
-  <Dropdown selected contents right=true/>
+  <Dropdown selected contents right=true />;
 };
+
+let buttonClasses = selected =>
+  "py-3 px-6 " ++ (selected ? "bg-gray-500" : "bg-white");
 
 [@react.component]
 let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
@@ -33,12 +32,12 @@ let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
       <div className="flex justify-between">
         <div className="rounded-lg border overflow-hidden">
           <button
-            className="bg-gray-500 py-3 px-6"
+            className={buttonClasses(showPending == true)}
             onClick={_ => setShowPending(_ => true)}>
             {"Pending" |> str}
           </button>
           <button
-            className="bg-white py-3 px-6"
+            className={buttonClasses(showPending == false)}
             onClick={_ => setShowPending(_ => false)}>
             {"Reviewed" |> str}
           </button>
@@ -52,7 +51,10 @@ let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
             users
             pendingSubmissions
           /> :
-          <div> {"Load Reviewed" |> str} </div>
+          <CoursesReview__ShowReviewedSubmissions
+            authenticityToken
+            courseId="2"
+          />
       }
     </div>
   </div>;

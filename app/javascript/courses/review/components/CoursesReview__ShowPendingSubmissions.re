@@ -16,6 +16,7 @@ let make = (~authenticityToken, ~pendingSubmissions, ~users) =>
       pendingSubmissions
       |> Array.map(submission =>
            <div
+             key={submission |> PendingSubmission.id}
              className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer bg-white text-center rounded-lg shadow-md mt-2">
              <div>
                <div className="flex items-center text-sm">

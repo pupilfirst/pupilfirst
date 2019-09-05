@@ -113,10 +113,10 @@ let swapContentBlockCB =
        ])
   );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
-  switch(cb1, cb2) {
+  switch (cb1, cb2) {
   | (Some(_cb1), Some(_cb2)) => addNewVersionCB()
   | _ => ()
-  }
+  };
 };
 
 let createNewContentCB =
@@ -145,7 +145,8 @@ let updateContentBlockCB =
     Some(contentBlock),
     ContentBlock.id(contentBlock),
   );
-
+  Js.log(contentBlock |> ContentBlock.id);
+  Js.log(currentId);
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
     |> List.filter(((_, _, _, id)) => id != currentId)
@@ -295,7 +296,9 @@ let make =
       sortedContentBlocks
       |> List.map(((sortIndex, blockType, cb, _)) =>
            switch (cb) {
-           | Some(cb) => [ContentBlock.make(cb |> ContentBlock.id, blockType, sortIndex )]
+           | Some(cb) => [
+               ContentBlock.make(cb |> ContentBlock.id, blockType, sortIndex),
+             ]
            | None => []
            }
          )

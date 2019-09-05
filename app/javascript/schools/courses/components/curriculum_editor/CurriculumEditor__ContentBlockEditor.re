@@ -9,7 +9,6 @@ let str = React.string;
 type action =
   | UpdateContentBlockPropertyText(string)
   | UpdateSaving
-  | DoneUpdating(string)
   | UpdateMarkdown(string)
   | ResetFormDirty(string)
   | UpdateFileName(string);
@@ -44,12 +43,6 @@ let reducer = (state, action) =>
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
-  | DoneUpdating(id) => {
-      ...state,
-      formDirty: false,
-      savingContentBlock: false,
-      id,
-    }
   | ResetFormDirty(buttonText) => {
       ...state,
       formDirty: false,
@@ -313,24 +306,6 @@ let updateContentBlock =
       sortIndex,
       updateContentBlockCB,
     ) => {
-  let id = state.id;
-  let text =
-    switch (contentBlock |> ContentBlock.blockType) {
-    | Markdown(_markdown) => state.markDownContent
-    | File(_url, _title, _filename) => state.contentBlockPropertyText
-    | Image(_url, _caption) => state.contentBlockPropertyText
-    | Embed(_url, _embedCode) => ""
-    };
-  let blockType =
-    contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
-  UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
-  |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-  |> Js.Promise.then_(response => {
-       let responseId = response##updateContentBlock##id;
-       dispatch(DoneUpdating(responseId));
-       Js.Promise.resolve();
-     })
-  |> ignore;
   let updatedContentBlockType =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) =>
@@ -345,10 +320,26 @@ let updateContentBlock =
       ContentBlock.makeImageBlock(url, state.contentBlockPropertyText)
     | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
     };
-  let updatedContentBlock =
-    ContentBlock.make(state.id, updatedContentBlockType, sortIndex);
-  let currentId = contentBlock |> ContentBlock.id;
-  updateContentBlockCB(updatedContentBlock, currentId);
+  let id = state.id;
+  let text =
+    switch (contentBlock |> ContentBlock.blockType) {
+    | Markdown(_markdown) => state.markDownContent
+    | File(_url, _title, _filename) => state.contentBlockPropertyText
+    | Image(_url, _caption) => state.contentBlockPropertyText
+    | Embed(_url, _embedCode) => ""
+    };
+  let blockType =
+    contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
+  UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
+  |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+  |> Js.Promise.then_(response => {
+       let responseId = response##updateContentBlock##id;
+       let updatedContentBlock =
+         ContentBlock.make(responseId, updatedContentBlockType, sortIndex);
+       updateContentBlockCB(updatedContentBlock, id);
+       Js.Promise.resolve();
+     })
+  |> ignore;
 };
 
 let submitForm =

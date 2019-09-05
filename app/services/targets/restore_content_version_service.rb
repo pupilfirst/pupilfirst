@@ -29,7 +29,7 @@ module Targets
           next unless cb.created_at.to_date == Date.today
 
           cb.id
-        end
+        end.compact
         ContentBlock.where(id: ids_to_delete)
       end
     end

@@ -64,7 +64,8 @@ let make = (~authenticityToken, _children) => {
            |> Js.Array.map(rawCourse => {
                 let endsAt =
                   switch (rawCourse##endsAt) {
-                  | Some(endsAt) => Some(endsAt |> Json.Decode.string)
+                  | Some(endsAt) =>
+                    Some(endsAt |> Json.Decode.string) |> Date.parseOption
                   | None => None
                   };
                 let gradesAndLabels =

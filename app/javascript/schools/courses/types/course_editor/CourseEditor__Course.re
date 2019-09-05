@@ -2,7 +2,7 @@ type t = {
   id: int,
   name: string,
   description: string,
-  endsAt: option(string),
+  endsAt: option(Js.Date.t),
   maxGrade: int,
   passGrade: int,
   gradesAndLabels: list(CourseEditor__GradesAndLabels.t),

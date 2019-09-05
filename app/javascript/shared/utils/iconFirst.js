@@ -1,12 +1,19 @@
-import "./iconFirst.css";
-let iconData = require("./svgPaths.json");
+import "./iconFirst/style.css";
+let iconData = require("./iconFirst/paths.json");
 
-function getIconData(iconName) {
-  let data = iconData[iconName];
+const xmlns = "http://www.w3.org/2000/svg";
+
+const findIconName = className => {
+  const iconName = className.match(/i-([a-zA-z0-9\-]+)/);
+  return iconName ? iconName[1] : "default";
+};
+
+const getIconData = className => {
+  const data = iconData[findIconName(className)];
   return data ? data : iconData["default"];
-}
+};
 
-function viewboxClass(width) {
+const viewboxClass = width => {
   switch (width) {
     case 448:
       return " if-w-14";
@@ -17,11 +24,10 @@ function viewboxClass(width) {
     default:
       return " if-w-16";
   }
-}
+};
 
 const createSvg = className => {
-  const xmlns = "http://www.w3.org/2000/svg";
-  const icon = getIconData(className.match(/i-([a-zA-z0-9\-]+)/)[1]);
+  const icon = getIconData(className);
   const el = document.createElementNS(xmlns, "svg");
   el.setAttribute(
     "class",
@@ -42,7 +48,7 @@ const createSvg = className => {
 
 export const transformIcons = () => {
   const elements = Array.from(document.getElementsByClassName("if"));
-  elements.map(element => {
+  elements.forEach(element => {
     if (element.tagName == "I") {
       element.parentNode.replaceChild(createSvg(element.className), element);
     }

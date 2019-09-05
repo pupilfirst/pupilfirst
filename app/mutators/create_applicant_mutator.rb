@@ -11,8 +11,9 @@ class CreateApplicantMutator < ApplicationMutator
   validate :ensure_time_between_requests
   validate :not_a_student
 
-  def save
+  def create_applicant
     Applicant.transaction do
+      applicant = persisted_applicant || Applicant.create!(email: email, course: course, name: name)
       MailLoginTokenService.new(applicant).execute
     end
     true
@@ -23,10 +24,6 @@ class CreateApplicantMutator < ApplicationMutator
   def authorized?
     # Anyone can apply
     true
-  end
-
-  def applicant
-    @applicant ||= Applicant.with_email(email).where(course: course).first_or_create!(email: email, course: course, name: name)
   end
 
   def persisted_applicant
@@ -44,7 +41,7 @@ class CreateApplicantMutator < ApplicationMutator
   end
 
   def ensure_time_between_requests
-    return if persisted_applicant.blank? && persisted_applicant&.login_mail_sent_at.blank?
+    return if persisted_applicant&.login_mail_sent_at.blank?
 
     time_since_last_mail = Time.zone.now - persisted_applicant.login_mail_sent_at
 

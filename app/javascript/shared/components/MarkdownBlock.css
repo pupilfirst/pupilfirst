@@ -88,6 +88,23 @@
   @apply mx-auto;
 }
 
+.markdown-block__table {
+  @apply block w-full table-auto overflow-auto;
+  border-spacing: 0;
+}
+
+.markdown-block__table-th {
+  @apply bg-gray-200 px-4 py-2 border border-gray-400 font-semibold;
+}
+
+.markdown-block__table-tr {
+  @apply bg-white border-t border-gray-400;
+}
+
+.markdown-block__table-td {
+  @apply px-4 py-2 border border-gray-400;
+}
+
 /*
  * Permissive styling used in learn section and its preview
  * in the school admin section.
@@ -177,6 +194,22 @@
 
 .markdown-block__permissive img {
   @apply markdown-block__img;
+}
+
+.markdown-block__permissive table {
+  @apply markdown-block__table;
+}
+
+.markdown-block__permissive table th {
+  @apply markdown-block__table-th;
+}
+
+.markdown-block__permissive table tr {
+  @apply markdown-block__table-tr;
+}
+
+.markdown-block__permissive table td {
+  @apply markdown-block__table-td;
 }
 
 /*
@@ -284,11 +317,11 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__comment b, strong {
+.markdown-block__comment b, .markdown-block__comment strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__comment s, del {
+.markdown-block__comment s, .markdown-block__comment del {
   @apply markdown-block__strikethrough;
 }
 

@@ -74,7 +74,7 @@ let updateDescription = (send, description) => {
 
 let updateEndsAt = (send, date) => {
   let regex = [%re
-    {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
+    {|/^([0-9]{4})(-?)(1[0-2]|0[1-9])\2(3[01]|0[1-9]|[12][0-9])$/|}
   ];
   let lengthOfInput = date |> String.length;
   let hasError = lengthOfInput == 0 ? false : !Js.Re.test_(regex, date);
@@ -147,7 +147,7 @@ let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
       id |> int_of_string,
       state.name,
       state.description,
-      state.endsAt,
+      state.endsAt |> Date.parseOption,
       state.maxGrade,
       state.passGrade,
       state.gradesAndLabels,
@@ -318,7 +318,7 @@ let make =
     | Some(course) => {
         name: course |> Course.name,
         description: course |> Course.description,
-        endsAt: course |> Course.endsAt,
+        endsAt: course |> Course.endsAt |> Date.iso8601Option,
         maxGrade: course |> Course.maxGrade,
         passGrade: course |> Course.passGrade,
         gradesAndLabels: course |> Course.gradesAndLabels,
@@ -475,13 +475,13 @@ let make =
                 <label
                   className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
                   htmlFor="date">
-                  {"Course ends at" |> str}
+                  {"Course ends on" |> str}
                 </label>
                 <input
                   className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="date"
                   type_="text"
-                  placeholder="DD/MM/YYYY"
+                  placeholder="YYYY-MM-DD"
                   value=endsAt
                   onChange={
                     event =>

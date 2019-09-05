@@ -37,17 +37,19 @@
 
 <body>
 <%= render 'layouts/pretender_tailwind' if @pretender %>
+<section class="min-h-full flex flex-col items-stretch">
+  <%= yield :nav %>
+  <main class="flex-grow">
+    <% if content_for?(:wrapper) %>
+      <%= yield :wrapper %>
+    <% else %>
+      <%= yield %>
+    <% end %>
+  </main>
 
-<%= yield :nav %>
-
-<% if content_for?(:wrapper) %>
-  <%= yield :wrapper %>
-<% else %>
-  <%= yield %>
-<% end %>
-
-<%= yield :tail %>
-<%= yield :footer %>
+  <%= yield :tail %>
+  <%= yield :footer %>
+</section>
 <!-- Scripts -->
 <%= javascript_pack_tag 'IconFirstPack', nonce: true %>
 </body>

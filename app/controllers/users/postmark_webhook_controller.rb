@@ -3,21 +3,26 @@ module Users
     skip_before_action :verify_authenticity_token
     http_basic_authenticate_with name: ENV['POSTMARK_HOOK_ID'], password: ENV['POSTMARK_HOOK_SECRET']
 
+    # POST /users/email_bounce
     def email_bounce
-      @user = current_school&.users&.find_by(email: params[:Email])
-      return unless @user.present? && params[:Type].in?(target_bounce_types)
-
-      mark_user_unemailable
+      mark_users_bounced if users.exists? && params[:Type].in?(accepted_webhook_types)
+      head :ok
     end
 
     private
 
-    def target_bounce_types
-      %w[HardBounce BadEmailAddress SpamComplaint]
+    def users
+      @users ||= User.with_email(params[:Email])
     end
 
-    def mark_user_unemailable
-      @user.update!(email_bounced_at: params[:BouncedAt], email_bounce_type: params[:Type])
+    def accepted_webhook_types
+      %w[HardBounce SpamComplaint]
+    end
+
+    def mark_users_bounced
+      users.each do |user|
+        user.update!(email_bounced_at: Time.zone.now, email_bounce_type: params[:Type])
+      end
     end
   end
 end

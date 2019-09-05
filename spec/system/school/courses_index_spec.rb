@@ -77,7 +77,7 @@ feature 'Courses Index', js: true do
     find("a", text: new_course_name).click
     fill_in 'Name', with: new_course_name_1, fill_options: { clear: :backspace }
     fill_in 'Description', with: new_description_for_edit, fill_options: { clear: :backspace }
-    fill_in 'Course ends at', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
+    fill_in 'Course ends on', with: date.iso8601
     replace_markdown new_about
     within('div#leaderboard') do
       click_button 'No'

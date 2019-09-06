@@ -105,16 +105,19 @@ let getReviewedSubmissions =
 
 let showSubmissionStatus = failed =>
   failed ?
-    <div className="bg-red-400 px-2 py-1 rounded shadow">
+    <div
+      className="bg-red-100 border border-red-500 text-red-700 font-semibold px-3 py-px rounded">
       {"Failed" |> str}
     </div> :
-    <div className="bg-green-400 px-2 py-1 rounded shadow">
+    <div
+      className="bg-green-100 border border-green-500 text-green-800 font-semibold px-3 py-px rounded">
       {"Passed" |> str}
     </div>;
 
 let showFeedbackSent = feedbackSent =>
   feedbackSent ?
-    <div className="bg-primary-200 px-2 py-1 rounded shadow mr-1">
+    <div
+      className="bg-primary-100 text-primary-700 border border-transparent font-semibold px-2 py-1 rounded shadow mr-1">
       {"Feedback Sent" |> str}
     </div> :
     React.null;
@@ -160,11 +163,11 @@ let showSubmission = (submissions, levels) =>
       |> List.map(submission =>
            <div
              key={submission |> ReviewedSubmission.id}
-             className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer bg-white text-center rounded-lg shadow-md mt-2">
+             className="bg-white border border-gray-300 px-6 py-5 mt-4 cursor-pointer bg-white rounded-lg shadow flex items-center justify-between hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
              <div>
                <div className="flex items-center text-sm">
                  <span
-                   className="bg-gray-400 py-px px-2 rounded-lg font-semibold">
+                   className="text-xs font-semibold border-r text-gray-800 pr-2 pl-0 border-gray-400">
                    {
                      submission
                      |> ReviewedSubmission.levelId
@@ -172,11 +175,11 @@ let showSubmission = (submissions, levels) =>
                      |> str
                    }
                  </span>
-                 <span className="ml-2 font-semibold">
+                 <span className="ml-2 font-semibold text-base">
                    {submission |> ReviewedSubmission.title |> str}
                  </span>
                </div>
-               <div className="text-left mt-1 text-xs text-gray-600">
+               <div className="mt-1 text-xs text-gray-900">
                  <span>
                    {submission |> ReviewedSubmission.userNames |> str}
                  </span>

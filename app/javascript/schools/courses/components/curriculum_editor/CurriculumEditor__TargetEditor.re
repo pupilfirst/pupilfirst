@@ -171,7 +171,7 @@ let cachePrerequisiteTargets = (targets, target) => {
      });
 };
 
-let setPayload = (state, target, authenticityToken) => {
+let setPayload = (state, authenticityToken) => {
   let payload = Js.Dict.empty();
   let targetData = Js.Dict.empty();
 
@@ -284,7 +284,6 @@ let formClasses = value => {
   let defaultClasses = "drawer-right-form bg-white w-full ";
   value ? defaultClasses ++ "opacity-50" : defaultClasses;
 };
-let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -709,7 +708,7 @@ let make =
 
   let updateTarget = (closeEditor, targetId) => {
     dispatch(UpdateSaving);
-    let payload = setPayload(state, target, authenticityToken);
+    let payload = setPayload(state, authenticityToken);
     let url = "/school/targets/" ++ targetId;
     Api.update(
       url,

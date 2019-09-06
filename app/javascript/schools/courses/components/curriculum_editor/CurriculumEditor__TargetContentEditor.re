@@ -145,8 +145,6 @@ let updateContentBlockCB =
     Some(contentBlock),
     ContentBlock.id(contentBlock),
   );
-  Js.log(contentBlock |> ContentBlock.id);
-  Js.log(currentId);
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
     |> List.filter(((_, _, _, id)) => id != currentId)

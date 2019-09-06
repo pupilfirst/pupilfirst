@@ -3,45 +3,88 @@
 open CoursesReview__Types;
 let str = React.string;
 
+type state = {
+  loading: bool,
+  submissions: list(ReviewedSubmission.t),
+  hasNextPage: bool,
+  endCursor: option(string),
+};
+
 type status =
   | Loading
   | Loaded(list(ReviewedSubmission.t));
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query($courseId: ID!, $page: Int! ) {
-      reviewedSubmissions(courseId: $courseId, page: $page) {
+    query($courseId: ID!, $levelId: ID) {
+      reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20) {
+        nodes {
         id,title,userNames,failed,feedbackSent,levelId,createdAt
+        }
+        pageInfo{
+          endCursor,hasNextPage
+        }
       }
   }
 |}
 ];
 
-let updateReviewedSubmissions = (setStatus, submissions) => {
-  let reviewedSubmissions =
-    submissions
-    |> Js.Array.map(submission =>
-         ReviewedSubmission.make(
-           ~id=submission##id,
-           ~title=submission##title,
-           ~createdAt=submission##createdAt,
-           ~levelId=submission##levelId,
-           ~userNames=submission##userNames,
-           ~failed=submission##failed,
-           ~feedbackSent=submission##feedbackSent,
-         )
-       )
-    |> Array.to_list;
-  setStatus(_ => Loaded(reviewedSubmissions));
-};
+let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
+  setState(state =>
+    {
+      submissions:
+        state.submissions
+        |> List.append(
+             (
+               switch (nodes) {
+               | None => []
+               | Some(submissionsArray) =>
+                 submissionsArray
+                 |> Js.Array.map(s =>
+                      switch (s) {
+                      | Some(submission) => [
+                          ReviewedSubmission.make(
+                            ~id=submission##id,
+                            ~title=submission##title,
+                            ~createdAt=submission##createdAt,
+                            ~levelId=submission##levelId,
+                            ~userNames=submission##userNames,
+                            ~failed=submission##failed,
+                            ~feedbackSent=submission##feedbackSent,
+                          ),
+                        ]
+                      | None => []
+                      }
+                    )
+                 |> Array.to_list
+               }
+             )
+             |> List.flatten,
+           ),
+      loading: false,
+      endCursor,
+      hasNextPage,
+    }
+  );
 
 let getReviewedSubmissions =
-    (authenticityToken, courseId, setStatus, page, ()) => {
-  setStatus(_ => Loading);
-  ReviewedSubmissionsQuery.make(~courseId, ~page, ())
+    (authenticityToken, courseId, setState, selectedLevel, ()) => {
+  setState(state => {...state, loading: true});
+  (
+    switch (selectedLevel) {
+    | Some(level) =>
+      ReviewedSubmissionsQuery.make(~courseId, ~levelId=level |> Level.id, ())
+    | None => ReviewedSubmissionsQuery.make(~courseId, ())
+    }
+  )
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       response##reviewedSubmissions |> updateReviewedSubmissions(setStatus);
+       response##reviewedSubmissions##nodes
+       |> updateReviewedSubmissions(
+            setState,
+            response##reviewedSubmissions##pageInfo##endCursor,
+            response##reviewedSubmissions##pageInfo##hasNextPage,
+          );
        Js.Promise.resolve();
      })
   |> ignore;
@@ -49,15 +92,15 @@ let getReviewedSubmissions =
   None;
 };
 
-let showPassed = passed =>
-  passed ?
-    <div
-      className="bg-green-100 border border-green-500 text-green-800 font-semibold px-3 py-px rounded">
-      {"Passed" |> str}
-    </div> :
+let showSubmissionStatus = failed =>
+  failed ?
     <div
       className="bg-red-100 border border-red-500 text-red-700 font-semibold px-3 py-px rounded">
       {"Failed" |> str}
+    </div> :
+    <div
+      className="bg-green-100 border border-green-500 text-green-800 font-semibold px-3 py-px rounded">
+      {"Passed" |> str}
     </div>;
 
 let showFeedbackSent = feedbackSent =>
@@ -68,15 +111,40 @@ let showFeedbackSent = feedbackSent =>
     </div> :
     React.null;
 
-let showNextButton = (page, setPage) =>
-  <div onClick={_ => setPage(_ => page + 1)}> {"Next" |> str} </div>;
+let showLoadMoreButton =
+    (authenticityToken, courseId, setState, selectedLevel, cursor) =>
+  <div className="flex justify-center w-full">
+    <div
+      onClick={
+        _ =>
+          getReviewedSubmissions(
+            authenticityToken,
+            courseId,
+            setState,
+            selectedLevel,
+            (),
+          )
+          |> ignore
+      }>
+      {"Load More" |> str}
+    </div>
+  </div>;
 
-let showPreviousButton = (page, setPage) =>
-  page <= 1 ?
-    React.null :
-    <div onClick={_ => setPage(_ => page - 1)}> {"Previous" |> str} </div>;
+let levelNumber = (levels, levelId) =>
+  "Level "
+  ++ (
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == levelId,
+         "Unable to find level with id "
+         ++ levelId
+         ++ "in CoursesReview__ShowPendingSubmissions",
+       )
+    |> Level.number
+    |> string_of_int
+  );
 
-let showSubmission = (submissions, page, setPage) =>
+let showSubmission = (submissions, levels) =>
   <div>
     {
       submissions
@@ -88,7 +156,12 @@ let showSubmission = (submissions, page, setPage) =>
                <div className="flex items-center text-sm">
                  <span
                    className="text-xs font-semibold border-r text-gray-800 pr-2 pl-0 border-gray-400">
-                   {"Level 1" |> str}
+                   {
+                     submission
+                     |> ReviewedSubmission.levelId
+                     |> levelNumber(levels)
+                     |> str
+                   }
                  </span>
                  <span className="ml-2 font-semibold text-base">
                    {submission |> ReviewedSubmission.title |> str}
@@ -113,43 +186,60 @@ let showSubmission = (submissions, page, setPage) =>
                    submission |> ReviewedSubmission.feedbackSent,
                  )
                }
-               {showPassed(submission |> ReviewedSubmission.failed)}
+               {showSubmissionStatus(submission |> ReviewedSubmission.failed)}
              </div>
            </div>
          )
       |> Array.of_list
       |> React.array
     }
-    <div className="flex items-center w-full">
-      {showPreviousButton(page, setPage)}
-      {showNextButton(page, setPage)}
-    </div>
   </div>;
 
+let resetPage = (setPage, ()) => {
+  setPage(_ => 1);
+  None;
+};
+
 [@react.component]
-let make = (~authenticityToken, ~courseId) => {
-  let (page, setPage) = React.useState(() => 1);
-  let (status, setStatus) = React.useState(() => Loading);
+let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
+  let (state, setState) =
+    React.useState(() =>
+      {loading: false, submissions: [], hasNextPage: false, endCursor: None}
+    );
 
   React.useEffect1(
-    getReviewedSubmissions(authenticityToken, courseId, setStatus, page),
-    [|page|],
+    getReviewedSubmissions(
+      authenticityToken,
+      courseId,
+      setState,
+      selectedLevel,
+    ),
+    [|courseId|],
   );
 
   <div>
     {
-      switch (status) {
-      | Loading => <div> {"Loading..." |> str} </div>
-      | Loaded(submissions) =>
-        switch (submissions, page) {
-        | ([], 1) => <div> {"No reviewed submission" |> str} </div>
-        | ([], _) =>
-          <div>
-            {"Nothing more to load" |> str}
-            {showPreviousButton(page, setPage)}
-          </div>
-        | (_, _) => showSubmission(submissions, page, setPage)
-        }
+      state.loading ?
+        <div> {"Loading..." |> str} </div> :
+        (
+          switch (state.submissions) {
+          | [] => <div> {"No reviewed submission" |> str} </div>
+          | _ => showSubmission(state.submissions, levels)
+          }
+        )
+    }
+    {
+      switch (state.hasNextPage, state.endCursor) {
+      | (false, _)
+      | (true, None) => React.null
+      | (true, Some(cursor)) =>
+        showLoadMoreButton(
+          authenticityToken,
+          courseId,
+          setState,
+          selectedLevel,
+          cursor,
+        )
       }
     }
   </div>;

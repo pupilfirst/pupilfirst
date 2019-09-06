@@ -5,6 +5,7 @@ class Level < ApplicationRecord
   has_many :target_groups, dependent: :restrict_with_error
   has_many :startups, dependent: :restrict_with_error
   has_many :targets, through: :target_groups
+  has_many :timeline_events, through: :targets
 
   belongs_to :course
 

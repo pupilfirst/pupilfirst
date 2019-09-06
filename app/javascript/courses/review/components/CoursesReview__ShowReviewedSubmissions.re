@@ -3,75 +3,73 @@
 open CoursesReview__Types;
 let str = React.string;
 
+type state = {
+  loading: bool,
+  submissions: list(ReviewedSubmission.t),
+  hasNextPage: bool,
+  endCursor: option(string),
+};
+
 type status =
   | Loading
   | Loaded(list(ReviewedSubmission.t));
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID ) {
-      reviewedSubmissions(courseId: $courseId, levelId,: $levelId) {
+    query($courseId: ID!, $levelId: ID) {
+      reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20) {
         nodes {
         id,title,userNames,failed,feedbackSent,levelId,createdAt
         }
         pageInfo{
-          endCursor
+          endCursor,hasNextPage
         }
       }
   }
 |}
 ];
 
-let updateReviewedSubmissions = (setStatus, nodes) =>
-  setStatus(_ =>
-    Loaded(
-      (
-        switch (nodes) {
-        | None => []
-        | Some(submissionsArray) =>
-          submissionsArray
-          |> Js.Array.map(s =>
-               switch (s) {
-               | Some(submission) => [
-                   ReviewedSubmission.make(
-                     ~id=submission##id,
-                     ~title=submission##title,
-                     ~createdAt=submission##createdAt,
-                     ~levelId=submission##levelId,
-                     ~userNames=submission##userNames,
-                     ~failed=submission##failed,
-                     ~feedbackSent=submission##feedbackSent,
-                   ),
-                 ]
+let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
+  setState(state =>
+    {
+      submissions:
+        state.submissions
+        |> List.append(
+             (
+               switch (nodes) {
                | None => []
+               | Some(submissionsArray) =>
+                 submissionsArray
+                 |> Js.Array.map(s =>
+                      switch (s) {
+                      | Some(submission) => [
+                          ReviewedSubmission.make(
+                            ~id=submission##id,
+                            ~title=submission##title,
+                            ~createdAt=submission##createdAt,
+                            ~levelId=submission##levelId,
+                            ~userNames=submission##userNames,
+                            ~failed=submission##failed,
+                            ~feedbackSent=submission##feedbackSent,
+                          ),
+                        ]
+                      | None => []
+                      }
+                    )
+                 |> Array.to_list
                }
              )
-          |> Array.to_list
-        }
-      )
-      |> List.flatten,
-    )
+             |> List.flatten,
+           ),
+      loading: false,
+      endCursor,
+      hasNextPage,
+    }
   );
-/* let reviewedSubmissions =
-     submissions
-     |> Js.Array.map(submission =>
-          ReviewedSubmission.make(
-            ~id=submission##id,
-            ~title=submission##title,
-            ~createdAt=submission##createdAt,
-            ~levelId=submission##levelId,
-            ~userNames=submission##userNames,
-            ~failed=submission##failed,
-            ~feedbackSent=submission##feedbackSent,
-          )
-        )
-     |> Array.to_list;
-   /* setStatus(_ => Loaded(reviewedSubmissions)); */
-   (); */
 
 let getReviewedSubmissions =
-    (authenticityToken, courseId, setStatus, page, selectedLevel, ()) => {
-  setStatus(_ => Loading);
+    (authenticityToken, courseId, setState, selectedLevel, ()) => {
+  setState(state => {...state, loading: true});
   (
     switch (selectedLevel) {
     | Some(level) =>
@@ -82,7 +80,11 @@ let getReviewedSubmissions =
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##reviewedSubmissions##nodes
-       |> updateReviewedSubmissions(setStatus);
+       |> updateReviewedSubmissions(
+            setState,
+            response##reviewedSubmissions##pageInfo##endCursor,
+            response##reviewedSubmissions##pageInfo##hasNextPage,
+          );
        Js.Promise.resolve();
      })
   |> ignore;
@@ -106,13 +108,24 @@ let showFeedbackSent = feedbackSent =>
     </div> :
     React.null;
 
-let showNextButton = (page, setPage) =>
-  <div onClick={_ => setPage(_ => page + 1)}> {"Next" |> str} </div>;
-
-let showPreviousButton = (page, setPage) =>
-  page <= 1 ?
-    React.null :
-    <div onClick={_ => setPage(_ => page - 1)}> {"Previous" |> str} </div>;
+let showLoadMoreButton =
+    (authenticityToken, courseId, setState, selectedLevel, cursor) =>
+  <div className="flex justify-center w-full">
+    <div
+      onClick={
+        _ =>
+          getReviewedSubmissions(
+            authenticityToken,
+            courseId,
+            setState,
+            selectedLevel,
+            (),
+          )
+          |> ignore
+      }>
+      {"Load More" |> str}
+    </div>
+  </div>;
 
 let levelNumber = (levels, levelId) =>
   "Level "
@@ -128,7 +141,7 @@ let levelNumber = (levels, levelId) =>
     |> string_of_int
   );
 
-let showSubmission = (submissions, page, setPage, levels) =>
+let showSubmission = (submissions, levels) =>
   <div>
     {
       submissions
@@ -177,10 +190,6 @@ let showSubmission = (submissions, page, setPage, levels) =>
       |> Array.of_list
       |> React.array
     }
-    <div className="flex items-center w-full">
-      {showPreviousButton(page, setPage)}
-      {showNextButton(page, setPage)}
-    </div>
   </div>;
 
 let resetPage = (setPage, ()) => {
@@ -190,47 +199,44 @@ let resetPage = (setPage, ()) => {
 
 [@react.component]
 let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
-  let (page, setPage) = React.useState(() => 1);
-  let (status, setStatus) = React.useState(() => Loading);
+  let (state, setState) =
+    React.useState(() =>
+      {loading: false, submissions: [], hasNextPage: false, endCursor: None}
+    );
 
-  /* React.useEffect1(
-       getReviewedSubmissions(
-         authenticityToken,
-         courseId,
-         setStatus,
-         page,
-         selectedLevel,
-       ),
-       [|page|],
-     ); */
-
-  React.useEffect1(resetPage(setPage), [|selectedLevel|]);
-
-  React.useEffect2(
+  React.useEffect1(
     getReviewedSubmissions(
       authenticityToken,
       courseId,
-      setStatus,
-      page,
+      setState,
       selectedLevel,
     ),
-    (page, selectedLevel),
+    [|courseId|],
   );
 
   <div>
     {
-      switch (status) {
-      | Loading => <div> {"Loading..." |> str} </div>
-      | Loaded(submissions) =>
-        switch (submissions, page) {
-        | ([], 1) => <div> {"No reviewed submission" |> str} </div>
-        | ([], _) =>
-          <div>
-            {"Nothing more to load" |> str}
-            {showPreviousButton(page, setPage)}
-          </div>
-        | (_, _) => showSubmission(submissions, page, setPage, levels)
-        }
+      state.loading ?
+        <div> {"Loading..." |> str} </div> :
+        (
+          switch (state.submissions) {
+          | [] => <div> {"No reviewed submission" |> str} </div>
+          | _ => showSubmission(state.submissions, levels)
+          }
+        )
+    }
+    {
+      switch (state.hasNextPage, state.endCursor) {
+      | (false, _)
+      | (true, None) => React.null
+      | (true, Some(cursor)) =>
+        showLoadMoreButton(
+          authenticityToken,
+          courseId,
+          setState,
+          selectedLevel,
+          cursor,
+        )
       }
     }
   </div>;

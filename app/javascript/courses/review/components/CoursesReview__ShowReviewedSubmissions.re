@@ -8,6 +8,7 @@ type state = {
   submissions: list(ReviewedSubmission.t),
   hasNextPage: bool,
   endCursor: option(string),
+  level: option(Level.t),
 };
 
 type status =
@@ -16,8 +17,8 @@ type status =
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID) {
-      reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20) {
+    query($courseId: ID!, $levelId: ID, $after: String) {
+      reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20, after: $after) {
         nodes {
         id,title,userNames,failed,feedbackSent,levelId,createdAt
         }
@@ -32,6 +33,7 @@ module ReviewedSubmissionsQuery = [%graphql
 let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
   setState(state =>
     {
+      ...state,
       submissions:
         state.submissions
         |> List.append(
@@ -68,13 +70,22 @@ let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
   );
 
 let getReviewedSubmissions =
-    (authenticityToken, courseId, setState, selectedLevel, ()) => {
+    (authenticityToken, courseId, cursor, setState, selectedLevel, ()) => {
   setState(state => {...state, loading: true});
   (
-    switch (selectedLevel) {
-    | Some(level) =>
+    switch (selectedLevel, cursor) {
+    | (Some(level), Some(cursor)) =>
+      ReviewedSubmissionsQuery.make(
+        ~courseId,
+        ~levelId=level |> Level.id,
+        ~after=cursor,
+        (),
+      )
+    | (Some(level), None) =>
       ReviewedSubmissionsQuery.make(~courseId, ~levelId=level |> Level.id, ())
-    | None => ReviewedSubmissionsQuery.make(~courseId, ())
+    | (None, Some(cursor)) =>
+      ReviewedSubmissionsQuery.make(~courseId, ~after=cursor, ())
+    | (None, None) => ReviewedSubmissionsQuery.make(~courseId, ())
     }
   )
   |> GraphqlQuery.sendQuery(authenticityToken)
@@ -117,6 +128,7 @@ let showLoadMoreButton =
           getReviewedSubmissions(
             authenticityToken,
             courseId,
+            cursor,
             setState,
             selectedLevel,
             (),
@@ -192,8 +204,8 @@ let showSubmission = (submissions, levels) =>
     }
   </div>;
 
-let resetPage = (setPage, ()) => {
-  setPage(_ => 1);
+let updateLevel = (setState, level, ()) => {
+  setState(state => {...state, level, endCursor: None});
   None;
 };
 
@@ -201,15 +213,24 @@ let resetPage = (setPage, ()) => {
 let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
   let (state, setState) =
     React.useState(() =>
-      {loading: false, submissions: [], hasNextPage: false, endCursor: None}
+      {
+        loading: false,
+        submissions: [],
+        hasNextPage: false,
+        endCursor: None,
+        level: selectedLevel,
+      }
     );
+
+  React.useEffect1(updateLevel(setState, selectedLevel), [|selectedLevel|]);
 
   React.useEffect1(
     getReviewedSubmissions(
       authenticityToken,
       courseId,
+      state.endCursor,
       setState,
-      selectedLevel,
+      state.level,
     ),
     [|courseId|],
   );
@@ -229,13 +250,13 @@ let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
       switch (state.hasNextPage, state.endCursor) {
       | (false, _)
       | (true, None) => React.null
-      | (true, Some(cursor)) =>
+      | (true, Some(_)) =>
         showLoadMoreButton(
           authenticityToken,
           courseId,
           setState,
-          selectedLevel,
-          cursor,
+          state.level,
+          state.endCursor,
         )
       }
     }

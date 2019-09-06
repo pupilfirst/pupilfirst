@@ -16,7 +16,8 @@ module Courses
         authenticity_token: view.form_authenticity_token,
         levels: levels,
         pending_submissions: pending_submissions,
-        users: users
+        users: users,
+        course_id: @course.id
       }
     end
 

@@ -58,7 +58,8 @@ let buttonClasses = selected =>
   "py-3 px-6 " ++ (selected ? "bg-gray-500" : "bg-white");
 
 [@react.component]
-let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
+let make =
+    (~authenticityToken, ~levels, ~pendingSubmissions, ~users, ~courseId) => {
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
   <div className="bg-gray-100 py-8">
@@ -89,7 +90,7 @@ let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
           /> :
           <CoursesReview__ShowReviewedSubmissions
             authenticityToken
-            courseId="40"
+            courseId
             selectedLevel
             levels
           />

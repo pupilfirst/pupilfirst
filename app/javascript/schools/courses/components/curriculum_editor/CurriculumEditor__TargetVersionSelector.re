@@ -2,9 +2,11 @@
 
 let str = React.string;
 
-let handleClick = (setShowDropdown, event) => {
+let handleClick = (setShowDropdown,versions, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  setShowDropdown(showDropdown => !showDropdown);
+  if (versions |> Array.length > 1) {
+    setShowDropdown(showDropdown => !showDropdown);
+  };
 };
 
 let handleVersionSelect =
@@ -40,10 +42,11 @@ let make =
       <div className="relative">
         <div className="inline-block">
           <label className="text-xs block text-gray-600 mb-1">
-            {"Versions" |> str}
+            {
+              ((versions |> Array.length > 1) ? "Versions" : "Version") |> str}
           </label>
           <button
-            onClick={handleClick(setShowDropdown)}
+            onClick={handleClick(setShowDropdown, versions)}
             className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
             <span className="flex items-center px-3 py-2">
               <span className="truncate text-left">
@@ -54,9 +57,14 @@ let make =
                 }
               </span>
             </span>
-            <span className="text-right px-3 py-2 border-l border-orange-400">
-              <i className="fas fa-chevron-down text-sm" />
-            </span>
+            {
+              versions |> Array.length > 1 ?
+                <span
+                  className="text-right px-3 py-2 border-l border-orange-400">
+                  <i className="fas fa-chevron-down text-sm" />
+                </span> :
+                React.null
+            }
           </button>
         </div>
         {

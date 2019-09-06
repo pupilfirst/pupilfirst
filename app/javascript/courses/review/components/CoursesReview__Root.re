@@ -26,6 +26,7 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
     dropdownShowAllButton(selectedLevel, setSelectedLevel)
     ->List.append(
         levels
+        |> Level.sort
         |> List.map(level =>
              <button
                className="p-3 w-full text-left focus:outline-none"
@@ -88,7 +89,9 @@ let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
           /> :
           <CoursesReview__ShowReviewedSubmissions
             authenticityToken
-            courseId="2"
+            courseId="40"
+            selectedLevel
+            levels
           />
       }
     </div>

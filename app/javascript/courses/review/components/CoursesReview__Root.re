@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesReview__Root.css")|}];
 
 open CoursesReview__Types;
 let str = React.string;
@@ -13,7 +14,7 @@ let dropdownShowAllButton = (selectedLevel, setSelectedLevel) =>
   switch (selectedLevel) {
   | Some(_) => [
       <button
-        className="p-3 w-full text-left focus:outline-none"
+        className="p-3 w-full text-left font-semibold focus:outline-none"
         onClick=(_ => setSelectedLevel(_ => None))>
         {"All Levels" |> str}
       </button>,
@@ -28,7 +29,7 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
         levels
         |> List.map(level =>
              <button
-               className="p-3 w-full text-left focus:outline-none"
+               className="p-3 w-full text-left font-semibold focus:outline-none"
                onClick={_ => setSelectedLevel(_ => Some(level))}>
                {dropDownButtonText(level) |> str}
              </button>
@@ -37,7 +38,8 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
     |> Array.of_list;
 
   let selected =
-    <button className="bg-white p-3 focus:outline-none">
+    <button
+      className="bg-white px-4 py-2 border border-gray-400 font-semibold rounded-lg focus:outline-none">
       {
         (
           switch (selectedLevel) {
@@ -47,23 +49,27 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
         )
         |> str
       }
-      <i className="ml-2 fas fa-chevron-down text-sm" />
+      <span className="pl-3 border-l">
+        <i className="ml-2 fas fa-chevron-down text-sm" />
+      </span>
     </button>;
 
   <Dropdown selected contents right=true />;
 };
 
 let buttonClasses = selected =>
-  "py-3 px-6 " ++ (selected ? "bg-gray-500" : "bg-white");
+  "py-2 px-6 font-semibold text-sm focus:outline-none "
+  ++ (selected ? "bg-primary-100 text-primary-500" : "bg-white");
 
 [@react.component]
 let make = (~authenticityToken, ~levels, ~pendingSubmissions, ~users) => {
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
-  <div className="bg-gray-100 py-8">
+  <div className="bg-gray-100 pt-14 pb-8 -mt-7">
     <div className="max-w-3xl mx-auto">
       <div className="flex justify-between">
-        <div className="rounded-lg border overflow-hidden">
+        <div
+          className="course-review__status-tab flex rounded-lg border border-gray-400 overflow-hidden">
           <button
             className={buttonClasses(showPending == true)}
             onClick={_ => setShowPending(_ => true)}>

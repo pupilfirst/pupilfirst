@@ -117,7 +117,7 @@ let showSubmissionStatus = failed =>
 let showFeedbackSent = feedbackSent =>
   feedbackSent ?
     <div
-      className="bg-primary-100 text-primary-700 border border-transparent font-semibold px-2 py-1 rounded shadow mr-1">
+      className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
       {"Feedback Sent" |> str}
     </div> :
     React.null;

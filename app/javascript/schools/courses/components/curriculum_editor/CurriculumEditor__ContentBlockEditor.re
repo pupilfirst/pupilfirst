@@ -301,8 +301,8 @@ let updateContentBlock =
     (
       contentBlock,
       state,
-      authenticityToken,
       dispatch,
+      authenticityToken,
       sortIndex,
       updateContentBlockCB,
     ) => {
@@ -337,6 +337,7 @@ let updateContentBlock =
        let updatedContentBlock =
          ContentBlock.make(responseId, updatedContentBlockType, sortIndex);
        updateContentBlockCB(updatedContentBlock, id);
+       dispatch(UpdateSaving);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -362,8 +363,8 @@ let submitForm =
     updateContentBlock(
       contentBlock,
       state,
-      authenticityToken,
       dispatch,
+      authenticityToken,
       sortIndex,
       updateContentBlockCB,
     )

@@ -4,6 +4,7 @@ module Types
     field :title, String, null: false
     field :created_at, String, null: false
     field :level_id, ID, null: false
+    field :target_id, ID, null: false
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :failed, Boolean, null: false

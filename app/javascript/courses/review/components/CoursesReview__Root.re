@@ -63,10 +63,10 @@ let buttonClasses = selected =>
   ++ (selected ? "bg-primary-100 text-primary-500" : "bg-white");
 
 [@react.component]
-let make =
-    (~authenticityToken, ~levels, ~pendingSubmissions, ~users, ~courseId) => {
+let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
+
   <div className="bg-gray-100 pt-14 pb-8 -mt-7">
     <div className="max-w-3xl mx-auto">
       <div className="flex justify-between">
@@ -89,8 +89,7 @@ let make =
         showPending ?
           <CoursesReview__ShowPendingSubmissions
             authenticityToken
-            users
-            pendingSubmissions
+            submissions
             levels
             selectedLevel
           /> :

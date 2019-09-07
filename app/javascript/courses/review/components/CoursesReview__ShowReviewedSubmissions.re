@@ -5,22 +5,18 @@ let str = React.string;
 
 type state = {
   loading: bool,
-  submissions: list(ReviewedSubmission.t),
+  submissions: list(Submission.t),
   hasNextPage: bool,
   endCursor: option(string),
   level: option(Level.t),
 };
-
-type status =
-  | Loading
-  | Loaded(list(ReviewedSubmission.t));
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
     query($courseId: ID!, $levelId: ID, $after: String) {
       reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20, after: $after) {
         nodes {
-        id,title,userNames,failed,feedbackSent,levelId,createdAt
+        id,title,userNames,failed,feedbackSent,levelId,createdAt,targetId
         }
         pageInfo{
           endCursor,hasNextPage
@@ -44,17 +40,23 @@ let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
                  submissionsArray
                  |> Js.Array.map(s =>
                       switch (s) {
-                      | Some(submission) => [
-                          ReviewedSubmission.make(
+                      | Some(submission) =>
+                        let status =
+                          Submission.makeStatus(
+                            ~failed=submission##failed,
+                            ~feedbackSent=submission##feedbackSent,
+                          );
+                        [
+                          Submission.make(
                             ~id=submission##id,
                             ~title=submission##title,
                             ~createdAt=submission##createdAt,
                             ~levelId=submission##levelId,
                             ~userNames=submission##userNames,
-                            ~failed=submission##failed,
-                            ~feedbackSent=submission##feedbackSent,
+                            ~targetId=submission##targetId,
+                            ~status=Some(status),
                           ),
-                        ]
+                        ];
                       | None => []
                       }
                     )
@@ -159,10 +161,11 @@ let levelNumber = (levels, levelId) =>
 let showSubmission = (submissions, levels) =>
   <div>
     {
-      submissions |> ReviewedSubmission.sort
+      submissions
+      |> Submission.sort
       |> List.map(submission =>
            <div
-             key={submission |> ReviewedSubmission.id}
+             key={submission |> Submission.id}
              className="bg-white border border-gray-300 px-6 py-5 mt-4 cursor-pointer bg-white rounded-lg shadow flex items-center justify-between hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
              <div>
                <div className="flex items-center text-sm">
@@ -170,36 +173,36 @@ let showSubmission = (submissions, levels) =>
                    className="text-xs font-semibold border-r text-gray-800 pr-2 pl-0 border-gray-400">
                    {
                      submission
-                     |> ReviewedSubmission.levelId
+                     |> Submission.levelId
                      |> levelNumber(levels)
                      |> str
                    }
                  </span>
                  <span className="ml-2 font-semibold text-base">
-                   {submission |> ReviewedSubmission.title |> str}
+                   {submission |> Submission.title |> str}
                  </span>
                </div>
                <div className="mt-1 text-xs text-gray-900">
-                 <span>
-                   {submission |> ReviewedSubmission.userNames |> str}
-                 </span>
+                 <span> {submission |> Submission.userNames |> str} </span>
                  <span className="ml-2">
                    {
                      "Submitted on "
-                     ++ (submission |> ReviewedSubmission.createdAtPretty)
+                     ++ (submission |> Submission.createdAtPretty)
                      |> str
                    }
                  </span>
                </div>
              </div>
-             <div className="text-xs flex">
-               {
-                 showFeedbackSent(
-                   submission |> ReviewedSubmission.feedbackSent,
-                 )
+             {
+               switch (submission |> Submission.status) {
+               | Some(status) =>
+                 <div className="text-xs flex">
+                   {showFeedbackSent(status |> Submission.feedbackSent)}
+                   {showSubmissionStatus(status |> Submission.failed)}
+                 </div>
+               | None => React.null
                }
-               {showSubmissionStatus(submission |> ReviewedSubmission.failed)}
-             </div>
+             }
            </div>
          )
       |> Array.of_list
@@ -240,20 +243,17 @@ let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
 
   <div>
     {
-      state.loading ?
-        <div> {"Loading..." |> str} </div> :
-        (
-          switch (state.submissions) {
-          | [] => <div> {"No reviewed submission" |> str} </div>
-          | _ => showSubmission(state.submissions, levels)
-          }
-        )
+      switch (state.submissions) {
+      | [] => <div> {"No reviewed submission" |> str} </div>
+      | _ => showSubmission(state.submissions, levels)
+      }
     }
     {
-      switch (state.hasNextPage, state.endCursor) {
-      | (false, _)
-      | (true, None) => React.null
-      | (true, Some(_)) =>
+      switch (state.loading, state.hasNextPage, state.endCursor) {
+      | (true, _, _) => <div> {"Loading..." |> str} </div>
+      | (false, false, _)
+      | (false, true, None) => React.null
+      | (false, true, Some(_)) =>
         showLoadMoreButton(
           authenticityToken,
           courseId,

@@ -15,8 +15,9 @@ let make = (~selected, ~contents, ~right=false) => {
           }>
           {
             contents
-            |> Array.map(content =>
+            |> Array.mapi((index, content) =>
                  <li
+                   key={"dropdown-" ++ (index |> string_of_int)}
                    className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap">
                    content
                  </li>

@@ -15,8 +15,7 @@ module Courses
       {
         authenticity_token: view.form_authenticity_token,
         levels: levels,
-        pending_submissions: pending_submissions,
-        users: users,
+        submissions: pending_submissions,
         course_id: @course.id
       }
     end
@@ -28,18 +27,18 @@ module Courses
     end
 
     def pending_submissions
-      @pending_submissions ||= @course.timeline_events.pending_review.includes(:founders, target: :target_group).map do |timeline_event|
+      @pending_submissions ||= @course.timeline_events.pending_review.includes(founders: :user, target: :target_group).map do |timeline_event|
         timeline_event.attributes.slice('id', 'target_id', 'created_at')
           .merge(title: timeline_event.target.title)
           .merge(timeline_event.target.target_group.slice('level_id'))
-          .merge(user_ids: timeline_event.founders.pluck(:user_id))
+          .merge(user_names: user_names(timeline_event)).merge(status: nil)
       end
     end
 
-    def users
-      @users ||= current_school.users.where(id: @pending_submissions.pluck(:user_ids).flatten.uniq).map do |user|
-        user.attributes.slice('id', 'name')
-      end
+    def user_names(timeline_event)
+      timeline_event.founders.map do |founder|
+        founder.user.name
+      end.join(', ')
     end
   end
 end

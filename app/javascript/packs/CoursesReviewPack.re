@@ -6,21 +6,14 @@ let decodeProps = json =>
   Json.Decode.(
     json |> field("authenticityToken", string),
     json |> field("levels", list(Level.decode)),
-    json |> field("pendingSubmissions", list(PendingSubmission.decode)),
-    json |> field("users", list(User.decode)),
+    json |> field("submissions", list(Submission.decode)),
     json |> field("courseId", string),
   );
 
-let (authenticityToken, levels, pendingSubmissions, users, courseId) =
+let (authenticityToken, levels, submissions, courseId) =
   DomUtils.parseJsonAttribute() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoursesReview__Root
-    authenticityToken
-    levels
-    pendingSubmissions
-    users
-    courseId
-  />,
+  <CoursesReview__Root authenticityToken levels submissions courseId />,
   "react-root",
 );

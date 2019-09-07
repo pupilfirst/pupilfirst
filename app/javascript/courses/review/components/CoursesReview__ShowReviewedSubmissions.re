@@ -159,7 +159,7 @@ let levelNumber = (levels, levelId) =>
 let showSubmission = (submissions, levels) =>
   <div>
     {
-      submissions
+      submissions |> ReviewedSubmission.sort
       |> List.map(submission =>
            <div
              key={submission |> ReviewedSubmission.id}
@@ -208,7 +208,7 @@ let showSubmission = (submissions, levels) =>
   </div>;
 
 let updateLevel = (setState, level, ()) => {
-  setState(state => {...state, level, endCursor: None});
+  setState(state => {...state, level, endCursor: None, submissions: []});
   None;
 };
 
@@ -235,7 +235,7 @@ let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
       setState,
       state.level,
     ),
-    [|courseId|],
+    [|state.level|],
   );
 
   <div>

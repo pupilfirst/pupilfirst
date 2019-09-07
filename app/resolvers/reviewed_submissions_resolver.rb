@@ -1,7 +1,7 @@
 class ReviewedSubmissionsResolver < ApplicationResolver
   def collection(course_id, level_id)
     if authorized?(course_id)
-      submissions(course_id, level_id).evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).order("updated_at DESC")
+      submissions(course_id, level_id).evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).order("created_at DESC")
     else
       TimelineEvent.none
     end

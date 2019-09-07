@@ -24,6 +24,15 @@ let createdAtDate = t => t |> createdAt |> DateFns.parseString;
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
+let sort = submissions =>
+  submissions
+  |> List.sort((x, y) =>
+       DateFns.differenceInSeconds(
+         y.createdAt |> DateFns.parseString,
+         x.createdAt |> DateFns.parseString,
+       )
+       |> int_of_float
+     );
 let make =
     (~id, ~title, ~createdAt, ~levelId, ~userNames, ~failed, ~feedbackSent) => {
   id,

@@ -66,6 +66,8 @@ let buttonClasses = selected =>
 let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
+  let (selectedSubmission, setSelectedSubmission) =
+    React.useState(() => None);
 
   <div className="bg-gray-100 pt-14 pb-8 -mt-7">
     <div className="max-w-3xl mx-auto">
@@ -92,6 +94,7 @@ let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
             submissions
             levels
             selectedLevel
+            setSelectedSubmission
           /> :
           <CoursesReview__ShowReviewedSubmissions
             authenticityToken
@@ -99,6 +102,18 @@ let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
             selectedLevel
             levels
           />
+      }
+      {
+        switch (selectedSubmission) {
+        | None => React.null
+        | Some(submission) =>
+          <CoursesReview__SubmissionOverlay
+            authenticityToken
+            levels
+            submission
+            setSelectedSubmission
+          />
+        }
       }
     </div>
   </div>;

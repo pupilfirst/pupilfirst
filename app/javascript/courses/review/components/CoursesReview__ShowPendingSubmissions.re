@@ -18,7 +18,14 @@ let levelNumber = (levels, levelId) =>
   );
 
 [@react.component]
-let make = (~authenticityToken, ~submissions, ~levels, ~selectedLevel) => {
+let make =
+    (
+      ~authenticityToken,
+      ~submissions,
+      ~levels,
+      ~selectedLevel,
+      ~setSelectedSubmission,
+    ) => {
   let submissionToShow =
     switch (selectedLevel) {
     | None => submissions
@@ -32,6 +39,7 @@ let make = (~authenticityToken, ~submissions, ~levels, ~selectedLevel) => {
       |> List.map(submission =>
            <div
              key={submission |> Submission.id}
+             onClick={_ => setSelectedSubmission(_ => Some(submission))}
              className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer bg-white text-center rounded-lg shadow-md mt-2">
              <div>
                <div className="flex items-center text-sm">

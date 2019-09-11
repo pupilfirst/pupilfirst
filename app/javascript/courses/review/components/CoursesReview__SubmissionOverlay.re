@@ -3,6 +3,51 @@
 open CoursesReview__Types;
 let str = React.string;
 
+type state = {
+  submissionDetails: list(SubmissionDetails.t),
+  loading: bool,
+};
+
+module ReviewSubmissionDetailsQuery = [%graphql
+  {|
+    query($submissionId: ID!) {
+      reviewSubmissionDetails(submissionId: $submissionId) {
+        id, failed, createdAt, description,
+        attachments{
+          url, title
+        },
+        grades {
+          evaluationCriterionId, id, grade
+        },
+        feedback{
+          id, coachId, createdAt,value
+        }
+      }
+  }
+|}
+];
+
+let updateSubmissionDetails = (setState, details) =>
+  setState(_ =>
+    {loading: false, submissionDetails: details |> SubmissionDetails.makeT}
+  );
+
+let getSubmissionDetails = (authenticityToken, submission, setState, ()) => {
+  setState(state => {...state, loading: true});
+  ReviewSubmissionDetailsQuery.make(
+    ~submissionId=submission |> Submission.id,
+    (),
+  )
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       response##reviewSubmissionDetails |> updateSubmissionDetails(setState);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+
+  None;
+};
+
 let levelNumber = (levels, levelId) =>
   "Level "
   ++ (
@@ -54,19 +99,39 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
     </div>
   </div>;
 
+let showSubmissions = state =>
+  state.submissionDetails
+  |> List.map(details =>
+       <div className="px-4 py-6">
+         {details |> SubmissionDetails.description |> str}
+       </div>
+     )
+  |> Array.of_list
+  |> React.array;
+
 [@react.component]
 let make = (~authenticityToken, ~levels, ~submission, ~setSelectedSubmission) => {
+  let (state, setState) =
+    React.useState(() => {loading: true, submissionDetails: []});
+
   React.useEffect(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
   });
 
+  React.useEffect1(
+    getSubmissionDetails(authenticityToken, submission, setState),
+    [|submission|],
+  );
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     {headerSection(submission, levels, setSelectedSubmission)}
     <div
-      className="container mx-auto mt-6 md:mt-8 max-w-3xl px-4 lg:px-0 pb-8">
-      {"Body" |> str}
+      className="container mx-auto mt-16 md:mt-18 max-w-3xl px-4 lg:px-0 pb-8">
+      {
+        state.loading ?
+          <div> {"Loading" |> str} </div> : showSubmissions(state)
+      }
     </div>
   </div>;
 };

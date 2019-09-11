@@ -158,7 +158,7 @@ let levelNumber = (levels, levelId) =>
     |> string_of_int
   );
 
-let showSubmission = (submissions, levels) =>
+let showSubmission = (submissions, levels, setSelectedSubmission) =>
   <div>
     {
       submissions
@@ -166,6 +166,7 @@ let showSubmission = (submissions, levels) =>
       |> List.map(submission =>
            <div
              key={submission |> Submission.id}
+             onClick={_ => setSelectedSubmission(_ => Some(submission))}
              className="bg-white border border-gray-300 px-6 py-5 mt-4 cursor-pointer bg-white rounded-lg shadow flex items-center justify-between hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
              <div>
                <div className="flex items-center text-sm">
@@ -216,7 +217,14 @@ let updateLevel = (setState, level, ()) => {
 };
 
 [@react.component]
-let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
+let make =
+    (
+      ~authenticityToken,
+      ~courseId,
+      ~selectedLevel,
+      ~levels,
+      ~setSelectedSubmission,
+    ) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -245,7 +253,7 @@ let make = (~authenticityToken, ~courseId, ~selectedLevel, ~levels) => {
     {
       switch (state.submissions) {
       | [] => <div> {"No reviewed submission" |> str} </div>
-      | _ => showSubmission(state.submissions, levels)
+      | _ => showSubmission(state.submissions, levels, setSelectedSubmission)
       }
     }
     {

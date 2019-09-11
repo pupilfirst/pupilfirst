@@ -101,6 +101,7 @@ let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
             courseId
             selectedLevel
             levels
+            setSelectedSubmission
           />
       }
       {

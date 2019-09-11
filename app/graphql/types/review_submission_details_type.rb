@@ -24,7 +24,7 @@ module Types
           id: feedback.id,
           coach_id: feedback.faculty_id,
           created_at: feedback.created_at,
-          feedback: feedback.feedback
+          value: feedback.feedback
         }
       end
     end

@@ -20,14 +20,16 @@ type t = {
   id: string,
   description: string,
   createdAt: string,
-  failed: bool,
+  passedAt: option(string),
+  evaluatorId: option(string),
   attachments: list(attachment),
   feedback: list(feedback),
   grades: list(grade),
 };
 let id = t => t.id;
 let createdAt = t => t.createdAt;
-let failed = t => t.failed;
+let passedAt = t => t.passedAt;
+let evaluatorId = t => t.evaluatorId;
 let description = t => t.description;
 let createdAtDate = t => t |> createdAt |> DateFns.parseString;
 let attachments = t => t.attachments;
@@ -52,11 +54,21 @@ let sort = submissions =>
      );
 
 let make =
-    (~id, ~description, ~createdAt, ~failed, ~attachments, ~feedback, ~grades) => {
+    (
+      ~id,
+      ~description,
+      ~createdAt,
+      ~passedAt,
+      ~evaluatorId,
+      ~attachments,
+      ~feedback,
+      ~grades,
+    ) => {
   id,
   description,
   createdAt,
-  failed,
+  passedAt,
+  evaluatorId,
   attachments,
   feedback,
   grades,
@@ -84,7 +96,8 @@ let makeT = details =>
          ~id=s##id,
          ~description=s##description,
          ~createdAt=s##createdAt,
-         ~failed=s##failed,
+         ~passedAt=s##passedAt,
+         ~evaluatorId=s##evaluatorId,
          ~attachments=
            s##attachments
            |> Js.Array.map(a => makeAttachment(~url=a##url, ~title=a##title))

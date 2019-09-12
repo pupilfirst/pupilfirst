@@ -5,6 +5,39 @@ let str = React.string;
 
 type state = {submission: SubmissionDetails.t};
 
+let showSubmissionStatus = submission => {
+  let (text, classes) =
+    switch (
+      submission |> SubmissionDetails.passedAt,
+      submission |> SubmissionDetails.evaluatorId,
+    ) {
+    | (None, None) => (
+        "Pending",
+        "bg-orange-100 border border-orange-500 text-orange-800 ",
+      )
+    | (None, Some(_)) => (
+        "Failed",
+        "bg-red-100 border border-red-500 text-red-700",
+      )
+    | (Some(_), None)
+    | (Some(_), Some(_)) => (
+        "Passed",
+        "bg-green-100 border border-green-500 text-green-800",
+      )
+    };
+  <div className={"font-semibold px-3 py-px rounded " ++ classes}>
+    {text |> str}
+  </div>;
+};
+
+let showFeedbackSent = feedbackSent =>
+  feedbackSent ?
+    <div
+      className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
+      {"Feedback Sent" |> str}
+    </div> :
+    React.null;
+
 let iconSpan = (iconClasses, attachment) => {
   let faClasses =
     switch (attachment |> SubmissionDetails.title) {
@@ -96,7 +129,14 @@ let make = (~authenticityToken, ~submission) => {
   <div className="mt-2 rounded-lg bg-white shadow shadow overflow-hidden">
     <div className="p-4 flex justify-between">
       <div> {"submission" |> str} </div>
-      <div> {"pending" |> str} </div>
+      <div className="text-xs flex">
+        {
+          showFeedbackSent(
+            submission |> SubmissionDetails.feedback |> ListUtils.isNotEmpty,
+          )
+        }
+        {showSubmissionStatus(submission)}
+      </div>
     </div>
     <div className="px-4 py-6 bg-gray-200">
       <div> {submission |> SubmissionDetails.description |> str} </div>

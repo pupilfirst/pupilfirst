@@ -12,7 +12,7 @@ module ReviewSubmissionDetailsQuery = [%graphql
   {|
     query($submissionId: ID!) {
       reviewSubmissionDetails(submissionId: $submissionId) {
-        id, failed, createdAt, description,
+        id, evaluatorId, passedAt, createdAt, description,
         attachments{
           url, title
         },

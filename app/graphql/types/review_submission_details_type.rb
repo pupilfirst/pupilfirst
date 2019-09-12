@@ -2,7 +2,8 @@ module Types
   class ReviewSubmissionDetailsType < Types::BaseObject
     field :id, ID, null: false
     field :created_at, String, null: false
-    field :failed, Boolean, null: false
+    field :passed_at, String, null: true
+    field :evaluator_id, ID, null: true
     field :description, String, null: false
     field :feedback, [Types::SubmissionFeedbackType], null: false
     field :grades, [Types::SubmissionGradeType], null: false
@@ -45,10 +46,6 @@ module Types
       end
 
       files + links
-    end
-
-    def failed
-      object.passed_at.nil?
     end
   end
 end

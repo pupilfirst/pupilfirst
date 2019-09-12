@@ -33,7 +33,7 @@ module Types
       files = object.timeline_event_files.with_attached_file.map do |file|
         {
           title: file.file.filename,
-          url: url_helpers.download_timeline_event_file_path(file)
+          url: Rails.application.routes.url_helpers.download_timeline_event_file_path(file)
         }
       end
 

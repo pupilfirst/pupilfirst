@@ -99,12 +99,10 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
     </div>
   </div>;
 
-let showSubmissions = state =>
+let showSubmissions = (authenticityToken, state) =>
   state.submissionDetails
-  |> List.map(details =>
-       <div className="px-4 py-6">
-         {details |> SubmissionDetails.description |> str}
-       </div>
+  |> List.map(submission =>
+       <div> <CoursesReview__Submissions authenticityToken submission /> </div>
      )
   |> Array.of_list
   |> React.array;
@@ -130,7 +128,8 @@ let make = (~authenticityToken, ~levels, ~submission, ~setSelectedSubmission) =>
       className="container mx-auto mt-16 md:mt-18 max-w-3xl px-4 lg:px-0 pb-8">
       {
         state.loading ?
-          <div> {"Loading" |> str} </div> : showSubmissions(state)
+          <div> {"Loading" |> str} </div> :
+          showSubmissions(authenticityToken, state)
       }
     </div>
   </div>;

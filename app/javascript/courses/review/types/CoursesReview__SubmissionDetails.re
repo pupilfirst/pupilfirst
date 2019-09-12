@@ -30,6 +30,11 @@ let createdAt = t => t.createdAt;
 let failed = t => t.failed;
 let description = t => t.description;
 let createdAtDate = t => t |> createdAt |> DateFns.parseString;
+let attachments = t => t.attachments;
+let feedback = t => t.feedback;
+let title = attachment => attachment.title;
+let url = attachment => attachment.url;
+let value = feedback => feedback.value;
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 

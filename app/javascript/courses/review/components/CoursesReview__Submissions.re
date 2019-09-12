@@ -117,7 +117,10 @@ let showFeedback = feedback =>
   feedback
   |> List.map(f =>
        <div className="p-4 border border-l-0 border-r-0">
-         {f |> SubmissionDetails.value |> str}
+         <MarkdownBlock
+           profile=Markdown.Permissive
+           markdown={f |> SubmissionDetails.value}
+         />
        </div>
      )
   |> Array.of_list
@@ -127,7 +130,7 @@ let showFeedback = feedback =>
 let make = (~authenticityToken, ~submission) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div className="mt-2 rounded-lg bg-white shadow shadow overflow-hidden">
-    <div className="p-4 flex justify-between">
+    <div className="p-4 md:p-6 flex justify-between">
       <div> {"submission" |> str} </div>
       <div className="text-xs flex">
         {
@@ -138,8 +141,11 @@ let make = (~authenticityToken, ~submission) => {
         {showSubmissionStatus(submission)}
       </div>
     </div>
-    <div className="px-4 py-6 bg-gray-200">
-      <div> {submission |> SubmissionDetails.description |> str} </div>
+    <div className="p-4 md:p-6 bg-gray-200">
+      <MarkdownBlock
+        profile=Markdown.Permissive
+        markdown={submission |> SubmissionDetails.description}
+      />
       {showSubmissions(submission |> SubmissionDetails.attachments)}
     </div>
     <div> {showFeedback(submission |> SubmissionDetails.feedback)} </div>

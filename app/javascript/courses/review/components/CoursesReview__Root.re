@@ -63,7 +63,8 @@ let buttonClasses = selected =>
   ++ (selected ? "bg-primary-100 text-primary-500" : "bg-white");
 
 [@react.component]
-let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
+let make =
+    (~authenticityToken, ~levels, ~submissions, ~gradeLabels, ~courseId) => {
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
   let (selectedSubmission, setSelectedSubmission) =
@@ -113,6 +114,7 @@ let make = (~authenticityToken, ~levels, ~submissions, ~courseId) => {
             levels
             submission
             setSelectedSubmission
+            gradeLabels
           />
         }
       }

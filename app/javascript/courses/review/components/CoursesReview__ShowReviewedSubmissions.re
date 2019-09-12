@@ -128,6 +128,7 @@ let showLoadMoreButton =
     (authenticityToken, courseId, setState, selectedLevel, cursor) =>
   <div className="flex justify-center w-full">
     <div
+      className="btn border mt-4 bg-white cursor-pointer"
       onClick={
         _ =>
           getReviewedSubmissions(

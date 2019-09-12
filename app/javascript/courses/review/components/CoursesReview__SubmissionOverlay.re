@@ -99,16 +99,15 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
     </div>
   </div>;
 
-let showSubmissions = (authenticityToken, state) =>
-  state.submissionDetails
-  |> List.map(submission =>
-       <div> <CoursesReview__Submissions authenticityToken submission /> </div>
-     )
-  |> Array.of_list
-  |> React.array;
-
 [@react.component]
-let make = (~authenticityToken, ~levels, ~submission, ~setSelectedSubmission) => {
+let make =
+    (
+      ~authenticityToken,
+      ~levels,
+      ~submission,
+      ~setSelectedSubmission,
+      ~gradeLabels,
+    ) => {
   let (state, setState) =
     React.useState(() => {loading: true, submissionDetails: []});
 
@@ -129,7 +128,18 @@ let make = (~authenticityToken, ~levels, ~submission, ~setSelectedSubmission) =>
       {
         state.loading ?
           <div> {"Loading" |> str} </div> :
-          showSubmissions(authenticityToken, state)
+          state.submissionDetails
+          |> List.map(submission =>
+               <div>
+                 <CoursesReview__Submissions
+                   authenticityToken
+                   submission
+                   gradeLabels
+                 />
+               </div>
+             )
+          |> Array.of_list
+          |> React.array
       }
     </div>
   </div>;

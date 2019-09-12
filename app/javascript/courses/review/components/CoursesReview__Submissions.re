@@ -127,7 +127,7 @@ let showFeedback = feedback =>
   |> React.array;
 
 [@react.component]
-let make = (~authenticityToken, ~submission) => {
+let make = (~authenticityToken, ~submission, ~gradeLabels) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div className="mt-2 rounded-lg bg-white shadow shadow overflow-hidden">
     <div className="p-4 md:p-6 flex justify-between">
@@ -148,6 +148,7 @@ let make = (~authenticityToken, ~submission) => {
       />
       {showSubmissions(submission |> SubmissionDetails.attachments)}
     </div>
+    <CoursesReview__GradeCard authenticityToken gradeLabels />
     <div> {showFeedback(submission |> SubmissionDetails.feedback)} </div>
   </div>;
 };

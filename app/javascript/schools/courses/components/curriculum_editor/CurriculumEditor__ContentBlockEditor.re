@@ -292,7 +292,6 @@ let createContentBlock =
         state,
         createNewContentCB,
       );
-      dispatch(UpdateSaving);
     },
     () => dispatch(UpdateSaving),
   );

@@ -2,7 +2,7 @@
 
 let str = React.string;
 
-let handleClick = (setShowDropdown,versions, event) => {
+let handleClick = (setShowDropdown, versions, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   if (versions |> Array.length > 1) {
     setShowDropdown(showDropdown => !showDropdown);
@@ -42,8 +42,7 @@ let make =
       <div className="relative">
         <div className="inline-block">
           <label className="text-xs block text-gray-600 mb-1">
-            {
-              ((versions |> Array.length > 1) ? "Versions" : "Version") |> str}
+            {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
           </label>
           <button
             onClick={handleClick(setShowDropdown, versions)}
@@ -70,6 +69,7 @@ let make =
         {
           showDropdown ?
             <ul
+              id="version-selection-list"
               className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
               {
                 versions
@@ -77,6 +77,7 @@ let make =
                 |> List.filter(version => version != selectedVersion)
                 |> List.map(version =>
                      <li
+                       id=version
                        key=version
                        onClick={
                          handleVersionSelect(

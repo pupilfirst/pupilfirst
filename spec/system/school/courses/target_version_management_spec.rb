@@ -121,6 +121,7 @@ feature 'Target Content Version Management', js: true do
       end
 
       expect(page).to have_selector('.content-block__content', count: 4)
+      sleep 3
       expect(target_1.content_versions.reload.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)).to eq([current_cb_sorting[0], current_cb_sorting[2], current_cb_sorting[1], current_cb_sorting[3]])
       expect(target_1.latest_content_versions.count).to eq(4)
     end

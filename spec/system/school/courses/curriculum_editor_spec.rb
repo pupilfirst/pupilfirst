@@ -310,6 +310,7 @@ feature 'Curriculum Editor', js: true do
       expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(quiz_question_2_answer_option_1)
 
       find('.target-group__target', text: new_target_4_title).click
+      expect(page).to have_text('Markdown editor')
       click_button 'Next Step'
 
       expect(page).to have_text('Any prerequisite targets?')
@@ -352,6 +353,7 @@ feature 'Curriculum Editor', js: true do
       expect(target.reload.completion_instructions).to eq(completion_instructions)
 
       find('.target-group__target', text: target.title).click
+      expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
       expect(page).to have_text('Do you have any completion instructions for the student?')
       fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }

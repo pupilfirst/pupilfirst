@@ -204,6 +204,7 @@ let make =
       if (initialRender |> React.Ref.current) {
         initialRender->React.Ref.setCurrent(false);
       } else {
+        Js.log("Test loop");
         let cachedContentBlocks =
           contentBlocks
           |> List.sort((x, y) =>

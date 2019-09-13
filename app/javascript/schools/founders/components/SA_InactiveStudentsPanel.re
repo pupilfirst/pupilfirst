@@ -190,15 +190,12 @@ let make =
                      <div
                        key={team |> Team.id}
                        id={team |> Team.name}
-                       className={
-                         "student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden"
-                         ++ (isSingleFounder ? " hover:bg-gray-100" : "")
-                       }>
+                       className="student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
                        {
                          let isChecked = state.selectedTeams |> List.mem(team);
                          let checkboxId = "select-team-" ++ (team |> Team.id);
                          <label
-                           className="block text-grey leading-tight font-bold px-4 py-5"
+                           className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-100"
                            htmlFor=checkboxId>
                            <input
                              className="leading-tight"
@@ -225,7 +222,7 @@ let make =
                                   <div className="flex-1 w-3/5">
                                     <div className="flex items-center">
                                       <a
-                                        className="flex flex-1 items-center py-4 pr-4"
+                                        className="flex flex-1 self-stretch items-center py-4 pr-4"
                                         id={
                                           (student |> Student.name) ++ "_edit"
                                         }>

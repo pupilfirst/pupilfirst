@@ -12,6 +12,7 @@ let handleClick = (setShowDropdown, versions, event) => {
 let handleVersionSelect =
     (setShowDropdown, selectVersionCB, selectedVersion, event) => {
   event |> ReactEvent.Mouse.preventDefault;
+  Js.log(selectedVersion);
   setShowDropdown(showDropdown => !showDropdown);
   selectVersionCB(selectedVersion);
 };

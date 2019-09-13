@@ -141,6 +141,7 @@ feature 'Target Content Version Management', js: true do
         expect(page).to have_selector('.add-content-block--open', count: 1)
 
         # Update a content block
+        block_to_update = target_1.content_versions.where(sort_index: 4).first.content_block
         within('#content-block-form-4') do
           fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
           click_button 'Update Title'
@@ -149,22 +150,81 @@ feature 'Target Content Version Management', js: true do
         dismiss_notification
 
         target_content_versions = target_1.content_versions.reload
+        expect(block_to_update.id).to_not eq(target_1.latest_content_versions.where(sort_index: 4).first.content_block_id)
         expect(target_content_versions.where(version_on: Date.today).count).to eq(4)
         expect(target_content_versions.where(version_on: 2.days.ago).count).to eq(4)
         expect(target_content_versions.where(version_on: 5.days.ago).count).to eq(2)
         expect(target_content_versions.where(version_on: 4.days.ago).count).to eq(1)
         expect(target_content_versions.count).to eq(11)
+
+        # Create a content block
+        find("div#add-block-3", visible: false).click
+        within("div#content-type-picker-3") do
+          find('p', text: 'Markdown').click
+        end
+        replace_markdown(sample_markdown_text)
+        find('span', text: 'Preview').click
+        click_button 'Save'
+        expect(page).to have_text('Content added successfully')
+        dismiss_notification
+
+        expect(target_content_versions.where(version_on: Date.today).count).to eq(5)
+        expect(target_content_versions.count).to eq(12)
+        expect(ContentVersion.last.sort_index).to eq(3)
+
+        # Delete the block created today
+        cb_id_to_delete = target_1.latest_content_versions.where(sort_index: 3).first.content_block_id
+        accept_confirm do
+          within('#content-block-controls-3') do
+            find_button('Delete block').click
+          end
+        end
+        expect(page).to have_selector('.content-block__content', count: 4)
+        target_1.content_versions.reload
+        expect(target_1.latest_content_versions.count).to eq(4)
+        expect(ContentBlock.find_by(id: cb_id_to_delete)).to eq(nil)
+        expect(target_content_versions.count).to eq(11)
+
+        # Delete an old content block
+        cb_id_to_delete = target_1.latest_content_versions.where(sort_index: 2).first.content_block_id
+        accept_confirm do
+          within('#content-block-controls-2') do
+            find_button('Delete block').click
+          end
+        end
+        expect(page).to have_selector('.content-block__content', count: 3)
+        target_1.content_versions.reload
+        expect(target_1.latest_content_versions.count).to eq(3)
+        # the content block should not be destroyed
+        expect(ContentBlock.find_by(id: cb_id_to_delete)).to_not eq(nil)
+        expect(target_1.content_versions.count).to eq(10)
+
+        # # Change content block sorting
+        # within('#content-block-controls-1') do
+        #   find_button('Move down').click
+        # end
+        # sleep 2
+        # expect(page).to have_selector('.content-block__content', count: 3)
+        # within('#content-block-form-1') do
+        #   expect(page).to have_button('Update Caption')
+        # end
+        # target_1.content_versions.reload
+        # expect(target_1.latest_content_versions.count).to eq(3)
+        # expect(target_1.latest_content_versions.where(sort_index: 2).first.content_block.block_type).to eq('embed')
+        # expect(target_1.latest_content_versions.where(sort_index: 1).first.content_block.block_type).to eq('image')
       end
     end
 
     scenario 'restores to an old version' do
       # View an old version of the target
-      # find('.target-group__target', text: target_1.title).click
-      # click_button format_date(Date.today)
-      # expect(page).to have_text(format_date(3.days.ago))
-      # find('li', text: format_date(3.days.ago)).click
-      # expect(page).to_not have_button('Edit')
-      # expect(page).to have_button('Restore this version')
+      find('.target-group__target', text: target_1.title).click
+      expect(page).to have_button('Edit')
+      expect(page).to_not have_selector('.add-content-block--open', count: 1)
+
+      click_button format_date(Date.today)
+      expect(page).to have_text(format_date(3.days.ago))
+      expect(page).to have_selector('.target-editor__version-dropdown-list-item', count: 2)
+      find('#version-selection-list').find('li', text: format_date(3.days.ago)).click
     end
   end
 end

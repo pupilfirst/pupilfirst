@@ -99,7 +99,7 @@ feature 'Target Content Version Management', js: true do
       expect(target_content_versions.where(version_on: Date.today).pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
 
       # Delete a content block
-      cb_id_to_delete = target_content_versions.where(version_on: Date.today, sort_index: 2).first.id
+      cb_id_to_delete = target_content_versions.where(version_on: Date.today, sort_index: 2).first.content_block_id
       accept_confirm do
         within('#content-block-controls-2') do
           find_button('Delete block').click
@@ -126,9 +126,34 @@ feature 'Target Content Version Management', js: true do
     end
 
     scenario 'modifies content on a future date' do
-      expect(page).to have_text(target_1.title)
-      find('.target-group__target', text: target_1.title).click
-      expect(page).to_not have_selector('.add-content-block--open', count: 1)
+      travel_to 2.days.from_now do
+        expect(page).to have_text(target_1.title)
+        find('.target-group__target', text: target_1.title).click
+        expect(page).to_not have_selector('.add-content-block--open', count: 1)
+        # Check the version management buttons
+        expect(page).to have_button(format_date(2.days.ago))
+        click_button format_date(2.days.ago)
+        expect(page).to have_text(format_date(4.days.ago))
+        expect(page).to have_text(format_date(5.days.ago))
+        click_button format_date(2.days.ago)
+        click_button 'Edit'
+        expect(page).to have_selector('.add-content-block--open', count: 1)
+
+        # Update a content block
+        within('#content-block-form-4') do
+          fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
+          click_button 'Update Title'
+        end
+        expect(page).to have_text('Content updated successfully')
+        dismiss_notification
+
+        target_content_versions = target_1.content_versions.reload
+        expect(target_content_versions.where(version_on: Date.today).count).to eq(4)
+        expect(target_content_versions.where(version_on: 2.days.ago).count).to eq(4)
+        expect(target_content_versions.where(version_on: 5.days.ago).count).to eq(2)
+        expect(target_content_versions.where(version_on: 4.days.ago).count).to eq(1)
+        expect(target_content_versions.count).to eq(11)
+      end
     end
 
     scenario 'restores to an old version' do

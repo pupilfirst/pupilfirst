@@ -42,3 +42,14 @@ let make = (~markdown, ~className=?, ~profile) => {
     dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse(profile)}
   />;
 };
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent("MarkdownBlock");
+
+  let make = (~markdown, ~profile, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~markdown, ~profile, ()),
+      children,
+    );
+};

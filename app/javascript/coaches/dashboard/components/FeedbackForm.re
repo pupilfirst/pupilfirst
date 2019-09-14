@@ -124,13 +124,13 @@ let make =
       {
         timelineEvent
         |> TimelineEvent.feedback
-        |> List.map(feedback =>
+        |> List.map(markdown =>
              <div className="timeline-event-card__field-box mx-3 mt-3 p-3">
                <h5
                  className="timeline-event-card__field-header font-bold mt-0">
                  {"Feedback Sent:" |> str}
                </h5>
-               <div dangerouslySetInnerHTML={"__html": feedback} />
+               <MarkdownBlock.Jsx2 profile=Markdown.Permissive markdown />
              </div>
            )
         |> Array.of_list
@@ -139,7 +139,7 @@ let make =
       {
         if (state.showForm) {
           <div className="feedback-form__trix-container py-3">
-            <TrixEditor onChange=updateFeedbackCB />
+            <textArea className="w-100" onChange=(e => updateFeedbackCB(ReactEvent.Form.target(e)##value)) ></textArea>
             <button
               className="btn btn-secondary mt-2 mr-2"
               onClick={

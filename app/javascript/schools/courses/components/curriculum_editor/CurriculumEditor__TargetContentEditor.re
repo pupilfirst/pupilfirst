@@ -54,16 +54,21 @@ let updateContentBlockSorting =
 let removeTargetContentCB =
     (
       contentBlock,
+      sortedContentBlocks,
       addNewVersionCB,
       updateTargetContentBlocks,
       toggleSortContentBlock,
       sortIndex,
       versions,
     ) => {
-  updateTargetContentBlocks(targetContentBlocks =>
-    targetContentBlocks
+  let updatedContentBlockList =
+    sortedContentBlocks
     |> List.filter(((index, _, _, _)) => sortIndex != index)
-  );
+    |> List.mapi((index, (_, blockType, contentBlock, id)) =>
+         (index + 1, blockType, contentBlock, id)
+       );
+  updateTargetContentBlocks(_ => updatedContentBlockList);
+
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
   switch (contentBlock) {
   | Some(_cb) => addNewVersionCB(versions)
@@ -262,6 +267,7 @@ let make =
                 removeTargetContentCB={
                   removeTargetContentCB(
                     contentBlock,
+                    sortedContentBlocks,
                     addNewVersionCB,
                     updateTargetContentBlocks,
                     toggleSortContentBlock,
@@ -287,7 +293,7 @@ let make =
                 blockCount={targetContentBlocks |> List.length}
                 swapContentBlockCB={
                   swapContentBlockCB(
-                    targetContentBlocks,
+                    sortedContentBlocks,
                     updateTargetContentBlocks,
                     toggleSortContentBlock,
                   )

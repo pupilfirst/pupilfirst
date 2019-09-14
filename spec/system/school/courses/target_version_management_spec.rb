@@ -120,9 +120,8 @@ feature 'Target Content Version Management', js: true do
         find_button('Move down').click
       end
 
-      expect(page).to have_selector('.content-block__content', count: 4)
-      sleep 3
-      expect(target_1.content_versions.reload.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)).to eq([current_cb_sorting[0], current_cb_sorting[2], current_cb_sorting[1], current_cb_sorting[3]])
+      sleep 4
+      expect(target_1.content_versions.reload.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)).to eq([current_cb_sorting[0], current_cb_sorting[1], current_cb_sorting[3], current_cb_sorting[2]])
       expect(target_1.latest_content_versions.count).to eq(4)
     end
 
@@ -205,19 +204,19 @@ feature 'Target Content Version Management', js: true do
         expect(ContentBlock.find_by(id: cb_id_to_delete)).to_not eq(nil)
         expect(target_1.content_versions.count).to eq(10)
 
-        # # Change content block sorting
-        # within('#content-block-controls-1') do
-        #   find_button('Move down').click
-        # end
-        # sleep 2
-        # expect(page).to have_selector('.content-block__content', count: 3)
-        # within('#content-block-form-1') do
-        #   expect(page).to have_button('Update Caption')
-        # end
-        # target_1.content_versions.reload
-        # expect(target_1.latest_content_versions.count).to eq(3)
-        # expect(target_1.latest_content_versions.where(sort_index: 2).first.content_block.block_type).to eq('embed')
-        # expect(target_1.latest_content_versions.where(sort_index: 1).first.content_block.block_type).to eq('image')
+        # Change content block sorting
+        within('#content-block-controls-2') do
+          find_button('Move up').click
+        end
+        sleep 2
+        expect(page).to have_selector('.content-block__content', count: 3)
+        within('#content-block-form-1') do
+          expect(page).to have_button('Update Caption', disabled: true)
+        end
+        target_1.content_versions.reload
+        expect(target_1.latest_content_versions.count).to eq(3)
+        expect(target_1.latest_content_versions.where(sort_index: 2).first.content_block.block_type).to eq('embed')
+        expect(target_1.latest_content_versions.where(sort_index: 1).first.content_block.block_type).to eq('image')
       end
     end
 

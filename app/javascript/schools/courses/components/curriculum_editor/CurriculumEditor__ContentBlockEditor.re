@@ -55,6 +55,7 @@ module DeleteContentBlockMutation = [%graphql
    mutation($id: ID!) {
     deleteContentBlock(id: $id) {
        success
+       versions
      }
    }
    |}
@@ -66,6 +67,7 @@ module UpdateContentBlockMutation = [%graphql
     updateContentBlock(id: $id, blockType: $blockType, text: $text ) {
        success
        id
+       versions
    }
   }
    |}
@@ -215,12 +217,15 @@ let handleDeleteContentBlock =
       DeleteContentBlockMutation.make(~id, ())
       |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
       |> Js.Promise.then_(response => {
+           let versions =
+             response##deleteContentBlock##versions
+             |> Array.map(version => version |> Json.Decode.string);
            response##deleteContentBlock##success ?
-             removeTargetContentCB(sortIndex) : ();
+             removeTargetContentCB(sortIndex, versions) : ();
            Js.Promise.resolve();
          })
       |> ignore;
-    | None => removeTargetContentCB(sortIndex)
+    | None => removeTargetContentCB(sortIndex, [||])
     } :
     ();
 let decodeContent =
@@ -258,6 +263,7 @@ let updateNewContentBlock =
     ) => {
   open Json.Decode;
   let id = json |> field("id", string);
+  let versions = json |> field("versions", array(string));
   let fileUrl =
     switch (blockType) {
     | File(_url, _title, _filename) => json |> field("fileUrl", string)
@@ -267,7 +273,7 @@ let updateNewContentBlock =
   let contentBlockType =
     json |> field("content", decodeContent(blockType, fileUrl, state));
   let newContentBlock = ContentBlock.make(id, contentBlockType, sortIndex);
-  createNewContentCB(newContentBlock);
+  createNewContentCB(newContentBlock, versions);
 };
 
 let createContentBlock =
@@ -333,9 +339,12 @@ let updateContentBlock =
   |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
   |> Js.Promise.then_(response => {
        let responseId = response##updateContentBlock##id;
+       let versions =
+         response##updateContentBlock##versions
+         |> Array.map(version => version |> Json.Decode.string);
        let updatedContentBlock =
          ContentBlock.make(responseId, updatedContentBlockType, sortIndex);
-       updateContentBlockCB(updatedContentBlock, id);
+       updateContentBlockCB(updatedContentBlock, id, versions);
        dispatch(UpdateSaving);
        Js.Promise.resolve();
      })

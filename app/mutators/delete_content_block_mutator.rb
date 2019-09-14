@@ -29,6 +29,10 @@ class DeleteContentBlockMutator < ApplicationMutator
     @content_block ||= ContentBlock.find(id)
   end
 
+  def target_versions
+    target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
+  end
+
   private
 
   def delete_content_version

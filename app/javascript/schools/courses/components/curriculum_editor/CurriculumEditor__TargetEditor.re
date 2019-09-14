@@ -560,21 +560,8 @@ let handleRestoreVersionCB =
     } :
     ();
 
-let addNewVersionCB = (state, dispatch, ()) =>
-  switch (state.versions) {
-  | [||] =>
-    dispatch(
-      UpdateVersions(Array.append([|currentDateString()|], state.versions)),
-    )
-  | versions =>
-    versions[0] != currentDateString() ?
-      dispatch(
-        UpdateVersions(
-          Array.append([|currentDateString()|], state.versions),
-        ),
-      ) :
-      ()
-  };
+let addNewVersionCB = (dispatch, versions) => {
+    dispatch(UpdateVersions(versions))};
 
 let selectVersionCB =
     (target, state, send, authenticityToken, selectedVersion) => {
@@ -851,7 +838,7 @@ let make =
                   key={target |> Target.id}
                   target
                   previewMode={state.previewMode}
-                  addNewVersionCB={addNewVersionCB(state, dispatch)}
+                  addNewVersionCB={addNewVersionCB(dispatch)}
                   contentBlocks={state.contentBlocks}
                   updateContentEditorDirtyCB
                   authenticityToken

@@ -5,6 +5,7 @@ module Mutations
     description "Sort target content blocks"
 
     field :success, Boolean, null: false
+    field :versions, [Types::DateType], null: false
 
     def resolve(params)
       mutator = SortContentBlocksMutator.new(params, context)
@@ -12,7 +13,7 @@ module Mutations
       if mutator.valid?
         mutator.sort
         mutator.notify(:success, "Done!", "Target content updated successfully")
-        { success: true }
+        { success: true, versions: mutator.target_versions }
       else
         mutator.notify_errors
         { success: false, errors: mutator.error_codes }

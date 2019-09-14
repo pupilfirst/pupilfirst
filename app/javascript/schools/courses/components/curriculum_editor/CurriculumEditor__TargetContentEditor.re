@@ -7,6 +7,7 @@ module SortContentBlockMutation = [%graphql
    mutation($contentBlockIds: [ID!]!) {
     sortContentBlocks(contentBlockIds: $contentBlockIds) {
        success
+       versions
      }
    }
    |}
@@ -16,6 +17,7 @@ let updateContentBlockSorting =
     (
       contentBlocks,
       authenticityToken,
+      addNewVersionCB,
       sortContentBlock,
       toggleSortContentBlock,
       (),
@@ -34,7 +36,13 @@ let updateContentBlockSorting =
   if (sortContentBlock == true) {
     SortContentBlockMutation.make(~contentBlockIds, ())
     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=false)
-    |> Js.Promise.then_(_response => Js.Promise.resolve())
+    |> Js.Promise.then_(response => {
+         let versions =
+           response##sortContentBlocks##versions
+           |> Array.map(version => version |> Json.Decode.string);
+         addNewVersionCB(versions);
+         Js.Promise.resolve();
+       })
     |> ignore;
     toggleSortContentBlock(_ => false);
   } else {
@@ -50,6 +58,7 @@ let removeTargetContentCB =
       updateTargetContentBlocks,
       toggleSortContentBlock,
       sortIndex,
+      versions,
     ) => {
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
@@ -57,7 +66,7 @@ let removeTargetContentCB =
   );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
   switch (contentBlock) {
-  | Some(_cb) => addNewVersionCB()
+  | Some(_cb) => addNewVersionCB(versions)
   | None => ()
   };
 };
@@ -81,7 +90,6 @@ let newContentBlockCB =
 let swapContentBlockCB =
     (
       targetContentBlocks,
-      addNewVersionCB,
       updateTargetContentBlocks,
       toggleSortContentBlock,
       upperSortIndex,
@@ -113,14 +121,10 @@ let swapContentBlockCB =
        ])
   );
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
-  switch (cb1, cb2) {
-  | (Some(_cb1), Some(_cb2)) => addNewVersionCB()
-  | _ => ()
-  };
 };
 
 let createNewContentCB =
-    (addNewVersionCB, updateTargetContentBlocks, contentBlock) => {
+    (addNewVersionCB, updateTargetContentBlocks, contentBlock, versions) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -134,11 +138,17 @@ let createNewContentCB =
        )
     |> List.append([newContentBlock])
   );
-  addNewVersionCB();
+  addNewVersionCB(versions);
 };
 
 let updateContentBlockCB =
-    (addNewVersionCB, updateTargetContentBlocks, contentBlock, currentId) => {
+    (
+      addNewVersionCB,
+      updateTargetContentBlocks,
+      contentBlock,
+      currentId,
+      versions,
+    ) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -150,7 +160,7 @@ let updateContentBlockCB =
     |> List.filter(((_, _, _, id)) => id != currentId)
     |> List.append([newContentBlock])
   );
-  addNewVersionCB();
+  addNewVersionCB(versions);
 };
 
 [@react.component]
@@ -180,6 +190,7 @@ let make =
     updateContentBlockSorting(
       sortedContentBlocks,
       authenticityToken,
+      addNewVersionCB,
       sortContentBlock,
       toggleSortContentBlock,
     ),
@@ -277,7 +288,6 @@ let make =
                 swapContentBlockCB={
                   swapContentBlockCB(
                     targetContentBlocks,
-                    addNewVersionCB,
                     updateTargetContentBlocks,
                     toggleSortContentBlock,
                   )

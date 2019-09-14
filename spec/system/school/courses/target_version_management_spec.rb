@@ -157,6 +157,12 @@ feature 'Target Content Version Management', js: true do
         expect(target_content_versions.where(version_on: 4.days.ago).count).to eq(1)
         expect(target_content_versions.count).to eq(11)
 
+        expect(page).to have_button(format_date(Date.today))
+        click_button format_date(Date.today)
+        expect(page).to have_text(format_date(2.days.ago))
+        expect(page).to have_text(format_date(4.days.ago))
+        expect(page).to have_text(format_date(5.days.ago))
+
         # Create a content block
         find("div#add-block-3", visible: false).click
         within("div#content-type-picker-3") do

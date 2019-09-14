@@ -32,6 +32,10 @@ class UpdateContentBlockMutator < ApplicationMutator
     end
   end
 
+  def target_versions
+    target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
+  end
+
   private
 
   def content_block

@@ -7,6 +7,10 @@ class SortContentBlocksMutator < ApplicationMutator
     ::ContentBlocks::SortService.new(content_block_ids).execute
   end
 
+  def target_versions
+    target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
+  end
+
   private
 
   def target

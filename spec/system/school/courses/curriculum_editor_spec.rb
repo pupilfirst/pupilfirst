@@ -259,7 +259,7 @@ feature 'Curriculum Editor', js: true do
 
       click_button 'Create'
       dismiss_notification
-
+      expect(page).to have_text('Markdown editor')
       click_button 'Next Step'
 
       within("div#evaluated") do
@@ -382,6 +382,7 @@ feature 'Curriculum Editor', js: true do
 
       expect(target.reload.visibility).to eq('live')
       find('.target-group__target', text: target.title).click
+      expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
 
       within("div#visibility") do
@@ -397,6 +398,7 @@ feature 'Curriculum Editor', js: true do
       expect(target.reload.visibility).to eq('archived')
 
       find('.target-group__target', text: target.title).click
+      expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
 
       within("div#evaluated") do

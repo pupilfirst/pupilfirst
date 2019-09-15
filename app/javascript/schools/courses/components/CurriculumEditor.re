@@ -61,7 +61,7 @@ let showArchivedButton = (targetGroupsInLevel, targets) => {
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
 };
 
-let updateTagetSortIndex = (state, send, sortedTargets) => {
+let updateTargetSortIndex = (state, send, sortedTargets) => {
   let oldTargets =
     state.targets |> List.filter(t => !(sortedTargets |> List.mem(t)));
   send(
@@ -71,7 +71,7 @@ let updateTagetSortIndex = (state, send, sortedTargets) => {
   );
 };
 
-let updateTagetGroupSortIndex = (state, send, sortedTargetGroups) => {
+let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
   let oldTargetGroups =
     state.targetGroups
     |> List.filter(t => !(sortedTargetGroups |> List.mem(t)));
@@ -367,9 +367,11 @@ let make =
                    updateTargetCB
                    showArchived={state.showArchived}
                    authenticityToken
-                   updateTagetSortIndexCB={updateTagetSortIndex(state, send)}
-                   updateTagetGroupSortIndexCB={
-                     updateTagetGroupSortIndex(state, send)
+                   updateTargetSortIndexCB={
+                     updateTargetSortIndex(state, send)
+                   }
+                   updateTargetGroupSortIndexCB={
+                     updateTargetGroupSortIndex(state, send)
                    }
                    authenticityToken
                    index

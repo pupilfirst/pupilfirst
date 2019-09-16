@@ -3,7 +3,7 @@
 }
 
 .markdown-button-group__button {
-  @apply border-r px-3 flex items-center whitespace-no-wrap text-sm font-semibold;
+  @apply bg-white border-r px-3 flex items-center whitespace-no-wrap text-sm font-semibold;
 }
 
 .markdown-button-group__button:last-child {

@@ -170,11 +170,9 @@ feature 'Curriculum Editor', js: true do
 
       # Update sort index
       page.execute_script("document.querySelector('#target-group-move-down-#{target_group.id}').click()")
-      sleep 2
-      expect(target_group.reload.sort_index).to eq(1)
+      expect { target_group.reload.sort_index }.to eventually(eq 1)
       page.execute_script("document.querySelector('#target-group-move-up-#{target_group.id}').click()")
-      sleep 2
-      expect(target_group.reload.sort_index).to eq(0)
+      expect { target_group.reload.sort_index }.to eventually(eq 0)
 
       # user should be able to create a draft target from the curriculum index
       find("#create-target-input#{target_group.id}").click
@@ -237,11 +235,9 @@ feature 'Curriculum Editor', js: true do
 
       # Update sort index
       page.execute_script("document.querySelector('#target-move-up-#{target.id}').click()")
-      sleep 2
-      expect(target.reload.sort_index).to eq(2)
+      expect { target.reload.sort_index }.to eventually(eq 2)
       page.execute_script("document.querySelector('#target-move-down-#{target.id}').click()")
-      sleep 2
-      expect(target.reload.sort_index).to eq(3)
+      expect { target.reload.sort_index }.to eventually(eq 3)
     end
 
     scenario 'creates a target with a quiz' do

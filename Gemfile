@@ -149,6 +149,7 @@ group :test do
   gem 'webdrivers', '~> 4.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
+  gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
 end
 
 group :development, :test do

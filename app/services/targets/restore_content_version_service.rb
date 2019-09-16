@@ -24,17 +24,19 @@ module Targets
 
     def content_blocks_created_today
       @content_blocks_created_today ||= begin
-        ContentBlock.where(id: ContentVersion.where(target: @target, version_on: latest_content_version_date).pluck(:content_block_id)).map do |cb|
+        ids_created_today = ContentBlock.where(id: ContentVersion.where(target: @target, version_on: latest_content_version_date).pluck(:content_block_id)).map do |cb|
           next unless cb.created_at.to_date == Date.today
 
           cb
         end.compact
+        ContentBlock.where(id: ids_created_today)
       end
     end
 
     def delete_todays_version
       return unless latest_content_version_date == Date.today
 
+      content_blocks_created_today
       @target.latest_content_versions.destroy_all
       content_blocks_created_today.destroy_all
     end

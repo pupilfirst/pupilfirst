@@ -130,7 +130,7 @@ let showFeedback = feedback =>
 let make = (~authenticityToken, ~submission, ~gradeLabels) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div className="mt-2 rounded-lg bg-white shadow shadow overflow-hidden">
-    <div className="p-4 md:p-6 flex justify-between">
+    <div className="p-4 md:p-6 flex items-center justify-between">
       <div> {"submission" |> str} </div>
       <div className="text-xs flex">
         {

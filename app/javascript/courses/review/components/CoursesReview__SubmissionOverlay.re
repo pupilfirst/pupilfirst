@@ -64,15 +64,15 @@ let levelNumber = (levels, levelId) =>
 
 let headerSection = (submission, levels, setSelectedSubmission) =>
   <div
-    className="bg-gray-100 border-b border-gray-400 px-3 pt-10 flex justify-center">
+    className="bg-gray-100 border-b border-gray-300 px-3 pt-16 xl:pt-10 flex justify-center">
     <div
-      onClick={_ => setSelectedSubmission(_ => None)}
-      className="bg-white rounded-lg shadow mr-5 -mb-10 px-4 items-center flex flex-col justify-center hover:bg-gray-200 hover:text-primary-500 cursor-pointerr">
-      <i className="fas fa-times text-xl" />
-      {"Close" |> str}
-    </div>
-    <div
-      className="bg-white border-t p-6 flex items-center justify-between rounded-lg shadow-md container max-w-3xl -mb-10">
+      className="relative bg-white border p-6 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
+      <div
+        onClick={_ => setSelectedSubmission(_ => None)}
+        className="course-review-submission-overlay__close absolute h-full border bg-white rounded-lg px-4 items-center flex flex-col justify-center hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
+        <i className="far fa-times-circle text-xl" />
+        {"Close" |> str}
+      </div>
       <div>
         <div className="flex items-center text-sm">
           <span className="bg-gray-400 py-px px-2 rounded-lg font-semibold">

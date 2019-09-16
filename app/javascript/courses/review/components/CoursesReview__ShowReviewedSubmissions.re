@@ -108,18 +108,18 @@ let getReviewedSubmissions =
 let showSubmissionStatus = failed =>
   failed ?
     <div
-      className="bg-red-100 border border-red-500 text-red-700 font-semibold px-3 py-px rounded">
+      className="bg-red-100 border border-red-500 leading-normal text-red-800 font-semibold px-3 py-px rounded">
       {"Failed" |> str}
     </div> :
     <div
-      className="bg-green-100 border border-green-500 text-green-800 font-semibold px-3 py-px rounded">
+      className="bg-green-100 border border-green-500 leading-normal text-green-800 font-semibold px-3 py-px rounded">
       {"Passed" |> str}
     </div>;
 
 let showFeedbackSent = feedbackSent =>
   feedbackSent ?
     <div
-      className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
+      className="bg-primary-100 text-primary-600 border border-transparent leading-normal font-semibold px-3 py-px rounded mr-3">
       {"Feedback Sent" |> str}
     </div> :
     React.null;
@@ -168,11 +168,11 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
            <div
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
-             className="bg-white border border-gray-300 px-6 py-5 mt-4 cursor-pointer bg-white rounded-lg shadow flex items-center justify-between hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
-             <div>
-               <div className="flex items-center text-sm">
+             className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border border-gray-300 p-3 md:p-6 mt-4 cursor-pointer rounded-lg shadow hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
+             <div className="md:pr-2">
+               <div className="block md:flex md:items-center text-sm">
                  <span
-                   className="text-xs font-semibold border-r text-gray-800 pr-2 pl-0 border-gray-400">
+                   className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                    {
                      submission
                      |> Submission.levelId
@@ -184,21 +184,20 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
                    {submission |> Submission.title |> str}
                  </span>
                </div>
-               <div className="mt-1 text-xs text-gray-900">
-                 <span> {submission |> Submission.userNames |> str} </span>
-                 <span className="ml-2">
-                   {
-                     "Submitted on "
-                     ++ (submission |> Submission.createdAtPretty)
-                     |> str
-                   }
+               <div className="mt-1 ml-px text-xs text-gray-900">
+                 <span> {"Submitted by " |> str} </span>
+                 <span className="font-semibold">
+                   {submission |> Submission.userNames |> str}
+                 </span>
+                 <span className="ml-1">
+                   {"on " ++ (submission |> Submission.createdAtPretty) |> str}
                  </span>
                </div>
              </div>
              {
                switch (submission |> Submission.status) {
                | Some(status) =>
-                 <div className="text-xs flex">
+                 <div className="text-xs flex mt-2 md:mt-0">
                    {showFeedbackSent(status |> Submission.feedbackSent)}
                    {showSubmissionStatus(status |> Submission.failed)}
                  </div>

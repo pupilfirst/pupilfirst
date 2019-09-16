@@ -50,8 +50,8 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
         )
         |> str
       }
-      <span className="pl-3 border-l">
-        <i className="ml-2 fas fa-chevron-down text-sm" />
+      <span className="pl-2 ml-2 border-l">
+        <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>;
 
@@ -59,8 +59,8 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
 };
 
 let buttonClasses = selected =>
-  "py-2 px-6 font-semibold text-sm focus:outline-none "
-  ++ (selected ? "bg-primary-100 text-primary-500" : "bg-white");
+  "w-1/2 md:w-auto py-2 px-3 md:px-6 font-semibold text-sm hover:text-primary-500 hover:bg-gray-100 focus:outline-none "
+  ++ (selected ? "bg-primary-100 shadow-inner text-primary-500" : "bg-white");
 
 [@react.component]
 let make =
@@ -70,11 +70,11 @@ let make =
   let (selectedSubmission, setSelectedSubmission) =
     React.useState(() => None);
 
-  <div className="bg-gray-100 pt-14 pb-8 -mt-7">
+  <div className="bg-gray-100 pt-14 pb-8 px-3 -mt-7">
     <div className="max-w-3xl mx-auto">
-      <div className="flex justify-between">
+      <div className="flex flex-col md:flex-row items-center justify-between">
         <div
-          className="course-review__status-tab flex rounded-lg border border-gray-400 overflow-hidden">
+          className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400 overflow-hidden">
           <button
             className={buttonClasses(showPending == true)}
             onClick={_ => setShowPending(_ => true)}>
@@ -86,7 +86,9 @@ let make =
             {"Reviewed" |> str}
           </button>
         </div>
-        <div> {showDropdown(levels, selectedLevel, setSelectedLevel)} </div>
+        <div className="flex-shrink-0 mt-4">
+          {showDropdown(levels, selectedLevel, setSelectedLevel)}
+        </div>
       </div>
       {
         showPending ?

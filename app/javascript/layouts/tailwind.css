@@ -176,6 +176,12 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   background-color: #1c1626;
 }
 
+@screen md {
+  .dropdown__list {
+    max-height: 20rem;
+  }
+}
+
 .dropdown__list-right {
   @apply right-0;
 }

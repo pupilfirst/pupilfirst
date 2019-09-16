@@ -10,7 +10,7 @@ let make = (~selected, ~contents, ~right=false) => {
       showDropDown ?
         <ul
           className={
-            "dropdown__list bg-white shadow-lg rounded mt-1 border border-gray-400 absolute overflow-hidden min-w-full w-auto z-20 "
+            "dropdown__list bg-white overflow-y-auto shadow-lg rounded mt-1 border border-gray-400 absolute overflow-hidden min-w-full w-auto z-20 "
             ++ (right ? "right-0" : "left-0")
           }>
           {

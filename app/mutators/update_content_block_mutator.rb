@@ -80,13 +80,11 @@ class UpdateContentBlockMutator < ApplicationMutator
   end
 
   def create_new_version(last_version_date)
-    previous_version = target.content_versions.where(version_on: last_version_date)
-    previous_version.each do |content_version|
-      next if content_version.content_block_id == id.to_i
-
-      target.content_versions.create!(content_block_id: content_version.content_block_id, version_on: Date.today, sort_index: content_version.sort_index)
+    target.content_versions.where(version_on: last_version_date).each do |content_version|
+      new_content_version = content_version.dup
+      new_content_version.version_on = Date.today
+      new_content_version.content_block = content_block if content_version.content_block_id == id.to_i
+      new_content_version.save!
     end
-    new_content_block_index = previous_version.find_by(content_block_id: id).sort_index
-    target.content_versions.create!(content_block: content_block, version_on: Date.today, sort_index: new_content_block_index)
   end
 end

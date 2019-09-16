@@ -24,29 +24,26 @@ module Targets
 
     def content_blocks_created_today
       @content_blocks_created_today ||= begin
-        current_blocks = ContentBlock.where(id: ContentVersion.where(target: @target, version_on: latest_content_version_date).pluck(:content_block_id))
-        ids_to_delete = current_blocks.map do |cb|
+        ContentBlock.where(id: ContentVersion.where(target: @target, version_on: latest_content_version_date).pluck(:content_block_id)).map do |cb|
           next unless cb.created_at.to_date == Date.today
 
-          cb.id
+          cb
         end.compact
-        ContentBlock.where(id: ids_to_delete)
       end
     end
 
     def delete_todays_version
       return unless latest_content_version_date == Date.today
 
-      blocks_to_delete = content_blocks_created_today
       @target.latest_content_versions.destroy_all
-      blocks_to_delete.destroy_all
+      content_blocks_created_today.destroy_all
     end
 
     def duplicate_requested_version
       content_versions.each do |version|
         new_version = version.dup
+        new_version.version_on = Date.today
         new_version.save!
-        new_version.update!(version_on: Date.today)
       end
     end
   end

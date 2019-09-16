@@ -6,10 +6,10 @@ class ContentVersionResolver < ApplicationResolver
       if target.content_versions.present?
         target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
       else
-        []
+        ContentVersion.none
       end
     else
-      School.none
+      ContentVersion.none
     end
   end
 

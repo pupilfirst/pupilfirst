@@ -8,7 +8,7 @@ class ContentBlockResolver < ApplicationResolver
         latest_content(target)
       end
     else
-      School.none
+      ContentBlock.none
     end
   end
 

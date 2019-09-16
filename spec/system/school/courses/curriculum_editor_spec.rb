@@ -525,8 +525,8 @@ feature 'Curriculum Editor', js: true do
 
       expect(target.reload.current_content_blocks.count).to eq(5)
       expect(latest_content_versions(target).pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
-      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(2)
-      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(5)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(5)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(4)
 
       # Move a block down
       within('#content-block-controls-1') do
@@ -543,12 +543,12 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(1)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'image' }).last.sort_index).to eq(1)
       expect(latest_content_versions(target).find_by(sort_index: 2).content_block.block_type).to eq('markdown')
 
       # Move a block up
-      within('#content-block-controls-5') do
-        find_button('Move up').click
+      within('#content-block-controls-4') do
+        find_button('Move down').click
       end
 
       within('#content-block-form-2') do
@@ -560,11 +560,11 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Content updated successfully')
       dismiss_notification
 
-      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(4)
-      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'image' }).last.sort_index).to eq(5)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(4)
+      expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.sort_index).to eq(5)
 
       # Update a file title
-      within('#content-block-form-4') do
+      within('#content-block-form-5') do
         fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
         click_button 'Update Title'
       end
@@ -575,7 +575,7 @@ feature 'Curriculum Editor', js: true do
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.content_block.content['title']).to eq('new file title')
 
       # Update an image caption
-      within('#content-block-form-5') do
+      within('#content-block-form-1') do
         fill_in 'content_block[caption]', with: 'new image caption', fill_options: { clear: :backspace }
         click_button 'Update Caption'
       end
@@ -587,7 +587,7 @@ feature 'Curriculum Editor', js: true do
 
       # Delete few content block
       accept_confirm do
-        within('#content-block-controls-5') do
+        within('#content-block-controls-1') do
           find_button('Delete block').click
         end
       end
@@ -597,7 +597,7 @@ feature 'Curriculum Editor', js: true do
       expect(latest_content_versions(target).pluck(:sort_index).sort).to eq([1, 2, 3, 4])
 
       accept_confirm do
-        within('#content-block-controls-3') do
+        within('#content-block-controls-2') do
           find_button('Delete block').click
         end
       end

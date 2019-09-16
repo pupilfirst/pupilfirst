@@ -68,7 +68,7 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_selector('.add-content-block--open', count: 1)
 
       # Update a content block
-      within('#content-block-form-4') do
+      within('#content-block-form-3') do
         fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
         click_button 'Update Title'
       end
@@ -140,8 +140,8 @@ feature 'Target Content Version Management', js: true do
         expect(page).to have_selector('.add-content-block--open', count: 1)
 
         # Update a content block
-        block_to_update = target_1.content_versions.where(sort_index: 4).first.content_block
-        within('#content-block-form-4') do
+        block_to_update = target_1.content_versions.where(sort_index: 3).first.content_block
+        within('#content-block-form-3') do
           fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
           click_button 'Update Title'
         end
@@ -149,7 +149,7 @@ feature 'Target Content Version Management', js: true do
         dismiss_notification
 
         target_content_versions = target_1.content_versions.reload
-        expect(block_to_update.id).to_not eq(target_1.latest_content_versions.where(sort_index: 4).first.content_block_id)
+        expect(block_to_update.id).to_not eq(target_1.latest_content_versions.where(sort_index: 3).first.content_block_id)
         expect(target_content_versions.where(version_on: Date.today).count).to eq(4)
         expect(target_content_versions.where(version_on: 2.days.ago).count).to eq(4)
         expect(target_content_versions.where(version_on: 5.days.ago).count).to eq(2)
@@ -210,13 +210,13 @@ feature 'Target Content Version Management', js: true do
         end
         sleep 2
         expect(page).to have_selector('.content-block__content', count: 3)
-        within('#content-block-form-1') do
+        within('#content-block-form-2') do
           expect(page).to have_button('Update Caption', disabled: true)
         end
         target_1.content_versions.reload
         expect(target_1.latest_content_versions.count).to eq(3)
-        expect(target_1.latest_content_versions.where(sort_index: 2).first.content_block.block_type).to eq('embed')
-        expect(target_1.latest_content_versions.where(sort_index: 1).first.content_block.block_type).to eq('image')
+        expect(target_1.latest_content_versions.where(sort_index: 3).first.content_block.block_type).to eq('embed')
+        expect(target_1.latest_content_versions.where(sort_index: 1).first.content_block.block_type).to eq('file')
       end
     end
 
@@ -230,6 +230,14 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_text(format_date(3.days.ago))
       expect(page).to have_selector('.target-editor__version-dropdown-list-item', count: 2)
       find('#version-selection-list').find('li', text: format_date(3.days.ago)).click
+      expect(page).to have_button('Restore this version')
+      accept_confirm do
+        find_button('Restore this version').click
+      end
+      expect(page).to have_button('Edit')
+      target_1.content_versions.reload
+
+      expect(target_1.content_versions.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)).to eq([cb_1.id, cb_2.id])
     end
   end
 end

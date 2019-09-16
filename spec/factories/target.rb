@@ -31,13 +31,13 @@ FactoryBot.define do
 
     trait :with_content do
       after(:create) do |target|
-        create(:content_block, :embed)
+        create(:content_block, :image)
         target.content_versions.create!(content_block: ContentBlock.last, sort_index: 1, version_on: Date.today)
         create(:content_block, :markdown)
         target.content_versions.create!(content_block: ContentBlock.last, sort_index: 2, version_on: Date.today)
-        create(:content_block, :image)
-        target.content_versions.create!(content_block: ContentBlock.last, sort_index: 3, version_on: Date.today)
         create(:content_block, :file)
+        target.content_versions.create!(content_block: ContentBlock.last, sort_index: 3, version_on: Date.today)
+        create(:content_block, :embed)
         target.content_versions.create!(content_block: ContentBlock.last, sort_index: 4, version_on: Date.today)
       end
     end

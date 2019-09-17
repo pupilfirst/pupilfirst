@@ -64,38 +64,44 @@ let levelNumber = (levels, levelId) =>
 
 let headerSection = (submission, levels, setSelectedSubmission) =>
   <div
-    className="bg-gray-100 border-b border-gray-300 px-3 pt-16 xl:pt-10 flex justify-center">
+    className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
     <div
-      className="relative bg-white border p-6 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
+      className="relative bg-white border border-gray-400 lg:border-gray-300 p-4 lg:p-6 flex items-center justify-between rounded-lg shadow-md container max-w-3xl -mb-12">
       <div
         onClick={_ => setSelectedSubmission(_ => None)}
-        className="course-review-submission-overlay__close absolute h-full border bg-white rounded-lg px-4 items-center flex flex-col justify-center hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
-        <i className="far fa-times-circle text-xl" />
-        {"Close" |> str}
+        className="course-review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-b lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+        <Icon className="if i-times-light text-xl lg:text-2xl" />
+        <span className="text-xs hidden lg:inline-block mt-px">
+          {"close" |> str}
+        </span>
       </div>
-      <div>
-        <div className="flex items-center text-sm">
-          <span className="bg-gray-400 py-px px-2 rounded-lg font-semibold">
+      <div className="md:pr-3">
+        <div className="block md:flex md:items-center text-sm">
+          <span
+            className="inline-block bg-gray-300 text-xs font-semibold mr-2 px-2 py-px rounded">
             {submission |> Submission.levelId |> levelNumber(levels) |> str}
           </span>
-          <span className="ml-2 font-semibold">
+          <span
+            className="inline-block md:block font-semibold text-sm md:text-lg">
             {submission |> Submission.title |> str}
           </span>
         </div>
-        <div className="text-left mt-1 text-xs text-gray-600">
-          <span> {submission |> Submission.userNames |> str} </span>
-          <span className="ml-2">
-            {
-              "Submitted on "
-              ++ (submission |> Submission.createdAtPretty)
-              |> str
-            }
+        <div className="text-left mt-1 text-xs text-gray-800">
+          <span> {"Submitted by " |> str} </span>
+          <span className="font-semibold">
+            {submission |> Submission.userNames |> str}
+          </span>
+          <span className="ml-1">
+            {"on " ++ (submission |> Submission.createdAtPretty) |> str}
           </span>
         </div>
       </div>
-      <div className="text-xs">
-        {submission |> Submission.timeDistance |> str}
-      </div>
+      <a
+        href="#"
+        target="_blank"
+        className="btn btn-primary-ghost btn-small hidden md:inline-block">
+        {"View Target " |> str}
+      </a>
     </div>
   </div>;
 
@@ -124,7 +130,7 @@ let make =
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     {headerSection(submission, levels, setSelectedSubmission)}
     <div
-      className="container mx-auto mt-16 md:mt-18 max-w-3xl px-4 lg:px-0 pb-8">
+      className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
       {
         state.loading ?
           <div> {"Loading" |> str} </div> :

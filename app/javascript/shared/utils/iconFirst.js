@@ -15,6 +15,10 @@ const getIconData = className => {
 
 const viewboxClass = width => {
   switch (width) {
+    case 320:
+      return " if-w-10";
+    case 384:
+      return " if-w-12";
     case 448:
       return " if-w-14";
     case 576:

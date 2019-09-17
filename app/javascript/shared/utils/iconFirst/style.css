@@ -7,6 +7,18 @@
   vertical-align: -0.125em;
 }
 
+/* svg viewBox width: 320px */
+
+.if-svg-icon__baseline.if-w-10 {
+  width: 0.625em;
+}
+
+/* svg viewBox width: 384px */
+
+.if-svg-icon__baseline.if-w-12 {
+  width: 0.75em;
+}
+
 /* svg viewBox width: 448px */
 
 .if-svg-icon__baseline.if-w-14 {

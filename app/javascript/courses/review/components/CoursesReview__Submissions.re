@@ -44,7 +44,10 @@ let iconSpan = (iconClasses, attachment) => {
     | Some(_) => "far fa-file"
     | None => "fas fa-link"
     };
-  <span className={"flex p-2 " ++ iconClasses}>
+  <span
+    className={
+      "flex h-full w-8 justify-center items-center p-2 " ++ iconClasses
+    }>
     <i className=faClasses />
   </span>;
 };
@@ -53,8 +56,8 @@ let showSubmissions = attachments =>
   switch (attachments) {
   | [] => React.null
   | attachments =>
-    <div className="mt-4">
-      <div className="text-xs font-semibold"> {"Attachments" |> str} </div>
+    <div className="mt-3">
+      <h5 className="text-xs font-semibold"> {"Attachments" |> str} </h5>
       <div className="flex flex-wrap">
         {
           attachments
@@ -70,7 +73,7 @@ let showSubmissions = attachments =>
                  switch (attachment |> SubmissionDetails.title) {
                  | Some(title) => (
                      "file-" ++ (attachment |> SubmissionDetails.url),
-                     "border-primary-200 bg-primary-200",
+                     "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
                      "bg-primary-200",
                      "bg-primary-100",
                      title,
@@ -78,7 +81,7 @@ let showSubmissions = attachments =>
                    )
                  | None => (
                      attachment |> SubmissionDetails.url,
-                     "border-blue-200 bg-blue-200",
+                     "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
                      "bg-blue-200",
                      "bg-blue-100",
                      attachment |> SubmissionDetails.url,
@@ -86,25 +89,22 @@ let showSubmissions = attachments =>
                    )
                  };
 
-               <span
-                 key
+               <a
+                 href=url
+                 target="_blank"
                  className={
-                   "mt-2 mr-2 flex items-center border-2 rounded "
+                   "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md  "
                    ++ containerClasses
                  }>
                  {iconSpan(iconClasses, attachment)}
                  <span
                    className={
-                     "rounded px-2 py-1 truncate rounded " ++ textClasses
+                     "course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose "
+                     ++ textClasses
                    }>
-                   <a
-                     href=url
-                     target="_blank"
-                     className="course-show-attachments__attachment-title text-xs font-semibold text-primary-600 inline-block truncate align-text-bottom">
-                     {text |> str}
-                   </a>
+                   {text |> str}
                  </span>
-               </span>;
+               </a>;
              })
           |> Array.of_list
           |> React.array
@@ -116,11 +116,24 @@ let showSubmissions = attachments =>
 let showFeedback = feedback =>
   feedback
   |> List.map(f =>
-       <div className="p-4 border border-l-0 border-r-0">
-         <MarkdownBlock
-           profile=Markdown.Permissive
-           markdown={f |> SubmissionDetails.value}
-         />
+       <div className="border-t p-4 md:p-6 flex">
+         <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full" />
+         <div className="flex-grow ml-3">
+           <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
+           <div>
+             <h4 className="font-semibold text-base inline-block">
+               {"coachName" |> str}
+             </h4>
+             <span className="inline-block text-xs text-gray-700 ml-1">
+               {"(Title)" |> str}
+             </span>
+           </div>
+           <MarkdownBlock
+             className="mt-3"
+             profile=Markdown.Permissive
+             markdown={f |> SubmissionDetails.value}
+           />
+         </div>
        </div>
      )
   |> Array.of_list
@@ -129,9 +142,12 @@ let showFeedback = feedback =>
 [@react.component]
 let make = (~authenticityToken, ~submission, ~gradeLabels) => {
   let (state, setState) = React.useState(() => {submission: submission});
-  <div className="mt-2 rounded-lg bg-white shadow shadow overflow-hidden">
-    <div className="p-4 md:p-6 flex items-center justify-between">
-      <div> {"submission" |> str} </div>
+  <div className="mt-6 rounded-lg bg-white border shadow overflow-hidden">
+    <div
+      className="p-4 md:px-6 md:py-5 border-b bg-white flex items-center justify-between">
+      <h2 className="font-semibold text-sm lg:text-base">
+        {"Submission" |> str}
+      </h2>
       <div className="text-xs flex">
         {
           showFeedbackSent(
@@ -141,7 +157,7 @@ let make = (~authenticityToken, ~submission, ~gradeLabels) => {
         {showSubmissionStatus(submission)}
       </div>
     </div>
-    <div className="p-4 md:p-6 bg-gray-200">
+    <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
       <MarkdownBlock
         profile=Markdown.Permissive
         markdown={submission |> SubmissionDetails.description}

@@ -24,7 +24,7 @@
 
   p Here is some feedback from #{coach_name} on your #{update_for}:
 
-  blockquote = simple_format(@startup_feedback.feedback)
+  blockquote =  sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe
 
   - if target.present?
     p You can view #{link_to 'the full feedback'.html_safe, target_url}, including any files attached to the feedback.

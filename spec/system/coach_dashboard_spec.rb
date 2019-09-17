@@ -189,12 +189,12 @@ feature 'Coach Dashboard' do
       expect(page).to_not have_selector('.feedback-form__trix-container')
       # Let's add a feedback
       click_on 'Email Feedback'
-      find('trix-editor').click.set 'Some important feedback'
+      fill_in 'feedback-form__textArea', with: 'Some important feedback'
       click_on 'Send'
       # form should now be hidden
       expect(page).to_not have_selector('.feedback-form__trix-container')
       # and a feedback created for the event
-      expect(StartupFeedback.last.feedback).to eq('<div>Some important feedback</div>')
+      expect(StartupFeedback.last.feedback).to eq('Some important feedback')
 
       # The feedback should have been sent as an email.
       open_email(student.email)

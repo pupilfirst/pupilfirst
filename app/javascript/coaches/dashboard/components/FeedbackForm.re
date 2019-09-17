@@ -139,7 +139,13 @@ let make =
       {
         if (state.showForm) {
           <div className="feedback-form__trix-container py-3">
-            <textArea className="w-100" onChange=(e => updateFeedbackCB(ReactEvent.Form.target(e)##value)) ></textArea>
+            <textArea
+              id="feedback-form__textArea"
+              className="w-100"
+              onChange={
+                e => updateFeedbackCB(ReactEvent.Form.target(e)##value)
+              }
+            />
             <button
               className="btn btn-secondary mt-2 mr-2"
               onClick={

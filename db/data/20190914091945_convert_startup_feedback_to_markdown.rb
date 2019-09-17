@@ -1,6 +1,6 @@
 class ConvertStartupFeedbackToMarkdown < ActiveRecord::Migration[5.2]
   def replace_divs(html)
-    html.gsub(/<div>\n?/, '').gsub(/<\/div>\n?/, '<br/>').gsub(/ \n?/, '<br/>')
+    html.gsub(/<div>\n?/, '').gsub(/<\/div>\n?/, '<br/>').gsub(' \n', '<br/>')
   end
 
   def up

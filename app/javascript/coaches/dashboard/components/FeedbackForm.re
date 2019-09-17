@@ -147,6 +147,7 @@ let make =
             <textArea
               id="feedback-form__textArea"
               className="w-100"
+              rows=6
               onChange={
                 e => updateFeedbackCB(ReactEvent.Form.target(e)##value)
               }

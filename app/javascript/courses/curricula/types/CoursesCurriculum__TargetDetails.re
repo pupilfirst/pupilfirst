@@ -4,7 +4,7 @@ type t = {
   submissionAttachments: list(CoursesCurriculum__SubmissionAttachment.t),
   feedback: list(CoursesCurriculum__Feedback.t),
   quizQuestions: list(CoursesCurriculum__QuizQuestion.t),
-  contentBlocks: list(CoursesCurriculum__ContentBlock.t),
+  contentBlocks: list(ContentBlock.t),
   communities: list(CoursesCurriculum__Community.t),
   linkToComplete: option(string),
   evaluated: bool,
@@ -40,9 +40,7 @@ let decode = json =>
     quizQuestions:
       json
       |> field("quizQuestions", list(CoursesCurriculum__QuizQuestion.decode)),
-    contentBlocks:
-      json
-      |> field("contentBlocks", list(CoursesCurriculum__ContentBlock.decode)),
+    contentBlocks: json |> field("contentBlocks", list(ContentBlock.decode)),
     communities:
       json |> field("communities", list(CoursesCurriculum__Community.decode)),
     linkToComplete:

@@ -3,7 +3,6 @@ module Level = CoursesCurriculum__Level;
 module TargetGroup = CoursesCurriculum__TargetGroup;
 module Target = CoursesCurriculum__Target;
 module TargetDetails = CoursesCurriculum__TargetDetails;
-module ContentBlock = CoursesCurriculum__ContentBlock;
 module LatestSubmission = CoursesCurriculum__LatestSubmission;
 module Submission = CoursesCurriculum__Submission;
 module SubmissionAttachment = CoursesCurriculum__SubmissionAttachment;

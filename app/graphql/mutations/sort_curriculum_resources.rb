@@ -8,15 +8,11 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = SortCurriculumResourceMutator.new(params, context)
+      mutator = SortCurriculumResourcesMutator.new(params, context)
 
       if mutator.valid?
         mutator.sort
-        mutator.notify(:success, "Done!", "sort_index updated successfully")
         { success: true }
-      else
-        mutator.notify_errors
-        { success: false, errors: mutator.error_codes }
       end
     end
   end

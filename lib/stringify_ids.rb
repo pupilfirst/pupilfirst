@@ -8,7 +8,7 @@ module StringifyIds
         stringify_ids_in_array(string_key, original_value)
       elsif original_value.respond_to?(:key?)
         stringify_ids(original_value)
-      elsif string_key == 'id' || string_key.ends_with?('_id') && original_value.is_a?(Numeric)
+      elsif (string_key == 'id' || string_key.ends_with?('_id')) && original_value.is_a?(Numeric)
         original_value.to_s
       else
         original_value

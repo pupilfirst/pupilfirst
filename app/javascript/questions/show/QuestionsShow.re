@@ -100,6 +100,7 @@ let make =
       ~communityPath,
       ~isCoach,
       ~communityId,
+      ~target,
     ) => {
   let (state, dispatch) =
     React.useReducer(
@@ -177,6 +178,33 @@ let make =
                 <span className="ml-2"> {"Back" |> str} </span>
               </a>
             </div>
+            {
+              switch (target) {
+              | Some(target) =>
+                <div className="max-w-3xl w-full mt-5 mx-auto">
+                  <div
+                    className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
+                    <p className="w-3/5 md:w-4/5 text-sm">
+                      <span className="font-semibold block text-xs">
+                        {"Linked Target: " |> str}
+                      </span>
+                      <span> {target |> Target.title |> str} </span>
+                    </p>
+                    {
+                      switch (target |> Target.id) {
+                      | Some(id) =>
+                        <a
+                          href={"/targets/" ++ id} className="btn btn-default">
+                          {"View Target" |> str}
+                        </a>
+                      | None => React.null
+                      }
+                    }
+                  </div>
+                </div>
+              | None => React.null
+              }
+            }
             <div
               className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden z-10">
               <div className="flex w-full">

@@ -22,11 +22,16 @@ module Schools
 
     def content_block_data(content_block)
       content_block_data = { id: content_block.id.to_s, content: content_block.content, error: nil }
-      content_block.file.attached? ? content_block_data.merge(fileUrl: url_for(content_block.file)) : content_block_data
+      content_block.file.attached? ? content_block_data.merge!(fileUrl: url_for(content_block.file)) : content_block_data
+      content_block_data.merge(versions: target_versions)
     end
 
     def content_block_params
       params[:content_block].merge(target_id: params[:target_id], content_sort_indices: JSON.parse(params[:content_sort_indices]))
+    end
+
+    def target_versions
+      Target.find(params[:target_id]).content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
     end
   end
 end

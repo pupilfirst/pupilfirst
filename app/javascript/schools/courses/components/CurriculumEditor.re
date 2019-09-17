@@ -6,7 +6,6 @@ type props = {
   levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
-  contentBlocks: list(ContentBlock.t),
   authenticityToken: string,
 };
 
@@ -21,7 +20,6 @@ type state = {
   editorAction,
   levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
-  contentBlocks: list(ContentBlock.t),
   targets: list(Target.t),
   showArchived: bool,
 };
@@ -32,12 +30,9 @@ type action =
   | UpdateLevels(Level.t)
   | UpdateTargetGroup(TargetGroup.t, editorAction)
   | UpdateTargetGroups(list(TargetGroup.t))
-  | UpdateTarget(Target.t, list(ContentBlock.t))
+  | UpdateTarget(Target.t)
   | UpdateTargets(list(Target.t))
-  | RemoveContentBlock(string)
-  | AddContentBlock(ContentBlock.t)
-  | ToggleShowArchived
-  | UpdateContentBlocks(list(ContentBlock.t));
+  | ToggleShowArchived;
 
 let str = ReasonReact.string;
 
@@ -61,7 +56,7 @@ let showArchivedButton = (targetGroupsInLevel, targets) => {
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0;
 };
 
-let updateTagetSortIndex = (state, send, sortedTargets) => {
+let updateTargetSortIndex = (state, send, sortedTargets) => {
   let oldTargets =
     state.targets |> List.filter(t => !(sortedTargets |> List.mem(t)));
   send(
@@ -71,7 +66,7 @@ let updateTagetSortIndex = (state, send, sortedTargets) => {
   );
 };
 
-let updateTagetGroupSortIndex = (state, send, sortedTargetGroups) => {
+let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
   let oldTargetGroups =
     state.targetGroups
     |> List.filter(t => !(sortedTargetGroups |> List.mem(t)));
@@ -90,7 +85,6 @@ let make =
       ~levels,
       ~targetGroups,
       ~targets,
-      ~contentBlocks,
       ~authenticityToken,
       _children,
     ) => {
@@ -102,7 +96,6 @@ let make =
       |> List.hd,
     editorAction: Hidden,
     targetGroups,
-    contentBlocks,
     levels,
     targets,
     showArchived: false,
@@ -131,34 +124,12 @@ let make =
       });
     | UpdateTargetGroups(targetGroups) =>
       ReasonReact.Update({...state, targetGroups})
-    | UpdateTarget(target, contentBlocks) =>
+    | UpdateTarget(target) =>
       let newtargets = target |> Target.updateList(state.targets);
-      let newContentBlocks =
-        state.contentBlocks
-        |> List.filter(cb => ContentBlock.targetId(cb) != Target.id(target))
-        |> List.append(contentBlocks);
-      ReasonReact.Update({
-        ...state,
-        targets: newtargets,
-        contentBlocks: newContentBlocks,
-      });
+      ReasonReact.Update({...state, targets: newtargets});
     | ToggleShowArchived =>
       ReasonReact.Update({...state, showArchived: !state.showArchived})
     | UpdateTargets(targets) => ReasonReact.Update({...state, targets})
-    | RemoveContentBlock(contentBlockId) =>
-      ReasonReact.Update({
-        ...state,
-        contentBlocks:
-          state.contentBlocks
-          |> List.filter(cb => ContentBlock.id(cb) != contentBlockId),
-      })
-    | AddContentBlock(contentBlock) =>
-      ReasonReact.Update({
-        ...state,
-        contentBlocks: List.append(contentBlocks, [contentBlock]),
-      })
-    | UpdateContentBlocks(contentBlocks) =>
-      ReasonReact.Update({...state, contentBlocks})
     },
   render: ({state, send}) => {
     let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
@@ -184,7 +155,7 @@ let make =
     let showTargetGroupEditorCB = targetGroup =>
       send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
 
-    let updateTargetCB = (target, contentBlocks, closeEditor) => {
+    let updateTargetCB = (target, closeEditor) => {
       let targetGroup =
         state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
 
@@ -196,7 +167,7 @@ let make =
         closeEditor ?
           Hidden : ShowTargetEditor(newTargetGroup |> TargetGroup.id, target);
 
-      send(UpdateTarget(target, contentBlocks));
+      send(UpdateTarget(target));
       send(UpdateTargetGroup(newTargetGroup, editorAction));
     };
 
@@ -219,13 +190,6 @@ let make =
       send(UpdateTargetGroup(targetGroup, Hidden));
     };
 
-    let updateContentBlocksCB = (targetId, contentBlocks) => {
-      let updatedContentBlocks =
-        state.contentBlocks
-        |> List.filter(cb => ContentBlock.targetId(cb) != targetId)
-        |> List.append(contentBlocks);
-      send(UpdateContentBlocks(updatedContentBlocks));
-    };
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 md:hidden shadow border-b">
         <button
@@ -239,23 +203,16 @@ let make =
         switch (state.editorAction) {
         | Hidden => ReasonReact.null
         | ShowTargetEditor(targetGroupId, target) =>
-          let targetContentBlocks =
-            state.contentBlocks
-            |> List.filter(contentBlock =>
-                 ContentBlock.targetId(contentBlock) == Target.id(target)
-               );
           <CurriculumEditor__TargetEditor.Jsx2
             target
             targetGroupId
-            contentBlocks=targetContentBlocks
             evaluationCriteria
             targets={state.targets}
             targetGroupIdsInLevel
             authenticityToken
             updateTargetCB
             hideEditorActionCB
-            updateContentBlocksCB
-          />;
+          />
         | ShowTargetGroupEditor(targetGroup) =>
           <CurriculumEditor__TargetGroupEditor
             targetGroup
@@ -367,9 +324,11 @@ let make =
                    updateTargetCB
                    showArchived={state.showArchived}
                    authenticityToken
-                   updateTagetSortIndexCB={updateTagetSortIndex(state, send)}
-                   updateTagetGroupSortIndexCB={
-                     updateTagetGroupSortIndex(state, send)
+                   updateTargetSortIndexCB={
+                     updateTargetSortIndex(state, send)
+                   }
+                   updateTargetGroupSortIndexCB={
+                     updateTargetGroupSortIndex(state, send)
                    }
                    authenticityToken
                    index
@@ -404,7 +363,6 @@ let decode = json =>
     levels: json |> field("levels", list(Level.decode)),
     targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
     targets: json |> field("targets", list(Target.decode)),
-    contentBlocks: json |> field("contentBlocks", list(ContentBlock.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -419,7 +377,6 @@ let jsComponent =
         ~levels=props.levels,
         ~targetGroups=props.targetGroups,
         ~targets=props.targets,
-        ~contentBlocks=props.contentBlocks,
         ~authenticityToken=props.authenticityToken,
         [||],
       );

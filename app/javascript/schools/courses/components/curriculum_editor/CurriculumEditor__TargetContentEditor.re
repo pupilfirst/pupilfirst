@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-open CurriculumEditor__Types;
-
 let str = React.string;
 
 module SortContentBlockMutation = [%graphql
@@ -9,6 +7,7 @@ module SortContentBlockMutation = [%graphql
    mutation($contentBlockIds: [ID!]!) {
     sortContentBlocks(contentBlockIds: $contentBlockIds) {
        success
+       versions
      }
    }
    |}
@@ -18,6 +17,7 @@ let updateContentBlockSorting =
     (
       contentBlocks,
       authenticityToken,
+      addNewVersionCB,
       sortContentBlock,
       toggleSortContentBlock,
       (),
@@ -36,7 +36,13 @@ let updateContentBlockSorting =
   if (sortContentBlock == true) {
     SortContentBlockMutation.make(~contentBlockIds, ())
     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=false)
-    |> Js.Promise.then_(_response => Js.Promise.resolve())
+    |> Js.Promise.then_(response => {
+         let versions =
+           response##sortContentBlocks##versions
+           |> Array.map(version => version |> Json.Decode.string);
+         addNewVersionCB(versions);
+         Js.Promise.resolve();
+       })
     |> ignore;
     toggleSortContentBlock(_ => false);
   } else {
@@ -45,29 +51,29 @@ let updateContentBlockSorting =
   None;
 };
 
-let updateContentBlockMasterList =
-    (sortedContentBlocks, updateContentBlocksCB, targetId) => {
-  let updatedCBs =
-    sortedContentBlocks
-    |> List.filter(((_, _, cb, _)) =>
-         switch (cb) {
-         | Some(_) => true
-         | None => false
-         }
-       )
-    |> List.map(((sortIndex, blockType, _, id)) =>
-         ContentBlock.make(id, blockType, targetId, sortIndex)
-       );
-  updateContentBlocksCB(targetId, updatedCBs);
-};
-
 let removeTargetContentCB =
-    (updateTargetContentBlocks, toggleSortContentBlock, sortIndex) => {
-  updateTargetContentBlocks(targetContentBlocks =>
-    targetContentBlocks
+    (
+      contentBlock,
+      sortedContentBlocks,
+      addNewVersionCB,
+      updateTargetContentBlocks,
+      toggleSortContentBlock,
+      sortIndex,
+      versions,
+    ) => {
+  let updatedContentBlockList =
+    sortedContentBlocks
     |> List.filter(((index, _, _, _)) => sortIndex != index)
-  );
+    |> List.mapi((index, (_, blockType, contentBlock, id)) =>
+         (index + 1, blockType, contentBlock, id)
+       );
+  updateTargetContentBlocks(_ => updatedContentBlockList);
+
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
+  switch (contentBlock) {
+  | Some(_cb) => addNewVersionCB(versions)
+  | None => ()
+  };
 };
 
 let newContentBlockCB =
@@ -122,7 +128,8 @@ let swapContentBlockCB =
   toggleSortContentBlock(sortContentBlock => !sortContentBlock);
 };
 
-let createNewContentCB = (updateTargetContentBlocks, contentBlock) => {
+let createNewContentCB =
+    (addNewVersionCB, updateTargetContentBlocks, contentBlock, versions) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
@@ -136,47 +143,43 @@ let createNewContentCB = (updateTargetContentBlocks, contentBlock) => {
        )
     |> List.append([newContentBlock])
   );
+  addNewVersionCB(versions);
 };
 
-let updateContentBlockCB = (updateTargetContentBlocks, contentBlock) => {
+let updateContentBlockCB =
+    (
+      addNewVersionCB,
+      updateTargetContentBlocks,
+      contentBlock,
+      currentId,
+      versions,
+    ) => {
   let newContentBlock = (
     ContentBlock.sortIndex(contentBlock),
     ContentBlock.blockType(contentBlock),
     Some(contentBlock),
     ContentBlock.id(contentBlock),
   );
-
   updateTargetContentBlocks(targetContentBlocks =>
     targetContentBlocks
-    |> List.filter(((_, _, _, id)) => id != ContentBlock.id(contentBlock))
+    |> List.filter(((_, _, _, id)) => id != currentId)
     |> List.append([newContentBlock])
   );
+  addNewVersionCB(versions);
 };
 
 [@react.component]
 let make =
     (
       ~target,
+      ~previewMode,
       ~contentBlocks,
-      ~updateContentBlocksCB,
+      ~addNewVersionCB,
       ~updateContentEditorDirtyCB,
       ~authenticityToken,
     ) => {
   let (targetContentBlocks, updateTargetContentBlocks) =
-    React.useState(() =>
-      contentBlocks
-      |> List.sort((x, y) =>
-           ContentBlock.sortIndex(x) - ContentBlock.sortIndex(y)
-         )
-      |> List.mapi((index, cb) =>
-           (
-             index + 1,
-             cb |> ContentBlock.blockType,
-             Some(cb),
-             cb |> ContentBlock.id,
-           )
-         )
-    );
+    React.useState(() => []);
   let (sortContentBlock, toggleSortContentBlock) =
     React.useState(() => false);
 
@@ -192,6 +195,7 @@ let make =
     updateContentBlockSorting(
       sortedContentBlocks,
       authenticityToken,
+      addNewVersionCB,
       sortContentBlock,
       toggleSortContentBlock,
     ),
@@ -204,68 +208,115 @@ let make =
   React.useEffect1(
     () => {
       updateContentEditorDirtyCB(contentEditorDirty);
-
-      updateContentBlockMasterList(
-        targetContentBlocks,
-        updateContentBlocksCB,
-        target |> Target.id,
-      );
       None;
     },
     [|contentEditorDirty|],
   );
 
-  [|
-    <CurriculumEditor__ContentTypePicker
-      key="static-content-picker"
-      sortIndex={
-        switch (sortedContentBlocks) {
-        | [] => 1
-        | nonEmptyList =>
-          let (sortIndex, _, _, _) = nonEmptyList |> List.rev |> List.hd;
-          sortIndex + 1;
+  let initialRender = React.useRef(true);
+
+  React.useEffect1(
+    () => {
+      if (initialRender |> React.Ref.current) {
+        initialRender->React.Ref.setCurrent(false);
+      } else {
+        let cachedContentBlocks =
+          contentBlocks
+          |> List.sort((x, y) =>
+               ContentBlock.sortIndex(x) - ContentBlock.sortIndex(y)
+             )
+          |> List.mapi((index, cb) =>
+               (
+                 index + 1,
+                 cb |> ContentBlock.blockType,
+                 Some(cb),
+                 cb |> ContentBlock.id,
+               )
+             );
+        updateTargetContentBlocks(_ => cachedContentBlocks);
+      };
+      None;
+    },
+    [|contentBlocks|],
+  );
+  switch (previewMode) {
+  | false =>
+    [|
+      <CurriculumEditor__ContentTypePicker
+        key="static-content-picker"
+        sortIndex={
+          switch (sortedContentBlocks) {
+          | [] => 1
+          | nonEmptyList =>
+            let (sortIndex, _, _, _) = nonEmptyList |> List.rev |> List.hd;
+            sortIndex + 1;
+          }
         }
-      }
-      staticMode=true
-      newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
-    />,
-  |]
-  |> Array.append(
-       sortedContentBlocks
-       |> List.map(((sortIndex, blockType, contentBlock, id)) =>
-            <CurriculumEditor__ContentBlockEditor
-              key=id
-              editorId=id
-              target
-              contentBlock
-              removeTargetContentCB={
-                removeTargetContentCB(
-                  updateTargetContentBlocks,
-                  toggleSortContentBlock,
-                )
-              }
-              blockType
-              sortIndex
-              newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
-              createNewContentCB={
-                createNewContentCB(updateTargetContentBlocks)
-              }
-              updateContentBlockCB={
-                updateContentBlockCB(updateTargetContentBlocks)
-              }
-              blockCount={targetContentBlocks |> List.length}
-              swapContentBlockCB={
-                swapContentBlockCB(
-                  targetContentBlocks,
-                  updateTargetContentBlocks,
-                  toggleSortContentBlock,
-                )
-              }
-              targetContentBlocks
-              authenticityToken
-            />
-          )
-       |> Array.of_list,
-     )
-  |> React.array;
+        staticMode=true
+        newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
+      />,
+    |]
+    |> Array.append(
+         sortedContentBlocks
+         |> List.map(((sortIndex, blockType, contentBlock, id)) =>
+              <CurriculumEditor__ContentBlockEditor
+                key=id
+                editorId=id
+                target
+                contentBlock
+                removeTargetContentCB={
+                  removeTargetContentCB(
+                    contentBlock,
+                    sortedContentBlocks,
+                    addNewVersionCB,
+                    updateTargetContentBlocks,
+                    toggleSortContentBlock,
+                  )
+                }
+                blockType
+                sortIndex
+                newContentBlockCB={
+                  newContentBlockCB(updateTargetContentBlocks)
+                }
+                createNewContentCB={
+                  createNewContentCB(
+                    addNewVersionCB,
+                    updateTargetContentBlocks,
+                  )
+                }
+                updateContentBlockCB={
+                  updateContentBlockCB(
+                    addNewVersionCB,
+                    updateTargetContentBlocks,
+                  )
+                }
+                blockCount={targetContentBlocks |> List.length}
+                swapContentBlockCB={
+                  swapContentBlockCB(
+                    sortedContentBlocks,
+                    updateTargetContentBlocks,
+                    toggleSortContentBlock,
+                  )
+                }
+                targetContentBlocks
+                authenticityToken
+              />
+            )
+         |> Array.of_list,
+       )
+    |> React.array
+  | true =>
+    let persistedBlocks =
+      sortedContentBlocks
+      |> List.map(((sortIndex, blockType, cb, _)) =>
+           switch (cb) {
+           | Some(cb) => [
+               ContentBlock.make(cb |> ContentBlock.id, blockType, sortIndex),
+             ]
+           | None => []
+           }
+         )
+      |> List.flatten;
+    <TargetContentView contentBlocks=persistedBlocks />;
+  };
 };

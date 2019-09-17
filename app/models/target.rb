@@ -34,10 +34,9 @@ class Target < ApplicationRecord
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
-  has_many :content_blocks, dependent: :destroy
+  has_many :content_versions, dependent: :destroy
   has_many :target_questions, dependent: :destroy
   has_many :questions, through: :target_questions
-  has_many :target_content_versions, dependent: :destroy
 
   acts_as_taggable
 
@@ -194,8 +193,21 @@ class Target < ApplicationRecord
     end
   end
 
-  def latest_content_version
-    latest_version = target_content_versions.order('updated_at DESC').last
-    return if latest_version.blank?
+  def latest_content_version_date
+    return if content_versions.blank?
+
+    content_versions.maximum(:version_on)
+  end
+
+  def current_content_blocks
+    return if content_versions.blank?
+
+    ContentBlock.where(id: content_versions.where(version_on: latest_content_version_date).select(:content_block_id))
+  end
+
+  def latest_content_versions
+    return if content_versions.blank?
+
+    content_versions.where(version_on: latest_content_version_date)
   end
 end

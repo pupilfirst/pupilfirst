@@ -12,6 +12,7 @@ type props = {
   communityPath: string,
   isCoach: bool,
   communityId: string,
+  target: option(Target.t),
 };
 
 let decodeProps = json =>
@@ -26,6 +27,8 @@ let decodeProps = json =>
     communityPath: json |> field("communityPath", string),
     isCoach: json |> field("isCoach", bool),
     communityId: json |> field("communityId", string),
+    target:
+      json |> field("target", nullable(Target.decode)) |> Js.Null.toOption,
   };
 
 let props = DomUtils.parseJsonAttribute() |> decodeProps;
@@ -42,6 +45,7 @@ ReactDOMRe.renderToElementWithId(
     communityPath={props.communityPath}
     isCoach={props.isCoach}
     communityId={props.communityId}
+    target={props.target}
   />,
   "react-root",
 );

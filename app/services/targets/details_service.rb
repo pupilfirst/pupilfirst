@@ -127,8 +127,10 @@ module Targets
     end
 
     def content_blocks
-      @target.content_blocks.with_attached_file.map do |content_block|
-        cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index')
+      latest_versions = @target.latest_content_versions
+      content_blocks = ContentBlock.where(id: latest_versions&.pluck(:content_block_id))
+      content_blocks.with_attached_file.map do |content_block|
+        cb = content_block.attributes.slice('id', 'block_type', 'content').merge(sort_index: latest_versions.find_by(content_block_id: content_block.id).sort_index)
         if content_block.file.attached?
           cb['file_url'] = url_helpers.rails_blob_path(content_block.file, only_path: true)
           cb['filename'] = content_block.file.filename

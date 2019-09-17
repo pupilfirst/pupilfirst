@@ -2,22 +2,19 @@ class SortContentBlocksMutator < ApplicationMutator
   attr_accessor :content_block_ids
 
   validates :content_block_ids, presence: true
-  validate :must_belong_to_same_target
 
   def sort
     ::ContentBlocks::SortService.new(content_block_ids).execute
   end
 
-  def must_belong_to_same_target
-    return if ContentBlock.where(id: content_block_ids).pluck(:target_id).uniq.one?
-
-    errors[:base] << 'Content blocks must belong to the same target'
+  def target_versions
+    target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
   end
 
   private
 
   def target
-    ContentBlock.find(content_block_ids.first).target
+    ContentVersion.where(content_block_id: content_block_ids).first.target
   end
 
   def authorized?

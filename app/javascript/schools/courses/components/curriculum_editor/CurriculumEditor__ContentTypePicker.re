@@ -2,8 +2,6 @@
 
 let str = React.string;
 
-open CurriculumEditor__Types;
-
 type kindOfButton =
   | MarkdownButton
   | FileButton

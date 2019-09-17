@@ -20,7 +20,7 @@ gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 gem 'webpacker', '~> 4.0'
 
 gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
-gem 'devise', '~> 4.6' # User auth library.
+gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'pg', '~> 1.0' # PostgreSQL support.
@@ -149,6 +149,7 @@ group :test do
   gem 'webdrivers', '~> 4.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
+  gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
 end
 
 group :development, :test do

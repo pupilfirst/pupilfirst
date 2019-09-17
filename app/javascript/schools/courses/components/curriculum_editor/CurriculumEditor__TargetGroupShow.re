@@ -37,7 +37,7 @@ let updateSortIndex =
       targetGroups,
       targetGroup,
       up,
-      updateTagetGroupSortIndexCB,
+      updateTargetGroupSortIndexCB,
       authenticityToken,
     ) => {
   let newTargetGroups = targetGroups |> ListUtils.swap(up, targetGroup);
@@ -49,7 +49,7 @@ let updateSortIndex =
        CurriculumEditor__SortResourcesMutation.TargetGroup,
        authenticityToken,
      );
-  updateTagetGroupSortIndexCB(newTargetGroups);
+  updateTargetGroupSortIndexCB(newTargetGroups);
 };
 
 let sortIndexHiddenClass = bool => bool ? " invisible" : "";
@@ -63,8 +63,8 @@ let make =
       ~updateTargetCB,
       ~showArchived,
       ~authenticityToken,
-      ~updateTagetSortIndexCB,
-      ~updateTagetGroupSortIndexCB,
+      ~updateTargetSortIndexCB,
+      ~updateTargetGroupSortIndexCB,
       ~authenticityToken,
       ~index,
       _children,
@@ -188,7 +188,7 @@ let make =
                       targetGroups,
                       targetGroup,
                       true,
-                      updateTagetGroupSortIndexCB,
+                      updateTargetGroupSortIndexCB,
                       authenticityToken,
                     )
                 }>
@@ -211,7 +211,7 @@ let make =
                       targetGroups,
                       targetGroup,
                       false,
-                      updateTagetGroupSortIndexCB,
+                      updateTargetGroupSortIndexCB,
                       authenticityToken,
                     )
                 }>
@@ -229,7 +229,7 @@ let make =
                targetGroup
                showTargetEditorCB
                targets=targetsToDisplay
-               updateTagetSortIndexCB
+               updateTargetSortIndexCB
                authenticityToken
                index
              />

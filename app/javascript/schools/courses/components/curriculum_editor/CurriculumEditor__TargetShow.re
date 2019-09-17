@@ -17,7 +17,7 @@ let targetClasses = (target, targets) =>
   );
 
 let updateSortIndex =
-    (targets, target, up, updateTagetSortIndexCB, authenticityToken) => {
+    (targets, target, up, updateTargetSortIndexCB, authenticityToken) => {
   let newTargets = targets |> ListUtils.swap(up, target);
   let targetIds = newTargets |> List.map(t => t |> Target.id) |> Array.of_list;
   targetIds
@@ -25,7 +25,7 @@ let updateSortIndex =
        CurriculumEditor__SortResourcesMutation.Target,
        authenticityToken,
      );
-  updateTagetSortIndexCB(newTargets);
+  updateTargetSortIndexCB(newTargets);
 };
 
 let sortIndexHiddenClass = bool => bool ? " invisible" : "";
@@ -36,7 +36,7 @@ let make =
       ~targetGroup,
       ~showTargetEditorCB,
       ~targets,
-      ~updateTagetSortIndexCB,
+      ~updateTargetSortIndexCB,
       ~authenticityToken,
       ~index,
       _children,
@@ -63,7 +63,7 @@ let make =
                     targets,
                     target,
                     true,
-                    updateTagetSortIndexCB,
+                    updateTargetSortIndexCB,
                     authenticityToken,
                   )
               }>
@@ -82,7 +82,7 @@ let make =
                     targets,
                     target,
                     false,
-                    updateTagetSortIndexCB,
+                    updateTargetSortIndexCB,
                     authenticityToken,
                   )
               }>

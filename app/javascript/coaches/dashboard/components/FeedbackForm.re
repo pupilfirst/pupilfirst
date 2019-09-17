@@ -124,8 +124,13 @@ let make =
       {
         timelineEvent
         |> TimelineEvent.feedback
-        |> List.map(markdown =>
-             <div className="timeline-event-card__field-box mx-3 mt-3 p-3">
+        |> List.mapi((index, markdown) =>
+             <div
+               key={
+                 "timeline-event-card__field-header"
+                 ++ (index |> string_of_int)
+               }
+               className="timeline-event-card__field-box mx-3 mt-3 p-3">
                <h5
                  className="timeline-event-card__field-header font-bold mt-0">
                  {"Feedback Sent:" |> str}

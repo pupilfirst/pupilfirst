@@ -58,6 +58,14 @@ describe TimelineEventFilePolicy do
       it 'denies access' do
         expect(subject).not_to permit(pundit_user, timeline_event_file)
       end
+
+      context 'when there is no linked submission' do
+        let(:timeline_event_file) { create :timeline_event_file, timeline_event: nil }
+
+        it 'grants access' do
+          expect(subject).to permit(pundit_user, timeline_event_file)
+        end
+      end
     end
   end
 end

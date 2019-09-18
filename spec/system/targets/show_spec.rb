@@ -107,13 +107,13 @@ feature 'Target Overlay', js: true do
 
     find('a', text: 'Upload File').click
     attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
-    expect(page).to have_selector('.course-show-attachments__attachment-title', text: 'human.png')
-
     find('a', text: 'Add URL').click
-    expect(page).to have_selector('.course-show-attachments__attachment-title', text: link_1)
     fill_in 'attachment_url', with: 'https://example.com?q=2'
     click_button 'Attach link'
-    expect(page).to have_selector('.course-show-attachments__attachment-title', text: link_2)
+
+    expect(page).to have_link('human.png', href: "/timeline_event_files/#{TimelineEventFile.last.id}/download")
+    expect(page).to have_link(link_1, href: link_1)
+    expect(page).to have_link(link_2, href: link_2)
 
     # The attachment forms should have disappeared now.
     expect(page).not_to have_selector('a', text: 'Add URL')
@@ -156,9 +156,9 @@ feature 'Target Overlay', js: true do
 
     # The submission contents should be on the page.
     expect(page).to have_content(bad_description)
-    expect(page).to have_selector('.course-show-attachments__attachment-title', text: 'human.png')
-    expect(page).to have_selector('.course-show-attachments__attachment-title', text: link_1)
-    expect(page).to have_selector('.course-show-attachments__attachment-title', text: link_2)
+    expect(page).to have_link('human.png', href: "/timeline_event_files/#{TimelineEventFile.last.id}/download")
+    expect(page).to have_link(link_1, href: link_1)
+    expect(page).to have_link(link_2, href: link_2)
 
     # User should be able to undo the submission.
     accept_confirm do

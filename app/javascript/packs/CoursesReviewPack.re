@@ -5,10 +5,10 @@ open CoursesReview__Types;
 let decodeProps = json =>
   Json.Decode.(
     json |> field("authenticityToken", string),
-    json |> field("levels", list(Level.decode)),
-    json |> field("submissions", list(Submission.decode)),
+    json |> field("levels", array(Level.decode)),
+    json |> field("submissions", array(Submission.decode)),
     json |> field("courseId", string),
-    json |> field("gradeLabels", list(GradeLabel.decode)),
+    json |> field("gradeLabels", array(GradeLabel.decode)),
   );
 
 let (authenticityToken, levels, submissions, courseId, gradeLabels) =

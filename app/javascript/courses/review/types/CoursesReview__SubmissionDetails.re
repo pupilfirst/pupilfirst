@@ -8,15 +8,21 @@ type grade = {
   id: string,
 };
 
+type evaluationCriterion = {
+  id: string,
+  name: string,
+};
+
 type t = {
   id: string,
   description: string,
   createdAt: string,
   passedAt: option(string),
   evaluatorId: option(string),
-  attachments: list(attachment),
-  feedback: list(CoursesReview__Feedback.t),
-  grades: list(grade),
+  attachments: array(attachment),
+  feedback: array(CoursesReview__Feedback.t),
+  grades: array(grade),
+  evaluationCriteria: array(evaluationCriterion),
 };
 let id = t => t.id;
 let createdAt = t => t.createdAt;
@@ -25,10 +31,11 @@ let evaluatorId = t => t.evaluatorId;
 let description = t => t.description;
 let createdAtDate = t => t |> createdAt |> DateFns.parseString;
 let attachments = t => t.attachments;
+let evaluationCriteria = t => t.evaluationCriteria;
+let grades = t => t.grades;
 let feedback = t => t.feedback;
 let title = attachment => attachment.title;
 let url = attachment => attachment.url;
-
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
@@ -37,7 +44,7 @@ let timeDistance = t =>
 
 let sort = submissions =>
   submissions
-  |> List.sort((x, y) =>
+  |> ArrayUtils.copyAndSort((x, y) =>
        DateFns.differenceInSeconds(
          y.createdAt |> DateFns.parseString,
          x.createdAt |> DateFns.parseString,
@@ -55,6 +62,7 @@ let make =
       ~attachments,
       ~feedback,
       ~grades,
+      ~evaluationCriteria,
     ) => {
   id,
   description,
@@ -64,6 +72,7 @@ let make =
   attachments,
   feedback,
   grades,
+  evaluationCriteria,
 };
 
 let makeGrade = (~evaluationCriterionId, ~grade, ~id) => {
@@ -73,6 +82,8 @@ let makeGrade = (~evaluationCriterionId, ~grade, ~id) => {
 };
 
 let makeAttachment = (~title, ~url) => {title, url};
+
+let makeEvaluationCriteria = (~id, ~name) => {id, name};
 
 let decodeJS = details =>
   details
@@ -85,8 +96,7 @@ let decodeJS = details =>
          ~evaluatorId=s##evaluatorId,
          ~attachments=
            s##attachments
-           |> Js.Array.map(a => makeAttachment(~url=a##url, ~title=a##title))
-           |> Array.to_list,
+           |> Js.Array.map(a => makeAttachment(~url=a##url, ~title=a##title)),
          ~feedback=
            s##feedback
            |> Js.Array.map(f =>
@@ -98,8 +108,7 @@ let decodeJS = details =>
                   ~createdAt=f##createdAt,
                   ~value=f##value,
                 )
-              )
-           |> Array.to_list,
+              ),
          ~grades=
            s##grades
            |> Js.Array.map(g =>
@@ -108,8 +117,12 @@ let decodeJS = details =>
                   ~id=g##id,
                   ~grade=g##grade,
                 )
-              )
-           |> Array.to_list,
+              ),
+         ~evaluationCriteria=
+           s##evaluationCriteria
+           |> Js.Array.map(ec =>
+                makeEvaluationCriteria(~id=ec##id, ~name=ec##name)
+              ),
        )
      )
-  |> Array.to_list;
+  ;

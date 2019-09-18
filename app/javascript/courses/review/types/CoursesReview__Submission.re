@@ -30,7 +30,7 @@ let timeDistance = t =>
 
 let sort = submissions =>
   submissions
-  |> List.sort((x, y) =>
+  |> ArrayUtils.copyAndSort((x, y) =>
        DateFns.differenceInSeconds(
          y.createdAt |> DateFns.parseString,
          x.createdAt |> DateFns.parseString,

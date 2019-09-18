@@ -4,7 +4,7 @@ open CoursesReview__Types;
 let str = React.string;
 
 type state = {
-  submissionDetails: list(SubmissionDetails.t),
+  submissionDetails: array(SubmissionDetails.t),
   loading: bool,
 };
 
@@ -21,6 +21,9 @@ module ReviewSubmissionDetailsQuery = [%graphql
         },
         feedback{
           id, coachName, coachAvatarUrl, coachTitle, createdAt,value
+        },
+        evaluationCriteria{
+          id, name
         }
       }
   }
@@ -48,20 +51,6 @@ let getSubmissionDetails = (authenticityToken, submission, setState, ()) => {
   None;
 };
 
-let levelNumber = (levels, levelId) =>
-  "Level "
-  ++ (
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == levelId,
-         "Unable to find level with id "
-         ++ levelId
-         ++ "in CoursesReview__ShowSubmission",
-       )
-    |> Level.number
-    |> string_of_int
-  );
-
 let headerSection = (submission, levels, setSelectedSubmission) =>
   <div
     className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
@@ -79,7 +68,12 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
         <div className="block md:flex md:items-center text-sm">
           <span
             className="inline-block bg-gray-300 text-xs font-semibold mr-2 px-2 py-px rounded">
-            {submission |> Submission.levelId |> levelNumber(levels) |> str}
+            {
+              submission
+              |> Submission.levelId
+              |> Level.unsafeLevelNumber(levels, "SubmissionOverlay")
+              |> str
+            }
           </span>
           <span
             className="inline-block md:block font-semibold text-sm md:text-lg">
@@ -115,7 +109,7 @@ let make =
       ~gradeLabels,
     ) => {
   let (state, setState) =
-    React.useState(() => {loading: true, submissionDetails: []});
+    React.useState(() => {loading: true, submissionDetails: [||]});
 
   React.useEffect(() => {
     ScrollLock.activate();
@@ -135,7 +129,7 @@ let make =
         state.loading ?
           <div> {"Loading" |> str} </div> :
           state.submissionDetails
-          |> List.map(submission =>
+          |> Array.map(submission =>
                <div>
                  <CoursesReview__Submissions
                    authenticityToken
@@ -144,7 +138,6 @@ let make =
                  />
                </div>
              )
-          |> Array.of_list
           |> React.array
       }
     </div>

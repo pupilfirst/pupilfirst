@@ -5,7 +5,7 @@ let str = React.string;
 
 type state = {
   loading: bool,
-  submissions: list(Submission.t),
+  submissions: array(Submission.t),
   hasNextPage: bool,
   endCursor: option(string),
   level: option(Level.t),
@@ -32,10 +32,10 @@ let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
       ...state,
       submissions:
         state.submissions
-        |> List.append(
+        |> Array.append(
              (
                switch (nodes) {
-               | None => []
+               | None => [||]
                | Some(submissionsArray) =>
                  submissionsArray
                  |> Js.Array.map(s =>
@@ -60,10 +60,9 @@ let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
                       | None => []
                       }
                     )
-                 |> Array.to_list
                }
              )
-             |> List.flatten,
+             |> Array.to_list |> List.flatten |> Array.of_list,
            ),
       loading: false,
       endCursor,
@@ -145,26 +144,12 @@ let showLoadMoreButton =
     </div>
   </div>;
 
-let levelNumber = (levels, levelId) =>
-  "Level "
-  ++ (
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == levelId,
-         "Unable to find level with id "
-         ++ levelId
-         ++ "in CoursesReview__ShowPendingSubmissions",
-       )
-    |> Level.number
-    |> string_of_int
-  );
-
 let showSubmission = (submissions, levels, setSelectedSubmission) =>
   <div>
     {
       submissions
       |> Submission.sort
-      |> List.map(submission =>
+      |> Array.map(submission =>
            <div
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
@@ -176,7 +161,7 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
                    {
                      submission
                      |> Submission.levelId
-                     |> levelNumber(levels)
+                     |> Level.unsafeLevelNumber(levels, "ShowReviewedSubmission")
                      |> str
                    }
                  </span>
@@ -206,13 +191,13 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
              }
            </div>
          )
-      |> Array.of_list
+
       |> React.array
     }
   </div>;
 
 let updateLevel = (setState, level, ()) => {
-  setState(state => {...state, level, endCursor: None, submissions: []});
+  setState(state => {...state, level, endCursor: None, submissions: [||]});
   None;
 };
 
@@ -229,7 +214,7 @@ let make =
     React.useState(() =>
       {
         loading: false,
-        submissions: [],
+        submissions: [||],
         hasNextPage: false,
         endCursor: None,
         level: selectedLevel,
@@ -252,7 +237,7 @@ let make =
   <div>
     {
       switch (state.submissions) {
-      | [] => <div> {"No reviewed submission" |> str} </div>
+      | [||] => <div> {"No reviewed submission" |> str} </div>
       | _ => showSubmission(state.submissions, levels, setSelectedSubmission)
       }
     }

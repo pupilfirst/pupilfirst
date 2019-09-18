@@ -12,31 +12,30 @@ let dropDownButtonText = level =>
 
 let dropdownShowAllButton = (selectedLevel, setSelectedLevel) =>
   switch (selectedLevel) {
-  | Some(_) => [
+  | Some(_) => [|
       <button
         className="p-3 w-full text-left font-semibold focus:outline-none"
         onClick=(_ => setSelectedLevel(_ => None))>
         {"All Levels" |> str}
       </button>,
-    ]
-  | None => []
+    |]
+  | None => [||]
   };
 
 let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
   let contents =
     dropdownShowAllButton(selectedLevel, setSelectedLevel)
-    ->List.append(
+    ->Array.append(
         levels
         |> Level.sort
-        |> List.map(level =>
+        |> Array.map(level =>
              <button
                className="p-3 w-full text-left font-semibold focus:outline-none"
                onClick={_ => setSelectedLevel(_ => Some(level))}>
                {dropDownButtonText(level) |> str}
              </button>
            ),
-      )
-    |> Array.of_list;
+      );
 
   let selected =
     <button

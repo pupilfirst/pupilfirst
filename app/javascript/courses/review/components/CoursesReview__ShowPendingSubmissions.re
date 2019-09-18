@@ -4,20 +4,6 @@
 open CoursesReview__Types;
 let str = React.string;
 
-let levelNumber = (levels, levelId) =>
-  "Level "
-  ++ (
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == levelId,
-         "Unable to find level with id "
-         ++ levelId
-         ++ "in CoursesReview__ShowPendingSubmissions",
-       )
-    |> Level.number
-    |> string_of_int
-  );
-
 [@react.component]
 let make =
     (
@@ -32,12 +18,12 @@ let make =
     | None => submissions
     | Some(level) =>
       submissions
-      |> List.filter(l => l |> Submission.levelId == (level |> Level.id))
+      |> Js.Array.filter(l => l |> Submission.levelId == (level |> Level.id))
     };
   <div>
     {
       submissionToShow
-      |> List.map(submission =>
+      |> Array.map(submission =>
            <div
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
@@ -49,7 +35,10 @@ let make =
                    {
                      submission
                      |> Submission.levelId
-                     |> levelNumber(levels)
+                     |> Level.unsafeLevelNumber(
+                          levels,
+                          "showPendingSubmissions",
+                        )
                      |> str
                    }
                  </span>
@@ -74,7 +63,6 @@ let make =
              </div>
            </div>
          )
-      |> Array.of_list
       |> React.array
     }
   </div>;

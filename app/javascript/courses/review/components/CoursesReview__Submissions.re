@@ -54,14 +54,14 @@ let iconSpan = (iconClasses, attachment) => {
 
 let showSubmissions = attachments =>
   switch (attachments) {
-  | [] => React.null
+  | [||] => React.null
   | attachments =>
     <div className="mt-3">
       <h5 className="text-xs font-semibold"> {"Attachments" |> str} </h5>
       <div className="flex flex-wrap">
         {
           attachments
-          |> List.map(attachment => {
+          |> Array.map(attachment => {
                let (
                  key,
                  containerClasses,
@@ -106,7 +106,6 @@ let showSubmissions = attachments =>
                  </span>
                </a>;
              })
-          |> Array.of_list
           |> React.array
         }
       </div>
@@ -115,7 +114,7 @@ let showSubmissions = attachments =>
 
 let showFeedback = feedback =>
   feedback
-  |> List.map(f =>
+  |> Array.map(f =>
        <div className="border-t p-4 md:p-6 flex">
          <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full">
            <img src={f |> Feedback.coachAvatarUrl} />
@@ -135,6 +134,9 @@ let showFeedback = feedback =>
                | None => React.null
                }
              }
+             <p className="text-xs leading-tight">
+               {f |> Feedback.createdAtPretty |> str}
+             </p>
            </div>
            <MarkdownBlock
              className="mt-3"
@@ -144,7 +146,6 @@ let showFeedback = feedback =>
          </div>
        </div>
      )
-  |> Array.of_list
   |> React.array;
 
 [@react.component]
@@ -159,7 +160,7 @@ let make = (~authenticityToken, ~submission, ~gradeLabels) => {
       <div className="text-xs flex">
         {
           showFeedbackSent(
-            submission |> SubmissionDetails.feedback |> ListUtils.isNotEmpty,
+            submission |> SubmissionDetails.feedback |> ArrayUtils.isNotEmpty,
           )
         }
         {showSubmissionStatus(submission)}
@@ -172,7 +173,11 @@ let make = (~authenticityToken, ~submission, ~gradeLabels) => {
       />
       {showSubmissions(submission |> SubmissionDetails.attachments)}
     </div>
-    <CoursesReview__GradeCard authenticityToken gradeLabels />
+    <CoursesReview__GradeCard
+      gradeLabels
+      evaluvationCriteria={submission |> SubmissionDetails.evaluationCriteria}
+      grades={submission |> SubmissionDetails.grades}
+    />
     <div> {showFeedback(submission |> SubmissionDetails.feedback)} </div>
   </div>;
 };

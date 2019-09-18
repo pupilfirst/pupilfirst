@@ -17,6 +17,7 @@ let title = t => t.title;
 let createdAt = t => t.createdAt;
 let levelId = t => t.levelId;
 let userNames = t => t.userNames;
+let targetId = t => t.targetId;
 let status = t => t.status;
 let failed = status => status.failed;
 let feedbackSent = status => status.feedbackSent;

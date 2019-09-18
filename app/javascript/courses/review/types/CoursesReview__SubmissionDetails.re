@@ -36,6 +36,8 @@ let grades = t => t.grades;
 let feedback = t => t.feedback;
 let title = attachment => attachment.title;
 let url = attachment => attachment.url;
+let evaluationCriterionName = evaluationCriterion => evaluationCriterion.name;
+let evaluationCriterion = evaluationCriterion => evaluationCriterion.id;
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
@@ -124,5 +126,4 @@ let decodeJS = details =>
                 makeEvaluationCriteria(~id=ec##id, ~name=ec##name)
               ),
        )
-     )
-  ;
+     );

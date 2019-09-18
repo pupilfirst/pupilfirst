@@ -67,7 +67,7 @@ let make =
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
   let (selectedSubmission, setSelectedSubmission) =
-    React.useState(() => None);
+    React.useState(() => Some(0 |> Array.unsafe_get(submissions)));
 
   <div className="bg-gray-100 pt-14 pb-8 px-3 -mt-7">
     <div className="max-w-3xl mx-auto">

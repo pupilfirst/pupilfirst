@@ -91,7 +91,7 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
         </div>
       </div>
       <a
-        href="#"
+        href={"/targets/" ++ (submission |> Submission.targetId)}
         target="_blank"
         className="btn btn-primary-ghost btn-small hidden md:inline-block">
         {"View Target " |> str}

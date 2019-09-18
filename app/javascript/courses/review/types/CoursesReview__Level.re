@@ -30,6 +30,6 @@ let unsafeLevelNumber = (levels, componentName, levelId) =>
         ++ "in CoursesRevew__"
         ++ componentName,
       );
-      "Unknown Level";
+      "Unknown";
     }
   );

@@ -6,11 +6,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.0'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 1.4' # The administration framework for Ruby on Rails applications. https://activeadmin.info
+gem 'activeadmin', '~> 2.3.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'active_storage_validations', '~> 0.6.1' # TODO: Condisder removing the gem once updgraded to Rails 6.0
 gem 'fastimage', '~> 2.1'
@@ -19,7 +19,7 @@ gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'webpacker', '~> 4.0'
 
-gem 'coffee-rails', '~> 4.2.0' # Coffeescript on Rails.
+gem 'coffee-rails', '~> 5.0.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
@@ -39,7 +39,7 @@ gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy t
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
-gem 'puma', '~> 3.11' # The Puma ruby web server.
+gem 'puma', '~> 4.1.1' # The Puma ruby web server.
 gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
@@ -56,7 +56,7 @@ gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wrapper over Google Calendar API.
 
 # This is a dependency of google_calendar. Lock the version to 0.4.0 to prevent introduction of sqlite3 into production dependencies.
-gem 'TimezoneParser', '= 0.4.0'
+gem 'TimezoneParser', '~> 1.0.0'
 
 gem 'groupdate', '~> 4.0' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
@@ -65,7 +65,7 @@ gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React
 gem 'ahoy_matey', '~> 2.0' # Analytics for Rails.
 gem 'uuidtools', '~>2.1' # Required by ahoy_matey for ActiveRecord stores.
 
-gem 'acts-as-taggable-on', '~> 6.0' # Tag a single model on several contexts.
+gem 'acts-as-taggable-on', github: 'spark-solutions/acts-as-taggable-on', branch: 'fix/rails-6-and-failing-specs' # Tag a single model on several contexts.
 gem 'sendinblue', '~> 2.4' # This is SendinBlue provided API V2 Ruby GEM
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
@@ -78,21 +78,21 @@ gem 'postmark-rails', '~> 0.15' # Official integration library for using Rails a
 # gem 'intercom-rails', '~> 0.4' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5' # Ruby bindings for the Intercom API
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
-gem 'responders', '~> 2.3' # A set of Rails responders to dry up your application (respond_to / with)
+gem 'responders', '~> 3.0' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 2.1' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 gem 'kaminari', '~> 1.0' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
-gem 'data_migrate', '~> 5.1' # Run data migrations alongside schema migrations.
+gem 'data_migrate', '= 6.0.4.beta' # Run data migrations alongside schema migrations.
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
-gem 'pretender', '~> 0.2' # Log in as another user in Rails
+gem 'pretender', '~> 0.3.4' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
@@ -126,7 +126,7 @@ end
 
 group :development do
   gem 'letter_opener_web', '~> 1.3' # A web interface for browsing Ruby on Rails sent emails.
-  gem 'bullet', '~> 5.5' # Detect N+1 queries.
+  gem 'bullet', '~> 6.0.2' # Detect N+1 queries.
   # gem 'better_errors' # Better error info on the front-end.
   # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
   gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
@@ -154,7 +154,7 @@ end
 
 group :development, :test do
   gem 'faker', '~> 1.8' # A library for generating fake data such as names, addresses, and phone numbers.
-  gem 'rspec-rails', '~> 3.5' # Duh.
+  gem 'rspec-rails', '~> 3.8.2' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.

@@ -165,9 +165,9 @@ feature 'Curriculum Editor', js: true do
       dismiss_notification
 
       # Update sort index
-      page.execute_script("document.querySelector('#target-group-move-down-#{target_group.id}').click()")
+      find("#target-group-move-down-#{target_group.id}").click
       expect { target_group.reload.sort_index }.to eventually(eq 1)
-      page.execute_script("document.querySelector('#target-group-move-up-#{target_group.id}').click()")
+      find("#target-group-move-up-#{target_group.id}").click
       expect { target_group.reload.sort_index }.to eventually(eq 0)
 
       # user should be able to create a draft target from the curriculum index
@@ -233,9 +233,9 @@ feature 'Curriculum Editor', js: true do
       expect(target.quiz).to eq(nil)
 
       # Update sort index
-      page.execute_script("document.querySelector('#target-move-up-#{target.id}').click()")
+      find("#target-move-up-#{target.id}").click
       expect { target.reload.sort_index }.to eventually(eq 2)
-      page.execute_script("document.querySelector('#target-move-down-#{target.id}').click()")
+      find("#target-move-down-#{target.id}").click
       expect { target.reload.sort_index }.to eventually(eq 3)
     end
 

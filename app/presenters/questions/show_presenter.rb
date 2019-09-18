@@ -16,7 +16,8 @@ module Questions
         currentUser_id: current_user.id,
         community_path: view.community_path(community),
         is_coach: current_coach.present?,
-        community_id: community.id
+        community_id: community.id,
+        target: linked_target
       }
     end
 
@@ -25,6 +26,17 @@ module Questions
     end
 
     private
+
+    def linked_target
+      target = @question.targets.first
+
+      return if target.blank?
+
+      {
+        title: target.title,
+        id: view.policy(target).show? ? target.id : nil
+      }
+    end
 
     def question_data
       @question.attributes.slice('id', 'title', 'description', 'creator_id', 'editor_id', 'created_at', 'updated_at')

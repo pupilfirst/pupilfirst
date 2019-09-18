@@ -496,10 +496,7 @@ let make =
                        <div
                          key={team |> Team.id |> string_of_int}
                          id={team |> Team.name}
-                         className={
-                           "student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden"
-                           ++ (isSingleFounder ? " hover:bg-gray-100" : "")
-                         }>
+                         className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden">
                          <div className="flex flex-col flex-1 w-3/5">
                            {
                              team
@@ -516,12 +513,12 @@ let make =
                                       student |> Student.id |> string_of_int
                                     }
                                     id={student |> Student.name}
-                                    className="student-team__card h-full cursor-pointer flex items-center bg-white hover:bg-gray-100">
+                                    className="student-team__card h-full cursor-pointer flex items-center bg-white">
                                     <div className="flex flex-1 w-3/5 h-full">
                                       <div
                                         className="flex items-center w-full">
                                         <label
-                                          className="flex items-center h-full text-gray-500 leading-tight font-bold px-4 py-5"
+                                          className="flex items-center h-full border-r text-gray-500 leading-tight font-bold px-4 py-5 hover:bg-gray-100"
                                           htmlFor=checkboxId>
                                           <input
                                             className="leading-tight"
@@ -544,7 +541,7 @@ let make =
                                           />
                                         </label>
                                         <a
-                                          className="flex flex-1 items-center py-4 pr-4"
+                                          className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100"
                                           id={
                                             (student |> Student.name)
                                             ++ "_edit"

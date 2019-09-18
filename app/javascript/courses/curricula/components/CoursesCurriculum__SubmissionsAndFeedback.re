@@ -294,11 +294,10 @@ let submissions =
                         | None => React.null
                         }
                       }
-                      <div
-                        className="mt-2 markdown-block markdown-block__permissive"
-                        dangerouslySetInnerHTML={
-                          "__html": feedback |> Feedback.feedback,
-                        }
+                      <MarkdownBlock
+                        profile=Markdown.Permissive
+                        className="mt-2"
+                        markdown={feedback |> Feedback.feedback}
                       />
                     </div>
                   </div>;

@@ -5,6 +5,7 @@ ActiveAdmin.register User do
   permit_params :email
 
   filter :email
+  filter :name
   filter :founders_id_not_null, label: 'Is a founder', as: :boolean
   filter :faculty_id_not_null, label: 'Is a faculty', as: :boolean
 

@@ -31,10 +31,10 @@ describe Courses::DemoContentService do
       expect(target.visibility).to eq(Target::VISIBILITY_LIVE)
 
       # Create a markdown content block for the target
-      expect(target.content_blocks.count).to eq(1)
-      content_block = target.content_blocks.first
+      expect(target.content_versions.count).to eq(1)
+      content_block = ContentBlock.find(target.content_versions.first.content_block_id)
       expect(content_block.block_type).to eq(ContentBlock::BLOCK_TYPE_MARKDOWN)
-      expect(content_block.sort_index).to eq(1)
+      expect(target.content_versions.first.sort_index).to eq(1)
 
       # Create 2 evaluation criteria for the course.
       expect(course.evaluation_criteria.count).to eq(2)

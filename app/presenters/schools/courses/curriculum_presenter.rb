@@ -16,7 +16,6 @@ module Schools
           levels: levels,
           targetGroups: target_groups,
           targets: targets,
-          contentBlocks: content_blocks,
           authenticityToken: view.form_authenticity_token
         }
       end
@@ -26,17 +25,6 @@ module Schools
           id: @course.id,
           name: @course.name
         }
-      end
-
-      def content_blocks
-        ContentBlock.where(target: @course.targets).with_attached_file.map do |content_block|
-          cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index', 'target_id')
-          if content_block.file.attached?
-            cb['file_url'] = view.url_for(content_block.file)
-            cb['file_name'] = content_block.file.filename
-          end
-          cb
-        end
       end
 
       def evaluation_criteria

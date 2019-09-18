@@ -7,11 +7,11 @@ module ContentBlocks
 
     def execute
       ContentBlock.transaction do
-        content_block = @target.content_blocks.create!(sort_index: @params[:content_sort_indices]['new'].to_i, block_type: @params[:block_type], content: content)
+        content_block = ContentBlock.create!(block_type: @params[:block_type], content: content)
         if @params[:file].present?
           content_block.file.attach(@params[:file])
         end
-        sort_content_blocks(@params[:content_sort_indices])
+        handle_content_version(@params[:content_sort_indices], content_block)
         content_block
       end
     end
@@ -37,11 +37,35 @@ module ContentBlocks
       Oembed::Resolver.new(@params[:url]).embed_code
     end
 
-    def sort_content_blocks(content_sort_indices)
+    def sort_content_blocks(content_sort_indices, new_content_block)
       content_sort_indices.each do |id, sort_index|
-        next if id == 'new'
+        if id == 'new'
+          ContentVersion.create!(target: @target, content_block: new_content_block, version_on: Date.today, sort_index: sort_index)
+        else
+          ContentVersion.where(content_block_id: id, target_id: @target.id, version_on: Date.today).first.update!(sort_index: sort_index)
+        end
+      end
+    end
 
-        ContentBlock.find(id).update!(sort_index: sort_index.to_i)
+    def latest_content_version_date
+      @latest_content_version_date ||= @target.latest_content_version_date
+    end
+
+    def handle_content_version(content_sort_indices, new_content_block)
+      if latest_content_version_date.present? && latest_content_version_date == Date.today
+        sort_content_blocks(content_sort_indices, new_content_block)
+      else
+        create_new_content_version(content_sort_indices, new_content_block)
+      end
+    end
+
+    def create_new_content_version(content_sort_indices, new_content_block)
+      content_sort_indices.each do |id, sort_index|
+        if id == 'new'
+          ContentVersion.create!(content_block_id: new_content_block.id, target: @target, version_on: Date.today, sort_index: sort_index)
+        else
+          ContentVersion.create!(content_block_id: id, target: @target, version_on: Date.today, sort_index: sort_index)
+        end
       end
     end
   end

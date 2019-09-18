@@ -9,12 +9,12 @@ let str = React.string;
 type action =
   | UpdateContentBlockPropertyText(string)
   | UpdateSaving
-  | DoneUpdating
   | UpdateMarkdown(string)
   | ResetFormDirty(string)
   | UpdateFileName(string);
 
 type state = {
+  id: string,
   contentBlockPropertyText: string,
   contentBlock: option(ContentBlock.t),
   sortIndex: int,
@@ -43,7 +43,6 @@ let reducer = (state, action) =>
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
-  | DoneUpdating => {...state, formDirty: false, savingContentBlock: false}
   | ResetFormDirty(buttonText) => {
       ...state,
       formDirty: false,
@@ -56,6 +55,7 @@ module DeleteContentBlockMutation = [%graphql
    mutation($id: ID!) {
     deleteContentBlock(id: $id) {
        success
+       versions
      }
    }
    |}
@@ -66,6 +66,8 @@ module UpdateContentBlockMutation = [%graphql
    mutation($id: ID!, $text: String!, $blockType: String!) {
     updateContentBlock(id: $id, blockType: $blockType, text: $text ) {
        success
+       id
+       versions
    }
   }
    |}
@@ -215,12 +217,15 @@ let handleDeleteContentBlock =
       DeleteContentBlockMutation.make(~id, ())
       |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
       |> Js.Promise.then_(response => {
+           let versions =
+             response##deleteContentBlock##versions
+             |> Array.map(version => version |> Json.Decode.string);
            response##deleteContentBlock##success ?
-             removeTargetContentCB(sortIndex) : ();
+             removeTargetContentCB(sortIndex, versions) : ();
            Js.Promise.resolve();
          })
       |> ignore;
-    | None => removeTargetContentCB(sortIndex)
+    | None => removeTargetContentCB(sortIndex, [||])
     } :
     ();
 let decodeContent =
@@ -252,13 +257,13 @@ let updateNewContentBlock =
     (
       json,
       blockType: ContentBlock.blockType,
-      target,
       sortIndex,
       state,
       createNewContentCB,
     ) => {
   open Json.Decode;
   let id = json |> field("id", string);
+  let versions = json |> field("versions", array(string));
   let fileUrl =
     switch (blockType) {
     | File(_url, _title, _filename) => json |> field("fileUrl", string)
@@ -267,9 +272,8 @@ let updateNewContentBlock =
     };
   let contentBlockType =
     json |> field("content", decodeContent(blockType, fileUrl, state));
-  let newContentBlock =
-    ContentBlock.make(id, contentBlockType, target |> Target.id, sortIndex);
-  createNewContentCB(newContentBlock);
+  let newContentBlock = ContentBlock.make(id, contentBlockType, sortIndex);
+  createNewContentCB(newContentBlock, versions);
 };
 
 let createContentBlock =
@@ -290,12 +294,10 @@ let createContentBlock =
       updateNewContentBlock(
         json,
         blockType,
-        target,
         sortIndex,
         state,
         createNewContentCB,
       );
-      dispatch(UpdateSaving);
     },
     () => dispatch(UpdateSaving),
   );
@@ -304,28 +306,11 @@ let updateContentBlock =
     (
       contentBlock,
       state,
-      authenticityToken,
       dispatch,
+      authenticityToken,
       sortIndex,
       updateContentBlockCB,
     ) => {
-  let id = contentBlock |> ContentBlock.id;
-  let text =
-    switch (contentBlock |> ContentBlock.blockType) {
-    | Markdown(_markdown) => state.markDownContent
-    | File(_url, _title, _filename) => state.contentBlockPropertyText
-    | Image(_url, _caption) => state.contentBlockPropertyText
-    | Embed(_url, _embedCode) => ""
-    };
-  let blockType =
-    contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
-  UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
-  |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-  |> Js.Promise.then_(_response => {
-       dispatch(DoneUpdating);
-       Js.Promise.resolve();
-     })
-  |> ignore;
   let updatedContentBlockType =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) =>
@@ -340,14 +325,30 @@ let updateContentBlock =
       ContentBlock.makeImageBlock(url, state.contentBlockPropertyText)
     | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
     };
-  let updatedContentBlock =
-    ContentBlock.make(
-      id,
-      updatedContentBlockType,
-      contentBlock |> ContentBlock.targetId,
-      sortIndex,
-    );
-  updateContentBlockCB(updatedContentBlock);
+  let id = state.id;
+  let text =
+    switch (contentBlock |> ContentBlock.blockType) {
+    | Markdown(_markdown) => state.markDownContent
+    | File(_url, _title, _filename) => state.contentBlockPropertyText
+    | Image(_url, _caption) => state.contentBlockPropertyText
+    | Embed(_url, _embedCode) => ""
+    };
+  let blockType =
+    contentBlock |> ContentBlock.blockType |> ContentBlock.blockTypeAsString;
+  UpdateContentBlockMutation.make(~id, ~text, ~blockType, ())
+  |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+  |> Js.Promise.then_(response => {
+       let responseId = response##updateContentBlock##id;
+       let versions =
+         response##updateContentBlock##versions
+         |> Array.map(version => version |> Json.Decode.string);
+       let updatedContentBlock =
+         ContentBlock.make(responseId, updatedContentBlockType, sortIndex);
+       updateContentBlockCB(updatedContentBlock, id, versions);
+       dispatch(UpdateSaving);
+       Js.Promise.resolve();
+     })
+  |> ignore;
 };
 
 let submitForm =
@@ -370,8 +371,8 @@ let submitForm =
     updateContentBlock(
       contentBlock,
       state,
-      authenticityToken,
       dispatch,
+      authenticityToken,
       sortIndex,
       updateContentBlockCB,
     )
@@ -433,6 +434,11 @@ let make =
       ~authenticityToken,
     ) => {
   let initialState = {
+    id:
+      switch (contentBlock) {
+      | Some(contentBlock) => contentBlock |> ContentBlock.id
+      | None => ""
+      },
     contentBlockPropertyText:
       switch (blockType) {
       | Markdown(_markdown) => ""

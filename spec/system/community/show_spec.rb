@@ -5,21 +5,22 @@ feature 'Community Show', js: true do
   include NotificationHelper
   include MarkdownEditorHelper
 
-  # Setup a course with founders and target for community.
+  # Setup a course with students and target for community.
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let(:level_1) { create :level, :one, course: course }
+  let(:level_1_c2) { create :level, :one, course: course_2 }
   let(:target_group) { create :target_group, level: level_1 }
   let!(:target) { create :target, target_group: target_group }
   let!(:community) { create :community, school: school, target_linkable: true }
-  let(:startup) { create :startup, level: level_1 }
-  let(:founder_1) { create :founder, startup: startup }
-  let(:founder_2) { create :founder, startup: startup }
+  let(:team) { create :team, level: level_1 }
+  let(:student_1) { create :student, startup: team }
+  let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
-  let!(:question_1) { create :question, community: community, creator: founder_1.user }
-  let!(:question_2) { create :question, community: community, creator: founder_1.user }
-  let!(:question_3) { create :question, community: community, creator: founder_1.user }
-  let!(:answer_1) { create :answer, question: question_1, creator: founder_1.user }
+  let!(:question_1) { create :question, community: community, creator: student_1.user }
+  let!(:question_2) { create :question, community: community, creator: student_1.user }
+  let!(:question_3) { create :question, community: community, creator: student_1.user, targets: [target] }
+  let!(:answer_1) { create :answer, question: question_1, creator: student_1.user }
   let(:question_title) { Faker::Lorem.sentence }
   let(:question_description) { Faker::Lorem.paragraph }
   let(:question_description_for_edit) { Faker::Lorem.paragraph }
@@ -28,9 +29,14 @@ feature 'Community Show', js: true do
   let(:comment_for_question) { Faker::Lorem.sentence }
   let(:comment_for_answer) { Faker::Lorem.sentence }
 
+  let(:course_2) { create :course, school: school }
+  let(:team_c2) { create :team, level: level_1_c2 }
+  let(:student_c2) { create :student, startup: team_c2 }
+
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
+    create :community_course_connection, course: course_2, community: community
   end
 
   scenario 'user who is not logged in tries to visit community' do
@@ -38,8 +44,8 @@ feature 'Community Show', js: true do
     expect(page).to have_text("Please sign in to continue.")
   end
 
-  scenario 'an active founder visits his community' do
-    sign_in_user(founder_1.user, referer: community_path(community))
+  scenario 'an active student visits his community' do
+    sign_in_user(student_1.user, referer: community_path(community))
 
     # All questions should be visible.
     expect(page).to have_text(community.name)
@@ -48,8 +54,8 @@ feature 'Community Show', js: true do
     expect(page).to have_text(question_3.title)
   end
 
-  scenario 'an active founder creates a question in his community' do
-    sign_in_user(founder_1.user, referer: community_path(community))
+  scenario 'an active student creates a question in his community' do
+    sign_in_user(student_1.user, referer: community_path(community))
     expect(page).to have_text(community.name)
 
     click_link 'Ask a question'
@@ -63,8 +69,8 @@ feature 'Community Show', js: true do
     expect(page).not_to have_text("ASK A NEW QUESTION")
   end
 
-  scenario 'an active founder participates in a question thread' do
-    sign_in_user(founder_2.user, referer: community_path(community))
+  scenario 'an active student participates in a question thread' do
+    sign_in_user(student_2.user, referer: community_path(community))
     expect(page).to have_text(community.name)
 
     click_link question_1.title
@@ -86,7 +92,7 @@ feature 'Community Show', js: true do
     # A notification should have been mailed to the question author.
     open_email(question_1.creator.email)
     expect(current_email.subject).to eq('New answer for your question')
-    expect(current_email.body).to include("#{founder_2.user.name} has posted an answer to a question that you posted on the #{community.name} community")
+    expect(current_email.body).to include("#{student_2.user.name} has posted an answer to a question that you posted on the #{community.name} community")
     expect(current_email.body).to include("/questions/#{question_1.id}")
 
     expect(page).to have_text("2 Answers")
@@ -131,7 +137,7 @@ feature 'Community Show', js: true do
     open_email(question_1.creator.email)
     expect(current_email.subject).to eq('New comment on your post')
     expect(current_email.body).to include("New comment on your question")
-    expect(current_email.body).to include("#{founder_2.user.name} has posted a comment to a question that you posted on the #{community.name} community")
+    expect(current_email.body).to include("#{student_2.user.name} has posted a comment to a question that you posted on the #{community.name} community")
     expect(current_email.body).to include("/questions/#{question_1.id}")
 
     comment_1 = Comment.where(commentable_id: question_1.id, commentable_type: "Question").last
@@ -157,7 +163,7 @@ feature 'Community Show', js: true do
     open_email(answer_1.creator.email)
     expect(current_email.subject).to eq('New comment on your post')
     expect(current_email.body).to include("New comment on your answer")
-    expect(current_email.body).to include("#{founder_2.user.name} has posted a comment to an answer that you posted on the #{community.name} community")
+    expect(current_email.body).to include("#{student_2.user.name} has posted a comment to an answer that you posted on the #{community.name} community")
     expect(current_email.body).to include("/questions/#{question_1.id}")
 
     comment_2 = Comment.where(commentable_id: answer_1.id, commentable_type: "Answer").last
@@ -176,11 +182,11 @@ feature 'Community Show', js: true do
     within("div[title=\"Answer #{answer_1.id}\"]") do
       find('div[title="Like Answer"]').click
       expect(page).to have_selector('div[title="Unlike Answer"]')
-      expect(AnswerLike.where(answer: answer_1, user: founder_2.user).count).to eq(1)
+      expect(AnswerLike.where(answer: answer_1, user: student_2.user).count).to eq(1)
 
       find('div[title="Unlike Answer"]').click
       expect(page).to have_selector('div[title="Like Answer"]')
-      expect(AnswerLike.where(answer: answer_1, user: founder_2.user).count).to eq(0)
+      expect(AnswerLike.where(answer: answer_1, user: student_2.user).count).to eq(0)
     end
   end
 
@@ -228,5 +234,23 @@ feature 'Community Show', js: true do
     expect(page).to have_text(old_description)
     expect(page).to have_text(question_description_for_edit)
     click_link 'Back to Question'
+  end
+
+  scenario 'a target-linked question is viewed by student with access to target' do
+    # The target should be mentioned and linked on the question page.
+    sign_in_user(student_1.user, referer: question_path(question_3))
+
+    expect(page).to have_text(target.title)
+    expect(page).to have_link('View Target', href: target_path(target))
+  end
+
+  scenario 'a target-linked question is viewed by student without access to target' do
+    # The target should be mentioned...
+    sign_in_user(student_c2.user, referer: question_path(question_3))
+
+    expect(page).to have_text(target.title)
+
+    # ...but not linked.
+    expect(page).not_to have_link('View Target')
   end
 end

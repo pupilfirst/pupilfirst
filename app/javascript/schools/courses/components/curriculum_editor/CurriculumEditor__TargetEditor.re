@@ -38,6 +38,10 @@ type state = {
   title: string,
   evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
+  contentBlocks: list(ContentBlock.t),
+  versions: array(string),
+  selectedVersion: string,
+  previewMode: bool,
   methodOfCompletion,
   quiz: list(QuizQuestion.t),
   linkToComplete: string,
@@ -65,6 +69,11 @@ type action =
   | UpdateActiveStep(activeStep)
   | UpdateVisibility(Target.visibility)
   | UpdateContentEditorDirty(bool)
+  | UpdateContentBlocks(list(ContentBlock.t), array(string))
+  | SwitchPreviewMode
+  | LoadOldVersion(list(ContentBlock.t))
+  | SelectVersion(string)
+  | UpdateVersions(array(string))
   | UpdateCompletionInstructions(string);
 
 let updateTitle = (send, title) => {
@@ -162,7 +171,7 @@ let cachePrerequisiteTargets = (targets, target) => {
      });
 };
 
-let setPayload = (state, target, authenticityToken) => {
+let setPayload = (state, authenticityToken) => {
   let payload = Js.Dict.empty();
   let targetData = Js.Dict.empty();
 
@@ -275,7 +284,6 @@ let formClasses = value => {
   let defaultClasses = "drawer-right-form bg-white w-full ";
   value ? defaultClasses ++ "opacity-50" : defaultClasses;
 };
-let updateDescriptionCB = description => Js.log(description);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -345,6 +353,33 @@ let reducer = (state, action) =>
       ...state,
       contentEditorDirty,
     }
+  | UpdateContentBlocks(contentBlocks, versions) => {
+      ...state,
+      contentBlocks,
+      versions,
+      selectedVersion:
+        switch (versions) {
+        | [||] => ""
+        | versions => versions[0]
+        },
+      previewMode: contentBlocks |> List.length > 0 ? true : false,
+    }
+  | LoadOldVersion(contentBlocks) => {
+      ...state,
+      contentBlocks,
+      previewMode: true,
+    }
+  | SelectVersion(selectedVersion) => {
+      ...state,
+      selectedVersion,
+      previewMode: true,
+    }
+  | SwitchPreviewMode => {...state, previewMode: !state.previewMode}
+  | UpdateVersions(versions) => {
+      ...state,
+      versions,
+      selectedVersion: versions[0],
+    }
   };
 
 let handleEditorClosure = (hideEditorActionCB, state) =>
@@ -358,19 +393,199 @@ let handleEditorClosure = (hideEditorActionCB, state) =>
       hideEditorActionCB() : ()
   };
 
+module ContentBlocksQuery = [%graphql
+  {|
+    query($targetId: ID!) {
+      contentBlocks(targetId: $targetId) {
+        id
+        blockType
+        sortIndex
+        content {
+          ... on ImageBlock {
+            caption
+            url
+            filename
+          }
+          ... on FileBlock {
+            title
+            url
+            filename
+          }
+          ... on MarkdownBlock {
+            markdown
+          }
+          ... on EmbedBlock {
+            url
+            embedCode
+          }
+        }
+      }
+      versions(targetId: $targetId)
+  }
+|}
+];
+
+module ContentBlocksVersionQuery = [%graphql
+  {|
+    query($targetId: ID!, $versionOn: Date! ) {
+      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
+        id
+        blockType
+        sortIndex
+        content {
+          ... on ImageBlock {
+            caption
+            url
+            filename
+          }
+          ... on FileBlock {
+            title
+            url
+            filename
+          }
+          ... on MarkdownBlock {
+            markdown
+          }
+          ... on EmbedBlock {
+            url
+            embedCode
+          }
+        }
+      }
+  }
+|}
+];
+
+module RestoreContentVersionMutation = [%graphql
+  {|
+   mutation($targetId: ID!, $versionOn: Date!) {
+    restoreContentVersion(targetId: $targetId, versionOn: $versionOn) {
+       success
+     }
+   }
+   |}
+];
+
+let loadContentBlocks = (target, send, authenticityToken, ()) => {
+  let targetId = target |> Target.id;
+  let response =
+    ContentBlocksQuery.make(~targetId, ())
+    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
+  response
+  |> Js.Promise.then_(result => {
+       let contentBlocks =
+         result##contentBlocks
+         |> Js.Array.map(rawContentBlock => {
+              let id = rawContentBlock##id;
+              let sortIndex = rawContentBlock##sortIndex;
+              let blockType =
+                switch (rawContentBlock##content) {
+                | `MarkdownBlock(content) =>
+                  ContentBlock.Markdown(content##markdown)
+                | `FileBlock(content) =>
+                  File(content##url, content##title, content##filename)
+                | `ImageBlock(content) =>
+                  Image(content##url, content##caption)
+                | `EmbedBlock(content) =>
+                  Embed(content##url, content##embedCode)
+                };
+              ContentBlock.make(id, blockType, sortIndex);
+            })
+         |> Array.to_list;
+       let versions =
+         result##versions
+         |> Array.map(version => version |> Json.Decode.string);
+       send(UpdateContentBlocks(contentBlocks, versions));
+       Js.Promise.resolve();
+     })
+  |> ignore;
+  None;
+};
+
+let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
+  let targetId = target |> Target.id;
+  let response =
+    ContentBlocksVersionQuery.make(~targetId, ~versionOn, ())
+    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
+  response
+  |> Js.Promise.then_(result => {
+       let contentBlocks =
+         result##contentBlocks
+         |> Js.Array.map(rawContentBlock => {
+              let id = rawContentBlock##id;
+              let sortIndex = rawContentBlock##sortIndex;
+              let blockType =
+                switch (rawContentBlock##content) {
+                | `MarkdownBlock(content) =>
+                  ContentBlock.Markdown(content##markdown)
+                | `FileBlock(content) =>
+                  File(content##url, content##title, content##filename)
+                | `ImageBlock(content) =>
+                  Image(content##url, content##caption)
+                | `EmbedBlock(content) =>
+                  Embed(content##url, content##embedCode)
+                };
+              ContentBlock.make(id, blockType, sortIndex);
+            })
+         |> Array.to_list;
+       send(LoadOldVersion(contentBlocks));
+       Js.Promise.resolve();
+     })
+  |> ignore;
+  None;
+};
+let currentDateString = () => Js.Date.make() |> DateFns.format("YYYY-MM-DD");
+
+let handleRestoreVersionCB =
+    (target, send, state, authenticityToken, versionOn) =>
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm(
+       "Are you sure you want to set this as the current version?",
+     ) ?
+    {
+      let targetId = Target.id(target);
+      RestoreContentVersionMutation.make(~targetId, ~versionOn, ())
+      |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+      |> Js.Promise.then_(response => {
+           response##restoreContentVersion##success ?
+             send(
+               UpdateVersions(
+                 Array.append([|currentDateString()|], state.versions),
+               ),
+             ) :
+             ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    } :
+    ();
+
+let addNewVersionCB = (dispatch, versions) => {
+    dispatch(UpdateVersions(versions))};
+
+let selectVersionCB =
+    (target, state, send, authenticityToken, selectedVersion) => {
+  let encodedVersion = selectedVersion |> Js.Json.string;
+  selectedVersion == state.versions[0] ?
+    loadContentBlocks(target, send, authenticityToken, ()) |> ignore :
+    loadOldVersions(target, send, encodedVersion, authenticityToken, ())
+    |> ignore;
+  send(SelectVersion(selectedVersion));
+};
+
+let switchViewModeCB = (send, ()) => send(SwitchPreviewMode);
+
 [@react.component]
 let make =
     (
       ~target,
       ~targetGroupId,
-      ~contentBlocks,
       ~evaluationCriteria,
       ~targets,
       ~targetGroupIdsInLevel,
       ~authenticityToken,
       ~updateTargetCB,
       ~hideEditorActionCB,
-      ~updateContentBlocksCB,
     ) => {
   let initialState = {
     title: target |> Target.title,
@@ -381,6 +596,9 @@ let make =
         eligibleTargets(targets, targetGroupIdsInLevel),
         target,
       ),
+    contentBlocks: [],
+    versions: [||],
+    selectedVersion: "",
     quiz: handleQuiz(target),
     linkToComplete:
       switch (target |> Target.linkToComplete) {
@@ -390,6 +608,7 @@ let make =
     methodOfCompletion: handleMethodOfCompletion(target),
     hasTitleError: false,
     hasLinktoCompleteError: false,
+    previewMode: true,
     dirty: false,
     isValidQuiz: true,
     saving: false,
@@ -401,6 +620,11 @@ let make =
   };
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
+
+  React.useEffect1(
+    loadContentBlocks(target, dispatch, authenticityToken),
+    [|target |> Target.id|],
+  );
 
   let targetEvaluated = () =>
     switch (state.methodOfCompletion) {
@@ -465,13 +689,13 @@ let make =
         ~completionInstructions=Some(state.completionInstructions),
       );
     Notification.success("Success", "Target updated successfully");
-    updateTargetCB(newTarget, contentBlocks, closeEditor);
+    updateTargetCB(newTarget, closeEditor);
     closeEditor ? () : dispatch(UpdateSaving);
   };
 
   let updateTarget = (closeEditor, targetId) => {
     dispatch(UpdateSaving);
-    let payload = setPayload(state, target, authenticityToken);
+    let payload = setPayload(state, authenticityToken);
     let url = "/school/targets/" ++ targetId;
     Api.update(
       url,
@@ -584,11 +808,38 @@ let make =
                     </div> :
                     ReasonReact.null
                 }
+                {
+                  state.versions |> Array.length > 0 ?
+                    <CurriculumEditor__TargetVersionSelector
+                      selectVersionCB={
+                        selectVersionCB(
+                          target,
+                          state,
+                          dispatch,
+                          authenticityToken,
+                        )
+                      }
+                      versions={state.versions}
+                      selectedVersion={state.selectedVersion}
+                      previewMode={state.previewMode}
+                      switchViewModeCB={switchViewModeCB(dispatch)}
+                      handleRestoreVersionCB={
+                        handleRestoreVersionCB(
+                          target,
+                          dispatch,
+                          state,
+                          authenticityToken,
+                        )
+                      }
+                    /> :
+                    React.null
+                }
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
                   target
-                  contentBlocks
-                  updateContentBlocksCB
+                  previewMode={state.previewMode}
+                  addNewVersionCB={addNewVersionCB(dispatch)}
+                  contentBlocks={state.contentBlocks}
                   updateContentEditorDirtyCB
                   authenticityToken
                 />
@@ -998,14 +1249,12 @@ module Jsx2 = {
       (
         ~target,
         ~targetGroupId,
-        ~contentBlocks,
         ~evaluationCriteria,
         ~targets,
         ~targetGroupIdsInLevel,
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~updateContentBlocksCB,
         _children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
@@ -1013,14 +1262,12 @@ module Jsx2 = {
       makeProps(
         ~target,
         ~targetGroupId,
-        ~contentBlocks,
         ~evaluationCriteria,
         ~targets,
         ~targetGroupIdsInLevel,
         ~authenticityToken,
         ~updateTargetCB,
         ~hideEditorActionCB,
-        ~updateContentBlocksCB,
         (),
       ),
       _children,

@@ -20,7 +20,7 @@ module ReviewSubmissionDetailsQuery = [%graphql
           evaluationCriterionId, id, grade
         },
         feedback{
-          id, coachId, createdAt,value
+          id, coachName, coachAvatarUrl, coachTitle, createdAt,value
         }
       }
   }
@@ -29,7 +29,7 @@ module ReviewSubmissionDetailsQuery = [%graphql
 
 let updateSubmissionDetails = (setState, details) =>
   setState(_ =>
-    {loading: false, submissionDetails: details |> SubmissionDetails.makeT}
+    {loading: false, submissionDetails: details |> SubmissionDetails.decodeJS}
   );
 
 let getSubmissionDetails = (authenticityToken, submission, setState, ()) => {

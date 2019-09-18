@@ -2,14 +2,6 @@ type attachment = {
   title: option(string),
   url: string,
 };
-
-type feedback = {
-  coachId: string,
-  createdAt: string,
-  value: string,
-  id: string,
-};
-
 type grade = {
   evaluationCriterionId: string,
   grade: int,
@@ -23,7 +15,7 @@ type t = {
   passedAt: option(string),
   evaluatorId: option(string),
   attachments: list(attachment),
-  feedback: list(feedback),
+  feedback: list(CoursesReview__Feedback.t),
   grades: list(grade),
 };
 let id = t => t.id;
@@ -36,7 +28,7 @@ let attachments = t => t.attachments;
 let feedback = t => t.feedback;
 let title = attachment => attachment.title;
 let url = attachment => attachment.url;
-let value = feedback => feedback.value;
+
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
@@ -82,14 +74,7 @@ let makeGrade = (~evaluationCriterionId, ~grade, ~id) => {
 
 let makeAttachment = (~title, ~url) => {title, url};
 
-let makeFeedback = (~coachId, ~createdAt, ~value, ~id) => {
-  coachId,
-  createdAt,
-  value,
-  id,
-};
-
-let makeT = details =>
+let decodeJS = details =>
   details
   |> Js.Array.map(s =>
        make(
@@ -105,9 +90,11 @@ let makeT = details =>
          ~feedback=
            s##feedback
            |> Js.Array.map(f =>
-                makeFeedback(
+                CoursesReview__Feedback.make(
                   ~id=f##id,
-                  ~coachId=f##coachId,
+                  ~coachName=f##coachName,
+                  ~coachAvatarUrl=f##coachAvatarUrl,
+                  ~coachTitle=f##coachTitle,
                   ~createdAt=f##createdAt,
                   ~value=f##value,
                 )

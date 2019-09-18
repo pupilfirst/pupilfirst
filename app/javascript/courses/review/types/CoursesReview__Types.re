@@ -4,3 +4,4 @@ module User = CoursesReview__User;
 module Submission = CoursesReview__Submission;
 module SubmissionDetails = CoursesReview__SubmissionDetails;
 module GradeLabel = CoursesReview__GradeLabel;
+module Feedback = CoursesReview__Feedback;

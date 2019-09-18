@@ -117,21 +117,29 @@ let showFeedback = feedback =>
   feedback
   |> List.map(f =>
        <div className="border-t p-4 md:p-6 flex">
-         <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full" />
+         <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full">
+           <img src={f |> Feedback.coachAvatarUrl} />
+         </div>
          <div className="flex-grow ml-3">
            <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
            <div>
              <h4 className="font-semibold text-base inline-block">
-               {"coachName" |> str}
+               {f |> Feedback.coachName |> str}
              </h4>
-             <span className="inline-block text-xs text-gray-700 ml-1">
-               {"(Title)" |> str}
-             </span>
+             {
+               switch (f |> Feedback.coachTitle) {
+               | Some(title) =>
+                 <span className="inline-block text-xs text-gray-700 ml-1">
+                   {title |> str}
+                 </span>
+               | None => React.null
+               }
+             }
            </div>
            <MarkdownBlock
              className="mt-3"
              profile=Markdown.Permissive
-             markdown={f |> SubmissionDetails.value}
+             markdown={f |> Feedback.value}
            />
          </div>
        </div>

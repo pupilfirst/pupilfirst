@@ -23,9 +23,11 @@ module Types
       object.startup_feedback.map do |feedback|
         {
           id: feedback.id,
-          coach_id: feedback.faculty_id,
           created_at: feedback.created_at,
-          value: feedback.feedback
+          value: feedback.feedback,
+          coach_name: feedback.faculty.user.name,
+          coach_avatar_url: feedback.faculty.user.image_or_avatar_url,
+          coach_title: feedback.faculty.user.title
         }
       end
     end

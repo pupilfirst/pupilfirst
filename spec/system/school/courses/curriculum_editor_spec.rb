@@ -71,21 +71,13 @@ feature 'Curriculum Editor', js: true do
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
-  def admin_user(user_type)
-    if user_type == :admin
-      school_admin.user
-    elsif user_type == :course_author
-      course_author.user
-    end
-  end
-
   def latest_content_versions(target)
     target.content_versions.reload.where(version_on: target.latest_content_version_date)
   end
 
-  shared_examples 'authorized users creates the curriculum' do |user_type|
+  context 'authorized user creates the curriculum' do
     scenario 'creates a basic course framework by adding level, target group and targets' do
-      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       # he should be on the last level
       expect(page).to have_text("Level 2: " + level_2.name)
@@ -201,9 +193,9 @@ feature 'Curriculum Editor', js: true do
     end
   end
 
-  shared_examples 'authorized users creates different types of targets' do |user_type|
+  context 'authorized user creates different types of targets' do
     scenario 'creates a target with a link to complete' do
-      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       find("#create-target-input#{target_group_2.id}").click
       fill_in "create-target-input#{target_group_2.id}", with: new_target_3_title
@@ -248,7 +240,7 @@ feature 'Curriculum Editor', js: true do
     end
 
     scenario 'creates a target with a quiz' do
-      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       find("#create-target-input#{target_group_2.id}").click
       fill_in "create-target-input#{target_group_2.id}", with: new_target_4_title
@@ -330,9 +322,9 @@ feature 'Curriculum Editor', js: true do
     end
   end
 
-  shared_examples 'authorized users modifies a target' do |user_type|
+  context 'authorized users modifies a target' do
     scenario 'adds content to a target and modifies its properties' do
-      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       target = target_4
 
@@ -497,7 +489,7 @@ feature 'Curriculum Editor', js: true do
     end
 
     scenario 'modifies an existing target content' do
-      sign_in_user admin_user(user_type), referer: curriculum_school_course_path(course)
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       target = target_5
       # Open the target editor
@@ -606,18 +598,8 @@ feature 'Curriculum Editor', js: true do
     end
   end
 
-  context 'school admin uses the curriculum editor' do
-    include_examples 'authorized users creates the curriculum', :admin
-    include_examples 'authorized users creates different types of targets', :admin
-    include_examples 'authorized users modifies a target', :admin
-  end
-
   context 'course author uses the curriculum editor' do
-    include_examples 'authorized users creates the curriculum', :course_author
-    include_examples 'authorized users creates different types of targets', :course_author
-    include_examples 'authorized users modifies a target', :course_author
-
-    scenario 'user can navigate only to assigned courses and not to school admin pages' do
+    scenario 'user can navigate only to assigned courses and modify content of those courses' do
       sign_in_user course_author.user, referer: curriculum_school_course_path(course)
       expect(page).to have_button(course.name)
       click_button course.name
@@ -635,6 +617,110 @@ feature 'Curriculum Editor', js: true do
       [school_path, curriculum_school_course_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
         visit path
         expect(page).to have_text("The page you were looking for doesn't exist!")
+      end
+
+      visit curriculum_school_course_path(course)
+      find("#create-target-input#{target_group_2.id}").click
+      fill_in "create-target-input#{target_group_2.id}", with: new_target_3_title
+      click_button 'Create'
+
+      expect(page).to have_text("Target created successfully")
+      dismiss_notification
+
+      click_button 'Next Step'
+      expect(page).to have_text('Any prerequisite targets?')
+
+      within("div#evaluated") do
+        click_button 'No'
+      end
+
+      within("div#method_of_completion") do
+        click_button 'Visit a link to complete the target.'
+      end
+
+      fill_in 'Link to complete', with: link_to_complete
+
+      within("div#visibility") do
+        click_button 'Live'
+      end
+
+      click_button 'Update Target'
+
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      target = target_5
+      # Open the target editor
+      find('.target-group__target', text: target.title).click
+      click_button 'Edit'
+      expect(page).to have_selector('.content-block__content', count: 4)
+      find("div#add-block-1", visible: false).click
+
+      within("div#content-type-picker-1") do
+        find('p', text: 'Markdown').click
+      end
+
+      expect(page).to have_selector('.content-block__content', count: 5)
+
+      replace_markdown(sample_markdown_text)
+      find('span', text: 'Preview').click
+      click_button 'Save'
+
+      expect(page).to have_text('Content added successfully')
+      dismiss_notification
+
+      # Move a block down
+      within('#content-block-controls-1') do
+        find_button('Move down').click
+      end
+
+      # Moving blocks has no message in the UI to be checked. Do some action before checking changes in DB
+      within('#content-block-form-3') do
+        find('span', text: 'Edit Markdown').click
+        replace_markdown(sample_markdown_text)
+        click_button 'Update'
+      end
+
+      expect(page).to have_text('Content updated successfully')
+      dismiss_notification
+
+      # Move a block up
+      within('#content-block-controls-4') do
+        find_button('Move down').click
+      end
+
+      within('#content-block-form-2') do
+        find('span', text: 'Edit Markdown').click
+        replace_markdown(sample_markdown_text)
+        click_button 'Update'
+      end
+
+      expect(page).to have_text('Content updated successfully')
+      dismiss_notification
+
+      # Update a file title
+      within('#content-block-form-5') do
+        fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
+        click_button 'Update Title'
+      end
+
+      expect(page).to have_text('Content updated successfully')
+      dismiss_notification
+
+      # Update an image caption
+      within('#content-block-form-1') do
+        fill_in 'content_block[caption]', with: 'new image caption', fill_options: { clear: :backspace }
+        click_button 'Update Caption'
+      end
+
+      expect(page).to have_text('Content updated successfully')
+      dismiss_notification
+
+      # Delete a content block
+      accept_confirm do
+        within('#content-block-controls-1') do
+          find_button('Delete block').click
+        end
       end
     end
   end

@@ -55,10 +55,10 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
   <div
     className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
     <div
-      className="relative bg-white border border-gray-400 lg:border-gray-300 p-4 lg:p-6 flex items-center justify-between rounded-lg shadow-md container max-w-3xl -mb-12">
+      className="relative bg-white border lg:border-transparent p-4 lg:p-6 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
       <div
         onClick={_ => setSelectedSubmission(_ => None)}
-        className="course-review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-b lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+        className="course-review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
         <Icon className="if i-times-light text-xl lg:text-2xl" />
         <span className="text-xs hidden lg:inline-block mt-px">
           {"close" |> str}

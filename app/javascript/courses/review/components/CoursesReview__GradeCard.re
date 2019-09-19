@@ -20,14 +20,14 @@ let showGrades = gradeLabels =>
 let renderGradePills = (gradeLabels, evaluvationCriteria) =>
   evaluvationCriteria
   |> Array.map(ec =>
-       <div className="mt-4 pr-4">
-         <div className="flex justify-between">
-           <div>
+       <div className="mt-3 pr-4">
+         <div className="flex justify-between font-semibold text-gray-700">
+           <p className="text-xs">
              {ec |> SubmissionDetails.evaluationCriterionName |> str}
-           </div>
-           <div> {"0/5" |> str} </div>
+           </p>
+           <p className="text-xs"> {"0/5" |> str} </p>
          </div>
-         <div className="inline-flex w-full text-center">
+         <div className="inline-flex w-full text-center mt-1">
            {
              gradeLabels
              |> Array.map(gradeLabel =>
@@ -45,7 +45,7 @@ let renderGradePills = (gradeLabels, evaluvationCriteria) =>
 
 [@react.component]
 let make = (~gradeLabels, ~evaluvationCriteria, ~grades) =>
-  <div className="p-4">
+  <div className="p-4 md:px-6 md:pt-5">
     <div className="font-semibold text-sm lg:text-base">
       {"Grade Card" |> str}
     </div>
@@ -60,8 +60,13 @@ let make = (~gradeLabels, ~evaluvationCriteria, ~grades) =>
       </div>
       <div
         className="w-2/5 items-center flex flex-col justify-center border-l">
-        <i className="fas fa-marker text-6xl p-2 text-gray-600" />
-        <div> {"Not Reviewed" |> str} </div>
+        <div
+          className="w-22 h-22 rounded-full border-5 flex justify-center items-center border-gray-200">
+          <i className="fas fa-marker text-4xl text-gray-400" />
+        </div>
+        <p className="text-xs font-semibold text-gray-600 mt-2">
+          {"Not Reviewed" |> str}
+        </p>
       </div>
     </div>
   </div>;

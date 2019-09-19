@@ -128,21 +128,24 @@ let showFeedback = feedback =>
              {
                switch (f |> Feedback.coachTitle) {
                | Some(title) =>
-                 <span className="inline-block text-xs text-gray-700 ml-1">
+                 <span className="inline-block text-xs text-gray-700 ml-2">
                    {title |> str}
                  </span>
                | None => React.null
                }
              }
-             <p className="text-xs leading-tight">
+           </div>
+           <div>
+             <p
+               className="text-xs leading-tight bg-gray-200 inline-block rounded p-1 mt-4">
                {f |> Feedback.createdAtPretty |> str}
              </p>
+             <MarkdownBlock
+               className="mt-1"
+               profile=Markdown.Permissive
+               markdown={f |> Feedback.value}
+             />
            </div>
-           <MarkdownBlock
-             className="mt-3"
-             profile=Markdown.Permissive
-             markdown={f |> Feedback.value}
-           />
          </div>
        </div>
      )
@@ -151,7 +154,8 @@ let showFeedback = feedback =>
 [@react.component]
 let make = (~authenticityToken, ~submission, ~gradeLabels) => {
   let (state, setState) = React.useState(() => {submission: submission});
-  <div className="mt-6 rounded-lg bg-white border shadow overflow-hidden">
+  <div
+    className="mt-6 rounded-b-lg bg-white border-t-3 border-orange-300 shadow overflow-hidden">
     <div
       className="p-4 md:px-6 md:py-5 border-b bg-white flex items-center justify-between">
       <h2 className="font-semibold text-sm lg:text-base">

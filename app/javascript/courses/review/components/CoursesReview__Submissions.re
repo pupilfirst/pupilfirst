@@ -178,7 +178,11 @@ let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
       grades={submission |> SubmissionDetails.grades}
       passGrade
       passedAt={submission |> SubmissionDetails.passedAt}
+      feedback={submission |> SubmissionDetails.feedback}
     />
-    <div> {showFeedback(submission |> SubmissionDetails.feedback)} </div>
+    <CoursesReview__ShowFeedback
+      authenticityToken
+      feedback={submission |> SubmissionDetails.feedback}
+    />
   </div>;
 };

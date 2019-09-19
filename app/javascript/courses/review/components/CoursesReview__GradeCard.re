@@ -10,11 +10,13 @@ type status =
 type state = {
   status,
   grades: array(Grade.t),
+  newFeedback: string,
 };
 
 let updateGrading = (grade, setState) =>
   setState(state =>
     {
+      ...state,
       status: Grading,
       grades:
         state.grades
@@ -200,19 +202,37 @@ let initalStatus = (passedAt, grades) =>
   | (None, true) => Graded(false)
   | (_, _) => UnGraded
   };
+let updateFeedbackCB = (setState, newFeedback) =>
+  setState(state => {...state, newFeedback});
 
 [@react.component]
 let make =
-    (~gradeLabels, ~evaluvationCriteria, ~grades, ~passGrade, ~passedAt) => {
+    (
+      ~gradeLabels,
+      ~evaluvationCriteria,
+      ~grades,
+      ~passGrade,
+      ~passedAt,
+      ~feedback,
+    ) => {
   let (state, setState) =
     React.useState(() =>
-      {status: initalStatus(passedAt, grades), grades: [||]}
+      {status: initalStatus(passedAt, grades), grades: [||], newFeedback: ""}
     );
   <div className="p-4">
     <div className="font-semibold text-sm lg:text-base">
       {"Grade Card" |> str}
     </div>
-    <div className="flex justify-between w-full pb-4">
+    {
+      feedback == [||] && grades == [||] ?
+        <CoursesReview__FeedbackEditor
+          feedback={state.newFeedback}
+          label="Add feedback"
+          updateFeedbackCB={updateFeedbackCB(setState)}
+        /> :
+        React.null
+    }
+    <div className="flex justify-between w-full pb-4 mt-4">
       <div className="w-3/5">
         {
           switch (grades) {

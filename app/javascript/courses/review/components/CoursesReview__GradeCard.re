@@ -219,7 +219,7 @@ let make =
     React.useState(() =>
       {status: initalStatus(passedAt, grades), grades: [||], newFeedback: ""}
     );
-  <div className="p-4">
+  <div className="p-4 md:px-6 md:pt-5">
     <div className="font-semibold text-sm lg:text-base">
       {"Grade Card" |> str}
     </div>

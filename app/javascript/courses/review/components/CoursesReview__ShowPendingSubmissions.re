@@ -27,7 +27,7 @@ let make =
            <div
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
-             className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border border-gray-300 p-3 md:p-6 mt-4 cursor-pointer rounded-lg shadow hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
+             className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-orange-400 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
              <div className="md:pr-2">
                <div className="block md:flex md:items-center text-sm">
                  <span

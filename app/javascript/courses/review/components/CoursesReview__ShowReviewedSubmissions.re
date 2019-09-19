@@ -62,7 +62,9 @@ let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
                     )
                }
              )
-             |> Array.to_list |> List.flatten |> Array.of_list,
+             |> Array.to_list
+             |> List.flatten
+             |> Array.of_list,
            ),
       loading: false,
       endCursor,
@@ -125,24 +127,22 @@ let showFeedbackSent = feedbackSent =>
 
 let showLoadMoreButton =
     (authenticityToken, courseId, setState, selectedLevel, cursor) =>
-  <div className="flex justify-center w-full">
-    <div
-      className="btn border mt-4 bg-white cursor-pointer"
-      onClick={
-        _ =>
-          getReviewedSubmissions(
-            authenticityToken,
-            courseId,
-            cursor,
-            setState,
-            selectedLevel,
-            (),
-          )
-          |> ignore
-      }>
-      {"Load More" |> str}
-    </div>
-  </div>;
+  <button
+    className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+    onClick={
+      _ =>
+        getReviewedSubmissions(
+          authenticityToken,
+          courseId,
+          cursor,
+          setState,
+          selectedLevel,
+          (),
+        )
+        |> ignore
+    }>
+    {"Load More..." |> str}
+  </button>;
 
 let showSubmission = (submissions, levels, setSelectedSubmission) =>
   <div>
@@ -153,7 +153,7 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
            <div
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
-             className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border border-gray-300 p-3 md:p-6 mt-4 cursor-pointer rounded-lg shadow hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
+             className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-gray-600 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
              <div className="md:pr-2">
                <div className="block md:flex md:items-center text-sm">
                  <span
@@ -161,7 +161,10 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
                    {
                      submission
                      |> Submission.levelId
-                     |> Level.unsafeLevelNumber(levels, "ShowReviewedSubmission")
+                     |> Level.unsafeLevelNumber(
+                          levels,
+                          "ShowReviewedSubmission",
+                        )
                      |> str
                    }
                  </span>
@@ -191,7 +194,6 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
              }
            </div>
          )
-
       |> React.array
     }
   </div>;
@@ -237,13 +239,21 @@ let make =
   <div>
     {
       switch (state.submissions) {
-      | [||] => <div> {"No reviewed submission" |> str} </div>
+      | [||] =>
+        <div
+          className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
+          {"No Reviewed Submission" |> str}
+        </div>
       | _ => showSubmission(state.submissions, levels, setSelectedSubmission)
       }
     }
     {
       switch (state.loading, state.hasNextPage, state.endCursor) {
-      | (true, _, _) => <div> {"Loading..." |> str} </div>
+      | (true, _, _) =>
+        <div
+          className="text-sm text-center font-semibold bg-gray-300 p-2 rounded mt-8">
+          {"Loading More..." |> str}
+        </div>
       | (false, false, _)
       | (false, true, None) => React.null
       | (false, true, Some(_)) =>

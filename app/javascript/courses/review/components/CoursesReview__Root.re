@@ -58,8 +58,12 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
 };
 
 let buttonClasses = selected =>
-  "w-1/2 md:w-auto py-2 px-3 md:px-6 font-semibold text-sm hover:text-primary-500 hover:bg-gray-100 focus:outline-none "
-  ++ (selected ? "bg-primary-100 shadow-inner text-primary-500" : "bg-white");
+  "w-1/2 md:w-auto py-2 px-3 md:px-6 font-semibold text-sm focus:outline-none "
+  ++ (
+    selected ?
+      "bg-primary-100 shadow-inner text-primary-500" :
+      "bg-white hover:text-primary-500 hover:bg-gray-100"
+  );
 
 [@react.component]
 let make =
@@ -76,9 +80,10 @@ let make =
   let (selectedSubmission, setSelectedSubmission) =
     React.useState(() => Some(0 |> Array.unsafe_get(submissions)));
 
-  <div className="bg-gray-100 pt-14 pb-8 px-3 -mt-7">
-    <div className="max-w-3xl mx-auto">
-      <div className="flex flex-col md:flex-row items-center justify-between">
+  <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
+    <div className="w-full bg-gray-100 relative md:sticky md:top-0">
+      <div
+        className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between pt-4 pb-4">
         <div
           className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400 overflow-hidden">
           <button
@@ -92,10 +97,12 @@ let make =
             {"Reviewed" |> str}
           </button>
         </div>
-        <div className="flex-shrink-0 mt-4">
+        <div className="flex-shrink-0 pt-2 md:pt-0">
           {showDropdown(levels, selectedLevel, setSelectedLevel)}
         </div>
       </div>
+    </div>
+    <div className="max-w-3xl mx-auto">
       {
         showPending ?
           <CoursesReview__ShowPendingSubmissions

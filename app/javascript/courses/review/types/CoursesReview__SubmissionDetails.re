@@ -2,16 +2,6 @@ type attachment = {
   title: option(string),
   url: string,
 };
-type grade = {
-  evaluationCriterionId: string,
-  grade: int,
-  id: string,
-};
-
-type evaluationCriterion = {
-  id: string,
-  name: string,
-};
 
 type t = {
   id: string,
@@ -21,8 +11,8 @@ type t = {
   evaluatorId: option(string),
   attachments: array(attachment),
   feedback: array(CoursesReview__Feedback.t),
-  grades: array(grade),
-  evaluationCriteria: array(evaluationCriterion),
+  grades: array(CoursesReview__Grade.t),
+  evaluationCriteria: array(CoursesReview__EvaluationCriterion.t),
 };
 let id = t => t.id;
 let createdAt = t => t.createdAt;
@@ -36,8 +26,6 @@ let grades = t => t.grades;
 let feedback = t => t.feedback;
 let title = attachment => attachment.title;
 let url = attachment => attachment.url;
-let evaluationCriterionName = evaluationCriterion => evaluationCriterion.name;
-let evaluationCriterion = evaluationCriterion => evaluationCriterion.id;
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 
@@ -77,15 +65,7 @@ let make =
   evaluationCriteria,
 };
 
-let makeGrade = (~evaluationCriterionId, ~grade, ~id) => {
-  evaluationCriterionId,
-  grade,
-  id,
-};
-
 let makeAttachment = (~title, ~url) => {title, url};
-
-let makeEvaluationCriteria = (~id, ~name) => {id, name};
 
 let decodeJS = details =>
   details
@@ -114,16 +94,18 @@ let decodeJS = details =>
          ~grades=
            s##grades
            |> Js.Array.map(g =>
-                makeGrade(
+                CoursesReview__Grade.make(
                   ~evaluationCriterionId=g##evaluationCriterionId,
-                  ~id=g##id,
-                  ~grade=g##grade,
+                  ~value=g##grade,
                 )
               ),
          ~evaluationCriteria=
            s##evaluationCriteria
            |> Js.Array.map(ec =>
-                makeEvaluationCriteria(~id=ec##id, ~name=ec##name)
+                CoursesReview__EvaluationCriterion.make(
+                  ~id=ec##id,
+                  ~name=ec##name,
+                )
               ),
        )
      );

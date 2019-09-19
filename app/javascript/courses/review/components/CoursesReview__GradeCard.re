@@ -2,49 +2,212 @@
 
 open CoursesReview__Types;
 let str = React.string;
+type status =
+  | Graded(bool)
+  | Grading
+  | UnGraded;
 
-let showGrades = gradeLabels =>
-  <div className="inline-flex w-full text-center pr-4 mt-4">
+type state = {
+  status,
+  grades: array(Grade.t),
+};
+
+let updateGrading = (grade, setState) =>
+  setState(state =>
     {
-      gradeLabels
-      |> Array.map(gradeLabel =>
-           <div
-             className="bg-gray-100 border py-1 px-4 text-sm cursor-pointer flex-1">
-             {gradeLabel |> GradeLabel.grade |> string_of_int |> str}
-           </div>
+      status: Grading,
+      grades:
+        state.grades
+        |> Js.Array.filter(g =>
+             g
+             |> Grade.evaluationCriterionId
+             != (grade |> Grade.evaluationCriterionId)
+           )
+        |> Array.append([|grade|]),
+    }
+  );
+
+let handleGradePillClick = (evaluationCriterionId, value, setState, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  switch (setState) {
+  | Some(setState) =>
+    updateGrading(Grade.make(~evaluationCriterionId, ~value), setState)
+  | None => ()
+  };
+};
+
+let findEvaluvationCriterion = (evaluvationCriteria, evaluationCriterionId) =>
+  switch (
+    evaluvationCriteria
+    |> Js.Array.find(ec =>
+         ec |> EvaluationCriterion.id == evaluationCriterionId
+       )
+  ) {
+  | Some(ec) => ec
+  | None =>
+    Rollbar.error(
+      "Unable to find evaluation Criterion with id: "
+      ++ evaluationCriterionId
+      ++ "in CoursesRevew__GradeCard",
+    );
+    evaluvationCriteria[0];
+  };
+
+let gradePillHeader = (evaluvationCriteriaName, selectedGrade, gradeLabels) =>
+  <div className="flex justify-between">
+    <div> {evaluvationCriteriaName |> str} </div>
+    <div>
+      {
+        (selectedGrade |> string_of_int)
+        ++ "/"
+        ++ (GradeLabel.maxGrade(gradeLabels) |> string_of_int)
+        |> str
+      }
+    </div>
+  </div>;
+
+let gradePillClasses = (selectedGrade, currentGrade, passgrade) =>
+  currentGrade <= selectedGrade ?
+    selectedGrade >= passgrade ? "bg-green-500" : "bg-red-500" : "bg-gray-100";
+
+let showGradePill =
+    (gradeLabels, evaluvationCriterion, gradeValue, passGrade, setState) =>
+  <div className="mt-4 pr-4">
+    {
+      gradePillHeader(
+        evaluvationCriterion |> EvaluationCriterion.name,
+        gradeValue,
+        gradeLabels,
+      )
+    }
+    <div className="inline-flex w-full text-center">
+      {
+        gradeLabels
+        |> Array.map(gradeLabel => {
+             let gradeLabelGrade = gradeLabel |> GradeLabel.grade;
+
+             <div
+               onClick={
+                 handleGradePillClick(
+                   evaluvationCriterion |> EvaluationCriterion.id,
+                   gradeLabelGrade,
+                   setState,
+                 )
+               }
+               title={gradeLabel |> GradeLabel.label}
+               className={
+                 "border py-1 px-4 text-sm flex-1 cursor-pointer "
+                 ++ gradePillClasses(gradeValue, gradeLabelGrade, passGrade)
+               }>
+               {
+                 switch (setState) {
+                 | Some(_) => gradeLabelGrade |> string_of_int |> str
+                 | None => React.null
+                 }
+               }
+             </div>;
+           })
+        |> React.array
+      }
+    </div>
+  </div>;
+
+let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria) =>
+  <div className="mt-4 pr-4">
+    {
+      grades
+      |> Array.map(grade =>
+           showGradePill(
+             gradeLabels,
+             findEvaluvationCriterion(
+               evaluvationCriteria,
+               grade |> Grade.evaluationCriterionId,
+             ),
+             grade |> Grade.value,
+             passGrade,
+             None,
+           )
          )
       |> React.array
     }
   </div>;
-
-let renderGradePills = (gradeLabels, evaluvationCriteria) =>
+let renderGradePills =
+    (gradeLabels, evaluvationCriteria, grades, passGrade, setState) =>
   evaluvationCriteria
-  |> Array.map(ec =>
-       <div className="mt-4 pr-4">
-         <div className="flex justify-between">
-           <div>
-             {ec |> SubmissionDetails.evaluationCriterionName |> str}
-           </div>
-           <div> {"0/5" |> str} </div>
-         </div>
-         <div className="inline-flex w-full text-center">
-           {
-             gradeLabels
-             |> Array.map(gradeLabel =>
-                  <div
-                    className="bg-gray-100 border py-1 px-4 text-sm cursor-pointer flex-1">
-                    {gradeLabel |> GradeLabel.grade |> string_of_int |> str}
-                  </div>
-                )
-             |> React.array
-           }
-         </div>
-       </div>
-     )
+  |> Array.map(ec => {
+       let grade =
+         grades
+         |> Js.Array.find(g =>
+              g
+              |> Grade.evaluationCriterionId == (ec |> EvaluationCriterion.id)
+            );
+       let gradeValue =
+         switch (grade) {
+         | Some(g) => g |> Grade.value
+         | None => 0
+         };
+
+       showGradePill(gradeLabels, ec, gradeValue, passGrade, Some(setState));
+     })
   |> React.array;
 
+let submissionStatusIcon = status => {
+  let text =
+    switch (status) {
+    | Graded(passed) => passed ? "Passed" : "Failed"
+    | Grading => "Reviewing"
+    | UnGraded => "Not Reviewed"
+    };
+  let color =
+    switch (status) {
+    | Graded(passed) => passed ? "green" : "red"
+    | Grading => "orange"
+    | UnGraded => "gray"
+    };
+
+  <div className="mx-auto">
+    <div
+      className={
+        "flex border-2 rounded-lg border-" ++ color ++ "-500 px-4 py-6"
+      }>
+      {
+        switch (status) {
+        | Graded(passed) =>
+          passed ?
+            <span className="fa-stack text-green-500 text-lg">
+              <i className="fas fa-certificate fa-stack-2x" />
+              <i className="fas fa-check fa-stack-1x fa-inverse" />
+            </span> :
+            <FaIcon
+              classes="fas fa-exclamation-triangle text-3xl text-red-500 mx-1"
+            />
+        | Grading =>
+          <FaIcon classes="fas fa-signature text-6xl p-2 text-orange-600" />
+        | UnGraded =>
+          <FaIcon classes="fas fa-marker text-6xl p-2 text-gray-600" />
+        }
+      }
+    </div>
+    <div className={"text-center text-" ++ color ++ "-500 font-bold mt-2"}>
+      {text |> str}
+    </div>
+  </div>;
+};
+
+let initalStatus = (passedAt, grades) =>
+  switch (passedAt, grades |> ArrayUtils.isNotEmpty) {
+  | (Some(_), _) => Graded(true)
+  | (None, true) => Graded(false)
+  | (_, _) => UnGraded
+  };
+
 [@react.component]
-let make = (~gradeLabels, ~evaluvationCriteria, ~grades) =>
+let make =
+    (~gradeLabels, ~evaluvationCriteria, ~grades, ~passGrade, ~passedAt) => {
+  let (state, setState) =
+    React.useState(() =>
+      {status: initalStatus(passedAt, grades), grades: [||]}
+    );
   <div className="p-4">
     <div className="font-semibold text-sm lg:text-base">
       {"Grade Card" |> str}
@@ -53,15 +216,21 @@ let make = (~gradeLabels, ~evaluvationCriteria, ~grades) =>
       <div className="w-3/5">
         {
           switch (grades) {
-          | [||] => renderGradePills(gradeLabels, evaluvationCriteria)
-          | grades => showGrades(gradeLabels)
+          | [||] =>
+            renderGradePills(
+              gradeLabels,
+              evaluvationCriteria,
+              state.grades,
+              passGrade,
+              setState,
+            )
+
+          | grades =>
+            showGrades(grades, gradeLabels, passGrade, evaluvationCriteria)
           }
         }
       </div>
-      <div
-        className="w-2/5 items-center flex flex-col justify-center border-l">
-        <i className="fas fa-marker text-6xl p-2 text-gray-600" />
-        <div> {"Not Reviewed" |> str} </div>
-      </div>
+      {submissionStatusIcon(state.status)}
     </div>
   </div>;
+};

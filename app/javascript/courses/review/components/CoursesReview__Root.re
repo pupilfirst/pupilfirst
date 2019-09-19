@@ -63,7 +63,14 @@ let buttonClasses = selected =>
 
 [@react.component]
 let make =
-    (~authenticityToken, ~levels, ~submissions, ~gradeLabels, ~courseId) => {
+    (
+      ~authenticityToken,
+      ~levels,
+      ~submissions,
+      ~gradeLabels,
+      ~courseId,
+      ~passGrade,
+    ) => {
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
   let (selectedSubmission, setSelectedSubmission) =
@@ -116,6 +123,7 @@ let make =
             submission
             setSelectedSubmission
             gradeLabels
+            passGrade
           />
         }
       }

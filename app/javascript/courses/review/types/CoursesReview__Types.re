@@ -5,3 +5,5 @@ module Submission = CoursesReview__Submission;
 module SubmissionDetails = CoursesReview__SubmissionDetails;
 module GradeLabel = CoursesReview__GradeLabel;
 module Feedback = CoursesReview__Feedback;
+module Grade = CoursesReview__Grade;
+module EvaluationCriterion = CoursesReview__EvaluationCriterion;

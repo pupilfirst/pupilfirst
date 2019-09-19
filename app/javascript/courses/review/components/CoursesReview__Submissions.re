@@ -51,7 +51,6 @@ let iconSpan = (iconClasses, attachment) => {
     <i className=faClasses />
   </span>;
 };
-
 let showSubmissions = attachments =>
   switch (attachments) {
   | [||] => React.null
@@ -149,7 +148,7 @@ let showFeedback = feedback =>
   |> React.array;
 
 [@react.component]
-let make = (~authenticityToken, ~submission, ~gradeLabels) => {
+let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div className="mt-6 rounded-lg bg-white border shadow overflow-hidden">
     <div
@@ -177,6 +176,8 @@ let make = (~authenticityToken, ~submission, ~gradeLabels) => {
       gradeLabels
       evaluvationCriteria={submission |> SubmissionDetails.evaluationCriteria}
       grades={submission |> SubmissionDetails.grades}
+      passGrade
+      passedAt={submission |> SubmissionDetails.passedAt}
     />
     <div> {showFeedback(submission |> SubmissionDetails.feedback)} </div>
   </div>;

@@ -17,7 +17,7 @@ module ReviewSubmissionDetailsQuery = [%graphql
           url, title
         },
         grades {
-          evaluationCriterionId, id, grade
+          evaluationCriterionId, grade
         },
         feedback{
           id, coachName, coachAvatarUrl, coachTitle, createdAt,value
@@ -107,6 +107,7 @@ let make =
       ~submission,
       ~setSelectedSubmission,
       ~gradeLabels,
+      ~passGrade,
     ) => {
   let (state, setState) =
     React.useState(() => {loading: true, submissionDetails: [||]});
@@ -135,6 +136,7 @@ let make =
                    authenticityToken
                    submission
                    gradeLabels
+                   passGrade
                  />
                </div>
              )

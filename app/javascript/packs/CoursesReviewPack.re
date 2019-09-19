@@ -9,9 +9,10 @@ let decodeProps = json =>
     json |> field("submissions", array(Submission.decode)),
     json |> field("courseId", string),
     json |> field("gradeLabels", array(GradeLabel.decode)),
+    json |> field("passGrade", int),
   );
 
-let (authenticityToken, levels, submissions, courseId, gradeLabels) =
+let (authenticityToken, levels, submissions, courseId, gradeLabels, passGrade) =
   DomUtils.parseJsonAttribute() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
@@ -21,6 +22,7 @@ ReactDOMRe.renderToElementWithId(
     submissions
     courseId
     gradeLabels
+    passGrade
   />,
   "react-root",
 );

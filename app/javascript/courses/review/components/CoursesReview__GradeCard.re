@@ -2,6 +2,7 @@
 
 open CoursesReview__Types;
 let str = React.string;
+
 type status =
   | Graded(bool)
   | Grading
@@ -11,29 +12,101 @@ type state = {
   status,
   grades: array(Grade.t),
   newFeedback: string,
+  saving: bool,
 };
 
-let updateGrading = (grade, setState) =>
+module CreateGradingMutation = [%graphql
+  {|
+  mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!) {
+    createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades){
+      success
+    }
+  }
+|}
+];
+
+let gradeSubmissionQuery = (authenticityToken, submissionId, state, setState) => {
+  let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
+
+  setState(state => {...state, saving: true});
+
+  (
+    state.newFeedback == "" ?
+      CreateGradingMutation.make(
+        ~submissionId,
+        ~feedback=state.newFeedback,
+        ~grades=jsGradesArray,
+        (),
+      ) :
+      CreateGradingMutation.make(~submissionId, ~grades=jsGradesArray, ())
+  )
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       response##createGrading##success ?
+         Notification.success("halo", "tada") :
+         Notification.error("halo", "tada");
+       setState(state => {...state, saving: true});
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let validGrades = (grades, evaluvationCriteria, status) =>
+  (
+    switch (status) {
+    | Graded(_)
+    | Grading => true
+    | UnGraded => false
+    }
+  )
+  && grades
+  |> Array.length == (evaluvationCriteria |> Array.length);
+
+let passed = (grades, passgrade) =>
+  grades
+  |> Js.Array.filter(g => g |> Grade.value < passgrade)
+  |> ArrayUtils.isEmpty;
+
+let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => {
+  let newGrades =
+    state.grades
+    |> Js.Array.filter(g =>
+         g
+         |> Grade.evaluationCriterionId
+         != (grade |> Grade.evaluationCriterionId)
+       )
+    |> Array.append([|grade|]);
+
   setState(state =>
     {
       ...state,
-      status: Grading,
-      grades:
-        state.grades
-        |> Js.Array.filter(g =>
-             g
-             |> Grade.evaluationCriterionId
-             != (grade |> Grade.evaluationCriterionId)
-           )
-        |> Array.append([|grade|]),
+      status:
+        validGrades(newGrades, evaluvationCriteria, state.status) ?
+          Graded(passed(newGrades, passGrade)) : Grading,
+      grades: newGrades,
     }
   );
-
-let handleGradePillClick = (evaluationCriterionId, value, setState, event) => {
+};
+let handleGradePillClick =
+    (
+      evaluationCriterionId,
+      evaluvationCriteria,
+      value,
+      state,
+      passGrade,
+      setState,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   switch (setState) {
   | Some(setState) =>
-    updateGrading(Grade.make(~evaluationCriterionId, ~value), setState)
+    updateGrading(
+      Grade.make(~evaluationCriterionId, ~value),
+      evaluvationCriteria,
+      state,
+      passGrade,
+      setState,
+    )
   | None => ()
   };
 };
@@ -96,7 +169,15 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
 };
 
 let showGradePill =
-    (gradeLabels, evaluvationCriterion, gradeValue, passGrade, setState) =>
+    (
+      gradeLabels,
+      evaluvationCriterion,
+      gradeValue,
+      passGrade,
+      evaluvationCriteria,
+      state,
+      setState,
+    ) =>
   <div className="mt-4 pr-4">
     {
       gradePillHeader(
@@ -116,7 +197,10 @@ let showGradePill =
                onClick={
                  handleGradePillClick(
                    evaluvationCriterion |> EvaluationCriterion.id,
+                   evaluvationCriteria,
                    gradeLabelGrade,
+                   state,
+                   passGrade,
                    setState,
                  )
                }
@@ -142,7 +226,7 @@ let showGradePill =
     </div>
   </div>;
 
-let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria) =>
+let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
   <div className="mt-4 pr-4">
     {
       grades
@@ -155,6 +239,8 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria) =>
              ),
              grade |> Grade.value,
              passGrade,
+             evaluvationCriteria,
+             state,
              None,
            )
          )
@@ -162,7 +248,7 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria) =>
     }
   </div>;
 let renderGradePills =
-    (gradeLabels, evaluvationCriteria, grades, passGrade, setState) =>
+    (gradeLabels, evaluvationCriteria, grades, passGrade, state, setState) =>
   evaluvationCriteria
   |> Array.map(ec => {
        let grade =
@@ -177,7 +263,15 @@ let renderGradePills =
          | None => 0
          };
 
-       showGradePill(gradeLabels, ec, gradeValue, passGrade, Some(setState));
+       showGradePill(
+         gradeLabels,
+         ec,
+         gradeValue,
+         passGrade,
+         evaluvationCriteria,
+         state,
+         Some(setState),
+       );
      })
   |> React.array;
 
@@ -234,9 +328,22 @@ let initalStatus = (passedAt, grades) =>
 let updateFeedbackCB = (setState, newFeedback) =>
   setState(state => {...state, newFeedback});
 
+let gradeSubmission =
+    (authenticityToken, submissionId, state, setState, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  switch (state.status) {
+  | Graded(_) =>
+    gradeSubmissionQuery(authenticityToken, submissionId, state, setState)
+  | Grading
+  | UnGraded => ()
+  };
+};
+
 [@react.component]
 let make =
     (
+      ~authenticityToken,
+      ~submissionId,
       ~gradeLabels,
       ~evaluvationCriteria,
       ~grades,
@@ -246,7 +353,12 @@ let make =
     ) => {
   let (state, setState) =
     React.useState(() =>
-      {status: initalStatus(passedAt, grades), grades: [||], newFeedback: ""}
+      {
+        status: initalStatus(passedAt, grades),
+        grades: [||],
+        newFeedback: "",
+        saving: false,
+      }
     );
   <div>
     <div className="p-4 md:px-6 md:pt-5">
@@ -273,6 +385,7 @@ let make =
                   evaluvationCriteria,
                   state.grades,
                   passGrade,
+                  state,
                   setState,
                 )
 
@@ -282,6 +395,7 @@ let make =
                   gradeLabels,
                   passGrade,
                   evaluvationCriteria,
+                  state,
                 )
               }
             }
@@ -295,7 +409,16 @@ let make =
       | [||] =>
         <div className="border-t">
           <div className="flex bg-gray-200 p-4 md:p-6 text-center font-bold">
-            <div className="px-4 py-2 bg-orange-400 mx-auto cursor-pointer">
+            <div
+              className="px-4 py-2 bg-orange-400 mx-auto cursor-pointer"
+              onClick={
+                gradeSubmission(
+                  authenticityToken,
+                  submissionId,
+                  state,
+                  setState,
+                )
+              }>
               {"Review Submission" |> str}
             </div>
           </div>

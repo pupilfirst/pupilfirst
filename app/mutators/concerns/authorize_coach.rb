@@ -1,4 +1,4 @@
-module AuthorizeFaculty
+module AuthorizeCoach
   include ActiveSupport::Concern
 
   def authorized?

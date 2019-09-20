@@ -1,5 +1,5 @@
 class CreateGradingMutator < ApplicationMutator
-  include AuthorizeFaculty
+  include AuthorizeCoach
 
   attr_accessor :submission_id
   attr_accessor :grades
@@ -15,15 +15,16 @@ class CreateGradingMutator < ApplicationMutator
   def grade
     TimelineEvent.transaction do
       evaluation_criteria.each do |criterion|
+        # binding.pry
         TimelineEventGrade.create!(
           timeline_event: submission,
           evaluation_criterion: criterion,
-          grade: grades[criterion.id]
+          grade: grade_array[criterion.id.to_s]
         )
       end
 
-      @timeline_event.update!(
-        passed_at: (failed?(grades) ? nil : Time.now),
+      submission.update!(
+        passed_at: (failed? ? nil : Time.now),
         evaluator: coach
       )
       send_feedback if feedback.present?
@@ -61,13 +62,13 @@ class CreateGradingMutator < ApplicationMutator
   end
 
   def valid_grading
-    return unless valid_grading?(grades)
+    return unless valid_grading?
 
     errors[:base] << "Grading values supplied are invalid: #{grades.to_json}"
   end
 
   def submission
-    @submission = current_school.timeline_event.where(id: submission_id).first
+    @submission = current_school.timeline_events.where(id: submission_id).first
   end
 
   def target
@@ -86,18 +87,22 @@ class CreateGradingMutator < ApplicationMutator
     @evaluation_criteria ||= submission.evaluation_criteria.to_a
   end
 
-  def valid_grading?(grades)
-    return false unless grades.is_a? Hash
-
-    all_criteria_graded?(grades) && all_grades_valid?(grades)
+  def grade_array
+    @grade_array ||= grades.each_with_object({}) do |key, value|
+      value[key[:evaluation_criterion_id]] = key[:grade]
+    end
   end
 
-  def all_criteria_graded?(grades)
-    evaluation_criteria.map(&:id).sort == grades.keys.sort
+  def valid_grading?
+    all_criteria_graded? && all_grades_valid?
   end
 
-  def all_grades_valid?(grades)
-    grades.values.all? { |grade| grade.in?(1..max_grade) }
+  def all_criteria_graded?
+    evaluation_criteria.map(&:id).sort == grade_array.keys.sort
+  end
+
+  def all_grades_valid?
+    grade_array.values.all? { |grade| grade.in?(1..max_grade) }
   end
 
   def max_grade
@@ -108,7 +113,7 @@ class CreateGradingMutator < ApplicationMutator
     @pass_grade ||= submission.founder.startup.course.pass_grade
   end
 
-  def failed?(grades)
-    grades.values.any? { |grade| grade < pass_grade }
+  def failed?
+    grade_array.values.any? { |grade| grade < pass_grade }
   end
 end

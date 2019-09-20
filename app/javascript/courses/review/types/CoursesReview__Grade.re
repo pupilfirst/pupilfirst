@@ -9,5 +9,8 @@ let make = (~evaluationCriterionId, ~value) => {
 };
 
 let evaluationCriterionId = t => t.evaluationCriterionId;
-
 let value = t => t.value;
+let asJsType = t => {
+  "evaluationCriterionId": t.evaluationCriterionId,
+  "grade": t.value,
+};

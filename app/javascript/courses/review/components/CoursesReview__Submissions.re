@@ -111,45 +111,6 @@ let showSubmissions = attachments =>
     </div>
   };
 
-let showFeedback = feedback =>
-  feedback
-  |> Array.map(f =>
-       <div className="border-t p-4 md:p-6 flex">
-         <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full">
-           <img src={f |> Feedback.coachAvatarUrl} />
-         </div>
-         <div className="flex-grow ml-3">
-           <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
-           <div>
-             <h4 className="font-semibold text-base inline-block">
-               {f |> Feedback.coachName |> str}
-             </h4>
-             {
-               switch (f |> Feedback.coachTitle) {
-               | Some(title) =>
-                 <span className="inline-block text-xs text-gray-700 ml-2">
-                   {title |> str}
-                 </span>
-               | None => React.null
-               }
-             }
-           </div>
-           <div>
-             <p
-               className="text-xs leading-tight bg-gray-200 inline-block rounded p-1 mt-4">
-               {f |> Feedback.createdAtPretty |> str}
-             </p>
-             <MarkdownBlock
-               className="mt-1"
-               profile=Markdown.Permissive
-               markdown={f |> Feedback.value}
-             />
-           </div>
-         </div>
-       </div>
-     )
-  |> React.array;
-
 [@react.component]
 let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
   let (state, setState) = React.useState(() => {submission: submission});
@@ -177,6 +138,8 @@ let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
       {showSubmissions(submission |> SubmissionDetails.attachments)}
     </div>
     <CoursesReview__GradeCard
+      authenticityToken
+      submissionId={submission |> SubmissionDetails.id}
       gradeLabels
       evaluvationCriteria={submission |> SubmissionDetails.evaluationCriteria}
       grades={submission |> SubmissionDetails.grades}

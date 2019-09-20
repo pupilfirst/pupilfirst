@@ -6,7 +6,7 @@ module Mutations
 
     description "Create grading for submission"
 
-    field :success, Boolean, null: true
+    field :success, Boolean, null: false
 
     def resolve(params)
       mutator = CreateGradingMutator.new(params, context)

@@ -14,7 +14,8 @@ let showFeedback = feedback =>
   feedback
   |> Array.mapi((index, f) =>
        <div key={index |> string_of_int} className="border-t p-4 md:p-6 flex">
-         <div className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full">
+         <div
+           className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden">
            <img src={f |> Feedback.coachAvatarUrl} />
          </div>
          <div className="flex-grow ml-3">

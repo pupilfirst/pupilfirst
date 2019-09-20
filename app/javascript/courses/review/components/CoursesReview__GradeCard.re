@@ -249,40 +249,60 @@ let make =
     React.useState(() =>
       {status: initalStatus(passedAt, grades), grades: [||], newFeedback: ""}
     );
-  <div className="p-4 md:px-6 md:pt-5">
-    {
-      feedback == [||] && grades == [||] ?
-        <CoursesReview__FeedbackEditor
-          feedback={state.newFeedback}
-          label="Your feedback"
-          updateFeedbackCB={updateFeedbackCB(setState)}
-        /> :
-        React.null
-    }
-    <div className="w-full pb-4 mt-4">
-      <div className="font-semibold text-sm lg:text-base">
-        {"Grade Card" |> str}
-      </div>
-      <div className="flex">
-        <div className="w-full md:w-4/6">
-          {
-            switch (grades) {
-            | [||] =>
-              renderGradePills(
-                gradeLabels,
-                evaluvationCriteria,
-                state.grades,
-                passGrade,
-                setState,
-              )
-
-            | grades =>
-              showGrades(grades, gradeLabels, passGrade, evaluvationCriteria)
-            }
-          }
+  <div>
+    <div className="p-4 md:px-6 md:pt-5">
+      {
+        feedback == [||] && grades == [||] ?
+          <CoursesReview__FeedbackEditor
+            feedback={state.newFeedback}
+            label="Add feedback"
+            updateFeedbackCB={updateFeedbackCB(setState)}
+          /> :
+          React.null
+      }
+      <div className="w-full pb-4 mt-4">
+        <div className="font-semibold text-sm lg:text-base">
+          {"Grade Card" |> str}
         </div>
-        {submissionStatusIcon(state.status)}
+        <div className="flex">
+          <div className="w-full md:w-4/6">
+            {
+              switch (grades) {
+              | [||] =>
+                renderGradePills(
+                  gradeLabels,
+                  evaluvationCriteria,
+                  state.grades,
+                  passGrade,
+                  setState,
+                )
+
+              | grades =>
+                showGrades(
+                  grades,
+                  gradeLabels,
+                  passGrade,
+                  evaluvationCriteria,
+                )
+              }
+            }
+          </div>
+          {submissionStatusIcon(state.status)}
+        </div>
       </div>
     </div>
+    {
+      switch (grades) {
+      | [||] =>
+        <div className="border-t">
+          <div className="flex bg-gray-200 p-4 md:p-6 text-center font-bold">
+            <div className="px-4 py-2 bg-orange-400 mx-auto cursor-pointer">
+              {"Review Submission" |> str}
+            </div>
+          </div>
+        </div>
+      | _ => React.null
+      }
+    }
   </div>;
 };

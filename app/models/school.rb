@@ -12,6 +12,7 @@ class School < ApplicationRecord
   has_many :levels, through: :courses
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
+  has_many :timeline_events, through: :founders
 
   acts_as_taggable_on :founder_tags
 

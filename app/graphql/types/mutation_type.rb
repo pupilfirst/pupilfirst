@@ -30,5 +30,6 @@ module Types
     field :create_course_export, mutation: Mutations::CreateCourseExport, null: false
     field :sort_curriculum_resources, mutation: Mutations::SortCurriculumResources, null: false
     field :restore_content_version, mutation: Mutations::RestoreContentVersion, null: false
+    field :create_grading, mutation: Mutations::CreateGrading, null: false
   end
 end

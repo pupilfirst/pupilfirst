@@ -52,42 +52,47 @@ let updateFeedbackCB = (setState, newFeedback) =>
   setState(state => {...state, newFeedback});
 
 [@react.component]
-let make = (~authenticityToken, ~feedback) => {
+let make = (~authenticityToken, ~feedback, ~reviewed) => {
   let (state, setState) =
     React.useState(() =>
       {saving: false, newFeedback: "", showFeedbackEditor: false}
     );
   <div>
     {showFeedback(feedback)}
-    <div className="border-t bg-white rounded-b-lg">
-      {
-        state.showFeedbackEditor ?
-          <div className="p-4 md:p-6">
-            <CoursesReview__FeedbackEditor
-              feedback={state.newFeedback}
-              label="Add feedback"
-              updateFeedbackCB={updateFeedbackCB(setState)}
-            />
-          </div> :
-          <div
-            className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
-            <div
-              onClick={
-                _ => setState(state => {...state, showFeedbackEditor: true})
-              }
-              className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
-              {
-                (
-                  switch (feedback) {
-                  | [||] => "Add feedback"
-                  | _ => "Add another feedback"
+    {
+      reviewed ?
+        <div className="border-t bg-white rounded-b-lg">
+          {
+            state.showFeedbackEditor ?
+              <div className="p-4 md:p-6">
+                <CoursesReview__FeedbackEditor
+                  feedback={state.newFeedback}
+                  label="Add feedback"
+                  updateFeedbackCB={updateFeedbackCB(setState)}
+                />
+              </div> :
+              <div
+                className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
+                <div
+                  onClick={
+                    _ =>
+                      setState(state => {...state, showFeedbackEditor: true})
                   }
-                )
-                |> str
-              }
-            </div>
-          </div>
-      }
-    </div>
+                  className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
+                  {
+                    (
+                      switch (feedback) {
+                      | [||] => "Add feedback"
+                      | _ => "Add another feedback"
+                      }
+                    )
+                    |> str
+                  }
+                </div>
+              </div>
+          }
+        </div> :
+        React.null
+    }
   </div>;
 };

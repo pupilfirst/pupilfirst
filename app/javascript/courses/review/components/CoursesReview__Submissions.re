@@ -187,6 +187,9 @@ let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
     <CoursesReview__ShowFeedback
       authenticityToken
       feedback={submission |> SubmissionDetails.feedback}
+      reviewed={
+        submission |> SubmissionDetails.grades |> ArrayUtils.isNotEmpty
+      }
     />
   </div>;
 };

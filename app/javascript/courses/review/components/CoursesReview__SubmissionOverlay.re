@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesReview__SubmissionOverlay.css")|}];
 
 open CoursesReview__Types;
 let str = React.string;

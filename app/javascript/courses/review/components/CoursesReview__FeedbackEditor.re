@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
 
 open CoursesReview__Types;
 
@@ -6,7 +7,7 @@ let str = React.string;
 
 [@react.component]
 let make = (~feedback, ~updateFeedbackCB, ~label) =>
-  <div>
+  <div className="pt-4 md:pt-5 course-review__feedback-editor">
     <MarkdownEditor
       updateDescriptionCB=updateFeedbackCB
       value=feedback

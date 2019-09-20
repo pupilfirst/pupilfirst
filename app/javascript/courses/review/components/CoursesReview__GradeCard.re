@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesReview__GradeCard.css")|}];
 
 open CoursesReview__Types;
 let str = React.string;
@@ -72,11 +73,11 @@ let gradePillHeader = (evaluvationCriteriaName, selectedGrade, gradeLabels) =>
 
 let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
   let defaultClasses =
-    "border-r py-1 px-2 text-sm flex-1 font-semibold "
+    "course-review-grade-card__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold "
     ++ (
       switch (setState) {
       | Some(_) =>
-        "cursor-pointer "
+        "cursor-pointer hover:shadow-lg focus:outline-none "
         ++ (
           currentGrade >= passgrade ?
             "hover:bg-green-500 hover:text-white " :
@@ -90,7 +91,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
   ++ (
     currentGrade <= selectedGrade ?
       selectedGrade >= passgrade ?
-        "bg-green-500 text-white" : "bg-red-500 text-white" :
+        "bg-green-500 text-white shadow-lg" : "bg-red-500 text-white shadow-lg" :
       "bg-gray-100 text-gray-800"
   );
 };
@@ -106,7 +107,7 @@ let showGradePill =
       )
     }
     <div
-      className="inline-flex w-full text-center border rounded-lg overflow-hidden mt-1">
+      className="course-review-grade-card__grade-bar inline-flex w-full text-center mt-1">
       {
         gradeLabels
         |> Array.map(gradeLabel => {
@@ -196,7 +197,7 @@ let submissionStatusIcon = status => {
     };
 
   <div
-    className="hidden md:flex w-2/6 items-center flex-col justify-center border-l">
+    className="hidden md:flex w-2/5 items-center flex-col justify-center border-l">
     <div
       className={
         "w-22 h-22 rounded-full border-5 flex justify-center items-center border-"
@@ -250,22 +251,22 @@ let make =
       {status: initalStatus(passedAt, grades), grades: [||], newFeedback: ""}
     );
   <div>
-    <div className="p-4 md:px-6 md:pt-5">
+    <div className="px-4 md:px-6 ">
       {
         feedback == [||] && grades == [||] ?
           <CoursesReview__FeedbackEditor
             feedback={state.newFeedback}
-            label="Add feedback"
+            label="Add Your Feedback"
             updateFeedbackCB={updateFeedbackCB(setState)}
           /> :
           React.null
       }
-      <div className="w-full pb-4 mt-4">
+      <div className="w-full pb-4 pt-4 md:pt-5">
         <div className="font-semibold text-sm lg:text-base">
           {"Grade Card" |> str}
         </div>
         <div className="flex">
-          <div className="w-full md:w-4/6">
+          <div className="w-full md:w-3/5">
             {
               switch (grades) {
               | [||] =>
@@ -294,11 +295,10 @@ let make =
     {
       switch (grades) {
       | [||] =>
-        <div className="border-t">
-          <div className="flex bg-gray-200 p-4 md:p-6 text-center font-bold">
-            <div className="px-4 py-2 bg-orange-400 mx-auto cursor-pointer">
-              {"Review Submission" |> str}
-            </div>
+        <div className="bg-white py-4 mx-3 md:mx-6 border-t">
+          <div
+            className="btn btn-success btn-large w-full border border-green-600">
+            {"Save Your Review" |> str}
           </div>
         </div>
       | _ => React.null

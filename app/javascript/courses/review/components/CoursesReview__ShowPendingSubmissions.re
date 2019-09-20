@@ -1,5 +1,4 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./CoursesReview__SubmissionOverlay.css")|}];
 
 open CoursesReview__Types;
 let str = React.string;
@@ -28,10 +27,10 @@ let make =
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
              className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-orange-400 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
-             <div className="md:pr-2">
-               <div className="block md:flex md:items-center text-sm">
+             <div className="w-full md:w-3/4">
+               <div className="block text-sm md:pr-2">
                  <span
-                   className="inline-block bg-gray-300 text-xs font-semibold mr-2 px-2 py-px rounded">
+                   className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                    {
                      submission
                      |> Submission.levelId
@@ -42,8 +41,7 @@ let make =
                      |> str
                    }
                  </span>
-                 <span
-                   className="inline-block md:block font-semibold text-base">
+                 <span className="ml-2 font-semibold text-base">
                    {submission |> Submission.title |> str}
                  </span>
                </div>
@@ -57,9 +55,11 @@ let make =
                  </span>
                </div>
              </div>
-             <div
-               className="text-xs mt-1 md:mt-0 font-semibold bg-orange-100 text-orange-600 flex-shrink-0 px-2 py-px rounded">
-               {submission |> Submission.timeDistance |> str}
+             <div className="w-auto md:w-1/4 text-xs flex justify-end">
+               <div
+                 className="text-xs mt-2 md:mt-0 font-semibold bg-orange-100 text-orange-600 flex-shrink-0 px-2 py-px rounded">
+                 {submission |> Submission.timeDistance |> str}
+               </div>
              </div>
            </div>
          )

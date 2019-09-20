@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesReview__GradeCard.css")|}];
 
 open CoursesReview__Types;
 let str = React.string;
@@ -25,7 +26,8 @@ module CreateGradingMutation = [%graphql
 |}
 ];
 
-let gradeSubmissionQuery = (authenticityToken, submissionId, state, setState) => {
+let gradeSubmissionQuery =
+    (authenticityToken, submissionId, state, setState, updateSubmissionCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
   setState(state => {...state, saving: true});
@@ -51,16 +53,8 @@ let gradeSubmissionQuery = (authenticityToken, submissionId, state, setState) =>
   |> ignore;
 };
 
-let validGrades = (grades, evaluvationCriteria, status) =>
-  (
-    switch (status) {
-    | Graded(_)
-    | Grading => true
-    | UnGraded => false
-    }
-  )
-  && grades
-  |> Array.length == (evaluvationCriteria |> Array.length);
+let validGrades = (grades, evaluvationCriteria) =>
+  grades |> Array.length == (evaluvationCriteria |> Array.length);
 
 let passed = (grades, passgrade) =>
   grades
@@ -81,7 +75,7 @@ let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => 
     {
       ...state,
       status:
-        validGrades(newGrades, evaluvationCriteria, state.status) ?
+        validGrades(newGrades, evaluvationCriteria) ?
           Graded(passed(newGrades, passGrade)) : Grading,
       grades: newGrades,
     }
@@ -145,11 +139,11 @@ let gradePillHeader = (evaluvationCriteriaName, selectedGrade, gradeLabels) =>
 
 let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
   let defaultClasses =
-    "border-r py-1 px-2 text-sm flex-1 font-semibold "
+    "course-review-grade-card__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold "
     ++ (
       switch (setState) {
       | Some(_) =>
-        "cursor-pointer "
+        "cursor-pointer hover:shadow-lg focus:outline-none "
         ++ (
           currentGrade >= passgrade ?
             "hover:bg-green-500 hover:text-white " :
@@ -163,7 +157,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
   ++ (
     currentGrade <= selectedGrade ?
       selectedGrade >= passgrade ?
-        "bg-green-500 text-white" : "bg-red-500 text-white" :
+        "bg-green-500 text-white shadow-lg" : "bg-red-500 text-white shadow-lg" :
       "bg-gray-100 text-gray-800"
   );
 };
@@ -178,7 +172,7 @@ let showGradePill =
       state,
       setState,
     ) =>
-  <div className="mt-4 pr-4">
+  <div className="md:pr-8 mt-4">
     {
       gradePillHeader(
         evaluvationCriterion |> EvaluationCriterion.name,
@@ -187,7 +181,7 @@ let showGradePill =
       )
     }
     <div
-      className="inline-flex w-full text-center border rounded-lg overflow-hidden mt-1">
+      className="course-review-grade-card__grade-bar inline-flex w-full text-center mt-1">
       {
         gradeLabels
         |> Array.map(gradeLabel => {
@@ -227,7 +221,7 @@ let showGradePill =
   </div>;
 
 let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
-  <div className="mt-4 pr-4">
+  <div>
     {
       grades
       |> Array.map(grade =>
@@ -289,7 +283,8 @@ let submissionStatusIcon = status => {
     | UnGraded => "gray"
     };
 
-  <div className="w-2/5 items-center flex flex-col justify-center border-l">
+  <div
+    className="hidden md:flex w-2/5 items-center flex-col justify-center border-l">
     <div
       className={
         "w-22 h-22 rounded-full border-5 flex justify-center items-center border-"
@@ -329,11 +324,24 @@ let updateFeedbackCB = (setState, newFeedback) =>
   setState(state => {...state, newFeedback});
 
 let gradeSubmission =
-    (authenticityToken, submissionId, state, setState, event) => {
+    (
+      authenticityToken,
+      submissionId,
+      state,
+      setState,
+      updateSubmissionCB,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   switch (state.status) {
   | Graded(_) =>
-    gradeSubmissionQuery(authenticityToken, submissionId, state, setState)
+    gradeSubmissionQuery(
+      authenticityToken,
+      submissionId,
+      state,
+      setState,
+      updateSubmissionCB,
+    )
   | Grading
   | UnGraded => ()
   };
@@ -350,6 +358,7 @@ let make =
       ~passGrade,
       ~passedAt,
       ~feedback,
+      ~updateSubmissionCB,
     ) => {
   let (state, setState) =
     React.useState(() =>
@@ -361,22 +370,22 @@ let make =
       }
     );
   <div>
-    <div className="p-4 md:px-6 md:pt-5">
+    <div className="px-4 md:px-6 ">
       {
         feedback == [||] && grades == [||] ?
           <CoursesReview__FeedbackEditor
             feedback={state.newFeedback}
-            label="Add feedback"
+            label="Add Your Feedback"
             updateFeedbackCB={updateFeedbackCB(setState)}
           /> :
           React.null
       }
-      <div className="w-full pb-4 mt-4">
+      <div className="w-full pb-4 pt-4 md:pt-5">
         <div className="font-semibold text-sm lg:text-base">
           {"Grade Card" |> str}
         </div>
         <div className="flex">
-          <div className="w-3/5">
+          <div className="w-full md:w-3/5">
             {
               switch (grades) {
               | [||] =>
@@ -407,22 +416,22 @@ let make =
     {
       switch (grades) {
       | [||] =>
-        <div className="border-t">
-          <div className="flex bg-gray-200 p-4 md:p-6 text-center font-bold">
-            <div
-              className="px-4 py-2 bg-orange-400 mx-auto cursor-pointer"
-              onClick={
-                gradeSubmission(
-                  authenticityToken,
-                  submissionId,
-                  state,
-                  setState,
-                )
-              }>
-              {"Review Submission" |> str}
-            </div>
+        <div className="bg-white py-4 mx-3 md:mx-6 border-t">
+          <div
+            className="btn btn-success btn-large w-full border border-green-600"
+            onClick={
+              gradeSubmission(
+                authenticityToken,
+                submissionId,
+                state,
+                setState,
+                updateSubmissionCB,
+              )
+            }>
+            {"Review Submission" |> str}
           </div>
         </div>
+
       | _ => React.null
       }
     }

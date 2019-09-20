@@ -109,18 +109,18 @@ let getReviewedSubmissions =
 let showSubmissionStatus = failed =>
   failed ?
     <div
-      className="bg-red-100 border border-red-500 leading-normal text-red-800 font-semibold px-3 py-px rounded">
+      className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
       {"Failed" |> str}
     </div> :
     <div
-      className="bg-green-100 border border-green-500 leading-normal text-green-800 font-semibold px-3 py-px rounded">
+      className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
       {"Passed" |> str}
     </div>;
 
 let showFeedbackSent = feedbackSent =>
   feedbackSent ?
     <div
-      className="bg-primary-100 text-primary-600 border border-transparent leading-normal font-semibold px-3 py-px rounded mr-3">
+      className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-3 py-px rounded mr-3">
       {"Feedback Sent" |> str}
     </div> :
     React.null;
@@ -154,8 +154,8 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
              className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-gray-600 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
-             <div className="md:pr-2">
-               <div className="block md:flex md:items-center text-sm">
+             <div className="w-full md:w-3/4">
+               <div className="block text-sm md:pr-2">
                  <span
                    className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                    {
@@ -185,7 +185,8 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
              {
                switch (submission |> Submission.status) {
                | Some(status) =>
-                 <div className="text-xs flex mt-2 md:mt-0">
+                 <div
+                   className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
                    {showFeedbackSent(status |> Submission.feedbackSent)}
                    {showSubmissionStatus(status |> Submission.failed)}
                  </div>

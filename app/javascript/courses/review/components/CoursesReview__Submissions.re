@@ -112,7 +112,14 @@ let showSubmissions = attachments =>
   };
 
 [@react.component]
-let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
+let make =
+    (
+      ~authenticityToken,
+      ~submission,
+      ~gradeLabels,
+      ~passGrade,
+      ~updateSubmissionCB,
+    ) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div
     className="mt-6 rounded-b-lg bg-white border-t-3 border-orange-300 shadow">
@@ -146,6 +153,7 @@ let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
       passGrade
       passedAt={submission |> SubmissionDetails.passedAt}
       feedback={submission |> SubmissionDetails.feedback}
+      updateSubmissionCB
     />
     <CoursesReview__ShowFeedback
       authenticityToken

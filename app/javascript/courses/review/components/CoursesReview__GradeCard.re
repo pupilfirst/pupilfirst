@@ -97,7 +97,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
 
 let showGradePill =
     (gradeLabels, evaluvationCriterion, gradeValue, passGrade, setState) =>
-  <div className="mt-4 pr-4">
+  <div className="md:pr-8 mt-4">
     {
       gradePillHeader(
         evaluvationCriterion |> EvaluationCriterion.name,
@@ -143,7 +143,7 @@ let showGradePill =
   </div>;
 
 let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria) =>
-  <div className="mt-4 pr-4">
+  <div>
     {
       grades
       |> Array.map(grade =>
@@ -195,7 +195,8 @@ let submissionStatusIcon = status => {
     | UnGraded => "gray"
     };
 
-  <div className="w-2/5 items-center flex flex-col justify-center border-l">
+  <div
+    className="hidden md:flex w-2/6 items-center flex-col justify-center border-l">
     <div
       className={
         "w-22 h-22 rounded-full border-5 flex justify-center items-center border-"
@@ -263,7 +264,7 @@ let make =
         {"Grade Card" |> str}
       </div>
       <div className="flex">
-        <div className="w-3/5">
+        <div className="w-full md:w-4/6">
           {
             switch (grades) {
             | [||] =>

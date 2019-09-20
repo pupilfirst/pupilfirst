@@ -55,7 +55,7 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
   <div
     className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
     <div
-      className="relative bg-white border lg:border-transparent p-4 lg:p-6 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
+      className="relative bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
       <div
         onClick={_ => setSelectedSubmission(_ => None)}
         className="course-review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
@@ -64,10 +64,10 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
           {"close" |> str}
         </span>
       </div>
-      <div className="md:pr-3">
-        <div className="block md:flex md:items-center text-sm">
+      <div className="w-full md:w-5/6">
+        <div className="block text-sm md:pr-2">
           <span
-            className="inline-block bg-gray-300 text-xs font-semibold mr-2 px-2 py-px rounded">
+            className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
             {
               submission
               |> Submission.levelId
@@ -75,10 +75,12 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
               |> str
             }
           </span>
-          <span
-            className="inline-block md:block font-semibold text-sm md:text-lg">
+          <a
+            href={"/targets/" ++ (submission |> Submission.targetId)}
+            target="_blank"
+            className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-sm md:text-lg">
             {submission |> Submission.title |> str}
-          </span>
+          </a>
         </div>
         <div className="text-left mt-1 text-xs text-gray-800">
           <span> {"Submitted by " |> str} </span>
@@ -90,12 +92,15 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
           </span>
         </div>
       </div>
-      <a
-        href={"/targets/" ++ (submission |> Submission.targetId)}
-        target="_blank"
-        className="btn btn-primary-ghost btn-small hidden md:inline-block">
-        {"View Target " |> str}
-      </a>
+      <div
+        className="hidden md:flex w-auto md:w-1/6 text-xs justify-end mt-2 md:mt-0">
+        <a
+          href={"/targets/" ++ (submission |> Submission.targetId)}
+          target="_blank"
+          className="btn btn-primary-ghost btn-small hidden md:inline-block">
+          {"View Target " |> str}
+        </a>
+      </div>
     </div>
   </div>;
 

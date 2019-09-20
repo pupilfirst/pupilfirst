@@ -57,20 +57,43 @@ let findEvaluvationCriterion = (evaluvationCriteria, evaluationCriterionId) =>
 
 let gradePillHeader = (evaluvationCriteriaName, selectedGrade, gradeLabels) =>
   <div className="flex justify-between">
-    <div> {evaluvationCriteriaName |> str} </div>
-    <div>
+    <p className="text-xs font-semibold text-gray-800">
+      {evaluvationCriteriaName |> str}
+    </p>
+    <p className="text-xs font-semibold text-gray-800">
       {
         (selectedGrade |> string_of_int)
         ++ "/"
         ++ (GradeLabel.maxGrade(gradeLabels) |> string_of_int)
         |> str
       }
-    </div>
+    </p>
   </div>;
 
-let gradePillClasses = (selectedGrade, currentGrade, passgrade) =>
-  currentGrade <= selectedGrade ?
-    selectedGrade >= passgrade ? "bg-green-500" : "bg-red-500" : "bg-gray-100";
+let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
+  let defaultClasses =
+    "border-r py-1 px-2 text-sm flex-1 font-semibold "
+    ++ (
+      switch (setState) {
+      | Some(_) =>
+        "cursor-pointer "
+        ++ (
+          currentGrade >= passgrade ?
+            "hover:bg-green-500 hover:text-white " :
+            "hover:bg-red-500 hover:text-white "
+        )
+      | None => ""
+      }
+    );
+
+  defaultClasses
+  ++ (
+    currentGrade <= selectedGrade ?
+      selectedGrade >= passgrade ?
+        "bg-green-500 text-white" : "bg-red-500 text-white" :
+      "bg-gray-100 text-gray-800"
+  );
+};
 
 let showGradePill =
     (gradeLabels, evaluvationCriterion, gradeValue, passGrade, setState) =>
@@ -82,7 +105,8 @@ let showGradePill =
         gradeLabels,
       )
     }
-    <div className="inline-flex w-full text-center">
+    <div
+      className="inline-flex w-full text-center border rounded-lg overflow-hidden mt-1">
       {
         gradeLabels
         |> Array.map(gradeLabel => {
@@ -98,8 +122,12 @@ let showGradePill =
                }
                title={gradeLabel |> GradeLabel.label}
                className={
-                 "border py-1 px-4 text-sm flex-1 cursor-pointer "
-                 ++ gradePillClasses(gradeValue, gradeLabelGrade, passGrade)
+                 gradePillClasses(
+                   gradeValue,
+                   gradeLabelGrade,
+                   passGrade,
+                   setState,
+                 )
                }>
                {
                  switch (setState) {
@@ -167,10 +195,12 @@ let submissionStatusIcon = status => {
     | UnGraded => "gray"
     };
 
-  <div className="mx-auto">
+  <div className="w-2/5 items-center flex flex-col justify-center border-l">
     <div
       className={
-        "flex border-2 rounded-lg border-" ++ color ++ "-500 px-4 py-6"
+        "w-22 h-22 rounded-full border-5 flex justify-center items-center border-"
+        ++ color
+        ++ "-400"
       }>
       {
         switch (status) {
@@ -181,18 +211,17 @@ let submissionStatusIcon = status => {
               <i className="fas fa-check fa-stack-1x fa-inverse" />
             </span> :
             <FaIcon
-              classes="fas fa-exclamation-triangle text-3xl text-red-500 mx-1"
+              classes="fas fa-exclamation-triangle text-4xl text-red-500"
             />
         | Grading =>
-          <FaIcon classes="fas fa-signature text-6xl p-2 text-orange-600" />
-        | UnGraded =>
-          <FaIcon classes="fas fa-marker text-6xl p-2 text-gray-600" />
+          <FaIcon classes="fas fa-signature text-4xl text-orange-500" />
+        | UnGraded => <FaIcon classes="fas fa-marker text-4xl text-gray-400" />
         }
       }
     </div>
-    <div className={"text-center text-" ++ color ++ "-500 font-bold mt-2"}>
+    <p className={"text-xs font-semibold text-" ++ color ++ "-800 mt-2"}>
       {text |> str}
-    </div>
+    </p>
   </div>;
 };
 
@@ -221,9 +250,6 @@ let make =
     );
   <div>
     <div className="p-4 md:px-6 md:pt-5">
-      <div className="font-semibold text-sm lg:text-base">
-        {"Grade Card" |> str}
-      </div>
       {
         feedback == [||] && grades == [||] ?
           <CoursesReview__FeedbackEditor
@@ -233,25 +259,35 @@ let make =
           /> :
           React.null
       }
-      <div className="flex justify-between w-full pb-4 mt-4">
-        <div className="w-3/5">
-          {
-            switch (grades) {
-            | [||] =>
-              renderGradePills(
-                gradeLabels,
-                evaluvationCriteria,
-                state.grades,
-                passGrade,
-                setState,
-              )
-
-            | grades =>
-              showGrades(grades, gradeLabels, passGrade, evaluvationCriteria)
-            }
-          }
+      <div className="w-full pb-4 mt-4">
+        <div className="font-semibold text-sm lg:text-base">
+          {"Grade Card" |> str}
         </div>
-        {submissionStatusIcon(state.status)}
+        <div className="flex">
+          <div className="w-3/5">
+            {
+              switch (grades) {
+              | [||] =>
+                renderGradePills(
+                  gradeLabels,
+                  evaluvationCriteria,
+                  state.grades,
+                  passGrade,
+                  setState,
+                )
+
+              | grades =>
+                showGrades(
+                  grades,
+                  gradeLabels,
+                  passGrade,
+                  evaluvationCriteria,
+                )
+              }
+            }
+          </div>
+          {submissionStatusIcon(state.status)}
+        </div>
       </div>
     </div>
     {

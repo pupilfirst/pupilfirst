@@ -154,7 +154,7 @@ let showFeedback = feedback =>
 let make = (~authenticityToken, ~submission, ~gradeLabels, ~passGrade) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div
-    className="mt-6 rounded-b-lg bg-white border-t-3 border-orange-300 shadow overflow-hidden">
+    className="mt-6 rounded-b-lg bg-white border-t-3 border-orange-300 shadow">
     <div
       className="p-4 md:px-6 md:py-5 border-b bg-white flex items-center justify-between">
       <h2 className="font-semibold text-sm lg:text-base">

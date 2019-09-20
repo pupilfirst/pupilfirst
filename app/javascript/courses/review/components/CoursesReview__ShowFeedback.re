@@ -20,24 +20,26 @@ let showFeedback = feedback =>
          <div className="flex-grow ml-3">
            <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
            <div>
-             <h4 className="font-semibold text-base inline-block">
+             <h4
+               className="font-semibold text-base inline-block leading-tight">
                {f |> Feedback.coachName |> str}
              </h4>
              {
                switch (f |> Feedback.coachTitle) {
                | Some(title) =>
-                 <span className="inline-block text-xs text-gray-700 ml-1">
-                   {title |> str}
+                 <span className="inline-block text-xs text-gray-800 md:ml-2">
+                   {"(" ++ title ++ ")" |> str}
                  </span>
                | None => React.null
                }
              }
-             <p className="text-xs leading-tight">
-               {f |> Feedback.createdAtPretty |> str}
-             </p>
            </div>
+           <p
+             className="text-xs leading-tight font-semibold inline-block p-1 bg-gray-200 rounded mt-4">
+             {f |> Feedback.createdAtPretty |> str}
+           </p>
            <MarkdownBlock
-             className="mt-3"
+             className="pt-1"
              profile=Markdown.Permissive
              markdown={f |> Feedback.value}
            />
@@ -57,7 +59,7 @@ let make = (~authenticityToken, ~feedback) => {
     );
   <div>
     {showFeedback(feedback)}
-    <div className="border-t">
+    <div className="border-t bg-white rounded-b-lg">
       {
         state.showFeedbackEditor ?
           <div className="p-4 md:p-6">
@@ -68,19 +70,22 @@ let make = (~authenticityToken, ~feedback) => {
             />
           </div> :
           <div
-            onClick={
-              _ => setState(state => {...state, showFeedbackEditor: true})
-            }
-            className="bg-gray-200 p-4 md:p-6 text-center font-bold cursor-pointer">
-            {
-              (
-                switch (feedback) {
-                | [||] => "Add feedback"
-                | _ => "Add another feedback"
-                }
-              )
-              |> str
-            }
+            className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
+            <div
+              onClick={
+                _ => setState(state => {...state, showFeedbackEditor: true})
+              }
+              className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
+              {
+                (
+                  switch (feedback) {
+                  | [||] => "Add feedback"
+                  | _ => "Add another feedback"
+                  }
+                )
+                |> str
+              }
+            </div>
           </div>
       }
     </div>

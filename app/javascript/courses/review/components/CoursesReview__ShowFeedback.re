@@ -50,39 +50,43 @@ let updateFeedbackCB = (setState, newFeedback) =>
   setState(state => {...state, newFeedback});
 
 [@react.component]
-let make = (~authenticityToken, ~feedback) => {
+let make = (~authenticityToken, ~feedback, ~reviewed) => {
   let (state, setState) =
     React.useState(() =>
       {saving: false, newFeedback: "", showFeedbackEditor: false}
     );
   <div>
     {showFeedback(feedback)}
-    <div className="border-t">
-      {
-        state.showFeedbackEditor ?
-          <div className="p-4 md:p-6">
-            <CoursesReview__FeedbackEditor
-              feedback={state.newFeedback}
-              label="Add feedback"
-              updateFeedbackCB={updateFeedbackCB(setState)}
-            />
-          </div> :
-          <div
-            onClick={
-              _ => setState(state => {...state, showFeedbackEditor: true})
-            }
-            className="bg-gray-200 p-4 md:p-6 text-center font-bold cursor-pointer">
-            {
-              (
-                switch (feedback) {
-                | [||] => "Add feedback"
-                | _ => "Add another feedback"
+    {
+      reviewed ?
+        <div className="border-t">
+          {
+            state.showFeedbackEditor ?
+              <div className="p-4 md:p-6">
+                <CoursesReview__FeedbackEditor
+                  feedback={state.newFeedback}
+                  label="Add feedback"
+                  updateFeedbackCB={updateFeedbackCB(setState)}
+                />
+              </div> :
+              <div
+                onClick={
+                  _ => setState(state => {...state, showFeedbackEditor: true})
                 }
-              )
-              |> str
-            }
-          </div>
-      }
-    </div>
+                className="bg-gray-200 p-4 md:p-6 text-center font-bold cursor-pointer">
+                {
+                  (
+                    switch (feedback) {
+                    | [||] => "Add feedback"
+                    | _ => "Add another feedback"
+                    }
+                  )
+                  |> str
+                }
+              </div>
+          }
+        </div> :
+        React.null
+    }
   </div>;
 };

@@ -9,11 +9,11 @@ type state = {
   loading: bool,
 };
 
-module ReviewSubmissionDetailsQuery = [%graphql
+module SubmissionDetailsQuery = [%graphql
   {|
     query($submissionId: ID!) {
-      reviewSubmissionDetails(submissionId: $submissionId) {
-        id, evaluatorId, passedAt, createdAt, description,
+      submissionDetails(submissionId: $submissionId) {
+        id, evaluatorName, passedAt, createdAt, description,
         attachments{
           url, title
         },
@@ -38,13 +38,10 @@ let updateSubmissionDetails = (setState, details) =>
 
 let getSubmissionDetails = (authenticityToken, submission, setState, ()) => {
   setState(state => {...state, loading: true});
-  ReviewSubmissionDetailsQuery.make(
-    ~submissionId=submission |> Submission.id,
-    (),
-  )
+  SubmissionDetailsQuery.make(~submissionId=submission |> Submission.id, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       response##reviewSubmissionDetails |> updateSubmissionDetails(setState);
+       response##submissionDetails |> updateSubmissionDetails(setState);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -101,7 +98,7 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
       </div>
     </div>
   </div>;
-let updateSubmissionCB = (setState, submission) =>
+let updateSubmissionCB = (setState, removePendingSubmissionCB, submission) => {
   setState(state =>
     {
       ...state,
@@ -113,6 +110,8 @@ let updateSubmissionCB = (setState, submission) =>
         |> Array.append([|submission|]),
     }
   );
+  removePendingSubmissionCB(submission |> SubmissionDetails.id);
+};
 
 [@react.component]
 let make =
@@ -123,6 +122,8 @@ let make =
       ~setSelectedSubmission,
       ~gradeLabels,
       ~passGrade,
+      ~currentCoach,
+      ~removePendingSubmissionCB,
     ) => {
   let (state, setState) =
     React.useState(() => {loading: true, submissionDetails: [||]});
@@ -153,10 +154,13 @@ let make =
                    submission
                    gradeLabels
                    passGrade
-                   updateSubmissionCB={updateSubmissionCB(setState)}
+                   updateSubmissionCB={
+                     updateSubmissionCB(setState, removePendingSubmissionCB)
+                   }
                    submissionNumber={
                      (state.submissionDetails |> Array.length) - index
                    }
+                   currentCoach
                  />
                </div>
              )

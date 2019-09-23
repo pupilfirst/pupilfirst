@@ -65,6 +65,11 @@ let buttonClasses = selected =>
       "bg-white hover:text-primary-500 hover:bg-gray-100"
   );
 
+let removePendingSubmission = (setSubmissions, submissionId) =>
+  setSubmissions(submissions =>
+    submissions |> Js.Array.filter(s => s |> Submission.id != submissionId)
+  );
+
 [@react.component]
 let make =
     (
@@ -74,7 +79,9 @@ let make =
       ~gradeLabels,
       ~courseId,
       ~passGrade,
+      ~currentCoach,
     ) => {
+  let (submissions, setSubmissions) = React.useState(() => submissions);
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
   let (selectedSubmission, setSelectedSubmission) =
@@ -131,6 +138,10 @@ let make =
             setSelectedSubmission
             gradeLabels
             passGrade
+            currentCoach
+            removePendingSubmissionCB={
+              removePendingSubmission(setSubmissions)
+            }
           />
         }
       }

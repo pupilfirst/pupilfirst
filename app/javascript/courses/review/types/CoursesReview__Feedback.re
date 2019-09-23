@@ -1,5 +1,5 @@
 type t = {
-  createdAt: string,
+  createdAt: Js.Date.t,
   value: string,
   id: string,
   coachName: string,
@@ -11,9 +11,7 @@ let coachName = t => t.coachName;
 let coachAvatarUrl = t => t.coachAvatarUrl;
 let coachTitle = t => t.coachTitle;
 let createdAt = t => t.createdAt;
-let createdAtDate = t => t |> createdAt |> DateFns.parseString;
-let createdAtPretty = t =>
-  t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
 
 let make = (~coachName, ~coachAvatarUrl, ~coachTitle, ~createdAt, ~value, ~id) => {
   coachName,

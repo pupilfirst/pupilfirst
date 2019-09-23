@@ -1,14 +1,18 @@
 module Types
-  class ReviewSubmissionDetailsType < Types::BaseObject
+  class SubmissionDetailsType < Types::BaseObject
     field :id, ID, null: false
     field :created_at, String, null: false
     field :passed_at, String, null: true
-    field :evaluator_id, ID, null: true
+    field :evaluator_name, String, null: true
     field :description, String, null: false
     field :feedback, [Types::SubmissionFeedbackType], null: false
     field :grades, [Types::GradeType], null: false
     field :attachments, [Types::SubmissionAttachmentType], null: false
     field :evaluation_criteria, [Types::EvaluationCriteria], null: false
+
+    def evaluator_name
+      object.evaluator&.name
+    end
 
     def grades
       object.timeline_event_grades.map do |submission_grading|

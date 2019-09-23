@@ -7,8 +7,8 @@ type t = {
   id: string,
   description: string,
   createdAt: string,
-  passedAt: option(string),
-  evaluatorId: option(string),
+  passedAt: option(Js.Date.t),
+  evaluatorName: option(string),
   attachments: array(attachment),
   feedback: array(CoursesReview__Feedback.t),
   grades: array(CoursesReview__Grade.t),
@@ -17,7 +17,7 @@ type t = {
 let id = t => t.id;
 let createdAt = t => t.createdAt;
 let passedAt = t => t.passedAt;
-let evaluatorId = t => t.evaluatorId;
+let evaluatorName = t => t.evaluatorName;
 let description = t => t.description;
 let createdAtDate = t => t |> createdAt |> DateFns.parseString;
 let attachments = t => t.attachments;
@@ -48,7 +48,7 @@ let make =
       ~description,
       ~createdAt,
       ~passedAt,
-      ~evaluatorId,
+      ~evaluatorName,
       ~attachments,
       ~feedback,
       ~grades,
@@ -58,7 +58,7 @@ let make =
   description,
   createdAt,
   passedAt,
-  evaluatorId,
+  evaluatorName,
   attachments,
   feedback,
   grades,
@@ -74,8 +74,8 @@ let decodeJS = details =>
          ~id=s##id,
          ~description=s##description,
          ~createdAt=s##createdAt,
-         ~passedAt=s##passedAt,
-         ~evaluatorId=s##evaluatorId,
+         ~passedAt=s##passedAt |> Date.parseOption,
+         ~evaluatorName=s##evaluatorName,
          ~attachments=
            s##attachments
            |> Js.Array.map(a => makeAttachment(~url=a##url, ~title=a##title)),
@@ -87,7 +87,7 @@ let decodeJS = details =>
                   ~coachName=f##coachName,
                   ~coachAvatarUrl=f##coachAvatarUrl,
                   ~coachTitle=f##coachTitle,
-                  ~createdAt=f##createdAt,
+                  ~createdAt=f##createdAt |> DateFns.parseString,
                   ~value=f##value,
                 )
               ),

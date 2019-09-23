@@ -1,4 +1,4 @@
-class ReviewSubmissionDetailsResolver < ApplicationResolver
+class SubmissionDetailsResolver < ApplicationResolver
   def collection(submission_id)
     submission = TimelineEvent.find_by(id: submission_id)
     if authorized?(submission)

@@ -16,6 +16,11 @@ type state = {
   saving: bool,
 };
 
+let passed = (grades, passgrade) =>
+  grades
+  |> Js.Array.filter(g => g |> Grade.value < passgrade)
+  |> ArrayUtils.isEmpty;
+
 module CreateGradingMutation = [%graphql
   {|
   mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!) {
@@ -27,7 +32,14 @@ module CreateGradingMutation = [%graphql
 ];
 
 let gradeSubmissionQuery =
-    (authenticityToken, submissionId, state, setState, updateSubmissionCB) => {
+    (
+      authenticityToken,
+      submissionId,
+      state,
+      setState,
+      passGrade,
+      updateGradingCB,
+    ) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
   setState(state => {...state, saving: true});
@@ -45,9 +57,12 @@ let gradeSubmissionQuery =
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##createGrading##success ?
-         Notification.success("halo", "tada") :
-         Notification.error("halo", "tada");
-       setState(state => {...state, saving: true});
+         updateGradingCB(
+           ~grades=state.grades,
+           ~passed=passed(state.grades, passGrade),
+           ~newFeedback=state.newFeedback,
+         ) :
+         setState(state => {...state, saving: false});
        Js.Promise.resolve();
      })
   |> ignore;
@@ -55,11 +70,6 @@ let gradeSubmissionQuery =
 
 let validGrades = (grades, evaluvationCriteria) =>
   grades |> Array.length == (evaluvationCriteria |> Array.length);
-
-let passed = (grades, passgrade) =>
-  grades
-  |> Js.Array.filter(g => g |> Grade.value < passgrade)
-  |> ArrayUtils.isEmpty;
 
 let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => {
   let newGrades =
@@ -329,7 +339,8 @@ let gradeSubmission =
       submissionId,
       state,
       setState,
-      updateSubmissionCB,
+      passGrade,
+      updateGradingCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -340,7 +351,8 @@ let gradeSubmission =
       submissionId,
       state,
       setState,
-      updateSubmissionCB,
+      passGrade,
+      updateGradingCB,
     )
   | Grading
   | UnGraded => ()
@@ -358,7 +370,7 @@ let make =
       ~passGrade,
       ~passedAt,
       ~feedback,
-      ~updateSubmissionCB,
+      ~updateGradingCB,
     ) => {
   let (state, setState) =
     React.useState(() =>
@@ -425,7 +437,8 @@ let make =
                 submissionId,
                 state,
                 setState,
-                updateSubmissionCB,
+                passGrade,
+                updateGradingCB,
               )
             }>
             {"Review Submission" |> str}

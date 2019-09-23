@@ -18,7 +18,16 @@ module Courses
         submissions: pending_submissions,
         course_id: @course.id,
         grade_labels: @course.grade_labels_to_props,
-        pass_grade: @course.pass_grade
+        pass_grade: @course.pass_grade,
+        current_coach: current_coach
+      }
+    end
+
+    def current_coach
+      {
+        name: current_user.name,
+        avatar_url: current_user.image_or_avatar_url,
+        title: current_user.title
       }
     end
 

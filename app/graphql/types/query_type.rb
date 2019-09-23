@@ -16,7 +16,7 @@ module Types
       argument :level_id, ID, required: false
     end
 
-    field :review_submission_details, [Types::ReviewSubmissionDetailsType], null: false do
+    field :submission_details, [Types::SubmissionDetailsType], null: false do
       argument :submission_id, ID, required: true
     end
 
@@ -36,8 +36,8 @@ module Types
       ReviewedSubmissionsResolver.new(context).collection(args[:course_id], args[:level_id])
     end
 
-    def review_submission_details(args)
-      ReviewSubmissionDetailsResolver.new(context).collection(args[:submission_id])
+    def submission_details(args)
+      SubmissionDetailsResolver.new(context).collection(args[:submission_id])
     end
   end
 end

@@ -7,3 +7,4 @@ module GradeLabel = CoursesReview__GradeLabel;
 module Feedback = CoursesReview__Feedback;
 module Grade = CoursesReview__Grade;
 module EvaluationCriterion = CoursesReview__EvaluationCriterion;
+module Coach = CoursesReview__Coach;

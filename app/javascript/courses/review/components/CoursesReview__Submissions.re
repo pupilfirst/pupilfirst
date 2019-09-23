@@ -9,7 +9,7 @@ let showSubmissionStatus = submission => {
   let (text, classes) =
     switch (
       submission |> SubmissionDetails.passedAt,
-      submission |> SubmissionDetails.evaluatorId,
+      submission |> SubmissionDetails.evaluatorName,
     ) {
     | (None, None) => (
         "Pending",
@@ -116,7 +116,7 @@ let cardClasses = submission =>
   ++ (
     switch (
       submission |> SubmissionDetails.passedAt,
-      submission |> SubmissionDetails.evaluatorId,
+      submission |> SubmissionDetails.evaluatorName,
     ) {
     | (None, None) => "border-orange-300"
     | (None, Some(_)) => "border-red-500"
@@ -124,6 +124,48 @@ let cardClasses = submission =>
     | (Some(_), Some(_)) => "border-green-500"
     }
   );
+
+let updateGradingCB =
+    (
+      ~grades,
+      ~passed,
+      ~newFeedback,
+      ~submission,
+      ~currentCoach,
+      ~updateSubmissionCB,
+    ) => {
+  let feedback =
+    newFeedback == "" ?
+      submission |> SubmissionDetails.feedback :
+      submission
+      |> SubmissionDetails.feedback
+      |> Array.append([|
+           Feedback.make(
+             ~coachName=currentCoach |> Coach.name,
+             ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
+             ~coachTitle=currentCoach |> Coach.title,
+             ~createdAt=Js.Date.make(),
+             ~value=newFeedback,
+             ~id="1111",
+           ),
+         |]);
+
+  let passedAt = passed ? Some(Js.Date.make()) : None;
+
+  let newSubmission =
+    SubmissionDetails.make(
+      ~id=submission |> SubmissionDetails.id,
+      ~description=submission |> SubmissionDetails.description,
+      ~createdAt=submission |> SubmissionDetails.createdAt,
+      ~passedAt,
+      ~evaluatorName=Some(currentCoach |> Coach.name),
+      ~attachments=submission |> SubmissionDetails.attachments,
+      ~feedback,
+      ~grades,
+      ~evaluationCriteria=submission |> SubmissionDetails.evaluationCriteria,
+    );
+  updateSubmissionCB(newSubmission);
+};
 
 [@react.component]
 let make =
@@ -134,6 +176,7 @@ let make =
       ~passGrade,
       ~updateSubmissionCB,
       ~submissionNumber,
+      ~currentCoach,
     ) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div className={cardClasses(submission)}>
@@ -172,7 +215,9 @@ let make =
       passGrade
       passedAt={submission |> SubmissionDetails.passedAt}
       feedback={submission |> SubmissionDetails.feedback}
-      updateSubmissionCB
+      updateGradingCB={
+        updateGradingCB(~submission, ~currentCoach, ~updateSubmissionCB)
+      }
     />
     <CoursesReview__ShowFeedback
       authenticityToken

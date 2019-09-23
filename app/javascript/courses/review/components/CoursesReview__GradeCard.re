@@ -294,33 +294,72 @@ let submissionStatusIcon = status => {
     };
 
   <div
-    className="hidden md:flex w-2/5 items-center flex-col justify-center border-l">
+    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
-      className={
-        "w-22 h-22 rounded-full border-5 flex justify-center items-center border-"
-        ++ color
-        ++ "-400"
-      }>
-      {
-        switch (status) {
-        | Graded(passed) =>
-          passed ?
-            <span className="fa-stack text-green-500 text-lg">
-              <i className="fas fa-certificate fa-stack-2x" />
-              <i className="fas fa-check fa-stack-1x fa-inverse" />
-            </span> :
-            <FaIcon
-              classes="fas fa-exclamation-triangle text-4xl text-red-500"
-            />
-        | Grading =>
-          <FaIcon classes="fas fa-signature text-4xl text-orange-500" />
-        | UnGraded => <FaIcon classes="fas fa-marker text-4xl text-gray-400" />
-        }
-      }
+      className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
+      <div
+        className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
+        <div>
+          <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
+          <p className="text-sm font-semibold px-3 pb-3">
+            {"Pratham Sehgal" |> str}
+          </p>
+        </div>
+        <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
+          {"on August 6, 2019" |> str}
+        </div>
+      </div>
+      <div className="w-24 flex flex-col items-center justify-center">
+        <div
+          className={
+            "w-24 h-18 rounded-lg border flex justify-center items-center bg-"
+            ++ color
+            ++ "-100 "
+            ++ "border-"
+            ++ color
+            ++ "-400 "
+          }>
+          {
+            switch (status) {
+            | Graded(passed) =>
+              passed ?
+                <FaIcon
+                  classes="fas fa-check-circle text-3xl md:text-4xl text-green-500"
+                /> :
+                <FaIcon
+                  classes="fas fa-exclamation-triangle text-3xl md:text-4xl text-red-500"
+                />
+            | Grading =>
+              <FaIcon
+                classes="fas fa-signature text-3xl md:text-4xl text-orange-500"
+              />
+            | UnGraded =>
+              <FaIcon
+                classes="fas fa-marker text-3xl md:text-4xl text-gray-400"
+              />
+            }
+          }
+        </div>
+        <p
+          className={
+            "text-xs text-center w-full border rounded px-1 py-px font-semibold mt-1 "
+            ++ "border-"
+            ++ color
+            ++ "-400 "
+            ++ "bg-"
+            ++ color
+            ++ "-100 "
+            ++ "text-"
+            ++ color
+            ++ "-800 "
+          }>
+          {text |> str}
+        </p>
+      </div>
     </div>
-    <p className={"text-xs font-semibold text-" ++ color ++ "-800 mt-2"}>
-      {text |> str}
-    </p>
+    <div className="mt-4 md:pl-6 w-full">
+      <div className="btn btn-danger w-full"> {"Undo Grading" |> str} </div>
+    </div>
   </div>;
 };
 
@@ -396,8 +435,8 @@ let make =
         <div className="font-semibold text-sm lg:text-base">
           {"Grade Card" |> str}
         </div>
-        <div className="flex">
-          <div className="w-full md:w-3/5">
+        <div className="flex md:flex-row flex-col">
+          <div className="w-full md:w-3/6">
             {
               switch (grades) {
               | [||] =>

@@ -323,8 +323,8 @@ let submissionStatusIcon = status => {
             switch (status) {
             | Graded(passed) =>
               passed ?
-                <FaIcon
-                  classes="fas fa-check-circle text-3xl md:text-4xl text-green-500"
+                <Icon
+                  className="if i-badge-check-solid text-3xl md:text-4xl text-green-500"
                 /> :
                 <FaIcon
                   classes="fas fa-exclamation-triangle text-3xl md:text-4xl text-red-500"

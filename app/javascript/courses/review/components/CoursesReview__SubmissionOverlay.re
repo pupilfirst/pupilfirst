@@ -88,9 +88,6 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
           <span className="font-semibold">
             {submission |> Submission.userNames |> str}
           </span>
-          <span className="ml-1">
-            {"on " ++ (submission |> Submission.createdAtPretty) |> str}
-          </span>
         </div>
       </div>
       <div
@@ -148,14 +145,18 @@ let make =
         state.loading ?
           <div> {"Loading" |> str} </div> :
           state.submissionDetails
-          |> Array.map(submission =>
+          |> Array.mapi((index, submission) =>
                <div>
                  <CoursesReview__Submissions
+                   key={index |> string_of_int}
                    authenticityToken
                    submission
                    gradeLabels
                    passGrade
                    updateSubmissionCB={updateSubmissionCB(setState)}
+                   submissionNumber={
+                     (state.submissionDetails |> Array.length) - index
+                   }
                  />
                </div>
              )

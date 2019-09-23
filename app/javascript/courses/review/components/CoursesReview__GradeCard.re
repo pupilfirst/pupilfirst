@@ -284,8 +284,9 @@ let submissionStatusIcon = status => {
     };
 
   <div
-    className="hidden md:flex w-3/6 flex-col items-center justify-center border-l">
-    <div className="flex items-center w-full md:pl-6">
+    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
+    <div
+      className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
       <div
         className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
         <div>
@@ -301,7 +302,7 @@ let submissionStatusIcon = status => {
       <div className="w-24 flex flex-col items-center justify-center">
         <div
           className={
-            "w-24 h-22 rounded-lg border-2 flex justify-center items-center bg-"
+            "w-24 h-18 rounded-lg border flex justify-center items-center bg-"
             ++ color
             ++ "-100 "
             ++ "border-"
@@ -313,21 +314,25 @@ let submissionStatusIcon = status => {
             | Graded(passed) =>
               passed ?
                 <FaIcon
-                  classes="fas fa-check-circle text-5xl text-green-500"
+                  classes="fas fa-check-circle text-3xl md:text-4xl text-green-500"
                 /> :
                 <FaIcon
-                  classes="fas fa-exclamation-triangle text-4xl text-red-500"
+                  classes="fas fa-exclamation-triangle text-3xl md:text-4xl text-red-500"
                 />
             | Grading =>
-              <FaIcon classes="fas fa-signature text-5xl text-orange-500" />
+              <FaIcon
+                classes="fas fa-signature text-3xl md:text-4xl text-orange-500"
+              />
             | UnGraded =>
-              <FaIcon classes="fas fa-marker text-5xl text-gray-400" />
+              <FaIcon
+                classes="fas fa-marker text-3xl md:text-4xl text-gray-400"
+              />
             }
           }
         </div>
         <p
           className={
-            "text-xs text-center w-full border-2 rounded px-1 py-px font-semibold mt-1 "
+            "text-xs text-center w-full border rounded px-1 py-px font-semibold mt-1 "
             ++ "border-"
             ++ color
             ++ "-400 "
@@ -342,7 +347,7 @@ let submissionStatusIcon = status => {
         </p>
       </div>
     </div>
-    <div className="mt-4 pl-6 w-full">
+    <div className="mt-4 md:pl-6 w-full">
       <div className="btn btn-danger w-full"> {"Undo Grading" |> str} </div>
     </div>
   </div>;
@@ -418,7 +423,7 @@ let make =
         <div className="font-semibold text-sm lg:text-base">
           {"Grade Card" |> str}
         </div>
-        <div className="flex">
+        <div className="flex md:flex-row flex-col">
           <div className="w-full md:w-3/6">
             {
               switch (grades) {

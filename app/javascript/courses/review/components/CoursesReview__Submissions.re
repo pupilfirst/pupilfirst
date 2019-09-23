@@ -111,6 +111,20 @@ let showSubmissions = attachments =>
     </div>
   };
 
+let cardClasses = submission =>
+  "mt-6 rounded-b-lg bg-white border-t-3 shadow "
+  ++ (
+    switch (
+      submission |> SubmissionDetails.passedAt,
+      submission |> SubmissionDetails.evaluatorId,
+    ) {
+    | (None, None) => "border-orange-300"
+    | (None, Some(_)) => "border-red-500"
+    | (Some(_), None)
+    | (Some(_), Some(_)) => "border-green-500"
+    }
+  );
+
 [@react.component]
 let make =
     (
@@ -119,15 +133,20 @@ let make =
       ~gradeLabels,
       ~passGrade,
       ~updateSubmissionCB,
+      ~submissionNumber,
     ) => {
   let (state, setState) = React.useState(() => {submission: submission});
-  <div
-    className="mt-6 rounded-b-lg bg-white border-t-3 border-orange-300 shadow">
+  <div className={cardClasses(submission)}>
     <div
       className="p-4 md:px-6 md:py-5 border-b bg-white flex items-center justify-between">
-      <h2 className="font-semibold text-sm lg:text-base">
-        {"Submission" |> str}
-      </h2>
+      <div>
+        <h2 className="font-semibold text-sm lg:text-base leading-tight">
+          {"Submission " ++ (submissionNumber |> string_of_int) |> str}
+        </h2>
+        <span className="text-xs text-gray-800">
+          {"on " ++ (submission |> SubmissionDetails.createdAtPretty) |> str}
+        </span>
+      </div>
       <div className="text-xs flex">
         {
           showFeedbackSent(

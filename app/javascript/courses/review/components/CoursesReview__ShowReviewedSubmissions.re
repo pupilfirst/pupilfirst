@@ -144,6 +144,15 @@ let showLoadMoreButton =
     {"Load More..." |> str}
   </button>;
 
+let submissionCardClasses = status =>
+  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
+  ++ (
+    switch (status) {
+    | Some(s) => s |> Submission.failed ? "border-red-500" : "border-green-500"
+    | None => "border-gray-600"
+    }
+  );
+
 let showSubmission = (submissions, levels, setSelectedSubmission) =>
   <div>
     {
@@ -153,7 +162,9 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
            <div
              key={submission |> Submission.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
-             className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-gray-600 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
+             className={
+               submissionCardClasses(submission |> Submission.status)
+             }>
              <div className="w-full md:w-3/4">
                <div className="block text-sm md:pr-2">
                  <span
@@ -241,10 +252,12 @@ let make =
     {
       switch (state.submissions) {
       | [||] =>
-        <div
-          className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
-          {"No Reviewed Submission" |> str}
-        </div>
+        state.loading ?
+          React.null :
+          <div
+            className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
+            {"No Reviewed Submission" |> str}
+          </div>
       | _ => showSubmission(state.submissions, levels, setSelectedSubmission)
       }
     }
@@ -253,7 +266,7 @@ let make =
       | (true, _, _) =>
         <div
           className="text-sm text-center font-semibold bg-gray-300 p-2 rounded mt-8">
-          {"Loading More..." |> str}
+          {"Loading Submissions..." |> str}
         </div>
       | (false, false, _)
       | (false, true, None) => React.null

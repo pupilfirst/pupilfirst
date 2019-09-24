@@ -24,7 +24,8 @@ module TimelineEvents
 
         @timeline_event.update!(
           passed_at: (failed?(grades) ? nil : Time.now),
-          evaluator: faculty
+          evaluator: faculty,
+          evaluated_at: Time.now
         )
       end
     end

@@ -1,7 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   actions :index, :show
-  permit_params :description, :serialized_links,
-    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
+  permit_params :description, :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file _destroy]
 
   filter :founders_user_name, as: :string
   filter :evaluated
@@ -139,21 +138,11 @@ ActiveAdmin.register TimelineEvent do
         column :file do |timeline_event_file|
           link_to timeline_event_file.filename, url_for(timeline_event_file.file), target: '_blank', rel: 'noopener'
         end
-
-        column :private
       end
 
       table_for timeline_event.links do
-        column :title do |link|
-          link_to link[:title], link[:url], target: '_blank', rel: 'noopener'
-        end
-
         column :url do |link|
-          link_to link[:url], link[:url], target: '_blank', rel: 'noopener'
-        end
-
-        column :private do |link|
-          link[:private] ? status_tag('Yes') : status_tag('No')
+          link_to link, target: '_blank', rel: 'noopener'
         end
       end
     end

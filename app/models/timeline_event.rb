@@ -23,8 +23,6 @@ class TimelineEvent < ApplicationRecord
 
   validates :description, presence: true
 
-  accepts_nested_attributes_for :timeline_event_files, allow_destroy: true
-
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_FOUNDER }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
@@ -50,55 +48,6 @@ class TimelineEvent < ApplicationRecord
   # Accessors used by timeline builder form to create TimelineEventFile entries.
   # Should contain a hash: { identifier_key => uploaded_file, ... }
   attr_accessor :files
-
-  # Writer used by timeline builder form to supply info about new / to-delete files.
-  attr_writer :files_metadata
-
-  def files_metadata
-    @files_metadata || []
-  end
-
-  def files_metadata_json
-    timeline_event_files.map do |te_file|
-      {
-        identifier: te_file.id,
-        title: te_file.title,
-        private: te_file.private?,
-        persisted: true
-      }
-    end.to_json
-  end
-
-  # Return serialized links so that AA TimelineEvent#new/edit can use it.
-  def serialized_links
-    links.to_json
-  end
-
-  # Accept links in serialized form.
-  def serialized_links=(links_string)
-    self.links = JSON.parse(links_string).map(&:symbolize_keys)
-  end
-
-  after_save :update_timeline_event_files
-
-  def update_timeline_event_files
-    # Go through files metadata, and perform create / delete.
-    files_metadata.each do |file_metadata|
-      if file_metadata['persisted']
-        # Delete persisted files if they've been flagged.
-        if file_metadata['delete']
-          timeline_event_files.find(file_metadata['identifier']).destroy!
-        end
-      else
-        # Create non-persisted files.
-        timeline_event_files.create!(
-          title: file_metadata['title'],
-          file: files[file_metadata['identifier']],
-          private: file_metadata['private']
-        )
-      end
-    end
-  end
 
   def reviewed?
     timeline_event_grades.present?

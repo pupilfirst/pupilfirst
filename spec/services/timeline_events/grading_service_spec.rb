@@ -28,6 +28,7 @@ describe TimelineEvents::GradingService do
         expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to match_array([evaluation_criterion_1.id, evaluation_criterion_2.id])
         expect(timeline_event.passed_at).not_to eq(nil)
         expect(timeline_event.evaluator_id).to eq(faculty.id)
+        expect(timeline_event.evaluated_at).not_to eq(nil)
       end
 
       context 'when trying to grade again' do
@@ -51,6 +52,7 @@ describe TimelineEvents::GradingService do
         expect(timeline_event.timeline_event_grades.pluck(:evaluation_criterion_id)).to match_array([evaluation_criterion_1.id, evaluation_criterion_2.id])
         expect(timeline_event.passed_at).to eq(nil)
         expect(timeline_event.evaluator_id).to eq(faculty.id)
+        expect(timeline_event.evaluated_at).not_to eq(nil)
       end
     end
 

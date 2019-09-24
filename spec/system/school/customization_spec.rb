@@ -25,17 +25,17 @@ feature 'School Customization', js: true do
     expect(page).to have_content('Icon must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high')
 
     # Happy path.
-    attach_file 'logo_on_light_bg', image_path('logo_sv_on_light_bg.png'), visible: false
-    attach_file 'logo_on_dark_bg', image_path('logo_sv_on_dark_bg.png'), visible: false
-    attach_file 'icon', image_path('icon_sv.png'), visible: false
+    attach_file 'logo_on_light_bg', image_path('logo_lipsum_on_light_bg.png'), visible: false
+    attach_file 'logo_on_dark_bg', image_path('logo_lipsum_on_dark_bg.png'), visible: false
+    attach_file 'icon', image_path('icon_pupilfirst.png'), visible: false
 
     click_button 'Update Images'
 
     expect(page).to have_content('Images have been updated successfully')
 
-    expect(school.reload.logo_on_light_bg.filename).to eq('logo_sv_on_light_bg.png')
-    expect(school.logo_on_dark_bg.filename).to eq('logo_sv_on_dark_bg.png')
-    expect(school.icon.filename).to eq('icon_sv.png')
+    expect(school.reload.logo_on_light_bg.filename).to eq('logo_lipsum_on_light_bg.png')
+    expect(school.logo_on_dark_bg.filename).to eq('logo_lipsum_on_dark_bg.png')
+    expect(school.icon.filename).to eq('icon_pupilfirst.png')
   end
 
   scenario 'school admin sets custom links' do

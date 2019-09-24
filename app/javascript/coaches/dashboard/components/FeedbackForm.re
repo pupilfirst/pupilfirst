@@ -143,7 +143,7 @@ let make =
       }
       {
         if (state.showForm) {
-          <div className="feedback-form__trix-container py-3">
+          <div className="feedback-form__editor-container py-3">
             <textArea
               id="feedback-form__textArea"
               className="w-100"

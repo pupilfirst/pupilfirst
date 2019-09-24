@@ -180,19 +180,19 @@ feature 'Coach Dashboard' do
       sign_in_user coach.user, referer: course_coach_dashboard_path(course)
 
       # feedback form should be hidden by default
-      expect(page).to_not have_selector('.feedback-form__trix-container')
+      expect(page).to_not have_selector('.feedback-form__editor-container')
       click_on 'Email Feedback'
       # the form should now be visible
-      expect(page).to have_selector('.feedback-form__trix-container')
+      expect(page).to have_selector('.feedback-form__editor-container')
       click_on 'Cancel'
       # form hidden again
-      expect(page).to_not have_selector('.feedback-form__trix-container')
+      expect(page).to_not have_selector('.feedback-form__editor-container')
       # Let's add a feedback
       click_on 'Email Feedback'
       fill_in 'feedback-form__textArea', with: 'Some important feedback'
       click_on 'Send'
       # form should now be hidden
-      expect(page).to_not have_selector('.feedback-form__trix-container')
+      expect(page).to_not have_selector('.feedback-form__editor-container')
       # and a feedback created for the event
       expect(StartupFeedback.last.feedback).to eq('Some important feedback')
 

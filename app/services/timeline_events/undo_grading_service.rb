@@ -13,7 +13,7 @@ module TimelineEvents
         # Clear existing grades
         TimelineEventGrade.where(timeline_event: @timeline_event).destroy_all
         # Clear evaluation info
-        @timeline_event.update!(passed_at: nil, evaluator_id: nil)
+        @timeline_event.update!(passed_at: nil, evaluator_id: nil, evaluated_at: nil)
       end
     end
   end

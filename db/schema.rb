@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_060218) do
+ActiveRecord::Schema.define(version: 2019_09_24_070216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -666,7 +666,6 @@ ActiveRecord::Schema.define(version: 2019_09_18_060218) do
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
     t.integer "timeline_event_id"
-    t.boolean "private"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
@@ -704,6 +703,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_060218) do
     t.datetime "passed_at"
     t.boolean "latest"
     t.string "quiz_score"
+    t.datetime "evaluated_at"
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|

@@ -101,7 +101,6 @@ ActiveAdmin.register Founder do
 
     column :slack_username
     column(:skype_username, &:skype_id)
-    column :resume, &:resume_link
     column :linkedin_url
     column :twitter_url
     column :personal_website_url

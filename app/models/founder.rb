@@ -164,10 +164,6 @@ class Founder < ApplicationRecord
     Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
   end
 
-  def resume_link
-    resume_file.present? ? Rails.application.routes.url_helpers.download_timeline_event_file_url(resume_file) : resume_url
-  end
-
   def profile_complete?
     required_fields = %i[name roles gender communication_address phone]
 

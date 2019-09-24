@@ -51,6 +51,6 @@ class UpdateCourseMutator < ApplicationMutator
   end
 
   def course
-    @course ||= Course.find_by(id: id)
+    @course ||= current_school.courses.find_by(id: id)
   end
 end

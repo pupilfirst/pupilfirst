@@ -1,0 +1,2 @@
+class UnauthorizedQueryException < StandardError
+end

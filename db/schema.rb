@@ -703,6 +703,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_070216) do
     t.datetime "passed_at"
     t.boolean "latest"
     t.string "quiz_score"
+    t.datetime "evaluated_at"
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|
@@ -762,7 +763,6 @@ ActiveRecord::Schema.define(version: 2019_09_24_070216) do
     t.string "affiliation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "evaluated_at"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end

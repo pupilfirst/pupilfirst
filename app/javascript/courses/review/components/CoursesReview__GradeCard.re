@@ -278,8 +278,41 @@ let renderGradePills =
        );
      })
   |> React.array;
+let showEvaluatedBy = (status, grades) =>
+  switch (grades |> ArrayUtils.isEmpty, status) {
+  | (true, Graded(_)) =>
+    <div
+      className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
+      <div>
+        <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
+        <p className="text-sm font-semibold px-3 pb-3">
+          {"Pratham Sehgal" |> str}
+        </p>
+      </div>
+      <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
+        {"on August 6, 2019" |> str}
+      </div>
+    </div>
+  | (false, Graded(_))
+  | (_, Grading)
+  | (_, UnGraded) => React.null
+  };
+let gradeStatusClasses = (color, status) =>
+  "w-24 h-20 rounded-lg border flex justify-center items-center bg-"
+  ++ color
+  ++ "-100 "
+  ++ "border-"
+  ++ color
+  ++ "-400 "
+  ++ (
+    switch (status) {
+    | Grading => "course-review-grade-card__status-pulse"
+    | Graded(_)
+    | UnGraded => ""
+    }
+  );
 
-let submissionStatusIcon = status => {
+let submissionStatusIcon = (status, grades) => {
   let text =
     switch (status) {
     | Graded(passed) => passed ? "Passed" : "Failed"
@@ -297,45 +330,26 @@ let submissionStatusIcon = status => {
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
       className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
-      <div
-        className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
-        <div>
-          <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
-          <p className="text-sm font-semibold px-3 pb-3">
-            {"Pratham Sehgal" |> str}
-          </p>
-        </div>
-        <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
-          {"on August 6, 2019" |> str}
-        </div>
-      </div>
+      {showEvaluatedBy(status, grades)}
       <div className="w-24 flex flex-col items-center justify-center">
-        <div
-          className={
-            "w-24 h-18 rounded-lg border flex justify-center items-center bg-"
-            ++ color
-            ++ "-100 "
-            ++ "border-"
-            ++ color
-            ++ "-400 "
-          }>
+        <div className={gradeStatusClasses(color, status)}>
           {
             switch (status) {
             | Graded(passed) =>
               passed ?
                 <Icon
-                  className="if i-badge-check-solid text-3xl md:text-4xl text-green-500"
+                  className="if i-badge-check-solid text-3xl md:text-5xl text-green-500"
                 /> :
                 <FaIcon
                   classes="fas fa-exclamation-triangle text-3xl md:text-4xl text-red-500"
                 />
             | Grading =>
-              <FaIcon
-                classes="fas fa-signature text-3xl md:text-4xl text-orange-500"
+              <Icon
+                className="if i-writing-pad-solid text-3xl md:text-5xl text-orange-300"
               />
             | UnGraded =>
-              <FaIcon
-                classes="fas fa-marker text-3xl md:text-4xl text-gray-400"
+              <Icon
+                className="if i-eye-solid text-3xl md:text-4xl text-gray-400"
               />
             }
           }
@@ -357,9 +371,18 @@ let submissionStatusIcon = status => {
         </p>
       </div>
     </div>
-    <div className="mt-4 md:pl-6 w-full">
-      <div className="btn btn-danger w-full"> {"Undo Grading" |> str} </div>
-    </div>
+    {
+      switch (status) {
+      | Graded(_) =>
+        <div className="mt-4 md:pl-6 w-full">
+          <div className="btn btn-danger w-full">
+            {"Undo Grading" |> str}
+          </div>
+        </div>
+      | Grading
+      | UnGraded => React.null
+      }
+    }
   </div>;
 };
 
@@ -460,7 +483,7 @@ let make =
               }
             }
           </div>
-          {submissionStatusIcon(state.status)}
+          {submissionStatusIcon(state.status, state.grades)}
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@
 
 /* svg viewBox Fixed Width */
 
-.if-fw {
+.if-svg-icon__baseline.if-fw {
   text-align: center;
   width: 1.25em;
 }

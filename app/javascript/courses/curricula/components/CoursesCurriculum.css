@@ -9,24 +9,25 @@
 }
 
 .curriculum__target-status {
-  @apply flex items-center text-xs font-semibold rounded-full border;
+  @apply flex items-center text-xs font-semibold rounded border;
 }
 
 .curriculum__target-status--pending {
-  @apply bg-orange-100 text-orange-600 border-orange-400;
+  @apply bg-orange-100 text-orange-800 border-orange-500;
 }
 
 .curriculum__target-status--submitted {
-  @apply bg-blue-100 text-blue-600 border-blue-400;
+  @apply bg-primary-100 text-primary-800 border-primary-500;
 }
 
 .curriculum__target-status--passed {
-  @apply bg-green-100 text-green-800 border-green-400;
+  @apply bg-green-100 text-green-800 border-green-500;
 }
 
 .curriculum__target-status--failed {
-  @apply bg-red-100 text-red-600 border-red-400;
+  @apply bg-red-100 text-red-800 border-red-500;
 }
+
 .curriculum__target-status--locked {
   @apply bg-gray-100 text-gray-800 border-gray-600;
 }

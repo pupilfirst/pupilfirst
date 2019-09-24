@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_102206) do
+ActiveRecord::Schema.define(version: 2019_09_24_070216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -762,6 +762,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_102206) do
     t.string "affiliation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "evaluated_at"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end

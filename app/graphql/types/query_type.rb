@@ -16,28 +16,38 @@ module Types
       argument :level_id, ID, required: false
     end
 
-    field :submission_details, [Types::SubmissionDetailsType], null: false do
+    field :submission_details, Types::SubmissionDetailsType, null: false do
       argument :submission_id, ID, required: true
     end
 
     def courses
-      CoursesResolver.new(context).collection
+      resolver = CoursesResolver.new(context)
+      resolver.authorize
+      resolver.courses
     end
 
     def content_blocks(args)
-      ContentBlockResolver.new(context).collection(args[:target_id], args[:version_on])
+      resolver = ContentBlockResolver.new(context, args)
+      resolver.authorize
+      resolver.content_blocks
     end
 
     def versions(args)
-      ContentVersionResolver.new(context).collection(args[:target_id])
+      resolver = ContentVersionResolver.new(context, args)
+      resolver.authorize
+      resolver.versions
     end
 
     def reviewed_submissions(args)
-      ReviewedSubmissionsResolver.new(context).collection(args[:course_id], args[:level_id])
+      resolver = ReviewedSubmissionsResolver.new(context, args)
+      resolver.authorize
+      resolver.reviewed_submissions
     end
 
     def submission_details(args)
-      SubmissionDetailsResolver.new(context).collection(args[:submission_id])
+      resolver = SubmissionDetailsResolver.new(context, args)
+      resolver.authorize
+      resolver.submission_details
     end
   end
 end

@@ -1,16 +1,41 @@
 class SubmissionDetailsResolver < ApplicationResolver
-  def collection(submission_id)
-    submission = TimelineEvent.find_by(id: submission_id)
-    if authorized?(submission)
-      TimelineEvent.where(target_id: submission.target_id).includes(:timeline_event_owners).where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) }).reverse
-    else
-      TimelineEvent.none
-    end
+  attr_accessor :submission_id
+
+  def submission_details
+    submissions = TimelineEvent.where(target_id: submission.target_id)
+      .includes(:timeline_event_owners)
+      .where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) }).reverse
+
+    {
+      submissions: submissions,
+      target_id: target.id,
+      target_title: target.title,
+      user_names: level_number,
+      level_number: user_names
+    }
   end
 
-  def authorized?(submission)
+  def submission
+    @submission ||= TimelineEvent.find_by(id: submission_id)
+  end
+
+  def target
+    @target ||= submission.target
+  end
+
+  def level_number
+    target.level.number
+  end
+
+  def user_names
+    submission.founders.map do |founder|
+      founder.user.name
+    end.join(', ')
+  end
+
+  def authorized?
     return false if submission.blank?
 
-    current_user.faculty.courses.where(id: submission.target.course.id).present?
+    current_user.faculty.courses.where(id: target.course.id).present?
   end
 end

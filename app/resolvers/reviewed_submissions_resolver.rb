@@ -1,21 +1,24 @@
 class ReviewedSubmissionsResolver < ApplicationResolver
-  def collection(course_id, level_id)
-    if authorized?(course_id)
-      submissions(course_id, level_id).evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).order("created_at DESC")
-    else
-      TimelineEvent.none
-    end
+  attr_accessor :course_id
+  attr_accessor :level_id
+
+  def reviewed_submissions
+    submissions.evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).order("created_at DESC")
   end
 
-  def authorized?(course_id)
+  def authorized?
     current_user.faculty.courses.where(id: course_id).present?
   end
 
-  def submissions(course_id, level_id)
+  def course
+    @course ||= Course.find(course_id)
+  end
+
+  def submissions
     if level_id.present?
-      Course.find(course_id).levels.where(id: level_id).first.timeline_events
+      course.levels.where(id: level_id).first.timeline_events
     else
-      Course.find(course_id).timeline_events
+      course.timeline_events
     end
   end
 end

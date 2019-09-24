@@ -1,11 +1,14 @@
 class ApplicationResolver
   include ActiveModel::Model
+
   attr_reader :context
 
-  def initialize(context)
+  def initialize(context, args = {})
     @context = context
+    assign_attributes(args)
   end
 
+  # TODO: Use the same method that ApplicationMutator uses - avoid duplication when doing so.
   def current_school_admin
     context[:current_school_admin]
   end
@@ -16,6 +19,16 @@ class ApplicationResolver
 
   def current_user
     context[:current_user]
+  end
+
+  def authorize
+    return if authorized?
+
+    raise UnauthorizedQueryException
+  end
+
+  def authorized?
+    raise 'Please implement the "authorized?" method in the resolver class.'
   end
 
   # current_school: current_school,

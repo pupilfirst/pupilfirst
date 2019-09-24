@@ -502,8 +502,9 @@ let loadContentBlocks = (target, send, authenticityToken, ()) => {
   None;
 };
 
-let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
+let loadOldVersions = (target, send, selectedVersion, authenticityToken, ()) => {
   let targetId = target |> Target.id;
+  let versionOn = selectedVersion |> Js.Json.string;
   let response =
     ContentBlocksVersionQuery.make(~targetId, ~versionOn, ())
     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
@@ -532,6 +533,7 @@ let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
        Js.Promise.resolve();
      })
   |> ignore;
+  send(SelectVersion(selectedVersion));
   None;
 };
 let currentDateString = () => Js.Date.make() |> DateFns.format("YYYY-MM-DD");
@@ -560,18 +562,33 @@ let handleRestoreVersionCB =
     } :
     ();
 
-let addNewVersionCB = (dispatch, versions) => {
-    dispatch(UpdateVersions(versions))};
+let addNewVersionCB = (dispatch, versions) =>
+  dispatch(UpdateVersions(versions));
 
 let selectVersionCB =
-    (target, state, send, authenticityToken, selectedVersion) => {
-  let encodedVersion = selectedVersion |> Js.Json.string;
+    (target, state, send, authenticityToken, selectedVersion) =>
   selectedVersion == state.versions[0] ?
     loadContentBlocks(target, send, authenticityToken, ()) |> ignore :
-    loadOldVersions(target, send, encodedVersion, authenticityToken, ())
+    (
+      switch (state.contentEditorDirty) {
+      | false =>
+        loadOldVersions(target, send, selectedVersion, authenticityToken, ())
+      | true =>
+        Webapi.Dom.window
+        |> Webapi.Dom.Window.confirm(
+             "There are unsaved changes in the current version! Are you sure you want to switch version?",
+           ) ?
+          loadOldVersions(
+            target,
+            send,
+            selectedVersion,
+            authenticityToken,
+            (),
+          ) :
+          None
+      }
+    )
     |> ignore;
-  send(SelectVersion(selectedVersion));
-};
 
 let switchViewModeCB = (send, ()) => send(SwitchPreviewMode);
 

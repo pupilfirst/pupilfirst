@@ -31,5 +31,6 @@ module Types
     field :sort_curriculum_resources, mutation: Mutations::SortCurriculumResources, null: false
     field :restore_content_version, mutation: Mutations::RestoreContentVersion, null: false
     field :create_grading, mutation: Mutations::CreateGrading, null: false
+    field :undo_grading, mutation: Mutations::UndoGrading, null: false
   end
 end

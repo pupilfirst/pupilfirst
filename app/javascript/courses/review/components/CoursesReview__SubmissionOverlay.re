@@ -72,10 +72,16 @@ let headerSection = (submissionDetails, setSelectedSubmission) =>
         <div className="block text-sm md:pr-2">
           <span
             className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-            {"Level " ++ (submissionDetails |> SubmissionDetails.levelNumber) |> str}
+            {
+              "Level "
+              ++ (submissionDetails |> SubmissionDetails.levelNumber)
+              |> str
+            }
           </span>
           <a
-            href={"/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)}
+            href={
+              "/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)
+            }
             target="_blank"
             className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-sm md:text-lg">
             {submissionDetails |> SubmissionDetails.targetTitle |> str}
@@ -91,7 +97,9 @@ let headerSection = (submissionDetails, setSelectedSubmission) =>
       <div
         className="hidden md:flex w-auto md:w-1/6 text-xs justify-end mt-2 md:mt-0">
         <a
-          href={"/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)}
+          href={
+            "/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)
+          }
           target="_blank"
           className="btn btn-primary-ghost btn-small hidden md:inline-block">
           {"View Target " |> str}
@@ -169,7 +177,10 @@ let make =
                        - index
                      }
                      currentCoach
-                     evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
+                     evaluationCriteria={
+                       submissionDetails
+                       |> SubmissionDetails.evaluationCriteria
+                     }
                    />
                  </div>
                )

@@ -3,8 +3,6 @@
 open CoursesReview__Types;
 let str = React.string;
 
-type state = {submission: Submission.t};
-
 let showSubmissionStatus = submission => {
   let (text, classes) =
     switch (
@@ -178,8 +176,7 @@ let make =
       ~submissionNumber,
       ~currentCoach,
       ~evaluationCriteria,
-    ) => {
-  let (state, setState) = React.useState(() => {submission: submission});
+    ) =>
   <div className={cardClasses(submission)}>
     <div
       className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
@@ -188,7 +185,11 @@ let make =
           {"Submission " ++ (submissionNumber |> string_of_int) |> str}
         </h2>
         <span className="text-xs text-gray-800 pt-px">
-          {"on " ++ (submission |> Submission.createdAtPretty) |> str}
+          {
+            "on "
+            ++ (submission |> Submission.createdAt |> Submission.prettyDate)
+            |> str
+          }
         </span>
       </div>
       <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
@@ -209,13 +210,10 @@ let make =
     </div>
     <CoursesReview__GradeCard
       authenticityToken
-      submissionId={submission |> Submission.id}
+      submission
       gradeLabels
       evaluvationCriteria=evaluationCriteria
-      grades={submission |> Submission.grades}
       passGrade
-      passedAt={submission |> Submission.passedAt}
-      feedback={submission |> Submission.feedback}
       updateGradingCB={
         updateGradingCB(~submission, ~currentCoach, ~updateSubmissionCB)
       }
@@ -226,4 +224,3 @@ let make =
       reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
     />
   </div>;
-};

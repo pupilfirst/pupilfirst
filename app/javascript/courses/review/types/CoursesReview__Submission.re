@@ -18,13 +18,14 @@ let id = t => t.id;
 let createdAt = t => t.createdAt;
 let passedAt = t => t.passedAt;
 let evaluatorName = t => t.evaluatorName;
+let evaluatedAt = t => t.evaluatedAt;
 let description = t => t.description;
 let attachments = t => t.attachments;
 let grades = t => t.grades;
 let feedback = t => t.feedback;
 let title = attachment => attachment.title;
 let url = attachment => attachment.url;
-let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+let prettyDate = date => date |> DateFns.format("MMMM D, YYYY");
 
 let timeDistance = t =>
   t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);

@@ -21,8 +21,7 @@ let showFeedback = feedback =>
          <div className="flex-grow ml-3">
            <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
            <div className="flex flex-col md:flex-row md:items-center">
-             <h4
-               className="font-semibold text-base inline-block">
+             <h4 className="font-semibold text-base inline-block">
                {f |> Feedback.coachName |> str}
              </h4>
              {

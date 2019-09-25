@@ -207,7 +207,7 @@ let make =
       }
     );
   let (saving, setSaving) = React.useState(() => false);
-  let updateDescriptionCB = description => setDescription(_ => description);
+  let updateMarkdownCB = description => setDescription(_ => description);
   <DisablingCover disabled=saving>
     <div
       className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
@@ -215,7 +215,7 @@ let make =
         <div className="w-full flex flex-col">
           <MarkdownEditor
             label="Your Answer"
-            updateDescriptionCB
+            updateMarkdownCB
             value=description
             profile=Markdown.QuestionAndAnswer
             defaultView=MarkdownEditor.Edit

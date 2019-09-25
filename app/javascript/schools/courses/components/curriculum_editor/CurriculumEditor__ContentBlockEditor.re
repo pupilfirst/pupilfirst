@@ -461,7 +461,7 @@ let make =
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
 
-  let updateDescriptionCB = string => dispatch(UpdateMarkdown(string));
+  let updateMarkdownCB = string => dispatch(UpdateMarkdown(string));
 
   <DisablingCover message="Saving..." disabled={state.savingContentBlock}>
     <div>
@@ -566,7 +566,7 @@ let make =
                       switch (contentBlock |> ContentBlock.blockType) {
                       | Markdown(markdown) =>
                         <MarkdownEditor
-                          updateDescriptionCB
+                          updateMarkdownCB
                           value=markdown
                           placeholder="You can use Markdown to format this text."
                           profile=Markdown.Permissive
@@ -620,7 +620,7 @@ let make =
                   | Markdown(_markdown) =>
                     <div className="w-full">
                       <MarkdownEditor
-                        updateDescriptionCB
+                        updateMarkdownCB
                         value=""
                         placeholder="You can use Markdown to format this text."
                         profile=Markdown.Permissive

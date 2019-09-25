@@ -500,7 +500,7 @@ let make =
                 }
                 <div id="About" className="mb-4">
                   <MarkdownEditor.Jsx2
-                    updateDescriptionCB={updateAboutCB(send)}
+                    updateMarkdownCB={updateAboutCB(send)}
                     value={state.about}
                     placeholder="Add more details about the course."
                     label="About"

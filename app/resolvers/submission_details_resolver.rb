@@ -10,8 +10,9 @@ class SubmissionDetailsResolver < ApplicationResolver
       submissions: submissions,
       target_id: target.id,
       target_title: target.title,
-      user_names: level_number,
-      level_number: user_names
+      user_names: user_names,
+      level_number: level_number,
+      evaluation_criteria: evaluation_criteria
     }
   end
 
@@ -31,6 +32,15 @@ class SubmissionDetailsResolver < ApplicationResolver
     submission.founders.map do |founder|
       founder.user.name
     end.join(', ')
+  end
+
+  def evaluation_criteria
+    target.evaluation_criteria.map do |criteria|
+      {
+        id: criteria.id,
+        name: criteria.name
+      }
+    end
   end
 
   def authorized?

@@ -3,13 +3,13 @@
 open CoursesReview__Types;
 let str = React.string;
 
-type state = {submission: SubmissionDetails.t};
+type state = {submission: Submission.t};
 
 let showSubmissionStatus = submission => {
   let (text, classes) =
     switch (
-      submission |> SubmissionDetails.passedAt,
-      submission |> SubmissionDetails.evaluatorName,
+      submission |> Submission.passedAt,
+      submission |> Submission.evaluatorName,
     ) {
     | (None, None) => (
         "Pending",
@@ -40,7 +40,7 @@ let showFeedbackSent = feedbackSent =>
 
 let iconSpan = (iconClasses, attachment) => {
   let faClasses =
-    switch (attachment |> SubmissionDetails.title) {
+    switch (attachment |> Submission.title) {
     | Some(_) => "far fa-file"
     | None => "fas fa-link"
     };
@@ -69,22 +69,22 @@ let showSubmissions = attachments =>
                  text,
                  url,
                ) =
-                 switch (attachment |> SubmissionDetails.title) {
+                 switch (attachment |> Submission.title) {
                  | Some(title) => (
-                     "file-" ++ (attachment |> SubmissionDetails.url),
+                     "file-" ++ (attachment |> Submission.url),
                      "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
                      "bg-primary-200",
                      "bg-primary-100",
                      title,
-                     attachment |> SubmissionDetails.url,
+                     attachment |> Submission.url,
                    )
                  | None => (
-                     attachment |> SubmissionDetails.url,
+                     attachment |> Submission.url,
                      "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
                      "bg-blue-200",
                      "bg-blue-100",
-                     attachment |> SubmissionDetails.url,
-                     attachment |> SubmissionDetails.url,
+                     attachment |> Submission.url,
+                     attachment |> Submission.url,
                    )
                  };
 
@@ -115,8 +115,8 @@ let cardClasses = submission =>
   "mt-6 rounded-b-lg bg-white border-t-3 shadow "
   ++ (
     switch (
-      submission |> SubmissionDetails.passedAt,
-      submission |> SubmissionDetails.evaluatorName,
+      submission |> Submission.passedAt,
+      submission |> Submission.evaluatorName,
     ) {
     | (None, None) => "border-orange-300"
     | (None, Some(_)) => "border-red-500"
@@ -136,9 +136,9 @@ let updateGradingCB =
     ) => {
   let feedback =
     newFeedback == "" ?
-      submission |> SubmissionDetails.feedback :
+      submission |> Submission.feedback :
       submission
-      |> SubmissionDetails.feedback
+      |> Submission.feedback
       |> Array.append([|
            Feedback.make(
              ~coachName=currentCoach |> Coach.name,
@@ -153,16 +153,16 @@ let updateGradingCB =
   let passedAt = passed ? Some(Js.Date.make()) : None;
 
   let newSubmission =
-    SubmissionDetails.make(
-      ~id=submission |> SubmissionDetails.id,
-      ~description=submission |> SubmissionDetails.description,
-      ~createdAt=submission |> SubmissionDetails.createdAt,
+    Submission.make(
+      ~id=submission |> Submission.id,
+      ~description=submission |> Submission.description,
+      ~createdAt=submission |> Submission.createdAt,
       ~passedAt,
       ~evaluatorName=Some(currentCoach |> Coach.name),
-      ~attachments=submission |> SubmissionDetails.attachments,
+      ~attachments=submission |> Submission.attachments,
       ~feedback,
       ~grades,
-      ~evaluationCriteria=submission |> SubmissionDetails.evaluationCriteria,
+      ~evaluatedAt=Some(Js.Date.make())
     );
   updateSubmissionCB(newSubmission);
 };
@@ -177,6 +177,7 @@ let make =
       ~updateSubmissionCB,
       ~submissionNumber,
       ~currentCoach,
+      ~evaluationCriteria,
     ) => {
   let (state, setState) = React.useState(() => {submission: submission});
   <div className={cardClasses(submission)}>
@@ -187,13 +188,13 @@ let make =
           {"Submission " ++ (submissionNumber |> string_of_int) |> str}
         </h2>
         <span className="text-xs text-gray-800 pt-px">
-          {"on " ++ (submission |> SubmissionDetails.createdAtPretty) |> str}
+          {"on " ++ (submission |> Submission.createdAtPretty) |> str}
         </span>
       </div>
       <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
         {
           showFeedbackSent(
-            submission |> SubmissionDetails.feedback |> ArrayUtils.isNotEmpty,
+            submission |> Submission.feedback |> ArrayUtils.isNotEmpty,
           )
         }
         {showSubmissionStatus(submission)}
@@ -202,29 +203,27 @@ let make =
     <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
       <MarkdownBlock
         profile=Markdown.Permissive
-        markdown={submission |> SubmissionDetails.description}
+        markdown={submission |> Submission.description}
       />
-      {showSubmissions(submission |> SubmissionDetails.attachments)}
+      {showSubmissions(submission |> Submission.attachments)}
     </div>
     <CoursesReview__GradeCard
       authenticityToken
-      submissionId={submission |> SubmissionDetails.id}
+      submissionId={submission |> Submission.id}
       gradeLabels
-      evaluvationCriteria={submission |> SubmissionDetails.evaluationCriteria}
-      grades={submission |> SubmissionDetails.grades}
+      evaluvationCriteria=evaluationCriteria
+      grades={submission |> Submission.grades}
       passGrade
-      passedAt={submission |> SubmissionDetails.passedAt}
-      feedback={submission |> SubmissionDetails.feedback}
+      passedAt={submission |> Submission.passedAt}
+      feedback={submission |> Submission.feedback}
       updateGradingCB={
         updateGradingCB(~submission, ~currentCoach, ~updateSubmissionCB)
       }
     />
     <CoursesReview__ShowFeedback
       authenticityToken
-      feedback={submission |> SubmissionDetails.feedback}
-      reviewed={
-        submission |> SubmissionDetails.grades |> ArrayUtils.isNotEmpty
-      }
+      feedback={submission |> Submission.feedback}
+      reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
     />
   </div>;
 };

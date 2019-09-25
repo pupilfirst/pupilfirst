@@ -8,7 +8,7 @@ module Types
     field :feedback, [Types::SubmissionFeedbackType], null: false
     field :grades, [Types::GradeType], null: false
     field :attachments, [Types::SubmissionAttachmentType], null: false
-    # field :evaluation_criteria, [Types::EvaluationCriteria], null: false
+    field :evaluated_at, String, null: true
 
     def evaluator_name
       object.evaluator&.name
@@ -19,15 +19,6 @@ module Types
         {
           evaluation_criterion_id: submission_grading.evaluation_criterion_id,
           grade: submission_grading.grade
-        }
-      end
-    end
-
-    def evaluation_criteria
-      object.evaluation_criteria.map do |criteria|
-        {
-          id: criteria.id,
-          name: criteria.name
         }
       end
     end

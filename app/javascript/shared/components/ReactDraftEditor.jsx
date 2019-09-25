@@ -77,7 +77,7 @@ export default function ReactDraftEditor(props) {
   }, [props.command, props.commandAt]);
 
   return (
-    <div className="markdown-draft-editor__container px-3 py-4 text-sm border border-gray-400 rounded" onClick={focusEditor}>
+    <div className="flex-grow px-3 pt-3" onClick={focusEditor}>
       <Editor
         ariaLabelledBy={props.ariaLabelledBy}
         ref={editor}

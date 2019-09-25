@@ -185,6 +185,8 @@ let make =
       }
     );
 
+  let fileInputId = id ++ "-file-input";
+
   let (label, previewButtonPosition) =
     switch (label) {
     | Some(label) => (
@@ -219,17 +221,33 @@ let make =
           | Some(c) => Some(c |> commandToString)
           };
 
-        <DraftEditor
-          ariaLabelledBy=id
-          ?placeholder
-          content={state.description}
-          onChange={
-            content =>
-              updateDescription(value, content, send, updateDescriptionCB)
-          }
-          ?command
-          commandAt=?{state.commandPair.commandAt}
-        />;
+        <div
+          className="markdown-draft-editor__container text-sm border border-gray-400 rounded flex flex-col overflow-hidden">
+          <DraftEditor
+            ariaLabelledBy=id
+            ?placeholder
+            content={state.description}
+            onChange={
+              content =>
+                updateDescription(value, content, send, updateDescriptionCB)
+            }
+            ?command
+            commandAt=?{state.commandPair.commandAt}
+          />
+          <div
+            className="bg-gray-100 flex-grow-0 border-t border-primary-200 border-dashed text-sm flex justify-between">
+            <input className="hidden" type_="file" id=fileInputId />
+            <label
+              className="pl-3 py-1 flex-grow cursor-pointer"
+              htmlFor=fileInputId>
+              {"Attach files by clicking here and selecting a file." |> str}
+            </label>
+            <span
+              className="px-3 py-1 hover:text-secondary-500 cursor-pointer">
+              <FaIcon classes="fab fa-markdown" />
+            </span>
+          </div>
+        </div>;
       }
     }
   </div>;

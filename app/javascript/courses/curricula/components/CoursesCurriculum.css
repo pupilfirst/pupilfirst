@@ -17,7 +17,7 @@
 }
 
 .curriculum__target-status--submitted {
-  @apply bg-primary-100 text-primary-800 border-primary-500;
+  @apply bg-blue-100 text-blue-800 border-blue-500;
 }
 
 .curriculum__target-status--passed {

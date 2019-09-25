@@ -144,10 +144,10 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
         onChange={attachFile(state, send, attachingCB, attachFileCB)}
       />
       <label
-        className="mt-2 cursor-pointer truncate h-10 border border-dashed flex px-4 items-center font-semibold rounded text-sm hover:bg-gray-400 flex-grow"
+        className="mt-2 cursor-pointer truncate h-10 bg-gray-100 border border-dashed border-gray-400 flex px-4 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
         htmlFor="attachment_file">
         <span>
-          <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+          <i className="fas fa-upload mr-2 text-lg" />
           <span className="truncate"> {state.filename |> str} </span>
         </span>
       </label>
@@ -155,7 +155,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
     {
       state.errors
       |> List.map(error =>
-           <div className="px-4 mt-2 text-red-600 text-sm" key=error>
+           <div className="mt-2 text-red-700 text-sm" key=error>
              <i className="fas fa-exclamation-circle mr-2" />
              <span> {error |> str} </span>
            </div>

@@ -19,7 +19,7 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
     let grading =
       Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
 
-    <div key={gradeNumber |> string_of_int} className="mb-2">
+    <div key={gradeNumber |> string_of_int} className="mb-4">
       <GradeBar grading gradeLabels passGrade />
     </div>;
   | None => React.null
@@ -43,7 +43,7 @@ let statusBar = (~color, ~text) => {
 
   <div
     className={
-      "font-semibold p-2 py-4 flex w-full items-center justify-center "
+      "font-semibold p-2 py-4 flex border-t border-b w-full items-center justify-center "
       ++ textColor
       ++ bgColor
     }>
@@ -90,7 +90,7 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
         )
       }
     </div>
-    <div className="bg-white flex flex-wrap items-center py-4">
+    <div className="bg-white flex border-t flex-wrap items-center py-4">
       <div
         className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-6">
         {submissionStatusIcon(~passed)}
@@ -191,11 +191,11 @@ let submissions =
                statusBar(~color="green", ~text="Marked as complete")
              | Pending =>
                <div
-                 className="bg-white px-6 py-4 flex justify-between items-center w-full">
+                 className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
                  <div
-                   className="text-blue-600 font-bold flex items-center justify-center">
+                   className="flex items-center justify-center font-semibold text-sm pl-2 pr-3 py-1 bg-orange-100 text-orange-600 rounded">
                    <span
-                     className="fa-stack text-blue-600 text-lg mr-1 flex-shrink-0">
+                     className="fa-stack text-orange-400 mr-2 flex-shrink-0">
                      <i className="fas fa-circle fa-stack-2x" />
                      <i
                        className="fas fa-hourglass-half fa-stack-1x fa-inverse"
@@ -266,7 +266,10 @@ let submissions =
                       (
                         name,
                         title,
-                        <img className="w-10 h-10 rounded-full" src=avatar />,
+                        <img
+                          className="w-12 h-12 rounded-full overflow-hidden object-cover border shadow"
+                          src=avatar
+                        />,
                       );
                     | None => (
                         "Unknown Coach",
@@ -279,24 +282,34 @@ let submissions =
                     };
 
                   <div
-                    className="bg-gray-100 border-t p-4 md:p-6 flex"
+                    className="flex bg-white border-t p-4 md:p-6"
                     key={feedback |> Feedback.id}>
-                    <div className="flex-shrink-0"> coachAvatar </div>
-                    <div className="flex-grow ml-3">
-                      <div className="text-sm">
-                        {"Feedback from:" |> str}
+                    <div className="w-full">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 mr-3"> coachAvatar </div>
+                        <div>
+                          <p className="text-xs">
+                            {"Feedback from:" |> str}
+                          </p>
+                          <div className="flex flex-col">
+                            <h4 className="text-sm md:text-base font-semibold">
+                              {coachName |> str}
+                            </h4>
+                            {
+                              switch (coachTitle) {
+                              | Some(title) =>
+                                <span className="text-xs">
+                                  {title |> str}
+                                </span>
+                              | None => React.null
+                              }
+                            }
+                          </div>
+                        </div>
                       </div>
-                      <div className="font-semibold"> {coachName |> str} </div>
-                      {
-                        switch (coachTitle) {
-                        | Some(title) =>
-                          <div className="text-xs"> {title |> str} </div>
-                        | None => React.null
-                        }
-                      }
                       <MarkdownBlock
                         profile=Markdown.Permissive
-                        className="mt-2"
+                        className="md:ml-15"
                         markdown={feedback |> Feedback.feedback}
                       />
                     </div>
@@ -340,7 +353,7 @@ let make =
     React.useState(() => false);
 
   <div>
-    <div className="flex justify-between border-b pb-2">
+    <div className="flex justify-between items-end border-b pb-2">
       <h4> {"Your Submissions" |> str} </h4>
       {
         targetStatus
@@ -348,7 +361,7 @@ let make =
              ~resubmittable=target |> Target.resubmittable,
            ) ?
           <button
-            className="btn btn-primary btn-small"
+            className="btn btn-primary"
             onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
             <span className="hidden md:inline">
               {

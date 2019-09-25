@@ -43,7 +43,7 @@ let make = (~attachments, ~removeAttachmentCB) =>
                switch (attachment) {
                | SubmissionAttachment.Link(url) => (
                    url,
-                   "border-blue-200 bg-blue-200",
+                   "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
                    "bg-blue-200",
                    "bg-blue-100",
                    url,
@@ -51,7 +51,7 @@ let make = (~attachments, ~removeAttachmentCB) =>
                  )
                | File(id, title, url) => (
                    "file-" ++ id,
-                   "border-primary-200 bg-primary-200",
+                   "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
                    "bg-primary-200",
                    "bg-primary-100",
                    title,
@@ -59,25 +59,23 @@ let make = (~attachments, ~removeAttachmentCB) =>
                  )
                };
 
-             <span
+             <a
+               href=url
+               target="_blank"
                key
                className={
-                 "mt-2 mr-2 flex items-center border-2 rounded "
+                 "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
                  ++ containerClasses
                }>
                {iconSpan(removeAttachmentCB, iconClasses, attachment)}
                <span
                  className={
-                   "rounded px-2 py-1 truncate rounded " ++ textClasses
+                   "rounded text-xs font-semibold inline-block whitespace-normal truncate w-48 md:w-50 h-full px-3 py-1 leading-loose "
+                   ++ textClasses
                  }>
-                 <a
-                   href=url
-                   target="_blank"
-                   className="course-show-attachments__attachment-title text-xs font-semibold text-primary-600 inline-block truncate align-text-bottom">
-                   {text |> str}
-                 </a>
+                 {text |> str}
                </span>
-             </span>;
+             </a>;
            })
         |> Array.of_list
         |> React.array

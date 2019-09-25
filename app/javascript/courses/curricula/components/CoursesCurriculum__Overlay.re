@@ -247,7 +247,7 @@ let targetStatusClass = (prefix, targetStatus) =>
   ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
 
 let targetStatusClasses = targetStatus =>
-  "curriculum__target-status text-xs py-1 px-2 md:px-4 "
+  "curriculum__target-status bg-white text-xs mt-2 md:mt-0 py-1 px-2 md:px-4 "
   ++ targetStatusClass("curriculum__target-status--", targetStatus);
 
 let overlayHeaderTitleCardClasses = targetStatus =>
@@ -257,16 +257,19 @@ let overlayHeaderTitleCardClasses = targetStatus =>
 let overlayStatus = (course, target, targetStatus) =>
   <div className={overlayHeaderTitleCardClasses(targetStatus)}>
     <button
-      className={"course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner "
-      ++ targetStatusClass("course-overlay__close--", targetStatus)}
+      className={
+        "course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner "
+        ++ targetStatusClass("course-overlay__close--", targetStatus)
+      }
       onClick={_e => closeOverlay(course)}>
       <Icon className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0" />
       <span className="text-xs hidden lg:inline-block mt-px">
         {"Close" |> str}
       </span>
     </button>
-    <div className="w-full flex items-center justify-between relative">
-      <h1 className="text-base leading-snug mr-3 md:text-xl">
+    <div
+      className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">
+      <h1 className="text-base leading-snug md:mr-6 md:text-xl">
         {target |> Target.title |> str}
       </h1>
       <div className={targetStatusClasses(targetStatus)}>

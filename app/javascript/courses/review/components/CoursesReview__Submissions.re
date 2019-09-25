@@ -92,7 +92,7 @@ let showSubmissions = attachments =>
                  href=url
                  target="_blank"
                  className={
-                   "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md  "
+                   "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
                    ++ containerClasses
                  }>
                  {iconSpan(iconClasses, attachment)}
@@ -162,7 +162,7 @@ let updateGradingCB =
       ~attachments=submission |> Submission.attachments,
       ~feedback,
       ~grades,
-      ~evaluatedAt=Some(Js.Date.make())
+      ~evaluatedAt=Some(Js.Date.make()),
     );
   updateSubmissionCB(newSubmission);
 };

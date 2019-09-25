@@ -10,7 +10,7 @@ let make =
       ~submissions,
       ~levels,
       ~selectedLevel,
-      ~setSelectedSubmission,
+      ~openOverlayCB,
     ) => {
   let submissionToShow =
     switch (selectedLevel) {
@@ -30,7 +30,7 @@ let make =
         |> Array.map(submission =>
              <div
                key={submission |> SubmissionInfo.id}
-               onClick=(_ => setSelectedSubmission(_ => Some(submission)))
+               onClick=(_ => openOverlayCB(submission |> SubmissionInfo.id))
                className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-orange-400 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
                <div className="w-full md:w-3/4">
                  <div className="block text-sm md:pr-2">

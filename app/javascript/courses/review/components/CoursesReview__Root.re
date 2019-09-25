@@ -4,12 +4,14 @@
 open CoursesReview__Types;
 let str = React.string;
 
+let openOverlay = submissionId =>
+  ReasonReactRouter.push("/submissions/" ++ submissionId);
+
 let dropDownButtonText = level =>
   "Level "
   ++ (level |> Level.number |> string_of_int)
   ++ " | "
   ++ (level |> Level.name);
-
 let dropdownShowAllButton = (selectedLevel, setSelectedLevel) =>
   switch (selectedLevel) {
   | Some(_) => [|
@@ -84,67 +86,62 @@ let make =
   let (submissions, setSubmissions) = React.useState(() => submissions);
   let (showPending, setShowPending) = React.useState(() => true);
   let (selectedLevel, setSelectedLevel) = React.useState(() => None);
-  let (selectedSubmission, setSelectedSubmission) =
-    React.useState(() => Some(0 |> Array.unsafe_get(submissions)));
 
-  <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
-    <div className="w-full bg-gray-100 relative md:sticky md:top-0">
-      <div
-        className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between pt-4 pb-4">
+  let url = ReasonReactRouter.useUrl();
+
+  switch (url.path) {
+  | ["submissions", submissionId, ..._] =>
+    <CoursesReview__SubmissionOverlay
+      authenticityToken
+      courseId
+      submissionId
+      gradeLabels
+      passGrade
+      currentCoach
+      removePendingSubmissionCB={removePendingSubmission(setSubmissions)}
+    />
+  | _ =>
+    <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
+      <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div
-          className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400 overflow-hidden">
-          <button
-            className={buttonClasses(showPending == true)}
-            onClick={_ => setShowPending(_ => true)}>
-            {"Pending" |> str}
-          </button>
-          <button
-            className={buttonClasses(showPending == false)}
-            onClick={_ => setShowPending(_ => false)}>
-            {"Reviewed" |> str}
-          </button>
-        </div>
-        <div className="flex-shrink-0 pt-2 md:pt-0">
-          {showDropdown(levels, selectedLevel, setSelectedLevel)}
+          className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between pt-4 pb-4">
+          <div
+            className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400 overflow-hidden">
+            <button
+              className={buttonClasses(showPending == true)}
+              onClick=(_ => setShowPending(_ => true))>
+              {"Pending" |> str}
+            </button>
+            <button
+              className={buttonClasses(showPending == false)}
+              onClick=(_ => setShowPending(_ => false))>
+              {"Reviewed" |> str}
+            </button>
+          </div>
+          <div className="flex-shrink-0 pt-2 md:pt-0">
+            {showDropdown(levels, selectedLevel, setSelectedLevel)}
+          </div>
         </div>
       </div>
-    </div>
-    <div className="max-w-3xl mx-auto">
-      {
-        showPending ?
-          <CoursesReview__ShowPendingSubmissions
-            authenticityToken
-            submissions
-            levels
-            selectedLevel
-            setSelectedSubmission
-          /> :
-          <CoursesReview__ShowReviewedSubmissions
-            authenticityToken
-            courseId
-            selectedLevel
-            levels
-            setSelectedSubmission
-          />
-      }
-      {
-        switch (selectedSubmission) {
-        | None => React.null
-        | Some(submission) =>
-          <CoursesReview__SubmissionOverlay
-            authenticityToken
-            levels
-            submissionId={submission |> SubmissionInfo.id}
-            setSelectedSubmission
-            gradeLabels
-            passGrade
-            currentCoach
-            removePendingSubmissionCB={
-              removePendingSubmission(setSubmissions)
-            }
-          />
+      <div className="max-w-3xl mx-auto">
+        {
+          showPending ?
+            <CoursesReview__ShowPendingSubmissions
+              authenticityToken
+              submissions
+              levels
+              selectedLevel
+              openOverlayCB=openOverlay
+            /> :
+            <CoursesReview__ShowReviewedSubmissions
+              authenticityToken
+              courseId
+              selectedLevel
+              levels
+              openOverlayCB=openOverlay
+            />
         }
-      }
+      </div>
     </div>
-  </div>;
+  };
 };

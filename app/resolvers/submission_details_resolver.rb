@@ -4,7 +4,7 @@ class SubmissionDetailsResolver < ApplicationResolver
   def submission_details
     submissions = TimelineEvent.where(target_id: submission.target_id)
       .includes(:timeline_event_owners)
-      .where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) }).reverse
+      .where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) }).includes(:startup_feedback, :timeline_event_grades, :evaluator).order("timeline_events.created_at").reverse
 
     {
       submissions: submissions,
@@ -45,6 +45,8 @@ class SubmissionDetailsResolver < ApplicationResolver
 
   def authorized?
     return false if submission.blank?
+
+    return false if current_user.faculty.blank?
 
     current_user.faculty.courses.where(id: target.course.id).present?
   end

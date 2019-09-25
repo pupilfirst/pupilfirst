@@ -154,7 +154,7 @@ let submissionCardClasses = status =>
     }
   );
 
-let showSubmission = (submissions, levels, setSelectedSubmission) =>
+let showSubmission = (submissions, levels, openOverlayCB) =>
   <div>
     {
       submissions
@@ -162,7 +162,7 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
       |> Array.map(submission =>
            <div
              key={submission |> SubmissionInfo.id}
-             onClick={_ => setSelectedSubmission(_ => Some(submission))}
+             onClick={_ => openOverlayCB(submission |> SubmissionInfo.id)}
              className={
                submissionCardClasses(submission |> SubmissionInfo.status)
              }>
@@ -222,13 +222,7 @@ let updateLevel = (setState, level, ()) => {
 
 [@react.component]
 let make =
-    (
-      ~authenticityToken,
-      ~courseId,
-      ~selectedLevel,
-      ~levels,
-      ~setSelectedSubmission,
-    ) => {
+    (~authenticityToken, ~courseId, ~selectedLevel, ~levels, ~openOverlayCB) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -263,7 +257,7 @@ let make =
             className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
             {"No Reviewed Submission" |> str}
           </div>
-      | _ => showSubmission(state.submissions, levels, setSelectedSubmission)
+      | _ => showSubmission(state.submissions, levels, openOverlayCB)
       }
     }
     {

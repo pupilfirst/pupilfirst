@@ -20,7 +20,9 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    true
+    return false if user.faculty.blank?
+
+    user.faculty.courses.where(id: record.id).present?
   end
 
   def apply?

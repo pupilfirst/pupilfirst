@@ -42,3 +42,20 @@ let decodeJS = details =>
            CoursesReview__EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
          ),
   );
+
+let updateSubmission = (t, submission) =>
+  make(
+    ~submissions=
+      t.submissions
+      |> Js.Array.filter(s =>
+           s
+           |> CoursesReview__Submission.id
+           != (submission |> CoursesReview__Submission.id)
+         )
+      |> Array.append([|submission|]),
+    ~targetId=t.targetId,
+    ~targetTitle=t.targetTitle,
+    ~userNames=t.userNames,
+    ~levelNumber=t.levelNumber,
+    ~evaluationCriteria=t.evaluationCriteria,
+  );

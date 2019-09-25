@@ -7,6 +7,8 @@ class ReviewedSubmissionsResolver < ApplicationResolver
   end
 
   def authorized?
+    return false if current_user.faculty.blank?
+
     current_user.faculty.courses.where(id: course_id).present?
   end
 

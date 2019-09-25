@@ -192,6 +192,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :timeline_events, only: %i[show], path: 'submissions'
+
   # Public change log
   scope 'changelog', as: 'changelog', controller: 'changelog' do
     get 'archive'

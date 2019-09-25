@@ -87,6 +87,7 @@ let showSubmissions = attachments =>
                  };
 
                <a
+                 key
                  href=url
                  target="_blank"
                  className={
@@ -133,22 +134,33 @@ let updateGradingCB =
       ~updateSubmissionCB,
     ) => {
   let feedback =
-    newFeedback == "" ?
-      submission |> Submission.feedback :
-      submission
-      |> Submission.feedback
-      |> Array.append([|
-           Feedback.make(
-             ~coachName=currentCoach |> Coach.name,
-             ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
-             ~coachTitle=currentCoach |> Coach.title,
-             ~createdAt=Js.Date.make(),
-             ~value=newFeedback,
-             ~id="1111",
-           ),
-         |]);
+    switch (newFeedback) {
+    | Some(f) =>
+      f == "" ?
+        submission |> Submission.feedback :
+        submission
+        |> Submission.feedback
+        |> Array.append([|
+             Feedback.make(
+               ~coachName=currentCoach |> Coach.name,
+               ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
+               ~coachTitle=currentCoach |> Coach.title,
+               ~createdAt=Js.Date.make(),
+               ~value=f,
+               ~id=Js.Date.now() |> Js.Float.toString,
+             ),
+           |])
+    | None => submission |> Submission.feedback
+    };
 
-  let passedAt = passed ? Some(Js.Date.make()) : None;
+  let (passedAt, evaluatedAt) =
+    switch (passed) {
+    | Some(p) => (p ? Some(Js.Date.make()) : None, Some(Js.Date.make()))
+    | None => (
+        submission |> Submission.passedAt,
+        submission |> Submission.evaluatedAt,
+      )
+    };
 
   let newSubmission =
     Submission.make(
@@ -160,7 +172,7 @@ let updateGradingCB =
       ~attachments=submission |> Submission.attachments,
       ~feedback,
       ~grades,
-      ~evaluatedAt=Some(Js.Date.make()),
+      ~evaluatedAt,
     );
   updateSubmissionCB(newSubmission);
 };

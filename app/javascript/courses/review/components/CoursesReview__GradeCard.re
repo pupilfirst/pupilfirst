@@ -23,13 +23,37 @@ let passed = (grades, passgrade) =>
 
 module CreateGradingMutation = [%graphql
   {|
-  mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!) {
-    createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades){
-      success
+    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!) {
+      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades){
+        success
+      }
     }
-  }
-|}
+  |}
 ];
+
+module UndoGradingMutation = [%graphql
+  {|
+    mutation($submissionId: ID!) {
+      undoGrading(submissionId: $submissionId){
+        success
+      }
+    }
+  |}
+];
+
+let undoGrading = (authenticityToken, submissionId, setState) => {
+  setState(state => {...state, saving: true});
+
+  UndoGradingMutation.make(~submissionId, ())
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       response##undoGrading##success ?
+         DomUtils.relaod() |> ignore :
+         setState(state => {...state, saving: false});
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
 
 let gradeSubmissionQuery =
     (
@@ -59,10 +83,11 @@ let gradeSubmissionQuery =
        response##createGrading##success ?
          updateGradingCB(
            ~grades=state.grades,
-           ~passed=passed(state.grades, passGrade),
-           ~newFeedback=state.newFeedback,
+           ~passed=Some(passed(state.grades, passGrade)),
+           ~newFeedback=Some(state.newFeedback),
          ) :
-         setState(state => {...state, saving: false});
+         ();
+       setState(state => {...state, saving: false});
        Js.Promise.resolve();
      })
   |> ignore;
@@ -279,29 +304,6 @@ let renderGradePills =
        );
      })
   |> React.array;
-let showEvaluatedBy = (status, submission) =>
-  switch (submission |> Submission.evaluatedAt, status) {
-  | (Some(date), Graded(_)) =>
-    <div
-      className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
-      {
-        switch (submission |> Submission.evaluatorName) {
-        | Some(name) =>
-          <div>
-            <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
-            <p className="text-sm font-semibold px-3 pb-3"> {name |> str} </p>
-          </div>
-        | None => React.null
-        }
-      }
-      <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
-        {"on " ++ (date |> Submission.prettyDate) |> str}
-      </div>
-    </div>
-  | (None, Graded(_))
-  | (_, Grading)
-  | (_, UnGraded) => React.null
-  };
 let gradeStatusClasses = (color, status) =>
   "w-24 h-20 rounded-lg border flex justify-center items-center bg-"
   ++ color
@@ -317,7 +319,7 @@ let gradeStatusClasses = (color, status) =>
     }
   );
 
-let submissionStatusIcon = (status, submission) => {
+let submissionStatusIcon = (status, submission, authenticityToken, setState) => {
   let text =
     switch (status) {
     | Graded(passed) => passed ? "Passed" : "Failed"
@@ -335,7 +337,32 @@ let submissionStatusIcon = (status, submission) => {
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
       className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
-      {showEvaluatedBy(status, submission)}
+      {
+        switch (submission |> Submission.evaluatedAt, status) {
+        | (Some(date), Graded(_)) =>
+          <div
+            className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
+            {
+              switch (submission |> Submission.evaluatorName) {
+              | Some(name) =>
+                <div>
+                  <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
+                  <p className="text-sm font-semibold px-3 pb-3">
+                    {name |> str}
+                  </p>
+                </div>
+              | None => React.null
+              }
+            }
+            <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
+              {"on " ++ (date |> Submission.prettyDate) |> str}
+            </div>
+          </div>
+        | (None, Graded(_))
+        | (_, Grading)
+        | (_, UnGraded) => React.null
+        }
+      }
       <div className="w-24 flex flex-col items-center justify-center">
         <div className={gradeStatusClasses(color, status)}>
           {
@@ -377,15 +404,25 @@ let submissionStatusIcon = (status, submission) => {
       </div>
     </div>
     {
-      switch (status) {
-      | Graded(_) =>
+      switch (submission |> Submission.evaluatedAt, status) {
+      | (Some(_), Graded(_)) =>
         <div className="mt-4 md:pl-6 w-full">
-          <div className="btn btn-danger w-full">
+          <div
+            onClick=(
+              _ =>
+                undoGrading(
+                  authenticityToken,
+                  submission |> Submission.id,
+                  setState,
+                )
+            )
+            className="btn btn-danger w-full">
             {"Undo Grading" |> str}
           </div>
         </div>
-      | Grading
-      | UnGraded => React.null
+      | (None, Graded(_))
+      | (_, Grading)
+      | (_, UnGraded) => React.null
       }
     }
   </div>;
@@ -449,7 +486,7 @@ let make =
         saving: false,
       }
     );
-  <div>
+  <DisablingCover disabled={state.saving}>
     <div className="px-4 md:px-6 ">
       {
         submission
@@ -492,7 +529,14 @@ let make =
               }
             }
           </div>
-          {submissionStatusIcon(state.status, submission)}
+          {
+            submissionStatusIcon(
+              state.status,
+              submission,
+              authenticityToken,
+              setState,
+            )
+          }
         </div>
       </div>
     </div>
@@ -519,5 +563,5 @@ let make =
       | _ => React.null
       }
     }
-  </div>;
+  </DisablingCover>;
 };

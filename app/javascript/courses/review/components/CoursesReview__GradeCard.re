@@ -198,6 +198,7 @@ let showGradePill =
              let gradeLabelGrade = gradeLabel |> GradeLabel.grade;
 
              <div
+               key={evaluvationCriterion |> EvaluationCriterion.id}
                onClick={
                  handleGradePillClick(
                    evaluvationCriterion |> EvaluationCriterion.id,
@@ -278,22 +279,26 @@ let renderGradePills =
        );
      })
   |> React.array;
-let showEvaluatedBy = (status, grades) =>
-  switch (grades |> ArrayUtils.isEmpty, status) {
-  | (true, Graded(_)) =>
+let showEvaluatedBy = (status, submission) =>
+  switch (submission |> Submission.evaluatedAt, status) {
+  | (Some(date), Graded(_)) =>
     <div
       className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
-      <div>
-        <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
-        <p className="text-sm font-semibold px-3 pb-3">
-          {"Pratham Sehgal" |> str}
-        </p>
-      </div>
+      {
+        switch (submission |> Submission.evaluatorName) {
+        | Some(name) =>
+          <div>
+            <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
+            <p className="text-sm font-semibold px-3 pb-3"> {name |> str} </p>
+          </div>
+        | None => React.null
+        }
+      }
       <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
-        {"on August 6, 2019" |> str}
+        {"on " ++ (date |> Submission.prettyDate) |> str}
       </div>
     </div>
-  | (false, Graded(_))
+  | (None, Graded(_))
   | (_, Grading)
   | (_, UnGraded) => React.null
   };
@@ -312,7 +317,7 @@ let gradeStatusClasses = (color, status) =>
     }
   );
 
-let submissionStatusIcon = (status, grades) => {
+let submissionStatusIcon = (status, submission) => {
   let text =
     switch (status) {
     | Graded(passed) => passed ? "Passed" : "Failed"
@@ -330,7 +335,7 @@ let submissionStatusIcon = (status, grades) => {
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
       className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
-      {showEvaluatedBy(status, grades)}
+      {showEvaluatedBy(status, submission)}
       <div className="w-24 flex flex-col items-center justify-center">
         <div className={gradeStatusClasses(color, status)}>
           {
@@ -425,19 +430,20 @@ let gradeSubmission =
 let make =
     (
       ~authenticityToken,
-      ~submissionId,
+      ~submission,
       ~gradeLabels,
       ~evaluvationCriteria,
-      ~grades,
       ~passGrade,
-      ~passedAt,
-      ~feedback,
       ~updateGradingCB,
     ) => {
   let (state, setState) =
     React.useState(() =>
       {
-        status: initalStatus(passedAt, grades),
+        status:
+          initalStatus(
+            submission |> Submission.passedAt,
+            submission |> Submission.grades,
+          ),
         grades: [||],
         newFeedback: "",
         saving: false,
@@ -446,7 +452,10 @@ let make =
   <div>
     <div className="px-4 md:px-6 ">
       {
-        feedback == [||] && grades == [||] ?
+        submission
+        |> Submission.feedback == [||]
+        && submission
+        |> Submission.grades == [||] ?
           <CoursesReview__FeedbackEditor
             feedback={state.newFeedback}
             label="Add Your Feedback"
@@ -461,7 +470,7 @@ let make =
         <div className="flex md:flex-row flex-col">
           <div className="w-full md:w-3/6">
             {
-              switch (grades) {
+              switch (submission |> Submission.grades) {
               | [||] =>
                 renderGradePills(
                   gradeLabels,
@@ -483,12 +492,12 @@ let make =
               }
             }
           </div>
-          {submissionStatusIcon(state.status, state.grades)}
+          {submissionStatusIcon(state.status, submission)}
         </div>
       </div>
     </div>
     {
-      switch (grades) {
+      switch (submission |> Submission.grades) {
       | [||] =>
         <div className="bg-white py-4 mx-3 md:mx-6 border-t">
           <div
@@ -496,7 +505,7 @@ let make =
             onClick={
               gradeSubmission(
                 authenticityToken,
-                submissionId,
+                submission |> Submission.id,
                 state,
                 setState,
                 passGrade,

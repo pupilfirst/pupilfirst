@@ -67,7 +67,7 @@ let buttonClasses = selected =>
 
 let removePendingSubmission = (setSubmissions, submissionId) =>
   setSubmissions(submissions =>
-    submissions |> Js.Array.filter(s => s |> Submission.id != submissionId)
+    submissions |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId)
   );
 
 [@react.component]
@@ -134,7 +134,7 @@ let make =
           <CoursesReview__SubmissionOverlay
             authenticityToken
             levels
-            submission
+            submissionId={submission |> SubmissionInfo.id}
             setSelectedSubmission
             gradeLabels
             passGrade

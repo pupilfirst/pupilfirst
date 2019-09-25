@@ -5,7 +5,7 @@ open CoursesReview__Types;
 let str = React.string;
 
 type state = {
-  submissionDetails: array(SubmissionDetails.t),
+  submissionDetails: option(SubmissionDetails.t),
   loading: bool,
 };
 
@@ -13,32 +13,38 @@ module SubmissionDetailsQuery = [%graphql
   {|
     query($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        id, evaluatorName, passedAt, createdAt, description,
-        attachments{
-          url, title
-        },
-        grades {
-          evaluationCriterionId, grade
-        },
-        feedback{
-          id, coachName, coachAvatarUrl, coachTitle, createdAt,value
-        },
+        targetId, targetTitle, userNames, levelNumber
         evaluationCriteria{
           id, name
+        },
+        submissions{
+          id, evaluatorName, passedAt, createdAt, description, evaluatedAt
+          attachments{
+            url, title
+          },
+          grades {
+            evaluationCriterionId, grade
+          },
+          feedback{
+            id, coachName, coachAvatarUrl, coachTitle, createdAt,value
+          },
         }
       }
-  }
-|}
+    }
+  |}
 ];
 
 let updateSubmissionDetails = (setState, details) =>
   setState(_ =>
-    {loading: false, submissionDetails: details |> SubmissionDetails.decodeJS}
+    {
+      loading: false,
+      submissionDetails: Some(details |> SubmissionDetails.decodeJS),
+    }
   );
 
-let getSubmissionDetails = (authenticityToken, submission, setState, ()) => {
+let getSubmissionDetails = (authenticityToken, submissionId, setState, ()) => {
   setState(state => {...state, loading: true});
-  SubmissionDetailsQuery.make(~submissionId=submission |> Submission.id, ())
+  SubmissionDetailsQuery.make(~submissionId, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##submissionDetails |> updateSubmissionDetails(setState);
@@ -49,7 +55,7 @@ let getSubmissionDetails = (authenticityToken, submission, setState, ()) => {
   None;
 };
 
-let headerSection = (submission, levels, setSelectedSubmission) =>
+let headerSection = (submissionDetails, setSelectedSubmission) =>
   <div
     className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
     <div
@@ -66,31 +72,26 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
         <div className="block text-sm md:pr-2">
           <span
             className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-            {
-              submission
-              |> Submission.levelId
-              |> Level.unsafeLevelNumber(levels, "SubmissionOverlay")
-              |> str
-            }
+            {"Level " ++ (submissionDetails |> SubmissionDetails.levelNumber) |> str}
           </span>
           <a
-            href={"/targets/" ++ (submission |> Submission.targetId)}
+            href={"/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)}
             target="_blank"
             className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-sm md:text-lg">
-            {submission |> Submission.title |> str}
+            {submissionDetails |> SubmissionDetails.targetTitle |> str}
           </a>
         </div>
         <div className="text-left mt-1 text-xs text-gray-800">
           <span> {"Submitted by " |> str} </span>
           <span className="font-semibold">
-            {submission |> Submission.userNames |> str}
+            {submissionDetails |> SubmissionDetails.userNames |> str}
           </span>
         </div>
       </div>
       <div
         className="hidden md:flex w-auto md:w-1/6 text-xs justify-end mt-2 md:mt-0">
         <a
-          href={"/targets/" ++ (submission |> Submission.targetId)}
+          href={"/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)}
           target="_blank"
           className="btn btn-primary-ghost btn-small hidden md:inline-block">
           {"View Target " |> str}
@@ -98,27 +99,26 @@ let headerSection = (submission, levels, setSelectedSubmission) =>
       </div>
     </div>
   </div>;
-let updateSubmissionCB = (setState, removePendingSubmissionCB, submission) => {
-  setState(state =>
-    {
-      ...state,
-      submissionDetails:
-        state.submissionDetails
-        |> Js.Array.filter(s =>
-             s |> SubmissionDetails.id != (submission |> SubmissionDetails.id)
-           )
-        |> Array.append([|submission|]),
-    }
-  );
-  removePendingSubmissionCB(submission |> SubmissionDetails.id);
-};
+let updateSubmissionCB = (setState, removePendingSubmissionCB, submission) =>
+  /* setState(state =>
+       {
+         ...state,
+         submissionDetails:
+           state.submissionDetails
+           |> Js.Array.filter(s =>
+                s |> SubmissionDetails.id != (submission |> SubmissionDetails.id)
+              )
+           |> Array.append([|submission|]),
+       }
+     ); */
+  removePendingSubmissionCB(submission |> Submission.id);
 
 [@react.component]
 let make =
     (
       ~authenticityToken,
       ~levels,
-      ~submission,
+      ~submissionId,
       ~setSelectedSubmission,
       ~gradeLabels,
       ~passGrade,
@@ -126,7 +126,7 @@ let make =
       ~removePendingSubmissionCB,
     ) => {
   let (state, setState) =
-    React.useState(() => {loading: true, submissionDetails: [||]});
+    React.useState(() => {loading: true, submissionDetails: None});
 
   React.useEffect(() => {
     ScrollLock.activate();
@@ -134,38 +134,50 @@ let make =
   });
 
   React.useEffect1(
-    getSubmissionDetails(authenticityToken, submission, setState),
-    [|submission|],
+    getSubmissionDetails(authenticityToken, submissionId, setState),
+    [|submissionId|],
   );
-  <div
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    {headerSection(submission, levels, setSelectedSubmission)}
+  switch (state.submissionDetails) {
+  | Some(submissionDetails) =>
     <div
-      className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
-      {
-        state.loading ?
-          <div> {"Loading" |> str} </div> :
-          state.submissionDetails
-          |> Array.mapi((index, submission) =>
-               <div>
-                 <CoursesReview__Submissions
-                   key={index |> string_of_int}
-                   authenticityToken
-                   submission
-                   gradeLabels
-                   passGrade
-                   updateSubmissionCB={
-                     updateSubmissionCB(setState, removePendingSubmissionCB)
-                   }
-                   submissionNumber={
-                     (state.submissionDetails |> Array.length) - index
-                   }
-                   currentCoach
-                 />
-               </div>
-             )
-          |> React.array
-      }
+      className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+      {headerSection(submissionDetails, setSelectedSubmission)}
+      <div
+        className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
+        {
+          state.loading ?
+            <div> {"Loading" |> str} </div> :
+            submissionDetails
+            |> SubmissionDetails.submissions
+            |> Array.mapi((index, submission) =>
+                 <div>
+                   <CoursesReview__Submissions
+                     key={index |> string_of_int}
+                     authenticityToken
+                     submission
+                     gradeLabels
+                     passGrade
+                     updateSubmissionCB={
+                       updateSubmissionCB(setState, removePendingSubmissionCB)
+                     }
+                     submissionNumber={
+                       (
+                         submissionDetails
+                         |> SubmissionDetails.submissions
+                         |> Array.length
+                       )
+                       - index
+                     }
+                     currentCoach
+                     evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
+                   />
+                 </div>
+               )
+            |> React.array
+        }
+      </div>
     </div>
-  </div>;
+
+  | None => React.null
+  };
 };

@@ -17,7 +17,9 @@ let make =
     | None => submissions
     | Some(level) =>
       submissions
-      |> Js.Array.filter(l => l |> Submission.levelId == (level |> Level.id))
+      |> Js.Array.filter(l =>
+           l |> SubmissionInfo.levelId == (level |> Level.id)
+         )
     };
   <div>
     {
@@ -27,7 +29,7 @@ let make =
         submissionToShow
         |> Array.map(submission =>
              <div
-               key={submission |> Submission.id}
+               key={submission |> SubmissionInfo.id}
                onClick=(_ => setSelectedSubmission(_ => Some(submission)))
                className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-orange-400 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
                <div className="w-full md:w-3/4">
@@ -36,7 +38,7 @@ let make =
                      className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                      {
                        submission
-                       |> Submission.levelId
+                       |> SubmissionInfo.levelId
                        |> Level.unsafeLevelNumber(
                             levels,
                             "showPendingSubmissions",
@@ -45,18 +47,18 @@ let make =
                      }
                    </span>
                    <span className="ml-2 font-semibold text-base">
-                     {submission |> Submission.title |> str}
+                     {submission |> SubmissionInfo.title |> str}
                    </span>
                  </div>
                  <div className="mt-1 md:ml-px text-xs text-gray-900">
                    <span> {"Submitted by " |> str} </span>
                    <span className="font-semibold">
-                     {submission |> Submission.userNames |> str}
+                     {submission |> SubmissionInfo.userNames |> str}
                    </span>
                    <span className="ml-1">
                      {
                        "on "
-                       ++ (submission |> Submission.createdAtPretty)
+                       ++ (submission |> SubmissionInfo.createdAtPretty)
                        |> str
                      }
                    </span>
@@ -65,7 +67,7 @@ let make =
                <div className="w-auto md:w-1/4 text-xs flex justify-end">
                  <div
                    className="text-xs mt-2 md:mt-0 font-semibold bg-orange-100 text-orange-600 flex-shrink-0 px-2 py-px rounded">
-                   {submission |> Submission.timeDistance |> str}
+                   {submission |> SubmissionInfo.timeDistance |> str}
                  </div>
                </div>
              </div>

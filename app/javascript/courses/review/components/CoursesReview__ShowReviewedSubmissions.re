@@ -5,7 +5,7 @@ let str = React.string;
 
 type state = {
   loading: bool,
-  submissions: array(Submission.t),
+  submissions: array(SubmissionInfo.t),
   hasNextPage: bool,
   endCursor: option(string),
   level: option(Level.t),
@@ -42,12 +42,12 @@ let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
                       switch (s) {
                       | Some(submission) =>
                         let status =
-                          Submission.makeStatus(
+                          SubmissionInfo.makeStatus(
                             ~failed=submission##failed,
                             ~feedbackSent=submission##feedbackSent,
                           );
                         [
-                          Submission.make(
+                          SubmissionInfo.make(
                             ~id=submission##id,
                             ~title=submission##title,
                             ~createdAt=submission##createdAt,
@@ -148,7 +148,8 @@ let submissionCardClasses = status =>
   "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
   ++ (
     switch (status) {
-    | Some(s) => s |> Submission.failed ? "border-red-500" : "border-green-500"
+    | Some(s) =>
+      s |> SubmissionInfo.failed ? "border-red-500" : "border-green-500"
     | None => "border-gray-600"
     }
   );
@@ -157,13 +158,13 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
   <div>
     {
       submissions
-      |> Submission.sort
+      |> SubmissionInfo.sort
       |> Array.map(submission =>
            <div
-             key={submission |> Submission.id}
+             key={submission |> SubmissionInfo.id}
              onClick={_ => setSelectedSubmission(_ => Some(submission))}
              className={
-               submissionCardClasses(submission |> Submission.status)
+               submissionCardClasses(submission |> SubmissionInfo.status)
              }>
              <div className="w-full md:w-3/4">
                <div className="block text-sm md:pr-2">
@@ -171,7 +172,7 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
                    className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                    {
                      submission
-                     |> Submission.levelId
+                     |> SubmissionInfo.levelId
                      |> Level.unsafeLevelNumber(
                           levels,
                           "ShowReviewedSubmission",
@@ -180,26 +181,30 @@ let showSubmission = (submissions, levels, setSelectedSubmission) =>
                    }
                  </span>
                  <span className="ml-2 font-semibold text-base">
-                   {submission |> Submission.title |> str}
+                   {submission |> SubmissionInfo.title |> str}
                  </span>
                </div>
                <div className="mt-1 ml-px text-xs text-gray-900">
                  <span> {"Submitted by " |> str} </span>
                  <span className="font-semibold">
-                   {submission |> Submission.userNames |> str}
+                   {submission |> SubmissionInfo.userNames |> str}
                  </span>
                  <span className="ml-1">
-                   {"on " ++ (submission |> Submission.createdAtPretty) |> str}
+                   {
+                     "on "
+                     ++ (submission |> SubmissionInfo.createdAtPretty)
+                     |> str
+                   }
                  </span>
                </div>
              </div>
              {
-               switch (submission |> Submission.status) {
+               switch (submission |> SubmissionInfo.status) {
                | Some(status) =>
                  <div
                    className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                   {showFeedbackSent(status |> Submission.feedbackSent)}
-                   {showSubmissionStatus(status |> Submission.failed)}
+                   {showFeedbackSent(status |> SubmissionInfo.feedbackSent)}
+                   {showSubmissionStatus(status |> SubmissionInfo.failed)}
                  </div>
                | None => React.null
                }

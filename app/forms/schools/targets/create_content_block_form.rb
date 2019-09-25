@@ -2,7 +2,7 @@ module Schools
   module Targets
     class CreateContentBlockForm < Reform::Form
       property :block_type, validates: { presence: true, inclusion: { in: ContentBlock.valid_block_types } }
-      property :target_id, virtual: true
+      property :target_id, virtual: true, validates: { presence: true }
       property :url, virtual: true
       property :content_sort_indices, virtual: true, validates: { presence: true }
       property :file, virtual: true
@@ -44,7 +44,6 @@ module Schools
       def content_block_params
         {
           block_type: block_type,
-          target_id: target_id,
           url: url,
           content_sort_indices: content_sort_indices,
           file: file,

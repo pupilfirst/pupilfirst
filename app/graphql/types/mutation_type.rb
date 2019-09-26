@@ -32,5 +32,6 @@ module Types
     field :restore_content_version, mutation: Mutations::RestoreContentVersion, null: false
     field :create_grading, mutation: Mutations::CreateGrading, null: false
     field :undo_grading, mutation: Mutations::UndoGrading, null: false
+    field :create_feedback, mutation: Mutations::CreateFeedback, null: false
   end
 end

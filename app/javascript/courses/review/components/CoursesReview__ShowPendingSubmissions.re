@@ -24,7 +24,11 @@ let make =
   <div>
     {
       switch (submissionToShow) {
-      | [||] => <div> {"No pending submissions to review" |> str} </div>
+      | [||] =>
+        <div
+          className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
+          {"No pending submissions to review" |> str}
+        </div>
       | _ =>
         submissionToShow
         |> Array.map(submission =>

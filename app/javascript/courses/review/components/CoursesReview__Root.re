@@ -72,6 +72,8 @@ let removePendingSubmission = (setSubmissions, submissionId) =>
     submissions |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId)
   );
 
+let submissionListClasses = bool => bool ? "" : "hidden";
+
 [@react.component]
 let make =
     (
@@ -111,6 +113,9 @@ let make =
               className={buttonClasses(showPending == true)}
               onClick=(_ => setShowPending(_ => true))>
               {"Pending" |> str}
+              <span className="ml-2 text-red-500">
+                {submissions |> Array.length |> string_of_int |> str}
+              </span>
             </button>
             <button
               className={buttonClasses(showPending == false)}
@@ -124,23 +129,24 @@ let make =
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
-        {
-          showPending ?
-            <CoursesReview__ShowPendingSubmissions
-              authenticityToken
-              submissions
-              levels
-              selectedLevel
-              openOverlayCB=openOverlay
-            /> :
-            <CoursesReview__ShowReviewedSubmissions
-              authenticityToken
-              courseId
-              selectedLevel
-              levels
-              openOverlayCB=openOverlay
-            />
-        }
+        <div className={submissionListClasses(showPending == true)}>
+          <CoursesReview__ShowPendingSubmissions
+            authenticityToken
+            submissions
+            levels
+            selectedLevel
+            openOverlayCB=openOverlay
+          />
+        </div>
+        <div className={submissionListClasses(showPending == false)}>
+          <CoursesReview__ShowReviewedSubmissions
+            authenticityToken
+            courseId
+            selectedLevel
+            levels
+            openOverlayCB=openOverlay
+          />
+        </div>
       </div>
     </div>
   };

@@ -10,6 +10,40 @@ type state = {
   showFeedbackEditor: bool,
 };
 
+module CreateFeedbackMutation = [%graphql
+  {|
+    mutation($submissionId: ID!, $feedback: String!) {
+      createFeedback(submissionId: $submissionId, feedback: $feedback){
+        success
+      }
+    }
+  |}
+];
+
+let createFeedback =
+    (authenticityToken, submissionId, feedback, setState, updateGradingCB) => {
+  setState(state => {...state, saving: true});
+
+  CreateFeedbackMutation.make(~submissionId, ~feedback, ())
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       response##createFeedback##success ?
+         {
+           updateGradingCB(
+             ~grades=[||],
+             ~passed=None,
+             ~newFeedback=Some(feedback),
+           );
+           setState(_ =>
+             {saving: false, newFeedback: "", showFeedbackEditor: false}
+           );
+         } :
+         setState(state => {...state, saving: false});
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 let showFeedback = feedback =>
   feedback
   |> Array.mapi((index, f) =>
@@ -59,7 +93,14 @@ let updateFeedbackCB = (setState, newFeedback) =>
   setState(state => {...state, newFeedback});
 
 [@react.component]
-let make = (~authenticityToken, ~feedback, ~reviewed) => {
+let make =
+    (
+      ~authenticityToken,
+      ~feedback,
+      ~reviewed,
+      ~submissionId,
+      ~updateGradingCB,
+    ) => {
   let (state, setState) =
     React.useState(() =>
       {saving: false, newFeedback: "", showFeedbackEditor: false}
@@ -79,7 +120,17 @@ let make = (~authenticityToken, ~feedback, ~reviewed) => {
                 />
                 <button
                   disabled={state.newFeedback == ""}
-                  className="btn btn-success btn-large w-full border border-green-600 mt-4">
+                  className="btn btn-success btn-large w-full border border-green-600 mt-4"
+                  onClick={
+                    _ =>
+                      createFeedback(
+                        authenticityToken,
+                        submissionId,
+                        state.newFeedback,
+                        setState,
+                        updateGradingCB,
+                      )
+                  }>
                   {"Share Feedback" |> str}
                 </button>
               </div> :

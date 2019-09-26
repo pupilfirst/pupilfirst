@@ -153,12 +153,17 @@ let updateGradingCB =
     | None => submission |> Submission.feedback
     };
 
-  let (passedAt, evaluatedAt) =
+  let (passedAt, evaluatedAt, newGrades) =
     switch (passed) {
-    | Some(p) => (p ? Some(Js.Date.make()) : None, Some(Js.Date.make()))
+    | Some(p) => (
+        p ? Some(Js.Date.make()) : None,
+        Some(Js.Date.make()),
+        grades,
+      )
     | None => (
         submission |> Submission.passedAt,
         submission |> Submission.evaluatedAt,
+        submission |> Submission.grades,
       )
     };
 
@@ -171,7 +176,7 @@ let updateGradingCB =
       ~evaluatorName=Some(currentCoach |> Coach.name),
       ~attachments=submission |> Submission.attachments,
       ~feedback,
-      ~grades,
+      ~grades=newGrades,
       ~evaluatedAt,
     );
   updateSubmissionCB(newSubmission);
@@ -230,5 +235,9 @@ let make =
       authenticityToken
       feedback={submission |> Submission.feedback}
       reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
+      submissionId={submission |> Submission.id}
+      updateGradingCB={
+        updateGradingCB(~submission, ~currentCoach, ~updateSubmissionCB)
+      }
     />
   </div>;

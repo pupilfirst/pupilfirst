@@ -41,7 +41,7 @@ let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
 
   let selected =
     <button
-      className="bg-white px-4 py-2 border border-gray-400 font-semibold rounded-lg focus:outline-none">
+      className="bg-white px-4 py-2 border border-gray-400 font-semibold rounded-lg focus:outline-none w-full md:w-auto flex justify-between">
       {
         (
           switch (selectedLevel) {
@@ -104,7 +104,7 @@ let make =
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div
-          className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between pt-4 pb-4">
+          className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
           <div
             className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400 overflow-hidden">
             <button
@@ -118,7 +118,7 @@ let make =
               {"Reviewed" |> str}
             </button>
           </div>
-          <div className="flex-shrink-0 pt-2 md:pt-0">
+          <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
             {showDropdown(levels, selectedLevel, setSelectedLevel)}
           </div>
         </div>

@@ -3,11 +3,11 @@
 }
 
 .community-answer-container>::after {
-  @apply relative h-13 inline-block text-center bottom-0 w-full pt-3;
+  @apply relative h-13 inline-block text-center font-normal bottom-0 w-full pt-3;
   content: '...';
   line-height: 1;
-  color: theme(colors.grey-600);
-  font-size: 30px;
+  color: theme(colors.gray.500);
+  font-size: 28px;
   letter-spacing: .6em;
 }
 

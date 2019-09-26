@@ -13,28 +13,34 @@ type state = {
 let showFeedback = feedback =>
   feedback
   |> Array.mapi((index, f) =>
-       <div key={index |> string_of_int} className="border-t p-4 md:p-6 flex">
-         <div
-           className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden">
-           <img src={f |> Feedback.coachAvatarUrl} />
-         </div>
-         <div className="flex-grow ml-3">
-           <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
-           <div className="flex flex-col md:flex-row md:items-center">
-             <h4 className="font-semibold text-base inline-block">
-               {f |> Feedback.coachName |> str}
-             </h4>
-             {
-               switch (f |> Feedback.coachTitle) {
-               | Some(title) =>
-                 <span
-                   className="inline-block text-xs text-gray-800 md:ml-2 pt-1 md:pt-0 leading-tight">
-                   {"(" ++ title ++ ")" |> str}
-                 </span>
-               | None => React.null
-               }
-             }
+       <div key={index |> string_of_int} className="border-t p-4 md:p-6">
+         <div className="flex items-center">
+           <div
+             className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-2 object-cover">
+             <img src={f |> Feedback.coachAvatarUrl} />
            </div>
+           <div>
+             <p className="text-xs leading-tight">
+               {"Feedback from:" |> str}
+             </p>
+             <div className="flex flex-col md:flex-row md:items-center">
+               <h4 className="font-semibold text-base inline-block">
+                 {f |> Feedback.coachName |> str}
+               </h4>
+               {
+                 switch (f |> Feedback.coachTitle) {
+                 | Some(title) =>
+                   <span
+                     className="inline-block text-xs text-gray-800 md:ml-2 leading-tight">
+                     {"(" ++ title ++ ")" |> str}
+                   </span>
+                 | None => React.null
+                 }
+               }
+             </div>
+           </div>
+         </div>
+         <div className="md:ml-14">
            <p
              className="text-xs leading-tight font-semibold inline-block p-1 bg-gray-200 rounded mt-4">
              {f |> Feedback.createdAtPretty |> str}

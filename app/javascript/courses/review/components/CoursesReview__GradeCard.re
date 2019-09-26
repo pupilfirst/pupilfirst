@@ -416,8 +416,9 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
                   setState,
                 )
             )
-            className="btn btn-danger w-full">
-            {"Undo Grading" |> str}
+            className="btn btn-danger btn-small w-full">
+            <i className="fas fa-undo" />
+            <span className="ml-2"> {"Undo Grading" |> str} </span>
           </div>
         </div>
       | (None, Graded(_))

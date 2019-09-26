@@ -70,13 +70,13 @@ let gradeSubmissionQuery =
 
   (
     state.newFeedback == "" ?
+      CreateGradingMutation.make(~submissionId, ~grades=jsGradesArray, ()) :
       CreateGradingMutation.make(
         ~submissionId,
         ~feedback=state.newFeedback,
         ~grades=jsGradesArray,
         (),
-      ) :
-      CreateGradingMutation.make(~submissionId, ~grades=jsGradesArray, ())
+      )
   )
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
@@ -462,6 +462,12 @@ let gradeSubmission =
   | UnGraded => ()
   };
 };
+let reviewButtonDisabled = status =>
+  switch (status) {
+  | Graded(_) => false
+  | Grading
+  | UnGraded => true
+  };
 
 [@react.component]
 let make =
@@ -544,7 +550,8 @@ let make =
       switch (submission |> Submission.grades) {
       | [||] =>
         <div className="bg-white py-4 mx-3 md:mx-6 border-t">
-          <div
+          <button
+            disabled={reviewButtonDisabled(state.status)}
             className="btn btn-success btn-large w-full border border-green-600"
             onClick={
               gradeSubmission(
@@ -557,9 +564,8 @@ let make =
               )
             }>
             {"Review Submission" |> str}
-          </div>
+          </button>
         </div>
-
       | _ => React.null
       }
     }

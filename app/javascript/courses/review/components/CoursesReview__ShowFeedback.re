@@ -71,6 +71,11 @@ let make = (~authenticityToken, ~feedback, ~reviewed) => {
                   label="Add feedback"
                   updateFeedbackCB={updateFeedbackCB(setState)}
                 />
+                <button
+                  disabled={state.newFeedback == ""}
+                  className="btn btn-success btn-large w-full border border-green-600 mt-4">
+                  {"Share Feedback" |> str}
+                </button>
               </div> :
               <div
                 className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">

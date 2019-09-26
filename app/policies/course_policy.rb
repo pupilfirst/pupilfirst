@@ -20,9 +20,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    return false if user.faculty.blank?
-
-    user.faculty.courses.where(id: record.id).present?
+    record.present? && courses_with_dashboard.present? && record.in?(courses_with_dashboard)
   end
 
   def apply?
@@ -35,5 +33,11 @@ class CoursePolicy < ApplicationPolicy
     def resolve
       current_school.courses
     end
+  end
+
+  private
+
+  def courses_with_dashboard
+    @courses_with_dashboard ||= current_coach&.courses_with_dashboard
   end
 end

@@ -79,6 +79,7 @@ module Users
         if saved_course.present?
           saved_course[:cta] = review_link(coach_course, 'Review Submissions')
           saved_course[:links] << review_link(coach_course)
+          saved_course[:links] << review_link_legacy(coach_course)
         else
           saved_course = course_details_for_coach(coach_course)
         end
@@ -90,7 +91,7 @@ module Users
     def course_details_for_coach(course)
       course_detail = course_info(course)
       course_detail[:cta] = review_link(course, 'Review Submissions')
-      course_detail[:links] = [review_link(course)]
+      course_detail[:links] = [review_link(course), review_link_legacy(course)]
       course_detail
     end
 
@@ -101,6 +102,13 @@ module Users
     end
 
     def review_link(course, text = 'Review')
+      {
+        text: text,
+        link: view.review_course_path(course)
+      }
+    end
+
+    def review_link_legacy(course, text = 'Review (Legacy)')
       {
         text: text,
         link: view.course_coach_dashboard_path(course)

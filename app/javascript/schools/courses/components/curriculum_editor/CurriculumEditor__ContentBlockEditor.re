@@ -473,6 +473,11 @@ let make =
       />
       /* Content block */
       <div
+        ariaLabel={
+          (blockType |> ContentBlock.blockTypeAsString)
+          ++ " editor for "
+          ++ editorId
+        }
         className="relative border border-gray-400 rounded-lg overflow-hidden">
         /* Content block controls */
 

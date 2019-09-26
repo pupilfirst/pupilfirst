@@ -77,9 +77,10 @@ let autoVerify =
       setSaving,
       authenticityToken,
       addSubmissionCB,
+      preview,
     ) =>
   <button
-    disabled=saving
+    disabled={saving || preview}
     className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
     onClick={
       createAutoVerifySubmission(
@@ -145,6 +146,7 @@ let make =
       ~authenticityToken,
       ~targetStatus,
       ~addSubmissionCB,
+      ~preview,
     ) => {
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
@@ -165,6 +167,7 @@ let make =
             setSaving,
             authenticityToken,
             addSubmissionCB,
+            preview,
           )
         | Locked(_) => React.null
         | _ => statusBar("Completed", linkToComplete)

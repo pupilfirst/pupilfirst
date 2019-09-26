@@ -10,6 +10,7 @@ let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
 open CoursesCurriculum__Types;
 
 type notice =
+  | Preview
   | CourseEnded
   | CourseComplete
   | AccessEnded
@@ -20,6 +21,7 @@ let str = React.string;
 
 let iconsForNotice = showNotice =>
   switch (showNotice) {
+  | Preview => courseEndedImage
   | CourseEnded => courseEndedImage
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
@@ -55,6 +57,12 @@ let courseEndedMessage = () => {
   let title = "Course Ended";
   let description = "The course has ended and submissions are disabled for all targets!";
   showNotice(~title, ~description, ~noticeType=CourseEnded, ());
+};
+
+let showPreviewMessage = () => {
+  let title = "Preview Mode";
+  let description = "You are accesing the preview mode for this course";
+  showNotice(~title, ~description, ~noticeType=Preview, ());
 };
 
 let accessEndedMessage = () => {
@@ -115,11 +123,21 @@ let computeLevelUp =
 };
 
 let computeNotice =
-    (levels, teamLevel, targetGroups, targets, statusOfTargets, course, team) =>
-  switch (course |> Course.hasEnded, team |> Team.accessEnded) {
-  | (true, true | false) => CourseEnded
-  | (false, true) => AccessEnded
-  | (false, false) =>
+    (
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      course,
+      team,
+      preview,
+    ) =>
+  switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
+  | (true, _, _) => Preview
+  | (false, true, true | false) => CourseEnded
+  | (false, false, true) => AccessEnded
+  | (false, false, false) =>
     computeLevelUp(levels, teamLevel, targetGroups, targets, statusOfTargets)
   };
 
@@ -134,6 +152,7 @@ let make =
       ~course,
       ~team,
       ~authenticityToken,
+      ~preview,
     ) => {
   let teamLevel =
     levels
@@ -152,10 +171,12 @@ let make =
         statusOfTargets,
         course,
         team,
+        preview,
       )
     );
 
   switch (showNotice) {
+  | Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()

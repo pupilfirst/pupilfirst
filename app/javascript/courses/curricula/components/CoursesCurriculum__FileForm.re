@@ -95,28 +95,32 @@ let submitForm = (filename, formId, send, addFileAttachmentCB) => {
   };
 };
 
-let attachFile = (state, send, attachingCB, attachFileCB, event) =>
-  switch (ReactEvent.Form.target(event)##files) {
-  | [||] => ()
-  | files =>
-    let file = files[0];
-    let maxFileSize = 5 * 1024 * 1024;
+let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
+  preview ?
+    Notification.notice("Preview Mode", "You cannot attach files.") :
+    (
+      switch (ReactEvent.Form.target(event)##files) {
+      | [||] => ()
+      | files =>
+        let file = files[0];
+        let maxFileSize = 5 * 1024 * 1024;
 
-    let errors =
-      file##size > maxFileSize ? ["The maximum file size is 5 MB."] : [];
+        let errors =
+          file##size > maxFileSize ? ["The maximum file size is 5 MB."] : [];
 
-    if (errors |> ListUtils.isEmpty) {
-      let filename = file##name;
-      attachingCB();
-      send(AttachFile(filename));
-      submitForm(filename, state.formId, send, attachFileCB);
-    } else {
-      send(SelectFile(file##name, errors));
-    };
-  };
+        if (errors |> ListUtils.isEmpty) {
+          let filename = file##name;
+          attachingCB();
+          send(AttachFile(filename));
+          submitForm(filename, state.formId, send, attachFileCB);
+        } else {
+          send(SelectFile(file##name, errors));
+        };
+      }
+    );
 
 [@react.component]
-let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
+let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -141,7 +145,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB) => {
         required=true
         multiple=false
         type_="file"
-        onChange={attachFile(state, send, attachingCB, attachFileCB)}
+        onChange={attachFile(state, send, attachingCB, attachFileCB, preview)}
       />
       <label
         className="mt-2 cursor-pointer truncate h-10 bg-gray-100 border border-dashed border-gray-400 flex px-4 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"

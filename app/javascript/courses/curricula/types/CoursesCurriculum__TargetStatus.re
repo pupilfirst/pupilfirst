@@ -57,6 +57,9 @@ let isPast = dateString =>
   | None => false
   };
 
+let makePending = targets =>
+  targets |> List.map(t => {targetId: t |> Target.id, status: Pending});
+
 let lockTargets = (targets, reason) =>
   targets
   |> List.map(t => {targetId: t |> Target.id, status: Locked(reason)});
@@ -69,9 +72,12 @@ let allTargetsComplete = (targetCache, targetIds) =>
        cachedTarget.submissionStatus == SubmissionPassed;
      });
 
-let compute = (team, course, levels, targetGroups, targets, submissions) =>
+let compute =
+    (preview, team, course, levels, targetGroups, targets, submissions) =>
   /* Eliminate the two course ended and student access ended conditions. */
-  if (course |> Course.endsAt |> isPast) {
+  if (preview) {
+    makePending(targets);
+  } else if (course |> Course.endsAt |> isPast) {
     lockTargets(targets, CourseLocked);
   } else if (team |> Team.accessEndsAt |> isPast) {
     lockTargets(targets, AccessLocked);

@@ -11,23 +11,52 @@ module Courses
 
     private
 
+    # rubocop:disable Metrics/MethodLength
     def props
+      if current_student.present?
+        {
+          submissions: submissions,
+          team: team_details,
+          coaches: faculty.map(&:attributes),
+          users: users,
+          evaluation_criteria: evaluation_criteria,
+          preview: false,
+          **default_props
+        }
+      else
+        {
+          submissions: [],
+          team: team_details_for_preview_mode,
+          coaches: [],
+          users: [],
+          evaluation_criteria: [],
+          preview: true,
+          **default_props
+        }
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def default_props
       {
         authenticity_token: view.form_authenticity_token,
         course: course_details,
-        levels: levels,
+        levels: levels_details,
         target_groups: target_groups,
-        targets: targets,
-        submissions: submissions,
-        team: team_details,
-        coaches: faculty.map(&:attributes),
-        users: users,
-        evaluation_criteria: evaluation_criteria
+        targets: targets
       }
     end
 
     def evaluation_criteria
       @course.evaluation_criteria.as_json(only: %i[id name])
+    end
+
+    def team_details_for_preview_mode
+      {
+        name: current_user.name,
+        level_id: levels.first.id,
+        access_ends_at: nil
+      }
     end
 
     def team_details
@@ -42,7 +71,11 @@ module Courses
     end
 
     def levels
-      @course.levels.map do |level|
+      @levels ||= @course.levels.order(number: :DESC).load
+    end
+
+    def levels_details
+      levels.map do |level|
         level.attributes.slice('id', 'name', 'number', 'unlock_on')
       end
     end

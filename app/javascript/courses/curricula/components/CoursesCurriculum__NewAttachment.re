@@ -25,6 +25,7 @@ let make =
       ~attachingCB,
       ~typingCB,
       ~disabled,
+      ~preview,
     ) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
@@ -57,6 +58,7 @@ let make =
             authenticityToken
             attachFileCB
             attachingCB
+            preview
           />
         | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB typingCB />
         }

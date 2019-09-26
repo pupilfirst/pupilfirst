@@ -16,7 +16,11 @@ module Layouts
     end
 
     def courses
-      Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) }).map do |course|
+      if current_school_admin.present? || current_coach.present?
+        current_school.courses
+      else
+        Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) })
+      end.map do |course|
         {
           id: course.id,
           name: course.name

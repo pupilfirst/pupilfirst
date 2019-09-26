@@ -343,6 +343,7 @@ let make =
       ~targetStatus,
       ~coaches,
       ~users,
+      ~preview,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
@@ -377,6 +378,7 @@ let make =
           addSubmissionCB={
             addSubmission(setShowSubmissionForm, addSubmissionCB)
           }
+          preview
         /> :
         submissions(
           target,

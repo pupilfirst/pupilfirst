@@ -16,7 +16,8 @@ module DraftEditor = {
       ~ariaLabelledBy: string=?,
       ~placeholder: string=?,
       ~command: string=?,
-      ~commandAt: string=?
+      ~commandAt: string=?,
+      ~insertText: string=?
     ) =>
     React.element =
     "default";
@@ -48,6 +49,7 @@ type state = {
   preview: bool,
   commandPair,
   attachment,
+  insertText: option(string),
 };
 
 type action =
@@ -61,9 +63,9 @@ type action =
 let reducer = (state, action) =>
   switch (action) {
   | UpdateMarkdown(markdown) => {...state, markdown}
-  | AddAttachment(markdown) => {
+  | AddAttachment(markdownEmbedCode) => {
       ...state,
-      markdown,
+      insertText: Some(markdownEmbedCode),
       attachment: ReadyToAttachFile(None),
     }
   | TogglePreview => {
@@ -73,6 +75,7 @@ let reducer = (state, action) =>
         command: None,
         commandAt: None,
       },
+      insertText: None,
     }
   | SetCommand(command) =>
     let commandAt = Js.Date.now() |> Js.Float.toString;
@@ -85,8 +88,11 @@ let reducer = (state, action) =>
     }
   };
 
+let addAttachment = (markdownEmbedCode, send) =>
+  send(AddAttachment(markdownEmbedCode));
+
 let updateMarkdown = (markdown, send, updateMarkdownCB) => {
-  send(AddAttachment(markdown));
+  send(UpdateMarkdown(markdown));
   updateMarkdownCB(markdown);
 };
 
@@ -208,12 +214,7 @@ let uploadFile = (send, oldMarkdown, updateMarkdownCB, formData) =>
            let markdownEmbedCode =
              json |> Json.Decode.(field("markdownEmbedCode", string));
 
-           let newMarkdown =
-             oldMarkdown
-             ++ attachmentEmbedGap(oldMarkdown)
-             ++ markdownEmbedCode;
-
-           updateMarkdown(newMarkdown, send, updateMarkdownCB);
+           addAttachment("\n" ++ markdownEmbedCode ++ "\n", send);
          } else {
            send(
              SetAttachmentError(
@@ -309,6 +310,7 @@ let make =
           commandAt: None,
         },
         attachment: ReadyToAttachFile(None),
+        insertText: None,
       },
     );
 
@@ -379,6 +381,7 @@ let make =
               }
               ?command
               commandAt=?{state.commandPair.commandAt}
+              insertText=?{state.insertText}
             />
           </DisablingCover>
           <div

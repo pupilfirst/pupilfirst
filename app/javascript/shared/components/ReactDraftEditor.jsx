@@ -76,6 +76,15 @@ export default function ReactDraftEditor(props) {
     handleKeyCommand(props.onChange, editorState, setEditorState, props.command)
   }, [props.command, props.commandAt]);
 
+  const contentChangedOutside = (props.content != editorState.getCurrentContent().getPlainText());
+
+  React.useEffect(() => {
+    if (contentChangedOutside) {
+      const contentState = ContentState.createFromText(props.content)
+      setEditorState(EditorState.createWithContent(contentState));
+    }
+  }, [contentChangedOutside]);
+
   return (
     <div className="flex-grow px-3 pt-3" onClick={focusEditor}>
       <Editor

@@ -55,11 +55,17 @@ type action =
   | TogglePreview
   | SetCommand(command)
   | SetAttaching
-  | SetAttachmentError(attachmentError);
+  | SetAttachmentError(attachmentError)
+  | AddAttachment(string);
 
 let reducer = (state, action) =>
   switch (action) {
   | UpdateMarkdown(markdown) => {...state, markdown}
+  | AddAttachment(markdown) => {
+      ...state,
+      markdown,
+      attachment: ReadyToAttachFile(None),
+    }
   | TogglePreview => {
       ...state,
       preview: !state.preview,
@@ -80,7 +86,7 @@ let reducer = (state, action) =>
   };
 
 let updateMarkdown = (markdown, send, updateMarkdownCB) => {
-  send(UpdateMarkdown(markdown));
+  send(AddAttachment(markdown));
   updateMarkdownCB(markdown);
 };
 
@@ -166,6 +172,15 @@ let handleApiError =
     | UnexpectedResponse(code) => code
   );
 
+let attachmentEmbedGap = oldMarkdown =>
+  if (oldMarkdown == "") {
+    "";
+  } else if (oldMarkdown |> Js.String.substr(~from=-1) == "\n") {
+    "\n";
+  } else {
+    "\n\n";
+  };
+
 let uploadFile = (send, oldMarkdown, updateMarkdownCB, formData) =>
   Js.Promise.(
     Fetch.fetchWithInit(
@@ -187,10 +202,28 @@ let uploadFile = (send, oldMarkdown, updateMarkdownCB, formData) =>
          }
        )
     |> then_(json => {
-         let markdownEmbedCode =
-           json |> Json.Decode.(field("markdownEmbedCode", string));
-         let newMarkdown = oldMarkdown ++ "\n" ++ markdownEmbedCode;
-         updateMarkdown(newMarkdown, send, updateMarkdownCB);
+         let errors = json |> Json.Decode.(field("errors", array(string)));
+
+         if (errors == [||]) {
+           let markdownEmbedCode =
+             json |> Json.Decode.(field("markdownEmbedCode", string));
+
+           let newMarkdown =
+             oldMarkdown
+             ++ attachmentEmbedGap(oldMarkdown)
+             ++ markdownEmbedCode;
+
+           updateMarkdown(newMarkdown, send, updateMarkdownCB);
+         } else {
+           send(
+             SetAttachmentError(
+               Some(
+                 "Failed to attach file! "
+                 ++ (errors |> Js.Array.joinWith(", ")),
+               ),
+             ),
+           );
+         };
          resolve();
        })
     |> catch(error =>
@@ -241,6 +274,12 @@ let attachFile = (send, oldMarkdown, updateMarkdownCB, fileFormId, event) =>
       send(SetAttaching);
       submitForm(fileFormId, send, oldMarkdown, updateMarkdownCB);
     };
+  };
+
+let isEditorDisabled = attachment =>
+  switch (attachment) {
+  | AttachingFile => true
+  | ReadyToAttachFile(_) => false
   };
 
 [@react.component]
@@ -324,19 +363,24 @@ let make =
 
         <div
           className="markdown-draft-editor__container text-sm border border-gray-400 rounded flex flex-col overflow-hidden">
-          <DraftEditor
-            ariaLabelledBy=id
-            ?placeholder
-            content={state.markdown}
-            onChange={
-              newMarkdownContent =>
-                value == newMarkdownContent ?
-                  () :
-                  updateMarkdown(newMarkdownContent, send, updateMarkdownCB)
-            }
-            ?command
-            commandAt=?{state.commandPair.commandAt}
-          />
+          <DisablingCover
+            disabled={isEditorDisabled(state.attachment)}
+            message="Uploading..."
+            containerClasses="flex flex-grow">
+            <DraftEditor
+              ariaLabelledBy=id
+              ?placeholder
+              content={state.markdown}
+              onChange={
+                newMarkdownContent =>
+                  value == newMarkdownContent ?
+                    () :
+                    updateMarkdown(newMarkdownContent, send, updateMarkdownCB)
+              }
+              ?command
+              commandAt=?{state.commandPair.commandAt}
+            />
+          </DisablingCover>
           <div
             className="bg-gray-100 flex-grow-0 border-t border-primary-200 border-dashed text-sm flex justify-between">
             <form className="flex items-center flex-wrap" id=fileFormId>
@@ -348,6 +392,7 @@ let make =
               <input
                 className="hidden"
                 type_="file"
+                name="markdown_attachment[file]"
                 id=fileInputId
                 multiple=false
                 onChange={
@@ -376,7 +421,7 @@ let make =
                         <span>
                           <FaIcon classes="far fa-file-image mr-2" />
                           {
-                            "Attach a file by clicking here and selecting one."
+                            "You can attach files by clicking here and selecting one."
                             |> str
                           }
                         </span>

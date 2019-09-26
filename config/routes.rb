@@ -211,6 +211,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :markdown_attachments, only: %i[create] do
+    member do
+      get '/:token', action: 'download', as: 'download'
+    end
+  end
+
   resource :impersonation, only: %i[destroy]
 
   scope 'intercom', as: 'intercom', controller: 'intercom' do

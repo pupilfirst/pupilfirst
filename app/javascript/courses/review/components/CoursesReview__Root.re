@@ -64,7 +64,7 @@ let buttonClasses = selected =>
   ++ (
     selected ?
       "bg-primary-100 shadow-inner text-primary-500" :
-      "bg-white hover:text-primary-500 hover:bg-gray-100"
+      "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100"
   );
 
 let removePendingSubmission = (setSubmissions, submissionId) =>
@@ -108,12 +108,13 @@ let make =
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
           <div
-            className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400 overflow-hidden">
+            className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
             <button
               className={buttonClasses(showPending == true)}
               onClick=(_ => setShowPending(_ => true))>
               {"Pending" |> str}
-              <span className="ml-2 text-red-500">
+              <span
+                className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
                 {submissions |> Array.length |> string_of_int |> str}
               </span>
             </button>

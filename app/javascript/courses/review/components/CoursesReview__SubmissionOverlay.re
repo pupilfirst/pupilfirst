@@ -65,7 +65,7 @@ let headerSection = (submissionDetails, courseId) =>
       className="relative bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
       <div
         onClick={_ => closeOverlay(courseId)}
-        className="course-review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+        className="review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
         <Icon className="if i-times-light text-xl lg:text-2xl" />
         <span className="text-xs hidden lg:inline-block mt-px">
           {"close" |> str}
@@ -159,7 +159,7 @@ let make =
         <div>
           {headerSection(submissionDetails, courseId)}
           <div
-            className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
+            className="review-submission-overlay__submission-container relative container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
             {
               state.loading ?
                 <div> {"Loading" |> str} </div> :

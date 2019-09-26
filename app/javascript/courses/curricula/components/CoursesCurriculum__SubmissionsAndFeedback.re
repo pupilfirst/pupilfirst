@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesCurriculum__SubmissionsAndFeedback.css")|}];
 
 let str = React.string;
 
@@ -43,7 +44,7 @@ let statusBar = (~color, ~text) => {
 
   <div
     className={
-      "font-semibold p-2 py-4 flex border-t border-b w-full items-center justify-center "
+      "font-semibold p-2 py-4 flex border-t w-full items-center justify-center "
       ++ textColor
       ++ bgColor
     }>
@@ -151,19 +152,19 @@ let submissions =
 
        <div
          key={submission |> Submission.id}
-         className="mt-4"
+         className="mt-4 relative curriculum__submission-feedback-container"
          ariaLabel={
            "Details about your submission on "
            ++ (submission |> Submission.createdAtPretty)
          }>
-         <div className="text-xs font-semibold">
+         <div className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 ml-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
            {
              "Submitted on "
              ++ (submission |> Submission.createdAtPretty)
              |> str
            }
          </div>
-         <div className="mt-2 rounded-lg bg-gray-100 shadow overflow-hidden">
+         <div className="rounded-lg bg-gray-100 border overflow-hidden">
            <div className="p-4 md:p-6">
              <MarkdownBlock
                profile=Markdown.Permissive
@@ -319,12 +320,6 @@ let submissions =
              |> React.array
            }
          </div>
-         <div
-           className="text-center text-3xl mt-4 text-gray-600"
-           dangerouslySetInnerHTML={
-             "__html": "&middot;&nbsp;&middot;&nbsp;&middot",
-           }
-         />
        </div>;
      })
   |> Array.of_list

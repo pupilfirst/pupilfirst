@@ -15,23 +15,15 @@ let make = (~disabled, ~message="Loading...", ~containerClasses="", ~children) =
           <div
             key="school-admin-disabling-cover__body"
             className="absolute w-full h-full z-20 flex items-center justify-center">
-            <div className="bg-gray-200 rounded-lg p-6">
-              <div
-                className="disabling-cover__loading-poolball relative disabling-cover__poolball-animation mx-auto">
-                <div
-                  className="disabling-cover__shape disabling-cover__shape-1"
-                />
-                <div
-                  className="disabling-cover__shape disabling-cover__shape-2"
-                />
-                <div
-                  className="disabling-cover__shape disabling-cover__shape-3"
-                />
-                <div
-                  className="disabling-cover__shape disabling-cover__shape-4"
-                />
+            <div
+              className="disabling-cover__loading-container bg-white rounded-lg shadow-xl p-4">
+              <div className="disabling-cover__loading-animation-box mx-auto">
+                <div className="disabling-cover__loading-box-1" />
+                <div className="disabling-cover__loading-box-2" />
+                <div className="disabling-cover__loading-box-3" />
               </div>
-              <span className="block p-3 font-semibold">
+              <span
+                className="block pt-2 font-semibold max-w-sm text-center text-sm">
                 {message |> React.string}
               </span>
             </div>

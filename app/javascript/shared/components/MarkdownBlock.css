@@ -218,7 +218,7 @@
  */
 
 .markdown-block__question-and-answer p {
-  @apply markdown-block__p;
+  @apply markdown-block__p leading-relaxed;
 }
 
 .markdown-block__question-and-answer h1 {
@@ -310,7 +310,7 @@
  */
 
 .markdown-block__comment p {
-  @apply markdown-block__p;
+  @apply markdown-block__p leading-relaxed;
 }
 
 .markdown-block__comment em {

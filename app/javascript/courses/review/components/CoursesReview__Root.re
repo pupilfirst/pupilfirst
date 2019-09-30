@@ -4,6 +4,13 @@
 open CoursesReview__Types;
 let str = React.string;
 
+type state = {
+  submissions: array(SubmissionInfo.t),
+  reviewedSubmissions: array(SubmissionInfo.t),
+  showPending: bool,
+  selectedLevel: option(Level.t),
+};
+
 let openOverlay = submissionId =>
   ReasonReactRouter.push("/submissions/" ++ submissionId);
 
@@ -12,28 +19,42 @@ let dropDownButtonText = level =>
   ++ (level |> Level.number |> string_of_int)
   ++ " | "
   ++ (level |> Level.name);
-let dropdownShowAllButton = (selectedLevel, setSelectedLevel) =>
+let dropdownShowAllButton = (selectedLevel, setState) =>
   switch (selectedLevel) {
   | Some(_) => [|
       <button
         className="p-3 w-full text-left font-semibold focus:outline-none"
-        onClick=(_ => setSelectedLevel(_ => None))>
+        onClick=(
+          _ =>
+            setState(state =>
+              {...state, selectedLevel: None, reviewedSubmissions: [||]}
+            )
+        )>
         {"All Levels" |> str}
       </button>,
     |]
   | None => [||]
   };
 
-let showDropdown = (levels, selectedLevel, setSelectedLevel) => {
+let showDropdown = (levels, selectedLevel, setState) => {
   let contents =
-    dropdownShowAllButton(selectedLevel, setSelectedLevel)
+    dropdownShowAllButton(selectedLevel, setState)
     ->Array.append(
         levels
         |> Level.sort
         |> Array.map(level =>
              <button
                className="p-3 w-full text-left font-semibold focus:outline-none"
-               onClick={_ => setSelectedLevel(_ => Some(level))}>
+               onClick={
+                 _ =>
+                   setState(state =>
+                     {
+                       ...state,
+                       selectedLevel: Some(level),
+                       reviewedSubmissions: [||],
+                     }
+                   )
+               }>
                {dropDownButtonText(level) |> str}
              </button>
            ),
@@ -67,12 +88,18 @@ let buttonClasses = selected =>
       "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100"
   );
 
-let removePendingSubmission = (setSubmissions, submissionId) =>
-  setSubmissions(submissions =>
-    submissions |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId)
+let removePendingSubmission = (setState, submissionId) =>
+  setState(state =>
+    {
+      ...state,
+      submissions:
+        state.submissions
+        |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId),
+    }
   );
 
-let submissionListClasses = bool => bool ? "" : "hidden";
+let updateReviewedSubmissions = (setState, reviewedSubmissions) =>
+  setState(state => {...state, reviewedSubmissions});
 
 [@react.component]
 let make =
@@ -85,9 +112,15 @@ let make =
       ~passGrade,
       ~currentCoach,
     ) => {
-  let (submissions, setSubmissions) = React.useState(() => submissions);
-  let (showPending, setShowPending) = React.useState(() => true);
-  let (selectedLevel, setSelectedLevel) = React.useState(() => None);
+  let (state, setState) =
+    React.useState(() =>
+      {
+        submissions,
+        reviewedSubmissions: [||],
+        showPending: true,
+        selectedLevel: None,
+      }
+    );
 
   let url = ReasonReactRouter.useUrl();
 
@@ -100,7 +133,7 @@ let make =
       gradeLabels
       passGrade
       currentCoach
-      removePendingSubmissionCB={removePendingSubmission(setSubmissions)}
+      removePendingSubmissionCB={removePendingSubmission(setState)}
     />
   | _ =>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -110,8 +143,8 @@ let make =
           <div
             className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
             <button
-              className={buttonClasses(showPending == true)}
-              onClick=(_ => setShowPending(_ => true))>
+              className={buttonClasses(state.showPending == true)}
+              onClick=(_ => setState(state => {...state, showPending: true}))>
               {"Pending" |> str}
               <span
                 className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
@@ -119,35 +152,38 @@ let make =
               </span>
             </button>
             <button
-              className={buttonClasses(showPending == false)}
-              onClick=(_ => setShowPending(_ => false))>
+              className={buttonClasses(state.showPending == false)}
+              onClick=(_ => setState(state => {...state, showPending: false}))>
               {"Reviewed" |> str}
             </button>
           </div>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
-            {showDropdown(levels, selectedLevel, setSelectedLevel)}
+            {showDropdown(levels, state.selectedLevel, setState)}
           </div>
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
-        <div className={submissionListClasses(showPending == true)}>
-          <CoursesReview__ShowPendingSubmissions
-            authenticityToken
-            submissions
-            levels
-            selectedLevel
-            openOverlayCB=openOverlay
-          />
-        </div>
-        <div className={submissionListClasses(showPending == false)}>
-          <CoursesReview__ShowReviewedSubmissions
-            authenticityToken
-            courseId
-            selectedLevel
-            levels
-            openOverlayCB=openOverlay
-          />
-        </div>
+        {
+          state.showPending ?
+            <CoursesReview__ShowPendingSubmissions
+              authenticityToken
+              submissions
+              levels
+              selectedLevel={state.selectedLevel}
+              openOverlayCB=openOverlay
+            /> :
+            <CoursesReview__ShowReviewedSubmissions
+              authenticityToken
+              courseId
+              selectedLevel={state.selectedLevel}
+              levels
+              openOverlayCB=openOverlay
+              reviewedSubmissions={state.reviewedSubmissions}
+              updateReviewedSubmissionsCB={
+                updateReviewedSubmissions(setState)
+              }
+            />
+        }
       </div>
     </div>
   };

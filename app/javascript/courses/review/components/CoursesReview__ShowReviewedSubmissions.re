@@ -5,10 +5,8 @@ let str = React.string;
 
 type state = {
   loading: bool,
-  submissions: array(SubmissionInfo.t),
   hasNextPage: bool,
   endCursor: option(string),
-  level: option(Level.t),
 };
 
 module ReviewedSubmissionsQuery = [%graphql
@@ -26,54 +24,43 @@ module ReviewedSubmissionsQuery = [%graphql
 |}
 ];
 
-let updateReviewedSubmissions = (setState, endCursor, hasNextPage, nodes) =>
-  setState(state =>
-    {
-      ...state,
-      submissions:
-        state.submissions
-        |> Array.append(
-             (
-               switch (nodes) {
-               | None => [||]
-               | Some(submissionsArray) =>
-                 submissionsArray
-                 |> Js.Array.map(s =>
-                      switch (s) {
-                      | Some(submission) =>
-                        let status =
-                          SubmissionInfo.makeStatus(
-                            ~failed=submission##failed,
-                            ~feedbackSent=submission##feedbackSent,
-                          );
-                        [
-                          SubmissionInfo.make(
-                            ~id=submission##id,
-                            ~title=submission##title,
-                            ~createdAt=submission##createdAt,
-                            ~levelId=submission##levelId,
-                            ~userNames=submission##userNames,
-                            ~targetId=submission##targetId,
-                            ~status=Some(status),
-                          ),
-                        ];
-                      | None => []
-                      }
-                    )
-               }
-             )
-             |> Array.to_list
-             |> List.flatten
-             |> Array.of_list,
-           ),
-      loading: false,
+let updateReviewedSubmissions =
+    (
+      setState,
       endCursor,
       hasNextPage,
-    }
+      reviewedSubmissions,
+      updateReviewedSubmissionsCB,
+      nodes,
+    ) => {
+  updateReviewedSubmissionsCB(
+    reviewedSubmissions
+    |> Array.append(
+         (
+           switch (nodes) {
+           | None => [||]
+           | Some(submissionsArray) =>
+             submissionsArray |> SubmissionInfo.decodeJS
+           }
+         )
+         |> Array.to_list
+         |> List.flatten
+         |> Array.of_list,
+       ),
   );
+  setState(_ => {loading: false, endCursor, hasNextPage});
+};
 
 let getReviewedSubmissions =
-    (authenticityToken, courseId, cursor, setState, selectedLevel, ()) => {
+    (
+      authenticityToken,
+      courseId,
+      cursor,
+      setState,
+      selectedLevel,
+      reviewedSubmissions,
+      updateReviewedSubmissionsCB,
+    ) => {
   setState(state => {...state, loading: true});
   (
     switch (selectedLevel, cursor) {
@@ -98,14 +85,39 @@ let getReviewedSubmissions =
             setState,
             response##reviewedSubmissions##pageInfo##endCursor,
             response##reviewedSubmissions##pageInfo##hasNextPage,
+            reviewedSubmissions,
+            updateReviewedSubmissionsCB,
           );
        Js.Promise.resolve();
      })
   |> ignore;
+};
+
+let loadSubmissions =
+    (
+      authenticityToken,
+      courseId,
+      state,
+      setState,
+      reviewedSubmissions,
+      selectedLevel,
+      updateReviewedSubmissionsCB,
+      (),
+    ) => {
+  reviewedSubmissions |> ArrayUtils.isEmpty ?
+    getReviewedSubmissions(
+      authenticityToken,
+      courseId,
+      state.endCursor,
+      setState,
+      selectedLevel,
+      reviewedSubmissions,
+      updateReviewedSubmissionsCB,
+    ) :
+    ();
 
   None;
 };
-
 let showSubmissionStatus = failed =>
   failed ?
     <div
@@ -126,7 +138,15 @@ let showFeedbackSent = feedbackSent =>
     React.null;
 
 let showLoadMoreButton =
-    (authenticityToken, courseId, setState, selectedLevel, cursor) =>
+    (
+      authenticityToken,
+      courseId,
+      setState,
+      selectedLevel,
+      cursor,
+      reviewedSubmissions,
+      updateReviewedSubmissionsCB,
+    ) =>
   <button
     className="btn btn-primary-ghost cursor-pointer w-full mt-8"
     onClick={
@@ -137,9 +157,9 @@ let showLoadMoreButton =
           cursor,
           setState,
           selectedLevel,
-          (),
+          reviewedSubmissions,
+          updateReviewedSubmissionsCB,
         )
-        |> ignore
     }>
     {"Load More..." |> str}
   </button>;
@@ -215,41 +235,38 @@ let showSubmission = (submissions, levels, openOverlayCB) =>
     }
   </div>;
 
-let updateLevel = (setState, level, ()) => {
-  setState(state => {...state, level, endCursor: None, submissions: [||]});
-  None;
-};
-
 [@react.component]
 let make =
-    (~authenticityToken, ~courseId, ~selectedLevel, ~levels, ~openOverlayCB) => {
+    (
+      ~authenticityToken,
+      ~courseId,
+      ~selectedLevel,
+      ~levels,
+      ~openOverlayCB,
+      ~reviewedSubmissions,
+      ~updateReviewedSubmissionsCB,
+    ) => {
   let (state, setState) =
     React.useState(() =>
-      {
-        loading: false,
-        submissions: [||],
-        hasNextPage: false,
-        endCursor: None,
-        level: selectedLevel,
-      }
+      {loading: false, hasNextPage: false, endCursor: None}
     );
 
-  React.useEffect1(updateLevel(setState, selectedLevel), [|selectedLevel|]);
-
   React.useEffect1(
-    getReviewedSubmissions(
+    loadSubmissions(
       authenticityToken,
       courseId,
-      state.endCursor,
+      state,
       setState,
-      state.level,
+      reviewedSubmissions,
+      selectedLevel,
+      updateReviewedSubmissionsCB,
     ),
-    [|state.level|],
+    [|selectedLevel|],
   );
 
   <div>
     {
-      switch (state.submissions) {
+      switch (reviewedSubmissions) {
       | [||] =>
         state.loading ?
           React.null :
@@ -257,7 +274,7 @@ let make =
             className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
             {"No Reviewed Submission" |> str}
           </div>
-      | _ => showSubmission(state.submissions, levels, openOverlayCB)
+      | _ => showSubmission(reviewedSubmissions, levels, openOverlayCB)
       }
     }
     {
@@ -274,8 +291,10 @@ let make =
           authenticityToken,
           courseId,
           setState,
-          state.level,
+          selectedLevel,
           state.endCursor,
+          reviewedSubmissions,
+          updateReviewedSubmissionsCB,
         )
       }
     }

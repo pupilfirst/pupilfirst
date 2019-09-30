@@ -463,6 +463,18 @@ let gradeSubmission =
   | UnGraded => ()
   };
 };
+
+let showFeedbackForm = (state, setState) =>
+  switch (state.status) {
+  | Graded(_) => React.null
+  | Grading
+  | UnGraded =>
+    <CoursesReview__FeedbackEditor
+      feedback={state.newFeedback}
+      label="Add Your Feedback"
+      updateFeedbackCB={updateFeedbackCB(setState)}
+    />
+  };
 let reviewButtonDisabled = status =>
   switch (status) {
   | Graded(_) => false
@@ -495,18 +507,7 @@ let make =
     );
   <DisablingCover disabled={state.saving}>
     <div className="px-4 md:px-6 ">
-      {
-        submission
-        |> Submission.feedback == [||]
-        && submission
-        |> Submission.grades == [||] ?
-          <CoursesReview__FeedbackEditor
-            feedback={state.newFeedback}
-            label="Add Your Feedback"
-            updateFeedbackCB={updateFeedbackCB(setState)}
-          /> :
-          React.null
-      }
+      {showFeedbackForm(state, setState)}
       <div className="w-full pb-4 pt-4 md:pt-5">
         <div className="font-semibold text-sm lg:text-base">
           {"Grade Card" |> str}

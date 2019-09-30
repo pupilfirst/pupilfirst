@@ -68,3 +68,28 @@ let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~targetId, ~status) =
 };
 
 let makeStatus = (~failed, ~feedbackSent) => {failed, feedbackSent};
+
+let decodeJS = details =>
+  details
+  |> Js.Array.map(s =>
+       switch (s) {
+       | Some(submission) =>
+         let status =
+           makeStatus(
+             ~failed=submission##failed,
+             ~feedbackSent=submission##feedbackSent,
+           );
+         [
+           make(
+             ~id=submission##id,
+             ~title=submission##title,
+             ~createdAt=submission##createdAt,
+             ~levelId=submission##levelId,
+             ~userNames=submission##userNames,
+             ~targetId=submission##targetId,
+             ~status=Some(status),
+           ),
+         ];
+       | None => []
+       }
+     );

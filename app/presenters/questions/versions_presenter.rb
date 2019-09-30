@@ -20,7 +20,8 @@ module Questions
 
     def markdown_prop(markdown)
       {
-        markdown: markdown
+        markdown: markdown,
+        permissive: false
       }.to_json
     end
 

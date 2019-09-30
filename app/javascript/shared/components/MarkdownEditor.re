@@ -439,10 +439,12 @@ let make =
                 }
               }
             </form>
-            <span
+            <a
+              href="/help/markdown"
+              target="_blank"
               className="px-3 py-1 hover:text-secondary-500 cursor-pointer">
               <FaIcon classes="fab fa-markdown" />
-            </span>
+            </a>
           </div>
         </div>;
       }

@@ -9,12 +9,12 @@ module Users
     end
 
     def course_details
-      course_details = founders.map do |founder|
-        course_detail = course_info(founder.course)
-        course_detail[:cta] = cta_for_founder(founder)
-        course_detail[:links] = founder_links(founder)
-        course_detail[:founder_exited] = founder.exited
-        course_detail
+      course_details = begin
+        if current_school_admin.present?
+          course_details_for_admin
+        else
+          course_details_for_student
+        end
       end
 
       return course_details if current_coach.blank?
@@ -52,6 +52,26 @@ module Users
 
     private
 
+    def course_details_for_admin
+      current_school.courses.map do |course|
+        course_detail = course_info(course)
+        course_detail[:cta] = cta_course(course)
+        course_detail[:links] = school_admin_links(course)
+        course_detail[:founder_exited] = false
+        course_detail
+      end
+    end
+
+    def course_details_for_student
+      founders.map do |founder|
+        course_detail = course_info(founder.course)
+        course_detail[:cta] = cta_for_founder(founder)
+        course_detail[:links] = founder_links(founder)
+        course_detail[:founder_exited] = founder.exited
+        course_detail
+      end
+    end
+
     def cta_for_founder(founder)
       text = if access_ended?(founder)
         'Course Ended'
@@ -61,9 +81,13 @@ module Users
         'Continue Course'
       end
 
+      cta_course(founder.course, text)
+    end
+
+    def cta_course(course, text = 'View Course')
       {
         text: text,
-        link: view.curriculum_course_path(founder.course)
+        link: view.curriculum_course_path(course)
       }
     end
 
@@ -98,7 +122,11 @@ module Users
     def founder_links(founder)
       return [] if founder.exited?
 
-      [curriculum_link(founder), leaderboard_link(founder)] - [nil]
+      [curriculum_link(founder.course), leaderboard_link(founder.course)] - [nil]
+    end
+
+    def school_admin_links(course)
+      [curriculum_link(course), leaderboard_link(course)] - [nil]
     end
 
     def review_link(course, text = 'Review')
@@ -123,15 +151,14 @@ module Users
       }
     end
 
-    def curriculum_link(founder)
+    def curriculum_link(course)
       {
         text: "Curriculum",
-        link: view.curriculum_course_path(founder.course)
+        link: view.curriculum_course_path(course)
       }
     end
 
-    def leaderboard_link(founder)
-      course = founder.course
+    def leaderboard_link(course)
       if course.enable_leaderboard
         {
           text: "Leaderboard",

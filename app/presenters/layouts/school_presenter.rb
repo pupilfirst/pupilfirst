@@ -36,9 +36,9 @@ module Layouts
 
         if faculty.present?
           if faculty.courses.exists?
-            view.course_coach_dashboard_path(faculty.courses.first)
+            view.review_course_path(faculty.courses.first)
           elsif faculty.startups.exists?
-            view.course_coach_dashboard_path(faculty.startups.first.course)
+            view.review_course_path(faculty.startups.first.course)
           end
         end
       end

@@ -113,7 +113,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
                      | "curriculum" => ("Curriculum", "curriculum")
                      | "calendar" => ("Calendar", "calendar")
                      | "leaderboard" => ("Leaderboard", "leaderboard")
-                     | "review" => ("Review", "coach_dashboard")
+                     | "review" => ("Review", "review")
                      | _unknown => ("Unknown", "")
                      };
 

@@ -12,8 +12,13 @@
   }
 }
 
-.community-question-list-container>:last-child {
+.community-question__list-container>:last-child {
   border: none;
+}
+
+.community-question__title {
+  /* Only for -webkit- browsers  */
+  word-break: break-word;
 }
 
 .community-ask-button-container:before {

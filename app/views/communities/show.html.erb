@@ -50,43 +50,43 @@
     </div>
     <div class="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div class="max-w-3xl w-full mx-auto relative">
-        <div class="community-question-list-container shadow bg-white rounded-lg mb-4">
+        <div class="community-question__list-container shadow bg-white rounded-lg mb-4">
           <% @questions.map do |question| %>
             <div class="flex items-center border-b">
               <div class="flex w-full">
-                <a class="cursor-pointer justify-between no-underline flex flex-1 items-center p-4 md:p-6 hover:bg-gray-100"
+                <a class="cursor-pointer no-underline flex flex-1 justify-between items-center p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
                    href=<%= question_path(question.id, question.title.parameterize) %>>
-                  <div class="text-black">
-                    <div class="text-sm font-semibold leading-tight">
+                  <span class="block">
+                    <span class="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
                       <%= question.title %>
-                    </div>
-                    <div class="text-xs mt-1 md:mt-2">
+                    </span>
+                    <span class="block text-xs mt-1">
                       <span>Asked by</span>
                       <span class="font-semibold"><%= presenter.creator_name(question) %> </span>
-                      <span class="hidden md:inline-block">on <%= presenter.time(question) %> </span>
-                      <span class="block md:inline-block md:border-l mt-1 md:mt-0 md:pl-2 md:ml-2">
+                      <span class="hidden md:inline-block md:mr-2">on <%= presenter.time(question) %> </span>
+                      <span class="block md:inline-block mt-1 md:mt-0 md:px-2 bg-gray-100 md:border-l border-gray-400">
                         <% if question.last_activity_at.present? %>
                         <span class='hidden md:inline-block'>updated </span>
                         <i class='fas fa-history mr-1 md:hidden'></i>   <%= presenter.activity(question) %>
                           <span> ago </span>
                         <% end %>
                       </span>
-                    </div>
-                  </div>
-                  <div class="flex flex-row text-black ml-2">
+                    </span>
+                  </span>
+                  <span class="flex flex-row ml-2">
                     <% if presenter.new_question?(question) %>
                       <div class="bg-green-600 text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
                     <% else %>
-                      <div class="px-4 text-center">
+                      <span class="px-4 text-center">
                         <i class="far fa-thumbs-up text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= presenter.comment_likes(question) %></p>
-                      </div>
-                      <div class="px-2 text-center">
+                      </span>
+                      <span class="px-2 text-center">
                         <i class="far fa-comment-dots text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= presenter.comments_count(question) %></p>
-                      </div>
+                      </span>
                     <% end %>
-                  </div>
+                  </span>
                 </a>
               </div>
             </div>

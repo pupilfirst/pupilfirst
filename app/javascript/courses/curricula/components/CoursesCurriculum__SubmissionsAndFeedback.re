@@ -164,7 +164,7 @@ let submissions =
              |> str
            }
          </div>
-         <div className="rounded-lg bg-gray-100 border overflow-hidden">
+         <div className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
            <div className="p-4 md:p-6">
              <MarkdownBlock
                profile=Markdown.Permissive
@@ -267,9 +267,7 @@ let submissions =
                       (
                         name,
                         title,
-                        <img
-                          className="w-12 h-12 rounded-full overflow-hidden object-cover border shadow"
-                          src=avatar
+                        <img src=avatar
                         />,
                       );
                     | None => (
@@ -283,37 +281,35 @@ let submissions =
                     };
 
                   <div
-                    className="flex bg-white border-t p-4 md:p-6"
+                    className="bg-white border-t p-4 md:p-6"
                     key={feedback |> Feedback.id}>
-                    <div className="w-full">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 mr-3"> coachAvatar </div>
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover"> coachAvatar </div>
+                      <div>
+                        <p className="text-xs leading-tight">
+                          {"Feedback from:" |> str}
+                        </p>
                         <div>
-                          <p className="text-xs">
-                            {"Feedback from:" |> str}
-                          </p>
-                          <div className="flex flex-col">
-                            <h4 className="text-sm md:text-base font-semibold">
-                              {coachName |> str}
-                            </h4>
-                            {
-                              switch (coachTitle) {
-                              | Some(title) =>
-                                <span className="text-xs">
-                                  {title |> str}
-                                </span>
-                              | None => React.null
-                              }
+                          <h4 className="font-semibold text-base leading-tight block md:inline-flex self-end">
+                            {coachName |> str}
+                          </h4>
+                          {
+                            switch (coachTitle) {
+                            | Some(title) =>
+                              <span className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
+                                {"(" ++ title ++ ")" |> str}
+                              </span>
+                            | None => React.null
                             }
-                          </div>
+                          }
                         </div>
                       </div>
-                      <MarkdownBlock
-                        profile=Markdown.Permissive
-                        className="md:ml-15"
-                        markdown={feedback |> Feedback.feedback}
-                      />
                     </div>
+                    <MarkdownBlock
+                      profile=Markdown.Permissive
+                      className="md:ml-15"
+                      markdown={feedback |> Feedback.feedback}
+                    />
                   </div>;
                 })
              |> Array.of_list
@@ -360,6 +356,7 @@ let make =
             className="btn btn-primary"
             onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
             <span className="hidden md:inline">
+              <i className="fas fa-plus mr-2"></i>
               {
                 (showSubmissionForm ? "Cancel" : "Add another submission")
                 |> str

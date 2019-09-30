@@ -598,7 +598,7 @@ let make =
       switch (targetDetails) {
       | Some(targetDetails) =>
         <div
-          className="container mx-auto mt-6 md:mt-8 max-w-3xl px-4 lg:px-0 pb-8">
+          className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0 pb-8">
           {learnSection(targetDetails, overlaySelection)}
           {discussSection(target, targetDetails, overlaySelection)}
           {

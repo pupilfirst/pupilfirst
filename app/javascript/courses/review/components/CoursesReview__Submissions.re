@@ -111,7 +111,7 @@ let showSubmissions = attachments =>
   };
 
 let cardClasses = submission =>
-  "mt-6 rounded-b-lg bg-white border-t-3 shadow "
+  "mt-6 rounded-b-lg bg-white border-t-3 shadow-md "
   ++ (
     switch (
       submission |> Submission.passedAt,

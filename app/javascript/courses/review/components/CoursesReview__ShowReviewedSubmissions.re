@@ -93,31 +93,6 @@ let getReviewedSubmissions =
   |> ignore;
 };
 
-let loadSubmissions =
-    (
-      authenticityToken,
-      courseId,
-      setLoading,
-      cursor,
-      reviewedSubmissions,
-      selectedLevel,
-      updateReviewedSubmissionsCB,
-      (),
-    ) => {
-  reviewedSubmissions |> ArrayUtils.isEmpty ?
-    getReviewedSubmissions(
-      authenticityToken,
-      courseId,
-      cursor,
-      setLoading,
-      selectedLevel,
-      reviewedSubmissions,
-      updateReviewedSubmissionsCB,
-    ) :
-    ();
-
-  None;
-};
 let showSubmissionStatus = failed =>
   failed ?
     <div
@@ -248,18 +223,28 @@ let make =
       ~hasNextPage,
       ~updateReviewedSubmissionsCB,
     ) => {
-  let (loading, setLoading) = React.useState(() => false);
+  let loaded =
+    switch (reviewedSubmissions, hasNextPage) {
+    | ([||], hasNextPage) => !hasNextPage
+    | (_loadedSubmissions, _hasNextPage) => false
+    };
+  let (loading, setLoading) = React.useState(() => !loaded);
 
   React.useEffect1(
-    loadSubmissions(
-      authenticityToken,
-      courseId,
-      setLoading,
-      endCursor,
-      reviewedSubmissions,
-      selectedLevel,
-      updateReviewedSubmissionsCB,
-    ),
+    () => {
+      loaded ?
+        () :
+        getReviewedSubmissions(
+          authenticityToken,
+          courseId,
+          endCursor,
+          setLoading,
+          selectedLevel,
+          reviewedSubmissions,
+          updateReviewedSubmissionsCB,
+        );
+      None;
+    },
     [|selectedLevel|],
   );
 
@@ -267,8 +252,11 @@ let make =
     {
       switch (reviewedSubmissions) {
       | [||] =>
-        loading ?
-          React.null :
+        !loaded ?
+          SkeletonLoading.multiple(
+            ~count=10,
+            ~element=SkeletonLoading.card(),
+          ) :
           <div
             className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow">
             <img className="w-3/4 md:w-1/2 mx-auto" src=reviewedEmptyImage />
@@ -280,10 +268,7 @@ let make =
     {
       switch (loading, hasNextPage, endCursor) {
       | (true, _, _) =>
-        <div
-          className="text-sm text-center font-semibold bg-gray-300 p-2 rounded mt-8">
-          {"Loading Submissions..." |> str}
-        </div>
+        SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
       | (false, false, _)
       | (false, true, None) => React.null
       | (false, true, Some(_)) =>

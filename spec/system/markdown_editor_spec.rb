@@ -27,14 +27,14 @@ feature 'Markdown editor', js: true do
 
     fill_in 'Question', with: 'This is a title.'
     add_markdown(intro_sentence)
-    attach_file("You can attach files by clicking here and selecting one.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
+    attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
 
     expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
     # Add a bit of sleep here to allow the JS to fully insert the markdown embed code.
     sleep(0.1)
 
-    attach_file("You can attach files by clicking here and selecting one.", sample_file_path('pdf-sample.pdf'), visible: false)
+    attach_file("Click here to attach a file.", sample_file_path('pdf-sample.pdf'), visible: false)
 
     expect(page).to have_text('pdf-sample.pdf')
 
@@ -85,7 +85,7 @@ feature 'Markdown editor', js: true do
       sign_in_user(student.user, referer: new_question_community_path(community))
       fill_in 'Question', with: 'This is a title.'
 
-      attach_file("You can attach files by clicking here and selecting one.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
+      attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
 
       expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
@@ -93,7 +93,7 @@ feature 'Markdown editor', js: true do
       expect(page).to have_text('0 Answers')
 
       # Let's try filling in an answer with an attachment.
-      attach_file("You can attach files by clicking here and selecting one.", sample_file_path('pdf-sample.pdf'), visible: false)
+      attach_file("Click here to attach a file.", sample_file_path('pdf-sample.pdf'), visible: false)
 
       expect(page).to have_text('You have exceeded the number of attachments allowed per day.')
       expect(page).not_to have_text('logo_lipsum_on_light_bg.png')

@@ -423,10 +423,7 @@ let make =
                       | None =>
                         <span>
                           <FaIcon classes="far fa-file-image mr-2" />
-                          {
-                            "You can attach files by clicking here and selecting one."
-                            |> str
-                          }
+                          {"Click here to attach a file." |> str}
                         </span>
                       }
                     }
@@ -444,6 +441,9 @@ let make =
               target="_blank"
               className="px-3 py-1 hover:text-secondary-500 cursor-pointer">
               <FaIcon classes="fab fa-markdown" />
+              <span className="text-xs ml-1 font-semibold hidden sm:inline">
+                {"Need help?" |> str}
+              </span>
             </a>
           </div>
         </div>;

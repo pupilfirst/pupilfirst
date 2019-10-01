@@ -1,8 +1,8 @@
 ![PupilFirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
 ---
 [![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/SVdotCO/pupilfirst/blob/master/LICENSE)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e1b6a2e1d15fba19e49e/maintainability)](https://codeclimate.com/repos/5d638348e7bd3c018b001e28/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/e1b6a2e1d15fba19e49e/test_coverage)](https://codeclimate.com/repos/5d638348e7bd3c018b001e28/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/maintainability)](https://codeclimate.com/github/SVdotCO/pupilfirst/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/test_coverage)](https://codeclimate.com/github/SVdotCO/pupilfirst/test_coverage)
 ![TeamCity Status for SVdotCO/pupilfirst](https://ci.sv.co/app/rest/builds/buildType:(id:PupilFirst_ContinuousIntegration)/statusIcon.svg)
 ---
 

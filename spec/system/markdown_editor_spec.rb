@@ -32,6 +32,9 @@ feature 'Markdown editor', js: true do
 
     expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
+    # Add a bit of sleep here to allow the JS to fully insert the markdown embed code.
+    sleep(0.1)
+
     add_markdown(second_sentence)
     attach_file("You can attach files by clicking here and selecting one.", sample_file_path('pdf-sample.pdf'), visible: false)
 

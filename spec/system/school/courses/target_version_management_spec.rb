@@ -226,10 +226,11 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_text(format_date(3.days.ago))
       expect(page).to have_selector('.target-editor__version-dropdown-list-item', count: 2)
       find('#version-selection-list').find('li', text: format_date(3.days.ago)).click
-      expect(page).to have_button('Restore this version')
+
       accept_confirm do
-        find_button('Restore this version').click
+        click_button('Restore this version')
       end
+
       expect(page).to have_button('Edit')
       target_1.content_versions.reload
 

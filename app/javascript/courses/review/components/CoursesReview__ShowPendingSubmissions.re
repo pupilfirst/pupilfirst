@@ -1,5 +1,8 @@
 [@bs.config {jsx: 3}];
 
+let pendingEmptyImage: string = [%raw
+  "require('../images/pending-empty.svg')"
+];
 open CoursesReview__Types;
 let str = React.string;
 
@@ -26,8 +29,11 @@ let make =
       switch (submissionToShow) {
       | [||] =>
         <div
-          className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
-          {"No pending submissions to review" |> str}
+          className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow">
+          <img className="w-3/4 md:w-1/2 mx-auto" src=pendingEmptyImage />
+          <h4 className="mt-2">
+            {"No pending submissions to review" |> str}
+          </h4>
         </div>
       | _ =>
         submissionToShow

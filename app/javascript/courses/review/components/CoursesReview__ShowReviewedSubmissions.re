@@ -1,4 +1,7 @@
 [@bs.config {jsx: 3}];
+let reviewedEmptyImage: string = [%raw
+  "require('../images/reviewed-empty.svg')"
+];
 
 open CoursesReview__Types;
 let str = React.string;
@@ -267,8 +270,9 @@ let make =
         loading ?
           React.null :
           <div
-            className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
-            {"No Reviewed Submission" |> str}
+            className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow">
+            <img className="w-3/4 md:w-1/2 mx-auto" src=reviewedEmptyImage />
+            <h4 className="mt-2"> {"No Reviewed Submission" |> str} </h4>
           </div>
       | _ => showSubmission(reviewedSubmissions, levels, openOverlayCB)
       }

@@ -199,6 +199,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
 
 let showGradePill =
     (
+      key,
       gradeLabels,
       evaluvationCriterion,
       gradeValue,
@@ -207,7 +208,7 @@ let showGradePill =
       state,
       setState,
     ) =>
-  <div className="md:pr-8 mt-4">
+  <div key={key |> string_of_int} className="md:pr-8 mt-4">
     {
       gradePillHeader(
         evaluvationCriterion |> EvaluationCriterion.name,
@@ -223,7 +224,7 @@ let showGradePill =
              let gradeLabelGrade = gradeLabel |> GradeLabel.grade;
 
              <div
-               key={evaluvationCriterion |> EvaluationCriterion.id}
+               key={gradeLabelGrade |> string_of_int}
                onClick={
                  handleGradePillClick(
                    evaluvationCriterion |> EvaluationCriterion.id,
@@ -260,8 +261,9 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
   <div>
     {
       grades
-      |> Array.map(grade =>
+      |> Array.mapi((key, grade) =>
            showGradePill(
+             key,
              gradeLabels,
              findEvaluvationCriterion(
                evaluvationCriteria,
@@ -280,7 +282,7 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
 let renderGradePills =
     (gradeLabels, evaluvationCriteria, grades, passGrade, state, setState) =>
   evaluvationCriteria
-  |> Array.map(ec => {
+  |> Array.mapi((key, ec) => {
        let grade =
          grades
          |> Js.Array.find(g =>
@@ -294,6 +296,7 @@ let renderGradePills =
          };
 
        showGradePill(
+         key,
          gradeLabels,
          ec,
          gradeValue,
@@ -320,17 +323,11 @@ let gradeStatusClasses = (color, status) =>
   );
 
 let submissionStatusIcon = (status, submission, authenticityToken, setState) => {
-  let text =
+  let (text, color) =
     switch (status) {
-    | Graded(passed) => passed ? "Passed" : "Failed"
-    | Grading => "Reviewing"
-    | UnGraded => "Not Reviewed"
-    };
-  let color =
-    switch (status) {
-    | Graded(passed) => passed ? "green" : "red"
-    | Grading => "orange"
-    | UnGraded => "gray"
+    | Graded(passed) => passed ? ("Passed", "green") : ("Failed", "red")
+    | Grading => ("Reviewing", "orange")
+    | UnGraded => ("Not Reviewed", "gray")
     };
 
   <div

@@ -3,12 +3,6 @@
 open CoursesReview__Types;
 let str = React.string;
 
-type state = {
-  loading: bool,
-  hasNextPage: bool,
-  endCursor: option(string),
-};
-
 module ReviewedSubmissionsQuery = [%graphql
   {|
     query($courseId: ID!, $levelId: ID, $after: String) {
@@ -26,7 +20,7 @@ module ReviewedSubmissionsQuery = [%graphql
 
 let updateReviewedSubmissions =
     (
-      setState,
+      setLoading,
       endCursor,
       hasNextPage,
       reviewedSubmissions,
@@ -34,21 +28,24 @@ let updateReviewedSubmissions =
       nodes,
     ) => {
   updateReviewedSubmissionsCB(
-    reviewedSubmissions
-    |> Array.append(
-         (
-           switch (nodes) {
-           | None => [||]
-           | Some(submissionsArray) =>
-             submissionsArray |> SubmissionInfo.decodeJS
-           }
-         )
-         |> Array.to_list
-         |> List.flatten
-         |> Array.of_list,
-       ),
+    ~reviewedSubmissions=
+      reviewedSubmissions
+      |> Array.append(
+           (
+             switch (nodes) {
+             | None => [||]
+             | Some(submissionsArray) =>
+               submissionsArray |> SubmissionInfo.decodeJS
+             }
+           )
+           |> Array.to_list
+           |> List.flatten
+           |> Array.of_list,
+         ),
+    ~hasNextPage,
+    ~endCursor,
   );
-  setState(_ => {loading: false, endCursor, hasNextPage});
+  setLoading(_ => false);
 };
 
 let getReviewedSubmissions =
@@ -56,12 +53,12 @@ let getReviewedSubmissions =
       authenticityToken,
       courseId,
       cursor,
-      setState,
+      setLoading,
       selectedLevel,
       reviewedSubmissions,
       updateReviewedSubmissionsCB,
     ) => {
-  setState(state => {...state, loading: true});
+  setLoading(_ => true);
   (
     switch (selectedLevel, cursor) {
     | (Some(level), Some(cursor)) =>
@@ -82,7 +79,7 @@ let getReviewedSubmissions =
   |> Js.Promise.then_(response => {
        response##reviewedSubmissions##nodes
        |> updateReviewedSubmissions(
-            setState,
+            setLoading,
             response##reviewedSubmissions##pageInfo##endCursor,
             response##reviewedSubmissions##pageInfo##hasNextPage,
             reviewedSubmissions,
@@ -97,8 +94,8 @@ let loadSubmissions =
     (
       authenticityToken,
       courseId,
-      state,
-      setState,
+      setLoading,
+      cursor,
       reviewedSubmissions,
       selectedLevel,
       updateReviewedSubmissionsCB,
@@ -108,8 +105,8 @@ let loadSubmissions =
     getReviewedSubmissions(
       authenticityToken,
       courseId,
-      state.endCursor,
-      setState,
+      cursor,
+      setLoading,
       selectedLevel,
       reviewedSubmissions,
       updateReviewedSubmissionsCB,
@@ -244,19 +241,18 @@ let make =
       ~levels,
       ~openOverlayCB,
       ~reviewedSubmissions,
+      ~endCursor,
+      ~hasNextPage,
       ~updateReviewedSubmissionsCB,
     ) => {
-  let (state, setState) =
-    React.useState(() =>
-      {loading: false, hasNextPage: false, endCursor: None}
-    );
+  let (loading, setLoading) = React.useState(() => false);
 
   React.useEffect1(
     loadSubmissions(
       authenticityToken,
       courseId,
-      state,
-      setState,
+      setLoading,
+      endCursor,
       reviewedSubmissions,
       selectedLevel,
       updateReviewedSubmissionsCB,
@@ -268,7 +264,7 @@ let make =
     {
       switch (reviewedSubmissions) {
       | [||] =>
-        state.loading ?
+        loading ?
           React.null :
           <div
             className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow text-gray-700">
@@ -278,7 +274,7 @@ let make =
       }
     }
     {
-      switch (state.loading, state.hasNextPage, state.endCursor) {
+      switch (loading, hasNextPage, endCursor) {
       | (true, _, _) =>
         <div
           className="text-sm text-center font-semibold bg-gray-300 p-2 rounded mt-8">
@@ -290,9 +286,9 @@ let make =
         showLoadMoreButton(
           authenticityToken,
           courseId,
-          setState,
+          setLoading,
           selectedLevel,
-          state.endCursor,
+          endCursor,
           reviewedSubmissions,
           updateReviewedSubmissionsCB,
         )

@@ -124,7 +124,7 @@ let cardClasses = submission =>
     }
   );
 
-let updateGradingCB =
+let updateSubmission =
     (
       ~grades,
       ~passed,
@@ -227,8 +227,8 @@ let make =
       gradeLabels
       evaluvationCriteria=evaluationCriteria
       passGrade
-      updateGradingCB={
-        updateGradingCB(~submission, ~currentCoach, ~updateSubmissionCB)
+      updateSubmissionCB={
+        updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
       }
     />
     <CoursesReview__ShowFeedback
@@ -236,8 +236,8 @@ let make =
       feedback={submission |> Submission.feedback}
       reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
       submissionId={submission |> Submission.id}
-      updateGradingCB={
-        updateGradingCB(~submission, ~currentCoach, ~updateSubmissionCB)
+      updateSubmissionCB={
+        updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
       }
     />
   </div>;

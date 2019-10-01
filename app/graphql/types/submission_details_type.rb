@@ -5,6 +5,7 @@ module Types
     field :target_title, String, null: false
     field :user_names, String, null: false
     field :level_number, String, null: false
+    field :level_id, ID, null: false
     field :evaluation_criteria, [Types::EvaluationCriteria], null: false
   end
 end

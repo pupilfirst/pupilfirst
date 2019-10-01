@@ -21,7 +21,7 @@ module CreateFeedbackMutation = [%graphql
 ];
 
 let createFeedback =
-    (authenticityToken, submissionId, feedback, setState, updateGradingCB) => {
+    (authenticityToken, submissionId, feedback, setState, updateSubmissionCB) => {
   setState(state => {...state, saving: true});
 
   CreateFeedbackMutation.make(~submissionId, ~feedback, ())
@@ -29,7 +29,7 @@ let createFeedback =
   |> Js.Promise.then_(response => {
        response##createFeedback##success ?
          {
-           updateGradingCB(
+           updateSubmissionCB(
              ~grades=[||],
              ~passed=None,
              ~newFeedback=Some(feedback),
@@ -100,7 +100,7 @@ let make =
       ~feedback,
       ~reviewed,
       ~submissionId,
-      ~updateGradingCB,
+      ~updateSubmissionCB,
     ) => {
   let (state, setState) =
     React.useState(() =>
@@ -129,7 +129,7 @@ let make =
                         submissionId,
                         state.newFeedback,
                         setState,
-                        updateGradingCB,
+                        updateSubmissionCB,
                       )
                   }>
                   {"Share Feedback" |> str}

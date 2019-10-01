@@ -287,7 +287,11 @@ let overlayStatus = (course, target, targetStatus, preview) =>
     {
       preview ?
         <div>
-          {renderLocked("You are accesing the preview mode for this course")}
+          {
+            renderLocked(
+              "You are currently looking at a preview of this course.",
+            )
+          }
         </div> :
         React.null
     }

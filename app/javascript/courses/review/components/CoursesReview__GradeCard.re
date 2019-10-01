@@ -62,7 +62,7 @@ let gradeSubmissionQuery =
       state,
       setState,
       passGrade,
-      updateGradingCB,
+      updateSubmissionCB,
     ) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
@@ -81,7 +81,7 @@ let gradeSubmissionQuery =
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##createGrading##success ?
-         updateGradingCB(
+         updateSubmissionCB(
            ~grades=state.grades,
            ~passed=Some(passed(state.grades, passGrade)),
            ~newFeedback=Some(state.newFeedback),
@@ -442,7 +442,7 @@ let gradeSubmission =
       state,
       setState,
       passGrade,
-      updateGradingCB,
+      updateSubmissionCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -454,23 +454,22 @@ let gradeSubmission =
       state,
       setState,
       passGrade,
-      updateGradingCB,
+      updateSubmissionCB,
     )
   | Grading
   | UnGraded => ()
   };
 };
 
-let showFeedbackForm = (state, setState) =>
-  switch (state.status) {
-  | Graded(_) => React.null
-  | Grading
-  | UnGraded =>
+let showFeedbackForm = (grades, state, setState) =>
+  switch (grades) {
+  | [||] =>
     <CoursesReview__FeedbackEditor
       feedback={state.newFeedback}
       label="Add Your Feedback"
       updateFeedbackCB={updateFeedbackCB(setState)}
     />
+  | _ => React.null
   };
 let reviewButtonDisabled = status =>
   switch (status) {
@@ -487,7 +486,7 @@ let make =
       ~gradeLabels,
       ~evaluvationCriteria,
       ~passGrade,
-      ~updateGradingCB,
+      ~updateSubmissionCB,
     ) => {
   let (state, setState) =
     React.useState(() =>
@@ -504,7 +503,7 @@ let make =
     );
   <DisablingCover disabled={state.saving}>
     <div className="px-4 md:px-6 ">
-      {showFeedbackForm(state, setState)}
+      {showFeedbackForm(submission |> Submission.grades, state, setState)}
       <div className="w-full pb-4 pt-4 md:pt-5">
         <div className="font-semibold text-sm lg:text-base">
           {"Grade Card" |> str}
@@ -559,7 +558,7 @@ let make =
                 state,
                 setState,
                 passGrade,
-                updateGradingCB,
+                updateSubmissionCB,
               )
             }>
             {"Review Submission" |> str}

@@ -13,7 +13,7 @@ module SubmissionDetailsQuery = [%graphql
   {|
     query($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, userNames, levelNumber
+        targetId, targetTitle, userNames, levelNumber, levelId
         evaluationCriteria{
           id, name
         },
@@ -110,23 +110,18 @@ let headerSection = (submissionDetails, courseId) =>
       </div>
     </div>
   </div>;
-let updateSubmissionCB = (setState, removePendingSubmissionCB, submission) => {
-  setState(state =>
-    {
-      ...state,
-      submissionDetails:
-        switch (state.submissionDetails) {
-        | Some(submissionDetails) =>
-          Some(
-            SubmissionDetails.updateSubmission(submissionDetails, submission),
-          )
-        | None => None
-        },
-    }
-  );
-
-  removePendingSubmissionCB(submission |> Submission.id);
-};
+let updateSubmission =
+    (state, setState, removePendingSubmissionCB, submission) =>
+  switch (state.submissionDetails) {
+  | Some(submissionDetails) =>
+    let submissionDetails =
+      SubmissionDetails.updateSubmission(submissionDetails, submission);
+    setState(state =>
+      {...state, submissionDetails: Some(submissionDetails)}
+    );
+    removePendingSubmissionCB(submission |> Submission.id);
+  | None => None |> ignore
+  };
 
 [@react.component]
 let make =
@@ -173,7 +168,8 @@ let make =
                        gradeLabels
                        passGrade
                        updateSubmissionCB={
-                         updateSubmissionCB(
+                         updateSubmission(
+                           state,
                            setState,
                            removePendingSubmissionCB,
                          )

@@ -97,6 +97,9 @@ let removePendingSubmission = (setState, submissionId) =>
       submissions:
         state.submissions
         |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId),
+      reviewedSubmissions: [||],
+      hasNextPage: true,
+      endCursor: None,
     }
   );
 
@@ -153,7 +156,7 @@ let make =
               {"Pending" |> str}
               <span
                 className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
-                {submissions |> Array.length |> string_of_int |> str}
+                {state.submissions |> Array.length |> string_of_int |> str}
               </span>
             </button>
             <button
@@ -172,7 +175,7 @@ let make =
           state.showPending ?
             <CoursesReview__ShowPendingSubmissions
               authenticityToken
-              submissions
+              submissions={state.submissions}
               levels
               selectedLevel={state.selectedLevel}
               openOverlayCB=openOverlay

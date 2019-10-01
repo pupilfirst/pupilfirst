@@ -11,7 +11,8 @@ class SubmissionDetailsResolver < ApplicationResolver
       target_id: target.id,
       target_title: target.title,
       user_names: user_names,
-      level_number: level_number,
+      level_number: level.number,
+      level_id: level.id,
       evaluation_criteria: evaluation_criteria
     }
   end
@@ -24,8 +25,8 @@ class SubmissionDetailsResolver < ApplicationResolver
     @target ||= submission.target
   end
 
-  def level_number
-    target.level.number
+  def level
+    @level ||= target.level
   end
 
   def user_names

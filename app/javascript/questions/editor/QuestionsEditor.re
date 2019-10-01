@@ -185,10 +185,10 @@ let make =
       | None => ""
       }
     );
-  let updateDescriptionCB = description => setDescription(_ => description);
+  let updateMarkdownCB = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
   <DisablingCover disabled=saving>
-    <div title="Question Editor" className="bg-gray-100">
+    <div className="bg-gray-100">
       <div className="flex-1 flex flex-col px-2">
         <div>
           {
@@ -255,7 +255,7 @@ let make =
             />
             <div className="w-full flex flex-col">
               <MarkdownEditor
-                updateDescriptionCB
+                updateMarkdownCB
                 value=description
                 placeholder="Your description gives people the information they need to help you answer your question. You can use Markdown to format this text."
                 label="Description"

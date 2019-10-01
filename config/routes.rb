@@ -211,12 +211,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :markdown_attachments, only: %i[create] do
+    member do
+      get '/:token', action: 'download', as: 'download'
+    end
+  end
+
   resource :impersonation, only: %i[destroy]
 
   scope 'intercom', as: 'intercom', controller: 'intercom' do
     post 'user_create', action: 'user_create_webhook'
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
+
+  get '/help/:document', to: 'help#show'
 
   # Handle incoming unsubscribe webhooks from SendInBlue
   post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'

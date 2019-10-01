@@ -6,6 +6,7 @@ let courseCompleteImage: string = [%raw
 ];
 let accessEndedImage: string = [%raw "require('../images/access-ended.svg')"];
 let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
+let previewModeImage: string = [%raw "require('../images/preview-mode.svg')"];
 
 open CoursesCurriculum__Types;
 
@@ -21,7 +22,7 @@ let str = React.string;
 
 let iconsForNotice = showNotice =>
   switch (showNotice) {
-  | Preview => courseEndedImage
+  | Preview => previewModeImage
   | CourseEnded => courseEndedImage
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
@@ -59,11 +60,19 @@ let courseEndedMessage = () => {
   showNotice(~title, ~description, ~noticeType=CourseEnded, ());
 };
 
-let showPreviewMessage = () => {
-  let title = "Preview Mode";
-  let description = "You are accesing the preview mode for this course";
-  showNotice(~title, ~description, ~noticeType=Preview, ());
-};
+let showPreviewMessage = () =>
+  <div
+    className="flex max-w-lg md:mx-auto mx-3 mt-4 rounded-lg px-3 py-2 shadow-lg items-center border border-primary-300 bg-gray-200 ">
+    <img className="w-18 md:w-20 flex-no-shrink" src=previewModeImage />
+    <div className="flex-1 text-left ml-2">
+      <h4 className="font-bold text-lg leading-tight">
+        {"Preview Mode" |> str}
+      </h4>
+      <p className="text-sm mt-1">
+        {"You are accessing the preview mode for this course" |> str}
+      </p>
+    </div>
+  </div>;
 
 let accessEndedMessage = () => {
   let title = "Access Ended";

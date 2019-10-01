@@ -111,7 +111,7 @@ let showSubmissions = attachments =>
   };
 
 let cardClasses = submission =>
-  "mt-6 rounded-b-lg bg-white border-t-3 shadow-md "
+  "mt-6 rounded-b-lg bg-white border-t-3 "
   ++ (
     switch (
       submission |> Submission.passedAt,
@@ -195,49 +195,53 @@ let make =
       ~evaluationCriteria,
     ) =>
   <div className={cardClasses(submission)}>
-    <div
-      className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
-      <div className="flex flex-col w-full sm:w-auto">
-        <h2 className="font-semibold text-sm lg:text-base leading-tight">
-          {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
-        </h2>
-        <span className="text-xs text-gray-800 pt-px">
-          {submission |> Submission.createdAt |> Submission.prettyDate |> str}
-        </span>
+    <div className="rounded-b-lg shadow-md">
+      <div
+        className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
+        <div className="flex flex-col w-full sm:w-auto">
+          <h2 className="font-semibold text-sm lg:text-base leading-tight">
+            {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
+          </h2>
+          <span className="text-xs text-gray-800 pt-px">
+            {
+              submission |> Submission.createdAt |> Submission.prettyDate |> str
+            }
+          </span>
+        </div>
+        <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
+          {
+            showFeedbackSent(
+              submission |> Submission.feedback |> ArrayUtils.isNotEmpty,
+            )
+          }
+          {showSubmissionStatus(submission)}
+        </div>
       </div>
-      <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
-        {
-          showFeedbackSent(
-            submission |> Submission.feedback |> ArrayUtils.isNotEmpty,
-          )
+      <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
+        <MarkdownBlock
+          profile=Markdown.Permissive
+          markdown={submission |> Submission.description}
+        />
+        {showSubmissions(submission |> Submission.attachments)}
+      </div>
+      <CoursesReview__GradeCard
+        authenticityToken
+        submission
+        gradeLabels
+        evaluvationCriteria=evaluationCriteria
+        passGrade
+        updateSubmissionCB={
+          updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
         }
-        {showSubmissionStatus(submission)}
-      </div>
-    </div>
-    <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
-      <MarkdownBlock
-        profile=Markdown.Permissive
-        markdown={submission |> Submission.description}
       />
-      {showSubmissions(submission |> Submission.attachments)}
+      <CoursesReview__ShowFeedback
+        authenticityToken
+        feedback={submission |> Submission.feedback}
+        reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
+        submissionId={submission |> Submission.id}
+        updateSubmissionCB={
+          updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
+        }
+      />
     </div>
-    <CoursesReview__GradeCard
-      authenticityToken
-      submission
-      gradeLabels
-      evaluvationCriteria=evaluationCriteria
-      passGrade
-      updateSubmissionCB={
-        updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
-      }
-    />
-    <CoursesReview__ShowFeedback
-      authenticityToken
-      feedback={submission |> Submission.feedback}
-      reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
-      submissionId={submission |> Submission.id}
-      updateSubmissionCB={
-        updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
-      }
-    />
   </div>;

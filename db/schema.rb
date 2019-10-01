@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_26_081912) do
+ActiveRecord::Schema.define(version: 2019_10_01_125519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -750,7 +750,6 @@ ActiveRecord::Schema.define(version: 2019_09_26_081912) do
     t.datetime "login_mail_sent_at"
     t.string "name"
     t.string "phone"
-    t.string "gender"
     t.string "communication_address"
     t.string "title"
     t.string "key_skills"

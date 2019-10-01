@@ -166,34 +166,32 @@ let make =
                 submissionDetails
                 |> SubmissionDetails.submissions
                 |> Array.mapi((index, submission) =>
-                     <div>
-                       <CoursesReview__Submissions
-                         key={index |> string_of_int}
-                         authenticityToken
-                         submission
-                         gradeLabels
-                         passGrade
-                         updateSubmissionCB={
-                           updateSubmissionCB(
-                             setState,
-                             removePendingSubmissionCB,
-                           )
-                         }
-                         submissionNumber={
-                           (
-                             submissionDetails
-                             |> SubmissionDetails.submissions
-                             |> Array.length
-                           )
-                           - index
-                         }
-                         currentCoach
-                         evaluationCriteria={
+                     <CoursesReview__Submissions
+                       key={index |> string_of_int}
+                       authenticityToken
+                       submission
+                       gradeLabels
+                       passGrade
+                       updateSubmissionCB={
+                         updateSubmissionCB(
+                           setState,
+                           removePendingSubmissionCB,
+                         )
+                       }
+                       submissionNumber={
+                         (
                            submissionDetails
-                           |> SubmissionDetails.evaluationCriteria
-                         }
-                       />
-                     </div>
+                           |> SubmissionDetails.submissions
+                           |> Array.length
+                         )
+                         - index
+                       }
+                       currentCoach
+                       evaluationCriteria={
+                         submissionDetails
+                         |> SubmissionDetails.evaluationCriteria
+                       }
+                     />
                    )
                 |> React.array
             }

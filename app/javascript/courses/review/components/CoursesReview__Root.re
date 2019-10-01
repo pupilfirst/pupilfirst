@@ -9,10 +9,26 @@ type state = {
   reviewedSubmissions: array(SubmissionInfo.t),
   showPending: bool,
   selectedLevel: option(Level.t),
+  hasNextPage: bool,
+  endCursor: option(string),
 };
 
 let openOverlay = submissionId =>
   ReasonReactRouter.push("/submissions/" ++ submissionId);
+
+let onClickForLevelSelector = (level, setState, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  setState(state =>
+    {
+      ...state,
+      selectedLevel: level,
+      reviewedSubmissions: [||],
+      hasNextPage: true,
+      endCursor: None,
+    }
+  );
+};
 
 let dropDownButtonText = level =>
   "Level "
@@ -24,12 +40,7 @@ let dropdownShowAllButton = (selectedLevel, setState) =>
   | Some(_) => [|
       <button
         className="p-3 w-full text-left font-semibold focus:outline-none"
-        onClick=(
-          _ =>
-            setState(state =>
-              {...state, selectedLevel: None, reviewedSubmissions: [||]}
-            )
-        )>
+        onClick={onClickForLevelSelector(None, setState)}>
         {"All Levels" |> str}
       </button>,
     |]
@@ -45,16 +56,7 @@ let showDropdown = (levels, selectedLevel, setState) => {
         |> Array.map(level =>
              <button
                className="p-3 w-full text-left font-semibold focus:outline-none"
-               onClick={
-                 _ =>
-                   setState(state =>
-                     {
-                       ...state,
-                       selectedLevel: Some(level),
-                       reviewedSubmissions: [||],
-                     }
-                   )
-               }>
+               onClick={onClickForLevelSelector(Some(level), setState)}>
                {dropDownButtonText(level) |> str}
              </button>
            ),
@@ -98,8 +100,9 @@ let removePendingSubmission = (setState, submissionId) =>
     }
   );
 
-let updateReviewedSubmissions = (setState, reviewedSubmissions) =>
-  setState(state => {...state, reviewedSubmissions});
+let updateReviewedSubmissions =
+    (~setState, ~reviewedSubmissions, ~hasNextPage, ~endCursor) =>
+  setState(state => {...state, reviewedSubmissions, hasNextPage, endCursor});
 
 [@react.component]
 let make =
@@ -119,6 +122,8 @@ let make =
         reviewedSubmissions: [||],
         showPending: true,
         selectedLevel: None,
+        hasNextPage: true,
+        endCursor: None,
       }
     );
 
@@ -179,8 +184,10 @@ let make =
               levels
               openOverlayCB=openOverlay
               reviewedSubmissions={state.reviewedSubmissions}
+              endCursor={state.endCursor}
+              hasNextPage={state.hasNextPage}
               updateReviewedSubmissionsCB={
-                updateReviewedSubmissions(setState)
+                updateReviewedSubmissions(~setState)
               }
             />
         }

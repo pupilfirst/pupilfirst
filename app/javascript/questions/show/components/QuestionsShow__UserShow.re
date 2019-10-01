@@ -7,7 +7,7 @@ let str = React.string;
 [@react.component]
 let make = (~user, ~createdAt, ~textForTimeStamp) =>
   <div>
-    <p className="text-xs text-gray-600">
+    <p className="text-xs text-gray-800">
       {
         textForTimeStamp
         ++ " on "

@@ -127,15 +127,82 @@ let make =
       ~users,
       ~evaluationCriteria,
     ) => {
-  let teamLevel =
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == (team |> Team.levelId),
-         "Could not find teamLevel with ID " ++ (team |> Team.levelId),
-       );
+  let url = ReasonReactRouter.useUrl();
+
+  let selectedTarget =
+    switch (url.path) {
+    | ["targets", targetId, ..._] =>
+      Some(
+        targets
+        |> ListUtils.unsafeFind(
+             t => t |> Target.id == targetId,
+             "Could not find selectedTarget with ID " ++ targetId,
+           ),
+      )
+    | _ => None
+    };
+
+  /* Level selection is a bit complicated because of how the selector for L0 is
+   * separate from the other levels. selectedLevelId is the numbered level
+   * selected by the user, whereas showLevelZero is the toggle on the title of
+   * L0 determining whether the user has picked it or not - it'll show up only
+   * if L0 is available, and will override the selectedLevelId. This rule is
+   * used to determine currentLevelId, which is the actual level whose contents
+   * are shown on the page. */
+
+  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
+  let teamLevelId = team |> Team.levelId;
+
+  let targetLevelId =
+    switch (selectedTarget) {
+    | Some(target) =>
+      let targetGroupId = target |> Target.targetGroupId;
+
+      let targetGroup =
+        targetGroups
+        |> ListUtils.unsafeFind(
+             t => t |> TargetGroup.id == targetGroupId,
+             "Could not find targetGroup with ID " ++ targetGroupId,
+           );
+
+      Some(targetGroup |> TargetGroup.levelId);
+    | None => None
+    };
 
   let (selectedLevelId, setSelectedLevelId) =
-    React.useState(() => teamLevel |> Level.id);
+    React.useState(() =>
+      switch (targetLevelId, levelZero) {
+      | (Some(targetLevelId), Some(levelZero)) =>
+        levelZero |> Level.id == targetLevelId ? teamLevelId : targetLevelId
+      | (Some(targetLevelId), None) => targetLevelId
+      | (None, _) => teamLevelId
+      }
+    );
+
+  let (showLevelZero, setShowLevelZero) =
+    React.useState(() =>
+      switch (levelZero, targetLevelId) {
+      | (Some(levelZero), Some(targetLevelId)) =>
+        levelZero |> Level.id == targetLevelId
+      | (Some(_), None)
+      | (None, Some(_))
+      | (None, None) => false
+      }
+    );
+
+  let currentLevelId =
+    switch (levelZero, showLevelZero) {
+    | (Some(levelZero), true) => levelZero |> Level.id
+    | (Some(_), false)
+    | (None, true | false) => selectedLevelId
+    };
+
+  let currentLevel =
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == currentLevelId,
+         "Could not find currentLevel with id " ++ currentLevelId,
+       );
 
   let (latestSubmissions, setLatestSubmissions) =
     React.useState(() => submissions);
@@ -161,49 +228,24 @@ let make =
     [|latestSubmissions|],
   );
 
-  let (showLevelZero, setShowLevelZero) = React.useState(() => false);
-  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
-  let currentLevelId =
-    switch (levelZero, showLevelZero) {
-    | (Some(levelZero), true) => levelZero |> Level.id
-    | (Some(_), false)
-    | (None, true | false) => selectedLevelId
-    };
-  let currentLevel =
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == currentLevelId,
-         "Could not find currentLevel with id " ++ currentLevelId,
-       );
-
   let targetGroupsInLevel =
     targetGroups
     |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
 
-  let url = ReasonReactRouter.useUrl();
-
   <div className="bg-gray-100 pt-11 pb-8 -mt-7">
     {
-      switch (url.path) {
-      | ["targets", targetId, ..._] =>
-        let selectedTarget =
-          targets
-          |> ListUtils.unsafeFind(
-               t => t |> Target.id == targetId,
-               "Could not find selectedTarget with ID " ++ targetId,
-             );
-
+      switch (selectedTarget) {
+      | Some(target) =>
         let targetStatus =
           statusOfTargets
           |> ListUtils.unsafeFind(
-               ts =>
-                 ts |> TargetStatus.targetId == (selectedTarget |> Target.id),
+               ts => ts |> TargetStatus.targetId == (target |> Target.id),
                "Could not find targetStatus for selectedTarget with ID "
-               ++ (selectedTarget |> Target.id),
+               ++ (target |> Target.id),
              );
 
         <CoursesCurriculum__Overlay
-          target=selectedTarget
+          target
           course
           targetStatus
           authenticityToken
@@ -216,12 +258,12 @@ let make =
           coaches
         />;
 
-      | _ => React.null
+      | None => React.null
       }
     }
     <CoursesCurriculum__NoticeManager
       levels
-      teamLevel
+      teamLevelId={team |> Team.levelId}
       targetGroups
       targets
       statusOfTargets

@@ -376,6 +376,15 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
     t.index ["number"], name: "index_levels_on_number"
   end
 
+  create_table "markdown_attachments", force: :cascade do |t|
+    t.string "token"
+    t.datetime "last_accessed_at"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
+  end
+
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
     t.string "feedback_type"
     t.text "description"
@@ -666,7 +675,6 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
 
   create_table "timeline_event_files", id: :serial, force: :cascade do |t|
     t.integer "timeline_event_id"
-    t.boolean "private"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
@@ -704,6 +712,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
     t.datetime "passed_at"
     t.boolean "latest"
     t.string "quiz_score"
+    t.datetime "evaluated_at"
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|
@@ -741,7 +750,6 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
     t.datetime "login_mail_sent_at"
     t.string "name"
     t.string "phone"
-    t.string "gender"
     t.string "communication_address"
     t.string "title"
     t.string "key_skills"
@@ -824,6 +832,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
   add_foreign_key "founders", "users"
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
+  add_foreign_key "markdown_attachments", "users"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"

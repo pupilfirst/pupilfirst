@@ -13,15 +13,21 @@ feature 'Target Content Version Management', js: true do
   let!(:school_admin) { create :school_admin, school: school }
   let!(:level_1) { create :level, :one, course: course }
   let!(:target_group_1) { create :target_group, level: level_1 }
-  let!(:target_1) { create :target, :with_content, target_group: target_group_1 }
+  let!(:target_1) { create :target, target_group: target_group_1 }
   let!(:target_2) { create :target, target_group: target_group_1 }
   let(:sample_markdown_text) { Faker::Markdown.sandwich(6) }
 
-  # Create few content blocks for target_1
-  let!(:cb_1) { create :content_block, :markdown, created_at: 3.days.ago }
-  let!(:cb_2) { create :content_block, :embed, created_at: 3.days.ago }
+  # Create content blocks for target_1 for latest version
+  let!(:cb_1) { create :content_block, :image }
+  let!(:cb_2) { create :content_block, :markdown }
+  let!(:cb_3) { create :content_block, :file }
+  let!(:cb_4) { create :content_block, :embed }
 
-  let!(:cb_3) { create :content_block, :file, created_at: 2.days.ago }
+  # Create few content blocks for target_1 for old versions
+  let!(:cb_5) { create :content_block, :markdown, created_at: 3.days.ago }
+  let!(:cb_6) { create :content_block, :embed, created_at: 3.days.ago }
+
+  let!(:cb_7) { create :content_block, :file, created_at: 2.days.ago }
 
   before do
     stub_request(:get, 'https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=3QDYbQIS8cQ').to_return(body: '{"version":"1.0","provider_name":"YouTube","html":"\u003ciframe width=\"480\" height=\"270\" src=\"https:\/\/www.youtube.com\/embed\/3QDYbQIS8cQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen\u003e\u003c\/iframe\u003e","thumbnail_url":"https:\/\/i.ytimg.com\/vi\/3QDYbQIS8cQ\/hqdefault.jpg","provider_url":"https:\/\/www.youtube.com\/","thumbnail_height":360,"type":"video","height":270,"thumbnail_width":480,"author_url":"https:\/\/www.youtube.com\/channel\/UCvsvW3QH1700y-j2VfEnq-A","author_name":"Just smile","title":"Funny And Cute Cats - Funniest Cats Compilation 2019","width":480}', status: 200) # rubocop:disable Metrics/LineLength
@@ -43,14 +49,20 @@ feature 'Target Content Version Management', js: true do
     before do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
+      # Create current version for the target
+      target_1.content_versions.create!(content_block: cb_1, version_on: Date.today, sort_index: 1)
+      target_1.content_versions.create!(content_block: cb_2, version_on: Date.today, sort_index: 2)
+      target_1.content_versions.create!(content_block: cb_3, version_on: Date.today, sort_index: 3)
+      target_1.content_versions.create!(content_block: cb_4, version_on: Date.today, sort_index: 4)
+
       # Create couple of old content versions for target 1
       travel_to 3.days.ago do
-        target_1.content_versions.create!(content_block: cb_1, version_on: Date.today, sort_index: 1)
-        target_1.content_versions.create!(content_block: cb_2, version_on: Date.today, sort_index: 2)
+        target_1.content_versions.create!(content_block: cb_5, version_on: Date.today, sort_index: 1)
+        target_1.content_versions.create!(content_block: cb_6, version_on: Date.today, sort_index: 2)
       end
 
       travel_to 2.days.ago do
-        target_1.content_versions.create!(content_block: cb_3, version_on: Date.today, sort_index: 1)
+        target_1.content_versions.create!(content_block: cb_7, version_on: Date.today, sort_index: 1)
       end
     end
 
@@ -68,7 +80,8 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_selector('.add-content-block--open', count: 1)
 
       # Update a content block
-      within('#content-block-form-3') do
+      block_to_update = target_1.latest_content_versions.where(sort_index: 3).first.content_block_id
+      within("div[aria-label='file editor for #{block_to_update}']") do
         fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
         click_button 'Update Title'
       end
@@ -99,9 +112,9 @@ feature 'Target Content Version Management', js: true do
       expect(target_content_versions.where(version_on: Date.today).pluck(:sort_index).sort).to eq([1, 2, 3, 4, 5])
 
       # Delete a content block
-      cb_id_to_delete = target_content_versions.where(version_on: Date.today, sort_index: 2).first.content_block_id
+      cb_id_to_delete = target_1.latest_content_versions.where(sort_index: 2).first.content_block_id
       accept_confirm do
-        within('#content-block-controls-2') do
+        within("div[aria-label='markdown editor for #{cb_id_to_delete}']") do
           find_button('Delete block').click
         end
       end
@@ -116,7 +129,8 @@ feature 'Target Content Version Management', js: true do
       # Update content sorting
       current_cb_sorting = target_content_versions.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)
 
-      within('#content-block-controls-3') do
+      block_id_to_move = current_cb_sorting[2]
+      within("div[aria-label='file editor for #{block_id_to_move}']") do
         find_button('Move down').click
       end
 
@@ -141,7 +155,7 @@ feature 'Target Content Version Management', js: true do
 
         # Update a content block
         block_to_update = target_1.content_versions.where(sort_index: 3).first.content_block
-        within('#content-block-form-3') do
+        within("div[aria-label='file editor for #{block_to_update.id}']") do
           fill_in 'content_block[title]', with: 'new file title', fill_options: { clear: :backspace }
           click_button 'Update Title'
         end
@@ -149,7 +163,8 @@ feature 'Target Content Version Management', js: true do
         dismiss_notification
 
         target_content_versions = target_1.content_versions.reload
-        expect(block_to_update.id).to_not eq(target_1.latest_content_versions.where(sort_index: 3).first.content_block_id)
+        new_content_block_id = target_1.latest_content_versions.where(sort_index: 3).first.content_block_id
+        expect(block_to_update.id).to_not eq(new_content_block_id)
         expect(target_content_versions.where(version_on: Date.today).count).to eq(4)
         expect(target_content_versions.where(version_on: 2.days.ago).count).to eq(4)
         expect(target_content_versions.where(version_on: 5.days.ago).count).to eq(2)
@@ -180,7 +195,7 @@ feature 'Target Content Version Management', js: true do
         # Delete the block created today
         cb_id_to_delete = target_1.latest_content_versions.where(sort_index: 3).first.content_block_id
         accept_confirm do
-          within('#content-block-controls-3') do
+          within("div[aria-label='markdown editor for #{cb_id_to_delete}']") do
             find_button('Delete block').click
           end
         end
@@ -193,7 +208,7 @@ feature 'Target Content Version Management', js: true do
         # Delete an old content block
         cb_id_to_delete = target_1.latest_content_versions.where(sort_index: 2).first.content_block_id
         accept_confirm do
-          within('#content-block-controls-2') do
+          within("div[aria-label='markdown editor for #{cb_id_to_delete}']") do
             find_button('Delete block').click
           end
         end
@@ -205,7 +220,8 @@ feature 'Target Content Version Management', js: true do
         expect(target_1.content_versions.count).to eq(10)
 
         # Change content block sorting
-        within('#content-block-controls-2') do
+        block_to_move = target_1.latest_content_versions.where(sort_index: 2).first.content_block_id
+        within("div[aria-label='file editor for #{block_to_move}']") do
           find_button('Move up').click
         end
 
@@ -226,14 +242,15 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_text(format_date(3.days.ago))
       expect(page).to have_selector('.target-editor__version-dropdown-list-item', count: 2)
       find('#version-selection-list').find('li', text: format_date(3.days.ago)).click
-      expect(page).to have_button('Restore this version')
+
       accept_confirm do
-        find_button('Restore this version').click
+        click_button('Restore this version')
       end
+
       expect(page).to have_button('Edit')
       target_1.content_versions.reload
 
-      expect(target_1.content_versions.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)).to eq([cb_1.id, cb_2.id])
+      expect(target_1.content_versions.where(version_on: Date.today).order(:sort_index).pluck(:content_block_id)).to eq([cb_5.id, cb_6.id])
     end
   end
 end

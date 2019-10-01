@@ -83,7 +83,7 @@ let make =
         textareaId={"quiz_question_" ++ questionId}
         placeholder="Type the question here (supports markdown)"
         value={quizQuestion |> QuizQuestion.question}
-        updateDescriptionCB=updateQuestion
+        updateMarkdownCB=updateQuestion
         profile=Markdown.Permissive
         defaultView=MarkdownEditor.Edit
       />

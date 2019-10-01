@@ -60,28 +60,8 @@
   font-size: 0.75rem;
 }
 
-.feedback-form__trix-container {
+.feedback-form__editor-container {
   padding: 0 15px;
-
-  trix-toolbar {
-    .trix-button-row {
-      flex-wrap: wrap;
-    }
-    .trix-button--icon {
-      width: 1.875em;
-      height: 1.625em;
-    }
-    .trix-button-group {
-      border-color: #e5e5e5;
-
-      &:not(:first-child) {
-        margin-left: 0px;
-      }
-    }
-    .trix-button {
-      border-bottom: 0;
-    }
-  }
 }
 
 .timeline-event-card__header-date-field {
@@ -108,6 +88,9 @@
   border-radius: 0 0 10px 0;
   border-top: 1px solid #e5e5e5;
   ul {
+    margin: 0;
+  }
+  ol {
     margin: 0;
   }
 }

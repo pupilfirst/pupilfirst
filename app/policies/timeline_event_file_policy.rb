@@ -3,14 +3,18 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return false if user.founders.blank? && current_coach.blank?
 
     timeline_event = record.timeline_event
+
+    # Allow everyone to download unlinked files. These have just been uploaded by a user, using the submission interface
+    # and will be deleted by DatabaseCleanupJob#cleanup_submission_files if still unlinked after 24 hours.
     return true if timeline_event.blank?
 
-    founders = timeline_event.founders
-    # Coach can view timeline event files.
-    return true if current_user_coaches?(record.timeline_event.target.course, founders)
+    students = timeline_event.founders
 
-    # Team members linked directly to the timeline event can access attached files.
-    founders.where(user_id: user&.id).exists?
+    # Coaches can view submission files.
+    return true if current_user_coaches?(timeline_event.target.course, students)
+
+    # Team members linked directly to the submission can access attached files.
+    students.where(user_id: user&.id).exists?
   end
 
   def create?

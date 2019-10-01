@@ -223,7 +223,7 @@ let make =
                             ++ "/versions"
                           }
                           title="Edit History"
-                          className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-700 border-r border-gray-400">
+                          className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 cursor-pointer text-gray-800 border-r border-gray-400">
                           <i className="fas fa-history text-sm" />
                           <span className="ml-2"> {"History" |> str} </span>
                         </a>
@@ -240,7 +240,7 @@ let make =
                               _ => dispatch(UpdateShowQuestionEdit(true))
                             }
                             title="Edit Question"
-                            className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-700 border-r border-gray-400 cursor-pointer">
+                            className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-800 border-r border-gray-400 cursor-pointer">
                             <i className="fas fa-edit text-sm" />
                             <span className="ml-2"> {"Edit" |> str} </span>
                           </a>
@@ -255,7 +255,8 @@ let make =
                     }
                   </div>
                   <div className="pt-7 px-3 md:px-6 flex flex-col">
-                    <h1 className="text-xl text-black font-semibold">
+                    <h1
+                      className="text-base md:text-xl text-black font-semibold break-words">
                       {state.question |> Question.title |> str}
                     </h1>
                   </div>

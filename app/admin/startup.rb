@@ -60,7 +60,6 @@ ActiveAdmin.register Startup do
     column :name
     column(:level) { |startup| startup.level.number }
     column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
-    column(:women_cofounders) { |startup| startup.founders.where(gender: Founder::GENDER_FEMALE).count }
   end
 
   action_item :view_feedback, only: :show do

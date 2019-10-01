@@ -29,6 +29,7 @@ describe TimelineEvents::UndoGradingService do
         expect(TimelineEventGrade.where(timeline_event: timeline_event).count).to eq(0)
         expect(timeline_event.passed_at).to eq(nil)
         expect(timeline_event.evaluator_id).to eq(nil)
+        expect(timeline_event.evaluated_at).to eq(nil)
       end
     end
 

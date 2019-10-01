@@ -1,6 +1,0 @@
-/ Populate options.
-- options = startup_feedback.startup.founders.map { |founder| [founder.name_and_email, founder.id] }
-
-= form_tag form_path, method: :post do
-  = select_tag :founder_id, options_for_select(options), class: 'admin-startup-feedback-show-founder-select'
-  = submit_tag 'Send DM'

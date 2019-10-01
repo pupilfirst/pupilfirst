@@ -1,13 +1,36 @@
 ---
 changelog:
+- timestamp: '2019-09-23T11:38:08Z'
+  changes:
+  - timestamp: '2019-09-23T11:34:12Z'
+    title: The feedback editor in the coach review interface now accepts Markdown.
+      There will be a bit of a downgrade in the experience for a short while, as the
+      editor doesn't have any UI elements to help with writing Markdown, but it introduces
+      support for tables, syntax-highlighted code-blocks, and much more. This was
+      done in preparation for a complete redesign of the review interface, which is
+      now underway.
+    category: feature
+  - timestamp: '2019-09-23T11:32:40Z'
+    title: The target editor in the school admin interface now supports versioning.
+      A daily snapshot of target content is taken whenever the content is edited,
+      the editor now includes a method to view previous verisons and to restore them,
+      if required.
+    category: feature
+  - timestamp: '2019-09-20T13:33:32Z'
+    title: When visiting a target's details page directly, the target's level is now
+      selected on the curriculum page underneath.
+    category: ui
+  - timestamp: '2019-09-16T13:03:08Z'
+    title: Linked targets are now displayed when viewing a question in the community.
+    category: feature
 - timestamp: '2019-09-02T11:35:11Z'
   changes:
   - timestamp: '2019-09-02T11:33:25Z'
     title: PupilFirst is now [open-source](https://git.pupilfirst.com)! This project's
       overall goal has always been to make modern tooling available in the field of
-      education, and to do so in a manner that promotes effective techniques for
-      improving student outcome. Going open-source allows us to be transparent about
-      the work that we do, and the changes we're making to the platform to aid that goal.
+      education, and to do so in a manner that promotes effective techniques for improving
+      student outcome. Going open-source allows us to be transparent about the work
+      that we do, and the changes we're making to the platform to aid that goal.
   - timestamp: '2019-09-02T10:31:45Z'
     title: The quiz editor in the school admin interface now has improved styling
       that makes the selected answer stand out in the list of possible answers - this

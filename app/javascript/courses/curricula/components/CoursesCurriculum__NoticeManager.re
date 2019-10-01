@@ -127,7 +127,7 @@ let computeNotice =
 let make =
     (
       ~levels,
-      ~teamLevel,
+      ~teamLevelId,
       ~targetGroups,
       ~targets,
       ~statusOfTargets,
@@ -135,6 +135,13 @@ let make =
       ~team,
       ~authenticityToken,
     ) => {
+  let teamLevel =
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == teamLevelId,
+         "Could not find teamLevel with ID " ++ teamLevelId,
+       );
+
   let (showNotice, _) =
     React.useState(() =>
       computeNotice(

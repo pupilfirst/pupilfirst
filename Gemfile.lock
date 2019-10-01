@@ -586,7 +586,6 @@ GEM
     rails-assets-slick-carousel (1.8.1)
       rails-assets-jquery (>= 1.7)
     rails-assets-tether (1.4.7)
-    rails-assets-trix (1.2.0)
     rails-assets-typedjs (2.0.9)
     rails-assets-waypoints (4.0.1)
     rails-dom-testing (2.0.3)
@@ -904,7 +903,6 @@ DEPENDENCIES
   rails-assets-readmore (~> 2.2)!
   rails-assets-slick-carousel (~> 1.6)!
   rails-assets-tether (~> 1.4)!
-  rails-assets-trix (~> 1.0)!
   rails-assets-typedjs (~> 2.0)!
   rails-assets-waypoints (~> 4.0)!
   rails_12factor (~> 0.0)

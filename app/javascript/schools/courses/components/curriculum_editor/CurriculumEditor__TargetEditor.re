@@ -71,7 +71,7 @@ type action =
   | UpdateContentEditorDirty(bool)
   | UpdateContentBlocks(list(ContentBlock.t), array(string))
   | SwitchPreviewMode
-  | LoadOldVersion(list(ContentBlock.t))
+  | LoadOldVersion(list(ContentBlock.t), string, array(string))
   | SelectVersion(string)
   | UpdateVersions(array(string))
   | UpdateCompletionInstructions(string);
@@ -364,9 +364,11 @@ let reducer = (state, action) =>
         },
       previewMode: contentBlocks |> List.length > 0 ? true : false,
     }
-  | LoadOldVersion(contentBlocks) => {
+  | LoadOldVersion(contentBlocks, selectedVersion, versions) => {
       ...state,
       contentBlocks,
+      selectedVersion,
+      versions,
       previewMode: true,
     }
   | SelectVersion(selectedVersion) => {
@@ -395,8 +397,8 @@ let handleEditorClosure = (hideEditorActionCB, state) =>
 
 module ContentBlocksQuery = [%graphql
   {|
-    query($targetId: ID!) {
-      contentBlocks(targetId: $targetId) {
+    query($targetId: ID!, $versionOn: Date ) {
+      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
         id
         blockType
         sortIndex
@@ -425,37 +427,6 @@ module ContentBlocksQuery = [%graphql
 |}
 ];
 
-module ContentBlocksVersionQuery = [%graphql
-  {|
-    query($targetId: ID!, $versionOn: Date! ) {
-      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
-        id
-        blockType
-        sortIndex
-        content {
-          ... on ImageBlock {
-            caption
-            url
-            filename
-          }
-          ... on FileBlock {
-            title
-            url
-            filename
-          }
-          ... on MarkdownBlock {
-            markdown
-          }
-          ... on EmbedBlock {
-            url
-            embedCode
-          }
-        }
-      }
-  }
-|}
-];
-
 module RestoreContentVersionMutation = [%graphql
   {|
    mutation($targetId: ID!, $versionOn: Date!) {
@@ -466,10 +437,11 @@ module RestoreContentVersionMutation = [%graphql
    |}
 ];
 
-let loadContentBlocks = (target, send, authenticityToken, ()) => {
+let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) => {
   let targetId = target |> Target.id;
+  let versionOn = Belt.Option.map(selectedVersion, Js.Json.string);
   let response =
-    ContentBlocksQuery.make(~targetId, ())
+    ContentBlocksQuery.make(~targetId, ~versionOn?, ())
     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
   response
   |> Js.Promise.then_(result => {
@@ -495,45 +467,17 @@ let loadContentBlocks = (target, send, authenticityToken, ()) => {
        let versions =
          result##versions
          |> Array.map(version => version |> Json.Decode.string);
-       send(UpdateContentBlocks(contentBlocks, versions));
+       switch (versionOn) {
+       | Some(versionOn) =>
+         send(LoadOldVersion(contentBlocks, versionOn |> Json.Decode.string, versions))
+       | None => send(UpdateContentBlocks(contentBlocks, versions))
+       };
        Js.Promise.resolve();
      })
   |> ignore;
   None;
 };
 
-let loadOldVersions = (target, send, versionOn, authenticityToken, ()) => {
-  let targetId = target |> Target.id;
-  let response =
-    ContentBlocksVersionQuery.make(~targetId, ~versionOn, ())
-    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
-  response
-  |> Js.Promise.then_(result => {
-       let contentBlocks =
-         result##contentBlocks
-         |> Js.Array.map(rawContentBlock => {
-              let id = rawContentBlock##id;
-              let sortIndex = rawContentBlock##sortIndex;
-              let blockType =
-                switch (rawContentBlock##content) {
-                | `MarkdownBlock(content) =>
-                  ContentBlock.Markdown(content##markdown)
-                | `FileBlock(content) =>
-                  File(content##url, content##title, content##filename)
-                | `ImageBlock(content) =>
-                  Image(content##url, content##caption)
-                | `EmbedBlock(content) =>
-                  Embed(content##url, content##embedCode)
-                };
-              ContentBlock.make(id, blockType, sortIndex);
-            })
-         |> Array.to_list;
-       send(LoadOldVersion(contentBlocks));
-       Js.Promise.resolve();
-     })
-  |> ignore;
-  None;
-};
 let currentDateString = () => Js.Date.make() |> DateFns.format("YYYY-MM-DD");
 
 let handleRestoreVersionCB =
@@ -560,18 +504,39 @@ let handleRestoreVersionCB =
     } :
     ();
 
-let addNewVersionCB = (dispatch, versions) => {
-    dispatch(UpdateVersions(versions))};
+let addNewVersionCB = (dispatch, versions) =>
+  dispatch(UpdateVersions(versions));
 
 let selectVersionCB =
-    (target, state, send, authenticityToken, selectedVersion) => {
-  let encodedVersion = selectedVersion |> Js.Json.string;
+    (target, state, send, authenticityToken, selectedVersion) =>
   selectedVersion == state.versions[0] ?
-    loadContentBlocks(target, send, authenticityToken, ()) |> ignore :
-    loadOldVersions(target, send, encodedVersion, authenticityToken, ())
+    loadContentBlocks(target, send, None, authenticityToken, ()) |> ignore :
+    (
+      switch (state.contentEditorDirty) {
+      | false =>
+        loadContentBlocks(
+          target,
+          send,
+          Some(selectedVersion),
+          authenticityToken,
+          (),
+        )
+      | true =>
+        Webapi.Dom.window
+        |> Webapi.Dom.Window.confirm(
+             "There are unsaved changes in the current version! Are you sure you want to switch version?",
+           ) ?
+          loadContentBlocks(
+            target,
+            send,
+            Some(selectedVersion),
+            authenticityToken,
+            (),
+          ) :
+          None
+      }
+    )
     |> ignore;
-  send(SelectVersion(selectedVersion));
-};
 
 let switchViewModeCB = (send, ()) => send(SwitchPreviewMode);
 
@@ -622,7 +587,7 @@ let make =
   let (state, dispatch) = React.useReducer(reducer, initialState);
 
   React.useEffect1(
-    loadContentBlocks(target, dispatch, authenticityToken),
+    loadContentBlocks(target, dispatch, None, authenticityToken),
     [|target |> Target.id|],
   );
 

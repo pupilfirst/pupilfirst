@@ -1,7 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   actions :index, :show
-  permit_params :description, :serialized_links,
-    :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file private _destroy]
+  permit_params :description, :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file _destroy]
 
   filter :founders_user_name, as: :string
   filter :evaluated
@@ -40,57 +39,8 @@ ActiveAdmin.register TimelineEvent do
     actions
   end
 
-  member_action :save_feedback, method: :post do
-    raise if params[:feedback].blank?
-
-    timeline_event = TimelineEvent.find(params[:id])
-
-    feedback = StartupFeedback.create!(
-      feedback: params[:feedback],
-      startup: timeline_event.startup,
-      faculty: current_admin_user&.faculty,
-      timeline_event: timeline_event
-    )
-
-    founder_params = feedback.for_founder? ? { founder_id: feedback.timeline_event.founder.id } : {}
-
-    render json: { feedback_id: feedback.id }.merge(founder_params)
-  end
-
-  member_action :send_slack_feedback, method: :post do
-    startup_feedback = StartupFeedback.find(params[:feedback_id])
-    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
-
-    begin
-      response = StartupFeedbackModule::SlackService.new(startup_feedback, founder: founder).send
-    rescue StartupFeedbackModule::SlackService::CommunicationFailure
-      render json: { error: 'Failed to communicate with Slack API' }, status: :internal_server_error
-    else
-      render json: { success: response }
-    end
-  end
-
-  member_action :send_email_feedback, method: :post do
-    startup_feedback = StartupFeedback.find(params[:feedback_id])
-    founder = Founder.find(params[:founder_id]) if params[:founder_id].present?
-    StartupFeedbackModule::EmailService.new(startup_feedback, founder: founder).send
-    head :ok
-  end
-
   action_item :view, only: :show do
     link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
-  end
-
-  action_item :feedback, only: :show do
-    link_to(
-      'Record New Feedback',
-      new_admin_startup_feedback_path(
-        startup_feedback: {
-          startup_id: timeline_event.startup.id,
-          timeline_event_id: timeline_event.id
-        }
-      )
-    )
   end
 
   collection_action :founders_for_startup do
@@ -139,21 +89,11 @@ ActiveAdmin.register TimelineEvent do
         column :file do |timeline_event_file|
           link_to timeline_event_file.filename, url_for(timeline_event_file.file), target: '_blank', rel: 'noopener'
         end
-
-        column :private
       end
 
       table_for timeline_event.links do
-        column :title do |link|
-          link_to link[:title], link[:url], target: '_blank', rel: 'noopener'
-        end
-
         column :url do |link|
-          link_to link[:url], link[:url], target: '_blank', rel: 'noopener'
-        end
-
-        column :private do |link|
-          link[:private] ? status_tag('Yes') : status_tag('No')
+          link_to link, target: '_blank', rel: 'noopener'
         end
       end
     end
@@ -172,7 +112,7 @@ ActiveAdmin.register TimelineEvent do
           column(:faculty) { |feedback_entry| feedback_entry.faculty.name }
 
           column(:feedback) do |feedback_entry|
-            feedback_entry.feedback.html_safe
+            pre feedback_entry.feedback
           end
 
           column(:created_at)

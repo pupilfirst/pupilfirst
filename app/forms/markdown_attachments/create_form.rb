@@ -7,7 +7,7 @@ module MarkdownAttachments
     validate :prevent_abuse
 
     def prevent_abuse
-      return if current_user.markdown_attachments.where('created_at >= ?', Time.zone.now.beginning_of_day).count < 50
+      return if current_user.markdown_attachments.where('created_at >= ?', Time.zone.now.beginning_of_day).count < Rails.application.secrets.max_daily_markdown_attachments
 
       errors[:base] << 'You have exceeded the number of attachments allowed per day.'
     end

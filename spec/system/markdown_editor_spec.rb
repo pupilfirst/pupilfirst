@@ -59,4 +59,35 @@ feature 'Markdown editor', js: true do
       %r{\[pdf-sample\.pdf\]\(/markdown_attachments/#{pdf_attachment.id}/[a-zA-Z0-9\-_]{22}\)}
     )
   end
+
+  context 'when the user has already attached a lot of files today' do
+    around do |example|
+      original_value = Rails.application.secrets.max_daily_markdown_attachments
+      Rails.application.secrets.max_daily_markdown_attachments = 1
+
+      example.run
+
+      Rails.application.secrets.max_daily_markdown_attachments = original_value
+    end
+
+    scenario 'user exceeds daily attachment limit' do
+      sign_in_user(student.user, referer: new_question_community_path(community))
+      fill_in 'Question', with: 'This is a title.'
+
+      attach_file("You can attach files by clicking here and selecting one.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
+
+      expect(page).to have_text('logo_lipsum_on_light_bg.png')
+
+      click_button('Post Your Question')
+      expect(page).to have_text('0 Answers')
+
+      # Let's try filling in an answer with an attachment.
+      attach_file("You can attach files by clicking here and selecting one.", sample_file_path('pdf-sample.pdf'), visible: false)
+
+      expect(page).to have_text('You have exceeded the number of attachments allowed per day.')
+      expect(page).not_to have_text('logo_lipsum_on_light_bg.png')
+
+      expect(MarkdownAttachment.count).to eq(1)
+    end
+  end
 end

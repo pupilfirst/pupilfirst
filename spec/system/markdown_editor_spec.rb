@@ -38,6 +38,9 @@ feature 'Markdown editor', js: true do
 
     expect(page).to have_text('pdf-sample.pdf')
 
+    # Both attachments should not have been accessed at this point.
+    expect(MarkdownAttachment.where(last_accessed_at: nil).count).to eq(2)
+
     click_button('Post Your Question')
     expect(page).to have_text('0 Answers')
 
@@ -58,6 +61,14 @@ feature 'Markdown editor', js: true do
     expect(last_question.description).to match(
       %r{\[pdf-sample\.pdf\]\(/markdown_attachments/#{pdf_attachment.id}/[a-zA-Z0-9\-_]{22}\)}
     )
+
+    # The attachment should have been linked to the uploading user.
+    expect(image_attachment.user).to eq(student.user)
+    expect(pdf_attachment.user).to eq(student.user)
+
+    # The image attachment should have been accessed at this point.
+    expect(MarkdownAttachment.where(last_accessed_at: nil).count).to eq(1)
+    expect(image_attachment.last_accessed_at).to be_present
   end
 
   context 'when the user has already attached a lot of files today' do

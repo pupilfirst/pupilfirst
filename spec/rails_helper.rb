@@ -55,7 +55,7 @@ ActiveRecord::Migration.maintain_test_schema!
 service_bug_counter = 0
 
 begin
-  ActiveStorage::Blob.service = ActiveStorage::Service.configure(:test, test: { service: :Disk, root: Rails.root.join('tmp', 'storage') })
+  ActiveStorage::Blob.service = ActiveStorage::Service.configure(:test, test: { service: 'Disk', root: Rails.root.join('tmp', 'storage') })
 
   if service_bug_counter.zero?
     puts "[NOTICE] Workaround for ActiveStorage::Blob.service assignment wasn't triggered. Consider removing it."

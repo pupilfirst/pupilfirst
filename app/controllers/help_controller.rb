@@ -10,7 +10,7 @@ class HelpController < ApplicationController
   private
 
   def document_filename
-    @document_filename ||= params[:document] == 'markdown' ? 'markdown.md' : nil
+    @document_filename ||= params[:document] == 'markdown-editor' ? 'markdown-editor.md' : nil
   end
 
   def validate_document

@@ -439,7 +439,7 @@ let make =
               }
             </form>
             <a
-              href="/help/markdown"
+              href="/help/markdown-editor"
               target="_blank"
               className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
               <FaIcon classes="fab fa-markdown text-sm" />

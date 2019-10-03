@@ -39,6 +39,7 @@ feature 'User Home' do
 
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
+  let(:school_admin) { create :school_admin, school: school }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course_1
@@ -96,8 +97,10 @@ feature 'User Home' do
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_1.description)
-    expect(page).to have_link("Review", href: course_coach_dashboard_path(course_1))
-    expect(page).to have_link("Review Submissions", href: course_coach_dashboard_path(course_1))
+    expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
+    expect(page).to have_link("Review", href: review_course_path(course_1))
+    expect(page).to have_link("Review Submissions", href: review_course_path(course_1))
+    expect(page).to have_link("Review (Legacy)", href: course_coach_dashboard_path(course_1))
 
     expect(page).not_to have_text(course_2.name)
     expect(page).not_to have_text(course_3.name)
@@ -115,14 +118,37 @@ feature 'User Home' do
 
     expect(page).to have_text(course_2.name)
     expect(page).to have_text(course_2.description)
-    expect(page).to have_link("Review", href: course_coach_dashboard_path(course_2))
-    expect(page).to have_link("Review Submissions", href: course_coach_dashboard_path(course_2))
+    expect(page).to have_link("Curriculum", href: curriculum_course_path(course_2))
+    expect(page).to have_link("Review", href: review_course_path(course_2))
+    expect(page).to have_link("Review Submissions", href: review_course_path(course_2))
+    expect(page).to have_link("Review (Legacy)", href: course_coach_dashboard_path(course_2))
 
     expect(page).not_to have_text(course_1.name)
     expect(page).not_to have_text(course_3.name)
     expect(page).not_to have_text(course_4.name)
 
     # team_coach has access to all communities in school
+    expect(page).to have_text(community_1.name)
+    expect(page).to have_text(community_2.name)
+    expect(page).to have_text(community_3.name)
+    expect(page).to have_text(community_4.name)
+  end
+
+  scenario 'When a school admin visits home', js: true do
+    sign_in_user(school_admin.user, referer: home_path)
+
+    expect(page).to have_text(course_1.name)
+    expect(page).to have_text(course_2.name)
+    expect(page).to have_text(course_3.name)
+    expect(page).to have_text(course_4.name)
+
+    # school admin can preview all courses in school
+    expect(page).to have_link("View Course", href: curriculum_course_path(course_1))
+    expect(page).to have_link("View Course", href: curriculum_course_path(course_2))
+    expect(page).to have_link("View Course", href: curriculum_course_path(course_3))
+    expect(page).to have_link("View Course", href: curriculum_course_path(course_4))
+
+    # school admin has access to all communities in school
     expect(page).to have_text(community_1.name)
     expect(page).to have_text(community_2.name)
     expect(page).to have_text(community_3.name)

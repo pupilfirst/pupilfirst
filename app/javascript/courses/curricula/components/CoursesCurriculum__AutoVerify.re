@@ -69,6 +69,17 @@ let createAutoVerifySubmission =
 let completeButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
+let previewLinkToComplete = link =>
+  <a
+    href=link
+    target="_blank"
+    className="block text-primary-500 w-full text-center bg-gray-200 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
+    <span>
+      <FaIcon classes="fas fa-external-link-alt mr-2" />
+      {"Visit Link " |> str}
+    </span>
+  </a>;
+
 let autoVerify =
     (
       target,
@@ -79,31 +90,36 @@ let autoVerify =
       addSubmissionCB,
       preview,
     ) =>
-  <button
-    disabled={saving || preview}
-    className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
-    onClick={
-      createAutoVerifySubmission(
-        authenticityToken,
-        target,
-        linkToComplete,
-        setSaving,
-        addSubmissionCB,
-      )
-    }>
-    {
-      switch (saving, linkToComplete) {
-      | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
-      | (false, Some(_)) =>
-        completeButtonText(
-          "Visit Link To Complete",
-          "fas fa-external-link-alt",
+  /* Handle special case for preview mode with link to complete */
+  switch (preview, linkToComplete) {
+  | (true, Some(link)) => previewLinkToComplete(link)
+  | _ =>
+    <button
+      disabled={saving || preview}
+      className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
+      onClick={
+        createAutoVerifySubmission(
+          authenticityToken,
+          target,
+          linkToComplete,
+          setSaving,
+          addSubmissionCB,
         )
-      | (false, None) =>
-        completeButtonText("Mark As Complete", "fas fa-check-square")
+      }>
+      {
+        switch (saving, linkToComplete) {
+        | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
+        | (false, Some(_)) =>
+          completeButtonText(
+            "Visit Link To Complete",
+            "fas fa-external-link-alt",
+          )
+        | (false, None) =>
+          completeButtonText("Mark As Complete", "fas fa-check-square")
+        }
       }
-    }
-  </button>;
+    </button>
+  };
 
 let statusBar = (string, linkToComplete) => {
   let defaultClasses = "font-bold p-4 flex w-full items-center text-green-500 bg-green-100 justify-center";

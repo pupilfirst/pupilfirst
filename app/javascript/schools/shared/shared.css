@@ -179,7 +179,6 @@
   background-color: #FBFAFC;
   overflow-x: hidden;
   overflow-y: scroll;
-  @apply .text-sm;
 }
 
 .drawer-right-form__input {

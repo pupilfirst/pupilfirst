@@ -1,0 +1,5 @@
+---
+timestamp: '2019-09-30T08:03:00Z'
+title: The markdown editor now support direct file uploads. Image files will be embedded
+  inline whereas all other file types will be treated as a Markdown-formatted links.
+category: feature

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_one :school_admin, dependent: :restrict_with_error
+  has_many :markdown_attachments, dependent: :restrict_with_error
 
   has_secure_token :login_token
   has_secure_token :reset_password_token
@@ -15,7 +16,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
     omniauth_providers: %i[google_oauth2 facebook github]
 
-  normalize_attribute :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
+  normalize_attribute :name, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id, :affiliation
 
@@ -24,16 +25,6 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
-
-  GENDER_MALE = 'male'.freeze
-  GENDER_FEMALE = 'female'.freeze
-  GENDER_OTHER = 'other'.freeze
-
-  def self.valid_gender_values
-    [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
-  end
-
-  validates :gender, inclusion: { in: valid_gender_values }, allow_nil: true
 
   before_save :capitalize_name_fragments
 

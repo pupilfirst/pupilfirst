@@ -194,19 +194,19 @@ class Target < ApplicationRecord
   end
 
   def latest_content_version_date
-    return if content_versions.blank?
+    return if content_versions.empty?
 
     content_versions.maximum(:version_on)
   end
 
   def current_content_blocks
-    return if content_versions.blank?
+    return if content_versions.empty?
 
     ContentBlock.where(id: content_versions.where(version_on: latest_content_version_date).select(:content_block_id))
   end
 
   def latest_content_versions
-    return if content_versions.blank?
+    return if content_versions.empty?
 
     content_versions.where(version_on: latest_content_version_date)
   end

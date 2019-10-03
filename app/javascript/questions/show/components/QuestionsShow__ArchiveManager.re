@@ -52,7 +52,7 @@ let make = (~authenticityToken, ~id, ~resourceType, ~archiveCB) => {
     onClick={
       archive(authenticityToken, id, resourceType, archiveCB, setSaving)
     }
-    className="flex items-center justify-center whitespace-no-wrap text-xs font-semibold py-1 px-3 flex-shrink-0 bg-transparent text-red-400 hover:bg-red-100 hover:text-red-800 cursor-pointer">
+    className="flex items-center justify-center whitespace-no-wrap text-xs font-semibold py-1 px-3 flex-shrink-0 bg-transparent text-red-700 hover:bg-red-100 hover:text-red-900 cursor-pointer">
     {
       saving ?
         <FaIcon classes="fas fa-spinner fa-spin" /> :

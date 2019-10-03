@@ -1,4 +1,8 @@
 [@bs.config {jsx: 3}];
+
+exception FormNotFound(string);
+exception UnexpectedResponse(int);
+
 [%bs.raw {|require("./MarkdownEditor.css")|}];
 
 module DraftEditor = {
@@ -12,7 +16,8 @@ module DraftEditor = {
       ~ariaLabelledBy: string=?,
       ~placeholder: string=?,
       ~command: string=?,
-      ~commandAt: string=?
+      ~commandAt: string=?,
+      ~insertText: string=?
     ) =>
     React.element =
     "default";
@@ -33,20 +38,36 @@ type defaultView =
 
 let str = React.string;
 
+type attachmentError = option(string);
+
+type attachment =
+  | AttachingFile
+  | ReadyToAttachFile(attachmentError);
+
 type state = {
-  description: string,
+  markdown: string,
   preview: bool,
   commandPair,
+  attachment,
+  insertText: option(string),
 };
 
 type action =
-  | UpdateDescription(string)
+  | UpdateMarkdown(string)
   | TogglePreview
-  | SetCommand(command);
+  | SetCommand(command)
+  | SetAttaching
+  | SetAttachmentError(attachmentError)
+  | AddAttachment(string);
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateDescription(description) => {...state, description}
+  | UpdateMarkdown(markdown) => {...state, markdown}
+  | AddAttachment(markdownEmbedCode) => {
+      ...state,
+      insertText: Some(markdownEmbedCode),
+      attachment: ReadyToAttachFile(None),
+    }
   | TogglePreview => {
       ...state,
       preview: !state.preview,
@@ -54,20 +75,26 @@ let reducer = (state, action) =>
         command: None,
         commandAt: None,
       },
+      insertText: None,
     }
   | SetCommand(command) =>
     let commandAt = Js.Date.now() |> Js.Float.toString;
     let commandPair = {command: Some(command), commandAt: Some(commandAt)};
     {...state, commandPair};
+  | SetAttaching => {...state, attachment: AttachingFile}
+  | SetAttachmentError(error) => {
+      ...state,
+      attachment: ReadyToAttachFile(error),
+    }
   };
 
-let updateDescription = (value, description, send, updateDescriptionCB) =>
-  value == description ?
-    () :
-    {
-      send(UpdateDescription(description));
-      updateDescriptionCB(description);
-    };
+let addAttachment = (markdownEmbedCode, send) =>
+  send(AddAttachment(markdownEmbedCode));
+
+let updateMarkdown = (markdown, send, updateMarkdownCB) => {
+  send(UpdateMarkdown(markdown));
+  updateMarkdownCB(markdown);
+};
 
 type previewButtonPosition =
   | PositionRight
@@ -101,9 +128,9 @@ let buttons = (state, send, previewButtonPosition) => {
 
   let previewOrEditButton =
     (
-      switch (state.description) {
+      switch (state.markdown) {
       | "" => React.null
-      | _someDescription =>
+      | _someMarkdown =>
         <button
           key="preview-button"
           className=classes
@@ -144,12 +171,124 @@ let buttons = (state, send, previewButtonPosition) => {
   |> React.array;
 };
 
+let handleApiError =
+  [@bs.open]
+  (
+    fun
+    | UnexpectedResponse(code) => code
+  );
+
+let attachmentEmbedGap = oldMarkdown =>
+  if (oldMarkdown == "") {
+    "";
+  } else if (oldMarkdown |> Js.String.substr(~from=-1) == "\n") {
+    "\n";
+  } else {
+    "\n\n";
+  };
+
+let uploadFile = (send, oldMarkdown, updateMarkdownCB, formData) =>
+  Js.Promise.(
+    Fetch.fetchWithInit(
+      "/markdown_attachments/",
+      Fetch.RequestInit.make(
+        ~method_=Post,
+        ~body=Fetch.BodyInit.makeWithFormData(formData),
+        ~credentials=Fetch.SameOrigin,
+        (),
+      ),
+    )
+    |> then_(response =>
+         if (Fetch.Response.ok(response)) {
+           response |> Fetch.Response.json;
+         } else {
+           Js.Promise.reject(
+             UnexpectedResponse(response |> Fetch.Response.status),
+           );
+         }
+       )
+    |> then_(json => {
+         let errors = json |> Json.Decode.(field("errors", array(string)));
+
+         if (errors == [||]) {
+           let markdownEmbedCode =
+             json |> Json.Decode.(field("markdownEmbedCode", string));
+
+           addAttachment("\n" ++ markdownEmbedCode ++ "\n", send);
+         } else {
+           send(
+             SetAttachmentError(
+               Some(
+                 "Failed to attach file! "
+                 ++ (errors |> Js.Array.joinWith(", ")),
+               ),
+             ),
+           );
+         };
+         resolve();
+       })
+    |> catch(error =>
+         (
+           switch (error |> handleApiError) {
+           | Some(code) =>
+             Notification.error(
+               "Error " ++ (code |> string_of_int),
+               "Please reload the page and try again.",
+             )
+           | None =>
+             Notification.error(
+               "Something went wrong!",
+               "Our team has been notified of this error. Please reload the page and try again.",
+             )
+           }
+         )
+         |> resolve
+       )
+    |> ignore
+  );
+
+let submitForm = (formId, send, oldMarkdown, updateMarkdownCB) => {
+  let element = ReactDOMRe._getElementById(formId);
+  switch (element) {
+  | Some(element) =>
+    DomUtils.FormData.create(element)
+    |> uploadFile(send, oldMarkdown, updateMarkdownCB)
+  | None => raise(FormNotFound(formId))
+  };
+};
+
+let attachFile = (send, oldMarkdown, updateMarkdownCB, fileFormId, event) =>
+  switch (ReactEvent.Form.target(event)##files) {
+  | [||] => ()
+  | files =>
+    let file = files[0];
+    let maxFileSize = 5 * 1024 * 1024;
+
+    let error =
+      file##size > maxFileSize ?
+        Some("The maximum file size is 5 MB. Please select another file.") :
+        None;
+
+    switch (error) {
+    | Some(_) => send(SetAttachmentError(error))
+    | None =>
+      send(SetAttaching);
+      submitForm(fileFormId, send, oldMarkdown, updateMarkdownCB);
+    };
+  };
+
+let isEditorDisabled = attachment =>
+  switch (attachment) {
+  | AttachingFile => true
+  | ReadyToAttachFile(_) => false
+  };
+
 [@react.component]
 let make =
     (
       ~textareaId=?,
       ~placeholder=?,
-      ~updateDescriptionCB,
+      ~updateMarkdownCB,
       ~value,
       ~label=?,
       ~profile,
@@ -160,7 +299,7 @@ let make =
     React.useReducer(
       reducer,
       {
-        description: value,
+        markdown: value,
         preview:
           switch (defaultView) {
           | Preview => true
@@ -170,6 +309,8 @@ let make =
           command: None,
           commandAt: None,
         },
+        attachment: ReadyToAttachFile(None),
+        insertText: None,
       },
     );
 
@@ -184,6 +325,9 @@ let make =
         ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
       }
     );
+
+  let fileFormId = id ++ "-file-form";
+  let fileInputId = id ++ "-file-input";
 
   let (label, previewButtonPosition) =
     switch (label) {
@@ -209,7 +353,7 @@ let make =
     {
       if (state.preview) {
         <MarkdownBlock
-          markdown={state.description}
+          markdown={state.markdown}
           className="pb-3 pt-2 leading-normal text-sm px-3 border border-transparent bg-gray-100 markdown-editor-preview"
           profile
         />;
@@ -220,17 +364,90 @@ let make =
           | Some(c) => Some(c |> commandToString)
           };
 
-        <DraftEditor
-          ariaLabelledBy=id
-          ?placeholder
-          content={state.description}
-          onChange={
-            content =>
-              updateDescription(value, content, send, updateDescriptionCB)
-          }
-          ?command
-          commandAt=?{state.commandPair.commandAt}
-        />;
+        <div
+          className="markdown-draft-editor__container text-sm border border-gray-400 rounded flex flex-col overflow-hidden">
+          <DisablingCover
+            disabled={isEditorDisabled(state.attachment)}
+            message="Uploading..."
+            containerClasses="flex flex-grow">
+            <DraftEditor
+              ariaLabelledBy=id
+              ?placeholder
+              content={state.markdown}
+              onChange={
+                newMarkdownContent =>
+                  value == newMarkdownContent ?
+                    () :
+                    updateMarkdown(newMarkdownContent, send, updateMarkdownCB)
+              }
+              ?command
+              commandAt=?{state.commandPair.commandAt}
+              insertText=?{state.insertText}
+            />
+          </DisablingCover>
+          <div
+            className="bg-gray-100 flex-grow-0 border-t border-primary-200 border-dashed text-sm flex justify-between">
+            <form className="flex items-center flex-wrap" id=fileFormId>
+              <input
+                name="authenticity_token"
+                type_="hidden"
+                value={AuthenticityToken.fromHead()}
+              />
+              <input
+                className="hidden"
+                type_="file"
+                name="markdown_attachment[file]"
+                id=fileInputId
+                multiple=false
+                onChange={
+                  attachFile(
+                    send,
+                    state.markdown,
+                    updateMarkdownCB,
+                    fileFormId,
+                  )
+                }
+              />
+              {
+                switch (state.attachment) {
+                | ReadyToAttachFile(error) =>
+                  <label
+                    className="pl-3 py-1 flex-grow cursor-pointer"
+                    htmlFor=fileInputId>
+                    {
+                      switch (error) {
+                      | Some(error) =>
+                        <span className="text-red-500">
+                          <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+                          {error |> str}
+                        </span>
+                      | None =>
+                        <span>
+                          <FaIcon classes="far fa-file-image mr-2" />
+                          {"Click here to attach a file." |> str}
+                        </span>
+                      }
+                    }
+                  </label>
+                | AttachingFile =>
+                  <span className="pl-3 py-1 flex-grow cursor-wait">
+                    <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
+                    {"Please wait for the file to upload..." |> str}
+                  </span>
+                }
+              }
+            </form>
+            <a
+              href="/help/markdown"
+              target="_blank"
+              className="px-3 py-1 hover:text-secondary-500 cursor-pointer">
+              <FaIcon classes="fab fa-markdown" />
+              <span className="text-xs ml-1 font-semibold hidden sm:inline">
+                {"Need help?" |> str}
+              </span>
+            </a>
+          </div>
+        </div>;
       }
     }
   </div>;
@@ -242,7 +459,7 @@ module Jsx2 = {
   let make =
       (
         ~placeholder,
-        ~updateDescriptionCB,
+        ~updateMarkdownCB,
         ~value,
         ~label,
         ~profile,
@@ -254,7 +471,7 @@ module Jsx2 = {
       make,
       makeProps(
         ~placeholder,
-        ~updateDescriptionCB,
+        ~updateMarkdownCB,
         ~value,
         ~label,
         ~profile,

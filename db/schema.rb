@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_24_070216) do
+ActiveRecord::Schema.define(version: 2019_10_01_125519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -374,6 +374,15 @@ ActiveRecord::Schema.define(version: 2019_09_24_070216) do
     t.bigint "course_id"
     t.index ["course_id"], name: "index_levels_on_course_id"
     t.index ["number"], name: "index_levels_on_number"
+  end
+
+  create_table "markdown_attachments", force: :cascade do |t|
+    t.string "token"
+    t.datetime "last_accessed_at"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
   end
 
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
@@ -741,7 +750,6 @@ ActiveRecord::Schema.define(version: 2019_09_24_070216) do
     t.datetime "login_mail_sent_at"
     t.string "name"
     t.string "phone"
-    t.string "gender"
     t.string "communication_address"
     t.string "title"
     t.string "key_skills"
@@ -824,6 +832,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_070216) do
   add_foreign_key "founders", "users"
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
+  add_foreign_key "markdown_attachments", "users"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"

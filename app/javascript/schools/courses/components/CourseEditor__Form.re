@@ -251,9 +251,9 @@ let booleanButtonClasses = bool => {
 };
 
 let enablePublicSignupButton = (publicSignup, send) =>
-  <div className="flex items-center mb-6">
+  <div className="flex items-center mt-5">
     <label
-      className="block tracking-wide text-gray-800 text-xs font-semibold mr-6"
+      className="block tracking-wide text-xs font-semibold mr-6"
       htmlFor="public-signup">
       {"Enable public signup for this course?" |> str}
     </label>
@@ -274,9 +274,9 @@ let enablePublicSignupButton = (publicSignup, send) =>
   </div>;
 
 let enableLeaderboardButton = (enableLeaderboard, send) =>
-  <div className="flex items-center mb-6">
+  <div className="flex items-center mt-5">
     <label
-      className="block tracking-wide text-gray-800 text-xs font-semibold mr-6"
+      className="block tracking-wide text-xs font-semibold mr-6"
       htmlFor="leaderboard">
       {"Enable Leaderboard for this course?" |> str}
     </label>
@@ -415,92 +415,110 @@ let make =
             <div className="mx-auto bg-white">
               <div className="max-w-2xl p-6 mx-auto">
                 <h5
-                  className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+                  className="uppercase text-center border-b border-gray-400 pb-2">
                   {"Course Details" |> str}
                 </h5>
-                <label
-                  className="inline-block tracking-wide text-xs font-semibold mb-2"
-                  htmlFor="name">
-                  {"Course Name" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="name"
-                  type_="text"
-                  placeholder="Type course name here"
-                  value={state.name}
-                  onChange={
-                    event =>
-                      updateName(send, ReactEvent.Form.target(event)##value)
+                <div className="mt-5">
+                  <label
+                    className="inline-block tracking-wide text-xs font-semibold "
+                    htmlFor="name">
+                    {"Course Name" |> str}
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="name"
+                    type_="text"
+                    placeholder="Type course name here"
+                    value={state.name}
+                    onChange={
+                      event =>
+                        updateName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                  {
+                    state.hasNameError ?
+                      <div className="drawer-right-form__error-msg">
+                        <span className="mr-2">
+                          <i className="fas fa-exclamation-triangle" />
+                        </span>
+                        <span> {"not a valid name" |> str} </span>
+                      </div> :
+                      ReasonReact.null
                   }
-                />
-                {
-                  state.hasNameError ?
-                    <div className="drawer-right-form__error-msg">
-                      {"not a valid name" |> str}
-                    </div> :
-                    ReasonReact.null
-                }
-                <label
-                  className="inline-block tracking-wide text-xs font-semibold mb-2"
-                  htmlFor="description">
-                  {"Course Description" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="description"
-                  type_="text"
-                  placeholder="Type course description here"
-                  value={state.description}
-                  onChange={
-                    event =>
-                      updateDescription(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                  }
-                />
+                </div>
+                <div className="mt-5">
+                  <label
+                    className="inline-block tracking-wide text-xs font-semibold"
+                    htmlFor="description">
+                    {"Course Description" |> str}
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="description"
+                    type_="text"
+                    placeholder="Type course description here"
+                    value={state.description}
+                    onChange={
+                      event =>
+                        updateDescription(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                </div>
                 {
                   state.hasDescriptionError ?
                     <div className="drawer-right-form__error-msg">
-                      {
-                        "Supplied description must be between 1 and 150 characters in length"
-                        |> str
-                      }
+                      <span className="mr-2">
+                        <i className="fas fa-exclamation-triangle" />
+                      </span>
+                      <span>
+                        {
+                          "Supplied description must be between 1 and 150 characters in length"
+                          |> str
+                        }
+                      </span>
                     </div> :
                     ReasonReact.null
                 }
-                <label
-                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
-                  htmlFor="date">
-                  {"Course ends on" |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="date"
-                  type_="text"
-                  placeholder="YYYY-MM-DD"
-                  value=endsAt
-                  onChange={
-                    event =>
-                      updateEndsAt(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                  }
-                />
+                <div className="mt-5">
+                  <label
+                    className="block tracking-wide text-xs font-semibold"
+                    htmlFor="date">
+                    {"Course ends on" |> str}
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="date"
+                    type_="text"
+                    placeholder="YYYY-MM-DD"
+                    value=endsAt
+                    onChange={
+                      event =>
+                        updateEndsAt(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
+                    }
+                  />
+                </div>
                 {
                   state.hasDateError ?
                     <div className="drawer-right-form__error-msg">
-                      {"not a valid date" |> str}
+                      <span className="mr-2">
+                        <i className="fas fa-exclamation-triangle" />
+                      </span>
+                      <span> {"not a valid date" |> str} </span>
                     </div> :
                     ReasonReact.null
                 }
-                <div id="About" className="mb-4">
+                <div id="About" className="mt-5">
                   <MarkdownEditor.Jsx2
-                    updateDescriptionCB={updateAboutCB(send)}
+                    updateMarkdownCB={updateAboutCB(send)}
                     value={state.about}
                     placeholder="Add more details about the course."
                     label="About"
@@ -521,7 +539,7 @@ let make =
                 </h5>
                 <div className="mb-4">
                   <span
-                    className="inline-block tracking-wide text-gray-800 text-sm font-semibold mr-2"
+                    className="inline-block tracking-wide text-sm font-semibold mr-2"
                     htmlFor="max_grades">
                     {"Maximum grade is" |> str}
                   </span>
@@ -562,7 +580,7 @@ let make =
                     }
                   }
                   <span
-                    className="inline-block tracking-wide text-gray-800 text-sm font-semibold mx-2"
+                    className="inline-block tracking-wide text-sm font-semibold mx-2"
                     htmlFor="pass_grades">
                     {"and the passing grade is" |> str}
                   </span>
@@ -604,7 +622,7 @@ let make =
                   }
                 </div>
                 <label
-                  className="block tracking-wide text-gray-800 text-xs font-semibold mb-2"
+                  className="block tracking-wide text-xs font-semibold mb-2"
                   htmlFor="grades">
                   {"Grades" |> str}
                 </label>
@@ -635,7 +653,7 @@ let make =
                                  |> string_of_int
                                }>
                                <input
-                                 className="text-center grades__label-input appearance-none inline-block bg-white text-gray-800 border border-gray-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                 className="text-center grades__label-input appearance-none inline-block bg-white border border-gray-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                  id={
                                    "label"
                                    ++ (

@@ -3,7 +3,7 @@ ActiveAdmin.register Founder do
 
   permit_params :name, :remote_avatar_url, :avatar, :startup_id, :about, :communication_address, :phone,
     :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
-    :behance_url, :gender, :skype_id, :exited, :excluded_from_leaderboard, roles: [], tag_list: []
+    :behance_url, :skype_id, :exited, :excluded_from_leaderboard, roles: [], tag_list: []
 
   controller do
     include DisableIntercom
@@ -87,7 +87,6 @@ ActiveAdmin.register Founder do
     end
 
     column :phone
-    column :gender
     column :communication_address
     column :about
 
@@ -136,7 +135,6 @@ ActiveAdmin.register Founder do
       end
 
       row :about
-      row :gender
       row :slack_username
       row :slack_user_id
       row 'Skype Id' do

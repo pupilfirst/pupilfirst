@@ -1,10 +1,5 @@
 ActiveAdmin.register Target do
-  actions :all, except: [:destroy]
-
-  permit_params :faculty_id, :role, :title, :description, :rubric_description, :resource_url, :completion_instructions, :days_to_complete,
-    :slideshow_embed, :video_embed, :completed_at, :completion_comment, :link_to_complete, :archived, :target_group_id, :target_action_type,
-    :sort_index, :youtube_video_id, :session_at, :session_by, :call_to_action,
-    prerequisite_target_ids: [], tag_list: [], evaluation_criterion_ids: []
+  actions :index, :show
 
   filter :title
   filter :archived
@@ -123,10 +118,6 @@ ActiveAdmin.register Target do
         end
       end
 
-      row :description do
-        target.description.html_safe
-      end
-
       row :youtube_video_id do
         if target.youtube_video_id.present?
           span do
@@ -151,27 +142,10 @@ ActiveAdmin.register Target do
       row :link_to_complete
       row :resubmittable
       row :rubric_description
+
       row :archived do
         div class: 'target-show__archival-status' do
           target.archived ? 'Yes' : 'No'
-        end
-
-        div class: 'target-show__archive-button' do
-          span do
-            if !target.archived?
-              button_to(
-                'Archive Target',
-                archive_target_admin_target_path(target: { archived: true }),
-                method: :put, data: { confirm: 'Are you sure you want to archive this target? This will wipe the pre-requisite mappings of this target if any' }
-              )
-            else
-              button_to(
-                'Unarchive Target',
-                archive_target_admin_target_path(target: { archived: false }),
-                method: :put, data: { confirm: 'Are you sure you want to unarchive this target?' }
-              )
-            end
-          end
         end
       end
 
@@ -223,6 +197,7 @@ ActiveAdmin.register Target do
     column :resource_url
     column :days_to_complete
     column :resubmittable
+
     column :archived do |target|
       target.archived? ? 'Yes' : 'No'
     end
@@ -253,67 +228,5 @@ ActiveAdmin.register Target do
     Targets::CreateOrUpdateCalendarEventJob.perform_later(target, current_admin_user)
     flash[:success] = "Google Calendar invitation will be created / updated shortly. You should receive an email in a few minutes with results."
     redirect_to admin_target_path(target)
-  end
-
-  member_action :archive_target, method: :put do
-    target = Target.find params[:id]
-    params = permitted_params[:target]
-
-    service = Targets::ArchivalService.new(target)
-    params[:archived] == 'true' ? service.archive : service.unarchive
-
-    message_text = params[:archived] == 'true' ? 'archived' : 'unarchived'
-    flash[:success] = "Target #{message_text} successfully!"
-    redirect_to action: :show
-  end
-
-  form do |f|
-    presenter = Admin::Targets::FormPresenter.new(target)
-    div id: 'admin-target__edit'
-
-    f.semantic_errors(*f.object.errors.keys)
-
-    f.inputs name: 'Target Details' do
-      f.input :role, as: :select, collection: Target.valid_roles.map { |r| [t("models.target.role.#{r}"), r] }, include_blank: false
-      f.input :title
-      f.input :session_at, as: :string, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i:s O' } }
-      f.input :tag_list, as: :select, collection: Target.tag_counts_on(:tags).pluck(:name), multiple: true
-
-      f.input :description, as: :hidden
-
-      div class: 'label-replica' do
-        text_node 'Description'
-        abbr(title: 'required') { '*' }
-      end
-
-      insert_tag(Arbre::HTML::Div) { content_tag 'trix-editor', nil, class: 'input-replica' + ' ' + presenter.error_class, input: 'target_description' }
-
-      if resource.errors[:description].present?
-        para(class: 'inline-errors-replica') { resource.errors[:description][0] }
-      end
-
-      f.input :target_action_type, collection: Target.valid_target_action_types
-
-      if presenter.valid_prerequisites.exists?
-        f.input :prerequisite_targets, collection: presenter.valid_prerequisites
-      end
-
-      f.input :youtube_video_id, label: 'YouTube Video ID', placeholder: 'For eg. S0PEA3R-6TU'
-      f.input :video_embed
-      f.input :slideshow_embed
-      f.input :resource_url
-      f.input :completion_instructions
-      f.input :call_to_action
-      f.input :link_to_complete
-      f.input :faculty, collection: Faculty.order(:name), include_blank: 'No linked faculty'
-      f.input :target_group, collection: TargetGroup.all.includes(:course, :level).order('courses.name ASC, levels.number ASC')
-      f.input :sort_index
-      f.input :days_to_complete
-      f.input :resubmittable
-      f.input :evaluation_criteria, collection: EvaluationCriterion.all.map { |ec| [ec.display_name.to_s, ec.id] }
-      f.input :rubric_description
-    end
-
-    f.actions
   end
 end

@@ -205,8 +205,6 @@ let make =
          "Could not find currentLevel with id " ++ currentLevelId,
        );
 
-  selectedLevelId |> Js.log;
-
   let (latestSubmissions, setLatestSubmissions) =
     React.useState(() => submissions);
 

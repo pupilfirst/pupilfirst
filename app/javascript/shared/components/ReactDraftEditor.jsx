@@ -55,6 +55,33 @@ const setItalic = (onChangeCB, editorState, setEditorState) => {
   updateSelection(editorState, '*', 'italicized text', onChangeCB, setEditorState);
 }
 
+const insertTextAtFocus = (editorState, insertText, onChangeCB, setEditorState) => {
+  const selectionState = editorState.getSelection();
+
+  let updatedSelectionState;
+
+  /*
+   * We need to collapse the selection to the focus (end of selection) in
+   * case there is some selected text becase we don't want to modify any
+   * existing text when inserted the supplied text.
+   */
+  if (selectionState.isCollapsed()) {
+    updatedSelectionState = selectionState;
+  } else {
+    updatedSelectionState = selectionState.merge({
+      anchorKey: selectionState.getFocusKey(),
+      anchorOffset: selectionState.getFocusOffset(),
+      isBackward: false
+    });
+  }
+
+  const currentContent = editorState.getCurrentContent();
+  const newContentState = Modifier.insertText(currentContent, updatedSelectionState, insertText);
+  const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+
+  onChange(onChangeCB, setEditorState, newEditorState);
+};
+
 export default function ReactDraftEditor(props) {
   const [editorState, setEditorState] = React.useState(() => {
     const contentState = ContentState.createFromText(props.content);
@@ -76,8 +103,23 @@ export default function ReactDraftEditor(props) {
     handleKeyCommand(props.onChange, editorState, setEditorState, props.command)
   }, [props.command, props.commandAt]);
 
+  const contentChangedOutside = (props.content != editorState.getCurrentContent().getPlainText());
+
+  React.useEffect(() => {
+    if (contentChangedOutside) {
+      const contentState = ContentState.createFromText(props.content)
+      setEditorState(EditorState.createWithContent(contentState));
+    }
+  }, [contentChangedOutside]);
+
+  React.useEffect(() => {
+    if (typeof props.insertText === "string") {
+      insertTextAtFocus(editorState, props.insertText, props.onChange, setEditorState)
+    }
+  }, [props.insertText])
+
   return (
-    <div className="markdown-draft-editor__container px-3 py-4 text-sm border border-gray-400 rounded" onClick={focusEditor}>
+    <div className="flex-grow px-3 pt-3" onClick={focusEditor}>
       <Editor
         ariaLabelledBy={props.ariaLabelledBy}
         ref={editor}

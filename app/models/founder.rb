@@ -57,7 +57,7 @@ class Founder < ApplicationRecord
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { joins(:startup).not_exited.access_active }
 
-  delegate :email, :name, :gender, :phone, :communication_address, :title, :key_skills, :about,
+  delegate :email, :name, :phone, :communication_address, :title, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, :initials_avatar, to: :user
 
@@ -165,7 +165,7 @@ class Founder < ApplicationRecord
   end
 
   def profile_complete?
-    required_fields = %i[name roles gender communication_address phone]
+    required_fields = %i[name roles communication_address phone]
 
     required_fields.all? { |field| self[field].present? }
   end

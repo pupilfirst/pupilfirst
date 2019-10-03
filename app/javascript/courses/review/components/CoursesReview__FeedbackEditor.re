@@ -9,7 +9,7 @@ let str = React.string;
 let make = (~feedback, ~updateFeedbackCB, ~label) =>
   <div className="pt-4 md:pt-5 course-review__feedback-editor">
     <MarkdownEditor
-      updateDescriptionCB=updateFeedbackCB
+      updateMarkdownCB=updateFeedbackCB
       value=feedback
       label
       profile=Markdown.Permissive

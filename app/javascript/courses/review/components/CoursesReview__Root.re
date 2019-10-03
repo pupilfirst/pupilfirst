@@ -131,19 +131,22 @@ let make =
     );
 
   let url = ReasonReactRouter.useUrl();
-
-  switch (url.path) {
-  | ["submissions", submissionId, ..._] =>
-    <CoursesReview__SubmissionOverlay
-      authenticityToken
-      courseId
-      submissionId
-      gradeLabels
-      passGrade
-      currentCoach
-      removePendingSubmissionCB={removePendingSubmission(setState)}
-    />
-  | _ =>
+  <div>
+    {
+      switch (url.path) {
+      | ["submissions", submissionId, ..._] =>
+        <CoursesReview__SubmissionOverlay
+          authenticityToken
+          courseId
+          submissionId
+          gradeLabels
+          passGrade
+          currentCoach
+          removePendingSubmissionCB={removePendingSubmission(setState)}
+        />
+      | _ => React.null
+      }
+    }
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div
@@ -152,7 +155,7 @@ let make =
             className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
             <button
               className={buttonClasses(state.showPending == true)}
-              onClick=(_ => setState(state => {...state, showPending: true}))>
+              onClick={_ => setState(state => {...state, showPending: true})}>
               {"Pending" |> str}
               <span
                 className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
@@ -161,7 +164,7 @@ let make =
             </button>
             <button
               className={buttonClasses(state.showPending == false)}
-              onClick=(_ => setState(state => {...state, showPending: false}))>
+              onClick={_ => setState(state => {...state, showPending: false})}>
               {"Reviewed" |> str}
             </button>
           </div>
@@ -196,5 +199,5 @@ let make =
         }
       </div>
     </div>
-  };
+  </div>;
 };

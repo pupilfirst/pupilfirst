@@ -156,45 +156,50 @@ let make =
           <div
             className="review-submission-overlay__submission-container relative container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
             {
-              state.loading ?
-                <div> {"Loading" |> str} </div> :
-                submissionDetails
-                |> SubmissionDetails.submissions
-                |> Array.mapi((index, submission) =>
-                     <CoursesReview__Submissions
-                       key={index |> string_of_int}
-                       authenticityToken
-                       submission
-                       gradeLabels
-                       passGrade
-                       updateSubmissionCB={
-                         updateSubmission(
-                           state,
-                           setState,
-                           removePendingSubmissionCB,
-                         )
-                       }
-                       submissionNumber={
-                         (
-                           submissionDetails
-                           |> SubmissionDetails.submissions
-                           |> Array.length
-                         )
-                         - index
-                       }
-                       currentCoach
-                       evaluationCriteria={
+              submissionDetails
+              |> SubmissionDetails.submissions
+              |> Array.mapi((index, submission) =>
+                   <CoursesReview__Submissions
+                     key={index |> string_of_int}
+                     authenticityToken
+                     submission
+                     gradeLabels
+                     passGrade
+                     updateSubmissionCB={
+                       updateSubmission(
+                         state,
+                         setState,
+                         removePendingSubmissionCB,
+                       )
+                     }
+                     submissionNumber={
+                       (
                          submissionDetails
-                         |> SubmissionDetails.evaluationCriteria
-                       }
-                     />
-                   )
-                |> React.array
+                         |> SubmissionDetails.submissions
+                         |> Array.length
+                       )
+                       - index
+                     }
+                     currentCoach
+                     evaluationCriteria={
+                       submissionDetails
+                       |> SubmissionDetails.evaluationCriteria
+                     }
+                   />
+                 )
+              |> React.array
             }
           </div>
         </div>
 
-      | None => React.null
+      | None =>
+        <div className="max-w-3xl mx-auto">
+          {SkeletonLoading.card()}
+          {SkeletonLoading.heading()}
+          {SkeletonLoading.paragraph()}
+          {SkeletonLoading.profileCard()}
+          {SkeletonLoading.paragraph()}
+        </div>
       }
     }
   </div>;

@@ -5,7 +5,7 @@ class CoursePolicy < ApplicationPolicy
     founder = user.founders.joins(:course).where(courses: { id: record }).first
 
     # Dropped out students cannot access course dashboard. # User must have a student profile in the course
-    founder&.exited? || review?
+    !founder&.exited? || review?
   end
 
   def leaderboard?

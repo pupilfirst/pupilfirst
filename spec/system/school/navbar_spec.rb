@@ -70,7 +70,7 @@ feature 'School Admin Navbar', js: true do
 
       # Navbar should also include links to home page and the coach's review dashboard.
       expect(page).to have_link('Home', href: "/home")
-      expect(page).to have_link('Review Submissions', href: "/courses/#{course_1.id}/coach_dashboard")
+      expect(page).to have_link('Review Submissions', href: "/courses/#{course_1.id}/review")
     end
   end
 end

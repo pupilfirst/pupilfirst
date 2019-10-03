@@ -193,12 +193,16 @@ let make =
         </div>
 
       | None =>
-        <div className="max-w-3xl mx-auto">
-          {SkeletonLoading.card()}
-          {SkeletonLoading.heading()}
-          {SkeletonLoading.paragraph()}
-          {SkeletonLoading.profileCard()}
-          {SkeletonLoading.paragraph()}
+        <div>
+          <div className="bg-gray-100 py-4">
+            <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
+          </div>
+          <div className="max-w-3xl mx-auto">
+            {SkeletonLoading.heading()}
+            {SkeletonLoading.paragraph()}
+            {SkeletonLoading.profileCard()}
+            {SkeletonLoading.paragraph()}
+          </div>
         </div>
       }
     }

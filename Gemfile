@@ -45,7 +45,7 @@ gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
 gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
-gem 'friendly_id', '~> 5.2' # Slugs for links. http://norman.github.io/friendly_id
+gem 'friendly_id', '~> 5.3.0' # Slugs for links. http://norman.github.io/friendly_id
 gem 'lita', '= 5.0.0', github: 'svdotco/lita', require: false # Lita without rack version limitation. TODO: Replace with official version when it drops rack < v2 limitation.
 gem 'lita-slack', '= 1.8.0', github: 'litaio/lita-slack', require: false # Lita adapter for Slack. TODO: removing github repo tracking when gem is updated
 gem 'kramdown', '~> 2.1' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org

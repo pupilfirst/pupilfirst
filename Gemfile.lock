@@ -344,7 +344,7 @@ GEM
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
-    friendly_id (5.2.5)
+    friendly_id (5.3.0)
       activerecord (>= 4.0.0)
     fuubar (2.4.1)
       rspec-core (~> 3.0)
@@ -848,7 +848,7 @@ DEPENDENCIES
   fastimage (~> 2.1)
   file_validators (~> 2.1)
   font-awesome-rails (~> 4.7)
-  friendly_id (~> 5.2)
+  friendly_id (~> 5.3.0)
   fuubar (~> 2.2)
   gaffe (~> 1.2)
   google_calendar (= 0.6.4)!

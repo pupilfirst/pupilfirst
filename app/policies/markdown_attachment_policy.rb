@@ -6,6 +6,6 @@ class MarkdownAttachmentPolicy < ApplicationPolicy
 
   def download?
     # All registered users in the attachment uploader's school can access it.
-    user.present? && record.user.school == current_school
+    record.user.school == current_school
   end
 end

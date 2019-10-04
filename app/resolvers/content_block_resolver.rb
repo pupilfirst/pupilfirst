@@ -1,10 +1,10 @@
 class ContentBlockResolver < ApplicationResolver
   attr_accessor :target_id
-  attr_accessor :version_date
+  attr_accessor :version_on
 
   def content_blocks
-    if version_date.present?
-      content_data(target.content_versions.where(version_on: version_date))
+    if version_on.present?
+      content_data(target.content_versions.where(version_on: version_on))
     else
       latest_content
     end
@@ -13,6 +13,8 @@ class ContentBlockResolver < ApplicationResolver
   def authorized?
     current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
   end
+
+  private
 
   def target
     @target ||= Target.find(target_id.to_i)

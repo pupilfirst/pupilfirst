@@ -2,10 +2,14 @@ class CoursePolicy < ApplicationPolicy
   def curriculum?
     return true if current_school_admin.present?
 
-    founder = user.founders.joins(:course).where(courses: { id: record }).first
+    return review? if user.faculty.present?
 
-    # Dropped out students cannot access course dashboard. # User must have a student profile in the course
-    !founder&.exited? || review?
+    founder = user.founders.joins(:course).where(courses: { id: record }).first
+    # User must have a student profile in the course
+    return false if founder.blank?
+
+    # Dropped out students cannot access course dashboard.
+    !founder.exited?
   end
 
   def leaderboard?

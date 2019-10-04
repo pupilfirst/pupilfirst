@@ -152,6 +152,7 @@ let make =
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
           <div
+            ariaLabel="status-tab"
             className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
             <button
               className={buttonClasses(state.showPending == true)}

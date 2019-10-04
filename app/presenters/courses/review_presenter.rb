@@ -19,11 +19,11 @@ module Courses
         course_id: @course.id,
         grade_labels: @course.grade_labels_to_props,
         pass_grade: @course.pass_grade,
-        current_coach: current_coach
+        current_coach: current_coach_details
       }
     end
 
-    def current_coach
+    def current_coach_details
       {
         name: current_user.name,
         avatar_url: current_user.image_or_avatar_url,
@@ -37,8 +37,12 @@ module Courses
       end
     end
 
+    def students
+      @students ||= Founder.where(startup_id: current_coach.reviewable_startups(@course))
+    end
+
     def pending_submissions
-      @pending_submissions ||= @course.timeline_events.pending_review.includes(founders: :user, target: :target_group).map do |timeline_event|
+      @pending_submissions ||= TimelineEvent.pending_review.from_founders(students).includes(founders: :user, target: :target_group).map do |timeline_event|
         timeline_event.attributes.slice('id', 'target_id', 'created_at')
           .merge(title: timeline_event.target.title)
           .merge(timeline_event.target.target_group.slice('level_id'))

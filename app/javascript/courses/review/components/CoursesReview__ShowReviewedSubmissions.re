@@ -158,6 +158,9 @@ let showSubmission = (submissions, levels, openOverlayCB) =>
            <div
              key={submission |> SubmissionInfo.id}
              onClick={_ => openOverlayCB(submission |> SubmissionInfo.id)}
+             ariaLabel={
+               "reviewed-submission-card-" ++ (submission |> SubmissionInfo.id)
+             }
              className={
                submissionCardClasses(submission |> SubmissionInfo.status)
              }>

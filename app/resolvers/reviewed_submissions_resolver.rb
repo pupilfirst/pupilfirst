@@ -21,6 +21,10 @@ class ReviewedSubmissionsResolver < ApplicationResolver
       course.levels.where(id: level_id).first.timeline_events
     else
       course.timeline_events
-    end
+    end.from_founders(students)
+  end
+
+  def students
+    @students ||= Founder.where(startup_id: current_user.faculty.reviewable_startups(course))
   end
 end

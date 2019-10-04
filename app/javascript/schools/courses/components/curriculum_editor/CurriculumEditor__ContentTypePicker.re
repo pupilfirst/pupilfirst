@@ -66,7 +66,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
           <div
             id={"add-block-" ++ (sortIndex |> string_of_int)}
             title="Add block"
-            className="add-content-block__plus-button text-gray-700 bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-400 w-7 h-7 flex justify-center items-center mx-auto z-20">
+            className="add-content-block__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
             <i
               className="fas fa-plus text-base add-content-block__plus-button-icon"
             />
@@ -74,7 +74,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         </div>
     }
     <div
-      className="add-content-block__block-content-type hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-3 z-10"
+      className="add-content-block__block-content-type hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10"
       id={"content-type-picker-" ++ (sortIndex |> string_of_int)}>
       {
         [|MarkdownButton, ImageButton, EmbedButton, FileButton|]

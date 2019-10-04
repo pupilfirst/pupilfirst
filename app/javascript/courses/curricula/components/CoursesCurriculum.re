@@ -53,7 +53,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
       {
         targetGroup |> TargetGroup.milestone ?
           <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-sm rounded-b-lg leading-tight text-white uppercase">
+            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {"Milestone targets" |> str}
           </div> :
           React.null

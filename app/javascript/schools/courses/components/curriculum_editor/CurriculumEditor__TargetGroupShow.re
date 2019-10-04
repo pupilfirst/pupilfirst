@@ -29,8 +29,8 @@ type action =
 let component =
   ReasonReact.reducerComponent("CurriculumEditor__TargetGroupShow");
 let archivedClasses = archived =>
-  "target-group__header relative cursor-pointer px-20 pb-5 text-center rounded-lg rounded-b-none overflow-hidden w-full "
-  ++ (archived ? "target-group__header--archived" : " ");
+  "target-group__header flex flex-col items-center justify-center relative cursor-pointer px-20 pb-7 text-center rounded-lg rounded-b-none overflow-hidden w-full "
+  ++ (archived ? "target-group__header--archived" : "");
 
 let updateSortIndex =
     (
@@ -140,7 +140,7 @@ let make =
     <div
       className="target-group__box relative mt-12 rounded-lg border border-b-0 border-gray-300 shadow-md">
       <div
-        className="flex w-full target-group__header-container rounded-lg rounded-b-none items-center relative bg-white hover:bg-gray-100 hover:text-primary-500">
+        className="w-full target-group__header-container rounded-lg rounded-b-none relative bg-white hover:bg-gray-100 hover:text-primary-500">
         <div
           id="target_group"
           className={archivedClasses(targetGroup |> TargetGroup.archived)}
@@ -153,11 +153,11 @@ let make =
               </div> :
               ReasonReact.null
           }
-          <div className="target-group__title pt-5">
+          <div className="target-group__title pt-6">
             <h4> {targetGroup |> TargetGroup.name |> str} </h4>
           </div>
           <div className="target-group__description">
-            <p className="pt-1">
+            <p className="pt-px text-sm">
               {
                 (
                   switch (targetGroup |> TargetGroup.description) {

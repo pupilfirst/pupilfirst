@@ -469,7 +469,13 @@ let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) =
          |> Array.map(version => version |> Json.Decode.string);
        switch (versionOn) {
        | Some(versionOn) =>
-         send(LoadOldVersion(contentBlocks, versionOn |> Json.Decode.string, versions))
+         send(
+           LoadOldVersion(
+             contentBlocks,
+             versionOn |> Json.Decode.string,
+             versions,
+           ),
+         )
        | None => send(UpdateContentBlocks(contentBlocks, versions))
        };
        Js.Promise.resolve();
@@ -1064,7 +1070,7 @@ let make =
                         )
                         className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
                         <i className="fas fa-plus-circle text-lg" />
-                        <h5 className="font-semibold ml-2">
+                        <h5 className="font-semibold mt-2">
                           {"Add another Question" |> str}
                         </h5>
                       </a>

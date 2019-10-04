@@ -317,6 +317,10 @@
   transition: all 0.2s;
 }
 
+.target-group__header {
+  min-height: 7rem;
+}
+
 .target-group__header--archived, .target-group__target--archived {
   background-color: #fdfae5;
   background-image: linear-gradient( to bottom right, rgba(0, 0, 0, 0.05) 25%, transparent 0, transparent 50%, rgba(0, 0, 0, 0.05) 0, rgba(0, 0, 0, 0.05) 75%, transparent 0, transparent);
@@ -351,10 +355,6 @@
 .target-group__target-reorder-down {
   transform: translateY(-15px);
   transition: transform 0.2s;
-}
-
-.target-group__header-container {
-  min-height: 7rem;
 }
 
 .target-group__header-container:hover .target-group__group-reorder:before {

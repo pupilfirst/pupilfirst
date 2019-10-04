@@ -4,7 +4,7 @@
 
 <% @presenter = Schools::ShowPresenter.new(self) %>
 <div class="flex-1 flex flex-col bg-gray-200 overflow-y-auto">
-    <div class="w-full p-12">
+    <div class="w-full p-6">
         <div class="max-w-3xl mx-auto relative rounded border overflow-hidden rounded-lg shadow-lg mx-3">
             <div class="bg-gradient-secondary-to-secondary-600-120 bg-cover h-24 p-5">
 
@@ -36,7 +36,8 @@
             </div>
         </div>
     </div>
-    <div class="max-w-3xl w-full mx-auto my-8">
+    <div class="w-full px-6">
+      <div class="max-w-3xl w-full mx-auto my-8">
         <h2 class="font-semibold mb-4 pb-2 border-b">Courses</h2>
         <div class="flex flex-wrap items-stretch w-full school-overview__course-list">
             <% @presenter.course_details.each_with_index do |course, index| %>
@@ -80,5 +81,6 @@
               </div>
             <% end %>
         </div>
+      </div>
     </div>
 </div>

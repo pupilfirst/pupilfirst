@@ -107,6 +107,19 @@ let updateReviewedSubmissions =
     (~setState, ~reviewedSubmissions, ~hasNextPage, ~endCursor) =>
   setState(state => {...state, reviewedSubmissions, hasNextPage, endCursor});
 
+let updateReviewdSubmission = (setState, submission) =>
+  setState(state =>
+    {
+      ...state,
+      reviewedSubmissions:
+        state.reviewedSubmissions
+        |> Array.map(s =>
+             s |> SubmissionInfo.id == (submission |> SubmissionInfo.id) ?
+               submission : s
+           ),
+    }
+  );
+
 [@react.component]
 let make =
     (
@@ -143,6 +156,7 @@ let make =
           passGrade
           currentCoach
           removePendingSubmissionCB={removePendingSubmission(setState)}
+          updateReviewdSubmissionCB={updateReviewdSubmission(setState)}
         />
       | _ => React.null
       }
@@ -178,7 +192,6 @@ let make =
         {
           state.showPending ?
             <CoursesReview__ShowPendingSubmissions
-              authenticityToken
               submissions={state.submissions}
               levels
               selectedLevel={state.selectedLevel}

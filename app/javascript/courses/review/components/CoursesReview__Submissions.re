@@ -126,6 +126,7 @@ let cardClasses = submission =>
 
 let updateSubmission =
     (
+      ~feedackUpdate,
       ~grades,
       ~passed,
       ~newFeedback,
@@ -179,7 +180,7 @@ let updateSubmission =
       ~grades=newGrades,
       ~evaluatedAt,
     );
-  updateSubmissionCB(newSubmission);
+  updateSubmissionCB(feedackUpdate, newSubmission);
 };
 
 [@react.component]
@@ -233,7 +234,12 @@ let make =
         evaluvationCriteria=evaluationCriteria
         passGrade
         updateSubmissionCB={
-          updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
+          updateSubmission(
+            ~feedackUpdate=false,
+            ~submission,
+            ~currentCoach,
+            ~updateSubmissionCB,
+          )
         }
       />
       <CoursesReview__ShowFeedback
@@ -242,7 +248,12 @@ let make =
         reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
         submissionId={submission |> Submission.id}
         updateSubmissionCB={
-          updateSubmission(~submission, ~currentCoach, ~updateSubmissionCB)
+          updateSubmission(
+            ~feedackUpdate=true,
+            ~submission,
+            ~currentCoach,
+            ~updateSubmissionCB,
+          )
         }
       />
     </div>

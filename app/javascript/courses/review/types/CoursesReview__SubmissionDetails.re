@@ -65,33 +65,33 @@ let updateSubmission = (t, submission) =>
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,
   );
-/* let failed = submission =>
-     switch (
-       submission |> CoursesReview__Submission.evaluatedAt,
-       submission |> CoursesReview__Submission.passedAt,
-     ) {
-     | (Some(_), Some(_)) => false
-     | (Some(_), None)
-     | (None, Some(_))
-     | (None, None) => true
-     };
+let failed = submission =>
+  switch (
+    submission |> CoursesReview__Submission.evaluatedAt,
+    submission |> CoursesReview__Submission.passedAt,
+  ) {
+  | (Some(_), Some(_)) => false
+  | (Some(_), None)
+  | (None, Some(_))
+  | (None, None) => true
+  };
 
-   let feedbackSent = submission =>
-     submission |> CoursesReview__Submission.feedback |> ArrayUtils.isNotEmpty;
+let feedbackSent = submission =>
+  submission |> CoursesReview__Submission.feedback |> ArrayUtils.isNotEmpty;
 
-   let makeSubmissionInfo = (t, submission) =>
-     CoursesReview__SubmissionInfo.make(
-       ~id=submission |> CoursesReview__Submission.id,
-       ~title=t.targetTitle,
-       ~createdAt=submission |> CoursesReview__Submission.createdAt,
-       ~levelId=t.levelId,
-       ~userNames=t.userNames,
-       ~targetId=t.targetId,
-       ~status=
-         Some(
-           CoursesReview__SubmissionInfo.makeStatus(
-             ~failed=failed(submission),
-             ~feedbackSent=feedbackSent(submission),
-           ),
-         ),
-     ); */
+let makeSubmissionInfo = (t, submission) =>
+  CoursesReview__SubmissionInfo.make(
+    ~id=submission |> CoursesReview__Submission.id,
+    ~title=t.targetTitle,
+    ~createdAt=submission |> CoursesReview__Submission.createdAt,
+    ~levelId=t.levelId,
+    ~userNames=t.userNames,
+    ~targetId=t.targetId,
+    ~status=
+      Some(
+        CoursesReview__SubmissionInfo.makeStatus(
+          ~failed=failed(submission),
+          ~feedbackSent=feedbackSent(submission),
+        ),
+      ),
+  );

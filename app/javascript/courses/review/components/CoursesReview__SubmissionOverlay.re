@@ -111,18 +111,27 @@ let headerSection = (submissionDetails, courseId) =>
       </div>
     </div>
   </div>;
+
 let updateSubmission =
-    (state, setState, removePendingSubmissionCB, submission) =>
-  switch (state.submissionDetails) {
-  | Some(submissionDetails) =>
-    let submissionDetails =
-      SubmissionDetails.updateSubmission(submissionDetails, submission);
-    setState(state =>
-      {...state, submissionDetails: Some(submissionDetails)}
-    );
+    (
+      submissionDetails,
+      setState,
+      removePendingSubmissionCB,
+      updateReviewdSubmissionCB,
+      feedackUpdate,
+      submission,
+    ) => {
+  let newSubmissionDetails =
+    SubmissionDetails.updateSubmission(submissionDetails, submission);
+  setState(state =>
+    {...state, submissionDetails: Some(newSubmissionDetails)}
+  );
+  feedackUpdate ?
+    updateReviewdSubmissionCB(
+      SubmissionDetails.makeSubmissionInfo(newSubmissionDetails, submission),
+    ) :
     removePendingSubmissionCB(submission |> Submission.id);
-  | None => None |> ignore
-  };
+};
 
 [@react.component]
 let make =
@@ -134,6 +143,7 @@ let make =
       ~passGrade,
       ~currentCoach,
       ~removePendingSubmissionCB,
+      ~updateReviewdSubmissionCB,
     ) => {
   let (state, setState) =
     React.useState(() => {loading: true, submissionDetails: None});
@@ -168,9 +178,10 @@ let make =
                      passGrade
                      updateSubmissionCB={
                        updateSubmission(
-                         state,
+                         submissionDetails,
                          setState,
                          removePendingSubmissionCB,
+                         updateReviewdSubmissionCB,
                        )
                      }
                      submissionNumber={

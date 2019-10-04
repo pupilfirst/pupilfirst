@@ -7,14 +7,7 @@ open CoursesReview__Types;
 let str = React.string;
 
 [@react.component]
-let make =
-    (
-      ~authenticityToken,
-      ~submissions,
-      ~levels,
-      ~selectedLevel,
-      ~openOverlayCB,
-    ) => {
+let make = (~submissions, ~levels, ~selectedLevel, ~openOverlayCB) => {
   let submissionToShow =
     switch (selectedLevel) {
     | None => submissions

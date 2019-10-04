@@ -25,6 +25,7 @@ let make =
       ~attachingCB,
       ~typingCB,
       ~disabled,
+      ~preview,
     ) => {
   let (selection, setSelection) = React.useState(() => UploadFile);
 
@@ -36,14 +37,14 @@ let make =
       <li className={tabClasses(selection, UploadFile)}>
         <a
           onClick={_e => setSelection(_ => UploadFile)}
-          className="inline-block text-gray-800 hover:text-indigo-800 p-4 text-xs font-semibold">
+          className="inline-block hover:text-primary-500 p-4 text-xs font-semibold">
           {"Upload File" |> str}
         </a>
       </li>
       <li className={tabClasses(selection, AddUrl)}>
         <a
           onClick={_e => setSelection(_ => AddUrl)}
-          className="inline-block text-gray-800 p-4 hover:text-indigo-800 text-xs font-semibold">
+          className="inline-block p-4 hover:text-primary-500 text-xs font-semibold">
           {"Add URL" |> str}
         </a>
       </li>
@@ -57,6 +58,7 @@ let make =
             authenticityToken
             attachFileCB
             attachingCB
+            preview
           />
         | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB typingCB />
         }

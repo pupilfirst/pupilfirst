@@ -25,7 +25,7 @@ let maxGrade = gradeLabels =>
   gradeLabels |> GradeLabel.maxGrade |> string_of_int;
 
 let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
-  let defaultClasses = "grade-bar__grade-pill";
+  let defaultClasses = "grade-bar__grade-pill cursor-auto";
   let resultModifier =
     switch (gradeReceived) {
     | None => ""
@@ -39,8 +39,8 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
     | None => ""
     | Some(_callBack) =>
       pillGrade < passGrade ?
-        " grade-bar__grade-pill--selectable-fail" :
-        " grade-bar__grade-pill--selectable-pass"
+        " grade-bar__grade-pill--selectable-fail cursor-pointer" :
+        " grade-bar__grade-pill--selectable-pass cursor-pointer"
     };
   defaultClasses ++ resultModifier ++ selectableModifier;
 };

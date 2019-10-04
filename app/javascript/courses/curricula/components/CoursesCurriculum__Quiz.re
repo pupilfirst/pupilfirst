@@ -96,7 +96,8 @@ let handleSubmit =
 };
 
 [@react.component]
-let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
+let make =
+    (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB, ~preview) => {
   let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
   let (saving, setSaving) = React.useState(() => false);
   let (selectedQuestion, setSelectedQuestion) =
@@ -148,7 +149,7 @@ let make = (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB) => {
           {
             currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
               <button
-                disabled=saving
+                disabled={saving || preview}
                 className="btn btn-primary"
                 onClick={
                   handleSubmit(

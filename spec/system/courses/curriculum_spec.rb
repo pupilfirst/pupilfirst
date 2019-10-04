@@ -38,7 +38,8 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:submitted_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:failed_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_l4_1, prerequisite_targets: [pending_target_g1], role: Target::ROLE_TEAM }
-  let!(:level_5_target) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
+  let!(:level_5_target_1) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
+  let!(:level_5_target_2) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
   let!(:level_6_target) { create :target, target_group: target_group_l6, role: Target::ROLE_TEAM }
 
   # Submissions
@@ -171,8 +172,8 @@ feature "Student's view of Course Curriculum", js: true do
     select("L5: #{level_5.name}", from: 'selected_level')
     expect(page).to have_content(target_group_l5.name)
     expect(page).to have_content(target_group_l5.description)
-    expect(page).to have_content(level_5_target.title)
-    find("div[aria-label='Select Target #{level_5_target.id}'").click
+    expect(page).to have_content(level_5_target_1.title)
+    find("div[aria-label='Select Target #{level_5_target_1.id}'").click
     expect(page).to have_content('You must level up to complete this target.')
 
     # Ensure level 6 is displayed as locked.
@@ -319,6 +320,52 @@ feature "Student's view of Course Curriculum", js: true do
         expect(page).not_to have_button('Level Up')
         expect(page).not_to have_text('You have successfully completed all milestone targets required to level up.')
       end
+    end
+  end
+
+  context 'when accessing preview mode of curriculum' do
+    let(:school_admin) { create :school_admin }
+
+    scenario 'preview contents in the curriculum' do
+      sign_in_user school_admin.user, referer: curriculum_course_path(course)
+
+      expect(page).to have_text('Preview Mode')
+
+      # Course name should be displayed.
+      expect(page).to have_content(course.name)
+
+      # The 'Max level' should be selected.
+      expect(page).to have_select("selected_level", selected: "L6: #{locked_level_6.name}")
+
+      level_names = [level_1, level_2, level_3, level_4, level_5, locked_level_6].map do |l|
+        "L#{l.number}: #{l.name}"
+      end
+
+      # All levels should be included in the select dropdown.
+      expect(page).to have_select("selected_level", options: level_names)
+
+      # Ensure level 6 is displayed as locked.
+      expect(page).not_to have_content(target_group_l6.name)
+      expect(page).not_to have_content(target_group_l6.description)
+      expect(page).not_to have_content(level_6_target.title)
+
+      # Visit the level 5 and ensure that content is in 'preview mode'.
+      select("L5: #{level_5.name}", from: 'selected_level')
+      expect(page).to have_content(target_group_l5.name)
+      expect(page).to have_content(target_group_l5.description)
+      expect(page).to have_content(level_5_target_1.title)
+
+      # All targets should have the right status written next to their titles.
+      within("div[aria-label='Select Target #{level_5_target_1.id}']") do
+        expect(page).to have_content('Pending')
+      end
+
+      within("div[aria-label='Select Target #{level_5_target_2.id}']") do
+        expect(page).to have_content('Pending')
+      end
+
+      find("div[aria-label='Select Target #{level_5_target_1.id}'").click
+      expect(page).to have_content('You are currently looking at a preview of this course.')
     end
   end
 end

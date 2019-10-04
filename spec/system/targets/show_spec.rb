@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Target Overlay', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
+  include NotificationHelper
 
   let(:course) { create :course }
   let!(:criterion_1) { create :evaluation_criterion, course: course }
@@ -579,5 +580,93 @@ feature 'Target Overlay', js: true do
     click_button('Close')
 
     expect(page).to have_text(target_group_l2.name)
+  end
+
+  context 'when accessing preview mode of curriculum' do
+    let(:school_admin) { create :school_admin }
+
+    scenario "target show page should render in preview mode" do
+      sign_in_user school_admin.user, referer: target_path(target_l1)
+      expect(page).to have_content('You are currently looking at a preview of this course.')
+    end
+
+    scenario 'tries to submit work on a target' do
+      sign_in_user school_admin.user, referer: target_path(target_l1)
+
+      # This target should have a 'Complete' section.
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+
+      # The submit button should be disabled.
+      expect(page).to have_button('Submit', disabled: true)
+      fill_in 'Work on your submission', with: Faker::Lorem.sentence
+
+      expect(page).to have_button('Submit', disabled: true)
+
+      find('a', text: 'Add URL').click
+      fill_in 'attachment_url', with: 'foobar'
+      expect(page).to have_content('does not look like a valid URL')
+      fill_in 'attachment_url', with: 'https://example.com?q=1'
+      click_button 'Attach link'
+
+      # The submit button should be disabled.
+      expect(page).to have_button('Submit', disabled: true)
+
+      find('a', text: 'Upload File').click
+      attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
+      find('a', text: 'Add URL').click
+      fill_in 'attachment_url', with: 'https://example.com?q=2'
+      click_button 'Attach link'
+      dismiss_notification
+
+      # The submit button should be disabled.
+      expect(page).to have_button('Submit', disabled: true)
+    end
+
+    context 'when the target is auto-verified' do
+      let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
+
+      scenario 'tries to completes an auto-verified target' do
+        sign_in_user school_admin.user, referer: target_path(target_l1)
+
+        # There should be a mark as complete button on the learn page.
+        expect(page).to have_button('Mark As Complete', disabled: true)
+      end
+    end
+
+    context 'when the target requires user to visit a link to complete it' do
+      let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
+      let!(:target_with_link) { create :target, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
+
+      scenario 'link to complete is shown to the user' do
+        sign_in_user school_admin.user, referer: target_path(target_with_link)
+
+        expect(page).to have_link('Visit Link', href: link_to_complete)
+      end
+    end
+
+    context 'when the target requires user to take a quiz to complete it ' do
+      scenario 'user can view all the questions' do
+        sign_in_user school_admin.user, referer: target_path(quiz_target)
+
+        within('.course-overlay__header-title-card') do
+          expect(page).to have_content(quiz_target.title)
+          expect(page).to have_content('Pending')
+        end
+
+        find('.course-overlay__body-tab-item', text: 'Take Quiz').click
+
+        # Question one
+        expect(page).to have_content(/Question #1/i)
+        expect(page).to have_content(quiz_question_1.question)
+        find('.quiz-root__answer', text: q1_answer_1.value).click
+        click_button('Next Question')
+
+        # Question two
+        expect(page).to have_content(/Question #2/i)
+        expect(page).to have_content(quiz_question_2.question)
+        find('.quiz-root__answer', text: q2_answer_4.value).click
+        expect(page).to have_button('Submit Quiz', disabled: true)
+      end
+    end
   end
 end

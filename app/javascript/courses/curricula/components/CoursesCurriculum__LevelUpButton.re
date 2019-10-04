@@ -43,7 +43,7 @@ let make = (~course, ~authenticityToken) => {
   <button
     disabled=saving
     onClick={createLevelUpQuery(authenticityToken, course, setSaving)}
-    className="btn btn-success mt-4">
+    className="btn btn-success btn-large w-full md:w-4/6 mt-4">
     {handleSubmitButton(saving)}
   </button>;
 };

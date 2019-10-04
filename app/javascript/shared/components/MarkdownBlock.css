@@ -13,32 +13,32 @@
 
 .markdown-block__h1 {
   font-size: 2rem;
-  @apply mt-4 leading-snug;
+  @apply mt-6 leading-snug;
 }
 
 .markdown-block__h2 {
   font-size: 1.5rem;
-  @apply mt-4 leading-snug;
+  @apply mt-6 leading-snug;
 }
 
 .markdown-block__h3 {
   font-size: 1.17rem;
-  @apply mt-4 leading-snug;
+  @apply mt-6 leading-snug;
 }
 
 .markdown-block__h4 {
   font-size: 1.125rem;
-  @apply mt-4 leading-snug;
+  @apply mt-6 leading-snug;
 }
 
 .markdown-block__h5 {
   font-size: 0.875rem;
-  @apply mt-4 leading-snug;
+  @apply mt-6 leading-snug;
 }
 
 .markdown-block__h6 {
   font-size: 0.75rem;
-  @apply mt-4 leading-snug;
+  @apply mt-6 leading-snug;
 }
 
 .markdown-block__em {
@@ -50,11 +50,11 @@
 }
 
 .markdown-block__ul {
-  @apply ml-10 mt-3 list-disc;
+  @apply ml-7 mt-3 list-disc;
 }
 
 .markdown-block__ol {
-  @apply ml-10 mt-3 list-decimal;
+  @apply ml-7 mt-3 list-decimal;
 }
 
 .markdown-block__li {
@@ -66,11 +66,11 @@
 }
 
 .markdown-block__a {
-  @apply text-primary-500 underline font-semibold;
+  @apply text-primary-500 underline font-semibold whitespace-pre-line break-all;
 }
 
 .markdown-block__blockquote {
-  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 ml-6 my-4 text-lg rounded-r font-semibold text-gray-800;
+  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
 }
 
 .markdown-block__hr {
@@ -154,8 +154,20 @@
   @apply markdown-block__ul;
 }
 
+@screen md {
+  .markdown-block__permissive ul {
+    @apply markdown-block__ul ml-10;
+  }
+}
+
 .markdown-block__permissive ol {
   @apply markdown-block__ol;
+}
+
+@screen md {
+  .markdown-block__permissive ol {
+    @apply markdown-block__ol ml-10;
+  }
 }
 
 .markdown-block__permissive li {
@@ -218,7 +230,7 @@
  */
 
 .markdown-block__question-and-answer p {
-  @apply markdown-block__p;
+  @apply markdown-block__p leading-relaxed;
 }
 
 .markdown-block__question-and-answer h1 {
@@ -310,7 +322,7 @@
  */
 
 .markdown-block__comment p {
-  @apply markdown-block__p;
+  @apply markdown-block__p leading-relaxed;
 }
 
 .markdown-block__comment em {

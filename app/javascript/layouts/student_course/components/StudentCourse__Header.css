@@ -22,7 +22,7 @@
 }
 
 .student-course__nav-tab:not(.student-course__nav-tab--active):hover {
-  @apply bg-gray-100 text-primary-400;
+  @apply bg-gray-200 text-primary-500;
 }
 
 .student-course__nav-tab--active {

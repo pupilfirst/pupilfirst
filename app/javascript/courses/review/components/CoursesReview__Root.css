@@ -1,0 +1,11 @@
+.course-review__status-tab {
+  @apply relative;
+}
+
+.course-review__status-tab>:first-child {
+  @apply border-r border-gray-400 rounded-l-lg;
+}
+
+.course-review__status-tab>:last-child {
+  @apply rounded-r-lg;
+}

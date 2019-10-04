@@ -1,6 +1,7 @@
 <% content_for(:head) do %>
   <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'HomeStyleguidePack', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'shared/skeleton-loading', media: 'all', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
 <% content_for(:tail) do %>
@@ -18,45 +19,45 @@
       <div class="bg-gray-200 pt-6 px-2 pb-2 mt-3 shadow rounded-lg">
         <h5 class="pl-1">Button</h5>
         <div class="bg-white border p-6 rounded-lg mt-2">
-          <div class="flex flex-col">
-            <p class="text-xs text-gray-600">Small</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-primary btn-small">Primary</button>
-              <button class="btn btn-primary btn-small disabled ml-3">Primary</button>
-              <button class="btn btn-primary btn-small ml-3">
+          <div class="">
+            <p class="text-xs text-gray-600 text-center md:text-left">Small</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-primary btn-small mt-2">Primary</button>
+              <button class="btn btn-primary btn-small disabled ml-3 mt-2">Primary</button>
+              <button class="btn btn-primary btn-small sm:ml-3 mt-2">
+                <i class="fas fa-spinner fa-spin mr-2"></i>
+                Saving...
+              </button>
+            </div>
+          </div>
+          <div class="mt-5">
+            <p class="text-xs text-gray-600 text-center md:text-left">Normal</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-primary mt-2">Primary</button>
+              <button class="btn btn-primary disabled ml-3 mt-2">Primary</button>
+              <button class="btn btn-primary sm:ml-3 mt-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Saving...
               </button>
             </div>
           </div>
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Normal</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-primary">Primary</button>
-              <button class="btn btn-primary disabled ml-3">Primary</button>
-              <button class="btn btn-primary ml-3">
+            <p class="text-xs text-gray-600 text-center md:text-left">Large</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-primary btn-large mt-2">Primary</button>
+              <button class="btn btn-primary btn-large disabled ml-3 mt-2">Primary</button>
+              <button class="btn btn-primary btn-large sm:ml-3 mt-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Saving...
               </button>
             </div>
           </div>
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Large</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-primary btn-large">Primary</button>
-              <button class="btn btn-primary btn-large disabled ml-3">Primary</button>
-              <button class="btn btn-primary btn-large ml-3">
-                <i class="fas fa-spinner fa-spin mr-2"></i>
-                Saving...
-              </button>
-            </div>
-          </div>
-          <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Ghost</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-primary-ghost">Primary</button>
-              <button class="btn btn-primary-ghost disabled ml-3">Primary</button>
-              <button class="btn btn-primary-ghost ml-3">
+            <p class="text-xs text-gray-600 text-center md:text-left">Ghost</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-primary-ghost mt-2">Primary</button>
+              <button class="btn btn-primary-ghost disabled ml-3 mt-2">Primary</button>
+              <button class="btn btn-primary-ghost sm:ml-3 mt-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Saving...
               </button>
@@ -64,47 +65,47 @@
           </div>
 
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Default</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-default">Default</button>
-              <button class="btn btn-default disabled ml-3">Default</button>
-              <button class="btn btn-default ml-3">
+            <p class="text-xs text-gray-600 text-center md:text-left">Default</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-default mt-2">Default</button>
+              <button class="btn btn-default disabled ml-3 mt-2">Default</button>
+              <button class="btn btn-default sm:ml-3 mt-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Saving...
               </button>
             </div>
           </div>
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Secondary</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-secondary">Secondary</button>
-              <button class="btn btn-secondary disabled ml-3">Secondary</button>
-              <button class="btn btn-secondary ml-3">
+            <p class="text-xs text-gray-600 text-center md:text-left">Secondary</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-secondary mt-2">Secondary</button>
+              <button class="btn btn-secondary disabled ml-3 mt-2">Secondary</button>
+              <button class="btn btn-secondary sm:ml-3 mt-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Saving...
               </button>
             </div>
           </div>
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Warning</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-warning">Warning</button>
-              <button class="btn btn-warning disabled ml-3">Warning</button>
+            <p class="text-xs text-gray-600 text-center md:text-left">Warning</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-warning mt-2">Warning</button>
+              <button class="btn btn-warning disabled ml-3 mt-2">Warning</button>
             </div>
           </div>
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Danger</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-danger">Danger</button>
-              <button class="btn btn-danger disabled ml-3">Danger</button>
+            <p class="text-xs text-gray-600 text-center md:text-left">Danger</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-danger mt-2">Danger</button>
+              <button class="btn btn-danger disabled ml-3 mt-2">Danger</button>
             </div>
           </div>
           <div class="flex flex-col mt-5">
-            <p class="text-xs text-gray-600">Success</p>
-            <div class="mt-1 flex">
-              <button class="btn btn-success">Success</button>
-              <button class="btn btn-success disabled ml-3">Success</button>
-              <button class="btn btn-success ml-3">
+            <p class="text-xs text-gray-600 text-center md:text-left">Success</p>
+            <div class="flex flex-wrap md:justify-start justify-center">
+              <button class="btn btn-success mt-2">Success</button>
+              <button class="btn btn-success disabled ml-3 mt-2">Success</button>
+              <button class="btn btn-success sm:ml-3 mt-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Saving...
               </button>
@@ -333,6 +334,113 @@
         <h5 class="ml-1">Markdown Syntax Highlighting</h5>
         <div class="bg-white border p-6 rounded-lg mt-2">
           <div id="styleguide__markdown-syntax-highlighting-root"></div>
+        </div>
+      </div>
+
+      <div class="bg-gray-200 pt-6 px-2 pb-2 mt-6 shadow rounded-lg">
+        <h5 class="ml-1">Skeleton Loading</h5>
+        <div class="border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Target Card</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper px-3 lg:px-0">
+              <div class="skeleton-placeholder__card mt-6 px-5 py-6 bg-white rounded-lg shadow">
+                <div class="flex items-center">
+                  <div class="flex-1">
+                    <div class="skeleton-placeholder__line-sm w-5/6 skeleton-animate"></div>
+                    <div class="skeleton-placeholder__line-sm mt-4 w-4/6 skeleton-animate"></div>
+                    </div>
+                  <div class="skeleton-placeholder__line-sm w-1/6 skeleton-animate"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Title and subtitle</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper mt-8 px-3 lg:px-0">
+              <div class="skeleton-placeholder__line-md mt-4 w-3/6 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 w-4/6 skeleton-animate"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Code</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper max-w-xs mt-8 px-3 lg:px-0">
+              <div class="flex skeleton-placeholder__code-line">
+                <div class="skeleton-placeholder__line-sm mr-3 w-2/6 skeleton-animate"></div>
+                <div class="skeleton-placeholder__line-sm mr-3 w-2/6 skeleton-animate"></div>
+                <div class="skeleton-placeholder__line-sm mr-3 w-4 skeleton-animate"></div>
+              </div>
+              <div class="flex skeleton-placeholder__code-line ml-6">
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-3/6 skeleton-animate"></div>
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-3/6 skeleton-animate"></div>
+              </div>
+              <div class="flex skeleton-placeholder__code-line ml-6">
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-2/6 skeleton-animate"></div>
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-1/6 skeleton-animate"></div>
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-2/6 skeleton-animate"></div>
+              </div>
+              <div class="flex skeleton-placeholder__code-line">
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-16 skeleton-animate"></div>
+                <div class="skeleton-placeholder__line-sm mt-4 mr-3 w-6 skeleton-animate"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Profile Card</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper max-w-sm mt-8 px-3 lg:px-0">
+              <div class="flex items-center">
+                <div class="w-14 h-14 bg-gray-100 rounded-full mr-4 skeleton-animate"></div>
+                <div class="flex-1">
+                  <div class="skeleton-placeholder__line-md w-3/6 skeleton-animate"></div>
+                  <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Image</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper mt-8 px-3 lg:px-0">
+              <div class="skeleton-placeholder__image mt-5 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mx-auto mt-4 w-3/6 skeleton-animate"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Paragraph</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper mt-8 px-3 lg:px-0">
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 w-4/6 skeleton-animate"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white border p-6 rounded-lg mt-2">
+          <p class="text-xs font-semibold">Learn content</p>
+          <div class="skeleton-body-container w-full pb-4 mx-auto">
+            <div class="skeleton-body-wrapper mt-8 px-3 lg:px-0">
+              <div class="skeleton-placeholder__line-md mt-4 w-3/6 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 w-4/6 skeleton-animate"></div>
+              <div class="skeleton-placeholder__image mt-5 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mx-auto mt-4 w-3/6 skeleton-animate"></div>
+            </div>
+            <div class="skeleton-body-wrapper mt-8 px-3 lg:px-0">
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 skeleton-animate"></div>
+              <div class="skeleton-placeholder__line-sm mt-4 w-4/6 skeleton-animate"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

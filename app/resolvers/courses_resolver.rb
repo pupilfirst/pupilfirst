@@ -1,9 +1,7 @@
 class CoursesResolver < ApplicationResolver
-  def collection
-    if current_school_admin.present?
-      current_school.courses
-    else
-      School.none
-    end
+  delegate :courses, to: :current_school
+
+  def authorized?
+    current_school_admin.present?
   end
 end

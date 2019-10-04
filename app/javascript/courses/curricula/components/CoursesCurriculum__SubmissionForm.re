@@ -238,7 +238,7 @@ let isDescriptionDisabled = formState =>
   };
 
 [@react.component]
-let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
+let make = (~authenticityToken, ~target, ~addSubmissionCB, ~preview) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
@@ -270,6 +270,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
           attachFileCB={(id, filename) => send(AttachFile(id, filename))}
           attachUrlCB={url => send(AttachUrl(url))}
           disabled={isBusy(state.formState)}
+          preview
         />
     }
     <div className="flex mt-3 justify-end">
@@ -277,7 +278,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB) => {
         onClick={
           submit(state, send, authenticityToken, target, addSubmissionCB)
         }
-        disabled={isButtonDisabled(state.formState)}
+        disabled={isButtonDisabled(state.formState) || preview}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}
       </button>

@@ -3,17 +3,19 @@
 }
 
 .community-answer-container>::after {
-  @apply relative h-13 inline-block text-center bottom-0 w-full pt-3;
-  content: '...';
-  line-height: 1;
-  color: theme(colors.grey-600);
-  font-size: 30px;
-  letter-spacing: .6em;
+  @apply relative block;
+  content: '';
+  margin: 32px auto 12px;
+  width: 120px;
+  height: 8px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 3'%3E%3Cpath d='M32.5 1.5a.5.5 0 0 1-.5.5H1a.5.5 0 0 1 0-1h31a.5.5 0 0 1 .5.5zM89 1H58a.5.5 0 0 0 0 1h31a.5.5 0 0 0 0-1zM38.5 0A1.5 1.5 0 1 0 40 1.5 1.5 1.5 0 0 0 38.5 0zM45 0a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 45 0zm6.5 0A1.5 1.5 0 1 0 53 1.5 1.5 1.5 0 0 0 51.5 0z' fill='%23e3e2e8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .community-answer-container>:last-child::after {
-  content: '';
-  height: 0;
+  content: none;
 }
 
 .community-qa-comment__input:placeholder-shown {

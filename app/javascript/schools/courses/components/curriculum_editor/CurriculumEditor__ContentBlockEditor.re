@@ -480,7 +480,7 @@ let make =
 
           <div
             id={"content-block-controls-" ++ (sortIndex |> string_of_int)}
-            className="flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
+            className="flex absolute right-0 top-0 bg-white rounded-bl rounded-tr-lg overflow-hidden shadow z-30">
             {
               sortIndex != 1 ?
                 <button
@@ -559,7 +559,7 @@ let make =
               value={state.sortIndex |> string_of_int}
             />
             <div
-              className="content-block__content bg-gray-200 flex justify-center items-center">
+              className="content-block__content bg-gray-200 flex justify-center items-center rounded-t-lg">
               {
                 switch (contentBlock) {
                 | Some(contentBlock) =>
@@ -592,12 +592,12 @@ let make =
                         </div>
                       | Embed(_url, embedCode) =>
                         <div
-                          className="content-block__embed"
+                          className="content-block__embed rounded-lg overflow-hidden"
                           dangerouslySetInnerHTML={"__html": embedCode}
                         />
                       | File(url, title, filename) =>
                         <a
-                          className="flex justify-between items-center bg-white px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
+                          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
                           target="_blank"
                           href=url>
                           <div className="flex items-center">

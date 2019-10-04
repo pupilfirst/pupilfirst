@@ -8,22 +8,39 @@ module Targets
     end
 
     def details
+      if @founder.present?
+        {
+          pending_user_ids: pending_user_ids,
+          submissions: details_for_submissions,
+          submission_attachments: attachments_for_submissions,
+          feedback: feedback_for_submissions,
+          grading: grading,
+          **default_props
+        }
+      else
+        {
+          pending_user_ids: [],
+          submissions: [],
+          submission_attachments: [],
+          feedback: [],
+          grading: [],
+          **default_props
+        }
+      end
+    end
+
+    private
+
+    def default_props
       {
-        pending_user_ids: pending_user_ids,
-        submissions: details_for_submissions,
-        submission_attachments: attachments_for_submissions,
-        feedback: feedback_for_submissions,
         quiz_questions: quiz_questions,
         content_blocks: content_blocks,
         communities: community_details,
         link_to_complete: @target.link_to_complete,
         evaluated: @target.evaluation_criteria.exists?,
-        grading: grading,
         completion_instructions: @target.completion_instructions
       }
     end
-
-    private
 
     def communities
       @target.course.communities.where(target_linkable: true)

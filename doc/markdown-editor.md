@@ -168,7 +168,7 @@ line from being converted to a list.
 ### Code blocks, and inline-code.
 
 There are a couple of ways to style code with our Markdown editor. You can
-write code in-line by wrapping it using a single _backtick character:
+write code in-line by wrapping it using a single _backtick_ character:
 
 ```markdown
 This is a line that has some `inline code` within it.

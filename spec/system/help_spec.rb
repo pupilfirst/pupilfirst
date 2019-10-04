@@ -6,7 +6,7 @@ feature 'Help pages', js: true do
   end
 
   scenario 'User visits the markdown editor help page' do
-    visit '/help/markdown'
+    visit '/help/markdown-editor'
     expect(page).to have_text('Markdown is a method to add styling for your text on the web.')
   end
 end

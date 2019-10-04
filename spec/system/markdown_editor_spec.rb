@@ -52,14 +52,19 @@ feature 'Markdown editor', js: true do
 
     expect(last_question.description).to include("#{intro_sentence}\n![logo_lipsum_on_light_bg.png]")
 
+    expected_url_head = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}/markdown_attachments"
+
     expect(last_question.description).to match(
-      %r{!\[logo_lipsum_on_light_bg\.png\]\(/markdown_attachments/#{image_attachment.id}/[a-zA-Z0-9\-_]{22}\)}
+      %r{!\[logo_lipsum_on_light_bg\.png\]\(#{expected_url_head}/#{image_attachment.id}/#{image_attachment.token}\)}
     )
+
+    # Make sure the token _looks_ right.
+    expect(image_attachment.token).to match(/[a-zA-Z0-9\-_]{22}/)
 
     expect(last_question.description).to include("\n[pdf-sample.pdf]")
 
     expect(last_question.description).to match(
-      %r{\[pdf-sample\.pdf\]\(/markdown_attachments/#{pdf_attachment.id}/[a-zA-Z0-9\-_]{22}\)}
+      %r{\[pdf-sample\.pdf\]\(#{expected_url_head}/#{pdf_attachment.id}/#{pdf_attachment.token}\)}
     )
 
     # The attachment should have been linked to the uploading user.

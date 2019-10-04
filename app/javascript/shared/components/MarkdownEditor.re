@@ -386,8 +386,10 @@ let make =
             />
           </DisablingCover>
           <div
-            className="bg-gray-100 flex-grow-0 border-t border-primary-200 border-dashed text-sm flex justify-between">
-            <form className="flex items-center flex-wrap" id=fileFormId>
+            className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
+            <form
+              className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
+              id=fileFormId>
               <input
                 name="authenticity_token"
                 type_="hidden"
@@ -412,7 +414,7 @@ let make =
                 switch (state.attachment) {
                 | ReadyToAttachFile(error) =>
                   <label
-                    className="pl-3 py-1 flex-grow cursor-pointer"
+                    className="px-3 py-1 flex-grow cursor-pointer"
                     htmlFor=fileInputId>
                     {
                       switch (error) {
@@ -438,10 +440,10 @@ let make =
               }
             </form>
             <a
-              href="/help/markdown"
+              href="/help/markdown-editor"
               target="_blank"
-              className="px-3 py-1 hover:text-secondary-500 cursor-pointer">
-              <FaIcon classes="fab fa-markdown" />
+              className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
+              <FaIcon classes="fab fa-markdown text-sm" />
               <span className="text-xs ml-1 font-semibold hidden sm:inline">
                 {"Need help?" |> str}
               </span>

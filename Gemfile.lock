@@ -687,7 +687,8 @@ GEM
       sprockets-rails
       tilt
     scarf (0.2.5)
-    scout_apm (3.0.0.pre28)
+    scout_apm (2.6.1)
+      parser
     seedbank (0.5.0)
       rake (>= 10.0)
     select2-rails (4.0.3)
@@ -886,7 +887,7 @@ DEPENDENCIES
   rubocop-rails (~> 2.3)
   sass-rails (~> 5.0)
   scarf (~> 0.2)
-  scout_apm (~> 3.0.x)
+  scout_apm (~> 2.6)
   seedbank (~> 0.4)
   select2-rails (~> 4.0)
   sendinblue (~> 2.4)

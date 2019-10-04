@@ -70,7 +70,7 @@ type action =
   | UpdateVisibility(Target.visibility)
   | UpdateContentEditorDirty(bool)
   | UpdateContentBlocks(list(ContentBlock.t), array(string))
-  | SwitchPreviewMode
+  | SwitchPreviewMode(bool)
   | LoadOldVersion(list(ContentBlock.t), string, array(string))
   | SelectVersion(string)
   | UpdateVersions(array(string))
@@ -376,7 +376,7 @@ let reducer = (state, action) =>
       selectedVersion,
       previewMode: true,
     }
-  | SwitchPreviewMode => {...state, previewMode: !state.previewMode}
+  | SwitchPreviewMode(previewMode) => {...state, previewMode}
   | UpdateVersions(versions) => {
       ...state,
       versions,
@@ -544,7 +544,8 @@ let selectVersionCB =
     )
     |> ignore;
 
-let switchViewModeCB = (send, ()) => send(SwitchPreviewMode);
+let switchViewModeCB = (send, previewMode) =>
+  send(SwitchPreviewMode(previewMode));
 
 [@react.component]
 let make =
@@ -1070,7 +1071,7 @@ let make =
                         )
                         className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
                         <i className="fas fa-plus-circle text-lg" />
-                        <h5 className="font-semibold mt-2">
+                        <h5 className="font-semibold ml-2">
                           {"Add another Question" |> str}
                         </h5>
                       </a>

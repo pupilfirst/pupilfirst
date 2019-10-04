@@ -402,12 +402,7 @@ let make =
                 name="markdown_attachment[file]"
                 id=fileInputId
                 multiple=false
-                onChange={
-                  attachFile(
-                    send,
-                    fileFormId,
-                  )
-                }
+                onChange={attachFile(send, fileFormId)}
               />
               {
                 switch (state.attachment) {
@@ -455,7 +450,7 @@ let make =
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("MarkDownEditor");
+  let component = ReasonReact.statelessComponent("MarkdownEditor");
 
   let make =
       (

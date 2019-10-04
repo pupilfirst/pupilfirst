@@ -19,7 +19,7 @@ type state = {
   contentBlock: option(ContentBlock.t),
   sortIndex: int,
   savingContentBlock: bool,
-  markDownContent: string,
+  markdownContent: string,
   fileName: string,
   embedUrl: string,
   formDirty: bool,
@@ -38,7 +38,7 @@ let reducer = (state, action) =>
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
   | UpdateMarkdown(text) =>
-    {...state, markDownContent: text, formDirty: true};
+    {...state, markdownContent: text, formDirty: true};
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | ResetFormDirty(buttonText) => {
       ...state,
@@ -230,7 +230,7 @@ let decodeContent =
   Json.Decode.(
     switch (blockType) {
     | Markdown(_markdown) =>
-      ContentBlock.makeMarkdownBlock(state.markDownContent)
+      ContentBlock.makeMarkdownBlock(state.markdownContent)
     | File(_url, _title, _filename) =>
       ContentBlock.makeFileBlock(
         fileUrl,
@@ -311,7 +311,7 @@ let updateContentBlock =
   let updatedContentBlockType =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) =>
-      ContentBlock.makeMarkdownBlock(state.markDownContent)
+      ContentBlock.makeMarkdownBlock(state.markdownContent)
     | File(url, _title, filename) =>
       ContentBlock.makeFileBlock(
         url,
@@ -325,7 +325,7 @@ let updateContentBlock =
   let id = state.id;
   let text =
     switch (contentBlock |> ContentBlock.blockType) {
-    | Markdown(_markdown) => state.markDownContent
+    | Markdown(_markdown) => state.markdownContent
     | File(_url, _title, _filename) => state.contentBlockPropertyText
     | Image(_url, _caption) => state.contentBlockPropertyText
     | Embed(_url, _embedCode) => ""
@@ -446,7 +446,7 @@ let make =
     contentBlock,
     sortIndex,
     savingContentBlock: false,
-    markDownContent:
+    markdownContent:
       switch (blockType) {
       | Markdown(markdown) => markdown
       | _ => ""
@@ -646,7 +646,7 @@ let make =
                   <input
                     type_="hidden"
                     name="content_block[markdown]"
-                    value={state.markDownContent}
+                    value={state.markdownContent}
                   />
                 | _ => React.null
                 }

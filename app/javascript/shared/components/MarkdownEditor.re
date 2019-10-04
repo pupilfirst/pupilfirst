@@ -91,11 +91,6 @@ let reducer = (state, action) =>
 let addAttachment = (markdownEmbedCode, send) =>
   send(AddAttachment(markdownEmbedCode));
 
-let updateMarkdown = (markdown, send, updateMarkdownCB) => {
-  send(UpdateMarkdown(markdown));
-  updateMarkdownCB(markdown);
-};
-
 type previewButtonPosition =
   | PositionRight
   | PositionLeft;
@@ -187,7 +182,7 @@ let attachmentEmbedGap = oldMarkdown =>
     "\n\n";
   };
 
-let uploadFile = (send, oldMarkdown, updateMarkdownCB, formData) =>
+let uploadFile = (send, formData) =>
   Js.Promise.(
     Fetch.fetchWithInit(
       "/markdown_attachments/",
@@ -247,17 +242,15 @@ let uploadFile = (send, oldMarkdown, updateMarkdownCB, formData) =>
     |> ignore
   );
 
-let submitForm = (formId, send, oldMarkdown, updateMarkdownCB) => {
+let submitForm = (formId, send) => {
   let element = ReactDOMRe._getElementById(formId);
   switch (element) {
-  | Some(element) =>
-    DomUtils.FormData.create(element)
-    |> uploadFile(send, oldMarkdown, updateMarkdownCB)
+  | Some(element) => DomUtils.FormData.create(element) |> uploadFile(send)
   | None => raise(FormNotFound(formId))
   };
 };
 
-let attachFile = (send, oldMarkdown, updateMarkdownCB, fileFormId, event) =>
+let attachFile = (send, fileFormId, event) =>
   switch (ReactEvent.Form.target(event)##files) {
   | [||] => ()
   | files =>
@@ -273,7 +266,7 @@ let attachFile = (send, oldMarkdown, updateMarkdownCB, fileFormId, event) =>
     | Some(_) => send(SetAttachmentError(error))
     | None =>
       send(SetAttaching);
-      submitForm(fileFormId, send, oldMarkdown, updateMarkdownCB);
+      submitForm(fileFormId, send);
     };
   };
 
@@ -281,6 +274,14 @@ let isEditorDisabled = attachment =>
   switch (attachment) {
   | AttachingFile => true
   | ReadyToAttachFile(_) => false
+  };
+
+let conditionallyUseCallback = (value, send, updateMarkdownCB, newMarkdown) =>
+  if (value == newMarkdown) {
+    ();
+  } else {
+    send(UpdateMarkdown(newMarkdown));
+    updateMarkdownCB(newMarkdown);
   };
 
 [@react.component]
@@ -374,10 +375,11 @@ let make =
               ?placeholder
               content={state.markdown}
               onChange={
-                newMarkdownContent =>
-                  value == newMarkdownContent ?
-                    () :
-                    updateMarkdown(newMarkdownContent, send, updateMarkdownCB)
+                conditionallyUseCallback(
+                  state.markdown,
+                  send,
+                  updateMarkdownCB,
+                )
               }
               ?command
               commandAt=?{state.commandPair.commandAt}
@@ -403,8 +405,6 @@ let make =
                 onChange={
                   attachFile(
                     send,
-                    state.markdown,
-                    updateMarkdownCB,
                     fileFormId,
                   )
                 }

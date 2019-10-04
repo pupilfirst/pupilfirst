@@ -37,11 +37,8 @@ let reducer = (state, action) =>
         },
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
-  | UpdateMarkdown(text) => {
-      ...state,
-      markDownContent: text,
-      formDirty: true,
-    }
+  | UpdateMarkdown(text) =>
+    {...state, markDownContent: text, formDirty: true};
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | ResetFormDirty(buttonText) => {
       ...state,

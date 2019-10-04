@@ -208,7 +208,13 @@ let showGradePill =
       state,
       setState,
     ) =>
-  <div key={key |> string_of_int} className="md:pr-8 mt-4">
+  <div
+    ariaLabel={
+      "evaluation-criterion-"
+      ++ (evaluvationCriterion |> EvaluationCriterion.id)
+    }
+    key={key |> string_of_int}
+    className="md:pr-8 mt-4">
     {
       gradePillHeader(
         evaluvationCriterion |> EvaluationCriterion.name,
@@ -331,6 +337,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
     };
 
   <div
+    ariaLabel="submission-status"
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
       className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
@@ -404,7 +411,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
       switch (submission |> Submission.evaluatedAt, status) {
       | (Some(_), Graded(_)) =>
         <div className="mt-4 md:pl-6 w-full">
-          <div
+          <button
             onClick=(
               _ =>
                 undoGrading(
@@ -416,7 +423,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
             className="btn btn-danger btn-small w-full">
             <i className="fas fa-undo" />
             <span className="ml-2"> {"Undo Grading" |> str} </span>
-          </div>
+          </button>
         </div>
       | (None, Graded(_))
       | (_, Grading)

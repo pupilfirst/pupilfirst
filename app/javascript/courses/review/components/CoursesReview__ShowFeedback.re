@@ -106,7 +106,7 @@ let make =
     React.useState(() =>
       {saving: false, newFeedback: "", showFeedbackEditor: false}
     );
-  <div>
+  <div ariaLabel="feedback-section">
     {showFeedback(feedback)}
     {
       reviewed ?
@@ -114,13 +114,15 @@ let make =
           {
             state.showFeedbackEditor ?
               <div className="p-4 md:p-6">
-                <CoursesReview__FeedbackEditor
-                  feedback={state.newFeedback}
-                  label="Add feedback"
-                  updateFeedbackCB={updateFeedbackCB(setState)}
-                />
+                <DisablingCover disabled={state.saving}>
+                  <CoursesReview__FeedbackEditor
+                    feedback={state.newFeedback}
+                    label="Add feedback"
+                    updateFeedbackCB={updateFeedbackCB(setState)}
+                  />
+                </DisablingCover>
                 <button
-                  disabled={state.newFeedback == ""}
+                  disabled={state.newFeedback == "" || state.saving}
                   className="btn btn-success btn-large w-full border border-green-600 mt-4"
                   onClick={
                     _ =>
@@ -137,7 +139,7 @@ let make =
               </div> :
               <div
                 className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
-                <div
+                <button
                   onClick={
                     _ =>
                       setState(state => {...state, showFeedbackEditor: true})
@@ -152,7 +154,7 @@ let make =
                     )
                     |> str
                   }
-                </div>
+                </button>
               </div>
           }
         </div> :

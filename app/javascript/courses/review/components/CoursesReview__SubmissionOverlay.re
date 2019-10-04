@@ -60,6 +60,7 @@ let closeOverlay = courseId =>
 
 let headerSection = (submissionDetails, courseId) =>
   <div
+    ariaLabel="submissions-overlay-header"
     className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
     <div
       className="relative bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">

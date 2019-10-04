@@ -3,7 +3,6 @@ require 'rails_helper'
 feature 'Course review' do
   include UserSpecHelper
 
-  # Setup a course with a single founder target, ...
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let(:level_1) { create :level, :one, course: course }
@@ -18,7 +17,6 @@ feature 'Course review' do
   let(:auto_verify_target) { create :target, :for_founders, target_group: target_group_l1 }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
-  # ... a couple of teams and a couch.
   let(:team_l1) { create :startup, level: level_1 }
   let(:team_l2) { create :startup, level: level_2 }
   let(:team_l3) { create :startup, level: level_3 }
@@ -27,7 +25,6 @@ feature 'Course review' do
   let(:school_admin) { create :school_admin }
 
   before do
-    # Enroll the coach in the course.
     create :faculty_course_enrollment, faculty: coach, course: course
     create :faculty_startup_enrollment, faculty: team_coach, startup: team_l3
 
@@ -40,7 +37,7 @@ feature 'Course review' do
   context 'with multiple submissions' do
     # Create a couple of passed submissions for the team 3.
     let(:submission_l1_t3) { create(:timeline_event, latest: true, target: target_l1, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-    let(:submission_l2_t3) { create(:timeline_event, latest: true, target: target_l2, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let(:submission_l2_t3) { create(:timeline_event, latest: true, target: target_l2, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: nil) }
     let(:auto_verified_submission) { create(:timeline_event, latest: true, target: auto_verify_target, passed_at: 1.day.ago) }
 
     # Create a couple of pending submissions for the teams.
@@ -48,12 +45,15 @@ feature 'Course review' do
     let(:submission_l2_t2) { create(:timeline_event, latest: true, target: target_l2) }
     let(:submission_l3_t3) { create(:timeline_event, latest: true, target: target_l3) }
 
+    let(:feedback) { create(:startup_feedback, startup_id: team_l2.id, faculty_id: coach.id) }
+
     before do
       submission_l1_t1.founders << team_l1.founders.first
       submission_l2_t2.founders << team_l2.founders.first
       submission_l1_t3.founders << team_l3.founders.first
       submission_l2_t3.founders << team_l3.founders.first
       submission_l3_t3.founders << team_l3.founders.first
+      submission_l2_t3.startup_feedback << feedback
     end
 
     scenario 'coach visits review dashboard', js: true do
@@ -91,11 +91,14 @@ feature 'Course review' do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text("Passed")
       end
       within("div[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text("Failed")
+        expect(page).to have_text("Feedback Sent")
       end
     end
 
@@ -192,6 +195,17 @@ feature 'Course review' do
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
+    end
+
+    scenario 'team coach visit review dashboard', js: true do
+      sign_in_user coach.user, referer: review_course_path(course)
+
+      within("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+        expect(page).to have_text(target_l3.title)
+      end
+      find("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']").click
+      # submissions overlay should be visible
+      expect(page).to have_text('Submission #1')
     end
   end
 

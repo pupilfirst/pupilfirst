@@ -2,7 +2,9 @@ class TimelineEventPolicy < ApplicationPolicy
   def show?
     return false if record.blank?
 
-    user.faculty.courses.where(id: record.target.course.id).present?
+    return false if record.evaluation_criteria.blank?
+
+    CoursePolicy.new(@pundit_user, record.target.course).review?
   end
 
   def review?

@@ -49,6 +49,6 @@ class SubmissionDetailsResolver < ApplicationResolver
 
     return false if current_user.faculty.blank?
 
-    current_user.faculty.courses.where(id: target.course.id).present?
+    target.course.in?(current_user.faculty.courses_with_dashboard)
   end
 end

@@ -107,7 +107,7 @@ let make =
       <input
         value=state
         onChange={event => send(ReactEvent.Form.target(event)##value)}
-        className="appearance-none block bg-white text-gray-800 border border-gray-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block bg-white leading-snug border border-gray-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray-500"
         id="tags"
         type_="text"
         placeholder={

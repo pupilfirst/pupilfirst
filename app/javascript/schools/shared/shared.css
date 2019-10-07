@@ -485,7 +485,7 @@
   @apply border-primary-400;
 }
 
-.select-list__item-selected--unremovable {
+.select-list__item-selected-unremovable {
   @apply border-gray-400 bg-gray-200;
 }
 

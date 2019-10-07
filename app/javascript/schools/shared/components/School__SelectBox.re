@@ -70,7 +70,7 @@ let make =
         |> Array.of_list
         |> React.array :
         <div
-          className="flex flex-col items-center justify-center bg-gray-100 text-gray-600 rounded px-3 pt-3 ">
+          className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 rounded px-3 pt-3 ">
           <i className="fas fa-inbox text-3xl" />
           <h5 className="mt-1 font-semibold"> {"None Selected" |> str} </h5>
           <span className="text-xs">
@@ -93,7 +93,7 @@ let make =
               nonSelectedList |> List.length > 3 ?
                 <div className="px-3 pt-3 pb-2">
                   <input
-                    className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-tight focus:outline-none"
+                    className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-normal focus:outline-none"
                     type_="text"
                     placeholder="Type to Search"
                     onChange={
@@ -122,7 +122,7 @@ let make =
                          }
                        }
                        title={"Select " ++ value}
-                       className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500">
+                       className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
                        {value |> str}
                      </div>
                    )

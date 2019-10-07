@@ -21,12 +21,11 @@ let make = (~submissions, ~levels, ~selectedLevel, ~openOverlayCB) => {
     {
       switch (submissionToShow) {
       | [||] =>
-        <div
-          className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow">
-          <img className="w-3/4 md:w-1/2 mx-auto" src=pendingEmptyImage />
-          <h4 className="mt-2">
+        <div className="text-lg font-semibold text-center py-4">
+          <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
             {"No pending submissions to review" |> str}
-          </h4>
+          </h5>
+          <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=pendingEmptyImage />
         </div>
       | _ =>
         submissionToShow

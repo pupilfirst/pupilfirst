@@ -260,10 +260,14 @@ let make =
             ~count=10,
             ~element=SkeletonLoading.card(),
           ) :
-          <div
-            className="text-lg font-semibold text-center rounded-lg p-8 bg-white shadow">
-            <img className="w-3/4 md:w-1/2 mx-auto" src=reviewedEmptyImage />
-            <h4 className="mt-2"> {"No Reviewed Submission" |> str} </h4>
+          <div className="text-lg font-semibold text-center px-6 py-4">
+            <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+              {"No Reviewed Submission" |> str}
+            </h5>
+            <img
+              className="w-3/4 md:w-1/2 mx-auto mt-2"
+              src=reviewedEmptyImage
+            />
           </div>
       | _ => showSubmission(reviewedSubmissions, levels, openOverlayCB)
       }

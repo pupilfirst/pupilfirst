@@ -2,7 +2,7 @@ class CoursePolicy < ApplicationPolicy
   def curriculum?
     return true if current_school_admin.present?
 
-    return review? if user.faculty.present?
+    return true if user.faculty.present? && review?
 
     founder = user.founders.joins(:course).where(courses: { id: record }).first
     # User must have a student profile in the course

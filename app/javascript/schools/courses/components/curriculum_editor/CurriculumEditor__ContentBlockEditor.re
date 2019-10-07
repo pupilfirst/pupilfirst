@@ -37,8 +37,11 @@ let reducer = (state, action) =>
         },
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
-  | UpdateMarkdown(text) =>
-    {...state, markdownContent: text, formDirty: true};
+  | UpdateMarkdown(text) => {
+      ...state,
+      markdownContent: text,
+      formDirty: true,
+    }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
   | ResetFormDirty(buttonText) => {
       ...state,
@@ -475,7 +478,7 @@ let make =
           ++ " editor for "
           ++ editorId
         }
-        className="relative border border-gray-400 rounded-lg overflow-hidden">
+        className="relative border border-gray-400 rounded-lg">
         /* Content block controls */
 
           <div

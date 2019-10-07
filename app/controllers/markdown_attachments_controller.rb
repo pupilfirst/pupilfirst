@@ -1,5 +1,5 @@
 class MarkdownAttachmentsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: %i[create]
 
   # POST /markdown_attachments
   def create

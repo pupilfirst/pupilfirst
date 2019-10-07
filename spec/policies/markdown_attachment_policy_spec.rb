@@ -9,7 +9,6 @@ describe MarkdownAttachmentPolicy do
 
   let(:pundit_user) do
     OpenStruct.new(
-      current_user: user,
       current_school: school
     )
   end

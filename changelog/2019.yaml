@@ -2,6 +2,10 @@
 changelog:
 - timestamp: '2019-10-07T08:38:32Z'
   changes:
+  - timestamp: '2019-10-07T08:40:00Z'
+    title: The preview button on the school admin target editor has been changed to a
+      tab that switches between the _Preview_ and _Edit_ modes.
+    category: ui
   - timestamp: '2019-10-07T08:38:21Z'
     title: The design of the _separator_ between submissions listed on a student's
       target overlay has been tweaked to avoid confusion with a carousel's control.

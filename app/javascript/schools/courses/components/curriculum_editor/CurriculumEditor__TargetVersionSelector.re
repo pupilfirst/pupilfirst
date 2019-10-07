@@ -95,8 +95,15 @@ let make =
           </label>
           <button
             onClick={handleClick(setShowDropdown, versions)}
-            className="target-editor__version-dropdown-button text-sm appearance-none bg-white border border-gray-400 inline-flex items-center justify-between hover:bg-gray-100 hover:shadow-lg focus:outline-none font-semibold relative rounded">
-            <span className="flex items-center px-3 py-2">
+            className={
+              "target-editor__version-dropdown-button text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none font-semibold relative rounded "
+              ++ (
+                versions |> Array.length > 1 ?
+                  "px-3 border-gray-400 hover:bg-gray-100 hover:shadow-lg" :
+                  "border-transparent cursor-auto"
+              )
+            }>
+            <span className="flex items-center py-2">
               <span className="truncate text-left">
                 {
                   selectedVersion
@@ -108,7 +115,7 @@ let make =
             {
               versions |> Array.length > 1 ?
                 <span
-                  className="text-right px-3 py-2 border-l border-gray-400">
+                  className="text-right pl-3 py-2 border-l border-gray-400">
                   <i className="fas fa-chevron-down text-sm" />
                 </span> :
                 React.null

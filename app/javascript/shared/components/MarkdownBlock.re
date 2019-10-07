@@ -17,7 +17,7 @@ let profileClasses = (profile: Markdown.profile) =>
   };
 
 let markdownBlockClasses = (profile, className) => {
-  let defaultClasses = "markdown-block " ++ profileClasses(profile);
+  let defaultClasses = "markdown-block text-base " ++ profileClasses(profile);
   switch (className) {
   | Some(className) => defaultClasses ++ className
   | None => defaultClasses

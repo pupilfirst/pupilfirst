@@ -179,10 +179,7 @@
   background-color: #FBFAFC;
   overflow-x: hidden;
   overflow-y: scroll;
-}
-
-.drawer-right-form__input {
-  margin-bottom: 2rem;
+  @apply text-sm;
 }
 
 .drawer-right-form__error-msg {
@@ -486,6 +483,10 @@
 .select-list__item-selected {
   animation: glowing 500ms ease-in;
   @apply border-primary-400;
+}
+
+.select-list__item-selected--unremovable {
+  @apply border-gray-400 bg-gray-200;
 }
 
 @keyframes glowing {

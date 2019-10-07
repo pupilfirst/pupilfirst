@@ -695,7 +695,7 @@ let make =
         <div className="w-full">
           <div className="bg-gray-200 w-full pt-6">
             <ul
-              className="flex flex-wrap w-full max-w-3xl mx-auto px-3 -mb-px">
+              className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
               <li
                 onClick={_event => dispatch(UpdateActiveStep(AddContent))}
                 className={

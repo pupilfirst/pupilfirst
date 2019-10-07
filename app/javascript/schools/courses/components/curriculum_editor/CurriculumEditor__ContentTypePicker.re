@@ -74,7 +74,7 @@ let make = (~sortIndex, ~staticMode, ~newContentBlockCB) => {
         </div>
     }
     <div
-      className="add-content-block__block-content-type hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10"
+      className="add-content-block__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10"
       id={"content-type-picker-" ++ (sortIndex |> string_of_int)}>
       {
         [|MarkdownButton, ImageButton, EmbedButton, FileButton|]

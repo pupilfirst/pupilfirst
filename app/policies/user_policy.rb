@@ -3,6 +3,9 @@ class UserPolicy < ApplicationPolicy
     # current_school must be present
     return false if current_school.blank?
 
+    # school admin can access home
+    return true if current_school_admin.present?
+
     # coach in a school can access home
     return true if current_coach.present?
 

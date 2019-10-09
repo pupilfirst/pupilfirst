@@ -14,6 +14,7 @@ let decodeProps = json =>
     json |> field("coaches", list(Coach.decode)),
     json |> field("users", list(User.decode)),
     json |> field("evaluationCriteria", list(EvaluationCriterion.decode)),
+    json |> field("preview", bool),
   );
 
 let (
@@ -27,6 +28,7 @@ let (
   coaches,
   users,
   evaluationCriteria,
+  preview,
 ) =
   DomUtils.parseJsonAttribute() |> decodeProps;
 
@@ -42,6 +44,7 @@ ReactDOMRe.renderToElementWithId(
     coaches
     users
     evaluationCriteria
+    preview
   />,
   "react-root",
 );

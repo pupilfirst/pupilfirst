@@ -19,7 +19,7 @@ type state = {
   contentBlock: option(ContentBlock.t),
   sortIndex: int,
   savingContentBlock: bool,
-  markDownContent: string,
+  markdownContent: string,
   fileName: string,
   embedUrl: string,
   formDirty: bool,
@@ -39,7 +39,7 @@ let reducer = (state, action) =>
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
   | UpdateMarkdown(text) => {
       ...state,
-      markDownContent: text,
+      markdownContent: text,
       formDirty: true,
     }
   | UpdateFileName(fileName) => {...state, fileName, formDirty: true}
@@ -233,7 +233,7 @@ let decodeContent =
   Json.Decode.(
     switch (blockType) {
     | Markdown(_markdown) =>
-      ContentBlock.makeMarkdownBlock(state.markDownContent)
+      ContentBlock.makeMarkdownBlock(state.markdownContent)
     | File(_url, _title, _filename) =>
       ContentBlock.makeFileBlock(
         fileUrl,
@@ -314,7 +314,7 @@ let updateContentBlock =
   let updatedContentBlockType =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) =>
-      ContentBlock.makeMarkdownBlock(state.markDownContent)
+      ContentBlock.makeMarkdownBlock(state.markdownContent)
     | File(url, _title, filename) =>
       ContentBlock.makeFileBlock(
         url,
@@ -328,7 +328,7 @@ let updateContentBlock =
   let id = state.id;
   let text =
     switch (contentBlock |> ContentBlock.blockType) {
-    | Markdown(_markdown) => state.markDownContent
+    | Markdown(_markdown) => state.markdownContent
     | File(_url, _title, _filename) => state.contentBlockPropertyText
     | Image(_url, _caption) => state.contentBlockPropertyText
     | Embed(_url, _embedCode) => ""
@@ -449,7 +449,7 @@ let make =
     contentBlock,
     sortIndex,
     savingContentBlock: false,
-    markDownContent:
+    markdownContent:
       switch (blockType) {
       | Markdown(markdown) => markdown
       | _ => ""
@@ -478,12 +478,12 @@ let make =
           ++ " editor for "
           ++ editorId
         }
-        className="relative border border-gray-400 rounded-lg overflow-hidden">
+        className="relative border border-gray-400 rounded-lg">
         /* Content block controls */
 
           <div
             id={"content-block-controls-" ++ (sortIndex |> string_of_int)}
-            className="flex absolute right-0 top-0 bg-white rounded-bl overflow-hidden shadow z-20">
+            className="flex absolute right-0 top-0 bg-white rounded-bl rounded-tr-lg overflow-hidden shadow z-30">
             {
               sortIndex != 1 ?
                 <button
@@ -562,7 +562,7 @@ let make =
               value={state.sortIndex |> string_of_int}
             />
             <div
-              className="content-block__content bg-gray-200 flex justify-center items-center">
+              className="content-block__content bg-gray-200 flex justify-center items-center rounded-t-lg">
               {
                 switch (contentBlock) {
                 | Some(contentBlock) =>
@@ -595,12 +595,12 @@ let make =
                         </div>
                       | Embed(_url, embedCode) =>
                         <div
-                          className="content-block__embed"
+                          className="content-block__embed rounded-lg overflow-hidden"
                           dangerouslySetInnerHTML={"__html": embedCode}
                         />
                       | File(url, title, filename) =>
                         <a
-                          className="flex justify-between items-center bg-white px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
+                          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
                           target="_blank"
                           href=url>
                           <div className="flex items-center">
@@ -649,7 +649,7 @@ let make =
                   <input
                     type_="hidden"
                     name="content_block[markdown]"
-                    value={state.markDownContent}
+                    value={state.markdownContent}
                   />
                 | _ => React.null
                 }

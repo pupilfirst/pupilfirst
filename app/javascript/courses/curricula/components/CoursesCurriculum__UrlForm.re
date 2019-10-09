@@ -58,7 +58,7 @@ let make = (~attachUrlCB, ~typingCB) => {
         value={state.url}
         type_="text"
         placeholder="Type full URL starting with https://..."
-        className="mt-2 cursor-pointer truncate h-10 border border-grey-400 border-dashed flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
+        className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
         onChange={updateUrl(send, typingCB)}
       />
       <button
@@ -71,7 +71,7 @@ let make = (~attachUrlCB, ~typingCB) => {
     {
       state.errors
       |> List.map(error =>
-           <div className="px-4 mt-2 text-red-600 text-sm" key=error>
+           <div className="mt-2 text-red-600 text-sm" key=error>
              <i className="fas fa-exclamation-circle mr-2" />
              <span> {error |> str} </span>
            </div>

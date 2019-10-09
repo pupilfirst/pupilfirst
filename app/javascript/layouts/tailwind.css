@@ -170,7 +170,7 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 }
 
 .btn-small {
-  @apply py-1 px-3 text-xs h-7 leading-tight;
+  @apply py-1 px-3 text-xs h-7 leading-normal;
 }
 
 .btn-normal {
@@ -189,6 +189,12 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 .footer__bottom {
   background-color: #1c1626;
+}
+
+@screen md {
+  .dropdown__list {
+    max-height: 20rem;
+  }
 }
 
 .dropdown__list-right {

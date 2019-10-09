@@ -1,0 +1,9 @@
+.course-review__feedback-editor label {
+  @apply text-sm;
+}
+
+@screen md {
+  .course-review__feedback-editor label {
+    @apply text-base;
+  }
+}

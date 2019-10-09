@@ -205,7 +205,7 @@ let make =
           <button
             title="close"
             onClick={_e => closeFormCB()}
-            className="flex items-center justify-center bg-gray-200 text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+            className="flex items-center justify-center bg-gray-100 text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
             <i className="fas fa-times text-xl" />
           </button>
         </div>
@@ -231,7 +231,7 @@ let make =
                 <div className="max-w-2xl p-6 mx-auto">
                   <div>
                     <label
-                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
                       htmlFor="name">
                       {"Name" |> str}
                     </label>
@@ -246,7 +246,7 @@ let make =
                             ReactEvent.Form.target(event)##value,
                           )
                       }
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="name"
                       type_="text"
                       placeholder="Student name here"
@@ -258,7 +258,7 @@ let make =
                   </div>
                   <div className="mt-5">
                     <label
-                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
                       htmlFor="team_name">
                       {"Team Name" |> str}
                     </label>
@@ -273,7 +273,7 @@ let make =
                             ReactEvent.Form.target(event)##value,
                           )
                       }
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="team_name"
                       type_="text"
                       placeholder="Team name here"
@@ -285,7 +285,7 @@ let make =
                   </div>
                   <div className="mt-5">
                     <label
-                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
                       htmlFor="title">
                       {"Title" |> str}
                     </label>
@@ -299,7 +299,7 @@ let make =
                             ),
                           )
                       }
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="title"
                       type_="text"
                       placeholder="Student, Coach, CEO, etc."
@@ -307,7 +307,7 @@ let make =
                   </div>
                   <div className="mt-5">
                     <label
-                      className="inline-block tracking-wide text-xs font-semibold mb-2"
+                      className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
                       htmlFor="affiliation">
                       {"Affiliation" |> str}
                     </label>
@@ -321,51 +321,53 @@ let make =
                             ),
                           )
                       }
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="affiliation"
                       type_="text"
                       placeholder="Acme Inc., Acme University, etc."
                     />
                   </div>
                   <div className="mt-5">
-                    <div className="border-b border-gray-400 pb-2 mb-2 ">
+                    <div className="border-b pb-4 mb-2 ">
                       <span
-                        className="inline-block mr-1 text-gray-800 text-xs font-semibold">
+                        className="inline-block mr-1 text-xs font-semibold">
                         {"Course Coaches:" |> str}
                       </span>
-                      <div className="mt-2">
+                      <div className="mt-2 flex flex-wrap">
                         {
                           courseCoachIds |> List.length > 0 ?
                             courseCoachIds
                             |> List.map(coachId =>
-                                 <div
-                                   key={coachId |> string_of_int}
-                                   className="select-list__item-selected flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
-                                   {
-                                     schoolCoaches
-                                     |> List.find(coach =>
-                                          Coach.id(coach) == coachId
-                                        )
-                                     |> Coach.name
-                                     |> str
-                                   }
+                                 <div className="w-1/2">
+                                   <div
+                                     key={coachId |> string_of_int}
+                                     className="select-list__item-selected-unremovable flex items-center justify-between bg-gray-100 text-xs font-semibold border rounded p-3 mr-2 mb-2">
+                                     {
+                                       schoolCoaches
+                                       |> List.find(coach =>
+                                            Coach.id(coach) == coachId
+                                          )
+                                       |> Coach.name
+                                       |> str
+                                     }
+                                   </div>
                                  </div>
                                )
                             |> Array.of_list
                             |> ReasonReact.array :
                             <div
-                              className="flex items-center justify-between bg-gray-100 text-xs text-gray-600 border rounded p-3 mb-2">
+                              className="flex items-center justify-between bg-gray-100 text-xs text-gray-800 border rounded p-3 mb-2">
                               {"None Assigned" |> str}
                             </div>
                         }
                       </div>
                     </div>
-                    <div className="border-b border-gray-400 pb-2 mb-2 ">
+                    <div className="border-b pb-4 mb-2 mt-5 ">
                       <span
-                        className="inline-block mr-1 text-gray-800 text-xs font-semibold">
+                        className="inline-block mr-1 text-xs font-semibold">
                         {"Exclusive Team Coaches:" |> str}
                       </span>
-                      <div className="mt-2">
+                      <div className="mt-2 p-6 border rounded bg-gray-100">
                         <SA_StudentsPanel_SelectBox
                           items={state.teamCoaches}
                           multiSelectCB=multiSelectCoachEnrollmentsCB
@@ -374,7 +376,9 @@ let make =
                     </div>
                   </div>
                   <div className="mt-5">
-                    <div className="mb-2"> {"Tags applied:" |> str} </div>
+                    <div className="mb-2 text-xs font-semibold">
+                      {"Tags applied:" |> str}
+                    </div>
                     <SA_StudentsPanel_SearchableTagList
                       unselectedTags={
                         studentTags

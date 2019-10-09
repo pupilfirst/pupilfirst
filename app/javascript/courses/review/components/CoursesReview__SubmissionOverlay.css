@@ -1,0 +1,27 @@
+.review-submission-overlay__close {
+  left: 1.5rem;
+  top: -2rem;
+}
+
+@screen lg {
+  .review-submission-overlay__close {
+    left: -5rem;
+    top: 0;
+  }
+}
+
+.review-submission-overlay__submission-container>::after {
+  @apply relative block;
+  content: '';
+  margin: 32px auto 26px;
+  width: 120px;
+  height: 8px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 3'%3E%3Cpath d='M32.5 1.5a.5.5 0 0 1-.5.5H1a.5.5 0 0 1 0-1h31a.5.5 0 0 1 .5.5zM89 1H58a.5.5 0 0 0 0 1h31a.5.5 0 0 0 0-1zM38.5 0A1.5 1.5 0 1 0 40 1.5 1.5 1.5 0 0 0 38.5 0zM45 0a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 45 0zm6.5 0A1.5 1.5 0 1 0 53 1.5 1.5 1.5 0 0 0 51.5 0z' fill='%23e3e2e8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.review-submission-overlay__submission-container>:last-child::after {
+  content: none;
+}

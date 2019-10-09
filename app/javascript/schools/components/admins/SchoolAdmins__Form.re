@@ -171,7 +171,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
           </h5>
           <div>
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2"
+              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="email">
               {"Email" |> str}
             </label>
@@ -181,7 +181,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               onChange={
                 event => setEmail(ReactEvent.Form.target(event)##value)
               }
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="email"
               type_="email"
               placeholder="Add email here"
@@ -193,7 +193,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
           </div>
           <div className="mt-5">
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2"
+              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="name">
               {"Name" |> str}
             </label>
@@ -203,7 +203,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               onChange={
                 event => setName(ReactEvent.Form.target(event)##value)
               }
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="name"
               type_="text"
               placeholder="Add name here"

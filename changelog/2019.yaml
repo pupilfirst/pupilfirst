@@ -1,5 +1,37 @@
 ---
 changelog:
+- timestamp: '2019-10-07T08:38:32Z'
+  changes:
+  - timestamp: '2019-10-07T08:40:00Z'
+    title: The preview button on the school admin target editor has been changed to a
+      tab that switches between the _Preview_ and _Edit_ modes.
+    category: ui
+  - timestamp: '2019-10-07T08:38:21Z'
+    title: The design of the _separator_ between submissions listed on a student's
+      target overlay has been tweaked to avoid confusion with a carousel's control.
+    category: ui
+  - timestamp: '2019-10-07T08:20:53Z'
+    title: Fixed some design issues that could cause text to overflow on the student's
+      target overlay and on the community index.
+    category: ui
+  - timestamp: '2019-10-07T08:18:10Z'
+    title: Fixed a bug in the markdown editor that could cause the cursor to jump
+      around when editing a single character.
+    category: bugfix
+  - timestamp: '2019-10-07T08:17:32Z'
+    title: We've deployed a brand new interface for reviewing student submissions!
+      The new interface lists pending and reviewed submissions separately with a level
+      filter, and lets coaches view all submissions for a target from a student in
+      one place, making it easy to compare and check for improvements. The new interface
+      strips out the student filter, because of which the old review interface will
+      remain accessible (via the Home page, marked as _legacy_) until a new _"Your
+      Students"_ interface goes live.
+    category: feature
+  - timestamp: '2019-09-30T08:03:00Z'
+    title: The markdown editor now supports direct file uploads. Image files will be
+      embedded inline whereas all other file types will be treated as a Markdown-formatted
+      links.
+    category: feature
 - timestamp: '2019-09-23T11:38:08Z'
   changes:
   - timestamp: '2019-09-23T11:34:12Z'

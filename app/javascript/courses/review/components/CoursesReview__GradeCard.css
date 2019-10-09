@@ -1,0 +1,31 @@
+.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill {
+  @apply border border-r-0;
+}
+
+.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill:first-child {
+  @apply rounded-l-lg;
+}
+
+.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill:last-child {
+  @apply border-r rounded-r-lg;
+}
+
+.course-review-grade-card__status-pulse {
+  box-shadow: 0 0 0 rgba(237, 137, 54, 0.4);
+  animation: grade-status-pulse 1.25s infinite;
+}
+
+@keyframes grade-status-pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(237, 137, 54, 0.4);
+    box-shadow: 0 0 0 0 rgba(237, 137, 54, 0.4);
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 10px rgba(237, 137, 54, 0);
+    box-shadow: 0 0 0 10px rgba(237, 137, 54, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(237, 137, 54, 0);
+    box-shadow: 0 0 0 0 rgba(237, 137, 54, 0);
+  }
+}

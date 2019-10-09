@@ -1,22 +1,26 @@
 class ContentBlockResolver < ApplicationResolver
-  def collection(target_id, version_date)
-    if authorized?(target_id)
-      target = Target.find(target_id.to_i)
-      if version_date.present?
-        content_data(target.content_versions.where(version_on: version_date))
-      else
-        latest_content(target)
-      end
+  attr_accessor :target_id
+  attr_accessor :version_on
+
+  def content_blocks
+    if version_on.present?
+      content_data(target.content_versions.where(version_on: version_on))
     else
-      ContentBlock.none
+      latest_content
     end
   end
 
-  def authorized?(target_id)
-    current_school_admin.present? || current_user&.course_authors&.where(course: Target.find(target_id.to_i).course).present?
+  def authorized?
+    current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
   end
 
-  def latest_content(target)
+  private
+
+  def target
+    @target ||= Target.find(target_id.to_i)
+  end
+
+  def latest_content
     latest_version_date = target.content_versions.maximum(:version_on)
     latest_content_versions = target.content_versions.where(version_on: latest_version_date)
     content_data(latest_content_versions)

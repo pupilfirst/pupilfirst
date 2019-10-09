@@ -17,15 +17,17 @@ let handleVersionSelect =
   selectVersionCB(selectedVersion);
 };
 
-let handleViewMode = (switchViewModeCB, event) => {
+let handleViewMode = (switchViewModeCB, previewMode, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  switchViewModeCB();
+  switchViewModeCB(previewMode);
 };
 
 let handleRestoreVersion = (handleRestoreVersionCB, versionOn, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   handleRestoreVersionCB(versionOn);
 };
+
+let previewModeButtonEnableClass = "bg-primary-100 shadow-inner text-primary-500";
 
 [@react.component]
 let make =
@@ -39,7 +41,53 @@ let make =
     ) => {
   let (showDropdown, setShowDropdown) = React.useState(() => false);
   <div className="flex justify-between items-end">
-    <div className="flex items-end">
+    <div className="w-2/6">
+      {
+        selectedVersion == versions[0] ?
+          <div className="flex rounded-lg border border-gray-400">
+            <button
+              onClick={handleViewMode(switchViewModeCB, true)}
+              className={
+                "w-1/2 py-2 px-3 font-semibold rounded-l-lg text-sm focus:outline-none "
+                ++ (
+                  previewMode ?
+                    previewModeButtonEnableClass :
+                    "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100"
+                )
+              }>
+              {"Preview" |> str}
+            </button>
+            <button
+              onClick={handleViewMode(switchViewModeCB, false)}
+              className={
+                "w-1/2 py-2 px-3 font-semibold rounded-r-lg text-sm focus:outline-none "
+                ++ (
+                  previewMode ?
+                    "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100" :
+                    previewModeButtonEnableClass
+                )
+              }>
+              {"Edit" |> str}
+            </button>
+          </div> :
+          React.null
+      }
+    </div>
+    <div className="w-4/6 flex justify-end items-end">
+      {
+        selectedVersion == versions[0] ?
+          React.null :
+          <button
+            onClick={
+              handleRestoreVersion(
+                handleRestoreVersionCB,
+                selectedVersion |> Js.Json.string,
+              )
+            }
+            className="btn btn-warning border border-orange-500 mr-4">
+            {"Restore this version" |> str}
+          </button>
+      }
       <div className="relative">
         <div className="inline-block">
           <label className="text-xs block text-gray-600 mb-1">
@@ -47,8 +95,15 @@ let make =
           </label>
           <button
             onClick={handleClick(setShowDropdown, versions)}
-            className="target-editor__version-dropdown-button appearance-none bg-orange-100 border border-orange-400 inline-flex items-center justify-between hover:bg-orange-200 hover:shadow-lg hover:text-orange-800 focus:outline-none focus:bg-orange-200 font-semibold relative rounded">
-            <span className="flex items-center px-3 py-2">
+            className={
+              "target-editor__version-dropdown-button text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none font-semibold relative rounded "
+              ++ (
+                versions |> Array.length > 1 ?
+                  "px-3 border-gray-400 hover:bg-gray-100 hover:shadow-lg" :
+                  "border-transparent cursor-auto"
+              )
+            }>
+            <span className="flex items-center py-2">
               <span className="truncate text-left">
                 {
                   selectedVersion
@@ -60,7 +115,7 @@ let make =
             {
               versions |> Array.length > 1 ?
                 <span
-                  className="text-right px-3 py-2 border-l border-orange-400">
+                  className="text-right pl-3 py-2 border-l border-gray-400">
                   <i className="fas fa-chevron-down text-sm" />
                 </span> :
                 React.null
@@ -71,7 +126,7 @@ let make =
           showDropdown ?
             <ul
               id="version-selection-list"
-              className="target-editor__version-dropdown-list bg-orange-100 font-semibold border border-orange-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
+              className="target-editor__version-dropdown-list text-sm bg-white font-semibold border border-gray-400 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
               {
                 versions
                 |> Array.to_list
@@ -87,7 +142,7 @@ let make =
                            version,
                          )
                        }
-                       className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-3 cursor-pointer hover:bg-orange-200 hover:text-orange-800">
+                       className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
                        {
                          version
                          |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
@@ -102,29 +157,6 @@ let make =
             React.null
         }
       </div>
-      {
-        selectedVersion == versions[0] ?
-          React.null :
-          <button
-            onClick={
-              handleRestoreVersion(
-                handleRestoreVersionCB,
-                selectedVersion |> Js.Json.string,
-              )
-            }
-            className="btn btn-warning border border-orange-500 ml-4">
-            {"Restore this version" |> str}
-          </button>
-      }
     </div>
-    {
-      selectedVersion == versions[0] ?
-        <button
-          onClick={handleViewMode(switchViewModeCB)}
-          className="btn btn-default border border-transparent ml-4">
-          {(previewMode ? "Edit" : "Preview") |> str}
-        </button> :
-        React.null
-    }
   </div>;
 };

@@ -144,7 +144,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       </div>
       <div className="mt-5">
         <label
-          className="inline-block tracking-wide text-xs font-semibold mb-2"
+          className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="title">
           {"Title" |> str}
         </label>
@@ -153,7 +153,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           onChange={
             event => send(UpdateTitle(ReactEvent.Form.target(event)##value))
           }
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="title"
           type_="text"
           placeholder="Student, Coach, CEO, etc."
@@ -161,7 +161,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
       </div>
       <div className="mt-5">
         <label
-          className="inline-block tracking-wide text-xs font-semibold mb-2"
+          className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="affiliation">
           {"Affiliation" |> str}
         </label>
@@ -171,7 +171,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
             event =>
               send(UpdateAffiliation(ReactEvent.Form.target(event)##value))
           }
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="affiliation"
           type_="text"
           placeholder="Acme Inc., Acme University, etc."

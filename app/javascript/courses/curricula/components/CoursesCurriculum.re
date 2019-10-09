@@ -53,7 +53,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
       {
         targetGroup |> TargetGroup.milestone ?
           <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-sm rounded-b-lg leading-tight text-white uppercase">
+            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {"Milestone targets" |> str}
           </div> :
           React.null
@@ -126,6 +126,7 @@ let make =
       ~coaches,
       ~users,
       ~evaluationCriteria,
+      ~preview,
     ) => {
   let url = ReasonReactRouter.useUrl();
 
@@ -209,7 +210,14 @@ let make =
 
   /* Curried function so that this can be re-used when a new submission is created. */
   let computeTargetStatus =
-    TargetStatus.compute(team, course, levels, targetGroups, targets);
+    TargetStatus.compute(
+      preview,
+      team,
+      course,
+      levels,
+      targetGroups,
+      targets,
+    );
 
   let initialRender = React.useRef(true);
 
@@ -256,6 +264,7 @@ let make =
           users
           evaluationCriteria
           coaches
+          preview
         />;
 
       | None => React.null
@@ -270,6 +279,7 @@ let make =
       course
       team
       authenticityToken
+      preview
     />
     <div className="px-3">
       <CoursesCurriculum__LevelSelector

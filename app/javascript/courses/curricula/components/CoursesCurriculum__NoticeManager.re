@@ -6,10 +6,12 @@ let courseCompleteImage: string = [%raw
 ];
 let accessEndedImage: string = [%raw "require('../images/access-ended.svg')"];
 let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
+let previewModeImage: string = [%raw "require('../images/preview-mode.svg')"];
 
 open CoursesCurriculum__Types;
 
 type notice =
+  | Preview
   | CourseEnded
   | CourseComplete
   | AccessEnded
@@ -20,6 +22,7 @@ let str = React.string;
 
 let iconsForNotice = showNotice =>
   switch (showNotice) {
+  | Preview => previewModeImage
   | CourseEnded => courseEndedImage
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
@@ -57,6 +60,20 @@ let courseEndedMessage = () => {
   showNotice(~title, ~description, ~noticeType=CourseEnded, ());
 };
 
+let showPreviewMessage = () =>
+  <div
+    className="flex max-w-lg md:mx-auto mx-3 mt-4 rounded-lg px-3 py-2 shadow-lg items-center border border-primary-300 bg-gray-200 ">
+    <img className="w-18 md:w-20 flex-no-shrink" src=previewModeImage />
+    <div className="flex-1 text-left ml-2">
+      <h4 className="font-bold text-lg leading-tight">
+        {"Preview Mode" |> str}
+      </h4>
+      <p className="text-sm mt-1">
+        {"You are accessing the preview mode for this course" |> str}
+      </p>
+    </div>
+  </div>;
+
 let accessEndedMessage = () => {
   let title = "Access Ended";
   let description = "Your access to this course has ended.";
@@ -67,7 +84,7 @@ let renderLevelUp = (course, authenticityToken) => {
   let title = "Ready to Level Up!";
   let description = "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!";
   <div
-    className="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg px-6 pt-4 pb-8">
+    className="max-w-3xl mx-3 lg:mx-auto text-center mt-4 bg-white rounded-lg shadow px-6 pt-4 pb-8">
     {showNotice(~title, ~description, ~noticeType=LevelUp, ~classes="", ())}
     <CoursesCurriculum__LevelUpButton course authenticityToken />
   </div>;
@@ -115,11 +132,21 @@ let computeLevelUp =
 };
 
 let computeNotice =
-    (levels, teamLevel, targetGroups, targets, statusOfTargets, course, team) =>
-  switch (course |> Course.hasEnded, team |> Team.accessEnded) {
-  | (true, true | false) => CourseEnded
-  | (false, true) => AccessEnded
-  | (false, false) =>
+    (
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      course,
+      team,
+      preview,
+    ) =>
+  switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
+  | (true, _, _) => Preview
+  | (false, true, true | false) => CourseEnded
+  | (false, false, true) => AccessEnded
+  | (false, false, false) =>
     computeLevelUp(levels, teamLevel, targetGroups, targets, statusOfTargets)
   };
 
@@ -134,6 +161,7 @@ let make =
       ~course,
       ~team,
       ~authenticityToken,
+      ~preview,
     ) => {
   let teamLevel =
     levels
@@ -152,10 +180,12 @@ let make =
         statusOfTargets,
         course,
         team,
+        preview,
       )
     );
 
   switch (showNotice) {
+  | Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()

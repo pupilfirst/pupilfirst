@@ -14,23 +14,6 @@ let closeOverlay = course =>
     "/courses/" ++ (course |> Course.id) ++ "/curriculum",
   );
 
-module ScrollLock = {
-  open Webapi.Dom;
-
-  let handleScrollLock = add => {
-    let classes = add ? "overflow-hidden" : "";
-
-    let body =
-      document
-      |> Document.getElementsByTagName("body")
-      |> HtmlCollection.toArray;
-
-    body[0]->Element.setClassName(classes);
-  };
-  let activate = () => handleScrollLock(true);
-  let deactivate = () => handleScrollLock(false);
-};
-
 let loadTargetDetails = (target, setTargetDetails, ()) => {
   Js.Promise.(
     Fetch.fetch("/targets/" ++ (target |> Target.id) ++ "/details_v2")
@@ -264,42 +247,58 @@ let targetStatusClass = (prefix, targetStatus) =>
   ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
 
 let targetStatusClasses = targetStatus =>
-  "curriculum__target-status text-xs py-1 px-2 md:px-4 "
+  "curriculum__target-status bg-white text-xs mt-2 md:mt-0 py-1 px-2 md:px-4 "
   ++ targetStatusClass("curriculum__target-status--", targetStatus);
 
 let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card flex justify-between items-center px-3 py-5 md:p-6 "
+  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 "
   ++ targetStatusClass("course-overlay__header-title-card--", targetStatus);
 
-let overlayStatus = (course, target, targetStatus) =>
-  <div className={overlayHeaderTitleCardClasses(targetStatus)}>
-    <button
-      className="course-overlay__close-button xl:absolute pr-4 xl:-ml-20 text-gray-600 hover:text-gray-900 focus:outline-none"
-      onClick={_e => closeOverlay(course)}>
-      <span
-        className="course-overlay__close-button-icon w-8 h-8 bg-gray-200 text-gray-700 border border-gray-400 rounded-full flex justify-center items-center">
-        <i className="fas fa-times text-xl" />
-      </span>
-      <span className="block font-semibold text-xs"> {"Close" |> str} </span>
-    </button>
-    <div className="w-full flex items-center justify-between relative">
-      <h1 className="text-base leading-snug mr-3 md:text-xl">
-        {target |> Target.title |> str}
-      </h1>
-      <div className={targetStatusClasses(targetStatus)}>
-        {targetStatus |> TargetStatus.statusToString |> str}
-      </div>
-    </div>
-  </div>;
-
-let renderLockReason = reason =>
+let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
     <i className="fas fa-lock text-lg" />
-    <span className="ml-2">
-      {reason |> TargetStatus.lockReasonToString |> str}
-    </span>
+    <span className="ml-2"> {text |> str} </span>
   </div>;
+let overlayStatus = (course, target, targetStatus, preview) =>
+  <div>
+    <div className={overlayHeaderTitleCardClasses(targetStatus)}>
+      <button
+        className={
+          "course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner "
+          ++ targetStatusClass("course-overlay__close--", targetStatus)
+        }
+        onClick={_e => closeOverlay(course)}>
+        <Icon className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0" />
+        <span className="text-xs hidden lg:inline-block mt-px">
+          {"Close" |> str}
+        </span>
+      </button>
+      <div
+        className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">
+        <h1 className="text-base leading-snug md:mr-6 md:text-xl">
+          {target |> Target.title |> str}
+        </h1>
+        <div className={targetStatusClasses(targetStatus)}>
+          {targetStatus |> TargetStatus.statusToString |> str}
+        </div>
+      </div>
+    </div>
+    {
+      preview ?
+        <div>
+          {
+            renderLocked(
+              "You are currently looking at a preview of this course.",
+            )
+          }
+        </div> :
+        React.null
+    }
+  </div>;
+
+let renderLockReason = reason =>
+  renderLocked(reason |> TargetStatus.lockReasonToString);
 
 let prerequisitesIncomplete =
     (reason, target, targets, statusOfTargets, changeTargetCB) => {
@@ -403,6 +402,7 @@ let completeSection =
       gradeLabels,
       coaches,
       users,
+      preview,
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
   let addVerifiedSubmissionCB =
@@ -424,6 +424,7 @@ let completeSection =
             addSubmissionCB={
               addSubmission(target, setTargetDetails, addSubmissionCB)
             }
+            preview
           />,
         |]
         |> React.array
@@ -440,6 +441,7 @@ let completeSection =
             targetDetails
             authenticityToken
             addSubmissionCB=addVerifiedSubmissionCB
+            preview
           />,
         |]
         |> React.array
@@ -460,6 +462,7 @@ let completeSection =
           targetStatus
           coaches
           users
+          preview
         />
       | (
           Pending | Submitted | Passed | Failed,
@@ -471,6 +474,7 @@ let completeSection =
           authenticityToken
           targetStatus
           addSubmissionCB=addVerifiedSubmissionCB
+          preview
         />
       | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
       }
@@ -531,6 +535,7 @@ let make =
       ~users,
       ~evaluationCriteria,
       ~coaches,
+      ~preview,
     ) => {
   let (targetDetails, setTargetDetails) = React.useState(() => None);
   let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
@@ -551,8 +556,8 @@ let make =
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-100 border-b border-gray-400 px-3">
-      <div className="course-overlay__header-container mx-auto">
-        {overlayStatus(course, target, targetStatus)}
+      <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
+        {overlayStatus(course, target, targetStatus, preview)}
         {
           handleLocked(
             target,
@@ -597,7 +602,7 @@ let make =
       switch (targetDetails) {
       | Some(targetDetails) =>
         <div
-          className="container mx-auto mt-6 md:mt-8 max-w-3xl px-4 lg:px-0 pb-8">
+          className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0 pb-8">
           {learnSection(targetDetails, overlaySelection)}
           {discussSection(target, targetDetails, overlaySelection)}
           {
@@ -613,6 +618,7 @@ let make =
               course |> Course.gradeLabels,
               coaches,
               users,
+              preview,
             )
           }
         </div>

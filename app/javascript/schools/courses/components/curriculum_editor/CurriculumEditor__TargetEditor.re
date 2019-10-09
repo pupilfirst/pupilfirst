@@ -70,7 +70,7 @@ type action =
   | UpdateVisibility(Target.visibility)
   | UpdateContentEditorDirty(bool)
   | UpdateContentBlocks(list(ContentBlock.t), array(string))
-  | SwitchPreviewMode
+  | SwitchPreviewMode(bool)
   | LoadOldVersion(list(ContentBlock.t), string, array(string))
   | SelectVersion(string)
   | UpdateVersions(array(string))
@@ -376,7 +376,7 @@ let reducer = (state, action) =>
       selectedVersion,
       previewMode: true,
     }
-  | SwitchPreviewMode => {...state, previewMode: !state.previewMode}
+  | SwitchPreviewMode(previewMode) => {...state, previewMode}
   | UpdateVersions(versions) => {
       ...state,
       versions,
@@ -469,7 +469,13 @@ let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) =
          |> Array.map(version => version |> Json.Decode.string);
        switch (versionOn) {
        | Some(versionOn) =>
-         send(LoadOldVersion(contentBlocks, versionOn |> Json.Decode.string, versions))
+         send(
+           LoadOldVersion(
+             contentBlocks,
+             versionOn |> Json.Decode.string,
+             versions,
+           ),
+         )
        | None => send(UpdateContentBlocks(contentBlocks, versions))
        };
        Js.Promise.resolve();
@@ -538,7 +544,8 @@ let selectVersionCB =
     )
     |> ignore;
 
-let switchViewModeCB = (send, ()) => send(SwitchPreviewMode);
+let switchViewModeCB = (send, previewMode) =>
+  send(SwitchPreviewMode(previewMode));
 
 [@react.component]
 let make =
@@ -688,7 +695,7 @@ let make =
         <div className="w-full">
           <div className="bg-gray-200 w-full pt-6">
             <ul
-              className="flex flex-wrap w-full max-w-3xl mx-auto px-3 -mb-px">
+              className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
               <li
                 onClick={_event => dispatch(UpdateActiveStep(AddContent))}
                 className={

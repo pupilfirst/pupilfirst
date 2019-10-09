@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./CoursesCurriculum__SubmissionsAndFeedback.css")|}];
 
 let str = React.string;
 
@@ -19,7 +20,7 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
     let grading =
       Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
 
-    <div key={gradeNumber |> string_of_int} className="mb-2">
+    <div key={gradeNumber |> string_of_int} className="mb-4">
       <GradeBar grading gradeLabels passGrade />
     </div>;
   | None => React.null
@@ -43,7 +44,7 @@ let statusBar = (~color, ~text) => {
 
   <div
     className={
-      "font-semibold p-2 py-4 flex w-full items-center justify-center "
+      "font-semibold p-2 py-4 flex border-t w-full items-center justify-center "
       ++ textColor
       ++ bgColor
     }>
@@ -90,7 +91,7 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
         )
       }
     </div>
-    <div className="bg-white flex flex-wrap items-center py-4">
+    <div className="bg-white flex border-t flex-wrap items-center py-4">
       <div
         className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-6">
         {submissionStatusIcon(~passed)}
@@ -151,19 +152,19 @@ let submissions =
 
        <div
          key={submission |> Submission.id}
-         className="mt-4"
+         className="mt-4 relative curriculum__submission-feedback-container"
          ariaLabel={
            "Details about your submission on "
            ++ (submission |> Submission.createdAtPretty)
          }>
-         <div className="text-xs font-semibold">
+         <div className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 ml-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
            {
              "Submitted on "
              ++ (submission |> Submission.createdAtPretty)
              |> str
            }
          </div>
-         <div className="mt-2 rounded-lg bg-gray-100 shadow overflow-hidden">
+         <div className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
            <div className="p-4 md:p-6">
              <MarkdownBlock
                profile=Markdown.Permissive
@@ -191,11 +192,11 @@ let submissions =
                statusBar(~color="green", ~text="Marked as complete")
              | Pending =>
                <div
-                 className="bg-white px-6 py-4 flex justify-between items-center w-full">
+                 className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
                  <div
-                   className="text-blue-600 font-bold flex items-center justify-center">
+                   className="flex items-center justify-center font-semibold text-sm pl-2 pr-3 py-1 bg-orange-100 text-orange-600 rounded">
                    <span
-                     className="fa-stack text-blue-600 text-lg mr-1 flex-shrink-0">
+                     className="fa-stack text-orange-400 mr-2 flex-shrink-0">
                      <i className="fas fa-circle fa-stack-2x" />
                      <i
                        className="fas fa-hourglass-half fa-stack-1x fa-inverse"
@@ -266,7 +267,8 @@ let submissions =
                       (
                         name,
                         title,
-                        <img className="w-10 h-10 rounded-full" src=avatar />,
+                        <img src=avatar
+                        />,
                       );
                     | None => (
                         "Unknown Coach",
@@ -279,39 +281,41 @@ let submissions =
                     };
 
                   <div
-                    className="bg-gray-100 border-t p-4 md:p-6 flex"
+                    className="bg-white border-t p-4 md:p-6"
                     key={feedback |> Feedback.id}>
-                    <div className="flex-shrink-0"> coachAvatar </div>
-                    <div className="flex-grow ml-3">
-                      <div className="text-sm">
-                        {"Feedback from:" |> str}
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover"> coachAvatar </div>
+                      <div>
+                        <p className="text-xs leading-tight">
+                          {"Feedback from:" |> str}
+                        </p>
+                        <div>
+                          <h4 className="font-semibold text-base leading-tight block md:inline-flex self-end">
+                            {coachName |> str}
+                          </h4>
+                          {
+                            switch (coachTitle) {
+                            | Some(title) =>
+                              <span className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
+                                {"(" ++ title ++ ")" |> str}
+                              </span>
+                            | None => React.null
+                            }
+                          }
+                        </div>
                       </div>
-                      <div className="font-semibold"> {coachName |> str} </div>
-                      {
-                        switch (coachTitle) {
-                        | Some(title) =>
-                          <div className="text-xs"> {title |> str} </div>
-                        | None => React.null
-                        }
-                      }
-                      <MarkdownBlock
-                        profile=Markdown.Permissive
-                        className="mt-2"
-                        markdown={feedback |> Feedback.feedback}
-                      />
                     </div>
+                    <MarkdownBlock
+                      profile=Markdown.Permissive
+                      className="md:ml-15"
+                      markdown={feedback |> Feedback.feedback}
+                    />
                   </div>;
                 })
              |> Array.of_list
              |> React.array
            }
          </div>
-         <div
-           className="text-center text-3xl mt-4 text-gray-600"
-           dangerouslySetInnerHTML={
-             "__html": "&middot;&nbsp;&middot;&nbsp;&middot",
-           }
-         />
        </div>;
      })
   |> Array.of_list
@@ -335,12 +339,13 @@ let make =
       ~targetStatus,
       ~coaches,
       ~users,
+      ~preview,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
 
   <div>
-    <div className="flex justify-between border-b pb-2">
+    <div className="flex justify-between items-end border-b pb-2">
       <h4> {"Your Submissions" |> str} </h4>
       {
         targetStatus
@@ -348,9 +353,10 @@ let make =
              ~resubmittable=target |> Target.resubmittable,
            ) ?
           <button
-            className="btn btn-primary btn-small"
+            className="btn btn-primary"
             onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
             <span className="hidden md:inline">
+              <i className="fas fa-plus mr-2"></i>
               {
                 (showSubmissionForm ? "Cancel" : "Add another submission")
                 |> str
@@ -369,6 +375,7 @@ let make =
           addSubmissionCB={
             addSubmission(setShowSubmissionForm, addSubmissionCB)
           }
+          preview
         /> :
         submissions(
           target,

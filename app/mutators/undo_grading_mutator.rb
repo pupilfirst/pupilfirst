@@ -21,7 +21,7 @@ class UndoGradingMutator < ApplicationMutator
   def must_be_graded
     return if submission&.evaluator_id?
 
-    errors[:base] << 'Event is pending review! Cannot undo.'
+    errors[:base] << 'Could not find a graded submission with the given ID'
   end
 
   def submission

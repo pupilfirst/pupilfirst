@@ -367,10 +367,16 @@ let make =
                         className="inline-block mr-1 text-xs font-semibold">
                         {"Exclusive Team Coaches:" |> str}
                       </span>
-                      <div className="mt-2 p-6 border rounded bg-gray-100">
-                        <SA_StudentsPanel_SelectBox
-                          items={state.teamCoaches}
-                          multiSelectCB=multiSelectCoachEnrollmentsCB
+                      <div className="mt-2">
+                        <School__SelectBox.Jsx2
+                          items={
+                            state.teamCoaches
+                            |> School__SelectBox.convertOldItems
+                          }
+                          selectCB={
+                            multiSelectCoachEnrollmentsCB
+                            |> School__SelectBox.convertOldCallback
+                          }
                         />
                       </div>
                     </div>

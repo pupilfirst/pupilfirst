@@ -51,10 +51,10 @@ let make =
         |> List.map(((key, value, _)) =>
              <div
                key
-               className="select-list__item-selected flex items-center justify-between bg-white font-semibold text-xs text-gray-700 border rounded px-3 py-2 mb-2">
-               {value |> str}
+               className="select-list__item-selected flex items-center justify-between bg-white font-semibold text-xs border rounded mb-2">
+               <div className="p-3 flex-1"> {value |> str} </div>
                <button
-                 className="p-1 hover:text-gray-900 focus:otline-none"
+                 className="flex p-3 text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none"
                  title="Remove"
                  onClick={
                    _event => {

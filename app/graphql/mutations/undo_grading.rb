@@ -11,7 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.undo_grading
-        mutator.notify(:success, "Review reverted", "Review cleared and moved to pending")
+        mutator.notify(:success, "Grades Removed", "The submission is now pending review.")
         { success: true }
       else
         mutator.notify_errors

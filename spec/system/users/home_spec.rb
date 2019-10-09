@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User Home' do
+feature 'User Home', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -50,7 +50,7 @@ feature 'User Home' do
     create :community_course_connection, course: course_4, community: community_4
   end
 
-  scenario 'When an active user visits he access courses and community', js: true do
+  scenario 'When an active user visits he access courses and community' do
     sign_in_user(founder.user, referer: home_path)
 
     # A new course.
@@ -92,7 +92,7 @@ feature 'User Home' do
     expect(page).not_to have_text(community_4.name)
   end
 
-  scenario 'When a course coach visits he access courses and community', js: true do
+  scenario 'When a course coach visits he access courses and community' do
     sign_in_user(course_coach.user, referer: home_path)
 
     expect(page).to have_text(course_1.name)
@@ -113,7 +113,7 @@ feature 'User Home' do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'When a student coach visits he access courses and community', js: true do
+  scenario 'When a student coach visits he access courses and community' do
     sign_in_user(team_coach.user, referer: home_path)
 
     expect(page).to have_text(course_2.name)
@@ -134,7 +134,7 @@ feature 'User Home' do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'When a school admin visits home', js: true do
+  scenario 'When a school admin visits home' do
     sign_in_user(school_admin.user, referer: home_path)
 
     expect(page).to have_text(course_1.name)

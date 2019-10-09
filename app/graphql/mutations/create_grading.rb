@@ -13,7 +13,7 @@ module Mutations
 
       if mutator.valid?
         mutator.grade
-        mutator.notify(:success, "Grading Recorded", "Submission reviewed and moved to completed")
+        mutator.notify(:success, "Grades Recorded", "The submission has been marked as reviewed.")
         { success: true }
       else
         mutator.notify_errors

@@ -141,7 +141,7 @@ class Faculty < ApplicationRecord
   def courses_with_dashboard
     startup_levels = Level.where(id: startups.select(:level_id))
     startup_courses = Course.where(id: startup_levels.select(:course_id))
-    (courses + startup_courses).uniq
+    Course.where(id: courses).or(Course.where(id: startup_courses))
   end
 
   def connect_link?

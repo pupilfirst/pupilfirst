@@ -64,9 +64,8 @@ GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
   specs:
-    TimezoneParser (1.0.0)
+    TimezoneParser (0.4.0)
       insensitive_hash
-      sqlite3
       tzinfo
     actioncable (6.0.0)
       actionpack (= 6.0.0)
@@ -752,7 +751,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.1)
     stackprof (0.2.12)
     temple (0.8.2)
     thor (0.20.3)
@@ -813,7 +811,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  TimezoneParser (~> 1.0.0)
+  TimezoneParser (= 0.4.0)
   active_storage_validations (~> 0.6.1)
   activeadmin (~> 2.3.1)
   acts-as-taggable-on!

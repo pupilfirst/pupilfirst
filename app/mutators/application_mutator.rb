@@ -6,6 +6,7 @@ class ApplicationMutator
   def initialize(attributes, context)
     @context = context
     assign_attributes(attributes)
+    raise UnauthorizedMutationException unless authorized?
   end
 
   def respond_to_missing?(name, *args)
@@ -21,12 +22,6 @@ class ApplicationMutator
 
   def error_codes
     errors.messages.values.flatten
-  end
-
-  def valid?
-    raise UnauthorizedMutationException unless authorized?
-
-    super
   end
 
   def notify(kind, title, body)

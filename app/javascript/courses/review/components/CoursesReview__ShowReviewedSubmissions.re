@@ -94,23 +94,23 @@ let getReviewedSubmissions =
 };
 
 let showSubmissionStatus = failed =>
-  failed ?
-    <div
-      className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-      {"Failed" |> str}
-    </div> :
-    <div
-      className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-      {"Passed" |> str}
-    </div>;
+  failed
+    ? <div
+        className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
+        {"Failed" |> str}
+      </div>
+    : <div
+        className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
+        {"Passed" |> str}
+      </div>;
 
 let showFeedbackSent = feedbackSent =>
-  feedbackSent ?
-    <div
-      className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-3 py-px rounded mr-3">
-      {"Feedback Sent" |> str}
-    </div> :
-    React.null;
+  feedbackSent
+    ? <div
+        className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-3 py-px rounded mr-3">
+        {"Feedback Sent" |> str}
+      </div>
+    : React.null;
 
 let showLoadMoreButton =
     (
@@ -124,17 +124,16 @@ let showLoadMoreButton =
     ) =>
   <button
     className="btn btn-primary-ghost cursor-pointer w-full mt-8"
-    onClick={
-      _ =>
-        getReviewedSubmissions(
-          authenticityToken,
-          courseId,
-          cursor,
-          setState,
-          selectedLevel,
-          reviewedSubmissions,
-          updateReviewedSubmissionsCB,
-        )
+    onClick={_ =>
+      getReviewedSubmissions(
+        authenticityToken,
+        courseId,
+        cursor,
+        setState,
+        selectedLevel,
+        reviewedSubmissions,
+        updateReviewedSubmissionsCB,
+      )
     }>
     {"Load More..." |> str}
   </button>;
@@ -151,66 +150,58 @@ let submissionCardClasses = status =>
 
 let showSubmission = (submissions, levels, openOverlayCB) =>
   <div>
-    {
-      submissions
-      |> SubmissionInfo.sort
-      |> Array.map(submission =>
-           <div
-             key={submission |> SubmissionInfo.id}
-             onClick={_ => openOverlayCB(submission |> SubmissionInfo.id)}
-             ariaLabel={
-               "reviewed-submission-card-" ++ (submission |> SubmissionInfo.id)
-             }
-             className={
-               submissionCardClasses(submission |> SubmissionInfo.status)
-             }>
-             <div className="w-full md:w-3/4">
-               <div className="block text-sm md:pr-2">
-                 <span
-                   className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                   {
-                     submission
-                     |> SubmissionInfo.levelId
-                     |> Level.unsafeLevelNumber(
-                          levels,
-                          "ShowReviewedSubmission",
-                        )
-                     |> str
-                   }
-                 </span>
-                 <span className="ml-2 font-semibold text-base">
-                   {submission |> SubmissionInfo.title |> str}
-                 </span>
+    {submissions
+     |> SubmissionInfo.sort
+     |> Array.map(submission =>
+          <div
+            key={submission |> SubmissionInfo.id}
+            onClick={_ => openOverlayCB(submission |> SubmissionInfo.id)}
+            ariaLabel={
+              "reviewed-submission-card-" ++ (submission |> SubmissionInfo.id)
+            }
+            className={submissionCardClasses(
+              submission |> SubmissionInfo.status,
+            )}>
+            <div className="w-full md:w-3/4">
+              <div className="block text-sm md:pr-2">
+                <span
+                  className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
+                  {submission
+                   |> SubmissionInfo.levelId
+                   |> Level.unsafeLevelNumber(
+                        levels,
+                        "ShowReviewedSubmission",
+                      )
+                   |> str}
+                </span>
+                <span className="ml-2 font-semibold text-base">
+                  {submission |> SubmissionInfo.title |> str}
+                </span>
+              </div>
+              <div className="mt-1 ml-px text-xs text-gray-900">
+                <span> {"Submitted by " |> str} </span>
+                <span className="font-semibold">
+                  {submission |> SubmissionInfo.userNames |> str}
+                </span>
+                <span className="ml-1">
+                  {"on "
+                   ++ (submission |> SubmissionInfo.createdAtPretty)
+                   |> str}
+                </span>
+              </div>
+            </div>
+            {switch (submission |> SubmissionInfo.status) {
+             | Some(status) =>
+               <div
+                 className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
+                 {showFeedbackSent(status |> SubmissionInfo.feedbackSent)}
+                 {showSubmissionStatus(status |> SubmissionInfo.failed)}
                </div>
-               <div className="mt-1 ml-px text-xs text-gray-900">
-                 <span> {"Submitted by " |> str} </span>
-                 <span className="font-semibold">
-                   {submission |> SubmissionInfo.userNames |> str}
-                 </span>
-                 <span className="ml-1">
-                   {
-                     "on "
-                     ++ (submission |> SubmissionInfo.createdAtPretty)
-                     |> str
-                   }
-                 </span>
-               </div>
-             </div>
-             {
-               switch (submission |> SubmissionInfo.status) {
-               | Some(status) =>
-                 <div
-                   className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                   {showFeedbackSent(status |> SubmissionInfo.feedbackSent)}
-                   {showSubmissionStatus(status |> SubmissionInfo.failed)}
-                 </div>
-               | None => React.null
-               }
-             }
-           </div>
-         )
-      |> React.array
-    }
+             | None => React.null
+             }}
+          </div>
+        )
+     |> React.array}
   </div>;
 
 [@react.component]
@@ -235,60 +226,57 @@ let make =
 
   React.useEffect1(
     () => {
-      loaded ?
-        () :
-        getReviewedSubmissions(
-          authenticityToken,
-          courseId,
-          endCursor,
-          setLoading,
-          selectedLevel,
-          reviewedSubmissions,
-          updateReviewedSubmissionsCB,
-        );
+      loaded
+        ? ()
+        : getReviewedSubmissions(
+            authenticityToken,
+            courseId,
+            endCursor,
+            setLoading,
+            selectedLevel,
+            reviewedSubmissions,
+            updateReviewedSubmissionsCB,
+          );
       None;
     },
     [|selectedLevel|],
   );
 
   <div>
-    {
-      switch (reviewedSubmissions) {
-      | [||] =>
-        !loaded ?
-          SkeletonLoading.multiple(
-            ~count=10,
-            ~element=SkeletonLoading.card(),
-          ) :
-          <div className="text-lg font-semibold text-center px-6 py-4">
-            <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-              {"No Reviewed Submission" |> str}
-            </h5>
-            <img
-              className="w-3/4 md:w-1/2 mx-auto mt-2"
-              src=reviewedEmptyImage
-            />
-          </div>
-      | _ => showSubmission(reviewedSubmissions, levels, openOverlayCB)
-      }
-    }
-    {
-      switch (loading, hasNextPage, endCursor) {
-      | (true, _, _) =>
-        SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
-      | (false, false, _)
-      | (false, true, None) => React.null
-      | (false, true, Some(_)) =>
-        showLoadMoreButton(
-          authenticityToken,
-          courseId,
-          setLoading,
-          selectedLevel,
-          endCursor,
-          reviewedSubmissions,
-          updateReviewedSubmissionsCB,
-        )
-      }
-    }
+    {switch (reviewedSubmissions) {
+     | [||] =>
+       !loaded
+         ? SkeletonLoading.multiple(
+             ~count=10,
+             ~element=SkeletonLoading.card(),
+           )
+         : <div
+             className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
+             <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+               {"No Reviewed Submission" |> str}
+             </h5>
+             <img
+               className="w-3/4 md:w-1/2 mx-auto mt-2"
+               src=reviewedEmptyImage
+             />
+           </div>
+     | _ => showSubmission(reviewedSubmissions, levels, openOverlayCB)
+     }}
+    {switch (loading, hasNextPage, endCursor) {
+     | (true, _, _) =>
+       SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
+     | (false, false, _)
+     | (false, true, None) => React.null
+     | (false, true, Some(_)) =>
+       showLoadMoreButton(
+         authenticityToken,
+         courseId,
+         setLoading,
+         selectedLevel,
+         endCursor,
+         reviewedSubmissions,
+         updateReviewedSubmissionsCB,
+       )
+     }}
   </div>;
 };

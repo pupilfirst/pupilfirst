@@ -17,11 +17,13 @@ module Layouts
 
     def courses
       if current_school_admin.present?
+        # All courses are availalbe to admins.
         current_school.courses
-      elsif current_coach.present?
-        current_coach.courses_with_dashboard
       else
-        Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) })
+        # Courses as a coach, plus courses as a student.
+        courses_as_coach = current_coach.present? ? current_coach.courses_with_dashboard : []
+        courses_as_student = Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) })
+        (courses_as_coach + courses_as_student).uniq
       end.map do |course|
         {
           id: course.id,

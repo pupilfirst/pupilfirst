@@ -21,15 +21,14 @@ let sort = levels =>
 let unsafeLevelNumber = (levels, componentName, levelId) =>
   "Level "
   ++ (
-    switch (levels |> Js.Array.find(l => l |> id == levelId)) {
-    | Some(l) => l |> number |> string_of_int
-    | None =>
-      Rollbar.error(
-        "Unable to find level with id: "
-        ++ levelId
-        ++ "in CoursesRevew__"
-        ++ componentName,
-      );
-      "Unknown";
-    }
+    levels
+    |> ArrayUtils.unsafeFind(
+         l => l.id == levelId,
+         "Unable to find level with id: "
+         ++ levelId
+         ++ "in CoursesRevew__"
+         ++ componentName,
+       )
+    |> number
+    |> string_of_int
   );

@@ -87,3 +87,5 @@ let decodeJS = details =>
        | None => []
        }
      );
+
+let replace = (e, l) => l |> Array.map(s => s.id == e.id ? e : s);

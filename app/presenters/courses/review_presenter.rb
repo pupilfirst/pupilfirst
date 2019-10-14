@@ -15,7 +15,7 @@ module Courses
       {
         authenticity_token: view.form_authenticity_token,
         levels: levels,
-        submissions: pending_submissions,
+        pending_submissions: pending_submissions,
         course_id: @course.id,
         grade_labels: @course.grade_labels_to_props,
         pass_grade: @course.pass_grade,

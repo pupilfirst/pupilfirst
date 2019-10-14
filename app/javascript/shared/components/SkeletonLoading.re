@@ -39,7 +39,7 @@ let heading = () =>
 let codeBlock = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper max-w-xs mt-8 px-3 lg:px-0">
-      <div className="flex skeleton-placeholder__code-line">
+      <div className="flex">
         <div
           className="skeleton-placeholder__line-sm mr-3 w-2/6 skeleton-animate"
         />
@@ -50,7 +50,7 @@ let codeBlock = () =>
           className="skeleton-placeholder__line-sm mr-3 w-4 skeleton-animate"
         />
       </div>
-      <div className="flex skeleton-placeholder__code-line ml-6">
+      <div className="flex ml-6">
         <div
           className="skeleton-placeholder__line-sm mt-4 mr-3 w-3/6 skeleton-animate"
         />
@@ -58,7 +58,7 @@ let codeBlock = () =>
           className="skeleton-placeholder__line-sm mt-4 mr-3 w-3/6 skeleton-animate"
         />
       </div>
-      <div className="flex skeleton-placeholder__code-line ml-6">
+      <div className="flex ml-6">
         <div
           className="skeleton-placeholder__line-sm mt-4 mr-3 w-2/6 skeleton-animate"
         />
@@ -69,7 +69,7 @@ let codeBlock = () =>
           className="skeleton-placeholder__line-sm mt-4 mr-3 w-2/6 skeleton-animate"
         />
       </div>
-      <div className="flex skeleton-placeholder__code-line">
+      <div className="flex">
         <div
           className="skeleton-placeholder__line-sm mt-4 mr-3 w-16 skeleton-animate"
         />

@@ -51,7 +51,7 @@ class TimelineEventsController < ApplicationController
       faculty: current_coach,
       timeline_event: timeline_event
     )
-    StartupFeedbackModule::EmailService.new(startup_feedback, founder: timeline_event.founder).send
+    StartupFeedbackModule::EmailService.new(startup_feedback).send
     render json: { error: nil }, status: :ok
   end
 end

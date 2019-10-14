@@ -24,10 +24,7 @@ let handleResponseError = error => {
 };
 
 let handleResponseJSON = (json, responseCB, errorCB) => {
-  let error =
-    json
-    |> Json.Decode.(field("error", nullable(string)))
-    |> Js.Null.toOption;
+  let error = json |> Json.Decode.(optional(field("error", string)));
 
   switch (error) {
   | Some(error) =>

@@ -129,12 +129,10 @@ let buttons = (state, send, previewButtonPosition) => {
         <button
           key="preview-button"
           className=classes
-          onClick=(
-            event => {
-              ReactEvent.Mouse.preventDefault(event);
-              send(TogglePreview);
-            }
-          )>
+          onClick={event => {
+            ReactEvent.Mouse.preventDefault(event);
+            send(TogglePreview);
+          }}>
           <FaIcon classes={state.preview ? "fab fa-markdown" : "far fa-eye"} />
           <span className="ml-2">
             {(state.preview ? "Edit Markdown" : "Preview") |> str}
@@ -182,64 +180,29 @@ let attachmentEmbedGap = oldMarkdown =>
     "\n\n";
   };
 
-let uploadFile = (send, formData) =>
-  Js.Promise.(
-    Fetch.fetchWithInit(
-      "/markdown_attachments/",
-      Fetch.RequestInit.make(
-        ~method_=Post,
-        ~body=Fetch.BodyInit.makeWithFormData(formData),
-        ~credentials=Fetch.SameOrigin,
-        (),
+let handleUploadFileResponse = (send, json) => {
+  let errors = json |> Json.Decode.(field("errors", array(string)));
+
+  if (errors == [||]) {
+    let markdownEmbedCode =
+      json |> Json.Decode.(field("markdownEmbedCode", string));
+
+    addAttachment("\n" ++ markdownEmbedCode ++ "\n", send);
+  } else {
+    send(
+      SetAttachmentError(
+        Some(
+          "Failed to attach file! " ++ (errors |> Js.Array.joinWith(", ")),
+        ),
       ),
-    )
-    |> then_(response =>
-         if (Fetch.Response.ok(response)) {
-           response |> Fetch.Response.json;
-         } else {
-           Js.Promise.reject(
-             UnexpectedResponse(response |> Fetch.Response.status),
-           );
-         }
-       )
-    |> then_(json => {
-         let errors = json |> Json.Decode.(field("errors", array(string)));
+    );
+  };
+};
 
-         if (errors == [||]) {
-           let markdownEmbedCode =
-             json |> Json.Decode.(field("markdownEmbedCode", string));
-
-           addAttachment("\n" ++ markdownEmbedCode ++ "\n", send);
-         } else {
-           send(
-             SetAttachmentError(
-               Some(
-                 "Failed to attach file! "
-                 ++ (errors |> Js.Array.joinWith(", ")),
-               ),
-             ),
-           );
-         };
-         resolve();
-       })
-    |> catch(error =>
-         (
-           switch (error |> handleApiError) {
-           | Some(code) =>
-             Notification.error(
-               "Error " ++ (code |> string_of_int),
-               "Please reload the page and try again.",
-             )
-           | None =>
-             Notification.error(
-               "Something went wrong!",
-               "Our team has been notified of this error. Please reload the page and try again.",
-             )
-           }
-         )
-         |> resolve
-       )
-    |> ignore
+let uploadFile = (send, formData) =>
+  Api.sendFormData(
+    "/markdown_attachments/", formData, handleUploadFileResponse(send), () =>
+    ()
   );
 
 let submitForm = (formId, send) => {
@@ -258,9 +221,9 @@ let attachFile = (send, fileFormId, event) =>
     let maxFileSize = 5 * 1024 * 1024;
 
     let error =
-      file##size > maxFileSize ?
-        Some("The maximum file size is 5 MB. Please select another file.") :
-        None;
+      file##size > maxFileSize
+        ? Some("The maximum file size is 5 MB. Please select another file.")
+        : None;
 
     switch (error) {
     | Some(_) => send(SetAttachmentError(error))
@@ -351,102 +314,94 @@ let make =
         {buttons(state, send, previewButtonPosition)}
       </div>
     </div>
-    {
-      if (state.preview) {
-        <MarkdownBlock
-          markdown={state.markdown}
-          className="pb-3 pt-2 leading-relaxed px-3 text-base border border-transparent bg-gray-100 markdown-editor-preview"
-          profile
-        />;
-      } else {
-        let command =
-          switch (state.commandPair.command) {
-          | None => None
-          | Some(c) => Some(c |> commandToString)
-          };
+    {if (state.preview) {
+       <MarkdownBlock
+         markdown={state.markdown}
+         className="pb-3 pt-2 leading-relaxed px-3 text-base border border-transparent bg-gray-100 markdown-editor-preview"
+         profile
+       />;
+     } else {
+       let command =
+         switch (state.commandPair.command) {
+         | None => None
+         | Some(c) => Some(c |> commandToString)
+         };
 
-        <div
-          className="markdown-draft-editor__container border border-gray-400 leading-relaxed text-base rounded flex flex-col overflow-hidden">
-          <DisablingCover
-            disabled={isEditorDisabled(state.attachment)}
-            message="Uploading..."
-            containerClasses="flex flex-grow">
-            <DraftEditor
-              ariaLabelledBy=id
-              ?placeholder
-              content={state.markdown}
-              onChange={
-                conditionallyUseCallback(
-                  state.markdown,
-                  send,
-                  updateMarkdownCB,
-                )
-              }
-              ?command
-              commandAt=?{state.commandPair.commandAt}
-              insertText=?{state.insertText}
-            />
-          </DisablingCover>
-          <div
-            className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
-            <form
-              className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
-              id=fileFormId>
-              <input
-                name="authenticity_token"
-                type_="hidden"
-                value={AuthenticityToken.fromHead()}
-              />
-              <input
-                className="hidden"
-                type_="file"
-                name="markdown_attachment[file]"
-                id=fileInputId
-                multiple=false
-                onChange={attachFile(send, fileFormId)}
-              />
-              {
-                switch (state.attachment) {
-                | ReadyToAttachFile(error) =>
-                  <label
-                    className="px-3 py-1 flex-grow cursor-pointer"
-                    htmlFor=fileInputId>
-                    {
-                      switch (error) {
-                      | Some(error) =>
-                        <span className="text-red-500">
-                          <FaIcon classes="fas fa-exclamation-triangle mr-2" />
-                          {error |> str}
-                        </span>
-                      | None =>
-                        <span className="text-sm">
-                          <FaIcon classes="far fa-file-image mr-2" />
-                          {"Click here to attach a file." |> str}
-                        </span>
-                      }
-                    }
-                  </label>
-                | AttachingFile =>
-                  <span className="pl-3 py-1 flex-grow cursor-wait">
-                    <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
-                    {"Please wait for the file to upload..." |> str}
-                  </span>
-                }
-              }
-            </form>
-            <a
-              href="/help/markdown-editor"
-              target="_blank"
-              className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
-              <FaIcon classes="fab fa-markdown text-sm" />
-              <span className="text-xs ml-1 font-semibold hidden sm:inline">
-                {"Need help?" |> str}
-              </span>
-            </a>
-          </div>
-        </div>;
-      }
-    }
+       <div
+         className="markdown-draft-editor__container border border-gray-400 leading-relaxed text-base rounded flex flex-col overflow-hidden">
+         <DisablingCover
+           disabled={isEditorDisabled(state.attachment)}
+           message="Uploading..."
+           containerClasses="flex flex-grow">
+           <DraftEditor
+             ariaLabelledBy=id
+             ?placeholder
+             content={state.markdown}
+             onChange={conditionallyUseCallback(
+               state.markdown,
+               send,
+               updateMarkdownCB,
+             )}
+             ?command
+             commandAt=?{state.commandPair.commandAt}
+             insertText=?{state.insertText}
+           />
+         </DisablingCover>
+         <div
+           className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
+           <form
+             className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
+             id=fileFormId>
+             <input
+               name="authenticity_token"
+               type_="hidden"
+               value={AuthenticityToken.fromHead()}
+             />
+             <input
+               className="hidden"
+               type_="file"
+               name="markdown_attachment[file]"
+               id=fileInputId
+               multiple=false
+               onChange={attachFile(send, fileFormId)}
+             />
+             {switch (state.attachment) {
+              | ReadyToAttachFile(error) =>
+                <label
+                  className="px-3 py-1 flex-grow cursor-pointer"
+                  htmlFor=fileInputId>
+                  {switch (error) {
+                   | Some(error) =>
+                     <span className="text-red-500">
+                       <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+                       {error |> str}
+                     </span>
+                   | None =>
+                     <span className="text-sm">
+                       <FaIcon classes="far fa-file-image mr-2" />
+                       {"Click here to attach a file." |> str}
+                     </span>
+                   }}
+                </label>
+              | AttachingFile =>
+                <span className="pl-3 py-1 flex-grow cursor-wait">
+                  <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
+                  {"Please wait for the file to upload..." |> str}
+                </span>
+              }}
+           </form>
+           <a
+             href="/help/markdown-editor"
+             target="_blank"
+             className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
+             <FaIcon classes="fab fa-markdown text-sm" />
+             <span className="text-xs ml-1 font-semibold hidden sm:inline">
+               {"Need help?" |> str}
+             </span>
+           </a>
+         </div>
+       </div>;
+     }}
   </div>;
 };
 

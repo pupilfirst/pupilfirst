@@ -15,7 +15,7 @@ feature 'School Admin Navbar', js: true do
   let!(:course_3) { create :course, school: school_2 }
 
   scenario 'school admin visits the admin interface' do
-    sign_in_user school_admin.user
+    sign_in_user school_admin.user, referer: school_path
 
     # User should be on the school admin overview page.
     expect(current_path).to eq('/school')
@@ -52,6 +52,9 @@ feature 'School Admin Navbar', js: true do
     click_link course_2.name
 
     expect(page).to have_link('Curriculum', href: "/school/courses/#{course_2.id}/curriculum")
+
+    # Navbar should also include links to home page
+    expect(page).to have_link('Home', href: "/home")
   end
 
   context 'when the user is also a student and a coach' do
@@ -63,7 +66,7 @@ feature 'School Admin Navbar', js: true do
     let!(:coach_enrollment) { create :faculty_startup_enrollment, faculty: coach, startup: team }
 
     scenario 'school admin visits the admin interface' do
-      sign_in_user school_admin.user
+      sign_in_user school_admin.user, referer: school_path
 
       # User should be on the school admin overview page.
       expect(current_path).to eq('/school')

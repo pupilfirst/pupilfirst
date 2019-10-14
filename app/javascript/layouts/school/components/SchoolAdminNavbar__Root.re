@@ -346,10 +346,7 @@ let make =
         }
       </div>
       <ul>
-        {
-          isStudent ?
-            bottomLink("/home", shrunk, "fas fa-home", "Home") : React.null
-        }
+        {bottomLink("/home", shrunk, "fas fa-home", "Home")}
         {
           switch (reviewPath) {
           | Some(path) =>

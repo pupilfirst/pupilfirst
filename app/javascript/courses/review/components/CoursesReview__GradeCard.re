@@ -47,7 +47,7 @@ let undoGrading = (authenticityToken, submissionId, setState) => {
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##undoGrading##success ?
-         DomUtils.relaod() |> ignore :
+         DomUtils.reload() |> ignore :
          setState(state => {...state, saving: false});
        Js.Promise.resolve();
      })
@@ -475,6 +475,14 @@ let computeStatus =
     }
   };
 
+let submitButtonText = (feedback, grades) =>
+  switch (feedback != "", grades |> ArrayUtils.isNotEmpty) {
+  | (false, false)
+  | (false, true) => "Save grades"
+  | (true, false)
+  | (true, true) => "Save grades & send feedback"
+  };
+
 [@react.component]
 let make =
     (
@@ -550,7 +558,7 @@ let make =
                 status,
               )
             }>
-            {"Review Submission" |> str}
+            {submitButtonText(state.newFeedback, state.grades) |> str}
           </button>
         </div>
 

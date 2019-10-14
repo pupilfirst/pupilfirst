@@ -242,7 +242,7 @@ let make =
   );
   loadingContentBlocks
     ? {
-      SkeletonLoading.contents();
+      SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.contents());
     }
     : (
       switch (previewMode) {

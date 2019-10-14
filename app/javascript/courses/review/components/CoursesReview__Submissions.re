@@ -231,7 +231,7 @@ let make =
         authenticityToken
         submission
         gradeLabels
-        evaluvationCriteria=evaluationCriteria
+        evaluationCriteria
         passGrade
         updateSubmissionCB={
           updateSubmission(

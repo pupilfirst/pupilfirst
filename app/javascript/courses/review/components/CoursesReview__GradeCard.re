@@ -93,10 +93,10 @@ let gradeSubmissionQuery =
   |> ignore;
 };
 
-let validGrades = (grades, evaluvationCriteria) =>
-  grades |> Array.length == (evaluvationCriteria |> Array.length);
+let validGrades = (grades, evaluationCriteria) =>
+  grades |> Array.length == (evaluationCriteria |> Array.length);
 
-let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => {
+let updateGrading = (grade, evaluationCriteria, state, passGrade, setState) => {
   let newGrades =
     state.grades
     |> Js.Array.filter(g =>
@@ -110,7 +110,7 @@ let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => 
     {
       ...state,
       status:
-        validGrades(newGrades, evaluvationCriteria) ?
+        validGrades(newGrades, evaluationCriteria) ?
           Graded(passed(newGrades, passGrade)) : Grading,
       grades: newGrades,
     }
@@ -119,7 +119,7 @@ let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => 
 let handleGradePillClick =
     (
       evaluationCriterionId,
-      evaluvationCriteria,
+      evaluationCriteria,
       value,
       state,
       passGrade,
@@ -131,7 +131,7 @@ let handleGradePillClick =
   | Some(setState) =>
     updateGrading(
       Grade.make(~evaluationCriterionId, ~value),
-      evaluvationCriteria,
+      evaluationCriteria,
       state,
       passGrade,
       setState,
@@ -140,9 +140,9 @@ let handleGradePillClick =
   };
 };
 
-let findEvaluvationCriterion = (evaluvationCriteria, evaluationCriterionId) =>
+let findEvaluvationCriterion = (evaluationCriteria, evaluationCriterionId) =>
   switch (
-    evaluvationCriteria
+    evaluationCriteria
     |> Js.Array.find(ec =>
          ec |> EvaluationCriterion.id == evaluationCriterionId
        )
@@ -154,13 +154,13 @@ let findEvaluvationCriterion = (evaluvationCriteria, evaluationCriterionId) =>
       ++ evaluationCriterionId
       ++ "in CoursesRevew__GradeCard",
     );
-    evaluvationCriteria[0];
+    evaluationCriteria[0];
   };
 
-let gradePillHeader = (evaluvationCriteriaName, selectedGrade, gradeLabels) =>
+let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
   <div className="flex justify-between">
     <p className="text-xs font-semibold text-gray-800">
-      {evaluvationCriteriaName |> str}
+      {evaluationCriteriaName |> str}
     </p>
     <p className="text-xs font-semibold text-gray-800">
       {
@@ -204,7 +204,7 @@ let showGradePill =
       evaluvationCriterion,
       gradeValue,
       passGrade,
-      evaluvationCriteria,
+      evaluationCriteria,
       state,
       setState,
     ) =>
@@ -234,7 +234,7 @@ let showGradePill =
                onClick={
                  handleGradePillClick(
                    evaluvationCriterion |> EvaluationCriterion.id,
-                   evaluvationCriteria,
+                   evaluationCriteria,
                    gradeLabelGrade,
                    state,
                    passGrade,
@@ -263,7 +263,7 @@ let showGradePill =
     </div>
   </div>;
 
-let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
+let showGrades = (grades, gradeLabels, passGrade, evaluationCriteria, state) =>
   <div>
     {
       grades
@@ -272,12 +272,12 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
              key,
              gradeLabels,
              findEvaluvationCriterion(
-               evaluvationCriteria,
+               evaluationCriteria,
                grade |> Grade.evaluationCriterionId,
              ),
              grade |> Grade.value,
              passGrade,
-             evaluvationCriteria,
+             evaluationCriteria,
              state,
              None,
            )
@@ -286,8 +286,8 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
     }
   </div>;
 let renderGradePills =
-    (gradeLabels, evaluvationCriteria, grades, passGrade, state, setState) =>
-  evaluvationCriteria
+    (gradeLabels, evaluationCriteria, grades, passGrade, state, setState) =>
+  evaluationCriteria
   |> Array.mapi((key, ec) => {
        let grade =
          grades
@@ -307,7 +307,7 @@ let renderGradePills =
          ec,
          gradeValue,
          passGrade,
-         evaluvationCriteria,
+         evaluationCriteria,
          state,
          Some(setState),
        );
@@ -491,7 +491,7 @@ let make =
       ~authenticityToken,
       ~submission,
       ~gradeLabels,
-      ~evaluvationCriteria,
+      ~evaluationCriteria,
       ~passGrade,
       ~updateSubmissionCB,
     ) => {
@@ -522,7 +522,7 @@ let make =
               | [||] =>
                 renderGradePills(
                   gradeLabels,
-                  evaluvationCriteria,
+                  evaluationCriteria,
                   state.grades,
                   passGrade,
                   state,
@@ -534,7 +534,7 @@ let make =
                   grades,
                   gradeLabels,
                   passGrade,
-                  evaluvationCriteria,
+                  evaluationCriteria,
                   state,
                 )
               }

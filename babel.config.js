@@ -83,7 +83,15 @@ module.exports = function(api) {
       [
         "prismjs",
         {
-          languages: ["javascript", "css", "scss", "ruby", "reason", "markup"],
+          languages: [
+            "javascript",
+            "css",
+            "scss",
+            "ruby",
+            "reason",
+            "markup",
+            "yaml"
+          ],
           plugins: ["line-numbers", "custom-class"]
         }
       ]

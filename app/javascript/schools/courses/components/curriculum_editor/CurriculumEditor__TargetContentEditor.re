@@ -173,6 +173,7 @@ let make =
     (
       ~target,
       ~previewMode,
+      ~loadingContentBlocks,
       ~contentBlocks,
       ~addNewVersionCB,
       ~updateContentEditorDirtyCB,
@@ -239,84 +240,87 @@ let make =
     },
     [|contentBlocks|],
   );
-  switch (previewMode) {
-  | false =>
-    [|
-      <CurriculumEditor__ContentTypePicker
-        key="static-content-picker"
-        sortIndex={
-          switch (sortedContentBlocks) {
-          | [] => 1
-          | nonEmptyList =>
-            let (sortIndex, _, _, _) = nonEmptyList |> List.rev |> List.hd;
-            sortIndex + 1;
-          }
-        }
-        staticMode=true
-        newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
-      />,
-    |]
-    |> Array.append(
-         sortedContentBlocks
-         |> List.map(((sortIndex, blockType, contentBlock, id)) =>
-              <CurriculumEditor__ContentBlockEditor
-                key=id
-                editorId=id
-                target
-                contentBlock
-                removeTargetContentCB={
-                  removeTargetContentCB(
-                    contentBlock,
-                    sortedContentBlocks,
-                    addNewVersionCB,
-                    updateTargetContentBlocks,
-                    toggleSortContentBlock,
-                  )
-                }
-                blockType
-                sortIndex
-                newContentBlockCB={
-                  newContentBlockCB(updateTargetContentBlocks)
-                }
-                createNewContentCB={
-                  createNewContentCB(
-                    addNewVersionCB,
-                    updateTargetContentBlocks,
-                  )
-                }
-                updateContentBlockCB={
-                  updateContentBlockCB(
-                    addNewVersionCB,
-                    updateTargetContentBlocks,
-                  )
-                }
-                blockCount={targetContentBlocks |> List.length}
-                swapContentBlockCB={
-                  swapContentBlockCB(
-                    sortedContentBlocks,
-                    updateTargetContentBlocks,
-                    toggleSortContentBlock,
-                  )
-                }
-                targetContentBlocks
-                authenticityToken
-              />
-            )
-         |> Array.of_list,
-       )
-    |> React.array
-  | true =>
-    let persistedBlocks =
-      sortedContentBlocks
-      |> List.map(((sortIndex, blockType, cb, _)) =>
-           switch (cb) {
-           | Some(cb) => [
-               ContentBlock.make(cb |> ContentBlock.id, blockType, sortIndex),
-             ]
-           | None => []
-           }
-         )
-      |> List.flatten;
-    <TargetContentView contentBlocks=persistedBlocks />;
-  };
+  loadingContentBlocks
+    ? {
+      SkeletonLoading.contents();
+    }
+    : (
+      switch (previewMode) {
+      | false =>
+        [|
+          <CurriculumEditor__ContentTypePicker
+            key="static-content-picker"
+            sortIndex={
+              switch (sortedContentBlocks) {
+              | [] => 1
+              | nonEmptyList =>
+                let (sortIndex, _, _, _) =
+                  nonEmptyList |> List.rev |> List.hd;
+                sortIndex + 1;
+              }
+            }
+            staticMode=true
+            newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
+          />,
+        |]
+        |> Array.append(
+             sortedContentBlocks
+             |> List.map(((sortIndex, blockType, contentBlock, id)) =>
+                  <CurriculumEditor__ContentBlockEditor
+                    key=id
+                    editorId=id
+                    target
+                    contentBlock
+                    removeTargetContentCB={removeTargetContentCB(
+                      contentBlock,
+                      sortedContentBlocks,
+                      addNewVersionCB,
+                      updateTargetContentBlocks,
+                      toggleSortContentBlock,
+                    )}
+                    blockType
+                    sortIndex
+                    newContentBlockCB={newContentBlockCB(
+                      updateTargetContentBlocks,
+                    )}
+                    createNewContentCB={createNewContentCB(
+                      addNewVersionCB,
+                      updateTargetContentBlocks,
+                    )}
+                    updateContentBlockCB={updateContentBlockCB(
+                      addNewVersionCB,
+                      updateTargetContentBlocks,
+                    )}
+                    blockCount={targetContentBlocks |> List.length}
+                    swapContentBlockCB={swapContentBlockCB(
+                      sortedContentBlocks,
+                      updateTargetContentBlocks,
+                      toggleSortContentBlock,
+                    )}
+                    targetContentBlocks
+                    authenticityToken
+                  />
+                )
+             |> Array.of_list,
+           )
+        |> React.array
+      | true =>
+        let persistedBlocks =
+          sortedContentBlocks
+          |> List.map(((sortIndex, blockType, cb, _)) =>
+               switch (cb) {
+               | Some(cb) => [
+                   ContentBlock.make(
+                     cb |> ContentBlock.id,
+                     blockType,
+                     sortIndex,
+                   ),
+                 ]
+               | None => []
+               }
+             )
+          |> List.flatten;
+        <TargetContentView contentBlocks=persistedBlocks />;
+      }
+    );
 };

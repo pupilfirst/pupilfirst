@@ -26,25 +26,19 @@ feature 'Founder Show' do
 
   scenario 'Public user visits a student profile' do
     visit student_path(founder.id)
+
+    expect(page).to have_text('You may have mistyped the address, or the page may have moved')
+  end
+
+  scenario 'Active founder visits his profile' do
+    sign_in_user(founder.user, referer: student_path(founder.id))
+
     # ensure founder is on his profile
     expect(page).to have_text(founder.fullname)
     # ensure course name displayed is correct
     expect(page).to have_text(course.name)
     # ensure level name displayed is correct
     expect(page).to have_text(level_1.name)
-
-    # Verified team event should be visible.
-    expect(page).to have_text(timeline_event_2.description)
-
-    # Verified founder event should be visible.
-    expect(page).to have_text(timeline_event_1.description)
-
-    # Other events should not be displayed.
-    expect(page).not_to have_text(timeline_event_3.description)
-  end
-
-  scenario 'Active founder visits his profile' do
-    sign_in_user(founder.user, referer: student_path(founder.id))
 
     # All events should be visible.
     expect(page).to have_text(timeline_event_1.description)

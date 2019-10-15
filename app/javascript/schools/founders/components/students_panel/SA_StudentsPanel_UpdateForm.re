@@ -5,9 +5,6 @@ type teamCoachlist = (int, string, bool);
 type state = {
   name: string,
   teamName: string,
-  hasNameError: bool,
-  hasTeamNameError: bool,
-  hasTitleError: bool,
   tagsToApply: list(string),
   exited: bool,
   teamCoaches: list(teamCoachlist),
@@ -21,13 +18,12 @@ type state = {
 type action =
   | UpdateName(string)
   | UpdateTeamName(string)
-  | UpdateErrors(bool, bool)
   | AddTag(string)
   | RemoveTag(string)
   | UpdateExited(bool)
   | UpdateCoachesList(int, string, bool)
   | UpdateExcludedFromLeaderboard(bool)
-  | UpdateTitle(string, bool)
+  | UpdateTitle(string)
   | UpdateAffiliation(string)
   | UpdateSaving(bool);
 
@@ -35,25 +31,27 @@ let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
 let str = ReasonReact.string;
 
-let updateName = (send, state, name) => {
-  let hasError = name |> String.length < 2;
+let stringInputInvalid = s => s |> String.length < 2;
+
+let updateName = (send, name) => {
   send(UpdateName(name));
-  send(UpdateErrors(hasError, state.hasTeamNameError));
 };
 
-let updateTeamName = (send, state, teamName) => {
-  let hasError = teamName |> String.length < 3;
+let updateTeamName = (send, teamName) => {
   send(UpdateTeamName(teamName));
-  send(UpdateErrors(state.hasNameError, hasError));
 };
 
-let updateTitle = (send, state, title) => {
-  let hasError = title |> String.length < 2;
-  send(UpdateTitle(title, hasError));
+let updateTitle = (send, title) => {
+  send(UpdateTitle(title));
 };
 
 let formInvalid = state =>
-  state.hasNameError || state.hasTeamNameError || state.hasTitleError;
+  state.name
+  |> stringInputInvalid
+  || state.teamName
+  |> stringInputInvalid
+  || state.title
+  |> stringInputInvalid;
 
 let handleErrorCB = (send, ()) => send(UpdateSaving(false));
 
@@ -153,9 +151,6 @@ let make =
   initialState: () => {
     name: student |> Student.name,
     teamName: student |> studentTeam(teams) |> Team.name,
-    hasNameError: false,
-    hasTeamNameError: false,
-    hasTitleError: false,
     tagsToApply: student |> Student.tags,
     exited: student |> Student.exited,
     teamCoaches:
@@ -174,8 +169,6 @@ let make =
     switch (action) {
     | UpdateName(name) => ReasonReact.Update({...state, name})
     | UpdateTeamName(teamName) => ReasonReact.Update({...state, teamName})
-    | UpdateErrors(hasNameError, hasTeamNameError) =>
-      ReasonReact.Update({...state, hasNameError, hasTeamNameError})
     | AddTag(tag) =>
       ReasonReact.Update({
         ...state,
@@ -197,8 +190,7 @@ let make =
       });
     | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) =>
       ReasonReact.Update({...state, excludedFromLeaderboard})
-    | UpdateTitle(title, hasTitleError) =>
-      ReasonReact.Update({...state, title, hasTitleError})
+    | UpdateTitle(title) => ReasonReact.Update({...state, title})
     | UpdateAffiliation(affiliation) =>
       ReasonReact.Update({...state, affiliation})
     | UpdateSaving(bool) => ReasonReact.Update({...state, saving: bool})
@@ -249,7 +241,6 @@ let make =
                       onChange={event =>
                         updateName(
                           send,
-                          state,
                           ReactEvent.Form.target(event)##value,
                         )
                       }
@@ -259,8 +250,8 @@ let make =
                       placeholder="Student name here"
                     />
                     <School__InputGroupError.Jsx2
-                      message="is not a valid name"
-                      active={state.hasNameError}
+                      message="Name must have at least two characters"
+                      active={state.name |> stringInputInvalid}
                     />
                   </div>
                   <div className="mt-5">
@@ -274,7 +265,6 @@ let make =
                       onChange={event =>
                         updateTeamName(
                           send,
-                          state,
                           ReactEvent.Form.target(event)##value,
                         )
                       }
@@ -284,8 +274,8 @@ let make =
                       placeholder="Team name here"
                     />
                     <School__InputGroupError.Jsx2
-                      message="is not a valid team name"
-                      active={state.hasTeamNameError}
+                      message="Team Name must have at least two characters"
+                      active={state.teamName |> stringInputInvalid}
                     />
                   </div>
                   <div className="mt-5">
@@ -299,7 +289,6 @@ let make =
                       onChange={event =>
                         updateTitle(
                           send,
-                          state,
                           ReactEvent.Form.target(event)##value,
                         )
                       }
@@ -309,8 +298,8 @@ let make =
                       placeholder="Student, Coach, CEO, etc."
                     />
                     <School__InputGroupError.Jsx2
-                      message="must be at least two characters long"
-                      active={state.hasTitleError}
+                      message="Title must have at least two characters"
+                      active={state.title |> stringInputInvalid}
                     />
                   </div>
                   <div className="mt-5">

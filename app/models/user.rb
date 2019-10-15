@@ -89,4 +89,12 @@ class User < ApplicationRecord
       initials_avatar(background_shape: background_shape)
     end
   end
+
+  def full_title
+    if title.present? && affiliation.present?
+      "#{title}, #{affiliation}"
+    else
+      title.presence || affiliation.presence
+    end
+  end
 end

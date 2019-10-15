@@ -23,6 +23,19 @@ module Types
       end
     end
 
+    def feedback
+      object.startup_feedback.map do |feedback|
+        {
+          id: feedback.id,
+          created_at: feedback.created_at,
+          value: feedback.feedback,
+          coach_name: feedback.faculty.user.name,
+          coach_avatar_url: feedback.faculty.user.image_or_avatar_url,
+          coach_title: feedback.faculty.user.full_title
+        }
+      end
+    end
+
     def attachments
       files = object.timeline_event_files.with_attached_file.map do |file|
         {

@@ -22,14 +22,13 @@ feature 'School students index', js: true do
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
   let(:title_1) { Faker::Lorem.words(2).join(" ") }
+  let(:title_2) { Faker::Lorem.words(2).join(" ") }
   let(:affiliation_1) { Faker::Lorem.words(2).join(" ") }
 
   let(:name_2) { Faker::Name.name }
   let(:email_2) { Faker::Internet.email(name_2) }
 
   let!(:new_team_name) { (Faker::Lorem.words(4).join ' ').titleize }
-
-  let!(:inactive_team_1) { create :startup, level: level_1, access_ends_at: 1.day.ago }
 
   let!(:course_coach) { create :faculty, school: school }
   let!(:coach) { create :faculty, school: school }
@@ -39,7 +38,7 @@ feature 'School students index', js: true do
     FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 
-  scenario 'school admin manages students on the course student page' do
+  scenario 'School admin adds new students' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # list all students
@@ -67,12 +66,12 @@ feature 'School students index', js: true do
     expect(page.find_field("title").value).to eq(title_1)
     expect(page.find_field("affiliation").value).to eq(affiliation_1)
 
-    # Clear title
-    fill_in 'Title', with: ''
+    # Set another title.
+    fill_in 'Title', with: title_2
     # Clear affiliation
     fill_in 'Affiliation', with: ''
 
-    # Remove both tags, then add one back - the unpersisted tag should be suggested.
+    # Remove both tags, then add one back - the un-persisted tag should be suggested.
     find('span[title="Remove tag Abc"]').click
     find('span[title="Remove tag Def"]').click
     fill_in 'Tags', with: 'ab' # Lowercase search should still list capitalized result.
@@ -106,107 +105,191 @@ feature 'School students index', js: true do
     expect(founder_1_user.name).to eq(name_1)
     expect(founder_2_user.name).to eq(name_2)
     expect(founder_1_user.title).to eq(title_1)
-    expect(founder_2_user.title).to eq(nil)
+    expect(founder_2_user.title).to eq(title_2)
     expect(founder_1_user.affiliation).to eq(affiliation_1)
     expect(founder_2_user.affiliation).to eq(nil)
     expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
     expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI')
+  end
 
-    name_3 = Faker::Name.name
+  context 'when adding a student who is already a user of another type' do
+    let(:title) { Faker::Job.title }
+    let(:affiliation) { Faker::Company.name }
+    let(:coach_user) { create :user, title: title, affiliation: affiliation }
+    let!(:original_name) { coach_user.name }
+    let(:faculty) { create :faculty, user: coach_user }
 
-    # Try adding an existing student and a new student at the same time.
-    click_button 'Add New Students'
+    scenario 'School admin adds a coach as a student' do
+      sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-    expect do
-      # First, an existing student.
-      fill_in 'Name', with: name_1
-      fill_in 'Email', with: email_1
-      click_button 'Add to List'
+      click_button 'Add New Students'
 
-      # Then a new student.
-      fill_in 'Name', with: name_3
-      fill_in 'Email', with: Faker::Internet.email(name_3)
-      click_button 'Add to List'
+      expect do
+        # First, an existing student.
+        fill_in 'Name', with: Faker::Name.name
+        fill_in 'Email', with: coach_user.email
+        fill_in 'Title', with: Faker::Job.title
+        fill_in 'Affiliation', with: Faker::Company.name
+        click_button 'Add to List'
+        click_button 'Save List'
 
-      # Try to save both.
-      click_button 'Save List'
+        expect(page).to have_text("All students were created successfully")
+        dismiss_notification
+      end.to change { Founder.count }.by(1)
 
-      expect(page).to have_text("1 of 2 students were added. Remaining students are already a part of the course")
-      dismiss_notification
-    end.to change { Founder.count }.by(1)
+      expect(page).to have_text(coach_user.reload.name)
 
-    expect(page).to have_text(name_3)
+      # Name, title and affiliation of existing user should not be modified.
+      expect(coach_user.name).to eq(original_name)
+      expect(coach_user.title).to eq(title)
+      expect(coach_user.affiliation).to eq(affiliation)
+    end
+  end
 
-    # Update a student
-    find("a", text: name_1).click
-    expect(page).to have_text(founder_1_user.name)
-    expect(page).to have_text(founder_1.startup.name)
-    expect(page.find_field("title").value).to eq(founder_1_user.title)
-    expect(page.find_field("affiliation").value).to eq(founder_1_user.affiliation)
-    fill_in 'Name', with: founder_1_user.name + " Jr."
-    fill_in 'Team Name', with: new_team_name, fill_options: { clear: :backspace }
-    fill_in 'Title', with: ''
-    fill_in 'Affiliation', with: ''
-    find('button[title="Exclude this student from the leaderboard"]').click
-    click_button 'Update Student'
+  context 'when there is one student in the course' do
+    let(:existing_user) { create :user, email: email_1, name: name_1 }
+    let!(:original_title) { existing_user.title }
+    let!(:original_affiliation) { existing_user.affiliation }
+    let(:name_3) { Faker::Name.name }
 
-    expect(page).to have_text("Student updated successfully")
-    dismiss_notification
-
-    expect(founder_1_user.reload.name).to end_with('Jr.')
-    expect(founder_1_user.title).to eq(nil)
-    expect(founder_1_user.affiliation).to eq(nil)
-    expect(founder_1.reload.startup.name).to eq(new_team_name)
-    expect(founder_1.excluded_from_leaderboard).to eq(true)
-
-    # Form a Team
-    check "select-student-#{founder_1.id}"
-    check "select-student-#{founder_2.id}"
-    click_button 'Group as Team'
-    expect(page).to have_text("Teams updated successfully")
-    dismiss_notification
-    founder_1.reload
-    founder_2.reload
-    expect(founder_1.startup.name).to eq(founder_2.startup.name)
-    expect(page).to have_text(founder_1.startup.name)
-
-    # Move out from a team
-    check "select-student-#{founder_1.id}"
-    click_button 'Move out from Team'
-    expect(page).to have_text("Teams updated successfully")
-    dismiss_notification
-    founder_1.reload
-    founder_2.reload
-    expect(founder_1.startup.id).not_to eq(founder_2.startup.id)
-
-    # Assign a coach to a team
-    founder = startup_2.founders.last
-    find("a", text: founder.user.name).click
-    expect(page).to have_text('Course Coaches')
-    expect(page).to have_text('Exclusive Team Coaches')
-    expect(page).to have_text(course_coach.name)
-
-    within '.select-list__group' do
-      expect(page).to_not have_text(exited_coach.name)
-      find('.px-3', text: coach.name).click
+    before do
+      create :student, user: existing_user, startup: startup_1
     end
 
-    click_button 'Update Student'
-    expect(page).to have_text("Student updated successfully")
-    dismiss_notification
-    founder.reload
-    expect(founder.startup.faculty.last).to eq(coach)
+    scenario 'School admin tries to add the existing student alongside a new student' do
+      sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-    # Inactive students list
-    expect(page).to_not have_text(inactive_team_1.founders.first.name)
-    click_link 'Inactive Students'
-    expect(page).to have_text(inactive_team_1.founders.first.name)
-    check "select-team-#{inactive_team_1.id}"
-    expect(page).to have_button('Mark Team Active')
-    click_button 'Mark Team Active'
-    expect(page).to have_text("Teams marked active successfully!")
-    visit school_course_students_path(course)
-    expect(page).to have_text(inactive_team_1.founders.first.name)
+      click_button 'Add New Students'
+
+      expect do
+        # First, an existing student.
+        fill_in 'Name', with: name_1
+        fill_in 'Email', with: email_1
+        fill_in 'Title', with: Faker::Job.title
+        fill_in 'Affiliation', with: Faker::Company.name
+        click_button 'Add to List'
+
+        # Then a new student.
+        fill_in 'Name', with: name_3
+        fill_in 'Email', with: Faker::Internet.email(name_3)
+        click_button 'Add to List'
+
+        # Try to save both.
+        click_button 'Save List'
+
+        expect(page).to have_text("1 of 2 students were added. Remaining students are already a part of the course")
+        dismiss_notification
+      end.to change { Founder.count }.by(1)
+
+      expect(page).to have_text(name_3)
+
+      # The title and affiliation of existing user should not be modified.
+      expect(existing_user.reload.title).to eq(original_title)
+      expect(existing_user.affiliation).to eq(original_affiliation)
+    end
+  end
+
+  context 'when there are two existing students' do
+    let(:user_1) { create :user, email: email_1, name: name_1, affiliation: Faker::Company.name }
+    let(:user_2) { create :user, email: email_2, name: name_2, affiliation: Faker::Company.name }
+    let!(:student_1) { create :student, user: user_1, startup: startup_1 }
+    let!(:student_2) { create :student, user: user_2, startup: startup_1 }
+    let(:new_title) { Faker::Job.title }
+
+    scenario 'School admin edits student details' do
+      sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+      # Update a student
+      find("a", text: name_1).click
+
+      expect(page).to have_text(user_1.name)
+      expect(page).to have_text(student_1.startup.name)
+      expect(page.find_field("title").value).to eq(user_1.title)
+      expect(page.find_field("affiliation").value).to eq(user_1.affiliation)
+
+      fill_in 'Name', with: user_1.name + " Jr."
+      fill_in 'Team Name', with: new_team_name, fill_options: { clear: :backspace }
+      fill_in 'Title', with: new_title
+      fill_in 'Affiliation', with: ''
+      find('button[title="Exclude this student from the leaderboard"]').click
+      click_button 'Update Student'
+
+      expect(page).to have_text("Student updated successfully")
+      dismiss_notification
+
+      expect(user_1.reload.name).to end_with('Jr.')
+      expect(user_1.title).to eq(new_title)
+      expect(user_1.affiliation).to eq(nil)
+      expect(student_1.reload.startup.name).to eq(new_team_name)
+      expect(student_1.excluded_from_leaderboard).to eq(true)
+
+      # Form a Team
+      check "select-student-#{student_1.id}"
+      check "select-student-#{student_2.id}"
+      click_button 'Group as Team'
+      expect(page).to have_text("Teams updated successfully")
+      dismiss_notification
+      student_1.reload
+      student_2.reload
+      expect(student_1.startup.name).to eq(student_2.startup.name)
+      expect(page).to have_text(student_1.startup.name)
+
+      # Move out from a team
+      check "select-student-#{student_1.id}"
+      click_button 'Move out from Team'
+      expect(page).to have_text("Teams updated successfully")
+      dismiss_notification
+      student_1.reload
+      student_2.reload
+      expect(student_1.startup.id).not_to eq(student_2.startup.id)
+
+      # Assign a coach to a team
+      founder = startup_2.founders.last
+      find("a", text: founder.user.name).click
+      expect(page).to have_text('Course Coaches')
+      expect(page).to have_text('Exclusive Team Coaches')
+      expect(page).to have_text(course_coach.name)
+
+      within '.select-list__group' do
+        expect(page).to_not have_text(exited_coach.name)
+        find('.px-3', text: coach.name).click
+      end
+
+      click_button 'Update Student'
+      expect(page).to have_text("Student updated successfully")
+      dismiss_notification
+      founder.reload
+      expect(founder.startup.faculty.last).to eq(coach)
+    end
+
+    context 'when there is an inactive team' do
+      let!(:inactive_team_1) { create :startup, level: level_1, access_ends_at: 1.day.ago }
+
+      scenario 'School admin manipulates inactive teams' do
+        sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+        # Student except inactive one should be listed.
+        expect(page).to have_text(name_1)
+        expect(page).to have_text(name_2)
+        expect(page).not_to have_text(inactive_team_1.founders.first.name)
+
+        click_link 'Inactive Students'
+
+        expect(page).to have_text(inactive_team_1.founders.first.name)
+
+        check "select-team-#{inactive_team_1.id}"
+
+        expect(page).to have_button('Mark Team Active')
+
+        click_button 'Mark Team Active'
+
+        expect(page).to have_text("Teams marked active successfully!")
+
+        visit school_course_students_path(course)
+
+        expect(page).to have_text(inactive_team_1.founders.first.name)
+      end
+    end
   end
 
   scenario 'school admin marks students as dropped out' do

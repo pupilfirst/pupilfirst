@@ -16,12 +16,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
     omniauth_providers: %i[google_oauth2 facebook github]
 
-  normalize_attribute :name, :phone, :communication_address, :title, :key_skills, :about,
+  normalize_attribute :name, :phone, :communication_address, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id, :affiliation
 
-  validates :email, presence: true, email: true
-  validates :email, uniqueness: { scope: :school_id }
+  validates :email, presence: true, email: true, uniqueness: { scope: :school_id }
+
   has_one_attached :avatar
 
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }

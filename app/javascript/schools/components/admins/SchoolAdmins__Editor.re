@@ -6,9 +6,14 @@ type editorAction =
   | ShowEditor(option(SchoolAdmin.t))
   | Hidden;
 
-let renderAdmin = (admin, setEditorAction) =>
+type state = {
+  editorAction,
+  admins: array(SchoolAdmin.t),
+};
+
+let renderAdmin = (admin, setState) =>
   <div
-    key={admin |> SchoolAdmin.id}
+    key={(admin |> SchoolAdmin.id) ++ (admin |> SchoolAdmin.name)}
     className="flex w-1/2 flex-shrink-0 mb-5 px-3">
     <div
       className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
@@ -17,7 +22,9 @@ let renderAdmin = (admin, setEditorAction) =>
         onClick={
           _event => {
             ReactEvent.Mouse.preventDefault(_event);
-            setEditorAction(_ => ShowEditor(Some(admin)));
+            setState(state =>
+              {...state, editorAction: ShowEditor(Some(admin))}
+            );
           }
         }>
         <div className="flex">
@@ -40,32 +47,39 @@ let renderAdmin = (admin, setEditorAction) =>
     </div>
   </div>;
 
-let handleUpdate = (admin, admins, setAdmins, setEditorAction) => {
-  setAdmins(_ => admins |> SchoolAdmin.update(admin));
-  setEditorAction(_ => Hidden);
-};
+let handleUpdate = (setState, admin) =>
+  setState(state =>
+    {admins: state.admins |> SchoolAdmin.update(admin), editorAction: Hidden}
+  );
 
 [@react.component]
 let make = (~authenticityToken, ~admins) => {
-  let (editorAction, setEditorAction) = React.useState(() => Hidden);
-  let (admins, setAdmins) = React.useState(() => admins);
-  let updateCB = admin =>
-    handleUpdate(admin, admins, setAdmins, setEditorAction);
+  let (state, setState) =
+    React.useState(() => {editorAction: Hidden, admins});
   <div className="flex flex-1 h-full overflow-y-scroll bg-gray-100">
     <div className="flex-1 flex flex-col">
       {
-        switch (editorAction) {
+        switch (state.editorAction) {
         | Hidden => React.null
         | ShowEditor(admin) =>
           <SchoolAdmin__EditorDrawer
-            closeDrawerCB=(() => setEditorAction(_ => Hidden))>
-            <SchoolAdmins__Form authenticityToken admin updateCB />
+            closeDrawerCB=(
+              _ => setState(state => {...state, editorAction: Hidden})
+            )>
+            <SchoolAdmins__Form
+              authenticityToken
+              admin
+              updateCB={handleUpdate(setState)}
+            />
           </SchoolAdmin__EditorDrawer>
         }
       }
       <div className="flex px-6 py-2 items-center justify-between">
         <button
-          onClick={_ => setEditorAction(_ => ShowEditor(None))}
+          onClick={
+            _ =>
+              setState(state => {...state, editorAction: ShowEditor(None)})
+          }
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle" />
           <h5 className="font-semibold ml-2">
@@ -77,10 +91,9 @@ let make = (~authenticityToken, ~admins) => {
         <div className="max-w-2xl w-full mx-auto">
           <div className="flex -mx-3 flex-wrap">
             {
-              admins
+              state.admins
               |> SchoolAdmin.sort
-              |> List.map(admin => renderAdmin(admin, setEditorAction))
-              |> Array.of_list
+              |> Array.map(admin => renderAdmin(admin, setState))
               |> ReasonReact.array
             }
           </div>

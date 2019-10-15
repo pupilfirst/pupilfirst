@@ -11,11 +11,11 @@ feature 'School admins Editor', js: true do
   let(:name) { Faker::Name.name }
   let(:email) { Faker::Internet.email(name) }
   let(:name_for_edit) { Faker::Name.name }
-  let(:email_for_edit) { Faker::Internet.email(name_for_edit) }
   let(:user) { create :user }
   let(:name_for_user) { Faker::Name.name }
+  let(:coach) { create :faculty, school: school }
 
-  scenario 'school admin visits a school admin editor' do
+  scenario 'school admin adds a new user as an admin' do
     sign_in_user school_admin_1.user, referer: admins_school_path
 
     # list all school admins
@@ -41,16 +41,14 @@ feature 'School admins Editor', js: true do
     expect(page).to have_text(new_school_admin_user.name)
     expect(page).to have_text(new_school_admin_user.email)
 
-    fill_in 'email', with: email_for_edit
     fill_in 'name', with: name_for_edit
     click_button 'Update School Admin'
     expect(page).to have_text("School Admin updated successfully")
     dismiss_notification
     expect(new_school_admin_user.reload.name).to eq(name_for_edit)
-    expect(new_school_admin_user.reload.email).to eq(email_for_edit)
   end
 
-  scenario 'create a school admin for an existing user', js: true do
+  scenario 'school admin adds an existing user as an admin', js: true do
     sign_in_user school_admin_1.user, referer: admins_school_path
 
     click_button 'Add New School Admin'
@@ -64,8 +62,13 @@ feature 'School admins Editor', js: true do
     expect(user.reload.name).to eq(name_for_user)
   end
 
-  scenario 'user who is not logged in gets redirected to sign in page' do
+  scenario 'user who is not logged in tries to access school admin editor interface' do
     visit admins_school_path
     expect(page).to have_text("Please sign in to continue.")
+  end
+
+  scenario 'logged in user who not a school admin tries to access school admin editor interface' do
+    sign_in_user coach.user, referer: admins_school_path
+    expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

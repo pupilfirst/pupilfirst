@@ -17,8 +17,8 @@ module CreateSchoolAdminQuery = [%graphql
 
 module UpdateSchoolAdminQuery = [%graphql
   {|
-  mutation($id: ID!, $name: String!, $email: String!) {
-    updateSchoolAdmin(id: $id, name: $name, email: $email) {
+  mutation($id: ID!, $name: String!) {
+    updateSchoolAdmin(id: $id, name: $name) {
       success
     }
   }
@@ -53,10 +53,10 @@ let createSchoolAdminQuery =
 };
 
 let updateSchoolAdminQuery =
-    (authenticityToken, admin, email, name, setSaving, updateCB) => {
+    (authenticityToken, admin, name, setSaving, updateCB) => {
   setSaving(_ => true);
   let id = admin |> SchoolAdmin.id;
-  UpdateSchoolAdminQuery.make(~id, ~email, ~name, ())
+  UpdateSchoolAdminQuery.make(~id, ~name, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##updateSchoolAdmin##success ?
@@ -65,7 +65,7 @@ let updateSchoolAdminQuery =
              SchoolAdmin.create(
                id,
                name,
-               email,
+               admin |> SchoolAdmin.email,
                admin |> SchoolAdmin.avatarUrl,
              ),
            );
@@ -88,7 +88,6 @@ let handleButtonClick =
     updateSchoolAdminQuery(
       authenticityToken,
       admin,
-      email,
       name,
       setSaving,
       updateCB,
@@ -118,22 +117,29 @@ let showInvalidNameError = (name, admin) =>
   | Some(_) => name == ""
   | None => false
   };
-let saveDisabled = (email, name, saving, admin) => {
-  let dirty =
+let saveDisabled = (email, name, saving, admin) =>
+  isInvalidEmail(email)
+  || saving
+  || name == ""
+  || (
     switch (admin) {
     | Some(admin) =>
       admin |> SchoolAdmin.name == name && admin |> SchoolAdmin.email == email
     | None => false
-    };
-
-  isInvalidEmail(email) || saving || name == "" || dirty;
-};
+    }
+  );
 
 let buttonText = (saving, admin) =>
   switch (saving, admin) {
   | (true, _) => "Saving"
   | (false, Some(_)) => "Update School Admin"
   | (false, None) => "Create School Admin"
+  };
+
+let emailInputDisabled = admin =>
+  switch (admin) {
+  | Some(_) => true
+  | None => false
   };
 
 [@react.component]
@@ -175,7 +181,6 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               htmlFor="email">
               {"Email" |> str}
             </label>
-            <span> {"*" |> str} </span>
             <input
               value=email
               onChange={
@@ -185,6 +190,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               id="email"
               type_="email"
               placeholder="Add email here"
+              disabled={emailInputDisabled(admin)}
             />
             <School__InputGroupError
               message="Enter a valid Email"
@@ -197,7 +203,6 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
               htmlFor="name">
               {"Name" |> str}
             </label>
-            <span> {"*" |> str} </span>
             <input
               value=name
               onChange={

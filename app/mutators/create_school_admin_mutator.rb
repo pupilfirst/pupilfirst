@@ -9,12 +9,6 @@ class CreateSchoolAdminMutator < ApplicationMutator
 
   validate :not_a_school_admin
 
-  def school_admin
-    return if courses.count == course_ids.count
-
-    errors[:base] << 'IncorrectCourseIds'
-  end
-
   def save
     SchoolAdmin.transaction do
       user = persisted_user || User.create!(email: email, school: current_school)

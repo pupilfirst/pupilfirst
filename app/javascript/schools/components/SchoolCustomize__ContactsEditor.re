@@ -160,9 +160,9 @@ let make =
             className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="contacts-editor__address"
             placeholder="Leave the address empty to hide the footer section."
-            onChange={
-              handleInputChange(address => send(UpdateAddress(address)))
-            }
+            onChange={handleInputChange(address =>
+              send(UpdateAddress(address))
+            )}
             value={state.address}
           />
         </div>
@@ -178,16 +178,14 @@ let make =
             className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="contacts-editor__email-address"
             placeholder="Leave the email address empty to hide the footer link."
-            onChange={
-              handleInputChange(emailAddress =>
-                send(
-                  UpdateEmailAddress(
-                    emailAddress,
-                    emailAddress |> EmailUtils.isInvalid(~allowBlank=true),
-                  ),
-                )
+            onChange={handleInputChange(emailAddress =>
+              send(
+                UpdateEmailAddress(
+                  emailAddress,
+                  emailAddress |> EmailUtils.isInvalid(true),
+                ),
               )
-            }
+            )}
             value={state.emailAddress}
           />
           <School__InputGroupError.Jsx2
@@ -198,15 +196,13 @@ let make =
         <button
           key="contacts-editor__update-button"
           disabled={updateButtonDisabled(state)}
-          onClick={
-            handleUpdateContactDetails(
-              state,
-              send,
-              authenticityToken,
-              updateAddressCB,
-              updateEmailAddressCB,
-            )
-          }
+          onClick={handleUpdateContactDetails(
+            state,
+            send,
+            authenticityToken,
+            updateAddressCB,
+            updateEmailAddressCB,
+          )}
           className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
           {updateContactDetailsButtonText(state.updating) |> str}
         </button>

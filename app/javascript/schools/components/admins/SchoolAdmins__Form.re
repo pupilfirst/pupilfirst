@@ -59,8 +59,8 @@ let updateSchoolAdminQuery =
   UpdateSchoolAdminQuery.make(~id, ~name, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       response##updateSchoolAdmin##success ?
-         {
+       response##updateSchoolAdmin##success
+         ? {
            updateCB(
              SchoolAdmin.create(
                id,
@@ -73,8 +73,8 @@ let updateSchoolAdminQuery =
              "Success",
              "School Admin updated successfully.",
            );
-         } :
-         setSaving(_ => false);
+         }
+         : setSaving(_ => false);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -103,8 +103,7 @@ let handleButtonClick =
   };
 };
 
-let isInvalidEmail = email =>
-  email |> EmailUtils.isInvalid(~allowBlank=false);
+let isInvalidEmail = email => email |> EmailUtils.isInvalid(false);
 
 let showInvalidEmailError = (email, admin) =>
   switch (admin) {
@@ -165,15 +164,13 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
         <div className="max-w-2xl p-6 mx-auto">
           <h5
             className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-            {
-              (
-                switch (admin) {
-                | Some(_) => "Update school admin"
-                | None => "Add new school admin"
-                }
-              )
-              |> str
-            }
+            {(
+               switch (admin) {
+               | Some(_) => "Update school admin"
+               | None => "Add new school admin"
+               }
+             )
+             |> str}
           </h5>
           <div>
             <label
@@ -183,8 +180,8 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
             </label>
             <input
               value=email
-              onChange={
-                event => setEmail(ReactEvent.Form.target(event)##value)
+              onChange={event =>
+                setEmail(ReactEvent.Form.target(event)##value)
               }
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="email"
@@ -205,8 +202,8 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
             </label>
             <input
               value=name
-              onChange={
-                event => setName(ReactEvent.Form.target(event)##value)
+              onChange={event =>
+                setName(ReactEvent.Form.target(event)##value)
               }
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="name"
@@ -221,16 +218,14 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
           <div className="w-auto mt-8">
             <button
               disabled={saveDisabled(email, name, saving, admin)}
-              onClick={
-                handleButtonClick(
-                  authenticityToken,
-                  admin,
-                  setSaving,
-                  name,
-                  email,
-                  updateCB,
-                )
-              }
+              onClick={handleButtonClick(
+                authenticityToken,
+                admin,
+                setSaving,
+                name,
+                email,
+                updateCB,
+              )}
               className="w-full btn btn-large btn-primary">
               {buttonText(saving, admin) |> str}
             </button>

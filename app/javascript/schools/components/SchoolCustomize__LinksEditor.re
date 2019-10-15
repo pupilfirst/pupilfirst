@@ -45,7 +45,7 @@ let handleTitleChange = (send, event) => {
 
 let handleUrlChange = (send, event) => {
   let url = ReactEvent.Form.target(event)##value;
-  send(UpdateUrl(url, UrlUtils.isInvalid(url)));
+  send(UpdateUrl(url, url |> UrlUtils.isInvalid(false)));
 };
 
 let handleCloseEditor = (cb, event) => {
@@ -98,30 +98,30 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
            className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
            key=id>
            <div className="flex items-center">
-             {
-               switch (kind) {
-               | HeaderLink
-               | FooterLink =>
-                 [|
-                   <span key="link-editor-entry__title">
-                     {title |> str}
-                   </span>,
-                   <i
-                     key="link-editor-entry__icon"
-                     className="fas fa-link mx-2"
-                   />,
-                   <code key="link-editor-entry__url"> {url |> str} </code>,
-                 |]
-                 |> ReasonReact.array
-               | SocialLink => <code> {url |> str} </code>
-               }
-             }
+             {switch (kind) {
+              | HeaderLink
+              | FooterLink =>
+                [|
+                  <span key="link-editor-entry__title"> {title |> str} </span>,
+                  <i
+                    key="link-editor-entry__icon"
+                    className="fas fa-link mx-2"
+                  />,
+                  <code key="link-editor-entry__url"> {url |> str} </code>,
+                |]
+                |> ReasonReact.array
+              | SocialLink => <code> {url |> str} </code>
+              }}
            </div>
            <button
              title={"Delete " ++ url}
-             onClick={
-               handleDelete(state, send, authenticityToken, removeLinkCB, id)
-             }
+             onClick={handleDelete(
+               state,
+               send,
+               authenticityToken,
+               removeLinkCB,
+               id,
+             )}
              className="p-3">
              <FaIcon.Jsx2
                classes={deleteIconClasses(state.deleting |> List.mem(id))}
@@ -144,9 +144,9 @@ let kindClasses = selected => {
   let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none";
   classes
   ++ (
-    selected ?
-      " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500" :
-      " text-gray-600"
+    selected
+      ? " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500"
+      : " text-gray-600"
   );
 };
 
@@ -159,8 +159,8 @@ let addLinkDisabled = state =>
     switch (state.kind) {
     | HeaderLink
     | FooterLink =>
-      isTitleInvalid(state.title) || UrlUtils.isInvalid(state.url)
-    | SocialLink => UrlUtils.isInvalid(state.url)
+      isTitleInvalid(state.title) || state.url |> UrlUtils.isInvalid(false)
+    | SocialLink => state.url |> UrlUtils.isInvalid(false)
     };
   } else {
     true;
@@ -351,44 +351,40 @@ let make =
           className="inline-block tracking-wide text-xs font-semibold mt-4">
           {linksTitle(state.kind)}
         </label>
-        {
-          showLinks(
-            state,
-            send,
-            authenticityToken,
-            removeLinkCB,
-            state.kind,
-            unpackLinks(state.kind, customizations),
-          )
-        }
+        {showLinks(
+           state,
+           send,
+           authenticityToken,
+           removeLinkCB,
+           state.kind,
+           unpackLinks(state.kind, customizations),
+         )}
         <DisablingCover.Jsx2 disabled={state.adding}>
           <div className="flex mt-3" key="sc-links-editor__form-body">
-            {
-              if (state |> titleInputVisible) {
-                <div className="flex-grow mr-4">
-                  <label
-                    className="inline-block tracking-wide text-xs font-semibold"
-                    htmlFor="link-title">
-                    {"Title" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="link-title"
-                    type_="text"
-                    placeholder="A short title for a new link"
-                    onChange={handleTitleChange(send)}
-                    value={state.title}
-                    maxLength=24
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="can't be empty"
-                    active={state.titleInvalid}
-                  />
-                </div>;
-              } else {
-                ReasonReact.null;
-              }
-            }
+            {if (state |> titleInputVisible) {
+               <div className="flex-grow mr-4">
+                 <label
+                   className="inline-block tracking-wide text-xs font-semibold"
+                   htmlFor="link-title">
+                   {"Title" |> str}
+                 </label>
+                 <input
+                   className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   id="link-title"
+                   type_="text"
+                   placeholder="A short title for a new link"
+                   onChange={handleTitleChange(send)}
+                   value={state.title}
+                   maxLength=24
+                 />
+                 <School__InputGroupError.Jsx2
+                   message="can't be empty"
+                   active={state.titleInvalid}
+                 />
+               </div>;
+             } else {
+               ReasonReact.null;
+             }}
             <div className="flex-grow">
               <label
                 className="inline-block tracking-wide text-xs font-semibold"
@@ -413,9 +409,12 @@ let make =
             <button
               key="sc-links-editor__form-button"
               disabled={addLinkDisabled(state)}
-              onClick={
-                handleAddLink(state, send, authenticityToken, addLinkCB)
-              }
+              onClick={handleAddLink(
+                state,
+                send,
+                authenticityToken,
+                addLinkCB,
+              )}
               className="btn btn-primary btn-large mt-6">
               {state.adding |> addLinkText |> str}
             </button>

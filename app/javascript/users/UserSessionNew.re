@@ -180,33 +180,31 @@ let iconClasses = provider =>
 
 let providers = () => {
   let defaultProvides = [|Google, Facebook, Github|];
-  DomUtils.isDevelopment() ?
-    defaultProvides |> Array.append([|Developer|]) : defaultProvides;
+  DomUtils.isDevelopment()
+    ? defaultProvides |> Array.append([|Developer|]) : defaultProvides;
 };
 let renderFederatedlogin = (fqdn, oauthHost) =>
   <div className="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
-    {
-      providers()
-      |> Array.map(provider =>
-           <a
-             key={buttonText(provider)}
-             className={buttonClasses(provider)}
-             href={federatedLoginUrl(oauthHost, fqdn, provider)}>
-             <span className="w-1/5 text-right text-lg">
-               <FaIcon classes={iconClasses(provider)} />
-             </span>
-             <span className="w-4/5 pl-3 text-left">
-               {buttonText(provider) |> str}
-             </span>
-           </a>
-         )
-      |> React.array
-    }
+    {providers()
+     |> Array.map(provider =>
+          <a
+            key={buttonText(provider)}
+            className={buttonClasses(provider)}
+            href={federatedLoginUrl(oauthHost, fqdn, provider)}>
+            <span className="w-1/5 text-right text-lg">
+              <FaIcon classes={iconClasses(provider)} />
+            </span>
+            <span className="w-4/5 pl-3 text-left">
+              {buttonText(provider) |> str}
+            </span>
+          </a>
+        )
+     |> React.array}
   </div>;
 
 let validPassword = password => password != "";
 
-let validEmail = email => email |> EmailUtils.isInvalid(~allowBlank=false);
+let validEmail = email => email |> EmailUtils.isInvalid(false);
 
 let renderSignInWithEmail =
     (
@@ -280,63 +278,53 @@ let renderSignInWithEmail =
       </div>
     </div>
     <div className="mt-6">
-      {
-        validPassword(password) ?
-          <button
-            disabled={saving || validEmail(email)}
-            onClick={
-              _ =>
-                signInWithPassword(
-                  authenticityToken,
-                  email,
-                  password,
-                  setSaving,
-                  sharedDevice,
-                )
-            }
-            className="btn btn-success btn-large text-center w-full">
-            {
-              saving ?
-                <FaIcon classes="fas fa-spinner fa-spin mr-2" /> :
-                ReasonReact.null
-            }
-            <span>
-              {(saving ? "Signing in" : "Sign in with password") |> str}
-            </span>
-          </button> :
-          <button
-            disabled={saving || validEmail(email)}
-            onClick={
-              _ =>
-                sendSignInEmail(
-                  authenticityToken,
-                  email,
-                  setView,
-                  setSaving,
-                  sharedDevice,
-                )
-            }
-            className="btn btn-primary btn-large text-center w-full">
-            {
-              saving ?
-                <FaIcon classes="fas fa-spinner fa-spin mr-2" /> :
-                ReasonReact.null
-            }
-            <span>
-              {(saving ? "Signing in" : "Email me a link to sign in") |> str}
-            </span>
-          </button>
-      }
+      {validPassword(password)
+         ? <button
+             disabled={saving || validEmail(email)}
+             onClick={_ =>
+               signInWithPassword(
+                 authenticityToken,
+                 email,
+                 password,
+                 setSaving,
+                 sharedDevice,
+               )
+             }
+             className="btn btn-success btn-large text-center w-full">
+             {saving
+                ? <FaIcon classes="fas fa-spinner fa-spin mr-2" />
+                : ReasonReact.null}
+             <span>
+               {(saving ? "Signing in" : "Sign in with password") |> str}
+             </span>
+           </button>
+         : <button
+             disabled={saving || validEmail(email)}
+             onClick={_ =>
+               sendSignInEmail(
+                 authenticityToken,
+                 email,
+                 setView,
+                 setSaving,
+                 sharedDevice,
+               )
+             }
+             className="btn btn-primary btn-large text-center w-full">
+             {saving
+                ? <FaIcon classes="fas fa-spinner fa-spin mr-2" />
+                : ReasonReact.null}
+             <span>
+               {(saving ? "Signing in" : "Email me a link to sign in") |> str}
+             </span>
+           </button>}
     </div>
   </div>;
 
 let renderSignInEmailSent = () =>
   <div className="max-w-sm mx-auto">
     <p className="mt-4 text-center">
-      {
-        "It should reach you in less than a minute. Click the link in the email, and you'll be signed in."
-        |> str
-      }
+      {"It should reach you in less than a minute. Click the link in the email, and you'll be signed in."
+       |> str}
     </p>
   </div>;
 
@@ -362,15 +350,12 @@ let renderForgotPassword =
     />
     <button
       disabled={saving || validEmail(email)}
-      onClick={
-        _ =>
-          sendResetPasswordEmail(authenticityToken, email, setView, setSaving)
+      onClick={_ =>
+        sendResetPasswordEmail(authenticityToken, email, setView, setSaving)
       }
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
-      {
-        saving ?
-          <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null
-      }
+      {saving
+         ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
       <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
     </button>
   </div>;
@@ -392,68 +377,64 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
         <span> {headerText(view) |> str} </span>
         <span className="inline-block"> {schoolName |> str} </span>
       </div>
-      {
-        switch (view) {
-        | FederatedSignIn => renderFederatedlogin(fqdn, oauthHost)
-        | SignInWithPassword =>
-          renderSignInWithEmail(
-            email,
-            setEmail,
-            password,
-            setPassword,
-            authenticityToken,
-            setView,
-            saving,
-            setSaving,
-            sharedDevice,
-            setSharedDevice,
-          )
-        | SignInEmailSent => renderSignInEmailSent()
-        | ForgotPassword =>
-          renderForgotPassword(
-            authenticityToken,
-            email,
-            saving,
-            setEmail,
-            setSaving,
-            setView,
-          )
-        }
-      }
-      {
-        switch (view) {
-        | FederatedSignIn =>
-          <div className="max-w-sm mx-auto md:px-9">
-            <span
-              className="federated-sigin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
-              <span className="bg-white px-2"> {"OR" |> str} </span>
-            </span>
-            <button
-              disabled=saving
-              onClick=(_ => setView(_ => SignInWithPassword))
-              className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 focus:bg-gray-200 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full">
-              <span className="w-1/5 text-right text-lg">
-                <FaIcon classes="fas fa-envelope" />
-              </span>
-              <span className="w-4/5 pl-3 text-left">
-                {"Continue with email" |> str}
-              </span>
-            </button>
-          </div>
-        | SignInWithPassword
-        | ForgotPassword =>
-          <div className="max-w-sm mx-auto md:px-9">
-            <button
-              disabled=saving
-              onClick=(_ => setView(_ => FederatedSignIn))
-              className="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none">
-              {"Sign in with Google, Facebook, or Github" |> str}
-            </button>
-          </div>
+      {switch (view) {
+       | FederatedSignIn => renderFederatedlogin(fqdn, oauthHost)
+       | SignInWithPassword =>
+         renderSignInWithEmail(
+           email,
+           setEmail,
+           password,
+           setPassword,
+           authenticityToken,
+           setView,
+           saving,
+           setSaving,
+           sharedDevice,
+           setSharedDevice,
+         )
+       | SignInEmailSent => renderSignInEmailSent()
+       | ForgotPassword =>
+         renderForgotPassword(
+           authenticityToken,
+           email,
+           saving,
+           setEmail,
+           setSaving,
+           setView,
+         )
+       }}
+      {switch (view) {
+       | FederatedSignIn =>
+         <div className="max-w-sm mx-auto md:px-9">
+           <span
+             className="federated-sigin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
+             <span className="bg-white px-2"> {"OR" |> str} </span>
+           </span>
+           <button
+             disabled=saving
+             onClick={_ => setView(_ => SignInWithPassword)}
+             className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 focus:bg-gray-200 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full">
+             <span className="w-1/5 text-right text-lg">
+               <FaIcon classes="fas fa-envelope" />
+             </span>
+             <span className="w-4/5 pl-3 text-left">
+               {"Continue with email" |> str}
+             </span>
+           </button>
+         </div>
+       | SignInWithPassword
+       | ForgotPassword =>
+         <div className="max-w-sm mx-auto md:px-9">
+           <button
+             disabled=saving
+             onClick={_ => setView(_ => FederatedSignIn)}
+             className="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none">
+             {"Sign in with Google, Facebook, or Github" |> str}
+           </button>
+         </div>
 
-        | SignInEmailSent => React.null
-        }
-      }
+       | SignInEmailSent => React.null
+       }}
     </div>
   </div>;
 };

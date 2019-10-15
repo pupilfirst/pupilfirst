@@ -197,7 +197,7 @@ feature 'Course review' do
       end
     end
 
-    scenario 'team coach visit review dashboard', js: true do
+    scenario 'coach can access submissions from review dashboard', js: true do
       sign_in_user coach.user, referer: review_course_path(course)
 
       within("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
@@ -209,7 +209,7 @@ feature 'Course review' do
     end
   end
 
-  scenario 'without any submissions', js: true do
+  scenario 'coach visits completely empty review dashboard', js: true do
     sign_in_user coach.user, referer: review_course_path(course)
 
     # Ensure coach is on the review dashboard.

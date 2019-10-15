@@ -15,11 +15,10 @@ class CreateGradingMutator < ApplicationMutator
   def grade
     TimelineEvent.transaction do
       evaluation_criteria.each do |criterion|
-        # binding.pry
         TimelineEventGrade.create!(
           timeline_event: submission,
           evaluation_criterion: criterion,
-          grade: grade_array[criterion.id.to_s]
+          grade: grade_hash[criterion.id.to_s]
         )
       end
 
@@ -72,12 +71,8 @@ class CreateGradingMutator < ApplicationMutator
     @submission = current_school.timeline_events.where(id: submission_id).first
   end
 
-  def target
-    @target ||= submission&.target
-  end
-
   def course
-    @course ||= target&.course
+    @course ||= submission&.course
   end
 
   def coach
@@ -85,12 +80,14 @@ class CreateGradingMutator < ApplicationMutator
   end
 
   def evaluation_criteria
-    @evaluation_criteria ||= submission.evaluation_criteria.to_a
+    @evaluation_criteria ||= submission.evaluation_criteria
   end
 
-  def grade_array
-    @grade_array ||= grades.each_with_object({}) do |key, value|
-      value[key[:evaluation_criterion_id]] = key[:grade]
+  def grade_hash
+    @grade_hash ||= grades.each_with_object({}) do |incoming_grade, grade_hash|
+      criteria_id = incoming_grade[:evaluation_criterion_id]
+      grade = incoming_grade[:grade]
+      grade_hash[criteria_id] = grade
     end
   end
 
@@ -99,22 +96,22 @@ class CreateGradingMutator < ApplicationMutator
   end
 
   def all_criteria_graded?
-    evaluation_criteria.map(&:id).sort == grade_array.keys.sort
+    (evaluation_criteria.pluck(:id) - grade_hash.keys).empty?
   end
 
   def all_grades_valid?
-    grade_array.values.all? { |grade| grade.in?(1..max_grade) }
+    grade_hash.values.all? { |grade| grade.in?(1..max_grade) }
   end
 
   def max_grade
-    @max_grade ||= submission.founder.startup.course.max_grade
+    @max_grade ||= @course.max_grade
   end
 
   def pass_grade
-    @pass_grade ||= submission.founder.startup.course.pass_grade
+    @pass_grade ||= @course.pass_grade
   end
 
   def failed?
-    grade_array.values.any? { |grade| grade < pass_grade }
+    grade_hash.values.any? { |grade| grade < pass_grade }
   end
 end

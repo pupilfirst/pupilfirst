@@ -9,7 +9,7 @@ class ReviewedSubmissionsResolver < ApplicationResolver
   def authorized?
     return false if current_user.faculty.blank?
 
-    course.in?(current_user.faculty.courses_with_dashboard)
+    current_user.faculty.reviewable_courses.where(id: course).exists?
   end
 
   def course

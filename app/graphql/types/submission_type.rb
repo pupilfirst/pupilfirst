@@ -1,5 +1,5 @@
 module Types
-  class Submission < Types::BaseObject
+  class SubmissionType < Types::BaseObject
     field :id, ID, null: false
     field :description, String, null: false
     field :created_at, String, null: false
@@ -19,19 +19,6 @@ module Types
         {
           evaluation_criterion_id: submission_grading.evaluation_criterion_id,
           grade: submission_grading.grade
-        }
-      end
-    end
-
-    def feedback
-      object.startup_feedback.map do |feedback|
-        {
-          id: feedback.id,
-          created_at: feedback.created_at,
-          value: feedback.feedback,
-          coach_name: feedback.faculty.user.name,
-          coach_avatar_url: feedback.faculty.user.image_or_avatar_url,
-          coach_title: feedback.faculty.user.title
         }
       end
     end

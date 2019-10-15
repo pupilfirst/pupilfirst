@@ -7,7 +7,7 @@ module Mutations
 
     description "Create a new submission for a target"
 
-    field :submission, Types::Submission, null: true
+    field :submission, Types::SubmissionType, null: true
 
     def resolve(params)
       mutator = CreateSubmissionMutator.new(params, context)

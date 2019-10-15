@@ -13,7 +13,7 @@ class SubmissionDetailsResolver < ApplicationResolver
       user_names: user_names,
       level_number: level.number,
       level_id: level.id,
-      evaluation_criteria: evaluation_criteria
+      evaluation_criteria: target.evaluation_criteria
     }
   end
 
@@ -33,15 +33,6 @@ class SubmissionDetailsResolver < ApplicationResolver
     submission.founders.map do |founder|
       founder.user.name
     end.join(', ')
-  end
-
-  def evaluation_criteria
-    target.evaluation_criteria.map do |criteria|
-      {
-        id: criteria.id,
-        name: criteria.name
-      }
-    end
   end
 
   def authorized?

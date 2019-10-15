@@ -45,21 +45,26 @@ feature 'School admins Editor', js: true do
     click_button 'Update School Admin'
     expect(page).to have_text("School Admin updated successfully")
     dismiss_notification
+
     expect(new_school_admin_user.reload.name).to eq(name_for_edit)
+    expect(new_school_admin_user.title).to eq('School Admin')
   end
 
   scenario 'school admin adds an existing user as an admin', js: true do
     sign_in_user school_admin_1.user, referer: admins_school_path
+    original_title = user.title
 
     click_button 'Add New School Admin'
     fill_in 'email', with: user.email
     fill_in 'name', with: name_for_user
     click_button 'Create School Admin'
+
     expect(page).to have_text("School Admin created successfully")
     dismiss_notification
 
     expect(school.users.where(email: user.email).count).to eq(1)
     expect(user.reload.name).to eq(name_for_user)
+    expect(user.reload.title).to eq(original_title)
   end
 
   scenario 'user who is not logged in tries to access school admin editor interface' do

@@ -31,8 +31,15 @@ module Courses
     def create_new_student(student)
       # Create a user and generate a login token.
       user = User.where(email: student.email, school: school).first_or_create!
+
       user.regenerate_login_token if user.login_token.blank?
-      user.update!(name: student.name, title: student.title, affiliation: student.affiliation)
+
+      # If a user was already present, don't override values of name, title or affiliation.
+      user.update!(
+        name: user.name.presence || student.name,
+        title: user.title.presence || student.title || "Student",
+        affiliation: user.affiliation.presence || student.affiliation
+      )
 
       startup = Startup.create!(name: student.name, level: first_level)
 

@@ -104,11 +104,10 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="name">
           {"Name" |> str}
         </label>
-        <span> {"*" |> str} </span>
         <input
           value={state.name}
-          onChange={
-            event => updateName(send, ReactEvent.Form.target(event)##value)
+          onChange={event =>
+            updateName(send, ReactEvent.Form.target(event)##value)
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="name"
@@ -126,11 +125,10 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="email">
           {"Email" |> str}
         </label>
-        <span> {"*" |> str} </span>
         <input
           value={state.email}
-          onChange={
-            event => updateEmail(send, ReactEvent.Form.target(event)##value)
+          onChange={event =>
+            updateEmail(send, ReactEvent.Form.target(event)##value)
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="email"
@@ -138,7 +136,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           placeholder="Student email here"
         />
         <School__InputGroupError.Jsx2
-          message="is too short"
+          message="is invalid"
           active={state.hasEmailError}
         />
       </div>
@@ -148,10 +146,11 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="title">
           {"Title" |> str}
         </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <input
           value={state.title}
-          onChange={
-            event => send(UpdateTitle(ReactEvent.Form.target(event)##value))
+          onChange={event =>
+            send(UpdateTitle(ReactEvent.Form.target(event)##value))
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="title"
@@ -165,11 +164,11 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="affiliation">
           {"Affiliation" |> str}
         </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <input
           value={state.affiliation}
-          onChange={
-            event =>
-              send(UpdateAffiliation(ReactEvent.Form.target(event)##value))
+          onChange={event =>
+            send(UpdateAffiliation(ReactEvent.Form.target(event)##value))
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="affiliation"
@@ -183,6 +182,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="tags">
           {"Tags" |> str}
         </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <SA_StudentsPanel_SearchableTagList
           unselectedTags={
             studentTags

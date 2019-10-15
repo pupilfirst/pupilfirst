@@ -5,8 +5,6 @@ type teamCoachlist = (int, string, bool);
 type state = {
   name: string,
   teamName: string,
-  hasNameError: bool,
-  hasTeamNameError: bool,
   tagsToApply: list(string),
   exited: bool,
   teamCoaches: list(teamCoachlist),
@@ -20,7 +18,6 @@ type state = {
 type action =
   | UpdateName(string)
   | UpdateTeamName(string)
-  | UpdateErrors(bool, bool)
   | AddTag(string)
   | RemoveTag(string)
   | UpdateExited(bool)
@@ -34,19 +31,27 @@ let component = ReasonReact.reducerComponent("SA_StudentsPanel_UpdateForm");
 
 let str = ReasonReact.string;
 
-let updateName = (send, state, name) => {
-  let hasError = name |> String.length < 2;
+let stringInputInvalid = s => s |> String.length < 2;
+
+let updateName = (send, name) => {
   send(UpdateName(name));
-  send(UpdateErrors(hasError, state.hasTeamNameError));
 };
 
-let updateTeamName = (send, state, teamName) => {
-  let hasError = teamName |> String.length < 3;
+let updateTeamName = (send, teamName) => {
   send(UpdateTeamName(teamName));
-  send(UpdateErrors(state.hasNameError, hasError));
 };
 
-let formInvalid = state => state.hasNameError || state.hasTeamNameError;
+let updateTitle = (send, title) => {
+  send(UpdateTitle(title));
+};
+
+let formInvalid = state =>
+  state.name
+  |> stringInputInvalid
+  || state.teamName
+  |> stringInputInvalid
+  || state.title
+  |> stringInputInvalid;
 
 let handleErrorCB = (send, ()) => send(UpdateSaving(false));
 
@@ -75,7 +80,7 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
     Student.updateInfo(
       ~exited=state.exited,
       ~excludedFromLeaderboard=state.excludedFromLeaderboard,
-      ~title=Some(state.title),
+      ~title=state.title,
       ~affiliation=Some(state.affiliation),
       ~student,
     );
@@ -146,8 +151,6 @@ let make =
   initialState: () => {
     name: student |> Student.name,
     teamName: student |> studentTeam(teams) |> Team.name,
-    hasNameError: false,
-    hasTeamNameError: false,
     tagsToApply: student |> Student.tags,
     exited: student |> Student.exited,
     teamCoaches:
@@ -158,7 +161,7 @@ let make =
       ),
     coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
-    title: student |> Student.title |> OptionUtils.toString,
+    title: student |> Student.title,
     affiliation: student |> Student.affiliation |> OptionUtils.toString,
     saving: false,
   },
@@ -166,8 +169,6 @@ let make =
     switch (action) {
     | UpdateName(name) => ReasonReact.Update({...state, name})
     | UpdateTeamName(teamName) => ReasonReact.Update({...state, teamName})
-    | UpdateErrors(hasNameError, hasTeamNameError) =>
-      ReasonReact.Update({...state, hasNameError, hasTeamNameError})
     | AddTag(tag) =>
       ReasonReact.Update({
         ...state,
@@ -235,16 +236,13 @@ let make =
                       htmlFor="name">
                       {"Name" |> str}
                     </label>
-                    <span> {"*" |> str} </span>
                     <input
                       value={state.name}
-                      onChange={
-                        event =>
-                          updateName(
-                            send,
-                            state,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                       className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="name"
@@ -252,8 +250,8 @@ let make =
                       placeholder="Student name here"
                     />
                     <School__InputGroupError.Jsx2
-                      message="is not a valid name"
-                      active={state.hasNameError}
+                      message="Name must have at least two characters"
+                      active={state.name |> stringInputInvalid}
                     />
                   </div>
                   <div className="mt-5">
@@ -262,16 +260,13 @@ let make =
                       htmlFor="team_name">
                       {"Team Name" |> str}
                     </label>
-                    <span> {"*" |> str} </span>
                     <input
                       value={state.teamName}
-                      onChange={
-                        event =>
-                          updateTeamName(
-                            send,
-                            state,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateTeamName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                       className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="team_name"
@@ -279,8 +274,8 @@ let make =
                       placeholder="Team name here"
                     />
                     <School__InputGroupError.Jsx2
-                      message="is not a valid team name"
-                      active={state.hasTeamNameError}
+                      message="Team Name must have at least two characters"
+                      active={state.teamName |> stringInputInvalid}
                     />
                   </div>
                   <div className="mt-5">
@@ -291,18 +286,20 @@ let make =
                     </label>
                     <input
                       value={state.title}
-                      onChange={
-                        event =>
-                          send(
-                            UpdateTitle(
-                              ReactEvent.Form.target(event)##value,
-                            ),
-                          )
+                      onChange={event =>
+                        updateTitle(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                       className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="title"
                       type_="text"
                       placeholder="Student, Coach, CEO, etc."
+                    />
+                    <School__InputGroupError.Jsx2
+                      message="Title must have at least two characters"
+                      active={state.title |> stringInputInvalid}
                     />
                   </div>
                   <div className="mt-5">
@@ -311,15 +308,17 @@ let make =
                       htmlFor="affiliation">
                       {"Affiliation" |> str}
                     </label>
+                    <span className="text-xs ml-1">
+                      {"(optional)" |> str}
+                    </span>
                     <input
                       value={state.affiliation}
-                      onChange={
-                        event =>
-                          send(
-                            UpdateAffiliation(
-                              ReactEvent.Form.target(event)##value,
-                            ),
-                          )
+                      onChange={event =>
+                        send(
+                          UpdateAffiliation(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
                       }
                       className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                       id="affiliation"
@@ -334,32 +333,28 @@ let make =
                         {"Course Coaches:" |> str}
                       </span>
                       <div className="mt-2 flex flex-wrap">
-                        {
-                          courseCoachIds |> List.length > 0 ?
-                            courseCoachIds
-                            |> List.map(coachId =>
-                                 <div className="w-1/2">
-                                   <div
-                                     key={coachId |> string_of_int}
-                                     className="select-list__item-selected-unremovable flex items-center justify-between bg-gray-100 text-xs font-semibold border rounded p-3 mr-2 mb-2">
-                                     {
-                                       schoolCoaches
+                        {courseCoachIds |> List.length > 0
+                           ? courseCoachIds
+                             |> List.map(coachId =>
+                                  <div className="w-1/2">
+                                    <div
+                                      key={coachId |> string_of_int}
+                                      className="select-list__item-selected-unremovable flex items-center justify-between bg-gray-100 text-xs font-semibold border rounded p-3 mr-2 mb-2">
+                                      {schoolCoaches
                                        |> List.find(coach =>
                                             Coach.id(coach) == coachId
                                           )
                                        |> Coach.name
-                                       |> str
-                                     }
-                                   </div>
-                                 </div>
-                               )
-                            |> Array.of_list
-                            |> ReasonReact.array :
-                            <div
-                              className="flex items-center justify-between bg-gray-100 text-xs text-gray-800 border rounded p-3 mb-2">
-                              {"None Assigned" |> str}
-                            </div>
-                        }
+                                       |> str}
+                                    </div>
+                                  </div>
+                                )
+                             |> Array.of_list
+                             |> ReasonReact.array
+                           : <div
+                               className="flex items-center justify-between bg-gray-100 text-xs text-gray-800 border rounded p-3 mb-2">
+                               {"None Assigned" |> str}
+                             </div>}
                       </div>
                     </div>
                     <div className="border-b pb-4 mb-2 mt-5 ">
@@ -402,37 +397,31 @@ let make =
                     <div className="flex items-center flex-shrink-0">
                       <label
                         className="block tracking-wide text-xs font-semibold mr-3">
-                        {
-                          "Should this student be excluded from leaderboards?"
-                          |> str
-                        }
+                        {"Should this student be excluded from leaderboards?"
+                         |> str}
                       </label>
                       <div
                         className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           title="Exclude this student from the leaderboard"
-                          onClick={
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateExcludedFromLeaderboard(true));
-                            }
-                          }
-                          className={
-                            boolBtnClasses(state.excludedFromLeaderboard)
-                          }>
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateExcludedFromLeaderboard(true));
+                          }}
+                          className={boolBtnClasses(
+                            state.excludedFromLeaderboard,
+                          )}>
                           {"Yes" |> str}
                         </button>
                         <button
                           title="Include this student in the leaderboard"
-                          onClick={
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateExcludedFromLeaderboard(false));
-                            }
-                          }
-                          className={
-                            boolBtnClasses(!state.excludedFromLeaderboard)
-                          }>
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateExcludedFromLeaderboard(false));
+                          }}
+                          className={boolBtnClasses(
+                            !state.excludedFromLeaderboard,
+                          )}>
                           {"No" |> str}
                         </button>
                       </div>
@@ -453,23 +442,19 @@ let make =
                           className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                           <button
                             title="Prevent this student from accessing the course"
-                            onClick={
-                              _event => {
-                                ReactEvent.Mouse.preventDefault(_event);
-                                send(UpdateExited(true));
-                              }
-                            }
+                            onClick={_event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateExited(true));
+                            }}
                             className={boolBtnClasses(state.exited)}>
                             {"Yes" |> str}
                           </button>
                           <button
                             title="Allow this student to access the course"
-                            onClick={
-                              _event => {
-                                ReactEvent.Mouse.preventDefault(_event);
-                                send(UpdateExited(false));
-                              }
-                            }
+                            onClick={_event => {
+                              ReactEvent.Mouse.preventDefault(_event);
+                              send(UpdateExited(false));
+                            }}
                             className={boolBtnClasses(!state.exited)}>
                             {"No" |> str}
                           </button>
@@ -478,15 +463,14 @@ let make =
                       <div className="w-auto">
                         <button
                           disabled={formInvalid(state)}
-                          onClick={
-                            _e =>
-                              updateStudent(
-                                student,
-                                state,
-                                send,
-                                authenticityToken,
-                                handleResponseCB(submitFormCB, state),
-                              )
+                          onClick={_e =>
+                            updateStudent(
+                              student,
+                              state,
+                              send,
+                              authenticityToken,
+                              handleResponseCB(submitFormCB, state),
+                            )
                           }
                           className="w-full btn btn-large btn-primary">
                           {"Update Student" |> str}

@@ -136,7 +136,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           placeholder="Student email here"
         />
         <School__InputGroupError.Jsx2
-          message="is too short"
+          message="is invalid"
           active={state.hasEmailError}
         />
       </div>

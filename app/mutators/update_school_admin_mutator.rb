@@ -3,14 +3,12 @@ class UpdateSchoolAdminMutator < ApplicationMutator
 
   attr_accessor :id
   attr_accessor :name
-  attr_accessor :email
 
-  validates :email, presence: true, length: { maximum: 128 }, email: true
   validates :name, presence: true, length: { maximum: 128 }
   validate :record_must_exists
 
   def save
-    school_admin.user.update!(name: name, email: email)
+    school_admin.user.update!(name: name)
   end
 
   private

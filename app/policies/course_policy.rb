@@ -18,7 +18,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    record.present? && courses_with_dashboard.present? && record.in?(courses_with_dashboard)
+    record.present? && reviewable_courses.present? && reviewable_courses.where(id: record).exists?
   end
 
   def apply?
@@ -36,7 +36,7 @@ class CoursePolicy < ApplicationPolicy
 
   private
 
-  def courses_with_dashboard
-    @courses_with_dashboard ||= current_coach&.courses_with_dashboard
+  def reviewable_courses
+    @reviewable_courses ||= current_coach&.reviewable_courses
   end
 end

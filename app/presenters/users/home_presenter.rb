@@ -96,7 +96,7 @@ module Users
     end
 
     def add_review_links_for_coach(course_details)
-      current_coach.courses_with_dashboard.inject(course_details) do |saved_courses, coach_course|
+      current_coach.reviewable_courses.inject(course_details) do |saved_courses, coach_course|
         saved_course, other_saved_courses = saved_courses.partition { |c| c[:course_id] == coach_course.id }
         saved_course = saved_course[0]
 

@@ -438,16 +438,10 @@ let make =
                         )
                     }
                   />
-                  {
-                    state.hasNameError ?
-                      <div className="drawer-right-form__error-msg">
-                        <span className="mr-2">
-                          <i className="fas fa-exclamation-triangle" />
-                        </span>
-                        <span> {"not a valid name" |> str} </span>
-                      </div> :
-                      ReasonReact.null
-                  }
+                  <School__InputGroupError.Jsx2
+                    message="Enter a valid name"
+                    active={state.hasNameError}
+                  />
                 </div>
                 <div className="mt-5">
                   <label
@@ -470,21 +464,10 @@ let make =
                     }
                   />
                 </div>
-                {
-                  state.hasDescriptionError ?
-                    <div className="drawer-right-form__error-msg">
-                      <span className="mr-2">
-                        <i className="fas fa-exclamation-triangle" />
-                      </span>
-                      <span>
-                        {
-                          "Supplied description must be between 1 and 150 characters in length"
-                          |> str
-                        }
-                      </span>
-                    </div> :
-                    ReasonReact.null
-                }
+                <School__InputGroupError.Jsx2
+                  message="Supplied description must be between 1 and 150 characters in length"
+                  active={state.hasDescriptionError}
+                />
                 <div className="mt-5">
                   <label
                     className="block tracking-wide text-xs font-semibold"
@@ -506,16 +489,10 @@ let make =
                     }
                   />
                 </div>
-                {
-                  state.hasDateError ?
-                    <div className="drawer-right-form__error-msg">
-                      <span className="mr-2">
-                        <i className="fas fa-exclamation-triangle" />
-                      </span>
-                      <span> {"not a valid date" |> str} </span>
-                    </div> :
-                    ReasonReact.null
-                }
+                <School__InputGroupError.Jsx2
+                  message="Enter a valid date"
+                  active={state.hasDateError}
+                />
                 <div id="About" className="mt-5">
                   <MarkdownEditor.Jsx2
                     updateMarkdownCB={updateAboutCB(send)}

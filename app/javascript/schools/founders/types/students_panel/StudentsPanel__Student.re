@@ -7,7 +7,7 @@ type t = {
   tags: list(string),
   exited: bool,
   excludedFromLeaderboard: bool,
-  title: option(string),
+  title: string,
   affiliation: option(string),
 };
 
@@ -50,9 +50,8 @@ let decode = json =>
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
     name: json |> field("name", string),
     avatarUrl: json |> field("avatarUrl", string),
-    title: json |> field("title", nullable(string)) |> Js.Null.toOption,
-    affiliation:
-      json |> field("affiliation", nullable(string)) |> Js.Null.toOption,
+    title: json |> field("title", string),
+    affiliation: json |> optional(field("affiliation", string)),
   };
 
 let encode = (name, teamName, t) =>
@@ -65,7 +64,7 @@ let encode = (name, teamName, t) =>
       ("email", t.email |> string),
       ("exited", t.exited |> bool),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
-      ("title", t.title |> OptionUtils.toString |> string),
+      ("title", t.title |> string),
       ("affiliation", t.affiliation |> OptionUtils.toString |> string),
     ])
   );

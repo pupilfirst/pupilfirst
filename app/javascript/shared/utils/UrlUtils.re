@@ -27,12 +27,9 @@ let urlRegex =
     ~flags="i",
   );
 
-let isInvalid = url => {
-  let trimmedUrl = url |> String.trim;
-
-  if (trimmedUrl |> String.length > 0) {
+let isInvalid = (allowBlank, url) =>
+  if (url |> String.trim |> String.length > 0) {
     !Js.Re.test_(urlRegex, url);
   } else {
-    true;
+    !allowBlank;
   };
-};

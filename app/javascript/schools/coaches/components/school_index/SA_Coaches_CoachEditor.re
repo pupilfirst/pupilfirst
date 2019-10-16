@@ -47,20 +47,20 @@ let component = ReasonReact.reducerComponent("SA_Coaches_CoachEditor");
 
 let str = ReasonReact.string;
 
+let nameOrTitleInvalid = name => name |> String.length < 2;
+
 let updateName = (send, name) => {
-  let hasError = name |> String.length < 2;
-  send(UpdateName(name, hasError));
+  send(UpdateName(name, name |> nameOrTitleInvalid));
 };
 
+let emailInvalid = email => email |> EmailUtils.isInvalid(false);
+
 let updateEmail = (send, email) => {
-  let regex = [%re {|/.+@.+\..+/i|}];
-  let hasError = !Js.Re.test_(regex, email);
-  send(UpdateEmail(email, hasError));
+  send(UpdateEmail(email, email |> emailInvalid));
 };
 
 let updateTitle = (send, title) => {
-  let hasError = title |> String.length < 2;
-  send(UpdateTitle(title, hasError));
+  send(UpdateTitle(title, title |> nameOrTitleInvalid));
 };
 
 let updateLinkedInUrl = (send, linkedinUrl) => {
@@ -68,19 +68,15 @@ let updateLinkedInUrl = (send, linkedinUrl) => {
     {|/(https?)?:?(\/\/)?(([w]{3}||\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/|}
   ];
   let hasError =
-    linkedinUrl |> String.length < 1 ?
-      false : !Js.Re.test_(regex, linkedinUrl);
+    linkedinUrl |> String.length < 1
+      ? false : !Js.Re.test_(regex, linkedinUrl);
   send(UpdateLinkedInUrl(linkedinUrl, hasError));
 };
 
 let updateConnectLink = (send, connectLink) => {
-  let regex = [%re
-    {|/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/|}
-  ];
-  let hasError =
-    connectLink |> String.length < 1 ?
-      false : !Js.Re.test_(regex, connectLink);
-  send(UpdateConnectLink(connectLink, hasError));
+  send(
+    UpdateConnectLink(connectLink, connectLink |> UrlUtils.isInvalid(true)),
+  );
 };
 
 let booleanButtonClasses = selected => {
@@ -88,14 +84,19 @@ let booleanButtonClasses = selected => {
   classes ++ (selected ? " toggle-button__button--active" : "");
 };
 
-let saveDisabled = state =>
-  state.hasTitleError
-  || state.hasNameError
-  || state.hasEmailError
+let saveDisabled = state => {
+  state.title
+  |> nameOrTitleInvalid
+  || state.name
+  |> nameOrTitleInvalid
+  || state.email
+  |> emailInvalid
   || state.hasLinkedInUrlError
-  || state.hasConnectLinkError
+  || state.connectLink
+  |> UrlUtils.isInvalid(true)
   || !state.dirty
   || state.saving;
+};
 
 let make =
     (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken, _children) => {
@@ -338,12 +339,11 @@ let make =
                       name="faculty[name]"
                       placeholder="Coach Name"
                       value={state.name}
-                      onChange={
-                        event =>
-                          updateName(
-                            send,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateName(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                     />
                     <School__InputGroupError.Jsx2
@@ -365,12 +365,11 @@ let make =
                       name="faculty[email]"
                       placeholder="Coach email address"
                       value={state.email}
-                      onChange={
-                        event =>
-                          updateEmail(
-                            send,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateEmail(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                     />
                     <School__InputGroupError.Jsx2
@@ -392,12 +391,11 @@ let make =
                       name="faculty[title]"
                       placeholder="Coach Title/Expertise"
                       value={state.title}
-                      onChange={
-                        event =>
-                          updateTitle(
-                            send,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateTitle(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                     />
                     <School__InputGroupError.Jsx2
@@ -413,13 +411,12 @@ let make =
                     </label>
                     <input
                       value={state.affiliation}
-                      onChange={
-                        event =>
-                          send(
-                            UpdateAffiliation(
-                              ReactEvent.Form.target(event)##value,
-                            ),
-                          )
+                      onChange={event =>
+                        send(
+                          UpdateAffiliation(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
                       }
                       className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="affiliation"
@@ -441,12 +438,11 @@ let make =
                       name="faculty[linkedin_url]"
                       placeholder="LinkedIn Profile URL"
                       value={state.linkedinUrl}
-                      onChange={
-                        event =>
-                          updateLinkedInUrl(
-                            send,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateLinkedInUrl(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                     />
                     <School__InputGroupError.Jsx2
@@ -467,12 +463,11 @@ let make =
                       name="faculty[connect_link]"
                       placeholder="Student connect request link for the coach"
                       value={state.connectLink}
-                      onChange={
-                        event =>
-                          updateConnectLink(
-                            send,
-                            ReactEvent.Form.target(event)##value,
-                          )
+                      onChange={event =>
+                        updateConnectLink(
+                          send,
+                          ReactEvent.Form.target(event)##value,
+                        )
                       }
                     />
                     <School__InputGroupError.Jsx2
@@ -492,24 +487,20 @@ let make =
                         className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           type_="submit"
-                          onClick={
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdatePublic(true));
-                            }
-                          }
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdatePublic(true));
+                          }}
                           name="faculty[public]"
                           value="true"
                           className={booleanButtonClasses(state.public)}>
                           {"Yes" |> str}
                         </button>
                         <button
-                          onClick={
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdatePublic(false));
-                            }
-                          }
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdatePublic(false));
+                          }}
                           className={booleanButtonClasses(!state.public)}>
                           {"No" |> str}
                         </button>
@@ -526,37 +517,31 @@ let make =
                       <label
                         className="block tracking-wide text-xs font-semibold mr-3"
                         htmlFor="evaluated">
-                        {
-                          "Should the coach be notified of student submissions?"
-                          |> str
-                        }
+                        {"Should the coach be notified of student submissions?"
+                         |> str}
                       </label>
                       <div
                         id="notification"
                         className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
-                          onClick={
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateNotifyForSubmission(true));
-                            }
-                          }
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateNotifyForSubmission(true));
+                          }}
                           name="faculty[notify_for_submission]"
-                          className={
-                            booleanButtonClasses(state.notifyForSubmission)
-                          }>
+                          className={booleanButtonClasses(
+                            state.notifyForSubmission,
+                          )}>
                           {"Yes" |> str}
                         </button>
                         <button
-                          onClick={
-                            _event => {
-                              ReactEvent.Mouse.preventDefault(_event);
-                              send(UpdateNotifyForSubmission(false));
-                            }
-                          }
-                          className={
-                            booleanButtonClasses(!state.notifyForSubmission)
-                          }>
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event);
+                            send(UpdateNotifyForSubmission(false));
+                          }}
+                          className={booleanButtonClasses(
+                            !state.notifyForSubmission,
+                          )}>
                           {"No" |> str}
                         </button>
                         <input
@@ -581,13 +566,12 @@ let make =
                       id="sa-coach-editor__file-input"
                       required=false
                       multiple=false
-                      onChange={
-                        event =>
-                          send(
-                            UpdateImageFileName(
-                              ReactEvent.Form.target(event)##files[0]##name,
-                            ),
-                          )
+                      onChange={event =>
+                        send(
+                          UpdateImageFileName(
+                            ReactEvent.Form.target(event)##files[0]##name,
+                          ),
+                        )
                       }
                     />
                     <label
@@ -606,67 +590,57 @@ let make =
                   <div className="max-w-2xl px-6 mx-auto">
                     <div
                       className="flex max-w-2xl w-full justify-between items-center mx-auto">
-                      {
-                        switch (coach) {
-                        | Some(_coach) =>
-                          <div className="flex items-center flex-shrink-0">
-                            <label
-                              className="block tracking-wide  text-xs font-semibold mr-3"
-                              htmlFor="evaluated">
-                              {"Has the coach left the school?" |> str}
-                            </label>
-                            <div
-                              id="exited"
-                              className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                              <button
-                                onClick=(
-                                  _event => {
-                                    ReactEvent.Mouse.preventDefault(_event);
-                                    send(UpdateExited(true));
-                                  }
-                                )
-                                name="faculty[exited]"
-                                className={booleanButtonClasses(state.exited)}>
-                                {"Yes" |> str}
-                              </button>
-                              <button
-                                onClick=(
-                                  _event => {
-                                    ReactEvent.Mouse.preventDefault(_event);
-                                    send(UpdateExited(false));
-                                  }
-                                )
-                                className={
-                                  booleanButtonClasses(!state.exited)
-                                }>
-                                {"No" |> str}
-                              </button>
-                              <input
-                                type_="hidden"
-                                name="faculty[exited]"
-                                value={state.exited |> string_of_bool}
-                              />
-                            </div>
-                          </div>
-                        | None => ReasonReact.null
-                        }
-                      }
-                      {
-                        switch (coach) {
-                        | Some(_coach) =>
-                          <button
-                            disabled={saveDisabled(state)}
-                            className="w-auto btn btn-large btn-primary">
-                            {"Update Coach" |> str}
-                          </button>
-                        | None =>
-                          <button
-                            disabled={saveDisabled(state)}
-                            className="w-full btn btn-large btn-primary">
-                            {"Create Coach" |> str}
-                          </button>
-                        }
-                      }
+                      {switch (coach) {
+                       | Some(_coach) =>
+                         <div className="flex items-center flex-shrink-0">
+                           <label
+                             className="block tracking-wide  text-xs font-semibold mr-3"
+                             htmlFor="evaluated">
+                             {"Has the coach left the school?" |> str}
+                           </label>
+                           <div
+                             id="exited"
+                             className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
+                             <button
+                               onClick={_event => {
+                                 ReactEvent.Mouse.preventDefault(_event);
+                                 send(UpdateExited(true));
+                               }}
+                               name="faculty[exited]"
+                               className={booleanButtonClasses(state.exited)}>
+                               {"Yes" |> str}
+                             </button>
+                             <button
+                               onClick={_event => {
+                                 ReactEvent.Mouse.preventDefault(_event);
+                                 send(UpdateExited(false));
+                               }}
+                               className={booleanButtonClasses(!state.exited)}>
+                               {"No" |> str}
+                             </button>
+                             <input
+                               type_="hidden"
+                               name="faculty[exited]"
+                               value={state.exited |> string_of_bool}
+                             />
+                           </div>
+                         </div>
+                       | None => ReasonReact.null
+                       }}
+                      {switch (coach) {
+                       | Some(_coach) =>
+                         <button
+                           disabled={saveDisabled(state)}
+                           className="w-auto btn btn-large btn-primary">
+                           {"Update Coach" |> str}
+                         </button>
+                       | None =>
+                         <button
+                           disabled={saveDisabled(state)}
+                           className="w-full btn btn-large btn-primary">
+                           {"Create Coach" |> str}
+                         </button>
+                       }}
                     </div>
                   </div>
                 </div>

@@ -154,6 +154,10 @@ let make =
                       state.studentsToAdd |> appliedTags,
                     )
                   }
+                  emailsToAdd={
+                    state.studentsToAdd
+                    |> List.map(student => student |> StudentInfo.email)
+                  }
                 />
                 <div>
                   <div className="mt-5">

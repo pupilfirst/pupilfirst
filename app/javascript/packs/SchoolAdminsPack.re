@@ -2,13 +2,13 @@
 
 type props = {
   authenticityToken: string,
-  admins: list(SchoolAdmin.t),
+  admins: array(SchoolAdmin.t),
 };
 
 let decodeProps = json =>
   Json.Decode.{
     authenticityToken: json |> field("authenticityToken", string),
-    admins: json |> field("admins", list(SchoolAdmin.decode)),
+    admins: json |> field("admins", array(SchoolAdmin.decode)),
   };
 
 let props =

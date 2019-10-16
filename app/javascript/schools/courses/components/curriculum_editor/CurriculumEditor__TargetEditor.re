@@ -83,7 +83,7 @@ let updateTitle = (send, title) => {
   send(UpdateTitle(title, hasError));
 };
 let updateLinkToComplete = (send, link) => {
-  let hasError = UrlUtils.isInvalid(link);
+  let hasError = link |> UrlUtils.isInvalid(false);
   send(UpdateLinkToComplete(link, hasError));
 };
 
@@ -365,7 +365,7 @@ let reducer = (state, action) =>
         | versions => versions[0]
         },
       previewMode: contentBlocks |> List.length > 0 ? true : false,
-      loadingContentBlocks: false
+      loadingContentBlocks: false,
     }
   | LoadOldVersion(contentBlocks, selectedVersion, versions) => {
       ...state,
@@ -373,7 +373,7 @@ let reducer = (state, action) =>
       selectedVersion,
       versions,
       previewMode: true,
-      loadingContentBlocks: false
+      loadingContentBlocks: false,
     }
   | SelectVersion(selectedVersion) => {
       ...state,

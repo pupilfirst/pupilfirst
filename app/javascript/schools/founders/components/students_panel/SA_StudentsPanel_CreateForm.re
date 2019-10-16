@@ -7,13 +7,14 @@ type state = {
 
 type action =
   | AddStudentInfo(StudentInfo.t)
-  | RemoveStudentInfo(int)
+  | RemoveStudentInfo(StudentInfo.t)
   | SetSaving(bool);
 
 let component = ReasonReact.reducerComponent("SA_StudentsPanel_CreateForm");
 
 let str = ReasonReact.string;
 
+let formInvalid = state => state.studentsToAdd |> ListUtils.isEmpty;
 let handleErrorCB = (send, ()) => send(SetSaving(false));
 
 /* Get the tags applied to a list of students. */
@@ -94,19 +95,6 @@ let renderTitleAndAffiliation = (title, affiliation) => {
   };
 };
 
-let notUniqueEmailAddresses = studentsToAdd => {
-  let emailsToAdd =
-    studentsToAdd
-    |> List.map(student => student |> StudentInfo.email)
-    |> ListUtils.distinct;
-  emailsToAdd |> List.length != (studentsToAdd |> List.length);
-};
-
-let formInvalid = state =>
-  state.studentsToAdd
-  |> ListUtils.isEmpty
-  || notUniqueEmailAddresses(state.studentsToAdd);
-
 let make =
     (
       ~courseId,
@@ -125,13 +113,13 @@ let make =
         ...state,
         studentsToAdd: [studentInfo, ...state.studentsToAdd],
       })
-    | RemoveStudentInfo(studentIndex) =>
+    | RemoveStudentInfo(studentInfo) =>
       ReasonReact.Update({
         ...state,
         studentsToAdd:
           state.studentsToAdd
           |> List.filter(s =>
-               s !== (studentIndex |> List.nth(state.studentsToAdd))
+               StudentInfo.email(s) !== StudentInfo.email(studentInfo)
              ),
       })
     | SetSaving(saving) => ReasonReact.Update({...state, saving})
@@ -157,94 +145,111 @@ let make =
                   {"Student Details" |> str}
                 </h5>
                 <SA_StudentsPanel_StudentInfoForm
-                  addToListCB={studentInfo =>
-                    send(AddStudentInfo(studentInfo))
+                  addToListCB={
+                    studentInfo => send(AddStudentInfo(studentInfo))
                   }
-                  studentTags={allKnownTags(
-                    studentTags,
-                    state.studentsToAdd |> appliedTags,
-                  )}
+                  studentTags={
+                    allKnownTags(
+                      studentTags,
+                      state.studentsToAdd |> appliedTags,
+                    )
+                  }
+                  emailsToAdd={
+                    state.studentsToAdd
+                    |> List.map(student => student |> StudentInfo.email)
+                  }
                 />
                 <div>
                   <div className="mt-5">
                     <div
                       className="inline-block tracking-wide text-xs font-semibold">
-                      {"These new students will be added to the course:" |> str}
+                      {
+                        "These new students will be added to the course:" |> str
+                      }
                     </div>
-                    {switch (state.studentsToAdd) {
-                     | [] =>
-                       <div
-                         className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
-                         {"This list is empty! Add some students using the form above."
-                          |> str}
-                       </div>
-                     | studentInfos =>
-                       studentInfos
-                       |> List.mapi((index, studentInfo) =>
-                            <div
-                              key={index |> string_of_int}
-                              className="flex justify-between bg-white-100 border shadow rounded-lg mt-2">
-                              <div
-                                className="flex flex-col flex-1 flex-wrap p-3">
-                                <div className="flex items-center">
-                                  <div className="mr-1 font-semibold">
-                                    {studentInfo |> StudentInfo.name |> str}
-                                  </div>
-                                  <div className="text-xs text-gray-600">
-                                    {" ("
-                                     ++ (studentInfo |> StudentInfo.email)
-                                     ++ ")"
-                                     |> str}
-                                  </div>
-                                </div>
-                                {renderTitleAndAffiliation(
-                                   studentInfo |> StudentInfo.title,
-                                   studentInfo |> StudentInfo.affiliation,
-                                 )}
-                                <div className="flex flex-wrap">
-                                  {studentInfo
-                                   |> StudentInfo.tags
-                                   |> List.map(tag =>
-                                        <div
-                                          key=tag
-                                          className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-                                          {tag |> str}
-                                        </div>
-                                      )
-                                   |> Array.of_list
-                                   |> ReasonReact.array}
-                                </div>
-                              </div>
-                              <button
-                                className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                                onClick={_event =>
-                                  send(RemoveStudentInfo(index))
-                                }>
-                                <i className="fas fa-trash-alt" />
-                              </button>
-                            </div>
-                          )
-                       |> Array.of_list
-                       |> ReasonReact.array
-                     }}
-                    {<div className="mt-1">
-                       <School__InputGroupError.Jsx2
-                         message="email addresses not unique"
-                         active={notUniqueEmailAddresses(state.studentsToAdd)}
-                       />
-                     </div>}
+                    {
+                      switch (state.studentsToAdd) {
+                      | [] =>
+                        <div
+                          className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
+                          {
+                            "This list is empty! Add some students using the form above."
+                            |> str
+                          }
+                        </div>
+                      | studentInfos =>
+                        studentInfos
+                        |> List.map(studentInfo =>
+                             <div
+                               key={studentInfo |> StudentInfo.email}
+                               className="flex justify-between bg-white-100 border shadow rounded-lg mt-2">
+                               <div
+                                 className="flex flex-col flex-1 flex-wrap p-3">
+                                 <div className="flex items-center">
+                                   <div className="mr-1 font-semibold">
+                                     {studentInfo |> StudentInfo.name |> str}
+                                   </div>
+                                   <div className="text-xs text-gray-600">
+                                     {
+                                       " ("
+                                       ++ (studentInfo |> StudentInfo.email)
+                                       ++ ")"
+                                       |> str
+                                     }
+                                   </div>
+                                 </div>
+                                 {
+                                   renderTitleAndAffiliation(
+                                     studentInfo |> StudentInfo.title,
+                                     studentInfo |> StudentInfo.affiliation,
+                                   )
+                                 }
+                                 <div className="flex flex-wrap">
+                                   {
+                                     studentInfo
+                                     |> StudentInfo.tags
+                                     |> List.map(tag =>
+                                          <div
+                                            key=tag
+                                            className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+                                            {tag |> str}
+                                          </div>
+                                        )
+                                     |> Array.of_list
+                                     |> ReasonReact.array
+                                   }
+                                 </div>
+                               </div>
+                               <button
+                                 className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                                 onClick=(
+                                   _event =>
+                                     send(RemoveStudentInfo(studentInfo))
+                                 )>
+                                 <i className="fas fa-trash-alt" />
+                               </button>
+                             </div>
+                           )
+                        |> Array.of_list
+                        |> ReasonReact.array
+                      }
+                    }
                   </div>
                 </div>
                 <div className="flex mt-4">
                   <button
-                    disabled={state.saving || formInvalid(state)}
-                    onClick={saveStudents(
-                      state,
-                      send,
-                      courseId,
-                      authenticityToken,
-                      handleResponseCB(submitFormCB, state),
-                    )}
+                    disabled={
+                      state.saving || state.studentsToAdd |> ListUtils.isEmpty
+                    }
+                    onClick={
+                      saveStudents(
+                        state,
+                        send,
+                        courseId,
+                        authenticityToken,
+                        handleResponseCB(submitFormCB, state),
+                      )
+                    }
                     className={
                       "w-full btn btn-primary btn-large mt-3"
                       ++ (formInvalid(state) ? " disabled" : "")

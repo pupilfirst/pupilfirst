@@ -350,4 +350,29 @@ feature 'School students index', js: true do
     visit school_course_students_path(course)
     expect(page).to have_text("Please sign in to continue.")
   end
+
+  scenario 'school admin tries to add the same email twice' do
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # Add a student
+    click_button 'Add New Students'
+
+    fill_in 'Name', with: name_1
+    fill_in 'Email', with: email_1
+    fill_in 'Title', with: title_1
+    fill_in 'Affiliation', with: affiliation_1
+    fill_in 'Tags', with: 'Abc'
+    find('span[title="Add new tag Abc"]').click
+    fill_in 'Tags', with: 'Def'
+    find('span[title="Add new tag Def"]').click
+    click_button 'Add to List'
+
+    # Try adding another student with same email
+
+    fill_in 'Name', with: name_2
+    fill_in 'Email', with: email_1
+
+    expect(page).to have_text('email address not unique for student')
+    expect(page).to have_button('Add to List', disabled: true)
+  end
 end

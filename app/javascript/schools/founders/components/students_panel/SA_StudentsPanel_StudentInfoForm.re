@@ -35,14 +35,19 @@ let updateEmail = (send, email) => {
   send(UpdateEmail(email, hasError));
 };
 
-let formInvalid = state =>
+let hasEmailDuplication = (email, emailsToAdd) => {
+  emailsToAdd |> List.exists(emailToAdd => email == emailToAdd);
+};
+
+let formInvalid = (state, emailsToAdd) =>
   state.name == ""
   || state.email == ""
   || state.hasNameError
-  || state.hasEmailError;
+  || state.hasEmailError
+  || hasEmailDuplication(state.email, emailsToAdd);
 
-let handleAdd = (state, send, addToListCB) =>
-  if (!formInvalid(state)) {
+let handleAdd = (state, send, emailsToAdd, addToListCB) =>
+  if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
       StudentInfo.make(
         state.name,
@@ -55,7 +60,7 @@ let handleAdd = (state, send, addToListCB) =>
     send(ResetForm);
   };
 
-let make = (~addToListCB, ~studentTags, _children) => {
+let make = (~addToListCB, ~studentTags, ~emailsToAdd, _children) => {
   ...component,
   initialState: () => {
     name: "",
@@ -93,7 +98,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
     | RemoveTag(tag) =>
       ReasonReact.Update({
         ...state,
-        tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
+        tagsToApply: state.tagsToApply |> List.filter(t => t != tag),
       })
     },
   render: ({state, send}) =>
@@ -106,8 +111,8 @@ let make = (~addToListCB, ~studentTags, _children) => {
         </label>
         <input
           value={state.name}
-          onChange={event =>
-            updateName(send, ReactEvent.Form.target(event)##value)
+          onChange={
+            event => updateName(send, ReactEvent.Form.target(event)##value)
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="name"
@@ -127,8 +132,8 @@ let make = (~addToListCB, ~studentTags, _children) => {
         </label>
         <input
           value={state.email}
-          onChange={event =>
-            updateEmail(send, ReactEvent.Form.target(event)##value)
+          onChange={
+            event => updateEmail(send, ReactEvent.Form.target(event)##value)
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="email"
@@ -136,8 +141,16 @@ let make = (~addToListCB, ~studentTags, _children) => {
           placeholder="Student email here"
         />
         <School__InputGroupError.Jsx2
-          message="is invalid"
-          active={state.hasEmailError}
+          message={
+            state.hasEmailError ?
+              "invalid email" :
+              hasEmailDuplication(state.email, emailsToAdd) ?
+                "email address not unique for student" : ""
+          }
+          active={
+            state.hasEmailError
+            || hasEmailDuplication(state.email, emailsToAdd)
+          }
         />
       </div>
       <div className="mt-5">
@@ -149,8 +162,8 @@ let make = (~addToListCB, ~studentTags, _children) => {
         <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <input
           value={state.title}
-          onChange={event =>
-            send(UpdateTitle(ReactEvent.Form.target(event)##value))
+          onChange={
+            event => send(UpdateTitle(ReactEvent.Form.target(event)##value))
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="title"
@@ -167,8 +180,9 @@ let make = (~addToListCB, ~studentTags, _children) => {
         <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <input
           value={state.affiliation}
-          onChange={event =>
-            send(UpdateAffiliation(ReactEvent.Form.target(event)##value))
+          onChange={
+            event =>
+              send(UpdateAffiliation(ReactEvent.Form.target(event)##value))
           }
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="affiliation"
@@ -195,9 +209,13 @@ let make = (~addToListCB, ~studentTags, _children) => {
         />
       </div>
       <button
-        onClick={_e => handleAdd(state, send, addToListCB)}
+        onClick={_e => handleAdd(state, send, emailsToAdd, addToListCB)}
+        disabled={
+          formInvalid(state, emailsToAdd)
+        }
         className={
-          "btn btn-primary mt-5" ++ (formInvalid(state) ? " disabled" : "")
+          "btn btn-primary mt-5"
+          ++ (formInvalid(state, emailsToAdd) ? " disabled" : "")
         }>
         {"Add to List" |> str}
       </button>

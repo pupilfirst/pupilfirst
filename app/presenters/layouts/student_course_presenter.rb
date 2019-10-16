@@ -47,7 +47,7 @@ module Layouts
     end
 
     def students
-      if current_coach.present? && @course.in?(current_coach.courses_with_dashboard)
+      if current_coach.present? && @course.in?(current_coach.reviewable_courses)
         "students"
       end
     end

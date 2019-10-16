@@ -54,7 +54,9 @@ module Courses
     end
 
     def team_details
-      Startup.where(id: students.select(:startup_id).distinct)..attributes.slice('id', 'name', 'level_id')
+      Startup.where(id: students.select(:startup_id).distinct).map do |startup|
+        startup.attributes.slice('id', 'name', 'level_id')
+      end
     end
   end
 end

@@ -207,6 +207,7 @@ Rails.application.routes.draw do
 
     member do
       get 'review', action: 'review'
+      get 'students', action: 'students'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
       get 'apply', action: 'apply'

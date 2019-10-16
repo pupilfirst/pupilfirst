@@ -33,6 +33,12 @@ class CoursesController < ApplicationController
     render layout: 'student_course'
   end
 
+  # GET /courses/:id/students
+  def students
+    @course = find_course
+    render layout: 'student_course'
+  end
+
   private
 
   def find_course

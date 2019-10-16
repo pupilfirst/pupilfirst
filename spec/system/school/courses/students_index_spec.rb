@@ -78,8 +78,11 @@ feature 'School students index', js: true do
     find('span[title="Pick tag Abc"]').click
     fill_in 'Tags', with: 'DE' # Uppercase search should still list capitalized result.
     find('span[title="Pick tag Def"]').click
-    fill_in 'Tags', with: 'GHI' # Uppercase search should still list capitalized result.
-    find('span[title="Add new tag GHI"]').click
+
+    # Uppercase search should still list capitalized result. Leading and trailing spaces should be removed, and extra
+    # spaces should get 'squished'.
+    fill_in 'Tags', with: '   GHI    JKL   '
+    find('span[title="Add new tag GHI JKL"]').click
 
     click_button 'Add to List'
 
@@ -109,7 +112,7 @@ feature 'School students index', js: true do
     expect(founder_1_user.affiliation).to eq(affiliation_1)
     expect(founder_2_user.affiliation).to eq(nil)
     expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
-    expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI')
+    expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
   end
 
   context 'when adding a student who is already a user of another type' do

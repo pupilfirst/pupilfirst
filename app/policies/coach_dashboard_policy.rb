@@ -1,13 +1,7 @@
 class CoachDashboardPolicy < ApplicationPolicy
   def show?
-    record.present? && courses_with_dashboard.present? && record.in?(courses_with_dashboard)
+    CoursePolicy.new(@pundit_user, record).review?
   end
 
   alias timeline_events? show?
-
-  private
-
-  def courses_with_dashboard
-    @courses_with_dashboard ||= current_coach&.courses_with_dashboard
-  end
 end

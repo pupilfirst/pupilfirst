@@ -17,6 +17,7 @@ feature 'Community Show', js: true do
   let(:student_1) { create :student, startup: team }
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
+  let(:school_admin) { create :school_admin }
   let!(:question_1) { create :question, community: community, creator: student_1.user }
   let!(:question_2) { create :question, community: community, creator: student_1.user }
   let!(:question_3) { create :question, community: community, creator: student_1.user, targets: [target] }
@@ -252,5 +253,16 @@ feature 'Community Show', js: true do
 
     # ...but not linked.
     expect(page).not_to have_link('View Target')
+  end
+
+  scenario 'school admin visits community' do
+    sign_in_user(school_admin.user, referer: community_path(community))
+    expect(page).to have_text(community.name)
+
+    click_link question_1.title
+
+    # Question and answers are visible
+    expect(page).to have_text(question_1.description)
+    expect(page).to have_text(answer_1.description)
   end
 end

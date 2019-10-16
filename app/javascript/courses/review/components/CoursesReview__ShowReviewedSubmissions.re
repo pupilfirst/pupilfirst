@@ -112,33 +112,6 @@ let showFeedbackSent = feedbackSent =>
     </div> :
     React.null;
 
-let showLoadMoreButton =
-    (
-      authenticityToken,
-      courseId,
-      setState,
-      selectedLevel,
-      cursor,
-      reviewedSubmissions,
-      updateReviewedSubmissionsCB,
-    ) =>
-  <button
-    className="btn btn-primary-ghost cursor-pointer w-full mt-8"
-    onClick={
-      _ =>
-        getReviewedSubmissions(
-          authenticityToken,
-          courseId,
-          cursor,
-          setState,
-          selectedLevel,
-          reviewedSubmissions,
-          updateReviewedSubmissionsCB,
-        )
-    }>
-    {"Load More..." |> str}
-  </button>;
-
 let submissionCardClasses = status =>
   "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
   ++ (
@@ -213,6 +186,17 @@ let showSubmission = (submissions, levels, openOverlayCB) =>
     }
   </div>;
 
+let showSubmissions = (reviewedSubmissions, levels, openOverlayCB) =>
+  reviewedSubmissions |> ArrayUtils.isEmpty ?
+    <div
+      className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
+      <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+        {"No Reviewed Submission" |> str}
+      </h5>
+      <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
+    </div> :
+    showSubmission(reviewedSubmissions, levels, openOverlayCB);
+
 [@react.component]
 let make =
     (
@@ -222,30 +206,25 @@ let make =
       ~levels,
       ~openOverlayCB,
       ~reviewedSubmissions,
-      ~endCursor,
-      ~hasNextPage,
       ~updateReviewedSubmissionsCB,
     ) => {
-  let loaded =
-    switch (reviewedSubmissions, hasNextPage) {
-    | ([||], hasNextPage) => !hasNextPage
-    | (_loadedSubmissions, _hasNextPage) => false
-    };
-  let (loading, setLoading) = React.useState(() => !loaded);
-
+  let (loading, setLoading) = React.useState(() => false);
   React.useEffect1(
     () => {
-      loaded ?
-        () :
+      switch ((reviewedSubmissions: ReviewedSubmission.t)) {
+      | Unloaded =>
         getReviewedSubmissions(
           authenticityToken,
           courseId,
-          endCursor,
+          None,
           setLoading,
           selectedLevel,
-          reviewedSubmissions,
+          [||],
           updateReviewedSubmissionsCB,
-        );
+        )
+      | FullyLoaded(_)
+      | PartiallyLoaded(_, _) => ()
+      };
       None;
     },
     [|selectedLevel|],
@@ -253,41 +232,38 @@ let make =
 
   <div>
     {
-      switch (reviewedSubmissions) {
-      | [||] =>
-        !loaded ?
-          SkeletonLoading.multiple(
-            ~count=10,
-            ~element=SkeletonLoading.card(),
-          ) :
-          <div className="text-lg font-semibold text-center px-6 py-4">
-            <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-              {"No Reviewed Submission" |> str}
-            </h5>
-            <img
-              className="w-3/4 md:w-1/2 mx-auto mt-2"
-              src=reviewedEmptyImage
-            />
-          </div>
-      | _ => showSubmission(reviewedSubmissions, levels, openOverlayCB)
-      }
-    }
-    {
-      switch (loading, hasNextPage, endCursor) {
-      | (true, _, _) =>
-        SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
-      | (false, false, _)
-      | (false, true, None) => React.null
-      | (false, true, Some(_)) =>
-        showLoadMoreButton(
-          authenticityToken,
-          courseId,
-          setLoading,
-          selectedLevel,
-          endCursor,
-          reviewedSubmissions,
-          updateReviewedSubmissionsCB,
-        )
+      switch ((reviewedSubmissions: ReviewedSubmission.t)) {
+      | Unloaded =>
+        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
+      | PartiallyLoaded(reviewedSubmissions, cursor) =>
+        <div>
+          {showSubmissions(reviewedSubmissions, levels, openOverlayCB)}
+          {
+            loading ?
+              SkeletonLoading.multiple(
+                ~count=3,
+                ~element=SkeletonLoading.card(),
+              ) :
+              <button
+                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                onClick=(
+                  _ =>
+                    getReviewedSubmissions(
+                      authenticityToken,
+                      courseId,
+                      Some(cursor),
+                      setLoading,
+                      selectedLevel,
+                      reviewedSubmissions,
+                      updateReviewedSubmissionsCB,
+                    )
+                )>
+                {"Load More..." |> str}
+              </button>
+          }
+        </div>
+      | FullyLoaded(reviewedSubmissions) =>
+        showSubmissions(reviewedSubmissions, levels, openOverlayCB)
       }
     }
   </div>;

@@ -13,7 +13,7 @@ class SubmissionDetailsResolver < ApplicationResolver
       user_names: user_names,
       level_number: level.number,
       level_id: level.id,
-      evaluation_criteria: evaluation_criteria
+      evaluation_criteria: target.evaluation_criteria
     }
   end
 
@@ -35,20 +35,11 @@ class SubmissionDetailsResolver < ApplicationResolver
     end.join(', ')
   end
 
-  def evaluation_criteria
-    target.evaluation_criteria.map do |criteria|
-      {
-        id: criteria.id,
-        name: criteria.name
-      }
-    end
-  end
-
   def authorized?
     return false if submission.blank?
 
     return false if current_user.faculty.blank?
 
-    target.course.in?(current_user.faculty.courses_with_dashboard)
+    current_user.faculty.reviewable_courses.where(id: target.course).exists?
   end
 end

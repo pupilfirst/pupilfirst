@@ -9,3 +9,7 @@
 .course-review__status-tab>:last-child {
   @apply rounded-r-lg;
 }
+
+.course-review__pending-empty, .course-review__reviewed-empty {
+  min-height: 18rem;
+}

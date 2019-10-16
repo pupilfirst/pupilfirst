@@ -14,7 +14,7 @@ let updateInfo:
   (
     ~exited: bool,
     ~excludedFromLeaderboard: bool,
-    ~title: option(string),
+    ~title: string,
     ~affiliation: option(string),
     ~student: t
   ) =>
@@ -30,6 +30,6 @@ let name: t => string;
 
 let avatarUrl: t => string;
 
-let title: t => option(string);
+let title: t => string;
 
 let affiliation: t => option(string);

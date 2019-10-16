@@ -60,7 +60,9 @@ const allowedCodeClasses = [
   "language-html", // markup
   "language-xml", // markup
   "language-svg", // markup
-  "language-mathml" // markup
+  "language-mathml", // markup
+  "language-yaml",
+  "language-yml" //yaml
 ];
 
 const sanitizationProfile = profile => {

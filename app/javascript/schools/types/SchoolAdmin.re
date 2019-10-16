@@ -24,10 +24,7 @@ let decode = json =>
 let create = (id, name, email, avatarUrl) => {id, name, email, avatarUrl};
 
 let update = (admin, admins) =>
-  admins |> List.filter(a => a.id != admin.id) |> List.append([admin]);
+  admins |> Js.Array.filter(a => a.id != admin.id) |> Array.append([|admin|]);
 
-  let sort = l => {
-    l |> List.sort((x, y) =>
-      x.name < y.name ? -1 : 1
-    );
-  };
+let sort = l =>
+  l |> ArrayUtils.copyAndSort((x, y) => x.name < y.name ? (-1) : 1);

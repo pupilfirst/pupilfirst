@@ -12,8 +12,8 @@ class CommunityPolicy < ApplicationPolicy
       # Pupilfirst doesn't have community.
       return scope.none if current_school.blank?
 
-      # Coach has access to all communities in a school.
-      return scope.where(school: current_school) if current_coach.present?
+      # School admin and Coach has access to all communities in a school.
+      return scope.where(school: current_school) if current_school_admin.present? || current_coach.present?
 
       course_ids = user.founders.where(exited: false).joins(:course).select(:course_id)
       scope.where(school: current_school).joins(:courses).where(courses: { id: course_ids }).distinct

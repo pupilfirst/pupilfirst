@@ -46,7 +46,7 @@ feature 'Submissions show' do
       expect(page).to have_content('Grade Card')
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content(evaluation_criterion_2.name)
-      expect(page).to have_button("Review Submission", disabled: true)
+      expect(page).to have_button("Save grades", disabled: true)
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback', js: true do
@@ -82,7 +82,7 @@ feature 'Submissions show' do
         expect(page).to have_text('Failed')
       end
 
-      click_button 'Review Submission'
+      click_button 'Save grades & send feedback'
 
       dismiss_notification
 
@@ -119,7 +119,7 @@ feature 'Submissions show' do
         expect(page).to have_text('Passed')
       end
 
-      click_button 'Review Submission'
+      click_button 'Save grades'
 
       dismiss_notification
 

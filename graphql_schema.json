@@ -3354,7 +3354,7 @@
             },
             {
               "name": "updateSchoolAdmin",
-              "description": "Create a new school admin",
+              "description": "Update school admin",
               "args": [
                 {
                   "name": "id",

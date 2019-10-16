@@ -32,6 +32,11 @@ changelog:
       embedded inline whereas all other file types will be treated as a Markdown-formatted
       links.
     category: feature
+  - timestamp: '2019-09-30T08:05:00Z'
+    title: School admins and coaches can now _preview_ courses without being enrolled in
+      them as a student. School admins can preview all courses whereas coaches can
+      preview courses where they have assigned students.
+    category: feature
 - timestamp: '2019-09-23T11:38:08Z'
   changes:
   - timestamp: '2019-09-23T11:34:12Z'

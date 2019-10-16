@@ -2,15 +2,14 @@ module StartupFeedbackModule
   class EmailService
     include Loggable
 
-    def initialize(startup_feedback, founder: nil)
+    def initialize(startup_feedback)
       @startup_feedback = startup_feedback
-      @founder = founder
     end
 
     def send
-      log "Queuing feedback email to #{@founder.present? ? @founder.email : "all founders in Startup##{@startup_feedback.startup.id}"}."
+      log "Queuing feedback email to students with ids: #{@startup_feedback.timeline_event.founders.pluck(:id).join(', ')}"
 
-      StartupMailer.feedback_as_email(@startup_feedback, founder: @founder).deliver_later
+      StartupMailer.feedback_as_email(@startup_feedback).deliver_later
 
       # Mark feedback as sent.
       @startup_feedback.update!(sent_at: Time.now)

@@ -9,19 +9,23 @@ let str = React.string;
 [@react.component]
 let make = (~submissions, ~levels, ~selectedLevel, ~openOverlayCB) => {
   let submissionToShow =
-    switch (selectedLevel) {
-    | None => submissions
-    | Some(level) =>
-      submissions
-      |> Js.Array.filter(l =>
-           l |> SubmissionInfo.levelId == (level |> Level.id)
-         )
-    };
+    (
+      switch (selectedLevel) {
+      | None => submissions
+      | Some(level) =>
+        submissions
+        |> Js.Array.filter(l =>
+             l |> SubmissionInfo.levelId == (level |> Level.id)
+           )
+      }
+    )
+    |> SubmissionInfo.sort;
   <div>
     {
       switch (submissionToShow) {
       | [||] =>
-        <div className="text-lg font-semibold text-center py-4">
+        <div
+          className="course-review__pending-empty text-lg font-semibold text-center py-4">
           <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
             {"No pending submissions to review" |> str}
           </h5>

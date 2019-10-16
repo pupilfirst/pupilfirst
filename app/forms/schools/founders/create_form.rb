@@ -11,6 +11,14 @@ module Schools
         property :tags
       end
 
+      validate :students_must_have_unique_email
+
+      def students_must_have_unique_email
+        return if students.map(&:email).uniq.count == students.count
+
+        errors[:base] << 'email addresses must be unique'
+      end
+
       def save
         ::Courses::AddStudentsService.new(course).add(students)
       end

@@ -1,4 +1,5 @@
 exception UnsafeFindFailed(string);
+
 let copyAndSort = (f, t) => {
   let cp = t |> Array.copy;
   cp |> Array.sort(f);
@@ -12,3 +13,11 @@ let isEmpty = a =>
   };
 
 let isNotEmpty = a => !(a |> isEmpty);
+
+let unsafeFind = (p, message, l) =>
+  switch (Js.Array.find(p, l)) {
+  | Some(e) => e
+  | None =>
+    Rollbar.error(message);
+    raise(UnsafeFindFailed(message));
+  };

@@ -18,6 +18,7 @@ tags
 
 # Ignore IDE-specific files.
 /.idea/
+/.vscode
 
 # Ignore OS-specific files.
 *.DS_Store

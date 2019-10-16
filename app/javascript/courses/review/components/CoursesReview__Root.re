@@ -4,13 +4,15 @@
 open CoursesReview__Types;
 let str = React.string;
 
+type visibleList =
+  | PendingSubmissions
+  | ReviewedSubmissions;
+
 type state = {
-  submissions: array(SubmissionInfo.t),
-  reviewedSubmissions: array(SubmissionInfo.t),
-  showPending: bool,
+  pendingSubmissions: array(SubmissionInfo.t),
+  reviewedSubmissions: ReviewedSubmission.t,
+  visibleList,
   selectedLevel: option(Level.t),
-  hasNextPage: bool,
-  endCursor: option(string),
 };
 
 let openOverlay = submissionId =>
@@ -20,13 +22,7 @@ let onClickForLevelSelector = (level, setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   setState(state =>
-    {
-      ...state,
-      selectedLevel: level,
-      reviewedSubmissions: [||],
-      hasNextPage: true,
-      endCursor: None,
-    }
+    {...state, selectedLevel: level, reviewedSubmissions: Unloaded}
   );
 };
 
@@ -94,29 +90,45 @@ let removePendingSubmission = (setState, submissionId) =>
   setState(state =>
     {
       ...state,
-      submissions:
-        state.submissions
+      pendingSubmissions:
+        state.pendingSubmissions
         |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId),
-      reviewedSubmissions: [||],
-      hasNextPage: true,
-      endCursor: None,
+      reviewedSubmissions: Unloaded,
     }
   );
 
 let updateReviewedSubmissions =
     (~setState, ~reviewedSubmissions, ~hasNextPage, ~endCursor) =>
-  setState(state => {...state, reviewedSubmissions, hasNextPage, endCursor});
-
-let updateReviewdSubmission = (setState, submission) =>
   setState(state =>
     {
       ...state,
       reviewedSubmissions:
-        state.reviewedSubmissions
-        |> Array.map(s =>
-             s |> SubmissionInfo.id == (submission |> SubmissionInfo.id) ?
-               submission : s
-           ),
+        switch (hasNextPage, endCursor) {
+        | (_, None)
+        | (false, Some(_)) => FullyLoaded(reviewedSubmissions)
+        | (true, Some(cursor)) =>
+          PartiallyLoaded(reviewedSubmissions, cursor)
+        },
+    }
+  );
+
+let updateReviewedSubmission = (setState, submission) =>
+  setState(state =>
+    {
+      ...state,
+      reviewedSubmissions:
+        switch (state.reviewedSubmissions) {
+        | Unloaded => Unloaded
+        | PartiallyLoaded(reviewedSubmissions, cursor) =>
+          PartiallyLoaded(
+            reviewedSubmissions |> SubmissionInfo.replace(submission),
+            cursor,
+          )
+        | FullyLoaded(reviewedSubmissions) =>
+          FullyLoaded(
+            reviewedSubmissions |> SubmissionInfo.replace(submission),
+          )
+        },
     }
   );
 
@@ -125,7 +137,7 @@ let make =
     (
       ~authenticityToken,
       ~levels,
-      ~submissions,
+      ~pendingSubmissions,
       ~gradeLabels,
       ~courseId,
       ~passGrade,
@@ -134,12 +146,10 @@ let make =
   let (state, setState) =
     React.useState(() =>
       {
-        submissions,
-        reviewedSubmissions: [||],
-        showPending: true,
+        pendingSubmissions,
+        reviewedSubmissions: Unloaded,
+        visibleList: PendingSubmissions,
         selectedLevel: None,
-        hasNextPage: true,
-        endCursor: None,
       }
     );
 
@@ -156,7 +166,7 @@ let make =
           passGrade
           currentCoach
           removePendingSubmissionCB={removePendingSubmission(setState)}
-          updateReviewdSubmissionCB={updateReviewdSubmission(setState)}
+          updateReviewedSubmissionCB={updateReviewedSubmission(setState)}
         />
       | _ => React.null
       }
@@ -169,17 +179,36 @@ let make =
             ariaLabel="status-tab"
             className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
             <button
-              className={buttonClasses(state.showPending == true)}
-              onClick={_ => setState(state => {...state, showPending: true})}>
+              className={
+                buttonClasses(state.visibleList == PendingSubmissions)
+              }
+              onClick={
+                _ =>
+                  setState(state =>
+                    {...state, visibleList: PendingSubmissions}
+                  )
+              }>
               {"Pending" |> str}
               <span
                 className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
-                {state.submissions |> Array.length |> string_of_int |> str}
+                {
+                  state.pendingSubmissions
+                  |> Array.length
+                  |> string_of_int
+                  |> str
+                }
               </span>
             </button>
             <button
-              className={buttonClasses(state.showPending == false)}
-              onClick={_ => setState(state => {...state, showPending: false})}>
+              className={
+                buttonClasses(state.visibleList == ReviewedSubmissions)
+              }
+              onClick={
+                _ =>
+                  setState(state =>
+                    {...state, visibleList: ReviewedSubmissions}
+                  )
+              }>
               {"Reviewed" |> str}
             </button>
           </div>
@@ -190,13 +219,15 @@ let make =
       </div>
       <div className="max-w-3xl mx-auto">
         {
-          state.showPending ?
+          switch (state.visibleList) {
+          | PendingSubmissions =>
             <CoursesReview__ShowPendingSubmissions
-              submissions={state.submissions}
+              submissions={state.pendingSubmissions}
               levels
               selectedLevel={state.selectedLevel}
               openOverlayCB=openOverlay
-            /> :
+            />
+          | ReviewedSubmissions =>
             <CoursesReview__ShowReviewedSubmissions
               authenticityToken
               courseId
@@ -204,12 +235,11 @@ let make =
               levels
               openOverlayCB=openOverlay
               reviewedSubmissions={state.reviewedSubmissions}
-              endCursor={state.endCursor}
-              hasNextPage={state.hasNextPage}
               updateReviewedSubmissionsCB={
                 updateReviewedSubmissions(~setState)
               }
             />
+          }
         }
       </div>
     </div>

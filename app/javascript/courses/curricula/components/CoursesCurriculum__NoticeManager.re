@@ -63,8 +63,8 @@ let courseEndedMessage = () => {
 let showPreviewMessage = () =>
   <div
     className="flex max-w-lg md:mx-auto mx-3 mt-4 rounded-lg px-3 py-2 shadow-lg items-center border border-primary-300 bg-gray-200 ">
-    <img className="w-18 md:w-20 flex-no-shrink" src=previewModeImage />
-    <div className="flex-1 text-left ml-2">
+    <img className="w-20 md:w-22 flex-no-shrink" src=previewModeImage />
+    <div className="flex-1 text-left ml-4">
       <h4 className="font-bold text-lg leading-tight">
         {"Preview Mode" |> str}
       </h4>

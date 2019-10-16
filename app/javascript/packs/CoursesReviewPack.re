@@ -6,7 +6,7 @@ let decodeProps = json =>
   Json.Decode.(
     json |> field("authenticityToken", string),
     json |> field("levels", array(Level.decode)),
-    json |> field("submissions", array(SubmissionInfo.decode)),
+    json |> field("pendingSubmissions", array(SubmissionInfo.decode)),
     json |> field("courseId", string),
     json |> field("gradeLabels", array(GradeLabel.decode)),
     json |> field("passGrade", int),
@@ -16,7 +16,7 @@ let decodeProps = json =>
 let (
   authenticityToken,
   levels,
-  submissions,
+  pendingSubmissions,
   courseId,
   gradeLabels,
   passGrade,
@@ -28,7 +28,7 @@ ReactDOMRe.renderToElementWithId(
   <CoursesReview__Root
     authenticityToken
     levels
-    submissions
+    pendingSubmissions
     courseId
     gradeLabels
     passGrade

@@ -5,7 +5,7 @@ module Mutations
 
     description "Create quiz submission"
 
-    field :submission, Types::Submission, null: true
+    field :submission, Types::SubmissionType, null: true
 
     def resolve(params)
       mutator = CreateQuizSubmissionMutator.new(params, context)

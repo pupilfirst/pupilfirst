@@ -6,5 +6,21 @@ module Types
     field :coach_name, String, null: false
     field :coach_avatar_url, String, null: false
     field :coach_title, String, null: true
+
+    def coach_name
+      object.faculty.user.name
+    end
+
+    def coach_title
+      object.faculty.user.full_title
+    end
+
+    def coach_avatar_url
+      object.faculty.user.image_or_avatar_url
+    end
+
+    def value
+      object.feedback
+    end
   end
 end

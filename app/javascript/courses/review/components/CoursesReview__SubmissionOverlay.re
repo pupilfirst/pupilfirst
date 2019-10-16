@@ -4,10 +4,9 @@
 open CoursesReview__Types;
 let str = React.string;
 
-type state = {
-  submissionDetails: option(SubmissionDetails.t),
-  loading: bool,
-};
+type state =
+  | Loading
+  | Loaded(SubmissionDetails.t);
 
 module SubmissionDetailsQuery = [%graphql
   {|
@@ -35,15 +34,10 @@ module SubmissionDetailsQuery = [%graphql
 ];
 
 let updateSubmissionDetails = (setState, details) =>
-  setState(_ =>
-    {
-      loading: false,
-      submissionDetails: Some(details |> SubmissionDetails.decodeJS),
-    }
-  );
+  setState(_ => Loaded(details |> SubmissionDetails.decodeJS));
 
 let getSubmissionDetails = (authenticityToken, submissionId, setState, ()) => {
-  setState(state => {...state, loading: true});
+  setState(_ => Loading);
   SubmissionDetailsQuery.make(~submissionId, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
@@ -117,17 +111,15 @@ let updateSubmission =
       submissionDetails,
       setState,
       removePendingSubmissionCB,
-      updateReviewdSubmissionCB,
+      updateReviewedSubmissionCB,
       feedackUpdate,
       submission,
     ) => {
   let newSubmissionDetails =
     SubmissionDetails.updateSubmission(submissionDetails, submission);
-  setState(state =>
-    {...state, submissionDetails: Some(newSubmissionDetails)}
-  );
+  setState(_ => Loaded(newSubmissionDetails));
   feedackUpdate ?
-    updateReviewdSubmissionCB(
+    updateReviewedSubmissionCB(
       SubmissionDetails.makeSubmissionInfo(newSubmissionDetails, submission),
     ) :
     removePendingSubmissionCB(submission |> Submission.id);
@@ -143,10 +135,9 @@ let make =
       ~passGrade,
       ~currentCoach,
       ~removePendingSubmissionCB,
-      ~updateReviewdSubmissionCB,
+      ~updateReviewedSubmissionCB,
     ) => {
-  let (state, setState) =
-    React.useState(() => {loading: true, submissionDetails: None});
+  let (state, setState) = React.useState(() => Loading);
 
   React.useEffect(() => {
     ScrollLock.activate();
@@ -160,8 +151,8 @@ let make =
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     {
-      switch (state.submissionDetails) {
-      | Some(submissionDetails) =>
+      switch (state) {
+      | Loaded(submissionDetails) =>
         <div>
           {headerSection(submissionDetails, courseId)}
           <div
@@ -181,7 +172,7 @@ let make =
                          submissionDetails,
                          setState,
                          removePendingSubmissionCB,
-                         updateReviewdSubmissionCB,
+                         updateReviewedSubmissionCB,
                        )
                      }
                      submissionNumber={
@@ -204,7 +195,7 @@ let make =
           </div>
         </div>
 
-      | None =>
+      | Loading =>
         <div>
           <div className="bg-gray-100 py-4">
             <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>

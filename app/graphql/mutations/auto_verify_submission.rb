@@ -4,7 +4,7 @@ module Mutations
 
     description "Auto verify target"
 
-    field :submission, Types::Submission, null: true
+    field :submission, Types::SubmissionType, null: true
 
     def resolve(params)
       mutator = AutoVerifySubmissionMutator.new(params, context)

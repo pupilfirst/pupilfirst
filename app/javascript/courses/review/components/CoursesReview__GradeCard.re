@@ -7,10 +7,9 @@ let str = React.string;
 type status =
   | Graded(bool)
   | Grading
-  | UnGraded;
+  | Ungraded;
 
 type state = {
-  status,
   grades: array(Grade.t),
   newFeedback: string,
   saving: bool,
@@ -48,7 +47,7 @@ let undoGrading = (authenticityToken, submissionId, setState) => {
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
        response##undoGrading##success ?
-         DomUtils.relaod() |> ignore :
+         DomUtils.reload() |> ignore :
          setState(state => {...state, saving: false});
        Js.Promise.resolve();
      })
@@ -93,10 +92,10 @@ let gradeSubmissionQuery =
   |> ignore;
 };
 
-let validGrades = (grades, evaluvationCriteria) =>
-  grades |> Array.length == (evaluvationCriteria |> Array.length);
+let validGrades = (grades, evaluationCriteria) =>
+  grades |> Array.length == (evaluationCriteria |> Array.length);
 
-let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => {
+let updateGrading = (grade, state, setState) => {
   let newGrades =
     state.grades
     |> Js.Array.filter(g =>
@@ -106,43 +105,25 @@ let updateGrading = (grade, evaluvationCriteria, state, passGrade, setState) => 
        )
     |> Array.append([|grade|]);
 
-  setState(state =>
-    {
-      ...state,
-      status:
-        validGrades(newGrades, evaluvationCriteria) ?
-          Graded(passed(newGrades, passGrade)) : Grading,
-      grades: newGrades,
-    }
-  );
+  setState(state => {...state, grades: newGrades});
 };
 let handleGradePillClick =
-    (
-      evaluationCriterionId,
-      evaluvationCriteria,
-      value,
-      state,
-      passGrade,
-      setState,
-      event,
-    ) => {
+    (evaluationCriterionId, value, state, setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   switch (setState) {
   | Some(setState) =>
     updateGrading(
       Grade.make(~evaluationCriterionId, ~value),
-      evaluvationCriteria,
       state,
-      passGrade,
       setState,
     )
   | None => ()
   };
 };
 
-let findEvaluvationCriterion = (evaluvationCriteria, evaluationCriterionId) =>
+let findEvaluvationCriterion = (evaluationCriteria, evaluationCriterionId) =>
   switch (
-    evaluvationCriteria
+    evaluationCriteria
     |> Js.Array.find(ec =>
          ec |> EvaluationCriterion.id == evaluationCriterionId
        )
@@ -154,13 +135,13 @@ let findEvaluvationCriterion = (evaluvationCriteria, evaluationCriterionId) =>
       ++ evaluationCriterionId
       ++ "in CoursesRevew__GradeCard",
     );
-    evaluvationCriteria[0];
+    evaluationCriteria[0];
   };
 
-let gradePillHeader = (evaluvationCriteriaName, selectedGrade, gradeLabels) =>
+let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
   <div className="flex justify-between">
     <p className="text-xs font-semibold text-gray-800">
-      {evaluvationCriteriaName |> str}
+      {evaluationCriteriaName |> str}
     </p>
     <p className="text-xs font-semibold text-gray-800">
       {
@@ -204,7 +185,6 @@ let showGradePill =
       evaluvationCriterion,
       gradeValue,
       passGrade,
-      evaluvationCriteria,
       state,
       setState,
     ) =>
@@ -234,10 +214,8 @@ let showGradePill =
                onClick={
                  handleGradePillClick(
                    evaluvationCriterion |> EvaluationCriterion.id,
-                   evaluvationCriteria,
                    gradeLabelGrade,
                    state,
-                   passGrade,
                    setState,
                  )
                }
@@ -263,7 +241,7 @@ let showGradePill =
     </div>
   </div>;
 
-let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
+let showGrades = (grades, gradeLabels, passGrade, evaluationCriteria, state) =>
   <div>
     {
       grades
@@ -272,12 +250,11 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
              key,
              gradeLabels,
              findEvaluvationCriterion(
-               evaluvationCriteria,
+               evaluationCriteria,
                grade |> Grade.evaluationCriterionId,
              ),
              grade |> Grade.value,
              passGrade,
-             evaluvationCriteria,
              state,
              None,
            )
@@ -286,8 +263,8 @@ let showGrades = (grades, gradeLabels, passGrade, evaluvationCriteria, state) =>
     }
   </div>;
 let renderGradePills =
-    (gradeLabels, evaluvationCriteria, grades, passGrade, state, setState) =>
-  evaluvationCriteria
+    (gradeLabels, evaluationCriteria, grades, passGrade, state, setState) =>
+  evaluationCriteria
   |> Array.mapi((key, ec) => {
        let grade =
          grades
@@ -307,7 +284,6 @@ let renderGradePills =
          ec,
          gradeValue,
          passGrade,
-         evaluvationCriteria,
          state,
          Some(setState),
        );
@@ -324,7 +300,7 @@ let gradeStatusClasses = (color, status) =>
     switch (status) {
     | Grading => "course-review-grade-card__status-pulse"
     | Graded(_)
-    | UnGraded => ""
+    | Ungraded => ""
     }
   );
 
@@ -333,7 +309,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
     switch (status) {
     | Graded(passed) => passed ? ("Passed", "green") : ("Failed", "red")
     | Grading => ("Reviewing", "orange")
-    | UnGraded => ("Not Reviewed", "gray")
+    | Ungraded => ("Not Reviewed", "gray")
     };
 
   <div
@@ -364,7 +340,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
           </div>
         | (None, Graded(_))
         | (_, Grading)
-        | (_, UnGraded) => React.null
+        | (_, Ungraded) => React.null
         }
       }
       <div className="w-24 flex flex-col items-center justify-center">
@@ -383,7 +359,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
               <Icon
                 className="if i-writing-pad-solid text-3xl md:text-5xl text-orange-300"
               />
-            | UnGraded =>
+            | Ungraded =>
               <Icon
                 className="if i-eye-solid text-3xl md:text-4xl text-gray-400"
               />
@@ -427,18 +403,12 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
         </div>
       | (None, Graded(_))
       | (_, Grading)
-      | (_, UnGraded) => React.null
+      | (_, Ungraded) => React.null
       }
     }
   </div>;
 };
 
-let initalStatus = (passedAt, grades) =>
-  switch (passedAt, grades |> ArrayUtils.isNotEmpty) {
-  | (Some(_), _) => Graded(true)
-  | (None, true) => Graded(false)
-  | (_, _) => UnGraded
-  };
 let updateFeedbackCB = (setState, newFeedback) =>
   setState(state => {...state, newFeedback});
 
@@ -450,10 +420,11 @@ let gradeSubmission =
       setState,
       passGrade,
       updateSubmissionCB,
+      status,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
-  switch (state.status) {
+  switch (status) {
   | Graded(_) =>
     gradeSubmissionQuery(
       authenticityToken,
@@ -464,7 +435,7 @@ let gradeSubmission =
       updateSubmissionCB,
     )
   | Grading
-  | UnGraded => ()
+  | Ungraded => ()
   };
 };
 
@@ -482,7 +453,34 @@ let reviewButtonDisabled = status =>
   switch (status) {
   | Graded(_) => false
   | Grading
-  | UnGraded => true
+  | Ungraded => true
+  };
+
+let computeStatus =
+    (submission, selectedGrades, evaluationCriteria, passGrade) =>
+  switch (
+    submission |> Submission.passedAt,
+    submission |> Submission.grades |> ArrayUtils.isNotEmpty,
+  ) {
+  | (Some(_), _) => Graded(true)
+  | (None, true) => Graded(false)
+  | (_, _) =>
+    if (selectedGrades == [||]) {
+      Ungraded;
+    } else if (selectedGrades
+               |> Array.length != (evaluationCriteria |> Array.length)) {
+      Grading;
+    } else {
+      Graded(passed(selectedGrades, passGrade));
+    }
+  };
+
+let submitButtonText = (feedback, grades) =>
+  switch (feedback != "", grades |> ArrayUtils.isNotEmpty) {
+  | (false, false)
+  | (false, true) => "Save grades"
+  | (true, false)
+  | (true, true) => "Save grades & send feedback"
   };
 
 [@react.component]
@@ -491,23 +489,14 @@ let make =
       ~authenticityToken,
       ~submission,
       ~gradeLabels,
-      ~evaluvationCriteria,
+      ~evaluationCriteria,
       ~passGrade,
       ~updateSubmissionCB,
     ) => {
   let (state, setState) =
-    React.useState(() =>
-      {
-        status:
-          initalStatus(
-            submission |> Submission.passedAt,
-            submission |> Submission.grades,
-          ),
-        grades: [||],
-        newFeedback: "",
-        saving: false,
-      }
-    );
+    React.useState(() => {grades: [||], newFeedback: "", saving: false});
+  let status =
+    computeStatus(submission, state.grades, evaluationCriteria, passGrade);
   <DisablingCover disabled={state.saving}>
     <div className="px-4 md:px-6 ">
       {showFeedbackForm(submission |> Submission.grades, state, setState)}
@@ -522,7 +511,7 @@ let make =
               | [||] =>
                 renderGradePills(
                   gradeLabels,
-                  evaluvationCriteria,
+                  evaluationCriteria,
                   state.grades,
                   passGrade,
                   state,
@@ -534,7 +523,7 @@ let make =
                   grades,
                   gradeLabels,
                   passGrade,
-                  evaluvationCriteria,
+                  evaluationCriteria,
                   state,
                 )
               }
@@ -542,7 +531,7 @@ let make =
           </div>
           {
             submissionStatusIcon(
-              state.status,
+              status,
               submission,
               authenticityToken,
               setState,
@@ -556,7 +545,7 @@ let make =
       | [||] =>
         <div className="bg-white py-4 mx-3 md:mx-6 border-t">
           <button
-            disabled={reviewButtonDisabled(state.status)}
+            disabled={reviewButtonDisabled(status)}
             className="btn btn-success btn-large w-full border border-green-600"
             onClick={
               gradeSubmission(
@@ -566,11 +555,13 @@ let make =
                 setState,
                 passGrade,
                 updateSubmissionCB,
+                status,
               )
             }>
-            {"Review Submission" |> str}
+            {submitButtonText(state.newFeedback, state.grades) |> str}
           </button>
         </div>
+
       | _ => React.null
       }
     }

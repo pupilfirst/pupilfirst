@@ -13,6 +13,7 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_grades, dependent: :destroy
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
+  has_one :course, through: :target
 
   serialize :links
 

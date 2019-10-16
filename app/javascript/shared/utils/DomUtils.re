@@ -18,7 +18,7 @@ let parseJsonAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
 
 let redirect = path => path |> Webapi.Dom.Window.setLocation(window);
 
-let relaod = () => location |> Location.reload;
+let reload = () => location |> Location.reload;
 let isDevelopment = () =>
   switch (
     document |> Document.documentElement |> Element.getAttribute("data-env")

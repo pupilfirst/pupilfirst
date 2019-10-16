@@ -13,7 +13,12 @@
 }
 
 .markdown-block :not(pre) code:not([class*="language-"]) {
-  @apply whitespace-normal bg-gray-200 text-sm rounded overflow-auto px-1 py-px border border-gray-400;
+  @apply whitespace-normal bg-gray-200 rounded overflow-auto px-1 py-px border border-gray-400;
+  font-size: 85%;
+}
+
+.markdown-block pre>code:not([class*="language-"]) {
+  @apply p-0 m-0 bg-transparent border-0 break-normal whitespace-pre;
 }
 
 .markdown-block code[class*="language-"], .markdown-block pre[class*="language-"] {

@@ -16,7 +16,7 @@ type action =
 let validate = url => {
   let urlLength = url |> String.length;
 
-  if (UrlUtils.isInvalid(url) && urlLength > 0) {
+  if (url |> UrlUtils.isInvalid(false) && urlLength > 0) {
     ["does not look like a valid URL"];
   } else {
     [];
@@ -68,16 +68,14 @@ let make = (~attachUrlCB, ~typingCB) => {
         {"Attach link" |> str}
       </button>
     </div>
-    {
-      state.errors
-      |> List.map(error =>
-           <div className="mt-2 text-red-600 text-sm" key=error>
-             <i className="fas fa-exclamation-circle mr-2" />
-             <span> {error |> str} </span>
-           </div>
-         )
-      |> Array.of_list
-      |> React.array
-    }
+    {state.errors
+     |> List.map(error =>
+          <div className="mt-2 text-red-600 text-sm" key=error>
+            <i className="fas fa-exclamation-circle mr-2" />
+            <span> {error |> str} </span>
+          </div>
+        )
+     |> Array.of_list
+     |> React.array}
   </div>;
 };

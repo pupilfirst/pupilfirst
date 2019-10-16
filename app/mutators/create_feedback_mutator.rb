@@ -17,7 +17,7 @@ class CreateFeedbackMutator < ApplicationMutator
         faculty: coach,
         timeline_event: submission
       )
-      StartupFeedbackModule::EmailService.new(startup_feedback, founder: submission.founder).send
+      StartupFeedbackModule::EmailService.new(startup_feedback).send
     end
   end
 

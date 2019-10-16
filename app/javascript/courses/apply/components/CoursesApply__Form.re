@@ -26,15 +26,14 @@ let createApplicant =
   CreateApplicantQuery.make(~courseId, ~email, ~name, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
-       response##createApplicant##success ?
-         setViewEmailSent() : setSaving(_ => false);
+       response##createApplicant##success
+         ? setViewEmailSent() : setSaving(_ => false);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let isInvalidEmail = email =>
-  email |> EmailUtils.isInvalid(~allowBlank=false);
+let isInvalidEmail = email => email |> EmailUtils.isInvalid(false);
 let saveDisabled = (email, name, saving) =>
   isInvalidEmail(email) || saving || name == "";
 
@@ -94,21 +93,17 @@ let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
     </div>
     <button
       disabled={saveDisabled(email, name, saving)}
-      onClick={
-        createApplicant(
-          authenticityToken,
-          courseId,
-          email,
-          name,
-          setSaving,
-          setViewEmailSent,
-        )
-      }
+      onClick={createApplicant(
+        authenticityToken,
+        courseId,
+        email,
+        name,
+        setSaving,
+        setViewEmailSent,
+      )}
       className="btn btn-primary btn-large text-center w-full mt-6">
-      {
-        saving ?
-          <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null
-      }
+      {saving
+         ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
       <span> {buttonText(email, name, saving) |> str} </span>
     </button>
   </div>;

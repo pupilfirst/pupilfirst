@@ -224,7 +224,8 @@ We support the following languages:
 
 - `css`
 - `scss`
-- `javascript`
+- `javascript` (`js`)
 - `reason`
 - `ruby`
 - `markup` (`html`, `xml`, `svg`, `mathml`)
+- `yaml` (`yml`)

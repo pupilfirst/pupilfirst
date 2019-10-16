@@ -35,14 +35,19 @@ let updateEmail = (send, email) => {
   send(UpdateEmail(email, hasError));
 };
 
-let formInvalid = state =>
+let hasEmailDuplication = (email, emailsToAdd) => {
+  emailsToAdd |> List.exists(emailToAdd => email == emailToAdd);
+};
+
+let formInvalid = (state, emailsToAdd) =>
   state.name == ""
   || state.email == ""
   || state.hasNameError
-  || state.hasEmailError;
+  || state.hasEmailError
+  || hasEmailDuplication(state.email, emailsToAdd);
 
-let handleAdd = (state, send, addToListCB) =>
-  if (!formInvalid(state)) {
+let handleAdd = (state, send, emailsToAdd, addToListCB) =>
+  if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
       StudentInfo.make(
         state.name,
@@ -55,7 +60,7 @@ let handleAdd = (state, send, addToListCB) =>
     send(ResetForm);
   };
 
-let make = (~addToListCB, ~studentTags, _children) => {
+let make = (~addToListCB, ~studentTags, ~emailsToAdd, _children) => {
   ...component,
   initialState: () => {
     name: "",
@@ -93,7 +98,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
     | RemoveTag(tag) =>
       ReasonReact.Update({
         ...state,
-        tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
+        tagsToApply: state.tagsToApply |> List.filter(t => t != tag),
       })
     },
   render: ({state, send}) =>
@@ -104,7 +109,6 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="name">
           {"Name" |> str}
         </label>
-        <span> {"*" |> str} </span>
         <input
           value={state.name}
           onChange={
@@ -126,7 +130,6 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="email">
           {"Email" |> str}
         </label>
-        <span> {"*" |> str} </span>
         <input
           value={state.email}
           onChange={
@@ -138,8 +141,16 @@ let make = (~addToListCB, ~studentTags, _children) => {
           placeholder="Student email here"
         />
         <School__InputGroupError.Jsx2
-          message="is too short"
-          active={state.hasEmailError}
+          message={
+            state.hasEmailError ?
+              "invalid email" :
+              hasEmailDuplication(state.email, emailsToAdd) ?
+                "email address not unique for student" : ""
+          }
+          active={
+            state.hasEmailError
+            || hasEmailDuplication(state.email, emailsToAdd)
+          }
         />
       </div>
       <div className="mt-5">
@@ -148,6 +159,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="title">
           {"Title" |> str}
         </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <input
           value={state.title}
           onChange={
@@ -165,6 +177,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="affiliation">
           {"Affiliation" |> str}
         </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <input
           value={state.affiliation}
           onChange={
@@ -183,6 +196,7 @@ let make = (~addToListCB, ~studentTags, _children) => {
           htmlFor="tags">
           {"Tags" |> str}
         </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
         <SA_StudentsPanel_SearchableTagList
           unselectedTags={
             studentTags
@@ -195,9 +209,13 @@ let make = (~addToListCB, ~studentTags, _children) => {
         />
       </div>
       <button
-        onClick={_e => handleAdd(state, send, addToListCB)}
+        onClick={_e => handleAdd(state, send, emailsToAdd, addToListCB)}
+        disabled={
+          formInvalid(state, emailsToAdd)
+        }
         className={
-          "btn btn-primary mt-5" ++ (formInvalid(state) ? " disabled" : "")
+          "btn btn-primary mt-5"
+          ++ (formInvalid(state, emailsToAdd) ? " disabled" : "")
         }>
         {"Add to List" |> str}
       </button>

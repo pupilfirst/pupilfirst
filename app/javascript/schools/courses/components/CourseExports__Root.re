@@ -221,9 +221,9 @@ let make = (~authenticityToken, ~course, ~exports, ~tags) => {
                 {
                   exports
                   |> ArrayUtils.copyAndSort((x, y) =>
-                       (y |> CourseExport.createdAt |> Js.Date.parseAsFloat)
-                       -. (
-                         x |> CourseExport.createdAt |> Js.Date.parseAsFloat
+                       DateFns.differenceInSeconds(
+                         y |> CourseExport.createdAt |> DateFns.parseString,
+                         x |> CourseExport.createdAt |> DateFns.parseString,
                        )
                        |> int_of_float
                      )

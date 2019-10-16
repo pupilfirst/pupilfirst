@@ -26,6 +26,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   alias show? apply?
+  alias students? review?
 
   class Scope < Scope
     def resolve

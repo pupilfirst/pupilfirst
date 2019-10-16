@@ -33,7 +33,7 @@ module Layouts
     end
 
     def additional_links
-      [leaderboard, review_dashboard] - [nil]
+      [leaderboard, review_dashboard, students] - [nil]
     end
 
     def review_dashboard
@@ -44,6 +44,12 @@ module Layouts
 
     def leaderboard
       @course.enable_leaderboard ? "leaderboard" : nil
+    end
+
+    def students
+      if current_coach.present? && @course.in?(current_coach.courses_with_dashboard)
+        "students"
+      end
     end
   end
 end

@@ -114,6 +114,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks) => {
                      | "calendar" => ("Calendar", "calendar")
                      | "leaderboard" => ("Leaderboard", "leaderboard")
                      | "review" => ("Review", "review")
+                     | "students" => ("Students", "students")
                      | _unknown => ("Unknown", "")
                      };
 

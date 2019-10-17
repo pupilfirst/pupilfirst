@@ -20,9 +20,19 @@ module Types
       argument :submission_id, ID, required: true
     end
 
+    field :teams, Types::TeamType.connection_type, null: false do
+      argument :course_id, ID, required: true
+      argument :level_id, ID, required: false
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
+    end
+
+    def teams(args)
+      resolver = TeamsResolver.new(context, args)
+      resolver.teams
     end
 
     def content_blocks(args)

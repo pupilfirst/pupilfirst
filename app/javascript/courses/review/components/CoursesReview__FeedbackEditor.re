@@ -8,6 +8,7 @@ let str = React.string;
 [@react.component]
 let make = (~feedback, ~updateFeedbackCB, ~label) =>
   <div className="pt-4 md:pt-5 course-review__feedback-editor">
+    <CoursesReview__ChecklistEditor />
     <MarkdownEditor
       updateMarkdownCB=updateFeedbackCB
       value=feedback

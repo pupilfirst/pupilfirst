@@ -70,11 +70,9 @@ let headerSection = (submissionDetails, courseId) =>
         <div className="block text-sm md:pr-2">
           <span
             className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-            {
-              "Level "
-              ++ (submissionDetails |> SubmissionDetails.levelNumber)
-              |> str
-            }
+            {"Level "
+             ++ (submissionDetails |> SubmissionDetails.levelNumber)
+             |> str}
           </span>
           <a
             href={
@@ -118,11 +116,14 @@ let updateSubmission =
   let newSubmissionDetails =
     SubmissionDetails.updateSubmission(submissionDetails, submission);
   setState(_ => Loaded(newSubmissionDetails));
-  feedackUpdate ?
-    updateReviewedSubmissionCB(
-      SubmissionDetails.makeSubmissionInfo(newSubmissionDetails, submission),
-    ) :
-    removePendingSubmissionCB(submission |> Submission.id);
+  feedackUpdate
+    ? updateReviewedSubmissionCB(
+        SubmissionDetails.makeSubmissionInfo(
+          newSubmissionDetails,
+          submission,
+        ),
+      )
+    : removePendingSubmissionCB(submission |> Submission.id);
 };
 
 [@react.component]
@@ -150,64 +151,57 @@ let make =
   );
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    {
-      switch (state) {
-      | Loaded(submissionDetails) =>
-        <div>
-          {headerSection(submissionDetails, courseId)}
-          <div
-            className="review-submission-overlay__submission-container relative container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
-            {
-              submissionDetails
-              |> SubmissionDetails.submissions
-              |> Array.mapi((index, submission) =>
-                   <CoursesReview__Submissions
-                     key={index |> string_of_int}
-                     authenticityToken
-                     submission
-                     gradeLabels
-                     passGrade
-                     updateSubmissionCB={
-                       updateSubmission(
-                         submissionDetails,
-                         setState,
-                         removePendingSubmissionCB,
-                         updateReviewedSubmissionCB,
-                       )
-                     }
-                     submissionNumber={
-                       (
-                         submissionDetails
-                         |> SubmissionDetails.submissions
-                         |> Array.length
-                       )
-                       - index
-                     }
-                     currentCoach
-                     evaluationCriteria={
+    {switch (state) {
+     | Loaded(submissionDetails) =>
+       <div>
+         {headerSection(submissionDetails, courseId)}
+         <div
+           className="review-submission-overlay__submission-container relative container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
+           {submissionDetails
+            |> SubmissionDetails.submissions
+            |> Array.mapi((index, submission) =>
+                 <CoursesReview__Submissions
+                   key={index |> string_of_int}
+                   authenticityToken
+                   submission
+                   gradeLabels
+                   passGrade
+                   updateSubmissionCB={updateSubmission(
+                     submissionDetails,
+                     setState,
+                     removePendingSubmissionCB,
+                     updateReviewedSubmissionCB,
+                   )}
+                   submissionNumber={
+                     (
                        submissionDetails
-                       |> SubmissionDetails.evaluationCriteria
-                     }
-                   />
-                 )
-              |> React.array
-            }
-          </div>
-        </div>
+                       |> SubmissionDetails.submissions
+                       |> Array.length
+                     )
+                     - index
+                   }
+                   currentCoach
+                   evaluationCriteria={
+                     submissionDetails |> SubmissionDetails.evaluationCriteria
+                   }
+                 />
+               )
+            |> React.array}
+         </div>
+       </div>
 
-      | Loading =>
-        <div>
-          <div className="bg-gray-100 py-4">
-            <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
-          </div>
-          <div className="max-w-3xl mx-auto">
-            {SkeletonLoading.heading()}
-            {SkeletonLoading.paragraph()}
-            {SkeletonLoading.profileCard()}
-            {SkeletonLoading.paragraph()}
-          </div>
-        </div>
-      }
-    }
+     | Loading =>
+       <div>
+         <div className="bg-gray-100 py-4">
+           <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
+         </div>
+         <div className="max-w-3xl mx-auto">
+           {SkeletonLoading.heading()}
+           {SkeletonLoading.paragraph()}
+           {SkeletonLoading.profileCard()}
+           {SkeletonLoading.paragraph()}
+         </div>
+       </div>
+     }}
   </div>;
 };

@@ -132,11 +132,18 @@ let handleEligibleTeamCoachList =
 };
 
 let studentTeam = (teams, student) =>
-  teams |> List.find(team => Team.id(team) === Student.teamId(student));
+  teams
+  |> ListUtils.unsafeFind(
+       team => Team.id(team) === Student.teamId(student),
+       "Could not find team for student (#"
+       ++ (student |> Student.id)
+       ++ ") editor",
+     );
 
 let make =
     (
       ~student,
+      ~isSingleFounder,
       ~teams,
       ~studentTags,
       ~teamCoachIds,
@@ -327,39 +334,13 @@ let make =
                     />
                   </div>
                   <div className="mt-5">
-                    <div className="border-b pb-4 mb-2 ">
-                      <span
-                        className="inline-block mr-1 text-xs font-semibold">
-                        {"Course Coaches:" |> str}
-                      </span>
-                      <div className="mt-2 flex flex-wrap">
-                        {courseCoachIds |> List.length > 0
-                           ? courseCoachIds
-                             |> List.map(coachId =>
-                                  <div className="w-1/2" key=coachId>
-                                    <div
-                                      className="select-list__item-selected-unremovable flex items-center justify-between bg-gray-100 text-xs font-semibold border rounded p-3 mr-2 mb-2">
-                                      {schoolCoaches
-                                       |> List.find(coach =>
-                                            Coach.id(coach) == coachId
-                                          )
-                                       |> Coach.name
-                                       |> str}
-                                    </div>
-                                  </div>
-                                )
-                             |> Array.of_list
-                             |> ReasonReact.array
-                           : <div
-                               className="flex items-center justify-between bg-gray-100 text-xs text-gray-800 border rounded p-3 mb-2">
-                               {"None Assigned" |> str}
-                             </div>}
-                      </div>
-                    </div>
                     <div className="border-b pb-4 mb-2 mt-5 ">
                       <span
                         className="inline-block mr-1 text-xs font-semibold">
-                        {"Exclusive Team Coaches:" |> str}
+                        {(
+                           isSingleFounder ? "Personal Coaches" : "Team Coaches"
+                         )
+                         |> str}
                       </span>
                       <div className="mt-2">
                         <School__SelectBox.Jsx2

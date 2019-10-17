@@ -41,9 +41,8 @@ let selectedAcrossTeams = selectedStudents =>
   |> ListUtils.distinct
   |> List.length > 1;
 
-let studentsInTeam = (students, team) =>
-  students
-  |> List.filter(student => Student.teamId(student) === Team.id(team));
+let studentsInTeam = (students, teamId) =>
+  students |> List.filter(student => Student.teamId(student) === teamId);
 
 let selectedPartialTeam = (selectedStudents, teams, students) => {
   let selectedTeam =
@@ -51,7 +50,8 @@ let selectedPartialTeam = (selectedStudents, teams, students) => {
     |> List.find(t =>
          Team.id(t) == (selectedStudents |> List.hd |> Student.teamId)
        );
-  let studentsInSelectedTeam = studentsInTeam(students, selectedTeam);
+  let studentsInSelectedTeam =
+    studentsInTeam(students, selectedTeam |> Team.id);
   selectedStudents |> List.length < (studentsInSelectedTeam |> List.length);
 };
 
@@ -79,10 +79,9 @@ let isGroupable = (selectedStudents, teams, students) =>
 let isMoveOutable = (selectedStudents, teams, students) =>
   selectedStudents
   |> List.length == 1
-  && teams
-  |> List.find(team =>
-       team |> Team.id == (selectedStudents |> List.hd |> Student.teamId)
-     )
+  && selectedStudents
+  |> List.hd
+  |> Student.teamId
   |> studentsInTeam(students)
   |> List.length > 1;
 
@@ -102,6 +101,7 @@ let filteredTeams = state => {
            tags
            |> List.for_all(tag =>
                 team
+                |> Team.id
                 |> studentsInTeam(state.students)
                 |> List.map(student => student |> Student.tags)
                 |> List.flatten
@@ -112,6 +112,7 @@ let filteredTeams = state => {
   tagFilteredTeams
   |> List.filter(team =>
        team
+       |> Team.id
        |> studentsInTeam(state.students)
        |> List.map(s => s |> Student.name)
        |> List.filter(n =>
@@ -200,7 +201,7 @@ let make =
         ...state,
         selectedStudents:
           state.teams
-          |> List.map(t => t |> studentsInTeam(state.students))
+          |> List.map(t => t |> Team.id |> studentsInTeam(state.students))
           |> List.flatten,
       })
     | DeselectAllStudents =>
@@ -255,8 +256,15 @@ let make =
             |> List.find(team => Team.id(team) == Student.teamId(student))
             |> Team.coachIds;
 
+          let isSingleFounder =
+            student
+            |> Student.teamId
+            |> studentsInTeam(state.students)
+            |> List.length == 1;
+
           <SA_StudentsPanel_UpdateForm
             student
+            isSingleFounder
             teams={state.teams}
             studentTags={state.tags}
             teamCoachIds
@@ -342,7 +350,7 @@ let make =
                     let studentCount =
                       filteredTeams(state)
                       |> List.map(team =>
-                           team |> studentsInTeam(state.students)
+                           team |> Team.id |> studentsInTeam(state.students)
                          )
                       |> List.flatten
                       |> List.length;
@@ -460,6 +468,7 @@ let make =
                    |> List.map(team => {
                         let isSingleFounder =
                           team
+                          |> Team.id
                           |> studentsInTeam(state.students)
                           |> List.length == 1;
                         <div
@@ -468,6 +477,7 @@ let make =
                           className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden">
                           <div className="flex flex-col flex-1 w-3/5">
                             {team
+                             |> Team.id
                              |> studentsInTeam(state.students)
                              |> List.map(student => {
                                   let isChecked =

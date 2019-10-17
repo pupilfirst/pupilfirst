@@ -249,9 +249,7 @@ feature 'School students index', js: true do
       # Assign a coach to a team
       founder = startup_2.founders.last
       find("a", text: founder.user.name).click
-      expect(page).to have_text('Course Coaches')
-      expect(page).to have_text('Exclusive Team Coaches')
-      expect(page).to have_text(course_coach.name)
+      expect(page).to have_text('Team Coaches')
 
       within '.select-list__group' do
         expect(page).to_not have_text(exited_coach.name)

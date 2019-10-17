@@ -13,11 +13,8 @@ module Courses
 
     def props
       {
-        authenticity_token: view.form_authenticity_token,
         levels: levels,
-        course: course_details,
-        students: student_details,
-        teams: team_details
+        course: course_details
       }
     end
 

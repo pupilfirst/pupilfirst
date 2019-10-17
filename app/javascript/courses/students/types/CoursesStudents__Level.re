@@ -15,3 +15,21 @@ let decode = json =>
     name: json |> field("name", string),
     number: json |> field("number", int),
   };
+
+let sort = levels =>
+  levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number);
+
+let unsafeLevelNumber = (levels, componentName, levelId) =>
+  "Level "
+  ++ (
+    levels
+    |> ArrayUtils.unsafeFind(
+         l => l.id == levelId,
+         "Unable to find level with id: "
+         ++ levelId
+         ++ "in CoursesStudents__"
+         ++ componentName,
+       )
+    |> number
+    |> string_of_int
+  );

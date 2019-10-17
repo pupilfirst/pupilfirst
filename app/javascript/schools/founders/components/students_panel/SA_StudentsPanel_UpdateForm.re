@@ -1,6 +1,6 @@
 open StudentsPanel__Types;
 
-type teamCoachlist = (int, string, bool);
+type teamCoachlist = (string, string, bool);
 
 type state = {
   name: string,
@@ -21,7 +21,7 @@ type action =
   | AddTag(string)
   | RemoveTag(string)
   | UpdateExited(bool)
-  | UpdateCoachesList(int, string, bool)
+  | UpdateCoachesList(string, string, bool)
   | UpdateExcludedFromLeaderboard(bool)
   | UpdateTitle(string)
   | UpdateAffiliation(string)
@@ -97,9 +97,9 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
   Js.Dict.set(
     payload,
     "coach_ids",
-    enrolledCoachIds |> Json.Encode.(list(int)),
+    enrolledCoachIds |> Json.Encode.(list(string)),
   );
-  let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
+  let url = "/school/students/" ++ (student |> Student.id);
   Api.update(url, payload, responseCB, handleErrorCB(send));
 };
 
@@ -182,7 +182,7 @@ let make =
     | UpdateExited(exited) => ReasonReact.Update({...state, exited})
     | UpdateCoachesList(key, value, selected) =>
       let oldCoach =
-        state.teamCoaches |> List.filter(((item, _, _)) => item !== key);
+        state.teamCoaches |> List.filter(((item, _, _)) => item != key);
       ReasonReact.Update({
         ...state,
         teamCoaches: [(key, value, selected), ...oldCoach],
@@ -336,9 +336,8 @@ let make =
                         {courseCoachIds |> List.length > 0
                            ? courseCoachIds
                              |> List.map(coachId =>
-                                  <div className="w-1/2">
+                                  <div className="w-1/2" key=coachId>
                                     <div
-                                      key={coachId |> string_of_int}
                                       className="select-list__item-selected-unremovable flex items-center justify-between bg-gray-100 text-xs font-semibold border rounded p-3 mr-2 mb-2">
                                       {schoolCoaches
                                        |> List.find(coach =>
@@ -364,14 +363,8 @@ let make =
                       </span>
                       <div className="mt-2">
                         <School__SelectBox.Jsx2
-                          items={
-                            state.teamCoaches
-                            |> School__SelectBox.convertOldItems
-                          }
-                          selectCB={
-                            multiSelectCoachEnrollmentsCB
-                            |> School__SelectBox.convertOldCallback
-                          }
+                          items={state.teamCoaches}
+                          selectCB=multiSelectCoachEnrollmentsCB
                         />
                       </div>
                     </div>

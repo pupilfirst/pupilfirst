@@ -10,3 +10,10 @@ let make = (~title, ~feedback) => {title, feedback};
 let decodeJS = data => {
   data |> Js.Array.map(r => make(~title=r##title, ~feedback=r##feedback));
 };
+
+let empty = () => {
+  [|
+    make(~title="Yes", ~feedback=Some("Sample text for yes")),
+    make(~title="No", ~feedback=Some("Sample text for no")),
+  |];
+};

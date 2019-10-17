@@ -17,3 +17,12 @@ let decodeJS = data => {
        )
      );
 };
+
+let empty = () => {
+  [|
+    make(
+      ~title="Default checklist",
+      ~checklist=CoursesReview__ReviewChecklistResult.empty(),
+    ),
+  |];
+};

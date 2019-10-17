@@ -1,6 +1,6 @@
 class AddReviewChecklistToTargets < ActiveRecord::Migration[6.0]
   def up
-    add_column :targets, :review_checklist, :json
+    add_column :targets, :review_checklist, :json, default: []
   end
 
   def down

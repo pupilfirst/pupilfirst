@@ -17,8 +17,9 @@ let make = (~reviewChecklist) =>
     <div className="bg-gray-300 rounded-lg mt-2">
       <div className="p-4">
         {switch (reviewChecklist) {
-         | Some(checklist) =>
-           checklist
+         | [||] => React.null
+         | _ =>
+           reviewChecklist
            |> Array.mapi((i, r) =>
                 <div className="mt-2">
                   <div className="text-lg font-semibold mt-2">
@@ -55,7 +56,6 @@ let make = (~reviewChecklist) =>
                 </div>
               )
            |> React.array
-         | None => React.null
          }}
       </div>
     </div>

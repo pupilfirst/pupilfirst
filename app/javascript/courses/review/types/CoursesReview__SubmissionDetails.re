@@ -6,7 +6,7 @@ type t = {
   levelNumber: string,
   levelId: string,
   evaluationCriteria: array(CoursesReview__EvaluationCriterion.t),
-  reviewChecklist: option(array(CoursesReview__ReviewChecklist.t)),
+  reviewChecklist: array(CoursesReview__ReviewChecklist.t),
 };
 let submissions = t => t.submissions;
 let targetId = t => t.targetId;
@@ -49,11 +49,7 @@ let decodeJS = details =>
       details##evaluationCriteria
       |> CoursesReview__EvaluationCriterion.decodeJs,
     ~reviewChecklist=
-      switch (details##reviewChecklist) {
-      | Some(checklist) =>
-        Some(checklist |> CoursesReview__ReviewChecklist.decodeJS)
-      | None => None
-      },
+      details##reviewChecklist |> CoursesReview__ReviewChecklist.decodeJS,
   );
 
 let updateSubmission = (t, submission) =>

@@ -16,6 +16,13 @@ module SubmissionDetailsQuery = [%graphql
         evaluationCriteria{
           id, name
         },
+        reviewChecklist{
+          title
+          checklist{
+            title
+            feedback
+          }
+        },
         submissions{
           id, evaluatorName, passedAt, createdAt, description, evaluatedAt
           attachments{
@@ -183,6 +190,9 @@ let make =
                    currentCoach
                    evaluationCriteria={
                      submissionDetails |> SubmissionDetails.evaluationCriteria
+                   }
+                   reviewChecklist={
+                     submissionDetails |> SubmissionDetails.reviewChecklist
                    }
                  />
                )

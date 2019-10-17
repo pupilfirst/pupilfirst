@@ -9,3 +9,5 @@ module Grade = CoursesReview__Grade;
 module EvaluationCriterion = CoursesReview__EvaluationCriterion;
 module Coach = CoursesReview__Coach;
 module ReviewedSubmission = CoursesReview__ReviewedSubmission;
+module ReviewChecklist = CoursesReview__ReviewChecklist;
+module ReviewChecklistResult = CoursesReview__ReviewChecklistResult;

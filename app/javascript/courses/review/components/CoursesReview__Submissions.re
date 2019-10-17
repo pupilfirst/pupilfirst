@@ -29,12 +29,12 @@ let showSubmissionStatus = submission => {
 };
 
 let showFeedbackSent = feedbackSent =>
-  feedbackSent ?
-    <div
-      className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
-      {"Feedback Sent" |> str}
-    </div> :
-    React.null;
+  feedbackSent
+    ? <div
+        className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
+        {"Feedback Sent" |> str}
+      </div>
+    : React.null;
 
 let iconSpan = (iconClasses, attachment) => {
   let faClasses =
@@ -56,56 +56,47 @@ let showSubmissions = attachments =>
     <div className="mt-3">
       <h5 className="text-xs font-semibold"> {"Attachments" |> str} </h5>
       <div className="flex flex-wrap">
-        {
-          attachments
-          |> Array.map(attachment => {
-               let (
-                 key,
-                 containerClasses,
-                 iconClasses,
-                 textClasses,
-                 text,
-                 url,
-               ) =
-                 switch (attachment |> Submission.title) {
-                 | Some(title) => (
-                     "file-" ++ (attachment |> Submission.url),
-                     "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
-                     "bg-primary-200",
-                     "bg-primary-100",
-                     title,
-                     attachment |> Submission.url,
-                   )
-                 | None => (
-                     attachment |> Submission.url,
-                     "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
-                     "bg-blue-200",
-                     "bg-blue-100",
-                     attachment |> Submission.url,
-                     attachment |> Submission.url,
-                   )
-                 };
+        {attachments
+         |> Array.map(attachment => {
+              let (key, containerClasses, iconClasses, textClasses, text, url) =
+                switch (attachment |> Submission.title) {
+                | Some(title) => (
+                    "file-" ++ (attachment |> Submission.url),
+                    "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
+                    "bg-primary-200",
+                    "bg-primary-100",
+                    title,
+                    attachment |> Submission.url,
+                  )
+                | None => (
+                    attachment |> Submission.url,
+                    "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
+                    "bg-blue-200",
+                    "bg-blue-100",
+                    attachment |> Submission.url,
+                    attachment |> Submission.url,
+                  )
+                };
 
-               <a
-                 key
-                 href=url
-                 target="_blank"
-                 className={
-                   "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
-                   ++ containerClasses
-                 }>
-                 {iconSpan(iconClasses, attachment)}
-                 <span
-                   className={
-                     "course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose "
-                     ++ textClasses
-                   }>
-                   {text |> str}
-                 </span>
-               </a>;
-             })
-          |> React.array
-        }
+              <a
+                key
+                href=url
+                target="_blank"
+                className={
+                  "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
+                  ++ containerClasses
+                }>
+                {iconSpan(iconClasses, attachment)}
+                <span
+                  className={
+                    "course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose "
+                    ++ textClasses
+                  }>
+                  {text |> str}
+                </span>
+              </a>;
+            })
+         |> React.array}
       </div>
     </div>
   };
@@ -137,20 +128,20 @@ let updateSubmission =
   let feedback =
     switch (newFeedback) {
     | Some(f) =>
-      f == "" ?
-        submission |> Submission.feedback :
-        submission
-        |> Submission.feedback
-        |> Array.append([|
-             Feedback.make(
-               ~coachName=currentCoach |> Coach.name,
-               ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
-               ~coachTitle=currentCoach |> Coach.title,
-               ~createdAt=Js.Date.make(),
-               ~value=f,
-               ~id=Js.Date.now() |> Js.Float.toString,
-             ),
-           |])
+      f == ""
+        ? submission |> Submission.feedback
+        : submission
+          |> Submission.feedback
+          |> Array.append([|
+               Feedback.make(
+                 ~coachName=currentCoach |> Coach.name,
+                 ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
+                 ~coachTitle=currentCoach |> Coach.title,
+                 ~createdAt=Js.Date.make(),
+                 ~value=f,
+                 ~id=Js.Date.now() |> Js.Float.toString,
+               ),
+             |])
     | None => submission |> Submission.feedback
     };
 
@@ -194,6 +185,7 @@ let make =
       ~submissionNumber,
       ~currentCoach,
       ~evaluationCriteria,
+      ~reviewChecklist,
     ) =>
   <div
     ariaLabel={"submissions-overlay-card-" ++ (submission |> Submission.id)}
@@ -206,17 +198,13 @@ let make =
             {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
           </h2>
           <span className="text-xs text-gray-800 pt-px">
-            {
-              submission |> Submission.createdAt |> Submission.prettyDate |> str
-            }
+            {submission |> Submission.createdAt |> Submission.prettyDate |> str}
           </span>
         </div>
         <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
-          {
-            showFeedbackSent(
-              submission |> Submission.feedback |> ArrayUtils.isNotEmpty,
-            )
-          }
+          {showFeedbackSent(
+             submission |> Submission.feedback |> ArrayUtils.isNotEmpty,
+           )}
           {showSubmissionStatus(submission)}
         </div>
       </div>
@@ -233,28 +221,26 @@ let make =
         gradeLabels
         evaluationCriteria
         passGrade
-        updateSubmissionCB={
-          updateSubmission(
-            ~feedackUpdate=false,
-            ~submission,
-            ~currentCoach,
-            ~updateSubmissionCB,
-          )
-        }
+        reviewChecklist
+        updateSubmissionCB={updateSubmission(
+          ~feedackUpdate=false,
+          ~submission,
+          ~currentCoach,
+          ~updateSubmissionCB,
+        )}
       />
       <CoursesReview__ShowFeedback
         authenticityToken
         feedback={submission |> Submission.feedback}
         reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
         submissionId={submission |> Submission.id}
-        updateSubmissionCB={
-          updateSubmission(
-            ~feedackUpdate=true,
-            ~submission,
-            ~currentCoach,
-            ~updateSubmissionCB,
-          )
-        }
+        reviewChecklist
+        updateSubmissionCB={updateSubmission(
+          ~feedackUpdate=true,
+          ~submission,
+          ~currentCoach,
+          ~updateSubmissionCB,
+        )}
       />
     </div>
   </div>;

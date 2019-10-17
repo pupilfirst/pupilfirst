@@ -6,6 +6,7 @@ type t = {
   levelNumber: string,
   levelId: string,
   evaluationCriteria: array(CoursesReview__EvaluationCriterion.t),
+  reviewChecklist: option(array(CoursesReview__ReviewChecklist.t)),
 };
 let submissions = t => t.submissions;
 let targetId = t => t.targetId;
@@ -14,6 +15,7 @@ let levelNumber = t => t.levelNumber;
 let levelId = t => t.levelId;
 let userNames = t => t.userNames;
 let evaluationCriteria = t => t.evaluationCriteria;
+let reviewChecklist = t => t.reviewChecklist;
 let make =
     (
       ~submissions,
@@ -23,6 +25,7 @@ let make =
       ~levelNumber,
       ~evaluationCriteria,
       ~levelId,
+      ~reviewChecklist,
     ) => {
   submissions,
   targetId,
@@ -31,6 +34,7 @@ let make =
   levelNumber,
   evaluationCriteria,
   levelId,
+  reviewChecklist,
 };
 
 let decodeJS = details =>
@@ -43,9 +47,13 @@ let decodeJS = details =>
     ~levelId=details##levelId,
     ~evaluationCriteria=
       details##evaluationCriteria
-      |> Js.Array.map(ec =>
-           CoursesReview__EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
-         ),
+      |> CoursesReview__EvaluationCriterion.decodeJs,
+    ~reviewChecklist=
+      switch (details##reviewChecklist) {
+      | Some(checklist) =>
+        Some(checklist |> CoursesReview__ReviewChecklist.decodeJS)
+      | None => None
+      },
   );
 
 let updateSubmission = (t, submission) =>
@@ -64,6 +72,7 @@ let updateSubmission = (t, submission) =>
     ~levelNumber=t.levelNumber,
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,
+    ~reviewChecklist=t.reviewChecklist,
   );
 let failed = submission =>
   switch (

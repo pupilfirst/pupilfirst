@@ -13,7 +13,8 @@ class SubmissionDetailsResolver < ApplicationResolver
       user_names: user_names,
       level_number: level.number,
       level_id: level.id,
-      evaluation_criteria: target.evaluation_criteria
+      evaluation_criteria: target.evaluation_criteria,
+      review_checklist: review_checklist
     }
   end
 
@@ -34,6 +35,8 @@ class SubmissionDetailsResolver < ApplicationResolver
       founder.user.name
     end.join(', ')
   end
+
+  delegate :review_checklist, to: :target
 
   def authorized?
     return false if submission.blank?

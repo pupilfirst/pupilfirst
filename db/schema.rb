@@ -656,7 +656,7 @@ ActiveRecord::Schema.define(version: 2019_10_10_072307) do
     t.text "rubric_description"
     t.boolean "resubmittable", default: true
     t.string "visibility"
-    t.json "review_checklist", default: []
+    t.jsonb "review_checklist", default: []
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"

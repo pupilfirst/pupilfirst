@@ -34,11 +34,10 @@ let checkboxOnChange = (itemIndex, resultIndex, setSelecton, event) => {
 };
 
 let generateFeedback = (reviewChecklist, selection, updateFeedbackCB) => {
-  ()//   reviewChecklist
-    //   |> Array.mapi((i, reviewChecklistItem)
-    //        => selection |> List.mem(target |> Target.targetGroupId))
-    //        // reviewChecklistItem
-    ;
+  ()//        // reviewChecklistItem
+    //   reviewChecklist
+    ; //        => selection |> List.mem(target |> Target.targetGroupId))
+ //   |> Array.mapi((i, reviewChecklistItem)
     // ;
 };
 
@@ -56,11 +55,11 @@ let make = (~reviewChecklist, ~updateFeedbackCB, ~showEditorCB) => {
      |> Array.mapi((i, reviewChecklistItem) =>
           <div className="mt-2" key={i |> string_of_int}>
             <div className="text-lg font-semibold mt-2">
-              {reviewChecklistItem |> ReviewChecklist.title |> str}
+              {reviewChecklistItem |> ReviewChecklistItem.title |> str}
             </div>
             <div>
               {reviewChecklistItem
-               |> ReviewChecklist.checklist
+               |> ReviewChecklistItem.checklist
                |> Array.mapi((index, checklistItem) =>
                     <div
                       className="px-2 mt-2"

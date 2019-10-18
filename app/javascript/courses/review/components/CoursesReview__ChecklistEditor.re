@@ -4,7 +4,7 @@
 open CoursesReview__Types;
 
 type state = {
-  reviewChecklist: array(ReviewChecklist.t),
+  reviewChecklist: array(ReviewChecklistItem.t),
   saving: bool,
 };
 
@@ -19,7 +19,8 @@ let updateChecklist = (checklistItem, index, setState) => {
     {
       ...state,
       reviewChecklist:
-        state.reviewChecklist |> ReviewChecklist.replace(checklistItem, index),
+        state.reviewChecklist
+        |> ReviewChecklistItem.replace(checklistItem, index),
     }
   );
 };
@@ -38,11 +39,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                 id="checklist_title"
                 type_="text"
                 placeholder="Add title for checklist item"
-                value={reviewChecklistItem |> ReviewChecklist.title}
+                value={reviewChecklistItem |> ReviewChecklistItem.title}
                 onChange={event =>
                   updateChecklist(
                     reviewChecklistItem
-                    |> ReviewChecklist.updateTitle(
+                    |> ReviewChecklistItem.updateTitle(
                          ReactEvent.Form.target(event)##value,
                        ),
                     i,
@@ -52,12 +53,12 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
               />
               <School__InputGroupError
                 message="Title should greate than 2 charcahters"
-                active={reviewChecklistItem |> ReviewChecklist.title == ""}
+                active={reviewChecklistItem |> ReviewChecklistItem.title == ""}
               />
             </div>
             <div>
               {reviewChecklistItem
-               |> ReviewChecklist.checklist
+               |> ReviewChecklistItem.checklist
                |> Array.mapi((index, checklistItem) => {
                     let feedback =
                       switch (checklistItem |> ReviewChecklistResult.feedback) {
@@ -84,9 +85,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                                 onChange={event =>
                                   updateChecklist(
                                     reviewChecklistItem
-                                    |> ReviewChecklist.updateChecklist(
+                                    |> ReviewChecklistItem.updateChecklist(
                                          reviewChecklistItem
-                                         |> ReviewChecklist.checklist
+                                         |> ReviewChecklistItem.checklist
                                          |> ReviewChecklistResult.updateTitle(
                                               ReactEvent.Form.target(event)##value,
                                               checklistItem,
@@ -115,9 +116,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                               onChange={event =>
                                 updateChecklist(
                                   reviewChecklistItem
-                                  |> ReviewChecklist.updateChecklist(
+                                  |> ReviewChecklistItem.updateChecklist(
                                        reviewChecklistItem
-                                       |> ReviewChecklist.checklist
+                                       |> ReviewChecklistItem.checklist
                                        |> ReviewChecklistResult.updateFeedback(
                                             ReactEvent.Form.target(event)##value,
                                             checklistItem,
@@ -142,7 +143,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                     onClick={_ =>
                       updateChecklist(
                         reviewChecklistItem
-                        |> ReviewChecklist.appendEmptyChecklistItem,
+                        |> ReviewChecklistItem.appendEmptyChecklistItem,
                         i,
                         setState,
                       )
@@ -162,7 +163,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
             {
               ...state,
               reviewChecklist:
-                ReviewChecklist.empty() |> Array.append(state.reviewChecklist),
+                ReviewChecklistItem.empty()
+                |> Array.append(state.reviewChecklist),
             }
           )
         }>

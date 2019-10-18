@@ -3,16 +3,15 @@ open CurriculumEditor__Types;
 let str = ReasonReact.string;
 type state = {
   name: string,
-  unlockOn: option(string),
+  unlockOn: option(Js.Date.t),
   hasNameError: bool,
-  hasDateError: bool,
   dirty: bool,
   saving: bool,
 };
 
 type action =
   | UpdateName(string, bool)
-  | UpdateUnlockOn(string, bool)
+  | UpdateUnlockOn(option(Js.Date.t))
   | UpdateSaving;
 
 let component = ReasonReact.reducerComponent("CurriculumEditor__LevelEditor");
@@ -22,18 +21,7 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let updateUnlockOn = (send, date) => {
-  let regex = [%re
-    {|/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/|}
-  ];
-
-  let lengthOfInput = date |> String.length;
-  let hasError = lengthOfInput == 0 ? false : !Js.Re.test_(regex, date);
-  send(UpdateUnlockOn(date, hasError));
-};
-
-let saveDisabled = state =>
-  state.hasDateError || state.hasNameError || !state.dirty || state.saving;
+let saveDisabled = state => state.hasNameError || !state.dirty || state.saving;
 
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty();
@@ -46,7 +34,8 @@ let setPayload = (authenticityToken, state) => {
   Js.Dict.set(payload, "name", state.name |> Js.Json.string);
 
   switch (state.unlockOn) {
-  | Some(date) => Js.Dict.set(payload, "unlock_on", date |> Js.Json.string)
+  | Some(date) =>
+    Js.Dict.set(payload, "unlock_on", date |> Date.iso8601 |> Js.Json.string)
   | None => Js.Dict.set(payload, "unlock_on", "" |> Js.Json.string)
   };
   payload;
@@ -70,7 +59,6 @@ let make =
         name: level |> Level.name,
         unlockOn: level |> Level.unlockOn,
         hasNameError: false,
-        hasDateError: false,
         dirty: false,
         saving: false,
       }
@@ -78,7 +66,6 @@ let make =
         name: "",
         unlockOn: None,
         hasNameError: false,
-        hasDateError: false,
         dirty: false,
         saving: false,
       }
@@ -87,13 +74,8 @@ let make =
     switch (action) {
     | UpdateName(name, hasNameError) =>
       ReasonReact.Update({...state, name, hasNameError, dirty: true})
-    | UpdateUnlockOn(date, hasDateError) =>
-      ReasonReact.Update({
-        ...state,
-        unlockOn: Some(date),
-        hasDateError,
-        dirty: true,
-      })
+    | UpdateUnlockOn(date) =>
+      ReasonReact.Update({...state, unlockOn: date, dirty: true})
     | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
     },
   render: ({state, send}) => {
@@ -133,11 +115,6 @@ let make =
       );
     };
 
-    let unlockOn =
-      switch (state.unlockOn) {
-      | Some(date) => date
-      | None => ""
-      };
     <div>
       <div className="blanket" />
       <div className="drawer-right">
@@ -169,76 +146,51 @@ let make =
                     type_="text"
                     placeholder="Type level name here"
                     value={state.name}
-                    onChange={
-                      event =>
-                        updateName(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
+                    onChange={event =>
+                      updateName(send, ReactEvent.Form.target(event)##value)
                     }
                   />
-                  {
-                    state.hasNameError ?
-                      <div className="drawer-right-form__error-msg">
-                        {"not a valid name" |> str}
-                      </div> :
-                      ReasonReact.null
-                  }
+                  {state.hasNameError
+                     ? <div className="drawer-right-form__error-msg">
+                         {"not a valid name" |> str}
+                       </div>
+                     : ReasonReact.null}
                 </div>
                 <div className="mt-5">
                   <label
                     className="block tracking-wide text-xs font-semibold"
-                    htmlFor="date">
+                    htmlFor="unlock-on-input">
                     {"Unlock level on" |> str}
                   </label>
-                  <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="date"
-                    type_="text"
-                    placeholder="DD/MM/YYYY"
-                    value=unlockOn
-                    onChange={
-                      event =>
-                        updateUnlockOn(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                    }
+                  <DatePicker.Jsx2
+                    id="unlock-on-input"
+                    selected=?{state.unlockOn}
+                    onChange={date => send(UpdateUnlockOn(date))}
                   />
-                  {
-                    state.hasDateError ?
-                      <div className="drawer-right-form__error-msg">
-                        {"not a valid date" |> str}
-                      </div> :
-                      ReasonReact.null
-                  }
                 </div>
                 <div className="flex mt-5">
-                  {
-                    switch (level) {
-                    | Some(level) =>
-                      let id = level |> Level.id;
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(
-                          _event => updateLevel(authenticityToken, id, state)
-                        )
-                        className="w-full btn btn-large btn-primary">
-                        {"Update Level" |> str}
-                      </button>;
+                  {switch (level) {
+                   | Some(level) =>
+                     let id = level |> Level.id;
+                     <button
+                       disabled={saveDisabled(state)}
+                       onClick={_event =>
+                         updateLevel(authenticityToken, id, state)
+                       }
+                       className="w-full btn btn-large btn-primary">
+                       {"Update Level" |> str}
+                     </button>;
 
-                    | None =>
-                      <button
-                        disabled={saveDisabled(state)}
-                        onClick=(
-                          _event =>
-                            createLevel(authenticityToken, course, state)
-                        )
-                        className="w-full btn btn-large btn-primary">
-                        {"Create New Level" |> str}
-                      </button>
-                    }
-                  }
+                   | None =>
+                     <button
+                       disabled={saveDisabled(state)}
+                       onClick={_event =>
+                         createLevel(authenticityToken, course, state)
+                       }
+                       className="w-full btn btn-large btn-primary">
+                       {"Create New Level" |> str}
+                     </button>
+                   }}
                 </div>
               </div>
             </div>

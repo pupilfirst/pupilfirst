@@ -96,14 +96,13 @@ feature 'Curriculum Editor', js: true do
       click_button 'Create Level'
       expect(page).to have_text("Level Name")
       fill_in 'Level Name', with: new_level_name
-      fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
+      fill_in 'Unlock level on', with: date.iso8601
       click_button 'Create New Level'
 
       expect(page).to have_text("Level created successfully")
       dismiss_notification
 
-      course.reload
-      level = course.levels.last
+      level = course.reload.levels.last
       expect(level.name).to eq(new_level_name)
       expect(level.unlock_on).to eq(date)
 
@@ -116,7 +115,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Level updated successfully')
       dismiss_notification
 
-      expect(level.reload.unlock_on).not_to eq(date)
+      expect(level.reload.unlock_on).to eq(nil)
 
       # he should be able to create a new target group
       find('.target-group__create').click

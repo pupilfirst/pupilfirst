@@ -387,8 +387,10 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
   </div>;
 };
 
-let updateFeedbackCB = (setState, newFeedback) =>
+let updateFeedbackCB = (setState, newFeedback) => {
+  Js.log(newFeedback);
   setState(state => {...state, newFeedback});
+};
 
 let gradeSubmission =
     (

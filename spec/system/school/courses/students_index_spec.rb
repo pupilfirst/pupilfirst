@@ -195,8 +195,13 @@ feature 'School students index', js: true do
   context 'when there are two existing students' do
     let(:user_1) { create :user, email: email_1, name: name_1, affiliation: Faker::Company.name }
     let(:user_2) { create :user, email: email_2, name: name_2, affiliation: Faker::Company.name }
-    let!(:student_1) { create :student, user: user_1, startup: startup_1 }
-    let!(:student_2) { create :student, user: user_2, startup: startup_1 }
+
+    # Put two students by themselves in different teams.
+    let(:team_1) { create :team, level: level_1 }
+    let(:team_2) { create :team, level: level_1 }
+    let!(:student_1) { create :student, user: user_1, startup: team_1 }
+    let!(:student_2) { create :student, user: user_2, startup: team_2 }
+
     let(:new_title) { Faker::Job.title }
 
     scenario 'School admin edits student details' do
@@ -206,12 +211,11 @@ feature 'School students index', js: true do
       find("a", text: name_1).click
 
       expect(page).to have_text(user_1.name)
-      expect(page).to have_text(student_1.startup.name)
       expect(page.find_field("title").value).to eq(user_1.title)
       expect(page.find_field("affiliation").value).to eq(user_1.affiliation)
 
       fill_in 'Name', with: user_1.name + " Jr."
-      fill_in 'Team Name', with: new_team_name, fill_options: { clear: :backspace }
+      expect(page).not_to have_field('Team Name')
       fill_in 'Title', with: new_title
       fill_in 'Affiliation', with: ''
       find('button[title="Exclude this student from the leaderboard"]').click
@@ -223,8 +227,8 @@ feature 'School students index', js: true do
       expect(user_1.reload.name).to end_with('Jr.')
       expect(user_1.title).to eq(new_title)
       expect(user_1.affiliation).to eq(nil)
-      expect(student_1.reload.startup.name).to eq(new_team_name)
-      expect(student_1.excluded_from_leaderboard).to eq(true)
+      expect(student_1.reload.excluded_from_leaderboard).to eq(true)
+      expect(student_1.startup.name).to eq(user_1.name)
 
       # Form a Team
       check "select-student-#{student_1.id}"
@@ -232,10 +236,22 @@ feature 'School students index', js: true do
       click_button 'Group as Team'
       expect(page).to have_text("Teams updated successfully")
       dismiss_notification
-      student_1.reload
-      student_2.reload
-      expect(student_1.startup.name).to eq(student_2.startup.name)
+
+      expect(student_1.reload.startup).to eq(student_2.reload.startup)
       expect(page).to have_text(student_1.startup.name)
+
+      # Try editing the team name for the newly formed team.
+      find("a", text: user_1.name).click
+
+      expect(page).to have_text(student_1.startup.name)
+
+      fill_in 'Team Name', with: new_team_name
+      click_button 'Update Student'
+
+      expect(page).to have_text("Student updated successfully")
+      dismiss_notification
+
+      expect(student_1.reload.startup.name).to eq(new_team_name)
 
       # Move out from a team
       check "select-student-#{student_1.id}"

@@ -269,30 +269,32 @@ let make =
                       active={state.name |> stringInputInvalid}
                     />
                   </div>
-                  <div className="mt-5">
-                    <label
-                      className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-                      htmlFor="team_name">
-                      {"Team Name" |> str}
-                    </label>
-                    <input
-                      value={state.teamName}
-                      onChange={event =>
-                        updateTeamName(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                      }
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="team_name"
-                      type_="text"
-                      placeholder="Team name here"
-                    />
-                    <School__InputGroupError.Jsx2
-                      message="Team Name must have at least two characters"
-                      active={state.teamName |> stringInputInvalid}
-                    />
-                  </div>
+                  {isSingleFounder
+                     ? ReasonReact.null
+                     : <div className="mt-5">
+                         <label
+                           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+                           htmlFor="team_name">
+                           {"Team Name" |> str}
+                         </label>
+                         <input
+                           value={state.teamName}
+                           onChange={event =>
+                             updateTeamName(
+                               send,
+                               ReactEvent.Form.target(event)##value,
+                             )
+                           }
+                           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="team_name"
+                           type_="text"
+                           placeholder="Team name here"
+                         />
+                         <School__InputGroupError.Jsx2
+                           message="Team Name must have at least two characters"
+                           active={state.teamName |> stringInputInvalid}
+                         />
+                       </div>}
                   <div className="mt-5">
                     <label
                       className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
@@ -386,8 +388,8 @@ let make =
                         className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           title="Exclude this student from the leaderboard"
-                          onClick={_event => {
-                            ReactEvent.Mouse.preventDefault(_event);
+                          onClick={event => {
+                            ReactEvent.Mouse.preventDefault(event);
                             send(UpdateExcludedFromLeaderboard(true));
                           }}
                           className={boolBtnClasses(

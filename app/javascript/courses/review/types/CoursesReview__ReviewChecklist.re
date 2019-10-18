@@ -26,3 +26,15 @@ let empty = () => {
     ),
   |];
 };
+
+let updateTitle = (title, t) => {
+  make(~title, ~checklist=t.checklist);
+};
+
+let updateChecklist = (checklist, t) => {
+  make(~title=t.title, ~checklist);
+};
+
+let replace = (t, index, checklist) => {
+  checklist |> ArrayUtils.replace(t, index);
+};

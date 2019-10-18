@@ -17,3 +17,16 @@ let empty = () => {
     make(~title="No", ~feedback=Some("Sample text for no")),
   |];
 };
+
+let replace = (t, index, checklist) => {
+  checklist |> ArrayUtils.replace(t, index);
+};
+
+let updateTitle = (title, t, index, checklist) => {
+  checklist |> replace(make(~title, ~feedback=t.feedback), index);
+};
+
+let updateFeedback = (feedback, t, index, checklist) => {
+  checklist
+  |> replace(make(~title=t.title, ~feedback=Some(feedback)), index);
+};

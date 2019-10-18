@@ -166,6 +166,10 @@ feature 'Curriculum Editor', js: true do
       # Update sort index
       find("#target-group-move-down-#{target_group.id}").click
       expect { target_group.reload.sort_index }.to eventually(eq 1)
+
+      # TODO: This section of the spec is flaky. The sleep is here to try and avoid a failure to click properly.
+      sleep 0.2
+
       find("#target-group-move-up-#{target_group.id}").click
       expect { target_group.reload.sort_index }.to eventually(eq 0)
 

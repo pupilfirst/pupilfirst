@@ -531,10 +531,20 @@ let make =
                                               ),
                                             )
                                           }>
-                                          <img
-                                            className="w-10 h-10 rounded-full mr-4 object-cover"
-                                            src={student |> Student.avatarUrl}
-                                          />
+                                          {switch (
+                                             student |> Student.avatarUrl
+                                           ) {
+                                           | Some(avatarUrl) =>
+                                             <img
+                                               className="w-10 h-10 rounded-full mr-4 object-cover"
+                                               src=avatarUrl
+                                             />
+                                           | None =>
+                                             <Avatar.Jsx2
+                                               name={student |> Student.name}
+                                               className="w-10 h-10 mr-4"
+                                             />
+                                           }}
                                           <div
                                             className="text-sm flex flex-col">
                                             <p

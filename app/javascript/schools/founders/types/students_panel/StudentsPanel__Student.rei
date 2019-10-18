@@ -28,7 +28,7 @@ let excludedFromLeaderboard: t => bool;
 
 let name: t => string;
 
-let avatarUrl: t => string;
+let avatarUrl: t => option(string);
 
 let title: t => string;
 

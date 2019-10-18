@@ -34,10 +34,9 @@ module Schools
       def students
         @students ||=
           founders.includes(taggings: :tag, user: { avatar_attachment: :blob }).map do |student|
-            {
+            student_props = {
               id: student.id,
               name: student.user.name,
-              avatar_url: student.user.image_or_avatar_url,
               email: student.user.email,
               team_id: student.startup_id,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
@@ -46,6 +45,12 @@ module Schools
               title: student.user.title,
               affiliation: student.user.affiliation
             }
+
+            if student.user.avatar.attached?
+              student_props[:avatar_url] = view.url_for(student.user.avatar_variant(:thumb))
+            end
+
+            student_props
           end
       end
 

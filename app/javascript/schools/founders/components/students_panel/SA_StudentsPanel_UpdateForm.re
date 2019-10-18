@@ -223,10 +223,18 @@ let make =
               <div className="mx-auto bg-white">
                 <div
                   className="flex items-centre py-6 pl-16 mb-4 border-b bg-gray-100">
-                  <img
-                    className="w-12 h-12 rounded-full mr-4"
-                    src={student |> Student.avatarUrl}
-                  />
+                  {switch (student |> Student.avatarUrl) {
+                   | Some(avatarUrl) =>
+                     <img
+                       className="w-12 h-12 rounded-full mr-4"
+                       src=avatarUrl
+                     />
+                   | None =>
+                     <Avatar.Jsx2
+                       name={student |> Student.name}
+                       className="w-12 h-12 mr-4"
+                     />
+                   }}
                   <div className="text-sm flex flex-col justify-center">
                     <div className="text-black font-bold inline-block">
                       {student |> Student.name |> str}

@@ -1,7 +1,7 @@
 type t = {
   id: string,
   name: string,
-  avatarUrl: string,
+  avatarUrl: option(string),
   teamId: string,
   email: string,
   tags: list(string),
@@ -49,7 +49,7 @@ let decode = json =>
     exited: json |> field("exited", bool),
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
     name: json |> field("name", string),
-    avatarUrl: json |> field("avatarUrl", string),
+    avatarUrl: json |> optional(field("avatarUrl", string)),
     title: json |> field("title", string),
     affiliation: json |> optional(field("affiliation", string)),
   };

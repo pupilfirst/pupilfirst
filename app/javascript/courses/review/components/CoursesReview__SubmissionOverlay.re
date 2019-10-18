@@ -133,6 +133,15 @@ let updateSubmission =
     : removePendingSubmissionCB(submission |> Submission.id);
 };
 
+let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) => {
+  setState(_ =>
+    Loaded(
+      submissionDetails
+      |> SubmissionDetails.updateReviewChecklist(reviewChecklist),
+    )
+  );
+};
+
 [@react.component]
 let make =
     (
@@ -194,6 +203,10 @@ let make =
                    reviewChecklist={
                      submissionDetails |> SubmissionDetails.reviewChecklist
                    }
+                   updateReviewChecklistCB={updateReviewChecklist(
+                     submissionDetails,
+                     setState,
+                   )}
                  />
                )
             |> React.array}

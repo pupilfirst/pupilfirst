@@ -100,6 +100,7 @@ let make =
       ~submissionId,
       ~reviewChecklist,
       ~updateSubmissionCB,
+      ~updateReviewChecklistCB,
     ) => {
   let (state, setState) =
     React.useState(() =>
@@ -117,6 +118,7 @@ let make =
                       label="Add feedback"
                       updateFeedbackCB={updateFeedbackCB(setState)}
                       reviewChecklist
+                      updateReviewChecklistCB
                     />
                   </DisablingCover>
                   <button

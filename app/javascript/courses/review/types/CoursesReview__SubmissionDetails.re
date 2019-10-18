@@ -100,3 +100,16 @@ let makeSubmissionInfo = (t, submission) =>
         ),
       ),
   );
+
+let updateReviewChecklist = (reviewChecklist, t) => {
+  make(
+    ~submissions=t.submissions,
+    ~targetId=t.targetId,
+    ~targetTitle=t.targetTitle,
+    ~userNames=t.userNames,
+    ~levelNumber=t.levelNumber,
+    ~levelId=t.levelId,
+    ~evaluationCriteria=t.evaluationCriteria,
+    ~reviewChecklist,
+  );
+};

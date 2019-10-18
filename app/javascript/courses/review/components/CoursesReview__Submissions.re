@@ -186,6 +186,7 @@ let make =
       ~currentCoach,
       ~evaluationCriteria,
       ~reviewChecklist,
+      ~updateReviewChecklistCB,
     ) =>
   <div
     ariaLabel={"submissions-overlay-card-" ++ (submission |> Submission.id)}
@@ -228,6 +229,7 @@ let make =
           ~currentCoach,
           ~updateSubmissionCB,
         )}
+        updateReviewChecklistCB
       />
       <CoursesReview__ShowFeedback
         authenticityToken
@@ -241,6 +243,7 @@ let make =
           ~currentCoach,
           ~updateSubmissionCB,
         )}
+        updateReviewChecklistCB
       />
     </div>
   </div>;

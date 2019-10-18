@@ -13,8 +13,14 @@ let showEditor = (setState, ()) => {
   setState(_ => {editMode: true});
 };
 
+let updateReviewChecklist =
+    (setState, updateReviewChecklistCB, reviewChecklist) => {
+  setState(_ => {editMode: false});
+  updateReviewChecklistCB(reviewChecklist);
+};
+
 [@react.component]
-let make = (~reviewChecklist, ~updateFeedbackCB) => {
+let make = (~reviewChecklist, ~updateFeedbackCB, ~updateReviewChecklistCB) => {
   let (state, setState) = React.useState(() => {editMode: true});
   <div className="">
     <div>
@@ -28,7 +34,10 @@ let make = (~reviewChecklist, ~updateFeedbackCB) => {
         {state.editMode
            ? <CoursesReview__ChecklistEditor
                reviewChecklist
-               updateReviewChecklistCB=()
+               updateReviewChecklistCB={updateReviewChecklist(
+                 setState,
+                 updateReviewChecklistCB,
+               )}
                closeEditModeCB={closeEditMode(setState)}
              />
            : <CoursesReview__ChecklistShow

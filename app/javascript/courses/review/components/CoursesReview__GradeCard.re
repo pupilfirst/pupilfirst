@@ -419,7 +419,8 @@ let gradeSubmission =
   };
 };
 
-let showFeedbackForm = (grades, reviewChecklist, state, setState) =>
+let showFeedbackForm =
+    (grades, reviewChecklist, updateReviewChecklistCB, state, setState) =>
   switch (grades) {
   | [||] =>
     <CoursesReview__FeedbackEditor
@@ -427,6 +428,7 @@ let showFeedbackForm = (grades, reviewChecklist, state, setState) =>
       label="Add Your Feedback"
       updateFeedbackCB={updateFeedbackCB(setState)}
       reviewChecklist
+      updateReviewChecklistCB
     />
   | _ => React.null
   };
@@ -474,6 +476,7 @@ let make =
       ~passGrade,
       ~reviewChecklist,
       ~updateSubmissionCB,
+      ~updateReviewChecklistCB,
     ) => {
   let (state, setState) =
     React.useState(() => {grades: [||], newFeedback: "", saving: false});
@@ -484,6 +487,7 @@ let make =
       {showFeedbackForm(
          submission |> Submission.grades,
          reviewChecklist,
+         updateReviewChecklistCB,
          state,
          setState,
        )}

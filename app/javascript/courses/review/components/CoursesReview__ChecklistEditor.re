@@ -172,7 +172,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
       </button>
     </div>
     <div className="py-2 mt-4 flex">
-      <button className="btn btn-primary"> {"Save Checklist" |> str} </button>
+      <button
+        onClick={_ => updateReviewChecklistCB(state.reviewChecklist)}
+        className="btn btn-primary">
+        {"Save Checklist" |> str}
+      </button>
       <button
         className="btn btn-primary-ghost ml-2"
         onClick={_ => closeEditModeCB()}>

@@ -6,12 +6,23 @@ open CoursesReview__Types;
 let str = React.string;
 
 [@react.component]
-let make = (~feedback, ~updateFeedbackCB, ~label, ~reviewChecklist) => {
+let make =
+    (
+      ~feedback,
+      ~updateFeedbackCB,
+      ~label,
+      ~reviewChecklist,
+      ~updateReviewChecklistCB,
+    ) => {
   Js.log("feedback");
   Js.log(feedback);
 
   <div className="pt-4 md:pt-5 course-review__feedback-editor">
-    <CoursesReview__Checklist reviewChecklist updateFeedbackCB />
+    <CoursesReview__Checklist
+      reviewChecklist
+      updateFeedbackCB
+      updateReviewChecklistCB
+    />
     <MarkdownEditor
       updateMarkdownCB=updateFeedbackCB
       value=feedback

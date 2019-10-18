@@ -22,7 +22,6 @@ feature 'School students index', js: true do
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
   let(:title_1) { Faker::Lorem.words(2).join(" ") }
-  let(:title_2) { Faker::Lorem.words(2).join(" ") }
   let(:affiliation_1) { Faker::Lorem.words(2).join(" ") }
 
   let(:name_2) { Faker::Name.name }
@@ -66,8 +65,8 @@ feature 'School students index', js: true do
     expect(page.find_field("title").value).to eq(title_1)
     expect(page.find_field("affiliation").value).to eq(affiliation_1)
 
-    # Set another title.
-    fill_in 'Title', with: title_2
+    # Clear the title.
+    fill_in 'Title', with: ''
     # Clear affiliation
     fill_in 'Affiliation', with: ''
 
@@ -108,7 +107,7 @@ feature 'School students index', js: true do
     expect(founder_1_user.name).to eq(name_1)
     expect(founder_2_user.name).to eq(name_2)
     expect(founder_1_user.title).to eq(title_1)
-    expect(founder_2_user.title).to eq(title_2)
+    expect(founder_2_user.title).to eq('Student') # the default should have been set.
     expect(founder_1_user.affiliation).to eq(affiliation_1)
     expect(founder_2_user.affiliation).to eq(nil)
     expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')

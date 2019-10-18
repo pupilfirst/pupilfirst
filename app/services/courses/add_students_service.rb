@@ -37,7 +37,7 @@ module Courses
       # If a user was already present, don't override values of name, title or affiliation.
       user.update!(
         name: user.name.presence || student.name,
-        title: user.title.presence || student.title || "Student",
+        title: user.title.presence || student.title.presence || "Student",
         affiliation: user.affiliation.presence || student.affiliation
       )
 

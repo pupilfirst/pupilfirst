@@ -11,11 +11,15 @@ let decodeJS = data => {
   data |> Js.Array.map(r => make(~title=r##title, ~feedback=r##feedback));
 };
 
-let empty = () => {
+let emptyTemplate = () => {
   [|
     make(~title="Yes", ~feedback=Some("Sample text for yes")),
     make(~title="No", ~feedback=Some("Sample text for no")),
   |];
+};
+
+let empty = () => {
+  make(~title="Sample title", ~feedback=Some("Sample description text"));
 };
 
 let replace = (t, index, checklist) => {

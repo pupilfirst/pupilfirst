@@ -22,7 +22,7 @@ let empty = () => {
   [|
     make(
       ~title="Default checklist",
-      ~checklist=CoursesReview__ReviewChecklistResult.empty(),
+      ~checklist=CoursesReview__ReviewChecklistResult.emptyTemplate(),
     ),
   |];
 };
@@ -37,4 +37,14 @@ let updateChecklist = (checklist, t) => {
 
 let replace = (t, index, checklist) => {
   checklist |> ArrayUtils.replace(t, index);
+};
+
+let appendEmptyChecklistItem = t => {
+  make(
+    ~title=t.title,
+    ~checklist={
+      [|CoursesReview__ReviewChecklistResult.empty()|]
+      |> Array.append(t.checklist);
+    },
+  );
 };

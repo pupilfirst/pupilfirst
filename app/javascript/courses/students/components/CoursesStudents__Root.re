@@ -5,14 +5,14 @@ open CoursesStudents__Types;
 let str = React.string;
 
 type state = {
-  teams: array(Team.t),
+  teams: Teams.t,
   studentSearchString: option(string),
   selectedLevel: option(Level.t),
 };
 
 let onClickForLevelSelector = (level, setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  setState(state => {...state, selectedLevel: level});
+  setState(state => {...state, selectedLevel: level, teams: Unloaded});
 };
 
 let onChangeSearchString = (setState, event) => {
@@ -39,7 +39,6 @@ let dropdownShowAllButton = (selectedLevel, setState) =>
   };
 
 let showDropdown = (levels, selectedLevel, setState) => {
-  Js.log(AuthenticityToken.fromHead());
   let contents =
     dropdownShowAllButton(selectedLevel, setState)
     ->Array.append(
@@ -72,11 +71,24 @@ let showDropdown = (levels, selectedLevel, setState) => {
   <Dropdown selected contents right=true />;
 };
 
+let updateTeams = (~setState, ~teams, ~hasNextPage, ~endCursor) =>
+  setState(state =>
+    {
+      ...state,
+      teams:
+        switch (hasNextPage, endCursor) {
+        | (_, None)
+        | (false, Some(_)) => FullyLoaded(teams)
+        | (true, Some(cursor)) => PartiallyLoaded(teams, cursor)
+        },
+    }
+  );
+
 [@react.component]
 let make = (~levels, ~course) => {
   let (state, setState) =
     React.useState(() =>
-      {teams: [||], studentSearchString: None, selectedLevel: None}
+      {teams: Unloaded, studentSearchString: None, selectedLevel: None}
     );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -103,10 +115,12 @@ let make = (~levels, ~course) => {
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
-        <CoursesStudents__StudentsList
+        <CoursesStudents__TeamsList
           levels
           selectedLevel={state.selectedLevel}
           teams={state.teams}
+          courseId={course |> Course.id}
+          updateTeamsCB={updateTeams(~setState)}
         />
       </div>
     </div>

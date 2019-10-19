@@ -3,7 +3,11 @@ class TeamsResolver < ApplicationResolver
   attr_accessor :level_id
 
   def teams
-    course.startups.includes(founders: :user)
+    if level_id.present?
+      teams_in_course.where(level_id: level_id)
+    else
+      teams_in_course
+    end.includes(founders: :user)
   end
 
   def authorized?
@@ -14,5 +18,9 @@ class TeamsResolver < ApplicationResolver
 
   def course
     @course ||= Course.find(course_id)
+  end
+
+  def teams_in_course
+    course.startups.active
   end
 end

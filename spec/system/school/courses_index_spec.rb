@@ -93,7 +93,7 @@ feature 'Courses Index', js: true do
     expect(course.about).to eq(new_about)
     expect(course.enable_leaderboard).to eq(false)
     expect(course.public_signup).to eq(true)
-    expect(Date.parse(course.ends_at.strftime("%Y-%m-%d"))).to eq(date)
+    expect(course.ends_at.to_date).to eq(date)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

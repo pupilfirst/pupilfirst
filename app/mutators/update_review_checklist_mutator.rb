@@ -15,7 +15,7 @@ class UpdateReviewChecklistMutator < ApplicationMutator
 
   def review_checklist_shape
     return if review_checklist_json.all? do |item|
-      item['title'].is_a?(String) && item['checklist'].all? do |result|
+      item['title'].is_a?(String) && item['result'].all? do |result|
         result['title'].is_a?(String) && result['feedback'].is_a?(String)
       end
     end

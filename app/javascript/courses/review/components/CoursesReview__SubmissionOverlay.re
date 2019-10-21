@@ -18,7 +18,7 @@ module SubmissionDetailsQuery = [%graphql
         },
         reviewChecklist{
           title
-          checklist{
+          result{
             title
             feedback
           }

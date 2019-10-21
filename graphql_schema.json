@@ -1680,7 +1680,7 @@
           "description": null,
           "fields": [
             {
-              "name": "checklist",
+              "name": "result",
               "description": null,
               "args": [],
               "type": {

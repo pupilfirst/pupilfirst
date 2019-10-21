@@ -1,6 +1,6 @@
 open StudentsPanel__Types;
 
-type teamCoachlist = (int, string, bool);
+type teamCoachlist = (string, string, bool);
 
 type state = {
   name: string,
@@ -21,7 +21,7 @@ type action =
   | AddTag(string)
   | RemoveTag(string)
   | UpdateExited(bool)
-  | UpdateCoachesList(int, string, bool)
+  | UpdateCoachesList(string, string, bool)
   | UpdateExcludedFromLeaderboard(bool)
   | UpdateTitle(string)
   | UpdateAffiliation(string)
@@ -97,9 +97,9 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
   Js.Dict.set(
     payload,
     "coach_ids",
-    enrolledCoachIds |> Json.Encode.(list(int)),
+    enrolledCoachIds |> Json.Encode.(list(string)),
   );
-  let url = "/school/students/" ++ (student |> Student.id |> string_of_int);
+  let url = "/school/students/" ++ (student |> Student.id);
   Api.update(url, payload, responseCB, handleErrorCB(send));
 };
 
@@ -132,11 +132,18 @@ let handleEligibleTeamCoachList =
 };
 
 let studentTeam = (teams, student) =>
-  teams |> List.find(team => Team.id(team) === Student.teamId(student));
+  teams
+  |> ListUtils.unsafeFind(
+       team => Team.id(team) === Student.teamId(student),
+       "Could not find team for student (#"
+       ++ (student |> Student.id)
+       ++ ") editor",
+     );
 
 let make =
     (
       ~student,
+      ~isSingleFounder,
       ~teams,
       ~studentTags,
       ~teamCoachIds,
@@ -182,7 +189,7 @@ let make =
     | UpdateExited(exited) => ReasonReact.Update({...state, exited})
     | UpdateCoachesList(key, value, selected) =>
       let oldCoach =
-        state.teamCoaches |> List.filter(((item, _, _)) => item !== key);
+        state.teamCoaches |> List.filter(((item, _, _)) => item != key);
       ReasonReact.Update({
         ...state,
         teamCoaches: [(key, value, selected), ...oldCoach],
@@ -216,10 +223,18 @@ let make =
               <div className="mx-auto bg-white">
                 <div
                   className="flex items-centre py-6 pl-16 mb-4 border-b bg-gray-100">
-                  <img
-                    className="w-12 h-12 rounded-full mr-4"
-                    src={student |> Student.avatarUrl}
-                  />
+                  {switch (student |> Student.avatarUrl) {
+                   | Some(avatarUrl) =>
+                     <img
+                       className="w-12 h-12 rounded-full mr-4"
+                       src=avatarUrl
+                     />
+                   | None =>
+                     <Avatar.Jsx2
+                       name={student |> Student.name}
+                       className="w-12 h-12 mr-4"
+                     />
+                   }}
                   <div className="text-sm flex flex-col justify-center">
                     <div className="text-black font-bold inline-block">
                       {student |> Student.name |> str}
@@ -254,30 +269,32 @@ let make =
                       active={state.name |> stringInputInvalid}
                     />
                   </div>
-                  <div className="mt-5">
-                    <label
-                      className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-                      htmlFor="team_name">
-                      {"Team Name" |> str}
-                    </label>
-                    <input
-                      value={state.teamName}
-                      onChange={event =>
-                        updateTeamName(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                      }
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="team_name"
-                      type_="text"
-                      placeholder="Team name here"
-                    />
-                    <School__InputGroupError.Jsx2
-                      message="Team Name must have at least two characters"
-                      active={state.teamName |> stringInputInvalid}
-                    />
-                  </div>
+                  {isSingleFounder
+                     ? ReasonReact.null
+                     : <div className="mt-5">
+                         <label
+                           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+                           htmlFor="team_name">
+                           {"Team Name" |> str}
+                         </label>
+                         <input
+                           value={state.teamName}
+                           onChange={event =>
+                             updateTeamName(
+                               send,
+                               ReactEvent.Form.target(event)##value,
+                             )
+                           }
+                           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="team_name"
+                           type_="text"
+                           placeholder="Team name here"
+                         />
+                         <School__InputGroupError.Jsx2
+                           message="Team Name must have at least two characters"
+                           active={state.teamName |> stringInputInvalid}
+                         />
+                       </div>}
                   <div className="mt-5">
                     <label
                       className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
@@ -327,51 +344,18 @@ let make =
                     />
                   </div>
                   <div className="mt-5">
-                    <div className="border-b pb-4 mb-2 ">
-                      <span
-                        className="inline-block mr-1 text-xs font-semibold">
-                        {"Course Coaches:" |> str}
-                      </span>
-                      <div className="mt-2 flex flex-wrap">
-                        {courseCoachIds |> List.length > 0
-                           ? courseCoachIds
-                             |> List.map(coachId =>
-                                  <div className="w-1/2">
-                                    <div
-                                      key={coachId |> string_of_int}
-                                      className="select-list__item-selected-unremovable flex items-center justify-between bg-gray-100 text-xs font-semibold border rounded p-3 mr-2 mb-2">
-                                      {schoolCoaches
-                                       |> List.find(coach =>
-                                            Coach.id(coach) == coachId
-                                          )
-                                       |> Coach.name
-                                       |> str}
-                                    </div>
-                                  </div>
-                                )
-                             |> Array.of_list
-                             |> ReasonReact.array
-                           : <div
-                               className="flex items-center justify-between bg-gray-100 text-xs text-gray-800 border rounded p-3 mb-2">
-                               {"None Assigned" |> str}
-                             </div>}
-                      </div>
-                    </div>
                     <div className="border-b pb-4 mb-2 mt-5 ">
                       <span
                         className="inline-block mr-1 text-xs font-semibold">
-                        {"Exclusive Team Coaches:" |> str}
+                        {(
+                           isSingleFounder ? "Personal Coaches" : "Team Coaches"
+                         )
+                         |> str}
                       </span>
                       <div className="mt-2">
                         <School__SelectBox.Jsx2
-                          items={
-                            state.teamCoaches
-                            |> School__SelectBox.convertOldItems
-                          }
-                          selectCB={
-                            multiSelectCoachEnrollmentsCB
-                            |> School__SelectBox.convertOldCallback
-                          }
+                          items={state.teamCoaches}
+                          selectCB=multiSelectCoachEnrollmentsCB
                         />
                       </div>
                     </div>
@@ -404,8 +388,8 @@ let make =
                         className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
                         <button
                           title="Exclude this student from the leaderboard"
-                          onClick={_event => {
-                            ReactEvent.Mouse.preventDefault(_event);
+                          onClick={event => {
+                            ReactEvent.Mouse.preventDefault(event);
                             send(UpdateExcludedFromLeaderboard(true));
                           }}
                           className={boolBtnClasses(

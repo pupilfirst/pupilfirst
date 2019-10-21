@@ -65,7 +65,8 @@ let make = (~authenticityToken, _children) => {
                 let endsAt =
                   switch (rawCourse##endsAt) {
                   | Some(endsAt) =>
-                    Some(endsAt |> Json.Decode.string) |> Date.parseOption
+                    Some(endsAt |> Json.Decode.string)
+                    |> OptionUtils.map(DateFns.parseString)
                   | None => None
                   };
                 let gradesAndLabels =
@@ -104,18 +105,16 @@ let make = (~authenticityToken, _children) => {
       send(UpdateEditorAction(Hidden));
     };
     <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
-      {
-        switch (state.editorAction) {
-        | Hidden => ReasonReact.null
-        | ShowForm(course) =>
-          <CourseEditor__Form
-            course
-            authenticityToken
-            hideEditorActionCB
-            updateCoursesCB
-          />
-        }
-      }
+      {switch (state.editorAction) {
+       | Hidden => ReasonReact.null
+       | ShowForm(course) =>
+         <CourseEditor__Form
+           course
+           authenticityToken
+           hideEditorActionCB
+           updateCoursesCB
+         />
+       }}
       <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
@@ -129,45 +128,40 @@ let make = (~authenticityToken, _children) => {
         </div>
         <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-2xl w-full mx-auto relative">
-            {
-              state.courses
-              |> Course.sort
-              |> List.map(course =>
-                   <div
-                     key={course |> Course.id |> string_of_int}
-                     className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
-                     <div
-                       className="flex w-full"
-                       key={course |> Course.id |> string_of_int}>
-                       <a
-                         className="cursor-pointer flex flex-1 items-center py-6 px-4 hover:bg-gray-100"
-                         onClick={
-                           _ =>
-                             send(
-                               UpdateEditorAction(ShowForm(Some(course))),
-                             )
-                         }>
-                         <div>
-                           <span className="text-black font-semibold">
-                             {course |> Course.name |> str}
-                           </span>
-                         </div>
-                       </a>
-                       <a
-                         href={
-                           "/school/courses/"
-                           ++ (course |> Course.id |> string_of_int)
-                           ++ "/students"
-                         }
-                         className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
-                         {"view" |> str}
-                       </a>
-                     </div>
-                   </div>
-                 )
-              |> Array.of_list
-              |> ReasonReact.array
-            }
+            {state.courses
+             |> Course.sort
+             |> List.map(course =>
+                  <div
+                    key={course |> Course.id |> string_of_int}
+                    className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
+                    <div
+                      className="flex w-full"
+                      key={course |> Course.id |> string_of_int}>
+                      <a
+                        className="cursor-pointer flex flex-1 items-center py-6 px-4 hover:bg-gray-100"
+                        onClick={_ =>
+                          send(UpdateEditorAction(ShowForm(Some(course))))
+                        }>
+                        <div>
+                          <span className="text-black font-semibold">
+                            {course |> Course.name |> str}
+                          </span>
+                        </div>
+                      </a>
+                      <a
+                        href={
+                          "/school/courses/"
+                          ++ (course |> Course.id |> string_of_int)
+                          ++ "/students"
+                        }
+                        className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
+                        {"view" |> str}
+                      </a>
+                    </div>
+                  </div>
+                )
+             |> Array.of_list
+             |> ReasonReact.array}
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ type t = {
   userNames: string,
   levelNumber: string,
   levelId: string,
-  evaluationCriteria: array(CoursesReview__EvaluationCriterion.t),
+  evaluationCriteria: array(EvaluationCriterion.t),
 };
 let submissions = t => t.submissions;
 let targetId = t => t.targetId;
@@ -44,7 +44,7 @@ let decodeJS = details =>
     ~evaluationCriteria=
       details##evaluationCriteria
       |> Js.Array.map(ec =>
-           CoursesReview__EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
+           EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
          ),
   );
 

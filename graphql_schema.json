@@ -2357,13 +2357,9 @@
                   "name": "endsAt",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },
@@ -3511,13 +3507,9 @@
                   "name": "endsAt",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },

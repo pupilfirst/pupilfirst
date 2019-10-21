@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_174853) do
+ActiveRecord::Schema.define(version: 2019_10_21_131557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -578,14 +578,6 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "target_content_versions", force: :cascade do |t|
-    t.bigint "target_id"
-    t.integer "content_blocks", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["target_id"], name: "index_target_content_versions_on_target_id"
-  end
-
   create_table "target_evaluation_criteria", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "evaluation_criterion_id"
@@ -765,7 +757,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
     t.string "behance_url"
     t.string "skype_id"
     t.bigint "school_id"
-    t.jsonb "preferences", default: "{}", null: false
+    t.jsonb "preferences", default: {}, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string "affiliation"
@@ -843,7 +835,6 @@ ActiveRecord::Schema.define(version: 2019_10_01_174853) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
-  add_foreign_key "target_content_versions", "targets"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

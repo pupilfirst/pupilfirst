@@ -3,7 +3,7 @@ module Mutations
     argument :id, ID, required: true
     argument :name, String, required: true
     argument :description, String, required: true
-    argument :ends_at, String, required: true
+    argument :ends_at, Types::DateType, required: false
     argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
     argument :enable_leaderboard, Boolean, required: true
     argument :about, String, required: true

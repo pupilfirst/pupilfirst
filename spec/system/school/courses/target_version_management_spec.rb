@@ -24,7 +24,7 @@ feature 'Target Content Version Management', js: true do
   let!(:cb_4) { create :content_block, :embed }
 
   # Create few content blocks for target_1 for old versions
-  let!(:cb_5) { create :content_block, :markdown, created_at: 3.days.ago }
+  let!(:cb_5) { create :content_block, :file, created_at: 3.days.ago }
   let!(:cb_6) { create :content_block, :embed, created_at: 3.days.ago }
 
   let!(:cb_7) { create :content_block, :file, created_at: 2.days.ago }
@@ -47,8 +47,6 @@ feature 'Target Content Version Management', js: true do
 
   context 'admin modifies content of a target with content' do
     before do
-      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
-
       # Create current version for the target
       target_1.content_versions.create!(content_block: cb_1, version_on: Date.today, sort_index: 1)
       target_1.content_versions.create!(content_block: cb_2, version_on: Date.today, sort_index: 2)
@@ -56,17 +54,15 @@ feature 'Target Content Version Management', js: true do
       target_1.content_versions.create!(content_block: cb_4, version_on: Date.today, sort_index: 4)
 
       # Create couple of old content versions for target 1
-      travel_to 3.days.ago do
-        target_1.content_versions.create!(content_block: cb_5, version_on: Date.today, sort_index: 1)
-        target_1.content_versions.create!(content_block: cb_6, version_on: Date.today, sort_index: 2)
-      end
+      target_1.content_versions.create!(content_block: cb_5, version_on: 3.days.ago, sort_index: 1)
+      target_1.content_versions.create!(content_block: cb_6, version_on: 3.days.ago, sort_index: 2)
 
-      travel_to 2.days.ago do
-        target_1.content_versions.create!(content_block: cb_7, version_on: Date.today, sort_index: 1)
-      end
+      target_1.content_versions.create!(content_block: cb_7, version_on: 2.days.ago, sort_index: 1)
     end
 
     scenario 'modifies content today' do
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+
       expect(page).to have_text(target_1.title)
       find('.target-group__target', text: target_1.title).click
       expect(page).to_not have_selector('.add-content-block--open', count: 1)
@@ -141,6 +137,8 @@ feature 'Target Content Version Management', js: true do
 
     scenario 'modifies content on a future date' do
       travel_to 2.days.from_now do
+        sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+
         expect(page).to have_text(target_1.title)
         find('.target-group__target', text: target_1.title).click
         expect(page).to_not have_selector('.add-content-block--open', count: 1)
@@ -233,15 +231,23 @@ feature 'Target Content Version Management', js: true do
     end
 
     scenario 'restores to an old version' do
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+
       # View an old version of the target
       find('.target-group__target', text: target_1.title).click
       expect(page).to have_button('Edit')
       expect(page).to_not have_selector('.add-content-block--open', count: 1)
 
       click_button format_date(Date.today)
-      expect(page).to have_text(format_date(3.days.ago))
+
+      # There should be two options in the dropdown.
       expect(page).to have_selector('.target-editor__version-dropdown-list-item', count: 2)
-      find('#version-selection-list').find('li', text: format_date(3.days.ago)).click
+
+      within('#version-selection-list') do
+        find('li', text: format_date(3.days.ago)).click
+      end
+
+      expect(page).to have_text(cb_5.content['title'])
 
       accept_confirm do
         click_button('Restore this version')

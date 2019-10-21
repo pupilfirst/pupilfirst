@@ -2,7 +2,7 @@ type t = {
   id: string,
   name: string,
   number: int,
-  unlockOn: option(string),
+  unlockOn: option(Js.Date.t),
 };
 
 let id = t => t.id;
@@ -19,7 +19,9 @@ let decode = json =>
     name: json |> field("name", string),
     number: json |> field("number", int),
     unlockOn:
-      json |> field("unlockOn", nullable(string)) |> Js.Null.toOption,
+      json
+      |> optional(field("unlockOn", string))
+      |> OptionUtils.map(DateFns.parseString),
   };
 
 let selectLevel = (levels, level_name) =>

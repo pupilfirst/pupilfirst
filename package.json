@@ -29,6 +29,7 @@
     "prismjs": "^1.16.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-datepicker": "^2.9.6",
     "react-dom": "^16.8.6",
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",

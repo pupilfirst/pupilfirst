@@ -25,14 +25,45 @@ let updateChecklist = (checklistItem, index, setState) => {
   );
 };
 
+let updateChecklistItem = (checklistItem, itemIndex, setState) => {
+  setState(state =>
+    {
+      ...state,
+      reviewChecklist:
+        state.reviewChecklist
+        |> ReviewChecklistItem.replace(checklistItem, itemIndex),
+    }
+  );
+};
+
+let updateChecklistItemTitle = (itemIndex, title, checklistItem, setState) => {
+  updateChecklistItem(
+    ReviewChecklistItem.updateTitle(title, checklistItem),
+    itemIndex,
+    setState,
+  );
+};
+
+let updateChecklistResultTitle =
+    (itemIndex, resultIndex, title, reviewChecklistItem, resultItem, setState) => {
+  let newReviewChecklistItem =
+    reviewChecklistItem
+    |> ReviewChecklistItem.updateChecklist(
+         reviewChecklistItem
+         |> ReviewChecklistItem.checklist
+         |> ReviewChecklistResult.updateTitle(title, resultItem, resultIndex),
+       );
+  updateChecklistItem(newReviewChecklistItem, itemIndex, setState);
+};
+
 [@react.component]
 let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
   let (state, setState) =
     React.useState(() => {reviewChecklist, saving: false});
   <div>
     {state.reviewChecklist
-     |> Array.mapi((i, reviewChecklistItem) =>
-          <div className="mt-2" key={i |> string_of_int}>
+     |> Array.mapi((itemIndex, reviewChecklistItem) =>
+          <div className="mt-2" key={itemIndex |> string_of_int}>
             <div className="mt-5">
               <input
                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -41,12 +72,10 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                 placeholder="Add title for checklist item"
                 value={reviewChecklistItem |> ReviewChecklistItem.title}
                 onChange={event =>
-                  updateChecklist(
-                    reviewChecklistItem
-                    |> ReviewChecklistItem.updateTitle(
-                         ReactEvent.Form.target(event)##value,
-                       ),
-                    i,
+                  updateChecklistItemTitle(
+                    itemIndex,
+                    ReactEvent.Form.target(event)##value,
+                    reviewChecklistItem,
                     setState,
                   )
                 }
@@ -59,15 +88,18 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
             <div>
               {reviewChecklistItem
                |> ReviewChecklistItem.checklist
-               |> Array.mapi((index, checklistItem) => {
+               |> Array.mapi((resultIndex, resultItem) => {
                     let feedback =
-                      switch (checklistItem |> ReviewChecklistResult.feedback) {
+                      switch (resultItem |> ReviewChecklistResult.feedback) {
                       | Some(f) => f
                       | None => ""
                       };
                     <div
                       className="px-2 mt-2"
-                      key={(i |> string_of_int) ++ (index |> string_of_int)}>
+                      key={
+                        (itemIndex |> string_of_int)
+                        ++ (resultIndex |> string_of_int)
+                      }>
                       <div className="flex">
                         // <Checkbox id="" label="" onChange=checkboxOnChange />
 
@@ -80,21 +112,15 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                                 type_="text"
                                 placeholder="Add title for checklist item"
                                 value={
-                                  checklistItem |> ReviewChecklistResult.title
+                                  resultItem |> ReviewChecklistResult.title
                                 }
                                 onChange={event =>
-                                  updateChecklist(
-                                    reviewChecklistItem
-                                    |> ReviewChecklistItem.updateChecklist(
-                                         reviewChecklistItem
-                                         |> ReviewChecklistItem.checklist
-                                         |> ReviewChecklistResult.updateTitle(
-                                              ReactEvent.Form.target(event)##value,
-                                              checklistItem,
-                                              index,
-                                            ),
-                                       ),
-                                    i,
+                                  updateChecklistResultTitle(
+                                    itemIndex,
+                                    resultIndex,
+                                    ReactEvent.Form.target(event)##value,
+                                    reviewChecklistItem,
+                                    resultItem,
                                     setState,
                                   )
                                 }
@@ -102,7 +128,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                               <School__InputGroupError
                                 message="Title should greate than 2 charcahters"
                                 active={
-                                  checklistItem
+                                  resultItem
                                   |> ReviewChecklistResult.title == ""
                                 }
                               />
@@ -121,11 +147,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                                        |> ReviewChecklistItem.checklist
                                        |> ReviewChecklistResult.updateFeedback(
                                             ReactEvent.Form.target(event)##value,
-                                            checklistItem,
-                                            index,
+                                            resultItem,
+                                            resultIndex,
                                           ),
                                      ),
-                                  i,
+                                  itemIndex,
                                   setState,
                                 )
                               }
@@ -144,7 +170,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                       updateChecklist(
                         reviewChecklistItem
                         |> ReviewChecklistItem.appendEmptyChecklistItem,
-                        i,
+                        itemIndex,
                         setState,
                       )
                     }>

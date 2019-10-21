@@ -22,7 +22,10 @@ let updateReviewChecklist =
 };
 
 let handleEmpty = (setState, updateReviewChecklistCB) => {
-  <div className="py-4 flex justify-center">
+  <div className="py-4">
+    <div className="text-sm">
+      {"Prepare for your review by creating a checklist" |> str}
+    </div>
     <button
       className="btn btn-primary"
       onClick={_ =>

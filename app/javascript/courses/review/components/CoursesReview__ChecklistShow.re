@@ -37,7 +37,7 @@ let generateFeedback =
     (reviewChecklist, selection, feedback, updateFeedbackCB) => {
   let newFeedback =
     feedback
-    ++ " <br> "
+    ++ "\n\n"
     ++ (
       reviewChecklist
       |> Array.mapi((i, reviewChecklistItem) => {
@@ -62,7 +62,7 @@ let generateFeedback =
       |> Array.to_list
       |> List.flatten
       |> Array.of_list
-      |> Js.Array.joinWith(" <br> ")
+      |> Js.Array.joinWith("\n\n")
     );
   updateFeedbackCB(newFeedback);
 };

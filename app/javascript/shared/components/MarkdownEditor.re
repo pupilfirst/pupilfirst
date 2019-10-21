@@ -45,7 +45,6 @@ type attachment =
   | ReadyToAttachFile(attachmentError);
 
 type state = {
-  markdown: string,
   preview: bool,
   commandPair,
   attachment,
@@ -53,7 +52,6 @@ type state = {
 };
 
 type action =
-  | UpdateMarkdown(string)
   | TogglePreview
   | SetCommand(command)
   | SetAttaching
@@ -62,7 +60,6 @@ type action =
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateMarkdown(markdown) => {...state, markdown}
   | AddAttachment(markdownEmbedCode) => {
       ...state,
       insertText: Some(markdownEmbedCode),
@@ -118,12 +115,12 @@ let handleCommandClick = (command, send, event) => {
   send(SetCommand(command));
 };
 
-let buttons = (state, send, previewButtonPosition) => {
+let buttons = (value, state, send, previewButtonPosition) => {
   let classes = "markdown-button-group__button hover:bg-primary-100 hover:text-primary-400 focus:outline-none focus:text-primary-600";
 
   let previewOrEditButton =
     (
-      switch (state.markdown) {
+      switch (value) {
       | "" => React.null
       | _someMarkdown =>
         <button
@@ -239,14 +236,6 @@ let isEditorDisabled = attachment =>
   | ReadyToAttachFile(_) => false
   };
 
-let conditionallyUseCallback = (value, send, updateMarkdownCB, newMarkdown) =>
-  if (value == newMarkdown) {
-    ();
-  } else {
-    send(UpdateMarkdown(newMarkdown));
-    updateMarkdownCB(newMarkdown);
-  };
-
 [@react.component]
 let make =
     (
@@ -264,7 +253,6 @@ let make =
     React.useReducer(
       reducer,
       {
-        markdown: value,
         preview:
           switch (defaultView) {
           | Preview => true
@@ -312,12 +300,12 @@ let make =
       className="flex justify-between items-end bg-white rounded-t-lg pb-2 sticky top-0 z-20">
       label
       <div className="flex markdown-button-group h-9 overflow-hidden">
-        {buttons(state, send, previewButtonPosition)}
+        {buttons(value, state, send, previewButtonPosition)}
       </div>
     </div>
     {if (state.preview) {
        <MarkdownBlock
-         markdown={state.markdown}
+         markdown=value
          className="pb-3 pt-2 leading-relaxed px-3 text-base border border-transparent bg-gray-100 markdown-editor-preview"
          profile
        />;
@@ -337,12 +325,8 @@ let make =
            <DraftEditor
              ariaLabelledBy=id
              ?placeholder
-             content={state.markdown}
-             onChange={conditionallyUseCallback(
-               state.markdown,
-               send,
-               updateMarkdownCB,
-             )}
+             content=value
+             onChange=updateMarkdownCB
              ?command
              commandAt=?{state.commandPair.commandAt}
              insertText=?{state.insertText}

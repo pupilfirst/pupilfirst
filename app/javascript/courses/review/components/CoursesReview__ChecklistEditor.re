@@ -1,5 +1,5 @@
 [@bs.config {jsx: 3}];
-[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
+[%bs.raw {|require("./CoursesReview__ChecklistEditor.css")|}];
 
 open CoursesReview__Types;
 
@@ -109,10 +109,10 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
     {state.reviewChecklist
      |> Array.mapi((itemIndex, reviewChecklistItem) =>
           <div className="mt-2" key={itemIndex |> string_of_int}>
-            <div className="mt-5 flex">
+            <div className="flex items-center">
               <div className="w-full">
                 <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="checklist-editor__checklist-item-title focus:outline-none focus:bg-white focus:border-primary-300"
                   id="checklist_title"
                   type_="text"
                   placeholder="Add title for checklist item"
@@ -127,7 +127,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                   }
                 />
                 <School__InputGroupError
-                  message="Title should greate than 2 charcahters"
+                  message="Title should be greater than 2 characters"
                   active={
                     reviewChecklistItem |> ReviewChecklistItem.title == ""
                   }
@@ -149,18 +149,20 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                       | None => ""
                       };
                     <div
-                      className="px-2 mt-2"
+                      className="px-2 md:px-4 mt-2"
                       key={
                         (itemIndex |> string_of_int)
                         ++ (resultIndex |> string_of_int)
                       }>
                       <div className="flex">
-                        <Checkbox id="" label="" onChange={_ => ()} />
-                        <div
-                          className="w-full bg-white border border-gray-400 rounded">
-                          <div className="">
+                        <label
+                          title="Disabled"
+                          className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
+                        />
+                        <div className="w-full bg-gray-100">
+                          <div>
                             <input
-                              className="appearance-none py-1 px-4 mt-2 leading-tight w-full focus:outline-none focus:bg-white focus:border-gray-500"
+                              className="checklist-editor__checklist-result-item-title focus:outline-none focus:bg-white focus:border-primary-300"
                               id={
                                 "result_"
                                 ++ (resultIndex |> string_of_int)
@@ -181,14 +183,14 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                               }
                             />
                             <School__InputGroupError
-                              message="Title should greate than 2 charcahters"
+                              message="Title should be greater than 2 characters"
                               active={
                                 resultItem |> ReviewChecklistResult.title == ""
                               }
                             />
                           </div>
                           <textarea
-                            className="appearance-none border-t border-gray-400 py-1 px-4 leading-tight w-full bg-gray-200  focus:outline-none focus:bg-white focus:border-gray-500"
+                            className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm py-2 px-4 leading-tight w-full focus:outline-none focus:bg-white focus:border-primary-300"
                             id={
                               "result_"
                               ++ (resultIndex |> string_of_int)

@@ -82,7 +82,8 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
     {reviewChecklist
      |> Array.mapi((i, reviewChecklistItem) =>
           <div className="" key={i |> string_of_int}>
-            <h4 className="text-base font-semibold w-full md:w-4/5">
+            <h4
+              className="text-base font-semibold mt-4 md:mt-0 w-full md:w-4/5">
               {reviewChecklistItem |> ReviewChecklistItem.title |> str}
             </h4>
             <div>
@@ -90,7 +91,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                |> ReviewChecklistItem.result
                |> Array.mapi((index, checklistItem) =>
                     <div
-                      className="px-2 mt-2"
+                      className="px-2 md:px-4 mt-2"
                       key={(i |> string_of_int) ++ (index |> string_of_int)}>
                       <Checkbox
                         id={
@@ -101,12 +102,12 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                         label={checklistItem |> ReviewChecklistResult.title}
                         onChange={checkboxOnChange(i, index, setSelecton)}
                       />
-                      <div className="pl-7">
+                      <div className="pl-7 pb-2">
                         {switch (
                            checklistItem |> ReviewChecklistResult.feedback
                          ) {
                          | Some(feedback) =>
-                           <div className="text-xs"> {feedback |> str} </div>
+                           <div className="text-sm"> {feedback |> str} </div>
                          | None => React.null
                          }}
                       </div>
@@ -117,18 +118,20 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
           </div>
         )
      |> React.array}
-    <button
-      className="btn btn-primary mt-4 w-full"
-      disabled={selection |> ListUtils.isEmpty}
-      onClick={_ =>
-        generateFeedback(
-          reviewChecklist,
-          selection,
-          feedback,
-          updateFeedbackCB,
-        )
-      }>
-      {"Generate Feedback" |> str}
-    </button>
+    <div className="text-center max-w-xs mx-auto mt-6">
+      <button
+        className="btn btn-primary btn-large w-full "
+        disabled={selection |> ListUtils.isEmpty}
+        onClick={_ =>
+          generateFeedback(
+            reviewChecklist,
+            selection,
+            feedback,
+            updateFeedbackCB,
+          )
+        }>
+        {"Generate Feedback" |> str}
+      </button>
+    </div>
   </div>;
 };

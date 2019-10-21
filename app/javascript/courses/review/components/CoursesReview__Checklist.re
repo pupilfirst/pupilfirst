@@ -22,12 +22,12 @@ let updateReviewChecklist =
 };
 
 let handleEmpty = (setState, updateReviewChecklistCB) => {
-  <div className="py-4">
+  <div className="text-center">
     <div className="text-sm">
       {"Prepare for your review by creating a checklist" |> str}
     </div>
     <button
-      className="btn btn-primary"
+      className="btn btn-large btn-primary mt-4"
       onClick={_ =>
         updateReviewChecklist(
           setState,
@@ -46,28 +46,26 @@ let make =
   let (state, setState) = React.useState(() => {editMode: false});
   <div className="pb-4 md:pb-6">
     <h5 className="font-semibold text-sm"> {"Review Checklist" |> str} </h5>
-    <div className="bg-gray-200 rounded-lg mt-2">
-      <div className="px-4">
-        {switch (reviewChecklist |> ArrayUtils.isEmpty, state.editMode) {
-         | (true, _) => handleEmpty(setState, updateReviewChecklistCB)
-         | (false, true) =>
-           <CoursesReview__ChecklistEditor
-             reviewChecklist
-             updateReviewChecklistCB={updateReviewChecklist(
-               setState,
-               updateReviewChecklistCB,
-             )}
-             closeEditModeCB={closeEditMode(setState)}
-           />
-         | (false, false) =>
-           <CoursesReview__ChecklistShow
-             reviewChecklist
-             feedback
-             updateFeedbackCB
-             showEditorCB={showEditor(setState)}
-           />
-         }}
-      </div>
+    <div className="bg-gray-100 rounded-sm mt-2 p-2 md:p-4">
+      {switch (reviewChecklist |> ArrayUtils.isEmpty, state.editMode) {
+       | (true, _) => handleEmpty(setState, updateReviewChecklistCB)
+       | (false, true) =>
+         <CoursesReview__ChecklistEditor
+           reviewChecklist
+           updateReviewChecklistCB={updateReviewChecklist(
+             setState,
+             updateReviewChecklistCB,
+           )}
+           closeEditModeCB={closeEditMode(setState)}
+         />
+       | (false, false) =>
+         <CoursesReview__ChecklistShow
+           reviewChecklist
+           feedback
+           updateFeedbackCB
+           showEditorCB={showEditor(setState)}
+         />
+       }}
     </div>
   </div>;
 };

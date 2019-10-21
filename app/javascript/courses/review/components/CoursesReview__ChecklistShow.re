@@ -71,18 +71,20 @@ let generateFeedback =
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
-  <div>
-    <div className="flex justify-end px-4">
-      <button className="btn btn-primary mt-2" onClick={_ => showEditorCB()}>
+  <div className="relative">
+    <div className="relative w-full md:absolute md:w-auto right-0 top-0">
+      <button
+        className="btn btn-small btn-primary-ghost w-full md:w-auto"
+        onClick={_ => showEditorCB()}>
         {"Edit Checklist" |> str}
       </button>
     </div>
     {reviewChecklist
      |> Array.mapi((i, reviewChecklistItem) =>
-          <div className="mt-2" key={i |> string_of_int}>
-            <div className="text-lg font-semibold mt-2">
+          <div className="" key={i |> string_of_int}>
+            <h4 className="text-base font-semibold w-full md:w-4/5">
               {reviewChecklistItem |> ReviewChecklistItem.title |> str}
-            </div>
+            </h4>
             <div>
               {reviewChecklistItem
                |> ReviewChecklistItem.checklist

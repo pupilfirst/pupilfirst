@@ -362,7 +362,7 @@ let make =
                        {error |> str}
                      </span>
                    | None =>
-                     <span className="text-sm">
+                     <span className="text-xs">
                        <FaIcon classes="far fa-file-image mr-2" />
                        {"Click here to attach a file." |> str}
                      </span>

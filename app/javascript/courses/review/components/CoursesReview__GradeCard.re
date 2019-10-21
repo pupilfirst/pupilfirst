@@ -388,7 +388,6 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
 };
 
 let updateFeedbackCB = (setState, newFeedback) => {
-  Js.log(newFeedback);
   setState(state => {...state, newFeedback});
 };
 
@@ -429,6 +428,7 @@ let showFeedbackForm =
       updateFeedbackCB={updateFeedbackCB(setState)}
       reviewChecklist
       updateReviewChecklistCB
+      showChecklist=true
     />
   | _ => React.null
   };

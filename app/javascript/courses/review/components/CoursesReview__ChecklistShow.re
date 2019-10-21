@@ -22,7 +22,7 @@ let unSelectChecklist = (itemIndex, resultIndex, setSelecton) => {
   setSelecton(selection =>
     selection
     |> List.filter(item =>
-         item.itemIndex != itemIndex && item.resultIndex != resultIndex
+         !(item.itemIndex == itemIndex && item.resultIndex == resultIndex)
        )
   );
 };
@@ -33,16 +33,42 @@ let checkboxOnChange = (itemIndex, resultIndex, setSelecton, event) => {
     : unSelectChecklist(itemIndex, resultIndex, setSelecton);
 };
 
-let generateFeedback = (reviewChecklist, selection, updateFeedbackCB) => {
-  ()//        // reviewChecklistItem
-    //   reviewChecklist
-    ; //        => selection |> List.mem(target |> Target.targetGroupId))
- //   |> Array.mapi((i, reviewChecklistItem)
-    // ;
+let generateFeedback =
+    (reviewChecklist, selection, feedback, updateFeedbackCB) => {
+  let newFeedback =
+    feedback
+    ++ " <br> "
+    ++ (
+      reviewChecklist
+      |> Array.mapi((i, reviewChecklistItem) => {
+           let resultIndexList =
+             selection
+             |> List.filter(selectionItem => selectionItem.itemIndex == i)
+             |> List.map(item => item.resultIndex);
+
+           reviewChecklistItem
+           |> ReviewChecklistItem.checklist
+           |> Array.mapi((index, resultItem) =>
+                resultIndexList |> List.mem(index)
+                  ? switch (resultItem |> ReviewChecklistResult.feedback) {
+                    | Some(feedback) => [feedback]
+                    | None => []
+                    }
+                  : []
+              )
+           |> Array.to_list
+           |> List.flatten;
+         })
+      |> Array.to_list
+      |> List.flatten
+      |> Array.of_list
+      |> Js.Array.joinWith(" <br> ")
+    );
+  updateFeedbackCB(newFeedback);
 };
 
 [@react.component]
-let make = (~reviewChecklist, ~updateFeedbackCB, ~showEditorCB) => {
+let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
   <div>
@@ -91,8 +117,14 @@ let make = (~reviewChecklist, ~updateFeedbackCB, ~showEditorCB) => {
      |> React.array}
     <button
       className="btn btn-primary mt-4 w-full"
+      disabled={selection |> ListUtils.isEmpty}
       onClick={_ =>
-        generateFeedback(reviewChecklist, selection, updateFeedbackCB)
+        generateFeedback(
+          reviewChecklist,
+          selection,
+          feedback,
+          updateFeedbackCB,
+        )
       }>
       {"Generate Feedback" |> str}
     </button>

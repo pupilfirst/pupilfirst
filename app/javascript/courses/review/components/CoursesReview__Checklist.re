@@ -20,7 +20,8 @@ let updateReviewChecklist =
 };
 
 [@react.component]
-let make = (~reviewChecklist, ~updateFeedbackCB, ~updateReviewChecklistCB) => {
+let make =
+    (~reviewChecklist, ~updateFeedbackCB, ~feedback, ~updateReviewChecklistCB) => {
   let (state, setState) = React.useState(() => {editMode: true});
   <div className="">
     <div>
@@ -42,6 +43,7 @@ let make = (~reviewChecklist, ~updateFeedbackCB, ~updateReviewChecklistCB) => {
              />
            : <CoursesReview__ChecklistShow
                reviewChecklist
+               feedback
                updateFeedbackCB
                showEditorCB={showEditor(setState)}
              />}

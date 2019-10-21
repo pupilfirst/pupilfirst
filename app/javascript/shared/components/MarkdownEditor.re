@@ -258,6 +258,7 @@ let make =
       ~profile,
       ~maxLength=1000,
       ~defaultView,
+      ~insertText=?,
     ) => {
   let (state, send) =
     React.useReducer(
@@ -274,7 +275,7 @@ let make =
           commandAt: None,
         },
         attachment: ReadyToAttachFile(None),
-        insertText: None,
+        insertText,
       },
     );
 

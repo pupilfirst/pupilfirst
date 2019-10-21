@@ -59,7 +59,6 @@ let getTeams =
       updateTeamsCB,
     ) => {
   setLoading(_ => true);
-  Js.log(selectedLevel);
   (
     switch (selectedLevel, cursor) {
     | (Some(level), Some(cursor)) =>
@@ -90,12 +89,51 @@ let getTeams =
   |> ignore;
 };
 
+let teamsList = (teams, levels, openOverlayCB) => {
+  teams
+  |> Array.map(team =>
+       <div
+         key={team |> CoursesStudents__TeamInfo.id}
+         onClick={_ => openOverlayCB}
+         ariaLabel={"team-card-" ++ (team |> CoursesStudents__TeamInfo.id)}
+         className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
+         <div className="w-full md:w-3/4">
+           <div className="block text-sm md:pr-2">
+             <span
+               className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
+               {team |> CoursesStudents__TeamInfo.name |> str}
+             </span>
+           </div>
+         </div>
+       </div>
+     )
+  |> React.array;
+};
+
+let showTeams = (teams, levels, openOverlayCB) => {
+  teams |> ArrayUtils.isEmpty
+    ? <div
+        className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
+        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+          {"No teams to show" |> str}
+        </h5>
+      </div>
+    : teamsList(teams, levels, openOverlayCB);
+};
+
 [@react.component]
-let make = (~levels, ~selectedLevel, ~teams, ~courseId, ~updateTeamsCB) => {
+let make =
+    (
+      ~levels,
+      ~selectedLevel,
+      ~teams,
+      ~courseId,
+      ~updateTeamsCB,
+      ~openOverlayCB,
+    ) => {
   let (loading, setLoading) = React.useState(() => false);
   React.useEffect1(
     () => {
-      Js.log(teams);
       switch ((teams: Teams.t)) {
       | Unloaded =>
         getTeams(
@@ -116,53 +154,34 @@ let make = (~levels, ~selectedLevel, ~teams, ~courseId, ~updateTeamsCB) => {
   );
 
   <div>
-    {switch ((teams: Teams.t)) {
+    {switch (teams) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
      | PartiallyLoaded(teams, cursor) =>
-       teams
-       |> Array.map(team =>
-            <div
-              key={team |> TeamInfo.id}
-              ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
-              className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
-              <div className="w-full md:w-3/4">
-                <div className="block text-sm md:pr-2">
-                  <span
-                    className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                    {team
-                     |> TeamInfo.levelId
-                     |> Level.unsafeLevelNumber(levels, "studentsList")
-                     |> str}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )
-       |> React.array
-     | FullyLoaded(teams) =>
-       teams
-       |> Array.map(team =>
-            <div
-              key={team |> CoursesStudents__TeamInfo.id}
-              ariaLabel={
-                "team-card-" ++ (team |> CoursesStudents__TeamInfo.id)
-              }
-              className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
-              <div className="w-full md:w-3/4">
-                <div className="block text-sm md:pr-2">
-                  <span
-                    className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                    {team
-                     |> CoursesStudents__TeamInfo.levelId
-                     |> Level.unsafeLevelNumber(levels, "studentsList")
-                     |> str}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )
-       |> React.array
+       <div>
+         {showTeams(teams, levels, openOverlayCB)}
+         {loading
+            ? SkeletonLoading.multiple(
+                ~count=3,
+                ~element=SkeletonLoading.card(),
+              )
+            : <button
+                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                onClick={_ =>
+                  getTeams(
+                    AuthenticityToken.fromHead(),
+                    courseId,
+                    Some(cursor),
+                    setLoading,
+                    selectedLevel,
+                    teams,
+                    updateTeamsCB,
+                  )
+                }>
+                {"Load More..." |> str}
+              </button>}
+       </div>
+     | FullyLoaded(teams) => showTeams(teams, levels, openOverlayCB)
      }}
   </div>;
 };

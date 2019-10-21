@@ -84,6 +84,10 @@ let updateTeams = (~setState, ~teams, ~hasNextPage, ~endCursor) =>
     }
   );
 
+let openOverlayCB = {
+  Js.log("Open Overlay");
+};
+
 [@react.component]
 let make = (~levels, ~course) => {
   let (state, setState) =
@@ -121,6 +125,7 @@ let make = (~levels, ~course) => {
           teams={state.teams}
           courseId={course |> Course.id}
           updateTeamsCB={updateTeams(~setState)}
+          openOverlayCB
         />
       </div>
     </div>

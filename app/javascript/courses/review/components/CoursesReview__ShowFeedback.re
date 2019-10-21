@@ -109,7 +109,7 @@ let make =
   <div ariaLabel="feedback-section">
     {showFeedback(feedback)}
     {reviewed
-       ? <div className="border-t bg-white rounded-b-lg">
+       ? <div className="bg-white rounded-b-lg">
            {state.showFeedbackEditor
               ? <div className="p-4 md:p-6">
                   <DisablingCover disabled={state.saving}>

@@ -41,14 +41,9 @@ let handleEmpty = (setState, updateReviewChecklistCB) => {
 let make =
     (~reviewChecklist, ~updateFeedbackCB, ~feedback, ~updateReviewChecklistCB) => {
   let (state, setState) = React.useState(() => {editMode: false});
-  <div className="">
-    <div>
-      <div className="text-xl"> {"Review Prep Checklist" |> str} </div>
-      <div className="text-sm">
-        {"Prepare for your review by creating a checklist" |> str}
-      </div>
-    </div>
-    <div className="bg-gray-300 rounded-lg mt-2">
+  <div className="pb-4 md:pb-6">
+    <h5 className="font-semibold text-sm"> {"Review Checklist" |> str} </h5>
+    <div className="bg-gray-200 rounded-lg mt-2">
       <div className="px-4">
         {switch (reviewChecklist |> ArrayUtils.isEmpty, state.editMode) {
          | (true, _) => handleEmpty(setState, updateReviewChecklistCB)

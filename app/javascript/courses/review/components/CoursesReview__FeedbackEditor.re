@@ -28,7 +28,7 @@ let make =
     ) => {
   let (textareaId, setTextareaId) = React.useState(() => generateRandomId());
   let (showChecklist, setShowCHecklist) = React.useState(() => showChecklist);
-  <div className="pt-4 md:pt-5 course-review__feedback-editor">
+  <div className="pt-4 md:pt-6 course-review__feedback-editor">
     <div>
       {showChecklist
          ? <CoursesReview__Checklist

@@ -491,10 +491,8 @@ let make =
          state,
          setState,
        )}
-      <div className="w-full pb-4 pt-4 md:pt-5">
-        <div className="font-semibold text-sm lg:text-base">
-          {"Grade Card" |> str}
-        </div>
+      <div className="w-full py-4 md:py-6">
+        <div className="font-semibold text-sm"> {"Grade Card" |> str} </div>
         <div className="flex md:flex-row flex-col">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
@@ -529,7 +527,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white py-4 mx-3 md:mx-6 border-t">
+       <div className="bg-white py-4 md:pb-6 mx-3 md:mx-6">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

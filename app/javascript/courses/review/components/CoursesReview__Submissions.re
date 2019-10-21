@@ -191,7 +191,7 @@ let make =
   <div
     ariaLabel={"submissions-overlay-card-" ++ (submission |> Submission.id)}
     className={cardClasses(submission)}>
-    <div className="rounded-b-lg shadow-md">
+    <div className="rounded-b-lg shadow">
       <div
         className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
         <div className="flex flex-col w-full sm:w-auto">

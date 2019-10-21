@@ -22,6 +22,15 @@ let empty = () => {
   [|
     make(
       ~title="Default checklist",
+      ~checklist=[|CoursesReview__ReviewChecklistResult.empty()|],
+    ),
+  |];
+};
+
+let emptyTemplate = () => {
+  [|
+    make(
+      ~title="Default checklist",
       ~checklist=CoursesReview__ReviewChecklistResult.emptyTemplate(),
     ),
   |];

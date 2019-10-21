@@ -13,13 +13,13 @@ let decodeJS = data => {
 
 let emptyTemplate = () => {
   [|
-    make(~title="Yes", ~feedback=Some("Sample text for yes")),
-    make(~title="No", ~feedback=Some("Sample text for no")),
+    make(~title="Yes", ~feedback=Some("Sample feedback for yes")),
+    make(~title="No", ~feedback=Some("Sample feedback for no")),
   |];
 };
 
 let empty = () => {
-  make(~title="Sample title", ~feedback=Some("Sample description text"));
+  make(~title="Sample title", ~feedback=Some("Sample feedback text"));
 };
 
 let replace = (t, index, checklist) => {

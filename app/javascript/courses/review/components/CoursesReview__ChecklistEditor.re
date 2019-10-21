@@ -8,22 +8,7 @@ type state = {
   saving: bool,
 };
 
-// let updateChecklistItemTitle = (itemIndex, title, checklist) => checklist |> Array.l(title))
-// let updateChecklistResultTitle = (itemIndex, resultIndex, title, checklist)
-// let updateChecklistResultFeedback = (itemIndex, resultIndex, feedback, checklist)
-
 let str = React.string;
-
-let updateChecklist = (checklistItem, index, setState) => {
-  setState(state =>
-    {
-      ...state,
-      reviewChecklist:
-        state.reviewChecklist
-        |> ReviewChecklistItem.replace(checklistItem, index),
-    }
-  );
-};
 
 let updateChecklistItem = (checklistItem, itemIndex, setState) => {
   setState(state =>
@@ -50,10 +35,51 @@ let updateChecklistResultTitle =
     reviewChecklistItem
     |> ReviewChecklistItem.updateChecklist(
          reviewChecklistItem
-         |> ReviewChecklistItem.checklist
+         |> ReviewChecklistItem.result
          |> ReviewChecklistResult.updateTitle(title, resultItem, resultIndex),
        );
   updateChecklistItem(newReviewChecklistItem, itemIndex, setState);
+};
+
+let updateChecklistResultFeedback =
+    (
+      itemIndex,
+      resultIndex,
+      feedback,
+      reviewChecklistItem,
+      resultItem,
+      setState,
+    ) => {
+  let newReviewChecklistItem =
+    reviewChecklistItem
+    |> ReviewChecklistItem.updateChecklist(
+         reviewChecklistItem
+         |> ReviewChecklistItem.result
+         |> ReviewChecklistResult.updateFeedback(
+              feedback,
+              resultItem,
+              resultIndex,
+            ),
+       );
+  updateChecklistItem(newReviewChecklistItem, itemIndex, setState);
+};
+
+let addEmptyResultItem = (reviewChecklistItem, itemIndex, setState) => {
+  updateChecklistItem(
+    reviewChecklistItem |> ReviewChecklistItem.appendEmptyChecklistItem,
+    itemIndex,
+    setState,
+  );
+};
+
+let addEmptyChecklistItem = setState => {
+  setState(state =>
+    {
+      ...state,
+      reviewChecklist:
+        ReviewChecklistItem.empty() |> Array.append(state.reviewChecklist),
+    }
+  );
 };
 
 [@react.component]
@@ -87,7 +113,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
             </div>
             <div>
               {reviewChecklistItem
-               |> ReviewChecklistItem.checklist
+               |> ReviewChecklistItem.result
                |> Array.mapi((resultIndex, resultItem) => {
                     let feedback =
                       switch (resultItem |> ReviewChecklistResult.feedback) {
@@ -108,7 +134,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                             <div className="">
                               <input
                                 className="appearance-none py-1 px-4 mt-2 leading-tight w-full focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="checklist_title"
+                                id={
+                                  "result_"
+                                  ++ (resultIndex |> string_of_int)
+                                  ++ "_title"
+                                }
                                 type_="text"
                                 placeholder="Add title for checklist item"
                                 value={
@@ -135,23 +165,21 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                             </div>
                             <textarea
                               className="appearance-none border-t border-gray-400 py-1 px-4 leading-tight w-full bg-gray-200  focus:outline-none focus:bg-white focus:border-gray-500"
-                              id="checklist_description"
+                              id={
+                                "result_"
+                                ++ (resultIndex |> string_of_int)
+                                ++ "_feedback"
+                              }
                               type_="text"
-                              placeholder="Add description for checklist item"
+                              placeholder="Add feedback"
                               value=feedback
                               onChange={event =>
-                                updateChecklist(
-                                  reviewChecklistItem
-                                  |> ReviewChecklistItem.updateChecklist(
-                                       reviewChecklistItem
-                                       |> ReviewChecklistItem.checklist
-                                       |> ReviewChecklistResult.updateFeedback(
-                                            ReactEvent.Form.target(event)##value,
-                                            resultItem,
-                                            resultIndex,
-                                          ),
-                                     ),
+                                updateChecklistResultFeedback(
                                   itemIndex,
+                                  resultIndex,
+                                  ReactEvent.Form.target(event)##value,
+                                  reviewChecklistItem,
+                                  resultItem,
                                   setState,
                                 )
                               }
@@ -167,9 +195,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                   <button
                     className="bg-gray-400 px-2 py-1 btn"
                     onClick={_ =>
-                      updateChecklist(
-                        reviewChecklistItem
-                        |> ReviewChecklistItem.appendEmptyChecklistItem,
+                      addEmptyResultItem(
+                        reviewChecklistItem,
                         itemIndex,
                         setState,
                       )
@@ -184,16 +211,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
     <div className="py-2 mt-2">
       <button
         className="bg-gray-400 px-2 py-1 btn w-full"
-        onClick={_ =>
-          setState(state =>
-            {
-              ...state,
-              reviewChecklist:
-                ReviewChecklistItem.empty()
-                |> Array.append(state.reviewChecklist),
-            }
-          )
-        }>
+        onClick={_ => addEmptyChecklistItem(setState)}>
         {"Add Checklist Item" |> str}
       </button>
     </div>

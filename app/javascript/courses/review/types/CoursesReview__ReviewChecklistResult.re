@@ -23,7 +23,8 @@ let empty = () => {
 };
 
 let replace = (t, index, checklist) => {
-  checklist |> ArrayUtils.replace(t, index);
+  checklist
+  |> Array.mapi((resultIndex, result) => resultIndex == index ? t : result);
 };
 
 let updateTitle = (title, t, index, checklist) => {

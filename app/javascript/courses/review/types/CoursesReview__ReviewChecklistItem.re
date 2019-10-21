@@ -1,19 +1,18 @@
 type t = {
   title: string,
-  checklist: array(CoursesReview__ReviewChecklistResult.t),
+  result: array(CoursesReview__ReviewChecklistResult.t),
 };
 let title = t => t.title;
-let checklist = t => t.checklist;
+let result = t => t.result;
 
-let make = (~title, ~checklist) => {title, checklist};
+let make = (~title, ~result) => {title, result};
 
 let decodeJS = data => {
   data
   |> Js.Array.map(rc =>
        make(
          ~title=rc##title,
-         ~checklist=
-           rc##checklist |> CoursesReview__ReviewChecklistResult.decodeJS,
+         ~result=rc##result |> CoursesReview__ReviewChecklistResult.decodeJS,
        )
      );
 };
@@ -22,7 +21,7 @@ let empty = () => {
   [|
     make(
       ~title="Default checklist",
-      ~checklist=[|CoursesReview__ReviewChecklistResult.empty()|],
+      ~result=[|CoursesReview__ReviewChecklistResult.empty()|],
     ),
   |];
 };
@@ -31,29 +30,29 @@ let emptyTemplate = () => {
   [|
     make(
       ~title="Default checklist",
-      ~checklist=CoursesReview__ReviewChecklistResult.emptyTemplate(),
+      ~result=CoursesReview__ReviewChecklistResult.emptyTemplate(),
     ),
   |];
 };
 
 let updateTitle = (title, t) => {
-  make(~title, ~checklist=t.checklist);
+  make(~title, ~result=t.result);
 };
 
-let updateChecklist = (checklist, t) => {
-  make(~title=t.title, ~checklist);
+let updateChecklist = (result, t) => {
+  make(~title=t.title, ~result);
 };
 
-let replace = (t, itemIndex, checklist) => {
-  checklist |> Array.mapi((index, item) => index == itemIndex ? t : item);
+let replace = (t, itemIndex, result) => {
+  result |> Array.mapi((index, item) => index == itemIndex ? t : item);
 };
 
 let appendEmptyChecklistItem = t => {
   make(
     ~title=t.title,
-    ~checklist={
+    ~result={
       [|CoursesReview__ReviewChecklistResult.empty()|]
-      |> Array.append(t.checklist);
+      |> Array.append(t.result);
     },
   );
 };

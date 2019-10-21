@@ -47,7 +47,7 @@ let generateFeedback =
              |> List.map(item => item.resultIndex);
 
            reviewChecklistItem
-           |> ReviewChecklistItem.checklist
+           |> ReviewChecklistItem.result
            |> Array.mapi((index, resultItem) =>
                 resultIndexList |> List.mem(index)
                   ? switch (resultItem |> ReviewChecklistResult.feedback) {
@@ -85,7 +85,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
             </div>
             <div>
               {reviewChecklistItem
-               |> ReviewChecklistItem.checklist
+               |> ReviewChecklistItem.result
                |> Array.mapi((index, checklistItem) =>
                     <div
                       className="px-2 mt-2"

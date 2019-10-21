@@ -44,9 +44,9 @@ let headerclasses = shrunk => {
   let defaultClasses = "school-admin-navbar__header ";
   defaultClasses
   ++ (
-    shrunk ?
-      "mx-auto" :
-      "px-5 py-2 relative z-20 border-r border-b border-gray-400 bg-white flex h-16 items-center"
+    shrunk
+      ? "mx-auto"
+      : "px-5 py-2 relative z-20 border-r border-b border-gray-400 bg-white flex h-16 items-center"
   );
 };
 
@@ -77,8 +77,8 @@ let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) =
   let classes =
     defaultClasses
     ++ (
-      selectedOption == currentOption ?
-        " school-admin-navbar__primary-nav-link--active" : ""
+      selectedOption == currentOption
+        ? " school-admin-navbar__primary-nav-link--active" : ""
     );
   let title = shrunk ? Some(text) : None;
   <a href=path className=classes ?title>
@@ -103,22 +103,18 @@ let secondaryNav = (courses, userRole, selectedOption) =>
       key="secondary-nav"
       className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
       <ul className="p-4">
-        {
-          secondaryNavOption(
-            "/school/customize",
-            settingsSelection,
-            Customization,
-            "Customization",
-          )
-        }
-        {
-          secondaryNavOption(
-            "/school/admins",
-            settingsSelection,
-            Admins,
-            "Admins",
-          )
-        }
+        {secondaryNavOption(
+           "/school/customize",
+           settingsSelection,
+           Customization,
+           "Customization",
+         )}
+        {secondaryNavOption(
+           "/school/admins",
+           settingsSelection,
+           Admins,
+           "Admins",
+         )}
       </ul>
     </div>
   | SelectedCourse(courseId, courseSelection) =>
@@ -132,41 +128,37 @@ let secondaryNav = (courses, userRole, selectedOption) =>
             currentCourseId=courseId
           />
         </li>
-        {
-          secondaryNavOption(
-            "/school/courses/" ++ courseId ++ "/curriculum",
-            courseSelection,
-            Curriculum,
-            "Curriculum",
-          )
-        }
-        {
-          switch (userRole) {
-          | SchoolAdmin =>
-            [|
-              secondaryNavOption(
-                "/school/courses/" ++ courseId ++ "/students",
-                courseSelection,
-                Students,
-                "Students",
-              ),
-              secondaryNavOption(
-                "/school/courses/" ++ courseId ++ "/coaches",
-                courseSelection,
-                CourseCoaches,
-                "Coaches",
-              ),
-              secondaryNavOption(
-                "/school/courses/" ++ courseId ++ "/exports",
-                courseSelection,
-                CourseExports,
-                "Exports",
-              ),
-            |]
-            |> React.array
-          | CourseAuthor => React.null
-          }
-        }
+        {secondaryNavOption(
+           "/school/courses/" ++ courseId ++ "/curriculum",
+           courseSelection,
+           Curriculum,
+           "Curriculum",
+         )}
+        {switch (userRole) {
+         | SchoolAdmin =>
+           [|
+             secondaryNavOption(
+               "/school/courses/" ++ courseId ++ "/students",
+               courseSelection,
+               Students,
+               "Students",
+             ),
+             secondaryNavOption(
+               "/school/courses/" ++ courseId ++ "/coaches",
+               courseSelection,
+               CourseCoaches,
+               "Coaches",
+             ),
+             secondaryNavOption(
+               "/school/courses/" ++ courseId ++ "/exports",
+               courseSelection,
+               CourseExports,
+               "Exports",
+             ),
+           |]
+           |> React.array
+         | CourseAuthor => React.null
+         }}
       </ul>
     </div>
   | _ => React.null
@@ -179,7 +171,6 @@ let make =
       ~schoolLogoPath,
       ~schoolIconPath,
       ~courses,
-      ~isStudent,
       ~isCourseAuthor,
       ~reviewPath,
     ) => {
@@ -225,24 +216,20 @@ let make =
       <div>
         <div className={headerclasses(shrunk)}>
           <div className={imageContainerClasses(shrunk)}>
-            {
-              shrunk ?
-                <div
-                  className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
-                  {
-                    isCourseAuthor ?
-                      <img src=schoolIconPath alt=schoolName /> :
-                      <a href="/school">
-                        <img src=schoolIconPath alt=schoolName />
-                      </a>
-                  }
-                </div> :
-                <img
-                  className="h-full object-contain"
-                  src=schoolLogoPath
-                  alt=schoolName
-                />
-            }
+            {shrunk
+               ? <div
+                   className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
+                   {isCourseAuthor
+                      ? <img src=schoolIconPath alt=schoolName />
+                      : <a href="/school">
+                          <img src=schoolIconPath alt=schoolName />
+                        </a>}
+                 </div>
+               : <img
+                   className="h-full object-contain"
+                   src=schoolLogoPath
+                   alt=schoolName
+                 />}
           </div>
         </div>
         /* <div
@@ -252,133 +239,113 @@ let make =
                <i className="fas fa-search" />
              </div>
            </div> */
-        {
-          switch (userRole) {
-          | SchoolAdmin =>
-            <ul>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Overview,
-                    "/school",
-                    shrunk,
-                    "fas fa-eye",
-                    "Overview",
-                  )
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    SchoolCoaches,
-                    "/school/coaches",
-                    shrunk,
-                    "fas fa-chalkboard-teacher",
-                    "Coaches",
-                  )
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Settings(Customization),
-                    "/school/customize",
-                    shrunk,
-                    "fas fa-cog",
-                    "Settings",
-                  )
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Courses,
-                    "/school/courses",
-                    shrunk,
-                    "fas fa-book",
-                    "Courses",
-                  )
-                }
-                {
-                  shrunk ?
-                    React.null :
-                    <ul className="pr-4 pb-4 ml-10 mt-1">
-                      {
-                        courses
-                        |> List.map(course =>
-                             <li key={course |> Course.id}>
-                               <a
-                                 href={
-                                   "/school/courses/"
-                                   ++ (course |> Course.id)
-                                   ++ "/curriculum"
-                                 }
-                                 className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
-                                 {course |> Course.name |> str}
-                               </a>
-                             </li>
-                           )
-                        |> Array.of_list
-                        |> React.array
-                      }
-                    </ul>
-                }
-              </li>
-              <li>
-                {
-                  topLink(
-                    selectedOption,
-                    Communities,
-                    "/school/communities",
-                    shrunk,
-                    "fas fa-users",
-                    "Communities",
-                  )
-                }
-              </li>
-            </ul>
-          | CourseAuthor => React.null
-          }
-        }
+        {switch (userRole) {
+         | SchoolAdmin =>
+           <ul>
+             <li>
+               {topLink(
+                  selectedOption,
+                  Overview,
+                  "/school",
+                  shrunk,
+                  "fas fa-eye",
+                  "Overview",
+                )}
+             </li>
+             <li>
+               {topLink(
+                  selectedOption,
+                  SchoolCoaches,
+                  "/school/coaches",
+                  shrunk,
+                  "fas fa-chalkboard-teacher",
+                  "Coaches",
+                )}
+             </li>
+             <li>
+               {topLink(
+                  selectedOption,
+                  Settings(Customization),
+                  "/school/customize",
+                  shrunk,
+                  "fas fa-cog",
+                  "Settings",
+                )}
+             </li>
+             <li>
+               {topLink(
+                  selectedOption,
+                  Courses,
+                  "/school/courses",
+                  shrunk,
+                  "fas fa-book",
+                  "Courses",
+                )}
+               {shrunk
+                  ? React.null
+                  : <ul className="pr-4 pb-4 ml-10 mt-1">
+                      {courses
+                       |> List.map(course =>
+                            <li key={course |> Course.id}>
+                              <a
+                                href={
+                                  "/school/courses/"
+                                  ++ (course |> Course.id)
+                                  ++ "/curriculum"
+                                }
+                                className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                                {course |> Course.name |> str}
+                              </a>
+                            </li>
+                          )
+                       |> Array.of_list
+                       |> React.array}
+                    </ul>}
+             </li>
+             <li>
+               {topLink(
+                  selectedOption,
+                  Communities,
+                  "/school/communities",
+                  shrunk,
+                  "fas fa-users",
+                  "Communities",
+                )}
+             </li>
+           </ul>
+         | CourseAuthor => React.null
+         }}
       </div>
       <ul>
         {bottomLink("/home", shrunk, "fas fa-home", "Home")}
-        {
-          switch (reviewPath) {
-          | Some(path) =>
-            bottomLink(
-              path,
-              shrunk,
-              "fas fa-clipboard-check",
-              "Review Submissions",
-            )
-          | None => React.null
-          }
-        }
+        {switch (reviewPath) {
+         | Some(path) =>
+           bottomLink(
+             path,
+             shrunk,
+             "fas fa-clipboard-check",
+             "Review Submissions",
+           )
+         | None => React.null
+         }}
         <li>
-          {
-            /* Using cloneElement is the only way (right now) to insert arbitrary props to an element. */
-            /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
-            ReasonReact.cloneElement(
-              <a
-                title=?{shrunk ? Some("Sign Out") : None}
-                className={bottomLinkClasses(shrunk)}
-                rel="nofollow"
-                href="/users/sign_out"
-              />,
-              ~props={"data-method": "delete"},
-              [|
-                <i className="fas fa-sign-out-alt fa-fw" />,
-                shrunk ?
-                  React.null :
-                  <span className="ml-2"> {"Sign Out" |> str} </span>,
-              |],
-            )
-          }
+          {/* Using cloneElement is the only way (right now) to insert arbitrary props to an element. */
+           /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
+           ReasonReact.cloneElement(
+             <a
+               title=?{shrunk ? Some("Sign Out") : None}
+               className={bottomLinkClasses(shrunk)}
+               rel="nofollow"
+               href="/users/sign_out"
+             />,
+             ~props={"data-method": "delete"},
+             [|
+               <i className="fas fa-sign-out-alt fa-fw" />,
+               shrunk
+                 ? React.null
+                 : <span className="ml-2"> {"Sign Out" |> str} </span>,
+             |],
+           )}
         </li>
       </ul>
     </div>,

@@ -143,9 +143,10 @@ let make =
          )
       |> TargetGroup.sort;
     let targetGroupsToDisplay =
-      state.showArchived ?
-        targetGroupsInLevel :
-        targetGroupsInLevel |> List.filter(tg => !(tg |> TargetGroup.archived));
+      state.showArchived
+        ? targetGroupsInLevel
+        : targetGroupsInLevel
+          |> List.filter(tg => !(tg |> TargetGroup.archived));
     let targetGroupIdsInLevel =
       targetGroupsInLevel
       |> List.filter(tg => !(tg |> TargetGroup.archived))
@@ -160,32 +161,33 @@ let make =
         state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
 
       let newTargetGroup =
-        target |> Target.visibility === Archived ?
-          targetGroup : targetGroup |> TargetGroup.archive(false);
+        target |> Target.visibility === Archived
+          ? targetGroup : targetGroup |> TargetGroup.archive(false);
 
       let editorAction =
-        closeEditor ?
-          Hidden : ShowTargetEditor(newTargetGroup |> TargetGroup.id, target);
+        closeEditor
+          ? Hidden
+          : ShowTargetEditor(newTargetGroup |> TargetGroup.id, target);
 
       send(UpdateTarget(target));
       send(UpdateTargetGroup(newTargetGroup, editorAction));
     };
 
     let updateTargetGroupsCB = targetGroup => {
-      targetGroup |> TargetGroup.archived ?
-        {
+      targetGroup |> TargetGroup.archived
+        ? {
           let targetIdsInTargerGroup =
             state.targets
             |> Target.targetIdsInTargetGroup(targetGroup |> TargetGroup.id);
           let newTargets =
             state.targets
             |> List.map(target =>
-                 targetIdsInTargerGroup |> List.mem(target |> Target.id) ?
-                   Target.archive(target) : target
+                 targetIdsInTargerGroup |> List.mem(target |> Target.id)
+                   ? Target.archive(target) : target
                );
           send(UpdateTargets(newTargets));
-        } :
-        ();
+        }
+        : ();
 
       send(UpdateTargetGroup(targetGroup, Hidden));
     };
@@ -199,38 +201,36 @@ let make =
           </span>
         </button>
       </div>
-      {
-        switch (state.editorAction) {
-        | Hidden => ReasonReact.null
-        | ShowTargetEditor(targetGroupId, target) =>
-          <CurriculumEditor__TargetEditor.Jsx2
-            target
-            targetGroupId
-            evaluationCriteria
-            targets={state.targets}
-            targetGroupIdsInLevel
-            authenticityToken
-            updateTargetCB
-            hideEditorActionCB
-          />
-        | ShowTargetGroupEditor(targetGroup) =>
-          <CurriculumEditor__TargetGroupEditor
-            targetGroup
-            currentLevelId
-            authenticityToken
-            updateTargetGroupsCB
-            hideEditorActionCB
-          />
-        | ShowLevelEditor(level) =>
-          <CurriculumEditor__LevelEditor
-            level
-            course
-            authenticityToken
-            hideEditorActionCB
-            updateLevelsCB
-          />
-        }
-      }
+      {switch (state.editorAction) {
+       | Hidden => ReasonReact.null
+       | ShowTargetEditor(targetGroupId, target) =>
+         <CurriculumEditor__TargetEditor.Jsx2
+           target
+           targetGroupId
+           evaluationCriteria
+           targets={state.targets}
+           targetGroupIdsInLevel
+           authenticityToken
+           updateTargetCB
+           hideEditorActionCB
+         />
+       | ShowTargetGroupEditor(targetGroup) =>
+         <CurriculumEditor__TargetGroupEditor
+           targetGroup
+           currentLevelId
+           authenticityToken
+           updateTargetGroupsCB
+           hideEditorActionCB
+         />
+       | ShowLevelEditor(level) =>
+         <CurriculumEditor__LevelEditor
+           level
+           course
+           authenticityToken
+           hideEditorActionCB
+           updateLevelsCB
+         />
+       }}
       <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
         <div
           className="w-full py-4 relative md:sticky top-0 z-20 bg-gray-100 border-b">
@@ -238,36 +238,30 @@ let make =
             <div className="flex">
               <div className="inline-block relative w-auto md:w-64">
                 <select
-                  onChange={
-                    event => {
-                      let level_name = ReactEvent.Form.target(event)##value;
-                      send(
-                        SelectLevel(
-                          Level.selectLevel(state.levels, level_name),
-                        ),
-                      );
-                    }
-                  }
+                  onChange={event => {
+                    let level_name = ReactEvent.Form.target(event)##value;
+                    send(
+                      SelectLevel(
+                        Level.selectLevel(state.levels, level_name),
+                      ),
+                    );
+                  }}
                   value={currentLevel |> Level.name}
                   className="block appearance-none w-full bg-white border text-sm border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
-                  {
-                    state.levels
-                    |> Level.sort
-                    |> List.map(level =>
-                         <option
-                           key={Level.id(level)} value={level |> Level.name}>
-                           {
-                             "Level "
-                             ++ (level |> Level.number |> string_of_int)
-                             ++ ": "
-                             ++ (level |> Level.name)
-                             |> str
-                           }
-                         </option>
-                       )
-                    |> Array.of_list
-                    |> ReasonReact.array
-                  }
+                  {state.levels
+                   |> Level.sort
+                   |> List.map(level =>
+                        <option
+                          key={Level.id(level)} value={level |> Level.name}>
+                          {"Level "
+                           ++ (level |> Level.number |> string_of_int)
+                           ++ ": "
+                           ++ (level |> Level.name)
+                           |> str}
+                        </option>
+                      )
+                   |> Array.of_list
+                   |> ReasonReact.array}
                 </select>
                 <div
                   className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-800">
@@ -276,70 +270,61 @@ let make =
               </div>
               <button
                 className="flex text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
-                onClick={
-                  _ =>
-                    send(
-                      UpdateEditorAction(
-                        ShowLevelEditor(Some(state.selectedLevel)),
-                      ),
-                    )
+                onClick={_ =>
+                  send(
+                    UpdateEditorAction(
+                      ShowLevelEditor(Some(state.selectedLevel)),
+                    ),
+                  )
                 }>
                 <i title="edit" className="fas fa-pencil-alt" />
               </button>
               <button
                 className="btn btn-primary ml-4"
-                onClick={
-                  _ => send(UpdateEditorAction(ShowLevelEditor(None)))
+                onClick={_ =>
+                  send(UpdateEditorAction(ShowLevelEditor(None)))
                 }>
                 <i className="fas fa-plus-square mr-2 text-lg" />
                 <span> {"Create Level" |> str} </span>
               </button>
             </div>
-            {
-              showArchivedButton(targetGroupsInLevel, state.targets) ?
-                <button
-                  className="btn btn-default"
-                  onClick={_ => send(ToggleShowArchived)}>
-                  {
-                    (state.showArchived ? "Hide Archived" : "Show Archived")
-                    |> str
-                  }
-                </button> :
-                ReasonReact.null
-            }
+            {showArchivedButton(targetGroupsInLevel, state.targets)
+               ? <button
+                   className="btn btn-default"
+                   onClick={_ => send(ToggleShowArchived)}>
+                   {(state.showArchived ? "Hide Archived" : "Show Archived")
+                    |> str}
+                 </button>
+               : ReasonReact.null}
           </div>
         </div>
         <div
           className="target-group__container max-w-3xl mt-5 mx-auto relative">
-          {
-            targetGroupsToDisplay
-            |> List.mapi((index, targetGroup) =>
-                 <CurriculumEditor__TargetGroupShow
-                   key={targetGroup |> TargetGroup.id}
-                   targetGroup
-                   targetGroups=targetGroupsToDisplay
-                   targets={state.targets}
-                   showTargetGroupEditorCB
-                   showTargetEditorCB
-                   updateTargetCB
-                   showArchived={state.showArchived}
-                   authenticityToken
-                   updateTargetSortIndexCB={
-                     updateTargetSortIndex(state, send)
-                   }
-                   updateTargetGroupSortIndexCB={
-                     updateTargetGroupSortIndex(state, send)
-                   }
-                   authenticityToken
-                   index
-                 />
-               )
-            |> Array.of_list
-            |> ReasonReact.array
-          }
+          {targetGroupsToDisplay
+           |> List.mapi((index, targetGroup) =>
+                <CurriculumEditor__TargetGroupShow
+                  key={targetGroup |> TargetGroup.id}
+                  targetGroup
+                  targetGroups=targetGroupsToDisplay
+                  targets={state.targets}
+                  showTargetGroupEditorCB
+                  showTargetEditorCB
+                  updateTargetCB
+                  showArchived={state.showArchived}
+                  updateTargetSortIndexCB={updateTargetSortIndex(state, send)}
+                  updateTargetGroupSortIndexCB={updateTargetGroupSortIndex(
+                    state,
+                    send,
+                  )}
+                  authenticityToken
+                  index
+                />
+              )
+           |> Array.of_list
+           |> ReasonReact.array}
           <div
-            onClick={
-              _ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))
+            onClick={_ =>
+              send(UpdateEditorAction(ShowTargetGroupEditor(None)))
             }
             className="target-group__create flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 hover:border-primary-400 rounded-lg mt-12 cursor-pointer">
             <span className="flex bg-gray-200 p-2 rounded-full">

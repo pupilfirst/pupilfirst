@@ -32,6 +32,21 @@ let updateTitle = (title, t, index, checklist) => {
 };
 
 let updateFeedback = (feedback, t, index, checklist) => {
+  let optionalFeedback =
+    feedback |> Js.String.trim == "" ? None : Some(feedback);
+
   checklist
-  |> replace(make(~title=t.title, ~feedback=Some(feedback)), index);
+  |> replace(make(~title=t.title, ~feedback=optionalFeedback), index);
+};
+
+let encode = t => {
+  let title = [("title", t.title |> Json.Encode.string)];
+
+  let feedback =
+    switch (t.feedback) {
+    | Some(f) => [("feedback", f |> Json.Encode.string)]
+    | None => []
+    };
+
+  Json.Encode.(object_(title @ feedback));
 };

@@ -63,3 +63,16 @@ let deleteResultItem = (index, t) => {
     ~result=t.result |> Js.Array.filteri((_el, i) => i != index),
   );
 };
+
+let encodeT = t =>
+  Json.Encode.(
+    object_([
+      ("title", t.title |> string),
+      (
+        "result",
+        t.result |> array(CoursesReview__ReviewChecklistResult.encode),
+      ),
+    ])
+  );
+
+let encode = checklist => checklist |> Json.Encode.(array(encodeT));

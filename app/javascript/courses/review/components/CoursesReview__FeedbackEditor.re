@@ -12,6 +12,7 @@ let make =
       ~reviewChecklist,
       ~updateReviewChecklistCB,
       ~showChecklist,
+      ~targetId,
     ) => {
   let (showChecklist, setShowCHecklist) = React.useState(() => showChecklist);
   <div className="pt-4 md:pt-6 course-review__feedback-editor">
@@ -22,6 +23,7 @@ let make =
              updateFeedbackCB
              feedback
              updateReviewChecklistCB
+             targetId
            />
          : <div>
              <button

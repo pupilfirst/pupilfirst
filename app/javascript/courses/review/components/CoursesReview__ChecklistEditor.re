@@ -10,6 +10,39 @@ type state = {
 
 let str = React.string;
 
+module UpdateReviewChecklistMutation = [%graphql
+  {|
+    mutation($targetId: ID!, $reviewChecklist: JSON!) {
+      updateReviewChecklist(targetId: $targetId, reviewChecklist: $reviewChecklist){
+        success
+      }
+    }
+  |}
+];
+
+let updateReviewChecklist =
+    (targetId, reviewChecklist, setState, updateReviewChecklistCB) => {
+  setState(state => {...state, saving: true});
+
+  UpdateReviewChecklistMutation.make(
+    ~targetId,
+    ~reviewChecklist=
+      CoursesReview__ReviewChecklistItem.encode(reviewChecklist),
+    (),
+  )
+  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> Js.Promise.then_(response => {
+       response##updateReviewChecklist##success
+         ? {
+           updateReviewChecklistCB(reviewChecklist);
+           setState(state => {...state, saving: false});
+         }
+         : setState(state => {...state, saving: false});
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 let updateChecklistItem = (checklistItem, itemIndex, setState) => {
   setState(state =>
     {
@@ -102,7 +135,8 @@ let removeChecklistItem = (itemIndex, setState) => {
 };
 
 [@react.component]
-let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
+let make =
+    (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
   let (state, setState) =
     React.useState(() => {reviewChecklist, saving: false});
   <div>
@@ -255,7 +289,14 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
     </div>
     <div className="py-2 mt-4 flex">
       <button
-        onClick={_ => updateReviewChecklistCB(state.reviewChecklist)}
+        onClick={_ =>
+          updateReviewChecklist(
+            targetId,
+            state.reviewChecklist,
+            setState,
+            updateReviewChecklistCB,
+          )
+        }
         className="btn btn-primary">
         {"Save Checklist" |> str}
       </button>

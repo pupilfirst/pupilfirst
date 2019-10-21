@@ -8,6 +8,5 @@ class Visit < ApplicationRecord
   EVENT_VOCALIST_COMMAND = -'Vocalist Command'
 
   VOCALIST_COMMAND_LEADERBOARD = -'leaderboard'
-  VOCALIST_COMMAND_CHANGELOG = -'changelog'
   VOCALIST_COMMAND_TARGETS = -'targets'
 end

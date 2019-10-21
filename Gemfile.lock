@@ -435,7 +435,6 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
     lita-default-handlers (0.1.0)
-    logchange (1.0.1)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -868,7 +867,6 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   lita (= 5.0.0)!
   lita-slack (= 1.8.0)!
-  logchange (~> 1.0)
   meta_request (~> 0.4)
   motion-markdown-it (~> 8.4.1)
   motion-markdown-it-plugins (~> 8.4.2)

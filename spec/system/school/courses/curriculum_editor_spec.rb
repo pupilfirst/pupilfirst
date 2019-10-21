@@ -183,6 +183,27 @@ feature 'Curriculum Editor', js: true do
 
       click_button 'Edit'
 
+      # Allow adding a new content block and deleting the sample block
+      find("div#add-block-1", visible: false).click
+      within("div#content-type-picker-1") do
+        find('p', text: 'Markdown').click
+      end
+
+      replace_markdown(sample_markdown_text)
+      find('span', text: 'Preview').click
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      dismiss_notification
+
+      accept_confirm do
+        within('#content-block-controls-2') do
+          find_button('Delete block').click
+        end
+      end
+
+      click_button 'Next Step'
+      find('span', text: 'Add Content').click
+
       expect(page).to have_selector('.content-block__content', count: 1)
       expect(page).to have_selector('.add-content-block--open', count: 1)
       target = target_group.reload.targets.last

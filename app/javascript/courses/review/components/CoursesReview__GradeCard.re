@@ -419,7 +419,14 @@ let gradeSubmission =
 };
 
 let showFeedbackForm =
-    (grades, reviewChecklist, updateReviewChecklistCB, state, setState) =>
+    (
+      grades,
+      reviewChecklist,
+      updateReviewChecklistCB,
+      state,
+      setState,
+      targetId,
+    ) =>
   switch (grades) {
   | [||] =>
     <CoursesReview__FeedbackEditor
@@ -429,6 +436,7 @@ let showFeedbackForm =
       reviewChecklist
       updateReviewChecklistCB
       showChecklist=true
+      targetId
     />
   | _ => React.null
   };
@@ -477,6 +485,7 @@ let make =
       ~reviewChecklist,
       ~updateSubmissionCB,
       ~updateReviewChecklistCB,
+      ~targetId,
     ) => {
   let (state, setState) =
     React.useState(() => {grades: [||], newFeedback: "", saving: false});
@@ -490,6 +499,7 @@ let make =
          updateReviewChecklistCB,
          state,
          setState,
+         targetId,
        )}
       <div className="w-full py-4 md:py-6">
         <div className="font-semibold text-sm"> {"Grade Card" |> str} </div>

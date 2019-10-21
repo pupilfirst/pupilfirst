@@ -101,6 +101,7 @@ let make =
       ~reviewChecklist,
       ~updateSubmissionCB,
       ~updateReviewChecklistCB,
+      ~targetId,
     ) => {
   let (state, setState) =
     React.useState(() =>
@@ -120,6 +121,7 @@ let make =
                       reviewChecklist
                       updateReviewChecklistCB
                       showChecklist=false
+                      targetId
                     />
                   </DisablingCover>
                   <button

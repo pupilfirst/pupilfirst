@@ -42,7 +42,13 @@ let handleEmpty = (setState, updateReviewChecklistCB) => {
 
 [@react.component]
 let make =
-    (~reviewChecklist, ~updateFeedbackCB, ~feedback, ~updateReviewChecklistCB) => {
+    (
+      ~reviewChecklist,
+      ~updateFeedbackCB,
+      ~feedback,
+      ~updateReviewChecklistCB,
+      ~targetId,
+    ) => {
   let (state, setState) = React.useState(() => {editMode: false});
   <div className="pb-4 md:pb-6">
     <h5 className="font-semibold text-sm"> {"Review Checklist" |> str} </h5>
@@ -58,6 +64,7 @@ let make =
                updateReviewChecklistCB,
              )}
              closeEditModeCB={closeEditMode(setState)}
+             targetId
            />
          | (false, false) =>
            <CoursesReview__ChecklistShow

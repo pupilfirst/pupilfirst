@@ -207,6 +207,7 @@ let make =
                      submissionDetails,
                      setState,
                    )}
+                   targetId={submissionDetails |> SubmissionDetails.targetId}
                  />
                )
             |> React.array}

@@ -15,7 +15,7 @@ module Schools
           school = model.school
           model.user.update!(name: name, title: title, affiliation: affiliation)
 
-          model.startup.update!(name: team_name)
+          model.startup.update!(name: override_team_name)
           model.tag_list = tags
           model.excluded_from_leaderboard = excluded_from_leaderboard
           model.save!
@@ -28,6 +28,10 @@ module Schools
       end
 
       private
+
+      def override_team_name
+        model.startup.founders.one? ? name : team_name
+      end
 
       def handle_exited(founder, exited)
         if exited

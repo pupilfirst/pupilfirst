@@ -1,7 +1,7 @@
 type t = {
-  id: int,
+  id: string,
   name: string,
-  coachIds: list(int),
+  coachIds: list(string),
   levelNumber: int,
 };
 
@@ -13,9 +13,9 @@ let coachIds = t => t.coachIds;
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     name: json |> field("name", string),
-    coachIds: json |> field("coachIds", list(int)),
+    coachIds: json |> field("coachIds", list(string)),
     levelNumber: json |> field("levelNumber", int),
   };
 

@@ -1,8 +1,8 @@
 type t = {
-  id: int,
+  id: string,
   name: string,
-  avatarUrl: string,
-  teamId: int,
+  avatarUrl: option(string),
+  teamId: string,
   email: string,
   tags: list(string),
   exited: bool,
@@ -42,14 +42,14 @@ let updateInfo =
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", int),
-    teamId: json |> field("teamId", int),
+    id: json |> field("id", string),
+    teamId: json |> field("teamId", string),
     email: json |> field("email", string),
     tags: json |> field("tags", list(string)),
     exited: json |> field("exited", bool),
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
     name: json |> field("name", string),
-    avatarUrl: json |> field("avatarUrl", string),
+    avatarUrl: json |> optional(field("avatarUrl", string)),
     title: json |> field("title", string),
     affiliation: json |> optional(field("affiliation", string)),
   };
@@ -57,8 +57,8 @@ let decode = json =>
 let encode = (name, teamName, t) =>
   Json.Encode.(
     object_([
-      ("id", t.id |> int),
-      ("team_id", t.teamId |> int),
+      ("id", t.id |> string),
+      ("team_id", t.teamId |> string),
       ("name", name |> string),
       ("team_name", teamName |> string),
       ("email", t.email |> string),

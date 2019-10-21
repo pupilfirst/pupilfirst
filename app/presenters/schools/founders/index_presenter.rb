@@ -7,16 +7,16 @@ module Schools
         @course = course
       end
 
-      def react_props
+      def props
         {
           teams: teams,
-          courseId: @course.id,
+          course_id: @course.id,
           students: students,
-          courseCoachIds: @course.faculty.pluck(:id),
-          schoolCoaches: coach_details,
+          course_coach_ids: @course.faculty.pluck(:id),
+          school_coaches: coach_details,
           levels: levels,
-          studentTags: founder_tags,
-          authenticityToken: view.form_authenticity_token
+          student_tags: founder_tags,
+          authenticity_token: view.form_authenticity_token
         }
       end
 
@@ -25,8 +25,8 @@ module Schools
           {
             id: team.id,
             name: team.name,
-            coachIds: team.faculty_startup_enrollments.pluck(:faculty_id),
-            levelNumber: team.level.number
+            coach_ids: team.faculty_startup_enrollments.pluck(:faculty_id),
+            level_number: team.level.number
           }
         end
       end
@@ -34,32 +34,35 @@ module Schools
       def students
         @students ||=
           founders.includes(taggings: :tag, user: { avatar_attachment: :blob }).map do |student|
-            {
+            student_props = {
               id: student.id,
               name: student.user.name,
-              avatarUrl: student.user.image_or_avatar_url,
               email: student.user.email,
-              teamId: student.startup_id,
+              team_id: student.startup_id,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
               exited: student.exited,
-              excludedFromLeaderboard: student.excluded_from_leaderboard,
+              excluded_from_leaderboard: student.excluded_from_leaderboard,
               title: student.user.title,
               affiliation: student.user.affiliation
             }
+
+            if student.user.avatar.attached?
+              student_props[:avatar_url] = view.url_for(student.user.avatar_variant(:thumb))
+            end
+
+            student_props
           end
       end
 
       private
 
       def coach_details
-        @coach_details ||=
-          current_school.faculty.where.not(exited: true).includes(user: { avatar_attachment: :blob }).map do |coach|
-            {
-              id: coach.id,
-              name: coach.user.name,
-              avatarUrl: coach.user.image_or_avatar_url
-            }
-          end
+        current_school.faculty.where.not(exited: true).includes(:user).map do |coach|
+          {
+            id: coach.id,
+            name: coach.name
+          }
+        end
       end
 
       def levels

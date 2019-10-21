@@ -2,8 +2,6 @@ type t;
 
 let decode: Js.Json.t => t;
 
-let id: t => int;
+let id: t => string;
 
 let name: t => string;
-
-let avatarUrl: t => string;

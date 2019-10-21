@@ -44,8 +44,8 @@ let updateChecklist = (checklist, t) => {
   make(~title=t.title, ~checklist);
 };
 
-let replace = (t, index, checklist) => {
-  checklist |> ArrayUtils.replace(t, index);
+let replace = (t, itemIndex, checklist) => {
+  checklist |> Array.mapi((index, item) => index == itemIndex ? t : item);
 };
 
 let appendEmptyChecklistItem = t => {

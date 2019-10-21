@@ -501,7 +501,7 @@ let make =
          setState,
          targetId,
        )}
-      <div className="w-full py-4 md:py-6">
+      <div className="w-full py-4 md:pb-6 md:pt-7">
         <div className="font-semibold text-sm"> {"Grade Card" |> str} </div>
         <div className="flex md:flex-row flex-col">
           <div className="w-full md:w-3/6">

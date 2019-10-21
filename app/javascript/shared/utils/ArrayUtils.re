@@ -6,7 +6,7 @@ let copyAndSort = (f, t) => {
   cp;
 };
 
-let replace = (item, index, t) => {
+let unsafeReplace = (item, index, t) => {
   let cp = t |> Array.copy;
   item |> Array.set(cp, index);
   cp;

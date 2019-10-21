@@ -56,3 +56,10 @@ let appendEmptyChecklistItem = t => {
     },
   );
 };
+
+let deleteResultItem = (index, t) => {
+  make(
+    ~title=t.title,
+    ~result=t.result |> Js.Array.filteri((_el, i) => i != index),
+  );
+};

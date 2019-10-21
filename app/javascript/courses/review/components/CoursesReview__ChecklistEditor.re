@@ -82,6 +82,25 @@ let addEmptyChecklistItem = setState => {
   );
 };
 
+let removeChecklistResult =
+    (itemIndex, resultIndex, reviewChecklistItem, setState) => {
+  updateChecklistItem(
+    reviewChecklistItem |> ReviewChecklistItem.deleteResultItem(resultIndex),
+    itemIndex,
+    setState,
+  );
+};
+
+let removeChecklistItem = (itemIndex, setState) => {
+  setState(state =>
+    {
+      ...state,
+      reviewChecklist:
+        state.reviewChecklist |> Js.Array.filteri((_el, i) => i != itemIndex),
+    }
+  );
+};
+
 [@react.component]
 let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
   let (state, setState) =
@@ -90,26 +109,35 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
     {state.reviewChecklist
      |> Array.mapi((itemIndex, reviewChecklistItem) =>
           <div className="mt-2" key={itemIndex |> string_of_int}>
-            <div className="mt-5">
-              <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="checklist_title"
-                type_="text"
-                placeholder="Add title for checklist item"
-                value={reviewChecklistItem |> ReviewChecklistItem.title}
-                onChange={event =>
-                  updateChecklistItemTitle(
-                    itemIndex,
-                    ReactEvent.Form.target(event)##value,
-                    reviewChecklistItem,
-                    setState,
-                  )
-                }
-              />
-              <School__InputGroupError
-                message="Title should greate than 2 charcahters"
-                active={reviewChecklistItem |> ReviewChecklistItem.title == ""}
-              />
+            <div className="mt-5 flex">
+              <div className="w-full">
+                <input
+                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="checklist_title"
+                  type_="text"
+                  placeholder="Add title for checklist item"
+                  value={reviewChecklistItem |> ReviewChecklistItem.title}
+                  onChange={event =>
+                    updateChecklistItemTitle(
+                      itemIndex,
+                      ReactEvent.Form.target(event)##value,
+                      reviewChecklistItem,
+                      setState,
+                    )
+                  }
+                />
+                <School__InputGroupError
+                  message="Title should greate than 2 charcahters"
+                  active={
+                    reviewChecklistItem |> ReviewChecklistItem.title == ""
+                  }
+                />
+              </div>
+              <div
+                className="btn btn-primary m-2"
+                onClick={_ => removeChecklistItem(itemIndex, setState)}>
+                {"delete" |> str}
+              </div>
             </div>
             <div>
               {reviewChecklistItem
@@ -127,54 +155,22 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                         ++ (resultIndex |> string_of_int)
                       }>
                       <div className="flex">
-                        // <Checkbox id="" label="" onChange=checkboxOnChange />
-
-                          <div
-                            className="w-full bg-white border border-gray-400 rounded">
-                            <div className="">
-                              <input
-                                className="appearance-none py-1 px-4 mt-2 leading-tight w-full focus:outline-none focus:bg-white focus:border-gray-500"
-                                id={
-                                  "result_"
-                                  ++ (resultIndex |> string_of_int)
-                                  ++ "_title"
-                                }
-                                type_="text"
-                                placeholder="Add title for checklist item"
-                                value={
-                                  resultItem |> ReviewChecklistResult.title
-                                }
-                                onChange={event =>
-                                  updateChecklistResultTitle(
-                                    itemIndex,
-                                    resultIndex,
-                                    ReactEvent.Form.target(event)##value,
-                                    reviewChecklistItem,
-                                    resultItem,
-                                    setState,
-                                  )
-                                }
-                              />
-                              <School__InputGroupError
-                                message="Title should greate than 2 charcahters"
-                                active={
-                                  resultItem
-                                  |> ReviewChecklistResult.title == ""
-                                }
-                              />
-                            </div>
-                            <textarea
-                              className="appearance-none border-t border-gray-400 py-1 px-4 leading-tight w-full bg-gray-200  focus:outline-none focus:bg-white focus:border-gray-500"
+                        <Checkbox id="" label="" onChange={_ => ()} />
+                        <div
+                          className="w-full bg-white border border-gray-400 rounded">
+                          <div className="">
+                            <input
+                              className="appearance-none py-1 px-4 mt-2 leading-tight w-full focus:outline-none focus:bg-white focus:border-gray-500"
                               id={
                                 "result_"
                                 ++ (resultIndex |> string_of_int)
-                                ++ "_feedback"
+                                ++ "_title"
                               }
                               type_="text"
-                              placeholder="Add feedback"
-                              value=feedback
+                              placeholder="Add title for checklist item"
+                              value={resultItem |> ReviewChecklistResult.title}
                               onChange={event =>
-                                updateChecklistResultFeedback(
+                                updateChecklistResultTitle(
                                   itemIndex,
                                   resultIndex,
                                   ReactEvent.Form.target(event)##value,
@@ -184,8 +180,48 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB) => {
                                 )
                               }
                             />
+                            <School__InputGroupError
+                              message="Title should greate than 2 charcahters"
+                              active={
+                                resultItem |> ReviewChecklistResult.title == ""
+                              }
+                            />
                           </div>
+                          <textarea
+                            className="appearance-none border-t border-gray-400 py-1 px-4 leading-tight w-full bg-gray-200  focus:outline-none focus:bg-white focus:border-gray-500"
+                            id={
+                              "result_"
+                              ++ (resultIndex |> string_of_int)
+                              ++ "_feedback"
+                            }
+                            type_="text"
+                            placeholder="Add feedback"
+                            value=feedback
+                            onChange={event =>
+                              updateChecklistResultFeedback(
+                                itemIndex,
+                                resultIndex,
+                                ReactEvent.Form.target(event)##value,
+                                reviewChecklistItem,
+                                resultItem,
+                                setState,
+                              )
+                            }
+                          />
                         </div>
+                        <div
+                          className="btn btn-primary m-2"
+                          onClick={_ =>
+                            removeChecklistResult(
+                              itemIndex,
+                              resultIndex,
+                              reviewChecklistItem,
+                              setState,
+                            )
+                          }>
+                          {"delete" |> str}
+                        </div>
+                      </div>
                     </div>;
                   })
                |> React.array}

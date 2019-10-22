@@ -126,39 +126,35 @@ let contentUploadContainer = (blockType, dispatch, state, editorId) =>
     className="content-block__content-placeholder flex flex-col justify-center text-center p-10">
     <div> {faIcons(blockType)} </div>
     <p className="text-xs text-gray-800 mt-1">
-      {
-        (
-          switch (blockType) {
-          | Markdown(_markdown) => ""
-          | File(_url, _title, _filename) => "You can upload PDF, JPG, ZIP etc."
-          | Image(_url, _caption) => "You can upload PNG, JPG, GIF files"
-          | Embed(_url, _embedCode) => "Paste in a URL to embed"
-          }
-        )
-        |> str
-      }
+      {(
+         switch (blockType) {
+         | Markdown(_markdown) => ""
+         | File(_url, _title, _filename) => "You can upload PDF, JPG, ZIP etc."
+         | Image(_url, _caption) => "You can upload PNG, JPG, GIF files"
+         | Embed(_url, _embedCode) => "Paste in a URL to embed"
+         }
+       )
+       |> str}
     </p>
-    {
-      fileUploadButtonVisible(blockType) ?
-        <div className="mt-2">
-          <input
-            id={"content-block-editor__file-input-" ++ editorId}
-            type_="file"
-            className="hidden"
-            required=false
-            multiple=false
-            name="content_block[file]"
-            onChange={event => handleFileUpload(dispatch, event, blockType)}
-          />
-          <label
-            className="btn btn-primary"
-            htmlFor={"content-block-editor__file-input-" ++ editorId}>
-            <i className="fas fa-upload" />
-            <span className="ml-2 truncate"> {state.fileName |> str} </span>
-          </label>
-        </div> :
-        React.null
-    }
+    {fileUploadButtonVisible(blockType)
+       ? <div className="mt-2">
+           <input
+             id={"content-block-editor__file-input-" ++ editorId}
+             type_="file"
+             className="hidden"
+             required=false
+             multiple=false
+             name="content_block[file]"
+             onChange={event => handleFileUpload(dispatch, event, blockType)}
+           />
+           <label
+             className="btn btn-primary"
+             htmlFor={"content-block-editor__file-input-" ++ editorId}>
+             <i className="fas fa-upload" />
+             <span className="ml-2 truncate"> {state.fileName |> str} </span>
+           </label>
+         </div>
+       : React.null}
   </div>;
 
 let saveDisabled = state => !state.formDirty || state.savingContentBlock;
@@ -210,24 +206,24 @@ let handleDeleteContentBlock =
   Webapi.Dom.window
   |> Webapi.Dom.Window.confirm(
        "Are you sure you want to delete this content?. You cannot undo this.",
-     ) ?
-    switch (contentBlock) {
-    | Some(contentBlock) =>
-      let id = ContentBlock.id(contentBlock);
-      DeleteContentBlockMutation.make(~id, ())
-      |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-      |> Js.Promise.then_(response => {
-           let versions =
-             response##deleteContentBlock##versions
-             |> Array.map(version => version |> Json.Decode.string);
-           response##deleteContentBlock##success ?
-             removeTargetContentCB(sortIndex, versions) : ();
-           Js.Promise.resolve();
-         })
-      |> ignore;
-    | None => removeTargetContentCB(sortIndex, [||])
-    } :
-    ();
+     )
+    ? switch (contentBlock) {
+      | Some(contentBlock) =>
+        let id = ContentBlock.id(contentBlock);
+        DeleteContentBlockMutation.make(~id, ())
+        |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+        |> Js.Promise.then_(response => {
+             let versions =
+               response##deleteContentBlock##versions
+               |> Array.map(version => version |> Json.Decode.string);
+             response##deleteContentBlock##success
+               ? removeTargetContentCB(sortIndex, versions) : ();
+             Js.Promise.resolve();
+           })
+        |> ignore;
+      | None => removeTargetContentCB(sortIndex, [||])
+      }
+    : ();
 let decodeContent =
     (blockType: ContentBlock.blockType, fileUrl, state, content) =>
   Json.Decode.(
@@ -461,7 +457,9 @@ let make =
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
 
-  let updateMarkdownCB = string => dispatch(UpdateMarkdown(string));
+  let updateMarkdownCB = string => {
+    dispatch(UpdateMarkdown(string));
+  };
 
   <DisablingCover message="Saving..." disabled={state.savingContentBlock}>
     <div>
@@ -484,40 +482,35 @@ let make =
           <div
             id={"content-block-controls-" ++ (sortIndex |> string_of_int)}
             className="flex absolute right-0 top-0 bg-white rounded-bl rounded-tr-lg overflow-hidden shadow z-30">
-            {
-              sortIndex != 1 ?
-                <button
-                  title="Move up"
-                  onClick={
-                    _event => swapContentBlockCB(sortIndex, sortIndex - 1)
-                  }
-                  className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-                  <i className="fas fa-arrow-up" />
-                </button> :
-                React.null
-            }
-            {
-              sortIndex != blockCount ?
-                <button
-                  title="Move down"
-                  onClick={
-                    _event => swapContentBlockCB(sortIndex + 1, sortIndex)
-                  }
-                  className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
-                  <i className="fas fa-arrow-down" />
-                </button> :
-                React.null
-            }
+            {sortIndex != 1
+               ? <button
+                   title="Move up"
+                   onClick={_event =>
+                     swapContentBlockCB(sortIndex, sortIndex - 1)
+                   }
+                   className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                   <i className="fas fa-arrow-up" />
+                 </button>
+               : React.null}
+            {sortIndex != blockCount
+               ? <button
+                   title="Move down"
+                   onClick={_event =>
+                     swapContentBlockCB(sortIndex + 1, sortIndex)
+                   }
+                   className="px-3 py-2 text-gray-700 hover:text-primary-400 hover:bg-primary-100 focus:outline-none">
+                   <i className="fas fa-arrow-down" />
+                 </button>
+               : React.null}
             <button
               title="Delete block"
-              onClick={
-                _event =>
-                  handleDeleteContentBlock(
-                    contentBlock,
-                    authenticityToken,
-                    removeTargetContentCB,
-                    sortIndex,
-                  )
+              onClick={_event =>
+                handleDeleteContentBlock(
+                  contentBlock,
+                  authenticityToken,
+                  removeTargetContentCB,
+                  sortIndex,
+                )
               }
               className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
               <i className="fas fa-trash-alt" />
@@ -526,20 +519,19 @@ let make =
           <form
             id={"content-block-form-" ++ (sortIndex |> string_of_int)}
             key={"content-block-form-" ++ editorId}
-            onSubmit={
-              event =>
-                submitForm(
-                  event,
-                  state,
-                  authenticityToken,
-                  blockType,
-                  dispatch,
-                  contentBlock,
-                  target,
-                  sortIndex,
-                  createNewContentCB,
-                  updateContentBlockCB,
-                )
+            onSubmit={event =>
+              submitForm(
+                event,
+                state,
+                authenticityToken,
+                blockType,
+                dispatch,
+                contentBlock,
+                target,
+                sortIndex,
+                createNewContentCB,
+                updateContentBlockCB,
+              )
             }>
             <input
               name="authenticity_token"
@@ -563,141 +555,128 @@ let make =
             />
             <div
               className="content-block__content bg-gray-200 flex justify-center items-center rounded-t-lg">
-              {
-                switch (contentBlock) {
-                | Some(contentBlock) =>
-                  <div className="w-full">
-                    {
-                      switch (contentBlock |> ContentBlock.blockType) {
-                      | Markdown(markdown) =>
-                        <MarkdownEditor
-                          updateMarkdownCB
-                          value=markdown
-                          placeholder="You can use Markdown to format this text."
-                          profile=Markdown.Permissive
-                          maxLength=100000
-                          defaultView=MarkdownEditor.Preview
-                        />
-                      | Image(url, caption) =>
-                        <div className="rounded-t-lg bg-white">
-                          <img className="mx-auto" src=url alt=caption />
-                          {
-                            switch (caption) {
-                            | "" => React.null
-
-                            | caption =>
-                              <div
-                                className="px-4 py-2 text-sm italic text-center">
-                                {caption |> str}
-                              </div>
-                            }
-                          }
-                        </div>
-                      | Embed(_url, embedCode) =>
-                        <div
-                          className="content-block__embed rounded-lg overflow-hidden"
-                          dangerouslySetInnerHTML={"__html": embedCode}
-                        />
-                      | File(url, title, filename) =>
-                        <a
-                          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
-                          target="_blank"
-                          href=url>
-                          <div className="flex items-center">
-                            <FaIcon
-                              classes="text-4xl text-gray-800 far fa-file-alt"
-                            />
-                            <div className="pl-4 leading-tight">
-                              <div className="text-lg font-semibold">
-                                {title |> str}
-                              </div>
-                              <div className="text-sm italic text-gray-600">
-                                {filename |> str}
-                              </div>
-                            </div>
-                          </div>
-                        </a>
-                      }
-                    }
-                  </div>
-                | None =>
-                  switch (blockType) {
-                  | Markdown(_markdown) =>
-                    <div className="w-full">
+              {switch (contentBlock) {
+               | Some(contentBlock) =>
+                 <div className="w-full">
+                   {switch (contentBlock |> ContentBlock.blockType) {
+                    | Markdown(markdown) =>
                       <MarkdownEditor
                         updateMarkdownCB
-                        value=""
+                        value={state.markdownContent}
                         placeholder="You can use Markdown to format this text."
                         profile=Markdown.Permissive
                         maxLength=100000
-                        defaultView=MarkdownEditor.Edit
+                        defaultView=MarkdownEditor.Preview
                       />
-                    </div>
-                  | _ =>
-                    contentUploadContainer(
-                      blockType,
-                      dispatch,
-                      state,
-                      editorId,
-                    )
-                  }
-                }
-              }
-              {
-                switch (blockType) {
-                | Markdown(_markdown) =>
-                  <input
-                    type_="hidden"
-                    name="content_block[markdown]"
-                    value={state.markdownContent}
-                  />
-                | _ => React.null
-                }
-              }
+                    | Image(url, caption) =>
+                      <div className="rounded-t-lg bg-white">
+                        <img className="mx-auto" src=url alt=caption />
+                        {switch (caption) {
+                         | "" => React.null
+
+                         | caption =>
+                           <div
+                             className="px-4 py-2 text-sm italic text-center">
+                             {caption |> str}
+                           </div>
+                         }}
+                      </div>
+                    | Embed(_url, embedCode) =>
+                      <div
+                        className="content-block__embed rounded-lg overflow-hidden"
+                        dangerouslySetInnerHTML={"__html": embedCode}
+                      />
+                    | File(url, title, filename) =>
+                      <a
+                        className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
+                        target="_blank"
+                        href=url>
+                        <div className="flex items-center">
+                          <FaIcon
+                            classes="text-4xl text-gray-800 far fa-file-alt"
+                          />
+                          <div className="pl-4 leading-tight">
+                            <div className="text-lg font-semibold">
+                              {title |> str}
+                            </div>
+                            <div className="text-sm italic text-gray-600">
+                              {filename |> str}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    }}
+                 </div>
+               | None =>
+                 switch (blockType) {
+                 | Markdown(_markdown) =>
+                   <div className="w-full">
+                     <MarkdownEditor
+                       updateMarkdownCB
+                       value={state.markdownContent}
+                       placeholder="You can use Markdown to format this text. tada"
+                       profile=Markdown.Permissive
+                       maxLength=100000
+                       defaultView=MarkdownEditor.Edit
+                     />
+                   </div>
+                 | _ =>
+                   contentUploadContainer(
+                     blockType,
+                     dispatch,
+                     state,
+                     editorId,
+                   )
+                 }
+               }}
+              {switch (blockType) {
+               | Markdown(_markdown) =>
+                 <input
+                   type_="hidden"
+                   name="content_block[markdown]"
+                   value={state.markdownContent}
+                 />
+               | _ => React.null
+               }}
             </div>
             /* Content block action bar */
             <div className="flex border-t justify-end">
-              {
-                actionBarTextInputVisible(blockType, contentBlock) ?
-                  <div
-                    className="flex-1 content-block__action-bar-input p-3 pr-0">
-                    <input
-                      className="appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
-                      id="captions"
-                      name={
-                        switch (blockType) {
-                        | File(_url, _title, _filename) => "content_block[title]"
-                        | Image(_url, _caption) => "content_block[caption]"
-                        | Embed(_url, _embedCode) => "content_block[url]"
-                        | Markdown(_markdown) => ""
-                        }
-                      }
-                      onChange={
-                        event =>
-                          dispatch(
-                            UpdateContentBlockPropertyText(
-                              ReactEvent.Form.target(event)##value,
-                            ),
-                          )
-                      }
-                      type_="text"
-                      value={state.contentBlockPropertyText}
-                      placeholder={placeHolderText(blockType)}
-                    />
-                  </div> :
-                  React.null
-              }
-              {
-                updateButtonVisible(contentBlock, blockType) ?
-                  <div className="text-right py-3 pl-2 pr-3">
-                    <button
-                      className="btn btn-large btn-success"
-                      disabled={saveDisabled(state)}>
-                      {editorButtonText(contentBlock) |> str}
-                    </button>
-                  </div> :
-                  React.null
-              }
+              {actionBarTextInputVisible(blockType, contentBlock)
+                 ? <div
+                     className="flex-1 content-block__action-bar-input p-3 pr-0">
+                     <input
+                       className="appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+                       id="captions"
+                       name={
+                         switch (blockType) {
+                         | File(_url, _title, _filename) => "content_block[title]"
+                         | Image(_url, _caption) => "content_block[caption]"
+                         | Embed(_url, _embedCode) => "content_block[url]"
+                         | Markdown(_markdown) => ""
+                         }
+                       }
+                       onChange={event =>
+                         dispatch(
+                           UpdateContentBlockPropertyText(
+                             ReactEvent.Form.target(event)##value,
+                           ),
+                         )
+                       }
+                       type_="text"
+                       value={state.contentBlockPropertyText}
+                       placeholder={placeHolderText(blockType)}
+                     />
+                   </div>
+                 : React.null}
+              {updateButtonVisible(contentBlock, blockType)
+                 ? <div className="text-right py-3 pl-2 pr-3">
+                     <button
+                       className="btn btn-large btn-success"
+                       disabled={saveDisabled(state)}>
+                       {editorButtonText(contentBlock) |> str}
+                     </button>
+                   </div>
+                 : React.null}
             </div>
           </form>
         </div>

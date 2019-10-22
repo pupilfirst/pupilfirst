@@ -21,6 +21,6 @@ class TeamsResolver < ApplicationResolver
   end
 
   def teams_in_course
-    course.startups.active.order(:id)
+    course.startups.active.includes(founders: { user: { avatar_attachment: :blob } }).order(:id)
   end
 end

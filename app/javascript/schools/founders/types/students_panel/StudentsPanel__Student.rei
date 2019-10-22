@@ -2,9 +2,9 @@ type t;
 
 let decode: Js.Json.t => t;
 
-let id: t => int;
+let id: t => string;
 
-let teamId: t => int;
+let teamId: t => string;
 
 let email: t => string;
 
@@ -28,7 +28,7 @@ let excludedFromLeaderboard: t => bool;
 
 let name: t => string;
 
-let avatarUrl: t => string;
+let avatarUrl: t => option(string);
 
 let title: t => string;
 

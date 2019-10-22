@@ -1,5 +1,8 @@
 module Schools
   class CoursesController < SchoolsController
+    include CamelizeKeys
+    include StringifyIds
+
     layout 'school'
 
     def index
@@ -55,19 +58,21 @@ module Schools
 
       form = Schools::Founders::CreateForm.new(Reform::OpenForm.new)
 
-      if form.validate(params)
+      response = if form.validate(params)
         student_count = form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, course)
 
-        render json: {
+        {
           teams: presenter.teams,
           students: presenter.students,
           error: nil,
           studentCount: student_count
         }
       else
-        render json: { error: form.errors.full_messages.join(', ') }
+        { error: form.errors.full_messages.join(', ') }
       end
+
+      render json: camelize_keys(stringify_ids(response))
     end
 
     # POST /school/courses/:course_id/mark_teams_active?team_ids[]=

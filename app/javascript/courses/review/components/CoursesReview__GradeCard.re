@@ -146,7 +146,9 @@ let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
     <p className="text-xs font-semibold text-gray-800">
       {(selectedGrade |> string_of_int)
        ++ "/"
-       ++ (GradeLabel.maxGrade(gradeLabels) |> string_of_int)
+       ++ (
+         GradeLabel.maxGrade(gradeLabels |> Array.to_list) |> string_of_int
+       )
        |> str}
     </p>
   </div>;
@@ -537,7 +539,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white py-4 md:pb-6 mx-3 md:mx-6">
+       <div className="bg-white py-4 mx-3 md:mx-6 border-t">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

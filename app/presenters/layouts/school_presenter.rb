@@ -6,7 +6,6 @@ module Layouts
         school_logo_path: school_logo_path,
         school_icon_path: school_icon_path,
         courses: courses,
-        is_student: current_user_is_a_student?,
         review_path: coach_dashboard_path,
         is_course_author: current_user_is_a_course_author?
       }
@@ -42,10 +41,6 @@ module Layouts
           end
         end
       end
-    end
-
-    def current_user_is_a_student?
-      current_user.founders.exists?
     end
 
     def courses

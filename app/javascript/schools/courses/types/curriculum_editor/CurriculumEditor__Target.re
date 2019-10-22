@@ -111,15 +111,15 @@ let updateSortIndex = sortedTargets =>
   sortedTargets
   |> List.mapi((sortIndex, t) =>
        create(
-         t.id,
-         t.targetGroupId,
-         t.title,
-         t.evaluationCriteria,
-         t.prerequisiteTargets,
-         t.quiz,
-         t.linkToComplete,
-         sortIndex,
-         t.visibility,
-         t.completionInstructions,
+         ~id=t.id,
+         ~targetGroupId=t.targetGroupId,
+         ~title=t.title,
+         ~evaluationCriteria=t.evaluationCriteria,
+         ~prerequisiteTargets=t.prerequisiteTargets,
+         ~quiz=t.quiz,
+         ~linkToComplete=t.linkToComplete,
+         ~sortIndex,
+         ~visibility=t.visibility,
+         ~completionInstructions=t.completionInstructions,
        )
      );

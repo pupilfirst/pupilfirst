@@ -96,14 +96,13 @@ feature 'Curriculum Editor', js: true do
       click_button 'Create Level'
       expect(page).to have_text("Level Name")
       fill_in 'Level Name', with: new_level_name
-      fill_in 'Unlock level on', with: date.day.to_s + "/" + date.month.to_s + "/" + date.year.to_s
+      fill_in 'Unlock level on', with: date.iso8601
       click_button 'Create New Level'
 
       expect(page).to have_text("Level created successfully")
       dismiss_notification
 
-      course.reload
-      level = course.levels.last
+      level = course.reload.levels.last
       expect(level.name).to eq(new_level_name)
       expect(level.unlock_on).to eq(date)
 
@@ -116,7 +115,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text('Level updated successfully')
       dismiss_notification
 
-      expect(level.reload.unlock_on).not_to eq(date)
+      expect(level.reload.unlock_on).to eq(nil)
 
       # he should be able to create a new target group
       find('.target-group__create').click
@@ -167,6 +166,10 @@ feature 'Curriculum Editor', js: true do
       # Update sort index
       find("#target-group-move-down-#{target_group.id}").click
       expect { target_group.reload.sort_index }.to eventually(eq 1)
+
+      # TODO: This section of the spec is flaky. The sleep is here to try and avoid a failure to click properly.
+      sleep 0.2
+
       find("#target-group-move-up-#{target_group.id}").click
       expect { target_group.reload.sort_index }.to eventually(eq 0)
 
@@ -179,6 +182,27 @@ feature 'Curriculum Editor', js: true do
       dismiss_notification
 
       click_button 'Edit'
+
+      # Allow adding a new content block and deleting the sample block
+      find("div#add-block-1", visible: false).click
+      within("div#content-type-picker-1") do
+        find('p', text: 'Markdown').click
+      end
+
+      replace_markdown(sample_markdown_text)
+      find('span', text: 'Preview').click
+      click_button 'Save'
+      expect(page).to have_text('Content added successfully')
+      dismiss_notification
+
+      accept_confirm do
+        within('#content-block-controls-2') do
+          find_button('Delete block').click
+        end
+      end
+
+      click_button 'Next Step'
+      find('span', text: 'Add Content').click
 
       expect(page).to have_selector('.content-block__content', count: 1)
       expect(page).to have_selector('.add-content-block--open', count: 1)

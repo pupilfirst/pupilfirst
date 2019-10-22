@@ -1,17 +1,22 @@
 module Schools
   class FoundersController < SchoolsController
+    include StringifyIds
+    include CamelizeKeys
+
     # POST /school/students/team_up?founder_ids=&team_name=
     def team_up
       authorize(Founder, policy_class: Schools::FounderPolicy)
       form = Schools::Founders::TeamUpForm.new(Reform::OpenForm.new)
 
-      if form.validate(params)
+      response = if form.validate(params)
         startup = form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, startup.course)
-        render json: { teams: presenter.teams, students: presenter.students, error: nil }
+        { teams: presenter.teams, students: presenter.students, error: nil }
       else
-        render json: { error: form.errors.full_messages.join(', ') }
+        { error: form.errors.full_messages.join(', ') }
       end
+
+      render json: camelize_keys(stringify_ids(response))
     end
 
     # PATCH /school/students/:id
@@ -21,13 +26,15 @@ module Schools
 
       form = Schools::Founders::EditForm.new(student)
 
-      if form.validate(params[:founder].merge(tags: params[:tags], coach_ids: params[:coach_ids]))
+      response = if form.validate(params[:founder].merge(tags: params[:tags], coach_ids: params[:coach_ids]))
         form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
-        render json: { teams: presenter.teams, students: presenter.students, error: nil }
+        { teams: presenter.teams, students: presenter.students, error: nil }
       else
-        render json: { error: form.errors.full_messages.join(', ') }
+        { error: form.errors.full_messages.join(', ') }
       end
+
+      render json: camelize_keys(stringify_ids(response))
     end
 
     private

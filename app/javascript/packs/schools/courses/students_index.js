@@ -5,5 +5,7 @@ import * as ReactDOM from "react-dom";
 import { jsComponent } from "../../../schools/founders/components/SA_ActiveStudentsPanel.bs";
 
 const root = document.getElementById("sa-students-panel");
-const props = JSON.parse(root.dataset.props);
+const props = JSON.parse(
+  document.getElementById("sa-students-panel-data").innerHTML
+);
 ReactDOM.render(React.createElement(jsComponent, props), root);

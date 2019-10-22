@@ -6,7 +6,6 @@ let decodeProps = json =>
     json |> field("schoolLogoPath", string),
     json |> field("schoolIconPath", string),
     json |> field("courses", list(SchoolAdminNavbar__Course.decode)),
-    json |> field("isStudent", bool),
     json |> field("isCourseAuthor", bool),
     json |> field("reviewPath", nullable(string)) |> Js.Null.toOption,
   );
@@ -16,7 +15,6 @@ let (
   schoolLogoPath,
   schoolIconPath,
   courses,
-  isStudent,
   isCourseAuthor,
   reviewPath,
 ) =
@@ -29,7 +27,6 @@ ReactDOMRe.renderToElementWithId(
     schoolLogoPath
     schoolIconPath
     courses
-    isStudent
     isCourseAuthor
     reviewPath
   />,

@@ -68,9 +68,9 @@ let decodeJS = details =>
          ~id=s##id,
          ~description=s##description,
          ~createdAt=s##createdAt |> DateFns.parseString,
-         ~passedAt=s##passedAt |> Date.parseOption,
+         ~passedAt=s##passedAt |> OptionUtils.map(DateFns.parseString),
          ~evaluatorName=s##evaluatorName,
-         ~evaluatedAt=s##evaluatedAt |> Date.parseOption,
+         ~evaluatedAt=s##evaluatedAt |> OptionUtils.map(DateFns.parseString),
          ~attachments=
            s##attachments
            |> Js.Array.map(a => makeAttachment(~url=a##url, ~title=a##title)),

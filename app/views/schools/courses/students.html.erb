@@ -5,5 +5,8 @@
 
 <% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>
 
-<div id="sa-students-panel" class="flex flex-1 h-full" data-props="<%= @presenter.react_props.to_json %>"></div>
+<script type="application/json" id="sa-students-panel-data">
+  <%= @presenter.props_to_json.html_safe %>
+</script>
 
+<div id="sa-students-panel" class="flex flex-1 h-full"></div>

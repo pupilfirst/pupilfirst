@@ -5,12 +5,17 @@ module Types
     field :level_id, ID, null: false
     field :students, [Types::StudentType], null: false
 
-    def team_id
-      object.startup_id
-    end
-
     def students
-      object.founders
+      object.founders.map do |student|
+        student_attributes = { id: student.id, name: student.name }
+
+        if student.user.avatar.attached?
+          student_attributes[:avatar_url] =
+            Rails.application.routes.url_helpers.rails_representation_path(student.user.avatar_variant(:thumb), only_path: true)
+        end
+
+        student_attributes
+      end
     end
   end
 end

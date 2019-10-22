@@ -8,6 +8,10 @@
 
 [![Screenshots](https://public-assets.sv.co/random/201909/pupilfirst-screenshots.png)](https://www.pupilfirst.com)
 
+## Changelog
+
+Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view the full changelog.
+
 ## Setup for development
 
 1. [Install and configure dependencies](#install-and-configure-dependencies)

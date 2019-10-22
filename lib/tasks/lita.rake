@@ -7,7 +7,6 @@ namespace :lita do
 
     # Require all handlers.
     require_relative '../lita/handlers/backup'
-    require_relative '../lita/handlers/changelog'
     require_relative '../lita/handlers/targets'
     require_relative '../lita/handlers/thanks'
 

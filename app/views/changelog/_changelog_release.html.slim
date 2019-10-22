@@ -1,8 +1,0 @@
-h3 = release[:week_title]
-
-- release[:categories].each do |category, changes|
-  h4 = category
-
-  ul
-    - changes.each do |change|
-      li.changelog__title == Kramdown::Document.new(change[:title]).to_html

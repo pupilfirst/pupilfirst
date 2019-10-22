@@ -21,6 +21,6 @@ class TeamsResolver < ApplicationResolver
   end
 
   def teams_in_course
-    course.startups.active
+    course.startups.active.order(:id)
   end
 end

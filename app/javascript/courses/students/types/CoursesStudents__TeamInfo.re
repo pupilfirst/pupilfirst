@@ -1,6 +1,7 @@
 type student = {
   id: string,
   name: string,
+  avatarUrl: option(string),
 };
 
 type t = {
@@ -17,7 +18,11 @@ let name = t => t.name;
 
 let students = t => t.students;
 
-let makeStudent = (~id, ~name) => {id, name};
+let studentId = (student: student) => student.id;
+
+let studentName = (student: student) => student.name;
+
+let makeStudent = (~id, ~name, ~avatarUrl) => {id, name, avatarUrl};
 
 let make = (~id, ~name, ~levelId, ~students) => {
   id,
@@ -34,7 +39,11 @@ let decodeJS = teamDetails => {
          let students =
            team##students
            |> Array.map(student =>
-                makeStudent(~id=student##id, ~name=student##name)
+                makeStudent(
+                  ~id=student##id,
+                  ~name=student##name,
+                  ~avatarUrl=student##avatarUrl,
+                )
               );
          [
            make(

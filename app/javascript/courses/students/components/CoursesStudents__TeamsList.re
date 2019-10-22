@@ -16,6 +16,7 @@ module TeamsQuery = [%graphql
         students {
           id,
           name
+          avatarUrl
         }
         }
         pageInfo{
@@ -87,19 +88,32 @@ let getTeams =
   |> ignore;
 };
 
-let teamsList = (teams, levels, openOverlayCB) => {
-  teams
-  |> Array.map(team =>
+let studentAvatar = (student: TeamInfo.student) => {
+  switch (student.avatarUrl) {
+  | Some(avatarUrl) =>
+    <img className="w-10 h-10 rounded-full mr-4 object-cover" src=avatarUrl />
+  | None =>
+    <Avatar
+      name={student |> TeamInfo.studentName}
+      className="w-10 h-10 mr-4"
+    />
+  };
+};
+
+let showStudentList = (team, levels, openOverlayCB) => {
+  team
+  |> TeamInfo.students
+  |> Array.map(student =>
        <div
-         key={team |> TeamInfo.id}
+         key={student |> TeamInfo.studentId}
          onClick={_ => openOverlayCB()}
-         ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
+         ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
          className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
+         {studentAvatar(student)}
          <div className="w-full w-5/6 md:w-3/4">
            <div className="block text-sm md:pr-2">
-             <span
-               className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-               {team |> TeamInfo.name |> str}
+             <span className="text-black font-semibold inline-block">
+               {student |> TeamInfo.studentName |> str}
              </span>
            </div>
          </div>
@@ -123,6 +137,12 @@ let teamsList = (teams, levels, openOverlayCB) => {
          </div>
        </div>
      )
+  |> React.array;
+};
+
+let teamsList = (teams, levels, openOverlayCB) => {
+  teams
+  |> Array.map(team => showStudentList(team, levels, openOverlayCB))
   |> React.array;
 };
 

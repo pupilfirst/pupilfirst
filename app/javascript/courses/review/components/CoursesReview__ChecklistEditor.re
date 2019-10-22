@@ -134,11 +134,21 @@ let removeChecklistItem = (itemIndex, setState) => {
   );
 };
 
+let initialStateForReviewChecklist = reviewChecklist => {
+  reviewChecklist |> ArrayUtils.isEmpty
+    ? ReviewChecklistItem.emptyTemplate() : reviewChecklist;
+};
+
 [@react.component]
 let make =
     (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
   let (state, setState) =
-    React.useState(() => {reviewChecklist, saving: false});
+    React.useState(() =>
+      {
+        reviewChecklist: reviewChecklist |> initialStateForReviewChecklist,
+        saving: false,
+      }
+    );
   <div>
     {state.reviewChecklist
      |> Array.mapi((itemIndex, reviewChecklistItem) =>

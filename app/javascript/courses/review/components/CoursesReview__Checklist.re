@@ -1,40 +1,39 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
 
-open CoursesReview__Types;
-
-type state = {editMode: bool};
+type state =
+  | Empty
+  | Edit
+  | Show;
 
 let str = React.string;
 
-let closeEditMode = (setState, ()) => {
-  setState(_ => {editMode: false});
+let computeState = reviewChecklist => {
+  reviewChecklist |> ArrayUtils.isEmpty ? Empty : Show;
+};
+
+let closeEditMode = (reviewChecklist, setState, ()) => {
+  setState(_ => computeState(reviewChecklist));
 };
 
 let showEditor = (setState, ()) => {
-  setState(_ => {editMode: true});
+  setState(_ => Edit);
 };
 
 let updateReviewChecklist =
     (setState, updateReviewChecklistCB, reviewChecklist) => {
-  setState(_ => {editMode: false});
+  setState(_ => computeState(reviewChecklist));
   updateReviewChecklistCB(reviewChecklist);
 };
 
-let handleEmpty = (setState, updateReviewChecklistCB) => {
+let handleEmpty = setState => {
   <div className="text-center">
     <div className="text-sm">
       {"Prepare for your review by creating a checklist" |> str}
     </div>
     <button
       className="btn btn-large btn-primary mt-4"
-      onClick={_ =>
-        updateReviewChecklist(
-          setState,
-          updateReviewChecklistCB,
-          ReviewChecklistItem.emptyTemplate(),
-        )
-      }>
+      onClick={_ => setState(_ => Edit)}>
       {"Create a review checklist" |> str}
     </button>
   </div>;
@@ -49,23 +48,24 @@ let make =
       ~updateReviewChecklistCB,
       ~targetId,
     ) => {
-  let (state, setState) = React.useState(() => {editMode: false});
+  let (state, setState) =
+    React.useState(() => computeState(reviewChecklist));
   <div className="pb-4 md:pb-6">
     <h5 className="font-semibold text-sm"> {"Review Checklist" |> str} </h5>
     <div className="bg-gray-100 rounded-sm mt-2 p-2 md:p-4">
-      {switch (reviewChecklist |> ArrayUtils.isEmpty, state.editMode) {
-       | (true, _) => handleEmpty(setState, updateReviewChecklistCB)
-       | (false, true) =>
+      {switch (state) {
+       | Empty => handleEmpty(setState)
+       | Edit =>
          <CoursesReview__ChecklistEditor
            reviewChecklist
            updateReviewChecklistCB={updateReviewChecklist(
              setState,
              updateReviewChecklistCB,
            )}
-           closeEditModeCB={closeEditMode(setState)}
+           closeEditModeCB={closeEditMode(reviewChecklist, setState)}
            targetId
          />
-       | (false, false) =>
+       | Show =>
          <CoursesReview__ChecklistShow
            reviewChecklist
            feedback

@@ -103,13 +103,11 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                         onChange={checkboxOnChange(i, index, setSelecton)}
                       />
                       <div className="pl-7 pb-2">
-                        {switch (
-                           checklistItem |> ReviewChecklistResult.feedback
-                         ) {
-                         | Some(feedback) =>
-                           <div className="text-sm"> {feedback |> str} </div>
-                         | None => React.null
-                         }}
+                        <CoursesReview__ChecklistShowFeedback
+                          feedback={
+                            checklistItem |> ReviewChecklistResult.feedback
+                          }
+                        />
                       </div>
                     </div>
                   )

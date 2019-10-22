@@ -157,7 +157,7 @@ let make =
               <div className="flex items-center">
                 <div className="w-full">
                   <input
-                    className="checklist-editor__checklist-item-title focus:outline-none focus:bg-white focus:border-primary-300"
+                    className="checklist-editor__checklist-item-title text-sm focus:outline-none focus:bg-white focus:border-primary-300"
                     id="checklist_title"
                     type_="text"
                     placeholder="Add title for checklist item"
@@ -301,7 +301,7 @@ let make =
           {"Add Checklist Item" |> str}
         </button>
       </div>
-      <div className="py-2 mt-4 flex">
+      <div className="py-2 mt-4 flex flex-row-reverse">
         <button
           disabled={state.saving}
           onClick={_ =>
@@ -316,9 +316,8 @@ let make =
           {"Save Checklist" |> str}
         </button>
         <button
-          className="btn btn-primary-ghost ml-2"
-          onClick={_ => closeEditModeCB()}>
-          {"Close" |> str}
+          className="btn btn-subtle mr-4" onClick={_ => closeEditModeCB()}>
+          {"Cancel" |> str}
         </button>
       </div>
     </DisablingCover>

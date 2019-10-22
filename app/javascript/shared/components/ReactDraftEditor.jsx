@@ -188,7 +188,7 @@ export default function ReactDraftEditor(props) {
   }, [props.insertText]);
 
   return (
-    <div className="flex-grow px-3 pt-3" onClick={focusEditor}>
+    <div className="flex-grow px-3 py-3" onClick={focusEditor}>
       <Editor
         ariaLabelledBy={props.ariaLabelledBy}
         ref={editor}

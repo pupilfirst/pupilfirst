@@ -15,7 +15,7 @@ let make =
       ~targetId,
     ) => {
   let (showChecklist, setShowCHecklist) = React.useState(() => showChecklist);
-  <div className="pt-4 md:pt-6 course-review__feedback-editor">
+  <div>
     <div>
       {showChecklist
          ? <CoursesReview__Checklist
@@ -25,21 +25,27 @@ let make =
              updateReviewChecklistCB
              targetId
            />
-         : <div>
+         : <div className="px-4 pt-4 md:px-6 pt-6">
              <button
-               className="btn btn-primary"
+               className="flex items-center bg-gray-100 border p-4 rounded-lg w-full text-left text-primary-500 font-semibold hover:bg-gray-200 hover:border-primary-300 focus:outline-none"
                onClick={_ => setShowCHecklist(_ => true)}>
-               {"Show Review Checklist" |> str}
+               <span
+                 className="inline-flex w-10 h-10 border border-white items-center justify-center rounded-full bg-primary-100 text-primary-500">
+                 <i className="fas fa-list" />
+               </span>
+               <span className="ml-3"> {"Show Review Checklist" |> str} </span>
              </button>
            </div>}
     </div>
-    <MarkdownEditor
-      updateMarkdownCB=updateFeedbackCB
-      value=feedback
-      label
-      profile=Markdown.Permissive
-      defaultView=MarkdownEditor.Edit
-      maxLength=10000
-    />
+    <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor">
+      <MarkdownEditor
+        updateMarkdownCB=updateFeedbackCB
+        value=feedback
+        label
+        profile=Markdown.Permissive
+        defaultView=MarkdownEditor.Edit
+        maxLength=10000
+      />
+    </div>
   </div>;
 };

@@ -50,7 +50,7 @@ let make =
     ) => {
   let (state, setState) =
     React.useState(() => computeState(reviewChecklist));
-  <div className="pb-4 md:pb-6">
+  <div className="px-4 pt-4 md:px-6 md:pt-6">
     <h5 className="font-semibold text-sm"> {"Review Checklist" |> str} </h5>
     <div className="bg-gray-100 rounded-sm mt-2 p-2 md:p-4">
       {switch (state) {

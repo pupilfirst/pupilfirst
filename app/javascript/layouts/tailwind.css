@@ -78,6 +78,18 @@ input:disabled, .disabled {
   @apply bg-gray-400 text-primary-700;
 }
 
+.btn-subtle {
+  @apply bg-transparent text-gray-800;
+}
+
+.btn-subtle:hover {
+  @apply bg-gray-300 text-gray-900;
+}
+
+.btn-subtle:focus {
+  @apply bg-gray-400 text-gray-900;
+}
+
 .btn-primary {
   @apply bg-primary-500 text-white shadow;
   background-image: linear-gradient( 135deg, rgba(96, 37, 192, 1) 0%, rgba(77, 30, 154, 1) 100%);

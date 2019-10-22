@@ -107,12 +107,12 @@ let make =
     React.useState(() =>
       {saving: false, newFeedback: "", showFeedbackEditor: false}
     );
-  <div ariaLabel="feedback-section">
+  <div className="mt-6" ariaLabel="feedback-section">
     {showFeedback(feedback)}
     {reviewed
        ? <div className="bg-white rounded-b-lg">
            {state.showFeedbackEditor
-              ? <div className="p-4 md:p-6">
+              ? <div>
                   <DisablingCover disabled={state.saving}>
                     <CoursesReview__FeedbackEditor
                       feedback={state.newFeedback}
@@ -124,20 +124,23 @@ let make =
                       targetId
                     />
                   </DisablingCover>
-                  <button
-                    disabled={state.newFeedback == "" || state.saving}
-                    className="btn btn-success btn-large w-full border border-green-600 mt-4"
-                    onClick={_ =>
-                      createFeedback(
-                        authenticityToken,
-                        submissionId,
-                        state.newFeedback,
-                        setState,
-                        updateSubmissionCB,
-                      )
-                    }>
-                    {"Share Feedback" |> str}
-                  </button>
+                  <div
+                    className="flex justify-end px-4 pt-2 pb-4 md:px-6 md:pb-6">
+                    <button
+                      disabled={state.newFeedback == "" || state.saving}
+                      className="btn btn-success border border-green-600"
+                      onClick={_ =>
+                        createFeedback(
+                          authenticityToken,
+                          submissionId,
+                          state.newFeedback,
+                          setState,
+                          updateSubmissionCB,
+                        )
+                      }>
+                      {"Share Feedback" |> str}
+                    </button>
+                  </div>
                 </div>
               : <div
                   className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">

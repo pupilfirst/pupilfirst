@@ -494,7 +494,7 @@ let make =
   let status =
     computeStatus(submission, state.grades, evaluationCriteria, passGrade);
   <DisablingCover disabled={state.saving}>
-    <div className="px-4 md:px-6 ">
+    <div className=" ">
       {showFeedbackForm(
          submission |> Submission.grades,
          reviewChecklist,
@@ -503,7 +503,7 @@ let make =
          setState,
          targetId,
        )}
-      <div className="w-full py-4 md:pb-6 md:pt-7">
+      <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
         <div className="font-semibold text-sm"> {"Grade Card" |> str} </div>
         <div className="flex md:flex-row flex-col">
           <div className="w-full md:w-3/6">
@@ -539,7 +539,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white py-4 mx-3 md:mx-6 border-t">
+       <div className="bg-white pt-4 mx-3 md:mx-6">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

@@ -84,7 +84,7 @@ let updateTeams = (~setState, ~teams, ~hasNextPage, ~endCursor) =>
     }
   );
 
-let openOverlayCB = {
+let openOverlayCB = () => {
   Js.log("Open Overlay");
 };
 

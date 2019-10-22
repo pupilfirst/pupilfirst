@@ -30,18 +30,16 @@ let updateTeamInfo =
     (setLoading, endCursor, hasNextPage, teams, updateTeamsCB, nodes) => {
   updateTeamsCB(
     ~teams=
-      teams
-      |> Array.append(
-           (
-             switch (nodes) {
-             | None => [||]
-             | Some(teamsArray) => teamsArray |> TeamInfo.decodeJS
-             }
-           )
-           |> Array.to_list
-           |> List.flatten
-           |> Array.of_list,
-         ),
+      (
+        switch (nodes) {
+        | None => [||]
+        | Some(teamsArray) => teamsArray |> TeamInfo.decodeJS
+        }
+      )
+      |> Array.to_list
+      |> List.flatten
+      |> Array.of_list
+      |> Array.append(teams),
     ~hasNextPage,
     ~endCursor,
   );
@@ -93,17 +91,35 @@ let teamsList = (teams, levels, openOverlayCB) => {
   teams
   |> Array.map(team =>
        <div
-         key={team |> CoursesStudents__TeamInfo.id}
-         onClick={_ => openOverlayCB}
-         ariaLabel={"team-card-" ++ (team |> CoursesStudents__TeamInfo.id)}
+         key={team |> TeamInfo.id}
+         onClick={_ => openOverlayCB()}
+         ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
          className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
-         <div className="w-full md:w-3/4">
+         <div className="w-full w-5/6 md:w-3/4">
            <div className="block text-sm md:pr-2">
              <span
                className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-               {team |> CoursesStudents__TeamInfo.name |> str}
+               {team |> TeamInfo.name |> str}
              </span>
            </div>
+         </div>
+         <div className="w-1/6 text-center">
+           <span
+             className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
+             <div className="text-xs font-semibold"> {"Level" |> str} </div>
+             <div className="font-bold">
+               {levels
+                |> ArrayUtils.unsafeFind(
+                     (l: Level.t) => l.id == TeamInfo.levelId(team),
+                     "Unable to find level with id: "
+                     ++ TeamInfo.levelId(team)
+                     ++ "in CoursesStudents__TeamsList",
+                   )
+                |> Level.number
+                |> string_of_int
+                |> str}
+             </div>
+           </span>
          </div>
        </div>
      )

@@ -71,7 +71,7 @@ let generateFeedback =
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
-  <div className="relative">
+  <div className="relative bg-gray-100 rounded-sm p-2 md:p-4">
     <div className="relative w-full md:absolute md:w-auto right-0 top-0">
       <button
         className="btn btn-small btn-primary-ghost w-full md:w-auto"

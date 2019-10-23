@@ -154,7 +154,8 @@ let make =
       {state.reviewChecklist
        |> Array.mapi((itemIndex, reviewChecklistItem) =>
             <div className="mt-2" key={itemIndex |> string_of_int}>
-              <div className="flex items-center">
+              <div
+                className="bg-gray-100 rounded-sm p-2 md:p-4 flex items-center">
                 <div className="w-full">
                   <input
                     className="checklist-editor__checklist-item-title text-sm focus:outline-none focus:bg-white focus:border-primary-300"

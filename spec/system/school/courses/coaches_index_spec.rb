@@ -91,7 +91,9 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text(startup.name)
     expect(startup.faculty.count).to eq(1)
 
-    find("div[aria-label='Delete #{coach_3.name}']").click
+    accept_confirm do
+      find("div[aria-label='Delete #{coach_3.name}']").click
+    end
 
     expect(page).to_not have_text(coach_3.name)
     expect(startup.faculty.count).to eq(0)
@@ -104,7 +106,10 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text('Course Coaches')
     expect(page).to have_text(coach_1.name)
 
-    find("div[aria-label='Delete #{coach_1.name}']").click
+    accept_confirm do
+      find("div[aria-label='Delete #{coach_1.name}']").click
+    end
+
     expect(page).to_not have_text(coach_1.name)
     expect(course_1.faculty.count).to eq(1)
   end

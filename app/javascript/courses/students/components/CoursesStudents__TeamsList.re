@@ -101,52 +101,105 @@ let studentAvatar = (student: TeamInfo.student) => {
   };
 };
 
-let showStudentList = (team, levels, openOverlayCB) => {
-  team
-  |> TeamInfo.students
-  |> Array.map(student =>
-       <div
-         key={student |> TeamInfo.studentId}
-         onClick={_ => openOverlayCB()}
-         ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-         className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
-         {studentAvatar(student)}
-         <div className="w-full w-5/6 md:w-3/4">
-           <div className="block text-sm md:pr-2">
-             <span className="text-black font-semibold inline-block">
-               {student |> TeamInfo.studentName |> str}
-             </span>
-             <p className="text-gray-600 font-semibold text-xs mt-px">
-               {student |> TeamInfo.studentTitle |> str}
-             </p>
-           </div>
-         </div>
-         <div className="w-1/6 text-center">
-           <span
-             className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
-             <div className="text-xs font-semibold"> {"Level" |> str} </div>
-             <div className="font-bold">
-               {levels
-                |> ArrayUtils.unsafeFind(
-                     (l: Level.t) => l.id == TeamInfo.levelId(team),
-                     "Unable to find level with id: "
-                     ++ TeamInfo.levelId(team)
-                     ++ "in CoursesStudents__TeamsList",
-                   )
-                |> Level.number
-                |> string_of_int
-                |> str}
-             </div>
-           </span>
-         </div>
-       </div>
-     )
-  |> React.array;
+let levelInfo = (levelId, levels) => {
+  <span
+    className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
+    <div className="text-xs font-semibold"> {"Level" |> str} </div>
+    <div className="font-bold">
+      {levels
+       |> ArrayUtils.unsafeFind(
+            (l: Level.t) => l.id == levelId,
+            "Unable to find level with id: "
+            ++ levelId
+            ++ "in CoursesStudents__TeamsList",
+          )
+       |> Level.number
+       |> string_of_int
+       |> str}
+    </div>
+  </span>;
+};
+
+let showStudent = (team, levels, openOverlayCB) => {
+  let student = TeamInfo.students(team)[0];
+  <div
+    key={student |> TeamInfo.studentId}
+    onClick={_ => openOverlayCB()}
+    ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
+    className="flex md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
+    {studentAvatar(student)}
+    <div className="w-full w-5/6 md:w-3/4">
+      <div className="block text-sm md:pr-2">
+        <p className="text-black font-semibold inline-block">
+          {student |> TeamInfo.studentName |> str}
+        </p>
+        <p className="text-gray-600 font-semibold text-xs mt-px">
+          {student |> TeamInfo.studentTitle |> str}
+        </p>
+      </div>
+    </div>
+    <div className="w-1/6 text-center">
+      {levelInfo(team |> TeamInfo.levelId, levels)}
+    </div>
+  </div>;
+};
+
+let showTeam = (team, levels, openOverlayCB) => {
+  <div
+    key={team |> TeamInfo.id}
+    ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
+    className="flex shadow bg-white rounded-lg mt-4 overflow-hidden">
+    <div className="flex flex-col flex-1 w-3/5">
+      {team
+       |> TeamInfo.students
+       |> Array.map(student =>
+            <div
+              key={student |> TeamInfo.studentId}
+              ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
+              onClick={_ => openOverlayCB()}
+              className="h-full cursor-pointer flex items-center bg-white">
+              <div className="flex flex-1 w-3/5 h-full">
+                <div className="flex items-center w-full">
+                  <div
+                    className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100">
+                    {studentAvatar(student)}
+                    <div className="text-sm flex flex-col">
+                      <p className="text-black font-semibold inline-block ">
+                        {student |> TeamInfo.studentName |> str}
+                      </p>
+                      <p className="text-gray-600 font-semibold text-xs mt-px">
+                        {student |> TeamInfo.studentTitle |> str}
+                      </p>
+                      <div className="flex flex-wrap" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+       |> React.array}
+    </div>
+    <div className="flex w-2/5 items-center">
+      <div className="w-3/5 py-4 px-3">
+        <div className="students-team--name mb-5">
+          <p className="text-xs"> {"Team Name" |> str} </p>
+          <h5> {team |> TeamInfo.name |> str} </h5>
+        </div>
+      </div>
+      <div className="w-2/5 text-center">
+        {levelInfo(team |> TeamInfo.levelId, levels)}
+      </div>
+    </div>
+  </div>;
 };
 
 let teamsList = (teams, levels, openOverlayCB) => {
   teams
-  |> Array.map(team => showStudentList(team, levels, openOverlayCB))
+  |> Array.map(team =>
+       Array.length(team |> TeamInfo.students) == 1
+         ? showStudent(team, levels, openOverlayCB)
+         : showTeam(team, levels, openOverlayCB)
+     )
   |> React.array;
 };
 

@@ -149,16 +149,15 @@ let make =
         saving: false,
       }
     );
-  <div>
+  <div className="bg-gray-100 rounded-sm p-2 pt-0 md:p-4 md:pt-0">
     <DisablingCover disabled={state.saving}>
       {state.reviewChecklist
        |> Array.mapi((itemIndex, reviewChecklistItem) =>
-            <div className="mt-2" key={itemIndex |> string_of_int}>
-              <div
-                className="bg-gray-100 rounded-sm p-2 md:p-4 flex items-center">
+            <div className="pt-5" key={itemIndex |> string_of_int}>
+              <div className="flex">
                 <div className="w-full">
                   <input
-                    className="checklist-editor__checklist-item-title text-sm focus:outline-none focus:bg-white focus:border-primary-300"
+                    className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
                     id="checklist_title"
                     type_="text"
                     placeholder="Add title for checklist item"
@@ -179,11 +178,11 @@ let make =
                     }
                   />
                 </div>
-                <div
-                  className="btn btn-primary m-2"
+                <button
+                  className="bg-gray-200 p-2 w-11 border border-gray-400 text-gray-700 rounded ml-2 hover:text-red-600 hover:bg-red-100 focus:outline-none"
                   onClick={_ => removeChecklistItem(itemIndex, setState)}>
-                  {"delete" |> str}
-                </div>
+                  <i className="fas fa-trash-alt" />
+                </button>
               </div>
               <div>
                 {reviewChecklistItem
@@ -195,7 +194,7 @@ let make =
                         | None => ""
                         };
                       <div
-                        className="px-2 md:px-4 mt-2"
+                        className="pl-2 md:pl-4 mt-2"
                         key={
                           (itemIndex |> string_of_int)
                           ++ (resultIndex |> string_of_int)
@@ -205,10 +204,10 @@ let make =
                             title="Disabled"
                             className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                           />
-                          <div className="w-full bg-gray-100">
-                            <div>
+                          <div className="w-full bg-gray-100 relative">
+                            <div className="relative">
                               <input
-                                className="checklist-editor__checklist-result-item-title focus:outline-none focus:bg-white focus:border-primary-300"
+                                className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
                                 id={
                                   "result_"
                                   ++ (resultIndex |> string_of_int)
@@ -230,16 +229,26 @@ let make =
                                   )
                                 }
                               />
-                              <School__InputGroupError
-                                message="Title should be greater than 2 characters"
-                                active={
-                                  resultItem
-                                  |> ReviewChecklistResult.title == ""
-                                }
-                              />
+                              <div
+                                className="flex w-10 h-10 absolute top-0 right-0 mr-2 items-center justify-center">
+                                <button
+                                  className="flex items-center justify-center bg-gray-100 w-7 h-7 mt-px text-sm text-gray-700 hover:text-red-600 hover:bg-red-100 rounded-full ml-2 border border-transparent text-center"
+                                  onClick={_ =>
+                                    removeChecklistResult(
+                                      itemIndex,
+                                      resultIndex,
+                                      reviewChecklistItem,
+                                      setState,
+                                    )
+                                  }>
+                                  <Icon className="if i-times-light" />
+                                </button>
+                              </div>
                             </div>
                             <textarea
-                              className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm py-2 px-4 leading-tight w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                              rows=2
+                              cols=33
+                              className="appearance-none border border-gray-400 bg-transparent rounded-b text-xs align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                               id={
                                 "result_"
                                 ++ (resultIndex |> string_of_int)
@@ -259,47 +268,50 @@ let make =
                                 )
                               }
                             />
-                          </div>
-                          <div
-                            className="btn btn-primary m-2"
-                            onClick={_ =>
-                              removeChecklistResult(
-                                itemIndex,
-                                resultIndex,
-                                reviewChecklistItem,
-                                setState,
-                              )
-                            }>
-                            {"delete" |> str}
+                            <School__InputGroupError
+                              message="Title should be greater than 2 characters"
+                              active={
+                                resultItem |> ReviewChecklistResult.title == ""
+                              }
+                            />
                           </div>
                         </div>
                       </div>;
                     })
                  |> React.array}
-                <div className="py-1 mt-2 flex px-2">
-                  // <Checkbox id="" label="" onChange=checkboxOnChange />
-
-                    <button
-                      className="bg-gray-400 px-2 py-1 btn"
-                      onClick={_ =>
-                        addEmptyResultItem(
-                          reviewChecklistItem,
-                          itemIndex,
-                          setState,
-                        )
-                      }>
-                      {"Add feedback template" |> str}
-                    </button>
-                  </div>
+                <button
+                  onClick={_ =>
+                    addEmptyResultItem(
+                      reviewChecklistItem,
+                      itemIndex,
+                      setState,
+                    )
+                  }
+                  className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
+                  <span
+                    title="Add Result"
+                    className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
+                  />
+                  <span
+                    className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-200 px-3 py-1 rounded border border-dashed border-gray-600">
+                    <i className="fas fa-plus text-xs mr-2" />
+                    {"Add Result" |> str}
+                  </span>
+                </button>
               </div>
             </div>
           )
        |> React.array}
-      <div className="py-2 mt-2">
+      <div className="pt-5">
         <button
-          className="bg-gray-400 px-2 py-1 btn w-full"
+          className="flex items-center text-sm font-semibold bg-gray-200 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none"
           onClick={_ => addEmptyChecklistItem(setState)}>
-          {"Add Checklist Item" |> str}
+          <span className="bg-gray-300 py-2 w-10">
+            <i className="fas fa-plus text-sm" />
+          </span>
+          <span className="px-4 py-2">
+            {"Add Checklist Item" |> str}
+          </span>
         </button>
       </div>
       <div className="py-2 mt-4 flex flex-row-reverse">
@@ -313,7 +325,7 @@ let make =
               updateReviewChecklistCB,
             )
           }
-          className="btn btn-primary">
+          className="btn btn-success">
           {"Save Checklist" |> str}
         </button>
         <button

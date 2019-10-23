@@ -72,7 +72,8 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
   <div className="relative bg-gray-100 rounded-sm p-2 md:p-4">
-    <div className="relative w-full md:absolute md:w-auto right-0 top-0">
+    <div
+      className="relative w-full md:absolute md:w-auto right-0 top-0 mt-2 mr-2 md:mt-4 md:mr-4">
       <button
         className="btn btn-small btn-primary-ghost w-full md:w-auto"
         onClick={_ => showEditorCB()}>

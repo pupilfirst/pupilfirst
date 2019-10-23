@@ -1,6 +1,7 @@
 type student = {
   id: string,
   name: string,
+  title: string,
   avatarUrl: option(string),
 };
 
@@ -16,13 +17,22 @@ let levelId = t => t.levelId;
 
 let name = t => t.name;
 
+let title = t => t.title;
+
 let students = t => t.students;
 
 let studentId = (student: student) => student.id;
 
 let studentName = (student: student) => student.name;
 
-let makeStudent = (~id, ~name, ~avatarUrl) => {id, name, avatarUrl};
+let studentTitle = (student: student) => student.title;
+
+let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
+  id,
+  name,
+  title,
+  avatarUrl,
+};
 
 let make = (~id, ~name, ~levelId, ~students) => {
   id,
@@ -42,6 +52,7 @@ let decodeJS = teamDetails => {
                 makeStudent(
                   ~id=student##id,
                   ~name=student##name,
+                  ~title=student##title,
                   ~avatarUrl=student##avatarUrl,
                 )
               );

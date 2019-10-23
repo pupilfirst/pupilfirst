@@ -16,6 +16,7 @@ module TeamsQuery = [%graphql
         students {
           id,
           name
+          title
           avatarUrl
         }
         }
@@ -115,6 +116,9 @@ let showStudentList = (team, levels, openOverlayCB) => {
              <span className="text-black font-semibold inline-block">
                {student |> TeamInfo.studentName |> str}
              </span>
+             <p className="text-gray-600 font-semibold text-xs mt-px">
+               {student |> TeamInfo.studentTitle |> str}
+             </p>
            </div>
          </div>
          <div className="w-1/6 text-center">

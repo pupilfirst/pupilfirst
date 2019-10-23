@@ -315,7 +315,13 @@ let make =
               <div className="max-w-2xl px-6 pt-5 mx-auto">
                 <h5
                   className="uppercase text-center border-b border-gray-400 pb-2">
-                  {"Coach Details" |> str}
+                  {(
+                     switch (coach) {
+                     | Some(coach) => coach |> Coach.name
+                     | None => "Add New Coach"
+                     }
+                   )
+                   |> str}
                 </h5>
               </div>
               <form key="xxx" id=formId onSubmit={event => submitForm(event)}>
@@ -351,32 +357,36 @@ let make =
                       active={state.hasNameError}
                     />
                   </div>
-                  <div className="mt-5">
-                    <label
-                      className="inline-block tracking-wide text-xs font-semibold"
-                      htmlFor="email">
-                      {"Email" |> str}
-                    </label>
-                    <span> {"*" |> str} </span>
-                    <input
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="email"
-                      type_="email"
-                      name="faculty[email]"
-                      placeholder="Coach email address"
-                      value={state.email}
-                      onChange={event =>
-                        updateEmail(
-                          send,
-                          ReactEvent.Form.target(event)##value,
-                        )
-                      }
-                    />
-                    <School__InputGroupError.Jsx2
-                      message="is not a valid email"
-                      active={state.hasEmailError}
-                    />
-                  </div>
+                  {switch (coach) {
+                   | Some(_coach) => React.null
+                   | None =>
+                     <div className="mt-5">
+                       <label
+                         className="inline-block tracking-wide text-xs font-semibold"
+                         htmlFor="email">
+                         {"Email" |> str}
+                       </label>
+                       <span> {"*" |> str} </span>
+                       <input
+                         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                         id="email"
+                         type_="email"
+                         name="faculty[email]"
+                         placeholder="Coach email address"
+                         value={state.email}
+                         onChange={event =>
+                           updateEmail(
+                             send,
+                             ReactEvent.Form.target(event)##value,
+                           )
+                         }
+                       />
+                       <School__InputGroupError.Jsx2
+                         message="is not a valid email address"
+                         active={state.hasEmailError}
+                       />
+                     </div>
+                   }}
                   <div className="mt-5">
                     <label
                       className="inline-block tracking-wide text-xs font-semibold"
@@ -627,20 +637,17 @@ let make =
                          </div>
                        | None => ReasonReact.null
                        }}
-                      {switch (coach) {
-                       | Some(_coach) =>
-                         <button
-                           disabled={saveDisabled(state)}
-                           className="w-auto btn btn-large btn-primary">
-                           {"Update Coach" |> str}
-                         </button>
-                       | None =>
-                         <button
-                           disabled={saveDisabled(state)}
-                           className="w-full btn btn-large btn-primary">
-                           {"Create Coach" |> str}
-                         </button>
-                       }}
+                      <button
+                        disabled={saveDisabled(state)}
+                        className="w-auto btn btn-large btn-primary">
+                        {(
+                           switch (coach) {
+                           | Some(_coach) => "Update Coach"
+                           | None => "Add Coach"
+                           }
+                         )
+                         |> str}
+                      </button>
                     </div>
                   </div>
                 </div>

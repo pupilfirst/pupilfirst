@@ -1,7 +1,6 @@
 module Schools
   module Coaches
     class UpdateForm < Reform::Form
-      property :email, validates: { email: true }, virtual: true
       property :name, validates: { presence: true, length: { maximum: 250 } }, virtual: true
       property :title, validates: { presence: true, length: { maximum: 250 } }
       property :linkedin_url, virtual: true

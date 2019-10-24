@@ -126,9 +126,9 @@ let showStudent = (team, levels, openOverlayCB) => {
     key={student |> TeamInfo.studentId}
     onClick={_ => openOverlayCB()}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-    className="flex md:flex-row items-start md:items-center justify-between bg-white p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:shadow-md">
-    {studentAvatar(student)}
-    <div className="w-full w-5/6 md:w-3/4">
+    className="flex md:flex-row items-start md:items-center justify-between bg-white p-2 md:py-6 md:px-5 mt-4 cursor-pointer rounded-lg shadow hover:shadow-md">
+    <div className="w-full flex w-5/6 md:w-3/4">
+      {studentAvatar(student)}
       <div className="block text-sm md:pr-2">
         <p className="text-black font-semibold inline-block">
           {student |> TeamInfo.studentName |> str}
@@ -157,11 +157,10 @@ let showTeam = (team, levels, openOverlayCB) => {
               key={student |> TeamInfo.studentId}
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
               onClick={_ => openOverlayCB()}
-              className="h-full cursor-pointer flex items-center bg-white">
+              className="h-full cursor-pointer hover:bg-gray-100 p-2 md:py-4 md:px-5 flex items-center bg-white">
               <div className="flex flex-1 w-3/5 h-full">
                 <div className="flex items-center w-full">
-                  <div
-                    className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100">
+                  <div className="flex flex-1 self-stretch items-center">
                     {studentAvatar(student)}
                     <div className="text-sm flex flex-col">
                       <p className="text-black font-semibold inline-block ">

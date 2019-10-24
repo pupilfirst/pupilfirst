@@ -76,7 +76,7 @@ let isGroupable = (selectedStudents, teams, students) =>
     || selectedPartialTeam(selectedStudents, teams, students)
   );
 
-let isMoveOutable = (selectedStudents, teams, students) =>
+let isMoveOutable = (selectedStudents, students) =>
   selectedStudents
   |> List.length == 1
   && selectedStudents
@@ -381,11 +381,7 @@ let make =
                      {"Group as Team" |> str}
                    </button>
                  : ReasonReact.null}
-              {isMoveOutable(
-                 state.selectedStudents,
-                 state.teams,
-                 state.students,
-               )
+              {isMoveOutable(state.selectedStudents, state.students)
                  ? <button
                      onClick={_e =>
                        teamUp(

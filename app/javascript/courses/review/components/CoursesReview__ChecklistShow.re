@@ -72,12 +72,12 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
   <div className="relative bg-gray-100 rounded-sm p-2 md:p-4">
-    <div
-      className="relative w-full md:absolute md:w-auto right-0 top-0 mt-2 mr-2 md:mt-4 md:mr-4">
+    <div className="absolute right-0 top-0 -mt-9">
       <button
-        className="btn btn-small btn-primary-ghost w-full md:w-auto"
+        className="flex items-center btn btn-small btn-primary-ghost"
         onClick={_ => showEditorCB()}>
-        {"Edit Checklist" |> str}
+        <i className="far fa-edit" />
+        <span className="ml-2 leading-tight"> {"Edit Checklist" |> str} </span>
       </button>
     </div>
     {reviewChecklist
@@ -103,7 +103,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                         label={checklistItem |> ReviewChecklistResult.title}
                         onChange={checkboxOnChange(i, index, setSelecton)}
                       />
-                      <div className="pl-7 pb-2">
+                      <div className="pl-7">
                         <CoursesReview__ChecklistShowFeedback
                           feedback={
                             checklistItem |> ReviewChecklistResult.feedback

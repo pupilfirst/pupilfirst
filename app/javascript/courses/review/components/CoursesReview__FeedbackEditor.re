@@ -42,7 +42,8 @@ let make =
          </div>
        }}
     </div>
-    <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor">
+    <div
+      className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
       <MarkdownEditor
         updateMarkdownCB=updateFeedbackCB
         value=feedback

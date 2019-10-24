@@ -297,7 +297,7 @@ let make =
 
   <div>
     <div
-      className="flex justify-between items-end bg-white rounded-t-lg pb-2 sticky top-0 z-20">
+      className="flex justify-between items-end bg-white pb-2 sticky top-0 z-20">
       label
       <div className="flex markdown-button-group h-9 overflow-hidden">
         {buttons(value, state, send, previewButtonPosition)}

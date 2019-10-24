@@ -60,7 +60,9 @@ let make =
   let (state, setState) =
     React.useState(() => computeState(reviewChecklist));
   <div className="px-4 pt-4 md:px-6 md:pt-6">
-    <h5 className="font-semibold text-sm"> {"Review Checklist" |> str} </h5>
+    <h5 className="font-semibold text-sm flex h-7 items-end">
+      {"Review Checklist" |> str}
+    </h5>
     <div className="mt-2">
       {switch (state) {
        | Empty => handleEmpty(setState)

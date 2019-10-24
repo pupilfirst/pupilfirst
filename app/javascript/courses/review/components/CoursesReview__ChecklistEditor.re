@@ -149,7 +149,8 @@ let make =
         saving: false,
       }
     );
-  <div className="bg-gray-100 rounded-sm p-2 pt-0 md:p-4 md:pt-0">
+  <div
+    className="bg-gray-100 border border-primary-200 shadow-inner rounded-lg p-2 pt-0 md:p-4 md:pt-0">
     <DisablingCover disabled={state.saving}>
       {state.reviewChecklist
        |> Array.mapi((itemIndex, reviewChecklistItem) =>
@@ -309,9 +310,7 @@ let make =
           <span className="bg-gray-300 py-2 w-10">
             <i className="fas fa-plus text-sm" />
           </span>
-          <span className="px-4 py-2">
-            {"Add Checklist Item" |> str}
-          </span>
+          <span className="px-4 py-2"> {"Add Checklist Item" |> str} </span>
         </button>
       </div>
       <div className="py-2 mt-4 flex flex-row-reverse">

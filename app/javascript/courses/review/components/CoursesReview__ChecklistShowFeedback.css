@@ -1,0 +1,3 @@
+.checklist-show-feedback__show-all-button {
+  background-image: linear-gradient(to bottom, transparent, theme("colors.gray.100"));
+}

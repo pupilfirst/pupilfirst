@@ -75,11 +75,11 @@ let showFeedback = feedback =>
          </div>
          <div className="md:ml-15">
            <p
-             className="text-xs leading-tight font-semibold inline-block p-1 bg-gray-200 rounded mt-4">
+             className="text-xs leading-tight font-semibold inline-block p-1 bg-gray-200 rounded mt-3">
              {f |> Feedback.createdAtPretty |> str}
            </p>
            <MarkdownBlock
-             className="pt-1"
+             className="pt-1 text-sm"
              profile=Markdown.Permissive
              markdown={f |> Feedback.value}
            />
@@ -107,7 +107,7 @@ let make =
     React.useState(() =>
       {saving: false, newFeedback: "", showFeedbackEditor: false}
     );
-  <div className="mt-6" ariaLabel="feedback-section">
+  <div className="pt-6" ariaLabel="feedback-section">
     {showFeedback(feedback)}
     {reviewed
        ? <div className="bg-white rounded-b-lg">

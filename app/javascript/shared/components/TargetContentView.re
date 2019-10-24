@@ -43,7 +43,7 @@ let embedContentBlock = (_url, embedCode) =>
 
 [@react.component]
 let make = (~contentBlocks) =>
-  <div id="learn-component">
+  <div className="text-base" id="learn-component">
     {
       contentBlocks
       |> ContentBlock.sort

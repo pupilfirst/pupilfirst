@@ -306,7 +306,7 @@ let make =
     {if (state.preview) {
        <MarkdownBlock
          markdown=value
-         className="pb-3 pt-2 leading-relaxed px-3 text-base border border-transparent bg-gray-100 markdown-editor-preview"
+         className="pb-3 pt-2 leading-relaxed px-3 border border-transparent bg-gray-100 markdown-editor-preview"
          profile
        />;
      } else {
@@ -317,7 +317,7 @@ let make =
          };
 
        <div
-         className="markdown-draft-editor__container border border-gray-400 leading-relaxed text-base rounded flex flex-col overflow-hidden">
+         className="markdown-draft-editor__container border border-gray-400 leading-relaxed rounded flex flex-col overflow-hidden">
          <DisablingCover
            disabled={isEditorDisabled(state.attachment)}
            message="Uploading..."

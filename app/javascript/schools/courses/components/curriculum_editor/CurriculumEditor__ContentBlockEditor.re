@@ -554,7 +554,7 @@ let make =
               value={state.sortIndex |> string_of_int}
             />
             <div
-              className="content-block__content bg-gray-200 flex justify-center items-center rounded-t-lg">
+              className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
               {switch (contentBlock) {
                | Some(contentBlock) =>
                  <div className="w-full">

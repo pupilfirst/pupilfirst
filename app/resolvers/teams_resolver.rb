@@ -1,13 +1,24 @@
 class TeamsResolver < ApplicationResolver
   attr_accessor :course_id
   attr_accessor :level_id
+  attr_accessor :search
 
   def teams
-    if level_id.present?
+    level_filtered = if level_id.present?
       teams_in_course.where(level_id: level_id)
     else
       teams_in_course
-    end.includes(founders: :user)
+    end
+
+    search_and_level_filtered = if search.present?
+      level_filtered.where('users.name ILIKE ?', "%#{search}%").or(
+        level_filtered.where('startups.name ILIKE ?', "%#{search}%")
+      )
+    else
+      level_filtered
+    end
+
+    search_and_level_filtered.distinct
   end
 
   def authorized?
@@ -21,6 +32,6 @@ class TeamsResolver < ApplicationResolver
   end
 
   def teams_in_course
-    course.startups.active.includes(founders: { user: { avatar_attachment: :blob } }).order(:id)
+    course.startups.active.joins(founders: :user).includes(founders: { user: { avatar_attachment: :blob } }).order('startups.name')
   end
 end

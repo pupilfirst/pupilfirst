@@ -124,7 +124,7 @@ let make = (~levels, ~course) => {
           selectedLevel={state.selectedLevel}
           studentSearch={state.studentSearch}
           teams={state.teams}
-          courseId={course |> Course.id}
+          course
           updateTeamsCB={updateTeams(~setState)}
           openOverlayCB
         />

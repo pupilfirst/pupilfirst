@@ -4,5 +4,6 @@ module Types
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
+    field :targets_completed, Int, null: false
   end
 end

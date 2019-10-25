@@ -55,7 +55,7 @@ let showDropdown = (levels, selectedLevel, setState) => {
 
   let selected =
     <button
-      className="bg-white px-4 py-2 border border-gray-400 font-semibold rounded-lg focus:outline-none w-full md:w-auto flex justify-between">
+      className="bg-white px-4 py-2 border font-semibold rounded-lg focus:outline-none w-full md:w-auto flex justify-between">
       {(
          switch (selectedLevel) {
          | None => "All Levels"
@@ -99,7 +99,7 @@ let make = (~levels, ~course) => {
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
-          <div className="flex items-center justify-between pl-3">
+          <div className="flex items-center justify-between">
             <input
               type_="search"
               className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"

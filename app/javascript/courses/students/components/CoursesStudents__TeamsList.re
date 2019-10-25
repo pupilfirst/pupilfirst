@@ -92,11 +92,14 @@ let getTeams =
 let studentAvatar = (student: TeamInfo.student) => {
   switch (student.avatarUrl) {
   | Some(avatarUrl) =>
-    <img className="w-10 h-10 rounded-full mr-4 object-cover" src=avatarUrl />
+    <img
+      className="w-10 h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
+      src=avatarUrl
+    />
   | None =>
     <Avatar
       name={student |> TeamInfo.studentName}
-      className="w-10 h-10 mr-4"
+      className="w-10 h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
     />
   };
 };
@@ -126,19 +129,34 @@ let showStudent = (team, levels, openOverlayCB) => {
     key={student |> TeamInfo.studentId}
     onClick={_ => openOverlayCB()}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-    className="flex md:flex-row items-start md:items-center justify-between bg-white p-2 md:py-6 md:px-5 mt-4 cursor-pointer rounded-lg shadow hover:shadow-md">
-    <div className="w-full flex w-5/6 md:w-3/4">
-      {studentAvatar(student)}
-      <div className="block text-sm md:pr-2">
-        <p className="text-black font-semibold inline-block">
-          {student |> TeamInfo.studentName |> str}
+    className="flex md:flex-row justify-between bg-white mt-4 cursor-pointer rounded-lg shadow hover:shadow-md">
+    <div className="w-full flex flex-1 w-4/6">
+      <div className="w-1/2 flex items-center p-2 md:p-4">
+        {studentAvatar(student)}
+        <div className="block text-sm md:pr-2">
+          <p className="font-semibold inline-block leading-snug">
+            {student |> TeamInfo.studentName |> str}
+          </p>
+          <p
+            className="text-gray-600 font-semibold text-xs mt-px leading-snug w-42 truncate">
+            {student |> TeamInfo.studentTitle |> str}
+          </p>
+        </div>
+      </div>
+      <div className="w-1/2 flex flex-col p-2 md:px-4 md:py-5 justify-center">
+        <p className="text-xs leading-tight text-gray-700">
+          {"Course Progress:" |> str}
+          <span className="font-semibold text-gray-900 ml-1">
+            {"55%" |> str}
+          </span>
         </p>
-        <p className="text-gray-600 font-semibold text-xs mt-px">
-          {student |> TeamInfo.studentTitle |> str}
-        </p>
+        <div
+          className="w-full h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
+          <div className="bg-green-500 text-xs leading-none h-2 w-30" />
+        </div>
       </div>
     </div>
-    <div className="w-1/6 text-center">
+    <div className="w-2/6 flex items-center justify-end p-2 md:p-4">
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </div>;
@@ -149,7 +167,7 @@ let showTeam = (team, levels, openOverlayCB) => {
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
     className="flex shadow bg-white rounded-lg mt-4 overflow-hidden">
-    <div className="flex flex-col flex-1 w-3/5">
+    <div className="flex flex-col flex-1 w-4/6">
       {team
        |> TeamInfo.students
        |> Array.map(student =>
@@ -157,19 +175,35 @@ let showTeam = (team, levels, openOverlayCB) => {
               key={student |> TeamInfo.studentId}
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
               onClick={_ => openOverlayCB()}
-              className="h-full cursor-pointer hover:bg-gray-100 p-2 md:py-4 md:px-5 flex items-center bg-white">
-              <div className="flex flex-1 w-3/5 h-full">
-                <div className="flex items-center w-full">
-                  <div className="flex flex-1 self-stretch items-center">
+              className="h-full cursor-pointer hover:bg-gray-100 flex items-center bg-white">
+              <div className="flex flex-1">
+                <div className="flex w-full">
+                  <div className="w-1/2 flex items-center md:px-4 md:py-5">
                     {studentAvatar(student)}
                     <div className="text-sm flex flex-col">
-                      <p className="text-black font-semibold inline-block ">
+                      <p className="font-semibold inline-block leading-snug ">
                         {student |> TeamInfo.studentName |> str}
                       </p>
-                      <p className="text-gray-600 font-semibold text-xs mt-px">
+                      <p
+                        className="text-gray-600 font-semibold text-xs mt-px leading-snug w-42 truncate">
                         {student |> TeamInfo.studentTitle |> str}
                       </p>
                       <div className="flex flex-wrap" />
+                    </div>
+                  </div>
+                  <div
+                    className="w-1/2 flex flex-col p-2 md:px-4 md:py-5 justify-center">
+                    <p className="text-xs leading-tight text-gray-700">
+                      {"Course Progress:" |> str}
+                      <span className="font-semibold text-gray-900 ml-1">
+                        {"55%" |> str}
+                      </span>
+                    </p>
+                    <div
+                      className="w-full bg-gray-300 h-2 rounded-lg overflow-hidden mt-1">
+                      <div
+                        className="bg-green-500 text-xs leading-none h-2 w-30"
+                      />
                     </div>
                   </div>
                 </div>
@@ -178,14 +212,17 @@ let showTeam = (team, levels, openOverlayCB) => {
           )
        |> React.array}
     </div>
-    <div className="flex w-2/5 items-center">
-      <div className="w-3/5 py-4 px-3">
-        <div className="students-team--name mb-5">
-          <p className="text-xs"> {"Team Name" |> str} </p>
-          <h5> {team |> TeamInfo.name |> str} </h5>
+    <div
+      className="flex w-2/6 items-center border-l border-gray-200 p-2 md:px-4 md:py-5">
+      <div className="flex-1 py-3 pr-3">
+        <div>
+          <p className="text-xs"> {"Team" |> str} </p>
+          <h3 className="text-base font-semibold">
+            {team |> TeamInfo.name |> str}
+          </h3>
         </div>
       </div>
-      <div className="w-2/5 text-center">
+      <div className="flex-shrink-0">
         {levelInfo(team |> TeamInfo.levelId, levels)}
       </div>
     </div>

@@ -60,7 +60,7 @@ let showDropdown = (levels, selectedLevel, setState) => {
 
   let selected =
     <button
-      className="bg-white px-4 py-2 border border-gray-400 font-semibold rounded-lg focus:outline-none w-full md:w-auto flex justify-between">
+      className="bg-white px-4 py-2 border font-semibold rounded-lg focus:outline-none w-full md:w-auto flex justify-between">
       {
         (
           switch (selectedLevel) {

@@ -9,9 +9,65 @@ type editorAction =
 type state = {
   editorAction,
   admins: array(SchoolAdmin.t),
+  deleting: bool,
 };
 
-let renderAdmin = (admin, setState) =>
+module DeleteSchoolAdminQuery = [%graphql
+  {|
+  mutation($id: ID!) {
+    deleteSchoolAdmin(id: $id) {
+      success
+    }
+  }
+|}
+];
+
+let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  if (Webapi.Dom.(
+        window
+        |> Window.confirm(
+             "Are you sure you want to remove "
+             ++ (admin |> SchoolAdmin.name)
+             ++ " from the list of admins?",
+           )
+      )) {
+    setState(state => {...state, deleting: true});
+
+    DeleteSchoolAdminQuery.make(~id=admin |> SchoolAdmin.id, ())
+    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+    |> Js.Promise.then_(response => {
+         if (response##deleteSchoolAdmin##success) {
+           /*
+            * If the school admin who was removed is the current user, redirect her to
+            * the home page. Otherwise, just remove the entry from the list.
+            */
+           if (admin |> SchoolAdmin.id == currentSchoolAdminId) {
+             DomUtils.redirect("/home");
+           } else {
+             setState(state =>
+               {
+                 ...state,
+                 deleting: false,
+                 admins:
+                   state.admins
+                   |> Js.Array.filter(a =>
+                        a |> SchoolAdmin.id != (admin |> SchoolAdmin.id)
+                      ),
+               }
+             );
+           };
+         } else {
+           setState(state => {...state, deleting: false});
+         };
+         response |> Js.Promise.resolve;
+       })
+    |> ignore;
+  };
+};
+
+let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
   <div
     key={(admin |> SchoolAdmin.id) ++ (admin |> SchoolAdmin.name)}
     className="flex w-1/2 flex-shrink-0 mb-5 px-3">
@@ -50,18 +106,35 @@ let renderAdmin = (admin, setState) =>
           </div>
         </div>
       </a>
+      {admins |> Array.length > 1
+         ? <div
+             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-600"
+             title={"Delete " ++ (admin |> SchoolAdmin.name)}
+             onClick={removeSchoolAdmin(
+               setState,
+               admin,
+               currentSchoolAdminId,
+             )}>
+             <i className="fas fa-trash-alt" />
+           </div>
+         : React.null}
     </div>
   </div>;
 
 let handleUpdate = (setState, admin) =>
   setState(state =>
-    {admins: state.admins |> SchoolAdmin.update(admin), editorAction: Hidden}
+    {
+      ...state,
+      admins: state.admins |> SchoolAdmin.update(admin),
+      editorAction: Hidden,
+    }
   );
 
 [@react.component]
 let make = (~currentSchoolAdminId, ~admins) => {
   let (state, setState) =
-    React.useState(() => {editorAction: Hidden, admins});
+    React.useState(() => {editorAction: Hidden, admins, deleting: false});
+
   <div className="flex flex-1 h-full overflow-y-scroll bg-gray-100">
     <div className="flex-1 flex flex-col">
       {switch (state.editorAction) {
@@ -74,28 +147,37 @@ let make = (~currentSchoolAdminId, ~admins) => {
            <SchoolAdmins__Form admin updateCB={handleUpdate(setState)} />
          </SchoolAdmin__EditorDrawer>
        }}
-      <div className="flex px-6 py-2 items-center justify-between">
-        <button
-          onClick={_ =>
-            setState(state => {...state, editorAction: ShowEditor(None)})
-          }
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
-          <i className="fas fa-plus-circle" />
-          <h5 className="font-semibold ml-2">
-            {"Add New School Admin" |> str}
-          </h5>
-        </button>
-      </div>
-      <div className="px-6 pb-4 mt-5 flex">
-        <div className="max-w-2xl w-full mx-auto">
-          <div className="flex -mx-3 flex-wrap">
-            {state.admins
-             |> SchoolAdmin.sort
-             |> Array.map(admin => renderAdmin(admin, setState))
-             |> ReasonReact.array}
+      <DisablingCover disabled={state.deleting} message="Deleting...">
+        <div className="flex px-6 py-2 items-center justify-between">
+          <button
+            onClick={_ =>
+              setState(state => {...state, editorAction: ShowEditor(None)})
+            }
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+            <i className="fas fa-plus-circle" />
+            <h5 className="font-semibold ml-2">
+              {"Add New School Admin" |> str}
+            </h5>
+          </button>
+        </div>
+        <div className="px-6 pb-4 mt-5 flex">
+          <div className="max-w-2xl w-full mx-auto">
+            <div className="flex -mx-3 flex-wrap">
+              {state.admins
+               |> SchoolAdmin.sort
+               |> Array.map(admin =>
+                    renderAdmin(
+                      currentSchoolAdminId,
+                      admin,
+                      state.admins,
+                      setState,
+                    )
+                  )
+               |> ReasonReact.array}
+            </div>
           </div>
         </div>
-      </div>
+      </DisablingCover>
     </div>
   </div>;
 };

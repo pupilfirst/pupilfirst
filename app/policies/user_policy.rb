@@ -1,11 +1,11 @@
 class UserPolicy < ApplicationPolicy
   def home?
+    # All users can visit their home page.
     true
   end
 
   def edit?
-    user.founders.where(exited: false).any?
+    # All users can edit their profile.
+    true
   end
-
-  alias show? edit?
 end

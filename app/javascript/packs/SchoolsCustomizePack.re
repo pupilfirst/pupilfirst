@@ -15,7 +15,7 @@ let decodeProps = json =>
 let props = DomUtils.parseJsonAttribute() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <SchoolCustomize
+  <SchoolCustomize__Root
     authenticityToken={props.authenticityToken}
     customizations={props.customizations}
     schoolName={props.schoolName}

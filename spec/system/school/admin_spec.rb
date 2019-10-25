@@ -67,6 +67,39 @@ feature 'School admins Editor', js: true do
     expect(user.reload.title).to eq(original_title)
   end
 
+  scenario 'school admin deletes another admin' do
+    sign_in_user school_admin_1.user, referer: admins_school_path
+
+    # Both admins should be deletable.
+    expect(page).to have_selector("div[title='Delete #{school_admin_1.name}'")
+    expect(page).to have_selector("div[title='Delete #{school_admin_2.name}'")
+
+    accept_confirm do
+      find("div[title='Delete #{school_admin_2.name}'").click
+    end
+
+    expect(page).not_to have_text(school_admin_2.name)
+    expect(SchoolAdmin.count).to eq(1)
+    expect(SchoolAdmin.first).to eq(school_admin_1)
+
+    # The current admin should no longer have the delete option.
+    expect(page).to have_text(school_admin_1.name)
+    expect(page).not_to have_selector("div[title='Delete #{school_admin_1.name}'")
+  end
+
+  scenario 'school admins deletes her own admin access' do
+    sign_in_user school_admin_1.user, referer: admins_school_path
+
+    accept_confirm do
+      find("div[title='Delete #{school_admin_1.name}'").click
+    end
+
+    # User should be taken to the home page.
+    expect(page).to have_text('Edit Profile')
+    expect(SchoolAdmin.count).to eq(1)
+    expect(SchoolAdmin.first).to eq(school_admin_2)
+  end
+
   scenario 'user who is not logged in tries to access school admin editor interface' do
     visit admins_school_path
     expect(page).to have_text("Please sign in to continue.")

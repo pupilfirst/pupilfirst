@@ -7,8 +7,8 @@ let str = React.string;
 
 module TeamsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID, $after: String) {
-      teams(courseId: $courseId, levelId: $levelId, first: 20, after: $after) {
+    query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
+      teams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after) {
         nodes {
         id,
         name,
@@ -55,23 +55,38 @@ let getTeams =
       cursor,
       setLoading,
       selectedLevel,
+      search,
       teams,
       updateTeamsCB,
     ) => {
   setLoading(_ => true);
   (
-    switch (selectedLevel, cursor) {
-    | (Some(level), Some(cursor)) =>
+    switch (selectedLevel, search, cursor) {
+    | (Some(level), Some(search), Some(cursor)) =>
+      TeamsQuery.make(
+        ~courseId,
+        ~levelId=level |> Level.id,
+        ~search,
+        ~after=cursor,
+        (),
+      )
+    | (Some(level), Some(search), None) =>
+      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ~search, ())
+    | (None, Some(search), Some(cursor)) =>
+      TeamsQuery.make(~courseId, ~search, ~after=cursor, ())
+    | (Some(level), None, Some(cursor)) =>
       TeamsQuery.make(
         ~courseId,
         ~levelId=level |> Level.id,
         ~after=cursor,
         (),
       )
-    | (Some(level), None) =>
+    | (Some(level), None, None) =>
       TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ())
-    | (None, Some(cursor)) => TeamsQuery.make(~courseId, ~after=cursor, ())
-    | (None, None) => TeamsQuery.make(~courseId, ())
+    | (None, Some(search), None) => TeamsQuery.make(~courseId, ~search, ())
+    | (None, None, Some(cursor)) =>
+      TeamsQuery.make(~courseId, ~after=cursor, ())
+    | (None, None, None) => TeamsQuery.make(~courseId, ())
     }
   )
   |> GraphqlQuery.sendQuery(authenticityToken)
@@ -218,13 +233,14 @@ let make =
     (
       ~levels,
       ~selectedLevel,
+      ~studentSearch,
       ~teams,
       ~courseId,
       ~updateTeamsCB,
       ~openOverlayCB,
     ) => {
   let (loading, setLoading) = React.useState(() => false);
-  React.useEffect1(
+  React.useEffect2(
     () => {
       switch ((teams: Teams.t)) {
       | Unloaded =>
@@ -234,6 +250,7 @@ let make =
           None,
           setLoading,
           selectedLevel,
+          studentSearch,
           [||],
           updateTeamsCB,
         )
@@ -242,7 +259,7 @@ let make =
       };
       None;
     },
-    [|selectedLevel|],
+    (selectedLevel, studentSearch),
   );
 
   <div>
@@ -266,6 +283,7 @@ let make =
                     Some(cursor),
                     setLoading,
                     selectedLevel,
+                    studentSearch,
                     teams,
                     updateTeamsCB,
                   )

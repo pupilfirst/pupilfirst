@@ -6,7 +6,7 @@ let str = React.string;
 
 type state = {
   teams: Teams.t,
-  studentSearchString: option(string),
+  studentSearch: option(string),
   selectedLevel: option(Level.t),
 };
 
@@ -15,9 +15,10 @@ let onClickForLevelSelector = (level, setState, event) => {
   setState(state => {...state, selectedLevel: level, teams: Unloaded});
 };
 
-let onChangeSearchString = (setState, event) => {
-  let studentSearchString = ReactEvent.Form.target(event)##value;
-  setState(state => {...state, studentSearchString});
+let onSubmitSearchString = (setState, event) => {
+  ReactEvent.Form.preventDefault(event);
+  let studentSearch = ReactEvent.Form.target(event)##student_search##value;
+  setState(state => {...state, studentSearch, teams: Unloaded});
 };
 
 let dropDownButtonText = level =>
@@ -92,27 +93,26 @@ let openOverlayCB = () => {
 let make = (~levels, ~course) => {
   let (state, setState) =
     React.useState(() =>
-      {teams: Unloaded, studentSearchString: None, selectedLevel: None}
+      {teams: Unloaded, studentSearch: None, selectedLevel: None}
     );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
-          <div className="flex items-center justify-between pl-3">
+          <form
+            className="flex items-center justify-between pl-3"
+            onSubmit={event => onSubmitSearchString(setState, event)}>
             <input
+              name="student_search"
               type_="search"
               className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
-              placeholder="Search by student name..."
-              value={
-                switch (state.studentSearchString) {
-                | Some(string) => string
-                | None => ""
-                }
-              }
-              onChange={event => onChangeSearchString(setState, event)}
+              placeholder="Search by student or team name..."
             />
-          </div>
+            <button className="btn btn-default mt-2">
+              {"Search" |> str}
+            </button>
+          </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
             {showDropdown(levels, state.selectedLevel, setState)}
           </div>
@@ -122,6 +122,7 @@ let make = (~levels, ~course) => {
         <CoursesStudents__TeamsList
           levels
           selectedLevel={state.selectedLevel}
+          studentSearch={state.studentSearch}
           teams={state.teams}
           courseId={course |> Course.id}
           updateTeamsCB={updateTeams(~setState)}

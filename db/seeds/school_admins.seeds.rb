@@ -1,4 +1,4 @@
-after 'development:schools', 'development:users' do
+after 'schools', 'users' do
   puts 'Seeding school_admins (production, idempotent)'
 
   School.all.each do |school|

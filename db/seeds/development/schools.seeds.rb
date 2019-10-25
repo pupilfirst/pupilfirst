@@ -3,7 +3,7 @@ after 'schools' do
 
   school = School.first
 
-# Attach a logo (on light) for school.
+  # Attach a logo (on light) for school.
   unless school.logo_on_light_bg.attached?
     school.logo_on_light_bg.attach(
       io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'logo_lipsum_on_light_bg.png')),
@@ -11,7 +11,7 @@ after 'schools' do
     )
   end
 
-# Attach a logo (on dark) for school.
+  # Attach a logo (on dark) for school.
   unless school.logo_on_dark_bg.attached?
     school.logo_on_dark_bg.attach(
       io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'logo_lipsum_on_dark_bg.png')),
@@ -19,7 +19,7 @@ after 'schools' do
     )
   end
 
-# Attach an icon for school.
+  # Attach an icon for school.
   unless school.icon.attached?
     school.icon.attach(
       io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'icon_pupilfirst.png')),
@@ -28,5 +28,5 @@ after 'schools' do
   end
 
   # Create another school without any customizations.
-  School.where(name: Faker::Lorem.word.capitalize).first_or_create!
+  School.where(name: 'Second School').first_or_create!
 end

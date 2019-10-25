@@ -1,5 +1,5 @@
 after 'users' do
-  puts 'Seeding admin_users (production) (idempotent)'
+  puts 'Seeding admin_users (production, idempotent)'
 
   # Create an admin user for the /admin interface. This user is a 'super-admin', who can do everything possible from the
   # ActiveAdmin interface.

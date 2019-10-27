@@ -7,13 +7,13 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = DestroyAnswerLikeMutator.new(params, context)
+      mutator = DestroyAnswerLikeMutator.new(context, params)
 
       if mutator.valid?
         mutator.destroy_answer_like
         { success: true }
       else
-        raise "Invalid request. Errors: #{mutator.error_codes}"
+        raise "Invalid request. Errors: #{mutator.error_messages}"
       end
     end
   end

@@ -8,7 +8,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = SortCurriculumResourcesMutator.new(params, context)
+      mutator = SortCurriculumResourcesMutator.new(context, params)
 
       if mutator.valid?
         mutator.sort

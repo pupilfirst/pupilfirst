@@ -10,7 +10,7 @@ module Mutations
     field :submission, Types::SubmissionType, null: true
 
     def resolve(params)
-      mutator = CreateSubmissionMutator.new(params, context)
+      mutator = CreateSubmissionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Your submission has been queued for review.")

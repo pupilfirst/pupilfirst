@@ -8,13 +8,13 @@ module Mutations
     field :errors, [Types::UpdateSchoolStringError], null: false
 
     def resolve(params)
-      mutator = UpdateSchoolStringMutator.new(params, context)
+      mutator = UpdateSchoolStringMutator.new(context, params)
 
       if mutator.valid?
         mutator.update_school_string
         { errors: [] }
       else
-        { errors: mutator.error_codes }
+        { errors: mutator.error_messages }
       end
     end
   end

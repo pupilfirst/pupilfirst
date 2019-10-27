@@ -7,7 +7,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = DeleteSchoolAdminMutator.new(params, context)
+      mutator = DeleteSchoolAdminMutator.new(context, params)
 
       success = if mutator.valid?
         mutator.delete_school_admin

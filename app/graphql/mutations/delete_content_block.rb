@@ -8,14 +8,14 @@ module Mutations
     field :versions, [Types::DateType], null: false
 
     def resolve(params)
-      mutator = DeleteContentBlockMutator.new(params, context)
+      mutator = DeleteContentBlockMutator.new(context, params)
 
       if mutator.valid?
         mutator.delete_content_block
         { success: true, versions: mutator.target_versions }
       else
         mutator.notify_errors
-        { success: false, errors: mutator.error_codes }
+        { success: false, errors: mutator.error_messages }
       end
     end
   end

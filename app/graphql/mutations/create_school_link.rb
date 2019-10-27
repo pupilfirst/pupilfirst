@@ -10,12 +10,12 @@ module Mutations
     field :errors, [Types::CreateSchoolLinkError], null: true
 
     def resolve(params)
-      mutator = CreateSchoolLinkMutator.new(params, context)
+      mutator = CreateSchoolLinkMutator.new(context, params)
 
       if mutator.valid?
         { school_link: mutator.create_school_link, errors: nil }
       else
-        { school_link: nil, errors: mutator.error_codes }
+        { school_link: nil, errors: mutator.error_messages }
       end
     end
   end

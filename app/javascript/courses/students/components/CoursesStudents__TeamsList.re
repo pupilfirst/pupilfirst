@@ -140,17 +140,14 @@ let levelInfo = (levelId, levels) => {
 };
 
 let studentProgressPercentage = (student, course) => {
-  let test =
-    (
-      (TeamInfo.targetsCompleted(student) |> float_of_int)
-      /. (Course.totalTargets(course) |> float_of_int)
-      *. 100.0
-      |> int_of_float
-      |> string_of_int
-    )
-    ++ "%";
-  Js.log(test);
-  test;
+  (
+    (TeamInfo.targetsCompleted(student) |> float_of_int)
+    /. (Course.totalTargets(course) |> float_of_int)
+    *. 100.0
+    |> int_of_float
+    |> string_of_int
+  )
+  ++ "%";
 };
 
 let showStudent = (team, levels, course, openOverlayCB) => {

@@ -109,13 +109,13 @@ let studentAvatar = (student: TeamInfo.student) => {
   switch (student.avatarUrl) {
   | Some(avatarUrl) =>
     <img
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-2 md:mr-3 object-cover"
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
       src=avatarUrl
     />
   | None =>
     <Avatar
       name={student |> TeamInfo.studentName}
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-2 md:mr-3 object-cover"
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
     />
   };
 };
@@ -162,7 +162,7 @@ let showStudent = (team, levels, course, openOverlayCB) => {
     className="flex md:flex-row justify-between bg-white mt-4 cursor-pointer rounded-lg shadow hover:shadow-md">
     <div className="flex flex-1 flex-col md:flex-row md:w-4/6">
       <div
-        className="md:w-1/2 flex items-center p-3 pr-0 pb-2 md:px-4 md:py-5">
+        className="md:w-1/2 flex items-start md:items-center p-3 pr-0 pb-2 md:px-4 md:py-5">
         {studentAvatar(student)}
         <div className="block text-sm md:pr-2">
           <p className="font-semibold inline-block leading-snug">
@@ -175,7 +175,7 @@ let showStudent = (team, levels, course, openOverlayCB) => {
         </div>
       </div>
       <div
-        className="md:w-1/2 flex flex-col ml-11 md:ml-0 p-3 pr-0 pt-0 md:px-4 md:py-5 justify-center">
+        className="md:w-1/2 flex flex-col ml-10 md:ml-0 p-3 pr-0 pt-0 md:px-4 md:py-5 justify-center">
         <p className="text-xs leading-tight text-gray-700">
           {"Course Progress:" |> str}
           <span className="font-semibold text-gray-900 ml-1">
@@ -216,7 +216,8 @@ let showTeam = (team, levels, course, openOverlayCB) => {
               className="cursor-pointer hover:bg-gray-100 flex items-center bg-white">
               <div className="flex w-full md:flex-1">
                 <div className="flex w-full">
-                  <div className="w-1/2 flex items-center p-3 md:px-4 md:py-5">
+                  <div
+                    className="w-1/2 flex items-start md:items-center p-3 md:px-4 md:py-5">
                     {studentAvatar(student)}
                     <div className="text-sm flex flex-col">
                       <p className="font-semibold inline-block leading-snug ">
@@ -333,7 +334,10 @@ let make =
   <div>
     {switch (teams) {
      | Unloaded =>
-       SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
+       SkeletonLoading.multiple(
+         ~count=10,
+         ~element=SkeletonLoading.userCard(),
+       )
      | PartiallyLoaded(teams, cursor) =>
        <div>
          {showTeams(teams, levels, course, openOverlayCB)}

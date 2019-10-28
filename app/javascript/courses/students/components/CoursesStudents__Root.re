@@ -101,12 +101,12 @@ let make = (~levels, ~course) => {
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
           <form
-            className="flex items-center justify-between"
+            className="flex items-center justify-between w-full md:w-auto"
             onSubmit={event => onSubmitSearchString(setState, event)}>
             <input
               name="student_search"
               type_="search"
-              className="bg-white border rounded block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2 focus:outline-none focus:border-primary-400"
+              className="bg-white border rounded block flex-1 md:w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2 focus:outline-none focus:border-primary-400"
               placeholder="Search by student or team name..."
             />
             <button className="btn btn-default"> {"Search" |> str} </button>

@@ -35,25 +35,5 @@ module Courses
     def course_details
       { id: @course.id, total_targets: @course.targets.count }
     end
-
-    def students
-      @students ||= Founder.where(startup_id: current_coach.reviewable_startups(@course))
-    end
-
-    def student_details
-      students.map do |student|
-        {
-          id: student.id,
-          name: student.name,
-          team_id: student.startup_id
-        }
-      end
-    end
-
-    def team_details
-      Startup.where(id: students.select(:startup_id).distinct).map do |startup|
-        startup.attributes.slice('id', 'name', 'level_id')
-      end
-    end
   end
 end

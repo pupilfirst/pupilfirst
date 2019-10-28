@@ -18,6 +18,7 @@ module TeamsQuery = [%graphql
           name
           title
           avatarUrl
+          targetsCompleted
         }
         }
         pageInfo{
@@ -108,13 +109,13 @@ let studentAvatar = (student: TeamInfo.student) => {
   switch (student.avatarUrl) {
   | Some(avatarUrl) =>
     <img
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-2 md:mr-3 object-cover"
       src=avatarUrl
     />
   | None =>
     <Avatar
       name={student |> TeamInfo.studentName}
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-2 md:mr-3 object-cover"
     />
   };
 };
@@ -138,7 +139,21 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let showStudent = (team, levels, openOverlayCB) => {
+let studentProgressPercentage = (student, course) => {
+  let test =
+    (
+      (TeamInfo.targetsCompleted(student) |> float_of_int)
+      /. (Course.totalTargets(course) |> float_of_int)
+      *. 100.0
+      |> int_of_float
+      |> string_of_int
+    )
+    ++ "%";
+  Js.log(test);
+  test;
+};
+
+let showStudent = (team, levels, course, openOverlayCB) => {
   let student = TeamInfo.students(team)[0];
   <div
     key={student |> TeamInfo.studentId}
@@ -164,12 +179,18 @@ let showStudent = (team, levels, openOverlayCB) => {
         <p className="text-xs leading-tight text-gray-700">
           {"Course Progress:" |> str}
           <span className="font-semibold text-gray-900 ml-1">
-            {"55%" |> str}
+            {studentProgressPercentage(student, course) |> str}
           </span>
         </p>
         <div
           className="w-full h-1 md:h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
-          <div className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30" />
+          <div
+            className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30"
+            style={ReactDOMRe.Style.make(
+              ~width={studentProgressPercentage(student, course)},
+              (),
+            )}
+          />
         </div>
       </div>
     </div>
@@ -179,7 +200,7 @@ let showStudent = (team, levels, openOverlayCB) => {
   </div>;
 };
 
-let showTeam = (team, levels, openOverlayCB) => {
+let showTeam = (team, levels, course, openOverlayCB) => {
   <div
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
@@ -202,7 +223,7 @@ let showTeam = (team, levels, openOverlayCB) => {
                         {student |> TeamInfo.studentName |> str}
                       </p>
                       <p
-                        className="text-gray-600 font-semibold text-xs mt-px leading-snug w-28 md:w-42 truncate">
+                        className="text-gray-600 font-semibold text-xs mt-px leading-snug w-24 md:w-42 truncate">
                         {student |> TeamInfo.studentTitle |> str}
                       </p>
                       <div className="flex flex-wrap" />
@@ -213,13 +234,17 @@ let showTeam = (team, levels, openOverlayCB) => {
                     <p className="text-xs leading-tight text-gray-700">
                       {"Course Progress:" |> str}
                       <span className="font-semibold text-gray-900 ml-1">
-                        {"55%" |> str}
+                        {studentProgressPercentage(student, course) |> str}
                       </span>
                     </p>
                     <div
                       className="w-full h-1 md:h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
                       <div
                         className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30"
+                        style={ReactDOMRe.Style.make(
+                          ~width={studentProgressPercentage(student, course)},
+                          (),
+                        )}
                       />
                     </div>
                   </div>
@@ -249,17 +274,17 @@ let showTeam = (team, levels, openOverlayCB) => {
   </div>;
 };
 
-let teamsList = (teams, levels, openOverlayCB) => {
+let teamsList = (teams, levels, course, openOverlayCB) => {
   teams
   |> Array.map(team =>
        Array.length(team |> TeamInfo.students) == 1
-         ? showStudent(team, levels, openOverlayCB)
-         : showTeam(team, levels, openOverlayCB)
+         ? showStudent(team, levels, course, openOverlayCB)
+         : showTeam(team, levels, course, openOverlayCB)
      )
   |> React.array;
 };
 
-let showTeams = (teams, levels, openOverlayCB) => {
+let showTeams = (teams, levels, course, openOverlayCB) => {
   teams |> ArrayUtils.isEmpty
     ? <div
         className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
@@ -267,7 +292,7 @@ let showTeams = (teams, levels, openOverlayCB) => {
           {"No teams to show" |> str}
         </h5>
       </div>
-    : teamsList(teams, levels, openOverlayCB);
+    : teamsList(teams, levels, course, openOverlayCB);
 };
 
 [@react.component]
@@ -277,11 +302,12 @@ let make =
       ~selectedLevel,
       ~studentSearch,
       ~teams,
-      ~courseId,
+      ~course,
       ~updateTeamsCB,
       ~openOverlayCB,
     ) => {
   let (loading, setLoading) = React.useState(() => false);
+  let courseId = course |> Course.id;
   React.useEffect2(
     () => {
       switch ((teams: Teams.t)) {
@@ -310,7 +336,7 @@ let make =
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
      | PartiallyLoaded(teams, cursor) =>
        <div>
-         {showTeams(teams, levels, openOverlayCB)}
+         {showTeams(teams, levels, course, openOverlayCB)}
          {loading
             ? SkeletonLoading.multiple(
                 ~count=3,
@@ -333,7 +359,7 @@ let make =
                 {"Load More..." |> str}
               </button>}
        </div>
-     | FullyLoaded(teams) => showTeams(teams, levels, openOverlayCB)
+     | FullyLoaded(teams) => showTeams(teams, levels, course, openOverlayCB)
      }}
   </div>;
 };

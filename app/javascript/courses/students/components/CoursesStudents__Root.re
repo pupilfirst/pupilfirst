@@ -18,7 +18,8 @@ let onClickForLevelSelector = (level, setState, event) => {
 let onSubmitSearchString = (setState, event) => {
   ReactEvent.Form.preventDefault(event);
   let search = ReactEvent.Form.target(event)##student_search##value;
-  setState(state => {...state, search, teams: Unloaded});
+  let validString = search |> Js.String.trim |> Js.String.length > 0;
+  validString ? setState(state => {...state, search, teams: Unloaded}) : ();
 };
 
 let dropDownButtonText = level =>

@@ -103,12 +103,18 @@ let make = (~levels, ~course) => {
           <form
             className="flex items-center justify-between w-full md:w-auto"
             onSubmit={event => onSubmitSearchString(setState, event)}>
-            <input
-              name="student_search"
-              type_="search"
-              className="bg-white border rounded block flex-1 md:w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2 focus:outline-none focus:border-primary-400"
-              placeholder="Search by student or team name..."
-            />
+            <div className="relative w-full md:w-auto mr-2">
+              <input
+                name="student_search"
+                type_="search"
+                className="course-students__student-search-input appearance-none bg-white border rounded block text-sm appearance-none leading-normal px-3 py-2 pr-8 focus:outline-none focus:border-primary-400"
+                placeholder="Search by student or team name..."
+              />
+              <span
+                className="course-students__student-search-input-cancel-button absolute right-0 top-0 text-gray-700 cursor-pointer hover:text-gray-900 text-lg px-1 py-px z-10 mr-2 flex items-center h-full focus:outline-none">
+                <i className="fas fa-times-circle" />
+              </span>
+            </div>
             <button className="btn btn-default"> {"Search" |> str} </button>
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">

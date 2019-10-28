@@ -1,0 +1,13 @@
+.course-students__student-search-input {
+  @apply w-full;
+}
+
+@screen md {
+  .course-students__student-search-input {
+    width: 17rem;
+  }
+}
+
+.course-students__student-search-input::-webkit-search-cancel-button {
+  display: none;
+}

@@ -301,7 +301,7 @@ let make =
     (
       ~levels,
       ~selectedLevel,
-      ~studentSearch,
+      ~search,
       ~teams,
       ~course,
       ~updateTeamsCB,
@@ -319,7 +319,7 @@ let make =
           None,
           setLoading,
           selectedLevel,
-          studentSearch,
+          search,
           [||],
           updateTeamsCB,
         )
@@ -328,7 +328,7 @@ let make =
       };
       None;
     },
-    (selectedLevel, studentSearch),
+    (selectedLevel, search),
   );
 
   <div>
@@ -355,7 +355,7 @@ let make =
                     Some(cursor),
                     setLoading,
                     selectedLevel,
-                    studentSearch,
+                    search,
                     teams,
                     updateTeamsCB,
                   )

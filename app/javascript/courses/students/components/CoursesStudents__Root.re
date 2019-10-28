@@ -6,7 +6,7 @@ let str = React.string;
 
 type state = {
   teams: Teams.t,
-  studentSearch: option(string),
+  search: option(string),
   selectedLevel: option(Level.t),
 };
 
@@ -17,8 +17,8 @@ let onClickForLevelSelector = (level, setState, event) => {
 
 let onSubmitSearchString = (setState, event) => {
   ReactEvent.Form.preventDefault(event);
-  let studentSearch = ReactEvent.Form.target(event)##student_search##value;
-  setState(state => {...state, studentSearch, teams: Unloaded});
+  let search = ReactEvent.Form.target(event)##student_search##value;
+  setState(state => {...state, search, teams: Unloaded});
 };
 
 let dropDownButtonText = level =>
@@ -93,7 +93,7 @@ let openOverlayCB = () => {
 let make = (~levels, ~course) => {
   let (state, setState) =
     React.useState(() =>
-      {teams: Unloaded, studentSearch: None, selectedLevel: None}
+      {teams: Unloaded, search: None, selectedLevel: None}
     );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -126,7 +126,7 @@ let make = (~levels, ~course) => {
         <CoursesStudents__TeamsList
           levels
           selectedLevel={state.selectedLevel}
-          studentSearch={state.studentSearch}
+          search={state.search}
           teams={state.teams}
           course
           updateTeamsCB={updateTeams(~setState)}

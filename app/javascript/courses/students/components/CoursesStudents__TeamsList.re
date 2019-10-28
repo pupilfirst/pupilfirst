@@ -108,13 +108,13 @@ let studentAvatar = (student: TeamInfo.student) => {
   switch (student.avatarUrl) {
   | Some(avatarUrl) =>
     <img
-      className="w-10 h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
       src=avatarUrl
     />
   | None =>
     <Avatar
       name={student |> TeamInfo.studentName}
-      className="w-10 h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mr-3 object-cover"
     />
   };
 };
@@ -145,8 +145,9 @@ let showStudent = (team, levels, openOverlayCB) => {
     onClick={_ => openOverlayCB()}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
     className="flex md:flex-row justify-between bg-white mt-4 cursor-pointer rounded-lg shadow hover:shadow-md">
-    <div className="w-full flex flex-1 w-4/6">
-      <div className="w-1/2 flex items-center p-2 md:p-4">
+    <div className="flex flex-1 flex-col md:flex-row md:w-4/6">
+      <div
+        className="md:w-1/2 flex items-center p-3 pr-0 pb-2 md:px-4 md:py-5">
         {studentAvatar(student)}
         <div className="block text-sm md:pr-2">
           <p className="font-semibold inline-block leading-snug">
@@ -158,7 +159,8 @@ let showStudent = (team, levels, openOverlayCB) => {
           </p>
         </div>
       </div>
-      <div className="w-1/2 flex flex-col p-2 md:px-4 md:py-5 justify-center">
+      <div
+        className="md:w-1/2 flex flex-col ml-11 md:ml-0 p-3 pr-0 pt-0 md:px-4 md:py-5 justify-center">
         <p className="text-xs leading-tight text-gray-700">
           {"Course Progress:" |> str}
           <span className="font-semibold text-gray-900 ml-1">
@@ -166,12 +168,12 @@ let showStudent = (team, levels, openOverlayCB) => {
           </span>
         </p>
         <div
-          className="w-full h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
-          <div className="bg-green-500 text-xs leading-none h-2 w-30" />
+          className="w-full h-1 md:h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
+          <div className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30" />
         </div>
       </div>
     </div>
-    <div className="w-2/6 flex items-center justify-end p-2 md:p-4">
+    <div className="w-2/6 flex items-center justify-end p-3 md:p-4">
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </div>;
@@ -181,8 +183,8 @@ let showTeam = (team, levels, openOverlayCB) => {
   <div
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
-    className="flex shadow bg-white rounded-lg mt-4 overflow-hidden">
-    <div className="flex flex-col flex-1 w-4/6">
+    className="flex shadow bg-white rounded-lg mt-4 overflow-hidden flex-col-reverse md:flex-row">
+    <div className="flex flex-col flex-1 w-full md:w-4/6">
       {team
        |> TeamInfo.students
        |> Array.map(student =>
@@ -190,24 +192,24 @@ let showTeam = (team, levels, openOverlayCB) => {
               key={student |> TeamInfo.studentId}
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
               onClick={_ => openOverlayCB()}
-              className="h-full cursor-pointer hover:bg-gray-100 flex items-center bg-white">
-              <div className="flex flex-1">
+              className="cursor-pointer hover:bg-gray-100 flex items-center bg-white">
+              <div className="flex w-full md:flex-1">
                 <div className="flex w-full">
-                  <div className="w-1/2 flex items-center md:px-4 md:py-5">
+                  <div className="w-1/2 flex items-center p-3 md:px-4 md:py-5">
                     {studentAvatar(student)}
                     <div className="text-sm flex flex-col">
                       <p className="font-semibold inline-block leading-snug ">
                         {student |> TeamInfo.studentName |> str}
                       </p>
                       <p
-                        className="text-gray-600 font-semibold text-xs mt-px leading-snug w-42 truncate">
+                        className="text-gray-600 font-semibold text-xs mt-px leading-snug w-28 md:w-42 truncate">
                         {student |> TeamInfo.studentTitle |> str}
                       </p>
                       <div className="flex flex-wrap" />
                     </div>
                   </div>
                   <div
-                    className="w-1/2 flex flex-col p-2 md:px-4 md:py-5 justify-center">
+                    className="w-1/2 flex flex-col p-3 md:px-4 md:py-5 justify-center">
                     <p className="text-xs leading-tight text-gray-700">
                       {"Course Progress:" |> str}
                       <span className="font-semibold text-gray-900 ml-1">
@@ -215,9 +217,9 @@ let showTeam = (team, levels, openOverlayCB) => {
                       </span>
                     </p>
                     <div
-                      className="w-full bg-gray-300 h-2 rounded-lg overflow-hidden mt-1">
+                      className="w-full h-1 md:h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
                       <div
-                        className="bg-green-500 text-xs leading-none h-2 w-30"
+                        className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30"
                       />
                     </div>
                   </div>
@@ -228,11 +230,14 @@ let showTeam = (team, levels, openOverlayCB) => {
        |> React.array}
     </div>
     <div
-      className="flex w-2/6 items-center border-l border-gray-200 p-2 md:px-4 md:py-5">
-      <div className="flex-1 py-3 pr-3">
+      className="flex w-full md:w-2/6 items-center border-l border-gray-200 p-3 md:px-4 md:py-5">
+      <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
-          <p className="text-xs"> {"Team" |> str} </p>
-          <h3 className="text-base font-semibold">
+          <p
+            className="text-xs bg-green-200 inline-block leading-tight px-1 py-px rounded">
+            {"Team" |> str}
+          </p>
+          <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
         </div>

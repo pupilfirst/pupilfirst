@@ -106,12 +106,10 @@ let make = (~levels, ~course) => {
             <input
               name="student_search"
               type_="search"
-              className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
+              className="bg-white border rounded block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2 focus:outline-none focus:border-primary-400"
               placeholder="Search by student or team name..."
             />
-            <button className="btn btn-default mt-2">
-              {"Search" |> str}
-            </button>
+            <button className="btn btn-default"> {"Search" |> str} </button>
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
             {showDropdown(levels, state.selectedLevel, setState)}

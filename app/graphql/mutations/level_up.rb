@@ -7,7 +7,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = LevelUpMutator.new(params, context)
+      mutator = LevelUpMutator.new(context, params)
 
       if mutator.valid?
         { success: mutator.execute }

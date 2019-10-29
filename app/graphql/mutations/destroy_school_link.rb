@@ -7,13 +7,13 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = DestroySchoolLinkMutator.new(params, context)
+      mutator = DestroySchoolLinkMutator.new(context, params)
 
       if mutator.valid?
         mutator.destroy_school_link
         { success: true }
       else
-        raise "Invalid request. Errors: #{mutator.error_codes}"
+        raise "Invalid request. Errors: #{mutator.error_messages}"
       end
     end
   end

@@ -8,7 +8,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = RestoreContentVersionMutator.new(params, context)
+      mutator = RestoreContentVersionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Version restored successfully.")
@@ -16,7 +16,7 @@ module Mutations
         { success: true }
       else
         mutator.notify_errors
-        { success: false, errors: mutator.error_codes }
+        { success: false, errors: mutator.error_messages }
       end
     end
   end

@@ -8,13 +8,13 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = ArchiveCommunityResourceMutator.new(params, context)
+      mutator = ArchiveCommunityResourceMutator.new(context, params)
 
       if mutator.valid?
         mutator.archive
         { success: true }
       else
-        raise "Invalid request. Errors: #{mutator.error_codes}"
+        raise "Invalid request. Errors: #{mutator.error_messages}"
       end
     end
   end

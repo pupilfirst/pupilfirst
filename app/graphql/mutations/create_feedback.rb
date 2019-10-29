@@ -8,7 +8,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = CreateFeedbackMutator.new(params, context)
+      mutator = CreateFeedbackMutator.new(context, params)
 
       if mutator.valid?
         mutator.create_feedback

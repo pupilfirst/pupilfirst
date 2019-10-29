@@ -11,7 +11,7 @@ module Mutations
     field :versions, [Types::DateType], null: false
 
     def resolve(params)
-      mutator = UpdateContentBlockMutator.new(params, context)
+      mutator = UpdateContentBlockMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Content updated successfully.")
@@ -19,7 +19,7 @@ module Mutations
         { success: true, id: content_block.id, versions: mutator.target_versions }
       else
         mutator.notify_errors
-        { success: false, errors: mutator.error_codes }
+        { success: false, errors: mutator.error_messages }
       end
     end
   end

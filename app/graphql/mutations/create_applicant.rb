@@ -9,7 +9,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = CreateApplicantMutator.new(params, context)
+      mutator = CreateApplicantMutator.new(context, params)
 
       if mutator.valid?
         { success: mutator.create_applicant }

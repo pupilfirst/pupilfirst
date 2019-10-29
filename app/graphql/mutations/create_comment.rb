@@ -10,12 +10,12 @@ module Mutations
     field :errors, [Types::CreateCommentErrors], null: true
 
     def resolve(params)
-      mutator = CreateCommentMutator.new(params, context)
+      mutator = CreateCommentMutator.new(context, params)
 
       if mutator.valid?
         { comment_id: mutator.create_comment, errors: nil }
       else
-        { comment_id: nil, errors: mutator.error_codes }
+        { comment_id: nil, errors: mutator.error_messages }
       end
     end
   end

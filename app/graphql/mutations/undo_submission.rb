@@ -7,7 +7,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = UndoSubmissionMutator.new(params, context)
+      mutator = UndoSubmissionMutator.new(context, params)
 
       if mutator.valid?
         mutator.undo_submission

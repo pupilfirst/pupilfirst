@@ -231,7 +231,7 @@ let make =
                                 }
                               />
                               <div
-                                className="flex w-10 h-10 absolute top-0 right-0 mr-2 items-center justify-center">
+                                className="flex w-10 h-10 absolute top-0 right-0 mr-1 items-center justify-center">
                                 <button
                                   className="flex items-center justify-center bg-gray-100 w-7 h-7 mt-px text-sm text-gray-700 hover:text-red-600 hover:bg-red-100 rounded-full ml-2 border border-transparent text-center"
                                   onClick={_ =>
@@ -310,7 +310,7 @@ let make =
           <span className="bg-gray-300 py-2 w-10">
             <i className="fas fa-plus text-sm" />
           </span>
-          <span className="px-4 py-2"> {"Add Checklist Item" |> str} </span>
+          <span className="px-3 py-2"> {"Add Checklist Item" |> str} </span>
         </button>
       </div>
       <div className="py-2 mt-4 flex flex-row-reverse">

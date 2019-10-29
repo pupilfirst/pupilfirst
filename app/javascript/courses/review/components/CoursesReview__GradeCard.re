@@ -252,9 +252,23 @@ let showGrades = (grades, gradeLabels, passGrade, evaluationCriteria, state) =>
      |> React.array}
   </div>;
 let renderGradePills =
-    (gradeLabels, evaluationCriteria, grades, passGrade, state, setState) =>
-  evaluationCriteria
-  |> Array.mapi((key, ec) => {
+    (
+      gradeLabels,
+      evaluationCriteria,
+      targetEvaluationCriteriaIds,
+      grades,
+      passGrade,
+      state,
+      setState,
+    ) =>
+  targetEvaluationCriteriaIds
+  |> Array.mapi((key, evaluationCriterionId) => {
+       let ec =
+         evaluationCriteria
+         |> ArrayUtils.unsafeFind(
+              e => e |> EvaluationCriterion.id == evaluationCriterionId,
+              "",
+            );
        let grade =
          grades
          |> Js.Array.find(g =>
@@ -472,6 +486,7 @@ let make =
       ~evaluationCriteria,
       ~passGrade,
       ~updateSubmissionCB,
+      ~targetEvaluationCriteriaIds,
     ) => {
   let (state, setState) =
     React.useState(() => {grades: [||], newFeedback: "", saving: false});
@@ -491,6 +506,7 @@ let make =
                renderGradePills(
                  gradeLabels,
                  evaluationCriteria,
+                 targetEvaluationCriteriaIds,
                  state.grades,
                  passGrade,
                  state,

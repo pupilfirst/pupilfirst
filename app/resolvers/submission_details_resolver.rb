@@ -2,18 +2,15 @@ class SubmissionDetailsResolver < ApplicationResolver
   attr_accessor :submission_id
 
   def submission_details
-    submissions = TimelineEvent.where(target_id: submission.target_id)
-      .includes(:timeline_event_owners)
-      .where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) }).includes(:startup_feedback, :timeline_event_grades, :evaluator).order("timeline_events.created_at").reverse
-
     {
-      submissions: submissions,
+      submissions: submissions.includes(:startup_feedback, :timeline_event_grades, :evaluator).order("timeline_events.created_at").reverse,
       target_id: target.id,
       target_title: target.title,
       user_names: user_names,
       level_number: level.number,
       level_id: level.id,
-      evaluation_criteria: target.evaluation_criteria
+      target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
+      evaluation_criteria: evaluation_criteria
     }
   end
 
@@ -21,8 +18,29 @@ class SubmissionDetailsResolver < ApplicationResolver
     @submission ||= TimelineEvent.find_by(id: submission_id)
   end
 
+  def submissions
+    TimelineEvent.where(target_id: submission.target_id)
+      .includes(:timeline_event_owners)
+      .where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) })
+  end
+
   def target
     @target ||= submission.target
+  end
+
+  def evaluation_criteria_fields
+    %w[name id]
+  end
+
+  def evaluation_criteria
+    # EvaluationCriterion of target OR EvaluationCriteria of submissions
+    target_criteria = target.evaluation_criteria.as_json(only: evaluation_criteria_fields)
+
+    submission_criteria = EvaluationCriterion.joins(timeline_event_grades: :timeline_event)
+      .where(timeline_events: { id: submissions })
+      .distinct.as_json(only: evaluation_criteria_fields)
+
+    (target_criteria + submission_criteria).uniq
   end
 
   def level

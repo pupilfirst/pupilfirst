@@ -231,6 +231,43 @@ feature 'Submissions show' do
     end
   end
 
+  context 'Evaluation criteria changed for a target with graded submissions' do
+    let(:target_1) { create :target, :for_founders, target_group: target_group }
+    let(:submission_reviewed) { create(:timeline_event, latest: true, target: target_1, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:timeline_event_grade_1) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_1) }
+    let!(:timeline_event_grade_2) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_2) }
+    let(:submission_pending) { create(:timeline_event, latest: true, target: target_1) }
+
+    before do
+      submission_pending.founders << team.founders.first
+      submission_reviewed.founders << team.founders.first
+      target_1.evaluation_criteria << [evaluation_criterion_1]
+    end
+
+    scenario 'coach visits a submission', js: true do
+      sign_in_user coach.user, referer: timeline_event_path(submission_reviewed)
+
+      within("div[aria-label='submissions-overlay-card-#{submission_reviewed.id}']") do
+        # Evaluation criteria at the point of grading are shown for reviewed submissions
+        within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+          expect(page).to have_text(evaluation_criterion_1.name)
+          expect(page).to have_text("#{timeline_event_grade_1.grade}/#{course.max_grade}")
+        end
+
+        within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+          expect(page).to have_text(evaluation_criterion_2.name)
+          expect(page).to have_text("#{timeline_event_grade_2.grade}/#{course.max_grade}")
+        end
+      end
+
+      within("div[aria-label='submissions-overlay-card-#{submission_pending.id}']") do
+        # New list of evaluation criteria are shown for pending submissions
+        expect(page).to have_text(evaluation_criterion_1.name)
+        expect(page).not_to have_text(evaluation_criterion_2.name)
+      end
+    end
+  end
+
   context 'with a reviewed submission that has feedback' do
     let(:submission_reviewed) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
     let(:feedback) { create(:startup_feedback, startup_id: team.id, faculty_id: coach.id) }

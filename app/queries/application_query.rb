@@ -6,7 +6,7 @@ class ApplicationQuery
   def initialize(context, attributes = {})
     @context = context
     assign_attributes(attributes)
-    raise UnauthorizedMutationException unless authorized?
+    raise UnauthorizedQueryException unless authorized?
   end
 
   def respond_to_missing?(name, *args)

@@ -10,7 +10,7 @@ module Schools
 
     def props
       {
-        authenticityToken: view.form_authenticity_token,
+        current_school_admin_id: current_school_admin.id,
         admins: admins
       }
     end
@@ -18,12 +18,14 @@ module Schools
     def admins
       @admins ||=
         SchoolAdmin.where(school: @school).includes(user: { avatar_attachment: :blob }).map do |admin|
-          {
+          details = {
             id: admin.id,
             name: admin.user.name,
-            avatarUrl: admin.user.image_or_avatar_url,
             email: admin.user.email
           }
+
+          details[:avatar_url] = admin.user.avatar_url(variant: :thumb) if admin.user.avatar.attached?
+          details
         end
     end
   end

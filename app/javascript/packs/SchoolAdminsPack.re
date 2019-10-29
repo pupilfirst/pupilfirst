@@ -1,27 +1,22 @@
 [@bs.config {jsx: 3}];
 
 type props = {
-  authenticityToken: string,
+  currentSchoolAdminId: string,
   admins: array(SchoolAdmin.t),
 };
 
 let decodeProps = json =>
   Json.Decode.{
-    authenticityToken: json |> field("authenticityToken", string),
+    currentSchoolAdminId: json |> field("currentSchoolAdminId", string),
     admins: json |> field("admins", array(SchoolAdmin.decode)),
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
-    ~id="school-admins",
-    ~attribute="data-json-props",
-    (),
-  )
-  |> decodeProps;
+  DomUtils.parseJsonTag(~id="school-admins-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <SchoolAdmins__Editor
-    authenticityToken={props.authenticityToken}
+    currentSchoolAdminId={props.currentSchoolAdminId}
     admins={props.admins}
   />,
   "school-admins",

@@ -139,7 +139,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_content('Review pending')
 
     # The student should be able to undo the submission at this point.
-    expect(page).to have_selector('button[title="Delete this submission"]')
+    expect(page).to have_button('Undo sumission')
 
     # User should be looking at their submission now.
     expect(page).to have_content('Your Submissions')
@@ -169,7 +169,7 @@ feature 'Target Overlay', js: true do
 
     # User should be able to undo the submission.
     accept_confirm do
-      find('button[title="Delete this submission"]').click
+      click_button('Undo sumission')
     end
 
     # This action should reload the page and return the user to the content of the target.
@@ -478,7 +478,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('Review pending')
 
       # The student should NOT be able to undo the submission at this point.
-      expect(page).not_to have_selector('button[title="Delete this submission"]')
+      expect(page).not_to have_button('Undo sumission')
     end
   end
 

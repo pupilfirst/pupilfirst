@@ -25,20 +25,19 @@ module UpdateSchoolAdminQuery = [%graphql
 |}
 ];
 
-let createSchoolAdminQuery =
-    (authenticityToken, email, name, setSaving, updateCB) => {
+let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
   setSaving(_ => true);
   CreateSchoolAdminQuery.make(~email, ~name, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
   |> Js.Promise.then_(response => {
        switch (response##createSchoolAdmin##schoolAdmin) {
        | Some(schoolAdmin) =>
          updateCB(
            SchoolAdmin.create(
-             schoolAdmin##id,
-             name,
-             email,
-             schoolAdmin##avatarUrl,
+             ~id=schoolAdmin##id,
+             ~name,
+             ~email,
+             ~avatarUrl=schoolAdmin##avatarUrl,
            ),
          );
          Notification.success(
@@ -50,25 +49,18 @@ let createSchoolAdminQuery =
        Js.Promise.resolve();
      })
   |> ignore;
+  ();
 };
 
-let updateSchoolAdminQuery =
-    (authenticityToken, admin, name, setSaving, updateCB) => {
+let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
   setSaving(_ => true);
   let id = admin |> SchoolAdmin.id;
   UpdateSchoolAdminQuery.make(~id, ~name, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
   |> Js.Promise.then_(response => {
        response##updateSchoolAdmin##success
          ? {
-           updateCB(
-             SchoolAdmin.create(
-               id,
-               name,
-               admin |> SchoolAdmin.email,
-               admin |> SchoolAdmin.avatarUrl,
-             ),
-           );
+           updateCB(admin |> SchoolAdmin.updateName(name));
            Notification.success(
              "Success",
              "School Admin updated successfully.",
@@ -80,26 +72,11 @@ let updateSchoolAdminQuery =
   |> ignore;
 };
 
-let handleButtonClick =
-    (authenticityToken, admin, setSaving, name, email, updateCB, event) => {
+let handleButtonClick = (admin, setSaving, name, email, updateCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   switch (admin) {
-  | Some(admin) =>
-    updateSchoolAdminQuery(
-      authenticityToken,
-      admin,
-      name,
-      setSaving,
-      updateCB,
-    )
-  | None =>
-    createSchoolAdminQuery(
-      authenticityToken,
-      email,
-      name,
-      setSaving,
-      updateCB,
-    )
+  | Some(admin) => updateSchoolAdminQuery(admin, name, setSaving, updateCB)
+  | None => createSchoolAdminQuery(email, name, setSaving, updateCB)
   };
 };
 
@@ -141,9 +118,15 @@ let emailInputDisabled = admin =>
   | None => false
   };
 
+let boolBtnClasses = selected => {
+  let classes = "toggle-button__button";
+  classes ++ (selected ? " toggle-button__button--active" : "");
+};
+
 [@react.component]
-let make = (~authenticityToken, ~admin, ~updateCB) => {
+let make = (~admin, ~updateCB) => {
   let (saving, setSaving) = React.useState(() => false);
+
   let (name, setName) =
     React.useState(() =>
       switch (admin) {
@@ -151,6 +134,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
       | None => ""
       }
     );
+
   let (email, setEmail) =
     React.useState(() =>
       switch (admin) {
@@ -158,6 +142,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
       | None => ""
       }
     );
+
   <div className="w-full">
     <DisablingCover disabled=saving>
       <div className="mx-auto bg-white">
@@ -166,7 +151,7 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
             className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
             {(
                switch (admin) {
-               | Some(_) => "Update school admin"
+               | Some(admin) => admin |> SchoolAdmin.name
                | None => "Add new school admin"
                }
              )
@@ -219,7 +204,6 @@ let make = (~authenticityToken, ~admin, ~updateCB) => {
             <button
               disabled={saveDisabled(email, name, saving, admin)}
               onClick={handleButtonClick(
-                authenticityToken,
                 admin,
                 setSaving,
                 name,

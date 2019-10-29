@@ -1,6 +1,6 @@
 open SchoolCustomize__Types;
 
-[%bs.raw {|require("./SchoolCustomize.css")|}];
+[%bs.raw {|require("./SchoolCustomize__Root.css")|}];
 
 let str = ReasonReact.string;
 
@@ -74,16 +74,14 @@ let sitemap = links =>
     </div>
   | links =>
     <div className="flex flex-wrap">
-      {
-        links
-        |> List.map(((id, title, _)) =>
-             <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
-               {title |> str}
-             </div>
-           )
-        |> Array.of_list
-        |> ReasonReact.array
-      }
+      {links
+       |> List.map(((id, title, _)) =>
+            <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
+              {title |> str}
+            </div>
+          )
+       |> Array.of_list
+       |> ReasonReact.array}
     </div>
   };
 
@@ -96,14 +94,12 @@ let socialLinks = links =>
     </div>
   | links =>
     <div className="flex flex-wrap">
-      {
-        links
-        |> List.map(((id, _title, url)) =>
-             <SchoolCustomize__SocialLink url key=id />
-           )
-        |> Array.of_list
-        |> ReasonReact.array
-      }
+      {links
+       |> List.map(((id, _title, url)) =>
+            <SchoolCustomize__SocialLink url key=id />
+          )
+       |> Array.of_list
+       |> ReasonReact.array}
     </div>
   };
 
@@ -163,50 +159,48 @@ let showEditor = (editor, send, event) => {
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(editor) =>
-    <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB=(() => send(CloseEditor))>
-      {
-        switch (editor) {
-        | LinksEditor(kind) =>
-          <SchoolCustomize__LinksEditor
-            key="sc-drawer__links-editor"
-            kind
-            customizations={state.customizations}
-            authenticityToken
-            addLinkCB=(link => send(AddLink(link)))
-            removeLinkCB=(linkId => send(RemoveLink(linkId)))
-          />
-        | AgreementsEditor(kind) =>
-          <SchoolCustomize__AgreementsEditor
-            key="sc-drawer__agreements-editor"
-            kind
-            customizations={state.customizations}
-            updatePrivacyPolicyCB=(
-              agreement => send(UpdatePrivacyPolicy(agreement))
-            )
-            updateTermsOfUseCB=(
-              agreement => send(UpdateTermsOfUse(agreement))
-            )
-            authenticityToken
-          />
-        | ContactsEditor =>
-          <SchoolCustomize__ContactsEditor
-            key="sc-drawer__contacts-editor"
-            customizations={state.customizations}
-            updateAddressCB=(address => send(UpdateAddress(address)))
-            updateEmailAddressCB=(
-              emailAddress => send(UpdateEmailAddress(emailAddress))
-            )
-            authenticityToken
-          />
-        | ImagesEditor =>
-          <SchoolCustomize__ImagesEditor
-            key="sc-drawer__images-editor"
-            customizations={state.customizations}
-            updateImagesCB=(json => send(UpdateImages(json)))
-            authenticityToken
-          />
-        }
-      }
+    <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB={() => send(CloseEditor)}>
+      {switch (editor) {
+       | LinksEditor(kind) =>
+         <SchoolCustomize__LinksEditor
+           key="sc-drawer__links-editor"
+           kind
+           customizations={state.customizations}
+           authenticityToken
+           addLinkCB={link => send(AddLink(link))}
+           removeLinkCB={linkId => send(RemoveLink(linkId))}
+         />
+       | AgreementsEditor(kind) =>
+         <SchoolCustomize__AgreementsEditor
+           key="sc-drawer__agreements-editor"
+           kind
+           customizations={state.customizations}
+           updatePrivacyPolicyCB={agreement =>
+             send(UpdatePrivacyPolicy(agreement))
+           }
+           updateTermsOfUseCB={agreement =>
+             send(UpdateTermsOfUse(agreement))
+           }
+           authenticityToken
+         />
+       | ContactsEditor =>
+         <SchoolCustomize__ContactsEditor
+           key="sc-drawer__contacts-editor"
+           customizations={state.customizations}
+           updateAddressCB={address => send(UpdateAddress(address))}
+           updateEmailAddressCB={emailAddress =>
+             send(UpdateEmailAddress(emailAddress))
+           }
+           authenticityToken
+         />
+       | ImagesEditor =>
+         <SchoolCustomize__ImagesEditor
+           key="sc-drawer__images-editor"
+           customizations={state.customizations}
+           updateImagesCB={json => send(UpdateImages(json))}
+           authenticityToken
+         />
+       }}
     </SchoolAdmin__EditorDrawer.Jsx2>
 
   | None => ReasonReact.null
@@ -271,40 +265,32 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
         <div
           className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
           <div className="flex items-center bg-gray-200 rounded p-2">
-            {
-              headerLogo(
-                schoolName,
-                state.customizations |> Customizations.logoOnLightBg,
-              )
-            }
-            {
-              editIcon(
-                "ml-6",
-                showEditor(ImagesEditor, send),
-                "Edit logo (on light backgrounds)",
-              )
-            }
+            {headerLogo(
+               schoolName,
+               state.customizations |> Customizations.logoOnLightBg,
+             )}
+            {editIcon(
+               "ml-6",
+               showEditor(ImagesEditor, send),
+               "Edit logo (on light backgrounds)",
+             )}
           </div>
           <div className="flex items-center">
             <div
               className="school-customize__header-links flex items-center bg-gray-200 rounded px-3 py-2 h-full">
-              {
-                headerLinks(
-                  state.customizations
-                  |> Customizations.headerLinks
-                  |> Customizations.unpackLinks,
-                )
-              }
-              {
-                editIcon(
-                  "ml-3",
-                  showEditor(
-                    LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
-                    send,
-                  ),
-                  "Edit header links",
-                )
-              }
+              {headerLinks(
+                 state.customizations
+                 |> Customizations.headerLinks
+                 |> Customizations.unpackLinks,
+               )}
+              {editIcon(
+                 "ml-3",
+                 showEditor(
+                   LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
+                   send,
+                 ),
+                 "Edit header links",
+               )}
             </div>
           </div>
         </div>
@@ -319,24 +305,20 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                   <span className="uppercase font-bold text-sm">
                     {"Sitemap" |> str}
                   </span>
-                  {
-                    editIcon(
-                      "ml-3",
-                      showEditor(
-                        LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
-                        send,
-                      ),
-                      "Edit footer links",
-                    )
-                  }
+                  {editIcon(
+                     "ml-3",
+                     showEditor(
+                       LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
+                       send,
+                     ),
+                     "Edit footer links",
+                   )}
                 </div>
-                {
-                  sitemap(
-                    state.customizations
-                    |> Customizations.footerLinks
-                    |> Customizations.unpackLinks,
-                  )
-                }
+                {sitemap(
+                   state.customizations
+                   |> Customizations.footerLinks
+                   |> Customizations.unpackLinks,
+                 )}
               </div>
             </div>
             <div className="w-1/2">
@@ -348,26 +330,22 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                       <span className="uppercase font-bold text-sm">
                         {"Social" |> str}
                       </span>
-                      {
-                        editIcon(
-                          "ml-3",
-                          showEditor(
-                            LinksEditor(
-                              SchoolCustomize__LinksEditor.SocialLink,
-                            ),
-                            send,
-                          ),
-                          "Edit social media links",
-                        )
-                      }
+                      {editIcon(
+                         "ml-3",
+                         showEditor(
+                           LinksEditor(
+                             SchoolCustomize__LinksEditor.SocialLink,
+                           ),
+                           send,
+                         ),
+                         "Edit social media links",
+                       )}
                     </div>
-                    {
-                      socialLinks(
-                        state.customizations
-                        |> Customizations.socialLinks
-                        |> Customizations.unpackLinks,
-                      )
-                    }
+                    {socialLinks(
+                       state.customizations
+                       |> Customizations.socialLinks
+                       |> Customizations.unpackLinks,
+                     )}
                   </div>
                 </div>
                 <div className="w-1/2">
@@ -377,20 +355,16 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
                       <span className="uppercase font-bold text-sm">
                         {"Contact" |> str}
                       </span>
-                      {
-                        editIcon(
-                          "ml-3",
-                          showEditor(ContactsEditor, send),
-                          "Edit contact details",
-                        )
-                      }
+                      {editIcon(
+                         "ml-3",
+                         showEditor(ContactsEditor, send),
+                         "Edit contact details",
+                       )}
                     </div>
                     {address(state.customizations |> Customizations.address)}
-                    {
-                      emailAddress(
-                        state.customizations |> Customizations.emailAddress,
-                      )
-                    }
+                    {emailAddress(
+                       state.customizations |> Customizations.emailAddress,
+                     )}
                   </div>
                 </div>
               </div>
@@ -400,67 +374,57 @@ let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
             className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
             <div
               className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
-              {
-                footerLogo(
-                  schoolName,
-                  state.customizations |> Customizations.logoOnDarkBg,
-                )
-              }
-              {
-                editIcon(
-                  "ml-3",
-                  showEditor(ImagesEditor, send),
-                  "Edit logo (on dark backgrounds)",
-                )
-              }
+              {footerLogo(
+                 schoolName,
+                 state.customizations |> Customizations.logoOnDarkBg,
+               )}
+              {editIcon(
+                 "ml-3",
+                 showEditor(ImagesEditor, send),
+                 "Edit logo (on dark backgrounds)",
+               )}
             </div>
             <div className="flex items-center text-sm">
               <div
                 className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
                 <div> {"Privacy Policy" |> str} </div>
-                {
-                  editIcon(
-                    "ml-3",
-                    showEditor(
-                      AgreementsEditor(
-                        SchoolCustomize__AgreementsEditor.PrivacyPolicy,
-                      ),
-                      send,
-                    ),
-                    "Edit privacy policy",
-                  )
-                }
+                {editIcon(
+                   "ml-3",
+                   showEditor(
+                     AgreementsEditor(
+                       SchoolCustomize__AgreementsEditor.PrivacyPolicy,
+                     ),
+                     send,
+                   ),
+                   "Edit privacy policy",
+                 )}
               </div>
               <div
                 className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2 ml-6">
                 <div> {"Terms of Use" |> str} </div>
-                {
-                  editIcon(
-                    "ml-3",
-                    showEditor(
-                      AgreementsEditor(
-                        SchoolCustomize__AgreementsEditor.TermsOfUse,
-                      ),
-                      send,
-                    ),
-                    "Edit terms of use",
-                  )
-                }
+                {editIcon(
+                   "ml-3",
+                   showEditor(
+                     AgreementsEditor(
+                       SchoolCustomize__AgreementsEditor.TermsOfUse,
+                     ),
+                     send,
+                   ),
+                   "Edit terms of use",
+                 )}
               </div>
               <div className="ml-6 flex items-center">
                 <i className="far fa-copyright" />
                 <span className="ml-1">
-                  {
-                    (
-                      Js.Date.make()
-                      |> Js.Date.getFullYear
-                      |> int_of_float
-                      |> string_of_int
-                    )
-                    ++ " "
-                    ++ schoolName
-                    |> str
-                  }
+                  {(
+                     Js.Date.make()
+                     |> Js.Date.getFullYear
+                     |> int_of_float
+                     |> string_of_int
+                   )
+                   ++ " "
+                   ++ schoolName
+                   |> str}
                 </span>
               </div>
             </div>

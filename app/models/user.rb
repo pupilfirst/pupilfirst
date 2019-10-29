@@ -78,6 +78,17 @@ class User < ApplicationRecord
     "data:image/svg+xml;base64,#{Base64.encode64(logo.svg)}"
   end
 
+  def avatar_url(variant: nil)
+    return unless avatar.attached?
+
+    if variant.blank?
+      Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true)
+    else
+      Rails.application.routes.url_helpers.rails_representation_path(avatar_variant(variant), only_path: true)
+    end
+  end
+
+  # TODO: Remove User#image_or_avatar_url when all of its usages are gone. Use the avatar_url method instead, and generate initial avatars client-side.
   def image_or_avatar_url(variant: nil, background_shape: nil)
     if avatar.attached?
       if variant.blank?

@@ -1,10 +1,44 @@
 [@bs.config {jsx: 3}];
+
+open Webapi.Dom;
+
+let onWindowClick = (showDropdown, setShowDropdown, _event) =>
+  if (showDropdown) {
+    setShowDropdown(_ => false);
+  } else {
+    ();
+  };
+
+let toggleDropdown = (setShowDropdown, event) => {
+  event |> ReactEvent.Mouse.stopPropagation;
+  setShowDropdown(showDropdown => !showDropdown);
+};
+
 [@react.component]
 let make = (~selected, ~contents, ~right=false) => {
   let (showDropdown, setShowDropdown) = React.useState(() => false);
+
+  React.useEffect1(
+    () => {
+      let curriedFunction = onWindowClick(showDropdown, setShowDropdown);
+
+      let removeEventListener = () =>
+        Window.removeEventListener("click", curriedFunction, window);
+
+      if (showDropdown) {
+        Window.addEventListener("click", curriedFunction, window);
+        Some(removeEventListener);
+      } else {
+        removeEventListener();
+        None;
+      };
+    },
+    [|showDropdown|],
+  );
+
   <div
     className="dropdown inline-block relative text-sm w-full md:w-auto"
-    onClick={_ => setShowDropdown(showDropdown => !showDropdown)}>
+    onClick={toggleDropdown(setShowDropdown)}>
     <div> selected </div>
     {showDropdown
        ? <ul

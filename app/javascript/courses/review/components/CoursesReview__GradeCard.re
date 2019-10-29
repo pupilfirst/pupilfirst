@@ -267,7 +267,8 @@ let renderGradePills =
          evaluationCriteria
          |> ArrayUtils.unsafeFind(
               e => e |> EvaluationCriterion.id == evaluationCriterionId,
-              "",
+              "CoursesReview__GradeCard: Unable to find evaluation criterion with id - "
+              ++ evaluationCriterionId,
             );
        let grade =
          grades

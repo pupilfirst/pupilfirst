@@ -8,7 +8,7 @@ module Mutations
     field :school_admin, Types::CreateSchoolAdminType, null: true
 
     def resolve(params)
-      mutator = CreateSchoolAdminMutator.new(params, context)
+      mutator = CreateSchoolAdminMutator.new(context, params)
 
       if mutator.valid?
         { school_admin: mutator.save }

@@ -15,12 +15,12 @@ module Mutations
     field :course, Types::CourseType, null: false
 
     def resolve(params)
-      mutator = CreateCourseMutator.new(params, context)
+      mutator = CreateCourseMutator.new(context, params)
 
       if mutator.valid?
         { course: mutator.create_course, errors: [] }
       else
-        { course: nil, errors: mutator.error_codes }
+        { course: nil, errors: mutator.error_messages }
       end
     end
   end

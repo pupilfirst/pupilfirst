@@ -25,11 +25,12 @@ let search =
   | "" => []
   | searchString =>
     let allTags =
-      List.append(selectedTags, unselectedTags) |> List.map(String.lowercase);
+      List.append(selectedTags, unselectedTags)
+      |> List.map(String.lowercase_ascii);
     /* If addition of tag is allowed, and it IS new, then display that option at the front. */
     let initial =
       if (allowNewTags
-          && !(allTags |> List.mem(searchString |> String.lowercase))) {
+          && !(allTags |> List.mem(searchString |> String.lowercase_ascii))) {
         [
           <span
             title={"Add new tag " ++ searchString}
@@ -47,8 +48,8 @@ let search =
       unselectedTags
       |> List.filter(tag =>
            tag
-           |> String.lowercase
-           |> Js.String.includes(searchString |> String.lowercase)
+           |> String.lowercase_ascii
+           |> Js.String.includes(searchString |> String.lowercase_ascii)
          )
       |> List.sort(String.compare)
       |> List.map(tag =>

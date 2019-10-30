@@ -8,7 +8,7 @@ module Mutations
     field :course_export, Types::CourseExportType, null: true
 
     def resolve(params)
-      mutator = CreateCourseExportMutator.new(params, context)
+      mutator = CreateCourseExportMutator.new(context, params)
 
       export = if mutator.valid?
         export = mutator.create_course_export

@@ -8,7 +8,10 @@ class UpdateReviewChecklistMutator < ApplicationQuery
   validate :review_checklist_shape
 
   def update_review_checklist
-    target.update!(review_checklist: review_checklist)
+    Target.transaction do
+      target.resource_versions.create!(value: target.review_checklist)
+      target.update!(review_checklist: review_checklist)
+    end
   end
 
   private
@@ -23,6 +26,7 @@ class UpdateReviewChecklistMutator < ApplicationQuery
 
     errors[:base] << 'Invalid review checklist'
   end
+
   # rubocop: enable  Metrics/CyclomaticComplexity
 
   def target

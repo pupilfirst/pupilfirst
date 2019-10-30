@@ -37,6 +37,7 @@ class Target < ApplicationRecord
   has_many :content_versions, dependent: :destroy
   has_many :target_questions, dependent: :destroy
   has_many :questions, through: :target_questions
+  has_many :resource_versions, as: :versionable, dependent: :restrict_with_error
 
   acts_as_taggable
 

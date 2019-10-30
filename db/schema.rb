@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_21_131557) do
+ActiveRecord::Schema.define(version: 2019_10_30_080004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -453,6 +453,16 @@ ActiveRecord::Schema.define(version: 2019_10_21_131557) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["target_id"], name: "index_quizzes_on_target_id"
+  end
+
+  create_table "resource_versions", force: :cascade do |t|
+    t.jsonb "value"
+    t.string "versionable_type"
+    t.bigint "versionable_id"
+    t.datetime "archived_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["versionable_type", "versionable_id"], name: "index_resource_versions_on_versionable_type_and_versionable_id"
   end
 
   create_table "resources", id: :serial, force: :cascade do |t|

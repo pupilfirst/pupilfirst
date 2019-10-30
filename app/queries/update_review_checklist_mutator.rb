@@ -1,4 +1,4 @@
-class UpdateReviewChecklistMutator < ApplicationMutator
+class UpdateReviewChecklistMutator < ApplicationQuery
   include AuthorizeCoach
 
   attr_accessor :target_id
@@ -23,7 +23,6 @@ class UpdateReviewChecklistMutator < ApplicationMutator
 
     errors[:base] << 'Invalid review checklist'
   end
-
   # rubocop: enable  Metrics/CyclomaticComplexity
 
   def target

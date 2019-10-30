@@ -8,7 +8,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = UpdateReviewChecklistMutator.new(params, context)
+      mutator = UpdateReviewChecklistMutator.new(context, params)
 
       if mutator.valid?
         mutator.update_review_checklist

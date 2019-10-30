@@ -87,9 +87,16 @@ let showDropdown = (levels, selectedLevel, setState) => {
         |> Level.sort
         |> Array.map(level =>
              <button
-               className="p-3 w-full text-left font-semibold focus:outline-none"
+               className="flex md:items-center justify-between p-3 w-full text-left font-semibold focus:outline-none"
                onClick={onClickForLevelSelector(Some(level), setState)}>
-               {dropDownButtonText(level) |> str}
+               <span className="pr-2">
+                 {dropDownButtonText(level) |> str}
+               </span>
+               <span
+                 className="flex-shrink-0 bg-secondary-500 rounded px-1 pb-px text-white leading-tight">
+                 <Icon className="if i-users-regular text-xs" />
+                 <span className="text-xs ml-1"> {"20" |> str} </span>
+               </span>
              </button>
            ),
       );

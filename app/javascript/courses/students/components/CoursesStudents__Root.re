@@ -10,9 +10,113 @@ type filter = {
 };
 
 type state = {
+  loading: bool,
   teams: Teams.t,
   searchInputString: option(string),
   filter,
+};
+
+module TeamsQuery = [%graphql
+  {|
+    query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
+      teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
+        nodes {
+        id,
+        name,
+        levelId,
+        students {
+          id,
+          name
+          title
+          avatarUrl
+        }
+        }
+        pageInfo{
+          endCursor,hasNextPage
+        }
+      }
+  }
+|}
+];
+
+let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
+  let updatedTeams =
+    (
+      switch (nodes) {
+      | None => [||]
+      | Some(teamsArray) => teamsArray |> TeamInfo.decodeJS
+      }
+    )
+    |> Array.to_list
+    |> List.flatten
+    |> Array.of_list
+    |> Array.append(teams);
+  setState(state =>
+    {
+      ...state,
+      teams:
+        switch (hasNextPage, endCursor) {
+        | (_, None)
+        | (false, Some(_)) => FullyLoaded(updatedTeams)
+        | (true, Some(cursor)) => PartiallyLoaded(updatedTeams, cursor)
+        },
+      loading: false,
+    }
+  );
+};
+
+let getTeams =
+    (
+      authenticityToken,
+      courseId,
+      cursor,
+      setState,
+      selectedLevel,
+      search,
+      teams,
+    ) => {
+  setState(state => {...state, loading: true});
+  (
+    switch (selectedLevel, search, cursor) {
+    | (Some(level), Some(search), Some(cursor)) =>
+      TeamsQuery.make(
+        ~courseId,
+        ~levelId=level |> Level.id,
+        ~search,
+        ~after=cursor,
+        (),
+      )
+    | (Some(level), Some(search), None) =>
+      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ~search, ())
+    | (None, Some(search), Some(cursor)) =>
+      TeamsQuery.make(~courseId, ~search, ~after=cursor, ())
+    | (Some(level), None, Some(cursor)) =>
+      TeamsQuery.make(
+        ~courseId,
+        ~levelId=level |> Level.id,
+        ~after=cursor,
+        (),
+      )
+    | (Some(level), None, None) =>
+      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ())
+    | (None, Some(search), None) => TeamsQuery.make(~courseId, ~search, ())
+    | (None, None, Some(cursor)) =>
+      TeamsQuery.make(~courseId, ~after=cursor, ())
+    | (None, None, None) => TeamsQuery.make(~courseId, ())
+    }
+  )
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       response##teams##nodes
+       |> updateTeams(
+            setState,
+            response##teams##pageInfo##endCursor,
+            response##teams##pageInfo##hasNextPage,
+            teams,
+          );
+       Js.Promise.resolve();
+     })
+  |> ignore;
 };
 
 let onClickForLevelSelector = (level, setState, event) => {
@@ -51,6 +155,7 @@ let onClearSearch = (setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setState(state =>
     {
+      ...state,
       searchInputString: None,
       filter: {
         search: None,
@@ -112,19 +217,6 @@ let showDropdown = (levels, selectedLevel, setState) => {
   <Dropdown selected contents right=true />;
 };
 
-let updateTeams = (~setState, ~teams, ~hasNextPage, ~endCursor) =>
-  setState(state =>
-    {
-      ...state,
-      teams:
-        switch (hasNextPage, endCursor) {
-        | (_, None)
-        | (false, Some(_)) => FullyLoaded(teams)
-        | (true, Some(cursor)) => PartiallyLoaded(teams, cursor)
-        },
-    }
-  );
-
 let updateSearchInputString = (setState, event) => {
   let searchInputString = ReactEvent.Form.target(event)##value;
   setState(state => {...state, searchInputString});
@@ -139,6 +231,7 @@ let make = (~levels, ~course) => {
   let (state, setState) =
     React.useState(() =>
       {
+        loading: false,
         teams: Unloaded,
         searchInputString: None,
         filter: {
@@ -147,6 +240,27 @@ let make = (~levels, ~course) => {
         },
       }
     );
+  let courseId = course |> Course.id;
+  React.useEffect2(
+    () => {
+      switch ((state.teams: Teams.t)) {
+      | Unloaded =>
+        getTeams(
+          AuthenticityToken.fromHead(),
+          courseId,
+          None,
+          setState,
+          state.filter.level,
+          state.filter.search,
+          [||],
+        )
+      | FullyLoaded(_)
+      | PartiallyLoaded(_, _) => ()
+      };
+      None;
+    },
+    (state.filter.level, state.filter.search),
+  );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
@@ -187,15 +301,40 @@ let make = (~levels, ~course) => {
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
-        <CoursesStudents__TeamsList
-          levels
-          selectedLevel={state.filter.level}
-          search={state.filter.search}
-          teams={state.teams}
-          course
-          updateTeamsCB={updateTeams(~setState)}
-          openOverlayCB
-        />
+        {switch (state.teams) {
+         | Unloaded =>
+           SkeletonLoading.multiple(
+             ~count=10,
+             ~element=SkeletonLoading.userCard(),
+           )
+         | PartiallyLoaded(teams, cursor) =>
+           [|
+             <CoursesStudents__TeamsList levels teams openOverlayCB />,
+             {state.loading
+                ? SkeletonLoading.multiple(
+                    ~count=3,
+                    ~element=SkeletonLoading.card(),
+                  )
+                : <button
+                    className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                    onClick={_ =>
+                      getTeams(
+                        AuthenticityToken.fromHead(),
+                        courseId,
+                        Some(cursor),
+                        setState,
+                        state.filter.level,
+                        state.filter.search,
+                        teams,
+                      )
+                    }>
+                    {"Load More..." |> str}
+                  </button>},
+           |]
+           |> React.array
+         | FullyLoaded(teams) =>
+           <CoursesStudents__TeamsList levels teams openOverlayCB />
+         }}
       </div>
     </div>
   </div>;

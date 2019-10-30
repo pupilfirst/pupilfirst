@@ -3,8 +3,8 @@
 
 let str = React.string;
 
-let feedbackClasses = showMore => {
-  showMore ? "relative h-auto" : "relative overflow-hidden h-12";
+let feedbackClasses = truncated => {
+  truncated ? "relative overflow-hidden h-12" : "relative h-auto";
 };
 
 let optionalStringLength = feedback => {
@@ -16,29 +16,30 @@ let optionalStringLength = feedback => {
 
 [@react.component]
 let make = (~feedback) => {
-  let (showMore, setShowMore) =
-    React.useState(() => feedback |> optionalStringLength < 150);
+  let truncationRequired = feedback |> optionalStringLength > 150;
+
+  let (truncated, setTruncated) = React.useState(() => truncationRequired);
 
   switch (feedback) {
   | Some(feedback) =>
-    <div className={feedbackClasses(showMore)}>
+    <div className={feedbackClasses(truncated)}>
       <MarkdownBlock
         markdown=feedback
         className="text-sm"
         profile=Markdown.Permissive
       />
-      {showMore || feedback |> String.length < 150
-         ? React.null
-         : <div
+      {truncationRequired && truncated
+         ? <div
              className="checklist-show-feedback__show-all-button absolute bottom-0 w-full">
              <button
                className="block w-full text-center rounded-lg text-primary-500 text-xs font-semibold focus:outline-none hover:text-primary-400"
-               onClick={_ => setShowMore(_ => true)}>
+               onClick={_ => setTruncated(_ => false)}>
                <span className="inline-block bg-gray-100 px-2">
                  {"Show All" |> str}
                </span>
              </button>
-           </div>}
+           </div>
+         : React.null}
     </div>
   | None => React.null
   };

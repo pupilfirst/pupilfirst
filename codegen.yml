@@ -1,0 +1,5 @@
+schema: 'http://school.localhost/graphql?introspection=true'
+generates:
+  graphql_schema.json:
+    plugins:
+      - introspection

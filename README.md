@@ -75,11 +75,16 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
 
 #### Setup ReasonML environment
 
-If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point. However,
-you'll also need to install the [Reason CLI toolchain](https://github.com/reasonml/reason-cli) to get all add-on
-features to work properly in VSCode:
+If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point.
 
-`npm install -g reason-cli@latest-macos` (OSX) or `@latest-linux` (Linux)
+If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an
+introspection query:
+
+```
+yarn run graphql-codegen
+```
+
+The GraphQL end-point is configured in the `codegen.yml` file.
 
 ### Set credentials for local database
 

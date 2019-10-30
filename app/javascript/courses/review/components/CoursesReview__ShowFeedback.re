@@ -125,10 +125,10 @@ let make =
                     />
                   </DisablingCover>
                   <div
-                    className="flex justify-end px-4 pt-2 pb-4 md:px-6 md:pb-6">
+                    className="flex justify-end pr-4 pl-10 pt-2 pb-4 md:px-6 md:pb-6">
                     <button
                       disabled={state.newFeedback == "" || state.saving}
-                      className="btn btn-success border border-green-600"
+                      className="btn btn-success border border-green-600 w-full md:w-auto"
                       onClick={_ =>
                         createFeedback(
                           authenticityToken,

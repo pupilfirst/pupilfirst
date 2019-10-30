@@ -313,7 +313,7 @@ let make =
           <span className="px-3 py-2"> {"Add Checklist Item" |> str} </span>
         </button>
       </div>
-      <div className="py-2 mt-4 flex flex-row-reverse">
+      <div className="py-2 mt-4 flex flex-col-reverse flex-row-reverse">
         <button
           disabled={state.saving}
           onClick={_ =>
@@ -324,7 +324,7 @@ let make =
               updateReviewChecklistCB,
             )
           }
-          className="btn btn-success">
+          className="btn btn-success mt-4 md:mt-0">
           {"Save Checklist" |> str}
         </button>
         <button

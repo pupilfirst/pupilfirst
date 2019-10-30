@@ -43,15 +43,22 @@ let make =
        }}
     </div>
     <div
-      className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
-      <MarkdownEditor
-        updateMarkdownCB=updateFeedbackCB
-        value=feedback
-        label
-        profile=Markdown.Permissive
-        defaultView=MarkdownEditor.Edit
-        maxLength=10000
-      />
+      className="flex px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
+      <span className="mr-2 md:mr-3 pt-5 md:pt-4">
+        <Icon
+          className="if i-comment-alt-regular text-gray-800 text-base md:text-lg"
+        />
+      </span>
+      <div className="w-full">
+        <MarkdownEditor
+          updateMarkdownCB=updateFeedbackCB
+          value=feedback
+          label
+          profile=Markdown.Permissive
+          defaultView=MarkdownEditor.Edit
+          maxLength=10000
+        />
+      </div>
     </div>
   </div>;
 };

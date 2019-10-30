@@ -520,8 +520,15 @@ let make =
          targetId,
        )}
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
-        <div className="font-semibold text-sm"> {"Grade Card" |> str} </div>
-        <div className="flex md:flex-row flex-col">
+        <h5 className="font-semibold text-sm flex items-center">
+          <Icon
+            className="if i-tachometer-alt-regular text-gray-800 text-base md:text-lg"
+          />
+          <span className="ml-2 md:ml-3 tracking-wide">
+            {"Grade Card" |> str}
+          </span>
+        </h5>
+        <div className="flex md:flex-row flex-col ml-7 md:ml-8">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>

@@ -7,7 +7,7 @@ module Types
 
     def students
       object.founders.map do |student|
-        student_attributes = { id: student.id, name: student.name, title: student.title, targets_completed: targets_completed(student) }
+        student_attributes = { id: student.id, name: student.name, title: student.title }
 
         if student.user.avatar.attached?
           student_attributes[:avatar_url] =
@@ -16,10 +16,6 @@ module Types
 
         student_attributes
       end
-    end
-
-    def targets_completed(student)
-      student.timeline_events.passed.select(:target_id).distinct.count
     end
   end
 end

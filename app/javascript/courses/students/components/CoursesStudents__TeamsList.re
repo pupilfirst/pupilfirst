@@ -8,7 +8,7 @@ let str = React.string;
 module TeamsQuery = [%graphql
   {|
     query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
-      teams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after) {
+      teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
         nodes {
         id,
         name,
@@ -18,7 +18,6 @@ module TeamsQuery = [%graphql
           name
           title
           avatarUrl
-          targetsCompleted
         }
         }
         pageInfo{
@@ -139,17 +138,6 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let studentProgressPercentage = (student, course) => {
-  (
-    (TeamInfo.targetsCompleted(student) |> float_of_int)
-    /. (Course.totalTargets(course) |> float_of_int)
-    *. 100.0
-    |> int_of_float
-    |> string_of_int
-  )
-  ++ "%";
-};
-
 let showStudent = (team, levels, course, openOverlayCB) => {
   let student = TeamInfo.students(team)[0];
   <div
@@ -169,25 +157,6 @@ let showStudent = (team, levels, course, openOverlayCB) => {
             className="text-gray-600 font-semibold text-xs mt-px leading-snug w-42 truncate">
             {student |> TeamInfo.studentTitle |> str}
           </p>
-        </div>
-      </div>
-      <div
-        className="md:w-1/2 flex flex-col ml-10 md:ml-0 p-3 pr-0 pt-0 md:px-4 md:py-5 justify-center">
-        <p className="text-xs leading-tight text-gray-700">
-          {"Course Progress:" |> str}
-          <span className="font-semibold text-gray-900 ml-1">
-            {studentProgressPercentage(student, course) |> str}
-          </span>
-        </p>
-        <div
-          className="w-full h-1 md:h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
-          <div
-            className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30"
-            style={ReactDOMRe.Style.make(
-              ~width={studentProgressPercentage(student, course)},
-              (),
-            )}
-          />
         </div>
       </div>
     </div>
@@ -225,25 +194,6 @@ let showTeam = (team, levels, course, openOverlayCB) => {
                         {student |> TeamInfo.studentTitle |> str}
                       </p>
                       <div className="flex flex-wrap" />
-                    </div>
-                  </div>
-                  <div
-                    className="w-1/2 flex flex-col p-3 md:px-4 md:py-5 justify-center">
-                    <p className="text-xs leading-tight text-gray-700">
-                      {"Course Progress:" |> str}
-                      <span className="font-semibold text-gray-900 ml-1">
-                        {studentProgressPercentage(student, course) |> str}
-                      </span>
-                    </p>
-                    <div
-                      className="w-full h-1 md:h-2 bg-gray-300 rounded-lg overflow-hidden mt-1">
-                      <div
-                        className="bg-green-500 text-xs leading-none h-1 md:h-2 w-30"
-                        style={ReactDOMRe.Style.make(
-                          ~width={studentProgressPercentage(student, course)},
-                          (),
-                        )}
-                      />
                     </div>
                   </div>
                 </div>

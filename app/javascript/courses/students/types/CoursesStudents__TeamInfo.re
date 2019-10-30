@@ -2,7 +2,6 @@ type student = {
   id: string,
   name: string,
   title: string,
-  targetsCompleted: int,
   avatarUrl: option(string),
 };
 
@@ -28,14 +27,11 @@ let studentName = (student: student) => student.name;
 
 let studentTitle = (student: student) => student.title;
 
-let targetsCompleted = (student: student) => student.targetsCompleted;
-
-let makeStudent = (~id, ~name, ~title, ~avatarUrl, ~targetsCompleted) => {
+let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
   id,
   name,
   title,
   avatarUrl,
-  targetsCompleted,
 };
 
 let make = (~id, ~name, ~levelId, ~students) => {
@@ -58,7 +54,6 @@ let decodeJS = teamDetails => {
                   ~name=student##name,
                   ~title=student##title,
                   ~avatarUrl=student##avatarUrl,
-                  ~targetsCompleted=student##targetsCompleted,
                 )
               );
          [

@@ -18,14 +18,6 @@ module Courses
       }
     end
 
-    def current_coach_details
-      {
-        name: current_user.name,
-        avatar_url: current_user.image_or_avatar_url,
-        title: current_user.title
-      }
-    end
-
     def levels
       @course.levels.map do |level|
         level.attributes.slice('id', 'name', 'number')
@@ -33,7 +25,7 @@ module Courses
     end
 
     def course_details
-      { id: @course.id, total_targets: @course.targets.count }
+      { id: @course.id }
     end
   end
 end

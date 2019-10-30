@@ -226,6 +226,20 @@ let openOverlayCB = () => {
   Js.log("Open Overlay");
 };
 
+let disableSearchButton = state => {
+  switch (state.searchInputString) {
+  | None => true
+  | Some(string) =>
+    !(string |> String.trim |> String.length > 0)
+    || (
+      switch (state.filter.search) {
+      | None => false
+      | Some(searchString) => string == searchString
+      }
+    )
+  };
+};
+
 [@react.component]
 let make = (~levels, ~course) => {
   let (state, setState) =
@@ -293,7 +307,11 @@ let make = (~levels, ~course) => {
                | None => React.null
                }}
             </div>
-            <button className="btn btn-default"> {"Search" |> str} </button>
+            <button
+              disabled={disableSearchButton(state)}
+              className="btn btn-default">
+              {"Search" |> str}
+            </button>
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
             {showDropdown(levels, state.filter.level, setState)}

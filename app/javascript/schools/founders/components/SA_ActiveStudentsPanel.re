@@ -117,8 +117,10 @@ let filteredTeams = state => {
        |> List.map(s => s |> Student.name)
        |> List.filter(n =>
             n
-            |> String.lowercase
-            |> Js.String.includes(state.searchString |> String.lowercase)
+            |> String.lowercase_ascii
+            |> Js.String.includes(
+                 state.searchString |> String.lowercase_ascii,
+               )
           )
        |> List.length > 0
      );
@@ -551,10 +553,10 @@ let make =
                                                   |> String.length > 0
                                                   && student
                                                   |> Student.name
-                                                  |> String.lowercase
+                                                  |> String.lowercase_ascii
                                                   |> Js.String.includes(
                                                        state.searchString
-                                                       |> String.lowercase,
+                                                       |> String.lowercase_ascii,
                                                      )
                                                     ? "bg-yellow-400" : ""
                                                 )

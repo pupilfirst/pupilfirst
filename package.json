@@ -53,6 +53,8 @@
     "sshpk": "^1.13.2"
   },
   "scripts": {
-    "postinstall": "bsb -clean-world && bsb -make-world"
+    "postinstall": "bsb -clean-world && bsb -make-world",
+    "re:build": "bsb -make-world -clean-world",
+    "re:watch": "bsb -make-world -clean-world -w"
   }
 }

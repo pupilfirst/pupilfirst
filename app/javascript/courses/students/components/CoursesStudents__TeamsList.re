@@ -5,105 +5,6 @@ open CoursesStudents__Types;
 
 let str = React.string;
 
-module TeamsQuery = [%graphql
-  {|
-    query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
-      teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
-        nodes {
-        id,
-        name,
-        levelId,
-        students {
-          id,
-          name
-          title
-          avatarUrl
-        }
-        }
-        pageInfo{
-          endCursor,hasNextPage
-        }
-      }
-  }
-|}
-];
-
-let updateTeamInfo =
-    (setLoading, endCursor, hasNextPage, teams, updateTeamsCB, nodes) => {
-  updateTeamsCB(
-    ~teams=
-      (
-        switch (nodes) {
-        | None => [||]
-        | Some(teamsArray) => teamsArray |> TeamInfo.decodeJS
-        }
-      )
-      |> Array.to_list
-      |> List.flatten
-      |> Array.of_list
-      |> Array.append(teams),
-    ~hasNextPage,
-    ~endCursor,
-  );
-  setLoading(_ => false);
-};
-
-let getTeams =
-    (
-      authenticityToken,
-      courseId,
-      cursor,
-      setLoading,
-      selectedLevel,
-      search,
-      teams,
-      updateTeamsCB,
-    ) => {
-  setLoading(_ => true);
-  (
-    switch (selectedLevel, search, cursor) {
-    | (Some(level), Some(search), Some(cursor)) =>
-      TeamsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~search,
-        ~after=cursor,
-        (),
-      )
-    | (Some(level), Some(search), None) =>
-      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ~search, ())
-    | (None, Some(search), Some(cursor)) =>
-      TeamsQuery.make(~courseId, ~search, ~after=cursor, ())
-    | (Some(level), None, Some(cursor)) =>
-      TeamsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~after=cursor,
-        (),
-      )
-    | (Some(level), None, None) =>
-      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ())
-    | (None, Some(search), None) => TeamsQuery.make(~courseId, ~search, ())
-    | (None, None, Some(cursor)) =>
-      TeamsQuery.make(~courseId, ~after=cursor, ())
-    | (None, None, None) => TeamsQuery.make(~courseId, ())
-    }
-  )
-  |> GraphqlQuery.sendQuery(authenticityToken)
-  |> Js.Promise.then_(response => {
-       response##teams##nodes
-       |> updateTeamInfo(
-            setLoading,
-            response##teams##pageInfo##endCursor,
-            response##teams##pageInfo##hasNextPage,
-            teams,
-            updateTeamsCB,
-          );
-       Js.Promise.resolve();
-     })
-  |> ignore;
-};
-
 let studentAvatar = (student: TeamInfo.student) => {
   switch (student.avatarUrl) {
   | Some(avatarUrl) =>
@@ -138,7 +39,7 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let showStudent = (team, levels, course, openOverlayCB) => {
+let showStudent = (team, levels, openOverlayCB) => {
   let student = TeamInfo.students(team)[0];
   <div
     key={student |> TeamInfo.studentId}
@@ -166,7 +67,7 @@ let showStudent = (team, levels, course, openOverlayCB) => {
   </div>;
 };
 
-let showTeam = (team, levels, course, openOverlayCB) => {
+let showTeam = (team, levels, openOverlayCB) => {
   <div
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
@@ -222,17 +123,17 @@ let showTeam = (team, levels, course, openOverlayCB) => {
   </div>;
 };
 
-let teamsList = (teams, levels, course, openOverlayCB) => {
+let teamsList = (teams, levels, openOverlayCB) => {
   teams
   |> Array.map(team =>
        Array.length(team |> TeamInfo.students) == 1
-         ? showStudent(team, levels, course, openOverlayCB)
-         : showTeam(team, levels, course, openOverlayCB)
+         ? showStudent(team, levels, openOverlayCB)
+         : showTeam(team, levels, openOverlayCB)
      )
   |> React.array;
 };
 
-let showTeams = (teams, levels, course, openOverlayCB) => {
+let showTeams = (teams, levels, openOverlayCB) => {
   teams |> ArrayUtils.isEmpty
     ? <div
         className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
@@ -240,77 +141,10 @@ let showTeams = (teams, levels, course, openOverlayCB) => {
           {"No teams to show" |> str}
         </h5>
       </div>
-    : teamsList(teams, levels, course, openOverlayCB);
+    : teamsList(teams, levels, openOverlayCB);
 };
 
 [@react.component]
-let make =
-    (
-      ~levels,
-      ~selectedLevel,
-      ~search,
-      ~teams,
-      ~course,
-      ~updateTeamsCB,
-      ~openOverlayCB,
-    ) => {
-  let (loading, setLoading) = React.useState(() => false);
-  let courseId = course |> Course.id;
-  React.useEffect2(
-    () => {
-      switch ((teams: Teams.t)) {
-      | Unloaded =>
-        getTeams(
-          AuthenticityToken.fromHead(),
-          courseId,
-          None,
-          setLoading,
-          selectedLevel,
-          search,
-          [||],
-          updateTeamsCB,
-        )
-      | FullyLoaded(_)
-      | PartiallyLoaded(_, _) => ()
-      };
-      None;
-    },
-    (selectedLevel, search),
-  );
-
-  <div>
-    {switch (teams) {
-     | Unloaded =>
-       SkeletonLoading.multiple(
-         ~count=10,
-         ~element=SkeletonLoading.userCard(),
-       )
-     | PartiallyLoaded(teams, cursor) =>
-       <div>
-         {showTeams(teams, levels, course, openOverlayCB)}
-         {loading
-            ? SkeletonLoading.multiple(
-                ~count=3,
-                ~element=SkeletonLoading.card(),
-              )
-            : <button
-                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
-                onClick={_ =>
-                  getTeams(
-                    AuthenticityToken.fromHead(),
-                    courseId,
-                    Some(cursor),
-                    setLoading,
-                    selectedLevel,
-                    search,
-                    teams,
-                    updateTeamsCB,
-                  )
-                }>
-                {"Load More..." |> str}
-              </button>}
-       </div>
-     | FullyLoaded(teams) => showTeams(teams, levels, course, openOverlayCB)
-     }}
-  </div>;
+let make = (~levels, ~teams, ~openOverlayCB) => {
+  <div> {showTeams(teams, levels, openOverlayCB)} </div>;
 };

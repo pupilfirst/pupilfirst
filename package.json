@@ -36,8 +36,11 @@
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
-    "bs-platform": "^5.0.6",
-    "graphql_ppx": "^0.2.8",
+    "@baransu/graphql_ppx_re": "^0.3.2",
+    "@graphql-codegen/cli": "^1.8.2",
+    "@graphql-codegen/introspection": "^1.8.2",
+    "bs-platform": "^6.2.1",
+    "graphql": "^14.5.8",
     "node-sass": "^4.12.0",
     "prettier": "1.18.2",
     "reason-react": ">=0.7.0",
@@ -53,6 +56,8 @@
     "sshpk": "^1.13.2"
   },
   "scripts": {
-    "postinstall": "bsb -clean-world && bsb -make-world"
+    "postinstall": "bsb -clean-world && bsb -make-world",
+    "re:build": "bsb -make-world -clean-world",
+    "re:watch": "bsb -make-world -clean-world -w"
   }
 }

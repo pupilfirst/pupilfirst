@@ -4,27 +4,61 @@
 open CoursesStudents__Types;
 let str = React.string;
 
+type filter = {
+  search: option(string),
+  level: option(Level.t),
+};
+
 type state = {
   teams: Teams.t,
-  search: option(string),
-  selectedLevel: option(Level.t),
+  searchInputString: option(string),
+  filter,
 };
 
 let onClickForLevelSelector = (level, setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  setState(state => {...state, selectedLevel: level, teams: Unloaded});
+  setState(state =>
+    {
+      ...state,
+      filter: {
+        level,
+        search: state.filter.search,
+      },
+      teams: Unloaded,
+    }
+  );
 };
 
 let onSubmitSearch = (setState, event) => {
   ReactEvent.Form.preventDefault(event);
   let search = ReactEvent.Form.target(event)##student_search##value;
-  let validString = search |> Js.String.trim |> Js.String.length > 0;
-  validString ? setState(state => {...state, search, teams: Unloaded}) : ();
+  let isValidString = search |> Js.String.trim |> Js.String.length > 0;
+  isValidString
+    ? setState(state =>
+        {
+          ...state,
+          filter: {
+            search,
+            level: state.filter.level,
+          },
+          teams: Unloaded,
+        }
+      )
+    : ();
 };
 
 let onClearSearch = (setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  setState(state => {...state, search: None, teams: Unloaded});
+  setState(state =>
+    {
+      searchInputString: None,
+      filter: {
+        search: None,
+        level: state.filter.level,
+      },
+      teams: Unloaded,
+    }
+  );
 };
 
 let dropDownButtonText = level =>
@@ -91,6 +125,11 @@ let updateTeams = (~setState, ~teams, ~hasNextPage, ~endCursor) =>
     }
   );
 
+let updateSearchInputString = (setState, event) => {
+  let searchInputString = ReactEvent.Form.target(event)##value;
+  setState(state => {...state, searchInputString});
+};
+
 let openOverlayCB = () => {
   Js.log("Open Overlay");
 };
@@ -99,7 +138,14 @@ let openOverlayCB = () => {
 let make = (~levels, ~course) => {
   let (state, setState) =
     React.useState(() =>
-      {teams: Unloaded, search: None, selectedLevel: None}
+      {
+        teams: Unloaded,
+        searchInputString: None,
+        filter: {
+          search: None,
+          level: None,
+        },
+      }
     );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -112,31 +158,39 @@ let make = (~levels, ~course) => {
             <div className="relative w-full md:w-auto mr-2">
               <input
                 name="student_search"
+                value={
+                  switch (state.searchInputString) {
+                  | None => ""
+                  | Some(string) => string
+                  }
+                }
+                onChange={event => updateSearchInputString(setState, event)}
                 className="course-students__student-search-input appearance-none bg-white border rounded block text-sm appearance-none leading-normal px-3 py-2 pr-8 focus:outline-none focus:border-primary-400"
                 placeholder="Search by student or team name..."
               />
-              {switch (state.search) {
+              {switch (state.filter.search) {
                | Some(_text) =>
-                 <span
+                 <button
                    onClick={event => onClearSearch(setState, event)}
+                   type_="button"
                    className="course-students__student-search-input-cancel-button absolute right-0 top-0 text-gray-700 cursor-pointer hover:text-gray-900 text-lg px-1 py-px z-10 mr-2 flex items-center h-full focus:outline-none">
                    <i className="fas fa-times-circle" />
-                 </span>
+                 </button>
                | None => React.null
                }}
             </div>
             <button className="btn btn-default"> {"Search" |> str} </button>
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
-            {showDropdown(levels, state.selectedLevel, setState)}
+            {showDropdown(levels, state.filter.level, setState)}
           </div>
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
         <CoursesStudents__TeamsList
           levels
-          selectedLevel={state.selectedLevel}
-          search={state.search}
+          selectedLevel={state.filter.level}
+          search={state.filter.search}
           teams={state.teams}
           course
           updateTeamsCB={updateTeams(~setState)}

@@ -14,12 +14,12 @@ module Mutations
     field :course, Types::CourseType, null: false
 
     def resolve(params)
-      mutator = UpdateCourseMutator.new(params, context)
+      mutator = UpdateCourseMutator.new(context, params)
 
       if mutator.valid?
         { course: mutator.update_course }
       else
-        raise "Failed with error codes: #{mutator.error_codes.to_json}"
+        raise "Failed with error codes: #{mutator.error_messages.to_json}"
       end
     end
   end

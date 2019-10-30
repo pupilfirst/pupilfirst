@@ -559,7 +559,7 @@ let make =
                | Some(contentBlock) =>
                  <div className="w-full">
                    {switch (contentBlock |> ContentBlock.blockType) {
-                    | Markdown(markdown) =>
+                    | Markdown(_markdown) =>
                       <MarkdownEditor
                         updateMarkdownCB
                         value={state.markdownContent}

@@ -1,2 +1,0 @@
-class UnauthorizedMutationException < StandardError
-end

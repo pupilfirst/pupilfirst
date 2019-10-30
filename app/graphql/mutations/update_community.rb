@@ -11,12 +11,12 @@ module Mutations
     field :errors, [Types::UpdateCommunityErrors], null: true
 
     def resolve(params)
-      mutator = UpdateCommunityMutator.new(params, context)
+      mutator = UpdateCommunityMutator.new(context, params)
 
       if mutator.valid?
         { community_id: mutator.update_community, errors: nil }
       else
-        { community_id: nil, errors: mutator.error_codes }
+        { community_id: nil, errors: mutator.error_messages }
       end
     end
   end

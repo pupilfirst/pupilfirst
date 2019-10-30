@@ -23,6 +23,7 @@ module SubmissionDetailsQuery = [%graphql
             feedback
           }
         },
+        targetEvaluationCriteriaIds,
         submissions{
           id, evaluatorName, passedAt, createdAt, description, evaluatedAt
           attachments{
@@ -182,6 +183,10 @@ let make =
                    submission
                    gradeLabels
                    passGrade
+                   targetEvaluationCriteriaIds={
+                     submissionDetails
+                     |> SubmissionDetails.targetEvaluationCriteriaIds
+                   }
                    updateSubmissionCB={updateSubmission(
                      submissionDetails,
                      setState,

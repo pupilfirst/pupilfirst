@@ -7,6 +7,7 @@ type t = {
   levelId: string,
   evaluationCriteria: array(EvaluationCriterion.t),
   reviewChecklist: array(CoursesReview__ReviewChecklistItem.t),
+  targetEvaluationCriteriaIds: array(string),
 };
 let submissions = t => t.submissions;
 let targetId = t => t.targetId;
@@ -16,6 +17,7 @@ let levelId = t => t.levelId;
 let userNames = t => t.userNames;
 let evaluationCriteria = t => t.evaluationCriteria;
 let reviewChecklist = t => t.reviewChecklist;
+let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds;
 let make =
     (
       ~submissions,
@@ -26,6 +28,7 @@ let make =
       ~evaluationCriteria,
       ~levelId,
       ~reviewChecklist,
+      ~targetEvaluationCriteriaIds,
     ) => {
   submissions,
   targetId,
@@ -35,6 +38,7 @@ let make =
   evaluationCriteria,
   levelId,
   reviewChecklist,
+  targetEvaluationCriteriaIds,
 };
 
 let decodeJS = details =>
@@ -45,6 +49,7 @@ let decodeJS = details =>
     ~userNames=details##userNames,
     ~levelNumber=details##levelNumber,
     ~levelId=details##levelId,
+    ~targetEvaluationCriteriaIds=details##targetEvaluationCriteriaIds,
     ~evaluationCriteria=
       details##evaluationCriteria
       |> Js.Array.map(ec =>
@@ -71,6 +76,7 @@ let updateSubmission = (t, submission) =>
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,
     ~reviewChecklist=t.reviewChecklist,
+    ~targetEvaluationCriteriaIds=t.targetEvaluationCriteriaIds,
   );
 let failed = submission =>
   switch (
@@ -112,6 +118,7 @@ let updateReviewChecklist = (reviewChecklist, t) => {
     ~levelNumber=t.levelNumber,
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,
+    ~targetEvaluationCriteriaIds=t.targetEvaluationCriteriaIds,
     ~reviewChecklist,
   );
 };

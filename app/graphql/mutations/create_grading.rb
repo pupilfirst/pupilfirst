@@ -9,7 +9,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = CreateGradingMutator.new(params, context)
+      mutator = CreateGradingMutator.new(context, params)
 
       if mutator.valid?
         mutator.grade

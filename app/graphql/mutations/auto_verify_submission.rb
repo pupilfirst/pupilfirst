@@ -7,7 +7,7 @@ module Mutations
     field :submission, Types::SubmissionType, null: true
 
     def resolve(params)
-      mutator = AutoVerifySubmissionMutator.new(params, context)
+      mutator = AutoVerifySubmissionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Your Submission has been recorded")

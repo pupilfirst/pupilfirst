@@ -8,14 +8,14 @@ module Mutations
     field :target, Types::CreateTargetType, null: true
 
     def resolve(params)
-      mutator = CreateTargetMutator.new(params, context)
+      mutator = CreateTargetMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Target created successfully.")
         { target: mutator.create_target, errors: nil }
       else
         mutator.notify_errors
-        { target: nil, errors: mutator.error_codes }
+        { target: nil, errors: mutator.error_messages }
       end
     end
   end

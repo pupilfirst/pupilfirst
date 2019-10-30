@@ -8,12 +8,12 @@ module Mutations
     field :errors, [Types::CreateAnswerLikeErrors], null: true
 
     def resolve(params)
-      mutator = CreateAnswerLikeMutator.new(params, context)
+      mutator = CreateAnswerLikeMutator.new(context, params)
 
       if mutator.valid?
         { answer_like_id: mutator.create_answer_like, errors: nil }
       else
-        { answer_like_id: nil, errors: mutator.error_codes }
+        { answer_like_id: nil, errors: mutator.error_messages }
       end
     end
   end

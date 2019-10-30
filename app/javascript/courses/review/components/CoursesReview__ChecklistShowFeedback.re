@@ -1,8 +1,6 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesReview__ChecklistShowFeedback.css")|}];
 
-open CoursesReview__Types;
-
 let str = React.string;
 
 let feedbackClasses = showMore => {

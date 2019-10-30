@@ -8,7 +8,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = UpdateSchoolAdminMutator.new(params, context)
+      mutator = UpdateSchoolAdminMutator.new(context, params)
 
       if mutator.valid?
         { success: mutator.save }

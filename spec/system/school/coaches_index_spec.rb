@@ -21,7 +21,7 @@ feature 'Coaches Index', js: true do
 
   let!(:school_admin) { create :school_admin, school: school }
 
-  scenario 'school admin visits coaches and creates a coach' do
+  scenario 'school admin adds a new coach and edits details' do
     sign_in_user school_admin.user, referer: school_coaches_path
 
     # list all coaches
@@ -38,7 +38,7 @@ feature 'Coaches Index', js: true do
     fill_in 'Title', with: new_coach_title
     fill_in 'Affiliation', with: new_coach_affiliation
 
-    click_button 'Create Coach'
+    click_button 'Add Coach'
 
     expect(page).to have_text('Coach created successfully')
     dismiss_notification
@@ -60,6 +60,7 @@ feature 'Coaches Index', js: true do
     fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
     attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
     fill_in 'Name', with: updated_coach_name
+    expect(page).not_to have_field('Email')
     fill_in 'Title', with: updated_coach_title
     fill_in 'Affiliation', with: ''
     click_button 'Update Coach'

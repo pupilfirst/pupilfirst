@@ -7,7 +7,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = UndoGradingMutator.new(params, context)
+      mutator = UndoGradingMutator.new(context, params)
 
       if mutator.valid?
         mutator.undo_grading

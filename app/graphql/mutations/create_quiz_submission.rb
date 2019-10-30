@@ -8,7 +8,7 @@ module Mutations
     field :submission, Types::SubmissionType, null: true
 
     def resolve(params)
-      mutator = CreateQuizSubmissionMutator.new(params, context)
+      mutator = CreateQuizSubmissionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Your Submission has been recorded")

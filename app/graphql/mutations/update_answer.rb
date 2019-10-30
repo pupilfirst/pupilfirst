@@ -9,12 +9,12 @@ module Mutations
     field :errors, [Types::UpdateAnswerErrors], null: true
 
     def resolve(params)
-      mutator = UpdateAnswerMutator.new(params, context)
+      mutator = UpdateAnswerMutator.new(context, params)
 
       if mutator.valid?
         { success: mutator.update_answer, errors: nil }
       else
-        { success: nil, errors: mutator.error_codes }
+        { success: nil, errors: mutator.error_messages }
       end
     end
   end

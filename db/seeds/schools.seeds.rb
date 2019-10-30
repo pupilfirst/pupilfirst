@@ -1,3 +1,3 @@
-puts "Seeding schools (production)"
+puts "Seeding schools (production, idempotent)"
 
-School.create!(name: 'Test School')
+School.where(name: 'Test School').first_or_create!

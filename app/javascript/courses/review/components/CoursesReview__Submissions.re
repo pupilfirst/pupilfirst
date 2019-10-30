@@ -188,6 +188,7 @@ let make =
       ~reviewChecklist,
       ~updateReviewChecklistCB,
       ~targetId,
+      ~targetEvaluationCriteriaIds,
     ) =>
   <div
     ariaLabel={"submissions-overlay-card-" ++ (submission |> Submission.id)}
@@ -222,6 +223,7 @@ let make =
         submission
         gradeLabels
         evaluationCriteria
+        targetEvaluationCriteriaIds
         passGrade
         reviewChecklist
         updateSubmissionCB={updateSubmission(

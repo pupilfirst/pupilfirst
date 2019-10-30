@@ -2,6 +2,7 @@ type t = {
   id: string,
   name: string,
   number: int,
+  teamsInLevel: int,
 };
 
 let id = t => t.id;
@@ -9,11 +10,14 @@ let name = t => t.name;
 
 let number = t => t.number;
 
+let teamsInLevel = t => t.teamsInLevel;
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
     number: json |> field("number", int),
+    teamsInLevel: json |> field("teamsInLevel", int),
   };
 
 let sort = levels =>

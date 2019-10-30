@@ -200,7 +200,9 @@ let showDropdown = (levels, selectedLevel, setState) => {
                <span
                  className="flex-shrink-0 bg-secondary-500 rounded px-1 pb-px text-white leading-tight">
                  <Icon className="if i-users-regular text-xs" />
-                 <span className="text-xs ml-1"> {"20" |> str} </span>
+                 <span className="text-xs ml-1">
+                   {level |> Level.teamsInLevel |> string_of_int |> str}
+                 </span>
                </span>
              </button>
            ),

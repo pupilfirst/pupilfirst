@@ -111,6 +111,8 @@ feature 'Submissions show' do
       checklist_title_2 = Faker::Lorem.sentence
       c2_result_0_title = Faker::Lorem.sentence
       c2_result_0_feedback = Faker::Markdown.sandwich(3)
+      c2_result_1_title = Faker::Lorem.sentence
+      c2_result_1_feedback = Faker::Markdown.sandwich(3)
 
       expect(target.review_checklist).to eq([])
 
@@ -132,6 +134,8 @@ feature 'Submissions show' do
         fill_in 'result_0_title', with: c2_result_0_title
         fill_in 'result_0_feedback', with: c2_result_0_feedback
         click_button 'Add Result'
+        fill_in 'result_1_title', with: c2_result_1_title
+        fill_in 'result_1_feedback', with: c2_result_1_feedback
       end
 
       click_button 'Save Checklist'
@@ -163,11 +167,11 @@ feature 'Submissions show' do
           expect(page).to have_content(c2_result_0_title)
           find("label", text: c2_result_0_title).click
         end
+
         within("div[aria-label='result-item-1']") do
-          expect(page).to have_content("Sample title")
-          expect(page).to have_content("Sample feedback text")
+          expect(page).to have_content(c2_result_1_title)
+          find("label", text: c2_result_1_title).click
         end
-        find("label", text: 'Sample title').click
       end
 
       click_button 'Generate Feedback'
@@ -176,7 +180,6 @@ feature 'Submissions show' do
         expect(page).to have_content(c1_result_0_feedback)
         expect(page).to have_content(c1_result_1_feedback)
         expect(page).to have_content(c2_result_0_feedback)
-        expect(page).to have_content("Sample feedback text")
       end
 
       click_button 'Edit Checklist'

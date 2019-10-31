@@ -19,7 +19,7 @@ let emptyTemplate = () => {
 };
 
 let empty = () => {
-  make(~title="Sample title", ~feedback=Some("Sample feedback text"));
+  make(~title="", ~feedback=None);
 };
 
 let replace = (t, index, checklist) => {

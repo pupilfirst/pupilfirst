@@ -5,7 +5,7 @@ class CreateFeedbackMutator < ApplicationQuery
   attr_accessor :feedback
 
   validates :submission_id, presence: true
-  validates :feedback, presence: true
+  validates :feedback, presence: true, length: { maximum: 10_000 }
 
   validate :require_valid_submission
 

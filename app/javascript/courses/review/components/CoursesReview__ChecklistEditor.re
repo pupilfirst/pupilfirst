@@ -138,6 +138,24 @@ let initialStateForReviewChecklist = reviewChecklist => {
     ? ReviewChecklistItem.emptyTemplate() : reviewChecklist;
 };
 
+let invalidChecklist = reviewChecklist => {
+  reviewChecklist
+  |> Array.map(reviewChecklistItem =>
+       reviewChecklistItem
+       |> ReviewChecklistItem.title
+       |> String.length < 2
+       || reviewChecklistItem
+       |> ReviewChecklistItem.result
+       |> Array.map(resultItem =>
+            resultItem |> ReviewChecklistResult.title |> String.length < 2
+          )
+       |> Js.Array.filter(valid => valid)
+       |> ArrayUtils.isNotEmpty
+     )
+  |> Js.Array.filter(valid => valid)
+  |> ArrayUtils.isNotEmpty;
+};
+
 [@react.component]
 let make =
     (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
@@ -221,7 +239,7 @@ let make =
                                   ++ "_title"
                                 }
                                 type_="text"
-                                placeholder="Add title for checklist item"
+                                placeholder="Add title for checklist result item"
                                 value={
                                   resultItem |> ReviewChecklistResult.title
                                 }
@@ -263,7 +281,7 @@ let make =
                                 ++ "_feedback"
                               }
                               type_="text"
-                              placeholder="Add feedback"
+                              placeholder="Add feedback (optional)"
                               value=feedback
                               onChange={event =>
                                 updateChecklistResultFeedback(
@@ -322,7 +340,7 @@ let make =
       </div>
       <div className="py-2 mt-4 flex flex-row-reverse">
         <button
-          disabled={state.saving}
+          disabled={state.saving || invalidChecklist(state.reviewChecklist)}
           onClick={_ =>
             updateReviewChecklist(
               targetId,

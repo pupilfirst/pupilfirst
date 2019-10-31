@@ -281,7 +281,7 @@ let make = (~levels, ~course) => {
       }
     );
   let courseId = course |> Course.id;
-  React.useEffect2(
+  React.useEffect1(
     () => {
       switch ((state.teams: Teams.t)) {
       | Unloaded =>
@@ -299,7 +299,7 @@ let make = (~levels, ~course) => {
       };
       None;
     },
-    (state.filter.level, state.filter.search),
+    [|state.filter|],
   );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -352,15 +352,14 @@ let make = (~levels, ~course) => {
              ~element=SkeletonLoading.userCard(),
            )
          | PartiallyLoaded(teams, cursor) =>
-           [|
-             <CoursesStudents__TeamsList levels teams openOverlayCB />,
+           <div>
+             <CoursesStudents__TeamsList levels teams openOverlayCB />
              {state.loading
                 ? SkeletonLoading.multiple(
                     ~count=3,
                     ~element=SkeletonLoading.card(),
                   )
                 : <button
-                    key="unique"
                     className="btn btn-primary-ghost cursor-pointer w-full mt-8"
                     onClick={_ =>
                       getTeams(
@@ -374,9 +373,8 @@ let make = (~levels, ~course) => {
                       )
                     }>
                     {"Load More..." |> str}
-                  </button>},
-           |]
-           |> React.array
+                  </button>}
+           </div>
          | FullyLoaded(teams) =>
            <CoursesStudents__TeamsList levels teams openOverlayCB />
          }}

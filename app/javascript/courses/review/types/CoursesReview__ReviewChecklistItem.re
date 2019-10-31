@@ -20,7 +20,7 @@ let makeFromJs = data => {
 let empty = () => {
   [|
     make(
-      ~title="Default checklist",
+      ~title="",
       ~result=[|CoursesReview__ReviewChecklistResult.empty()|],
     ),
   |];

@@ -119,8 +119,18 @@ let getTeams =
   |> ignore;
 };
 
-let onClickForLevelSelector = (level, setState, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
+let dropdownElementClasses = (level, selectedLevel) => {
+  "p-3 w-full flex justify-between md:items-center text-left font-semibold focus:outline-none "
+  ++ (
+    switch (selectedLevel, level) {
+    | (Some(sl), Some(l)) when l |> Level.id == (sl |> Level.id) => "bg-gray-200 text-primary-500"
+    | (None, None) => "bg-gray-200 text-primary-500"
+    | _ => ""
+    }
+  );
+};
+
+let updateLevel = (level, setState) => {
   setState(state =>
     {
       ...state,
@@ -131,6 +141,15 @@ let onClickForLevelSelector = (level, setState, event) => {
       teams: Unloaded,
     }
   );
+};
+
+let onClickForLevelSelector = (level, selectedLevel, setState, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  switch (selectedLevel, level) {
+  | (Some(sl), Some(l)) when l |> Level.id == (sl |> Level.id) => ()
+  | _ => updateLevel(level, setState)
+  };
 };
 
 let onSubmitSearch = (setState, event) => {
@@ -172,28 +191,26 @@ let dropDownButtonText = level =>
   ++ " | "
   ++ (level |> Level.name);
 
-let dropdownShowAllButton = (selectedLevel, setState) =>
-  switch (selectedLevel) {
-  | Some(_) => [|
+let showDropdown = (levels, selectedLevel, setState) => {
+  let contents =
+    [|
       <button
-        className="p-3 w-full text-left font-semibold focus:outline-none"
-        onClick={onClickForLevelSelector(None, setState)}>
+        className={dropdownElementClasses(None, selectedLevel)}
+        onClick={onClickForLevelSelector(None, selectedLevel, setState)}>
         {"All Levels" |> str}
       </button>,
     |]
-  | None => [||]
-  };
-
-let showDropdown = (levels, selectedLevel, setState) => {
-  let contents =
-    dropdownShowAllButton(selectedLevel, setState)
     ->Array.append(
         levels
         |> Level.sort
         |> Array.map(level =>
              <button
-               className="flex md:items-center justify-between p-3 w-full text-left font-semibold focus:outline-none"
-               onClick={onClickForLevelSelector(Some(level), setState)}>
+               className={dropdownElementClasses(Some(level), selectedLevel)}
+               onClick={onClickForLevelSelector(
+                 Some(level),
+                 selectedLevel,
+                 setState,
+               )}>
                <span className="pr-2">
                  {dropDownButtonText(level) |> str}
                </span>

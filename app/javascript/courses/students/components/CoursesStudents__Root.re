@@ -360,6 +360,7 @@ let make = (~levels, ~course) => {
                     ~element=SkeletonLoading.card(),
                   )
                 : <button
+                    key="unique"
                     className="btn btn-primary-ghost cursor-pointer w-full mt-8"
                     onClick={_ =>
                       getTeams(

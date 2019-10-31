@@ -334,7 +334,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
             | None => React.null
             }}
            <div
-             className="text-xs bg-gray-300 flex items-center rounded-b-lg p-2 md:px-3 md:py-1">
+             className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
              {"on " ++ (date |> Submission.prettyDate) |> str}
            </div>
          </div>
@@ -522,14 +522,14 @@ let make =
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
         <h5 className="font-semibold text-sm flex items-center">
           <Icon
-            className="if i-tachometer-alt-regular text-gray-800 text-base md:text-lg"
+            className="if i-tachometer-regular text-gray-800 text-base md:text-lg"
           />
           <span className="ml-2 md:ml-3 tracking-wide">
             {"Grade Card" |> str}
           </span>
         </h5>
         <div
-          className="flex md:flex-row flex-col-reverse ml-7 md:ml-8 bg-gray-100 p-2 md:p-4 rounded-sm mt-2">
+          className="flex md:flex-row flex-col-reverse ml-7 md:ml-8 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>

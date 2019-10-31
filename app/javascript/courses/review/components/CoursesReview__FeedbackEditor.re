@@ -11,15 +11,17 @@ let make =
       ~label,
       ~reviewChecklist,
       ~updateReviewChecklistCB,
-      ~showChecklist,
+      ~checklistVisible,
       ~targetId,
     ) => {
-  let (showChecklist, setShowCHecklist) = React.useState(() => showChecklist);
+  let (checklistVisible, setChecklistVisible) =
+    React.useState(() => checklistVisible);
+  let reviewChecklistIsNotEmpty = reviewChecklist |> ArrayUtils.isNotEmpty;
   <div>
     <div>
-      {switch (showChecklist, reviewChecklist |> ArrayUtils.isEmpty) {
-       | (false, true)
-       | (true, _) =>
+      {switch (checklistVisible, reviewChecklistIsNotEmpty) {
+       | (true, _)
+       | (false, false) =>
          <CoursesReview__Checklist
            reviewChecklist
            updateFeedbackCB
@@ -28,11 +30,11 @@ let make =
            targetId
          />
 
-       | (false, false) =>
+       | (false, true) =>
          <div className="px-4 pt-4 md:px-6 pt-6">
            <button
              className="flex items-center bg-gray-100 border p-4 rounded-lg w-full text-left text-primary-500 font-semibold hover:bg-gray-200 hover:border-primary-300 focus:outline-none"
-             onClick={_ => setShowCHecklist(_ => true)}>
+             onClick={_ => setChecklistVisible(_ => true)}>
              <span
                className="inline-flex w-10 h-10 border border-white items-center justify-center rounded-full bg-primary-100 text-primary-500">
                <i className="fas fa-list" />

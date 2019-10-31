@@ -7,7 +7,7 @@ let feedback = t => t.feedback;
 
 let make = (~title, ~feedback) => {title, feedback};
 
-let decodeJS = data => {
+let makeFromJs = data => {
   data |> Js.Array.map(r => make(~title=r##title, ~feedback=r##feedback));
 };
 

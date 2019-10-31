@@ -2,18 +2,13 @@
 [%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
 
 type state =
-  | Empty
   | Edit
   | Show;
 
 let str = React.string;
 
-let computeState = reviewChecklist => {
-  reviewChecklist |> ArrayUtils.isEmpty ? Empty : Show;
-};
-
-let closeEditMode = (reviewChecklist, setState, ()) => {
-  setState(_ => computeState(reviewChecklist));
+let closeEditMode = (setState, ()) => {
+  setState(_ => Show);
 };
 
 let showEditor = (setState, ()) => {
@@ -22,7 +17,7 @@ let showEditor = (setState, ()) => {
 
 let updateReviewChecklist =
     (setState, updateReviewChecklistCB, reviewChecklist) => {
-  setState(_ => computeState(reviewChecklist));
+  setState(_ => Show);
   updateReviewChecklistCB(reviewChecklist);
 };
 
@@ -57,8 +52,7 @@ let make =
       ~updateReviewChecklistCB,
       ~targetId,
     ) => {
-  let (state, setState) =
-    React.useState(() => computeState(reviewChecklist));
+  let (state, setState) = React.useState(() => Show);
   <div className="px-4 pt-4 md:px-6 md:pt-6">
     <div className="flex h-7 items-end">
       <h5 className="font-semibold text-sm flex items-center">
@@ -72,7 +66,6 @@ let make =
     </div>
     <div className="mt-2 ml-6 md:ml-7">
       {switch (state) {
-       | Empty => handleEmpty(setState)
        | Edit =>
          <CoursesReview__ChecklistEditor
            reviewChecklist
@@ -80,16 +73,18 @@ let make =
              setState,
              updateReviewChecklistCB,
            )}
-           closeEditModeCB={closeEditMode(reviewChecklist, setState)}
+           closeEditModeCB={closeEditMode(setState)}
            targetId
          />
        | Show =>
-         <CoursesReview__ChecklistShow
-           reviewChecklist
-           feedback
-           updateFeedbackCB
-           showEditorCB={showEditor(setState)}
-         />
+         reviewChecklist |> ArrayUtils.isEmpty
+           ? handleEmpty(setState)
+           : <CoursesReview__ChecklistShow
+               reviewChecklist
+               feedback
+               updateFeedbackCB
+               showEditorCB={showEditor(setState)}
+             />
        }}
     </div>
   </div>;

@@ -452,7 +452,7 @@ let showFeedbackForm =
       updateFeedbackCB={updateFeedbackCB(setState)}
       reviewChecklist
       updateReviewChecklistCB
-      showChecklist=true
+      checklistVisible=true
       targetId
     />
   | _ => React.null

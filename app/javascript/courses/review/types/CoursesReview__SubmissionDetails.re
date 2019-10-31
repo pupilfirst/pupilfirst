@@ -43,7 +43,7 @@ let make =
 
 let decodeJS = details =>
   make(
-    ~submissions=details##submissions |> CoursesReview__Submission.decodeJS,
+    ~submissions=details##submissions |> CoursesReview__Submission.makeFromJs,
     ~targetId=details##targetId,
     ~targetTitle=details##targetTitle,
     ~userNames=details##userNames,
@@ -56,7 +56,7 @@ let decodeJS = details =>
            EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
          ),
     ~reviewChecklist=
-      details##reviewChecklist |> CoursesReview__ReviewChecklistItem.decodeJS,
+      details##reviewChecklist |> CoursesReview__ReviewChecklistItem.makeFromJs,
   );
 
 let updateSubmission = (t, submission) =>

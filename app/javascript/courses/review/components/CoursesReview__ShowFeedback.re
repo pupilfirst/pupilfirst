@@ -120,7 +120,7 @@ let make =
                       updateFeedbackCB={updateFeedbackCB(setState)}
                       reviewChecklist
                       updateReviewChecklistCB
-                      showChecklist=false
+                      checklistVisible=false
                       targetId
                     />
                   </DisablingCover>

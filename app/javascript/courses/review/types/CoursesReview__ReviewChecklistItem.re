@@ -7,12 +7,12 @@ let result = t => t.result;
 
 let make = (~title, ~result) => {title, result};
 
-let decodeJS = data => {
+let makeFromJs = data => {
   data
   |> Js.Array.map(rc =>
        make(
          ~title=rc##title,
-         ~result=rc##result |> CoursesReview__ReviewChecklistResult.decodeJS,
+         ~result=rc##result |> CoursesReview__ReviewChecklistResult.makeFromJs,
        )
      );
 };
@@ -64,7 +64,7 @@ let deleteResultItem = (index, t) => {
   );
 };
 
-let encodeT = t =>
+let encode = t =>
   Json.Encode.(
     object_([
       ("title", t.title |> string),
@@ -75,4 +75,4 @@ let encodeT = t =>
     ])
   );
 
-let encode = checklist => checklist |> Json.Encode.(array(encodeT));
+let encodeArray = checklist => checklist |> Json.Encode.(array(encode));

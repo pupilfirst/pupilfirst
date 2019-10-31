@@ -27,17 +27,16 @@ let updateReviewChecklist =
   UpdateReviewChecklistMutation.make(
     ~targetId,
     ~reviewChecklist=
-      CoursesReview__ReviewChecklistItem.encode(reviewChecklist),
+      CoursesReview__ReviewChecklistItem.encodeArray(reviewChecklist),
     (),
   )
   |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
   |> Js.Promise.then_(response => {
-       response##updateReviewChecklist##success
-         ? {
-           updateReviewChecklistCB(reviewChecklist);
-           setState(state => {...state, saving: false});
-         }
-         : setState(state => {...state, saving: false});
+       if (response##updateReviewChecklist##success) {
+         updateReviewChecklistCB(reviewChecklist);
+       };
+
+       setState(state => {...state, saving: false});
        Js.Promise.resolve();
      })
   |> ignore;

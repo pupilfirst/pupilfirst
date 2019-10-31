@@ -61,7 +61,7 @@ let make =
 
 let makeAttachment = (~title, ~url) => {title, url};
 
-let decodeJS = details =>
+let makeFromJs = details =>
   details
   |> Js.Array.map(s =>
        make(

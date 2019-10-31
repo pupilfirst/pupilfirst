@@ -45,17 +45,17 @@ let showStudent = (team, levels, openOverlayCB) => {
     key={student |> TeamInfo.studentId}
     onClick={_ => openOverlayCB()}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-    className="flex md:flex-row justify-between bg-white mt-4 cursor-pointer rounded-lg shadow hover:shadow-md">
-    <div className="flex flex-1 flex-col md:flex-row md:w-4/6">
+    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow ">
+    <div className="flex flex-1 flex-col justify-center md:flex-row md:w-4/6">
       <div
-        className="md:w-1/2 flex items-start md:items-center p-3 pr-0 pb-2 md:px-4 md:py-5">
+        className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
         {studentAvatar(student)}
         <div className="block text-sm md:pr-2">
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
           <p
-            className="text-gray-600 font-semibold text-xs mt-px leading-snug w-42 truncate">
+            className="text-gray-600 font-semibold text-xs mt-px leading-snug">
             {student |> TeamInfo.studentTitle |> str}
           </p>
         </div>
@@ -80,23 +80,17 @@ let showTeam = (team, levels, openOverlayCB) => {
               key={student |> TeamInfo.studentId}
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
               onClick={_ => openOverlayCB()}
-              className="cursor-pointer hover:bg-gray-100 flex items-center bg-white">
-              <div className="flex w-full md:flex-1">
-                <div className="flex w-full">
-                  <div
-                    className="w-1/2 flex items-start md:items-center p-3 md:px-4 md:py-5">
-                    {studentAvatar(student)}
-                    <div className="text-sm flex flex-col">
-                      <p className="font-semibold inline-block leading-snug ">
-                        {student |> TeamInfo.studentName |> str}
-                      </p>
-                      <p
-                        className="text-gray-600 font-semibold text-xs mt-px leading-snug w-24 md:w-42 truncate">
-                        {student |> TeamInfo.studentTitle |> str}
-                      </p>
-                      <div className="flex flex-wrap" />
-                    </div>
-                  </div>
+              className="flex items-center bg-white">
+              <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
+                {studentAvatar(student)}
+                <div className="text-sm flex flex-col">
+                  <p className="font-semibold inline-block leading-snug ">
+                    {student |> TeamInfo.studentName |> str}
+                  </p>
+                  <p
+                    className="text-gray-600 font-semibold text-xs mt-px leading-snug ">
+                    {student |> TeamInfo.studentTitle |> str}
+                  </p>
                 </div>
               </div>
             </div>
@@ -104,7 +98,7 @@ let showTeam = (team, levels, openOverlayCB) => {
        |> React.array}
     </div>
     <div
-      className="flex w-full md:w-2/6 items-center border-l border-gray-200 p-3 md:px-4 md:py-5">
+      className="flex w-full md:w-2/6 items-center bg-gray-200 md:bg-white border-l border-gray-200 p-3 md:px-4 md:py-5">
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
           <p

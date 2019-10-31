@@ -117,28 +117,22 @@ let showTeam = (team, levels, openOverlayCB) => {
   </div>;
 };
 
-let teamsList = (teams, levels, openOverlayCB) => {
-  teams
-  |> Array.map(team =>
-       Array.length(team |> TeamInfo.students) == 1
-         ? showStudent(team, levels, openOverlayCB)
-         : showTeam(team, levels, openOverlayCB)
-     )
-  |> React.array;
-};
-
-let showTeams = (teams, levels, openOverlayCB) => {
-  teams |> ArrayUtils.isEmpty
-    ? <div
-        className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {"No teams to show" |> str}
-        </h5>
-      </div>
-    : teamsList(teams, levels, openOverlayCB);
-};
-
 [@react.component]
 let make = (~levels, ~teams, ~openOverlayCB) => {
-  <div> {showTeams(teams, levels, openOverlayCB)} </div>;
+  <div>
+    {teams |> ArrayUtils.isEmpty
+       ? <div
+           className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
+           <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+             {"No teams to show" |> str}
+           </h5>
+         </div>
+       : teams
+         |> Array.map(team =>
+              Array.length(team |> TeamInfo.students) == 1
+                ? showStudent(team, levels, openOverlayCB)
+                : showTeam(team, levels, openOverlayCB)
+            )
+         |> React.array}
+  </div>;
 };

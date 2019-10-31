@@ -199,7 +199,7 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   @apply py-2 px-5 text-base h-10;
 }
 
-.btn-extralarge {
+.button-xl {
   @apply py-2 px-6 text-base h-12;
 }
 

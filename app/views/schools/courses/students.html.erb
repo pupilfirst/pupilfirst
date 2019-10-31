@@ -1,6 +1,10 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | Students</title>
+  <%= stylesheet_pack_tag 'SchoolsCoursesStudentsPack', media: 'all' %>
+<% end %>
+
 <% content_for(:tail) do %>
-  <%= stylesheet_pack_tag 'schools/courses/students_index', media: 'all' %>
-  <%= javascript_pack_tag 'schools/courses/students_index', nonce: true %>
+  <%= javascript_pack_tag 'SchoolsCoursesStudentsPack', nonce: true %>
 <% end %>
 
 <% @presenter = Schools::Founders::IndexPresenter.new(self, @course) %>

@@ -22,8 +22,6 @@ module CoursesQuery = [%graphql
 |}
 ];
 
-type props = {authenticityToken: string};
-
 type editorAction =
   | Hidden
   | ShowForm(option(Course.t));
@@ -42,7 +40,7 @@ let str = ReasonReact.string;
 
 let component = ReasonReact.reducerComponent("CourseEditor");
 
-let make = (~authenticityToken, _children) => {
+let make = _children => {
   ...component,
   initialState: () => {editorAction: Hidden, courses: []},
   reducer: (action, state) =>
@@ -56,7 +54,8 @@ let make = (~authenticityToken, _children) => {
     },
   didMount: ({send}) => {
     let coursesQuery = CoursesQuery.make();
-    let response = coursesQuery |> GraphqlQuery.sendQuery(authenticityToken);
+    let response =
+      coursesQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
     response
     |> Js.Promise.then_(result => {
          let courses =
@@ -108,12 +107,7 @@ let make = (~authenticityToken, _children) => {
       {switch (state.editorAction) {
        | Hidden => ReasonReact.null
        | ShowForm(course) =>
-         <CourseEditor__Form
-           course
-           authenticityToken
-           hideEditorActionCB
-           updateCoursesCB
-         />
+         <CourseEditor__Form course hideEditorActionCB updateCoursesCB />
        }}
       <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
@@ -168,17 +162,3 @@ let make = (~authenticityToken, _children) => {
     </div>;
   },
 };
-
-let decode = json =>
-  Json.Decode.{
-    authenticityToken: json |> field("authenticityToken", string),
-  };
-
-let jsComponent =
-  ReasonReact.wrapReasonForJs(
-    ~component,
-    jsProps => {
-      let props = jsProps |> decode;
-      make(~authenticityToken=props.authenticityToken, [||]);
-    },
-  );

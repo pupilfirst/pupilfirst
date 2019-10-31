@@ -1,3 +1,7 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | Exports</title>
+<% end %>
+
 <%= content_for(:tail) do %>
   <%= javascript_pack_tag 'SchoolsCoursesExportsPack', nonce: true %>
 <% end %>

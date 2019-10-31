@@ -137,7 +137,7 @@ let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
   updateCoursesCB(course);
 };
 
-let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
+let createCourse = (state, send, updateCoursesCB) => {
   send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
@@ -164,7 +164,7 @@ let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
       (),
     );
   let response =
-    createCourseQuery |> GraphqlQuery.sendQuery(authenticityToken);
+    createCourseQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
 
   response
   |> Js.Promise.then_(result => {
@@ -179,7 +179,7 @@ let createCourse = (authenticityToken, state, send, updateCoursesCB) => {
   |> ignore;
 };
 
-let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => {
+let updateCourse = (state, send, updateCoursesCB, course) => {
   send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
@@ -205,7 +205,7 @@ let updateCourse = (authenticityToken, state, send, updateCoursesCB, course) => 
       (),
     );
   let response =
-    updateCourseQuery |> GraphqlQuery.sendQuery(authenticityToken);
+    updateCourseQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
 
   response
   |> Js.Promise.then_(result => {
@@ -279,14 +279,7 @@ let about = course =>
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about));
 
-let make =
-    (
-      ~course,
-      ~authenticityToken,
-      ~hideEditorActionCB,
-      ~updateCoursesCB,
-      _children,
-    ) => {
+let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
   ...component,
   initialState: () =>
     switch (course) {
@@ -703,13 +696,7 @@ let make =
                      <button
                        disabled={saveDisabled(state)}
                        onClick={_ =>
-                         updateCourse(
-                           authenticityToken,
-                           state,
-                           send,
-                           updateCoursesCB,
-                           course,
-                         )
+                         updateCourse(state, send, updateCoursesCB, course)
                        }
                        className="w-full btn btn-large btn-primary mt-3">
                        {"Update Course" |> str}
@@ -719,12 +706,7 @@ let make =
                      <button
                        disabled={saveDisabled(state)}
                        onClick={_ =>
-                         createCourse(
-                           authenticityToken,
-                           state,
-                           send,
-                           updateCoursesCB,
-                         )
+                         createCourse(state, send, updateCoursesCB)
                        }
                        className="w-full btn btn-large btn-primary mt-3">
                        {"Create Course" |> str}

@@ -140,10 +140,8 @@ let findEvaluvationCriterion = (evaluationCriteria, evaluationCriterionId) =>
 
 let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
   <div className="flex justify-between">
-    <p className="text-xs font-semibold text-gray-800">
-      {evaluationCriteriaName |> str}
-    </p>
-    <p className="text-xs font-semibold text-gray-800">
+    <p className="text-xs font-semibold"> {evaluationCriteriaName |> str} </p>
+    <p className="text-xs font-semibold">
       {(selectedGrade |> string_of_int)
        ++ "/"
        ++ (
@@ -175,7 +173,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
       ? selectedGrade >= passgrade
           ? "bg-green-500 text-white shadow-lg"
           : "bg-red-500 text-white shadow-lg"
-      : "bg-gray-100 text-gray-800"
+      : "bg-white text-gray-900"
   );
 };
 
@@ -294,7 +292,7 @@ let renderGradePills =
      })
   |> React.array;
 let gradeStatusClasses = (color, status) =>
-  "w-24 h-20 rounded-lg border flex justify-center items-center bg-"
+  "w-12 h-10 p-1 mr-2 md:mr-0 md:w-24 md:h-20 rounded md:rounded-lg border flex justify-center items-center bg-"
   ++ color
   ++ "-100 "
   ++ "border-"
@@ -320,11 +318,11 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
     ariaLabel="submission-status"
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
-      className="flex items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
+      className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
       {switch (submission |> Submission.evaluatedAt, status) {
        | (Some(date), Graded(_)) =>
          <div
-           className="bg-gray-200 flex flex-col flex-1 justify-between rounded-lg pt-3 mr-2">
+           className="bg-gray-200 block md:flex flex-col w-full justify-between rounded-lg pt-3 mr-2 mt-4 md:mt-0">
            {switch (submission |> Submission.evaluatorName) {
             | Some(name) =>
               <div>
@@ -335,7 +333,8 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
               </div>
             | None => React.null
             }}
-           <div className="text-xs bg-gray-300 p-1 rounded-b-lg px-3 py-1">
+           <div
+             className="text-xs bg-gray-300 flex items-center rounded-b-lg p-2 md:px-3 md:py-1">
              {"on " ++ (date |> Submission.prettyDate) |> str}
            </div>
          </div>
@@ -343,30 +342,31 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
        | (_, Grading)
        | (_, Ungraded) => React.null
        }}
-      <div className="w-24 flex flex-col items-center justify-center">
+      <div
+        className="w-full md:w-24 flex flex-row md:flex-col md:items-center justify-center">
         <div className={gradeStatusClasses(color, status)}>
           {switch (status) {
            | Graded(passed) =>
              passed
                ? <Icon
-                   className="if i-badge-check-solid text-3xl md:text-5xl text-green-500"
+                   className="if i-badge-check-solid text-xl md:text-5xl text-green-500"
                  />
                : <FaIcon
-                   classes="fas fa-exclamation-triangle text-3xl md:text-4xl text-red-500"
+                   classes="fas fa-exclamation-triangle text-xl md:text-4xl text-red-500"
                  />
            | Grading =>
              <Icon
-               className="if i-writing-pad-solid text-3xl md:text-5xl text-orange-300"
+               className="if i-writing-pad-solid text-xl md:text-5xl text-orange-300"
              />
            | Ungraded =>
              <Icon
-               className="if i-eye-solid text-3xl md:text-4xl text-gray-400"
+               className="if i-eye-solid text-xl md:text-4xl text-gray-400"
              />
            }}
         </div>
         <p
           className={
-            "text-xs text-center w-full border rounded px-1 py-px font-semibold mt-1 "
+            "text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 "
             ++ "border-"
             ++ color
             ++ "-400 "
@@ -392,7 +392,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
                setState,
              )
            }
-           className="btn btn-danger btn-small w-full">
+           className="btn btn-danger btn-small">
            <i className="fas fa-undo" />
            <span className="ml-2"> {"Undo Grading" |> str} </span>
          </button>
@@ -528,7 +528,8 @@ let make =
             {"Grade Card" |> str}
           </span>
         </h5>
-        <div className="flex md:flex-row flex-col ml-7 md:ml-8">
+        <div
+          className="flex md:flex-row flex-col-reverse ml-7 md:ml-8 bg-gray-100 p-2 md:p-4 rounded-sm mt-2">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>
@@ -563,7 +564,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white pt-4 mx-3 md:mx-6">
+       <div className="bg-white pt-4 mr-3 ml-11 md:mr-6 md:ml-14">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

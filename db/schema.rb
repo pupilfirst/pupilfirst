@@ -459,7 +459,6 @@ ActiveRecord::Schema.define(version: 2019_10_30_080004) do
     t.jsonb "value"
     t.string "versionable_type"
     t.bigint "versionable_id"
-    t.datetime "archived_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["versionable_type", "versionable_id"], name: "index_resource_versions_on_versionable_type_and_versionable_id"

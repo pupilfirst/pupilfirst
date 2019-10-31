@@ -1,4 +1,4 @@
-class TeamsResolver < ApplicationResolver
+class TeamsResolver < ApplicationQuery
   attr_accessor :course_id
   attr_accessor :level_id
   attr_accessor :search

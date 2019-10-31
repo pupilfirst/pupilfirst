@@ -97,6 +97,110 @@ feature 'Submissions show' do
       expect(submission.timeline_event_grades.pluck(:grade)).to eq([1, 2])
     end
 
+    scenario 'coach generates feedback from review checklist', js: true do
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      # Checklist item 1
+      checklist_title_1 = Faker::Lorem.sentence
+      c1_result_0_title = Faker::Lorem.sentence
+      c1_result_0_feedback = Faker::Markdown.sandwich(3)
+      c1_result_1_title = Faker::Lorem.sentence
+      c1_result_1_feedback = Faker::Markdown.sandwich(3)
+
+      # Checklist item 2
+      checklist_title_2 = Faker::Lorem.sentence
+      c2_result_0_title = Faker::Lorem.sentence
+      c2_result_0_feedback = Faker::Markdown.sandwich(3)
+
+      expect(target.review_checklist).to eq([])
+
+      click_button 'Create a review checklist'
+
+      within("div[aria-label='checklist-item-0']") do
+        fill_in 'checklist_title', with: checklist_title_1
+        fill_in 'result_0_title', with: c1_result_0_title
+        fill_in 'result_0_feedback', with: c1_result_0_feedback
+
+        fill_in 'result_1_title', with: c1_result_1_title
+        fill_in 'result_1_feedback', with: c1_result_1_feedback
+      end
+
+      click_button 'Add Checklist Item'
+
+      within("div[aria-label='checklist-item-1']") do
+        fill_in 'checklist_title', with: checklist_title_2
+        fill_in 'result_0_title', with: c2_result_0_title
+        fill_in 'result_0_feedback', with: c2_result_0_feedback
+        click_button 'Add Result'
+      end
+
+      click_button 'Save Checklist'
+
+      expect(page).to have_content('Edit Checklist')
+
+      expect(target.reload.review_checklist).not_to eq([])
+
+      # Reload Page
+      visit timeline_event_path(submission_pending)
+
+      within("div[aria-label='checklist-item-0']") do
+        expect(page).to have_content(checklist_title_1)
+
+        within("div[aria-label='result-item-0']") do
+          expect(page).to have_content(c1_result_0_title)
+          find("label", text: c1_result_0_title).click
+        end
+
+        within("div[aria-label='result-item-1']") do
+          expect(page).to have_content(c1_result_1_title)
+          find("label", text: c1_result_1_title).click
+        end
+      end
+
+      within("div[aria-label='checklist-item-1']") do
+        expect(page).to have_content(checklist_title_2)
+        within("div[aria-label='result-item-0']") do
+          expect(page).to have_content(c2_result_0_title)
+          find("label", text: c2_result_0_title).click
+        end
+        within("div[aria-label='result-item-1']") do
+          expect(page).to have_content("Sample title")
+          expect(page).to have_content("Sample feedback text")
+        end
+        find("label", text: 'Sample title').click
+      end
+
+      click_button 'Generate Feedback'
+
+      within("div[aria-label='feedback']") do
+        expect(page).to have_content(c1_result_0_feedback)
+        expect(page).to have_content(c1_result_1_feedback)
+        expect(page).to have_content(c2_result_0_feedback)
+        expect(page).to have_content("Sample feedback text")
+      end
+
+      click_button 'Edit Checklist'
+
+      within("div[aria-label='checklist-item-1']") do
+        within("div[aria-label='result-item-0']") do
+          find("button[title='Remove checklist result']").click
+        end
+      end
+
+      within("div[aria-label='checklist-item-1']") do
+        find("button[title='Remove checklist item']").click
+      end
+
+      within("div[aria-label='checklist-item-0']") do
+        find("button[title='Remove checklist item']").click
+      end
+
+      click_button 'Save Checklist'
+
+      click_button 'Create a review checklist'
+      expect(target.reload.review_checklist).to eq([])
+    end
+
     scenario 'coach evaluates a pending submission without giving a feedback', js: true do
       sign_in_user coach.user, referer: timeline_event_path(submission_pending)
 

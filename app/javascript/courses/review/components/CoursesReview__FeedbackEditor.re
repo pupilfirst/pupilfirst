@@ -49,7 +49,7 @@ let make =
           className="if i-comment-alt-regular text-gray-800 text-base md:text-lg"
         />
       </span>
-      <div className="w-full">
+      <div className="w-full" ariaLabel="feedback">
         <MarkdownEditor
           updateMarkdownCB=updateFeedbackCB
           value=feedback

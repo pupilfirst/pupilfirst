@@ -154,7 +154,10 @@ let make =
     <DisablingCover disabled={state.saving}>
       {state.reviewChecklist
        |> Array.mapi((itemIndex, reviewChecklistItem) =>
-            <div className="pt-5" key={itemIndex |> string_of_int}>
+            <div
+              className="pt-5"
+              key={itemIndex |> string_of_int}
+              ariaLabel={"checklist-item-" ++ (itemIndex |> string_of_int)}>
               <div className="flex">
                 <div className="w-full">
                   <input
@@ -180,6 +183,7 @@ let make =
                   />
                 </div>
                 <button
+                  title="Remove checklist item"
                   className="bg-gray-200 p-2 w-11 border border-gray-400 text-gray-700 rounded ml-2 hover:text-red-600 hover:bg-red-100 focus:outline-none"
                   onClick={_ => removeChecklistItem(itemIndex, setState)}>
                   <i className="fas fa-trash-alt" />
@@ -195,6 +199,9 @@ let make =
                         | None => ""
                         };
                       <div
+                        ariaLabel={
+                          "result-item-" ++ (resultIndex |> string_of_int)
+                        }
                         className="pl-2 md:pl-4 mt-2"
                         key={
                           (itemIndex |> string_of_int)
@@ -233,6 +240,7 @@ let make =
                               <div
                                 className="flex w-10 h-10 absolute top-0 right-0 mr-1 items-center justify-center">
                                 <button
+                                  title="Remove checklist result"
                                   className="flex items-center justify-center bg-gray-100 w-7 h-7 mt-px text-sm text-gray-700 hover:text-red-600 hover:bg-red-100 rounded-full ml-2 border border-transparent text-center"
                                   onClick={_ =>
                                     removeChecklistResult(

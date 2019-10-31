@@ -81,8 +81,10 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
       </button>
     </div>
     {reviewChecklist
-     |> Array.mapi((i, reviewChecklistItem) =>
-          <div className="" key={i |> string_of_int}>
+     |> Array.mapi((itemIndex, reviewChecklistItem) =>
+          <div
+            key={itemIndex |> string_of_int}
+            ariaLabel={"checklist-item-" ++ (itemIndex |> string_of_int)}>
             <h4
               className="text-base font-semibold mt-4 md:mt-0 w-full md:w-4/5">
               {reviewChecklistItem |> ReviewChecklistItem.title |> str}
@@ -90,18 +92,28 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
             <div>
               {reviewChecklistItem
                |> ReviewChecklistItem.result
-               |> Array.mapi((index, checklistItem) =>
+               |> Array.mapi((resultIndex, checklistItem) =>
                     <div
                       className="px-2 md:px-4 mt-2"
-                      key={(i |> string_of_int) ++ (index |> string_of_int)}>
+                      ariaLabel={
+                        "result-item-" ++ (resultIndex |> string_of_int)
+                      }
+                      key={
+                        (itemIndex |> string_of_int)
+                        ++ (resultIndex |> string_of_int)
+                      }>
                       <Checkbox
                         id={
-                          "review_checkbox"
-                          ++ (i |> string_of_int)
-                          ++ (index |> string_of_int)
+                          "review-checkbox-"
+                          ++ (itemIndex |> string_of_int)
+                          ++ (resultIndex |> string_of_int)
                         }
                         label={checklistItem |> ReviewChecklistResult.title}
-                        onChange={checkboxOnChange(i, index, setSelecton)}
+                        onChange={checkboxOnChange(
+                          itemIndex,
+                          resultIndex,
+                          setSelecton,
+                        )}
                       />
                       <div className="pl-7">
                         <CoursesReview__ChecklistShowFeedback

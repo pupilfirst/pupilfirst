@@ -1,32 +1,49 @@
-import React from 'react';
-import { Editor, EditorState, ContentState, Modifier } from 'draft-js';
-import 'draft-js/dist/Draft.css';
+import React from "react";
+import { Editor, EditorState, ContentState, Modifier } from "draft-js";
+import "draft-js/dist/Draft.css";
 
-const onChange = (onChangeCB, setEditorState, editorState) => {
+const onChange = (content, onChangeCB, setEditorState, editorState) => {
   const text = editorState.getCurrentContent().getPlainText();
-  onChangeCB(text);
-  setEditorState(editorState)
+
+  if (text !== content) {
+    onChangeCB(text);
+  }
+
+  setEditorState(editorState);
 };
 
-const handleKeyCommand = (onChangeCB, editorState, setEditorState, command) => {
+const handleKeyCommand = (
+  content,
+  onChangeCB,
+  editorState,
+  setEditorState,
+  command
+) => {
   switch (command) {
     case "bold":
-      setBold(onChangeCB, editorState, setEditorState);
-      return 'handled';
+      setBold(content, onChangeCB, editorState, setEditorState);
+      return "handled";
     case "italic":
-      setItalic(onChangeCB, editorState, setEditorState);
-      return 'handled';
+      setItalic(content, onChangeCB, editorState, setEditorState);
+      return "handled";
     default:
-      return 'not-handled';
+      return "not-handled";
   }
 };
 
-const updateSelection = (editorState, delimiter, filler, onChangeCB, setEditorState) => {
+const updateSelection = (
+  content,
+  editorState,
+  delimiter,
+  filler,
+  onChangeCB,
+  setEditorState
+) => {
   const selectionState = editorState.getSelection();
   const anchorKey = selectionState.getAnchorKey();
 
   if (anchorKey !== selectionState.getFocusKey()) {
-    return
+    return;
   }
 
   const currentContent = editorState.getCurrentContent();
@@ -38,24 +55,56 @@ const updateSelection = (editorState, delimiter, filler, onChangeCB, setEditorSt
   var newContentState;
 
   if (selectionState.isCollapsed()) {
-    newContentState = Modifier.insertText(currentContent, selectionState, delimiter + filler + delimiter)
+    newContentState = Modifier.insertText(
+      currentContent,
+      selectionState,
+      delimiter + filler + delimiter
+    );
   } else {
-    newContentState = Modifier.replaceText(currentContent, selectionState, delimiter + selectedText + delimiter)
+    newContentState = Modifier.replaceText(
+      currentContent,
+      selectionState,
+      delimiter + selectedText + delimiter
+    );
   }
 
-  const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
-  onChange(onChangeCB, setEditorState, newEditorState);
-}
+  const newEditorState = EditorState.push(
+    editorState,
+    newContentState,
+    "insert-characters"
+  );
+  onChange(content, onChangeCB, setEditorState, newEditorState);
+};
 
-const setBold = (onChangeCB, editorState, setEditorState) => {
-  updateSelection(editorState, '**', 'bold text', onChangeCB, setEditorState);
-}
+const setBold = (content, onChangeCB, editorState, setEditorState) => {
+  updateSelection(
+    content,
+    editorState,
+    "**",
+    "bold text",
+    onChangeCB,
+    setEditorState
+  );
+};
 
-const setItalic = (onChangeCB, editorState, setEditorState) => {
-  updateSelection(editorState, '*', 'italicized text', onChangeCB, setEditorState);
-}
+const setItalic = (content, onChangeCB, editorState, setEditorState) => {
+  updateSelection(
+    content,
+    editorState,
+    "*",
+    "italicized text",
+    onChangeCB,
+    setEditorState
+  );
+};
 
-const insertTextAtFocus = (editorState, insertText, onChangeCB, setEditorState) => {
+const insertTextAtFocus = (
+  content,
+  editorState,
+  insertText,
+  onChangeCB,
+  setEditorState
+) => {
   const selectionState = editorState.getSelection();
 
   let updatedSelectionState;
@@ -76,18 +125,25 @@ const insertTextAtFocus = (editorState, insertText, onChangeCB, setEditorState) 
   }
 
   const currentContent = editorState.getCurrentContent();
-  const newContentState = Modifier.insertText(currentContent, updatedSelectionState, insertText);
-  const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+  const newContentState = Modifier.insertText(
+    currentContent,
+    updatedSelectionState,
+    insertText
+  );
+  const newEditorState = EditorState.push(
+    editorState,
+    newContentState,
+    "insert-characters"
+  );
 
-  onChange(onChangeCB, setEditorState, newEditorState);
+  onChange(content, onChangeCB, setEditorState, newEditorState);
 };
 
 export default function ReactDraftEditor(props) {
   const [editorState, setEditorState] = React.useState(() => {
     const contentState = ContentState.createFromText(props.content);
     return EditorState.createWithContent(contentState);
-  }
-  );
+  });
 
   const editor = React.useRef(null);
 
@@ -96,38 +152,61 @@ export default function ReactDraftEditor(props) {
   }
 
   React.useEffect(() => {
-    focusEditor()
+    focusEditor();
   }, []);
 
   React.useEffect(() => {
-    handleKeyCommand(props.onChange, editorState, setEditorState, props.command)
+    handleKeyCommand(
+      props.content,
+      props.onChange,
+      editorState,
+      setEditorState,
+      props.command
+    );
   }, [props.command, props.commandAt]);
 
-  const contentChangedOutside = (props.content != editorState.getCurrentContent().getPlainText());
+  const contentChangedOutside =
+    props.content != editorState.getCurrentContent().getPlainText();
 
   React.useEffect(() => {
     if (contentChangedOutside) {
-      const contentState = ContentState.createFromText(props.content)
+      const contentState = ContentState.createFromText(props.content);
       setEditorState(EditorState.createWithContent(contentState));
     }
   }, [contentChangedOutside]);
 
   React.useEffect(() => {
     if (typeof props.insertText === "string") {
-      insertTextAtFocus(editorState, props.insertText, props.onChange, setEditorState)
+      insertTextAtFocus(
+        props.content,
+        editorState,
+        props.insertText,
+        props.onChange,
+        setEditorState
+      );
     }
-  }, [props.insertText])
+  }, [props.insertText]);
 
   return (
-    <div className="flex-grow px-3 pt-3" onClick={focusEditor}>
+    <div className="flex-grow px-3 py-3" onClick={focusEditor}>
       <Editor
         ariaLabelledBy={props.ariaLabelledBy}
         ref={editor}
         placeholder={props.placeholder}
-        handleKeyCommand={(command, editorState) => handleKeyCommand(props.onChange, editorState, setEditorState, command)}
+        handleKeyCommand={(command, editorState) =>
+          handleKeyCommand(
+            props.content,
+            props.onChange,
+            editorState,
+            setEditorState,
+            command
+          )
+        }
         editorState={editorState}
-        onChange={editorState => onChange(props.onChange, setEditorState, editorState)}
+        onChange={editorState =>
+          onChange(props.content, props.onChange, setEditorState, editorState)
+        }
       />
     </div>
   );
-};
+}

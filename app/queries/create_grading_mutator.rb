@@ -11,6 +11,7 @@ class CreateGradingMutator < ApplicationQuery
   validate :should_not_be_graded
   validate :valid_evaluation_criteria
   validate :valid_grading
+  validates :feedback, length: { maximum: 10_000 }
 
   def grade
     TimelineEvent.transaction do

@@ -10,9 +10,12 @@ class SubmissionDetailsResolver < ApplicationQuery
       level_number: level.number,
       level_id: level.id,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
-      evaluation_criteria: evaluation_criteria
+      evaluation_criteria: evaluation_criteria,
+      review_checklist: review_checklist
     }
   end
+
+  delegate :review_checklist, to: :target
 
   def submission
     @submission ||= TimelineEvent.find_by(id: submission_id)

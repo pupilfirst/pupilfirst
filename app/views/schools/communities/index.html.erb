@@ -1,5 +1,9 @@
-<% content_for(:tail) do %>
+<% content_for(:head) do %>
+  <title><%= current_school.name %> | Communities</title>
   <%= stylesheet_pack_tag 'SchoolCommunitiesPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
   <%= javascript_pack_tag 'SchoolCommunitiesPack', 'data-turbolinks-track': 'reload', nonce: true %>
 <% end %>
 

@@ -1,14 +1,5 @@
 open CurriculumEditor__Types;
 
-type props = {
-  course: Course.t,
-  evaluationCriteria: list(EvaluationCriteria.t),
-  levels: list(Level.t),
-  targetGroups: list(TargetGroup.t),
-  targets: list(Target.t),
-  authenticityToken: string,
-};
-
 type editorAction =
   | Hidden
   | ShowTargetEditor(string, Target.t)
@@ -339,31 +330,3 @@ let make =
     </div>;
   },
 };
-
-let decode = json =>
-  Json.Decode.{
-    course: json |> field("course", Course.decode),
-    evaluationCriteria:
-      json |> field("evaluationCriteria", list(EvaluationCriteria.decode)),
-    levels: json |> field("levels", list(Level.decode)),
-    targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
-    targets: json |> field("targets", list(Target.decode)),
-    authenticityToken: json |> field("authenticityToken", string),
-  };
-
-let jsComponent =
-  ReasonReact.wrapReasonForJs(
-    ~component,
-    jsProps => {
-      let props = jsProps |> decode;
-      make(
-        ~course=props.course,
-        ~evaluationCriteria=props.evaluationCriteria,
-        ~levels=props.levels,
-        ~targetGroups=props.targetGroups,
-        ~targets=props.targets,
-        ~authenticityToken=props.authenticityToken,
-        [||],
-      );
-    },
-  );

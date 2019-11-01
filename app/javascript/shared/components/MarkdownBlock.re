@@ -13,7 +13,7 @@ let profileClasses = (profile: Markdown.profile) =>
   switch (profile) {
   | Comment => "markdown-block__comment "
   | QuestionAndAnswer => "markdown-block__question-and-answer "
-  | Permissive => "markdown-block__permissive text-base "
+  | Permissive => "markdown-block__permissive "
   };
 
 let markdownBlockClasses = (profile, className) => {

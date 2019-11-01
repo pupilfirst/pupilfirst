@@ -16,6 +16,13 @@ module SubmissionDetailsQuery = [%graphql
         evaluationCriteria{
           id, name
         },
+        reviewChecklist{
+          title
+          result{
+            title
+            feedback
+          }
+        },
         targetEvaluationCriteriaIds,
         submissions{
           id, evaluatorName, passedAt, createdAt, description, evaluatedAt
@@ -127,6 +134,15 @@ let updateSubmission =
     : removePendingSubmissionCB(submission |> Submission.id);
 };
 
+let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) => {
+  setState(_ =>
+    Loaded(
+      submissionDetails
+      |> SubmissionDetails.updateReviewChecklist(reviewChecklist),
+    )
+  );
+};
+
 [@react.component]
 let make =
     (
@@ -189,6 +205,14 @@ let make =
                    evaluationCriteria={
                      submissionDetails |> SubmissionDetails.evaluationCriteria
                    }
+                   reviewChecklist={
+                     submissionDetails |> SubmissionDetails.reviewChecklist
+                   }
+                   updateReviewChecklistCB={updateReviewChecklist(
+                     submissionDetails,
+                     setState,
+                   )}
+                   targetId={submissionDetails |> SubmissionDetails.targetId}
                  />
                )
             |> React.array}

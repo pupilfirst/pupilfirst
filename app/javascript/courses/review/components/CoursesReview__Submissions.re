@@ -185,12 +185,15 @@ let make =
       ~submissionNumber,
       ~currentCoach,
       ~evaluationCriteria,
+      ~reviewChecklist,
+      ~updateReviewChecklistCB,
+      ~targetId,
       ~targetEvaluationCriteriaIds,
     ) =>
   <div
     ariaLabel={"submissions-overlay-card-" ++ (submission |> Submission.id)}
     className={cardClasses(submission)}>
-    <div className="rounded-b-lg shadow-md">
+    <div className="rounded-b-lg shadow">
       <div
         className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
         <div className="flex flex-col w-full sm:w-auto">
@@ -222,24 +225,30 @@ let make =
         evaluationCriteria
         targetEvaluationCriteriaIds
         passGrade
+        reviewChecklist
         updateSubmissionCB={updateSubmission(
           ~feedackUpdate=false,
           ~submission,
           ~currentCoach,
           ~updateSubmissionCB,
         )}
+        updateReviewChecklistCB
+        targetId
       />
       <CoursesReview__ShowFeedback
         authenticityToken
         feedback={submission |> Submission.feedback}
         reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
         submissionId={submission |> Submission.id}
+        reviewChecklist
         updateSubmissionCB={updateSubmission(
           ~feedackUpdate=true,
           ~submission,
           ~currentCoach,
           ~updateSubmissionCB,
         )}
+        updateReviewChecklistCB
+        targetId
       />
     </div>
   </div>;

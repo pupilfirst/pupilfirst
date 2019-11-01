@@ -20,12 +20,7 @@ body {
   @apply w-full h-full antialiased;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   @apply font-bold;
 }
 
@@ -55,8 +50,7 @@ h6 {
 
 /* Input */
 
-input:disabled,
-.disabled {
+input:disabled, .disabled {
   @apply cursor-not-allowed bg-gray-200 text-gray-700;
 }
 
@@ -84,22 +78,26 @@ input:disabled,
   @apply bg-gray-400 text-primary-700;
 }
 
+.btn-subtle {
+  @apply bg-transparent text-gray-800;
+}
+
+.btn-subtle:hover {
+  @apply bg-gray-300 text-gray-900;
+}
+
+.btn-subtle:focus {
+  @apply bg-gray-400 text-gray-900;
+}
+
 .btn-primary {
   @apply bg-primary-500 text-white shadow;
-  background-image: linear-gradient(
-    135deg,
-    rgba(96, 37, 192, 1) 0%,
-    rgba(77, 30, 154, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(96, 37, 192, 1) 0%, rgba(77, 30, 154, 1) 100%);
 }
 
 .btn-primary:hover {
   @apply bg-primary-600;
-  background-image: linear-gradient(
-    135deg,
-    rgba(77, 30, 154, 1) 0%,
-    rgba(56, 13, 128, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(77, 30, 154, 1) 0%, rgba(56, 13, 128, 1) 100%);
 }
 
 .btn-primary:focus {
@@ -121,20 +119,12 @@ input:disabled,
 
 .btn-secondary {
   @apply bg-secondary-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    rgba(246, 16, 103, 1) 0%,
-    rgba(172, 6, 69, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(246, 16, 103, 1) 0%, rgba(172, 6, 69, 1) 100%);
 }
 
 .btn-secondary:hover {
   @apply bg-secondary-600;
-  background-image: linear-gradient(
-    135deg,
-    rgba(172, 6, 69, 1) 0%,
-    rgba(123, 5, 49, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(172, 6, 69, 1) 0%, rgba(123, 5, 49, 1) 100%);
 }
 
 .btn-secondary:focus {
@@ -144,20 +134,12 @@ input:disabled,
 
 .btn-success {
   @apply bg-green-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    rgba(72, 187, 120, 1) 0%,
-    rgba(56, 161, 105, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(72, 187, 120, 1) 0%, rgba(56, 161, 105, 1) 100%);
 }
 
 .btn-success:hover {
   @apply bg-green-600;
-  background-image: linear-gradient(
-    135deg,
-    rgba(56, 161, 105, 1) 0%,
-    rgba(47, 133, 90, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(56, 161, 105, 1) 0%, rgba(47, 133, 90, 1) 100%);
 }
 
 .btn-success:focus {
@@ -167,20 +149,12 @@ input:disabled,
 
 .btn-warning {
   @apply bg-yellow-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    rgba(237, 137, 54, 1) 0%,
-    rgba(221, 107, 32, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(237, 137, 54, 1) 0%, rgba(221, 107, 32, 1) 100%);
 }
 
 .btn-warning:hover {
   @apply bg-yellow-600;
-  background-image: linear-gradient(
-    135deg,
-    rgba(221, 107, 32, 1) 0%,
-    rgba(192, 86, 33, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(221, 107, 32, 1) 0%, rgba(192, 86, 33, 1) 100%);
 }
 
 .btn-warning:focus {
@@ -190,20 +164,12 @@ input:disabled,
 
 .btn-danger {
   @apply bg-red-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    rgba(245, 101, 101, 1) 0%,
-    rgba(229, 62, 62, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(245, 101, 101, 1) 0%, rgba(229, 62, 62, 1) 100%);
 }
 
 .btn-danger:hover {
   @apply bg-red-600;
-  background-image: linear-gradient(
-    135deg,
-    rgba(229, 62, 62, 1) 0%,
-    rgba(197, 48, 48, 1) 100%
-  );
+  background-image: linear-gradient( 135deg, rgba(229, 62, 62, 1) 0%, rgba(197, 48, 48, 1) 100%);
 }
 
 .btn-danger:focus {
@@ -211,16 +177,12 @@ input:disabled,
   background-image: none;
 }
 
-button:disabled,
-.disabled {
+button:disabled, .disabled {
   @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
   background-image: none;
 }
 
-button:disabled:hover,
-.disabled:hover,
-button:disabled:focus,
-.disabled:focus {
+button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   @apply bg-gray-300 text-gray-500 border-transparent shadow-none;
   background-image: none;
 }
@@ -230,11 +192,15 @@ button:disabled:focus,
 }
 
 .btn-normal {
-  @apply py-2 px-4 text-sm h-8;
+  @apply py-1 px-4 text-sm h-8;
 }
 
 .btn-large {
   @apply py-2 px-5 text-base h-10;
+}
+
+.button-xl {
+  @apply py-2 px-6 text-base h-12;
 }
 
 /* Footer Style */
@@ -261,8 +227,7 @@ button:disabled:focus,
   @apply left-0;
 }
 
-.dropdown__list-left:before,
-.dropdown__list-left:after {
+.dropdown__list-left:before, .dropdown__list-left:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -285,8 +250,7 @@ button:disabled:focus,
   border-left: 6px solid transparent;
 }
 
-.dropdown__list-right:before,
-.dropdown__list-right:after {
+.dropdown__list-right:before, .dropdown__list-right:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -313,17 +277,9 @@ button:disabled:focus,
 
 @responsive {
   .bg-gradient-primary-600-to-primary-800-to-bottom {
-    background-image: linear-gradient(
-      to bottom,
-      theme("colors.primary.600"),
-      theme("colors.primary.800")
-    );
+    background-image: linear-gradient( to bottom, theme("colors.primary.600"), theme("colors.primary.800"));
   }
   .bg-gradient-secondary-to-secondary-600-120 {
-    background-image: linear-gradient(
-      120deg,
-      theme("colors.secondary.500"),
-      theme("colors.secondary.600")
-    );
+    background-image: linear-gradient( 120deg, theme("colors.secondary.500"), theme("colors.secondary.600"));
   }
 }

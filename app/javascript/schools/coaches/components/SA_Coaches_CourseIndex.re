@@ -312,36 +312,3 @@ let make =
     </DisablingCover.Jsx2>;
   },
 };
-
-type props = {
-  courseCoachIds: list(int),
-  startupCoachIds: list(int),
-  schoolCoaches: list(Coach.t),
-  authenticityToken: string,
-  courseId: int,
-};
-
-let decode = json =>
-  Json.Decode.{
-    courseCoachIds: json |> field("courseCoachIds", list(int)),
-    startupCoachIds: json |> field("startupCoachIds", list(int)),
-    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
-    courseId: json |> field("courseId", int),
-    authenticityToken: json |> field("authenticityToken", string),
-  };
-
-let jsComponent =
-  ReasonReact.wrapReasonForJs(
-    ~component,
-    jsProps => {
-      let props = jsProps |> decode;
-      make(
-        ~courseCoachIds=props.courseCoachIds,
-        ~startupCoachIds=props.startupCoachIds,
-        ~schoolCoaches=props.schoolCoaches,
-        ~courseId=props.courseId,
-        ~authenticityToken=props.authenticityToken,
-        [||],
-      );
-    },
-  );

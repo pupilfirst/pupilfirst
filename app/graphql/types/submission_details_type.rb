@@ -7,6 +7,7 @@ module Types
     field :level_number, String, null: false
     field :level_id, ID, null: false
     field :evaluation_criteria, [Types::EvaluationCriteriaType], null: false
+    field :review_checklist, [Types::ReviewChecklistType], null: false
     field :target_evaluation_criteria_ids, [ID], null: false
   end
 end

@@ -7,3 +7,5 @@ module Feedback = CoursesReview__Feedback;
 module Grade = CoursesReview__Grade;
 module Coach = CoursesReview__Coach;
 module ReviewedSubmission = CoursesReview__ReviewedSubmission;
+module ReviewChecklistItem = CoursesReview__ReviewChecklistItem;
+module ReviewChecklistResult = CoursesReview__ReviewChecklistResult;

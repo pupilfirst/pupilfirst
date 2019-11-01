@@ -12,7 +12,7 @@ let make = (~className) => {
     },
     [|className|],
   );
-  <span key=className> <i className /> </span>;
+  <span className="inline-flex" key=className> <i className /> </span>;
 };
 
 module Jsx2 = {

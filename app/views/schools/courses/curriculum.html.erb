@@ -1,6 +1,10 @@
-<%= content_for(:tail) do %>
-  <%= stylesheet_pack_tag 'schools/courses/curriculum', media: 'all' %>
-  <%= javascript_pack_tag 'schools/courses/curriculum', nonce: true %>
+<% content_for(:head) do %>
+  <title><%= current_school.name %> | Curriculum</title>
+  <%= stylesheet_pack_tag 'SchoolsCoursesCurriculumPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolsCoursesCurriculumPack', nonce: true %>
 <% end %>
 
 <% presenter = Schools::Courses::CurriculumPresenter.new(self, @course) %>

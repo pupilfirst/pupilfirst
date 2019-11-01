@@ -33,6 +33,7 @@ module Types
     field :create_grading, mutation: Mutations::CreateGrading, null: false
     field :undo_grading, mutation: Mutations::UndoGrading, null: false
     field :create_feedback, mutation: Mutations::CreateFeedback, null: false
+    field :update_review_checklist, mutation: Mutations::UpdateReviewChecklist, null: false
     field :delete_school_admin, mutation: Mutations::DeleteSchoolAdmin, null: false
   end
 end

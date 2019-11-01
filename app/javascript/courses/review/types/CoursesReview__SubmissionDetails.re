@@ -6,6 +6,7 @@ type t = {
   levelNumber: string,
   levelId: string,
   evaluationCriteria: array(EvaluationCriterion.t),
+  reviewChecklist: array(CoursesReview__ReviewChecklistItem.t),
   targetEvaluationCriteriaIds: array(string),
 };
 let submissions = t => t.submissions;
@@ -15,6 +16,7 @@ let levelNumber = t => t.levelNumber;
 let levelId = t => t.levelId;
 let userNames = t => t.userNames;
 let evaluationCriteria = t => t.evaluationCriteria;
+let reviewChecklist = t => t.reviewChecklist;
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds;
 let make =
     (
@@ -25,6 +27,7 @@ let make =
       ~levelNumber,
       ~evaluationCriteria,
       ~levelId,
+      ~reviewChecklist,
       ~targetEvaluationCriteriaIds,
     ) => {
   submissions,
@@ -34,12 +37,13 @@ let make =
   levelNumber,
   evaluationCriteria,
   levelId,
+  reviewChecklist,
   targetEvaluationCriteriaIds,
 };
 
 let decodeJS = details =>
   make(
-    ~submissions=details##submissions |> CoursesReview__Submission.decodeJS,
+    ~submissions=details##submissions |> CoursesReview__Submission.makeFromJs,
     ~targetId=details##targetId,
     ~targetTitle=details##targetTitle,
     ~userNames=details##userNames,
@@ -51,6 +55,8 @@ let decodeJS = details =>
       |> Js.Array.map(ec =>
            EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
          ),
+    ~reviewChecklist=
+      details##reviewChecklist |> CoursesReview__ReviewChecklistItem.makeFromJs,
   );
 
 let updateSubmission = (t, submission) =>
@@ -69,6 +75,7 @@ let updateSubmission = (t, submission) =>
     ~levelNumber=t.levelNumber,
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,
+    ~reviewChecklist=t.reviewChecklist,
     ~targetEvaluationCriteriaIds=t.targetEvaluationCriteriaIds,
   );
 let failed = submission =>
@@ -101,3 +108,17 @@ let makeSubmissionInfo = (t, submission) =>
         ),
       ),
   );
+
+let updateReviewChecklist = (reviewChecklist, t) => {
+  make(
+    ~submissions=t.submissions,
+    ~targetId=t.targetId,
+    ~targetTitle=t.targetTitle,
+    ~userNames=t.userNames,
+    ~levelNumber=t.levelNumber,
+    ~levelId=t.levelId,
+    ~evaluationCriteria=t.evaluationCriteria,
+    ~targetEvaluationCriteriaIds=t.targetEvaluationCriteriaIds,
+    ~reviewChecklist,
+  );
+};

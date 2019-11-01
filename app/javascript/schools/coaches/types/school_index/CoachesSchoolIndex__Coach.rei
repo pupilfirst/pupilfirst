@@ -22,8 +22,6 @@ let notifyForSubmission: t => bool;
 
 let exited: t => bool;
 
-let updateInfo: (string, t) => t;
-
 let updateList: (list(t), t) => list(t);
 
 let affiliation: t => option(string);

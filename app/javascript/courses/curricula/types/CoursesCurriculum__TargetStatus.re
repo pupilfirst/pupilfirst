@@ -48,8 +48,6 @@ type cachedTarget = {
   prerequisiteTargetIds: list(string),
 };
 
-type cachedStudent = {levelNumber: int};
-
 let isPast = dateString =>
   switch (dateString) {
   | Some(date) =>

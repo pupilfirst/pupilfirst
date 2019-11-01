@@ -21,7 +21,6 @@ type state = {
   savingContentBlock: bool,
   markdownContent: string,
   fileName: string,
-  embedUrl: string,
   formDirty: bool,
 };
 
@@ -451,7 +450,6 @@ let make =
       | _ => ""
       },
     fileName: uploadButtonText(blockType),
-    embedUrl: "",
     formDirty: false,
   };
 

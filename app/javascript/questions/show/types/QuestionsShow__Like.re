@@ -11,10 +11,6 @@ let decode = json =>
     answerId: json |> field("answerId", string),
   };
 
-let userId = t => t.userId;
-
-let answerId = t => t.answerId;
-
 let id = t => t.id;
 
 let likesForAnswer = (answerId, likes) =>

@@ -27,15 +27,6 @@ let title = attachment => attachment.title;
 let url = attachment => attachment.url;
 let prettyDate = date => date |> DateFns.format("MMMM D, YYYY");
 
-let timeDistance = t =>
-  t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);
-
-let sort = submissions =>
-  submissions
-  |> ArrayUtils.copyAndSort((x, y) =>
-       DateFns.differenceInSeconds(y.createdAt, x.createdAt) |> int_of_float
-     );
-
 let make =
     (
       ~id,
@@ -78,7 +69,6 @@ let makeFromJs = details =>
            s##feedback
            |> Js.Array.map(f =>
                 CoursesReview__Feedback.make(
-                  ~id=f##id,
                   ~coachName=f##coachName,
                   ~coachAvatarUrl=f##coachAvatarUrl,
                   ~coachTitle=f##coachTitle,

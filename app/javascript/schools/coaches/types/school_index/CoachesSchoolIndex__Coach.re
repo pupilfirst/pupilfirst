@@ -37,8 +37,6 @@ let imageFileName = t => t.imageFileName;
 
 let affiliation = t => t.affiliation;
 
-let updateInfo = (name, coach) => {...coach, name};
-
 let decode = json =>
   Json.Decode.{
     name: json |> field("name", string),

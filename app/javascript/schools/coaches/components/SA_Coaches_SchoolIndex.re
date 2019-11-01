@@ -8,7 +8,6 @@ type formVisible =
 
 type state = {
   coaches: list(Coach.t),
-  searchString: string,
   formVisible,
 };
 
@@ -20,7 +19,7 @@ let component = ReasonReact.reducerComponent("SA_Coaches_SchoolIndex");
 
 let make = (~coaches, ~authenticityToken, _children) => {
   ...component,
-  initialState: () => {coaches, searchString: "", formVisible: None},
+  initialState: () => {coaches, formVisible: None},
   reducer: (action, state) =>
     switch (action) {
     | UpdateFormVisible(formVisible) =>

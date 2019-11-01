@@ -1,5 +1,4 @@
 module Level = CoursesReview__Level;
-module User = CoursesReview__User;
 module SubmissionInfo = CoursesReview__SubmissionInfo;
 module SubmissionDetails = CoursesReview__SubmissionDetails;
 module Submission = CoursesReview__Submission;

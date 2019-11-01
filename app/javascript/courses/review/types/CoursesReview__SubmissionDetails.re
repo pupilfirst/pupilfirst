@@ -13,7 +13,6 @@ let submissions = t => t.submissions;
 let targetId = t => t.targetId;
 let targetTitle = t => t.targetTitle;
 let levelNumber = t => t.levelNumber;
-let levelId = t => t.levelId;
 let userNames = t => t.userNames;
 let evaluationCriteria = t => t.evaluationCriteria;
 let reviewChecklist = t => t.reviewChecklist;
@@ -99,7 +98,6 @@ let makeSubmissionInfo = (t, submission) =>
     ~createdAt=submission |> CoursesReview__Submission.createdAt,
     ~levelId=t.levelId,
     ~userNames=t.userNames,
-    ~targetId=t.targetId,
     ~status=
       Some(
         CoursesReview__SubmissionInfo.makeStatus(

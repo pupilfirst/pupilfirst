@@ -14,8 +14,6 @@ type courseSelection =
 
 type settingsSelection =
   | Customization
-  | Domains
-  | Homepage
   | Admins;
 
 type userRole =
@@ -28,8 +26,7 @@ type selection =
   | Settings(settingsSelection)
   | Courses
   | SelectedCourse(Course.id, courseSelection)
-  | Communities
-  | Nothing;
+  | Communities;
 
 let str = React.string;
 

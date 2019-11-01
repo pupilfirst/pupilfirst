@@ -133,11 +133,6 @@ let reducer = (state, action) =>
     }
   };
 
-let removeAttachment = (attachment, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  send(RemoveAttachment(attachment));
-};
-
 let isBusy = formState =>
   switch (formState) {
   | Attaching
@@ -260,24 +255,26 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB, ~preview) => {
         Some(attachment => send(RemoveAttachment(attachment)))
       }
     />
-    {
-      state.attachments |> List.length >= 3 ?
-        React.null :
-        <CoursesCurriculum__NewAttachment
-          authenticityToken
-          attachingCB={() => send(UpdateFormState(Attaching))}
-          typingCB={typing => send(SetTypingLink(typing))}
-          attachFileCB={(id, filename) => send(AttachFile(id, filename))}
-          attachUrlCB={url => send(AttachUrl(url))}
-          disabled={isBusy(state.formState)}
-          preview
-        />
-    }
+    {state.attachments |> List.length >= 3
+       ? React.null
+       : <CoursesCurriculum__NewAttachment
+           authenticityToken
+           attachingCB={() => send(UpdateFormState(Attaching))}
+           typingCB={typing => send(SetTypingLink(typing))}
+           attachFileCB={(id, filename) => send(AttachFile(id, filename))}
+           attachUrlCB={url => send(AttachUrl(url))}
+           disabled={isBusy(state.formState)}
+           preview
+         />}
     <div className="flex mt-3 justify-end">
       <button
-        onClick={
-          submit(state, send, authenticityToken, target, addSubmissionCB)
-        }
+        onClick={submit(
+          state,
+          send,
+          authenticityToken,
+          target,
+          addSubmissionCB,
+        )}
         disabled={isButtonDisabled(state.formState) || preview}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}

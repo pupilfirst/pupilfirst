@@ -64,7 +64,7 @@ module Courses
     end
 
     def course_details
-      details = @course.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'ends_at')
+      details = @course.attributes.slice('id', 'ends_at')
 
       details['grade_labels'] = @course.grade_labels_to_props
       details

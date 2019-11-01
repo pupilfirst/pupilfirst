@@ -92,9 +92,6 @@ let gradeSubmissionQuery =
   |> ignore;
 };
 
-let validGrades = (grades, evaluationCriteria) =>
-  grades |> Array.length == (evaluationCriteria |> Array.length);
-
 let updateGrading = (grade, state, setState) => {
   let newGrades =
     state.grades

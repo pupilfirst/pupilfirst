@@ -73,7 +73,6 @@ let contentBlocks = t => t.contentBlocks;
 let quizQuestions = t => t.quizQuestions;
 let communities = t => t.communities;
 let linkToComplete = t => t.linkToComplete;
-let evaluated = t => t.evaluated;
 
 let completionInstructions = t => t.completionInstructions;
 

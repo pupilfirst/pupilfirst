@@ -13,8 +13,6 @@ let id = t => t.id;
 
 let avatarUrl = t => t.avatarUrl;
 
-let teamId = t => t.teamId;
-
 let decode = json =>
   Json.Decode.{
     name: json |> field("name", string),
@@ -23,8 +21,11 @@ let decode = json =>
     teamId: json |> field("teamId", int),
   };
 
-let founderNames = (founders: list(t)) => founders |> List.map(founder => founder.name) |> String.concat(", ");
+let founderNames = (founders: list(t)) =>
+  founders |> List.map(founder => founder.name) |> String.concat(", ");
 
-let withIds = (ids, founders) => founders |> List.filter(founder => List.mem(founder.id, ids));
+let withIds = (ids, founders) =>
+  founders |> List.filter(founder => List.mem(founder.id, ids));
 
-let inTeam = (team, founders) => founders |> List.filter(founder => founder |> teamId == (team |> Team.id));
+let inTeam = (team, founders) =>
+  founders |> List.filter(founder => founder.teamId == (team |> Team.id));

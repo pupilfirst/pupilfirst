@@ -99,8 +99,6 @@ let sort = targets =>
 
 let archive = t => {...t, visibility: Archived};
 
-let find = (id, targets) => targets |> List.find(t => t.id == id);
-
 let removeTarget = (target, targets) =>
   targets |> List.filter(t => t.id != target.id);
 

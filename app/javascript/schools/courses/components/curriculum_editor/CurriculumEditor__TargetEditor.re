@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-exception SetPayloadCalledWithoutMethodOfCompletion;
-
 [%bs.raw {|require("./CurriculumEditor__TargetEditor.css")|}];
 
 open CurriculumEditor__Types;
@@ -18,7 +16,6 @@ let quizIcon: string = [%raw
 
 let str = ReasonReact.string;
 type methodOfCompletion =
-  | NotSelected
   | Evaluated
   | VisitLink
   | TakeQuiz
@@ -73,7 +70,6 @@ type action =
   | UpdateContentBlocks(list(ContentBlock.t), array(string))
   | SwitchPreviewMode(bool)
   | LoadOldVersion(list(ContentBlock.t), string, array(string))
-  | SelectVersion(string)
   | UpdateVersions(array(string))
   | UpdateCompletionInstructions(string)
   | SetLoadingContentBlocks;
@@ -90,7 +86,6 @@ let updateLinkToComplete = (send, link) => {
 let saveDisabled = state => {
   let hasMethordOfCompletionError =
     switch (state.methodOfCompletion) {
-    | NotSelected => true
     | Evaluated =>
       state.evaluationCriteria
       |> List.filter(((_, _, selected)) => selected)
@@ -213,15 +208,6 @@ let setPayload = (state, authenticityToken) => {
 
   let (evaluationCriteriaIds, linkToComplete, quiz) =
     switch (state.methodOfCompletion) {
-    | NotSelected =>
-      Rollbar.error(
-        "TargetEditor.setPayload was called when methodOfCompletion was NotSelected",
-      );
-      Notification.error(
-        "Error!",
-        "Something went wrong. Please reload the page before trying again.",
-      );
-      raise(SetPayloadCalledWithoutMethodOfCompletion);
     | Evaluated =>
       let evaluationCriteriaIds =
         state.evaluationCriteria
@@ -318,7 +304,6 @@ let reducer = (state, action) =>
       methodOfCompletion,
       dirty:
         switch (methodOfCompletion) {
-        | NotSelected => false
         | VisitLink => state.linkToComplete |> String.length > 0
         | Evaluated
         | TakeQuiz
@@ -374,11 +359,6 @@ let reducer = (state, action) =>
       versions,
       previewMode: true,
       loadingContentBlocks: false,
-    }
-  | SelectVersion(selectedVersion) => {
-      ...state,
-      selectedVersion,
-      previewMode: true,
     }
   | SwitchPreviewMode(previewMode) => {...state, previewMode}
   | UpdateVersions(versions) => {
@@ -608,7 +588,6 @@ let make =
 
   let targetEvaluated = () =>
     switch (state.methodOfCompletion) {
-    | NotSelected => true
     | Evaluated => true
     | VisitLink => false
     | TakeQuiz => false
@@ -1061,7 +1040,6 @@ let make =
                           </div>
                         : ReasonReact.null}
                    </div>
-                 | NotSelected => ReasonReact.null
                  }}
               </div>
             </div>
@@ -1156,9 +1134,6 @@ let make =
 };
 
 module Jsx2 = {
-  let component =
-    ReasonReact.statelessComponent("CurriculumEditor__TargetEditor");
-
   let make =
       (
         ~target,

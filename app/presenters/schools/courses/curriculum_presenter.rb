@@ -22,8 +22,7 @@ module Schools
 
       def course_data
         {
-          id: @course.id,
-          name: @course.name
+          id: @course.id
         }
       end
 

@@ -8,7 +8,6 @@ type state = {
   tagsToApply: list(string),
   exited: bool,
   teamCoaches: list(teamCoachlist),
-  coachEnrollmentsChanged: bool,
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: string,
@@ -166,7 +165,6 @@ let make =
         courseCoachIds,
         teamCoachIds,
       ),
-    coachEnrollmentsChanged: false,
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
     title: student |> Student.title,
     affiliation: student |> Student.affiliation |> OptionUtils.toString,
@@ -193,7 +191,6 @@ let make =
       ReasonReact.Update({
         ...state,
         teamCoaches: [(key, value, selected), ...oldCoach],
-        coachEnrollmentsChanged: true,
       });
     | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) =>
       ReasonReact.Update({...state, excludedFromLeaderboard})

@@ -9,14 +9,12 @@ let parse = s => s |> dateParse;
 
 type format =
   | OnlyDate
-  | DateAndTime
   | DateWithYearAndTime;
 
 let format = (f, t) => {
   let formatString =
     switch (f) {
     | OnlyDate => "Do MMM YYYY"
-    | DateAndTime => "MMM D HH:mm"
     | DateWithYearAndTime => "Do MMM YYYY HH:mm"
     };
   dateFormat(t, formatString);

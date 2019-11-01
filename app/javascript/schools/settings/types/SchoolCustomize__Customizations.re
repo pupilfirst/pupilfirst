@@ -45,8 +45,6 @@ let emailAddress = t => t.schoolStrings.emailAddress;
 let privacyPolicy = t => t.schoolStrings.privacyPolicy;
 let termsOfUse = t => t.schoolStrings.termsOfUse;
 
-let links = t => t.links;
-
 let headerLinks = t =>
   t.links
   |> List.filter(l =>

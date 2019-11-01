@@ -20,8 +20,6 @@ type state = {
 };
 
 type action =
-  | UpdateTeams(list(Team.t))
-  | UpdateStudents(list(Student.t))
   | RefreshData(list(Team.t), list(Student.t))
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
@@ -183,9 +181,6 @@ let make =
     switch (action) {
     | RefreshData(teams, students) =>
       ReasonReact.Update({...state, teams, students})
-
-    | UpdateTeams(teams) => ReasonReact.Update({...state, teams})
-    | UpdateStudents(students) => ReasonReact.Update({...state, students})
     | SelectStudent(student) =>
       ReasonReact.Update({
         ...state,

@@ -13,11 +13,6 @@ let empty = grade => {grade, label: ""};
 
 let update = (label, t) => {...t, label};
 
-let encode = t =>
-  Json.Encode.(
-    object_([("grade", t.grade |> int), ("label", t.label |> string)])
-  );
-
 let asJsType = t => {"grade": t.grade, "label": t.label};
 
 let valid = t => t.label |> Js.String.trim |> Js.String.length >= 1;

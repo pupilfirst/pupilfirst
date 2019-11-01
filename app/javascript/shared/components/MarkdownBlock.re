@@ -1,8 +1,6 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./MarkdownBlock.css")|}];
 
-let str = React.string;
-
 let randomId = () => {
   let randomComponent =
     Js.Math.random() |> Js.Float.toString |> Js.String.substr(~from=2);
@@ -44,8 +42,6 @@ let make = (~markdown, ~className=?, ~profile) => {
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("MarkdownBlock");
-
   let make = (~markdown, ~profile, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

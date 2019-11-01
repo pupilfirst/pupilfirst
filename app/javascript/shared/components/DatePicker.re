@@ -22,8 +22,6 @@ let make = (~onChange, ~selected=?, ~id=?) => {
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("DayPicker");
-
   let make = (~onChange, ~selected=?, ~id=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

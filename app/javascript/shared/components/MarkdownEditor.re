@@ -1,7 +1,6 @@
 [@bs.config {jsx: 3}];
 
 exception FormNotFound(string);
-exception UnexpectedResponse(int);
 
 [%bs.raw {|require("./MarkdownEditor.css")|}];
 
@@ -160,22 +159,6 @@ let buttons = (value, state, send, previewButtonPosition) => {
   )
   |> React.array;
 };
-
-let handleApiError =
-  [@bs.open]
-  (
-    fun
-    | UnexpectedResponse(code) => code
-  );
-
-let attachmentEmbedGap = oldMarkdown =>
-  if (oldMarkdown == "") {
-    "";
-  } else if (oldMarkdown |> Js.String.substr(~from=-1) == "\n") {
-    "\n";
-  } else {
-    "\n\n";
-  };
 
 let handleUploadFileResponse = (send, json) => {
   let errors = json |> Json.Decode.(field("errors", array(string)));
@@ -391,8 +374,6 @@ let make =
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("MarkdownEditor");
-
   let make =
       (
         ~placeholder,

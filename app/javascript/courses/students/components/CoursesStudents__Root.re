@@ -138,7 +138,6 @@ let updateLevel = (level, setState) => {
         level,
         search: state.filter.search,
       },
-      teams: Unloaded,
     }
   );
 };
@@ -164,7 +163,6 @@ let onSubmitSearch = (setState, event) => {
             search,
             level: state.filter.level,
           },
-          teams: Unloaded,
         }
       )
     : ();
@@ -180,7 +178,6 @@ let onClearSearch = (setState, event) => {
         search: None,
         level: state.filter.level,
       },
-      teams: Unloaded,
     }
   );
 };
@@ -281,10 +278,12 @@ let make = (~levels, ~course) => {
       }
     );
   let courseId = course |> Course.id;
+  let initialRender = React.useRef(true);
   React.useEffect1(
     () => {
-      switch ((state.teams: Teams.t)) {
-      | Unloaded =>
+      if (initialRender |> React.Ref.current) {
+        initialRender->React.Ref.setCurrent(false);
+      } else {
         getTeams(
           AuthenticityToken.fromHead(),
           courseId,
@@ -293,13 +292,28 @@ let make = (~levels, ~course) => {
           state.filter.level,
           state.filter.search,
           [||],
-        )
-      | FullyLoaded(_)
-      | PartiallyLoaded(_, _) => ()
+        );
       };
+
       None;
     },
     [|state.filter|],
+  );
+
+  React.useEffect1(
+    () => {
+      getTeams(
+        AuthenticityToken.fromHead(),
+        courseId,
+        None,
+        setState,
+        None,
+        None,
+        [||],
+      );
+      None;
+    },
+    [|levels|],
   );
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -344,7 +358,7 @@ let make = (~levels, ~course) => {
           </div>
         </div>
       </div>
-      <div className="max-w-3xl mx-auto">
+      <div className=" max-w-3xl mx-auto">
         {switch (state.teams) {
          | Unloaded =>
            SkeletonLoading.multiple(

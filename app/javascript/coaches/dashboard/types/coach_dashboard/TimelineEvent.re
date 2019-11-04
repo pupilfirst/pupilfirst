@@ -12,10 +12,6 @@ type t = {
   evaluator: option(string),
 };
 
-type reviewResult =
-  | Passed
-  | Failed;
-
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", int),
@@ -66,14 +62,8 @@ let reviewPending = tes =>
 let reviewComplete = tes =>
   tes |> List.filter(te => !(te.evaluation |> Grading.pending));
 
-let getReviewResult = (passGrade, t) =>
-  t.evaluation |> Grading.anyFail(passGrade) ? Failed : Passed;
-
-let resultAsString = reviewResult =>
-  switch (reviewResult) {
-  | Passed => "Passed"
-  | Failed => "Failed"
-  };
+let passed = (~passGrade, t) =>
+  !(t.evaluation |> Grading.anyFail(passGrade));
 
 let evaluation = t => t.evaluation;
 

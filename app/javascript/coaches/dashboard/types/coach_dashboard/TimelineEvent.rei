@@ -1,9 +1,5 @@
 type t;
 
-type reviewResult =
-  | Passed
-  | Failed;
-
 let title: t => string;
 
 let createdAt: t => DateTime.t;
@@ -32,9 +28,7 @@ let updateEvaluator: (string, t) => t;
 
 let updateEvaluation: (list(Grading.t), t) => t;
 
-let getReviewResult: (int, t) => reviewResult;
-
-let resultAsString: reviewResult => string;
+let passed: (~passGrade: int, t) => bool;
 
 let evaluation: t => list(Grading.t);
 

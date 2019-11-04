@@ -9,21 +9,19 @@ let teLinks = timelineEvent =>
   | [] => ReasonReact.null
   | links =>
     <div>
-      {
-        links
-        |> List.map(link =>
-             <a
-               href=link
-               target="_blank"
-               rel="noopener"
-               className="badge badge-secondary font-regular mr-2"
-               key=link>
-               {link |> str}
-             </a>
-           )
-        |> Array.of_list
-        |> ReasonReact.array
-      }
+      {links
+       |> List.map(link =>
+            <a
+              href=link
+              target="_blank"
+              rel="noopener"
+              className="badge badge-secondary font-regular mr-2"
+              key=link>
+              {link |> str}
+            </a>
+          )
+       |> Array.of_list
+       |> ReasonReact.array}
     </div>
   };
 
@@ -32,24 +30,22 @@ let teFiles = timelineEvent =>
   | [] => ReasonReact.null
   | files =>
     <div>
-      {
-        files
-        |> List.map(file => {
-             let id = file |> File.id |> string_of_int;
-             let url = "/timeline_event_files/" ++ id ++ "/download";
-             <a
-               href=url
-               target="_blank"
-               rel="noopener"
-               className="badge badge-secondary font-regular mr-2"
-               key=id>
-               <i className="fa fa-file mr-1" />
-               {file |> File.title |> str}
-             </a>;
-           })
-        |> Array.of_list
-        |> ReasonReact.array
-      }
+      {files
+       |> List.map(file => {
+            let id = file |> File.id |> string_of_int;
+            let url = "/timeline_event_files/" ++ id ++ "/download";
+            <a
+              href=url
+              target="_blank"
+              rel="noopener"
+              className="badge badge-secondary font-regular mr-2"
+              key=id>
+              <i className="fa fa-file mr-1" />
+              {file |> File.title |> str}
+            </a>;
+          })
+       |> Array.of_list
+       |> ReasonReact.array}
     </div>
   };
 
@@ -97,21 +93,17 @@ let make =
             </h5>
             <h6
               className="timeline-event-card__header-subtext font-regular mb-0">
-              {
-                founders
-                |> Founder.withIds(timelineEvent |> TimelineEvent.founderIds)
-                |> Founder.founderNames
-                |> str
-              }
+              {founders
+               |> Founder.withIds(timelineEvent |> TimelineEvent.founderIds)
+               |> Founder.founderNames
+               |> str}
               <span
                 className="timeline-event-card__header-date-field pl-2 ml-2">
                 <i className="fa fa-calendar mr-1" />
-                {
-                  timelineEvent
-                  |> TimelineEvent.createdAt
-                  |> DateTime.format(DateTime.OnlyDate)
-                  |> str
-                }
+                {timelineEvent
+                 |> TimelineEvent.createdAt
+                 |> DateTime.format(DateTime.OnlyDate)
+                 |> str}
               </span>
             </h6>
           </div>
@@ -133,49 +125,45 @@ let make =
             "col-md-5 d-flex flex-column align-items-center timeline-event-card__review-box p-0 js-timeline-event-card__review-box-"
             ++ (timelineEvent |> TimelineEvent.id |> string_of_int)
           }>
-          {
-            timelineEvent |> TimelineEvent.evaluation |> Grading.pending ?
-              <EvaluationForm
-                timelineEvent
-                gradeLabels
-                replaceTimelineEvent
-                authenticityToken
-                passGrade
-                coachName
-              /> :
-              <div className="w-100">
-                <ReviewStatusBadge
-                  reviewResult={
-                    timelineEvent |> TimelineEvent.getReviewResult(passGrade)
-                  }
-                  notAcceptedIconUrl
-                  verifiedIconUrl
-                />
-                {
-                  let evaluation = timelineEvent |> TimelineEvent.evaluation;
-                  evaluation
-                  |> List.map(grading =>
-                       <div
-                         key={grading |> Grading.criterionId}
-                         className="mx-3 mb-3">
-                         <GradeBar.Jsx2 grading gradeLabels passGrade />
-                       </div>
-                     )
-                  |> Array.of_list
-                  |> ReasonReact.array;
-                }
-                <div
-                  className="timeline-event-card__evaluator-details row flex-row-reverse w-full justify-content-between px-3">
-                  <div className="col-12 col-md-auto">
-                    <UndoReviewButton
-                      timelineEvent
-                      replaceTimelineEvent
-                      authenticityToken
-                    />
-                  </div>
-                  <div className="col-12 col-md-auto">
-                    {
-                      switch (timelineEvent |> TimelineEvent.evaluator) {
+          {timelineEvent |> TimelineEvent.evaluation |> Grading.pending
+             ? <EvaluationForm
+                 timelineEvent
+                 gradeLabels
+                 replaceTimelineEvent
+                 authenticityToken
+                 passGrade
+                 coachName
+               />
+             : <div className="w-100">
+                 <ReviewStatusBadge
+                   passed={timelineEvent |> TimelineEvent.passed(~passGrade)}
+                   notAcceptedIconUrl
+                   verifiedIconUrl
+                 />
+                 {
+                   let evaluation = timelineEvent |> TimelineEvent.evaluation;
+                   evaluation
+                   |> List.map(grading =>
+                        <div
+                          key={grading |> Grading.criterionId}
+                          className="mx-3 mb-3">
+                          <GradeBar.Jsx2 grading gradeLabels passGrade />
+                        </div>
+                      )
+                   |> Array.of_list
+                   |> ReasonReact.array;
+                 }
+                 <div
+                   className="timeline-event-card__evaluator-details row flex-row-reverse w-full justify-content-between px-3">
+                   <div className="col-12 col-md-auto">
+                     <UndoReviewButton
+                       timelineEvent
+                       replaceTimelineEvent
+                       authenticityToken
+                     />
+                   </div>
+                   <div className="col-12 col-md-auto">
+                     {switch (timelineEvent |> TimelineEvent.evaluator) {
                       | Some(evaluator) =>
                         <div className="text-center sm:text-left">
                           <h6
@@ -187,12 +175,10 @@ let make =
                           </div>
                         </div>
                       | None => ReasonReact.null
-                      }
-                    }
-                  </div>
-                </div>
-              </div>
-          }
+                      }}
+                   </div>
+                 </div>
+               </div>}
           <FeedbackForm timelineEvent replaceTimelineEvent authenticityToken />
           <div />
         </div>

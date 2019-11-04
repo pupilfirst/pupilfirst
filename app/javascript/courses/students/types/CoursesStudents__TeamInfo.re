@@ -41,7 +41,7 @@ let make = (~id, ~name, ~levelId, ~students) => {
   students,
 };
 
-let decodeJS = teamDetails => {
+let makeFromJS = teamDetails => {
   teamDetails
   |> Js.Array.map(team =>
        switch (team) {

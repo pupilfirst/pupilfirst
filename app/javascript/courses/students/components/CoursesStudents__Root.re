@@ -44,7 +44,7 @@ let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
     (
       switch (nodes) {
       | None => [||]
-      | Some(teamsArray) => teamsArray |> TeamInfo.decodeJS
+      | Some(teamsArray) => teamsArray |> TeamInfo.makeFromJS
       }
     )
     |> Array.to_list

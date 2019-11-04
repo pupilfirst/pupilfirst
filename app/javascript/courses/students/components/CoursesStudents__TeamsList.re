@@ -61,7 +61,9 @@ let showStudent = (team, levels, openOverlayCB) => {
         </div>
       </div>
     </div>
-    <div className="w-2/6 flex items-center justify-end p-3 md:p-4">
+    <div
+      ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
+      className="w-2/6 flex items-center justify-end p-3 md:p-4">
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </div>;
@@ -110,7 +112,9 @@ let showTeam = (team, levels, openOverlayCB) => {
           </h3>
         </div>
       </div>
-      <div className="flex-shrink-0">
+      <div
+        ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
+        className="flex-shrink-0">
         {levelInfo(team |> TeamInfo.levelId, levels)}
       </div>
     </div>

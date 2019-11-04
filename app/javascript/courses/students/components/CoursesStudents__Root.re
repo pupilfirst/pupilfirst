@@ -340,6 +340,7 @@ let make = (~levels, ~course) => {
                | Some(_text) =>
                  <button
                    onClick={event => onClearSearch(setState, event)}
+                   name="clear-student-search"
                    type_="button"
                    className="course-students__student-search-input-cancel-button absolute right-0 top-0 text-gray-700 cursor-pointer hover:text-gray-900 text-lg px-1 py-px z-10 mr-2 flex items-center h-full focus:outline-none">
                    <i className="fas fa-times-circle" />

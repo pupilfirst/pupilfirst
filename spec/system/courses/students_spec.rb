@@ -21,6 +21,9 @@ feature "Course students list", js: true do
 
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
+    10.times do
+      create :startup, level: level_3
+    end
   end
 
   scenario 'coach checks the complete list of students' do
@@ -28,10 +31,21 @@ feature "Course students list", js: true do
 
     expect(page).to have_button('All Levels')
 
-    # Check if teams from all levels are listed
-    expect(page).to have_text(team_1.name)
-    expect(page).to have_text(team_3.name)
-    expect(page).to have_text(team_6.name)
+    teams_sorted_by_name = course.startups.order(:name).to_a
+
+    # Check if the first ten teams are listed
+    expect(page).to have_text(teams_sorted_by_name[0].name)
+    expect(page).to have_text(teams_sorted_by_name[1].name)
+    expect(page).to have_text(teams_sorted_by_name[9].name)
+
+    # Check if teams in next page are not listed
+    expect(page).to_not have_text(teams_sorted_by_name[10].name)
+    expect(page).to_not have_text(teams_sorted_by_name[11].name)
+
+    click_button('Load More...')
+
+    expect(page).to have_text(teams_sorted_by_name[10].name)
+    expect(page).to have_text(teams_sorted_by_name[11].name)
 
     # Check if founders are listed
     course.startups.each do |startup|
@@ -55,21 +69,52 @@ feature "Course students list", js: true do
   scenario 'coach searches for and filters students by level' do
     sign_in_user coach.user, referer: students_course_path(course)
 
-    expect(page).to have_text(team_1.name)
+    expect(page).to have_text(course.startups.order('name').first.name)
 
     # Filter by level
     click_button 'All Levels'
     click_button "Level 1 | #{level_1.name}"
 
-    expect(page).to have_text(team_1.name)
     expect(page).not_to have_text(team_5.name)
+    expect(page).to have_text(team_1.name)
 
     click_button "Level 1 | #{level_1.name}"
-    click_button "Level 3 | #{level_3.name}"
+    click_button "Level 2 | #{level_2.name}"
 
     expect(page).not_to have_text("Level 1 | #{level_1.name}")
 
-    expect(page).to have_text(team_5.name)
+    expect(page).to have_text(team_3.name)
     expect(page).not_to have_text(team_1.name)
+
+    # Search for a student in the filtered level
+    student_name = team_3.founders.first.name
+    fill_in 'student_search', with: student_name
+    click_button 'Search'
+
+    expect(page).to have_text(student_name)
+    expect(page).to_not have_text(team_2.name)
+
+    # Clear the search
+    click_button 'clear-student-search'
+
+    expect(page).to have_text(team_2.name)
+    expect(page).to have_text(team_3.name)
+
+    # Switch to level which will have pagination
+    click_button "Level 2 | #{level_2.name}"
+    click_button "Level 3 | #{level_3.name}"
+    expect(page).to_not have_text(team_1.name)
+
+    click_button('Load More...')
+    expect(page).to have_text(team_6.name)
+
+    # Clear the level filter
+    click_button "Level 3 | #{level_3.name}"
+    click_button 'All Levels'
+
+    click_button('Load More...')
+    expect(page).to have_text(team_1.name)
+    expect(page).to have_text(team_3.name)
+    expect(page).to have_text(team_6.name)
   end
 end

@@ -315,7 +315,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
     ariaLabel="submission-status"
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
     <div
-      className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center mt-4 md:mt-0 w-full md:pl-6">
+      className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
       {switch (submission |> Submission.evaluatedAt, status) {
        | (Some(date), Graded(_)) =>
          <div
@@ -518,15 +518,13 @@ let make =
        )}
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
         <h5 className="font-semibold text-sm flex items-center">
-          <Icon
-            className="if i-tachometer-regular text-gray-800 text-base md:text-lg"
-          />
+          <Icon className="if i-tachometer-regular text-gray-800 text-base" />
           <span className="ml-2 md:ml-3 tracking-wide">
             {"Grade Card" |> str}
           </span>
         </h5>
         <div
-          className="flex md:flex-row flex-col-reverse ml-7 md:ml-8 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+          className="flex md:flex-row flex-col-reverse ml-6 md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>
@@ -561,7 +559,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white pt-4 mr-3 ml-11 md:mr-6 md:ml-14">
+       <div className="bg-white pt-4 mr-3 ml-10 md:mr-6 md:ml-13">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

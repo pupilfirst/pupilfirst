@@ -1,4 +1,5 @@
 type t = {
+  [@live]
   name: string,
   levelId: string,
   accessEndsAt: option(string),

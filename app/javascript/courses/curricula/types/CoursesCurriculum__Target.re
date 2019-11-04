@@ -6,6 +6,7 @@ type role =
 
 type t = {
   id: string,
+  [@live]
   role,
   title: string,
   targetGroupId: string,

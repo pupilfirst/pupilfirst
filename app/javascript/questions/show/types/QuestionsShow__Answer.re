@@ -42,9 +42,6 @@ let answerFromUser = (userId, answers) =>
 
 let archived = t => t.archived;
 
-let findAnswer = (answerId, answers) =>
-  answers |> List.filter(answer => answer.id == answerId) |> List.hd;
-
 let delete = (id, answers) => answers |> List.filter(a => a.id != id);
 
 let create =

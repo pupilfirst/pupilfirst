@@ -139,7 +139,7 @@ module Targets
 
     def answer_options(question)
       question.answer_options.map do |answer|
-        answer.attributes.slice('id', 'value', 'hint')
+        answer.attributes.slice('id', 'value')
       end
     end
 

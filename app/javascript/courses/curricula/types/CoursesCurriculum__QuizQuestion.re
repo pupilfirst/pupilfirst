@@ -1,7 +1,6 @@
 type answerOption = {
   id: string,
   value: string,
-  hint: option(string),
 };
 
 type t = {
@@ -14,7 +13,6 @@ let decodeAnswerOption = json =>
   Json.Decode.{
     id: json |> field("id", string),
     value: json |> field("value", string),
-    hint: json |> field("hint", nullable(string)) |> Js.Null.toOption,
   };
 
 let decode = json =>
@@ -33,8 +31,6 @@ let answerOptions = t => t.answerOptions;
 let answerId = answerOption => answerOption.id;
 
 let answerValue = answerOption => answerOption.value;
-
-let answerHint = answerOption => answerOption.hint;
 
 let lastQuestion = questions => {
   let maxIndex =

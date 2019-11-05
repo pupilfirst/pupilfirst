@@ -46,9 +46,9 @@ let make =
     </div>
     <div
       className="flex px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
-      <span className="mr-2 md:mr-3 pt-5 md:pt-4">
+      <span className="mr-2 md:mr-3 pt-5">
         <Icon
-          className="if i-comment-alt-regular text-gray-800 text-base md:text-lg"
+          className="if i-comment-alt-regular text-gray-800 text-base"
         />
       </span>
       <div className="w-full" ariaLabel="feedback">

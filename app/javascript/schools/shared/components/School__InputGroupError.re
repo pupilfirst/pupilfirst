@@ -17,8 +17,6 @@ let make = (~message, ~active) =>
   };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("SchoolInputGroupError");
-
   let make = (~message, ~active, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

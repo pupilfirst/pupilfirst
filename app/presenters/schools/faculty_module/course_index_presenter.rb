@@ -28,7 +28,6 @@ module Schools
           {
             id: faculty.id,
             name: faculty.user.name,
-            email: faculty.user.email,
             title: faculty.user.title,
             imageUrl: faculty.user.image_or_avatar_url,
             teams: faculty_team_details(faculty)

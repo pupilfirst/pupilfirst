@@ -7,12 +7,10 @@ let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", ~children) =>
     <div className="drawer-right">
       <div className="drawer-right__close absolute">
         <button
-          onClick={
-            e => {
-              e |> ReactEvent.Mouse.preventDefault;
-              closeDrawerCB();
-            }
-          }
+          onClick={e => {
+            e |> ReactEvent.Mouse.preventDefault;
+            closeDrawerCB();
+          }}
           title=closeButtonTitle
           className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
           <i className="fas fa-times text-xl" />
@@ -23,9 +21,6 @@ let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", ~children) =>
   </div>;
 
 module Jsx2 = {
-  let component =
-    ReasonReact.statelessComponent("SchoolCustomize__EditorDrawer");
-
   let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

@@ -18,8 +18,6 @@ let milestone = t => t.milestone;
 
 let levelId = t => t.levelId;
 
-let sortIndex = t => t.sortIndex;
-
 let archived = t => t.archived;
 
 let decode = json =>

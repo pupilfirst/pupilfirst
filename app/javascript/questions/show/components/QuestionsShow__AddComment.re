@@ -65,7 +65,6 @@ let make =
         currentUserId,
         commentableId,
         commentableType,
-        false,
         currentTime(),
       );
     setValue(_ => "");
@@ -107,15 +106,13 @@ let make =
           onChange={event => setValue(ReactEvent.Form.target(event)##value)}
           className="community-qa-comment__input text-xs text-left bg-gray-200 py-3 px-4 rounded-b appearance-none block w-full leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white"
         />
-        {
-          validComment ?
-            <button
-              onClick=handleCreateComment
-              className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 btn-primary appearance-none focus:outline-none text-center">
-              {"Comment" |> str}
-            </button> :
-            ReasonReact.null
-        }
+        {validComment
+           ? <button
+               onClick=handleCreateComment
+               className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 btn-primary appearance-none focus:outline-none text-center">
+               {"Comment" |> str}
+             </button>
+           : ReasonReact.null}
       </DisablingCover>
     </div>
   </div>;

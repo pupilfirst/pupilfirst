@@ -14,14 +14,3 @@ let make = (~className) => {
   );
   <span className="inline-flex" key=className> <i className /> </span>;
 };
-
-module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Icon");
-
-  let make = (~className, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~className, ()),
-      children,
-    );
-};

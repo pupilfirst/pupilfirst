@@ -139,7 +139,6 @@ let updateSubmission =
                  ~coachTitle=currentCoach |> Coach.title,
                  ~createdAt=Js.Date.make(),
                  ~value=f,
-                 ~id=Js.Date.now() |> Js.Float.toString,
                ),
              |])
     | None => submission |> Submission.feedback

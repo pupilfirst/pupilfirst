@@ -97,8 +97,6 @@ let make = (~name, ~className) => {
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Avatar");
-
   let make = (~name, ~className, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

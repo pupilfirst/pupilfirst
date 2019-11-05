@@ -11,7 +11,6 @@ let handleApiError =
 
 type state = {
   name: string,
-  imageUrl: string,
   email: string,
   title: string,
   linkedinUrl: string,
@@ -105,7 +104,6 @@ let make =
     switch (coach) {
     | None => {
         name: "",
-        imageUrl: "",
         email: "",
         title: "",
         linkedinUrl: "",
@@ -125,7 +123,6 @@ let make =
       }
     | Some(coach) => {
         name: coach |> Coach.name,
-        imageUrl: coach |> Coach.imageUrl,
         email: coach |> Coach.email,
         title: coach |> Coach.title,
         linkedinUrl:

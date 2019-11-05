@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-let str = React.string;
-
 module SortContentBlockMutation = [%graphql
   {|
    mutation($contentBlockIds: [ID!]!) {

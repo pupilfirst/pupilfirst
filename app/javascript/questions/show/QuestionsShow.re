@@ -15,7 +15,6 @@ type action =
   | UpdateQuestion(Question.t)
   | UpdateAnswer(Answer.t)
   | RemoveAnswer(string)
-  | UpdateComment(Comment.t)
   | RemoveComment(string);
 
 type state = {
@@ -55,10 +54,6 @@ let reducer = (state, action) =>
   | UpdateAnswer(answer) => {
       ...state,
       answers: Answer.updateAnswer(state.answers, answer),
-    }
-  | UpdateComment(comment) => {
-      ...state,
-      comments: Comment.updateComment(state.comments, comment),
     }
   };
 
@@ -116,8 +111,8 @@ let make =
     );
   let addCommentCB = comment => dispatch(AddComment(comment));
   let handleAnswerCB = (answer, newAnswer) =>
-    newAnswer ?
-      dispatch(AddAnswer(answer, false)) : dispatch(UpdateAnswer(answer));
+    newAnswer
+      ? dispatch(AddAnswer(answer, false)) : dispatch(UpdateAnswer(answer));
   let addLikeCB = like => dispatch(AddLike(like));
   let removeLikeCB = id => dispatch(RemoveLike(id));
   let updateQuestionCB = (title, description) =>
@@ -145,41 +140,37 @@ let make =
 
   <div className="bg-gray-100">
     <div className="flex-col px-2 md:px-6 py-2 items-center justify-between">
-      {
-        state.showQuestionEdit ?
-          <div>
-            <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-              <a
-                id="close-button"
-                className="btn btn-default cursor-default"
-                onClick={
-                  event => {
-                    event |> ReactEvent.Mouse.preventDefault;
-                    dispatch(UpdateShowQuestionEdit(false));
-                  }
-                }>
-                <i className="fas fa-arrow-left" />
-                <span className="ml-2"> {"Close" |> str} </span>
-              </a>
-            </div>
-            <QuestionsEditor
-              authenticityToken
-              communityId
-              target=None
-              showBackButton=false
-              question={state.question}
-              updateQuestionCB
-            />
-          </div> :
-          <div className="flex flex-col">
-            <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-              <a className="btn btn-default" href=communityPath>
-                <i className="fas fa-arrow-left" />
-                <span className="ml-2"> {"Back" |> str} </span>
-              </a>
-            </div>
-            {
-              switch (target) {
+      {state.showQuestionEdit
+         ? <div>
+             <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
+               <a
+                 id="close-button"
+                 className="btn btn-default cursor-default"
+                 onClick={event => {
+                   event |> ReactEvent.Mouse.preventDefault;
+                   dispatch(UpdateShowQuestionEdit(false));
+                 }}>
+                 <i className="fas fa-arrow-left" />
+                 <span className="ml-2"> {"Close" |> str} </span>
+               </a>
+             </div>
+             <QuestionsEditor
+               authenticityToken
+               communityId
+               target=None
+               showBackButton=false
+               question={state.question}
+               updateQuestionCB
+             />
+           </div>
+         : <div className="flex flex-col">
+             <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
+               <a className="btn btn-default" href=communityPath>
+                 <i className="fas fa-arrow-left" />
+                 <span className="ml-2"> {"Back" |> str} </span>
+               </a>
+             </div>
+             {switch (target) {
               | Some(target) =>
                 <div className="max-w-3xl w-full mt-5 mx-auto">
                   <div
@@ -190,31 +181,26 @@ let make =
                       </span>
                       <span> {target |> Target.title |> str} </span>
                     </p>
-                    {
-                      switch (target |> Target.id) {
-                      | Some(id) =>
-                        <a
-                          href={"/targets/" ++ id} className="btn btn-default">
-                          {"View Target" |> str}
-                        </a>
-                      | None => React.null
-                      }
-                    }
+                    {switch (target |> Target.id) {
+                     | Some(id) =>
+                       <a href={"/targets/" ++ id} className="btn btn-default">
+                         {"View Target" |> str}
+                       </a>
+                     | None => React.null
+                     }}
                   </div>
                 </div>
               | None => React.null
-              }
-            }
-            <div
-              className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden z-10">
-              <div className="flex w-full">
-                <div
-                  title="Question block"
-                  className="flex flex-col w-full relative">
-                  <div
-                    className="absolute right-0 top-0 flex border border-t-0 border-r-0 border-gray-400 bg-gray-200 rounded-bl">
-                    {
-                      switch (state.question |> Question.editorId) {
+              }}
+             <div
+               className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden z-10">
+               <div className="flex w-full">
+                 <div
+                   title="Question block"
+                   className="flex flex-col w-full relative">
+                   <div
+                     className="absolute right-0 top-0 flex border border-t-0 border-r-0 border-gray-400 bg-gray-200 rounded-bl">
+                     {switch (state.question |> Question.editorId) {
                       | Some(_) =>
                         <a
                           href={
@@ -228,131 +214,121 @@ let make =
                           <span className="ml-2"> {"History" |> str} </span>
                         </a>
                       | None => React.null
-                      }
-                    }
-                    {
-                      state.question
+                      }}
+                     {state.question
                       |> Question.creatorId == currentUserId
-                      || isCoach ?
-                        <div className="flex">
-                          <a
-                            onClick={
-                              _ => dispatch(UpdateShowQuestionEdit(true))
-                            }
-                            title="Edit Question"
-                            className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-800 border-r border-gray-400 cursor-pointer">
-                            <i className="fas fa-edit text-sm" />
-                            <span className="ml-2"> {"Edit" |> str} </span>
-                          </a>
-                          <QuestionsShow__ArchiveManager
-                            authenticityToken
-                            id={question |> Question.id}
-                            resourceType="Question"
-                            archiveCB
-                          />
-                        </div> :
-                        React.null
-                    }
-                  </div>
-                  <div className="pt-7 px-3 md:px-6 flex flex-col">
-                    <h1
-                      className="text-base md:text-xl text-black font-semibold break-words">
-                      {state.question |> Question.title |> str}
-                    </h1>
-                  </div>
-                  <div className="pb-4 pt-2 px-3 md:px-6 flex flex-col">
-                    <MarkdownBlock
-                      markdown={state.question |> Question.description}
-                      className="leading-normal text-sm"
-                      profile=Markdown.QuestionAndAnswer
-                    />
-                    {
-                      switch (state.question |> Question.editorId) {
+                      || isCoach
+                        ? <div className="flex">
+                            <a
+                              onClick={_ =>
+                                dispatch(UpdateShowQuestionEdit(true))
+                              }
+                              title="Edit Question"
+                              className="inline-flex items-center whitespace-no-wrap text-xs font-semibold py-1 px-3 bg-transparent hover:bg-primary-100 hover:text-primary-500 text-gray-800 border-r border-gray-400 cursor-pointer">
+                              <i className="fas fa-edit text-sm" />
+                              <span className="ml-2"> {"Edit" |> str} </span>
+                            </a>
+                            <QuestionsShow__ArchiveManager
+                              authenticityToken
+                              id={question |> Question.id}
+                              resourceType="Question"
+                              archiveCB
+                            />
+                          </div>
+                        : React.null}
+                   </div>
+                   <div className="pt-7 px-3 md:px-6 flex flex-col">
+                     <h1
+                       className="text-base md:text-xl text-black font-semibold break-words">
+                       {state.question |> Question.title |> str}
+                     </h1>
+                   </div>
+                   <div className="pb-4 pt-2 px-3 md:px-6 flex flex-col">
+                     <MarkdownBlock
+                       markdown={state.question |> Question.description}
+                       className="leading-normal text-sm"
+                       profile=Markdown.QuestionAndAnswer
+                     />
+                     {switch (state.question |> Question.editorId) {
                       | Some(editorId) =>
                         <div>
                           <div
                             className="text-xs mt-2 inline-block px-2 py-1 rounded bg-orange-100 text-orange-900">
                             <span> {"Last edited by " |> str} </span>
                             <span className="font-semibold">
-                              {
-                                users
-                                |> User.findById(editorId)
-                                |> User.name
-                                |> str
-                              }
+                              {users
+                               |> User.findById(editorId)
+                               |> User.name
+                               |> str}
                             </span>
                             <span>
-                              {
-                                " on "
-                                ++ (
-                                  state.question
-                                  |> Question.updatedAt
-                                  |> DateTime.stingToFormatedTime(
-                                       DateTime.DateWithYearAndTime,
-                                     )
-                                )
-                                |> str
-                              }
+                              {" on "
+                               ++ (
+                                 state.question
+                                 |> Question.updatedAt
+                                 |> DateTime.stingToFormatedTime(
+                                      DateTime.DateWithYearAndTime,
+                                    )
+                               )
+                               |> str}
                             </span>
                           </div>
                         </div>
                       | None => React.null
-                      }
-                    }
-                  </div>
-                  <div
-                    className="flex flex-row justify-between px-3 md:px-6 pb-6">
-                    <div className="pr-2 pt-6 text-center">
-                      <i className="far fa-comments text-xl text-gray-600" />
-                      <p className="text-xs py-1">
-                        {
-                          state.comments
+                      }}
+                   </div>
+                   <div
+                     className="flex flex-row justify-between px-3 md:px-6 pb-6">
+                     <div className="pr-2 pt-6 text-center">
+                       <i className="far fa-comments text-xl text-gray-600" />
+                       <p className="text-xs py-1">
+                         {state.comments
                           |> Comment.commentsForQuestion
                           |> List.length
                           |> string_of_int
-                          |> str
-                        }
-                      </p>
-                    </div>
-                    <QuestionsShow__UserShow
-                      user={
-                        users
-                        |> User.findById(state.question |> Question.creatorId)
-                      }
-                      createdAt={state.question |> Question.createdAt}
-                      textForTimeStamp="Asked"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <QuestionsShow__CommentShow
-              comments={state.comments |> Comment.commentsForQuestion}
-              users
-              authenticityToken
-              commentableType="Question"
-              commentableId={state.question |> Question.id}
-              addCommentCB
-              currentUserId
-              archiveCB
-              isCoach
-            />
-            <div
-              className="max-w-3xl w-full justify-center mx-auto pt-8 pb-2 border-b">
-              <div className="flex items-end">
-                <span className="text-lg font-semibold">
-                  {
-                    let numberOfAnswers = filteredAnswers |> List.length;
-                    (numberOfAnswers |> string_of_int)
-                    ++ (numberOfAnswers == 1 ? " Answer" : " Answers")
-                    |> str;
-                  }
-                </span>
-              </div>
-            </div>
-            <div className="community-answer-container">
-              {
-                filteredAnswers
+                          |> str}
+                       </p>
+                     </div>
+                     <QuestionsShow__UserShow
+                       user={
+                         users
+                         |> User.findById(
+                              state.question |> Question.creatorId,
+                            )
+                       }
+                       createdAt={state.question |> Question.createdAt}
+                       textForTimeStamp="Asked"
+                     />
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <QuestionsShow__CommentShow
+               comments={state.comments |> Comment.commentsForQuestion}
+               users
+               authenticityToken
+               commentableType="Question"
+               commentableId={state.question |> Question.id}
+               addCommentCB
+               currentUserId
+               archiveCB
+               isCoach
+             />
+             <div
+               className="max-w-3xl w-full justify-center mx-auto pt-8 pb-2 border-b">
+               <div className="flex items-end">
+                 <span className="text-lg font-semibold">
+                   {
+                     let numberOfAnswers = filteredAnswers |> List.length;
+                     (numberOfAnswers |> string_of_int)
+                     ++ (numberOfAnswers == 1 ? " Answer" : " Answers")
+                     |> str;
+                   }
+                 </span>
+               </div>
+             </div>
+             <div className="community-answer-container">
+               {filteredAnswers
                 |> List.sort((answerA, answerB) =>
                      DateFns.differenceInSeconds(
                        answerB |> Answer.createdAt |> DateFns.parseString,
@@ -383,34 +359,30 @@ let make =
                      />
                    )
                 |> Array.of_list
-                |> ReasonReact.array
-              }
-            </div>
-            {
-              showAnswersCreateComponent(
+                |> ReasonReact.array}
+             </div>
+             {showAnswersCreateComponent(
                 state.answers,
                 state.showAnswerCreate,
                 currentUserId,
-              ) ?
-                <QuestionsShow__AnswerEditor
-                  question={state.question}
-                  authenticityToken
-                  currentUserId
-                  handleAnswerCB
-                /> :
-                <div
-                  className="community-ask-button-container mt-4 my-8 max-w-3xl w-full flex mx-auto justify-center">
-                  <div className="bg-gray-100 px-1 z-10">
-                    <button
-                      className="btn btn-primary"
-                      onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
-                      {"Add another answer" |> str}
-                    </button>
-                  </div>
-                </div>
-            }
-          </div>
-      }
+              )
+                ? <QuestionsShow__AnswerEditor
+                    question={state.question}
+                    authenticityToken
+                    currentUserId
+                    handleAnswerCB
+                  />
+                : <div
+                    className="community-ask-button-container mt-4 my-8 max-w-3xl w-full flex mx-auto justify-center">
+                    <div className="bg-gray-100 px-1 z-10">
+                      <button
+                        className="btn btn-primary"
+                        onClick={_ => dispatch(UpdateShowAnswerCreate(true))}>
+                        {"Add another answer" |> str}
+                      </button>
+                    </div>
+                  </div>}
+           </div>}
     </div>
   </div>;
 };

@@ -7,18 +7,16 @@ let str = React.string;
 let gradeDescription = (gradeLabels, grading) =>
   <div className="grade-bar__criterion-name">
     {grading |> Grading.criterionName |> str}
-    {
-      switch (grading |> Grading.grade) {
-      | Some(grade) =>
-        <span>
-          {": " |> str}
-          <span className="grade-bar__grade-label">
-            {grade |> GradeLabel.labelFor(gradeLabels) |> str}
-          </span>
-        </span>
-      | None => ReasonReact.null
-      }
-    }
+    {switch (grading |> Grading.grade) {
+     | Some(grade) =>
+       <span>
+         {": " |> str}
+         <span className="grade-bar__grade-label">
+           {grade |> GradeLabel.labelFor(gradeLabels) |> str}
+         </span>
+       </span>
+     | None => ReasonReact.null
+     }}
   </div>;
 
 let maxGrade = gradeLabels =>
@@ -31,16 +29,16 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
     | None => ""
     | Some(grade) when pillGrade > grade => ""
     | Some(grade) =>
-      grade < passGrade ?
-        " grade-bar__grade-pill--failed" : " grade-bar__grade-pill--passed"
+      grade < passGrade
+        ? " grade-bar__grade-pill--failed" : " grade-bar__grade-pill--passed"
     };
   let selectableModifier =
     switch (callBack) {
     | None => ""
     | Some(_callBack) =>
-      pillGrade < passGrade ?
-        " grade-bar__grade-pill--selectable-fail cursor-pointer" :
-        " grade-bar__grade-pill--selectable-pass cursor-pointer"
+      pillGrade < passGrade
+        ? " grade-bar__grade-pill--selectable-fail cursor-pointer"
+        : " grade-bar__grade-pill--selectable-pass cursor-pointer"
     };
   defaultClasses ++ resultModifier ++ selectableModifier;
 };
@@ -48,15 +46,13 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
 let gradeBarHeader = (grading, gradeLabels) =>
   <div className="grade-bar__header pb-1">
     {grading |> gradeDescription(gradeLabels)}
-    {
-      switch (grading |> Grading.grade) {
-      | None => ReasonReact.null
-      | Some(grade) =>
-        <div className="grade-bar__grade font-semibold">
-          {(grade |> string_of_int) ++ "/" ++ maxGrade(gradeLabels) |> str}
-        </div>
-      }
-    }
+    {switch (grading |> Grading.grade) {
+     | None => ReasonReact.null
+     | Some(grade) =>
+       <div className="grade-bar__grade font-semibold">
+         {(grade |> string_of_int) ++ "/" ++ maxGrade(gradeLabels) |> str}
+       </div>
+     }}
   </div>;
 
 let handleClick = (gradeSelectCB, grading, newGrade) =>
@@ -72,33 +68,27 @@ let gradeBarPill = (gradeLabel, grading, gradeSelectCB, passGrade) => {
     title={gradeLabel |> GradeLabel.label}
     role="button"
     onClick={_event => handleClick(gradeSelectCB, grading, myGrade)}
-    className={
-      gradePillClasses(
-        grading |> Grading.grade,
-        passGrade,
-        myGrade,
-        gradeSelectCB,
-      )
-    }>
-    {
-      switch (gradeSelectCB) {
-      | None => ReasonReact.null
-      | Some(_CB) => myGrade |> string_of_int |> str
-      }
-    }
+    className={gradePillClasses(
+      grading |> Grading.grade,
+      passGrade,
+      myGrade,
+      gradeSelectCB,
+    )}>
+    {switch (gradeSelectCB) {
+     | None => ReasonReact.null
+     | Some(_CB) => myGrade |> string_of_int |> str
+     }}
   </div>;
 };
 
 let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
   <div className="grade-bar__track" role="group">
-    {
-      gradeLabels
-      |> List.map(gradeLabel =>
-           gradeBarPill(gradeLabel, grading, gradeSelectCB, passGrade)
-         )
-      |> Array.of_list
-      |> ReasonReact.array
-    }
+    {gradeLabels
+     |> List.map(gradeLabel =>
+          gradeBarPill(gradeLabel, grading, gradeSelectCB, passGrade)
+        )
+     |> Array.of_list
+     |> ReasonReact.array}
   </div>;
 
 [@react.component]
@@ -109,8 +99,6 @@ let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade) =>
   </div>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("GradeBar");
-
   let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

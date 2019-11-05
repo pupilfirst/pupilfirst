@@ -14,5 +14,3 @@ let decode = json =>
 let grade = t => t.grade;
 let submissionId = t => t.submissionId;
 let evaluationCriterionId = t => t.evaluationCriterionId;
-
-let key = t => t.submissionId ++ "-" ++ t.evaluationCriterionId;

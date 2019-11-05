@@ -48,11 +48,6 @@ let handleUrlChange = (send, event) => {
   send(UpdateUrl(url, url |> UrlUtils.isInvalid(false)));
 };
 
-let handleCloseEditor = (cb, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  cb();
-};
-
 module DestroySchoolLinkQuery = [%graphql
   {|
   mutation($id: ID!) {

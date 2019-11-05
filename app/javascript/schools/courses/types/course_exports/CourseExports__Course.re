@@ -1,14 +1,7 @@
 type id = string;
 
-type t = {
-  id,
-  name: string,
-};
+type t = {id};
 
 let id = t => t.id;
 
-let decode = json =>
-  Json.Decode.{
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-  };
+let decode = json => Json.Decode.{id: json |> field("id", string)};

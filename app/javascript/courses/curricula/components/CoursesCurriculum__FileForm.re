@@ -14,8 +14,6 @@ type state = {
 type action =
   | AttachFile(string)
   | SelectFile(string, list(string))
-  | GenerateNewId
-  | ClearErrors
   | ResetForm;
 
 let defaultTitle = "Choose file to upload";
@@ -24,8 +22,6 @@ let reducer = (state, action) =>
   switch (action) {
   | AttachFile(filename) => {...state, filename, errors: []}
   | SelectFile(filename, errors) => {...state, filename, errors}
-  | GenerateNewId => {...state, formId: Random.int(99999) |> string_of_int}
-  | ClearErrors => {...state, errors: []}
   | ResetForm => {...state, errors: [], filename: defaultTitle}
   };
 
@@ -96,9 +92,9 @@ let submitForm = (filename, formId, send, addFileAttachmentCB) => {
 };
 
 let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
-  preview ?
-    Notification.notice("Preview Mode", "You cannot attach files.") :
-    (
+  preview
+    ? Notification.notice("Preview Mode", "You cannot attach files.")
+    : (
       switch (ReactEvent.Form.target(event)##files) {
       | [||] => ()
       | files =>
@@ -156,23 +152,19 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
         </span>
       </label>
     </form>
-    {
-      state.errors
-      |> List.map(error =>
-           <div className="mt-2 text-red-700 text-sm" key=error>
-             <i className="fas fa-exclamation-circle mr-2" />
-             <span> {error |> str} </span>
-           </div>
-         )
-      |> Array.of_list
-      |> React.array
-    }
-    {
-      state.errors |> ListUtils.isEmpty ?
-        React.null :
-        <div className="px-4 mt-2 text-sm">
-          {"Please choose another file for upload." |> str}
-        </div>
-    }
+    {state.errors
+     |> List.map(error =>
+          <div className="mt-2 text-red-700 text-sm" key=error>
+            <i className="fas fa-exclamation-circle mr-2" />
+            <span> {error |> str} </span>
+          </div>
+        )
+     |> Array.of_list
+     |> React.array}
+    {state.errors |> ListUtils.isEmpty
+       ? React.null
+       : <div className="px-4 mt-2 text-sm">
+           {"Please choose another file for upload." |> str}
+         </div>}
   </div>;
 };

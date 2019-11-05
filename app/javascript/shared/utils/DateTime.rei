@@ -2,7 +2,6 @@ type t;
 
 type format =
   | OnlyDate
-  | DateAndTime
   | DateWithYearAndTime;
 
 let parse: string => t;

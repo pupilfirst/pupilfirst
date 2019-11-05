@@ -6,8 +6,6 @@ let grade: t => option(int);
 
 let pending: list(t) => bool;
 
-let isFail: (int, t) => bool;
-
 let anyFail: (int, list(t)) => bool;
 
 let clearedEvaluation: list(t) => list(t);

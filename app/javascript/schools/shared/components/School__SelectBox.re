@@ -123,9 +123,6 @@ let make =
 };
 
 module Jsx2 = {
-  let component =
-    ReasonReact.statelessComponent("CurriculumEditor__SelectBox");
-
   let make = (~items, ~selectCB, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

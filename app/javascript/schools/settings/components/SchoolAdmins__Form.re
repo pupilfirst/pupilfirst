@@ -118,11 +118,6 @@ let emailInputDisabled = admin =>
   | None => false
   };
 
-let boolBtnClasses = selected => {
-  let classes = "toggle-button__button";
-  classes ++ (selected ? " toggle-button__button--active" : "");
-};
-
 [@react.component]
 let make = (~admin, ~updateCB) => {
   let (saving, setSaving) = React.useState(() => false);

@@ -5,7 +5,6 @@ type status = {
 
 type t = {
   id: string,
-  targetId: string,
   title: string,
   createdAt: Js.Date.t,
   levelId: string,
@@ -14,10 +13,8 @@ type t = {
 };
 let id = t => t.id;
 let title = t => t.title;
-let createdAt = t => t.createdAt;
 let levelId = t => t.levelId;
 let userNames = t => t.userNames;
-let targetId = t => t.targetId;
 let status = t => t.status;
 let failed = status => status.failed;
 let feedbackSent = status => status.feedbackSent;
@@ -42,7 +39,6 @@ let statusDecode = json =>
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    targetId: json |> field("targetId", string),
     title: json |> field("title", string),
     levelId: json |> field("levelId", string),
     createdAt: json |> field("createdAt", string) |> DateFns.parseString,
@@ -51,13 +47,12 @@ let decode = json =>
       json |> field("status", nullable(statusDecode)) |> Js.Null.toOption,
   };
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~targetId, ~status) => {
+let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status) => {
   id,
   title,
   createdAt,
   levelId,
   userNames,
-  targetId,
   status,
 };
 
@@ -80,7 +75,6 @@ let decodeJS = details =>
              ~createdAt=submission##createdAt |> DateFns.parseString,
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
-             ~targetId=submission##targetId,
              ~status=Some(status),
            ),
          ];

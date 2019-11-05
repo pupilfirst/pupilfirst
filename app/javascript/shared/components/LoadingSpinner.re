@@ -4,15 +4,13 @@
 
 let str = React.string;
 
-let onAnimationEnd = (loading, setRender) => {
-  switch (loading) {
-  | false => setRender(_ => false)
-  | true => ()
+let onAnimationEnd = (loading, setRender) =>
+  if (!loading) {
+    setRender(_ => false);
   };
-};
 
 let animationClass = loading => {
-  loading ? "slideUp" : "slideDown";
+  loading ? "loading-spinner__slide-up" : "loading-spinner__slide-down";
 };
 
 [@react.component]
@@ -31,7 +29,7 @@ let make = (~loading) => {
     ? <div
         className="fixed bottom-0 z-50 w-full left-0 right-0 flex justify-center w-full">
         <div
-          className={"loading-spinner-container " ++ animationClass(loading)}
+          className={"loading-spinner__container " ++ animationClass(loading)}
           onAnimationEnd={_ => onAnimationEnd(loading, setRender)}>
           <div className="loading-spinner__xs">
             <svg className="loading-spinner__svg" viewBox="0 0 50 50">

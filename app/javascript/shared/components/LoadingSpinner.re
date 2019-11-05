@@ -1,0 +1,32 @@
+[@bs.config {jsx: 3}];
+
+[%bs.raw {|require("./LoadingSpinner.css")|}];
+
+let str = React.string;
+
+[@react.component]
+let make = (~loading) => {
+  loading
+    ? <div
+        className="fixed bottom-0 z-50 w-full left-0 right-0 flex justify-center w-full">
+        <div className="loading-spinner-container slideInUp">
+          <div className="loading-spinner__xs">
+            <svg className="loading-spinner__svg" viewBox="0 0 50 50">
+              <circle
+                className="loading-spinner__svg-path"
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                strokeWidth="5"
+              />
+            </svg>
+          </div>
+          <span
+            className="inline-block ml-2 text-xs text-white font-semibold tracking-wide">
+            {"Loading..." |> str}
+          </span>
+        </div>
+      </div>
+    : React.null;
+};

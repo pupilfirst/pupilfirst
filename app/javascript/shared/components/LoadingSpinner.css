@@ -1,8 +1,4 @@
-.course-students__student-search-input::-webkit-search-cancel-button {
-  display: none;
-}
-
-.loading-spinner-container {
+.loading-spinner__container {
   @apply max-w-sm bg-primary-900 shadow-lg rounded-t-lg flex px-6 pt-3 pb-2 items-center justify-center;
 }
 
@@ -61,7 +57,7 @@
   }
 }
 
-@keyframes slideUp {
+@keyframes loading-spinner__slide-up {
   from {
     -webkit-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
@@ -73,7 +69,7 @@
   }
 }
 
-@keyframes slideDown {
+@keyframes loading-spinner__slide-down {
   from {
     visibility: visible;
     -webkit-transform: translate3d(0, 0, 0);
@@ -86,10 +82,10 @@
   }
 }
 
-.slideUp {
-  animation: slideUp 0.5s ease-in-out;
+.loading-spinner__slide-up {
+  animation: loading-spinner__slide-up 0.5s ease-in-out;
 }
 
-.slideDown {
-  animation: slideDown 0.5s ease-in-out;
+.loading-spinner__slide-down {
+  animation: loading-spinner__slide-down 0.5s ease-in-out;
 }

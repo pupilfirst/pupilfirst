@@ -5,7 +5,6 @@
 let str = React.string;
 
 let onAnimationEnd = (loading, setRender) => {
-  Js.log("test");
   switch (loading) {
   | false => setRender(_ => false)
   | true => ()

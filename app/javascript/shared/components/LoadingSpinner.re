@@ -18,9 +18,12 @@ let animationClass = loading => {
 [@react.component]
 let make = (~loading) => {
   let (shouldRender, setRender) = React.useState(() => loading);
+  let initialRender = React.useRef(true);
   React.useEffect1(
     () => {
-      if (loading) {
+      if (initialRender |> React.Ref.current) {
+        initialRender->React.Ref.setCurrent(false);
+      } else if (loading) {
         setRender(_ => true);
       };
       None;

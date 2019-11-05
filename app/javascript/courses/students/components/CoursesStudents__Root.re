@@ -9,8 +9,13 @@ type filter = {
   level: option(Level.t),
 };
 
+type loading =
+  | NotLoading
+  | Reloading
+  | LoadingMore;
+
 type state = {
-  loading: bool,
+  loading,
   teams: Teams.t,
   searchInputString: option(string),
   filter,
@@ -60,9 +65,33 @@ let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
         | (false, Some(_)) => FullyLoaded(updatedTeams)
         | (true, Some(cursor)) => PartiallyLoaded(updatedTeams, cursor)
         },
-      loading: false,
+      loading: NotLoading,
     }
   );
+};
+
+let loadingTicker = {
+  <div
+    className="fixed bottom-0 z-50 w-full left-0 right-0 flex justify-center w-full">
+    <div className="loading-spinner-container slideInUp">
+      <div className="loading-spinner__xs">
+        <svg className="loading-spinner__svg" viewBox="0 0 50 50">
+          <circle
+            className="loading-spinner__svg-path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            strokeWidth="5"
+          />
+        </svg>
+      </div>
+      <span
+        className="inline-block ml-2 text-xs text-white font-semibold tracking-wide">
+        {"Loading..." |> str}
+      </span>
+    </div>
+  </div>;
 };
 
 let getTeams =
@@ -74,8 +103,9 @@ let getTeams =
       selectedLevel,
       search,
       teams,
+      loading,
     ) => {
-  setState(state => {...state, loading: true});
+  setState(state => {...state, loading});
   (
     switch (selectedLevel, search, cursor) {
     | (Some(level), Some(search), Some(cursor)) =>
@@ -268,7 +298,7 @@ let make = (~levels, ~course) => {
   let (state, setState) =
     React.useState(() =>
       {
-        loading: false,
+        loading: NotLoading,
         teams: Unloaded,
         searchInputString: None,
         filter: {
@@ -278,27 +308,6 @@ let make = (~levels, ~course) => {
       }
     );
   let courseId = course |> Course.id;
-  let initialRender = React.useRef(true);
-  React.useEffect1(
-    () => {
-      if (initialRender |> React.Ref.current) {
-        initialRender->React.Ref.setCurrent(false);
-      } else {
-        getTeams(
-          AuthenticityToken.fromHead(),
-          courseId,
-          None,
-          setState,
-          state.filter.level,
-          state.filter.search,
-          [||],
-        );
-      };
-
-      None;
-    },
-    [|state.filter|],
-  );
 
   React.useEffect1(
     () => {
@@ -307,14 +316,17 @@ let make = (~levels, ~course) => {
         courseId,
         None,
         setState,
-        None,
-        None,
+        state.filter.level,
+        state.filter.search,
         [||],
+        Reloading,
       );
+
       None;
     },
-    [|levels|],
+    [|state.filter|],
   );
+
   <div>
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
@@ -369,7 +381,7 @@ let make = (~levels, ~course) => {
          | PartiallyLoaded(teams, cursor) =>
            <div>
              <CoursesStudents__TeamsList levels teams openOverlayCB />
-             {state.loading
+             {state.loading == LoadingMore
                 ? SkeletonLoading.multiple(
                     ~count=3,
                     ~element=SkeletonLoading.card(),
@@ -385,6 +397,7 @@ let make = (~levels, ~course) => {
                         state.filter.level,
                         state.filter.search,
                         teams,
+                        LoadingMore,
                       )
                     }>
                     {"Load More..." |> str}
@@ -395,5 +408,14 @@ let make = (~levels, ~course) => {
          }}
       </div>
     </div>
+    {switch (state.teams) {
+     | Unloaded => React.null
+     | _ =>
+       switch (state.loading) {
+       | Reloading => loadingTicker
+       | LoadingMore => React.null
+       | NotLoading => React.null
+       }
+     }}
   </div>;
 };

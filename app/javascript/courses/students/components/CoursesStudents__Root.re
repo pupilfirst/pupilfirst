@@ -386,12 +386,15 @@ let make = (~levels, ~course) => {
     </div>
     {switch (state.teams) {
      | Unloaded => React.null
+
      | _ =>
-       switch (state.loading) {
-       | Reloading => <LoadingSpinner loading=true />
-       | LoadingMore => React.null
-       | NotLoading => React.null
-       }
+       let loading =
+         switch (state.loading) {
+         | NotLoading => false
+         | Reloading => true
+         | LoadingMore => false
+         };
+       <LoadingSpinner loading />;
      }}
   </div>;
 };

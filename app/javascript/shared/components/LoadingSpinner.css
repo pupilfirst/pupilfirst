@@ -61,7 +61,7 @@
   }
 }
 
-@keyframes slideInUp {
+@keyframes slideUp {
   from {
     -webkit-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
@@ -73,6 +73,23 @@
   }
 }
 
-.slideInUp {
-  animation: slideInUp 0.25s ease-in-out;
+@keyframes slideDown {
+  from {
+    visibility: visible;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+.slideUp {
+  animation: slideUp 0.5s ease-in-out;
+}
+
+.slideDown {
+  animation: slideDown 0.5s ease-in-out;
 }

@@ -4,12 +4,36 @@
 
 let str = React.string;
 
+let onAnimationEnd = (loading, setRender) => {
+  Js.log("test");
+  switch (loading) {
+  | false => setRender(_ => false)
+  | true => ()
+  };
+};
+
+let animationClass = loading => {
+  loading ? "slideUp" : "slideDown";
+};
+
 [@react.component]
 let make = (~loading) => {
-  loading
+  let (shouldRender, setRender) = React.useState(() => loading);
+  React.useEffect1(
+    () => {
+      if (loading) {
+        setRender(_ => true);
+      };
+      None;
+    },
+    [|loading|],
+  );
+  shouldRender
     ? <div
         className="fixed bottom-0 z-50 w-full left-0 right-0 flex justify-center w-full">
-        <div className="loading-spinner-container slideInUp">
+        <div
+          className={"loading-spinner-container " ++ animationClass(loading)}
+          onAnimationEnd={_ => onAnimationEnd(loading, setRender)}>
           <div className="loading-spinner__xs">
             <svg className="loading-spinner__svg" viewBox="0 0 50 50">
               <circle

@@ -46,7 +46,7 @@ let showStudent = (team, levels, openOverlayCB) => {
     onClick={_ => openOverlayCB()}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
     className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow ">
-    <div className="flex flex-1 flex-col justify-center md:flex-row md:w-4/6">
+    <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div
         className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
         {studentAvatar(student)}
@@ -63,7 +63,7 @@ let showStudent = (team, levels, openOverlayCB) => {
     </div>
     <div
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
-      className="w-2/6 flex items-center justify-end p-3 md:p-4">
+      className="w-2/5 flex items-center justify-end p-3 md:p-4">
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </div>;
@@ -74,7 +74,7 @@ let showTeam = (team, levels, openOverlayCB) => {
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
     className="flex shadow bg-white rounded-lg mt-4 overflow-hidden flex-col-reverse md:flex-row">
-    <div className="flex flex-col flex-1 w-full md:w-4/6">
+    <div className="flex flex-col flex-1 w-full md:w-3/5">
       {team
        |> TeamInfo.students
        |> Array.map(student =>
@@ -100,7 +100,7 @@ let showTeam = (team, levels, openOverlayCB) => {
        |> React.array}
     </div>
     <div
-      className="flex w-full md:w-2/6 items-center bg-gray-200 md:bg-white border-l border-gray-200 p-3 md:px-4 md:py-5">
+      className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l p-3 md:px-4 md:py-5">
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
           <p

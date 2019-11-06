@@ -20,9 +20,7 @@ class ApplicationQuery
 
   def method_missing(name, *args)
     name_symbol = name.to_sym
-    super unless context.key?(name_symbol)
-
-    context[name_symbol]
+    context.key?(name_symbol) ? context[name_symbol] : super
   end
 
   def error_messages

@@ -1,7 +1,5 @@
 class DestroySchoolLinkMutator < ApplicationQuery
-  attr_accessor :id
-
-  validates :id, presence: true
+  property :id, validates: { presence: true }
 
   def destroy_school_link
     school_link.destroy!

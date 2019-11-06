@@ -1,5 +1,5 @@
 class SubmissionDetailsResolver < ApplicationQuery
-  attr_accessor :submission_id
+  property :submission_id
 
   def submission_details
     {

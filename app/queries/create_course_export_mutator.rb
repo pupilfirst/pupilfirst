@@ -1,10 +1,8 @@
 class CreateCourseExportMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :course_id
-  attr_accessor :tag_ids
-
-  validates :course_id, presence: { message: 'CourseIdBlank' }
+  property :course_id, validates: { presence: { message: 'CourseIdBlank' } }
+  property :tag_ids
 
   validate :require_valid_course
   validate :require_valid_tags

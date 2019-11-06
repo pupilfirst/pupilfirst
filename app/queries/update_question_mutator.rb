@@ -1,12 +1,9 @@
 class UpdateQuestionMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  attr_accessor :id
-  attr_accessor :title
-  attr_accessor :description
-
-  validates :title, length: { minimum: 1, maximum: 250, message: 'InvalidLengthTitle' }, allow_nil: false
-  validates :description, length: { minimum: 1, message: 'InvalidLengthDescription' }, allow_nil: false
+  property :id
+  property :title, validates: { length: { minimum: 1, maximum: 250, message: 'InvalidLengthTitle' }, allow_nil: false }
+  property :description, validates: { length: { minimum: 1, message: 'InvalidLengthDescription' }, allow_nil: false }
 
   def update_question
     question.text_versions.create!(value: question.description, user: question.creator, edited_at: question.updated_at)

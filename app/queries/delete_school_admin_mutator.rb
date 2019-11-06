@@ -1,9 +1,7 @@
 class DeleteSchoolAdminMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :id
-
-  validates :id, presence: true
+  property :id, validates: { presence: true }
 
   validate :must_be_admin_of_this_school
   validate :at_least_one_admin_must_exist

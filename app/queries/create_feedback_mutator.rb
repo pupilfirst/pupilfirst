@@ -1,11 +1,8 @@
 class CreateFeedbackMutator < ApplicationQuery
   include AuthorizeCoach
 
-  attr_accessor :submission_id
-  attr_accessor :feedback
-
-  validates :submission_id, presence: true
-  validates :feedback, presence: true, length: { maximum: 10_000 }
+  property :submission_id, validates: { presence: true }
+  property :feedback, validates: { presence: true, length: { maximum: 10_000 } }
 
   validate :require_valid_submission
 

@@ -1,10 +1,10 @@
 class UpdateSchoolStringMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :key
-  attr_accessor :value
+  property :key, validates: { inclusion: { in: SchoolString::VALID_KEYS, message: 'InvalidKey' } }
+  property :value
 
-  validates :key, inclusion: { in: SchoolString::VALID_KEYS, message: 'InvalidKey' }
+  # 'value' has different validations for different school string types.
   validates :value, length: { maximum: 10_000, message: 'InvalidLengthValue' }, allow_blank: true, if: :agreement?
   validates :value, length: { maximum: 1000, message: 'InvalidLengthValue' }, allow_blank: true, if: :address?
   validates :value, email: { message: 'InvalidValue' }, allow_blank: true, if: :email_address?

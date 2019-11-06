@@ -1,10 +1,9 @@
 class UpdateReviewChecklistMutator < ApplicationQuery
   include AuthorizeCoach
 
-  attr_accessor :target_id
-  attr_accessor :review_checklist
+  property :target_id, validates: { presence: true }
+  property :review_checklist
 
-  validates :target_id, presence: true
   validate :review_checklist_shape
 
   def update_review_checklist

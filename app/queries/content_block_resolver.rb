@@ -1,6 +1,6 @@
 class ContentBlockResolver < ApplicationQuery
-  attr_accessor :target_id
-  attr_accessor :version_on
+  property :target_id
+  property :version_on
 
   def content_blocks
     if version_on.present?

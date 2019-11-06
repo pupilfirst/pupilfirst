@@ -1,7 +1,5 @@
 class LevelUpMutator < ApplicationQuery
-  attr_accessor :course_id
-
-  validates :course_id, presence: true
+  property :course_id, validates: { presence: true }
 
   validate :must_have_next_level
   validate :must_be_eligible

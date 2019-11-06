@@ -3,6 +3,11 @@ class ApplicationQuery
 
   attr_reader :context
 
+  def self.property(name, options = {})
+    attr_accessor name
+    validates(name, options[:validates]) if options.key?(:validates)
+  end
+
   def initialize(context, attributes = {})
     @context = context
     assign_attributes(attributes)

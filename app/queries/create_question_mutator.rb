@@ -1,14 +1,10 @@
 class CreateQuestionMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  attr_accessor :title
-  attr_accessor :description
-  attr_accessor :community_id
-  attr_accessor :target_id
-
-  validates :title, length: { minimum: 1, maximum: 250, message: 'InvalidLengthTitle' }, allow_nil: false
-  validates :description, length: { minimum: 1, maximum: 15_000, message: 'InvalidLengthDescription' }, allow_nil: false
-  validates :community_id, presence: { message: 'BlankCommunityID' }
+  property :title, validates: { length: { minimum: 1, maximum: 250, message: 'InvalidLengthTitle' }, allow_nil: false }
+  property :description, validates: { length: { minimum: 1, maximum: 15_000, message: 'InvalidLengthDescription' }, allow_nil: false }
+  property :community_id, validates: { presence: { message: 'BlankCommunityID' } }
+  property :target_id
 
   def create_question
     question = Question.create!(

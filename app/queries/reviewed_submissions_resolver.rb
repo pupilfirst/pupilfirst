@@ -1,6 +1,6 @@
 class ReviewedSubmissionsResolver < ApplicationQuery
-  attr_accessor :course_id
-  attr_accessor :level_id
+  property :course_id
+  property :level_id
 
   def reviewed_submissions
     submissions.evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).order("created_at DESC")

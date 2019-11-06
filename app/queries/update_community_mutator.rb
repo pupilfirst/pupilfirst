@@ -1,12 +1,10 @@
 class UpdateCommunityMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :id
-  attr_accessor :name
-  attr_accessor :target_linkable
-  attr_accessor :course_ids
-
-  validates :name, length: { minimum: 1, maximum: 50, message: 'InvalidLengthName' }
+  property :id
+  property :name, validates: { length: { minimum: 1, maximum: 50, message: 'InvalidLengthName' } }
+  property :target_linkable
+  property :course_ids
 
   validate :course_must_exist_in_current_school
 

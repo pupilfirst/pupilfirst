@@ -1,11 +1,7 @@
 class CreateApplicantMutator < ApplicationQuery
-  attr_accessor :course_id
-  attr_accessor :email
-  attr_accessor :name
-
-  validates :email, presence: true, length: { maximum: 128 }, email: true
-  validates :course_id, presence: { message: 'BlankCourseId' }
-  validates :name, presence: true, length: { maximum: 128 }
+  property :email, validates: { presence: true, length: { maximum: 128 }, email: true }
+  property :course_id, validates: { presence: { message: 'BlankCourseId' } }
+  property :name, validates: { presence: true, length: { maximum: 128 } }
 
   validate :course_must_exist
   validate :ensure_time_between_requests

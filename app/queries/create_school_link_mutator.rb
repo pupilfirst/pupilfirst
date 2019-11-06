@@ -1,13 +1,9 @@
 class CreateSchoolLinkMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :kind
-  attr_accessor :title
-  attr_accessor :url
-
-  validates :kind, inclusion: { in: SchoolLink::VALID_KINDS, message: 'InvalidKind' }
-  validates :title, length: { minimum: 1, maximum: 24, message: 'InvalidLengthTitle' }, allow_nil: true
-  validates :url, url: { message: 'InvalidUrl' }, presence: { message: 'BlankUrl' }
+  property :kind, validates: { inclusion: { in: SchoolLink::VALID_KINDS, message: 'InvalidKind' } }
+  property :title, validates: { length: { minimum: 1, maximum: 24, message: 'InvalidLengthTitle' }, allow_nil: true }
+  property :url, validates: { url: { message: 'InvalidUrl' }, presence: { message: 'BlankUrl' } }
 
   validate :title_conditionally_required
 

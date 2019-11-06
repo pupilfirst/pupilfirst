@@ -1,7 +1,7 @@
 class TeamsResolver < ApplicationQuery
-  attr_accessor :course_id
-  attr_accessor :level_id
-  attr_accessor :search
+  property :course_id
+  property :level_id
+  property :search
 
   def teams
     level_filtered = if level_id.present?

@@ -1,9 +1,8 @@
 class AutoVerifySubmissionMutator < ApplicationQuery
   include AuthorizeStudent
 
-  attr_accessor :target_id
+  property :target_id, validates: { presence: { message: 'Blank Target Id' } }
 
-  validates :target_id, presence: { message: 'Blank Target Id' }
   validate :can_be_auto_verified
   validate :ensure_submittability
 

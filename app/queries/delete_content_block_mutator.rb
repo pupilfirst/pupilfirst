@@ -1,7 +1,6 @@
 class DeleteContentBlockMutator < ApplicationQuery
-  attr_accessor :id
+  property :id, validates: { presence: true }
 
-  validates :id, presence: true
   validate :not_the_only_content_block
 
   def delete_content_block

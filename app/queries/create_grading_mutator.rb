@@ -1,17 +1,14 @@
 class CreateGradingMutator < ApplicationQuery
   include AuthorizeCoach
 
-  attr_accessor :submission_id
-  attr_accessor :grades
-  attr_accessor :feedback
-
-  validates :submission_id, presence: { message: 'Submission ID is required for grading' }
+  property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
+  property :feedback, validates: { length: { maximum: 10_000 } }
+  property :grades
 
   validate :require_valid_submission
   validate :should_not_be_graded
   validate :valid_evaluation_criteria
   validate :valid_grading
-  validates :feedback, length: { maximum: 10_000 }
 
   def grade
     TimelineEvent.transaction do

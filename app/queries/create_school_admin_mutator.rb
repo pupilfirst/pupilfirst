@@ -1,11 +1,8 @@
 class CreateSchoolAdminMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :name
-  attr_accessor :email
-
-  validates :email, presence: true, length: { maximum: 128 }, email: true
-  validates :name, presence: true, length: { maximum: 128 }
+  property :email, validates: { presence: true, length: { maximum: 128 }, email: true }
+  property :name, validates: { presence: true, length: { maximum: 128 } }
 
   validate :not_a_school_admin
 

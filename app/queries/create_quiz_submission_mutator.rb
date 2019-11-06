@@ -1,10 +1,8 @@
 class CreateQuizSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
 
-  attr_accessor :target_id
-  attr_accessor :answer_ids
-
-  validates :target_id, presence: { message: 'Blank Target Id' }
+  property :target_id, validates: { presence: { message: 'Blank Target Id' } }
+  property :answer_ids
 
   validate :target_should_have_a_quiz
   validate :all_questions_answered

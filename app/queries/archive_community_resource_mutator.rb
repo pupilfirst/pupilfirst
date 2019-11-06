@@ -1,10 +1,8 @@
 class ArchiveCommunityResourceMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  attr_accessor :id
-  attr_accessor :resource_type
-
-  validates :resource_type, inclusion: { in: [Question, Answer, Comment].map(&:to_s) }
+  property :id
+  property :resource_type, validates: { inclusion: { in: [Question, Answer, Comment].map(&:to_s) } }
 
   def archive
     community_resource.update!(archived: true, archiver: current_user)

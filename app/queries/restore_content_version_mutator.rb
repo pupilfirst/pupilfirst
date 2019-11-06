@@ -1,10 +1,8 @@
 class RestoreContentVersionMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
-  attr_accessor :version_on
-  attr_accessor :target_id
 
-  validates :target_id, presence: true
-  validates :version_on, presence: true
+  property :target_id, validates: { presence: true }
+  property :version_on, validates: { presence: true }
 
   def restore
     ::Targets::RestoreContentVersionService.new(target, version_on).execute

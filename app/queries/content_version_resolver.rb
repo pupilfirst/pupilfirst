@@ -1,5 +1,5 @@
 class ContentVersionResolver < ApplicationQuery
-  attr_accessor :target_id
+  property :target_id
 
   def versions
     if target.content_versions.present?

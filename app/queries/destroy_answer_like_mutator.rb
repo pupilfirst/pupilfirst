@@ -1,7 +1,5 @@
 class DestroyAnswerLikeMutator < ApplicationQuery
-  attr_accessor :id
-
-  validates :id, presence: true
+  property :id, validates: { presence: true }
 
   def destroy_answer_like
     answer_like.destroy!

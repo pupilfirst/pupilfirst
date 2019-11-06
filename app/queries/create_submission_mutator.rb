@@ -1,14 +1,10 @@
 class CreateSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
 
-  attr_accessor :target_id
-  attr_accessor :description
-  attr_accessor :links
-  attr_accessor :file_ids
-
-  validates :target_id, presence: { message: 'BlankTargetId' }
-  validates :description, presence: { message: 'BlankDescription' }, length: { maximum: 1500, minimum: 1, message: 'InvalidDescriptionLength' }
-  validates :links, urls: true
+  property :target_id, validates: { presence: { message: 'BlankTargetId' } }
+  property :description, validates: { presence: { message: 'BlankDescription' }, length: { maximum: 1500, minimum: 1, message: 'InvalidDescriptionLength' } }
+  property :links, validates: { urls: true }
+  property :file_ids
 
   validate :no_pending_submission_already
   validate :all_files_should_be_new

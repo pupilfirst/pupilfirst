@@ -1,11 +1,10 @@
 class UpdateContentBlockMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
-  attr_accessor :id
-  attr_accessor :block_type
-  attr_accessor :text
 
-  validates :id, presence: true
-  validates :block_type, presence: true
+  property :id, validates: { presence: true }
+  property :block_type, validates: { presence: true }
+  property :text
+
   validate :text_must_be_present_for_markdown
 
   def text_must_be_present_for_markdown

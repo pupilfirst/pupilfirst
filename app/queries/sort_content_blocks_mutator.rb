@@ -1,7 +1,5 @@
 class SortContentBlocksMutator < ApplicationQuery
-  attr_accessor :content_block_ids
-
-  validates :content_block_ids, presence: true
+  property :content_block_ids, validates: { presence: true }
 
   def sort
     ::ContentBlocks::SortService.new(content_block_ids).execute

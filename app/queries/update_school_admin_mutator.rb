@@ -1,10 +1,9 @@
 class UpdateSchoolAdminMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :id
-  attr_accessor :name
+  property :id
+  property :name, validates: { presence: true, length: { maximum: 128 } }
 
-  validates :name, presence: true, length: { maximum: 128 }
   validate :record_must_exists
 
   def save

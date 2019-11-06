@@ -1,9 +1,7 @@
 class CreateAnswerLikeMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  attr_accessor :answer_id
-
-  validates :answer_id, presence: { message: 'BlankAnswerId' }
+  property :answer_id, validates: { presence: { message: 'BlankAnswerId' } }
 
   def create_answer_like
     AnswerLike.where(

@@ -1,13 +1,9 @@
 class CreateCommentMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  attr_accessor :value
-  attr_accessor :commentable_type
-  attr_accessor :commentable_id
-
-  validates :commentable_type, inclusion: { in: [Answer.name, Question.name], message: 'InvalidCommentableType' }
-  validates :value, length: { minimum: 1, message: 'InvalidLengthValue' }, allow_nil: false
-  validates :commentable_id, presence: { message: 'BlankCommentableId' }
+  property :commentable_type, validates: { inclusion: { in: [Answer.name, Question.name], message: 'InvalidCommentableType' } }
+  property :value, validates: { length: { minimum: 1, message: 'InvalidLengthValue' }, allow_nil: false }
+  property :commentable_id, validates: { presence: { message: 'BlankCommentableId' } }
 
   def create_comment
     comment = Comments::CreateService.new(current_user, commentable, value).create

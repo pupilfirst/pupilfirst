@@ -1,18 +1,14 @@
 class UpdateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :id
-  attr_accessor :name
-  attr_accessor :grades_and_labels
-  attr_accessor :ends_at
-  attr_accessor :description
-  attr_accessor :enable_leaderboard
-  attr_accessor :public_signup
-  attr_accessor :about
-
-  validates :name, presence: { message: 'NameBlank' }
-  validates :description, presence: { message: 'DescriptionBlank' }
-  validates :grades_and_labels, presence: { message: 'GradesAndLabelsBlank' }
+  property :id
+  property :name, validates: { presence: { message: 'NameBlank' } }
+  property :description, validates: { presence: { message: 'DescriptionBlank' } }
+  property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
+  property :ends_at
+  property :enable_leaderboard
+  property :public_signup
+  property :about
 
   validate :valid_course_id
   validate :correct_grades_and_labels

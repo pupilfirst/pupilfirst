@@ -1,9 +1,7 @@
 class SortCurriculumResourcesMutator < ApplicationQuery
-  attr_accessor :resource_type
-  attr_accessor :resource_ids
+  property :resource_ids, validates: { presence: true }
+  property :resource_type, validates: { inclusion: { in: [TargetGroup.name, Target.name] } }
 
-  validates :resource_ids, presence: true
-  validates :resource_type, inclusion: { in: [TargetGroup.name, Target.name] }
   validate :must_belong_to_same_parent
 
   def sort

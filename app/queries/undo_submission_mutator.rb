@@ -1,7 +1,5 @@
 class UndoSubmissionMutator < ApplicationQuery
-  attr_accessor :target_id
-
-  validates :target_id, presence: true
+  property :target_id, validates: { presence: true }
 
   validate :must_have_pending_submission
 

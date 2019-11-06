@@ -1,9 +1,7 @@
 class UndoGradingMutator < ApplicationQuery
   include AuthorizeCoach
 
-  attr_accessor :submission_id
-
-  validates :submission_id, presence: true
+  property :submission_id, validates: { presence: true }
 
   validate :must_be_graded
 

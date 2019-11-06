@@ -1,9 +1,6 @@
 class CreateTargetMutator < ApplicationQuery
-  attr_accessor :title
-  attr_accessor :target_group_id
-
-  validates :title, presence: { message: 'TitleBlank' }
-  validates :target_group_id, presence: { message: 'TargetGroupIdBlank' }
+  property :title, validates: { presence: { message: 'TitleBlank' } }
+  property :target_group_id, validates: { presence: { message: 'TargetGroupIdBlank' } }
 
   def create_target
     Target.transaction do

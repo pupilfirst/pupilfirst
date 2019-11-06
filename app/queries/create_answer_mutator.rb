@@ -1,11 +1,8 @@
 class CreateAnswerMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  attr_accessor :description
-  attr_accessor :question_id
-
-  validates :description, length: { minimum: 1, maximum: 15_000, message: 'InvalidLengthDescription' }
-  validates :question_id, presence: { message: 'BlankQuestionId' }
+  property :description, validates: { length: { minimum: 1, maximum: 15_000, message: 'InvalidLengthDescription' } }
+  property :question_id, validates: { presence: { message: 'BlankQuestionId' } }
 
   def create_answer
     answer = Answers::CreateService.new(current_user, question, description).create

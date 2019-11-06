@@ -1,21 +1,15 @@
 class CreateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  attr_accessor :name
-  attr_accessor :max_grade
-  attr_accessor :pass_grade
-  attr_accessor :grades_and_labels
-  attr_accessor :ends_at
-  attr_accessor :description
-  attr_accessor :enable_leaderboard
-  attr_accessor :public_signup
-  attr_accessor :about
-
-  validates :name, presence: { message: 'NameBlank' }
-  validates :max_grade, presence: { message: 'MaxGradeBlank' }
-  validates :pass_grade, presence: { message: 'PassGradeBlank' }
-  validates :grades_and_labels, presence: { message: 'GradesAndLabelsBlank' }
-  validates :description, presence: { message: 'DescriptionBlank' }
+  property :name, validates: { presence: { message: 'NameBlank' } }
+  property :max_grade, validates: { presence: { message: 'MaxGradeBlank' } }
+  property :pass_grade, validates: { presence: { message: 'PassGradeBlank' } }
+  property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
+  property :description, validates: { presence: { message: 'DescriptionBlank' } }
+  property :ends_at
+  property :enable_leaderboard
+  property :public_signup
+  property :about
 
   def correct_grades_and_labels
     return if max_grade == grades_and_labels.count

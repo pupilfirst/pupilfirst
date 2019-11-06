@@ -164,7 +164,12 @@ let updateSubmission =
       ~description=submission |> Submission.description,
       ~createdAt=submission |> Submission.createdAt,
       ~passedAt,
-      ~evaluatorName=Some(currentCoach |> Coach.name),
+      ~evaluatorName=
+        if (feedackUpdate) {
+          submission |> Submission.evaluatorName;
+        } else {
+          Some(currentCoach |> Coach.name);
+        },
       ~attachments=submission |> Submission.attachments,
       ~feedback,
       ~grades=newGrades,

@@ -17,7 +17,7 @@ let levelId = t => t.levelId;
 
 let name = t => t.name;
 
-let title = t => t.title;
+[@dead "title"] let title = t => t.title;
 
 let students = t => t.students;
 

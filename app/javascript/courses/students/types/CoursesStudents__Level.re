@@ -23,7 +23,7 @@ let decode = json =>
 let sort = levels =>
   levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number);
 
-let unsafeLevelNumber = (levels, componentName, levelId) =>
+[@dead "unsafeLevelNumber"] let unsafeLevelNumber = (levels, componentName, levelId) =>
   "Level "
   ++ (
     levels

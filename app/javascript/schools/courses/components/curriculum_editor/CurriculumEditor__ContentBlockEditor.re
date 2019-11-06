@@ -112,13 +112,24 @@ let uploadButtonText = blockType =>
   | Embed(_url, _embedCode) => ""
   };
 
-let handleFileUpload = (dispatch, event, blockType) =>
+let handleFileUpload = (dispatch, event, blockType) => {
   switch (ReactEvent.Form.target(event)##files) {
   | [||] => dispatch(ResetFormDirty(uploadButtonText(blockType)))
   | files =>
     let file = files[0];
-    dispatch(UpdateFileName(file##name));
+    let maxFileSize = 5 * 1024 * 1024;
+    let error =
+      file##size > maxFileSize
+        ? Some("The maximum file size is 5 MB. Please select another file.")
+        : None;
+    switch (error) {
+    | Some(errorMessage) =>
+      dispatch(ResetFormDirty(errorMessage));
+      Notification.error("Upload Error", errorMessage);
+    | None => dispatch(UpdateFileName(file##name))
+    };
   };
+};
 
 let contentUploadContainer = (blockType, dispatch, state, editorId) =>
   <div

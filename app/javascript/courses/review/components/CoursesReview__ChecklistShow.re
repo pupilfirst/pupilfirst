@@ -66,12 +66,21 @@ let generateFeedback =
     );
   updateFeedbackCB(newFeedback);
 };
+let checklistItemCheckedClasses = (itemIndex, selection) => {
+  "mb-4 px-2 pb-2 md:px-4 border-l-2 border-transparent "
+  ++ (
+    selection
+    |> List.filter(s => s.itemIndex == itemIndex)
+    |> ListUtils.isNotEmpty
+      ? "border-green-400" : ""
+  );
+};
 
 [@react.component]
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
-  <div className="relative bg-gray-100 rounded-lg p-2 md:p-4">
+  <div className="relative bg-gray-100 rounded-lg py-2 md:py-4">
     <div className="absolute right-0 top-0 -mt-9">
       <button
         className="flex items-center btn btn-small btn-primary-ghost"
@@ -83,10 +92,11 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
     {reviewChecklist
      |> Array.mapi((itemIndex, reviewChecklistItem) =>
           <div
+            className={checklistItemCheckedClasses(itemIndex, selection)}
             key={itemIndex |> string_of_int}
             ariaLabel={"checklist-item-" ++ (itemIndex |> string_of_int)}>
             <h4
-              className="text-base font-semibold mt-4 md:mt-0 w-full md:w-4/5">
+              className="text-base font-semibold mt-2 md:mt-0 w-full md:w-4/5">
               {reviewChecklistItem |> ReviewChecklistItem.title |> str}
             </h4>
             <div>
@@ -129,7 +139,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
           </div>
         )
      |> React.array}
-    <div className="text-center max-w-xs mx-auto mt-6">
+    <div className="text-center max-w-xs mx-2 md:mx-auto">
       <button
         className="btn btn-primary btn-large w-full "
         disabled={selection |> ListUtils.isEmpty}

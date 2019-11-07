@@ -14,7 +14,7 @@ let animationClass = loading => {
 };
 
 [@react.component]
-let make = (~loading) => {
+let make = (~loading, ~message="Loading...") => {
   let (shouldRender, setRender) = React.useState(() => loading);
   let initialRender = React.useRef(true);
   React.useEffect1(
@@ -48,7 +48,7 @@ let make = (~loading) => {
           </div>
           <span
             className="inline-block ml-2 text-xs text-white font-semibold tracking-wide">
-            {"Loading..." |> str}
+            {message |> str}
           </span>
         </div>
       </div>

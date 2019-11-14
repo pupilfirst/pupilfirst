@@ -190,6 +190,7 @@ export default function ReactDraftEditor(props) {
   return (
     <div className="flex-grow px-3 py-3" onClick={focusEditor}>
       <Editor
+        spellCheck={true}
         ariaLabelledBy={props.ariaLabelledBy}
         ref={editor}
         placeholder={props.placeholder}

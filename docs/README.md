@@ -1,3 +1,3 @@
 # Index
 
-This is the index page of the documentation site. It'll need to be filled in.
+This is the documentation for the PupilFirst LMS. Use the navigation bar to the left to browse topics.

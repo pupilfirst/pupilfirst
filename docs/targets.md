@@ -1,5 +1,23 @@
 # Targets
 
+## Milestone targets
+
+To qualify for levelling up, students must complete what are known as milestone targets. These are groups of targets that must be attempted for the student to be able to level up.
+
+In the curriculum editor, you can mark your choice of target _groups_ as milestone. If a group is thus marked, all targets within the group will count as milestone targets. It's possible to have multiple milestone groups within a level.
+
+### Possible questions
+
+**What happens if I don't mark any target group as milestone?**
+
+If a level doesn't contain at least one milestone target group, students will not be shown the option to level up. PupilFirst checks for the submission of milestone targets to determine whether a student can level up.
+
+**What if I want my students to complete every target? Do I have to mark all target as milestones?**
+
+Not necessarily. Remember that you can set targets as pre-requisites for others. Technically, you can set up a chain of targets, one depending on the completion of another to ensure that students complete all targets.
+
+How you organize the content is ultimately up-to-you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and what order (if any) you want students to tackle your material.
+
 ## Locked targets
 
 There are four situations in which a target can be _locked_ for a student:

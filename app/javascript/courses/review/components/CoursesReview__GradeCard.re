@@ -320,16 +320,15 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
        | (Some(date), Graded(_)) =>
          <div
            className="bg-gray-200 block md:flex flex-col w-full justify-between rounded-lg pt-3 mr-2 mt-4 md:mt-0">
-           {switch (submission |> Submission.evaluatorName) {
-            | Some(name) =>
-              <div>
-                <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
-                <p className="text-sm font-semibold px-3 pb-3">
-                  {name |> str}
-                </p>
-              </div>
-            | None => React.null
-            }}
+           <div>
+             <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
+             <p className="text-sm font-semibold px-3 pb-3">
+               {switch (submission |> Submission.evaluatorName) {
+                | Some(name) => name |> str
+                | None => <em> {"Deleted Coach" |> str} </em>
+                }}
+             </p>
+           </div>
            <div
              className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
              {"on " ++ (date |> Submission.prettyDate) |> str}

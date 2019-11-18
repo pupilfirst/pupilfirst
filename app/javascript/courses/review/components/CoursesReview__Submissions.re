@@ -117,7 +117,7 @@ let cardClasses = submission =>
 
 let updateSubmission =
     (
-      ~feedackUpdate,
+      ~feedbackUpdate,
       ~grades,
       ~passed,
       ~newFeedback,
@@ -165,7 +165,7 @@ let updateSubmission =
       ~createdAt=submission |> Submission.createdAt,
       ~passedAt,
       ~evaluatorName=
-        if (feedackUpdate) {
+        if (feedbackUpdate) {
           submission |> Submission.evaluatorName;
         } else {
           Some(currentCoach |> Coach.name);
@@ -175,7 +175,7 @@ let updateSubmission =
       ~grades=newGrades,
       ~evaluatedAt,
     );
-  updateSubmissionCB(feedackUpdate, newSubmission);
+  updateSubmissionCB(feedbackUpdate, newSubmission);
 };
 
 [@react.component]
@@ -231,7 +231,7 @@ let make =
         passGrade
         reviewChecklist
         updateSubmissionCB={updateSubmission(
-          ~feedackUpdate=false,
+          ~feedbackUpdate=false,
           ~submission,
           ~currentCoach,
           ~updateSubmissionCB,
@@ -246,7 +246,7 @@ let make =
         submissionId={submission |> Submission.id}
         reviewChecklist
         updateSubmissionCB={updateSubmission(
-          ~feedackUpdate=true,
+          ~feedbackUpdate=true,
           ~submission,
           ~currentCoach,
           ~updateSubmissionCB,

@@ -2,3 +2,4 @@
 * [Home](/)
 * [Courses](/courses.md)
 * [Targets](targets.md)
+* [Coaches](/coaches.md)

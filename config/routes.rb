@@ -170,6 +170,7 @@ Rails.application.routes.draw do
 
   # Founder show
   scope 'students', controller: 'founders' do
+    get '/:id/report', action: 'report', as: 'student_report'
     get '/:id(/:slug)', action: 'show', as: 'student'
     get '/:id/events/:page', action: 'paged_events', as: 'paged_events'
     get '/:id/e/:event_id(/:event_title)', action: 'timeline_event_show', as: 'student_timeline_event_show'

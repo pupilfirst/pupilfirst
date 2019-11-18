@@ -29,6 +29,13 @@ class FoundersController < ApplicationController
     render 'show'
   end
 
+  # GET /students/:id/report
+  def report
+    @founder = authorize(Founder.find(params[:id]))
+    @course = @founder.course
+    render 'courses/students', layout: 'student_course'
+  end
+
   private
 
   def skip_container

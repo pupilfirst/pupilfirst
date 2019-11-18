@@ -45,6 +45,12 @@ class Course < ApplicationRecord
     end
   end
 
+  def clone(user_id)
+    # Add course clone service
+  end
+
+  handle_asynchronously :clone
+
   private
 
   def grade_labels_must_match_grades

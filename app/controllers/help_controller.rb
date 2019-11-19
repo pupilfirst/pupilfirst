@@ -3,14 +3,14 @@ class HelpController < ApplicationController
 
   # GET /help/:document
   def show
-    @markdown = File.read(Rails.root.join('doc', document_filename))
+    @markdown = File.read(Rails.root.join('docs', 'served', document_filename))
     render layout: 'student'
   end
 
   private
 
   def document_filename
-    @document_filename ||= params[:document] == 'markdown-editor' ? 'markdown-editor.md' : nil
+    @document_filename ||= params[:document] == "markdown_editor" ? "markdown_editor.md" : nil
   end
 
   def validate_document

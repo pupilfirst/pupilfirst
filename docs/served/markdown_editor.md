@@ -3,7 +3,7 @@
 Text boxes that have the _Markdown_ logo at the bottom-right can be used to add
 rich formatting to what you write.
 
-![Markdown Editor Marker](/images/doc/markdown/1909-md-editor-marker.png)
+![Markdown Editor Marker](https://res.cloudinary.com/sv-co/image/upload/v1574146590/pupilfirst_documentation/markdown_editor/md-editor-marker_icf5n8.png)
 
 ## What is Markdown?
 
@@ -197,7 +197,7 @@ If you would like to enable syntax highlighting, mention the name of the
 language after the first set of backticks:
 
 ````markdown
-```reason
+```javascript
 let rec hanoi = (n, a, b, c) =>
   if (n > 0) {
     hanoi(n - 1, a, c, b);
@@ -209,13 +209,14 @@ hanoi(4, 1, 2, 3);
 ```
 ````
 
-```reason
-let rec hanoi = (n, a, b, c) =>
+```javascript
+const hanoi = (n, a, b, c) => {
   if (n > 0) {
     hanoi(n - 1, a, c, b);
-    Js.log({j|Move disk from pole $a to pole $b|j});
+    console.log('Move disk ' + n + ' from ' + a + ' to ' + b);
     hanoi(n - 1, c, b, a)
-  };
+  }
+}
 
 hanoi(4, 1, 2, 3);
 ```

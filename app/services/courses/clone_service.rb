@@ -75,13 +75,14 @@ module Courses
       targets.each do |old_target, new_target|
         old_target.latest_content_versions.each do |content_version|
           old_content_block = content_version.content_block
+          # create content block
           new_content_block = ContentBlock.create!(
             block_type: old_content_block.block_type,
             content: old_content_block.content
           )
-
           new_content_block.file.attach(old_content_block.file.blob) if old_content_block.file.attached?
 
+          # create content version
           ContentVersion.create!(
             target_id: new_target.id,
             content_block_id: new_content_block.id,
@@ -97,9 +98,11 @@ module Courses
       targets.each do |old_target, new_target|
         next unless old_target.quiz?
 
+        # create quiz
         old_quiz = old_target.quiz
         new_quiz = Quiz.create!(title: old_quiz.title, target: new_target)
 
+        # create quiz questions
         old_quiz.quiz_questions.includes(:answer_options).each do |old_quiz_question|
           new_quiz_question = QuizQuestion.create!(
             question: old_quiz_question.question,
@@ -107,6 +110,7 @@ module Courses
             quiz_id: new_quiz.id
           )
 
+          # create answer options
           old_quiz_question.answer_options.each do |old_answer_option|
             new_answer_option = AnswerOption.create!(
               value: old_answer_option.value,
@@ -116,17 +120,20 @@ module Courses
 
             next if old_quiz_question.correct_answer_id != old_answer_option.id
 
+            # update correct answer
             new_quiz_question.update!(correct_answer: new_answer_option)
           end
         end
       end
     end
+
     # rubocop:enable Metrics/MethodLength
 
     def create_prerequisites_targets(targets)
       targets.each do |old_target, new_target|
         next if old_target.prerequisite_target_ids.blank?
 
+        # translate old prerequisite target ids
         new_target.prerequisite_target_ids = old_target.prerequisite_target_ids.map { |old_id| @target_id_translation[old_id] }
         new_target.save!
       end

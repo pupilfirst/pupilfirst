@@ -64,6 +64,7 @@ describe Courses::CloneService do
       original_quiz_questions = QuizQuestion.all.pluck(:question, :description)
       original_answer_options = AnswerOption.all.pluck(:value, :hint)
       original_content_blocks_count = ContentBlock.count
+      original_content_blocks = Target.all.map { |t| t.latest_content_versions.map { |cv| cv.content_block.slice(:block_type, :content) } }
       new_course = subject.clone(new_name, new_school)
 
       expect(new_course.name).to eq(new_name)
@@ -84,7 +85,7 @@ describe Courses::CloneService do
 
       # content block should have been cloned
       expect(new_course.content_blocks.count).to eq(original_content_blocks_count)
-
+      expect(new_course.targets.map { |t| t.latest_content_versions.map { |cv| cv.content_block.slice(:block_type, :content) } }).to match_array(original_content_blocks)
       # There should be no cloning of startups, founders, or timeline events.
       expect(Startup.count).to eq(original_startup_count)
       expect(Founder.count).to eq(original_founder_count)

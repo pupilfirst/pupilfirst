@@ -27,7 +27,7 @@ describe Users::InitializeSchoolService do
       # should create a student profile
       expect(user.reload.founders.count).to eq(1)
       # should create a coach profile
-      expect(user.faculty).not_to eq(nil)
+      expect(user.faculty.present?).to be(true)
       # should clone the course to new school
       expect(new_school.courses.count).to eq(1)
       expect(new_school.courses.first.slice(:name, :description)).to match_array(course.slice(:name, :description))

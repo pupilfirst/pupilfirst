@@ -25,16 +25,11 @@ module Users
       Courses::AssignReviewerService.new(course).assign(coach)
     end
 
-    def create_team(course)
+    def create_student(course)
       team = Startup.create!(
         name: @user.name,
         level: course.levels.find_by(number: 1)
       )
-      team
-    end
-
-    def create_student(course)
-      team = create_team(course)
       Founder.create!(user: @user, startup: team)
     end
 

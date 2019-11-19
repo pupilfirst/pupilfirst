@@ -177,7 +177,7 @@ let make =
            && state.courseCoaches
            |> ListUtils.isEmpty
              ? <div
-                 className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
+                 className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full mt-8">
                  {"The course has no coaches assigned!" |> str}
                </div>
              : ReasonReact.null}

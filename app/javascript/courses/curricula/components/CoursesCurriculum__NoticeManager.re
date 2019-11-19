@@ -49,8 +49,7 @@ let showNotice =
 
 let courseCompletedMessage = () => {
   let title = "Congratulations! You have completed all milestone targets in this course.";
-  let description = "You've completed our Level Framework, but you know by now that this is just the beginning of your journey.
-  Feel free to complete targets that you might have left out, read up on attached links and resources, and work on the breadth and depth of your skills.";
+  let description = "You've completed our coursework. Feel free to complete targets that you might have left out, and read up on attached links and resources.";
   showNotice(~title, ~description, ~noticeType=CourseComplete, ());
 };
 

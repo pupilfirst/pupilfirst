@@ -119,11 +119,6 @@ Rails.application.configure do
   # Add the rack-cors middleware to serve CORS header for static assets
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins %w[https://www.sv.co https://sv.co https://school.sv.co]
-      resource '*'
-    end
-
-    allow do
       origins '*'
       resource '/assets/*', methods: :get, headers: :any
     end

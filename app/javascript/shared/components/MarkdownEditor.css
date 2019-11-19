@@ -16,4 +16,5 @@
 
 .markdown-draft-editor__container {
   min-height: 10.5rem;
+  word-break: break-word;
 }

@@ -118,13 +118,13 @@ let updateSubmission =
       setState,
       removePendingSubmissionCB,
       updateReviewedSubmissionCB,
-      feedackUpdate,
+      feedbackUpdate,
       submission,
     ) => {
   let newSubmissionDetails =
     SubmissionDetails.updateSubmission(submissionDetails, submission);
   setState(_ => Loaded(newSubmissionDetails));
-  feedackUpdate
+  feedbackUpdate
     ? updateReviewedSubmissionCB(
         SubmissionDetails.makeSubmissionInfo(
           newSubmissionDetails,

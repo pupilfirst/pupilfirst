@@ -147,7 +147,7 @@ ActiveAdmin.register Founder do
       row :designation
       row :college do |founder|
         if founder.college.present?
-          link_to founder.college.name, admin_college_path(founder.college)
+          founder.college.name
         elsif founder.college_text.present?
           founder.college_text
         end
@@ -157,7 +157,7 @@ ActiveAdmin.register Founder do
         university = founder.college&.university
 
         if university.present?
-          link_to university.name, admin_university_path(university)
+          university.name
         end
       end
 

@@ -1,8 +1,8 @@
 module Users
   class InitializeSchoolService
-    def initialize(user_id, course_id)
-      @user = User.find(user_id)
-      @course = Course.find(course_id)
+    def initialize(user, course)
+      @user = user
+      @course = course
     end
 
     def execute
@@ -13,6 +13,8 @@ module Users
         create_community(new_course)
       end
     end
+
+    alias perform execute
 
     private
 

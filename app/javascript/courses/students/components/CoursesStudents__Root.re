@@ -251,8 +251,8 @@ let updateSearchInputString = (setState, event) => {
   setState(state => {...state, searchInputString});
 };
 
-let openOverlayCB = () => {
-  Js.log("Open Overlay");
+let openOverlayCB = studentId => {
+  ReasonReactRouter.push("/students/" ++ studentId ++ "/report");
 };
 
 let disableSearchButton = state => {
@@ -285,6 +285,8 @@ let make = (~levels, ~course) => {
     );
   let courseId = course |> Course.id;
 
+  let url = ReasonReactRouter.useUrl();
+
   React.useEffect1(
     () => {
       getTeams(
@@ -304,6 +306,15 @@ let make = (~levels, ~course) => {
   );
 
   <div>
+    {switch (url.path) {
+     | ["students", studentId, ..._] =>
+       <CoursesStudents__StudentOverlay
+         authenticityToken={AuthenticityToken.fromHead()}
+         courseId
+         studentId
+       />
+     | _ => React.null
+     }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div

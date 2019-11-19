@@ -43,7 +43,7 @@ let showStudent = (team, levels, openOverlayCB) => {
   let student = TeamInfo.students(team)[0];
   <div
     key={student |> TeamInfo.studentId}
-    onClick={_ => openOverlayCB()}
+    onClick={_ => openOverlayCB(student |> TeamInfo.studentId)}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
     className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow ">
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
@@ -81,7 +81,7 @@ let showTeam = (team, levels, openOverlayCB) => {
             <div
               key={student |> TeamInfo.studentId}
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-              onClick={_ => openOverlayCB()}
+              onClick={_ => openOverlayCB(student |> TeamInfo.studentId)}
               className="flex items-center bg-white">
               <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
                 {studentAvatar(student)}

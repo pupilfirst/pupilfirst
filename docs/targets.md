@@ -16,7 +16,7 @@ If a level doesn't contain at least one milestone target group, students will no
 
 Not necessarily. Remember that you can set targets as pre-requisites for others. Technically, you can set up a chain of targets, one depending on the completion of another to ensure that students complete all targets.
 
-How you organize the content is ultimately up-to-you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and what order (if any) you want students to tackle your material.
+How you organize the content is ultimately up to you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and in what order (if any) you want students to tackle your material.
 
 ## Locked targets
 

@@ -19,6 +19,7 @@ class Course < ApplicationRecord
   has_many :community_course_connections, dependent: :restrict_with_error
   has_many :communities, through: :community_course_connections
   has_many :course_exports, dependent: :destroy
+  has_many :content_blocks, through: :targets
 
   normalize_attribute :about
 

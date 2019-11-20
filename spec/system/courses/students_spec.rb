@@ -9,7 +9,8 @@ feature "Course students list", js: true do
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
   let(:level_3) { create :level, :three, course: course }
-  let(:coach) { create :faculty, school: school }
+  let(:course_coach) { create :faculty, school: school }
+  let(:team_coach) { create :faculty, school: school }
 
   # Create few teams
   let!(:team_1) { create :startup, level: level_1 }
@@ -20,14 +21,16 @@ feature "Course students list", js: true do
   let!(:team_6) { create :startup, level: level_3 }
 
   before do
-    create :faculty_course_enrollment, faculty: coach, course: course
+    create :faculty_course_enrollment, faculty: course_coach, course: course
     10.times do
       create :startup, level: level_3
     end
+
+    create :faculty_startup_enrollment, faculty: team_coach, startup: team_6
   end
 
   scenario 'coach checks the complete list of students' do
-    sign_in_user coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referer: students_course_path(course)
 
     expect(page).to have_button('All Levels')
 
@@ -67,7 +70,7 @@ feature "Course students list", js: true do
   end
 
   scenario 'coach searches for and filters students by level' do
-    sign_in_user coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referer: students_course_path(course)
 
     expect(page).to have_text(course.startups.order('name').first.name)
 
@@ -116,5 +119,12 @@ feature "Course students list", js: true do
     expect(page).to have_text(team_1.name)
     expect(page).to have_text(team_3.name)
     expect(page).to have_text(team_6.name)
+  end
+
+  scenario 'team coach only has assigned teams in the students list' do
+    sign_in_user team_coach.user, referer: students_course_path(course)
+
+    expect(page).to have_text(team_6.name)
+    expect(page).to_not have_text(team_1.name)
   end
 end

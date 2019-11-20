@@ -24,14 +24,22 @@ class TeamsResolver < ApplicationQuery
   def authorized?
     return false if current_user.faculty.blank?
 
-    current_user.faculty.reviewable_courses.where(id: course).exists?
+    faculty.reviewable_courses.where(id: course).exists?
+  end
+
+  def faculty
+    @faculty ||= current_user.faculty
   end
 
   def course
     @course ||= Course.find(course_id)
   end
 
+  def reviewable_teams
+    faculty.courses.where(id: course_id).present? ? course.startups : faculty.startups
+  end
+
   def teams_in_course
-    course.startups.active.joins(founders: :user).includes(founders: [user: { avatar_attachment: :blob }]).order('startups.name')
+    reviewable_teams.active.joins(founders: :user).includes(founders: [user: { avatar_attachment: :blob }]).order('startups.name')
   end
 end

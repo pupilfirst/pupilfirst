@@ -1,18 +1,21 @@
-type socialLink =
-  | Github(string)
-  | LinkedIn(string)
-  | Instagram(string)
-  | Twitter(string);
-
 type t = {
-  id: string,
   title: string,
   email: string,
   phone: option(string),
   notes: option(array(CoursesStudents__CoachNote.t)),
-  submissions: array(CoursesStudents__Submission.t),
-  grades: array(CoursesStudents__Grade.t),
-  userNames: string,
+  submissions: option(array(CoursesStudents__Submission.t)),
+  evaluationCriteria: array(CoursesStudents__EvaluationCriterion.t),
   levelId: string,
-  socialLinks: option(array(socialLink)),
+  socialLinks: option(array(string)),
+};
+
+let makeFromJS = studentDetails => {
+  title: studentDetails##title,
+  email: studentDetails##email,
+  phone: None,
+  notes: None,
+  submissions: None,
+  evaluationCriteria: [||],
+  levelId: studentDetails##levelId,
+  socialLinks: None,
 };

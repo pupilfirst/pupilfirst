@@ -4,11 +4,73 @@
 open CoursesStudents__Types;
 let str = React.string;
 
+type state =
+  | Loading
+  | Loaded(StudentDetails.t);
+
 let closeOverlay = courseId =>
   ReasonReactRouter.push("/courses/" ++ courseId ++ "/students");
 
+module StudentDetailsQuery = [%graphql
+  {|
+    query($studentId: ID!) {
+      studentDetails(studentId: $studentId) {
+        title, email, phone, socialLinks,
+        evaluationCriteria{
+          id, name
+        },
+        submissions{
+          id,
+          title,
+          createdAt,
+          passedAt,
+        },
+           grades {
+            evaluationCriterionId
+            grade
+          },
+          coachNotes {
+            note
+            author {
+              id
+              name
+              avatarUrl
+            }
+          }
+          levelId
+
+      }
+    }
+  |}
+];
+
+let updateStudentDetails = (setState, details) => {
+  setState(_ => Loaded(details |> StudentDetails.makeFromJS));
+};
+let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
+  setState(_ => Loading);
+  StudentDetailsQuery.make(~studentId, ())
+  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> Js.Promise.then_(response => {
+       response##studentDetails |> updateStudentDetails(setState);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+
+  None;
+};
+
 [@react.component]
-let make = (~authenticityToken, ~courseId, ~studentId) => {
+let make = (~courseId, ~studentId) => {
+  let (state, setState) = React.useState(() => Loading);
+  React.useEffect(() => {
+    ScrollLock.activate();
+    Some(() => ScrollLock.deactivate());
+  });
+  React.useEffect1(
+    getStudentDetails(AuthenticityToken.fromHead(), studentId, setState),
+    [|studentId|],
+  );
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div

@@ -26,6 +26,10 @@ module Types
       argument :search, String, required: false
     end
 
+    field :student_details, Types::StudentDetailsType, null: false do
+      argument :student_id, ID, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -54,6 +58,11 @@ module Types
     def submission_details(args)
       resolver = SubmissionDetailsResolver.new(context, args)
       resolver.submission_details
+    end
+
+    def student_details(args)
+      resolver = StudentDetailsResolver.new(context, args)
+      resolver.student_details
     end
   end
 end

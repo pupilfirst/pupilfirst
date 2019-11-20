@@ -1,5 +1,7 @@
 # Targets
 
+Targets hold the content for a course's curriculum, and is the main objects that students interact with as a part of your courses. The creation and editing of targets is done within [the curriculum editor](/curriculum_editor). This document has additional information about targets that dictate their behavior.
+
 ## Milestone targets
 
 To qualify for levelling up, students must complete what are known as milestone targets. These are groups of targets that must be attempted for the student to be able to level up.

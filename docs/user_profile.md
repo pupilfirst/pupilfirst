@@ -1,14 +1,4 @@
-# Users
-
-There are three kinds of users within PupilFirst:
-
-1. **School Admin:** They manage the school, and have access to the school administration interface.
-2. **Coach:** They have access to all communities, and can review submissions from students or teams they are linked to.
-3. **Students:** The have access to one or more courses and can submit work on targets. They also have access to commnunities that they're courses are linked to.
-
-!> There is a fourth class of user - _course author_, that currently not exposed via the school administration interface. See [related Github issue](https://github.com/SVdotCO/pupilfirst/issues/125) for details.
-
-## User profile
+# User Profile
 
 All users, regardless of their _type_ can edit their personal details user profile. There's a link to edit the profile on the _home_ page.
 

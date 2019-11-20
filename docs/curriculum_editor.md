@@ -21,6 +21,8 @@ To create a new level, click the _Create Level_ button next to the level selecto
 
 Similar targets can be grouped together into target groups. This allow you to organize content into discrete chunks in a way that makes sense for what you're trying to teach. To create a target group, just click the _Create a target group_ button within a level.
 
+When creating and editing a target group, you can decide whether it's a _milestone_ target group or not. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/targets?id=milestone-targets).
+
 ## Creating targets
 
 To create a target, click the _Create a target_ option inside a target group, enter a name, and hit the _Create_ button. This will create a new target with that name in the target group, and will set it to the _Draft_ status.
@@ -67,7 +69,7 @@ The file block accepts the file and a caption and displays it as a distinctly st
 
 ## Setting the method of completion
 
-Editing the content of a target is the first step in setting it up. You can switch to the method of completion using the tab at the top of the target editor, or a link at the bottom.
+Editing the content of a target is the first step in setting it up. You can switch to the second step, _Method of Completion_, using the tab at the top of the target editor, or a link at the bottom.
 
 The method of completion tab lets you decide how your students can complete the target. It asks a few questions:
 

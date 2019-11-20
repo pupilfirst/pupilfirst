@@ -1,8 +1,21 @@
-<!-- docs/_sidebar.md -->
-* [Home](/)
-* [Courses](/courses.md)
-* [Targets](targets.md)
-* [Coaches](/coaches.md)
-* [Communities](/communities.md)
-* [Curriculum Editor](/curriculum_editor.md)
-* [Users](/users.md)
+- **Getting started**
+  - [Home](/)
+  - [User Roles](/user_roles.md)
+- **Administration**
+  - [Courses](/courses.md)
+  - [Students](/students.md)
+  - [Coaches](/coaches.md)
+  - [Curriculum Editor](/curriculum_editor.md)
+  - [Targets](targets.md)
+  - [Communities](/communities.md)
+  - [Exporting data](/exporting_data.md)
+  - [School Customization](/school_customization.md)
+- **Coaching**
+  - [Reviewing Submissions](/reviewing_submissions.md)
+  - [Student Reports](/student_reports.md)
+- **Learning**
+  - [Signing Up](/signing_up.md)
+  - [Taking Courses](/taking_courses.md)
+  - [Participating in the Community](/participating_in_the_community.md)
+- **Additional Reading**
+  - [User Profile](/user_profile.md)

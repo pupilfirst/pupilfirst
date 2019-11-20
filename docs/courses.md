@@ -1,5 +1,7 @@
 # Courses
 
+Courses hold your content and can have any number of students enrolled, with coaches to guide their path.
+
 ## Creating courses
 
 To create a new course, head to the Courses menu from the school admin interface's navigation bar, and click the _Add New Course_ button at the top of the page.

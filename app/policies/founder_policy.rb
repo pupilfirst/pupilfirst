@@ -27,6 +27,7 @@ class FounderPolicy < ApplicationPolicy
     return true if user.school_admin.present?
 
     # Coaches who review submissions from this student can view their profile.
-    user.faculty.present? && user.faculty.reviewable_courses.where(id: record.course).exists?
+    faculty = user.faculty
+    faculty.present? && (faculty.courses.where(id: record.course).exists? || faculty.startups.where(id: record.startup_id).present?)
   end
 end

@@ -1,0 +1,9 @@
+.help-icon__help-container {
+  width: max-content;
+}
+
+.help-icon__help-container--center {
+  left: 50%;
+  right: 50;
+  transform: translateX(-50%);
+};

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Users::InitializeSchoolService do
-  subject { described_class.new(user.id, course.id) }
+  subject { described_class.new(user, course) }
 
   let(:school) { create :school }
   let(:new_school) { create :school }

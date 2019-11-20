@@ -423,10 +423,17 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                 />
                 <div className="mt-5">
                   <label
-                    className="block tracking-wide text-xs font-semibold"
+                    className="tracking-wide text-xs font-semibold"
                     htmlFor="course-ends-at-input">
-                    {"Course ends on" |> str}
+                    {"Course end date" |> str}
                   </label>
+                  <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
+                  <HelpIcon.Jsx2
+                    className="ml-2"
+                    link="https://docs.pupilfirst.com/#/courses">
+                    {"If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions."
+                     |> str}
+                  </HelpIcon.Jsx2>
                   <DatePicker.Jsx2
                     onChange={date => send(UpdateEndsAt(date))}
                     selected=?{state.endsAt}

@@ -2,6 +2,27 @@
 
 The curriculum editor allows to edit the structure and content of your course. At the top-level content is organized into _levels_. Levels contains many groups of targets, and content for targets is also edited here.
 
+![Curriculum editor in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574237953/pupilfirst_documentation/curriculum_editor/curriculum_editor_page_j13pxw.png)
+
+## What are levels?
+
+Levels are the top organizational unit within a course, and act as an indicator for the progress of a student.
+
+1. Levels can hold many _groups_ of targets.
+2. All students begin in the first level - **Level 1**.
+3. Students can move up through levels, after they've submitted work on [milestone targets](/targets?id=milestone-targets). We call this _leveling up_, or to _level up_.
+4. Courses can have any number of levels, but you probably don't want to go overboard.
+
+?> **For all the non-gamers out there:** The phrase _level up_, is borrowed from the world of gaming. Roughly, it means _to progress to the next level_ - an activity that is common in modern role-playing games where one's character advances to the next level of development.
+
+To create a new level, click the _Create Level_ button next to the level selector, and to edit a level's name, click the _edit icon_ next to the selected level.
+
+## What's a target group?
+
+Similar targets can be grouped together into target groups. This allow you to organize content into discrete chunks in a way that makes sense for what you're trying to teach. To create a target group, just click the _Create a target group_ button within a level.
+
+When creating and editing a target group, you can decide whether it's a _milestone_ target group or not. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/targets?id=milestone-targets).
+
 ## Creating targets
 
 To create a target, click the _Create a target_ option inside a target group, enter a name, and hit the _Create_ button. This will create a new target with that name in the target group, and will set it to the _Draft_ status.
@@ -25,7 +46,7 @@ The Markdown block allows you to write formatted text in the Markdown format. Yo
 
 ![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1574148846/pupilfirst_documentation/curriculum_editor/markdown_editor_y8tpqk.png)
 
-To learn more about using the markdown editor to format text, click on the _Need help?_ link at the bottom right of the editor.
+To learn more about using the Markdown editor to format text, click on the _Need help?_ link at the bottom right of the editor. It'll take you to documentation served within the platform which details everything you can do with Markdown.
 
 **Image**\
 The image block accepts an image file and a caption and displays it, cetner with the other content.
@@ -48,27 +69,27 @@ The file block accepts the file and a caption and displays it as a distinctly st
 
 ## Setting the method of completion
 
-Editing the content of a target is the first step in setting it up. You can switch to the method of completion using the tab at the top of the target editor, or a link at the bottom.
+Editing the content of a target is the first step in setting it up. You can switch to the second step, _Method of Completion_, using the tab at the top of the target editor, or a link at the bottom.
 
 The method of completion tab lets you decide how your students can complete the target. It asks a few questions:
 
-**Any prerequisite target?**
+**Any prerequisite target?**\
 You can select other targets from the same level as pre-requisite targets. This will _lock_ the target until the student has completed the prerequisites.
 
-**Is this target reviewed by a coach?**
+**Is this target reviewed by a coach?**\
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.
 
-**Choose evaluation criteria from your list**
+**Choose evaluation criteria from your list**\
 This list will appear only if you've chosen to have the target's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this target.
 
-**How do you want the student to complete the target?**
+**How do you want the student to complete the target?**\
 If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of three ways by which a student can complete the target on their own:
 
 1. Simply mark the target as completed: No additional steps.
 2. Visit a link to complete the target: You'll be asked for the link.
 3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
 
-**Do you have any completion instructions for the student?**
+**Do you have any completion instructions for the student?**\
 Text entered here will be displayed right next to where the students take action on a target. For targets that are simply marked as complete or completed by visiting a link, this will be at the end of the main content, next to the button that completes the target. For quizzes and reviewed submissions, this will be at the top of the page that displays the quiz, or the submission form.
 
 ### Preparing a quiz

@@ -1,8 +1,12 @@
 # Courses
 
+Courses hold your content and can have any number of students enrolled, with coaches to guide their path.
+
 ## Creating courses
 
 To create a new course, head to the Courses menu from the school admin interface's navigation bar, and click the _Add New Course_ button at the top of the page.
+
+![Courses page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574237472/pupilfirst_documentation/courses/courses_page_p8p5tg.png)
 
 The form that pops up will ask you for a few properties:
 
@@ -12,7 +16,7 @@ The name of the course, that will publicly displayed.
 **Course description**\
 This short description will be displayed on the course's public page.
 
-**Course ends on**\
+**Course end date**\
 If set, students in your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
 
 **About**\
@@ -32,3 +36,5 @@ These are the grades that coaches can assign when they're reviewing a student's 
 ## Editing courses
 
 To edit a course's details, simply click on the course in the Courses menu. The form for editing a course is identical to the one that you used to create it.
+
+To edit the _contents_ of a course, you'll want to use the [curriculum editor](/curriculum_editor?id=curriculum-editor), which is documented separately.

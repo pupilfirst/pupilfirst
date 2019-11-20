@@ -73,7 +73,7 @@ module Courses
 
     def create_content_blocks(targets)
       targets.each do |old_target, new_target|
-        old_target.latest_content_versions.each do |content_version|
+        old_target.latest_content_versions&.each do |content_version|
           old_content_block = content_version.content_block
           # create content block
           new_content_block = ContentBlock.create!(

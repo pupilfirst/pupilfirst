@@ -9,7 +9,7 @@ PupilFirst enables quick and efficient review of task submissions by students, a
 
 Coaches can be added from the coaches page which is linked on the main navigation bar of the school administration interface.
 
-![Coaches link on admin navbar](https://res.cloudinary.com/sv-co/image/upload/v1574074318/pupilfirst_documentation/coaches/coaches_option_navbar_w9lily.png)
+![Coaches page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574236845/pupilfirst_documentation/coaches/coaches_page_xjrmba.png)
 
 You can add new coaches using the _Add New Coach_ option, and edit them by clicking on the name on this list. Coaches have a few additional properties unique to them:
 
@@ -30,7 +30,7 @@ Once a coach has been added to a school, they can immediately access all communi
 
 To assign a coach as a _course coach_, jump into a course, and head to the _Coaches_ submenu:
 
-![Coaches submenu inside a course](https://res.cloudinary.com/sv-co/image/upload/v1574074318/pupilfirst_documentation/coaches/course_coaches_menu_eynofc.png)
+![Coaches assigned to a course](https://res.cloudinary.com/sv-co/image/upload/v1574237288/pupilfirst_documentation/coaches/course_coaches_page_ldxjjs.png)
 
 _Course_ coaches have the permission to review submissions from _all_ students in a course. This is appropriate if you have a small group of students in a course, or if a coach is has an _overseer_ position within the list of coaches.
 

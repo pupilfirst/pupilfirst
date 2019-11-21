@@ -15,30 +15,29 @@ module StudentDetailsQuery = [%graphql
   {|
     query($studentId: ID!) {
       studentDetails(studentId: $studentId) {
-        title, email, phone, socialLinks,
+        title, name,email, phone, socialLinks,
         evaluationCriteria{
-          id, name
+          id, name, maxGrade, passGrade
         },
-        submissions{
-          id,
-          title,
-          createdAt,
-          passedAt,
-        },
-           grades {
-            evaluationCriterionId
-            grade
-          },
           coachNotes {
             note
+            createdAt
             author {
               id
               name
+              title
               avatarUrl
             }
           }
           levelId
-
+          socialLinks
+          totalTargets
+          targetsCompleted
+          quizScores
+          averageGrades {
+            id
+            averageGrade
+          }
       }
     }
   |}

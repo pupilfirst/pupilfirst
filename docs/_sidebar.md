@@ -10,6 +10,7 @@
   - [Communities](/communities.md)
   - [Exporting data](/exporting_data.md)
   - [School Customization](/school_customization.md)
+  - [School Admins](/school_admins.md)
 - **Coaching**
   - [Reviewing Submissions](/reviewing_submissions.md)
   - [Student Reports](/student_reports.md)

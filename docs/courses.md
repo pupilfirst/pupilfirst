@@ -4,11 +4,11 @@ Courses hold your content and can have any number of students enrolled, with coa
 
 ## Creating courses
 
-To create a new course, head to the Courses menu from the school admin interface's navigation bar, and click the _Add New Course_ button at the top of the page.
+To create a new course, head to the Courses menu from the school administration interface's navigation bar, and click the _Add New Course_ button at the top of the page.
 
 ![Courses page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574237472/pupilfirst_documentation/courses/courses_page_p8p5tg.png)
 
-The form that pops up will ask you for a few properties:
+The form that pops up will ask you for a few details:
 
 **Name**\
 The name of the course, that will publicly displayed.
@@ -17,7 +17,7 @@ The name of the course, that will publicly displayed.
 This short description will be displayed on the course's public page.
 
 **Course end date**\
-If set, students in your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
+If set, your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
 
 **About**\
 This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.

@@ -4,5 +4,10 @@ module Types
     field :title, String, null: false
     field :created_at, String, null: false
     field :passed_at, String, null: true
+    field :level_id, String, null: false
+
+    def level_id
+      object.target.level.id
+    end
   end
 end

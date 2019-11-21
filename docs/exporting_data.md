@@ -6,7 +6,7 @@ PupilFirst has a robust data export feature that'll let you pull data out of the
 
 To prepare a new export, visit the _Exports_ sub-menu within a course, and click the _Create a new export_ button. When preparing an export, you can limit the results to a select group of students by picking one or more tags that's associated with them.
 
-The export may take a short while to prepare, so the platform will send you an email when it's ready. When it's done, you can download the export as an `.ods` (OpenDocument Spreadsheet) that contains three sheets: _targets_, _students_, and _submissions_.
+The export may take a short while to prepare, so the platform will send you an email when it's ready. When it's done, you can download the export as an `.ods` (OpenDocument Spreadsheet) file that contains three sheets: _targets_, _students_, and _submissions_.
 
 **Targets**\
 This sheet includes a list of all targets _live_ targets in the course, ordered by level. The first column, `ID` is used to identify the target in the _Submissions_ sheet.
@@ -33,11 +33,11 @@ While working with PupilFirst as school admins, we've realized that it's quite d
 
 You can use the data in the spreadsheet to generate all kinds of reports. For example:
 
-1. Track the trend of student performance, overall within a course, over time.
+1. Track the trend of overall student performance within a course, over time.
 2. Track how well your coaches are able to keep up with their reviewing workload.
-3.
+3. Determine which optional targets are most popular among students.
 
-These are just a few examples of what we've used the data to
+These are just a few tasks that we've used the exported data for. We're sure that there are many other use-cases for the data that we haven't thought of yet.
 
 ## Moving common analyses into the platform
 

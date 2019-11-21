@@ -3,16 +3,41 @@ class StudentDetailsResolver < ApplicationQuery
 
   def student_details
     {
+      name: student.name,
       title: student.title,
       email: student.email,
       phone: student.phone,
       coach_notes: coach_notes,
-      submissions: submissions,
+      targets_completed: targets_completed,
+      total_targets: total_targets,
       level_id: student.level.id,
       social_links: social_links,
-      evaluation_criteria: student.course.evaluation_criteria,
-      grades: grades
+      evaluation_criteria: evaluation_criteria,
+      quiz_scores: quiz_scores,
+      average_grades: average_grades
     }
+  end
+
+  def average_grades
+    @average_grades ||= TimelineEventGrade.where(timeline_event: submissions).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
+      { id: ec_id, average_grade: average_grade }
+    end
+  end
+
+  def targets_completed
+    submissions.passed.distinct(:target_id).count
+  end
+
+  def total_targets
+    course.targets.live.count
+  end
+
+  def quiz_scores
+    submissions.where.not(quiz_score: nil).pluck(:quiz_score)
+  end
+
+  def course
+    @course ||= student.course
   end
 
   def authorized?
@@ -22,7 +47,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def student
-    @student ||= Founder.find(student_id)
+    @student ||= Founder.where(id: student_id).includes(:user).first
   end
 
   def coach_notes
@@ -30,14 +55,21 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions
-    @submissions ||= student.timeline_events.includes(:target)
+    student.timeline_events
   end
 
   def social_links
     student.user.slice('linkedin_url', 'twitter_url', 'facebook_url', 'github_url').values - [nil]
   end
 
-  def grades
-    TimelineEventGrade.where(timeline_event_id: submissions.pluck(:id))
+  def evaluation_criteria
+    EvaluationCriterion.where(id: average_grades.pluck(:id)).map do |ec|
+      {
+        id: ec.id,
+        name: ec.name,
+        max_grade: course.max_grade,
+        pass_grade: course.pass_grade
+      }
+    end
   end
 end

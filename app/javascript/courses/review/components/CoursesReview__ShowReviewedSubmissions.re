@@ -216,7 +216,7 @@ let make =
           updateReviewedSubmissionsCB,
         )
       | FullyLoaded(_)
-      | PartiallyLoaded(_, _) => Js.log("test")
+      | PartiallyLoaded(_, _) => ()
       };
       None;
     },

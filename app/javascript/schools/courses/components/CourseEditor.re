@@ -13,6 +13,10 @@ module CoursesQuery = [%graphql
       enableLeaderboard
       about
       publicSignup
+      image{
+        url
+        filename
+      }
       gradesAndLabels {
         grade
         label
@@ -39,6 +43,15 @@ type action =
 let str = ReasonReact.string;
 
 let component = ReasonReact.reducerComponent("CourseEditor");
+
+let hideEditorAction = (send, ()) => send(UpdateEditorAction(Hidden));
+
+let updateCourses = (send, course, hideOverlay) => {
+  send(UpdateCourse(course));
+  if (hideOverlay) {
+    send(UpdateEditorAction(Hidden));
+  };
+};
 
 let make = _children => {
   ...component,
@@ -89,6 +102,7 @@ let make = _children => {
                   rawCourse##enableLeaderboard,
                   rawCourse##about,
                   rawCourse##publicSignup,
+                  Course.makeImageFromJs(rawCourse##image),
                 );
               })
            |> Array.to_list;
@@ -98,16 +112,15 @@ let make = _children => {
     |> ignore;
   },
   render: ({state, send}) => {
-    let hideEditorActionCB = () => send(UpdateEditorAction(Hidden));
-    let updateCoursesCB = course => {
-      send(UpdateCourse(course));
-      send(UpdateEditorAction(Hidden));
-    };
     <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
       {switch (state.editorAction) {
        | Hidden => ReasonReact.null
        | ShowForm(course) =>
-         <CourseEditor__Form course hideEditorActionCB updateCoursesCB />
+         <CourseEditor__Form
+           course
+           hideEditorActionCB={hideEditorAction(send)}
+           updateCoursesCB={updateCourses(send)}
+         />
        }}
       <div className="flex-1 flex flex-col">
         <div className="flex px-6 py-2 items-center justify-between">

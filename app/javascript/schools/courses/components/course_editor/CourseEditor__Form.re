@@ -20,6 +20,7 @@ type state = {
   publicSignup: bool,
   dirty: bool,
   saving: bool,
+  image: option(Course.image),
 };
 
 type action =
@@ -33,7 +34,8 @@ type action =
   | UpdateSelectedGrade(int)
   | UpdateEnableLeaderboard(bool)
   | UpdateAbout(string)
-  | UpdatePublicSignup(bool);
+  | UpdatePublicSignup(bool)
+  | UpdateImage(Course.image);
 
 module CreateCourseQuery = [%graphql
   {|
@@ -116,7 +118,13 @@ let updateMaxGrade = (value, state, send) =>
     send(UpdateMaxGrade(value));
   };
 
-let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
+let handleResponseCB = (id, state, updateCoursesCB, course) => {
+  let newCourse =
+    switch (course) {
+    | Some(_) => false
+    | None => true
+    };
+
   let course =
     Course.create(
       id |> int_of_string,
@@ -129,12 +137,13 @@ let handleResponseCB = (id, state, updateCoursesCB, newCourse) => {
       state.enableLeaderboard,
       Some(state.about),
       state.publicSignup,
+      state.image,
     );
   newCourse
     ? Notification.success("Success", "Course created successfully")
     : Notification.success("Success", "Course updated successfully");
 
-  updateCoursesCB(course);
+  updateCoursesCB(course, true);
 };
 
 let createCourse = (state, send, updateCoursesCB) => {
@@ -172,14 +181,14 @@ let createCourse = (state, send, updateCoursesCB) => {
          result##createCourse##course##id,
          state,
          updateCoursesCB,
-         true,
+         None,
        );
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let updateCourse = (state, send, updateCoursesCB, course) => {
+let updateCourse = (state, send, course, updateCoursesCB, course) => {
   send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
@@ -213,7 +222,7 @@ let updateCourse = (state, send, updateCoursesCB, course) => {
          result##updateCourse##course##id,
          state,
          updateCoursesCB,
-         false,
+         Some(course),
        );
        Js.Promise.resolve();
      })
@@ -279,6 +288,11 @@ let about = course =>
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about));
 
+let updateImage = (send, updateCoursesCB, course, image) => {
+  send(UpdateImage(image));
+  updateCoursesCB(course |> Course.replaceImage(Some(image)), false);
+};
+
 let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
   ...component,
   initialState: () =>
@@ -299,6 +313,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
         enableLeaderboard: course |> Course.enableLeaderboard,
         about: about(course),
         publicSignup: course |> Course.publicSignup,
+        image: course |> Course.image,
       }
     | None => {
         name: "",
@@ -317,6 +332,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
         enableLeaderboard: false,
         about: "",
         publicSignup: false,
+        image: None,
       }
     },
   reducer: (action, state) =>
@@ -355,6 +371,8 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
       ReasonReact.Update({...state, gradesAndLabels, dirty: true});
     | UpdateSelectedGrade(selectedGrade) =>
       ReasonReact.Update({...state, selectedGrade, dirty: true})
+    | UpdateImage(image) =>
+      ReasonReact.Update({...state, image: Some(image)})
     },
   render: ({state, send}) => {
     <div>
@@ -457,6 +475,18 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                 </div>
                 {enableLeaderboardButton(state.enableLeaderboard, send)}
                 {enablePublicSignupButton(state.publicSignup, send)}
+                {switch (course) {
+                 | Some(course) =>
+                   <CourseEditor__ImageHandler
+                     course
+                     updateImageCB={updateImage(
+                       send,
+                       updateCoursesCB,
+                       course,
+                     )}
+                   />
+                 | None => React.null
+                 }}
               </div>
             </div>
             <div className="mx-auto">
@@ -703,7 +733,13 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                      <button
                        disabled={saveDisabled(state)}
                        onClick={_ =>
-                         updateCourse(state, send, updateCoursesCB, course)
+                         updateCourse(
+                           state,
+                           send,
+                           course,
+                           updateCoursesCB,
+                           course,
+                         )
                        }
                        className="w-full btn btn-large btn-primary mt-3">
                        {"Update Course" |> str}

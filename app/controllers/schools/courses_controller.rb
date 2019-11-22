@@ -9,6 +9,19 @@ module Schools
       authorize(current_school, policy_class: Schools::CoursePolicy)
     end
 
+    # POST /courses/id
+    def attach_image
+      course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @form = Schools::Courses::UpdateForm.new(course)
+
+      if @form.validate(params)
+        @form.save
+        render json: { image_url: course.image_url, error: nil }
+      else
+        render json: { image_url: nil, error: @form.errors.full_messages.join(', ') }
+      end
+    end
+
     # GET /courses/:id/curriculum
     def curriculum
       course = scope.where(id: params[:id]).includes([:evaluation_criteria, :levels, :target_groups, targets: [:evaluation_criteria, :prerequisite_targets, :resources, quiz: { quiz_questions: %I[answer_options correct_answer] }]]).first

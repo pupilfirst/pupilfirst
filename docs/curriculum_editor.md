@@ -1,6 +1,10 @@
 # Curriculum Editor
 
-The curriculum editor allows to edit the structure and content of your course. At the top-level content is organized into _levels_. Levels contains many groups of targets, and content for targets is also edited here.
+At PupilFirst, we believe that actions speak louder than words, and that (when possible) it's always better to give your students things to _do_, rather than information to simply _consume_.
+
+However, your students will always need instruction before they can effectively take any action. These instructions will need to be laid out in a path whose route is clear, and with a visible end-point. The curriculum editor is designed to make this possible.
+
+The curriculum editor organizes content into _levels_, which contains many _groups_ of _targets_, each of which can hold the text and other rich media that you want your students to see.
 
 ![Curriculum editor in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574237953/pupilfirst_documentation/curriculum_editor/curriculum_editor_page_j13pxw.png)
 
@@ -15,7 +19,10 @@ Levels are the top organizational unit within a course, and act as an indicator 
 
 ?> **For all the non-gamers out there:** The phrase _level up_, is borrowed from the world of gaming. Roughly, it means _to progress to the next level_ - an activity that is common in modern role-playing games where one's character advances to the next level of development.
 
-To create a new level, click the _Create Level_ button next to the level selector, and to edit a level's name, click the _edit icon_ next to the selected level.
+To create a new level, click the _Create Level_ button next to the level selector, and to edit a level's name, click the _edit icon_ next to the selected level. Levels have one additional property: a date to _Unlock level on_. If set, the _content_ of the level is hidden from the student until that date.
+
+?> **What purpose does a level's _unlock date_ serve?**\
+Locked levels are still _visible_ to a student, but it's content (targets) are not. This can be used to communicate to the student about the _path_ they're expected to follow, but to deliberately hide the exact content they'll get access to. For example, this can be useful if the content for a level is still a work-in-progress, but the overall organization of the course is fixed.
 
 ## What's a target group?
 

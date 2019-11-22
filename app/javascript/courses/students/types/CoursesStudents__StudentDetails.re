@@ -25,6 +25,27 @@ let makeAverageGrade = gradesData => {
      );
 };
 
+let computeAverageQuizScore = quizScores => {
+  let netScore =
+    quizScores
+    |> Array.map(quizScore => {
+         let fractionArray =
+           quizScore |> String.split_on_char('/') |> Array.of_list;
+         let (numerator, denominator) = (
+           fractionArray[0] |> float_of_string,
+           fractionArray[1] |> float_of_string,
+         );
+         numerator /. denominator;
+       })
+    |> Js.Array.reduce((a, b) => a +. b, 0.0);
+  netScore *. 100.0;
+};
+
+let averageQuizScore = t => {
+  t.quizScores |> ArrayUtils.isEmpty
+    ? None : Some(computeAverageQuizScore(t.quizScores));
+};
+
 let makeFromJS = studentDetails => {
   name: studentDetails##name,
   title: studentDetails##title,

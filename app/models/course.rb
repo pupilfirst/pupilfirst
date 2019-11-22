@@ -21,6 +21,8 @@ class Course < ApplicationRecord
   has_many :course_exports, dependent: :destroy
   has_many :content_blocks, through: :targets
 
+  has_one_attached :image
+
   normalize_attribute :about
 
   def short_name
@@ -43,6 +45,12 @@ class Course < ApplicationRecord
   def grade_labels_to_props
     grade_labels.map do |key, value|
       { grade: key.to_i, label: value }
+    end
+  end
+
+  def image_url
+    if image.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
     end
   end
 

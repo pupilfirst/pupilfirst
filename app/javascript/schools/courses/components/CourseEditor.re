@@ -15,6 +15,7 @@ module CoursesQuery = [%graphql
       enableLeaderboard
       about
       publicSignup
+      featured
       image{
         url
         filename
@@ -121,38 +122,7 @@ let make = _children => {
     |> Js.Promise.then_(result => {
          let courses =
            result##courses
-           |> Js.Array.map(rawCourse => {
-                let endsAt =
-                  switch (rawCourse##endsAt) {
-                  | Some(endsAt) =>
-                    Some(endsAt |> Json.Decode.string)
-                    |> OptionUtils.map(DateFns.parseString)
-                  | None => None
-                  };
-                let gradesAndLabels =
-                  rawCourse##gradesAndLabels
-                  |> Array.map(gradesAndLabel =>
-                       GradesAndLabels.create(
-                         gradesAndLabel##grade,
-                         gradesAndLabel##label,
-                       )
-                     )
-                  |> Array.to_list;
-
-                Course.create(
-                  rawCourse##id |> int_of_string,
-                  rawCourse##name,
-                  rawCourse##description,
-                  endsAt,
-                  rawCourse##maxGrade,
-                  rawCourse##passGrade,
-                  gradesAndLabels,
-                  rawCourse##enableLeaderboard,
-                  rawCourse##about,
-                  rawCourse##publicSignup,
-                  Course.makeImageFromJs(rawCourse##image),
-                );
-              })
+           |> Js.Array.map(rawCourse => Course.makeFromJs(rawCourse))
            |> Array.to_list;
          send(UpdateCourses(courses));
          Js.Promise.resolve();

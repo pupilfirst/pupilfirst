@@ -20,7 +20,7 @@ type state = {
   publicSignup: bool,
   dirty: bool,
   saving: bool,
-  image: option(Course.image),
+  featured: bool,
 };
 
 type action =
@@ -35,12 +35,12 @@ type action =
   | UpdateEnableLeaderboard(bool)
   | UpdateAbout(string)
   | UpdatePublicSignup(bool)
-  | UpdateImage(Course.image);
+  | UpdateFeatured(bool);
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: Date, $enableLeaderboard: Boolean!, $about: String!,$publicSignup: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard,about: $about,publicSignup: $publicSignup, gradesAndLabels: $gradesAndLabels ) {
+   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: Date, $enableLeaderboard: Boolean!, $about: String!,$publicSignup: Boolean!,$featured: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard,about: $about,publicSignup: $publicSignup,featured: $featured, gradesAndLabels: $gradesAndLabels ) {
        course {
          id
        }
@@ -51,8 +51,8 @@ module CreateCourseQuery = [%graphql
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $enableLeaderboard: Boolean!, $about: String!,$publicSignup: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard,about: $about,publicSignup: $publicSignup, gradesAndLabels: $gradesAndLabels){
+   mutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $enableLeaderboard: Boolean!, $about: String!,$publicSignup: Boolean!,$featured: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard,about: $about,publicSignup: $publicSignup,featured: $featured, gradesAndLabels: $gradesAndLabels){
        course {
          id
        }
@@ -119,29 +119,30 @@ let updateMaxGrade = (value, state, send) =>
   };
 
 let handleResponseCB = (id, state, updateCoursesCB, course) => {
-  let newCourse =
+  let (image, persistedCourse) =
     switch (course) {
-    | Some(_) => false
-    | None => true
+    | Some(c) => (c |> Course.image, true)
+    | None => (None, true)
     };
 
   let course =
     Course.create(
-      id |> int_of_string,
-      state.name,
-      state.description,
-      state.endsAt,
-      state.maxGrade,
-      state.passGrade,
-      state.gradesAndLabels,
-      state.enableLeaderboard,
-      Some(state.about),
-      state.publicSignup,
-      state.image,
+      ~id=id |> int_of_string,
+      ~name=state.name,
+      ~description=state.description,
+      ~endsAt=state.endsAt,
+      ~maxGrade=state.maxGrade,
+      ~passGrade=state.passGrade,
+      ~gradesAndLabels=state.gradesAndLabels,
+      ~enableLeaderboard=state.enableLeaderboard,
+      ~about=Some(state.about),
+      ~publicSignup=state.publicSignup,
+      ~image,
+      ~featured=state.featured,
     );
-  newCourse
-    ? Notification.success("Success", "Course created successfully")
-    : Notification.success("Success", "Course updated successfully");
+  persistedCourse
+    ? Notification.success("Success", "Course updated successfully")
+    : Notification.success("Success", "Course created successfully");
 
   updateCoursesCB(course, true);
 };
@@ -170,6 +171,7 @@ let createCourse = (state, send, updateCoursesCB) => {
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~gradesAndLabels=jsGradeAndLabelArray,
+      ~featured=state.featured,
       (),
     );
   let response =
@@ -188,7 +190,7 @@ let createCourse = (state, send, updateCoursesCB) => {
   |> ignore;
 };
 
-let updateCourse = (state, send, course, updateCoursesCB, course) => {
+let updateCourse = (state, send, updateCoursesCB, course) => {
   send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
@@ -211,6 +213,7 @@ let updateCourse = (state, send, course, updateCoursesCB, course) => {
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~gradesAndLabels=jsGradeAndLabelArray,
+      ~featured=state.featured,
       (),
     );
   let response =
@@ -252,6 +255,29 @@ let enablePublicSignupButton = (publicSignup, send) =>
       <button
         className={booleanButtonClasses(!publicSignup)}
         onClick={_ => send(UpdatePublicSignup(false))}>
+        {"No" |> str}
+      </button>
+    </div>
+  </div>;
+
+let featuredButton = (featured, send) =>
+  <div className="flex items-center mt-5">
+    <label
+      className="block tracking-wide text-xs font-semibold mr-6"
+      htmlFor="featured">
+      {"Feature course in school home page?" |> str}
+    </label>
+    <div
+      id="featured"
+      className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+      <button
+        className={booleanButtonClasses(featured)}
+        onClick={_ => send(UpdateFeatured(true))}>
+        {"Yes" |> str}
+      </button>
+      <button
+        className={booleanButtonClasses(!featured)}
+        onClick={_ => send(UpdateFeatured(false))}>
         {"No" |> str}
       </button>
     </div>
@@ -308,7 +334,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
         enableLeaderboard: course |> Course.enableLeaderboard,
         about: about(course),
         publicSignup: course |> Course.publicSignup,
-        image: course |> Course.image,
+        featured: course |> Course.featured,
       }
     | None => {
         name: "",
@@ -327,7 +353,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
         enableLeaderboard: false,
         about: "",
         publicSignup: false,
-        image: None,
+        featured: true,
       }
     },
   reducer: (action, state) =>
@@ -366,8 +392,8 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
       ReasonReact.Update({...state, gradesAndLabels, dirty: true});
     | UpdateSelectedGrade(selectedGrade) =>
       ReasonReact.Update({...state, selectedGrade, dirty: true})
-    | UpdateImage(image) =>
-      ReasonReact.Update({...state, image: Some(image)})
+    | UpdateFeatured(featured) =>
+      ReasonReact.Update({...state, featured, dirty: true})
     },
   render: ({state, send}) => {
     <div>
@@ -469,6 +495,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                   />
                 </div>
                 {enableLeaderboardButton(state.enableLeaderboard, send)}
+                {featuredButton(state.featured, send)}
                 {enablePublicSignupButton(state.publicSignup, send)}
               </div>
             </div>
@@ -716,13 +743,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                      <button
                        disabled={saveDisabled(state)}
                        onClick={_ =>
-                         updateCourse(
-                           state,
-                           send,
-                           course,
-                           updateCoursesCB,
-                           course,
-                         )
+                         updateCourse(state, send, updateCoursesCB, course)
                        }
                        className="w-full btn btn-large btn-primary mt-3">
                        {"Update Course" |> str}

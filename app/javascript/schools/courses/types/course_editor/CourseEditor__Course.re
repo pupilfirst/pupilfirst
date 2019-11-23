@@ -15,6 +15,7 @@ type t = {
   about: option(string),
   publicSignup: bool,
   image: option(image),
+  featured: bool,
 };
 
 let name = t => t.name;
@@ -36,6 +37,8 @@ let passGrade = t => t.passGrade;
 let gradesAndLabels = t => t.gradesAndLabels;
 
 let enableLeaderboard = t => t.enableLeaderboard;
+
+let featured = t => t.featured;
 
 let image = t => t.image;
 
@@ -60,17 +63,18 @@ let makeImageFromJs = data => {
 
 let create =
     (
-      id,
-      name,
-      description,
-      endsAt,
-      maxGrade,
-      passGrade,
-      gradesAndLabels,
-      enableLeaderboard,
-      about,
-      publicSignup,
-      image,
+      ~id,
+      ~name,
+      ~description,
+      ~endsAt,
+      ~maxGrade,
+      ~passGrade,
+      ~gradesAndLabels,
+      ~enableLeaderboard,
+      ~about,
+      ~publicSignup,
+      ~image,
+      ~featured,
     ) => {
   id,
   name,
@@ -83,6 +87,40 @@ let create =
   about,
   publicSignup,
   image,
+  featured,
 };
 
 let replaceImage = (image, t) => {...t, image};
+
+let makeFromJs = rawCourse => {
+  let endsAt =
+    switch (rawCourse##endsAt) {
+    | Some(endsAt) =>
+      Some(endsAt |> Json.Decode.string)
+      |> OptionUtils.map(DateFns.parseString)
+    | None => None
+    };
+  let gradesAndLabels =
+    rawCourse##gradesAndLabels
+    |> Array.map(gradesAndLabel =>
+         CourseEditor__GradesAndLabels.create(
+           gradesAndLabel##grade,
+           gradesAndLabel##label,
+         )
+       )
+    |> Array.to_list;
+  create(
+    ~id=rawCourse##id |> int_of_string,
+    ~name=rawCourse##name,
+    ~description=rawCourse##description,
+    ~endsAt,
+    ~maxGrade=rawCourse##maxGrade,
+    ~passGrade=rawCourse##passGrade,
+    ~gradesAndLabels,
+    ~enableLeaderboard=rawCourse##enableLeaderboard,
+    ~about=rawCourse##about,
+    ~publicSignup=rawCourse##publicSignup,
+    ~image=makeImageFromJs(rawCourse##image),
+    ~featured=rawCourse##featured,
+  );
+};

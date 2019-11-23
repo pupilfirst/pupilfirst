@@ -8,4 +8,6 @@ class UserPolicy < ApplicationPolicy
     # All users can edit their profile.
     true
   end
+
+  alias home_v2? home?
 end

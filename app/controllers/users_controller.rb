@@ -1,9 +1,13 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  layout 'student', only: :home
+  layout 'student', only: :home_v2
 
   # GET /home/
   def home
+    @user = authorize(current_user)
+  end
+
+  def home_v2
     @user = authorize(current_user)
   end
 

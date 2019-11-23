@@ -9,6 +9,7 @@ module Mutations
     argument :enable_leaderboard, Boolean, required: true
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
+    argument :featured, Boolean, required: true
 
     description "Create a new course."
 

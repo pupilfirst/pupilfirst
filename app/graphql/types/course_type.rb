@@ -11,6 +11,7 @@ module Types
     field :about, String, null: true
     field :public_signup, Boolean, null: false
     field :image, Types::ImageType, null: true
+    field :featured, Boolean, null: false
 
     def grades_and_labels
       object.grade_labels.map do |grade, label|

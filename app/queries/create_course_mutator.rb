@@ -10,6 +10,7 @@ class CreateCourseMutator < ApplicationQuery
   property :enable_leaderboard
   property :public_signup
   property :about
+  property :featured
 
   def correct_grades_and_labels
     return if max_grade == grades_and_labels.count
@@ -28,7 +29,8 @@ class CreateCourseMutator < ApplicationQuery
         ends_at: ends_at,
         enable_leaderboard: enable_leaderboard,
         public_signup: public_signup,
-        about: about
+        about: about,
+        featured: featured
       )
       Courses::DemoContentService.new(course).execute
       course

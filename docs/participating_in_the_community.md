@@ -1,1 +1,0 @@
-# Participating in the Community

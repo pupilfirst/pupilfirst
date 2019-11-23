@@ -17,6 +17,5 @@
 - **Learning**
   - [Signing Up](/signing_up.md)
   - [Taking Courses](/taking_courses.md)
-  - [Participating in the Community](/participating_in_the_community.md)
 - **Additional Reading**
   - [User Profile](/user_profile.md)

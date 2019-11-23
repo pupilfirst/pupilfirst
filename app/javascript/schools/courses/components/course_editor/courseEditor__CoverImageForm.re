@@ -82,7 +82,7 @@ let optionalImageLabelText = (image, selectedFilename) =>
     }
   };
 
-let maxAllowedSize = 1 * 1024 * 1024;
+let maxAllowedSize = 2 * 1024 * 1024;
 
 let isInvalidImageFile = image =>
   (
@@ -100,7 +100,7 @@ let updateImage = (send, event) => {
   send(SelectImage(imageFile##name, imageFile |> isInvalidImageFile));
 };
 
-let make = (~course, ~updateImageCB, _children) => {
+let make = (~course, ~updateImageCB, ~closeDrawerCB, _children) => {
   ...component,
   initialState: () => {
     filename: None,
@@ -124,55 +124,62 @@ let make = (~course, ~updateImageCB, _children) => {
     },
   render: ({state, send}) => {
     let image = course |> Course.image;
-    <form
-      id=formId
-      key="sc-images-editor__form"
-      onSubmit={handleUpdateImages(send, state, course, updateImageCB)}>
-      <input
-        name="authenticity_token"
-        type_="hidden"
-        value={AuthenticityToken.fromHead()}
-      />
-      <DisablingCover.Jsx2 disabled={state.updating}>
-        <div
-          key="sc-images-editor__logo-on-400-bg-input-group" className="mt-4">
-          <label
-            className="block tracking-wide text-gray-800 text-xs font-semibold"
-            htmlFor="sc-images-editor__logo-on-400-bg-input">
-            {"Logo on a light background" |> str}
-          </label>
-          <input
-            disabled={state.updating}
-            className="hidden"
-            name="course_cover_image"
-            type_="file"
-            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-            id="sc-images-editor__logo-on-400-bg-input"
-            required=false
-            multiple=false
-            onChange={updateImage(send)}
-          />
-          <label
-            className="file-input-label mt-2"
-            htmlFor="sc-images-editor__logo-on-400-bg-input">
-            <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
-              {optionalImageLabelText(image, state.filename)}
-            </span>
-          </label>
-          <School__InputGroupError.Jsx2
-            message="must be a JPEG / PNG under 2 MB in size"
-            active={state.invalidImage}
-          />
-        </div>
-        <button
-          type_="submit"
-          key="sc-images-editor__update-button"
-          disabled={updateButtonDisabled(state)}
-          className="btn btn-primary btn-large mt-6">
-          {updateButtonText(state.updating) |> str}
-        </button>
-      </DisablingCover.Jsx2>
-    </form>;
+    <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB>
+      <form
+        id=formId
+        className="mx-8 pt-8"
+        key="sc-images-editor__form"
+        onSubmit={handleUpdateImages(send, state, course, updateImageCB)}>
+        <input
+          name="authenticity_token"
+          type_="hidden"
+          value={AuthenticityToken.fromHead()}
+        />
+        <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+          {"Edit cover image" |> str}
+        </h5>
+        <DisablingCover.Jsx2 disabled={state.updating}>
+          <div
+            key="sc-images-editor__logo-on-400-bg-input-group"
+            className="mt-4">
+            <label
+              className="block tracking-wide text-gray-800 text-xs font-semibold"
+              htmlFor="sc-images-editor__logo-on-400-bg-input">
+              {"Logo on a light background" |> str}
+            </label>
+            <input
+              disabled={state.updating}
+              className="hidden"
+              name="course_cover_image"
+              type_="file"
+              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+              id="sc-images-editor__logo-on-400-bg-input"
+              required=false
+              multiple=false
+              onChange={updateImage(send)}
+            />
+            <label
+              className="file-input-label mt-2"
+              htmlFor="sc-images-editor__logo-on-400-bg-input">
+              <i className="fas fa-upload" />
+              <span className="ml-2 truncate">
+                {optionalImageLabelText(image, state.filename)}
+              </span>
+            </label>
+            <School__InputGroupError.Jsx2
+              message="must be a JPEG / PNG under 2 MB in size"
+              active={state.invalidImage}
+            />
+          </div>
+          <button
+            type_="submit"
+            key="sc-images-editor__update-button"
+            disabled={updateButtonDisabled(state)}
+            className="btn btn-primary btn-large mt-6">
+            {updateButtonText(state.updating) |> str}
+          </button>
+        </DisablingCover.Jsx2>
+      </form>
+    </SchoolAdmin__EditorDrawer.Jsx2>;
   },
 };

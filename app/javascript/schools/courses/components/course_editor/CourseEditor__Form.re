@@ -288,11 +288,6 @@ let about = course =>
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about));
 
-let updateImage = (send, updateCoursesCB, course, image) => {
-  send(UpdateImage(image));
-  updateCoursesCB(course |> Course.replaceImage(Some(image)), false);
-};
-
 let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
   ...component,
   initialState: () =>
@@ -475,18 +470,6 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                 </div>
                 {enableLeaderboardButton(state.enableLeaderboard, send)}
                 {enablePublicSignupButton(state.publicSignup, send)}
-                {switch (course) {
-                 | Some(course) =>
-                   <CourseEditor__ImageHandler
-                     course
-                     updateImageCB={updateImage(
-                       send,
-                       updateCoursesCB,
-                       course,
-                     )}
-                   />
-                 | None => React.null
-                 }}
               </div>
             </div>
             <div className="mx-auto">

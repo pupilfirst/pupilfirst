@@ -130,12 +130,24 @@ let courseSection = (courses, communities) => {
                     className="text-gray-800 text-sm font-semibold p-4 w-full">
                     {course |> Course.description |> str}
                   </div>
-                  {courseLinks(course |> Course.links, course |> Course.id)}
-                  {communityLinks(
-                     course |> Course.linkedCommunities,
-                     communities,
-                   )}
-                  {callToAction(course)}
+                  {if (course |> Course.exited) {
+                     <div className="text-sm p-4 bg-red-100 rounded">
+                       {"Your student profile for this course is locked, and cannot be updated."
+                        |> str}
+                     </div>;
+                   } else {
+                     <div>
+                       {courseLinks(
+                          course |> Course.links,
+                          course |> Course.id,
+                        )}
+                       {communityLinks(
+                          course |> Course.linkedCommunities,
+                          communities,
+                        )}
+                       {callToAction(course)}
+                     </div>;
+                   }}
                 </div>
               </div>
             </div>

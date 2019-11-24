@@ -49,7 +49,9 @@ module Users
     end
 
     def courses_with_review_access
-      @courses_with_review_access ||= current_user.faculty.reviewable_courses.pluck(:id)
+      @courses_with_review_access ||= begin
+        current_user.faculty.present? ? current_user.faculty.reviewable_courses.pluck(:id) : []
+      end
     end
 
     def communities

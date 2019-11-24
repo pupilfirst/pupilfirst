@@ -21,10 +21,12 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
         <div className="text-gray-600 inline-block"> {userTitle |> str} </div>
       </div>
     </div>
-    <a className="btn" href="/user/edit">
-      <i className="fas fa-edit text-xs md:text-sm mr-2" />
-      <span> {"Edit profile" |> str} </span>
-    </a>
+    {showUserEdit
+       ? <a className="btn" href="/user/edit">
+           <i className="fas fa-edit text-xs md:text-sm mr-2" />
+           <span> {"Edit profile" |> str} </span>
+         </a>
+       : React.null}
   </div>;
 };
 
@@ -75,7 +77,30 @@ let callToAction = course => {
   </div>;
 };
 
-let courseSection = courses => {
+let communityLinks = (communityIds, communities) => {
+  <div className="px-4 flex flex-wrap mt-4">
+    {communityIds
+     |> Array.map(id => {
+          let community =
+            communities |> Js.Array.find(c => c |> Community.id == id);
+          switch (community) {
+          | Some(c) =>
+            <a
+              href={"/communities/" ++ (c |> Community.id)}
+              className="rounded shadow mr-4 mt-4 btn">
+              <i className="fas fa-book" />
+              <span className="text-black font-semibold ml-2">
+                {c |> Community.name |> str}
+              </span>
+            </a>
+          | None => React.null
+          };
+        })
+     |> React.array}
+  </div>;
+};
+
+let courseSection = (courses, communities) => {
   <div className="bg-gray-200 py-8">
     <div className="flex flex-wrap w-full max-w-3xl mx-auto">
       {courses
@@ -106,6 +131,10 @@ let courseSection = courses => {
                     {course |> Course.description |> str}
                   </div>
                   {courseLinks(course |> Course.links, course |> Course.id)}
+                  {communityLinks(
+                     course |> Course.linkedCommunities,
+                     communities,
+                   )}
                   {callToAction(course)}
                 </div>
               </div>
@@ -121,7 +150,7 @@ let make =
     (
       ~currentSchoolAdmin,
       ~courses,
-      ~communites,
+      ~communities,
       ~showUserEdit,
       ~userName,
       ~userTitle,
@@ -130,6 +159,6 @@ let make =
   <div>
     {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
     {navSection()}
-    {courseSection(courses)}
+    {courseSection(courses, communities)}
   </div>;
 };

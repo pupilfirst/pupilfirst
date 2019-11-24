@@ -13,14 +13,13 @@ module Users
         courses: course_details_array,
         current_school_admin: current_school_admin.present?,
         show_user_edit: show_user_edit?,
-        communites: community_details_array,
+        communities: community_details_array,
         user_name: current_user.name,
-        user_avatar: current_user.avatar,
         user_title: current_user.full_title
       }
 
       if current_user.avatar.attached?
-        home_props[:avatar_url] = view.url_for(student.user.avatar_variant(:thumb))
+        home_props[:avatar_url] = view.url_for(current_user.avatar_variant(:thumb))
       end
 
       home_props
@@ -73,21 +72,21 @@ module Users
       communities.map do |community|
         {
           id: community.id,
-          name: community.name,
-          linked_courses: community.courses.pluck(:id).map(&:to_s)
+          name: community.name
         }
       end
     end
 
     def course_details_array
-      courses.map do |course|
+      courses.includes(:communities).map do |course|
         {
           id: course.id,
           name: course.name,
           links: course_links(course),
           description: course.description,
           exited: student_exited(course.id),
-          image_url: course.image_url
+          image_url: course.image_url,
+          linked_communities: course.communities.pluck(:id).map(&:to_s)
         }
       end
     end

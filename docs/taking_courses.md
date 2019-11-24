@@ -10,6 +10,18 @@ While all of the content in the course is _visible_ to a student, right from the
 
 Levels can contain targets that are optional, and targets can depend upon each-other in the form of prerequisites, which further allows you to customize the order in which students attempt targets. As an author, how you'll structure the content depends upon the nature of the topic that you're trying to teach.
 
+### Completing targets
+
+Students progress in a course by completing targets, and leveling up. [As discussed in the curriculum editor](/curriculum_editor?id=setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. It is also very likely to be the most valuable target completion method for a student.
+
+![Student preparing a submission](https://res.cloudinary.com/sv-co/image/upload/v1574582893/pupilfirst_documentation/taking_courses/create_submission_kj16o8.png)
+
+This is because it's possible for expert coaches to make a qualitative review of a student's submission and give targeted feedback that will help them the most.
+
+This is a part of what _teachers_ do - get to know your student, what they need, and how best to help them progress from wherever they are in their learning process. No automated system can replace this. Yes, it can be difficult at times, and it can be time-consuming, but given that the goal of teaching is to provide the best possible outcome for our students, we should use the best methods available.
+
+We can, and will continue to [build features to make the review process easier](/reviewing_submissions?id=review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
+
 ## Participating in the Community
 
 When a community is linked to one or more courses, students in those courses can post questions in the community. In addition to this, if a community has the _Discuss Targets_ option is enabled, then students will see the _Discuss_ tab when they open targets. The tab shows questions other students have asked about the target in the past.
@@ -20,4 +32,10 @@ Because the issues that students face are often similar, having a history of dou
 
 ## Finishing a course
 
+Students are considered to have finished a course when they've passed all _milestone_ targets in it.
+
 ![A completed course](https://res.cloudinary.com/sv-co/image/upload/v1574423330/pupilfirst_documentation/taking_courses/course_complete_vtvncc.png)
+
+On courses with difficult subject matter, we've found it appropriate to end courses with capstone milestone targets that require students to exercise a wide range of skills they've learned during the course.
+
+This allows students to _flex_ their new skills, and also provides a good opportunity to provide feedback and to guide them towards further growth.

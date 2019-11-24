@@ -16,6 +16,10 @@ PupilFirst is an open-source project. You can find the [platform's codebase on G
 
 We also [track active work on the platform](https://github.com/SVdotCO/pupilfirst/projects/1) using the Github projects feature. The _In Progress_ list keeps track of what our team is working on at any given point of time, and the _Up Next_ list contains features and other issues that we're prioritizing for the near-future.
 
+### Improving this documentation
+
+This documentation is [a part of the open-source repository](https://github.com/SVdotCO/pupilfirst/tree/master/docs). If you spot any mistakes, or think that some topics could be expanded or improved, please post an issue on the Github repo. Better yet, send us a pull-request!
+
 ## Changelog
 
 You can find a log of changes to the platform at [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog).

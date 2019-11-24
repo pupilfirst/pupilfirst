@@ -1,7 +1,7 @@
 type t = {
   id: string,
   name: string,
-  link: array(string),
+  links: array(string),
   description: string,
   exited: bool,
   imageUrl: option(string),
@@ -9,7 +9,7 @@ type t = {
 
 let name = t => t.name;
 let id = t => t.id;
-let link = t => t.link;
+let links = t => t.links;
 let description = t => t.description;
 let exited = t => t.exited;
 let imageUrl = t => t.imageUrl;
@@ -20,7 +20,7 @@ let decode = json =>
     name: json |> field("name", string),
     description: json |> field("description", string),
     exited: json |> field("exited", bool),
-    link: json |> field("link", array(string)),
+    links: json |> field("links", array(string)),
     imageUrl:
       json |> field("imageUrl", nullable(string)) |> Js.Null.toOption,
   };

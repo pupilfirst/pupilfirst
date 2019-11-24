@@ -6,65 +6,129 @@ open UsersHome__Types;
 
 let str = React.string;
 
-let headerSectiom = () => {
-  <div> {"Header" |> str} </div>;
+let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
+  <div
+    className="flex max-w-3xl mx-auto justify-between pt-10 items-center px-2">
+    <div className="flex">
+      {switch (avatarUrl) {
+       | Some(src) => <img className="w-12 h-12 rounded-full mr-4" src />
+       | None => <Avatar name=userName className="w-12 h-12 mr-4" />
+       }}
+      <div className="text-sm flex flex-col justify-center">
+        <div className="text-black font-bold inline-block">
+          {userName |> str}
+        </div>
+        <div className="text-gray-600 inline-block"> {userTitle |> str} </div>
+      </div>
+    </div>
+    <a className="btn" href="/user/edit">
+      <i className="fas fa-edit text-xs md:text-sm mr-2" />
+      <span> {"Edit profile" |> str} </span>
+    </a>
+  </div>;
 };
 
 let navSection = () => {
-  <div> {"nav" |> str} </div>;
+  <div className="border-b mt-6">
+    <div className="flex max-w-3xl mx-auto">
+      <div className="py-4 border-b-2 border-primary-500 mr-6">
+        <i className="fas fa-edit text-xs md:text-sm mr-2" />
+        <span> {"My Courses" |> str} </span>
+      </div>
+      <div className="py-4 mr-2">
+        <i className="fas fa-edit text-xs md:text-sm mr-2" />
+        <span> {"Communities" |> str} </span>
+      </div>
+    </div>
+  </div>;
 };
 
-let courseSection = courses => {
-  <div className="flex w-full">
-    {courses
-     |> Array.map(course =>
-          <div key={course |> Course.id} className="px-2 w-1/2">
-            <div
-              key={course |> Course.id}
-              className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
-              <div className="w-full">
-                <div>
-                  {switch (course |> Course.imageUrl) {
-                   | Some(url) =>
-                     <img className="object-cover h-48 w-full" src=url />
-                   | None => <div className="h-48 svg-bg-pattern-1" />
-                   }}
-                </div>
-                <div className="flex w-full" key={course |> Course.id}>
-                  <a
-                    className="cursor-pointer flex flex-1 items-center py-6 px-4 hover:bg-gray-100">
-                    <div>
-                      <span className="text-black font-semibold">
-                        {course |> Course.name |> str}
-                      </span>
-                    </div>
-                  </a>
-                  <a
-                    className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
-                    {"Edit course" |> str}
-                  </a>
-                  <a
-                    className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
-                    {"Edit Cover Image" |> str}
-                  </a>
-                </div>
-                <div
-                  className="text-gray-800 bg-gray-300 text-sm font-semibold p-4 w-full">
-                  {course |> Course.description |> str}
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-     //  {courseLinks(course)}
+let courseLinks = (links, courseId) => {
+  <div className="flex flex-wrap px-4">
+    {links
+     |> Array.map(l => {
+          let (title, suffix, icon) =
+            switch (l) {
+            | "curriculum" => ("Curriculum", "curriculum", "fas fa-book")
+            | "calendar" => ("Calendar", "calendar", "fas fa-book")
+            | "leaderboard" => ("Leaderboard", "leaderboard", "fas fa-book")
+            | "review" => ("Review", "review", "fas fa-book")
+            | "students" => ("Students", "students", "fas fa-book")
+            | _unknown => ("Unknown", "", "fas fa-book")
+            };
+          <a
+            href={"/courses/" ++ courseId ++ "/" ++ suffix}
+            className="rounded shadow mr-4 mt-4 btn">
+            <i className=icon />
+            <span className="text-black font-semibold ml-2">
+              {title |> str}
+            </span>
+          </a>;
+        })
      |> React.array}
   </div>;
 };
 
+let callToAction = course => {
+  <div className="w-full bg-gray-300 mt-4 p-4">
+    <div> {"Visit Course" |> str} </div>
+  </div>;
+};
+
+let courseSection = courses => {
+  <div className="bg-gray-200 py-8">
+    <div className="flex flex-wrap w-full max-w-3xl mx-auto">
+      {courses
+       |> Array.map(course =>
+            <div key={course |> Course.id} className="px-2 w-full md:w-1/2">
+              <div
+                key={course |> Course.id}
+                className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
+                <div className="w-full">
+                  <div>
+                    {switch (course |> Course.imageUrl) {
+                     | Some(url) =>
+                       <img className="object-cover h-48 w-full" src=url />
+                     | None => <div className="h-48 svg-bg-pattern-1" />
+                     }}
+                  </div>
+                  <div className="flex w-full" key={course |> Course.id}>
+                    <div className="-mt-10 px-4">
+                      <div>
+                        <span className="text-white font-semibold">
+                          {course |> Course.name |> str}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="text-gray-800 text-sm font-semibold p-4 w-full">
+                    {course |> Course.description |> str}
+                  </div>
+                  {courseLinks(course |> Course.links, course |> Course.id)}
+                  {callToAction(course)}
+                </div>
+              </div>
+            </div>
+          )
+       |> React.array}
+    </div>
+  </div>;
+};
+
 [@react.component]
-let make = (~currentSchoolAdmin, ~courses, ~communites, ~showUserEdit) => {
-  <div className="max-w-5xl mx-auto">
-    {headerSectiom()}
+let make =
+    (
+      ~currentSchoolAdmin,
+      ~courses,
+      ~communites,
+      ~showUserEdit,
+      ~userName,
+      ~userTitle,
+      ~avatarUrl,
+    ) => {
+  <div>
+    {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
     {navSection()}
     {courseSection(courses)}
   </div>;

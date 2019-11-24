@@ -5,12 +5,18 @@ type props = {
   courses: array(UsersHome__Course.t),
   communites: array(UsersHome__Community.t),
   showUserEdit: bool,
+  userName: string,
+  userTitle: string,
+  avatarUrl: option(string),
 };
 
 let decodeProps = json =>
   Json.Decode.{
     currentSchoolAdmin: json |> field("currentSchoolAdmin", bool),
     showUserEdit: json |> field("showUserEdit", bool),
+    userName: json |> field("userName", string),
+    userTitle: json |> field("userTitle", string),
+    avatarUrl: json |> optional(field("avatarUrl", string)),
     courses: json |> field("courses", array(UsersHome__Course.decode)),
     communites:
       json |> field("communites", array(UsersHome__Community.decode)),
@@ -24,6 +30,9 @@ ReactDOMRe.renderToElementWithId(
     courses={props.courses}
     communites={props.communites}
     showUserEdit={props.showUserEdit}
+    userName={props.userName}
+    userTitle={props.userTitle}
+    avatarUrl={props.avatarUrl}
   />,
   "users-home",
 );

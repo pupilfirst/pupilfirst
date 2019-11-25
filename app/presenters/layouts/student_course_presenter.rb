@@ -11,7 +11,8 @@ module Layouts
       {
         current_course_id: @course.id,
         courses: courses,
-        additional_links: additional_links
+        additional_links: additional_links,
+        cover_image: @course.cover_url
       }
     end
 

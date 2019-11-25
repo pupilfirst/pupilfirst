@@ -13,7 +13,10 @@
       <div class="max-w-4xl mx-auto text-center px-4 pt-5 pb-6 md:px-14 md:py-9 lg:px-28 lg:pt-18 lg:pb-11">
         <h1 class="font-bold leading-tight"> <%= @course.name %></h1>
         <p class="font-semibold mt-2"><%= @course.description %> </p>
-        <a href="<%= apply_course_path(@course) %>" class="btn btn-large font-bold bg-yellow-400 hover:bg-yellow-500 text-yellow-900 shadow mt-4">Apply Now</a>
+        <% if @course.public_signup %>
+          <a href="<%= apply_course_path(@course) %>" class="btn btn-large font-bold bg-yellow-400 hover:bg-yellow-500 text-yellow-900 shadow mt-4">Apply
+            Now</a>
+        <% end %>
       </div>
       <div class="course-show__hero-bg-pattern w-full"></div>
     </div>
@@ -23,12 +26,15 @@
           <div class="bg-white p-4 md:p-8 markdown-block markdown-block__permissive">
             <%= sanitize(presenter.about) %>
           </div>
-          <div class="course-show__footer-cta svg-bg-pattern-4 p-4 py-12 text-center">
-            <div class="text-2xl text-white font-bold">
-              Apply to <%= @course.name %>
+          <% if @course.public_signup %>
+            <div class="course-show__footer-cta svg-bg-pattern-4 p-4 py-12 text-center">
+              <div class="text-2xl text-white font-bold">
+                Apply to <%= @course.name %>
+              </div>
+              <a href="<%= apply_course_path(@course) %>" class="btn btn-large font-bold bg-yellow-400 hover:bg-yellow-500 text-yellow-900 shadow mt-4">Apply
+                Now</a>
             </div>
-            <a href="<%= apply_course_path(@course) %>" class="btn btn-large font-bold bg-yellow-400 hover:bg-yellow-500 text-yellow-900 shadow mt-4">Apply Now</a>
-          </div>
+          <% end %>
         </div>
       </div>
     <% end %>

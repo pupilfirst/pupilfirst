@@ -60,6 +60,11 @@ let updateCourses = (send, course, hideOverlay) => {
 let courseLinks = course => {
   <div className="flex">
     <a
+      href={"/courses/" ++ (course |> Course.id |> string_of_int)}
+      className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
+      {"Landing Page" |> str}
+    </a>
+    <a
       href={
         "/school/courses/"
         ++ (course |> Course.id |> string_of_int)
@@ -158,7 +163,7 @@ let make = _children => {
           </button>
         </div>
         <div className="px-6 pb-4 mt-5 flex flex-1">
-          <div className="max-w-5xl flex flex-wrap mx-auto">
+          <div className="max-w-3xl flex flex-wrap mx-auto">
             {state.courses
              |> Course.sort
              |> List.map(course =>

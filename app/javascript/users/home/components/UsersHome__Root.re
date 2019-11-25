@@ -76,6 +76,7 @@ let courseLinks = (links, courseId) => {
             | _unknown => ("Unknown", "", "fas fa-bug")
             };
           <a
+            key=suffix
             href={"/courses/" ++ courseId ++ "/" ++ suffix}
             className="rounded shadow mr-4 mt-4 btn">
             <i className=icon />
@@ -125,6 +126,7 @@ let communityLinks = (communityIds, communities) => {
           switch (community) {
           | Some(c) =>
             <a
+              key={c |> Community.id}
               href={"/communities/" ++ (c |> Community.id)}
               className="rounded shadow mr-4 mt-4 btn">
               <i className="fas fa-users" />
@@ -199,7 +201,9 @@ let communitiesSection = communities => {
     <div className="lg:max-w-3xl flex flex-wrap">
       {communities
        |> Array.map(community =>
-            <div className="flex flex-col w-full md:w-1/2 px-2">
+            <div
+              key={community |> Community.id}
+              className="flex flex-col w-full md:w-1/2 px-2">
               <a
                 className="h-full mt-3 border border-gray-400 rounded-lg hover:shadow hover:border-gray-500"
                 href={"communities/" ++ (community |> Community.id)}>

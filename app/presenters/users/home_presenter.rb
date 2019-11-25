@@ -8,30 +8,50 @@ module Users
       "Home | #{current_school.name}"
     end
 
-    def course_details
-      course_details = begin
-        if current_school_admin.present?
-          course_details_for_admin
-        else
-          course_details_for_student
-        end
+    def props
+      home_props = {
+        courses: course_details_array,
+        current_school_admin: current_school_admin.present?,
+        show_user_edit: show_user_edit?,
+        communities: community_details_array,
+        user_name: current_user.name,
+        user_title: current_user.full_title
+      }
+
+      if current_user.avatar.attached?
+        home_props[:avatar_url] = view.url_for(current_user.avatar_variant(:thumb))
       end
 
-      return course_details if current_coach.blank?
-
-      add_review_links_for_coach(course_details)
+      home_props
     end
 
-    def founders
-      @founders ||= current_user.founders.joins(:school).where(schools: { id: current_school }).includes(:course, :startup)
+    private
+
+    def courses
+      @courses ||= begin
+        if current_school_admin.present?
+          current_school.courses
+        else
+          current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access).uniq)
+        end
+      end
     end
 
-    def show_user_edit?
-      view.policy(current_user).edit?
+    def courses_with_student_profile
+      @courses_with_student_profile ||= begin
+        current_user.founders.joins(:course).pluck(:course_id, :exited).map do |course_id, exited|
+          {
+            course_id: course_id,
+            exited: exited
+          }
+        end
+      end
     end
 
-    def show_communities?
-      communities.any?
+    def courses_with_review_access
+      @courses_with_review_access ||= begin
+        current_user.faculty.present? ? current_user.faculty.reviewable_courses.pluck(:id) : []
+      end
     end
 
     def communities
@@ -50,124 +70,45 @@ module Users
       end
     end
 
-    private
-
-    def course_details_for_admin
-      current_school.courses.map do |course|
-        course_detail = course_info(course)
-        course_detail[:cta] = cta_course(course)
-        course_detail[:links] = school_admin_links(course)
-        course_detail[:founder_exited] = false
-        course_detail
-      end
-    end
-
-    def course_details_for_student
-      founders.map do |founder|
-        course_detail = course_info(founder.course)
-        course_detail[:cta] = cta_for_founder(founder)
-        course_detail[:links] = founder_links(founder)
-        course_detail[:founder_exited] = founder.exited
-        course_detail
-      end
-    end
-
-    def cta_for_founder(founder)
-      text = if access_ended?(founder)
-        'Course Ended'
-      elsif !founder.dashboard_toured?
-        'Start Course'
-      else
-        'Continue Course'
-      end
-
-      cta_course(founder.course, text)
-    end
-
-    def cta_course(course, text = 'View Course')
-      {
-        text: text,
-        link: view.curriculum_course_path(course)
-      }
-    end
-
-    def access_ended?(founder)
-      founder.course.ends_at&.past? || founder.startup.access_ends_at&.past?
-    end
-
-    def add_review_links_for_coach(course_details)
-      current_coach.reviewable_courses.inject(course_details) do |saved_courses, coach_course|
-        saved_course, other_saved_courses = saved_courses.partition { |c| c[:course_id] == coach_course.id }
-        saved_course = saved_course[0]
-
-        if saved_course.present?
-          saved_course[:cta] = review_link(coach_course, 'Review Submissions')
-          saved_course[:links] = coach_links(coach_course)
-        else
-          saved_course = course_details_for_coach(coach_course)
-        end
-
-        [saved_course] + other_saved_courses
-      end
-    end
-
-    def course_details_for_coach(course)
-      course_detail = course_info(course)
-      course_detail[:cta] = review_link(course, 'Review Submissions')
-      course_detail[:links] = coach_links(course)
-      course_detail
-    end
-
-    def founder_links(founder)
-      return [] if founder.exited?
-
-      [curriculum_link(founder.course), leaderboard_link(founder.course)] - [nil]
-    end
-
-    def school_admin_links(course)
-      [curriculum_link(course), leaderboard_link(course)] - [nil]
-    end
-
-    def coach_links(course)
-      [curriculum_link(course), leaderboard_link(course), review_link(course), review_link_legacy(course)] - [nil]
-    end
-
-    def review_link(course, text = 'Review')
-      {
-        text: text,
-        link: view.review_course_path(course)
-      }
-    end
-
-    def review_link_legacy(course, text = 'Review (Legacy)')
-      {
-        text: text,
-        link: view.course_coach_dashboard_path(course)
-      }
-    end
-
-    def course_info(course)
-      {
-        course_id: course.id,
-        course_name: course.name,
-        course_description: course.description
-      }
-    end
-
-    def curriculum_link(course)
-      {
-        text: "Curriculum",
-        link: view.curriculum_course_path(course)
-      }
-    end
-
-    def leaderboard_link(course)
-      if course.enable_leaderboard
+    def community_details_array
+      communities.map do |community|
         {
-          text: "Leaderboard",
-          link: view.leaderboard_course_path(course)
+          id: community.id,
+          name: community.name
         }
       end
+    end
+
+    def course_details_array
+      courses.includes(:communities).map do |course|
+        {
+          id: course.id,
+          name: course.name,
+          links: course_links(course),
+          description: course.description,
+          exited: student_exited(course.id),
+          thumbnail_url: course.thumbnail_url,
+          linked_communities: course.communities.pluck(:id).map(&:to_s)
+        }
+      end
+    end
+
+    def student_exited(course_id)
+      course_with_founder = courses_with_student_profile.detect { |c| c[:course_id] == course_id }
+      course_with_founder.present? ? course_with_founder[:exited] : false
+    end
+
+    def course_links(course)
+      links = []
+      links << 'curriculum'
+      links << 'leaderboard' if course.enable_leaderboard?
+      links << 'review' if course.id.in?(courses_with_review_access)
+      links << 'students' if course.id.in?(courses_with_review_access)
+      links
+    end
+
+    def show_user_edit?
+      view.policy(current_user).edit?
     end
   end
 end

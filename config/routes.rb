@@ -107,7 +107,6 @@ Rails.application.routes.draw do
   get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
   get 'home', controller: "users", action: "home", as: "home"
-  get 'home_v2', controller: "users", action: "home_v2", as: "home_v2"
 
   resource :user, only: %i[edit update]
 

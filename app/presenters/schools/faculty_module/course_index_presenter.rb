@@ -37,7 +37,7 @@ module Schools
 
       def faculty_team_details(faculty)
         if faculty.startups.present?
-          faculty.startups.map { |startup| { name: startup.name } }
+          faculty.startups.joins(:course).where(courses: { id: @course }).map { |startup| { name: startup.name } }
         end
       end
 

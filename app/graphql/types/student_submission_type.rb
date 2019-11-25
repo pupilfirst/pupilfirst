@@ -5,7 +5,7 @@ module Types
     field :created_at, String, null: false
     field :passed_at, String, null: true
     field :level_id, String, null: false
-    field :grades, Types::GradeType, null: false
+    field :grades, [Types::GradeType], null: false
 
     def level_id
       object.target.level.id

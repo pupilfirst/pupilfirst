@@ -43,6 +43,8 @@ class StudentDetailsResolver < ApplicationQuery
   def authorized?
     return false if current_user.faculty.blank?
 
+    return false if student.blank?
+
     current_user.faculty.reviewable_courses.where(id: student.course).exists?
   end
 
@@ -51,7 +53,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def coach_notes
-    CoachNote.where(student_id: student_id)
+    CoachNote.where(student_id: student_id).limit(20)
   end
 
   def submissions

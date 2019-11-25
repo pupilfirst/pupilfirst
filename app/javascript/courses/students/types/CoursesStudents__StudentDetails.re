@@ -23,6 +23,8 @@ let name = t => t.name;
 
 let title = t => t.title;
 
+let avatarUrl = t => t.avatarUrl;
+
 let makeAverageGrade = gradesData => {
   gradesData
   |> Js.Array.map(gradeData =>

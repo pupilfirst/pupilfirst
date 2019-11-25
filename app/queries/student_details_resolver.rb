@@ -54,8 +54,9 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def avatar_url
-    if student.user.avatar.attached?
-      Rails.application.routes.url_helpers.rails_representation_path(user.avatar_variant(:thumb), only_path: true)
+    user = student.user
+    if user.avatar.attached?
+      Rails.application.routes.url_helpers.rails_representation_path(user.avatar_variant(:mid), only_path: true)
     end
   end
 

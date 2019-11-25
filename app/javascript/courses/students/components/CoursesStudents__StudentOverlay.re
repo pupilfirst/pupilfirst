@@ -15,7 +15,7 @@ module StudentDetailsQuery = [%graphql
   {|
     query($studentId: ID!) {
       studentDetails(studentId: $studentId) {
-        title, name,email, phone, socialLinks,
+        title, name,email, phone, socialLinks, avatarUrl
         evaluationCriteria{
           id, name, maxGrade, passGrade
         },
@@ -72,124 +72,147 @@ let make = (~courseId, ~studentId) => {
   );
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="flex flex-col md:flex-row min-h-screen">
-      <div className="w-full md:w-2/5 bg-white">
-        <div className="student-overlay__student-details relative py-8">
-          <div
-            onClick={_ => closeOverlay(courseId)}
-            className="absolute left-0 top-0">
-            <Icon
-              className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0"
-            />
-            <span className="text-xs hidden lg:inline-block mt-px">
-              {"close" |> str}
-            </span>
-          </div>
-          <div
-            className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-25 md:h-25 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
-            <img className="object-cover" />
-          </div>
-          <h2 className="text-lg text-center mt-3"> {"Jim Flores" |> str} </h2>
-          <p className="text-sm font-semibold text-center mt-2">
-            {"Student, Sastra University" |> str}
-          </p>
-        </div>
-        <div className="flex">
-          <div className="w-1/2 student-overlay__doughnut-chart-container">
-            <svg
-              viewBox="0 0 36 36"
-              className="student-overlay__doughnut-chart purple">
-              <path
-                className="student-overlay__doughnut-chart-bg"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                className="student-overlay__doughnut-chart-stroke"
-                strokeDasharray="50, 100"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <text
-                x="50%"
-                y="58%"
-                className="student-overlay__doughnut-chart-text font-semibold">
-                {"30%" |> str}
-              </text>
-            </svg>
-            <p className="text-sm font-semibold text-center mt-2">
-              {"Total Targets Completed" |> str}
-            </p>
-            <p
-              className="text-sm text-gray-700 font-semibold text-center mt-1">
-              {"25 / 100 targets" |> str}
-            </p>
-          </div>
-          <div className="w-1/2 student-overlay__doughnut-chart-container">
-            <svg
-              viewBox="0 0 36 36"
-              className="student-overlay__doughnut-chart pink">
-              <path
-                className="student-overlay__doughnut-chart-bg"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                className="student-overlay__doughnut-chart-stroke"
-                strokeDasharray="80, 100"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <text
-                x="50%"
-                y="58%"
-                className="student-overlay__doughnut-chart-text font-semibold">
-                {"80%" |> str}
-              </text>
-            </svg>
-            <p className="text-sm font-semibold text-center mt-2">
-              {"Average Quiz Completed" |> str}
-            </p>
-            <p
-              className="text-sm text-gray-700 font-semibold text-center mt-1">
-              {"25 / 100 Quizes" |> str}
-            </p>
-          </div>
-        </div>
-        <div className="flex py-8">
-          <div className="w-1/2 student-overlay__pie-chart-container">
-            <svg
-              className="student-overlay__pie-chart mx-auto"
-              viewBox="0 0 32 32">
-              <circle
-                className="student-overlay__pie-chart-circle"
-                strokeDasharray="29, 100"
-                r="16"
-                cx="16"
-                cy="16"
-              />
-            </svg>
-            <p className="text-sm font-semibold text-center mt-2">
-              {"Quality of Submission" |> str}
-            </p>
-          </div>
-          <div className="w-1/2 student-overlay__pie-chart-container">
-            <svg
-              className="student-overlay__pie-chart mx-auto"
-              viewBox="0 0 32 32">
-              <circle
-                className="student-overlay__pie-chart-circle"
-                strokeDasharray="29, 100"
-                r="16"
-                cx="16"
-                cy="16"
-              />
-            </svg>
-            <p className="text-sm font-semibold text-center mt-2">
-              {"Correctness of Implementation" |> str}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">
-        {"Comments" |> str}
-      </div>
+    <div
+      onClick={_ => closeOverlay(courseId)}
+      className="absolute z-50 left-0 cursor-pointer top-0">
+      <Icon className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0" />
+      <span className="text-xs hidden lg:inline-block mt-px">
+        {"close" |> str}
+      </span>
     </div>
+    {switch (state) {
+     | Loaded(studentDetails) =>
+       <div className="flex flex-col md:flex-row min-h-screen">
+         <div className="w-full md:w-2/5 bg-white">
+           <div className="student-overlay__student-details relative py-8">
+             <div
+               className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-25 md:h-25 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+               {switch (studentDetails |> StudentDetails.avatarUrl) {
+                | Some(avatarUrl) =>
+                  <img className="w-full object-cover" src=avatarUrl />
+                | None =>
+                  <Avatar
+                    name={studentDetails |> StudentDetails.name}
+                    className="object-cover"
+                  />
+                }}
+             </div>
+             <h2 className="text-lg text-center mt-3">
+               {studentDetails |> StudentDetails.name |> str}
+             </h2>
+             <p className="text-sm font-semibold text-center mt-2">
+               {studentDetails |> StudentDetails.title |> str}
+             </p>
+           </div>
+           <div className="flex">
+             <div className="w-1/2 student-overlay__doughnut-chart-container">
+               <svg
+                 viewBox="0 0 36 36"
+                 className="student-overlay__doughnut-chart purple">
+                 <path
+                   className="student-overlay__doughnut-chart-bg"
+                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                 />
+                 <path
+                   className="student-overlay__doughnut-chart-stroke"
+                   strokeDasharray="50, 100"
+                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                 />
+                 <text
+                   x="50%"
+                   y="58%"
+                   className="student-overlay__doughnut-chart-text font-semibold">
+                   {"30%" |> str}
+                 </text>
+               </svg>
+               <p className="text-sm font-semibold text-center mt-2">
+                 {"Total Targets Completed" |> str}
+               </p>
+               <p
+                 className="text-sm text-gray-700 font-semibold text-center mt-1">
+                 {"25 / 100 targets" |> str}
+               </p>
+             </div>
+             <div className="w-1/2 student-overlay__doughnut-chart-container">
+               <svg
+                 viewBox="0 0 36 36"
+                 className="student-overlay__doughnut-chart pink">
+                 <path
+                   className="student-overlay__doughnut-chart-bg"
+                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                 />
+                 <path
+                   className="student-overlay__doughnut-chart-stroke"
+                   strokeDasharray="80, 100"
+                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                 />
+                 <text
+                   x="50%"
+                   y="58%"
+                   className="student-overlay__doughnut-chart-text font-semibold">
+                   {"80%" |> str}
+                 </text>
+               </svg>
+               <p className="text-sm font-semibold text-center mt-2">
+                 {"Average Quiz Completed" |> str}
+               </p>
+               <p
+                 className="text-sm text-gray-700 font-semibold text-center mt-1">
+                 {"25 / 100 Quizes" |> str}
+               </p>
+             </div>
+           </div>
+           <div className="flex py-8">
+             <div className="w-1/2 student-overlay__pie-chart-container">
+               <svg
+                 className="student-overlay__pie-chart mx-auto"
+                 viewBox="0 0 32 32">
+                 <circle
+                   className="student-overlay__pie-chart-circle"
+                   strokeDasharray="29, 100"
+                   r="16"
+                   cx="16"
+                   cy="16"
+                 />
+               </svg>
+               <p className="text-sm font-semibold text-center mt-2">
+                 {"Quality of Submission" |> str}
+               </p>
+             </div>
+             <div className="w-1/2 student-overlay__pie-chart-container">
+               <svg
+                 className="student-overlay__pie-chart mx-auto"
+                 viewBox="0 0 32 32">
+                 <circle
+                   className="student-overlay__pie-chart-circle"
+                   strokeDasharray="29, 100"
+                   r="16"
+                   cx="16"
+                   cy="16"
+                 />
+               </svg>
+               <p className="text-sm font-semibold text-center mt-2">
+                 {"Correctness of Implementation" |> str}
+               </p>
+             </div>
+           </div>
+         </div>
+         <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">
+           {"Comments" |> str}
+         </div>
+       </div>
+     | Loading =>
+       <div>
+         <div className="bg-gray-100 py-4">
+           <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
+         </div>
+         <div className="max-w-3xl mx-auto">
+           {SkeletonLoading.heading()}
+           {SkeletonLoading.paragraph()}
+           {SkeletonLoading.profileCard()}
+           {SkeletonLoading.paragraph()}
+         </div>
+       </div>
+     }}
   </div>;
 };

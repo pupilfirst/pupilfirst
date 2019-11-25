@@ -1,0 +1,11 @@
+.user-home-community__cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.user-home-course__cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}

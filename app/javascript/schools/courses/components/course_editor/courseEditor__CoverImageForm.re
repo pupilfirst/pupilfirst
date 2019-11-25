@@ -91,7 +91,7 @@ let optionalImageLabelText = (image, selectedFilename) =>
         {"Please pick a file to replace " |> str}
         <code> {existingImage |> Course.filename |> str} </code>
       </span>
-    | None => "Please choose an image file to customize course cover" |> str
+    | None => "Please choose an image file." |> str
     }
   };
 
@@ -161,14 +161,14 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
           value={AuthenticityToken.fromHead()}
         />
         <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-          {"Edit cover image" |> str}
+          {"Course Images" |> str}
         </h5>
         <DisablingCover.Jsx2 disabled={state.updating}>
-          <div key="couese-images-editor__thumbnail" className="mt-4">
+          <div key="course-images-editor__thumbnail" className="mt-4">
             <label
               className="block tracking-wide text-gray-800 text-xs font-semibold"
               htmlFor="sc-images-editor__logo-on-400-bg-input">
-              {"Thumbnail for course" |> str}
+              {"Thumbnail" |> str}
             </label>
             <input
               disabled={state.updating}
@@ -176,14 +176,14 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
               name="course_thumbnail"
               type_="file"
               accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="couese-images-editor__thumbnail"
+              id="course-images-editor__thumbnail"
               required=false
               multiple=false
               onChange={updateImage(send, false)}
             />
             <label
               className="file-input-label mt-2"
-              htmlFor="couese-images-editor__thumbnail">
+              htmlFor="course-images-editor__thumbnail">
               <i className="fas fa-upload" />
               <span className="ml-2 truncate">
                 {optionalImageLabelText(thumbnail, state.filenameThumb)}
@@ -194,11 +194,11 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
               active={state.invalidThumb}
             />
           </div>
-          <div key="couese-images-editor__cover" className="mt-4">
+          <div key="course-images-editor__cover" className="mt-4">
             <label
               className="block tracking-wide text-gray-800 text-xs font-semibold"
               htmlFor="sc-images-editor__logo-on-400-bg-input">
-              {"Cover image for course" |> str}
+              {"Cover Image" |> str}
             </label>
             <input
               disabled={state.updating}
@@ -206,14 +206,14 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
               name="course_cover"
               type_="file"
               accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="couese-images-editor__cover"
+              id="course-images-editor__cover"
               required=false
               multiple=false
               onChange={updateImage(send, true)}
             />
             <label
               className="file-input-label mt-2"
-              htmlFor="couese-images-editor__cover">
+              htmlFor="course-images-editor__cover">
               <i className="fas fa-upload" />
               <span className="ml-2 truncate">
                 {optionalImageLabelText(cover, state.filenameCover)}

@@ -76,6 +76,7 @@ let courseLinks = (links, courseId) => {
             | _unknown => ("Unknown", "", "fas fa-bug")
             };
           <a
+            key=suffix
             href={"/courses/" ++ courseId ++ "/" ++ suffix}
             className="rounded shadow mr-4 mt-4 btn">
             <i className=icon />
@@ -102,16 +103,39 @@ let ctaButton = (title, suffix, courseId) => {
   </a>;
 };
 
-let callToAction = course => {
+let ctaText = message => {
+  <div className="flex justify-between items-center">
+    <span>
+      <i className="text-primary-500 fas fa-book" />
+      <span className="text-primary-500 font-semibold ml-2">
+        {message |> str}
+      </span>
+    </span>
+  </div>;
+};
+
+let callToAction = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
+
   <div className="w-full bg-gray-200 mt-4 p-4">
-    {switch (course |> Course.links |> Js.Array.find(l => l == "review")) {
-     | Some(l) => ctaButton("Visit Review", l, courseId)
-     | None =>
-       switch (course |> Course.links |> Js.Array.find(l => l == "curriculum")) {
-       | Some(l) => ctaButton("Continue course", l, courseId)
-       | None => React.null
-       }
+    {if (currentSchoolAdmin) {
+       ctaButton("View Course", "curriculum", courseId);
+     } else {
+       switch (course |> Course.links |> Js.Array.find(l => l == "review")) {
+       | Some(l) => ctaButton("Review Submissions", l, courseId)
+       | None =>
+         switch (
+           course |> Course.exited,
+           course |> Course.ended,
+           course |> Course.links |> Js.Array.find(l => l == "curriculum"),
+         ) {
+         | (true, _, _) => ctaText("Dropped out")
+         | (false, true, _) => ctaText("Course Ended")
+         | (false, false, Some(l)) =>
+           ctaButton("Continue Course", l, courseId)
+         | (false, false, None) => React.null
+         }
+       };
      }}
   </div>;
 };
@@ -125,6 +149,7 @@ let communityLinks = (communityIds, communities) => {
           switch (community) {
           | Some(c) =>
             <a
+              key={c |> Community.id}
               href={"/communities/" ++ (c |> Community.id)}
               className="rounded shadow mr-4 mt-4 btn">
               <i className="fas fa-users" />
@@ -139,11 +164,14 @@ let communityLinks = (communityIds, communities) => {
   </div>;
 };
 
-let coursesSection = (courses, communities) => {
+let coursesSection = (courses, communities, currentSchoolAdmin) => {
   <div className="flex flex-wrap w-full max-w-3xl mx-auto">
     {courses
      |> Array.map(course =>
-          <div key={course |> Course.id} className="px-2 w-full md:w-1/2">
+          <div
+            key={course |> Course.id}
+            ariaLabel={course |> Course.name}
+            className="px-2 w-full md:w-1/2">
             <div
               key={course |> Course.id}
               className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
@@ -183,9 +211,9 @@ let coursesSection = (courses, communities) => {
                         course |> Course.linkedCommunities,
                         communities,
                       )}
-                     {callToAction(course)}
                    </div>;
                  }}
+                {callToAction(course, currentSchoolAdmin)}
               </div>
             </div>
           </div>
@@ -199,7 +227,9 @@ let communitiesSection = communities => {
     <div className="lg:max-w-3xl flex flex-wrap">
       {communities
        |> Array.map(community =>
-            <div className="flex flex-col w-full md:w-1/2 px-2">
+            <div
+              key={community |> Community.id}
+              className="flex flex-col w-full md:w-1/2 px-2">
               <a
                 className="h-full mt-3 border border-gray-400 rounded-lg hover:shadow hover:border-gray-500"
                 href={"communities/" ++ (community |> Community.id)}>
@@ -242,7 +272,8 @@ let make =
     </div>
     <div className="py-8">
       {switch (view) {
-       | ShowCourses => coursesSection(courses, communities)
+       | ShowCourses =>
+         coursesSection(courses, communities, currentSchoolAdmin)
        | ShowCommunities => communitiesSection(communities)
        }}
     </div>

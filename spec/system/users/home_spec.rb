@@ -58,7 +58,7 @@ feature 'User Home', js: true do
       expect(page).to have_text(course_1.name)
       expect(page).to have_text(course_1.description)
       expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
-      expect(page).to have_link("Start Course", href: curriculum_course_path(course_1))
+      expect(page).to have_link("Continue Course", href: curriculum_course_path(course_1))
     end
 
     # A course which is going on.
@@ -72,7 +72,8 @@ feature 'User Home', js: true do
     within("div[aria-label=\"#{course_3.name}\"]") do
       expect(page).to have_text(course_3.name)
       expect(page).to have_text(course_3.description)
-      expect(page).to have_link("Course Ended", href: curriculum_course_path(course_3))
+      expect(page).to have_link("Curriculum", href: curriculum_course_path(course_3))
+      expect(page).to have_text("Course Ended")
     end
 
     # Course from which student has dropped out.
@@ -80,7 +81,11 @@ feature 'User Home', js: true do
       expect(page).to have_text(course_4.name)
       expect(page).to have_text(course_4.description)
       expect(page).to have_text("Dropped out")
+
+      expect(page).not_to have_link("Curriculum", href: curriculum_course_path(course_4))
     end
+
+    click_button 'Communities'
 
     # Students should have access to communities which are linked to their courses,
     # regardless of whether the course is active...
@@ -100,11 +105,12 @@ feature 'User Home', js: true do
     expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
     expect(page).to have_link("Review", href: review_course_path(course_1))
     expect(page).to have_link("Review Submissions", href: review_course_path(course_1))
-    expect(page).to have_link("Review (Legacy)", href: course_coach_dashboard_path(course_1))
 
     expect(page).not_to have_text(course_2.name)
     expect(page).not_to have_text(course_3.name)
     expect(page).not_to have_text(course_4.name)
+
+    click_button 'Communities'
 
     # course_coach has access to all communities in school
     expect(page).to have_text(community_1.name)
@@ -121,11 +127,12 @@ feature 'User Home', js: true do
     expect(page).to have_link("Curriculum", href: curriculum_course_path(course_2))
     expect(page).to have_link("Review", href: review_course_path(course_2))
     expect(page).to have_link("Review Submissions", href: review_course_path(course_2))
-    expect(page).to have_link("Review (Legacy)", href: course_coach_dashboard_path(course_2))
 
     expect(page).not_to have_text(course_1.name)
     expect(page).not_to have_text(course_3.name)
     expect(page).not_to have_text(course_4.name)
+
+    click_button 'Communities'
 
     # team_coach has access to all communities in school
     expect(page).to have_text(community_1.name)
@@ -148,6 +155,7 @@ feature 'User Home', js: true do
     expect(page).to have_link("View Course", href: curriculum_course_path(course_3))
     expect(page).to have_link("View Course", href: curriculum_course_path(course_4))
 
+    click_button 'Communities'
     # school admin has access to all communities in school
     expect(page).to have_text(community_1.name)
     expect(page).to have_text(community_2.name)

@@ -7,10 +7,6 @@ class UsersController < ApplicationController
     @user = authorize(current_user)
   end
 
-  def home_v2
-    @user = authorize(current_user)
-  end
-
   # GET /user/edit
   def edit
     @form = Users::EditForm.new(current_user)

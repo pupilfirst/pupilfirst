@@ -12,20 +12,20 @@ feature 'Courses Index', js: true do
 
   let!(:school_admin) { create :school_admin, school: school }
 
-  let!(:new_course_name) { Faker::Lorem.words(2).join ' ' }
-  let!(:new_course_name_1) { Faker::Lorem.words(2).join ' ' }
-  let!(:new_description) { Faker::Lorem.sentences.join ' ' }
-  let!(:new_about) { Faker::Lorem.paragraph }
-  let!(:new_description_for_edit) { Faker::Lorem.sentences.join ' ' }
-  let!(:grade_label_1) { Faker::Lorem.words(2).join ' ' }
-  let!(:grade_label_2) { Faker::Lorem.words(2).join ' ' }
-  let!(:grade_label_3) { Faker::Lorem.words(2).join ' ' }
-  let!(:grade_label_4) { Faker::Lorem.words(2).join ' ' }
-  let!(:grade_label_5) { Faker::Lorem.words(2).join ' ' }
+  let(:course_name) { Faker::Lorem.words(2).join ' ' }
+  let(:description) { Faker::Lorem.sentences.join ' ' }
 
-  let(:date) { Date.today }
+  let(:grade_label_1) { Faker::Lorem.words(2).join ' ' }
+  let(:grade_label_2) { Faker::Lorem.words(2).join ' ' }
+  let(:grade_label_3) { Faker::Lorem.words(2).join ' ' }
+  let(:grade_label_4) { Faker::Lorem.words(2).join ' ' }
+  let(:grade_label_5) { Faker::Lorem.words(2).join ' ' }
 
-  scenario 'school admin visits courses and create a course' do
+  def file_path(filename)
+    File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
+  end
+
+  scenario 'School admin creates a course' do
     sign_in_user school_admin.user, referer: school_courses_path
 
     # list all courses
@@ -36,15 +36,17 @@ feature 'Courses Index', js: true do
     # Add a new course
     click_button 'Add New Course'
 
-    fill_in 'Course Name', with: new_course_name
-    fill_in 'Name', with: new_course_name
-    fill_in 'Description', with: new_description
+    fill_in 'Course Name', with: course_name
+    fill_in 'Description', with: description
+
     within('div#leaderboard') do
       click_button 'Yes'
     end
+
     within('div#public-signup') do
       click_button 'No'
     end
+
     fill_in 'label1', with: grade_label_1
     find('label[for=label2]').click
     fill_in 'label2', with: grade_label_2
@@ -59,10 +61,12 @@ feature 'Courses Index', js: true do
     expect(page).to have_text("Course created successfully")
     dismiss_notification
 
-    expect(page).to have_text(new_course_name)
+    expect(page).to have_text(course_name)
+
     course = Course.last
-    expect(course.name).to eq(new_course_name)
-    expect(course.description).to eq(new_description)
+
+    expect(course.name).to eq(course_name)
+    expect(course.description).to eq(description)
     expect(course.about).to eq(nil)
     expect(course.enable_leaderboard).to eq(true)
     expect(course.public_signup).to eq(false)
@@ -73,27 +77,67 @@ feature 'Courses Index', js: true do
     expect(course.grade_labels["3"]).to eq(grade_label_3)
     expect(course.grade_labels["4"]).to eq(grade_label_4)
     expect(course.grade_labels["5"]).to eq(grade_label_5)
+  end
 
-    find("a", text: new_course_name).click
-    fill_in 'Name', with: new_course_name_1, fill_options: { clear: :backspace }
-    fill_in 'Description', with: new_description_for_edit, fill_options: { clear: :backspace }
-    fill_in 'Course end date', with: date.iso8601
-    replace_markdown new_about
-    within('div#leaderboard') do
-      click_button 'No'
+  context 'when a course exists' do
+    let(:new_course_name) { Faker::Lorem.words(2).join ' ' }
+    let(:new_about) { Faker::Lorem.paragraph }
+    let(:new_description) { Faker::Lorem.sentences.join ' ' }
+    let(:course_end_date) { Date.today }
+
+    scenario 'School admin edits an existing course' do
+      sign_in_user school_admin.user, referer: school_courses_path
+
+      find("a[title='Edit #{course_1.name}']").click
+
+      fill_in 'Name', with: new_course_name, fill_options: { clear: :backspace }
+      fill_in 'Description', with: new_description, fill_options: { clear: :backspace }
+      fill_in 'Course end date', with: course_end_date.iso8601
+
+      replace_markdown new_about
+
+      within('div#leaderboard') do
+        click_button 'No'
+      end
+
+      within('div#public-signup') do
+        click_button 'Yes'
+      end
+
+      click_button 'Update Course'
+
+      expect(page).to have_text("Course updated successfully")
+
+      expect(course_1.reload.name).to eq(new_course_name)
+      expect(course_1.description).to eq(new_description)
+      expect(course_1.about).to eq(new_about)
+      expect(course_1.enable_leaderboard).to eq(false)
+      expect(course_1.public_signup).to eq(true)
+      expect(course_1.ends_at.to_date).to eq(course_end_date)
     end
-    within('div#public-signup') do
-      click_button 'Yes'
+
+    scenario 'School admin edits images associated with the course' do
+      sign_in_user school_admin.user, referer: school_courses_path
+
+      find("a[title='Edit images for #{course_1.name}']").click
+
+      expect(page).to have_text('Please choose an image file.', count: 2)
+
+      attach_file 'course_thumbnail', file_path('logo_lipsum_on_light_bg.png'), visible: false
+      attach_file 'course_cover', file_path('logo_lipsum_on_dark_bg.png'), visible: false
+
+      click_button 'Update Image'
+
+      expect(page).to have_text('Images have been updated successfully')
+
+      find("a[title='Edit images for #{course_1.name}']").click
+
+      expect(page).to have_text('Please pick a file to replace logo_lipsum_on_light_bg.png')
+      expect(page).to have_text('Please pick a file to replace logo_lipsum_on_dark_bg.png')
+
+      expect(course_1.cover).to be_attached
+      expect(course_1.thumbnail).to be_attached
     end
-    click_button 'Update Course'
-    expect(page).to have_text("Course updated successfully")
-    course.reload
-    expect(course.name).to eq(new_course_name_1)
-    expect(course.description).to eq(new_description_for_edit)
-    expect(course.about).to eq(new_about)
-    expect(course.enable_leaderboard).to eq(false)
-    expect(course.public_signup).to eq(true)
-    expect(course.ends_at.to_date).to eq(date)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

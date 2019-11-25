@@ -7,6 +7,7 @@ type t = {
   name: string,
   title: string,
   email: string,
+  avatarUrl: option(string),
   phone: option(string),
   coachNotes: array(CoursesStudents__CoachNote.t),
   evaluationCriteria: array(CoursesStudents__EvaluationCriterion.t),
@@ -17,6 +18,10 @@ type t = {
   quizScores: array(string),
   averageGrades: array(averageGrade),
 };
+
+let name = t => t.name;
+
+let title = t => t.title;
 
 let makeAverageGrade = gradesData => {
   gradesData
@@ -50,6 +55,7 @@ let makeFromJS = studentDetails => {
   name: studentDetails##name,
   title: studentDetails##title,
   email: studentDetails##email,
+  avatarUrl: studentDetails##avatarUrl,
   phone: studentDetails##phone,
   coachNotes:
     studentDetails##coachNotes |> CoursesStudents__CoachNote.makeFromJs,

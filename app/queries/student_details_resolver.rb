@@ -6,6 +6,7 @@ class StudentDetailsResolver < ApplicationQuery
       name: student.name,
       title: student.title,
       email: student.email,
+      avatar_url: avatar_url,
       phone: student.phone,
       coach_notes: coach_notes,
       targets_completed: targets_completed,
@@ -50,6 +51,12 @@ class StudentDetailsResolver < ApplicationQuery
 
   def student
     @student ||= Founder.where(id: student_id).includes(:user).first
+  end
+
+  def avatar_url
+    if student.user.avatar.attached?
+      Rails.application.routes.url_helpers.rails_representation_path(user.avatar_variant(:thumb), only_path: true)
+    end
   end
 
   def coach_notes

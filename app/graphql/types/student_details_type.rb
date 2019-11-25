@@ -2,6 +2,7 @@ module Types
   class StudentDetailsType < Types::BaseObject
     field :name, String, null: false
     field :title, String, null: false
+    field :avatar_url, String, null: true
     field :email, String, null: false
     field :phone, String, null: true
     field :coach_notes, [Types::CoachNoteType], null: false

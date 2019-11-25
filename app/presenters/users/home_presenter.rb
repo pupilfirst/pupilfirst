@@ -88,7 +88,8 @@ module Users
           description: course.description,
           exited: student_exited(course.id),
           thumbnail_url: course.thumbnail_url,
-          linked_communities: course.communities.pluck(:id).map(&:to_s)
+          linked_communities: course.communities.pluck(:id).map(&:to_s),
+          ended: course.ended?
         }
       end
     end

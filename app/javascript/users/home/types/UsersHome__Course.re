@@ -6,6 +6,7 @@ type t = {
   exited: bool,
   thumbnailUrl: option(string),
   linkedCommunities: array(string),
+  ended: bool,
 };
 
 let name = t => t.name;
@@ -15,6 +16,7 @@ let description = t => t.description;
 let exited = t => t.exited;
 let thumbnailUrl = t => t.thumbnailUrl;
 let linkedCommunities = t => t.linkedCommunities;
+let ended = t => t.ended;
 
 let decode = json =>
   Json.Decode.{
@@ -26,4 +28,5 @@ let decode = json =>
     thumbnailUrl:
       json |> field("thumbnailUrl", nullable(string)) |> Js.Null.toOption,
     linkedCommunities: json |> field("linkedCommunities", array(string)),
+    ended: json |> field("ended", bool),
   };

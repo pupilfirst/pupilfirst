@@ -160,6 +160,7 @@ let make = _children => {
                         </div>
                         <div className="flex w-full" key={course |> Course.id}>
                           <a
+                            title={"Edit " ++ (course |> Course.name)}
                             className="cursor-pointer flex flex-1 items-center py-6 px-4 hover:bg-gray-100"
                             onClick={_ =>
                               send(
@@ -173,15 +174,9 @@ let make = _children => {
                             </div>
                           </a>
                           <a
-                            onClick={_ =>
-                              send(
-                                UpdateEditorAction(ShowForm(Some(course))),
-                              )
+                            title={
+                              "Edit images for " ++ (course |> Course.name)
                             }
-                            className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
-                            {"Edit course" |> str}
-                          </a>
-                          <a
                             onClick={_ =>
                               send(
                                 UpdateEditorAction(

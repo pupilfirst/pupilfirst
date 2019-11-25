@@ -20,7 +20,7 @@ type state = {
 
 let component = ReasonReact.reducerComponent("CourseEditor__ImageHandler");
 
-let updateButtonText = updating => updating ? "Updating..." : "Update Image";
+let updateButtonText = updating => updating ? "Updating..." : "Update Images";
 
 let formId = "course-editor-form-image-form";
 
@@ -166,10 +166,17 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
         <DisablingCover.Jsx2 disabled={state.updating}>
           <div key="course-images-editor__thumbnail" className="mt-4">
             <label
-              className="block tracking-wide text-gray-800 text-xs font-semibold"
+              className="tracking-wide text-gray-800 text-xs font-semibold"
               htmlFor="sc-images-editor__logo-on-400-bg-input">
               {"Thumbnail" |> str}
             </label>
+            <HelpIcon.Jsx2
+              className="text-xs ml-1"
+              alignment=HelpIcon.AlignLeft
+              link="https://docs.pupilfirst.com/#/courses?id=course-images">
+              {"The thumbnail will be displayed on the homepage, and here in the admin courses list."
+               |> str}
+            </HelpIcon.Jsx2>
             <input
               disabled={state.updating}
               className="hidden"
@@ -196,10 +203,17 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
           </div>
           <div key="course-images-editor__cover" className="mt-4">
             <label
-              className="block tracking-wide text-gray-800 text-xs font-semibold"
+              className="tracking-wide text-gray-800 text-xs font-semibold"
               htmlFor="sc-images-editor__logo-on-400-bg-input">
               {"Cover Image" |> str}
             </label>
+            <HelpIcon.Jsx2
+              className="text-xs ml-1"
+              alignment=HelpIcon.AlignLeft
+              link="https://docs.pupilfirst.com/#/courses?id=course-images">
+              {"The cover image for a course will be displayed at the top of all student pages within the course."
+               |> str}
+            </HelpIcon.Jsx2>
             <input
               disabled={state.updating}
               className="hidden"

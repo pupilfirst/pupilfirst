@@ -126,7 +126,7 @@ feature 'Courses Index', js: true do
       attach_file 'course_thumbnail', file_path('logo_lipsum_on_light_bg.png'), visible: false
       attach_file 'course_cover', file_path('logo_lipsum_on_dark_bg.png'), visible: false
 
-      click_button 'Update Image'
+      click_button 'Update Images'
 
       expect(page).to have_text('Images have been updated successfully')
 

@@ -19,6 +19,43 @@ let courseOptions = courses =>
   |> Array.of_list
   |> React.array;
 
+let courseDropdown =
+    (currentCourse, otherCourses, showCourses, setShowCourses) => {
+  <div className="w-full relative">
+    {switch (otherCourses) {
+     | [] =>
+       <div
+         className="flex max-w-3xl mx-auto items-center relative justify-between font-semibold relative px-3 py-2 rounded w-full text-2xl text-white">
+         <span className="truncate w-full text-center">
+           {currentCourse |> Course.name |> str}
+         </span>
+       </div>
+     | otherCourses =>
+       <div className="student-course__dropdown max-w-xs relative mx-auto">
+         <button
+           key={"dropdown-course" ++ (currentCourse |> Course.id)}
+           onClick={_ => setShowCourses(showCourses => !showCourses)}
+           className="dropdown__btn max-w-xs mx-auto text-white appearance-none flex items-center relative justify-between focus:outline-none font-semibold w-full text-lg md:text-2xl">
+           <span className="truncate w-full text-center">
+             {currentCourse |> Course.name |> str}
+           </span>
+           <div
+             className="student-course__dropdown-btn ml-3 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-between px-3 py-2 rounded">
+             <i className="fas fa-chevron-down text-xs font-semibold" />
+           </div>
+         </button>
+         {showCourses
+            ? <ul
+                key="dropdown-course-list"
+                className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden min-w-full w-auto z-20">
+                {courseOptions(otherCourses)}
+              </ul>
+            : React.null}
+       </div>
+     }}
+  </div>;
+};
+
 let renderCourseSelector =
     (currentCourseId, courses, showCourses, setShowCourses, coverImage) => {
   let currentCourse =
@@ -31,46 +68,25 @@ let renderCourseSelector =
        );
   let otherCourses =
     courses |> List.filter(c => c |> Course.id != currentCourseId);
-  <div>
-    {switch (coverImage) {
-     | Some(src) => <img className="object-cover h-48 w-full" src />
-     | None => <div className="h-48 svg-bg-pattern-1" />
-     }}
-    <div className="student-course__cover svg-bg-pattern-2 pb-22 pt-15 px-3">
-      <div className="flex">
-        <div className="w-full relative">
-          {switch (otherCourses) {
-           | [] =>
-             <div
-               className="flex max-w-3xl mx-auto items-center relative justify-between font-semibold relative px-3 py-2 rounded w-full text-2xl text-white">
-               <span className="truncate w-full text-center">
-                 {currentCourse |> Course.name |> str}
-               </span>
-             </div>
-           | otherCourses =>
-             <div
-               className="student-course__dropdown max-w-xs relative mx-auto">
-               <button
-                 key={"dropdown-course" ++ (currentCourse |> Course.id)}
-                 onClick={_ => setShowCourses(showCourses => !showCourses)}
-                 className="dropdown__btn max-w-xs mx-auto student-course__dropdown-btn text-white appearance-none flex hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm relative px-3 py-2 rounded w-full text-2xl">
-                 <span className="truncate w-full text-center">
-                   {currentCourse |> Course.name |> str}
-                 </span>
-                 <i
-                   className="fas fa-chevron-down text-xs ml-3 font-semibold"
-                 />
-               </button>
-               {showCourses
-                  ? <ul
-                      key="dropdown-course-list"
-                      className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden min-w-full w-auto z-20">
-                      {courseOptions(otherCourses)}
-                    </ul>
-                  : React.null}
-             </div>
-           }}
-        </div>
+  <div className="relative bg-primary-900">
+    <div className="relative pb-1/2 md:pb-1/4 2xl:pb-1/5">
+      {switch (coverImage) {
+       | Some(src) =>
+         <img className="absolute h-full w-full object-cover" src />
+       | None =>
+         <div
+           className="student-course__cover-default absolute h-full w-full svg-bg-pattern-1"
+         />
+       }}
+    </div>
+    <div className="max-w-3xl mx-auto relative">
+      <div className="absolute student-course__dropdown-container px-4 lg:px-0">
+        {courseDropdown(
+           currentCourse,
+           otherCourses,
+           showCourses,
+           setShowCourses,
+         )}
       </div>
     </div>
   </div>;

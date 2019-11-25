@@ -1,11 +1,10 @@
-.student-course__cover {
-  position: relative;
+.student-course__cover-default {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 
-.student-course__cover:before {
+.student-course__cover-default:before {
   position: absolute;
   content: " ";
   top: 0;
@@ -15,6 +14,10 @@
   display: block;
   z-index: 0;
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.student-course__dropdown-container {
+  bottom: 2.75rem;
 }
 
 .student-course__dropdown-btn {

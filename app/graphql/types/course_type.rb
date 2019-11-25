@@ -10,7 +10,8 @@ module Types
     field :enable_leaderboard, Boolean, null: false
     field :about, String, null: true
     field :public_signup, Boolean, null: false
-    field :image, Types::ImageType, null: true
+    field :thumbnail, Types::ImageType, null: true
+    field :cover, Types::ImageType, null: true
     field :featured, Boolean, null: false
 
     def grades_and_labels
@@ -19,8 +20,12 @@ module Types
       end
     end
 
-    def image
-      object.image.attached? ? image_details(object.image) : nil
+    def cover
+      object.cover.attached? ? image_details(object.cover) : nil
+    end
+
+    def thumbnail
+      object.thumbnail.attached? ? image_details(object.thumbnail) : nil
     end
 
     private

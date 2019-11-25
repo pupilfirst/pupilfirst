@@ -9,16 +9,16 @@ module Schools
       authorize(current_school, policy_class: Schools::CoursePolicy)
     end
 
-    # POST /courses/id
-    def attach_image
+    # POST /courses/id/attach_images
+    def attach_images
       course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
       @form = Schools::Courses::UpdateForm.new(course)
 
       if @form.validate(params)
         @form.save
-        render json: { image_url: course.image_url, error: nil }
+        render json: { thumbnail_url: course.thumbnail_url, cover_url: course.cover_url, error: nil }
       else
-        render json: { image_url: nil, error: @form.errors.full_messages.join(', ') }
+        render json: { thumbnail_url: nil, cover_url: nil, error: @form.errors.full_messages.join(', ') }
       end
     end
 

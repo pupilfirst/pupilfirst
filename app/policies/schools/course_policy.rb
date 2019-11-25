@@ -24,7 +24,7 @@ module Schools
       # All course authors can view the curricula
       user.course_authors.where(course: record).present?
     end
-    alias attach_image? update?
+    alias attach_images? update?
     alias delete_coach_enrollment? update?
     alias update_coach_enrollments? delete_coach_enrollment?
     alias students? show?

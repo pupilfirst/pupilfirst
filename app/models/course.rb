@@ -21,7 +21,8 @@ class Course < ApplicationRecord
   has_many :course_exports, dependent: :destroy
   has_many :content_blocks, through: :targets
 
-  has_one_attached :image
+  has_one_attached :thumbnail
+  has_one_attached :cover
 
   normalize_attribute :about
 
@@ -48,9 +49,15 @@ class Course < ApplicationRecord
     end
   end
 
-  def image_url
-    if image.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+  def cover_url
+    if cover.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(cover, only_path: true)
+    end
+  end
+
+  def thumbnail_url
+    if thumbnail.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(thumbnail, only_path: true)
     end
   end
 

@@ -129,7 +129,7 @@ module Users
     end
 
     def coach_links(course)
-      [curriculum_link(course), leaderboard_link(course), review_link(course), review_link_legacy(course)] - [nil]
+      [curriculum_link(course), leaderboard_link(course), review_link(course), students_link(course)] - [nil]
     end
 
     def review_link(course, text = 'Review')
@@ -139,10 +139,10 @@ module Users
       }
     end
 
-    def review_link_legacy(course, text = 'Review (Legacy)')
+    def students_link(course, text = 'Students')
       {
         text: text,
-        link: view.course_coach_dashboard_path(course)
+        link: view.students_course_path(course)
       }
     end
 

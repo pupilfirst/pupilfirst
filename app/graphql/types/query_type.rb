@@ -30,6 +30,10 @@ module Types
       argument :student_id, ID, required: true
     end
 
+    field :student_submissions, Types::StudentSubmissionType.connection_type, null: false do
+      argument :student_id, ID, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -63,6 +67,11 @@ module Types
     def student_details(args)
       resolver = StudentDetailsResolver.new(context, args)
       resolver.student_details
+    end
+
+    def student_submissions(args)
+      resolver = StudentSubmissionsResolver.new(context, args)
+      resolver.student_submissions
     end
   end
 end

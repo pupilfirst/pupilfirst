@@ -119,10 +119,10 @@ let updateMaxGrade = (value, state, send) =>
   };
 
 let handleResponseCB = (id, state, updateCourseCB, course) => {
-  let (thumbnail, cover, persistedCourse) =
+  let (thumbnail, cover) =
     switch (course) {
-    | Some(c) => (c |> Course.thumbnail, c |> Course.cover, true)
-    | None => (None, None, true)
+    | Some(c) => (c |> Course.thumbnail, c |> Course.cover)
+    | None => (None, None)
     };
 
   let course =
@@ -141,9 +141,6 @@ let handleResponseCB = (id, state, updateCourseCB, course) => {
       ~cover,
       ~featured=state.featured,
     );
-  persistedCourse
-    ? Notification.success("Success", "Course updated successfully")
-    : Notification.success("Success", "Course created successfully");
 
   updateCourseCB(course);
 };

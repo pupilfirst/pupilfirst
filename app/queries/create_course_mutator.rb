@@ -15,7 +15,7 @@ class CreateCourseMutator < ApplicationQuery
   def correct_grades_and_labels
     return if max_grade == grades_and_labels.count
 
-    raise "UpdateCourseMutator received invalid grades and labels #{grades_and_labels}"
+    raise "CreateCourseMutator received invalid grades and labels #{grades_and_labels}"
   end
 
   def create_course

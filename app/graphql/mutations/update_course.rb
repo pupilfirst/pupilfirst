@@ -18,6 +18,7 @@ module Mutations
       mutator = UpdateCourseMutator.new(context, params)
 
       if mutator.valid?
+        mutator.notify(:success, 'Done!', 'Course updated successfully!')
         { course: mutator.update_course }
       else
         raise "Failed with error codes: #{mutator.error_messages.to_json}"

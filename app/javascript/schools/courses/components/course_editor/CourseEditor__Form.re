@@ -127,7 +127,7 @@ let handleResponseCB = (id, state, updateCourseCB, course) => {
 
   let course =
     Course.create(
-      ~id=id |> int_of_string,
+      ~id,
       ~name=state.name,
       ~description=state.description,
       ~endsAt=state.endsAt,
@@ -200,7 +200,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
 
   let updateCourseQuery =
     UpdateCourseQuery.make(
-      ~id=course |> Course.id |> string_of_int,
+      ~id=course |> Course.id,
       ~name=state.name,
       ~description=state.description,
       ~endsAt=?

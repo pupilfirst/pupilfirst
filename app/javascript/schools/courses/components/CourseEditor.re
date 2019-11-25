@@ -61,38 +61,22 @@ let updateCourse = (send, course) => {
 let courseLinks = course => {
   <div className="flex">
     <a
-      href={
-        "/school/courses/"
-        ++ (course |> Course.id |> string_of_int)
-        ++ "/curriculum"
-      }
+      href={"/school/courses/" ++ (course |> Course.id) ++ "/curriculum"}
       className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
       {"Curriculum" |> str}
     </a>
     <a
-      href={
-        "/school/courses/"
-        ++ (course |> Course.id |> string_of_int)
-        ++ "/students"
-      }
+      href={"/school/courses/" ++ (course |> Course.id) ++ "/students"}
       className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
       {"Students" |> str}
     </a>
     <a
-      href={
-        "/school/courses/"
-        ++ (course |> Course.id |> string_of_int)
-        ++ "/coaches"
-      }
+      href={"/school/courses/" ++ (course |> Course.id) ++ "/coaches"}
       className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
       {"Coaches" |> str}
     </a>
     <a
-      href={
-        "/school/courses/"
-        ++ (course |> Course.id |> string_of_int)
-        ++ "/exports"
-      }
+      href={"/school/courses/" ++ (course |> Course.id) ++ "/exports"}
       className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
       {"Exports" |> str}
     </a>
@@ -159,9 +143,9 @@ let make = _children => {
             {state.courses
              |> Course.sort
              |> List.map(course =>
-                  <div className="px-2 w-1/2">
+                  <div className="px-2 w-1/2" key={course |> Course.id}>
                     <div
-                      key={course |> Course.id |> string_of_int}
+                      key={course |> Course.id}
                       className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
                       <div className="w-full">
                         <div>
@@ -174,9 +158,7 @@ let make = _children => {
                            | None => <div className="h-48 svg-bg-pattern-1" />
                            }}
                         </div>
-                        <div
-                          className="flex w-full"
-                          key={course |> Course.id |> string_of_int}>
+                        <div className="flex w-full" key={course |> Course.id}>
                           <a
                             className="cursor-pointer flex flex-1 items-center py-6 px-4 hover:bg-gray-100"
                             onClick={_ =>
@@ -214,16 +196,15 @@ let make = _children => {
                         <div
                           className="text-gray-800 bg-gray-300 text-sm font-semibold p-4 w-full">
                           <span> {course |> Course.description |> str} </span>
-                          <span>
+                          <div className="mt-2">
+                            <i className="fas fa-external-link-square-alt" />
                             <a
-                              href={
-                                "/courses/"
-                                ++ (course |> Course.id |> string_of_int)
-                              }
+                              href={"/courses/" ++ (course |> Course.id)}
+                              target="_blank"
                               className="text-sm font-semibold cursor-pointer ml-2 text-primary-500">
-                              {"View course page" |> str}
+                              {"View public page" |> str}
                             </a>
-                          </span>
+                          </div>
                         </div>
                         {courseLinks(course)}
                       </div>

@@ -1,10 +1,17 @@
-type image = {
-  url: string,
-  filename: string,
+module Image = {
+  type t = {
+    url: string,
+    filename: string,
+  };
+
+  let url = t => t.url;
+  let filename = t => t.filename;
+
+  let make = (url, filename) => {url, filename};
 };
 
 type t = {
-  id: int,
+  id: string,
   name: string,
   description: string,
   endsAt: option(Js.Date.t),
@@ -14,8 +21,8 @@ type t = {
   enableLeaderboard: bool,
   about: option(string),
   publicSignup: bool,
-  thumbnail: option(image),
-  cover: option(image),
+  thumbnail: option(Image.t),
+  cover: option(Image.t),
   featured: bool,
 };
 
@@ -45,23 +52,41 @@ let cover = t => t.cover;
 
 let thumbnail = t => t.thumbnail;
 
-let imageUrl = image => image.url;
+let imageUrl = image => image |> Image.url;
 
-let filename = image => image.filename;
+let filename = image => image |> Image.filename;
 
-let sort = courses => courses |> List.sort((x, y) => x.id - y.id);
+let sort = courses =>
+  courses
+  |> List.sort((x, y) => (x.id |> int_of_string) - (y.id |> int_of_string));
 
 let updateList = (courses, course) => {
   let oldCourses = courses |> List.filter(c => c.id !== course.id);
   oldCourses |> List.rev |> List.append([course]) |> List.rev;
 };
 
-let makeImage = (url, filename) => Some({url, filename});
-
 let makeImageFromJs = data => {
   switch (data) {
-  | Some(image) => makeImage(image##url, image##filename)
+  | Some(image) => Some(Image.make(image##url, image##filename))
   | None => None
+  };
+};
+
+let addImages =
+    (~coverUrl, ~thumbnailUrl, ~coverFilename, ~thumbnailFilename, t) => {
+  {
+    ...t,
+    cover:
+      switch (coverUrl) {
+      | Some(coverUrl) => Some(Image.make(coverUrl, coverFilename))
+      | None => None
+      },
+    thumbnail:
+      switch (thumbnailUrl) {
+      | Some(thumbnailUrl) =>
+        Some(Image.make(thumbnailUrl, thumbnailFilename))
+      | None => None
+      },
   };
 };
 
@@ -116,7 +141,7 @@ let makeFromJs = rawCourse => {
        )
     |> Array.to_list;
   create(
-    ~id=rawCourse##id |> int_of_string,
+    ~id=rawCourse##id,
     ~name=rawCourse##name,
     ~description=rawCourse##description,
     ~endsAt,

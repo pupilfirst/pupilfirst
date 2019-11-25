@@ -29,14 +29,18 @@ let filename = optionalFilename => {
 };
 
 let handleUpdateCB = (json, state, course, updateCourseCB) => {
-  let cover_url = json |> Json.Decode.(field("cover_url", string));
-  let thumbnail_url = json |> Json.Decode.(field("thumbnail_url", string));
+  let coverUrl = json |> Json.Decode.(field("cover_url", optional(string)));
+  let thumbnailUrl =
+    json |> Json.Decode.(field("thumbnail_url", optional(string)));
 
-  let cover = Course.makeImage(cover_url, filename(state.filenameCover));
-  let thumbnail =
-    Course.makeImage(thumbnail_url, filename(state.filenameThumb));
-
-  let newCourse = course |> Course.replaceImages(cover, thumbnail);
+  let newCourse =
+    course
+    |> Course.addImages(
+         ~coverUrl,
+         ~thumbnailUrl,
+         ~coverFilename=filename(state.filenameCover),
+         ~thumbnailFilename=filename(state.filenameThumb),
+       );
 
   updateCourseCB(newCourse);
 };
@@ -49,7 +53,7 @@ let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
   switch (element) {
   | Some(element) =>
     Api.sendFormData(
-      "courses/" ++ (course |> Course.id |> string_of_int) ++ "/attach_images",
+      "courses/" ++ (course |> Course.id) ++ "/attach_images",
       DomUtils.FormData.create(element),
       json => {
         Notification.success(

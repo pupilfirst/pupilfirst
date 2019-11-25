@@ -32,8 +32,14 @@ let makeAverageGrade = gradesData => {
      );
 };
 
+let totalTargets = t => t.totalTargets |> float_of_int;
+
+let targetsCompleted = t => t.targetsCompleted |> float_of_int;
+
+let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
+
 let computeAverageQuizScore = quizScores => {
-  let netScore =
+  let sumOfPercentageScores =
     quizScores
     |> Array.map(quizScore => {
          let fractionArray =
@@ -42,10 +48,10 @@ let computeAverageQuizScore = quizScores => {
            fractionArray[0] |> float_of_string,
            fractionArray[1] |> float_of_string,
          );
-         numerator /. denominator;
+         numerator /. denominator *. 100.0;
        })
     |> Js.Array.reduce((a, b) => a +. b, 0.0);
-  netScore *. 100.0;
+  sumOfPercentageScores /. (quizScores |> Array.length |> float_of_int);
 };
 
 let averageQuizScore = t => {

@@ -59,6 +59,62 @@ let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
   None;
 };
 
+let doughnutChart = (color, percentage) => {
+  <svg
+    viewBox="0 0 36 36"
+    className={"student-overlay__doughnut-chart " ++ color}>
+    <path
+      className="student-overlay__doughnut-chart-bg"
+      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+    />
+    <path
+      className="student-overlay__doughnut-chart-stroke"
+      strokeDasharray={percentage ++ ", 100"}
+      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+    />
+    <text
+      x="50%"
+      y="58%"
+      className="student-overlay__doughnut-chart-text font-semibold">
+      {percentage ++ "%" |> str}
+    </text>
+  </svg>;
+};
+
+let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
+  let targetCompletionPercent =
+    targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int;
+  <div className="w-1/2 student-overlay__doughnut-chart-container">
+    {doughnutChart("purple", targetCompletionPercent)}
+    <p className="text-sm font-semibold text-center mt-2">
+      {"Total Targets Completed" |> str}
+    </p>
+    <p className="text-sm text-gray-700 font-semibold text-center mt-1">
+      {(targetsCompleted |> int_of_float |> string_of_int)
+       ++ "/"
+       ++ (totalTargets |> int_of_float |> string_of_int)
+       ++ " Targets"
+       |> str}
+    </p>
+  </div>;
+};
+
+let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
+  switch (averageQuizScore) {
+  | Some(score) =>
+    <div className="w-1/2 student-overlay__doughnut-chart-container">
+      {doughnutChart("pink", score |> int_of_float |> string_of_int)}
+      <p className="text-sm font-semibold text-center mt-2">
+        {"Average Quiz Score" |> str}
+      </p>
+      <p className="text-sm text-gray-700 font-semibold text-center mt-1">
+        {quizzesAttempted ++ " Quizzes Attempted" |> str}
+      </p>
+    </div>
+  | None => React.null
+  };
+};
+
 [@react.component]
 let make = (~courseId, ~studentId) => {
   let (state, setState) = React.useState(() => Loading);
@@ -105,62 +161,14 @@ let make = (~courseId, ~studentId) => {
              </p>
            </div>
            <div className="flex">
-             <div className="w-1/2 student-overlay__doughnut-chart-container">
-               <svg
-                 viewBox="0 0 36 36"
-                 className="student-overlay__doughnut-chart purple">
-                 <path
-                   className="student-overlay__doughnut-chart-bg"
-                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                 />
-                 <path
-                   className="student-overlay__doughnut-chart-stroke"
-                   strokeDasharray="50, 100"
-                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                 />
-                 <text
-                   x="50%"
-                   y="58%"
-                   className="student-overlay__doughnut-chart-text font-semibold">
-                   {"30%" |> str}
-                 </text>
-               </svg>
-               <p className="text-sm font-semibold text-center mt-2">
-                 {"Total Targets Completed" |> str}
-               </p>
-               <p
-                 className="text-sm text-gray-700 font-semibold text-center mt-1">
-                 {"25 / 100 targets" |> str}
-               </p>
-             </div>
-             <div className="w-1/2 student-overlay__doughnut-chart-container">
-               <svg
-                 viewBox="0 0 36 36"
-                 className="student-overlay__doughnut-chart pink">
-                 <path
-                   className="student-overlay__doughnut-chart-bg"
-                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                 />
-                 <path
-                   className="student-overlay__doughnut-chart-stroke"
-                   strokeDasharray="80, 100"
-                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                 />
-                 <text
-                   x="50%"
-                   y="58%"
-                   className="student-overlay__doughnut-chart-text font-semibold">
-                   {"80%" |> str}
-                 </text>
-               </svg>
-               <p className="text-sm font-semibold text-center mt-2">
-                 {"Average Quiz Completed" |> str}
-               </p>
-               <p
-                 className="text-sm text-gray-700 font-semibold text-center mt-1">
-                 {"25 / 100 Quizes" |> str}
-               </p>
-             </div>
+             {targetsCompletionStatus(
+                studentDetails |> StudentDetails.targetsCompleted,
+                studentDetails |> StudentDetails.totalTargets,
+              )}
+             {quizPerformanceChart(
+                studentDetails |> StudentDetails.averageQuizScore,
+                studentDetails |> StudentDetails.quizzesAttempted,
+              )}
            </div>
            <div className="flex py-8">
              <div className="w-1/2 student-overlay__pie-chart-container">

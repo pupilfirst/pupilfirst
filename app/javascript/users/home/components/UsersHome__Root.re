@@ -46,13 +46,13 @@ let navSection = (view, setView) => {
       <button
         className={navButtonClasses(view == ShowCourses)}
         onClick={_ => setView(_ => ShowCourses)}>
-        <i className="fas fa-edit text-xs md:text-sm mr-2" />
+        <i className="fas fa-book text-xs md:text-sm mr-2" />
         <span> {"My Courses" |> str} </span>
       </button>
       <button
         className={navButtonClasses(view == ShowCommunities)}
         onClick={_ => setView(_ => ShowCommunities)}>
-        <i className="fas fa-edit text-xs md:text-sm mr-2" />
+        <i className="fas fa-users text-xs md:text-sm mr-2" />
         <span> {"Communities" |> str} </span>
       </button>
     </div>
@@ -66,11 +66,14 @@ let courseLinks = (links, courseId) => {
           let (title, suffix, icon) =
             switch (l) {
             | "curriculum" => ("Curriculum", "curriculum", "fas fa-book")
-            | "calendar" => ("Calendar", "calendar", "fas fa-book")
-            | "leaderboard" => ("Leaderboard", "leaderboard", "fas fa-book")
-            | "review" => ("Review", "review", "fas fa-book")
-            | "students" => ("Students", "students", "fas fa-book")
-            | _unknown => ("Unknown", "", "fas fa-book")
+            | "leaderboard" => (
+                "Leaderboard",
+                "leaderboard",
+                "fas fa-calendar-alt",
+              )
+            | "review" => ("Review", "review", "fas fa-check-square")
+            | "students" => ("Students", "students", "fas fa-cog")
+            | _unknown => ("Unknown", "", "fas fa-bug")
             };
           <a
             href={"/courses/" ++ courseId ++ "/" ++ suffix}
@@ -88,20 +91,25 @@ let courseLinks = (links, courseId) => {
 let ctaButton = (title, suffix, courseId) => {
   <a
     href={"/courses/" ++ courseId ++ "/" ++ suffix}
-    className="flex justify-between items-center">
-    <span className="text-black font-semibold ml-2"> {title |> str} </span>
-    <i className="fas fa-book" />
+    className="flex justify-between items-center cursor-pointer">
+    <span>
+      <i className="text-primary-500 fas fa-book" />
+      <span className="text-primary-500 font-semibold ml-2">
+        {title |> str}
+      </span>
+    </span>
+    <i className="text-primary-500 fas fa-arrow-right" />
   </a>;
 };
 
 let callToAction = course => {
   let courseId = course |> Course.id;
-  <div className="w-full bg-gray-300 mt-4 p-4">
+  <div className="w-full bg-gray-200 mt-4 p-4">
     {switch (course |> Course.links |> Js.Array.find(l => l == "review")) {
-     | Some(l) => ctaButton("Visit Review", "review", courseId)
+     | Some(l) => ctaButton("Visit Review", l, courseId)
      | None =>
        switch (course |> Course.links |> Js.Array.find(l => l == "curriculum")) {
-       | Some(l) => ctaButton("Continue course", "curriculum", courseId)
+       | Some(l) => ctaButton("Continue course", l, courseId)
        | None => React.null
        }
      }}
@@ -109,7 +117,7 @@ let callToAction = course => {
 };
 
 let communityLinks = (communityIds, communities) => {
-  <div className="px-4 flex flex-wrap mt-4">
+  <div className="px-4 flex flex-wrap">
     {communityIds
      |> Array.map(id => {
           let community =
@@ -119,7 +127,7 @@ let communityLinks = (communityIds, communities) => {
             <a
               href={"/communities/" ++ (c |> Community.id)}
               className="rounded shadow mr-4 mt-4 btn">
-              <i className="fas fa-book" />
+              <i className="fas fa-users" />
               <span className="text-black font-semibold ml-2">
                 {c |> Community.name |> str}
               </span>
@@ -138,7 +146,7 @@ let coursesSection = (courses, communities) => {
           <div key={course |> Course.id} className="px-2 w-full md:w-1/2">
             <div
               key={course |> Course.id}
-              className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
+              className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
               <div className="w-full">
                 <div>
                   {switch (course |> Course.imageUrl) {

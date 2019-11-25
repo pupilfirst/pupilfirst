@@ -115,6 +115,42 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
   };
 };
 
+let pieChart = percentageValue => {
+  <svg className="student-overlay__pie-chart mx-auto" viewBox="0 0 32 32">
+    <circle
+      className="student-overlay__pie-chart-circle"
+      strokeDasharray={percentageValue ++ ", 100"}
+      r="16"
+      cx="16"
+      cy="16"
+    />
+  </svg>;
+};
+
+let averageGradeCharts = (evaluationCriteria, averageGrades) => {
+  evaluationCriteria
+  |> Array.map(ec =>
+       <div
+         key={ec |> EvaluationCriterion.id}
+         className="w-1/2 student-overlay__pie-chart-container">
+         <svg
+           className="student-overlay__pie-chart mx-auto" viewBox="0 0 32 32">
+           <circle
+             className="student-overlay__pie-chart-circle"
+             strokeDasharray="29, 100"
+             r="16"
+             cx="16"
+             cy="16"
+           />
+         </svg>
+         <p className="text-sm font-semibold text-center mt-2">
+           {ec |> EvaluationCriterion.name |> str}
+         </p>
+       </div>
+     )
+  |> React.array;
+};
+
 [@react.component]
 let make = (~courseId, ~studentId) => {
   let (state, setState) = React.useState(() => Loading);
@@ -171,38 +207,10 @@ let make = (~courseId, ~studentId) => {
               )}
            </div>
            <div className="flex py-8">
-             <div className="w-1/2 student-overlay__pie-chart-container">
-               <svg
-                 className="student-overlay__pie-chart mx-auto"
-                 viewBox="0 0 32 32">
-                 <circle
-                   className="student-overlay__pie-chart-circle"
-                   strokeDasharray="29, 100"
-                   r="16"
-                   cx="16"
-                   cy="16"
-                 />
-               </svg>
-               <p className="text-sm font-semibold text-center mt-2">
-                 {"Quality of Submission" |> str}
-               </p>
-             </div>
-             <div className="w-1/2 student-overlay__pie-chart-container">
-               <svg
-                 className="student-overlay__pie-chart mx-auto"
-                 viewBox="0 0 32 32">
-                 <circle
-                   className="student-overlay__pie-chart-circle"
-                   strokeDasharray="29, 100"
-                   r="16"
-                   cx="16"
-                   cy="16"
-                 />
-               </svg>
-               <p className="text-sm font-semibold text-center mt-2">
-                 {"Correctness of Implementation" |> str}
-               </p>
-             </div>
+             {averageGradeCharts(
+                studentDetails |> StudentDetails.evaluationCriteria,
+                studentDetails |> StudentDetails.averageGrades,
+              )}
            </div>
          </div>
          <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">

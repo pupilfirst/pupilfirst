@@ -38,6 +38,10 @@ let targetsCompleted = t => t.targetsCompleted |> float_of_int;
 
 let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
 
+let evaluationCriteria = t => t.evaluationCriteria;
+
+let averageGrades = t => t.averageGrades;
+
 let computeAverageQuizScore = quizScores => {
   let sumOfPercentageScores =
     quizScores

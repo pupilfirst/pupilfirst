@@ -3,14 +3,17 @@ open CourseEditor__Types;
 let str = ReasonReact.string;
 
 type action =
-  | SelectImage(string, bool)
+  | SelectCover(string, bool)
+  | SelectThumb(string, bool)
   | BeginUpdate
   | ErrorOccured
   | DoneUpdating;
 
 type state = {
-  filename: option(string),
-  invalidImage: bool,
+  filenameThumb: option(string),
+  filenameCover: option(string),
+  invalidThumb: bool,
+  invalidCover: bool,
   updating: bool,
   formDirty: bool,
 };
@@ -21,18 +24,24 @@ let updateButtonText = updating => updating ? "Updating..." : "Update Image";
 
 let formId = "course-editor-form-image-form";
 
-let handleUpdateCB = (json, state, updateImageCB) => {
-  let filename =
-    switch (state.filename) {
-    | Some(filename) => filename
-    | None => "unknown"
-    };
-  let url = json |> Json.Decode.(field("image_url", string));
-  let image = Course.makeImage(url, filename);
-  updateImageCB(image);
+let filename = optionalFilename => {
+  optionalFilename |> OptionUtils.default("unknown");
 };
 
-let handleUpdateImages = (send, state, course, updateImageCB, event) => {
+let handleUpdateCB = (json, state, course, updateCourseCB) => {
+  let cover_url = json |> Json.Decode.(field("cover_url", string));
+  let thumbnail_url = json |> Json.Decode.(field("thumbnail_url", string));
+
+  let cover = Course.makeImage(cover_url, filename(state.filenameCover));
+  let thumbnail =
+    Course.makeImage(thumbnail_url, filename(state.filenameThumb));
+
+  let newCourse = course |> Course.replaceImages(cover, thumbnail);
+
+  updateCourseCB(newCourse);
+};
+
+let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
   event |> ReactEvent.Form.preventDefault;
   send(BeginUpdate);
 
@@ -40,14 +49,14 @@ let handleUpdateImages = (send, state, course, updateImageCB, event) => {
   switch (element) {
   | Some(element) =>
     Api.sendFormData(
-      "courses/" ++ (course |> Course.id |> string_of_int) ++ "/attach_image",
+      "courses/" ++ (course |> Course.id |> string_of_int) ++ "/attach_images",
       DomUtils.FormData.create(element),
       json => {
         Notification.success(
           "Done!",
-          "Image have been updated successfully.",
+          "Images have been updated successfully.",
         );
-        handleUpdateCB(json, state, updateImageCB);
+        handleUpdateCB(json, state, course, updateCourseCB);
         send(DoneUpdating);
       },
       () => send(ErrorOccured),
@@ -60,7 +69,7 @@ let updateButtonDisabled = state =>
   if (state.updating) {
     true;
   } else {
-    !state.formDirty || state.invalidImage;
+    !state.formDirty || state.invalidThumb || state.invalidCover;
   };
 
 let optionalImageLabelText = (image, selectedFilename) =>
@@ -95,26 +104,37 @@ let isInvalidImageFile = image =>
   ||
   image##size > maxAllowedSize;
 
-let updateImage = (send, event) => {
+let updateImage = (send, isCover, event) => {
   let imageFile = ReactEvent.Form.target(event)##files[0];
-  send(SelectImage(imageFile##name, imageFile |> isInvalidImageFile));
+  isCover
+    ? send(SelectCover(imageFile##name, imageFile |> isInvalidImageFile))
+    : send(SelectThumb(imageFile##name, imageFile |> isInvalidImageFile));
 };
 
-let make = (~course, ~updateImageCB, ~closeDrawerCB, _children) => {
+let make = (~course, ~updateCourseCB, ~closeDrawerCB, _children) => {
   ...component,
   initialState: () => {
-    filename: None,
-    invalidImage: false,
+    filenameThumb: None,
+    filenameCover: None,
+    invalidThumb: false,
+    invalidCover: false,
     updating: false,
     formDirty: false,
   },
   reducer: (action, state) =>
     switch (action) {
-    | SelectImage(name, invalid) =>
+    | SelectThumb(name, invalid) =>
       ReasonReact.Update({
         ...state,
-        filename: Some(name),
-        invalidImage: invalid,
+        filenameThumb: Some(name),
+        invalidThumb: invalid,
+        formDirty: true,
+      })
+    | SelectCover(name, invalid) =>
+      ReasonReact.Update({
+        ...state,
+        filenameCover: Some(name),
+        invalidCover: invalid,
         formDirty: true,
       })
     | BeginUpdate => ReasonReact.Update({...state, updating: true})
@@ -123,13 +143,14 @@ let make = (~course, ~updateImageCB, ~closeDrawerCB, _children) => {
     | ErrorOccured => ReasonReact.Update({...state, updating: false})
     },
   render: ({state, send}) => {
-    let image = course |> Course.image;
+    let thumbnail = course |> Course.thumbnail;
+    let cover = course |> Course.cover;
     <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB>
       <form
         id=formId
         className="mx-8 pt-8"
         key="sc-images-editor__form"
-        onSubmit={handleUpdateImages(send, state, course, updateImageCB)}>
+        onSubmit={handleUpdateImages(send, state, course, updateCourseCB)}>
         <input
           name="authenticity_token"
           type_="hidden"
@@ -139,36 +160,64 @@ let make = (~course, ~updateImageCB, ~closeDrawerCB, _children) => {
           {"Edit cover image" |> str}
         </h5>
         <DisablingCover.Jsx2 disabled={state.updating}>
-          <div
-            key="sc-images-editor__logo-on-400-bg-input-group"
-            className="mt-4">
+          <div key="couese-images-editor__thumbnail" className="mt-4">
             <label
               className="block tracking-wide text-gray-800 text-xs font-semibold"
               htmlFor="sc-images-editor__logo-on-400-bg-input">
-              {"Logo on a light background" |> str}
+              {"Thumbnail for course" |> str}
             </label>
             <input
               disabled={state.updating}
               className="hidden"
-              name="course_cover_image"
+              name="course_thumbnail"
               type_="file"
               accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-              id="sc-images-editor__logo-on-400-bg-input"
+              id="couese-images-editor__thumbnail"
               required=false
               multiple=false
-              onChange={updateImage(send)}
+              onChange={updateImage(send, false)}
             />
             <label
               className="file-input-label mt-2"
-              htmlFor="sc-images-editor__logo-on-400-bg-input">
+              htmlFor="couese-images-editor__thumbnail">
               <i className="fas fa-upload" />
               <span className="ml-2 truncate">
-                {optionalImageLabelText(image, state.filename)}
+                {optionalImageLabelText(thumbnail, state.filenameThumb)}
               </span>
             </label>
             <School__InputGroupError.Jsx2
               message="must be a JPEG / PNG under 2 MB in size"
-              active={state.invalidImage}
+              active={state.invalidThumb}
+            />
+          </div>
+          <div key="couese-images-editor__cover" className="mt-4">
+            <label
+              className="block tracking-wide text-gray-800 text-xs font-semibold"
+              htmlFor="sc-images-editor__logo-on-400-bg-input">
+              {"Cover image for course" |> str}
+            </label>
+            <input
+              disabled={state.updating}
+              className="hidden"
+              name="course_cover"
+              type_="file"
+              accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+              id="couese-images-editor__cover"
+              required=false
+              multiple=false
+              onChange={updateImage(send, true)}
+            />
+            <label
+              className="file-input-label mt-2"
+              htmlFor="couese-images-editor__cover">
+              <i className="fas fa-upload" />
+              <span className="ml-2 truncate">
+                {optionalImageLabelText(cover, state.filenameCover)}
+              </span>
+            </label>
+            <School__InputGroupError.Jsx2
+              message="must be a JPEG / PNG under 2 MB in size"
+              active={state.invalidCover}
             />
           </div>
           <button

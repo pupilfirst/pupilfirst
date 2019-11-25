@@ -14,7 +14,8 @@ type t = {
   enableLeaderboard: bool,
   about: option(string),
   publicSignup: bool,
-  image: option(image),
+  thumbnail: option(image),
+  cover: option(image),
   featured: bool,
 };
 
@@ -40,9 +41,12 @@ let enableLeaderboard = t => t.enableLeaderboard;
 
 let featured = t => t.featured;
 
-let image = t => t.image;
+let cover = t => t.cover;
+
+let thumbnail = t => t.thumbnail;
 
 let imageUrl = image => image.url;
+
 let filename = image => image.filename;
 
 let sort = courses => courses |> List.sort((x, y) => x.id - y.id);
@@ -52,11 +56,11 @@ let updateList = (courses, course) => {
   oldCourses |> List.rev |> List.append([course]) |> List.rev;
 };
 
-let makeImage = (url, filename) => {url, filename};
+let makeImage = (url, filename) => Some({url, filename});
 
 let makeImageFromJs = data => {
   switch (data) {
-  | Some(image) => Some(makeImage(image##url, image##filename))
+  | Some(image) => makeImage(image##url, image##filename)
   | None => None
   };
 };
@@ -73,7 +77,8 @@ let create =
       ~enableLeaderboard,
       ~about,
       ~publicSignup,
-      ~image,
+      ~cover,
+      ~thumbnail,
       ~featured,
     ) => {
   id,
@@ -86,11 +91,12 @@ let create =
   enableLeaderboard,
   about,
   publicSignup,
-  image,
+  cover,
+  thumbnail,
   featured,
 };
 
-let replaceImage = (image, t) => {...t, image};
+let replaceImages = (cover, thumbnail, t) => {...t, cover, thumbnail};
 
 let makeFromJs = rawCourse => {
   let endsAt =
@@ -120,7 +126,8 @@ let makeFromJs = rawCourse => {
     ~enableLeaderboard=rawCourse##enableLeaderboard,
     ~about=rawCourse##about,
     ~publicSignup=rawCourse##publicSignup,
-    ~image=makeImageFromJs(rawCourse##image),
+    ~thumbnail=makeImageFromJs(rawCourse##thumbnail),
+    ~cover=makeImageFromJs(rawCourse##cover),
     ~featured=rawCourse##featured,
   );
 };

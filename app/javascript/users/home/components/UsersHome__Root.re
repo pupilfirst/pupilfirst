@@ -149,7 +149,7 @@ let coursesSection = (courses, communities) => {
               className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
               <div className="w-full">
                 <div>
-                  {switch (course |> Course.imageUrl) {
+                  {switch (course |> Course.thumbnailUrl) {
                    | Some(url) =>
                      <img className="object-cover h-48 w-full" src=url />
                    | None =>

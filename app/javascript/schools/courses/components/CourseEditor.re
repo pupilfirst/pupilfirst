@@ -16,7 +16,11 @@ module CoursesQuery = [%graphql
       about
       publicSignup
       featured
-      image{
+      cover{
+        url
+        filename
+      }
+      thumbnail{
         url
         filename
       }
@@ -50,20 +54,12 @@ let component = ReasonReact.reducerComponent("CourseEditor");
 
 let hideEditorAction = (send, ()) => send(UpdateEditorAction(Hidden));
 
-let updateCourses = (send, course, hideOverlay) => {
+let updateCourse = (send, course) => {
   send(UpdateCourse(course));
-  if (hideOverlay) {
-    send(UpdateEditorAction(Hidden));
-  };
 };
 
 let courseLinks = course => {
   <div className="flex">
-    <a
-      href={"/courses/" ++ (course |> Course.id |> string_of_int)}
-      className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
-      {"Landing Page" |> str}
-    </a>
     <a
       href={
         "/school/courses/"
@@ -103,10 +99,6 @@ let courseLinks = course => {
   </div>;
 };
 
-let updateImage = (updateCoursesCB, course, image) => {
-  updateCoursesCB(course |> Course.replaceImage(Some(image)), false);
-};
-
 let make = _children => {
   ...component,
   initialState: () => {editorAction: Hidden, courses: []},
@@ -117,7 +109,7 @@ let make = _children => {
     | UpdateCourses(courses) => ReasonReact.Update({...state, courses})
     | UpdateCourse(course) =>
       let newCourses = course |> Course.updateList(state.courses);
-      ReasonReact.Update({...state, courses: newCourses});
+      ReasonReact.Update({courses: newCourses, editorAction: Hidden});
     },
   didMount: ({send}) => {
     let coursesQuery = CoursesQuery.make();
@@ -142,12 +134,12 @@ let make = _children => {
          <CourseEditor__Form
            course
            hideEditorActionCB={hideEditorAction(send)}
-           updateCoursesCB={updateCourses(send)}
+           updateCourseCB={updateCourse(send)}
          />
        | ShowCoverImageForm(course) =>
          <CourseEditor__CoverImageForm
            course
-           updateImageCB={updateImage(updateCourses(send), course)}
+           updateCourseCB={updateCourse(send)}
            closeDrawerCB={hideEditorAction(send)}
          />
        }}
@@ -173,7 +165,7 @@ let make = _children => {
                       className="flex items-center overflow-hidden shadow bg-white rounded-lg mb-4">
                       <div className="w-full">
                         <div>
-                          {switch (course |> Course.image) {
+                          {switch (course |> Course.thumbnail) {
                            | Some(image) =>
                              <img
                                className="object-cover h-48 w-full"
@@ -216,12 +208,22 @@ let make = _children => {
                               )
                             }
                             className="text-primary-500 bg-gray-100 hover:bg-gray-200 border-l text-sm font-semibold items-center p-4 flex cursor-pointer">
-                            {"Edit Cover Image" |> str}
+                            {"Edit Images" |> str}
                           </a>
                         </div>
                         <div
                           className="text-gray-800 bg-gray-300 text-sm font-semibold p-4 w-full">
-                          {course |> Course.description |> str}
+                          <span> {course |> Course.description |> str} </span>
+                          <span>
+                            <a
+                              href={
+                                "/courses/"
+                                ++ (course |> Course.id |> string_of_int)
+                              }
+                              className="text-sm font-semibold cursor-pointer ml-2 text-primary-500">
+                              {"View course page" |> str}
+                            </a>
+                          </span>
                         </div>
                         {courseLinks(course)}
                       </div>

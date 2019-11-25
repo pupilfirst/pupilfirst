@@ -118,11 +118,11 @@ let updateMaxGrade = (value, state, send) =>
     send(UpdateMaxGrade(value));
   };
 
-let handleResponseCB = (id, state, updateCoursesCB, course) => {
-  let (image, persistedCourse) =
+let handleResponseCB = (id, state, updateCourseCB, course) => {
+  let (thumbnail, cover, persistedCourse) =
     switch (course) {
-    | Some(c) => (c |> Course.image, true)
-    | None => (None, true)
+    | Some(c) => (c |> Course.thumbnail, c |> Course.cover, true)
+    | None => (None, None, true)
     };
 
   let course =
@@ -137,17 +137,18 @@ let handleResponseCB = (id, state, updateCoursesCB, course) => {
       ~enableLeaderboard=state.enableLeaderboard,
       ~about=Some(state.about),
       ~publicSignup=state.publicSignup,
-      ~image,
+      ~thumbnail,
+      ~cover,
       ~featured=state.featured,
     );
   persistedCourse
     ? Notification.success("Success", "Course updated successfully")
     : Notification.success("Success", "Course created successfully");
 
-  updateCoursesCB(course, true);
+  updateCourseCB(course);
 };
 
-let createCourse = (state, send, updateCoursesCB) => {
+let createCourse = (state, send, updateCourseCB) => {
   send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
@@ -182,7 +183,7 @@ let createCourse = (state, send, updateCoursesCB) => {
        handleResponseCB(
          result##createCourse##course##id,
          state,
-         updateCoursesCB,
+         updateCourseCB,
          None,
        );
        Js.Promise.resolve();
@@ -190,7 +191,7 @@ let createCourse = (state, send, updateCoursesCB) => {
   |> ignore;
 };
 
-let updateCourse = (state, send, updateCoursesCB, course) => {
+let updateCourse = (state, send, updateCourseCB, course) => {
   send(UpdateSaving);
   let jsGradeAndLabelArray =
     state.gradesAndLabels
@@ -224,7 +225,7 @@ let updateCourse = (state, send, updateCoursesCB, course) => {
        handleResponseCB(
          result##updateCourse##course##id,
          state,
-         updateCoursesCB,
+         updateCourseCB,
          Some(course),
        );
        Js.Promise.resolve();
@@ -314,7 +315,7 @@ let about = course =>
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about));
 
-let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
+let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
   ...component,
   initialState: () =>
     switch (course) {
@@ -743,7 +744,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                      <button
                        disabled={saveDisabled(state)}
                        onClick={_ =>
-                         updateCourse(state, send, updateCoursesCB, course)
+                         updateCourse(state, send, updateCourseCB, course)
                        }
                        className="w-full btn btn-large btn-primary mt-3">
                        {"Update Course" |> str}
@@ -753,7 +754,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCoursesCB, _children) => {
                      <button
                        disabled={saveDisabled(state)}
                        onClick={_ =>
-                         createCourse(state, send, updateCoursesCB)
+                         createCourse(state, send, updateCourseCB)
                        }
                        className="w-full btn btn-large btn-primary mt-3">
                        {"Create Course" |> str}

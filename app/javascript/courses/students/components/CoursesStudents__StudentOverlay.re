@@ -72,21 +72,123 @@ let make = (~courseId, ~studentId) => {
   );
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div
-      ariaLabel="submissions-overlay-header"
-      className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
-      <div
-        className="relative bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
-        <div
-          onClick={_ => closeOverlay(courseId)}
-          className="review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
-          <Icon
-            className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0"
-          />
-          <span className="text-xs hidden lg:inline-block mt-px">
-            {"close" |> str}
-          </span>
+    <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="w-full md:w-2/5 bg-white">
+        <div className="student-overlay__student-details relative py-8">
+          <div
+            onClick={_ => closeOverlay(courseId)}
+            className="absolute left-0 top-0">
+            <Icon
+              className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0"
+            />
+            <span className="text-xs hidden lg:inline-block mt-px">
+              {"close" |> str}
+            </span>
+          </div>
+          <div
+            className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-25 md:h-25 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+            <img className="object-cover" />
+          </div>
+          <h2 className="text-lg text-center mt-3"> {"Jim Flores" |> str} </h2>
+          <p className="text-sm font-semibold text-center mt-2">
+            {"Student, Sastra University" |> str}
+          </p>
         </div>
+        <div className="flex">
+          <div className="w-1/2 student-overlay__doughnut-chart-container">
+            <svg
+              viewBox="0 0 36 36"
+              className="student-overlay__doughnut-chart purple">
+              <path
+                className="student-overlay__doughnut-chart-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                className="student-overlay__doughnut-chart-stroke"
+                strokeDasharray="50, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text
+                x="50%"
+                y="58%"
+                className="student-overlay__doughnut-chart-text font-semibold">
+                {"30%" |> str}
+              </text>
+            </svg>
+            <p className="text-sm font-semibold text-center mt-2">
+              {"Total Targets Completed" |> str}
+            </p>
+            <p
+              className="text-sm text-gray-700 font-semibold text-center mt-1">
+              {"25 / 100 targets" |> str}
+            </p>
+          </div>
+          <div className="w-1/2 student-overlay__doughnut-chart-container">
+            <svg
+              viewBox="0 0 36 36"
+              className="student-overlay__doughnut-chart pink">
+              <path
+                className="student-overlay__doughnut-chart-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                className="student-overlay__doughnut-chart-stroke"
+                strokeDasharray="80, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text
+                x="50%"
+                y="58%"
+                className="student-overlay__doughnut-chart-text font-semibold">
+                {"80%" |> str}
+              </text>
+            </svg>
+            <p className="text-sm font-semibold text-center mt-2">
+              {"Average Quiz Completed" |> str}
+            </p>
+            <p
+              className="text-sm text-gray-700 font-semibold text-center mt-1">
+              {"25 / 100 Quizes" |> str}
+            </p>
+          </div>
+        </div>
+        <div className="flex py-8">
+          <div className="w-1/2 student-overlay__pie-chart-container">
+            <svg
+              className="student-overlay__pie-chart mx-auto"
+              viewBox="0 0 32 32">
+              <circle
+                className="student-overlay__pie-chart-circle"
+                strokeDasharray="29, 100"
+                r="16"
+                cx="16"
+                cy="16"
+              />
+            </svg>
+            <p className="text-sm font-semibold text-center mt-2">
+              {"Quality of Submission" |> str}
+            </p>
+          </div>
+          <div className="w-1/2 student-overlay__pie-chart-container">
+            <svg
+              className="student-overlay__pie-chart mx-auto"
+              viewBox="0 0 32 32">
+              <circle
+                className="student-overlay__pie-chart-circle"
+                strokeDasharray="29, 100"
+                r="16"
+                cx="16"
+                cy="16"
+              />
+            </svg>
+            <p className="text-sm font-semibold text-center mt-2">
+              {"Correctness of Implementation" |> str}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">
+        {"Comments" |> str}
       </div>
     </div>
   </div>;

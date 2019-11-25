@@ -1,0 +1,71 @@
+.student-overlay__doughnut-chart-container {
+  width: 100%;
+  justify-content: space-around;
+}
+
+.student-overlay__doughnut-chart {
+  display: block;
+  max-width: 100%;
+  max-height: 100px;
+}
+
+.student-overlay__doughnut-chart-bg {
+  fill: none;
+  stroke-width: 2;
+}
+
+.student-overlay__doughnut-chart-stroke {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: butt;
+  animation: progress 0.5s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-bg {
+  stroke: #D3BFF3;
+}
+
+.student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-bg {
+  stroke: #FCB5D0;
+}
+
+.student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-stroke {
+  stroke: #6025C0;
+}
+
+.student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-stroke {
+  stroke: #F61067;
+}
+
+.student-overlay__doughnut-chart-text {
+  font-size: 0.425rem;
+  text-anchor: middle;
+}
+
+.student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-text {
+  fill: #976AE2;
+}
+
+.student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-text {
+  fill: #F95392;
+}
+
+.student-overlay__pie-chart {
+  width: 24px;
+  height: 24px;
+  transform: rotate(-90deg);
+  background: yellowgreen;
+  border-radius: 50%;
+}
+
+.student-overlay__pie-chart .student-overlay__pie-chart-circle {
+  fill: yellowgreen;
+  stroke: #655;
+  stroke-width: 32;
+}

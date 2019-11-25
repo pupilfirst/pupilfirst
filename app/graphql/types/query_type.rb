@@ -30,7 +30,7 @@ module Types
       argument :student_id, ID, required: true
     end
 
-    field :student_submissions, Types::StudentSubmissionType, null: false do
+    field :student_submissions, Types::StudentSubmissionType.connection_type, null: false do
       argument :student_id, ID, required: true
     end
 

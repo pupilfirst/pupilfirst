@@ -93,7 +93,7 @@ let courseLinks = course => {
 let ctaButton = (title, suffix, courseId) => {
   <a
     href={"/courses/" ++ courseId ++ "/" ++ suffix}
-    className="flex justify-between items-center cursor-pointer">
+    className="flex justify-between items-center cursor-pointer p-4">
     <span>
       <i className="text-primary-500 fas fa-book" />
       <span className="text-primary-500 font-semibold ml-2">
@@ -118,7 +118,7 @@ let ctaText = message => {
 let callToAction = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
 
-  <div className="w-full bg-gray-200 mt-4 p-4">
+  <div className="w-full bg-gray-200 mt-4">
     {switch (
        currentSchoolAdmin,
        course |> Course.review,

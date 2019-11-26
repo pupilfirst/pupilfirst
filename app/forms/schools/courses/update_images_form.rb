@@ -1,6 +1,6 @@
 module Schools
   module Courses
-    class UpdatesImagesForm < Reform::Form
+    class UpdateImagesForm < Reform::Form
       property :course_cover, virtual: true, validates: { image: true, file_size: { less_than: 2.megabytes }, allow_blank: true }
       property :course_thumbnail, virtual: true, validates: { image: true, file_size: { less_than: 2.megabytes }, allow_blank: true }
 

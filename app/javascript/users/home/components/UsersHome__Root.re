@@ -81,11 +81,11 @@ let ctaButton = (title, suffix, courseId) => {
   </a>;
 };
 
-let ctaText = message => {
+let ctaText = (message, icon) => {
   <div
-    className="w-full bg-gray-200 mt-4 px-6 text-primary-500 font-semibold flex justify-between items-center">
+    className="w-full bg-red-100 text-red-600 mt-4 px-6 py-4 flex text-sm font-semibold justify-center items-center ">
     <span>
-      <i className="fas fa-book" />
+      <i className=icon />
       <span className="ml-2"> {message |> str} </span>
     </span>
   </div>;
@@ -104,8 +104,9 @@ let callToAction = (course, currentSchoolAdmin) => {
      | (true, _, _, _) => ctaButton("View Course", "curriculum", courseId)
      | (false, true, _, _) =>
        ctaButton("Review Submissions", "review", courseId)
-     | (false, false, true, _) => ctaText("Dropped out")
-     | (false, false, false, true) => ctaText("Course Ended")
+     | (false, false, true, _) => ctaText("Dropped out", "fas fa-user-slash")
+     | (false, false, false, true) =>
+       ctaText("Course Ended", "fas fa-history")
      | (false, false, false, false) =>
        ctaButton("Continue Course", "curriculum", courseId)
      }}
@@ -164,7 +165,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
             <div
               key={course |> Course.id}
               ariaLabel={course |> Course.name}
-              className="w-full px-3 lg:px-5 md:w-1/2">
+              className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
               <div
                 key={course |> Course.id}
                 className="flex overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
@@ -197,7 +198,8 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                     {course |> Course.description |> str}
                   </div>
                   {if (course |> Course.exited) {
-                     <div className="text-sm p-4 bg-red-100 rounded">
+                     <div
+                       className="text-sm py-4 bg-red-100 rounded mt-2 px-6">
                        {"Your student profile for this course is locked, and cannot be updated."
                         |> str}
                      </div>;
@@ -221,7 +223,7 @@ let communitiesSection = communities => {
        |> Array.map(community =>
             <div
               key={community |> Community.id}
-              className="flex w-full px-3 lg:px-5 md:w-1/2">
+              className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 mt:mt-10">
               <a
                 className="w-full h-full shadow rounded-lg hover:shadow-lg"
                 href={"communities/" ++ (community |> Community.id)}>
@@ -262,7 +264,7 @@ let make =
       {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
       {navSection(view, setView)}
     </div>
-    <div className="py-8">
+    <div className="pb-8">
       {switch (view) {
        | ShowCourses =>
          coursesSection(courses, communities, currentSchoolAdmin)

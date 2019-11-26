@@ -180,11 +180,11 @@ let socialLinkIconClass = url => {
 };
 
 let socialLinks = socialLinks => {
-    {socialLinks
-     |> Array.map(link =>
-          <a href=link> <i className={socialLinkIconClass(link)} /> </a>
-        )
-     |> React.array}
+  socialLinks
+  |> Array.map(link =>
+       <a href=link> <i className={socialLinkIconClass(link)} /> </a>
+     )
+  |> React.array;
 };
 
 let personalInfo = studentDetails => {
@@ -255,6 +255,7 @@ let make = (~courseId, ~studentId) => {
              </p>
            </div>
            {personalInfo(studentDetails)}
+           <p className="text-lg font-semibold"> {"Targets Overview" |> str} </p>
            <div className="flex">
              {targetsCompletionStatus(
                 studentDetails |> StudentDetails.targetsCompleted,
@@ -265,6 +266,7 @@ let make = (~courseId, ~studentId) => {
                 studentDetails |> StudentDetails.quizzesAttempted,
               )}
            </div>
+           <p className="text-lg font-semibold"> {"Average Grades" |> str} </p>
            <div className="flex py-8">
              {averageGradeCharts(
                 studentDetails |> StudentDetails.evaluationCriteria,

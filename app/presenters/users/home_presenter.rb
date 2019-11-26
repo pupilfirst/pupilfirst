@@ -84,7 +84,8 @@ module Users
         {
           id: course.id,
           name: course.name,
-          links: course_links(course),
+          review: course.id.in?(courses_with_review_access),
+          enable_leaderboard: course.enable_leaderboard?,
           description: course.description,
           exited: student_exited(course.id),
           thumbnail_url: course.thumbnail_url,
@@ -97,15 +98,6 @@ module Users
     def student_exited(course_id)
       course_with_founder = courses_with_student_profile.detect { |c| c[:course_id] == course_id }
       course_with_founder.present? ? course_with_founder[:exited] : false
-    end
-
-    def course_links(course)
-      links = []
-      links << 'curriculum'
-      links << 'leaderboard' if course.enable_leaderboard?
-      links << 'review' if course.id.in?(courses_with_review_access)
-      links << 'students' if course.id.in?(courses_with_review_access)
-      links
     end
 
     def show_user_edit?

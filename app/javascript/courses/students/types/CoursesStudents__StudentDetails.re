@@ -23,6 +23,12 @@ let name = t => t.name;
 
 let title = t => t.title;
 
+let email = t => t.email;
+
+let phone = t => t.phone;
+
+let socialLinks = t => t.socialLinks;
+
 let avatarUrl = t => t.avatarUrl;
 
 let makeAverageGrade = gradesData => {
@@ -54,7 +60,9 @@ let averageGrades = t => t.averageGrades;
 let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) => {
   evaluationCriteria
   |> ArrayUtils.unsafeFind(
-       ec => CoursesStudents__EvaluationCriterion.id(ec) == grade.evaluationCriterionId,
+       ec =>
+         CoursesStudents__EvaluationCriterion.id(ec)
+         == grade.evaluationCriterionId,
        "Unable to find evaluation criterion with id: "
        ++ grade.evaluationCriterionId
        ++ "in component: "

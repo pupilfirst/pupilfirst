@@ -115,18 +115,6 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
   };
 };
 
-let pieChart = percentageValue => {
-  <svg className="student-overlay__pie-chart mx-auto" viewBox="0 0 32 32">
-    <circle
-      className="student-overlay__pie-chart-circle"
-      strokeDasharray={percentageValue ++ ", 100"}
-      r="16"
-      cx="16"
-      cy="16"
-    />
-  </svg>;
-};
-
 let averageGradeCharts =
     (
       evaluationCriteria: array(EvaluationCriterion.t),
@@ -158,7 +146,7 @@ let averageGradeCharts =
              x="50%"
              y="58%"
              className="student-overlay__doughnut-chart-text font-semibold">
-             {(grade.grade |> string_of_float)
+             {(grade.grade |> Js.Float.toString)
               ++ "/"
               ++ (criterion.maxGrade |> string_of_int)
               |> str}
@@ -170,6 +158,55 @@ let averageGradeCharts =
        </div>;
      })
   |> React.array;
+};
+
+let test = (value, url) => {
+  let tester = Js.Re.fromString(value);
+  url |> Js.Re.test_(tester);
+};
+
+let socialLinkIconClass = url => {
+  switch (url) {
+  | url when url |> test("twitter") => "fab fa-twitter"
+  | url when url |> test("facebook") => "fab fa-facebook-f"
+  | url when url |> test("instagram") => "fab fa-instagram"
+  | url when url |> test("youtube") => "fab fa-youtube"
+  | url when url |> test("linkedin") => "fab fa-linkedin"
+  | url when url |> test("reddit") => "fab fa-reddit"
+  | url when url |> test("flickr") => "fab fa-flickr"
+  | url when url |> test("github") => "fab fa-github"
+  | _unknownUrl => "fas fa-users"
+  };
+};
+
+let socialLinks = socialLinks => {
+    {socialLinks
+     |> Array.map(link =>
+          <a href=link> <i className={socialLinkIconClass(link)} /> </a>
+        )
+     |> React.array}
+};
+
+let personalInfo = studentDetails => {
+  <div className="flex">
+    <div className="flex student-name-and-email content-between">
+      <div className="flex">
+        <i className="fas fa-envelope" />
+        <p> {studentDetails |> StudentDetails.email |> str} </p>
+      </div>
+      {switch (studentDetails |> StudentDetails.phone) {
+       | Some(phone) =>
+         <div className="flex">
+           <i className="fas fa-phone" />
+           <p> {phone |> str} </p>
+         </div>
+       | None => React.null
+       }}
+    </div>
+    <div className="flex student-social-links">
+      {socialLinks(studentDetails |> StudentDetails.socialLinks)}
+    </div>
+  </div>;
 };
 
 [@react.component]
@@ -217,6 +254,7 @@ let make = (~courseId, ~studentId) => {
                {studentDetails |> StudentDetails.title |> str}
              </p>
            </div>
+           {personalInfo(studentDetails)}
            <div className="flex">
              {targetsCompletionStatus(
                 studentDetails |> StudentDetails.targetsCompleted,

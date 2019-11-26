@@ -127,27 +127,48 @@ let pieChart = percentageValue => {
   </svg>;
 };
 
-let averageGradeCharts = (evaluationCriteria, averageGrades) => {
-  evaluationCriteria
-  |> Array.map(ec =>
+let averageGradeCharts =
+    (
+      evaluationCriteria: array(EvaluationCriterion.t),
+      averageGrades: array(StudentDetails.averageGrade),
+    ) => {
+  averageGrades
+  |> Array.map(grade => {
+       let criterion =
+         StudentDetails.evaluationCriterionForGrade(
+           grade,
+           evaluationCriteria,
+           "CoursesStudents__StudentOverlay",
+         );
        <div
-         key={ec |> EvaluationCriterion.id}
+         key={criterion |> EvaluationCriterion.id}
          className="w-1/2 student-overlay__pie-chart-container">
          <svg
            className="student-overlay__pie-chart mx-auto" viewBox="0 0 32 32">
            <circle
              className="student-overlay__pie-chart-circle"
-             strokeDasharray="29, 100"
+             strokeDasharray={
+               StudentDetails.gradeAsPercentage(grade, criterion) ++ ", 100"
+             }
              r="16"
              cx="16"
              cy="16"
            />
+           <text
+             x="50%"
+             y="58%"
+             className="student-overlay__doughnut-chart-text font-semibold">
+             {(grade.grade |> string_of_float)
+              ++ "/"
+              ++ (criterion.maxGrade |> string_of_int)
+              |> str}
+           </text>
          </svg>
          <p className="text-sm font-semibold text-center mt-2">
-           {ec |> EvaluationCriterion.name |> str}
+           {criterion |> EvaluationCriterion.name |> str}
          </p>
-       </div>
-     )
+       </div>;
+     })
   |> React.array;
 };
 

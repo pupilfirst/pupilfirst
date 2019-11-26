@@ -34,6 +34,15 @@ let makeAverageGrade = gradesData => {
 
 let totalTargets = t => t.totalTargets |> float_of_int;
 
+let gradeAsPercentage =
+    (
+      averageGrade: averageGrade,
+      evaluationCriterion: CoursesStudents__EvaluationCriterion.t,
+    ) => {
+  let maxGrade = evaluationCriterion.maxGrade |> float_of_int;
+  averageGrade.grade /. maxGrade *. 100.0 |> int_of_float |> string_of_int;
+};
+
 let targetsCompleted = t => t.targetsCompleted |> float_of_int;
 
 let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
@@ -41,6 +50,17 @@ let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
 let evaluationCriteria = t => t.evaluationCriteria;
 
 let averageGrades = t => t.averageGrades;
+
+let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) => {
+  evaluationCriteria
+  |> ArrayUtils.unsafeFind(
+       ec => CoursesStudents__EvaluationCriterion.id(ec) == grade.evaluationCriterionId,
+       "Unable to find evaluation criterion with id: "
+       ++ grade.evaluationCriterionId
+       ++ "in component: "
+       ++ componentName,
+     );
+};
 
 let computeAverageQuizScore = quizScores => {
   let sumOfPercentageScores =

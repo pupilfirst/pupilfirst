@@ -21,7 +21,7 @@ class StudentDetailsResolver < ApplicationQuery
 
   def average_grades
     @average_grades ||= TimelineEventGrade.where(timeline_event: submissions).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
-      { id: ec_id, average_grade: average_grade }
+      { id: ec_id, average_grade: average_grade.round(1) }
     end
   end
 

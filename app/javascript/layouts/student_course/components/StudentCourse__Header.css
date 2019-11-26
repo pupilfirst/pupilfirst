@@ -16,8 +16,12 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.student-course__dropdown-container {
+.student-course__dropdown-container--with-sub-nav {
   bottom: 2.75rem;
+}
+
+.student-course__dropdown-container--without-sub-nav {
+  bottom: 1rem;
 }
 
 .student-course__dropdown-btn {
@@ -34,7 +38,7 @@
 
 .student-course__nav-tab--active:before {
   @apply absolute bg-primary-500 bottom-0 rounded-t-lg;
-  content: '';
+  content: "";
   width: 70%;
   height: 3px;
   left: 50%;

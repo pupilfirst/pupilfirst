@@ -56,8 +56,24 @@ let courseDropdown =
   </div>;
 };
 
+let courseDropdownClasses = additionalLinks => {
+  "absolute px-4 lg:px-0 "
+  ++ (
+    additionalLinks |> ListUtils.isEmpty
+      ? "student-course__dropdown-container--without-sub-nav"
+      : "student-course__dropdown-container--with-sub-nav"
+  );
+};
+
 let renderCourseSelector =
-    (currentCourseId, courses, showCourses, setShowCourses, coverImage) => {
+    (
+      currentCourseId,
+      courses,
+      showCourses,
+      setShowCourses,
+      coverImage,
+      additionalLinks,
+    ) => {
   let currentCourse =
     courses
     |> ListUtils.unsafeFind(
@@ -80,7 +96,7 @@ let renderCourseSelector =
        }}
     </div>
     <div className="max-w-3xl mx-auto relative">
-      <div className="absolute student-course__dropdown-container px-4 lg:px-0">
+      <div className={courseDropdownClasses(additionalLinks)}>
         {courseDropdown(
            currentCourse,
            otherCourses,
@@ -113,6 +129,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
        showCourses,
        setShowCourses,
        coverImage,
+       additionalLinks,
      )}
     {switch (additionalLinks) {
      | [] => React.null

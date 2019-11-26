@@ -11,8 +11,7 @@ let onWindowClick = (helpVisible, setHelpVisible, _event) =>
     ();
   };
 
-let toggleHelp = (setHelpVisible, event) => {
-  event |> ReactEvent.Mouse.stopPropagation;
+let toggleHelp = (setHelpVisible, _event) => {
   setHelpVisible(helpVisible => !helpVisible);
 };
 
@@ -63,6 +62,7 @@ let make = (~className="", ~link=?, ~alignment=AlignCenter, ~children) => {
     />
     {helpVisible
        ? <div
+           onClick={event => event |> ReactEvent.Mouse.stopPropagation}
            className={
              "help-icon__help-container overflow-y-auto mt-1 border border-gray-900 absolute z-50 p-2 rounded-lg bg-gray-900 text-white max-w-xs text-center"
              ++ (alignment |> alignmentClass)

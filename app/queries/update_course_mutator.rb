@@ -9,6 +9,7 @@ class UpdateCourseMutator < ApplicationQuery
   property :enable_leaderboard
   property :public_signup
   property :about
+  property :featured
 
   validate :valid_course_id
   validate :correct_grades_and_labels
@@ -33,7 +34,8 @@ class UpdateCourseMutator < ApplicationQuery
       ends_at: ends_at,
       enable_leaderboard: enable_leaderboard,
       public_signup: public_signup,
-      about: about
+      about: about,
+      featured: featured
     )
     @course
   end

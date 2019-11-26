@@ -38,6 +38,10 @@ describe Courses::CloneService do
   # prerequisite target
   let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1_1, role: Target::ROLE_TEAM }
 
+  def file_path(filename)
+    File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
+  end
+
   before do
     complete_target(startup_l1.founders.first, target_l1_1_1)
     complete_target(startup_l2.founders.first, target_l1_1_1)
@@ -51,6 +55,10 @@ describe Courses::CloneService do
 
     # set prerequisite target
     target_l1_2.prerequisite_targets << prerequisite_target
+
+    # attach images
+    course.cover.attach(io: File.open(file_path('logo_lipsum_on_light_bg.png')), filename: 'logo_lipsum_on_light_bg.png')
+    course.thumbnail.attach(io: File.open(file_path('logo_lipsum_on_dark_bg.png')), filename: 'logo_lipsum_on_dark_bg.png')
   end
 
   describe '#clone' do
@@ -90,6 +98,9 @@ describe Courses::CloneService do
       expect(Startup.count).to eq(original_startup_count)
       expect(Founder.count).to eq(original_founder_count)
       expect(TimelineEvent.count).to eq(original_submission_count)
+
+      expect(new_course.cover).to be_attached
+      expect(new_course.thumbnail).to be_attached
     end
   end
 end

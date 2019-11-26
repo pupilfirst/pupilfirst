@@ -10,12 +10,12 @@
   - [Communities](/communities.md)
   - [Exporting data](/exporting_data.md)
   - [School Customization](/school_customization.md)
+  - [School Admins](/school_admins.md)
 - **Coaching**
   - [Reviewing Submissions](/reviewing_submissions.md)
   - [Student Reports](/student_reports.md)
 - **Learning**
   - [Signing Up](/signing_up.md)
   - [Taking Courses](/taking_courses.md)
-  - [Participating in the Community](/participating_in_the_community.md)
 - **Additional Reading**
   - [User Profile](/user_profile.md)

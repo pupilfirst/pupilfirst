@@ -94,7 +94,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
   });
 
   <div className="border-b">
-    <div className="container mx-auto px-4 md:px-6 max-w-6xl">
+    <div className="container mx-auto px-3 max-w-5xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm" href="/">

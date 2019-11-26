@@ -36,7 +36,7 @@ class TeamsResolver < ApplicationQuery
   end
 
   def reviewable_teams
-    faculty.courses.where(id: course_id).present? ? course.startups : faculty.startups
+    faculty.courses.where(id: course_id).exists? ? course.startups : faculty.startups
   end
 
   def teams_in_course

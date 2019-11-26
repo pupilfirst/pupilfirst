@@ -16,14 +16,16 @@ feature 'Course Coaches Index', js: true do
   let!(:coach_5) { create :faculty, school: school_2 }
   let!(:coach_6) { create :faculty, school: school, exited: true }
 
-  let!(:level) { create :level, course: course_2 }
-  let!(:startup) { create :startup, level: level }
+  let!(:c1_level) { create :level, course: course_1 }
+  let!(:c2_level) { create :level, course: course_2 }
+  let!(:startup) { create :startup, level: c2_level }
 
   let!(:school_admin) { create :school_admin, school: school }
 
   before do
-    FacultyCourseEnrollment.create(faculty: coach_1, course: course_1, safe_to_create: true)
-    FacultyCourseEnrollment.create(faculty: coach_2, course: course_1, safe_to_create: true)
+    create :faculty_course_enrollment, faculty: coach_1, course: course_1
+    create :faculty_course_enrollment, faculty: coach_2, course: course_1
+    create :faculty_startup_enrollment, faculty: coach_3, startup: startup
   end
 
   scenario 'school admin assigns faculty to a course' do
@@ -53,10 +55,6 @@ feature 'Course Coaches Index', js: true do
     end
 
     expect(course_1.reload.faculty.count).to eq(3)
-  end
-
-  before do
-    FacultyStartupEnrollment.create(faculty: coach_3, startup: startup, safe_to_create: true)
   end
 
   scenario 'school admin assigns faculty to a course who already had a team enrollment' do
@@ -117,5 +115,21 @@ feature 'Course Coaches Index', js: true do
   scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_course_coaches_path(course_1)
     expect(page).to have_text("Please sign in to continue.")
+  end
+
+  context 'when a coach is assigned as a team coach to students in multiple courses' do
+    let!(:startup_2) { create :startup, level: c1_level }
+
+    before do
+      create :faculty_startup_enrollment, faculty: coach_3, startup: startup_2
+    end
+
+    scenario 'user sees team assignments for coaches in the list' do
+      # Only teams in the current course should be displayed.
+      sign_in_user school_admin.user, referer: school_course_coaches_path(course_2)
+
+      expect(page).to have_text(startup.name)
+      expect(page).not_to have_text(startup_2.name)
+    end
   end
 end

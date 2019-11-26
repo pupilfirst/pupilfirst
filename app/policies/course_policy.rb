@@ -21,11 +21,14 @@ class CoursePolicy < ApplicationPolicy
     record.present? && reviewable_courses.present? && reviewable_courses.where(id: record).exists?
   end
 
+  def show?
+    true
+  end
+
   def apply?
     record&.school == current_school && record.public_signup?
   end
 
-  alias show? apply?
   alias students? review?
 
   class Scope < Scope

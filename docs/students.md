@@ -6,7 +6,7 @@ Courses can contain any number of students. To see the students in a course, fir
 
 ## Adding new students
 
-To add new students to a course, click the _Add New Students_ button at the top-right of the list. The form that opens up will allow you to add many students at once. It contains the following properties:
+To add new students to a course, click the _Add New Students_ button at the top-right of the list. The form that opens up will allow you to add many students at once. It asks for the following details:
 
 **Name**\
 The name of the student.

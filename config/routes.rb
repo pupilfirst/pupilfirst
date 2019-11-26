@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       member do
         get 'curriculum'
         get 'exports'
+        post 'attach_images'
       end
 
       resources :levels, only: %i[create]

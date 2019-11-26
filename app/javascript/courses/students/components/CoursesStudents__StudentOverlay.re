@@ -220,6 +220,10 @@ let personalInfo = studentDetails => {
   </div>;
 };
 
+let setSelectedTab = (selectedTab, setState) => {
+  setState(state => {...state, selectedTab});
+};
+
 [@react.component]
 let make = (~courseId, ~studentId, ~levels) => {
   let (state, setState) =
@@ -289,7 +293,34 @@ let make = (~courseId, ~studentId, ~levels) => {
            </div>
          </div>
          <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">
-           {"Notes" |> str}
+           {<ul className="flex font-semibold border-b">
+              <li
+                onClick={_event => setSelectedTab(Notes, setState)}
+                className={
+                  "p-2 "
+                  ++ (
+                    switch (state.selectedTab) {
+                    | Notes => "border-b-2 border-primary-500 text-primary-500 -mb-px"
+                    | Submissions => ""
+                    }
+                  )
+                }>
+                {"Notes" |> str}
+              </li>
+              <li
+                onClick={_event => setSelectedTab(Submissions, setState)}
+                className={
+                  "p-2 "
+                  ++ (
+                    switch (state.selectedTab) {
+                    | Submissions => "border-b-2 border-primary-500 text-primary-500 -mb-px"
+                    | Notes => ""
+                    }
+                  )
+                }>
+                {"Submissions" |> str}
+              </li>
+            </ul>}
            {switch (state.selectedTab) {
             | Notes =>
               <CoursesStudents__CoachNotes

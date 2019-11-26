@@ -4,7 +4,7 @@
 open CoursesStudents__Types;
 
 type state = {
-  newNote: string,
+  newNote: option(string),
   notes: array(CoachNote.t),
 };
 
@@ -23,6 +23,6 @@ module CreateCoachNotesMutation = [%graphql
 [@react.component]
 let make = (~studentId, ~coachNotes) => {
   let (state, setState) =
-    React.useState(() => {newNote: "", notes: coachNotes});
-  <div> {"test" |> str} </div>;
+    React.useState(() => {newNote: None, notes: coachNotes});
+  <div />;
 };

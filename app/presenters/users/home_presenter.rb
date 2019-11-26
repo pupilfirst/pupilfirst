@@ -33,7 +33,7 @@ module Users
           current_school.courses
         else
           current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access).uniq)
-        end
+        end.with_attached_thumbnail
       end
     end
 

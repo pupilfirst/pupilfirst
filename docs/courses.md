@@ -58,8 +58,8 @@ This image will be displayed in all pages _within_ a course. It's the large head
 Because this image fits with the width of the page, it should be created following a few guidelines:
 
 1. The aspect ratio of the image should be 4:1. The suggested resolution is `1920x480` (WxH).
-2. Text within the cover image should be restricted to the center portion of the image. This is because the image width will be considerably smaller on mobile screens, with an aspect ratio of 2:1.
+2. Text within the cover image should be restricted to the center portion of the image. This is because the image width will be considerably smaller on mobile screens, and its height is restricted on larger screens.
 
 Here's an example image that shows where you should place text in a cover image:
 
-![Cover image text positioning](https://res.cloudinary.com/sv-co/image/upload/v1574751880/pupilfirst_documentation/courses/cover_image_text_positioning_vyggub.png)
+[![Cover image composition](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)

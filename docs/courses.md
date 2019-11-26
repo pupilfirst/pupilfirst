@@ -62,4 +62,4 @@ Because this image fits with the width of the page, it should be created followi
 
 Here's an example image that shows where you should place text in a cover image:
 
-![Cover image text positioning](https://res.cloudinary.com/sv-co/image/upload/v1574693221/pupilfirst_documentation/courses/cover_image_text_positioning_m5un8x.png)q
+![Cover image text positioning](https://res.cloudinary.com/sv-co/image/upload/v1574751880/pupilfirst_documentation/courses/cover_image_text_positioning_vyggub.png)

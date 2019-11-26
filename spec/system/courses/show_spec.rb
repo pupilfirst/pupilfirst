@@ -40,11 +40,11 @@ feature "Public view of Course", js: true do
   end
 
   context 'when public user visits a non public course' do
-    scenario 'The page should not render' do
+    scenario 'The page should render' do
       visit course_path(private_course)
 
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-      expect(page).not_to have_content(private_course.name)
+      expect(page).to have_content(private_course.name)
+      expect(page).not_to have_link("Apply Now", href: apply_course_path(public_course))
     end
   end
 end

@@ -16,13 +16,18 @@ let make = (~id, ~title, ~createdAt, ~passedAt, ~levelId) => {
 
 let makeFromJs = submissions => {
   submissions
-  |> Js.Array.map(s =>
-       make(
-         ~id=s##id,
-         ~title=s##title,
-         ~createdAt=s##createdAt |> DateFns.parseString,
-         ~passedAt=s##passedAt |> OptionUtils.map(DateFns.parseString),
-         ~levelId=s##levelId,
-       )
+  |> Js.Array.map(submission =>
+       switch (submission) {
+       | Some(submission) => [
+           make(
+             ~id=submission##id,
+             ~title=submission##title,
+             ~createdAt=submission##createdAt |> DateFns.parseString,
+             ~passedAt=submission##passedAt |> OptionUtils.map(DateFns.parseString),
+             ~levelId=submission##levelId,
+           ),
+         ]
+       | None => []
+       }
      );
 };

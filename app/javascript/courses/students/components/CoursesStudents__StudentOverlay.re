@@ -192,8 +192,10 @@ let socialLinkIconClass = url => {
 
 let socialLinks = socialLinks => {
   socialLinks
-  |> Array.map(link =>
-       <a href=link> <i className={socialLinkIconClass(link)} /> </a>
+  |> Array.mapi((index, link) =>
+       <a key={index |> string_of_int} href=link>
+         <i className={socialLinkIconClass(link)} />
+       </a>
      )
   |> React.array;
 };

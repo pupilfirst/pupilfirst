@@ -13,7 +13,7 @@ type view =
 
 let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
   <div
-    className="flex max-w-3xl mx-auto justify-between pt-10 items-center px-2">
+    className="max-w-4xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
     <div className="flex">
       {switch (avatarUrl) {
        | Some(src) => <img className="w-12 h-12 rounded-full mr-4" src />
@@ -36,13 +36,13 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
 };
 
 let navButtonClasses = selected => {
-  "py-4 mr-6 focus:outline-none "
-  ++ (selected ? "border-b-2 border-primary-500" : "");
+  "font-semibold border-b-2 border-transparent text-sm py-4 mr-6 focus:outline-none "
+  ++ (selected ? "text-primary-500 border-primary-500" : "");
 };
 
 let navSection = (view, setView) => {
-  <div className="border-b mt-6">
-    <div className="flex max-w-3xl mx-auto">
+  <div className="border-b mt-8">
+    <div className="flex max-w-4xl mx-auto px-3 lg:px-0">
       <button
         className={navButtonClasses(view == ShowCourses)}
         onClick={_ => setView(_ => ShowCourses)}>
@@ -165,60 +165,65 @@ let communityLinks = (communityIds, communities) => {
 };
 
 let coursesSection = (courses, communities, currentSchoolAdmin) => {
-  <div className="flex flex-wrap w-full max-w-3xl mx-auto">
-    {courses
-     |> Array.map(course =>
-          <div
-            key={course |> Course.id}
-            ariaLabel={course |> Course.name}
-            className="px-2 w-full md:w-1/2">
+  <div className="w-full max-w-4xl mx-auto">
+    <div className="flex flex-wrap lg:-mx-5">
+      {courses
+       |> Array.map(course =>
             <div
               key={course |> Course.id}
-              className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
-              <div className="w-full">
-                <div>
-                  {switch (course |> Course.thumbnailUrl) {
-                   | Some(url) =>
-                     <img className="object-cover h-48 w-full" src=url />
-                   | None =>
-                     <div
-                       className="h-48 svg-bg-pattern-1 user-home-course__cover"
-                     />
-                   }}
-                </div>
-                <div className="flex w-full" key={course |> Course.id}>
-                  <div className="-mt-10 px-4">
-                    <div>
-                      <span className="text-white font-semibold">
-                        {course |> Course.name |> str}
-                      </span>
+              ariaLabel={course |> Course.name}
+              className="w-full px-3 lg:px-5 md:w-1/2">
+              <div
+                key={course |> Course.id}
+                className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
+                <div className="w-full">
+                  <div>
+                    {switch (course |> Course.thumbnailUrl) {
+                     | Some(url) =>
+                       <img className="object-cover h-48 w-full" src=url />
+                     | None =>
+                       <div
+                         className="h-48 svg-bg-pattern-1 user-home-course__cover"
+                       />
+                     }}
+                  </div>
+                  <div className="flex w-full" key={course |> Course.id}>
+                    <div className="-mt-10 px-4">
+                      <div>
+                        <span className="text-white font-semibold">
+                          {course |> Course.name |> str}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                  <div
+                    className="text-gray-800 text-sm font-semibold p-4 w-full">
+                    {course |> Course.description |> str}
+                  </div>
+                  {if (course |> Course.exited) {
+                     <div className="text-sm p-4 bg-red-100 rounded">
+                       {"Your student profile for this course is locked, and cannot be updated."
+                        |> str}
+                     </div>;
+                   } else {
+                     <div>
+                       {courseLinks(
+                          course |> Course.links,
+                          course |> Course.id,
+                        )}
+                       {communityLinks(
+                          course |> Course.linkedCommunities,
+                          communities,
+                        )}
+                     </div>;
+                   }}
+                  {callToAction(course, currentSchoolAdmin)}
                 </div>
-                <div
-                  className="text-gray-800 text-sm font-semibold p-4 w-full">
-                  {course |> Course.description |> str}
-                </div>
-                {if (course |> Course.exited) {
-                   <div className="text-sm p-4 bg-red-100 rounded">
-                     {"Your student profile for this course is locked, and cannot be updated."
-                      |> str}
-                   </div>;
-                 } else {
-                   <div>
-                     {courseLinks(course |> Course.links, course |> Course.id)}
-                     {communityLinks(
-                        course |> Course.linkedCommunities,
-                        communities,
-                      )}
-                   </div>;
-                 }}
-                {callToAction(course, currentSchoolAdmin)}
               </div>
             </div>
-          </div>
-        )
-     |> React.array}
+          )
+       |> React.array}
+    </div>
   </div>;
 };
 

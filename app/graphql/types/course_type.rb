@@ -21,20 +21,22 @@ module Types
     end
 
     def cover
-      object.cover.attached? ? image_details(object.cover) : nil
+      image_details(object.cover)
     end
 
     def thumbnail
-      object.thumbnail.attached? ? image_details(object.thumbnail) : nil
+      image_details(object.thumbnail)
     end
 
     private
 
-    def image_details(image)
-      {
-        url: Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true),
-        filename: image.filename
-      }
+    def image_details(object)
+      if object.attached?
+        {
+          url: Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true),
+          filename: image.filename
+        }
+      end
     end
   end
 end

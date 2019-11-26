@@ -30,8 +30,8 @@ module Types
 
     private
 
-    def image_details(object)
-      if object.attached?
+    def image_details(image)
+      if image.attached?
         {
           url: Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true),
           filename: image.filename

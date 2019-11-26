@@ -40,7 +40,7 @@ let navButtonClasses = selected => {
   ++ (selected ? "text-primary-500 border-primary-500" : "");
 };
 
-let navSection = (view, setView) => {
+let navSection = (view, setView, communities) => {
   <div className="border-b mt-6">
     <div className="flex max-w-4xl mx-auto px-3 lg:px-0">
       <button
@@ -49,12 +49,14 @@ let navSection = (view, setView) => {
         <i className="fas fa-book text-xs md:text-sm mr-2" />
         <span> {"My Courses" |> str} </span>
       </button>
-      <button
-        className={navButtonClasses(view == ShowCommunities)}
-        onClick={_ => setView(_ => ShowCommunities)}>
-        <i className="fas fa-users text-xs md:text-sm mr-2" />
-        <span> {"Communities" |> str} </span>
-      </button>
+      {communities |> ArrayUtils.isNotEmpty
+         ? <button
+             className={navButtonClasses(view == ShowCommunities)}
+             onClick={_ => setView(_ => ShowCommunities)}>
+             <i className="fas fa-users text-xs md:text-sm mr-2" />
+             <span> {"Communities" |> str} </span>
+           </button>
+         : React.null}
     </div>
   </div>;
 };
@@ -262,7 +264,7 @@ let make =
   <div className="bg-gray-100">
     <div className="bg-white">
       {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
-      {navSection(view, setView)}
+      {navSection(view, setView, communities)}
     </div>
     <div className="pb-8">
       {switch (view) {

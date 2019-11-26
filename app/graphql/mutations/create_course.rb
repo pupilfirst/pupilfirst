@@ -9,6 +9,7 @@ module Mutations
     argument :enable_leaderboard, Boolean, required: true
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
+    argument :featured, Boolean, required: true
 
     description "Create a new course."
 
@@ -18,6 +19,7 @@ module Mutations
       mutator = CreateCourseMutator.new(context, params)
 
       if mutator.valid?
+        mutator.notify(:success, 'Done!', 'Course created successfully!')
         { course: mutator.create_course, errors: [] }
       else
         { course: nil, errors: mutator.error_messages }

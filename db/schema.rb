@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_30_080004) do
+ActiveRecord::Schema.define(version: 2019_11_23_083104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(version: 2019_10_30_080004) do
     t.boolean "enable_leaderboard", default: false
     t.boolean "public_signup", default: false
     t.text "about"
+    t.boolean "featured", default: true
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 

@@ -1,11 +1,10 @@
-.student-course__cover {
-  position: relative;
+.student-course__cover-default {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 
-.student-course__cover:before {
+.student-course__cover-default:before {
   position: absolute;
   content: " ";
   top: 0;
@@ -15,6 +14,14 @@
   display: block;
   z-index: 0;
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.student-course__dropdown-container--with-sub-nav {
+  bottom: 2.75rem;
+}
+
+.student-course__dropdown-container--without-sub-nav {
+  bottom: 1rem;
 }
 
 .student-course__dropdown-btn {
@@ -31,7 +38,7 @@
 
 .student-course__nav-tab--active:before {
   @apply absolute bg-primary-500 bottom-0 rounded-t-lg;
-  content: '';
+  content: "";
   width: 70%;
   height: 3px;
   left: 50%;

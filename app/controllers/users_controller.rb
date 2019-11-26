@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  layout 'student', only: :home
+  layout 'student', except: %i[edit update]
 
   # GET /home/
   def home

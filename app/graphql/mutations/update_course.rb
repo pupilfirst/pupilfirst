@@ -8,6 +8,7 @@ module Mutations
     argument :enable_leaderboard, Boolean, required: true
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
+    argument :featured, Boolean, required: true
 
     description "Update a course."
 
@@ -17,6 +18,7 @@ module Mutations
       mutator = UpdateCourseMutator.new(context, params)
 
       if mutator.valid?
+        mutator.notify(:success, 'Done!', 'Course updated successfully!')
         { course: mutator.update_course }
       else
         raise "Failed with error codes: #{mutator.error_messages.to_json}"

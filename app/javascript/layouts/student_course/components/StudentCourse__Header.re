@@ -21,7 +21,7 @@ let courseOptions = courses =>
 
 let courseDropdown =
     (currentCourse, otherCourses, showCourses, setShowCourses) => {
-  <div className="w-full relative">
+  <div>
     {switch (otherCourses) {
      | [] =>
        <div
@@ -56,13 +56,9 @@ let courseDropdown =
   </div>;
 };
 
-let courseDropdownClasses = additionalLinks => {
-  "absolute px-4 lg:px-0 "
-  ++ (
-    additionalLinks |> ListUtils.isEmpty
-      ? "student-course__dropdown-container--without-sub-nav"
-      : "student-course__dropdown-container--with-sub-nav"
-  );
+let courseNameContainerClasses = additionalLinks => {
+  "student-course__name-container w-full absolute bottom-0 "
+  ++ (additionalLinks |> ListUtils.isEmpty ? "h-10 md:h-12" : "h-10 md:h-20");
 };
 
 let renderCourseSelector =
@@ -95,8 +91,8 @@ let renderCourseSelector =
          />
        }}
     </div>
-    <div className="max-w-3xl mx-auto relative">
-      <div className={courseDropdownClasses(additionalLinks)}>
+    <div className={courseNameContainerClasses(additionalLinks)}>
+      <div className="student-course__name relative px-4 lg:px-0 flex mx-auto lg:max-w-3xl">
         {courseDropdown(
            currentCourse,
            otherCourses,
@@ -136,7 +132,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
      | additionalLinks =>
        <div className="md:px-3">
          <div
-           className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg -mt-7 z-10 relative">
+           className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg mt-0 md:-mt-7 z-10 relative">
            {additionalLinks
             |> List.append(["curriculum"])
             |> List.map(l => {

@@ -190,7 +190,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                       className="user-home-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                       key={course |> Course.id}>
                       <h4
-                        className="user-home-course__title text-white font-semibold leading-tight pl-6 pr-4">
+                        className="user-home-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
                         {course |> Course.name |> str}
                       </h4>
                     </div>
@@ -225,12 +225,12 @@ let communitiesSection = communities => {
        |> Array.map(community =>
             <div
               key={community |> Community.id}
-              className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 mt:mt-10">
+              className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
               <a
                 className="w-full h-full shadow rounded-lg hover:shadow-lg"
                 href={"communities/" ++ (community |> Community.id)}>
                 <div
-                  className="user-home-community__cover flex w-full bg-gray-600 h-32 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+                  className="user-home-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
                 />
                 <div
                   className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">

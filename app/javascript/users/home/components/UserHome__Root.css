@@ -10,11 +10,17 @@
   background-size: cover;
 }
 
-.user-home-course__title {
-  bottom: 1rem;
+.user-home-course__title-container {
+  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient( to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6));
+  background-blend-mode: screen;
 }
 
-.user-home-course__title-container {
-  background: rgba(0, 0, 0, 1);
-  background: linear-gradient( to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6));
+.user-home-course__title {
+  bottom: 1rem;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.user-home-course__description {
+  min-height: 4.5rem;
 }

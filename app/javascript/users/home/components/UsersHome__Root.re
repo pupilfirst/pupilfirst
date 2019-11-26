@@ -41,7 +41,7 @@ let navButtonClasses = selected => {
 };
 
 let navSection = (view, setView) => {
-  <div className="border-b mt-8">
+  <div className="border-b mt-6">
     <div className="flex max-w-4xl mx-auto px-3 lg:px-0">
       <button
         className={navButtonClasses(view == ShowCourses)}
@@ -63,54 +63,30 @@ let courseLink = (courseId, title, suffix, icon) => {
   <a
     key=suffix
     href={"/courses/" ++ courseId ++ "/" ++ suffix}
-    className="rounded shadow mr-4 mt-4 btn">
+    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
     <i className=icon />
-    <span className="text-black font-semibold ml-2"> {title |> str} </span>
+    <span className="font-semibold ml-2"> {title |> str} </span>
   </a>;
-};
-
-let courseLinks = course => {
-  let courseId = course |> Course.id;
-  <div className="flex flex-wrap px-4">
-    {courseLink(courseId, "Curriculum", "curriculum", "fas fa-book")}
-    {course |> Course.enableLeaderboard
-       ? courseLink(
-           courseId,
-           "Leaderboard",
-           "leaderboard",
-           "fas fa-calendar-alt",
-         )
-       : React.null}
-    {course |> Course.review
-       ? courseLink(courseId, "Review", "review", "fas fa-check-square")
-       : React.null}
-    {course |> Course.review
-       ? courseLink(courseId, "Students", "students", "fas fa-cog")
-       : React.null}
-  </div>;
 };
 
 let ctaButton = (title, suffix, courseId) => {
   <a
     href={"/courses/" ++ courseId ++ "/" ++ suffix}
-    className="flex justify-between items-center cursor-pointer">
+    className="w-full bg-gray-200 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-gray-300">
     <span>
-      <i className="text-primary-500 fas fa-book" />
-      <span className="text-primary-500 font-semibold ml-2">
-        {title |> str}
-      </span>
+      <i className="fas fa-book" />
+      <span className="ml-2"> {title |> str} </span>
     </span>
-    <i className="text-primary-500 fas fa-arrow-right" />
+    <i className="fas fa-arrow-right" />
   </a>;
 };
 
 let ctaText = message => {
-  <div className="flex justify-between items-center">
+  <div
+    className="w-full bg-gray-200 mt-4 px-6 text-primary-500 font-semibold flex justify-between items-center">
     <span>
-      <i className="text-primary-500 fas fa-book" />
-      <span className="text-primary-500 font-semibold ml-2">
-        {message |> str}
-      </span>
+      <i className="fas fa-book" />
+      <span className="ml-2"> {message |> str} </span>
     </span>
   </div>;
 };
@@ -118,7 +94,7 @@ let ctaText = message => {
 let callToAction = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
 
-  <div className="w-full bg-gray-200 mt-4 p-4">
+  <div>
     {switch (
        currentSchoolAdmin,
        course |> Course.review,
@@ -137,32 +113,52 @@ let callToAction = (course, currentSchoolAdmin) => {
 };
 
 let communityLinks = (communityIds, communities) => {
-  <div className="px-4 flex flex-wrap">
-    {communityIds
-     |> Array.map(id => {
-          let community =
-            communities |> Js.Array.find(c => c |> Community.id == id);
-          switch (community) {
-          | Some(c) =>
-            <a
-              key={c |> Community.id}
-              href={"/communities/" ++ (c |> Community.id)}
-              className="rounded shadow mr-4 mt-4 btn">
-              <i className="fas fa-users" />
-              <span className="text-black font-semibold ml-2">
-                {c |> Community.name |> str}
-              </span>
-            </a>
-          | None => React.null
-          };
-        })
-     |> React.array}
+  communityIds
+  |> Array.map(id => {
+       let community =
+         communities |> Js.Array.find(c => c |> Community.id == id);
+       switch (community) {
+       | Some(c) =>
+         <a
+           key={c |> Community.id}
+           href={"/communities/" ++ (c |> Community.id)}
+           className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
+           <i className="fas fa-users" />
+           <span className="font-semibold ml-2">
+             {c |> Community.name |> str}
+           </span>
+         </a>
+       | None => React.null
+       };
+     })
+  |> React.array;
+};
+
+let courseLinks = (course, communities) => {
+  let courseId = course |> Course.id;
+  <div className="flex flex-wrap px-4 mt-2">
+    {courseLink(courseId, "Curriculum", "curriculum", "fas fa-book")}
+    {course |> Course.enableLeaderboard
+       ? courseLink(
+           courseId,
+           "Leaderboard",
+           "leaderboard",
+           "fas fa-calendar-alt",
+         )
+       : React.null}
+    {course |> Course.review
+       ? courseLink(courseId, "Review", "review", "fas fa-check-square")
+       : React.null}
+    {course |> Course.review
+       ? courseLink(courseId, "Students", "students", "fas fa-user-friends")
+       : React.null}
+    {communityLinks(course |> Course.linkedCommunities, communities)}
   </div>;
 };
 
 let coursesSection = (courses, communities, currentSchoolAdmin) => {
   <div className="w-full max-w-4xl mx-auto">
-    <div className="flex flex-wrap lg:-mx-5">
+    <div className="flex flex-wrap flex-1 lg:-mx-5">
       {courses
        |> Array.map(course =>
             <div
@@ -171,8 +167,8 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
               className="w-full px-3 lg:px-5 md:w-1/2">
               <div
                 key={course |> Course.id}
-                className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
-                <div className="w-full">
+                className="flex overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
+                <div>
                   <div className="relative">
                     <div className="relative pb-1/2 bg-gray-800">
                       {switch (course |> Course.thumbnailUrl) {
@@ -191,13 +187,13 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                       className="user-home-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                       key={course |> Course.id}>
                       <h4
-                        className="user-home-course__title text-white font-semibold px-4">
+                        className="user-home-course__title text-white font-semibold leading-tight pl-6 pr-4">
                         {course |> Course.name |> str}
                       </h4>
                     </div>
                   </div>
                   <div
-                    className="text-gray-800 text-sm font-semibold p-4 w-full">
+                    className="user-home-course__description text-sm px-6 pt-4 w-full leading-relaxed">
                     {course |> Course.description |> str}
                   </div>
                   {if (course |> Course.exited) {
@@ -206,16 +202,10 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                         |> str}
                      </div>;
                    } else {
-                     <div>
-                       {courseLinks(course)}
-                       {communityLinks(
-                          course |> Course.linkedCommunities,
-                          communities,
-                        )}
-                     </div>;
+                     <div> {courseLinks(course, communities)} </div>;
                    }}
-                  {callToAction(course, currentSchoolAdmin)}
                 </div>
+                <div> {callToAction(course, currentSchoolAdmin)} </div>
               </div>
             </div>
           )
@@ -225,18 +215,18 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
 };
 
 let communitiesSection = communities => {
-  <div className="mx-auto max-w-3xl">
-    <div className="lg:max-w-3xl flex flex-wrap">
+  <div className="w-full max-w-4xl mx-auto">
+    <div className="flex flex-wrap flex-1 lg:-mx-5">
       {communities
        |> Array.map(community =>
             <div
               key={community |> Community.id}
-              className="flex flex-col w-full md:w-1/2 px-2">
+              className="flex w-full px-3 lg:px-5 md:w-1/2">
               <a
-                className="h-full mt-3 border border-gray-400 rounded-lg hover:shadow hover:border-gray-500"
+                className="w-full h-full shadow rounded-lg hover:shadow-lg"
                 href={"communities/" ++ (community |> Community.id)}>
                 <div
-                  className="user-home-community__cover flex w-full bg-gray-600 h-15 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+                  className="user-home-community__cover flex w-full bg-gray-600 h-32 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
                 />
                 <div
                   className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">

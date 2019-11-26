@@ -177,23 +177,27 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                 key={course |> Course.id}
                 className="flex items-center overflow-hidden shadow-md bg-white rounded-lg mb-4">
                 <div className="w-full">
-                  <div>
-                    {switch (course |> Course.thumbnailUrl) {
-                     | Some(url) =>
-                       <img className="object-cover h-48 w-full" src=url />
-                     | None =>
-                       <div
-                         className="h-48 svg-bg-pattern-1 user-home-course__cover"
-                       />
-                     }}
-                  </div>
-                  <div className="flex w-full" key={course |> Course.id}>
-                    <div className="-mt-10 px-4">
-                      <div>
-                        <span className="text-white font-semibold">
-                          {course |> Course.name |> str}
-                        </span>
-                      </div>
+                  <div className="relative">
+                    <div className="relative pb-1/2 bg-gray-800">
+                      {switch (course |> Course.thumbnailUrl) {
+                       | Some(url) =>
+                         <img
+                           className="absolute h-full w-full object-cover"
+                           src=url
+                         />
+                       | None =>
+                         <div
+                           className="user-home-course__cover absolute h-full w-full svg-bg-pattern-1"
+                         />
+                       }}
+                    </div>
+                    <div
+                      className="user-home-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
+                      key={course |> Course.id}>
+                      <h4
+                        className="user-home-course__title text-white font-semibold px-4">
+                        {course |> Course.name |> str}
+                      </h4>
                     </div>
                   </div>
                   <div

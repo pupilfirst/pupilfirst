@@ -308,7 +308,7 @@ let make = (~levels, ~course) => {
   <div>
     {switch (url.path) {
      | ["students", studentId, ..._] =>
-       <CoursesStudents__StudentOverlay courseId studentId />
+       <CoursesStudents__StudentOverlay courseId studentId levels />
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">

@@ -31,6 +31,8 @@ let socialLinks = t => t.socialLinks;
 
 let avatarUrl = t => t.avatarUrl;
 
+let coachNotes = t => t.coachNotes;
+
 let makeAverageGrade = gradesData => {
   gradesData
   |> Js.Array.map(gradeData =>

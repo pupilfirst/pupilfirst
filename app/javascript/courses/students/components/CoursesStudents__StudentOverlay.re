@@ -4,9 +4,18 @@
 open CoursesStudents__Types;
 let str = React.string;
 
-type state =
+type selectedTab =
+  | Notes
+  | Submissions;
+
+type dataLoadStatus =
   | Loading
   | Loaded(StudentDetails.t);
+
+type state = {
+  selectedTab,
+  dataLoadStatus,
+};
 
 let closeOverlay = courseId =>
   ReasonReactRouter.push("/courses/" ++ courseId ++ "/students");
@@ -44,10 +53,12 @@ module StudentDetailsQuery = [%graphql
 ];
 
 let updateStudentDetails = (setState, details) => {
-  setState(_ => Loaded(details |> StudentDetails.makeFromJS));
+  setState(state =>
+    {...state, dataLoadStatus: Loaded(details |> StudentDetails.makeFromJS)}
+  );
 };
 let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
-  setState(_ => Loading);
+  setState(state => {...state, dataLoadStatus: Loading});
   StudentDetailsQuery.make(~studentId, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
@@ -210,8 +221,9 @@ let personalInfo = studentDetails => {
 };
 
 [@react.component]
-let make = (~courseId, ~studentId) => {
-  let (state, setState) = React.useState(() => Loading);
+let make = (~courseId, ~studentId, ~levels) => {
+  let (state, setState) =
+    React.useState(() => {dataLoadStatus: Loading, selectedTab: Notes});
   React.useEffect(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
@@ -230,7 +242,7 @@ let make = (~courseId, ~studentId) => {
         {"close" |> str}
       </span>
     </div>
-    {switch (state) {
+    {switch (state.dataLoadStatus) {
      | Loaded(studentDetails) =>
        <div className="flex flex-col md:flex-row min-h-screen">
          <div className="w-full md:w-2/5 bg-white">
@@ -255,7 +267,9 @@ let make = (~courseId, ~studentId) => {
              </p>
            </div>
            {personalInfo(studentDetails)}
-           <p className="text-lg font-semibold"> {"Targets Overview" |> str} </p>
+           <p className="text-lg font-semibold">
+             {"Targets Overview" |> str}
+           </p>
            <div className="flex">
              {targetsCompletionStatus(
                 studentDetails |> StudentDetails.targetsCompleted,
@@ -275,7 +289,16 @@ let make = (~courseId, ~studentId) => {
            </div>
          </div>
          <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">
-           {"Comments" |> str}
+           {"Notes" |> str}
+           {switch (state.selectedTab) {
+            | Notes =>
+              <CoursesStudents__CoachNotes
+                studentId
+                coachNotes={studentDetails |> StudentDetails.coachNotes}
+              />
+            | Submissions =>
+              <CoursesStudents__SubmissionsList studentId levels />
+            }}
          </div>
        </div>
      | Loading =>

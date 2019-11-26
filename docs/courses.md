@@ -41,8 +41,6 @@ To edit the _contents_ of a course, you'll want to use the [curriculum editor](/
 
 ## Course Images
 
-!> This feature is a work in progress. Please check [the related Github issue](https://github.com/SVdotCO/pupilfirst/issues/66) for updates.
-
 You can customize how the course looks to the student by editing two images:
 
 ### Thumbnail

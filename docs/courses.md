@@ -59,6 +59,7 @@ Because this image fits with the width of the page, it should be created followi
 
 1. The aspect ratio of the image should be 4:1. The suggested resolution is `1920x480` (WxH).
 2. Text within the cover image should be restricted to the center portion of the image. This is because the image width will be considerably smaller on mobile screens, and its height is restricted on larger screens.
+3. We suggest using an image with a dark background for improved contrast with the site's header and the rest of the page's content.
 
 Here's an example image that shows where you should place text in a cover image:
 

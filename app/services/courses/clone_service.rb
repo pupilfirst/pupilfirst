@@ -23,6 +23,8 @@ module Courses
           create_content_blocks(targets)
           create_prerequisites_targets(targets)
           create_quiz(targets)
+          new_course.cover.attach(@course.cover.blob) if @course.cover.attached?
+          new_course.thumbnail.attach(@course.thumbnail.blob) if @course.thumbnail.attached?
         end
       end
     end

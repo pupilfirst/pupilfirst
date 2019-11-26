@@ -59,33 +59,34 @@ let navSection = (view, setView) => {
   </div>;
 };
 
-let courseLinks = (links, courseId) => {
+let courseLink = (courseId, title, suffix, icon) => {
+  <a
+    key=suffix
+    href={"/courses/" ++ courseId ++ "/" ++ suffix}
+    className="rounded shadow mr-4 mt-4 btn">
+    <i className=icon />
+    <span className="text-black font-semibold ml-2"> {title |> str} </span>
+  </a>;
+};
+
+let courseLinks = course => {
+  let courseId = course |> Course.id;
   <div className="flex flex-wrap px-4">
-    {links
-     |> Array.map(l => {
-          let (title, suffix, icon) =
-            switch (l) {
-            | "curriculum" => ("Curriculum", "curriculum", "fas fa-book")
-            | "leaderboard" => (
-                "Leaderboard",
-                "leaderboard",
-                "fas fa-calendar-alt",
-              )
-            | "review" => ("Review", "review", "fas fa-check-square")
-            | "students" => ("Students", "students", "fas fa-cog")
-            | _unknown => ("Unknown", "", "fas fa-bug")
-            };
-          <a
-            key=suffix
-            href={"/courses/" ++ courseId ++ "/" ++ suffix}
-            className="rounded shadow mr-4 mt-4 btn">
-            <i className=icon />
-            <span className="text-black font-semibold ml-2">
-              {title |> str}
-            </span>
-          </a>;
-        })
-     |> React.array}
+    {courseLink(courseId, "Curriculum", "curriculum", "fas fa-book")}
+    {course |> Course.enableLeaderboard
+       ? courseLink(
+           courseId,
+           "Leaderboard",
+           "leaderboard",
+           "fas fa-calendar-alt",
+         )
+       : React.null}
+    {course |> Course.review
+       ? courseLink(courseId, "Review", "review", "fas fa-check-square")
+       : React.null}
+    {course |> Course.review
+       ? courseLink(courseId, "Students", "students", "fas fa-cog")
+       : React.null}
   </div>;
 };
 
@@ -118,24 +119,19 @@ let callToAction = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
 
   <div className="w-full bg-gray-200 mt-4 p-4">
-    {if (currentSchoolAdmin) {
-       ctaButton("View Course", "curriculum", courseId);
-     } else {
-       switch (course |> Course.links |> Js.Array.find(l => l == "review")) {
-       | Some(l) => ctaButton("Review Submissions", l, courseId)
-       | None =>
-         switch (
-           course |> Course.exited,
-           course |> Course.ended,
-           course |> Course.links |> Js.Array.find(l => l == "curriculum"),
-         ) {
-         | (true, _, _) => ctaText("Dropped out")
-         | (false, true, _) => ctaText("Course Ended")
-         | (false, false, Some(l)) =>
-           ctaButton("Continue Course", l, courseId)
-         | (false, false, None) => React.null
-         }
-       };
+    {switch (
+       currentSchoolAdmin,
+       course |> Course.review,
+       course |> Course.exited,
+       course |> Course.ended,
+     ) {
+     | (true, _, _, _) => ctaButton("View Course", "curriculum", courseId)
+     | (false, true, _, _) =>
+       ctaButton("Review Submissions", "review", courseId)
+     | (false, false, true, _) => ctaText("Dropped out")
+     | (false, false, false, true) => ctaText("Course Ended")
+     | (false, false, false, false) =>
+       ctaButton("Continue Course", "curriculum", courseId)
      }}
   </div>;
 };
@@ -211,10 +207,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                      </div>;
                    } else {
                      <div>
-                       {courseLinks(
-                          course |> Course.links,
-                          course |> Course.id,
-                        )}
+                       {courseLinks(course)}
                        {communityLinks(
                           course |> Course.linkedCommunities,
                           communities,

@@ -12,7 +12,7 @@ module Schools
     # POST /courses/id/attach_images
     def attach_images
       course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      @form = Schools::Courses::UpdateForm.new(course)
+      @form = Schools::Courses::UpdateImagesForm.new(course)
 
       if @form.validate(params)
         @form.save

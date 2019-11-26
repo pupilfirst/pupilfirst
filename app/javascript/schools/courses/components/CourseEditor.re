@@ -121,7 +121,7 @@ let make = _children => {
            updateCourseCB={updateCourse(send)}
          />
        | ShowCoverImageForm(course) =>
-         <CourseEditor__CoverImageForm
+         <CourseEditor__ImagesForm.Jsx2
            course
            updateCourseCB={updateCourse(send)}
            closeDrawerCB={hideEditorAction(send)}

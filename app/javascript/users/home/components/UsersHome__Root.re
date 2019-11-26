@@ -29,7 +29,7 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
     {showUserEdit
        ? <a className="btn" href="/user/edit">
            <i className="fas fa-edit text-xs md:text-sm mr-2" />
-           <span> {"Edit profile" |> str} </span>
+           <span> {"Edit Profile" |> str} </span>
          </a>
        : React.null}
   </div>;

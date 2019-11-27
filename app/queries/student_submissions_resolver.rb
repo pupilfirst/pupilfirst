@@ -2,7 +2,7 @@ class StudentSubmissionsResolver < ApplicationQuery
   property :student_id
 
   def student_submissions
-    student.timeline_events.evaluated_by_faculty.includes(:timeline_event_grades)
+    student.timeline_events.evaluated_by_faculty.includes(target: :level)
   end
 
   def authorized?

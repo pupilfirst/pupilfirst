@@ -2,7 +2,6 @@ module Mutations
   class CreateCoachNote < GraphQL::Schema::Mutation
     argument :note, String, required: true
     argument :student_id, ID, required: true
-    argument :author_id, ID, required: true
 
     description "Create a coach note."
 

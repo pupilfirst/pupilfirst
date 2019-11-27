@@ -1,6 +1,58 @@
+.student-overlay__student-level-progress {
+  height: 5px;
+}
+
+.student-overlay__student-level {
+  @apply bg-gray-300 text-center;
+}
+
+.student-overlay__student-level-count {
+  @apply inline-block text-xs text-gray-500 font-semibold text-center pt-2;
+}
+
+.student-overlay__student-level--completed {
+  @apply bg-yellow-500;
+}
+
+.student-overlay__student-level:not(:last-child) {
+  @apply border-r-2 border-white;
+}
+
+.student-overlay__student-current-level {
+  @apply relative bg-gray-300;
+}
+
+.student-overlay__student-level--completed .student-overlay__student-level-count {
+  @apply text-gray-600;
+}
+
+.student-overlay__student-current-level .student-overlay__student-level-count {
+  @apply text-gray-600;
+}
+
+.student-overlay__student-current-level:after {
+  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
+  content: '';
+}
+
+.student-overlay__student-current-level:before {
+  position: absolute;
+  content: '';
+  height: 22px;
+  z-index: 10;
+  bottom: 0;
+  width: 22px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%23d69e2e'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: -2px bottom;
+}
+
 .student-overlay__doughnut-chart-container {
-  width: 100%;
-  justify-content: space-around;
+  @apply shadow-lg rounded-lg p-4;
+}
+
+.student-overlay__pie-chart-container {
+  @apply p-6 bg-gray-100 rounded-lg;
 }
 
 .student-overlay__doughnut-chart {
@@ -60,12 +112,12 @@
   width: 24px;
   height: 24px;
   transform: rotate(-90deg);
-  background: yellowgreen;
+  background: theme("colors.green.200");
   border-radius: 50%;
 }
 
 .student-overlay__pie-chart .student-overlay__pie-chart-circle {
-  fill: yellowgreen;
-  stroke: #655;
+  fill: theme("colors.green.200");
+  stroke: theme("colors.green.500");
   stroke-width: 32;
 }

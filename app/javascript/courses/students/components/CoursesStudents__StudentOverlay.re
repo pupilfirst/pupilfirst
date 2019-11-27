@@ -396,9 +396,8 @@ let make = (~courseId, ~studentId, ~levels) => {
            <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
          </div>
          <div className="max-w-3xl mx-auto">
-           {SkeletonLoading.heading()}
+           {SkeletonLoading.contents()}
            {SkeletonLoading.paragraph()}
-           {SkeletonLoading.profileCard()}
            {SkeletonLoading.paragraph()}
          </div>
        </div>

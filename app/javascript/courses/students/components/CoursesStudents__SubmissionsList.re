@@ -106,42 +106,43 @@ let showSubmission = (submissions, levels) =>
     {submissions
      |> Submission.sort
      |> Array.map(submission =>
-          <div
-            key={submission |> Submission.id}
-            onClick={_ => Js.log("submission")}
-            ariaLabel={
-              "reviewed-submission-card-" ++ (submission |> Submission.id)
-            }
-            className={submissionCardClasses(submission)}>
-            <div className="w-full md:w-3/4">
-              <div className="block text-sm md:pr-2">
-                <span
-                  className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                  {submission
-                   |> Submission.levelId
-                   |> Level.unsafeLevelNumber(
-                        levels,
-                        "ShowReviewedSubmission",
-                      )
-                   |> str}
-                </span>
-                <span className="ml-2 font-semibold text-base">
-                  {submission |> Submission.title |> str}
-                </span>
+          <a href={"/submissions/" ++ (submission |> Submission.id)} target="_blank">
+            <div
+              key={submission |> Submission.id}
+              ariaLabel={
+                "student-submission-card-" ++ (submission |> Submission.id)
+              }
+              className={submissionCardClasses(submission)}>
+              <div className="w-full md:w-3/4">
+                <div className="block text-sm md:pr-2">
+                  <span
+                    className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
+                    {submission
+                     |> Submission.levelId
+                     |> Level.unsafeLevelNumber(
+                          levels,
+                          "StudentSubmissionsList",
+                        )
+                     |> str}
+                  </span>
+                  <span className="ml-2 font-semibold text-base">
+                    {submission |> Submission.title |> str}
+                  </span>
+                </div>
+                <div className="mt-1 ml-px text-xs text-gray-900">
+                  <span className="ml-1">
+                    {"Submitted on "
+                     ++ (submission |> Submission.createdAtPretty)
+                     |> str}
+                  </span>
+                </div>
               </div>
-              <div className="mt-1 ml-px text-xs text-gray-900">
-                <span className="ml-1">
-                  {"Submitted on "
-                   ++ (submission |> Submission.createdAtPretty)
-                   |> str}
-                </span>
-              </div>
+              {<div
+                 className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
+                 {showSubmissionStatus(submission |> Submission.failed)}
+               </div>}
             </div>
-            {<div
-               className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-               {showSubmissionStatus(submission |> Submission.failed)}
-             </div>}
-          </div>
+          </a>
         )
      |> React.array}
   </div>;

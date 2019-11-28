@@ -145,15 +145,34 @@ let averageGradeCharts =
            evaluationCriteria,
            "CoursesStudents__StudentOverlay",
          );
+       let passGrade =
+         criterion |> EvaluationCriterion.passGrade |> float_of_int;
+       let averageGrade = grade |> StudentDetails.gradeValue;
        <div
          key={criterion |> EvaluationCriterion.id}
          className="flex w-full lg:w-1/2 px-2 mt-2">
          <div className="student-overlay__pie-chart-container">
            <div
              className="flex bg-white px-5 pt-4 pb-2 text-center items-center">
-             <svg className="student-overlay__pie-chart" viewBox="0 0 32 32">
+             <svg
+               className={
+                 "student-overlay__pie-chart "
+                 ++ (
+                   averageGrade > passGrade
+                     ? "student-overlay__pie-chart--pass"
+                     : "student-overlay__pie-chart--fail"
+                 )
+               }
+               viewBox="0 0 32 32">
                <circle
-                 className="student-overlay__pie-chart-circle"
+                 className={
+                   "student-overlay__pie-chart-circle "
+                   ++ (
+                     averageGrade > passGrade
+                       ? "student-overlay__pie-chart-circle--pass"
+                       : "student-overlay__pie-chart-circle--fail"
+                   )
+                 }
                  strokeDasharray={
                    StudentDetails.gradeAsPercentage(grade, criterion)
                    ++ ", 100"

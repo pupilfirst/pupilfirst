@@ -9,6 +9,8 @@ let id = t => t.id;
 
 let name = t => t.name;
 
+let passGrade = t => t.passGrade;
+
 let make = (~id, ~name, ~maxGrade, ~passGrade) => {
   id,
   name,

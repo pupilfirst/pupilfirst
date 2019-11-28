@@ -112,12 +112,26 @@
   width: 24px;
   height: 24px;
   transform: rotate(-90deg);
-  background: theme("colors.green.200");
   border-radius: 50%;
 }
 
+.student-overlay__pie-chart--pass  {
+  background: theme("colors.green.200");
+}
+
+.student-overlay__pie-chart--fail  {
+  background: theme("colors.orange.200");
+}
+
 .student-overlay__pie-chart .student-overlay__pie-chart-circle {
+  stroke-width: 32;
+}
+
+.student-overlay__pie-chart-circle--pass {
   fill: theme("colors.green.200");
   stroke: theme("colors.green.500");
-  stroke-width: 32;
+}
+.student-overlay__pie-chart-circle--fail {
+  fill: theme("colors.orange.200");
+  stroke: theme("colors.orange.500");
 }

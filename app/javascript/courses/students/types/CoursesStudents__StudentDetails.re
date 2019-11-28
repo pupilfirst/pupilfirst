@@ -61,6 +61,8 @@ let evaluationCriteria = t => t.evaluationCriteria;
 
 let averageGrades = t => t.averageGrades;
 
+let gradeValue = averageGrade => averageGrade.grade;
+
 let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) => {
   evaluationCriteria
   |> ArrayUtils.unsafeFind(

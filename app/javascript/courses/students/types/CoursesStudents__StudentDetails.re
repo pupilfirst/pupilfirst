@@ -25,6 +25,8 @@ let title = t => t.title;
 
 let email = t => t.email;
 
+let levelId = t => t.levelId;
+
 let phone = t => t.phone;
 
 let socialLinks = t => t.socialLinks;

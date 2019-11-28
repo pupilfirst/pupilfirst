@@ -239,6 +239,52 @@ let setSelectedTab = (selectedTab, setState) => {
   setState(state => {...state, selectedTab});
 };
 
+let levelProgressBar = (levelId, levels) => {
+  let currentLevelNumber =
+    levels
+    |> ArrayUtils.unsafeFind(
+         level => Level.id(level) == levelId,
+         "Unable to find level with id" ++ levelId ++ "in StudentOverlay",
+       )
+    |> Level.number;
+  <div>
+    <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
+    <div className="mt-2 h-12 flex items-center">
+      <ul className="student-overlay__student-level-progress flex w-full">
+        {levels
+         |> Level.sort
+         |> Array.map(level => {
+              let levelNumber = level |> Level.number;
+              levelNumber < currentLevelNumber
+                ? <li
+                    className="flex-1 student-overlay__student-level student-overlay__student-level--completed">
+                    <span className="student-overlay__student-level-count">
+                      {levelNumber |> string_of_int |> str}
+                    </span>
+                  </li>
+                : (
+                  if (levelNumber == currentLevelNumber) {
+                    <li
+                      className="flex-1 student-overlay__student-level student-overlay__student-current-level">
+                      <span className="student-overlay__student-level-count">
+                        {levelNumber |> string_of_int |> str}
+                      </span>
+                    </li>;
+                  } else {
+                    <li className="flex-1 student-overlay__student-level">
+                      <span className="student-overlay__student-level-count">
+                        {levelNumber |> string_of_int |> str}
+                      </span>
+                    </li>;
+                  }
+                );
+            })
+         |> React.array}
+      </ul>
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make = (~courseId, ~studentId, ~levels) => {
   let (state, setState) =
@@ -283,50 +329,7 @@ let make = (~courseId, ~studentId, ~levels) => {
              </p>
              {personalInfo(studentDetails)}
            </div>
-           <div>
-             <h6 className="text-sm font-semibold">
-               {"Level Progress: 4/6" |> str}
-             </h6>
-             <div className="mt-2 h-12 flex items-center">
-               <ul
-                 className="student-overlay__student-level-progress flex w-full">
-                 <li
-                   className="flex-1 student-overlay__student-level student-overlay__student-level--completed">
-                   <span className="student-overlay__student-level-count">
-                     {"1" |> str}
-                   </span>
-                 </li>
-                 <li
-                   className="flex-1 student-overlay__student-level student-overlay__student-level--completed">
-                   <span className="student-overlay__student-level-count">
-                     {"2" |> str}
-                   </span>
-                 </li>
-                 <li
-                   className="flex-1 student-overlay__student-level student-overlay__student-level--completed">
-                   <span className="student-overlay__student-level-count">
-                     {"3" |> str}
-                   </span>
-                 </li>
-                 <li
-                   className="flex-1 student-overlay__student-level student-overlay__student-current-level">
-                   <span className="student-overlay__student-level-count">
-                     {"4" |> str}
-                   </span>
-                 </li>
-                 <li className="flex-1 student-overlay__student-level">
-                   <span className="student-overlay__student-level-count">
-                     {"5" |> str}
-                   </span>
-                 </li>
-                 <li className="flex-1 student-overlay__student-level">
-                   <span className="student-overlay__student-level-count">
-                     {"6" |> str}
-                   </span>
-                 </li>
-               </ul>
-             </div>
-           </div>
+           {levelProgressBar(studentDetails |> StudentDetails.levelId, levels)}
            <div className="mt-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
              <div className="flex -mx-2 flex-wrap mt-2">

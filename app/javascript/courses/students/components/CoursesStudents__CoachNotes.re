@@ -12,9 +12,11 @@ let str = React.string;
 
 module CreateCoachNotesMutation = [%graphql
   {|
-   mutation($studentId: ID!, $note: String!, $authorId: ID!) {
-    createCoachNote(studentId: $studentId, authorId: $authorId, note: $note ) {
-       success
+   mutation($studentId: ID!, $note: String!) {
+    createCoachNote(studentId: $studentId, note: $note ) {
+       coachNote {
+         note
+       }
       }
     }
    |}

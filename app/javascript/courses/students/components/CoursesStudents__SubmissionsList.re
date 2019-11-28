@@ -106,7 +106,9 @@ let showSubmission = (submissions, levels) =>
     {submissions
      |> Submission.sort
      |> Array.map(submission =>
-          <a href={"/submissions/" ++ (submission |> Submission.id)} target="_blank">
+          <a
+            href={"/submissions/" ++ (submission |> Submission.id)}
+            target="_blank">
             <div
               key={submission |> Submission.id}
               ariaLabel={

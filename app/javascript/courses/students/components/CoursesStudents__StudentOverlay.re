@@ -8,13 +8,13 @@ type selectedTab =
   | Notes
   | Submissions;
 
-type dataLoadStatus =
+type studentData =
   | Loading
   | Loaded(StudentDetails.t);
 
 type state = {
   selectedTab,
-  dataLoadStatus,
+  studentData,
 };
 
 let closeOverlay = courseId =>
@@ -54,11 +54,11 @@ module StudentDetailsQuery = [%graphql
 
 let updateStudentDetails = (setState, details) => {
   setState(state =>
-    {...state, dataLoadStatus: Loaded(details |> StudentDetails.makeFromJS)}
+    {...state, studentData: Loaded(details |> StudentDetails.makeFromJS)}
   );
 };
 let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
-  setState(state => {...state, dataLoadStatus: Loading});
+  setState(state => {...state, studentData: Loading});
   StudentDetailsQuery.make(~studentId, ())
   |> GraphqlQuery.sendQuery(authenticityToken)
   |> Js.Promise.then_(response => {
@@ -257,6 +257,7 @@ let levelProgressBar = (levelId, levels) => {
               let levelNumber = level |> Level.number;
               levelNumber < currentLevelNumber
                 ? <li
+                    key={level |> Level.id}
                     className="flex-1 student-overlay__student-level student-overlay__student-level--completed">
                     <span className="student-overlay__student-level-count">
                       {levelNumber |> string_of_int |> str}
@@ -265,13 +266,14 @@ let levelProgressBar = (levelId, levels) => {
                 : (
                   if (levelNumber == currentLevelNumber) {
                     <li
+                    key={level |> Level.id}
                       className="flex-1 student-overlay__student-level student-overlay__student-current-level">
                       <span className="student-overlay__student-level-count">
                         {levelNumber |> string_of_int |> str}
                       </span>
                     </li>;
                   } else {
-                    <li className="flex-1 student-overlay__student-level">
+                    <li key={level |> Level.id} className="flex-1 student-overlay__student-level">
                       <span className="student-overlay__student-level-count">
                         {levelNumber |> string_of_int |> str}
                       </span>
@@ -284,11 +286,19 @@ let levelProgressBar = (levelId, levels) => {
     </div>
   </div>;
 };
+let addNoteCB = (setState, studentDetails, note) => {
+  setState(state =>
+    {
+      ...state,
+      studentData: Loaded(StudentDetails.addNewNote(note, studentDetails)),
+    }
+  );
+};
 
 [@react.component]
 let make = (~courseId, ~studentId, ~levels) => {
   let (state, setState) =
-    React.useState(() => {dataLoadStatus: Loading, selectedTab: Notes});
+    React.useState(() => {studentData: Loading, selectedTab: Notes});
   React.useEffect(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
@@ -304,7 +314,7 @@ let make = (~courseId, ~studentId, ~levels) => {
       className="absolute z-50 left-0 cursor-pointer top-0 mt-4 ml-4 md:mt-8 md:ml-8 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
       <Icon className="if i-times-light text-xl lg:text-2xl" />
     </div>
-    {switch (state.dataLoadStatus) {
+    {switch (state.studentData) {
      | Loaded(studentDetails) =>
        <div className="flex flex-col md:flex-row min-h-screen">
          <div className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">
@@ -387,6 +397,7 @@ let make = (~courseId, ~studentId, ~levels) => {
               <CoursesStudents__CoachNotes
                 studentId
                 coachNotes={studentDetails |> StudentDetails.coachNotes}
+                addNoteCB={addNoteCB(setState, studentDetails)}
               />
             | Submissions =>
               <CoursesStudents__SubmissionsList studentId levels />

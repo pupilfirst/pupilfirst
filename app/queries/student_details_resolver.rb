@@ -69,7 +69,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def social_links
-    student.user.slice('linkedin_url', 'twitter_url', 'facebook_url', 'github_url').values - [nil]
+    student.user.slice('linkedin_url', 'twitter_url', 'facebook_url', 'github_url', 'personal_website_url').values - [nil]
   end
 
   def evaluation_criteria

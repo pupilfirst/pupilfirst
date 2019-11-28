@@ -16,12 +16,13 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.student-course__dropdown-container--with-sub-nav {
-  bottom: 2.75rem;
+.student-course__name-container {
+  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient( to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
 }
 
-.student-course__dropdown-container--without-sub-nav {
-  bottom: 1rem;
+.student-course__name .dropdown__btn {
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .student-course__dropdown-btn {

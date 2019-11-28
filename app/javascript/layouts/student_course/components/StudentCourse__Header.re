@@ -21,22 +21,22 @@ let courseOptions = courses =>
 
 let courseDropdown =
     (currentCourse, otherCourses, showCourses, setShowCourses) => {
-  <div className="w-full relative">
+  <div>
     {switch (otherCourses) {
      | [] =>
        <div
-         className="flex max-w-3xl mx-auto items-center relative justify-between font-semibold relative px-3 py-2 rounded w-full text-2xl text-white">
-         <span className="truncate w-full text-center">
+         className="flex max-w-xs md:max-w-xl mx-auto items-center relative justify-between font-semibold relative rounded w-full text-lg md:text-2xl leading-tight text-white">
+         <span className="sm:truncate w-full text-left">
            {currentCourse |> Course.name |> str}
          </span>
        </div>
      | otherCourses =>
-       <div className="student-course__dropdown max-w-xs relative mx-auto">
+       <div className="student-course__dropdown relative mx-auto">
          <button
            key={"dropdown-course" ++ (currentCourse |> Course.id)}
            onClick={_ => setShowCourses(showCourses => !showCourses)}
-           className="dropdown__btn max-w-xs mx-auto text-white appearance-none flex items-center relative justify-between focus:outline-none font-semibold w-full text-lg md:text-2xl">
-           <span className="truncate w-full text-center">
+           className="dropdown__btn max-w-xs md:max-w-lg mx-auto text-white appearance-none flex items-center relative justify-between focus:outline-none font-semibold w-full text-lg md:text-2xl leading-tight">
+           <span className="sm:truncate w-full text-left">
              {currentCourse |> Course.name |> str}
            </span>
            <div
@@ -56,12 +56,11 @@ let courseDropdown =
   </div>;
 };
 
-let courseDropdownClasses = additionalLinks => {
-  "absolute px-4 lg:px-0 "
+let courseNameContainerClasses = additionalLinks => {
+  "student-course__name-container w-full absolute bottom-0 "
   ++ (
     additionalLinks |> ListUtils.isEmpty
-      ? "student-course__dropdown-container--without-sub-nav"
-      : "student-course__dropdown-container--with-sub-nav"
+      ? "pt-2 pb-3 md:pt-4 md:pb-6" : "pt-2 pb-3 md:pt-4 md:pb-12"
   );
 };
 
@@ -95,8 +94,9 @@ let renderCourseSelector =
          />
        }}
     </div>
-    <div className="max-w-3xl mx-auto relative">
-      <div className={courseDropdownClasses(additionalLinks)}>
+    <div className={courseNameContainerClasses(additionalLinks)}>
+      <div
+        className="student-course__name relative px-4 lg:px-0 flex h-full mx-auto lg:max-w-3xl">
         {courseDropdown(
            currentCourse,
            otherCourses,
@@ -136,7 +136,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
      | additionalLinks =>
        <div className="md:px-3">
          <div
-           className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg -mt-7 z-10 relative">
+           className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg mt-0 md:-mt-7 z-10 relative">
            {additionalLinks
             |> List.append(["curriculum"])
             |> List.map(l => {

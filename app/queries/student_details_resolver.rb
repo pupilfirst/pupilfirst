@@ -61,7 +61,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def coach_notes
-    CoachNote.where(student_id: student_id).limit(20)
+    CoachNote.where(student_id: student_id).order('created_at DESC').limit(20)
   end
 
   def submissions

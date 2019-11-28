@@ -15,6 +15,7 @@ module CreateCoachNotesMutation = [%graphql
    mutation($studentId: ID!, $note: String!) {
     createCoachNote(studentId: $studentId, note: $note ) {
        coachNote {
+         id
          note
          createdAt
          author {
@@ -63,6 +64,58 @@ let updateCoachNoteCB = (setState, newNote) => {
 let saveNoteButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
+let showCoachNote = note => {
+  <div key={note |> CoachNote.id}>
+    {switch (note |> CoachNote.author) {
+     | Some(coach) =>
+       switch (coach |> Coach.avatarUrl) {
+       | Some(avatarUrl) =>
+         <img
+           className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+           src=avatarUrl
+         />
+       | None =>
+         <Avatar
+           name={coach |> Coach.name}
+           className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+         />
+       }
+
+     | None =>
+       <Avatar
+         name="X Y"
+         className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+       />
+     }}
+    <div>
+      <p className="font-semibold inline-block leading-snug">
+        {(
+           switch (note |> CoachNote.author) {
+           | Some(coach) => coach |> Coach.name
+           | None => "Deleted Coach"
+           }
+         )
+         |> str}
+      </p>
+      {switch (note |> CoachNote.author) {
+       | Some(coach) =>
+         <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+           {coach |> Coach.title |> str}
+         </p>
+       | None => React.null
+       }}
+      <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+        {"on " ++ (note |> CoachNote.noteOn) |> str}
+      </p>
+    </div>
+    <MarkdownBlock
+      className="pt-1 text-sm"
+      profile=Markdown.Permissive
+      markdown={note |> CoachNote.note}
+    />
+  </div>;
+};
+
 [@react.component]
 let make = (~studentId, ~coachNotes, ~addNoteCB) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
@@ -91,5 +144,10 @@ let make = (~studentId, ~coachNotes, ~addNoteCB) => {
          ? saveNoteButtonText("Saving", "fas fa-spinner")
          : saveNoteButtonText("Save Note", "")}
     </button>
+    <h6> {"All Notes" |> str} </h6>
+    {coachNotes
+     |> CoachNote.sort
+     |> Array.map(note => showCoachNote(note))
+     |> React.array}
   </div>;
 };

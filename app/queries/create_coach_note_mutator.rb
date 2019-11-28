@@ -10,6 +10,12 @@ class CreateCoachNoteMutator < ApplicationQuery
     end
   end
 
+  private
+
+  def course
+    Founder.find(student_id).course
+  end
+
   def author_id
     current_user.faculty.id
   end

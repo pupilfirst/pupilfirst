@@ -74,6 +74,11 @@ let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) => 
      );
 };
 
+let addNewNote = (note, t) => {
+  let notes = Array.append(t.coachNotes, [|note|]);
+  {...t, coachNotes: notes};
+};
+
 let computeAverageQuizScore = quizScores => {
   let sumOfPercentageScores =
     quizScores
@@ -102,7 +107,8 @@ let makeFromJS = studentDetails => {
   avatarUrl: studentDetails##avatarUrl,
   phone: studentDetails##phone,
   coachNotes:
-    studentDetails##coachNotes |> CoursesStudents__CoachNote.makeFromJs,
+    studentDetails##coachNotes
+    |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
   evaluationCriteria:
     studentDetails##evaluationCriteria
     |> CoursesStudents__EvaluationCriterion.makeFromJs,

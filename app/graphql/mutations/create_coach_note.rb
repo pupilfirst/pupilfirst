@@ -5,17 +5,17 @@ module Mutations
 
     description "Create a coach note."
 
-    field :coach_note, Types::CoachNoteType, null: false
+    field :coach_note, Types::CoachNoteType, null: true
 
     def resolve(params)
       mutator = CreateCoachNoteMutator.new(context, params)
 
       if mutator.valid?
-        new_note = mutator.create_note
         mutator.notify(:success, "Success", "Note added successfully")
-        { note: new_note.note, author: new_note.author, created_at: new_note.created_at }
+        { coach_note: mutator.create_note }
       else
         mutator.notify_errors
+        { coach_note: nil }
       end
     end
   end

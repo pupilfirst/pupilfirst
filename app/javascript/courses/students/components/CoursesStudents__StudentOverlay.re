@@ -199,18 +199,21 @@ let socialLinkIconClass = url => {
   };
 };
 
-let socialLinks = socialLinks => {
-  socialLinks
-  |> Array.mapi((index, link) =>
-       <a
-         className="px-2 py-1 inline-block hover:text-primary-500"
-         key={index |> string_of_int}
-         target="_blank"
-         href=link>
-         <i className={socialLinkIconClass(link)} />
-       </a>
-     )
-  |> React.array;
+let showSocialLinks = socialLinks => {
+  <div
+    className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-100 px-2 rounded-lg">
+    {socialLinks
+     |> Array.mapi((index, link) =>
+          <a
+            className="px-2 py-1 inline-block hover:text-primary-500"
+            key={index |> string_of_int}
+            target="_blank"
+            href=link>
+            <i className={socialLinkIconClass(link)} />
+          </a>
+        )
+     |> React.array}
+  </div>;
 };
 
 let personalInfo = studentDetails => {
@@ -232,10 +235,11 @@ let personalInfo = studentDetails => {
        | None => React.null
        }}
     </div>
-    <div
-      className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-100 px-2 rounded-lg">
-      {socialLinks(studentDetails |> StudentDetails.socialLinks)}
-    </div>
+    {
+      let socialLinks = studentDetails |> StudentDetails.socialLinks;
+      socialLinks |> ArrayUtils.isNotEmpty
+        ? showSocialLinks(socialLinks) : React.null;
+    }
   </div>;
 };
 

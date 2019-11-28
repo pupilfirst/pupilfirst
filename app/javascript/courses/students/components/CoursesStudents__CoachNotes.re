@@ -67,11 +67,10 @@ let saveNoteButtonText = (title, iconClasses) =>
 let make = (~studentId, ~coachNotes, ~addNoteCB) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
   <div>
-    <p> {"Add New Note" |> str} </p>
     <MarkdownEditor
       updateMarkdownCB={updateCoachNoteCB(setState)}
       value={state.newNote}
-      placeholder="Add a new note"
+      label="Add new note"
       profile=Markdown.Permissive
       maxLength=10000
       defaultView=MarkdownEditor.Edit

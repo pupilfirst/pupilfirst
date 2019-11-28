@@ -205,6 +205,7 @@ let socialLinks = socialLinks => {
        <a
          className="px-2 py-1 inline-block hover:text-primary-500"
          key={index |> string_of_int}
+         target="_blank"
          href=link>
          <i className={socialLinkIconClass(link)} />
        </a>

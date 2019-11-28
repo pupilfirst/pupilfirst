@@ -29,6 +29,7 @@ module StudentDetailsQuery = [%graphql
           id, name, maxGrade, passGrade
         },
           coachNotes {
+            id
             note
             createdAt
             author {

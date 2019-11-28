@@ -120,14 +120,16 @@ let showCoachNote = note => {
 let make = (~studentId, ~coachNotes, ~addNoteCB) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
   <div>
-    <MarkdownEditor
-      updateMarkdownCB={updateCoachNoteCB(setState)}
-      value={state.newNote}
-      label="Add new note"
-      profile=Markdown.Permissive
-      maxLength=10000
-      defaultView=MarkdownEditor.Edit
-    />
+    <DisablingCover disabled={state.saving} message="Saving...">
+      <MarkdownEditor
+        updateMarkdownCB={updateCoachNoteCB(setState)}
+        value={state.newNote}
+        label="Add new note"
+        profile=Markdown.Permissive
+        maxLength=10000
+        defaultView=MarkdownEditor.Edit
+      />
+    </DisablingCover>
     <button
       disabled={state.newNote |> String.length < 1 || state.saving}
       onClick={_ =>

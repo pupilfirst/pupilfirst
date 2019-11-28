@@ -152,8 +152,7 @@ let averageGradeCharts =
          key={criterion |> EvaluationCriterion.id}
          className="flex w-full lg:w-1/2 px-2 mt-2">
          <div className="student-overlay__pie-chart-container">
-           <div
-             className="flex bg-white px-5 pt-4 pb-2 text-center items-center">
+           <div className="flex px-5 pt-4 text-center items-center">
              <svg
                className={
                  "student-overlay__pie-chart "
@@ -189,8 +188,7 @@ let averageGradeCharts =
                 |> str}
              </span>
            </div>
-           <p
-             className="text-sm font-semibold bg-gray-100 px-5 pt-2 pb-4 h-full">
+           <p className="text-sm font-semibold px-5 pt-3 pb-4">
              {criterion |> EvaluationCriterion.name |> str}
            </p>
          </div>
@@ -350,7 +348,7 @@ let make = (~courseId, ~studentId, ~levels) => {
                <Icon className="if i-times-light text-xl lg:text-2xl" />
              </div>
              <div
-               className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-25 md:h-25 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+               className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
                {switch (studentDetails |> StudentDetails.avatarUrl) {
                 | Some(avatarUrl) =>
                   <img className="w-full object-cover" src=avatarUrl />

@@ -48,11 +48,11 @@
 }
 
 .student-overlay__doughnut-chart-container {
-  @apply shadow-lg rounded-lg p-4 h-full;
+  @apply shadow rounded-lg p-4 h-full;
 }
 
 .student-overlay__pie-chart-container {
-  @apply w-full shadow rounded-lg overflow-hidden;
+  @apply bg-gray-100 w-full rounded-lg overflow-hidden;
 }
 
 .student-overlay__doughnut-chart {
@@ -115,11 +115,11 @@
   border-radius: 50%;
 }
 
-.student-overlay__pie-chart--pass  {
+.student-overlay__pie-chart--pass {
   background: theme("colors.green.200");
 }
 
-.student-overlay__pie-chart--fail  {
+.student-overlay__pie-chart--fail {
   background: theme("colors.orange.200");
 }
 
@@ -131,6 +131,7 @@
   fill: theme("colors.green.200");
   stroke: theme("colors.green.500");
 }
+
 .student-overlay__pie-chart-circle--fail {
   fill: theme("colors.orange.200");
   stroke: theme("colors.orange.500");

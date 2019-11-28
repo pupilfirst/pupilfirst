@@ -18,6 +18,22 @@ body {
   font-family: "Open Sans", sans-serif;
   color: #453c52;
   @apply w-full h-full antialiased;
+  scrollbar-width: thin;
+  scrollbar-color: theme(colors.gray.500) theme(colors.gray.100);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme(colors.gray.100);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme(colors.gray.500);
+  border-radius: 6px;
+  border: 3px solid theme(colors.gray.100);
 }
 
 h1, h2, h3, h4, h5, h6 {

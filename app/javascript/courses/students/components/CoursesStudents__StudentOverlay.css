@@ -1,4 +1,5 @@
 .student-overlay__student-level-progress {
+  position: relative;
   height: 5px;
 }
 
@@ -30,11 +31,6 @@
   @apply text-gray-600;
 }
 
-.student-overlay__student-current-level:after {
-  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
-  content: '';
-}
-
 .student-overlay__student-current-level:before {
   position: absolute;
   content: '';
@@ -45,6 +41,27 @@
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%23d69e2e'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: -2px bottom;
+}
+
+.student-overlay__student-course-completed .student-overlay__student-level {
+  @apply bg-green-400;
+}
+
+.student-overlay__student-course-completed:before {
+  position: absolute;
+  content: '';
+  height: 22px;
+  z-index: 10;
+  bottom: 0;
+  width: 22px;
+  right: -16px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
+  background-position: bottom center;
+}
+
+.student-overlay__student-current-level:after {
+  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
+  content: '';
 }
 
 .student-overlay__doughnut-chart-container {

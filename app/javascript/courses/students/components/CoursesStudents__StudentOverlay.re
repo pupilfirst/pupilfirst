@@ -273,7 +273,13 @@ let levelProgressBar = (levelId, levels) => {
        )
     |> Level.number;
   <div>
-    <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
+    <div className="flex justify-between items-end">
+      <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
+      <p className="text-green-600 font-semibold">
+        {{js|🎉|js} |> str}
+        <span className="text-xs ml-px">{"Course Completed!" |> str}</span>
+      </p>
+    </div>
     <div className="h-12 flex items-center">
       <ul className="student-overlay__student-level-progress flex w-full">
         {levels

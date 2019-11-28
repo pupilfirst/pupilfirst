@@ -313,18 +313,18 @@ let make = (~courseId, ~studentId, ~levels) => {
     getStudentDetails(AuthenticityToken.fromHead(), studentId, setState),
     [|studentId|],
   );
-  <div
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div
-      onClick={_ => closeOverlay(courseId)}
-      className="absolute z-50 left-0 cursor-pointer top-0 mt-4 ml-4 md:mt-8 md:ml-8 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
-      <Icon className="if i-times-light text-xl lg:text-2xl" />
-    </div>
+  <div className="fixed z-30 top-0 left-0 w-full h-full bg-white">
     {switch (state.studentData) {
      | Loaded(studentDetails) =>
-       <div className="flex flex-col md:flex-row min-h-screen">
-         <div className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">
+       <div className="flex flex-col md:flex-row h-screen">
+         <div
+           className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16 overflow-y-auto">
            <div className="student-overlay__student-details relative pb-8">
+             <div
+               onClick={_ => closeOverlay(courseId)}
+               className="absolute z-50 left-0 cursor-pointer top-0 mt-4 ml-4 md:mt-8 md:ml-8 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
+               <Icon className="if i-times-light text-xl lg:text-2xl" />
+             </div>
              <div
                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-25 md:h-25 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
                {switch (studentDetails |> StudentDetails.avatarUrl) {
@@ -370,9 +370,9 @@ let make = (~courseId, ~studentId, ~levels) => {
            </div>
          </div>
          <div
-           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pt-2 pb-6 2xl:pt-4 2xl:pb-8">
+           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pt-4 2xl:pb-8 overflow-y-auto">
            <div
-             className="sticky top-0 bg-gray-100 pt-2 px-4 md:px-8 2xl:px-16">
+             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 z-30">
              {<ul className="flex font-semibold border-b text-sm">
                 <li
                   onClick={_event => setSelectedTab(Notes, setState)}

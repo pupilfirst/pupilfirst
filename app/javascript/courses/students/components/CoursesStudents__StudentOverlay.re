@@ -98,7 +98,7 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   <div className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container">
       {doughnutChart("purple", targetCompletionPercent)}
-      <p className="text-sm font-semibold text-center mt-2">
+      <p className="text-sm font-semibold text-center mt-3">
         {"Total Targets Completed" |> str}
       </p>
       <p className="text-sm text-gray-700 font-semibold text-center mt-1">
@@ -118,7 +118,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
     <div className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
       <div className="student-overlay__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
-        <p className="text-sm font-semibold text-center mt-2">
+        <p className="text-sm font-semibold text-center mt-3">
           {"Average Quiz Score" |> str}
         </p>
         <p
@@ -146,9 +146,10 @@ let averageGradeCharts =
          );
        <div
          key={criterion |> EvaluationCriterion.id}
-         className="w-full md:w-1/2 px-2">
+         className="flex w-full lg:w-1/2 px-2 mt-2">
          <div className="student-overlay__pie-chart-container">
-           <div className="flex">
+           <div
+             className="flex bg-white px-5 pt-4 pb-2 text-center items-center">
              <svg className="student-overlay__pie-chart" viewBox="0 0 32 32">
                <circle
                  className="student-overlay__pie-chart-circle"
@@ -161,14 +162,15 @@ let averageGradeCharts =
                  cy="16"
                />
              </svg>
-             <span className="ml-2 text-lg font-semibold">
+             <span className="ml-3 text-lg font-semibold">
                {(grade.grade |> Js.Float.toString)
                 ++ "/"
                 ++ (criterion.maxGrade |> string_of_int)
                 |> str}
              </span>
            </div>
-           <p className="text-sm font-semibold mt-2">
+           <p
+             className="text-sm font-semibold bg-gray-100 px-5 pt-2 pb-4 h-full">
              {criterion |> EvaluationCriterion.name |> str}
            </p>
          </div>
@@ -249,7 +251,7 @@ let levelProgressBar = (levelId, levels) => {
     |> Level.number;
   <div>
     <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
-    <div className="mt-2 h-12 flex items-center">
+    <div className="h-12 flex items-center">
       <ul className="student-overlay__student-level-progress flex w-full">
         {levels
          |> Level.sort
@@ -345,7 +347,7 @@ let make = (~courseId, ~studentId, ~levels) => {
            </div>
            <div className="mt-8">
              <h6 className="font-semibold"> {"Average Grades" |> str} </h6>
-             <div className="flex -mx-2 flex-wrap mt-2">
+             <div className="flex -mx-2 flex-wrap">
                {averageGradeCharts(
                   studentDetails |> StudentDetails.evaluationCriteria,
                   studentDetails |> StudentDetails.averageGrades,
@@ -353,44 +355,50 @@ let make = (~courseId, ~studentId, ~levels) => {
              </div>
            </div>
          </div>
-         <div className="w-full md:w-3/5 bg-gray-100 border-l p-12">
-           {<ul className="flex font-semibold border-b">
-              <li
-                onClick={_event => setSelectedTab(Notes, setState)}
-                className={
-                  "p-2 "
-                  ++ (
-                    switch (state.selectedTab) {
-                    | Notes => "border-b-2 border-primary-500 text-primary-500 -mb-px"
-                    | Submissions => ""
-                    }
-                  )
-                }>
-                {"Notes" |> str}
-              </li>
-              <li
-                onClick={_event => setSelectedTab(Submissions, setState)}
-                className={
-                  "p-2 "
-                  ++ (
-                    switch (state.selectedTab) {
-                    | Submissions => "border-b-2 border-primary-500 text-primary-500 -mb-px"
-                    | Notes => ""
-                    }
-                  )
-                }>
-                {"Submissions" |> str}
-              </li>
-            </ul>}
-           {switch (state.selectedTab) {
-            | Notes =>
-              <CoursesStudents__CoachNotes
-                studentId
-                coachNotes={studentDetails |> StudentDetails.coachNotes}
-              />
-            | Submissions =>
-              <CoursesStudents__SubmissionsList studentId levels />
-            }}
+         <div
+           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pt-2 pb-6 2xl:pt-4 2xl:pb-8">
+           <div
+             className="sticky top-0 bg-gray-100 pt-2 px-4 md:px-8 2xl:px-16">
+             {<ul className="flex font-semibold border-b text-sm">
+                <li
+                  onClick={_event => setSelectedTab(Notes, setState)}
+                  className={
+                    "px-3 py-3 md:py-2 cursor-pointer text-gray-800 rounded-t-lg "
+                    ++ (
+                      switch (state.selectedTab) {
+                      | Notes => "border-b-3 border-primary-500 text-primary-500 -mb-px"
+                      | Submissions => "hover:bg-gray-200 hover:text-gray-900"
+                      }
+                    )
+                  }>
+                  {"Notes" |> str}
+                </li>
+                <li
+                  onClick={_event => setSelectedTab(Submissions, setState)}
+                  className={
+                    "px-3 py-3 md:py-2 cursor-pointer text-gray-800 "
+                    ++ (
+                      switch (state.selectedTab) {
+                      | Submissions => "border-b-3 border-primary-500 text-primary-500 -mb-px"
+                      | Notes => "hover:bg-gray-200 hover:text-gray-900"
+                      }
+                    )
+                  }>
+                  {"Submissions" |> str}
+                </li>
+              </ul>}
+           </div>
+           <div className="pt-2 px-4 md:px-8 2xl:px-16">
+             {switch (state.selectedTab) {
+              | Notes =>
+                <CoursesStudents__CoachNotes
+                  studentId
+                  coachNotes={studentDetails |> StudentDetails.coachNotes}
+                />
+              | Submissions =>
+                <CoursesStudents__SubmissionsList studentId levels />
+              }}
+           </div>
          </div>
        </div>
      | Loading =>

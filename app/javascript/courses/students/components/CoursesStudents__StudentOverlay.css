@@ -48,11 +48,11 @@
 }
 
 .student-overlay__doughnut-chart-container {
-  @apply shadow-lg rounded-lg p-4;
+  @apply shadow-lg rounded-lg p-4 h-full;
 }
 
 .student-overlay__pie-chart-container {
-  @apply p-6 bg-gray-100 rounded-lg;
+  @apply w-full shadow rounded-lg overflow-hidden;
 }
 
 .student-overlay__doughnut-chart {

@@ -146,10 +146,12 @@ let make = (~studentId, ~coachNotes, ~addNoteCB) => {
          ? saveNoteButtonText("Saving", "fas fa-spinner")
          : saveNoteButtonText("Save Note", "")}
     </button>
-    <h6> {"All Notes" |> str} </h6>
-    {coachNotes
-     |> CoachNote.sort
-     |> Array.map(note => showCoachNote(note))
-     |> React.array}
+    <div>
+      <h6 className="font-semibold mt-6"> {"All Notes" |> str} </h6>
+      {coachNotes
+       |> CoachNote.sort
+       |> Array.map(note => showCoachNote(note))
+       |> React.array}
+    </div>
   </div>;
 };

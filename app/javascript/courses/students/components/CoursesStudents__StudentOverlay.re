@@ -363,7 +363,7 @@ let make = (~courseId, ~studentId, ~levels) => {
      | Loaded(studentDetails) =>
        <div className="flex flex-col md:flex-row md:h-screen">
          <div
-           className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16 md:overflow-y-auto">
+           className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
            <div className="student-overlay__student-details relative pb-8">
              <div
                onClick={_ => closeOverlay(courseId)}
@@ -419,9 +419,9 @@ let make = (~courseId, ~studentId, ~levels) => {
            </div>
          </div>
          <div
-           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pt-4 2xl:pb-8 md:overflow-y-auto">
+           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
            <div
-             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 z-30">
+             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
              {<ul className="flex font-semibold border-b text-sm">
                 <li
                   onClick={_event => setSelectedTab(Notes, setState)}

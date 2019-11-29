@@ -11,12 +11,23 @@ class StudentDetailsResolver < ApplicationQuery
       coach_notes: coach_notes,
       targets_completed: targets_completed,
       total_targets: total_targets,
-      level_id: student.level.id,
+      level_id: level.id,
       social_links: social_links,
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
-      average_grades: average_grades
+      average_grades: average_grades,
+      course_completed: course_completed?
     }
+  end
+
+  def course_completed?
+    max_level = course.levels.maximum(:number)
+
+    return false if level.number < max_level
+
+    completed_statuses = [Targets::StatusService::STATUS_PASSED, Targets::StatusService::STATUS_SUBMITTED]
+
+    Target.where(target_group: level.target_groups.where(milestone: true)).all? { |target| target.status(student).in?(completed_statuses) }
   end
 
   def average_grades
@@ -49,6 +60,10 @@ class StudentDetailsResolver < ApplicationQuery
     current_user.faculty.reviewable_courses.where(id: student.course).exists?
   end
 
+  def level
+    @level ||= student.level
+  end
+
   def student
     @student ||= Founder.where(id: student_id).includes(:user).first
   end
@@ -61,7 +76,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def coach_notes
-    CoachNote.where(student_id: student_id).order('created_at DESC').limit(20)
+    CoachNote.where(student_id: student_id).includes(author: [user: { avatar_attachment: :blob }]).order('created_at DESC').limit(20)
   end
 
   def submissions

@@ -24,7 +24,7 @@ module StudentDetailsQuery = [%graphql
   {|
     query($studentId: ID!) {
       studentDetails(studentId: $studentId) {
-        title, name,email, phone, socialLinks, avatarUrl
+        title, name,email, phone, socialLinks, avatarUrl, courseCompleted
         evaluationCriteria{
           id, name, maxGrade, passGrade
         },
@@ -264,7 +264,7 @@ let setSelectedTab = (selectedTab, setState) => {
   setState(state => {...state, selectedTab});
 };
 
-let levelProgressBar = (levelId, levels) => {
+let levelProgressBar = (levelId, levels, courseCompleted) => {
   let currentLevelNumber =
     levels
     |> ArrayUtils.unsafeFind(
@@ -275,13 +275,23 @@ let levelProgressBar = (levelId, levels) => {
   <div>
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
-      <p className="text-green-600 font-semibold">
-        {{js|🎉|js} |> str}
-        <span className="text-xs ml-px">{"Course Completed!" |> str}</span>
-      </p>
+      {courseCompleted
+         ? <p className="text-green-600 font-semibold">
+             {{js|🎉|js} |> str}
+             <span className="text-xs ml-px">
+               {"Course Completed!" |> str}
+             </span>
+           </p>
+         : React.null}
     </div>
     <div className="h-12 flex items-center">
-      <ul className="student-overlay__student-level-progress flex w-full">
+      <ul
+        className={
+          "student-overlay__student-level-progress flex w-full "
+          ++ (
+            courseCompleted ? "student-overlay__student-course-completed" : ""
+          )
+        }>
         {levels
          |> Level.sort
          |> Array.map(level => {
@@ -298,7 +308,14 @@ let levelProgressBar = (levelId, levels) => {
                   if (levelNumber == currentLevelNumber) {
                     <li
                       key={level |> Level.id}
-                      className="flex-1 student-overlay__student-level student-overlay__student-current-level">
+                      className={
+                        "flex-1 student-overlay__student-level "
+                        ++ (
+                          courseCompleted
+                            ? "student-overlay__student-level--completed"
+                            : "student-overlay__student-current-level"
+                        )
+                      }>
                       <span className="student-overlay__student-level-count">
                         {levelNumber |> string_of_int |> str}
                       </span>
@@ -373,7 +390,11 @@ let make = (~courseId, ~studentId, ~levels) => {
              </p>
              {personalInfo(studentDetails)}
            </div>
-           {levelProgressBar(studentDetails |> StudentDetails.levelId, levels)}
+           {levelProgressBar(
+              studentDetails |> StudentDetails.levelId,
+              levels,
+              studentDetails |> StudentDetails.courseCompleted,
+            )}
            <div className="mt-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
              <div className="flex -mx-2 flex-wrap mt-2">

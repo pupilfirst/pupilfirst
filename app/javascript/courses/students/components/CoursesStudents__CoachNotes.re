@@ -65,54 +65,60 @@ let saveNoteButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
 let showCoachNote = note => {
-  <div key={note |> CoachNote.id}>
-    {switch (note |> CoachNote.author) {
-     | Some(coach) =>
-       switch (coach |> Coach.avatarUrl) {
-       | Some(avatarUrl) =>
-         <img
-           className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-           src=avatarUrl
-         />
-       | None =>
-         <Avatar
-           name={coach |> Coach.name}
-           className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-         />
-       }
-
-     | None =>
-       <Avatar
-         name="X Y"
-         className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-       />
-     }}
-    <div>
-      <p className="font-semibold inline-block leading-snug">
-        {(
-           switch (note |> CoachNote.author) {
-           | Some(coach) => coach |> Coach.name
-           | None => "Deleted Coach"
-           }
-         )
-         |> str}
-      </p>
+  <div className="mt-4" key={note |> CoachNote.id}>
+    <div className="flex">
       {switch (note |> CoachNote.author) {
        | Some(coach) =>
-         <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
-           {coach |> Coach.title |> str}
-         </p>
-       | None => React.null
+         switch (coach |> Coach.avatarUrl) {
+         | Some(avatarUrl) =>
+           <img
+             className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+             src=avatarUrl
+           />
+         | None =>
+           <Avatar
+             name={coach |> Coach.name}
+             className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+           />
+         }
+
+       | None =>
+         <Avatar
+           name="X Y"
+           className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+         />
        }}
-      <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+      <div>
+        <p className="text-sm font-semibold inline-block leading-snug">
+          {(
+             switch (note |> CoachNote.author) {
+             | Some(coach) => coach |> Coach.name
+             | None => "Deleted Coach"
+             }
+           )
+           |> str}
+        </p>
+        {switch (note |> CoachNote.author) {
+         | Some(coach) =>
+           <p
+             className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+             {coach |> Coach.title |> str}
+           </p>
+         | None => React.null
+         }}
+      </div>
+    </div>
+    <div className="ml-10 md:ml-13 mt-2">
+      <p
+        className="inline-block text-xs font-semibold leading-tight bg-gray-300 text-gray-800 mt-px px-1 py-px rounded">
         {"on " ++ (note |> CoachNote.noteOn) |> str}
       </p>
+      <MarkdownBlock
+        className="pt-1 text-sm"
+        profile=Markdown.Permissive
+        markdown={note |> CoachNote.note}
+      />
     </div>
-    <MarkdownBlock
-      className="pt-1 text-sm"
-      profile=Markdown.Permissive
-      markdown={note |> CoachNote.note}
-    />
   </div>;
 };
 
@@ -148,6 +154,15 @@ let make = (~studentId, ~coachNotes, ~addNoteCB) => {
     </button>
     <div>
       <h6 className="font-semibold mt-6"> {"All Notes" |> str} </h6>
+      {coachNotes |> ArrayUtils.isEmpty
+         ? <div
+             className="bg-gray-200 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
+             <i className="fas fa-sticky-note text-gray-400 text-4xl" />
+             <p className="text-xs font-semibold text-gray-700 mt-2">
+               {"No Notes here!" |> str}
+             </p>
+           </div>
+         : React.null}
       {coachNotes
        |> CoachNote.sort
        |> Array.map(note => showCoachNote(note))

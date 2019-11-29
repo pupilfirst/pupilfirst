@@ -466,14 +466,19 @@ let make = (~courseId, ~studentId, ~levels) => {
          </div>
        </div>
      | Loading =>
-       <div>
-         <div className="bg-gray-100 py-4">
-           <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
+       <div className="flex flex-col md:flex-row md:h-screen">
+         <div
+           className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">
+           {SkeletonLoading.image()}
+           {SkeletonLoading.multiple(
+              ~count=2,
+              ~element=SkeletonLoading.profileCard(),
+            )}
          </div>
-         <div className="max-w-3xl mx-auto">
+         <div
+           className="w-full relative md:w-3/5 bg-gray-100 md:border-l p-4 md:p-8 2xl:p-16">
            {SkeletonLoading.contents()}
-           {SkeletonLoading.paragraph()}
-           {SkeletonLoading.paragraph()}
+           {SkeletonLoading.profileCard()}
          </div>
        </div>
      }}

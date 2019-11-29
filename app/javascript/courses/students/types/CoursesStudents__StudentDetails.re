@@ -17,7 +17,7 @@ type t = {
   targetsCompleted: int,
   quizScores: array(string),
   averageGrades: array(averageGrade),
-  courseCompleted: bool,
+  levelsCompleted: array(string),
 };
 
 let name = t => t.name;
@@ -35,8 +35,6 @@ let socialLinks = t => t.socialLinks;
 let avatarUrl = t => t.avatarUrl;
 
 let coachNotes = t => t.coachNotes;
-
-let courseCompleted = t => t.courseCompleted;
 
 let makeAverageGrade = gradesData => {
   gradesData
@@ -63,6 +61,8 @@ let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
 let evaluationCriteria = t => t.evaluationCriteria;
 
 let averageGrades = t => t.averageGrades;
+
+let levelsCompleted = t => t.levelsCompleted;
 
 let gradeValue = averageGrade => averageGrade.grade;
 
@@ -123,5 +123,5 @@ let makeFromJS = studentDetails => {
   targetsCompleted: studentDetails##targetsCompleted,
   quizScores: studentDetails##quizScores,
   averageGrades: studentDetails##averageGrades |> makeAverageGrade,
-  courseCompleted: studentDetails##courseCompleted,
+  levelsCompleted: studentDetails##levelsCompleted,
 };

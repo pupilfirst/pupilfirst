@@ -16,18 +16,22 @@ class StudentDetailsResolver < ApplicationQuery
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
       average_grades: average_grades,
-      course_completed: course_completed?
+      levels_completed: levels_completed
     }
   end
 
-  def course_completed?
-    max_level = course.levels.maximum(:number)
+  def levels_completed
+    required_targets_by_level = Target.joins(:target_group).where(target_groups: { milestone: true, level_id: course.levels.select(:id) }).distinct(:id)
+      .pluck(:id, 'target_groups.level_id').each_with_object({}) do |(target_id, level_id), required_targets_by_level|
+      required_targets_by_level[level_id] ||= []
+      required_targets_by_level[level_id] << target_id
+    end
 
-    return false if level.number < max_level
+    passed_target_ids = TimelineEvent.joins(:founders).where(founders: { id: student.id }).where.not(passed_at: nil).distinct(:target_id).pluck(:target_id)
 
-    completed_statuses = [Targets::StatusService::STATUS_PASSED, Targets::StatusService::STATUS_SUBMITTED]
-
-    Target.where(target_group: level.target_groups.where(milestone: true)).all? { |target| target.status(student).in?(completed_statuses) }
+    course.levels.pluck(:id).select do |level_id|
+      ((required_targets_by_level[level_id] || []) - passed_target_ids).empty?
+    end.map(&:to_s)
   end
 
   def average_grades

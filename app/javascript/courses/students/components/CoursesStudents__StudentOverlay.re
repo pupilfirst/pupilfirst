@@ -24,7 +24,7 @@ module StudentDetailsQuery = [%graphql
   {|
     query($studentId: ID!) {
       studentDetails(studentId: $studentId) {
-        title, name,email, phone, socialLinks, avatarUrl, courseCompleted
+        title, name,email, phone, socialLinks, avatarUrl
         evaluationCriteria{
           id, name, maxGrade, passGrade
         },
@@ -43,6 +43,7 @@ module StudentDetailsQuery = [%graphql
           socialLinks
           totalTargets
           targetsCompleted
+          levelsCompleted
           quizScores
           averageGrades {
             id
@@ -264,7 +265,22 @@ let setSelectedTab = (selectedTab, setState) => {
   setState(state => {...state, selectedTab});
 };
 
-let levelProgressBar = (levelId, levels, courseCompleted) => {
+let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
+  let classes =
+    levelNumber <= currentLevelNumber
+      ? "student-overlay__student-level--reached" : "";
+  let classes =
+    levelNumber == currentLevelNumber
+      ? classes ++ " student-overlay__student-level--current" : classes;
+  levelCompleted
+    ? classes ++ " student-overlay__student-level--completed" : classes;
+};
+
+let levelProgressBar = (levelId, levels, levelsCompleted) => {
+  let courseCompleted =
+    levels
+    |> Array.for_all(level => levelsCompleted |> Array.mem(level |> Level.id));
+
   let currentLevelNumber =
     levels
     |> ArrayUtils.unsafeFind(
@@ -289,47 +305,31 @@ let levelProgressBar = (levelId, levels, courseCompleted) => {
         className={
           "student-overlay__student-level-progress flex w-full "
           ++ (
-            courseCompleted ? "student-overlay__student-course-completed" : ""
+            courseCompleted
+              ? "student-overlay__student-level-progress--completed" : ""
           )
         }>
         {levels
          |> Level.sort
          |> Array.map(level => {
               let levelNumber = level |> Level.number;
-              levelNumber < currentLevelNumber
-                ? <li
-                    key={level |> Level.id}
-                    className="flex-1 student-overlay__student-level student-overlay__student-level--completed">
-                    <span className="student-overlay__student-level-count">
-                      {levelNumber |> string_of_int |> str}
-                    </span>
-                  </li>
-                : (
-                  if (levelNumber == currentLevelNumber) {
-                    <li
-                      key={level |> Level.id}
-                      className={
-                        "flex-1 student-overlay__student-level "
-                        ++ (
-                          courseCompleted
-                            ? "student-overlay__student-level--completed"
-                            : "student-overlay__student-current-level"
-                        )
-                      }>
-                      <span className="student-overlay__student-level-count">
-                        {levelNumber |> string_of_int |> str}
-                      </span>
-                    </li>;
-                  } else {
-                    <li
-                      key={level |> Level.id}
-                      className="flex-1 student-overlay__student-level">
-                      <span className="student-overlay__student-level-count">
-                        {levelNumber |> string_of_int |> str}
-                      </span>
-                    </li>;
-                  }
-                );
+              let levelCompleted =
+                levelsCompleted |> Array.mem(level |> Level.id);
+
+              <li
+                key={level |> Level.id}
+                className={
+                  "flex-1 student-overlay__student-level "
+                  ++ studentLevelClasses(
+                       levelNumber,
+                       levelCompleted,
+                       currentLevelNumber,
+                     )
+                }>
+                <span className="student-overlay__student-level-count">
+                  {levelNumber |> string_of_int |> str}
+                </span>
+              </li>;
             })
          |> React.array}
       </ul>
@@ -357,6 +357,7 @@ let make = (~courseId, ~studentId, ~levels) => {
     getStudentDetails(AuthenticityToken.fromHead(), studentId, setState),
     [|studentId|],
   );
+
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
     {switch (state.studentData) {
@@ -393,7 +394,7 @@ let make = (~courseId, ~studentId, ~levels) => {
            {levelProgressBar(
               studentDetails |> StudentDetails.levelId,
               levels,
-              studentDetails |> StudentDetails.courseCompleted,
+              studentDetails |> StudentDetails.levelsCompleted,
             )}
            <div className="mt-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
@@ -467,8 +468,7 @@ let make = (~courseId, ~studentId, ~levels) => {
        </div>
      | Loading =>
        <div className="flex flex-col md:flex-row md:h-screen">
-         <div
-           className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">
+         <div className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">
            {SkeletonLoading.image()}
            {SkeletonLoading.multiple(
               ~count=2,

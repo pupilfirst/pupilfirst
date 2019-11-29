@@ -13,6 +13,6 @@ module Types
     field :total_targets, Integer, null: false
     field :quiz_scores, [String], null: false
     field :average_grades, [Types::EvaluationCriterionAverageType], null: false
-    field :course_completed, Boolean, null: false
+    field :levels_completed, [String], null: false
   end
 end

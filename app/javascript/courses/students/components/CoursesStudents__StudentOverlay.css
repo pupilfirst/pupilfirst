@@ -11,29 +11,24 @@
   @apply inline-block text-xs text-gray-500 font-semibold text-center pt-2;
 }
 
-.student-overlay__student-level--completed {
+.student-overlay__student-level--reached {
   @apply bg-yellow-500;
 }
 
-.student-overlay__student-level:not(:last-child) {
-  @apply border-r-2 border-white;
-}
-
-.student-overlay__student-current-level {
+.student-overlay__student-level--current {
   @apply relative bg-gray-300;
 }
 
-.student-overlay__student-level--completed .student-overlay__student-level-count {
-  @apply text-gray-600;
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current:after {
+  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
+  content: "";
 }
 
-.student-overlay__student-current-level .student-overlay__student-level-count {
-  @apply text-gray-600;
-}
-
-.student-overlay__student-current-level:before {
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current:before {
   position: absolute;
-  content: '';
+  content: "";
   height: 22px;
   z-index: 10;
   bottom: 0;
@@ -43,13 +38,17 @@
   background-position: -2px bottom;
 }
 
-.student-overlay__student-course-completed .student-overlay__student-level {
-  @apply bg-green-400;
+.student-overlay__student-level--completed {
+  @apply relative bg-green-400;
 }
 
-.student-overlay__student-course-completed:before {
+.student-overlay__student-level:not(:last-child) {
+  @apply border-r-2 border-white;
+}
+
+.student-overlay__student-level-progress--completed:before {
   position: absolute;
-  content: '';
+  content: "";
   height: 22px;
   z-index: 10;
   bottom: 0;
@@ -57,11 +56,6 @@
   right: -16px;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
   background-position: bottom center;
-}
-
-.student-overlay__student-current-level:after {
-  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
-  content: '';
 }
 
 .student-overlay__doughnut-chart-container {
@@ -97,19 +91,20 @@
 }
 
 .student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-bg {
-  stroke: #D3BFF3;
+  stroke: #d3bff3;
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-bg {
-  stroke: #FCB5D0;
+  stroke: #fcb5d0;
 }
 
-.student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-stroke {
-  stroke: #6025C0;
+.student-overlay__doughnut-chart.purple
+  .student-overlay__doughnut-chart-stroke {
+  stroke: #6025c0;
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-stroke {
-  stroke: #F61067;
+  stroke: #f61067;
 }
 
 .student-overlay__doughnut-chart-text {
@@ -118,11 +113,11 @@
 }
 
 .student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-text {
-  fill: #6025C0;
+  fill: #6025c0;
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-text {
-  fill: #F95392;
+  fill: #f95392;
 }
 
 .student-overlay__pie-chart {

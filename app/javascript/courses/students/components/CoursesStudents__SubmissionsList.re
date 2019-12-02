@@ -6,10 +6,7 @@ let reviewedEmptyImage: string = [%raw
 
 open CoursesStudents__Types;
 
-type state = {
-  submissions: Submissions.t,
-  loading: bool,
-};
+type state = {loading: bool};
 
 let str = React.string;
 
@@ -34,7 +31,14 @@ module StudentSubmissionsQuery = [%graphql
 ];
 
 let updateStudentSubmissions =
-    (setState, endCursor, hasNextPage, submissions, nodes) => {
+    (
+      setState,
+      updateSubmissionsCB,
+      endCursor,
+      hasNextPage,
+      submissions,
+      nodes,
+    ) => {
   let updatedSubmissions =
     Array.append(
       (
@@ -48,23 +52,28 @@ let updateStudentSubmissions =
       |> Array.of_list,
       submissions,
     );
-  setState(_ =>
-    {
-      loading: false,
-      submissions:
-        switch (hasNextPage, endCursor) {
-        | (_, None)
-        | (false, Some(_)) => FullyLoaded(updatedSubmissions)
-        | (true, Some(cursor)) =>
-          PartiallyLoaded(updatedSubmissions, cursor)
-        },
-    }
-  );
+
+  let submissionsData: Submissions.t =
+    switch (hasNextPage, endCursor) {
+    | (_, None)
+    | (false, Some(_)) => FullyLoaded(updatedSubmissions)
+    | (true, Some(cursor)) => PartiallyLoaded(updatedSubmissions, cursor)
+    };
+
+  updateSubmissionsCB(submissionsData);
+  setState(_ => {loading: false});
 };
 
 let getStudentSubmissions =
-    (authenticityToken, studentId, cursor, setState, submissions) => {
-  setState(state => {...state, loading: true});
+    (
+      authenticityToken,
+      studentId,
+      cursor,
+      setState,
+      submissions,
+      updateSubmissionsCB,
+    ) => {
+  setState(_ => {loading: true});
   (
     switch (cursor) {
     | Some(cursor) =>
@@ -77,6 +86,7 @@ let getStudentSubmissions =
        response##studentSubmissions##nodes
        |> updateStudentSubmissions(
             setState,
+            updateSubmissionsCB,
             response##studentSubmissions##pageInfo##endCursor,
             response##studentSubmissions##pageInfo##hasNextPage,
             submissions,
@@ -161,9 +171,8 @@ let showSubmissions = (submissions, levels) =>
     : showSubmission(submissions, levels);
 
 [@react.component]
-let make = (~studentId, ~levels) => {
-  let (state, setState) =
-    React.useState(() => {submissions: Unloaded, loading: false});
+let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
+  let (state, setState) = React.useState(() => {loading: false});
   React.useEffect1(
     () => {
       getStudentSubmissions(
@@ -172,13 +181,14 @@ let make = (~studentId, ~levels) => {
         None,
         setState,
         [||],
+        updateSubmissionsCB,
       );
       None;
     },
     [|studentId|],
   );
   <div>
-    {switch (state.submissions) {
+    {switch ((submissions: Submissions.t)) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
      | PartiallyLoaded(submissions, cursor) =>
@@ -198,6 +208,7 @@ let make = (~studentId, ~levels) => {
                     Some(cursor),
                     setState,
                     submissions,
+                    updateSubmissionsCB,
                   )
                 }>
                 {"Load More..." |> str}

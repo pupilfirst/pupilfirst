@@ -15,6 +15,7 @@ type studentData =
 type state = {
   selectedTab,
   studentData,
+  submissions: Submissions.t,
 };
 
 let closeOverlay = courseId =>
@@ -70,6 +71,10 @@ let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
   |> ignore;
 
   None;
+};
+
+let updateSubmissions = (setState, submissions) => {
+  setState(state => {...state, submissions});
 };
 
 let doughnutChart = (color, percentage) => {
@@ -135,7 +140,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
 
 let averageGradeCharts =
     (
-      evaluationCriteria: array(EvaluationCriterion.t),
+      evaluationCriteria: array(CoursesStudents__EvaluationCriterion.t),
       averageGrades: array(StudentDetails.averageGrade),
     ) => {
   averageGrades
@@ -147,10 +152,12 @@ let averageGradeCharts =
            "CoursesStudents__StudentOverlay",
          );
        let passGrade =
-         criterion |> EvaluationCriterion.passGrade |> float_of_int;
+         criterion
+         |> CoursesStudents__EvaluationCriterion.passGrade
+         |> float_of_int;
        let averageGrade = grade |> StudentDetails.gradeValue;
        <div
-         key={criterion |> EvaluationCriterion.id}
+         key={criterion |> CoursesStudents__EvaluationCriterion.id}
          className="flex w-full lg:w-1/2 px-2 mt-2">
          <div className="student-overlay__pie-chart-container">
            <div className="flex px-5 pt-4 text-center items-center">
@@ -190,7 +197,7 @@ let averageGradeCharts =
              </span>
            </div>
            <p className="text-sm font-semibold px-5 pt-3 pb-4">
-             {criterion |> EvaluationCriterion.name |> str}
+             {criterion |> CoursesStudents__EvaluationCriterion.name |> str}
            </p>
          </div>
        </div>;
@@ -348,7 +355,9 @@ let addNoteCB = (setState, studentDetails, note) => {
 [@react.component]
 let make = (~courseId, ~studentId, ~levels) => {
   let (state, setState) =
-    React.useState(() => {studentData: Loading, selectedTab: Notes});
+    React.useState(() =>
+      {studentData: Loading, selectedTab: Notes, submissions: Unloaded}
+    );
   React.useEffect(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
@@ -461,7 +470,12 @@ let make = (~courseId, ~studentId, ~levels) => {
                   addNoteCB={addNoteCB(setState, studentDetails)}
                 />
               | Submissions =>
-                <CoursesStudents__SubmissionsList studentId levels />
+                <CoursesStudents__SubmissionsList
+                  studentId
+                  levels
+                  submissions={state.submissions}
+                  updateSubmissionsCB={updateSubmissions(setState)}
+                />
               }}
            </div>
          </div>

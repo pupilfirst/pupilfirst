@@ -269,6 +269,10 @@ let disableSearchButton = state => {
   };
 };
 
+let levelsWithStudents = levels => {
+  levels |> Js.Array.filter(level => Level.number(level) != 0);
+};
+
 [@react.component]
 let make = (~levels, ~course) => {
   let (state, setState) =
@@ -350,7 +354,11 @@ let make = (~levels, ~course) => {
             </button>
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
-            {showDropdown(levels, state.filter.level, setState)}
+            {showDropdown(
+               levelsWithStudents(levels),
+               state.filter.level,
+               setState,
+             )}
           </div>
         </div>
       </div>

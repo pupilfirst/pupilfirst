@@ -47,16 +47,14 @@ let updateStudentSubmissions =
         | Some(submissionsArray) => submissionsArray |> Submission.makeFromJs
         }
       )
-      |> Array.to_list
-      |> List.flatten
-      |> Array.of_list,
+      |> ArrayUtils.flatten,
       submissions,
     );
 
   let submissionsData: Submissions.t =
     switch (hasNextPage, endCursor) {
-    | (_, None)
-    | (false, Some(_)) => FullyLoaded(updatedSubmissions)
+    | (true, None)
+    | (false, _) => FullyLoaded(updatedSubmissions)
     | (true, Some(cursor)) => PartiallyLoaded(updatedSubmissions, cursor)
     };
 
@@ -117,6 +115,7 @@ let showSubmission = (submissions, levels) =>
      |> Submission.sort
      |> Array.map(submission =>
           <a
+            key={submission |> Submission.id}
             href={"/submissions/" ++ (submission |> Submission.id)}
             target="_blank">
             <div
@@ -175,14 +174,19 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
   let (state, setState) = React.useState(() => {loading: false});
   React.useEffect1(
     () => {
-      getStudentSubmissions(
-        AuthenticityToken.fromHead(),
-        studentId,
-        None,
-        setState,
-        [||],
-        updateSubmissionsCB,
-      );
+      switch (submissions) {
+      | Submissions.Unloaded =>
+        getStudentSubmissions(
+          AuthenticityToken.fromHead(),
+          studentId,
+          None,
+          setState,
+          [||],
+          updateSubmissionsCB,
+        )
+      | FullyLoaded(_)
+      | PartiallyLoaded(_) => ()
+      };
       None;
     },
     [|studentId|],

@@ -31,7 +31,7 @@ let unsafeLevelNumber = (levels, componentName, levelId) =>
          l => l.id == levelId,
          "Unable to find level with id: "
          ++ levelId
-         ++ "in CoursesStudents__"
+         ++ " in CoursesStudents__"
          ++ componentName,
        )
     |> number

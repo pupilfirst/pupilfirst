@@ -78,13 +78,16 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
 If you've installed all node modules using _Yarn_, then the basic environment should be ready at this point.
 
 If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an
-introspection query:
+introspection query.
+
+With the PupilFirst server running, run the `graphql-codegen` script.
 
 ```
 yarn run graphql-codegen
 ```
 
-The GraphQL end-point is configured in the `codegen.yml` file.
+It'll visit the local GraphQL end-point which is configured in the `codegen.yml` file, fetch the schema and store it in
+the `graphql_schema.json` file.
 
 ### Set credentials for local database
 

@@ -15,7 +15,6 @@ type state = {
   hasNameError: bool,
   hasDescriptionError: bool,
   hasDateError: bool,
-  enableLeaderboard: bool,
   about: string,
   publicSignup: bool,
   dirty: bool,
@@ -32,15 +31,14 @@ type action =
   | UpdateEndsAt(option(Js.Date.t))
   | UpdateSaving
   | UpdateSelectedGrade(int)
-  | UpdateEnableLeaderboard(bool)
   | UpdateAbout(string)
   | UpdatePublicSignup(bool)
   | UpdateFeatured(bool);
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: Date, $enableLeaderboard: Boolean!, $about: String!,$publicSignup: Boolean!,$featured: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard,about: $about,publicSignup: $publicSignup,featured: $featured, gradesAndLabels: $gradesAndLabels ) {
+   mutation($name: String!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $endsAt: Date, $about: String!,$publicSignup: Boolean!,$featured: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createCourse(name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, endsAt: $endsAt, about: $about,publicSignup: $publicSignup,featured: $featured, gradesAndLabels: $gradesAndLabels ) {
        course {
          id
        }
@@ -51,8 +49,8 @@ module CreateCourseQuery = [%graphql
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $enableLeaderboard: Boolean!, $about: String!,$publicSignup: Boolean!,$featured: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, enableLeaderboard: $enableLeaderboard,about: $about,publicSignup: $publicSignup,featured: $featured, gradesAndLabels: $gradesAndLabels){
+   mutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, gradesAndLabels: $gradesAndLabels){
        course {
          id
        }
@@ -134,7 +132,6 @@ let handleResponseCB = (id, state, updateCourseCB, course) => {
       ~maxGrade=state.maxGrade,
       ~passGrade=state.passGrade,
       ~gradesAndLabels=state.gradesAndLabels,
-      ~enableLeaderboard=state.enableLeaderboard,
       ~about=Some(state.about),
       ~publicSignup=state.publicSignup,
       ~thumbnail,
@@ -165,7 +162,6 @@ let createCourse = (state, send, updateCourseCB) => {
         state.endsAt
         |> OptionUtils.map(Date.iso8601)
         |> OptionUtils.map(Js.Json.string),
-      ~enableLeaderboard=state.enableLeaderboard,
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~gradesAndLabels=jsGradeAndLabelArray,
@@ -207,7 +203,6 @@ let updateCourse = (state, send, updateCourseCB, course) => {
         state.endsAt
         |> OptionUtils.map(Date.iso8601)
         |> OptionUtils.map(Js.Json.string),
-      ~enableLeaderboard=state.enableLeaderboard,
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~gradesAndLabels=jsGradeAndLabelArray,
@@ -281,29 +276,6 @@ let featuredButton = (featured, send) =>
     </div>
   </div>;
 
-let enableLeaderboardButton = (enableLeaderboard, send) =>
-  <div className="flex items-center mt-5">
-    <label
-      className="block tracking-wide text-xs font-semibold mr-6"
-      htmlFor="leaderboard">
-      {"Enable Leaderboard for this course?" |> str}
-    </label>
-    <div
-      id="leaderboard"
-      className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-      <button
-        className={booleanButtonClasses(enableLeaderboard)}
-        onClick={_ => send(UpdateEnableLeaderboard(true))}>
-        {"Yes" |> str}
-      </button>
-      <button
-        className={booleanButtonClasses(!enableLeaderboard)}
-        onClick={_ => send(UpdateEnableLeaderboard(false))}>
-        {"No" |> str}
-      </button>
-    </div>
-  </div>;
-
 let about = course =>
   switch (course |> Course.about) {
   | Some(about) => about
@@ -329,7 +301,6 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
         dirty: false,
         saving: false,
         selectedGrade: course |> Course.maxGrade,
-        enableLeaderboard: course |> Course.enableLeaderboard,
         about: about(course),
         publicSignup: course |> Course.publicSignup,
         featured: course |> Course.featured,
@@ -348,7 +319,6 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
         dirty: false,
         saving: false,
         selectedGrade: 1,
-        enableLeaderboard: false,
         about: "",
         publicSignup: false,
         featured: true,
@@ -372,8 +342,6 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
       ReasonReact.Update({...state, maxGrade, dirty: true})
     | UpdatePassGrade(passGrade) =>
       ReasonReact.Update({...state, passGrade, dirty: true})
-    | UpdateEnableLeaderboard(enableLeaderboard) =>
-      ReasonReact.Update({...state, enableLeaderboard, dirty: true})
     | UpdatePublicSignup(publicSignup) =>
       ReasonReact.Update({...state, publicSignup, dirty: true})
     | UpdateAbout(about) =>
@@ -492,7 +460,6 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     defaultView=MarkdownEditor.Edit
                   />
                 </div>
-                {enableLeaderboardButton(state.enableLeaderboard, send)}
                 {featuredButton(state.featured, send)}
                 {enablePublicSignupButton(state.publicSignup, send)}
               </div>

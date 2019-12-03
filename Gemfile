@@ -97,7 +97,7 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
-gem 'chartkick', '~> 3.2' # Create beautiful charts with one line of JavaScript.
+gem 'chartkick', '~> 3.3' # Create beautiful charts with one line of JavaScript.
 gem 'graphql', '~> 1.9' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 

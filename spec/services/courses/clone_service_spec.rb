@@ -81,7 +81,7 @@ describe Courses::CloneService do
       expect(new_course.school).to eq(new_school)
 
       # evaluation_criterion should have been cloned
-      expect(new_course.evaluation_criteria.pluck(:description)).to match_array(course.evaluation_criteria.pluck(:description))
+      expect(new_course.evaluation_criteria.pluck(:name)).to match_array(course.evaluation_criteria.pluck(:name))
 
       # Levels, target groups, targets, and resources should have been cloned.
       expect(new_course.levels.pluck(:name)).to match_array(original_level_names)

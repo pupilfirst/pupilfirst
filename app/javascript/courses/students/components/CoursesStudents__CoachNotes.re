@@ -159,7 +159,7 @@ let make = (~studentId, ~coachNotes, ~addNoteCB) => {
              className="bg-gray-200 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
              <i className="fas fa-sticky-note text-gray-400 text-4xl" />
              <p className="text-xs font-semibold text-gray-700 mt-2">
-               {"No Notes here!" |> str}
+               {"No notes here!" |> str}
              </p>
            </div>
          : React.null}

@@ -122,7 +122,9 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
 let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
   switch (averageQuizScore) {
   | Some(score) =>
-    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
+    <div
+      ariaLabel="quiz-performance-chart"
+      className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
       <div className="student-overlay__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3">
@@ -157,6 +159,10 @@ let averageGradeCharts =
          |> float_of_int;
        let averageGrade = grade |> StudentDetails.gradeValue;
        <div
+         ariaLabel={
+           "average-grade-for-criterion-"
+           ++ (criterion |> CoursesStudents__EvaluationCriterion.id)
+         }
          key={criterion |> CoursesStudents__EvaluationCriterion.id}
          className="flex w-full lg:w-1/2 px-2 mt-2">
          <div className="student-overlay__pie-chart-container">

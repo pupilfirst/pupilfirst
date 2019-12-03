@@ -191,7 +191,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
     },
     [|studentId|],
   );
-  <div>
+  <div ariaLabel="student-submissions">
     {switch ((submissions: Submissions.t)) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())

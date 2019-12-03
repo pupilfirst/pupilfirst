@@ -102,7 +102,7 @@ let doughnutChart = (color, percentage) => {
 let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   let targetCompletionPercent =
     targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int;
-  <div className="w-full lg:w-1/2 px-2">
+  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container">
       {doughnutChart("purple", targetCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
@@ -122,7 +122,7 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
 let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
   switch (averageQuizScore) {
   | Some(score) =>
-    <div className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
+    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
       <div className="student-overlay__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3">

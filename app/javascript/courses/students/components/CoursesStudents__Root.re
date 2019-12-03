@@ -269,7 +269,7 @@ let disableSearchButton = state => {
   };
 };
 
-let levelsWithStudents = levels => {
+let applicableLevels = levels => {
   levels |> Js.Array.filter(level => Level.number(level) != 0);
 };
 
@@ -312,7 +312,11 @@ let make = (~levels, ~course) => {
   <div>
     {switch (url.path) {
      | ["students", studentId, ..._] =>
-       <CoursesStudents__StudentOverlay courseId studentId levels />
+       <CoursesStudents__StudentOverlay
+         courseId
+         studentId
+         levels={applicableLevels(levels)}
+       />
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -355,7 +359,7 @@ let make = (~levels, ~course) => {
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
             {showDropdown(
-               levelsWithStudents(levels),
+               applicableLevels(levels),
                state.filter.level,
                setState,
              )}

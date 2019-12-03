@@ -36,7 +36,7 @@ module Users
     end
 
     def create_community(course)
-      community = @user.school.communities.create!(name: "Demo Community", target_linkable: true)
+      community = @user.school.communities.create!(name: "Demo", target_linkable: true)
       CommunityCourseConnection.create!(course: course, community: community)
     end
   end

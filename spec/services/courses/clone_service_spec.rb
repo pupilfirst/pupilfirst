@@ -20,6 +20,8 @@ describe Courses::CloneService do
   let!(:target_l2_2) { create :target, :with_content, :for_founders, target_group: target_group_l2 }
   let(:startup_l1) { create :startup, level: level_one }
   let(:startup_l2) { create :startup, level: level_two }
+  let(:ec_1) { create :evaluation_criterion, course: course }
+  let(:ec_2) { create :evaluation_criterion, course: course }
 
   let(:new_name) { Faker::Lorem.words(2).join(' ') }
 
@@ -55,7 +57,7 @@ describe Courses::CloneService do
 
     # set prerequisite target
     target_l1_2.prerequisite_targets << prerequisite_target
-
+    target_l1_2.evaluation_criteria << ec_1
     # attach images
     course.cover.attach(io: File.open(file_path('logo_lipsum_on_light_bg.png')), filename: 'logo_lipsum_on_light_bg.png')
     course.thumbnail.attach(io: File.open(file_path('logo_lipsum_on_dark_bg.png')), filename: 'logo_lipsum_on_dark_bg.png')
@@ -78,6 +80,9 @@ describe Courses::CloneService do
       expect(new_course.name).to eq(new_name)
       expect(new_course.school).to eq(new_school)
 
+      # evaluation_criterion should have been cloned
+      expect(new_course.evaluation_criteria.pluck(:description)).to match_array(course.evaluation_criteria.pluck(:description))
+
       # Levels, target groups, targets, and resources should have been cloned.
       expect(new_course.levels.pluck(:name)).to match_array(original_level_names)
       expect(new_course.target_groups.pluck(:name)).to match_array(original_group_names)
@@ -90,6 +95,10 @@ describe Courses::CloneService do
 
       # prerequisite target should been linked
       expect(new_course.targets.joins(:prerequisite_targets).first.prerequisite_targets.first.title).to eq(prerequisite_target.title)
+
+      evaluated_targets = new_course.targets.joins(:target_evaluation_criteria)
+      expect(evaluated_targets.count).to eq(1)
+      expect(evaluated_targets.first.evaluation_criteria.pluck(:description, :name)).to eq([[ec_1.description, ec_1.name]])
 
       # content block should have been cloned
       expect(new_course.content_blocks.count).to eq(original_content_blocks_count)

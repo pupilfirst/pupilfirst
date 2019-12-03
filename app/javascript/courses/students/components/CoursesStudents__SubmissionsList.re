@@ -1,7 +1,7 @@
 [@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesStudents__StudentOverlay.css")|}];
 let reviewedEmptyImage: string = [%raw
-  "require('../images/reviewed-empty.svg')"
+  "require('../../shared/images/reviewed-empty.svg')"
 ];
 
 open CoursesStudents__Types;

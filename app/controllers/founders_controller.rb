@@ -31,8 +31,8 @@ class FoundersController < ApplicationController
 
   # GET /students/:id/report
   def report
-    @founder = authorize(Founder.find(params[:id]))
-    @course = @founder.course
+    @student = authorize(Founder.find(params[:id]))
+    @course = @student.course
     render 'courses/students', layout: 'student_course'
   end
 

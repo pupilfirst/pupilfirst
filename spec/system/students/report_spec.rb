@@ -46,6 +46,7 @@ feature "Course students report", js: true do
     target_l1.evaluation_criteria << evaluation_criterion_1
     target_l2.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
     target_l3.evaluation_criteria << evaluation_criterion_2
+    target_4.evaluation_criteria << evaluation_criterion_2
 
     submission_target_l1_1.founders << team.founders.first
     submission_target_l1_2.founders << team.founders.first
@@ -130,5 +131,33 @@ feature "Course students report", js: true do
     expect(page).to have_text(coach.title, count: 2)
     expect(page).to have_text(Date.today.strftime('%B%e'), count: 2)
     expect(CoachNote.where(student: founder).last.note).to eq(note_2)
+  end
+
+  scenario 'coach loads more submissions' do
+    # Create over 20 reviewed submissions
+    founder = team.founders.first
+    20.times do
+      submission = TimelineEvent.create!(description: Faker::Lorem.sentence, latest: true, target: target_4, evaluator_id: coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
+      submission.founders << founder
+      submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
+    end
+
+    sign_in_user coach.user, referer: student_report_path(founder)
+    expect(page).to have_text(founder.name)
+    find('li', text: 'Submissions').click
+    expect(page).to have_button('Load More...')
+    click_button('Load More...')
+
+    within("div[aria-label='student-submissions']") do
+      expect(page).to have_selector('a', count: founder.timeline_events.evaluated_by_faculty.count)
+    end
+
+    # Switching tabs should preserve already loaded submissions
+    find('li', text: 'Notes').click
+    find('li', text: 'Submissions').click
+
+    within("div[aria-label='student-submissions']") do
+      expect(page).to have_selector('a', count: founder.timeline_events.evaluated_by_faculty.count)
+    end
   end
 end

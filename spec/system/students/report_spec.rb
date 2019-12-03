@@ -71,6 +71,8 @@ feature "Course students report", js: true do
 
     find("div[aria-label='student-card-#{founder.id}']").click
     expect(page).to have_text(founder.name)
+    expect(page).to have_text('Level Progress')
+    expect(page).to have_selector('.student-overlay__student-level', count: course.levels.where.not(number: 0).count)
 
     # Targets Overview
     expect(page).to have_text('Targets Overview')

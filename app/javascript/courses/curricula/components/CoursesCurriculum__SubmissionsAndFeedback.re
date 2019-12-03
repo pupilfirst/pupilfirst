@@ -21,7 +21,7 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
       Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
 
     <div key={gradeNumber |> string_of_int} className="mb-4">
-      <GradeBar grading gradeLabels passGrade />
+      <CoursesCurriculum__GradeBar grading gradeLabels passGrade />
     </div>;
   | None => React.null
   };

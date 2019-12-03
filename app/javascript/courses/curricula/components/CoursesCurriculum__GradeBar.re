@@ -1,9 +1,10 @@
 [@bs.config {jsx: 3}];
 
-[%bs.raw {|require("./GradeBar.scss")|}];
+[%bs.raw {|require("./CoursesCurriculum__GradeBar.scss")|}];
 
 let str = React.string;
 
+open CoursesCurriculum__Types;
 let gradeDescription = (gradeLabels, grading) =>
   <div className="grade-bar__criterion-name">
     {grading |> Grading.criterionName |> str}

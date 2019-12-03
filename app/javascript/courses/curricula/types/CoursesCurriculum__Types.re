@@ -14,3 +14,4 @@ module Community = CoursesCurriculum__Community;
 module Grade = CoursesCurriculum__Grade;
 module TargetStatus = CoursesCurriculum__TargetStatus;
 module Feedback = CoursesCurriculum__Feedback;
+module Grading = CoursesCurriculum__Grading;

@@ -5,6 +5,8 @@ type props = {
   courseName: string,
   courseDescription: string,
   courseId: string,
+  email: option(string),
+  name: option(string),
 };
 
 let decodeProps = json =>
@@ -13,6 +15,8 @@ let decodeProps = json =>
     courseName: json |> field("courseName", string),
     courseDescription: json |> field("courseDescription", string),
     courseId: json |> field("courseId", string),
+    email: json |> field("email", optional(string)),
+    name: json |> field("name", optional(string)),
   };
 
 let props =
@@ -24,6 +28,8 @@ ReactDOMRe.renderToElementWithId(
     courseName={props.courseName}
     courseDescription={props.courseDescription}
     courseId={props.courseId}
+    email={props.email}
+    name={props.name}
   />,
   "courses-apply",
 );

@@ -7,7 +7,6 @@ class CreateCourseMutator < ApplicationQuery
   property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
   property :description, validates: { presence: { message: 'DescriptionBlank' } }
   property :ends_at
-  property :enable_leaderboard
   property :public_signup
   property :about
   property :featured
@@ -27,7 +26,6 @@ class CreateCourseMutator < ApplicationQuery
         pass_grade: pass_grade,
         grade_labels: grade_labels,
         ends_at: ends_at,
-        enable_leaderboard: enable_leaderboard,
         public_signup: public_signup,
         about: about,
         featured: featured

@@ -39,10 +39,6 @@ feature 'Courses Index', js: true do
     fill_in 'Course Name', with: course_name
     fill_in 'Description', with: description
 
-    within('div#leaderboard') do
-      click_button 'Yes'
-    end
-
     within('div#public-signup') do
       click_button 'No'
     end
@@ -68,7 +64,7 @@ feature 'Courses Index', js: true do
     expect(course.name).to eq(course_name)
     expect(course.description).to eq(description)
     expect(course.about).to eq(nil)
-    expect(course.enable_leaderboard).to eq(true)
+    expect(course.enable_leaderboard).to eq(false)
     expect(course.public_signup).to eq(false)
     expect(course.max_grade).to eq(5)
     expect(course.pass_grade).to eq(2)
@@ -96,10 +92,6 @@ feature 'Courses Index', js: true do
 
       replace_markdown new_about
 
-      within('div#leaderboard') do
-        click_button 'No'
-      end
-
       within('div#public-signup') do
         click_button 'Yes'
       end
@@ -111,7 +103,6 @@ feature 'Courses Index', js: true do
       expect(course_1.reload.name).to eq(new_course_name)
       expect(course_1.description).to eq(new_description)
       expect(course_1.about).to eq(new_about)
-      expect(course_1.enable_leaderboard).to eq(false)
       expect(course_1.public_signup).to eq(true)
       expect(course_1.ends_at.to_date).to eq(course_end_date)
     end

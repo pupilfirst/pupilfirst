@@ -6,7 +6,6 @@ class UpdateCourseMutator < ApplicationQuery
   property :description, validates: { presence: { message: 'DescriptionBlank' } }
   property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
   property :ends_at
-  property :enable_leaderboard
   property :public_signup
   property :about
   property :featured
@@ -32,7 +31,6 @@ class UpdateCourseMutator < ApplicationQuery
       description: description,
       grade_labels: grade_labels,
       ends_at: ends_at,
-      enable_leaderboard: enable_leaderboard,
       public_signup: public_signup,
       about: about,
       featured: featured

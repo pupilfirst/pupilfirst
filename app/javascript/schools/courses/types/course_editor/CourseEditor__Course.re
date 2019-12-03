@@ -18,7 +18,6 @@ type t = {
   maxGrade: int,
   passGrade: int,
   gradesAndLabels: list(CourseEditor__GradesAndLabels.t),
-  enableLeaderboard: bool,
   about: option(string),
   publicSignup: bool,
   thumbnail: option(Image.t),
@@ -43,8 +42,6 @@ let maxGrade = t => t.maxGrade;
 let passGrade = t => t.passGrade;
 
 let gradesAndLabels = t => t.gradesAndLabels;
-
-let enableLeaderboard = t => t.enableLeaderboard;
 
 let featured = t => t.featured;
 
@@ -99,7 +96,6 @@ let create =
       ~maxGrade,
       ~passGrade,
       ~gradesAndLabels,
-      ~enableLeaderboard,
       ~about,
       ~publicSignup,
       ~cover,
@@ -113,7 +109,6 @@ let create =
   maxGrade,
   passGrade,
   gradesAndLabels,
-  enableLeaderboard,
   about,
   publicSignup,
   cover,
@@ -148,7 +143,6 @@ let makeFromJs = rawCourse => {
     ~maxGrade=rawCourse##maxGrade,
     ~passGrade=rawCourse##passGrade,
     ~gradesAndLabels,
-    ~enableLeaderboard=rawCourse##enableLeaderboard,
     ~about=rawCourse##about,
     ~publicSignup=rawCourse##publicSignup,
     ~thumbnail=makeImageFromJs(rawCourse##thumbnail),

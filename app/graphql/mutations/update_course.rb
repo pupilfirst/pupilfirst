@@ -5,7 +5,6 @@ module Mutations
     argument :description, String, required: true
     argument :ends_at, Types::DateType, required: false
     argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
-    argument :enable_leaderboard, Boolean, required: true
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
     argument :featured, Boolean, required: true

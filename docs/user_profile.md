@@ -2,7 +2,7 @@
 
 All users, regardless of their _role_ can edit their personal details. There's a link to edit your own profile on the `/home` page.
 
-![Edit profile link](https://res.cloudinary.com/sv-co/image/upload/v1574236372/pupilfirst_documentation/users/edit_profile_link_yhs7ct.png)
+![Edit profile link](https://res.cloudinary.com/sv-co/image/upload/v1575270932/pupilfirst_documentation/user_profile/edit_user_profile_link_mvhrkc.png)
 
 ## Editing your profile
 

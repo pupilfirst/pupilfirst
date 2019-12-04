@@ -1,4 +1,9 @@
 exception InvalidVisibilityValue(string);
+exception InvalidRoleValue(string);
+
+type role =
+  | Student
+  | Team;
 
 type visibility =
   | Draft
@@ -7,6 +12,7 @@ type visibility =
 
 type t = {
   id: string,
+  role,
   targetGroupId: string,
   title: string,
   evaluationCriteria: list(int),
@@ -38,12 +44,21 @@ let sortIndex = t => t.sortIndex;
 
 let visibility = t => t.visibility;
 
+let role = t => t.role;
+
 let decodeVisbility = visibilityString =>
   switch (visibilityString) {
   | "draft" => Draft
   | "live" => Live
   | "archived" => Archived
   | _ => raise(InvalidVisibilityValue("Unknown Value"))
+  };
+
+let decodeRole = roleString =>
+  switch (roleString) {
+  | "student" => Student
+  | "team" => Team
+  | role => raise(InvalidRoleValue("Unknown Value :" ++ role))
   };
 
 let decode = json =>
@@ -58,6 +73,7 @@ let decode = json =>
       json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     sortIndex: json |> field("sortIndex", int),
     visibility: decodeVisbility(json |> field("visibility", string)),
+    role: decodeRole(json |> field("role", string)),
     completionInstructions:
       json
       |> field("completionInstructions", nullable(string))
@@ -81,6 +97,7 @@ let create =
       ~sortIndex,
       ~visibility,
       ~completionInstructions,
+      ~role,
     ) => {
   id,
   targetGroupId,
@@ -92,6 +109,7 @@ let create =
   sortIndex,
   visibility,
   completionInstructions,
+  role,
 };
 
 let sort = targets =>
@@ -119,5 +137,22 @@ let updateSortIndex = sortedTargets =>
          ~sortIndex,
          ~visibility=t.visibility,
          ~completionInstructions=t.completionInstructions,
+         ~role=t.role,
        )
      );
+
+let template = (id, targetGroupId, title) => {
+  create(
+    ~id,
+    ~targetGroupId,
+    ~title,
+    ~evaluationCriteria=[],
+    ~prerequisiteTargets=[],
+    ~quiz=[],
+    ~linkToComplete=None,
+    ~sortIndex=999,
+    ~visibility=Draft,
+    ~completionInstructions=None,
+    ~role=Student,
+  );
+};

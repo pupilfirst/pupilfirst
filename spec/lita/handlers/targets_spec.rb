@@ -32,9 +32,9 @@ describe Lita::Handlers::Targets do
         create :target, role: 'product', assignee: startup, status: Target::STATUS_DONE
       end
 
-      let(:complete_founder_target) { create :target, role: Target::ROLE_FOUNDER, assignee: founder, status: Target::STATUS_DONE }
+      let(:complete_founder_target) { create :target, role: Target::ROLE_STUDENT, assignee: founder, status: Target::STATUS_DONE }
       let(:pending_startup_target) { create :target, role: 'engineering', assignee: startup }
-      let(:pending_founder_target) { create :target, role: Target::ROLE_FOUNDER, assignee: founder }
+      let(:pending_founder_target) { create :target, role: Target::ROLE_STUDENT, assignee: founder }
 
       before do
         # Disable verification of slack_username when founder is created.
@@ -83,7 +83,7 @@ describe Lita::Handlers::Targets do
           context 'when target has additional optional info' do
             let(:pending_founder_target) do
               create :target,
-                role: Target::ROLE_FOUNDER,
+                role: Target::ROLE_STUDENT,
                 assignee: founder,
                 completion_instructions: Faker::Lorem.sentence,
                 resource_url: Faker::Internet.url

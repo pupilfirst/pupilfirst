@@ -847,7 +847,7 @@ let make =
                         <img className="w-12 h-12" src=markIcon />
                       </span>
                       <span>
-                        {"All students in the team must submit." |> str}
+                        {"All students must submit." |> str}
                       </span>
                     </button>
                     <button
@@ -860,7 +860,7 @@ let make =
                         <img className="w-12 h-12" src=quizIcon />
                       </span>
                       <span>
-                        {"Only one student in the team needs to submit." |> str}
+                        {"Only one student in a team needs to submit." |> str}
                       </span>
                     </button>
                   </div>

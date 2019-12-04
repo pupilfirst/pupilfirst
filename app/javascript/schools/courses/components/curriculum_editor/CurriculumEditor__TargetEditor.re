@@ -543,11 +543,11 @@ let selectVersionCB =
 };
 
 let targetRoleClasses = selected => {
-  "btn border border-primary-500 "
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded p-4 items-center cursor-pointer text-left "
   ++ (
     selected
-      ? "bg-primary-500 text-white"
-      : "bg-white text-primary-500 hover:bg-primary-100 hover:text-primary-600"
+      ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
+      : "border-gray-400 hover:bg-gray-200 bg-white"
   );
 };
 
@@ -831,7 +831,7 @@ let make =
                   <label
                     className="block tracking-wide text-sm font-semibold mr-6"
                     htmlFor="role">
-                    {"Who submits the target?" |> str}
+                    {"How should teams tackle this target?" |> str}
                   </label>
                   <div id="role" className="flex mt-4">
                     <button
@@ -843,7 +843,12 @@ let make =
                         "mr-4 "
                         ++ targetRoleClasses(state.role == Target.Student)
                       }>
-                      {"All Students" |> str}
+                      <span className="mb-1 mr-2">
+                        <img className="w-12 h-12" src=markIcon />
+                      </span>
+                      <span>
+                        {"All students must submit on their own." |> str}
+                      </span>
                     </button>
                     <button
                       onClick={_event => {
@@ -851,7 +856,13 @@ let make =
                         dispatch(UpdateTagetRole(Target.Team));
                       }}
                       className={targetRoleClasses(state.role == Target.Team)}>
-                      {"One student from team" |> str}
+                      <span className="mb-1 mr-2">
+                        <img className="w-12 h-12" src=quizIcon />
+                      </span>
+                      <span>
+                        {"Only one student in a team needs to submit work on this target."
+                         |> str}
+                      </span>
                     </button>
                   </div>
                 </div>

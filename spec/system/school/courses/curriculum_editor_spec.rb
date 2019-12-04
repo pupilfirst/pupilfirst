@@ -356,24 +356,28 @@ feature 'Curriculum Editor', js: true do
       find('.target-group__target', text: target.title).click
       expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
+      click_button 'Only one student in a team needs to submit work on this target.'
       expect(page).to have_text('Do you have any completion instructions for the student?')
       fill_in 'completion-instructions', with: completion_instructions
 
       click_button 'Update Target'
       dismiss_notification
 
-      expect(target.reload.completion_instructions).to eq(completion_instructions)
+      expect(target.reload.role).to eq(Target::ROLE_TEAM)
+      expect(target.completion_instructions).to eq(completion_instructions)
 
       find('.target-group__target', text: target.title).click
       expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
+      click_button 'All students must submit on their own.'
       expect(page).to have_text('Do you have any completion instructions for the student?')
       fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
 
       click_button 'Update Target'
       dismiss_notification
 
-      expect(target.reload.completion_instructions).to eq(nil)
+      expect(target.reload.role).to eq(Target::ROLE_STUDENT)
+      expect(target.completion_instructions).to eq(nil)
 
       # Change target visibility
       find('.target-group__target', text: target.title).click

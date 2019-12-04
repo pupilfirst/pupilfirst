@@ -15,6 +15,7 @@ module Courses
         course_id: @course.id,
         course_name: @course.name,
         course_description: @course.description,
+        thumbnail_url: @course.thumbnail_url,
         email: view.params[:email],
         name: view.params[:name]
       }

@@ -29,6 +29,7 @@ let make =
       ~courseName,
       ~courseDescription,
       ~courseId,
+      ~thumbnailUrl,
       ~email,
       ~name,
     ) => {
@@ -39,15 +40,28 @@ let make =
       <div
         className="course-apply flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
         <div
-          className="md:w-1/2 flex flex-col justify-between course-apply__left-container svg-bg-pattern-4 relative text-white">
-          <div
-            className="px-4 pt-5 pb-6 md:px-14 md:py-14 lg:px-28 lg:pt-32 lg:pb-10">
-            <h1 className="font-bold leading-tight"> {courseName |> str} </h1>
-            <p className="mt-2"> {courseDescription |> str} </p>
+          className="md:w-1/2 flex flex-col bg-primary-900 relative text-white">
+          <div className="hidden md:block relative h-1/2 bg-primary-900">
+            {switch (thumbnailUrl) {
+             | Some(src) =>
+               <img className="absolute h-full w-full object-cover" src />
+             | None =>
+               <div
+                 className="student-course__cover-default absolute h-full w-full svg-bg-pattern-1"
+               />
+             }}
           </div>
-          <div
-            className="course-apply__left-bg-pattern hidden sm:block w-full"
-          />
+          <div className="h-auto md:h-1/2 md:border-t border-primary-500">
+            <div
+              className="flex flex-col justify-center h-full px-4 py-6 md:px-14 xl:px-24">
+              <h1 className="text-xl md:text-3xl font-bold leading-tight">
+                {courseName |> str}
+              </h1>
+              <p className="text-sm md:text-base mt-2">
+                {courseDescription |> str}
+              </p>
+            </div>
+          </div>
         </div>
         <div className="md:w-1/2">
           <div className="p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">

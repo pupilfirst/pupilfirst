@@ -22,7 +22,7 @@ FactoryBot.define do
     end
 
     trait :for_founders do
-      role { Target::ROLE_FOUNDER }
+      role { Target::ROLE_STUDENT }
     end
 
     trait :for_startup do

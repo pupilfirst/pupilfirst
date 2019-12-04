@@ -6,7 +6,7 @@ describe Targets::AutoVerificationService do
   let(:course) { create :course }
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1 }
-  let(:target) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
+  let(:target) { create :target, target_group: target_group, role: Target::ROLE_STUDENT }
 
   let(:startup) { create :startup, level: level_1 }
   let(:founder_1) { startup.founders.first }

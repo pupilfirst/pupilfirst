@@ -7,10 +7,10 @@ module Targets
     # rubocop:disable Metrics/AbcSize
     def execute(target_params)
       Target.transaction do
-        @target.role = 'founder'
+        @target.role = target_params[:role]
         @target.title = target_params[:title]
         @target.description = target_params[:description]
-        @target.target_action_type = 'Todo'
+        @target.target_action_type = Target::TYPE_TODO
         @target.youtube_video_id = target_params[:youtube_video_id]
         @target.resource_ids = target_params[:resource_ids]
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]

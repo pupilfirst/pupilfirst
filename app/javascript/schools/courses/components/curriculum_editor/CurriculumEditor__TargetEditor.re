@@ -33,6 +33,7 @@ type resource = (int, string);
 
 type state = {
   title: string,
+  role: Target.role,
   evaluationCriteria: list(evaluationCriterion),
   prerequisiteTargets: list(prerequisiteTarget),
   contentBlocks: list(ContentBlock.t),
@@ -72,7 +73,8 @@ type action =
   | LoadOldVersion(list(ContentBlock.t), string, array(string))
   | UpdateVersions(array(string))
   | UpdateCompletionInstructions(string)
-  | SetLoadingContentBlocks;
+  | SetLoadingContentBlocks
+  | UpdateTagetRole(Target.role);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -184,6 +186,12 @@ let setPayload = (state, authenticityToken) => {
     | Draft => "draft"
     };
 
+  let role =
+    switch (state.role) {
+    | Student => "student"
+    | Team => "team"
+    };
+
   Js.Dict.set(
     payload,
     "authenticity_token",
@@ -191,6 +199,8 @@ let setPayload = (state, authenticityToken) => {
   );
 
   Js.Dict.set(targetData, "title", state.title |> Js.Json.string);
+
+  Js.Dict.set(targetData, "role", role |> Js.Json.string);
 
   Js.Dict.set(
     targetData,
@@ -367,6 +377,7 @@ let reducer = (state, action) =>
       selectedVersion: versions[0],
     }
   | SetLoadingContentBlocks => {...state, loadingContentBlocks: true}
+  | UpdateTagetRole(role) => {...state, role, dirty: true}
   };
 
 let handleEditorClosure = (hideEditorActionCB, state) =>
@@ -531,6 +542,15 @@ let selectVersionCB =
       |> ignore;
 };
 
+let targetRoleClasses = selected => {
+  "btn border border-primary-500 "
+  ++ (
+    selected
+      ? "bg-primary-500 text-white"
+      : "bg-white text-primary-500 hover:bg-primary-100 hover:text-primary-600"
+  );
+};
+
 let switchViewModeCB = (send, previewMode) =>
   send(SwitchPreviewMode(previewMode));
 
@@ -548,6 +568,7 @@ let make =
     ) => {
   let initialState = {
     title: target |> Target.title,
+    role: target |> Target.role,
     evaluationCriteria:
       cacheCurrentEvaluationCriteria(evaluationCriteria, target),
     prerequisiteTargets:
@@ -646,6 +667,7 @@ let make =
         ~sortIndex=target |> Target.sortIndex,
         ~visibility=state.visibility,
         ~completionInstructions=Some(state.completionInstructions),
+        ~role=state.role,
       );
     Notification.success("Success", "Target updated successfully");
     updateTargetCB(newTarget, closeEditor);
@@ -805,6 +827,34 @@ let make =
                 )
               }>
               <div className="max-w-3xl py-6 px-3 mx-auto">
+                <div className="mb-6">
+                  <label
+                    className="block tracking-wide text-sm font-semibold mr-6"
+                    htmlFor="role">
+                    {"Who submits the target?" |> str}
+                  </label>
+                  <div id="role" className="flex mt-4">
+                    <button
+                      onClick={_event => {
+                        ReactEvent.Mouse.preventDefault(_event);
+                        dispatch(UpdateTagetRole(Target.Student));
+                      }}
+                      className={
+                        "mr-4 "
+                        ++ targetRoleClasses(state.role == Target.Student)
+                      }>
+                      {"All Students" |> str}
+                    </button>
+                    <button
+                      onClick={_event => {
+                        ReactEvent.Mouse.preventDefault(_event);
+                        dispatch(UpdateTagetRole(Target.Team));
+                      }}
+                      className={targetRoleClasses(state.role == Target.Team)}>
+                      {"One student from team" |> str}
+                    </button>
+                  </div>
+                </div>
                 {showPrerequisiteTargets
                    ? <div>
                        <label

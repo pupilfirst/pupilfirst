@@ -74,7 +74,7 @@ type action =
   | UpdateVersions(array(string))
   | UpdateCompletionInstructions(string)
   | SetLoadingContentBlocks
-  | UpdateTagetRole(Target.role);
+  | UpdateTargetRole(Target.role);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -377,7 +377,7 @@ let reducer = (state, action) =>
       selectedVersion: versions[0],
     }
   | SetLoadingContentBlocks => {...state, loadingContentBlocks: true}
-  | UpdateTagetRole(role) => {...state, role, dirty: true}
+  | UpdateTargetRole(role) => {...state, role, dirty: true}
   };
 
 let handleEditorClosure = (hideEditorActionCB, state) =>
@@ -837,7 +837,7 @@ let make =
                     <button
                       onClick={_event => {
                         ReactEvent.Mouse.preventDefault(_event);
-                        dispatch(UpdateTagetRole(Target.Student));
+                        dispatch(UpdateTargetRole(Target.Student));
                       }}
                       className={
                         "mr-4 "
@@ -847,21 +847,20 @@ let make =
                         <img className="w-12 h-12" src=markIcon />
                       </span>
                       <span>
-                        {"All students must submit on their own." |> str}
+                        {"All students in the team must submit." |> str}
                       </span>
                     </button>
                     <button
                       onClick={_event => {
                         ReactEvent.Mouse.preventDefault(_event);
-                        dispatch(UpdateTagetRole(Target.Team));
+                        dispatch(UpdateTargetRole(Target.Team));
                       }}
                       className={targetRoleClasses(state.role == Target.Team)}>
                       <span className="mb-1 mr-2">
                         <img className="w-12 h-12" src=quizIcon />
                       </span>
                       <span>
-                        {"Only one student in a team needs to submit work on this target."
-                         |> str}
+                        {"Only one student in the team needs to submit." |> str}
                       </span>
                     </button>
                   </div>

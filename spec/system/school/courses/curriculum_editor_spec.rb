@@ -356,7 +356,7 @@ feature 'Curriculum Editor', js: true do
       find('.target-group__target', text: target.title).click
       expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
-      click_button 'Only one student in a team needs to submit work on this target.'
+      click_button 'Only one student in the team needs to submit.'
       expect(page).to have_text('Do you have any completion instructions for the student?')
       fill_in 'completion-instructions', with: completion_instructions
 
@@ -369,7 +369,7 @@ feature 'Curriculum Editor', js: true do
       find('.target-group__target', text: target.title).click
       expect(page).to have_selector('.add-content-block--open', count: 1)
       click_button 'Next Step'
-      click_button 'All students must submit on their own.'
+      click_button 'All students in the team must submit.'
       expect(page).to have_text('Do you have any completion instructions for the student?')
       fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
 

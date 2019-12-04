@@ -105,7 +105,7 @@ let make =
       let targetGroupId = targetGroup |> TargetGroup.id;
       /* let sortIndex = json |> Json.Decode.(field("sortIndex", int)); */
       let newTarget =
-        Target.template(targetId, state.targetTitle, state.targetTitle);
+        Target.template(targetId, targetGroupId, state.targetTitle);
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));
       updateTargetCB(newTarget, false);

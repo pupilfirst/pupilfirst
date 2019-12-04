@@ -60,7 +60,7 @@ feature 'Curriculum Editor', js: true do
   let(:quiz_question_2_answer_option_1) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
 
-  let(:sample_markdown_text) { Faker::Markdown.sandwich(6) }
+  let(:sample_markdown_text) { Faker::Markdown.sandwich(2) }
   let(:completion_instructions) { Faker::Lorem.sentence }
 
   before do
@@ -185,6 +185,7 @@ feature 'Curriculum Editor', js: true do
 
       # Allow adding a new content block and deleting the sample block
       find("div#add-block-1", visible: false).click
+
       within("div#content-type-picker-1") do
         find('p', text: 'Markdown').click
       end
@@ -192,7 +193,9 @@ feature 'Curriculum Editor', js: true do
       replace_markdown(sample_markdown_text)
       find('span', text: 'Preview').click
       click_button 'Save'
+
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
       accept_confirm do
@@ -206,9 +209,13 @@ feature 'Curriculum Editor', js: true do
 
       expect(page).to have_selector('.content-block__content', count: 1)
       expect(page).to have_selector('.add-content-block--open', count: 1)
+
       target = target_group.reload.targets.last
+
       expect(target.title).to eq(new_target_1_title)
+
       find('#target-editor-close').click
+
       expect(page).to have_text(new_target_1_title)
 
       within("div#target-show-#{target.id}") do
@@ -226,9 +233,13 @@ feature 'Curriculum Editor', js: true do
       click_button 'Create'
 
       expect(page).to have_text("Target created successfully")
+
       dismiss_notification
 
+      expect(page).to have_content('Markdown editor')
+
       click_button 'Next Step'
+
       expect(page).to have_text('Any prerequisite targets?')
 
       within("div#evaluated") do
@@ -248,18 +259,24 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
+
       dismiss_notification
 
       expect(page).to have_text("Create a target")
+
       target = Target.find_by(title: new_target_3_title)
+
       expect(target.evaluation_criteria).to eq([])
       expect(target.link_to_complete).to eq(link_to_complete)
       expect(target.quiz).to eq(nil)
 
       # Update sort index
       find("#target-move-up-#{target.id}").click
+
       expect { target.reload.sort_index }.to eventually(eq 2)
+
       find("#target-move-down-#{target.id}").click
+
       expect { target.reload.sort_index }.to eventually(eq 3)
     end
 
@@ -271,7 +288,9 @@ feature 'Curriculum Editor', js: true do
 
       click_button 'Create'
       dismiss_notification
+
       expect(page).to have_text('Markdown editor')
+
       click_button 'Next Step'
 
       within("div#evaluated") do
@@ -307,11 +326,13 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
+
       dismiss_notification
 
       expect(page).to have_text("Create a target")
 
       target = Target.find_by(title: new_target_4_title)
+
       expect(target.evaluation_criteria).to eq([])
       expect(target.link_to_complete).to eq(nil)
       expect(target.quiz.title).to eq(new_target_4_title)
@@ -322,7 +343,9 @@ feature 'Curriculum Editor', js: true do
       expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(quiz_question_2_answer_option_1)
 
       find('.target-group__target', text: new_target_4_title).click
+
       expect(page).to have_text('Markdown editor')
+
       click_button 'Next Step'
 
       expect(page).to have_text('Any prerequisite targets?')
@@ -338,6 +361,7 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
+
       dismiss_notification
 
       expect(target.reload.evaluation_criteria).to eq([])
@@ -347,42 +371,52 @@ feature 'Curriculum Editor', js: true do
   end
 
   context 'authorized users modifies a target' do
+    let(:target_to_modify) { create :target, target_group: target_group_2 }
+    let!(:existing_content_block) { (create :content_version, :file, target: target_to_modify).content_block }
+
     scenario 'adds content to a target and modifies its properties' do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
-      target = target_4
+      # Update target completion instructions.
+      find('.target-group__target', text: target_to_modify.title).click
 
-      # update target completion_instructions
-      find('.target-group__target', text: target.title).click
-      expect(page).to have_selector('.add-content-block--open', count: 1)
+      expect(page).to have_text(existing_content_block.file.filename)
+
       click_button 'Next Step'
       click_button 'Only one student in a team needs to submit.'
       expect(page).to have_text('Do you have any completion instructions for the student?')
+
       fill_in 'completion-instructions', with: completion_instructions
 
       click_button 'Update Target'
       dismiss_notification
 
-      expect(target.reload.role).to eq(Target::ROLE_TEAM)
-      expect(target.completion_instructions).to eq(completion_instructions)
+      expect(target_to_modify.reload.role).to eq(Target::ROLE_TEAM)
+      expect(target_to_modify.completion_instructions).to eq(completion_instructions)
 
-      find('.target-group__target', text: target.title).click
-      expect(page).to have_selector('.add-content-block--open', count: 1)
+      find('.target-group__target', text: target_to_modify.title).click
+
+      expect(page).to have_text(existing_content_block.file.filename)
+
       click_button 'Next Step'
       click_button 'All students must submit.'
-      expect(page).to have_text('Do you have any completion instructions for the student?')
-      fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
 
+      expect(page).to have_text('Do you have any completion instructions for the student?')
+
+      fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
       click_button 'Update Target'
       dismiss_notification
 
-      expect(target.reload.role).to eq(Target::ROLE_STUDENT)
-      expect(target.completion_instructions).to eq(nil)
+      expect(target_to_modify.reload.role).to eq(Target::ROLE_STUDENT)
+      expect(target_to_modify.completion_instructions).to eq(nil)
 
       # Change target visibility
-      find('.target-group__target', text: target.title).click
-      expect(page).to have_selector('.add-content-block--open', count: 1)
+      find('.target-group__target', text: target_to_modify.title).click
+
+      expect(page).to have_text(existing_content_block.file.filename)
+
       click_button 'Next Step'
+
       expect(page).to have_text('Target Visibility')
 
       within("div#visibility") do
@@ -392,13 +426,16 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
       dismiss_notification
 
-      within("div#target-show-#{target.id}") do
+      within("div#target-show-#{target_to_modify.id}") do
         expect(page).to_not have_text('Draft')
       end
 
-      expect(target.reload.visibility).to eq('live')
-      find('.target-group__target', text: target.title).click
-      expect(page).to have_selector('.add-content-block--open', count: 1)
+      expect(target_to_modify.reload.visibility).to eq('live')
+
+      find('.target-group__target', text: target_to_modify.title).click
+
+      expect(page).to have_text(existing_content_block.file.filename)
+
       click_button 'Next Step'
 
       within("div#visibility") do
@@ -408,13 +445,17 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
       dismiss_notification
 
-      expect(page).to_not have_selector("div#target-show-#{target.id}")
-      click_button 'Show Archived'
-      expect(page).to have_selector("div#target-show-#{target.id}")
-      expect(target.reload.visibility).to eq('archived')
+      expect(target_to_modify.reload.visibility).to eq('archived')
+      expect(page).to_not have_selector("div#target-show-#{target_to_modify.id}")
 
-      find('.target-group__target', text: target.title).click
-      expect(page).to have_selector('.add-content-block--open', count: 1)
+      click_button 'Show Archived'
+
+      expect(page).to have_selector("div#target-show-#{target_to_modify.id}")
+
+      find('.target-group__target', text: target_to_modify.title).click
+
+      expect(page).to have_text(existing_content_block.file.filename)
+
       click_button 'Next Step'
 
       within("div#evaluated") do
@@ -440,10 +481,12 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
       dismiss_notification
 
-      # Add few contents to target
+      # Add some content to target.
+      find('.target-group__target', text: target_to_modify.title).click
 
-      find('.target-group__target', text: target.title).click
+      click_button 'Edit'
 
+      # Allow adding a new content block and deleting the sample block
       within('.add-content-block--open') do
         find('p', text: 'Markdown').click
       end
@@ -453,10 +496,13 @@ feature 'Curriculum Editor', js: true do
       click_button 'Save'
 
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
-      expect(target.content_versions.last.sort_index).to eq(1)
-      expect(target.content_versions.last.content_block.block_type).to eq('markdown')
+      expect(target_to_modify.content_versions.maximum(:sort_index)).to eq(2)
+
+      first_content_block = target_to_modify.content_versions.find_by(sort_index: 2).content_block
+      expect(first_content_block.block_type).to eq('markdown')
 
       within('.add-content-block--open') do
         find('p', text: 'Image').click
@@ -466,17 +512,20 @@ feature 'Curriculum Editor', js: true do
       click_button 'Save'
 
       expect(page).to have_text('File must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high')
+
       dismiss_notification
 
       attach_file 'content_block[file]', file_path('logo_hackkar.png'), visible: false
       click_button 'Save'
 
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
-      content_block = target.content_versions.reload.last.content_block
-      expect(target.content_versions.reload.last.sort_index).to eq(2)
-      expect(content_block.file.filename).to eq('logo_hackkar.png')
+      expect(target_to_modify.content_versions.maximum(:sort_index)).to eq(3)
+
+      second_content_block = target_to_modify.content_versions.find_by(sort_index: 3).content_block
+      expect(second_content_block.file.filename).to eq('logo_hackkar.png')
 
       within('.add-content-block--open') do
         find('p', text: 'File').click
@@ -486,11 +535,14 @@ feature 'Curriculum Editor', js: true do
       click_button 'Save'
 
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
-      content_block = target.content_versions.reload.last.content_block
-      expect(target.content_versions.last.sort_index).to eq(3)
-      expect(content_block.file.filename).to eq('pdf-sample.pdf')
+      expect(target_to_modify.content_versions.maximum(:sort_index)).to eq(4)
+
+      third_content_block = target_to_modify.content_versions.find_by(sort_index: 4).content_block
+
+      expect(third_content_block.file.filename).to eq('pdf-sample.pdf')
 
       within('.add-content-block--open') do
         find('p', text: 'Embed').click
@@ -500,30 +552,35 @@ feature 'Curriculum Editor', js: true do
       click_button 'Save'
 
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
-      content_block = target.content_versions.reload.last.content_block
-      expect(target.content_versions.last.sort_index).to eq(4)
-      expect(content_block.block_type).to eq('embed')
+      expect(target_to_modify.content_versions.maximum(:sort_index)).to eq(5)
+
+      fourth_content_block = target_to_modify.content_versions.find_by(sort_index: 5).content_block
+
+      expect(fourth_content_block.block_type).to eq('embed')
+      expect(page).to_not have_selector(:button, 'Update')
 
       # Change target title
-      expect(page).to_not have_selector(:button, 'Update')
       fill_in 'title', with: 'new target title', fill_options: { clear: :backspace }
       click_button 'Update'
-
       dismiss_notification
 
-      expect(target.reload.title).to eq('new target title')
+      expect(target_to_modify.reload.title).to eq('new target title')
     end
 
     scenario 'modifies an existing target content' do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       target = target_5
+
       # Open the target editor
       find('.target-group__target', text: target.title).click
       click_button 'Edit'
+
       expect(page).to have_selector('.content-block__content', count: 4)
+
       find("div#add-block-1", visible: false).click
 
       within("div#content-type-picker-1") do
@@ -537,6 +594,7 @@ feature 'Curriculum Editor', js: true do
       click_button 'Save'
 
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
       expect(target.reload.current_content_blocks.count).to eq(5)
@@ -557,6 +615,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'image' }).last.sort_index).to eq(1)
@@ -574,6 +633,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'embed' }).last.sort_index).to eq(4)
@@ -586,6 +646,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'file' }).last.content_block.content['title']).to eq('new file title')
@@ -597,6 +658,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       expect(latest_content_versions(target).joins(:content_block).where(content_blocks: { block_type: 'image' }).last.content_block.content['caption']).to eq('new image caption')
@@ -619,6 +681,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       click_button 'Next Step'
+
       find('span', text: 'Add Content').click
 
       expect(page).to have_selector('.content-block__content', count: 3)
@@ -629,13 +692,17 @@ feature 'Curriculum Editor', js: true do
   context 'course author uses the curriculum editor' do
     scenario 'user can navigate only to assigned courses and modify content of those courses' do
       sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
       expect(page).to have_button(course.name)
+
       click_button course.name
+
       expect(page).to have_link(course_2.name, href: "/school/courses/#{course_2.id}/curriculum")
       expect(page).to_not have_link(course_3.name, href: "/school/courses/#{course_3.id}/curriculum")
-      click_link course_2.name
-      expect(page).to have_button(course_2.name)
 
+      click_link course_2.name
+
+      expect(page).to have_button(course_2.name)
       expect(page).to_not have_link(href: '/school/coaches')
       expect(page).to_not have_link(href: '/school/customize')
       expect(page).to_not have_link(href: '/school/courses')
@@ -644,6 +711,7 @@ feature 'Curriculum Editor', js: true do
 
       [school_path, curriculum_school_course_path(course_3), school_communities_path, school_courses_path, customize_school_path].each do |path|
         visit path
+
         expect(page).to have_text("The page you were looking for doesn't exist!")
       end
 
@@ -653,9 +721,13 @@ feature 'Curriculum Editor', js: true do
       click_button 'Create'
 
       expect(page).to have_text("Target created successfully")
+
       dismiss_notification
 
+      expect(page).to have_text('Markdown editor')
+
       click_button 'Next Step'
+
       expect(page).to have_text('Any prerequisite targets?')
 
       within("div#evaluated") do
@@ -675,13 +747,17 @@ feature 'Curriculum Editor', js: true do
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
+
       dismiss_notification
 
       target = target_5
+
       # Open the target editor
       find('.target-group__target', text: target.title).click
       click_button 'Edit'
+
       expect(page).to have_selector('.content-block__content', count: 4)
+
       find("div#add-block-1", visible: false).click
 
       within("div#content-type-picker-1") do
@@ -695,6 +771,7 @@ feature 'Curriculum Editor', js: true do
       click_button 'Save'
 
       expect(page).to have_text('Content added successfully')
+
       dismiss_notification
 
       # Move a block down
@@ -710,6 +787,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       # Move a block up
@@ -724,6 +802,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       # Update a file title
@@ -733,6 +812,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       # Update an image caption
@@ -742,6 +822,7 @@ feature 'Curriculum Editor', js: true do
       end
 
       expect(page).to have_text('Content updated successfully')
+
       dismiss_notification
 
       # Delete a content block
@@ -755,6 +836,7 @@ feature 'Curriculum Editor', js: true do
 
   scenario 'user who is not logged in gets redirected to sign in page' do
     visit curriculum_school_course_path(course)
+
     expect(page).to have_text("Please sign in to continue.")
   end
 end

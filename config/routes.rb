@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       member do
         get 'curriculum'
         get 'exports'
+        get 'evaluation_criteria'
         post 'attach_images'
       end
 

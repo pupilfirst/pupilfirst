@@ -22,7 +22,8 @@ type state = {
 };
 
 type action =
-  | RefreshData(list(Team.t), list(Student.t))
+  | RefreshDataAfterUpdate(list(Team.t), list(Student.t), list(string))
+  | RefreshDataAfterTeamUp(list(Team.t), list(Student.t))
   | SelectStudent(Student.t)
   | DeselectStudent(Student.t)
   | SelectAllStudents
@@ -30,7 +31,6 @@ type action =
   | UpdateSearchString(string)
   | UpdateFormVisible(formVisible)
   | UpdateSelectedLevelNumber(option(int))
-  | AddNewTags(list(string))
   | AddTagFilter(string)
   | RemoveTagFilter(string)
   | ToggleFilterVisibility;
@@ -130,8 +130,7 @@ let handleTeamUpResponse = (send, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   let students =
     json |> Json.Decode.(field("students", list(Student.decode)));
-  send(RefreshData(teams, students));
-  send(DeselectAllStudents);
+  send(RefreshDataAfterTeamUp(teams, students));
   Notification.success("Success!", "Teams updated successfully");
 };
 
@@ -167,7 +166,19 @@ let initialState = (teams, students, studentTags) => {
 
 let reducer = (state, action) =>
   switch (action) {
-  | RefreshData(teams, students) => {...state, teams, students}
+  | RefreshDataAfterUpdate(teams, students, tags) => {
+      ...state,
+      teams,
+      students,
+      tags: List.append(tags, state.tags) |> List.sort_uniq(String.compare),
+      formVisible: None,
+    }
+  | RefreshDataAfterTeamUp(teams, students) => {
+      ...state,
+      teams,
+      students,
+      selectedStudents: [],
+    }
   | SelectStudent(student) => {
       ...state,
       selectedStudents: [student, ...state.selectedStudents],
@@ -202,10 +213,6 @@ let reducer = (state, action) =>
       ...state,
       tagsFilteredBy: state.tagsFilteredBy |> List.filter(t => t !== tag),
     }
-  | AddNewTags(tags) => {
-      ...state,
-      tags: List.append(tags, state.tags) |> List.sort_uniq(String.compare),
-    }
   | ToggleFilterVisibility => {...state, filterVisible: !state.filterVisible}
   };
 
@@ -225,12 +232,8 @@ let make =
     React.useReducer(reducer, initialState(teams, students, studentTags));
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
     {
-      let closeFormCB = () => send(UpdateFormVisible(None));
-      let submitFormCB = (teams, students, tags) => {
-        send(RefreshData(teams, students));
-        send(AddNewTags(tags));
-        send(UpdateFormVisible(None));
-      };
+      let submitFormCB = (teams, students, tags) =>
+        send(RefreshDataAfterUpdate(teams, students, tags));
       switch (state.formVisible) {
       | None => ReasonReact.null
       | CreateForm =>

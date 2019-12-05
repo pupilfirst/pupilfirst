@@ -2,6 +2,7 @@ class ApplicantsController < ApplicationController
   # GET /enroll/:token
   def enroll
     @applicant = Applicant.find_by(login_token: params[:token])
+
     if valid_applicant?
       student = Applicants::CreateStudentService.new(@applicant).create
       sign_in student.user

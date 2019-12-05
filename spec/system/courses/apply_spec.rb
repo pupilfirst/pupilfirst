@@ -84,4 +84,13 @@ feature "Apply for public courses", js: true do
     expect(page).to have_text("Sign in")
     expect(page).to have_text('User authentication failed. The link you followed appears to be invalid.')
   end
+
+  scenario 'user visits apply URL with email and name as query parameters' do
+    name = Faker::Name.name
+    email = Faker::Internet.email(name)
+    visit apply_course_path(public_course, name: name, email: email)
+
+    expect(page).to have_selector("input[value='#{name}']")
+    expect(page).to have_selector("input[value='#{email}']")
+  end
 end

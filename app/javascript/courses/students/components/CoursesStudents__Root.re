@@ -251,8 +251,8 @@ let updateSearchInputString = (setState, event) => {
   setState(state => {...state, searchInputString});
 };
 
-let openOverlayCB = () => {
-  Js.log("Open Overlay");
+let openOverlayCB = studentId => {
+  ReasonReactRouter.push("/students/" ++ studentId ++ "/report");
 };
 
 let disableSearchButton = state => {
@@ -267,6 +267,10 @@ let disableSearchButton = state => {
       }
     )
   };
+};
+
+let applicableLevels = levels => {
+  levels |> Js.Array.filter(level => Level.number(level) != 0);
 };
 
 [@react.component]
@@ -284,6 +288,8 @@ let make = (~levels, ~course) => {
       }
     );
   let courseId = course |> Course.id;
+
+  let url = ReasonReactRouter.useUrl();
 
   React.useEffect1(
     () => {
@@ -304,6 +310,11 @@ let make = (~levels, ~course) => {
   );
 
   <div>
+    {switch (url.path) {
+     | ["students", studentId, "report"] =>
+       <CoursesStudents__StudentOverlay courseId studentId levels />
+     | _ => React.null
+     }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0">
         <div
@@ -343,7 +354,11 @@ let make = (~levels, ~course) => {
             </button>
           </form>
           <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
-            {showDropdown(levels, state.filter.level, setState)}
+            {showDropdown(
+               applicableLevels(levels),
+               state.filter.level,
+               setState,
+             )}
           </div>
         </div>
       </div>

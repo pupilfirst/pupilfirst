@@ -47,9 +47,19 @@ let buttonText = (email, name, saving) =>
   };
 
 [@react.component]
-let make = (~authenticityToken, ~courseName, ~courseId, ~setViewEmailSent) => {
-  let (email, setEmail) = React.useState(() => "");
-  let (name, setName) = React.useState(() => "");
+let make =
+    (
+      ~authenticityToken,
+      ~courseName,
+      ~courseId,
+      ~setViewEmailSent,
+      ~email,
+      ~name,
+    ) => {
+  let (email, setEmail) =
+    React.useState(() => email |> OptionUtils.default(""));
+  let (name, setName) =
+    React.useState(() => name |> OptionUtils.default(""));
   let (saving, setSaving) = React.useState(() => false);
   <div className="flex flex-col">
     <h4 className="font-bold">

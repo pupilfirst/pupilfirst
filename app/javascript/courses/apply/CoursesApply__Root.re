@@ -17,15 +17,21 @@ let emailSentMessage = () =>
       {"We've sent you a magic link!" |> str}
     </div>
     <p className="mt-4 text-center">
-      {
-        "It should reach you in less than a minute. Click the link in the email to sign up"
-        |> str
-      }
+      {"It should reach you in less than a minute. Click the link in the email to sign up"
+       |> str}
     </p>
   </div>;
 
 [@react.component]
-let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
+let make =
+    (
+      ~authenticityToken,
+      ~courseName,
+      ~courseDescription,
+      ~courseId,
+      ~email,
+      ~name,
+    ) => {
   let (view, setView) = React.useState(() => Apply);
 
   <div className="bg-gray-100 py-8">
@@ -45,18 +51,18 @@ let make = (~authenticityToken, ~courseName, ~courseDescription, ~courseId) => {
         </div>
         <div className="md:w-1/2">
           <div className="p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">
-            {
-              switch (view) {
-              | Apply =>
-                <CoursesApply__Form
-                  authenticityToken
-                  courseName
-                  courseId
-                  setViewEmailSent={setViewEmailSent(setView)}
-                />
-              | EmailSent => emailSentMessage()
-              }
-            }
+            {switch (view) {
+             | Apply =>
+               <CoursesApply__Form
+                 authenticityToken
+                 courseName
+                 courseId
+                 setViewEmailSent={setViewEmailSent(setView)}
+                 email
+                 name
+               />
+             | EmailSent => emailSentMessage()
+             }}
           </div>
         </div>
       </div>

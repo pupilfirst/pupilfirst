@@ -395,7 +395,7 @@ feature 'Target Overlay', js: true do
   end
 
   context "when some team members haven't completed an individual target" do
-    let!(:target_l1) { create :target, target_group: target_group_l1, role: Target::ROLE_FOUNDER }
+    let!(:target_l1) { create :target, target_group: target_group_l1, role: Target::ROLE_STUDENT }
     let!(:timeline_event) { create :timeline_event, target: target_l1, founders: [student], passed_at: 2.days.ago, latest: true }
 
     scenario 'student is shown pending team members on individual targets' do

@@ -210,7 +210,7 @@ GEM
     capybara-screenshot (1.0.23)
       capybara (>= 1.0, < 4)
       launchy
-    chartkick (3.2.1)
+    chartkick (3.3.0)
     childprocess (1.0.1)
       rake (< 13.0)
     cliver (0.3.2)
@@ -819,7 +819,7 @@ DEPENDENCIES
   capybara (~> 3.0)
   capybara-email (~> 3.0)
   capybara-screenshot (~> 1.0)
-  chartkick (~> 3.2)
+  chartkick (~> 3.3)
   coderay (~> 1.1)
   coffee-rails (~> 5.0.0)
   cuprite (~> 0.5)

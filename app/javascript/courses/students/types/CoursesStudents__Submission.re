@@ -39,16 +39,24 @@ let makeFromJs = submissions => {
   submissions
   |> Js.Array.map(submission =>
        switch (submission) {
-       | Some(submission) => [
+       | Some(submission) =>
+         let createdAt =
+           submission##createdAt |> Json.Decode.string |> DateFns.parseString;
+         let passedAt =
+           switch (submission##passedAt) {
+           | Some(passedAt) =>
+             Some(passedAt |> Json.Decode.string |> DateFns.parseString)
+           | None => None
+           };
+         [
            make(
              ~id=submission##id,
              ~title=submission##title,
-             ~createdAt=submission##createdAt |> DateFns.parseString,
-             ~passedAt=
-               submission##passedAt |> OptionUtils.map(DateFns.parseString),
+             ~createdAt,
+             ~passedAt,
              ~levelId=submission##levelId,
            ),
-         ]
+         ];
        | None => []
        }
      );

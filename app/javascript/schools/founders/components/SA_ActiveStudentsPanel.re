@@ -234,13 +234,15 @@ let make =
       switch (state.formVisible) {
       | None => ReasonReact.null
       | CreateForm =>
-        <SA_StudentsPanel_CreateForm
-          courseId
-          closeFormCB
-          submitFormCB
-          studentTags={state.tags}
-          authenticityToken
-        />
+        <SchoolAdmin__EditorDrawer
+          closeDrawerCB={() => send(UpdateFormVisible(None))}>
+          <SA_StudentsPanel_CreateForm
+            courseId
+            submitFormCB
+            studentTags={state.tags}
+            authenticityToken
+          />
+        </SchoolAdmin__EditorDrawer>
       | UpdateForm(student) =>
         let teamCoachIds =
           state.teams
@@ -253,18 +255,20 @@ let make =
           |> studentsInTeam(state.students)
           |> List.length == 1;
 
-        <SA_StudentsPanel_UpdateForm
-          student
-          isSingleFounder
-          teams={state.teams}
-          studentTags={state.tags}
-          teamCoachIds
-          courseCoachIds
-          schoolCoaches
-          closeFormCB
-          submitFormCB
-          authenticityToken
-        />;
+        <SchoolAdmin__EditorDrawer
+          closeDrawerCB={() => send(UpdateFormVisible(None))}>
+          <SA_StudentsPanel_UpdateForm
+            student
+            isSingleFounder
+            teams={state.teams}
+            studentTags={state.tags}
+            teamCoachIds
+            courseCoachIds
+            schoolCoaches
+            submitFormCB
+            authenticityToken
+          />
+        </SchoolAdmin__EditorDrawer>;
       };
     }
     <div

@@ -28,7 +28,6 @@ ReactDOMRe.renderToElementWithId(
   <CoursesApply__Root
     authenticityToken={props.authenticityToken}
     courseName={props.courseName}
-    courseDescription={props.courseDescription}
     courseId={props.courseId}
     thumbnailUrl={props.thumbnailUrl}
     email={props.email}

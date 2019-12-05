@@ -24,58 +24,27 @@ let emailSentMessage = () =>
 
 [@react.component]
 let make =
-    (
-      ~authenticityToken,
-      ~courseName,
-      ~courseDescription,
-      ~courseId,
-      ~thumbnailUrl,
-      ~email,
-      ~name,
-    ) => {
+    (~authenticityToken, ~courseName, ~courseId, ~thumbnailUrl, ~email, ~name) => {
   let (view, setView) = React.useState(() => Apply);
 
-  <div className="bg-gray-100 py-8">
-    <div className="container mx-auto px-3 max-w-6xl">
+  <div className="bg-gray-100 py-8 w-full">
+    <div className="container mx-auto px-3 max-w-lg">
       <div
-        className="course-apply flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
-        <div
-          className="md:w-1/2 relative flex flex-col bg-primary-900 relative text-white">
-          <div className="relative md:pb-0 md:h-1/2 bg-primary-900">
+        className="relative flex flex-col shadow-xl rounded-lg overflow-hidden bg-white border">
+        <div className="flex flex-col text-gray-900 bg-gray-200 text-white">
+          <div className="relative pb-1/2 bg-primary-900">
             {switch (thumbnailUrl) {
              | Some(src) =>
-               <img
-                 className="relative md:absolute md:h-full w-full object-cover"
-                 src
-               />
+               <img className="absolute h-full w-full object-cover" src />
              | None =>
                <div
                  className="course-apply__cover-default absolute h-full w-full svg-bg-pattern-1"
                />
              }}
           </div>
-          <div
-            className="hidden md:block h-auto md:h-1/2 md:border-t border-primary-500">
-            <div
-              className="flex flex-col justify-center h-full px-4 py-6 md:px-8 xl:px-24">
-              <div>
-                <h1 className="text-xl md:text-3xl font-bold leading-tight">
-                  {courseName |> str}
-                </h1>
-                <p className="text-sm lg:text-base mt-2">
-                  {courseDescription |> str}
-                </p>
-                <a
-                  className="inline-block font-semibold mt-2 underline text-xs text-primary-400 hover:text-primary-200 tracking-wide"
-                  href="#">
-                  {"Read More" |> str}
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
-        <div className="md:w-1/2">
-          <div className="p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">
+        <div className="">
+          <div className="p-4 pt-5 md:px-16 md:py-12 md:pt-10">
             {switch (view) {
              | Apply =>
                <CoursesApply__Form
@@ -90,6 +59,18 @@ let make =
              }}
           </div>
         </div>
+      </div>
+      <div className="text-center mt-4 text-gray-700">
+        <a
+          href="#"
+          className="text-xs cursor-pointer pr-4 border-r border-gray-400 hover:text-primary-500">
+          {"terms-of-use" |> str}
+        </a>
+        <a
+          href="#"
+          className="text-xs cursor-pointer pl-4 hover:text-primary-500">
+          {"privacy-policy" |> str}
+        </a>
       </div>
     </div>
   </div>;

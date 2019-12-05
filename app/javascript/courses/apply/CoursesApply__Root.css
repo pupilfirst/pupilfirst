@@ -15,10 +15,3 @@
   z-index: 0;
   background-color: rgba(0, 0, 0, 0.2);
 }
-
-@screen lg {
-  .course-apply {
-    position: relative;
-    min-height: 32rem;
-  }
-}

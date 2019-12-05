@@ -18,7 +18,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/apply
   def apply
     @course = find_course
-    render layout: 'student'
+    render layout: 'tailwind'
   end
 
   # GET /courses/:id/(:slug)

@@ -63,7 +63,7 @@ let make =
         </ul>
       </div>
     </div>
-    <div className="max-w-2xl p-6 mx-auto">
+    <div className="max-w-2xl mx-auto">
       {switch (view) {
        | DetailsTab =>
          <SA_StudentsPanel_UpdateDetailsForm

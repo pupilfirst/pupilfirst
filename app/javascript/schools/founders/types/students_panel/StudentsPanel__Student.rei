@@ -12,7 +12,6 @@ let tags: t => list(string);
 
 let updateInfo:
   (
-    ~exited: bool,
     ~excludedFromLeaderboard: bool,
     ~title: string,
     ~affiliation: option(string),

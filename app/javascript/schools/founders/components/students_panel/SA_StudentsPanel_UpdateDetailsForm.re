@@ -8,7 +8,6 @@ type state = {
   name: string,
   teamName: string,
   tagsToApply: list(string),
-  exited: bool,
   teamCoaches: list(teamCoachlist),
   excludedFromLeaderboard: bool,
   title: string,
@@ -22,7 +21,6 @@ type action =
   | UpdateTeamName(string)
   | AddTag(string)
   | RemoveTag(string)
-  | UpdateExited(bool)
   | UpdateCoachesList(string, string, bool)
   | UpdateExcludedFromLeaderboard(bool)
   | UpdateTitle(string)
@@ -79,7 +77,6 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
     |> List.map(((key, _, _)) => key);
   let updatedStudent =
     Student.updateInfo(
-      ~exited=state.exited,
       ~excludedFromLeaderboard=state.excludedFromLeaderboard,
       ~title=state.title,
       ~affiliation=Some(state.affiliation),
@@ -100,6 +97,16 @@ let updateStudent = (student, state, send, authenticityToken, responseCB) => {
     "coach_ids",
     enrolledCoachIds |> Json.Encode.(list(string)),
   );
+
+  Js.Dict.set(
+    payload,
+    "access_ends_at",
+    state.accessEndsAt
+    |> OptionUtils.map(Js.Date.toString)
+    |> OptionUtils.default("")
+    |> Json.Encode.(string),
+  );
+
   let url = "/school/students/" ++ (student |> Student.id);
   Api.update(url, payload, responseCB, handleErrorCB(send));
 };
@@ -146,7 +153,6 @@ let initialState =
   name: student |> Student.name,
   teamName: student |> studentTeam(teams) |> Team.name,
   tagsToApply: student |> Student.tags,
-  exited: student |> Student.exited,
   teamCoaches:
     handleEligibleTeamCoachList(schoolCoaches, courseCoachIds, teamCoachIds),
   excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
@@ -165,7 +171,6 @@ let reducer = (state, action) =>
       ...state,
       tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
     }
-  | UpdateExited(exited) => {...state, exited}
   | UpdateCoachesList(key, value, selected) =>
     let oldCoach =
       state.teamCoaches |> List.filter(((item, _, _)) => item != key);
@@ -368,56 +373,21 @@ let make =
         />
       </div>
     </div>
-    <div className="p-6 bg-gray-100 border-t">
-      <div className="max-w-2xl px-6 mx-auto">
-        <div
-          className="flex max-w-2xl w-full justify-between items-center mx-auto">
-          <div
-            className="flex items-center flex-shrink-0 bg-red-100 py-1 px-1 rounded">
-            <label
-              className="block tracking-wide text-red-600 text-xs font-semibold mr-3">
-              {"Has this student dropped out?" |> str}
-            </label>
-            <div
-              className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-              <button
-                title="Prevent this student from accessing the course"
-                onClick={_event => {
-                  ReactEvent.Mouse.preventDefault(_event);
-                  send(UpdateExited(true));
-                }}
-                className={boolBtnClasses(state.exited)}>
-                {"Yes" |> str}
-              </button>
-              <button
-                title="Allow this student to access the course"
-                onClick={_event => {
-                  ReactEvent.Mouse.preventDefault(_event);
-                  send(UpdateExited(false));
-                }}
-                className={boolBtnClasses(!state.exited)}>
-                {"No" |> str}
-              </button>
-            </div>
-          </div>
-          <div className="w-auto">
-            <button
-              disabled={formInvalid(state)}
-              onClick={_e =>
-                updateStudent(
-                  student,
-                  state,
-                  send,
-                  authenticityToken,
-                  handleResponseCB(submitFormCB, state),
-                )
-              }
-              className="w-full btn btn-large btn-primary">
-              {"Update Student" |> str}
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="my-5 w-auto">
+      <button
+        disabled={formInvalid(state)}
+        onClick={_e =>
+          updateStudent(
+            student,
+            state,
+            send,
+            authenticityToken,
+            handleResponseCB(submitFormCB, state),
+          )
+        }
+        className="w-full btn btn-large btn-primary">
+        {"Update Student" |> str}
+      </button>
     </div>
   </DisablingCover>;
 };

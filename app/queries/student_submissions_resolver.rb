@@ -8,12 +8,16 @@ class StudentSubmissionsResolver < ApplicationQuery
   def authorized?
     return false if student.blank?
 
-    return false if current_user.faculty.blank?
+    return false if coach.blank?
 
-    current_user.faculty.reviewable_courses.where(id: student.course).exists?
+    coach.courses.where(id: student.course.id).exists? || coach.startups.where(id: student.startup_id).present?
   end
 
   def student
     @student ||= Founder.find_by(id: student_id)
+  end
+
+  def coach
+    @coach ||= current_user.faculty
   end
 end

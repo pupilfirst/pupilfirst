@@ -17,15 +17,27 @@ module Courses
                        max_grade: @course.max_grade,
                        pass_grade: @course.pass_grade,
                        school: school).tap do |new_course|
+          evaluation_criteria_translation = create_evaluation_criteria(new_course)
           levels = create_levels(new_course)
           target_groups = create_target_groups(levels)
-          targets = create_targets(target_groups)
+          targets = create_targets(target_groups, evaluation_criteria_translation)
           create_content_blocks(targets)
           create_prerequisites_targets(targets)
           create_quiz(targets)
           new_course.cover.attach(@course.cover.blob) if @course.cover.attached?
           new_course.thumbnail.attach(@course.thumbnail.blob) if @course.thumbnail.attached?
         end
+      end
+    end
+
+    def create_evaluation_criteria(new_course)
+      @course.evaluation_criteria.each_with_object({}) do |old_ec, translation|
+        new_ec = new_course.evaluation_criteria.create!(
+          description: old_ec.description,
+          name: old_ec.name
+        )
+
+        translation[old_ec.id] = new_ec.id
       end
     end
 
@@ -57,7 +69,7 @@ module Courses
       end
     end
 
-    def create_targets(target_groups)
+    def create_targets(target_groups, evaluation_criteria_translation)
       target_groups.flat_map do |old_target_group, new_target_group|
         old_target_group.targets.live.map do |old_target|
           new_target = Target.create!(
@@ -67,9 +79,18 @@ module Courses
                 'sort_index', 'link_to_complete', 'review_checklist', 'visibility', 'resubmittable'
               ).merge(target_group: new_target_group)
           )
+          create_target_evaluation_criteria(old_target, new_target, evaluation_criteria_translation) if old_target.evaluation_criteria.exists?
           @target_id_translation[old_target.id] = new_target.id
           [old_target, new_target]
         end
+      end
+    end
+
+    def create_target_evaluation_criteria(old_target, new_target, evaluation_criteria_translation)
+      old_target.target_evaluation_criteria.each do |t_ec|
+        new_target.target_evaluation_criteria.create!(
+          evaluation_criterion_id: evaluation_criteria_translation[t_ec.evaluation_criterion_id]
+        )
       end
     end
 

@@ -43,8 +43,8 @@ class Target < ApplicationRecord
   acts_as_taggable
 
   scope :live, -> { where(visibility: VISIBILITY_LIVE) }
-  scope :founder, -> { where(role: ROLE_FOUNDER) }
-  scope :not_founder, -> { where.not(role: ROLE_FOUNDER) }
+  scope :founder, -> { where(role: ROLE_STUDENT) }
+  scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
   scope :sessions, -> { where.not(session_at: nil) }
   scope :not_auto_verifiable, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verifiable, -> { where.not(id: not_auto_verifiable) }
@@ -56,12 +56,12 @@ class Target < ApplicationRecord
     %i[ransack_tagged_with]
   end
 
-  ROLE_FOUNDER = 'founder'
+  ROLE_STUDENT = 'student'
   ROLE_TEAM = 'team'
 
   # See en.yml's target.role
   def self.valid_roles
-    [ROLE_FOUNDER, ROLE_TEAM].freeze
+    [ROLE_STUDENT, ROLE_TEAM].freeze
   end
 
   TYPE_TODO = 'Todo'
@@ -139,7 +139,7 @@ class Target < ApplicationRecord
   end
 
   def founder_role?
-    role == Target::ROLE_FOUNDER
+    role == Target::ROLE_STUDENT
   end
 
   def status(founder)
@@ -164,7 +164,7 @@ class Target < ApplicationRecord
   end
 
   def founder_event?
-    role == ROLE_FOUNDER
+    role == ROLE_STUDENT
   end
 
   def quiz?

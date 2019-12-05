@@ -25,9 +25,9 @@ describe Courses::DemoContentService do
       # Create a target in the target group
       expect(target_group.targets.count).to eq(1)
       target = target_group.targets.first
-      expect(target.role).to eq("founder")
+      expect(target.role).to eq(Target::ROLE_STUDENT)
       expect(target.title).to eq("Demo Target")
-      expect(target.target_action_type).to eq("Todo")
+      expect(target.target_action_type).to eq(Target::TYPE_TODO)
       expect(target.visibility).to eq(Target::VISIBILITY_LIVE)
 
       # Create a markdown content block for the target

@@ -20,7 +20,7 @@ let decode = json =>
     id: json |> field("id", string),
     role:
       switch (json |> field("role", string)) {
-      | "founder" => Student
+      | "student" => Student
       | "team" => Team
       | unknownRole => raise(CannotParseUnknownRole(unknownRole))
       },

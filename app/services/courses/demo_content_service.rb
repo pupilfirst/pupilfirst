@@ -36,9 +36,9 @@ module Courses
 
     def create_target(target_group)
       target = Target.create!(
-        role: "founder",
+        role: Target::ROLE_STUDENT,
         title: "Demo Target",
-        target_action_type: "Todo",
+        target_action_type: Target::TYPE_TODO,
         target_group: target_group,
         sort_index: 1,
         visibility: Target::VISIBILITY_LIVE

@@ -5,7 +5,7 @@
     "@babel/preset-react": "^7.0.0",
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@glennsl/bs-json": "^4.0.0",
-    "@rails/ujs": "^6.0.0-alpha",
+    "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "^4.0.7",
     "babel-plugin-prismjs": "^1.1.0",
     "babel-plugin-react-css-modules": "^3.3.2",

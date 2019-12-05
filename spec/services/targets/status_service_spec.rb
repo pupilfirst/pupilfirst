@@ -10,7 +10,7 @@ describe Targets::StatusService do
   let(:founder_1) { startup.founders.first }
   let!(:founder_2) { create :founder, startup: startup }
   let(:target_group) { create :target_group, level: level_2 }
-  let(:founder_target_1) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
+  let(:founder_target_1) { create :target, target_group: target_group, role: Target::ROLE_STUDENT }
 
   describe '#status' do
     context 'when the target has no submissions' do
@@ -46,7 +46,7 @@ describe Targets::StatusService do
 
       context 'when the target has other prerequisite targets' do
         let(:team_target_1) { create :target, target_group: target_group, role: Target::ROLE_TEAM }
-        let(:founder_target_2) { create :target, target_group: target_group, role: Target::ROLE_FOUNDER }
+        let(:founder_target_2) { create :target, target_group: target_group, role: Target::ROLE_STUDENT }
 
         before do
           founder_target_1.prerequisite_targets << [team_target_1, founder_target_2]
@@ -78,7 +78,7 @@ describe Targets::StatusService do
           create :target_group, level: level_2, milestone: true
         end
         let(:founder_target_1) do
-          create :target, target_group: level_2_milestone_target_group, role: Target::ROLE_FOUNDER
+          create :target, target_group: level_2_milestone_target_group, role: Target::ROLE_STUDENT
         end
         let(:level_1_milestone_target_group) do
           create :target_group, level: level_1, milestone: true
@@ -87,7 +87,7 @@ describe Targets::StatusService do
           create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_TEAM
         end
         let!(:leve1_1_founder_target) do
-          create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_FOUNDER
+          create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_STUDENT
         end
 
         context 'when there are pending milestones in the previous level' do

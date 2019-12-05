@@ -105,18 +105,7 @@ let make =
       let targetGroupId = targetGroup |> TargetGroup.id;
       /* let sortIndex = json |> Json.Decode.(field("sortIndex", int)); */
       let newTarget =
-        Target.create(
-          ~id=targetId,
-          ~targetGroupId,
-          ~title=state.targetTitle,
-          ~evaluationCriteria=[],
-          ~prerequisiteTargets=[],
-          ~quiz=[],
-          ~linkToComplete=None,
-          ~sortIndex=999,
-          ~visibility=Draft,
-          ~completionInstructions=None,
-        );
+        Target.template(targetId, targetGroupId, state.targetTitle);
       send(UpdateTargetSaving);
       send(UpdateTargetTitle(""));
       updateTargetCB(newTarget, false);

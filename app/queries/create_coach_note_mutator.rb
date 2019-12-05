@@ -19,7 +19,7 @@ class CreateCoachNoteMutator < ApplicationQuery
   end
 
   def coach
-    @coach ||= user.faculty
+    @coach ||= current_user.faculty
   end
 
   def authorized?

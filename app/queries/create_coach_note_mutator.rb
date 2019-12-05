@@ -4,7 +4,7 @@ class CreateCoachNoteMutator < ApplicationQuery
 
   def create_note
     CoachNote.transaction do
-      CoachNote.create!(note: note, author_id: coach.id, student_id: student_id)
+      CoachNote.create!(note: note, author_id: current_user.id, student_id: student_id)
     end
   end
 

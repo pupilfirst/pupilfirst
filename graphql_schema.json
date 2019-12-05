@@ -1730,7 +1730,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Coach",
+              "name": "NoteAuthor",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1792,7 +1792,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Coach",
+        "name": "NoteAuthor",
         "description": "",
         "fields": [
           {

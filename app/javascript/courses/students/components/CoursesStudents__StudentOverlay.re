@@ -44,10 +44,10 @@ module StudentDetailsQuery = [%graphql
           socialLinks
           totalTargets
           targetsCompleted
-          levelsCompleted
+          completedLevelIds
           quizScores
           averageGrades {
-            id
+            evaluationCriterionId
             averageGrade
           }
       }
@@ -409,7 +409,7 @@ let make = (~courseId, ~studentId, ~levels) => {
            {levelProgressBar(
               studentDetails |> StudentDetails.levelId,
               levels,
-              studentDetails |> StudentDetails.levelsCompleted,
+              studentDetails |> StudentDetails.completedLevelIds,
             )}
            <div className="mt-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>

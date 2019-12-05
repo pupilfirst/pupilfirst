@@ -311,7 +311,7 @@ let make = (~levels, ~course) => {
 
   <div>
     {switch (url.path) {
-     | ["students", studentId, ..._] =>
+     | ["students", studentId, "report"] =>
        <CoursesStudents__StudentOverlay
          courseId
          studentId

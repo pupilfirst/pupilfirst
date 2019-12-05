@@ -16,11 +16,11 @@ class StudentDetailsResolver < ApplicationQuery
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
       average_grades: average_grades,
-      levels_completed: levels_completed
+      completed_level_ids: completed_level_ids
     }
   end
 
-  def levels_completed
+  def completed_level_ids
     required_targets_by_level = Target.joins(:target_group).where(target_groups: { milestone: true, level_id: course.levels.select(:id) }).distinct(:id)
       .pluck(:id, 'target_groups.level_id').each_with_object({}) do |(target_id, level_id), required_targets_by_level|
       required_targets_by_level[level_id] ||= []
@@ -31,12 +31,12 @@ class StudentDetailsResolver < ApplicationQuery
 
     course.levels.pluck(:id).select do |level_id|
       ((required_targets_by_level[level_id] || []) - passed_target_ids).empty?
-    end.map(&:to_s)
+    end
   end
 
   def average_grades
     @average_grades ||= TimelineEventGrade.where(timeline_event: submissions).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
-      { id: ec_id, average_grade: average_grade.round(1) }
+      { evaluation_criterion_id: ec_id, average_grade: average_grade.round(1) }
     end
   end
 
@@ -92,7 +92,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def evaluation_criteria
-    EvaluationCriterion.where(id: average_grades.pluck(:id)).map do |ec|
+    EvaluationCriterion.where(id: average_grades.pluck(:evaluation_criterion_id)).map do |ec|
       {
         id: ec.id,
         name: ec.name,

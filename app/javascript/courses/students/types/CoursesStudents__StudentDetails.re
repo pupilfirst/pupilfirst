@@ -17,7 +17,7 @@ type t = {
   targetsCompleted: int,
   quizScores: array(string),
   averageGrades: array(averageGrade),
-  levelsCompleted: array(string),
+  completedLevelIds: array(string),
 };
 
 let name = t => t.name;
@@ -39,7 +39,10 @@ let coachNotes = t => t.coachNotes;
 let makeAverageGrade = gradesData => {
   gradesData
   |> Js.Array.map(gradeData =>
-       {evaluationCriterionId: gradeData##id, grade: gradeData##averageGrade}
+       {
+         evaluationCriterionId: gradeData##evaluationCriterionId,
+         grade: gradeData##averageGrade,
+       }
      );
 };
 
@@ -62,7 +65,7 @@ let evaluationCriteria = t => t.evaluationCriteria;
 
 let averageGrades = t => t.averageGrades;
 
-let levelsCompleted = t => t.levelsCompleted;
+let completedLevelIds = t => t.completedLevelIds;
 
 let gradeValue = averageGrade => averageGrade.grade;
 
@@ -74,7 +77,7 @@ let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) => 
          == grade.evaluationCriterionId,
        "Unable to find evaluation criterion with id: "
        ++ grade.evaluationCriterionId
-       ++ "in component: "
+       ++ " in component: "
        ++ componentName,
      );
 };
@@ -123,5 +126,5 @@ let makeFromJS = studentDetails => {
   targetsCompleted: studentDetails##targetsCompleted,
   quizScores: studentDetails##quizScores,
   averageGrades: studentDetails##averageGrades |> makeAverageGrade,
-  levelsCompleted: studentDetails##levelsCompleted,
+  completedLevelIds: studentDetails##completedLevelIds,
 };

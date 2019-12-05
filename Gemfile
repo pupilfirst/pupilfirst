@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.0.1'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -24,7 +24,7 @@ gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'pg', '~> 1.0' # PostgreSQL support.
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '>= 6'
 gem 'slim', '~> 4.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '~> 4.1' # JavaScript compressor.
@@ -39,7 +39,7 @@ gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy t
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
-gem 'puma', '~> 4.1.1' # The Puma ruby web server.
+gem 'puma', '~> 4.3' # The Puma ruby web server.
 gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
@@ -152,7 +152,7 @@ end
 
 group :development, :test do
   gem 'faker', '~> 1.8' # A library for generating fake data such as names, addresses, and phone numbers.
-  gem 'rspec-rails', '~> 4.0.0.beta2' # Duh.
+  gem 'rspec-rails', '~> 4.0.0.beta3' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.

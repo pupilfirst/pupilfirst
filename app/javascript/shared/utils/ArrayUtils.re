@@ -21,3 +21,7 @@ let unsafeFind = (p, message, l) =>
     Rollbar.error(message);
     raise(UnsafeFindFailed(message));
   };
+
+let flatten = t => {
+  t |> Array.to_list |> List.flatten |> Array.of_list;
+};

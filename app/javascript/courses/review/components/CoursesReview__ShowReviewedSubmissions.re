@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 let reviewedEmptyImage: string = [%raw
-  "require('../images/reviewed-empty.svg')"
+  "require('../../shared/images/reviewed-empty.svg')"
 ];
 
 open CoursesReview__Types;
@@ -216,7 +216,7 @@ let make =
           updateReviewedSubmissionsCB,
         )
       | FullyLoaded(_)
-      | PartiallyLoaded(_, _) => Js.log("test")
+      | PartiallyLoaded(_, _) => ()
       };
       None;
     },

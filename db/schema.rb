@@ -119,6 +119,16 @@ ActiveRecord::Schema.define(version: 2019_11_23_083104) do
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
   end
 
+  create_table "coach_notes", force: :cascade do |t|
+    t.bigint "author_id"
+    t.bigint "student_id"
+    t.text "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_coach_notes_on_author_id"
+    t.index ["student_id"], name: "index_coach_notes_on_student_id"
+  end
+
   create_table "colleges", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "also_known_as"

@@ -26,7 +26,8 @@ module Schools
             id: team.id,
             name: team.name,
             coach_ids: team.faculty_startup_enrollments.pluck(:faculty_id),
-            level_number: team.level.number
+            level_number: team.level.number,
+            access_ends_at: team.access_ends_at
           }
         end
       end

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open StudentsPanel__Types;
 
 type props = {

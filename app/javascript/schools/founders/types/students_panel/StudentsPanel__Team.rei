@@ -9,3 +9,5 @@ let name: t => string;
 let coachIds: t => list(string);
 
 let levelNumber: t => int;
+
+let accessEndsAt: t => option(Js.Date.t);

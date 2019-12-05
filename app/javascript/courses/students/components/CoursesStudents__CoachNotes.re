@@ -84,7 +84,7 @@ let showCoachNote = note => {
 
        | None =>
          <Avatar
-           name="X Y"
+           name="?"
            className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
          />
        }}
@@ -98,14 +98,15 @@ let showCoachNote = note => {
            )
            |> str}
         </p>
-        {switch (note |> CoachNote.author) {
-         | Some(coach) =>
-           <p
-             className="text-gray-600 font-semibold text-xs mt-px leading-snug">
-             {coach |> Coach.title |> str}
-           </p>
-         | None => React.null
-         }}
+        <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+          {(
+             switch (note |> CoachNote.author) {
+             | Some(coach) => coach |> Coach.title
+             | None => "Unknown"
+             }
+           )
+           |> str}
+        </p>
       </div>
     </div>
     <div className="ml-10 md:ml-13 mt-2">

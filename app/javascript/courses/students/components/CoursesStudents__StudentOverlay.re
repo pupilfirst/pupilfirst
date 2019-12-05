@@ -290,12 +290,14 @@ let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
 };
 
 let levelProgressBar = (levelId, levels, levelsCompleted) => {
+  let applicableLevels =
+    levels |> Js.Array.filter(level => Level.number(level) != 0);
   let courseCompleted =
-    levels
+    applicableLevels
     |> Array.for_all(level => levelsCompleted |> Array.mem(level |> Level.id));
 
   let currentLevelNumber =
-    levels
+    applicableLevels
     |> ArrayUtils.unsafeFind(
          level => Level.id(level) == levelId,
          "Unable to find level with id" ++ levelId ++ "in StudentOverlay",
@@ -322,7 +324,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
               ? "student-overlay__student-level-progress--completed" : ""
           )
         }>
-        {levels
+        {applicableLevels
          |> Level.sort
          |> Array.map(level => {
               let levelNumber = level |> Level.number;

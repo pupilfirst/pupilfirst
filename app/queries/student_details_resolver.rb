@@ -41,7 +41,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def targets_completed
-    submissions.passed.pluck(:target_id).uniq.count
+    submissions.passed.distinct(:target_id).count(:target_id)
   end
 
   def total_targets

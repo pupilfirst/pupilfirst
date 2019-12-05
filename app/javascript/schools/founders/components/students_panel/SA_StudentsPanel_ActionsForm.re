@@ -18,24 +18,24 @@ let make =
       ~authenticityToken,
     ) => {
   let (saving, setSaving) = React.useState(() => false);
-  <div className="mx-auto bg-white">
-    <div className="mt-5">
-      <label
-        className="tracking-wide text-xs font-semibold"
-        htmlFor="access-ends-at-input">
-        {"Dropout Student" |> str}
-      </label>
-      <HelpIcon
-        className="ml-2"
-        link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-        {"If specified, students can't submit their work from the specified date"
-         |> str}
-      </HelpIcon>
-      <div>
-        <button className="btn btn-danger">
-          {"Dropout Student" |> str}
-        </button>
-      </div>
+
+  <div className="mt-5">
+    <label
+      className="tracking-wide text-xs font-semibold"
+      htmlFor="access-ends-at-input">
+      {"Has this student dropped out?" |> str}
+    </label>
+    <HelpIcon
+      className="ml-2"
+      link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
+      {"If specified, students can't submit their work from the specified date"
+       |> str}
+    </HelpIcon>
+    <div className="mt-2">
+      <button className="btn btn-danger btn-large">
+        <i className="fa fa-exclamation-triangle" />
+        <span className="ml-2"> {"Dropout Student" |> str} </span>
+      </button>
     </div>
   </div>;
 };

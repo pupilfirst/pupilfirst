@@ -214,7 +214,7 @@ let make =
     send(UpdateCoachesList(key, value, selected));
   <DisablingCover disabled={state.saving}>
     <div>
-      <div>
+      <div className="pt-5">
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="name">

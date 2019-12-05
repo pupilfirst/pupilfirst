@@ -40,26 +40,37 @@ let make =
       <div
         className="course-apply flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
         <div
-          className="md:w-1/2 flex flex-col bg-primary-900 relative text-white">
-          <div className="hidden md:block relative h-1/2 bg-primary-900">
+          className="md:w-1/2 relative flex flex-col bg-primary-900 relative text-white">
+          <div className="relative md:pb-0 md:h-1/2 bg-primary-900">
             {switch (thumbnailUrl) {
              | Some(src) =>
-               <img className="absolute h-full w-full object-cover" src />
+               <img
+                 className="relative md:absolute md:h-full w-full object-cover"
+                 src
+               />
              | None =>
                <div
-                 className="student-course__cover-default absolute h-full w-full svg-bg-pattern-1"
+                 className="course-apply__cover-default absolute h-full w-full svg-bg-pattern-1"
                />
              }}
           </div>
-          <div className="h-auto md:h-1/2 md:border-t border-primary-500">
+          <div
+            className="hidden md:block h-auto md:h-1/2 md:border-t border-primary-500">
             <div
-              className="flex flex-col justify-center h-full px-4 py-6 md:px-14 xl:px-24">
-              <h1 className="text-xl md:text-3xl font-bold leading-tight">
-                {courseName |> str}
-              </h1>
-              <p className="text-sm md:text-base mt-2">
-                {courseDescription |> str}
-              </p>
+              className="flex flex-col justify-center h-full px-4 py-6 md:px-8 xl:px-24">
+              <div>
+                <h1 className="text-xl md:text-3xl font-bold leading-tight">
+                  {courseName |> str}
+                </h1>
+                <p className="text-sm lg:text-base mt-2">
+                  {courseDescription |> str}
+                </p>
+                <a
+                  className="inline-block font-semibold mt-2 underline text-xs text-primary-400 hover:text-primary-200 tracking-wide"
+                  href="#">
+                  {"Read More" |> str}
+                </a>
+              </div>
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ class Founder < ApplicationRecord
     admitted.where(exited_on: nil).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
 
-  scope :not_exited, -> { where.not(exited_on: nil) }
+  scope :not_exited, -> { where(exited_on: nil) }
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { joins(:startup).not_exited.access_active }
 

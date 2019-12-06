@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_06_074550) do
+ActiveRecord::Schema.define(version: 2019_12_06_091042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -351,7 +351,6 @@ ActiveRecord::Schema.define(version: 2019_12_06_074550) do
     t.integer "university_id"
     t.string "roles"
     t.string "slack_user_id"
-    t.boolean "exited", default: false
     t.integer "user_id"
     t.integer "college_id"
     t.boolean "dashboard_toured"

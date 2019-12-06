@@ -12,19 +12,11 @@ module CreateApplicantQuery = [%graphql
 ];
 
 let createApplicant =
-    (
-      authenticityToken,
-      courseId,
-      email,
-      name,
-      setSaving,
-      setViewEmailSent,
-      event,
-    ) => {
+    (courseId, email, name, setSaving, setViewEmailSent, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
   CreateApplicantQuery.make(~courseId, ~email, ~name, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
   |> Js.Promise.then_(response => {
        response##createApplicant##success
          ? setViewEmailSent() : setSaving(_ => false);
@@ -47,15 +39,7 @@ let buttonText = (email, name, saving) =>
   };
 
 [@react.component]
-let make =
-    (
-      ~authenticityToken,
-      ~courseName,
-      ~courseId,
-      ~setViewEmailSent,
-      ~email,
-      ~name,
-    ) => {
+let make = (~courseName, ~courseId, ~setViewEmailSent, ~email, ~name) => {
   let (email, setEmail) =
     React.useState(() => email |> OptionUtils.default(""));
   let (name, setName) =
@@ -104,7 +88,6 @@ let make =
     <button
       disabled={saveDisabled(email, name, saving)}
       onClick={createApplicant(
-        authenticityToken,
         courseId,
         email,
         name,

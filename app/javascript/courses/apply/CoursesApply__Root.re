@@ -11,13 +11,13 @@ type views =
 let setViewEmailSent = (setView, ()) => setView(_ => EmailSent);
 
 let emailSentMessage = () =>
-  <div className="max-w-sm mx-auto">
+  <div>
     <img className="mx-auto w-44 sm:w-48" src=emailSentIcon />
-    <div className="text-lg sm:text-2xl font-bold text-center mt-4">
-      {"We've sent you a magic link!" |> str}
+    <div className="text-xl font-bold text-center mt-4">
+      {"We've sent you a verification mail." |> str}
     </div>
     <p className="mt-4 text-center">
-      {"It should reach you in less than a minute. Click the link in the email to sign up"
+      {"It should reach you in less than a minute. Click the link in the email to sign up, and get started."
        |> str}
     </p>
   </div>;
@@ -25,45 +25,70 @@ let emailSentMessage = () =>
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~courseName,
-      ~courseDescription,
       ~courseId,
+      ~thumbnailUrl,
       ~email,
       ~name,
+      ~privacyPolicy,
+      ~termsOfUse,
     ) => {
   let (view, setView) = React.useState(() => Apply);
 
-  <div className="bg-gray-100 py-8">
-    <div className="container mx-auto px-3 max-w-6xl">
-      <div
-        className="course-apply flex flex-col md:flex-row shadow-xl rounded-lg overflow-hidden bg-white border">
+  <div className="flex min-h-screen bg-gray-100 items-center justify-center">
+    <div className="py-8 w-full">
+      <div className="container mx-auto px-3 max-w-lg">
         <div
-          className="md:w-1/2 flex flex-col justify-between course-apply__left-container svg-bg-pattern-4 relative text-white">
-          <div
-            className="px-4 pt-5 pb-6 md:px-14 md:py-14 lg:px-28 lg:pt-32 lg:pb-10">
-            <h1 className="font-bold leading-tight"> {courseName |> str} </h1>
-            <p className="mt-2"> {courseDescription |> str} </p>
+          className="relative flex flex-col shadow-xl rounded-lg overflow-hidden bg-white border">
+          <div className="flex flex-col text-gray-900 bg-gray-200 text-white">
+            <div className="relative pb-1/2 bg-primary-900">
+              {switch (thumbnailUrl) {
+               | Some(src) =>
+                 <img className="absolute h-full w-full object-cover" src />
+               | None =>
+                 <div
+                   className="course-apply__cover-default absolute h-full w-full svg-bg-pattern-1"
+                 />
+               }}
+            </div>
           </div>
-          <div
-            className="course-apply__left-bg-pattern hidden sm:block w-full"
-          />
+          <div className="">
+            <div className="p-4 pt-5 md:px-12 md:py-12 md:pt-10">
+              {switch (view) {
+               | Apply =>
+                 <CoursesApply__Form
+                   courseName
+                   courseId
+                   setViewEmailSent={setViewEmailSent(setView)}
+                   email
+                   name
+                 />
+               | EmailSent => emailSentMessage()
+               }}
+            </div>
+          </div>
         </div>
-        <div className="md:w-1/2">
-          <div className="p-4 pt-5 md:px-14 md:py-20 lg:px-28 lg:py-32">
-            {switch (view) {
-             | Apply =>
-               <CoursesApply__Form
-                 authenticityToken
-                 courseName
-                 courseId
-                 setViewEmailSent={setViewEmailSent(setView)}
-                 email
-                 name
+        <div className="text-center mt-4 text-gray-700">
+          {termsOfUse
+             ? <a
+                 href="/agreements/terms-of-use"
+                 className="text-xs cursor-pointer hover:text-primary-500">
+                 {"Terms of Use" |> str}
+               </a>
+             : React.null}
+          {termsOfUse && privacyPolicy
+             ? <span
+                 className="px-4 text-gray-500"
+                 dangerouslySetInnerHTML={"__html": "&vert;"}
                />
-             | EmailSent => emailSentMessage()
-             }}
-          </div>
+             : React.null}
+          {privacyPolicy
+             ? <a
+                 href="/agreements/privacy-policy"
+                 className="text-xs cursor-pointer hover:text-primary-500">
+                 {"Privacy Policy" |> str}
+               </a>
+             : React.null}
         </div>
       </div>
     </div>

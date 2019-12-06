@@ -31,7 +31,8 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   resource :applicants, only: [] do
-    get '/:token', action: 'enroll', as: "enroll"
+    get '/:token', action: 'enroll' # TODO: Legacy route - remove after a few weeks.
+    get '/:token/enroll', action: 'enroll', as: "enroll"
   end
 
   # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.

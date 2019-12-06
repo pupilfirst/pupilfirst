@@ -1,6 +1,7 @@
 <%
   school_name = @school.name
   login_url = enroll_applicants_url(@applicant.login_token)
+  course_name = @applicant.course.name
 %>
 
 <% content_for :title do %>
@@ -8,7 +9,7 @@
 <% end %>
 
 <% content_for :subtitle do %>
-  We're happy you're here. Let's get your email address verified:
+  Let's get you started in the <%= course_name %> course!
 <% end %>
 
 <% content_for :title_button_text do %>
@@ -23,8 +24,8 @@
 
 <% content_for :body do %>
   <p>
-    To activate your  <%= school_name %> Account, please verify your email address.
-    Your account will not be created until your email address is confirmed.
+    To activate your  <%= school_name %> Account, and enroll to the <%= course_name %> course, please verify your email
+    address. Your account will not be created until your email address is confirmed.
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Founders::MarkAsExitedService do
-  subject { described_class.new(student.id) }
+  subject { described_class.new(student) }
 
   describe '#execute' do
     context 'when the student is in a team of more than one'

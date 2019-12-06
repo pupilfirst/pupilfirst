@@ -30,18 +30,6 @@ module Schools
       def override_team_name
         model.startup.founders.one? ? name : team_name
       end
-
-      # def handle_exited(founder, exited)
-      #  if exited
-      #    ::Founders::MarkAsExitedService.new(model.id).execute
-      #  else
-      #    # Re-assign team coaches.
-      #    ::Startups::AssignReviewerService.new(founder.startup).assign(coach_ids)
-      #
-      #    # Reset exited if it has changed.
-      #    founder.update!(exited: false) if founder.exited?
-      #  end
-      # end
     end
   end
 end

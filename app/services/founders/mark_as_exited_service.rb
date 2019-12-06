@@ -1,8 +1,8 @@
 module Founders
   class MarkAsExitedService
-    # @param id [Integer] ID of student to mark as dropped out
-    def initialize(id)
-      @student = Founder.find(id)
+    # @param student [Student] mark as dropped out
+    def initialize(student)
+      @student = student
     end
 
     def execute

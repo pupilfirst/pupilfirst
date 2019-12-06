@@ -97,7 +97,7 @@ module Users
 
     def student_exited(course_id)
       course_with_founder = courses_with_student_profile.detect { |c| c[:course_id] == course_id }
-      course_with_founder.present? ? course_with_founder[:exited].nil? : false
+      course_with_founder.present? ? course_with_founder[:exited_on].present? : false
     end
 
     def show_user_edit?

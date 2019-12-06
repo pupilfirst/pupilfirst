@@ -22,6 +22,8 @@ module Schools
 
           school.founder_tag_list << tags
           school.save!
+
+          ::Startups::AssignReviewerService.new(model.startup).assign(coach_ids)
         end
       end
 

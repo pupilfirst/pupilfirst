@@ -22,17 +22,25 @@ feature "Apply for public courses", js: true do
     visit apply_course_path(public_course)
 
     expect(page).to have_content(public_course.name)
-    expect(page).to have_content(public_course.description)
     fill_in 'Email', with: email
     fill_in 'Name', with: name
     click_button 'Apply'
-    expect(page).to have_content("We've sent you a magic link!")
+
+    expect(page).to have_content("We've sent you a verification mail")
+
     applicant = Applicant.where(email: email).first
+
     expect(applicant.name).to eq(name)
     expect(applicant.email).to eq(email)
     expect(applicant.login_mail_sent_at).not_to eq(nil)
 
+    open_email(email)
+    expect(current_email.body).to include(public_course.name)
+    expect(current_email.body).to include(applicant.login_token)
+
     visit enroll_applicants_path(applicant.login_token)
+
+    expect(page).to have_content("Welcome to #{school.name}!")
     expect(page).to have_content(applicant.name)
     expect(page).to have_content(public_course.name)
   end
@@ -41,16 +49,21 @@ feature "Apply for public courses", js: true do
     visit apply_course_path(public_course)
 
     expect(page).to have_content(public_course.name)
+
     fill_in 'Email', with: email_2
     fill_in 'Name', with: name_2
     click_button 'Apply'
-    expect(page).to have_content("We've sent you a magic link!")
+
+    expect(page).to have_content("We've sent you a verification mail")
 
     visit apply_course_path(public_course)
+
     expect(page).to have_content(public_course.name)
+
     fill_in 'Email', with: email_2
     fill_in 'Name', with: name_2
     click_button 'Apply'
+
     expect(page).to have_content('An email was sent less than two minutes ago. Please wait for a few minutes before trying again')
   end
 
@@ -68,6 +81,7 @@ feature "Apply for public courses", js: true do
     fill_in 'Email', with: user.email
     fill_in 'Name', with: user.name
     click_button 'Apply'
+
     expect(page).to have_text("Already enrolled in #{public_course.name} course")
   end
 
@@ -92,5 +106,47 @@ feature "Apply for public courses", js: true do
 
     expect(page).to have_selector("input[value='#{name}']")
     expect(page).to have_selector("input[value='#{email}']")
+  end
+
+  context 'when school has privacy policy' do
+    before do
+      create :school_string, :privacy_policy, school: school
+      create :school_string, :terms_of_use, school: school_2
+    end
+
+    scenario 'applicant can only see link to the privacy policy' do
+      visit apply_course_path(public_course)
+
+      expect(page).to have_link('Privacy Policy', href: '/agreements/privacy-policy')
+      expect(page).not_to have_link('Terms of Use', href: '/agreements/terms-of-use')
+    end
+  end
+
+  context 'when school has terms of use' do
+    before do
+      create :school_string, :privacy_policy, school: school_2
+      create :school_string, :terms_of_use, school: school
+    end
+
+    scenario 'applicant can only see link to the terms of use' do
+      visit apply_course_path(public_course)
+
+      expect(page).not_to have_link('Privacy Policy', href: '/agreements/privacy-policy')
+      expect(page).to have_link('Terms of Use', href: '/agreements/terms-of-use')
+    end
+  end
+
+  context 'when school has both agreements' do
+    before do
+      create :school_string, :privacy_policy, school: school
+      create :school_string, :terms_of_use, school: school
+    end
+
+    scenario 'applicant can see links to both agreements' do
+      visit apply_course_path(public_course)
+
+      expect(page).to have_link('Privacy Policy', href: '/agreements/privacy-policy')
+      expect(page).to have_link('Terms of Use', href: '/agreements/terms-of-use')
+    end
   end
 end

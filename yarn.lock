@@ -809,10 +809,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@baransu/graphql_ppx_re@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@baransu/graphql_ppx_re/-/graphql_ppx_re-0.3.2.tgz#6876609be84853b1da6184b7868731066a892851"
-  integrity sha512-DseaS4enJpd43MyTEQZagbEktCzE0wpI96QSxOYR9AHpkgLNrSaM92yi8FBV8Q4sYmFX9191Bdjp+30Y0KWXwQ==
+"@baransu/graphql_ppx_re@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@baransu/graphql_ppx_re/-/graphql_ppx_re-0.4.0.tgz#24f01e19d030768bba85a8676c70679c8fb63725"
+  integrity sha512-vCWaBTbLRHDRvl72e80UH1Xo6Rp7JaBJgBgt24jBX1zXPdpvELObwxapmaSdPHK+wI31X0fRJu9z6yD7IAlBDA==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -823,10 +823,10 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.10.1.tgz#dec28ee02c3fc51da46d53ce4da9d5787312fbd7"
   integrity sha512-PYncBhgN1l02mwHmczukexmu4yRTjRDAAdcK62jdWSAW8epcnZ9K2win/7rMrffiv/c7XLVDA8vD+yi6WyvbGQ==
 
-"@glennsl/bs-json@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-4.0.0.tgz#f057d0d1d84d614e27d8bbb67b64e6b6727f24b2"
-  integrity sha512-nunb6+cZcx7pyooh8i4froogXumOOiFb7rF3bz6E9X7b3Dc+3/HGwpnUjxciFN8eQL4QC+MskzG1tG+Ci1aJxA==
+"@glennsl/bs-json@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-5.0.1.tgz#b19d0b45f4a80d52e6bfefa032ac99f4548f3083"
+  integrity sha512-tDxqeO4LCUz3HIwsdqyM4OIUk/bIV8QwDuhNbqy3hHIVEciePbJXTSyXMKsoIFs3ukQY8ZsQXskONtOK4TyLfA==
 
 "@graphql-codegen/cli@^1.8.2":
   version "1.9.1"
@@ -2071,10 +2071,10 @@ bs-fetch@^0.5.0:
   resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.5.0.tgz#6913b1d1ddfa0b0a4b832357854e9763d61d4b28"
   integrity sha512-cGjwRpyNcIaX+p2ssy/38zs7BM/miKNgmOR3NEhxKFete5mR05JcvjuV4raG89oGCG281SU1b56TTAKmf9VCug==
 
-bs-platform@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-6.2.1.tgz#30266c7f23a3b323e1fc9596a9a6eb9f053981b4"
-  integrity sha512-FmQ8kYV52A0Y302qh6o0/J9TO+kHzsjGQnsjrg/ONUYIY/jWzBnt9dCBO6EBnaEKfFJLqk5JrUDCxuihqtTcnw==
+bs-platform@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.1.tgz#1d7b0ef6088b998dceee5db74a7cd8f01c20a3bd"
+  integrity sha512-UjStdtHhbtC/l6vKJ1XRDqrPk7rFf5PLYHtRX3akDXEYVnTbN36z0g4DEr5mU8S0N945e33HYts9x+i7hKKpZQ==
 
 bs-webapi@^0.15.2:
   version "0.15.2"

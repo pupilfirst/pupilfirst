@@ -20,7 +20,7 @@ let signOutLink = authenticityToken =>
   <div
     key="Logout-button"
     className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
-    <form className="button_to" method="post" action="/users/sign_out">
+    <form className="button_to" method_="post" action="/users/sign_out">
       <input name="_method" value="delete" type_="hidden" />
       <input
         name="authenticity_token"

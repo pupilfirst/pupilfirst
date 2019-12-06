@@ -84,7 +84,7 @@ module Schools
       end
 
       def founders
-        @founders ||= Founder.where(startup: startups)
+        @founders ||= Founder.not_exited.where(startup: startups)
       end
     end
   end

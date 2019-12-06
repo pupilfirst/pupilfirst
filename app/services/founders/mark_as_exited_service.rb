@@ -10,7 +10,8 @@ module Founders
         if create_new_team?
           startup = Startup.create!(
             name: @student.name,
-            level: @student.startup.level
+            level: @student.startup.level,
+            access_ends_at: Time.zone.now
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
@@ -18,6 +19,9 @@ module Founders
         else
           # Remove all coach enrollments.
           FacultyStartupEnrollment.where(startup: @student.startup).destroy_all
+
+          # End access for the startup
+          @student.startup.update!(access_ends_at: Time.zone.now)
 
           # Mark the student as exited.
           @student.update!(exited_on: Date.today)

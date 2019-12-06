@@ -50,10 +50,10 @@ class Founder < ApplicationRecord
   scope :active_on_web, ->(from, to) { joins(user: :visits).where(visits: { started_at: from..to }) }
 
   scope :inactive, lambda {
-    admitted.where(exited_on: nil).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
+    admitted.where(exited_at: nil).where.not(id: active_on_slack(Time.now.beginning_of_week, Time.now)).where.not(id: active_on_web(Time.now.beginning_of_week, Time.now))
   }
 
-  scope :not_exited, -> { where(exited_on: nil) }
+  scope :not_exited, -> { where(exited_at: nil) }
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { joins(:startup).not_exited.access_active }
 
@@ -113,7 +113,7 @@ class Founder < ApplicationRecord
 
   # The option to create connect requests is restricted to non exited founders
   def can_connect?
-    startup.present? && exited_on.nil?
+    startup.present? && exited_at.nil?
   end
 
   def pending_connect_request_for?(faculty)

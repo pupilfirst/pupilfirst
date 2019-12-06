@@ -10,7 +10,7 @@ module Founders
     end
 
     def incomplete_profile?
-      @founder.exited_on.nil? && @founder.profile_completion_percentage < 100
+      @founder.exited_at.nil? && @founder.profile_completion_percentage < 100
     end
 
     def public_faculty

@@ -15,7 +15,7 @@ module Founders
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
-          @student.update!(startup: startup, exited_on: Date.today)
+          @student.update!(startup: startup, exited_at: Time.zone.now)
         else
           # Remove all coach enrollments.
           FacultyStartupEnrollment.where(startup: @student.startup).destroy_all
@@ -24,7 +24,7 @@ module Founders
           @student.startup.update!(access_ends_at: Time.zone.now)
 
           # Mark the student as exited.
-          @student.update!(exited_on: Date.today)
+          @student.update!(exited_at: Time.zone.now)
         end
       end
     end

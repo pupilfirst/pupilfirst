@@ -70,7 +70,7 @@ module Targets
       return [] unless @target.founder_role?
 
       @founder.startup.founders.where.not(id: @founder).reject do |founder|
-        founder.exited_on? || founder.timeline_events.where(target: @target).passed.exists?
+        founder.exited_at? || founder.timeline_events.where(target: @target).passed.exists?
       end.map(&:user_id)
     end
 

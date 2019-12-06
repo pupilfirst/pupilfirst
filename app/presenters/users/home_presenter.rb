@@ -39,10 +39,10 @@ module Users
 
     def courses_with_student_profile
       @courses_with_student_profile ||= begin
-        current_user.founders.joins(:course).pluck(:course_id, :exited_on).map do |course_id, exited_on|
+        current_user.founders.joins(:course).pluck(:course_id, :exited_at).map do |course_id, exited_at|
           {
             course_id: course_id,
-            exited_on: exited_on
+            exited_at: exited_at
           }
         end
       end
@@ -64,7 +64,7 @@ module Users
           communities_in_school
         else
           # Students can access communities linked to their courses, as long as they haven't dropped out.
-          active_courses = Course.joins(founders: :user).where(users: { id: current_user }).where(founders: { exited_on: nil })
+          active_courses = Course.joins(founders: :user).where(users: { id: current_user }).where(founders: { exited_at: nil })
           communities_in_school.joins(:courses).where(courses: { id: active_courses }).distinct
         end
       end
@@ -97,7 +97,7 @@ module Users
 
     def student_exited(course_id)
       course_with_founder = courses_with_student_profile.detect { |c| c[:course_id] == course_id }
-      course_with_founder.present? ? course_with_founder[:exited_on].present? : false
+      course_with_founder.present? ? course_with_founder[:exited_at].present? : false
     end
 
     def show_user_edit?

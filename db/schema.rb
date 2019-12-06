@@ -358,7 +358,7 @@ ActiveRecord::Schema.define(version: 2019_12_06_091042) do
     t.integer "resume_file_id"
     t.string "slack_access_token"
     t.boolean "excluded_from_leaderboard", default: false
-    t.date "exited_on"
+    t.datetime "exited_at"
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"

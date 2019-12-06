@@ -2,6 +2,29 @@
 
 open StudentsPanel__Types;
 
+module DropoutStudentQuery = [%graphql
+  {|
+   mutation($id: ID!) {
+    dropoutStudent(id: $id){
+      success
+     }
+   }
+ |}
+];
+
+let dropoutStudent = (id, setSaving, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  setSaving(_ => true);
+  DropoutStudentQuery.make(~id, ())
+  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> Js.Promise.then_(response => {
+       response##dropoutStudent##success
+         ? DomUtils.reload() : setSaving(_ => false);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 let str = ReasonReact.string;
 
 [@react.component]
@@ -32,7 +55,9 @@ let make =
        |> str}
     </HelpIcon>
     <div className="mt-2">
-      <button className="btn btn-danger btn-large">
+      <button
+        className="btn btn-danger btn-large"
+        onClick={dropoutStudent(student |> Student.id, setSaving)}>
         <i className="fa fa-exclamation-triangle" />
         <span className="ml-2"> {"Dropout Student" |> str} </span>
       </button>

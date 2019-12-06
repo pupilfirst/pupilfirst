@@ -11,6 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.execute
+        mutator.notify(:success, 'Done!', 'Updated successfully!')
         { success: true }
       else
         mutator.notify_errors

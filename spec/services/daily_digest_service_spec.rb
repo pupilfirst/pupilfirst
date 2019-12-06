@@ -23,7 +23,7 @@ describe DailyDigestService do
   let(:t2_student_regular) { create :founder, startup: team_2 }
   let(:t2_student_digest_inactive) { create :founder, startup: team_2 }
   let(:t2_student_bounced) { create :founder, startup: team_2 }
-  let(:t4_student_dropped_out) { create :founder, startup: team_4, exited: true }
+  let(:t4_student_dropped_out) { create :founder, startup: team_4, exited_on: Date.yesterday }
 
   let(:community_1) { create :community, school: school, courses: [team_1.course] }
   let(:community_2) { create :community, school: school, courses: [team_1.course, team_2.course] }

@@ -14,13 +14,13 @@ module Founders
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
-          @student.update!(startup: startup, exited: true)
+          @student.update!(startup: startup, exited_on: Date.today)
         else
           # Remove all coach enrollments.
           FacultyStartupEnrollment.where(startup: @student.startup).destroy_all
 
           # Mark the student as exited.
-          @student.update!(exited: true)
+          @student.update!(exited_on: Date.today)
         end
       end
     end

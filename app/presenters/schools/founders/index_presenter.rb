@@ -41,7 +41,7 @@ module Schools
               email: student.user.email,
               team_id: student.startup_id,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
-              exited: student.exited,
+              exited: student.exited_on?,
               excluded_from_leaderboard: student.excluded_from_leaderboard,
               title: student.user.title,
               affiliation: student.user.affiliation

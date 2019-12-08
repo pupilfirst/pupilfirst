@@ -1,7 +1,7 @@
 class GraphqlController < ApplicationController
   skip_forgery_protection if: :introspection?
 
-  def execute
+  def execute # rubocop:disable Metrics/MethodLength
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
@@ -15,6 +15,7 @@ class GraphqlController < ApplicationController
       current_host: current_host,
       current_startup: current_startup,
       current_school_admin: current_school_admin,
+      session: session,
       notifications: []
     }
 

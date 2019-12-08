@@ -5,12 +5,17 @@ module Applicants
       @course = applicant.course
     end
 
-    def create
+    def create(tag)
       Applicant.transaction do
-        student = create_new_student
-        # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
-        school.founder_tag_list << student.tag_list
-        school.save!
+        student = create_new_student(tag)
+
+        # Make sure the tag is in the school's list of founder tags.
+        # This is useful for retrieval in the school admin interface.
+        unless tag.in?(school.founder_tag_list)
+          school.founder_tag_list.add(tag)
+          school.save!
+        end
+
         # Delete the applicant
         @applicant.destroy!
 
@@ -20,7 +25,7 @@ module Applicants
 
     private
 
-    def create_new_student
+    def create_new_student(tag)
       # Create a user and generate a login token.
       user = school.users.with_email(@applicant.email).first_or_create!(email: @applicant.email, title: 'Student')
       user.regenerate_login_token if user.login_token.blank?
@@ -30,7 +35,7 @@ module Applicants
 
       # Finally, create a student profile for the user and tag it.
       student = Founder.create!(user: user, startup: startup)
-      student.tag_list << "Public Signup"
+      student.tag_list.add(tag)
       student.save!
       student
     end

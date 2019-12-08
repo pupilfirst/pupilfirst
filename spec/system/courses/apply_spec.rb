@@ -17,13 +17,21 @@ feature "Apply for public courses", js: true do
   let(:old_applicant) { create :applicant, course: course }
   let(:startup) { create :startup, level: level_one }
   let(:token) { Faker::Crypto.md5 }
+  let(:saved_tag) { Faker::Lorem.word }
+
+  before do
+    school.founder_tag_list.add(saved_tag)
+    school.save!
+  end
 
   scenario 'public sign up for a public course' do
-    visit apply_course_path(public_course)
+    visit apply_course_path(public_course, name: name, email: email, tag: saved_tag)
 
+    # The fields should already be filled in.
     expect(page).to have_content(public_course.name)
-    fill_in 'Email', with: email
-    fill_in 'Name', with: name
+    expect(page).to have_selector("input[value='#{name}']")
+    expect(page).to have_selector("input[value='#{email}']")
+
     click_button 'Apply'
 
     expect(page).to have_content("We've sent you a verification mail")
@@ -43,6 +51,8 @@ feature "Apply for public courses", js: true do
     expect(page).to have_content("Welcome to #{school.name}!")
     expect(page).to have_content(applicant.name)
     expect(page).to have_content(public_course.name)
+    expect(Founder.last.tag_list).to include(saved_tag)
+    expect(Founder.last.tag_list).not_to include('Public Signup')
   end
 
   scenario 'applicant tries to sign up multiple times in quick succession' do
@@ -65,6 +75,49 @@ feature "Apply for public courses", js: true do
     click_button 'Apply'
 
     expect(page).to have_content('An email was sent less than two minutes ago. Please wait for a few minutes before trying again')
+  end
+
+  scenario 'applicant signing up without a tag is given a default tag' do
+    visit apply_course_path(public_course, name: name, email: email)
+    click_button 'Apply'
+
+    expect(page).to have_content("We've sent you a verification mail")
+
+    visit enroll_applicants_path(Applicant.last.login_token)
+
+    expect(page).to have_content("Welcome to #{school.name}!")
+    expect(Founder.last.tag_list).to include('Public Signup')
+  end
+
+  scenario 'applicant signing up with an unknown tag is given the default tag' do
+    visit apply_course_path(public_course, name: name, email: email, tag: 'An unknown tag')
+    click_button 'Apply'
+
+    expect(page).to have_content("We've sent you a verification mail")
+
+    visit enroll_applicants_path(Applicant.last.login_token)
+
+    expect(page).to have_content("Welcome to #{school.name}!")
+    expect(Founder.last.tag_list).to include('Public Signup')
+    expect(Founder.last.tag_list).not_to include('An unknown tag')
+  end
+
+  scenario 'applicant tag is remembered even if user navigates away before returning and applying' do
+    visit apply_course_path(public_course, tag: saved_tag)
+
+    expect(page).to have_content(public_course.name)
+
+    visit course_path(public_course)
+
+    expect(page).to have_content(public_course.description)
+
+    visit apply_course_path(public_course, name: name, email: email)
+    click_button 'Apply'
+
+    expect(page).to have_content("We've sent you a verification mail")
+
+    visit enroll_applicants_path(Applicant.last.login_token)
+    expect(Founder.last.tag_list).to include(saved_tag)
   end
 
   scenario "user visits a public course in other school" do
@@ -97,15 +150,6 @@ feature "Apply for public courses", js: true do
 
     expect(page).to have_text("Sign in")
     expect(page).to have_text('User authentication failed. The link you followed appears to be invalid.')
-  end
-
-  scenario 'user visits apply URL with email and name as query parameters' do
-    name = Faker::Name.name
-    email = Faker::Internet.email(name)
-    visit apply_course_path(public_course, name: name, email: email)
-
-    expect(page).to have_selector("input[value='#{name}']")
-    expect(page).to have_selector("input[value='#{email}']")
   end
 
   context 'when school has privacy policy' do

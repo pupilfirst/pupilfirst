@@ -18,6 +18,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/apply
   def apply
     @course = find_course
+    save_tag
     render layout: 'tailwind'
   end
 
@@ -43,5 +44,13 @@ class CoursesController < ApplicationController
 
   def find_course
     authorize(policy_scope(Course).find(params[:id]))
+  end
+
+  def save_tag
+    return if params[:tag].blank?
+
+    if params[:tag].in?(current_school.founder_tag_list)
+      session[:applicant_tag] = params[:tag]
+    end
   end
 end

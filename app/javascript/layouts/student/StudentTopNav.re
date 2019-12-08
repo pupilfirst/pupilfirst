@@ -20,23 +20,15 @@ let signOutLink = authenticityToken =>
   <div
     key="Logout-button"
     className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
-    <form className="button_to" method_="post" action="/users/sign_out">
-      <input name="_method" value="delete" type_="hidden" />
-      <input
-        name="authenticity_token"
-        value=authenticityToken
-        type_="hidden"
-      />
-      <div className="flex items-center justify-center">
-        <button
-          className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
-          type_="submit"
-          value="Sign Out">
-          <FaIcon classes="fas fa-power-off" />
-          <span className="ml-2"> {"Sign Out" |> str} </span>
-        </button>
-      </div>
-    </form>
+    <div className="flex items-center justify-center">
+      <a
+        href="/users/sign_out"
+        rel="nofollow"
+        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black">
+        <FaIcon classes="fas fa-power-off" />
+        <span className="ml-2"> {"Sign Out" |> str} </span>
+      </a>
+    </div>
   </div>;
 
 let signInLink = () =>

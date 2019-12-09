@@ -1,15 +1,36 @@
 class AddExitedOnToFoundersTable < ActiveRecord::Migration[6.0]
+  class User < ActiveRecord::Base
+    has_many :founders
+  end
+
   class Founder < ActiveRecord::Base
+    belongs_to :startup
+    belongs_to :user
+
+    delegate :name, to: :user
+  end
+
+  class Startup < ActiveRecord::Base
+    has_many :founders
   end
 
   def change
-    add_column :founders, :exited_at, :datetime
+    add_column :startups, :exited_at, :datetime
 
-    Founder.reset_column_information
-    Founder.all.each do |f|
-      next unless f.exited?
+    Startup.reset_column_information
+    Founder.all.each do |student|
+      next unless student.exited?
 
-      f.update!(exited_at: f.updated_at)
+      if student.startup.founders.count > 1
+        startup = Startup.create!(
+          name: student.name,
+          level_id: student.startup.level_id,
+          exited_at: student.updated_at
+        )
+        student.update!(startup: startup)
+      else
+        student.startup.update!(exited_at: student.updated_at)
+      end
     end
   end
 end

@@ -1,4 +1,4 @@
-.federated-sigin-in__seperator:before {
+.federated-signin-in__seperator:before {
   @apply bg-gray-300 absolute;
   z-index: -1;
   content: '';

@@ -27,6 +27,10 @@ let dropoutStudent = (id, setSaving, event) => {
 
 let str = ReasonReact.string;
 
+let submitButtonIcons = saving => {
+  saving ? "fas fa-spinner fa-spin" : "fa fa-exclamation-triangle";
+};
+
 [@react.component]
 let make = (~student) => {
   let (saving, setSaving) = React.useState(() => false);
@@ -40,15 +44,14 @@ let make = (~student) => {
     <HelpIcon
       className="ml-2"
       link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-      {"If specified, students can't submit their work from the specified date"
-       |> str}
+      {"The student will lose all access to the course. " |> str}
     </HelpIcon>
     <div className="mt-2">
       <button
         disabled=saving
         className="btn btn-danger btn-large"
         onClick={dropoutStudent(student |> Student.id, setSaving)}>
-        <i className="fa fa-exclamation-triangle" />
+        <FaIcon classes={submitButtonIcons(saving)} />
         <span className="ml-2"> {"Dropout Student" |> str} </span>
       </button>
     </div>

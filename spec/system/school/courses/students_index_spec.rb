@@ -277,90 +277,128 @@ feature 'School students index', js: true do
       founder.reload
       expect(founder.startup.faculty.last).to eq(coach)
     end
+  end
 
-    context 'when there is an inactive team' do
-      let!(:inactive_team_1) { create :startup, level: level_1, access_ends_at: 1.day.ago }
+  context 'school admin marks team as inactive' do
+    let!(:inactive_team_1) { create :startup, level: level_1 }
+    let(:access_ends_at) { 1.day.from_now }
 
-      scenario 'School admin manipulates inactive teams' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+    scenario 'School admin updates Access ends at' do
+      sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-        # Student except inactive one should be listed.
-        expect(page).to have_text(name_1)
-        expect(page).to have_text(name_2)
-        expect(page).not_to have_text(inactive_team_1.founders.first.name)
+      founder = inactive_team_1.founders.first
+      expect(page).to have_text(founder.name)
 
-        click_link 'Inactive Students'
+      find("a", text: founder.name).click
 
-        expect(page).to have_text(inactive_team_1.founders.first.name)
+      expect(page).to have_text(founder.startup.name)
+      fill_in 'Access ends at', with: access_ends_at.iso8601
+      click_button 'Update Student'
 
-        check "select-team-#{inactive_team_1.id}"
+      expect(page).to have_text("Student updated successfully")
+      dismiss_notification
 
-        expect(page).to have_button('Mark Team Active')
+      expect(founder.reload.startup.access_ends_at.to_date).to eq(access_ends_at.to_date)
 
-        click_button 'Mark Team Active'
+      find("a", text: founder.name).click
+      fill_in 'Access ends at', with: 1.day.ago.iso8601
+      click_button 'Update Student'
 
-        expect(page).to have_text("Teams marked active successfully!")
+      expect(page).to have_text("Student updated successfully")
+      dismiss_notification
 
-        visit school_course_students_path(course)
+      expect(founder.reload.startup.access_ends_at.to_date).to eq(1.day.ago.to_date)
+      expect(page).not_to have_text(founder.name)
 
-        expect(page).to have_text(inactive_team_1.founders.first.name)
-      end
+      click_link 'Inactive Students'
+
+      expect(page).to have_text(founder.name)
+
+      check "select-team-#{inactive_team_1.id}"
+
+      expect(page).to have_button('Mark Team Active')
+
+      click_button 'Mark Team Active'
+
+      expect(page).to have_text("Teams marked active successfully!")
+
+      visit school_course_students_path(course)
+
+      expect(page).to have_text(founder.name)
     end
   end
 
-  # scenario 'school admin marks students as dropped out' do
-  #  # Enroll the coach as a team coach in all three teams.
-  #  create :faculty_startup_enrollment, faculty: coach, startup: startup_1
-  #  create :faculty_startup_enrollment, faculty: coach, startup: startup_2
-  #  create :faculty_startup_enrollment, faculty: coach, startup: team_with_lone_student
-  #
-  #  sign_in_user school_admin.user, referer: school_course_students_path(course)
-  #
-  #  # Mark a student in a team of more than one students as dropped out.
-  #  founder = startup_2.founders.last
-  #  founder_user = founder.user
-  #
-  #  find("a", text: founder_user.name).click
-  #
-  #  expect(page).to have_text(founder_user.name)
-  #  expect(page).to have_text(founder.startup.name)
-  #  expect(coach.startups.count).to eq(3)
-  #
-  #  find('button[title="Prevent this student from accessing the course"]').click
-  #  click_button 'Update Student'
-  #  expect(page).to have_text("Student updated successfully")
-  #  dismiss_notification
-  #
-  #  # The student should have been marked as exited.
-  #  expect(founder.reload.exited).to eq(true)
-  #
-  #  # The student's team name should now be the student's own name.
-  #  expect(founder.startup.name).to eq(founder_user.name)
-  #
-  #  # The student should be in a team without any directly linked coaches.
-  #  expect(founder.startup.faculty.count).to eq(0)
-  #
-  #  # However the coach should still be linked to the same number of teams.
-  #  expect(coach.startups.count).to eq(3)
-  #
-  #  # Mark a student who is alone in a team as dropped out.
-  #  expect(team_with_lone_student.faculty.count).to eq(1)
-  #
-  #  find("a", text: lone_student.name).click
-  #
-  #  find('button[title="Prevent this student from accessing the course"]').click
-  #  click_button 'Update Student'
-  #  expect(page).to have_text("Student updated successfully")
-  #  dismiss_notification
-  #
-  #  # The student's team should not have changed.
-  #  lone_user_team = lone_student.reload.startup
-  #  expect(lone_user_team).to eq(team_with_lone_student)
-  #
-  #  # All coaches should have been removed from the team.
-  #  expect(lone_user_team.faculty.count).to eq(0)
-  #  expect(coach.startups.count).to eq(2)
-  # end
+  scenario 'school admin marks students as dropped out' do
+    # Enroll the coach as a team coach in all three teams.
+    create :faculty_startup_enrollment, faculty: coach, startup: startup_1
+    create :faculty_startup_enrollment, faculty: coach, startup: startup_2
+    create :faculty_startup_enrollment, faculty: coach, startup: team_with_lone_student
+
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # Mark a student in a team of more than one students as dropped out.
+    founder = startup_2.founders.last
+    founder_user = founder.user
+
+    find("a", text: founder_user.name).click
+
+    expect(page).to have_text(founder_user.name)
+    expect(page).to have_text(founder.startup.name)
+    expect(coach.startups.count).to eq(3)
+
+    click_button 'Actions'
+    click_button 'Dropout Student'
+
+    expect(page).not_to have_text(founder_user.name)
+
+    # The student's team name should now be the student's own name.
+    expect(founder.reload.startup.name).to eq(founder_user.name)
+
+    # The team should have been marked as exited.
+    expect(founder.startup.exited_at).not_to eq(nil)
+
+    # The student should be in a team without any directly linked coaches.
+    expect(founder.startup.faculty.count).to eq(0)
+
+    # However the coach should still be linked to the same number of teams.
+    expect(coach.startups.count).to eq(3)
+
+    # Mark a student who is alone in a team as dropped out.
+    expect(team_with_lone_student.faculty.count).to eq(1)
+
+    find("a", text: lone_student.name).click
+
+    click_button 'Actions'
+    click_button 'Dropout Student'
+
+    expect(page).not_to have_text(founder_user.name)
+
+    lone_user_team = lone_student.reload.startup
+    expect(lone_user_team.exited_at).not_to eq(nil)
+    # The student's team should not have changed.
+    expect(lone_user_team).to eq(team_with_lone_student)
+
+    # All coaches should have been removed from the team.
+    expect(lone_user_team.faculty.count).to eq(0)
+    expect(coach.startups.count).to eq(2)
+
+    click_link 'Inactive Students'
+
+    expect(page).to have_text(founder_user.name)
+    expect(page).to have_text(lone_student.name)
+
+    check "select-team-#{lone_user_team.id}"
+
+    expect(page).to have_button('Mark Team Active')
+
+    click_button 'Mark Team Active'
+
+    expect(page).to have_text("Teams marked active successfully!")
+
+    visit school_course_students_path(course)
+
+    expect(page).to have_text(lone_student.name)
+  end
 
   scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_course_students_path(course)

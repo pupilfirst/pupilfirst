@@ -337,23 +337,16 @@ let make =
          | None => React.null
          }}
         <li>
-          {/* Using cloneElement is the only way (right now) to insert arbitrary props to an element. */
-           /* Here, it is used to insert data-method="delete", which is used by Rails UJS to convert the request to a DELETE. */
-           ReasonReact.cloneElement(
-             <a
-               title=?{shrunk ? Some("Sign Out") : None}
-               className={bottomLinkClasses(shrunk)}
-               rel="nofollow"
-               href="/users/sign_out"
-             />,
-             ~props={"data-method": "delete"},
-             [|
-               <i className="fas fa-sign-out-alt fa-fw" />,
-               shrunk
-                 ? React.null
-                 : <span className="ml-2"> {"Sign Out" |> str} </span>,
-             |],
-           )}
+          <a
+            title=?{shrunk ? Some("Sign Out") : None}
+            className={bottomLinkClasses(shrunk)}
+            rel="nofollow"
+            href="/users/sign_out">
+            <i className="fas fa-sign-out-alt fa-fw" />
+            {shrunk
+               ? React.null
+               : <span className="ml-2"> {"Sign Out" |> str} </span>}
+          </a>
         </li>
       </ul>
     </div>,

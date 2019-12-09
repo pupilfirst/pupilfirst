@@ -19,7 +19,6 @@ module CreateCoachNotesMutation = [%graphql
          note
          createdAt
          author {
-          id
           avatarUrl
           name
           title

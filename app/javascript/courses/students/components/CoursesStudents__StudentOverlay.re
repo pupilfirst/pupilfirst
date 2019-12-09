@@ -34,7 +34,6 @@ module StudentDetailsQuery = [%graphql
             note
             createdAt
             author {
-              id
               name
               title
               avatarUrl
@@ -60,6 +59,7 @@ let updateStudentDetails = (setState, details) => {
     {...state, studentData: Loaded(details |> StudentDetails.makeFromJS)}
   );
 };
+
 let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
   setState(state => {...state, studentData: Loading});
   StudentDetailsQuery.make(~studentId, ())

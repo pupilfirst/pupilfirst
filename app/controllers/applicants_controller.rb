@@ -1,12 +1,12 @@
 class ApplicantsController < ApplicationController
-  # GET /enroll/:token
+  # GET /applicants/:token/enroll
   def enroll
     @applicant = Applicant.find_by(login_token: params[:token])
 
     if valid_applicant?
-      student = Applicants::CreateStudentService.new(@applicant).create
+      student = Applicants::CreateStudentService.new(@applicant).create(session[:applicant_tag] || 'Public Signup')
       sign_in student.user
-      flash[:success] = 'User authentication successfully'
+      flash[:success] = "Welcome to #{current_school.name}!"
       redirect_to after_sign_in_path_for(student.user)
     else
       flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'

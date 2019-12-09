@@ -84,18 +84,7 @@ let make =
            submitFormCB
            authenticityToken
          />
-       | ActionsTab =>
-         <SA_StudentsPanel_ActionsForm
-           student
-           isSingleFounder
-           teams
-           studentTags
-           teamCoachIds
-           courseCoachIds
-           schoolCoaches
-           submitFormCB
-           authenticityToken
-         />
+       | ActionsTab => <SA_StudentsPanel_ActionsForm student />
        }}
     </div>
   </div>;

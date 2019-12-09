@@ -28,18 +28,7 @@ let dropoutStudent = (id, setSaving, event) => {
 let str = ReasonReact.string;
 
 [@react.component]
-let make =
-    (
-      ~student,
-      ~isSingleFounder,
-      ~teams,
-      ~studentTags,
-      ~teamCoachIds,
-      ~courseCoachIds,
-      ~schoolCoaches,
-      ~submitFormCB,
-      ~authenticityToken,
-    ) => {
+let make = (~student) => {
   let (saving, setSaving) = React.useState(() => false);
 
   <div className="mt-5">
@@ -56,6 +45,7 @@ let make =
     </HelpIcon>
     <div className="mt-2">
       <button
+        disabled=saving
         className="btn btn-danger btn-large"
         onClick={dropoutStudent(student |> Student.id, setSaving)}>
         <i className="fa fa-exclamation-triangle" />

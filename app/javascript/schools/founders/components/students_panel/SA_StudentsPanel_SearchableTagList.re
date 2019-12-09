@@ -63,7 +63,7 @@ let search =
   };
 };
 
-let reducer = (state, searchString) => {
+let reducer = (_state, searchString) => {
   searchString;
 };
 

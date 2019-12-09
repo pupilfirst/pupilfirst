@@ -21,8 +21,6 @@ let updateInfo:
 
 let encode: (string, string, t) => Js.Json.t;
 
-let exited: t => bool;
-
 let excludedFromLeaderboard: t => bool;
 
 let name: t => string;

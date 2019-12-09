@@ -8,7 +8,7 @@ class Startup < ApplicationRecord
   COURSE_FEE = 50_000
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
-  scope :inactive, -> { where('access_ends_at < ?', Time.now) }
+  scope :inactive, -> { where('access_ends_at < ?', Time.now).or(where.not(exited_at: nil)) }
   scope :not_exited, -> { where(exited_at: nil) }
   scope :access_active, -> { where('access_ends_at > ?', Time.now).or(where(access_ends_at: nil)) }
   scope :active, -> { not_exited.access_active }

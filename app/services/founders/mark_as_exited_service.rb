@@ -11,20 +11,17 @@ module Founders
           startup = Startup.create!(
             name: @student.name,
             level: @student.startup.level,
-            access_ends_at: Time.zone.now
+            exited_at: Time.zone.now
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
-          @student.update!(startup: startup, exited_at: Time.zone.now)
+          @student.update!(startup: startup)
         else
           # Remove all coach enrollments.
           FacultyStartupEnrollment.where(startup: @student.startup).destroy_all
 
-          # End access for the startup
-          @student.startup.update!(access_ends_at: Time.zone.now)
-
-          # Mark the student as exited.
-          @student.update!(exited_at: Time.zone.now)
+          # Mark the startup as exited.
+          @student.startup.update!(exited_at: Time.zone.now)
         end
       end
     end

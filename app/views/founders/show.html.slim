@@ -1,7 +1,7 @@
 - presenter = Founders::ShowPresenter.new(self, @founder)
 - content_for(:head) do
   title #{presenter.course_name} Course Profile for #{@founder.fullname} | #{current_school.name}
-- if @founder.exited_at?
+- if @founder.startup.exited_at?
   - content_for :sitewide_notice
     ' Your student profile for this course is locked, and cannot be updated.
 #founder__show
@@ -87,7 +87,7 @@
           .row
             - if presenter.public_faculty.any?
               .col-md-12.mt-4
-                h3 =presenter.faculty_display_text
+                h3 = presenter.faculty_display_text
                 hr
                 - presenter.public_faculty.each do |faculty|
                   .data-faculty

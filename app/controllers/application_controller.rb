@@ -161,7 +161,7 @@ class ApplicationController < ActionController::Base
     # User must be logged in.
     authenticate_user!
 
-    return if current_founder.present? && current_founder.exited_at.nil?
+    return if current_founder.present? && current_founder.startup.exited_at.nil?
 
     redirect_to 'https://www.sv.co'
   end

@@ -10,9 +10,8 @@ describe Founders::MarkAsExitedService do
     it 'creates a new startup in the same level and mark the founder as exited' do
       old_startup = student.startup
 
-      expect { subject.execute }.to change { student.reload.exited_at }.from(nil)
-      expect(student.reload.startup).not_to eq(old_startup.id)
-      expect(student.startup.access_ends_at).not_to eq(nil)
+      expect { subject.execute }.to change { student.reload.startup.exited_at }.from(nil)
+      expect(student.startup).not_to eq(old_startup.id)
     end
   end
 
@@ -30,9 +29,7 @@ describe Founders::MarkAsExitedService do
 
       # The student should be in the same team.
       expect(student.reload.startup).to eq(team)
-      expect(student.startup.access_ends_at).not_to eq(nil)
-
-      expect(student.exited_at).not_to eq(nil)
+      expect(student.startup.exited_at).not_to eq(nil)
     end
   end
 end

@@ -6,11 +6,11 @@ module Founders
     end
 
     def course_name
-      @founder.startup.course.name
+      team.course.name
     end
 
     def incomplete_profile?
-      @founder.exited_at.nil? && @founder.profile_completion_percentage < 100
+      team.exited_at.nil? && @founder.profile_completion_percentage < 100
     end
 
     def public_faculty
@@ -23,6 +23,10 @@ module Founders
       else
         "Coach"
       end
+    end
+
+    def team
+      @team ||= @founder.startup
     end
   end
 end

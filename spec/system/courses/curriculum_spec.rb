@@ -68,7 +68,7 @@ feature "Student's view of Course Curriculum", js: true do
 
   context 'when student has exited the programme' do
     scenario 'ex-student attempts to visit course curriculum' do
-      student.update!(exited_at: Date.yesterday)
+      student.startup.update!(exited_at: 1.day.ago)
       sign_in_user student.user, referer: curriculum_course_path(course)
       expect(page).to have_content("The page you were looking for doesn't exist!")
     end

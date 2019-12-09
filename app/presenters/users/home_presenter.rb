@@ -64,7 +64,7 @@ module Users
           communities_in_school
         else
           # Students can access communities linked to their courses, as long as they haven't dropped out.
-          active_courses = Course.joins(founders: :user).where(users: { id: current_user }).where(founders: { exited_at: nil })
+          active_courses = Course.joins(startups: [founders: :user]).where(users: { id: current_user }).where(startups: { exited_at: nil })
           communities_in_school.joins(:courses).where(courses: { id: active_courses }).distinct
         end
       end

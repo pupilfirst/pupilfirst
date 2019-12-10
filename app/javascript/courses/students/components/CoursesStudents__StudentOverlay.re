@@ -266,11 +266,9 @@ let personalInfo = studentDetails => {
        | None => React.null
        }}
     </div>
-    {
-      let socialLinks = studentDetails |> StudentDetails.socialLinks;
-      socialLinks |> ArrayUtils.isNotEmpty
-        ? showSocialLinks(socialLinks) : React.null;
-    }
+    {let socialLinks = studentDetails |> StudentDetails.socialLinks;
+     socialLinks |> ArrayUtils.isNotEmpty
+       ? showSocialLinks(socialLinks) : React.null}
   </div>;
 };
 

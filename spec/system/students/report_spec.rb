@@ -134,7 +134,7 @@ feature "Course students report", js: true do
     dismiss_notification
     expect(page).to have_text(course_coach.name, count: 2)
     expect(page).to have_text(course_coach.title, count: 2)
-    expect(page).to have_text(Date.today.strftime('%B%e'), count: 2)
+    expect(page).to have_text(Date.today.strftime('%B %e'), count: 2)
     expect(CoachNote.where(student: founder).last.note).to eq(note_2)
   end
 

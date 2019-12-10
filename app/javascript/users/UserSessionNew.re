@@ -406,7 +406,7 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
        | FederatedSignIn =>
          <div className="max-w-sm mx-auto md:px-9">
            <span
-             className="federated-sigin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
+             className="federated-signin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
              <span className="bg-white px-2"> {"OR" |> str} </span>
            </span>
            <button

@@ -54,13 +54,29 @@ let formInvalid = state =>
 
 let handleErrorCB = (send, ()) => send(UpdateSaving(false));
 
-let handleResponseCB = (submitCB, state, json) => {
+let successMessage = (accessEndsAt, isSingleFounder) => {
+  switch (accessEndsAt) {
+  | Some(date) =>
+    switch (date |> DateFns.isBefore(Js.Date.make()), isSingleFounder) {
+    | (true, true) => "Student archived successfully"
+    | (true, false) => "Team archived successfully"
+    | (false, true)
+    | (false, false) => "Student updated successfully"
+    }
+  | None => "Student updated successfully"
+  };
+};
+
+let handleResponseCB = (submitCB, state, isSingleFounder, json) => {
   let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
   let students =
     json |> Json.Decode.(field("students", list(Student.decode)));
 
   submitCB(teams, students, state.tagsToApply);
-  Notification.success("Success", "Student updated successfully");
+  Notification.success(
+    "Success",
+    successMessage(state.accessEndsAt, isSingleFounder),
+  );
 };
 
 let updateStudent = (student, state, send, authenticityToken, responseCB) => {
@@ -137,6 +153,12 @@ let handleEligibleTeamCoachList =
 
        (coach |> Coach.id, coach |> Coach.name, selected);
      });
+};
+
+let accessEndsAtHelpMessage = isSingleStudent => {
+  isSingleStudent
+    ? "Student can't submit his work from the specified date"
+    : "Team members can't submit their work from the specified date";
 };
 
 let studentTeam = (teams, student) =>
@@ -363,8 +385,7 @@ let make =
         <HelpIcon
           className="ml-2"
           link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-          {"If specified, students can't submit their work from the specified date"
-           |> str}
+          {accessEndsAtHelpMessage(isSingleFounder) |> str}
         </HelpIcon>
         <DatePicker
           onChange={date => send(UpdateAccessEndsAt(date))}
@@ -382,7 +403,7 @@ let make =
             state,
             send,
             authenticityToken,
-            handleResponseCB(submitFormCB, state),
+            handleResponseCB(submitFormCB, state, isSingleFounder),
           )
         }
         className="w-full btn btn-large btn-primary">

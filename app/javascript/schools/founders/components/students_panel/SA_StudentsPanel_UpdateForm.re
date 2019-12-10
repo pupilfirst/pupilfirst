@@ -15,6 +15,10 @@ let selectedTabClasses = selected => {
   ++ (selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100");
 };
 
+let tabItemsClasses = selected => {
+  selected ? "" : "hidden";
+};
+
 [@react.component]
 let make =
     (
@@ -71,21 +75,22 @@ let make =
       </div>
     </div>
     <div className="max-w-2xl mx-auto">
-      {switch (view) {
-       | DetailsTab =>
-         <SA_StudentsPanel_UpdateDetailsForm
-           student
-           isSingleFounder
-           teams
-           studentTags
-           teamCoachIds
-           courseCoachIds
-           schoolCoaches
-           submitFormCB
-           authenticityToken
-         />
-       | ActionsTab => <SA_StudentsPanel_ActionsForm student />
-       }}
+      <div className={tabItemsClasses(view == DetailsTab)}>
+        <SA_StudentsPanel_UpdateDetailsForm
+          student
+          isSingleFounder
+          teams
+          studentTags
+          teamCoachIds
+          courseCoachIds
+          schoolCoaches
+          submitFormCB
+          authenticityToken
+        />
+      </div>
+      <div className={tabItemsClasses(view == ActionsTab)}>
+        <SA_StudentsPanel_ActionsForm student />
+      </div>
     </div>
   </div>;
 };

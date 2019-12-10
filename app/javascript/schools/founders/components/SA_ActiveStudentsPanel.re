@@ -231,49 +231,47 @@ let make =
   let (state, send) =
     React.useReducer(reducer, initialState(teams, students, studentTags));
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
-    {
-      let submitFormCB = (teams, students, tags) =>
-        send(RefreshDataAfterUpdate(teams, students, tags));
-      switch (state.formVisible) {
-      | None => ReasonReact.null
-      | CreateForm =>
-        <SchoolAdmin__EditorDrawer
-          closeDrawerCB={() => send(UpdateFormVisible(None))}>
-          <SA_StudentsPanel_CreateForm
-            courseId
-            submitFormCB
-            studentTags={state.tags}
-            authenticityToken
-          />
-        </SchoolAdmin__EditorDrawer>
-      | UpdateForm(student) =>
-        let teamCoachIds =
-          state.teams
-          |> List.find(team => Team.id(team) == Student.teamId(student))
-          |> Team.coachIds;
+    {let submitFormCB = (teams, students, tags) =>
+       send(RefreshDataAfterUpdate(teams, students, tags));
+     switch (state.formVisible) {
+     | None => ReasonReact.null
+     | CreateForm =>
+       <SchoolAdmin__EditorDrawer
+         closeDrawerCB={() => send(UpdateFormVisible(None))}>
+         <SA_StudentsPanel_CreateForm
+           courseId
+           submitFormCB
+           studentTags={state.tags}
+           authenticityToken
+         />
+       </SchoolAdmin__EditorDrawer>
+     | UpdateForm(student) =>
+       let teamCoachIds =
+         state.teams
+         |> List.find(team => Team.id(team) == Student.teamId(student))
+         |> Team.coachIds;
 
-        let isSingleFounder =
-          student
-          |> Student.teamId
-          |> studentsInTeam(state.students)
-          |> List.length == 1;
+       let isSingleFounder =
+         student
+         |> Student.teamId
+         |> studentsInTeam(state.students)
+         |> List.length == 1;
 
-        <SchoolAdmin__EditorDrawer
-          closeDrawerCB={() => send(UpdateFormVisible(None))}>
-          <SA_StudentsPanel_UpdateForm
-            student
-            isSingleFounder
-            teams={state.teams}
-            studentTags={state.tags}
-            teamCoachIds
-            courseCoachIds
-            schoolCoaches
-            submitFormCB
-            authenticityToken
-          />
-        </SchoolAdmin__EditorDrawer>;
-      };
-    }
+       <SchoolAdmin__EditorDrawer
+         closeDrawerCB={() => send(UpdateFormVisible(None))}>
+         <SA_StudentsPanel_UpdateForm
+           student
+           isSingleFounder
+           teams={state.teams}
+           studentTags={state.tags}
+           teamCoachIds
+           courseCoachIds
+           schoolCoaches
+           submitFormCB
+           authenticityToken
+         />
+       </SchoolAdmin__EditorDrawer>;
+     }}
     <div
       className="border-b px-6 py-2 bg-white flex items-center justify-between z-20">
       <div className="inline-block relative w-64">
@@ -319,7 +317,7 @@ let make =
         <a
           className="btn btn-default no-underline"
           href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
-          {"Inactive Students" |> str}
+          {"Student Archive" |> str}
         </a>
       </div>
     </div>
@@ -342,19 +340,17 @@ let make =
               />
               <span
                 id="selected-students" className="ml-2 text-sm text-gray-600">
-                {
-                  let selectedCount = state.selectedStudents |> List.length;
-                  let studentCount =
-                    filteredTeams(state)
-                    |> List.map(team =>
-                         team |> Team.id |> studentsInTeam(state.students)
-                       )
-                    |> List.flatten
-                    |> List.length;
-                  selectedCount > 0
-                    ? (selectedCount |> string_of_int) ++ " selected" |> str
-                    : (studentCount |> string_of_int) ++ " students" |> str;
-                }
+                {let selectedCount = state.selectedStudents |> List.length;
+                 let studentCount =
+                   filteredTeams(state)
+                   |> List.map(team =>
+                        team |> Team.id |> studentsInTeam(state.students)
+                      )
+                   |> List.flatten
+                   |> List.length;
+                 selectedCount > 0
+                   ? (selectedCount |> string_of_int) ++ " selected" |> str
+                   : (studentCount |> string_of_int) ++ " students" |> str}
               </span>
             </label>
           </div>
@@ -590,28 +586,26 @@ let make =
                                    </p>
                                    <div
                                      className="flex items-center flex-wrap">
-                                     {
-                                       let teamCoaches =
-                                         schoolCoaches
-                                         |> List.filter(coach =>
-                                              team
-                                              |> Team.coachIds
-                                              |> List.exists(teamCoachId =>
-                                                   teamCoachId
-                                                   == Coach.id(coach)
-                                                 )
-                                            );
-                                       teamCoaches
-                                       |> List.map(coach =>
-                                            <Avatar
-                                              key={coach |> Coach.id}
-                                              name={coach |> Coach.name}
-                                              className="w-6 h-6 rounded-full mr-1 mt-1"
-                                            />
-                                          )
-                                       |> Array.of_list
-                                       |> ReasonReact.array;
-                                     }
+                                     {let teamCoaches =
+                                        schoolCoaches
+                                        |> List.filter(coach =>
+                                             team
+                                             |> Team.coachIds
+                                             |> List.exists(teamCoachId =>
+                                                  teamCoachId
+                                                  == Coach.id(coach)
+                                                )
+                                           );
+                                      teamCoaches
+                                      |> List.map(coach =>
+                                           <Avatar
+                                             key={coach |> Coach.id}
+                                             name={coach |> Coach.name}
+                                             className="w-6 h-6 rounded-full mr-1 mt-1"
+                                           />
+                                         )
+                                      |> Array.of_list
+                                      |> ReasonReact.array}
                                    </div>
                                  </div>}
                           </div>

@@ -1,4 +1,4 @@
-class AddExitedOnToFoundersTable < ActiveRecord::Migration[6.0]
+class AddExitedAtToFoundersTable < ActiveRecord::Migration[6.0]
   class User < ActiveRecord::Base
     has_many :founders
   end

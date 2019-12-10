@@ -309,22 +309,6 @@ feature 'School students index', js: true do
 
       expect(founder.reload.startup.access_ends_at.to_date).to eq(1.day.ago.to_date)
       expect(page).not_to have_text(founder.name)
-
-      click_link 'Inactive Students'
-
-      expect(page).to have_text(founder.name)
-
-      check "select-team-#{inactive_team_1.id}"
-
-      expect(page).to have_button('Mark Team Active')
-
-      click_button 'Mark Team Active'
-
-      expect(page).to have_text("Teams marked active successfully!")
-
-      visit school_course_students_path(course)
-
-      expect(page).to have_text(founder.name)
     end
   end
 
@@ -381,23 +365,6 @@ feature 'School students index', js: true do
     # All coaches should have been removed from the team.
     expect(lone_user_team.faculty.count).to eq(0)
     expect(coach.startups.count).to eq(2)
-
-    click_link 'Inactive Students'
-
-    expect(page).to have_text(founder_user.name)
-    expect(page).to have_text(lone_student.name)
-
-    check "select-team-#{lone_user_team.id}"
-
-    expect(page).to have_button('Mark Team Active')
-
-    click_button 'Mark Team Active'
-
-    expect(page).to have_text("Teams marked active successfully!")
-
-    visit school_course_students_path(course)
-
-    expect(page).to have_text(lone_student.name)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

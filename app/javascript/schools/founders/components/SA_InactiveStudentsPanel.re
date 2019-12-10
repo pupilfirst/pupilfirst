@@ -94,6 +94,7 @@ let make =
           <div className="flex items-center justify-between">
             <div className="flex pl-3 ">
               <input
+                id="search"
                 type_="search"
                 className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
                 placeholder="Search by student or team name..."

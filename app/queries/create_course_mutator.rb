@@ -1,18 +1,18 @@
 class CreateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  property :name, validates: { presence: { message: 'NameBlank' } }
+  property :name, validates: { presence: true, length: { minimum: 2, maximum: 50 } }
+  property :description, validates: { presence: true, length: { minimum: 2, maximum: 151 } }
   property :max_grade, validates: { presence: { message: 'MaxGradeBlank' } }
   property :pass_grade, validates: { presence: { message: 'PassGradeBlank' } }
   property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
-  property :description, validates: { presence: { message: 'DescriptionBlank' } }
   property :ends_at
   property :public_signup
-  property :about
+  property :about, validates: { length: { maximum: 10_000 } }
   property :featured
 
   def correct_grades_and_labels
-    return if max_grade == grades_and_labels.count
+    return if (@course.max_grade == (grade_labels.values - [""]).count) && (@course.max_grade == grades_and_labels.count)
 
     raise "CreateCourseMutator received invalid grades and labels #{grades_and_labels}"
   end

@@ -2,12 +2,12 @@ class UpdateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :id
-  property :name, validates: { presence: { message: 'NameBlank' } }
-  property :description, validates: { presence: { message: 'DescriptionBlank' } }
+  property :name, validates: { presence: true, length: { minimum: 1, maximum: 50 } }
+  property :description, validates: { presence: true, length: { minimum: 1, maximum: 250 } }
   property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
   property :ends_at
   property :public_signup
-  property :about
+  property :about, validates: { length: { maximum: 10_000 } }
   property :featured
 
   validate :valid_course_id
@@ -20,7 +20,7 @@ class UpdateCourseMutator < ApplicationQuery
   end
 
   def correct_grades_and_labels
-    return if @course.max_grade == grades_and_labels.count
+    return if (@course.max_grade == (grade_labels.values - [""]).count) && (@course.max_grade == grades_and_labels.count)
 
     raise "UpdateCourseMutator received invalid grades and labels #{grades_and_labels}"
   end

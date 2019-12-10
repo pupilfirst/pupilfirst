@@ -392,6 +392,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     id="name"
                     type_="text"
                     placeholder="Type course name here"
+                    maxLength=50
                     value={state.name}
                     onChange={event =>
                       updateName(send, ReactEvent.Form.target(event)##value)
@@ -414,6 +415,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     type_="text"
                     placeholder="Type course description here"
                     value={state.description}
+                    maxLength=151
                     onChange={event =>
                       updateDescription(
                         send,

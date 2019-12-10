@@ -50,14 +50,12 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
-      {
-        targetGroup |> TargetGroup.milestone ?
-          <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-            {"Milestone targets" |> str}
-          </div> :
-          React.null
-      }
+      {targetGroup |> TargetGroup.milestone
+         ? <div
+             className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+             {"Milestone targets" |> str}
+           </div>
+         : React.null}
       <div className="p-6 pt-5">
         <div className="text-2xl font-bold leading-snug">
           {targetGroup |> TargetGroup.name |> str}
@@ -66,15 +64,13 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
           {targetGroup |> TargetGroup.description |> str}
         </div>
       </div>
-      {
-        targets
-        |> List.sort((t1, t2) =>
-             (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
-           )
-        |> List.map(target => rendertarget(target, statusOfTargets))
-        |> Array.of_list
-        |> React.array
-      }
+      {targets
+       |> List.sort((t1, t2) =>
+            (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex)
+          )
+       |> List.map(target => rendertarget(target, statusOfTargets))
+       |> Array.of_list
+       |> React.array}
     </div>
   </div>;
 };
@@ -97,21 +93,79 @@ let handleLockedLevel = level =>
       {"Level Locked" |> str}
     </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
-    {
-      switch (level |> Level.unlockOn) {
-      | Some(date) =>
-        let dateString =
-          date |> DateFns.parseString |> DateFns.format("MMMM D, YYYY");
-        <div className="font-semibold text-md px-3">
-          <p> {"The level is currently locked!" |> str} </p>
-          <p>
-            {"You can access the content on " ++ dateString ++ "." |> str}
-          </p>
-        </div>;
-      | None => React.null
-      }
-    }
+    {switch (level |> Level.unlockOn) {
+     | Some(date) =>
+       let dateString =
+         date |> DateFns.parseString |> DateFns.format("MMMM D, YYYY");
+       <div className="font-semibold text-md px-3">
+         <p> {"The level is currently locked!" |> str} </p>
+         <p>
+           {"You can access the content on " ++ dateString ++ "." |> str}
+         </p>
+       </div>;
+     | None => React.null
+     }}
   </div>;
+
+let computeLevelUp =
+    (levels, teamLevel, targetGroups, targets, statusOfTargets) => {
+  let targetGroupsInLevel =
+    targetGroups
+    |> List.filter(tg => tg |> TargetGroup.levelId == (teamLevel |> Level.id));
+  let milestoneTargetGroupIds =
+    targetGroupsInLevel
+    |> List.filter(tg => tg |> TargetGroup.milestone)
+    |> List.map(tg => tg |> TargetGroup.id);
+
+  let milestoneTargetIds =
+    targets
+    |> List.filter(t =>
+         (t |> Target.targetGroupId)->List.mem(milestoneTargetGroupIds)
+       )
+    |> List.map(t => t |> Target.id);
+
+  let statusOfMilestoneTargets =
+    statusOfTargets
+    |> List.filter(ts =>
+         (ts |> TargetStatus.targetId)->List.mem(milestoneTargetIds)
+       );
+
+  let nextLevelNumber = (teamLevel |> Level.number) + 1;
+
+  let nextLevel =
+    levels |> ListUtils.findOpt(l => l |> Level.number == nextLevelNumber);
+
+  let canLevelUp =
+    statusOfMilestoneTargets
+    |> ListUtils.isNotEmpty
+    && statusOfMilestoneTargets
+    |> TargetStatus.canLevelUp;
+
+  switch (nextLevel, canLevelUp) {
+  | (Some(level), true) => level |> Level.isLocked ? Notice.Nothing : LevelUp
+  | (None, true) => CourseComplete
+  | (Some(_) | None, false) => Nothing
+  };
+};
+
+let computeNotice =
+    (
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      course,
+      team,
+      preview,
+    ) =>
+  switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
+  | (true, _, _) => Notice.Preview
+  | (false, true, true | false) => CourseEnded
+  | (false, false, true) => AccessEnded
+  | (false, false, false) =>
+    computeLevelUp(levels, teamLevel, targetGroups, targets, statusOfTargets)
+  };
 
 [@react.component]
 let make =
@@ -153,6 +207,13 @@ let make =
 
   let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0);
   let teamLevelId = team |> Team.levelId;
+
+  let teamLevel =
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == teamLevelId,
+         "Could not find teamLevel with ID " ++ teamLevelId,
+       );
 
   let targetLevelId =
     switch (selectedTarget) {
@@ -240,67 +301,71 @@ let make =
     targetGroups
     |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
 
+  let notice =
+    computeNotice(
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      course,
+      team,
+      preview,
+    );
+
   <div className="bg-gray-100 pt-11 pb-8 -mt-7">
-    {
-      switch (selectedTarget) {
-      | Some(target) =>
-        let targetStatus =
-          statusOfTargets
-          |> ListUtils.unsafeFind(
-               ts => ts |> TargetStatus.targetId == (target |> Target.id),
-               "Could not find targetStatus for selectedTarget with ID "
-               ++ (target |> Target.id),
-             );
+    {switch (selectedTarget) {
+     | Some(target) =>
+       let targetStatus =
+         statusOfTargets
+         |> ListUtils.unsafeFind(
+              ts => ts |> TargetStatus.targetId == (target |> Target.id),
+              "Could not find targetStatus for selectedTarget with ID "
+              ++ (target |> Target.id),
+            );
 
-        <CoursesCurriculum__Overlay
-          target
-          course
-          targetStatus
-          authenticityToken
-          addSubmissionCB={addSubmission(setLatestSubmissions)}
-          targets
-          statusOfTargets
-          changeTargetCB=selectTarget
-          users
-          evaluationCriteria
-          coaches
-          preview
-        />;
+       <CoursesCurriculum__Overlay
+         target
+         course
+         targetStatus
+         authenticityToken
+         addSubmissionCB={addSubmission(setLatestSubmissions)}
+         targets
+         statusOfTargets
+         changeTargetCB=selectTarget
+         users
+         evaluationCriteria
+         coaches
+         preview
+       />;
 
-      | None => React.null
-      }
-    }
-    <CoursesCurriculum__NoticeManager
-      levels
-      teamLevelId={team |> Team.levelId}
-      targetGroups
-      targets
-      statusOfTargets
-      course
-      team
-      authenticityToken
-      preview
-    />
-    <div className="px-3">
-      <CoursesCurriculum__LevelSelector
-        levels
-        selectedLevelId
-        setSelectedLevelId
-        showLevelZero
-        setShowLevelZero
-        levelZero
-      />
-    </div>
-    {
-      currentLevel |> Level.isLocked ?
-        handleLockedLevel(currentLevel) :
-        targetGroupsInLevel
-        |> TargetGroup.sort
-        |> List.map(targetGroup =>
-             renderTargetGroup(targetGroup, targets, statusOfTargets)
-           )
-        |> Array.of_list
-        |> React.array
-    }
+     | None => React.null
+     }}
+    <CoursesCurriculum__NoticeManager notice course authenticityToken />
+    {switch (notice) {
+     | LevelUp => React.null
+     | _anyOtherNotice =>
+       <div>
+         <div className="px-3">
+           <CoursesCurriculum__LevelSelector
+             levels
+             selectedLevelId
+             setSelectedLevelId
+             showLevelZero
+             setShowLevelZero
+             levelZero
+           />
+         </div>
+         {currentLevel |> Level.isLocked
+            ? handleLockedLevel(currentLevel)
+            : targetGroupsInLevel
+              |> TargetGroup.sort
+              |> List.map(targetGroup =>
+                   renderTargetGroup(targetGroup, targets, statusOfTargets)
+                 )
+              |> Array.of_list
+              |> React.array}
+       </div>
+     }}
   </div>;
 };

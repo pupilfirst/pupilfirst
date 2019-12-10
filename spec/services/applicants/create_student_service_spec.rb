@@ -7,10 +7,11 @@ describe Applicants::CreateStudentService do
   let(:school) { course.school }
   let!(:level_one) { create :level, course: course }
   let(:applicant) { create :applicant, course: course }
+  let(:tag) { Faker::Lorem.word }
 
   describe '#create' do
     it 'create a student account for the applicant' do
-      student = subject.create
+      student = subject.create(tag)
       user = student.user
 
       # The user should have same name and email
@@ -30,7 +31,7 @@ describe Applicants::CreateStudentService do
       expect(startup.level).to eq(level_one)
 
       # Founder should have tag "Public Signup"
-      expect(student.tag_list).to eq(["Public Signup"])
+      expect(student.tag_list).to eq([tag])
 
       # Applicant should be destroyed
       expect(Applicant.where(email: applicant.email).count).to eq(0)
@@ -46,7 +47,7 @@ describe Applicants::CreateStudentService do
       end
 
       it 'does not change the title of existing users' do
-        student = subject.create
+        student = subject.create(tag)
 
         expect(student.user.reload.title).to eq(existing_title)
       end

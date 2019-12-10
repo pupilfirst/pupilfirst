@@ -35,6 +35,7 @@ module Types
     field :create_feedback, mutation: Mutations::CreateFeedback, null: false
     field :update_review_checklist, mutation: Mutations::UpdateReviewChecklist, null: false
     field :delete_school_admin, mutation: Mutations::DeleteSchoolAdmin, null: false
+    field :create_coach_note, mutation: Mutations::CreateCoachNote, null: false
     field :dropout_student, mutation: Mutations::DropoutStudent, null: false
   end
 end

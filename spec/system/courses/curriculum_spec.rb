@@ -293,8 +293,9 @@ feature "Student's view of Course Curriculum", js: true do
     scenario 'student levels up' do
       sign_in_user student_tl1.user, referer: curriculum_course_path(course)
 
-      # Student should be on shown level 1.
-      expect(page).to have_text(completed_target_l1.title)
+      # When level up is pending, student should not be shown any targets or target groups.
+      expect(page).not_to have_text(target_group_l1.name)
+      expect(page).not_to have_text(completed_target_l1.title)
 
       # There should be a level up notice on the page.
       expect(page).to have_text('You have successfully completed all milestone targets required to level up.')

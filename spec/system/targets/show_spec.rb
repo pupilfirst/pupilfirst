@@ -4,6 +4,7 @@ feature 'Target Overlay', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
+  include FounderSpecHelper
 
   let(:course) { create :course }
   let!(:criterion_1) { create :evaluation_criterion, course: course }
@@ -250,49 +251,47 @@ feature 'Target Overlay', js: true do
       end
     end
 
-    context 'when the target requires student to take a quiz to complete it ' do
-      scenario 'student completes a target by taking a quiz' do
-        sign_in_user student.user, referer: target_path(quiz_target)
+    scenario 'student completes a target by taking a quiz' do
+      sign_in_user student.user, referer: target_path(quiz_target)
 
-        within('.course-overlay__header-title-card') do
-          expect(page).to have_content(quiz_target.title)
-          expect(page).to have_content('Pending')
-        end
-
-        find('.course-overlay__body-tab-item', text: 'Take Quiz').click
-
-        # Completion instructions should be show on Take Quiz section for targets with quiz
-        expect(page).to have_text("Instructions")
-        expect(page).to have_text(quiz_target.completion_instructions)
-
-        # Question one
-        expect(page).to have_content(/Question #1/i)
-        expect(page).to have_content(quiz_question_1.question)
-        find('.quiz-root__answer', text: q1_answer_1.value).click
-        click_button('Next Question')
-
-        # Question two
-        expect(page).to have_content(/Question #2/i)
-        expect(page).to have_content(quiz_question_2.question)
-        find('.quiz-root__answer', text: q2_answer_4.value).click
-        click_button('Submit Quiz')
-
-        expect(page).to have_content('Your Submission has been recorded')
-
-        within('.course-overlay__header-title-card') do
-          expect(page).to have_content(quiz_target.title)
-          expect(page).to have_content('Passed')
-        end
-
-        # The quiz result should be visible.
-        expect(page).to have_content("Target #{quiz_target.title} was completed by answering a quiz")
-        expect(page).to have_content("Your Answer: #{q1_answer_1.value}")
-        expect(page).to have_content("Correct Answer: #{q1_answer_2.value}")
-        expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
-
-        # The score should have stored on the submission.
-        expect(TimelineEvent.last.quiz_score).to eq('1/2')
+      within('.course-overlay__header-title-card') do
+        expect(page).to have_content(quiz_target.title)
+        expect(page).to have_content('Pending')
       end
+
+      find('.course-overlay__body-tab-item', text: 'Take Quiz').click
+
+      # Completion instructions should be show on Take Quiz section for targets with quiz
+      expect(page).to have_text("Instructions")
+      expect(page).to have_text(quiz_target.completion_instructions)
+
+      # Question one
+      expect(page).to have_content(/Question #1/i)
+      expect(page).to have_content(quiz_question_1.question)
+      find('.quiz-root__answer', text: q1_answer_1.value).click
+      click_button('Next Question')
+
+      # Question two
+      expect(page).to have_content(/Question #2/i)
+      expect(page).to have_content(quiz_question_2.question)
+      find('.quiz-root__answer', text: q2_answer_4.value).click
+      click_button('Submit Quiz')
+
+      expect(page).to have_content('Your Submission has been recorded')
+
+      within('.course-overlay__header-title-card') do
+        expect(page).to have_content(quiz_target.title)
+        expect(page).to have_content('Passed')
+      end
+
+      # The quiz result should be visible.
+      expect(page).to have_content("Target #{quiz_target.title} was completed by answering a quiz")
+      expect(page).to have_content("Your Answer: #{q1_answer_1.value}")
+      expect(page).to have_content("Correct Answer: #{q1_answer_2.value}")
+      expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
+
+      # The score should have stored on the submission.
+      expect(TimelineEvent.last.quiz_score).to eq('1/2')
     end
   end
 
@@ -580,6 +579,41 @@ feature 'Target Overlay', js: true do
     click_button('Close')
 
     expect(page).to have_text(target_group_l2.name)
+  end
+
+  context 'when the student has only one reviewed milestone target left in a level' do
+    before do
+      complete_target student, prerequisite_target
+      complete_target student, quiz_target
+    end
+
+    scenario 'student can level up immediately after submitting the milestone target' do
+      sign_in_user student.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+
+      expect(page).to have_text(target_l1.completion_instructions)
+
+      fill_in 'Work on your submission', with: Faker::Lorem.sentence
+      click_button 'Submit'
+
+      expect(page).to have_content('Your submission has been queued for review')
+
+      # Let's check the curriculum view to make sure that only the level up option is visible now.
+      click_button 'Close'
+
+      expect(page).not_to have_text(target_l1.title)
+      expect(page).not_to have_text(target_group_l1.name)
+      expect(page).not_to have_text(prerequisite_target.title)
+      expect(page).not_to have_text(quiz_target.title)
+
+      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
+
+      click_button('Level Up')
+
+      # This should level up the student and show them the next level.
+      expect(page).to have_text(target_l2.title)
+      expect(page).to have_text(target_group_l2.name)
+    end
   end
 
   context 'when accessing preview mode of curriculum' do

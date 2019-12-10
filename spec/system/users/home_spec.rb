@@ -105,6 +105,7 @@ feature 'User Home', js: true do
     expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
     expect(page).to have_link("Review", href: review_course_path(course_1))
     expect(page).to have_link("Review Submissions", href: review_course_path(course_1))
+    expect(page).to have_link("Students", href: students_course_path(course_1))
 
     expect(page).not_to have_text(course_2.name)
     expect(page).not_to have_text(course_3.name)
@@ -127,6 +128,7 @@ feature 'User Home', js: true do
     expect(page).to have_link("Curriculum", href: curriculum_course_path(course_2))
     expect(page).to have_link("Review", href: review_course_path(course_2))
     expect(page).to have_link("Review Submissions", href: review_course_path(course_2))
+    expect(page).to have_link("Students", href: students_course_path(course_2))
 
     expect(page).not_to have_text(course_1.name)
     expect(page).not_to have_text(course_3.name)

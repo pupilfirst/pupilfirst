@@ -4,8 +4,8 @@
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
     "@fortawesome/fontawesome-free": "^5.10.1",
-    "@glennsl/bs-json": "^4.0.0",
-    "@rails/ujs": "^6.0.0-alpha",
+    "@glennsl/bs-json": "5.0.1",
+    "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "^4.0.7",
     "babel-plugin-prismjs": "^1.1.0",
     "babel-plugin-react-css-modules": "^3.3.2",
@@ -36,10 +36,10 @@
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
-    "@baransu/graphql_ppx_re": "^0.3.2",
+    "@baransu/graphql_ppx_re": "0.4.0",
     "@graphql-codegen/cli": "^1.8.2",
     "@graphql-codegen/introspection": "^1.8.2",
-    "bs-platform": "^6.2.1",
+    "bs-platform": "7.0.1",
     "graphql": "^14.5.8",
     "node-sass": "^4.12.0",
     "prettier": "1.18.2",

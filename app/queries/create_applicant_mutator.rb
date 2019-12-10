@@ -10,8 +10,15 @@ class CreateApplicantMutator < ApplicationQuery
   def create_applicant
     Applicant.transaction do
       applicant = persisted_applicant || Applicant.create!(email: email, course: course, name: name)
+
+      if context[:session][:applicant_tag].present?
+        applicant.tag_list.add(context[:session][:applicant_tag])
+        applicant.save!
+      end
+
       MailLoginTokenService.new(applicant).execute
     end
+
     true
   end
 

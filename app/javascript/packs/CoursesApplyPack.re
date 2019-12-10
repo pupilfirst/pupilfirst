@@ -1,35 +1,37 @@
 [@bs.config {jsx: 3}];
 
 type props = {
-  authenticityToken: string,
   courseName: string,
-  courseDescription: string,
   courseId: string,
+  thumbnailUrl: option(string),
   email: option(string),
   name: option(string),
+  privacyPolicy: bool,
+  termsOfUse: bool,
 };
 
 let decodeProps = json =>
   Json.Decode.{
-    authenticityToken: json |> field("authenticityToken", string),
     courseName: json |> field("courseName", string),
-    courseDescription: json |> field("courseDescription", string),
     courseId: json |> field("courseId", string),
+    thumbnailUrl: json |> field("thumbnailUrl", optional(string)),
     email: json |> field("email", optional(string)),
     name: json |> field("name", optional(string)),
+    privacyPolicy: json |> field("privacyPolicy", bool),
+    termsOfUse: json |> field("termsOfUse", bool),
   };
 
-let props =
-  DomUtils.parseJsonAttribute(~id="courses-apply", ()) |> decodeProps;
+let props = DomUtils.parseJsonTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CoursesApply__Root
-    authenticityToken={props.authenticityToken}
     courseName={props.courseName}
-    courseDescription={props.courseDescription}
     courseId={props.courseId}
+    thumbnailUrl={props.thumbnailUrl}
     email={props.email}
     name={props.name}
+    privacyPolicy={props.privacyPolicy}
+    termsOfUse={props.termsOfUse}
   />,
-  "courses-apply",
+  "react-root",
 );

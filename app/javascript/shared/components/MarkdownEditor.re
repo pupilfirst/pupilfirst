@@ -300,7 +300,7 @@ let make =
          };
 
        <div
-         className="markdown-draft-editor__container border border-gray-400 leading-relaxed rounded flex flex-col overflow-hidden">
+         className="markdown-draft-editor__container bg-white border border-gray-400 leading-relaxed rounded flex flex-col overflow-hidden">
          <DisablingCover
            disabled={isEditorDisabled(state.attachment)}
            message="Uploading..."

@@ -10,7 +10,7 @@
 
     <% if current_user.present? %>
       <li class="nav-item" role="presentation">
-        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-ghost-secondary btn-signin', id: 'sv-navbar__sign-out' %>
+        <%= link_to 'Sign Out', destroy_user_session_path, class: 'btn btn-sm btn-ghost-secondary btn-signin', id: 'sv-navbar__sign-out' %>
       </li>
     <% else %>
       <li class="nav-item" role="presentation" itemprop="name">

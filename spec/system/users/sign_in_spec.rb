@@ -69,7 +69,7 @@ feature 'User signing in by supplying email address', js: true do
         expect(user.reload.reset_password_token).to eq(nil)
 
         # can sign in with the same password
-        click_button "Sign Out"
+        click_link "Sign Out"
         expect(page).to have_content("Sign in")
         click_button 'Continue with email'
         fill_in 'Email Address', with: user.email

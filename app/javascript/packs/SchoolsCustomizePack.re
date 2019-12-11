@@ -1,7 +1,10 @@
+[@bs.config {jsx: 3}];
+
 type props = {
   authenticityToken: string,
   customizations: SchoolCustomize__Customizations.t,
   schoolName: string,
+  schoolAbout: option(string),
 };
 
 let decodeProps = json =>
@@ -10,6 +13,7 @@ let decodeProps = json =>
     customizations:
       json |> field("customizations", SchoolCustomize__Customizations.decode),
     schoolName: json |> field("schoolName", string),
+    schoolAbout: json |> field("schoolName", optional(string)),
   };
 
 let props = DomUtils.parseJsonAttribute() |> decodeProps;

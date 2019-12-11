@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open SchoolCustomize__Types;
 
 [%bs.raw {|require("./SchoolCustomize__Root.css")|}];
@@ -25,8 +27,6 @@ type action =
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
   | UpdateImages(Js.Json.t);
-
-let component = ReasonReact.reducerComponent("SchoolCustomize");
 
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch (logoOnLightBg) {
@@ -159,7 +159,7 @@ let showEditor = (editor, send, event) => {
 let editor = (state, send, authenticityToken) =>
   switch (state.visibleEditor) {
   | Some(editor) =>
-    <SchoolAdmin__EditorDrawer.Jsx2 closeDrawerCB={() => send(CloseEditor)}>
+    <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(CloseEditor)}>
       {switch (editor) {
        | LinksEditor(kind) =>
          <SchoolCustomize__LinksEditor
@@ -201,262 +201,254 @@ let editor = (state, send, authenticityToken) =>
            authenticityToken
          />
        }}
-    </SchoolAdmin__EditorDrawer.Jsx2>
+    </SchoolAdmin__EditorDrawer>
 
   | None => ReasonReact.null
   };
 
-let make = (~authenticityToken, ~customizations, ~schoolName, _children) => {
-  ...component,
-  initialState: () => {visibleEditor: None, customizations},
-  reducer: (action, state) =>
-    switch (action) {
-    | ShowEditor(editor) =>
-      ReasonReact.Update({...state, visibleEditor: Some(editor)})
-    | CloseEditor => ReasonReact.Update({...state, visibleEditor: None})
-    | AddLink(link) =>
-      ReasonReact.Update({
-        ...state,
-        customizations: state.customizations |> Customizations.addLink(link),
-      })
-    | RemoveLink(linkId) =>
-      ReasonReact.Update({
-        ...state,
-        customizations:
-          state.customizations |> Customizations.removeLink(linkId),
-      })
-    | UpdatePrivacyPolicy(agreement) =>
-      ReasonReact.Update({
-        ...state,
-        customizations:
-          state.customizations
-          |> Customizations.updatePrivacyPolicy(agreement),
-      })
-    | UpdateTermsOfUse(agreement) =>
-      ReasonReact.Update({
-        ...state,
-        customizations:
-          state.customizations |> Customizations.updateTermsOfUse(agreement),
-      })
-    | UpdateAddress(address) =>
-      ReasonReact.Update({
-        ...state,
-        customizations:
-          state.customizations |> Customizations.updateAddress(address),
-      })
-    | UpdateEmailAddress(emailAddress) =>
-      ReasonReact.Update({
-        ...state,
-        customizations:
-          state.customizations
-          |> Customizations.updateEmailAddress(emailAddress),
-      })
-    | UpdateImages(json) =>
-      ReasonReact.Update({
-        ...state,
-        customizations:
-          state.customizations |> Customizations.updateImages(json),
-      })
-    },
-  render: ({state, send}) =>
-    <div>
-      <div className="px-6 pt-6 w-full xl:max-w-6xl mx-auto">
-        <div className="font-bold"> {"Header" |> str} </div>
-        <div
-          className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
-          <div className="flex items-center bg-gray-200 rounded p-2">
-            {headerLogo(
-               schoolName,
-               state.customizations |> Customizations.logoOnLightBg,
+let initialState = customizations => {visibleEditor: None, customizations};
+
+let reducer = (state, action) =>
+  switch (action) {
+  | ShowEditor(editor) => {...state, visibleEditor: Some(editor)}
+  | CloseEditor => {...state, visibleEditor: None}
+  | AddLink(link) => {
+      ...state,
+      customizations: state.customizations |> Customizations.addLink(link),
+    }
+  | RemoveLink(linkId) => {
+      ...state,
+      customizations:
+        state.customizations |> Customizations.removeLink(linkId),
+    }
+  | UpdatePrivacyPolicy(agreement) => {
+      ...state,
+      customizations:
+        state.customizations |> Customizations.updatePrivacyPolicy(agreement),
+    }
+  | UpdateTermsOfUse(agreement) => {
+      ...state,
+      customizations:
+        state.customizations |> Customizations.updateTermsOfUse(agreement),
+    }
+  | UpdateAddress(address) => {
+      ...state,
+      customizations:
+        state.customizations |> Customizations.updateAddress(address),
+    }
+  | UpdateEmailAddress(emailAddress) => {
+      ...state,
+      customizations:
+        state.customizations
+        |> Customizations.updateEmailAddress(emailAddress),
+    }
+  | UpdateImages(json) => {
+      ...state,
+      customizations:
+        state.customizations |> Customizations.updateImages(json),
+    }
+  };
+
+[@react.component]
+let make = (~authenticityToken, ~customizations, ~schoolName) => {
+  let (state, send) =
+    React.useReducer(reducer, initialState(customizations));
+  <div>
+    <div className="px-6 pt-6 w-full xl:max-w-6xl mx-auto">
+      <div className="font-bold"> {"Header" |> str} </div>
+      <div
+        className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
+        <div className="flex items-center bg-gray-200 rounded p-2">
+          {headerLogo(
+             schoolName,
+             state.customizations |> Customizations.logoOnLightBg,
+           )}
+          {editIcon(
+             "ml-6",
+             showEditor(ImagesEditor, send),
+             "Edit logo (on light backgrounds)",
+           )}
+        </div>
+        <div className="flex items-center">
+          <div
+            className="school-customize__header-links flex items-center bg-gray-200 rounded px-3 py-2 h-full">
+            {headerLinks(
+               state.customizations
+               |> Customizations.headerLinks
+               |> Customizations.unpackLinks,
              )}
             {editIcon(
-               "ml-6",
-               showEditor(ImagesEditor, send),
-               "Edit logo (on light backgrounds)",
+               "ml-3",
+               showEditor(
+                 LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
+                 send,
+               ),
+               "Edit header links",
              )}
           </div>
-          <div className="flex items-center">
+        </div>
+      </div>
+      <div className="mt-6 font-bold"> {"Footer" |> str} </div>
+      <div className="mt-3 w-full">
+        <div
+          className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
+          <div className="w-1/2">
             <div
-              className="school-customize__header-links flex items-center bg-gray-200 rounded px-3 py-2 h-full">
-              {headerLinks(
+              className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
+              <div className="flex items-center">
+                <span className="uppercase font-bold text-sm">
+                  {"Sitemap" |> str}
+                </span>
+                {editIcon(
+                   "ml-3",
+                   showEditor(
+                     LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
+                     send,
+                   ),
+                   "Edit footer links",
+                 )}
+              </div>
+              {sitemap(
                  state.customizations
-                 |> Customizations.headerLinks
+                 |> Customizations.footerLinks
                  |> Customizations.unpackLinks,
                )}
+            </div>
+          </div>
+          <div className="w-1/2">
+            <div className="flex">
+              <div className="w-1/2">
+                <div
+                  className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
+                  <div className="flex items-center">
+                    <span className="uppercase font-bold text-sm">
+                      {"Social" |> str}
+                    </span>
+                    {editIcon(
+                       "ml-3",
+                       showEditor(
+                         LinksEditor(SchoolCustomize__LinksEditor.SocialLink),
+                         send,
+                       ),
+                       "Edit social media links",
+                     )}
+                  </div>
+                  {socialLinks(
+                     state.customizations
+                     |> Customizations.socialLinks
+                     |> Customizations.unpackLinks,
+                   )}
+                </div>
+              </div>
+              <div className="w-1/2">
+                <div
+                  className="p-3 bg-black border border-dashed border-gray-900 rounded h-full">
+                  <div className="flex items-center">
+                    <span className="uppercase font-bold text-sm">
+                      {"Contact" |> str}
+                    </span>
+                    {editIcon(
+                       "ml-3",
+                       showEditor(ContactsEditor, send),
+                       "Edit contact details",
+                     )}
+                  </div>
+                  {address(state.customizations |> Customizations.address)}
+                  {emailAddress(
+                     state.customizations |> Customizations.emailAddress,
+                   )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
+          <div
+            className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
+            {footerLogo(
+               schoolName,
+               state.customizations |> Customizations.logoOnDarkBg,
+             )}
+            {editIcon(
+               "ml-3",
+               showEditor(ImagesEditor, send),
+               "Edit logo (on dark backgrounds)",
+             )}
+          </div>
+          <div className="flex items-center text-sm">
+            <div
+              className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
+              <div> {"Privacy Policy" |> str} </div>
               {editIcon(
                  "ml-3",
                  showEditor(
-                   LinksEditor(SchoolCustomize__LinksEditor.HeaderLink),
+                   AgreementsEditor(
+                     SchoolCustomize__AgreementsEditor.PrivacyPolicy,
+                   ),
                    send,
                  ),
-                 "Edit header links",
+                 "Edit privacy policy",
                )}
             </div>
-          </div>
-        </div>
-        <div className="mt-6 font-bold"> {"Footer" |> str} </div>
-        <div className="mt-3 w-full">
-          <div
-            className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
-            <div className="w-1/2">
-              <div
-                className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
-                <div className="flex items-center">
-                  <span className="uppercase font-bold text-sm">
-                    {"Sitemap" |> str}
-                  </span>
-                  {editIcon(
-                     "ml-3",
-                     showEditor(
-                       LinksEditor(SchoolCustomize__LinksEditor.FooterLink),
-                       send,
-                     ),
-                     "Edit footer links",
-                   )}
-                </div>
-                {sitemap(
-                   state.customizations
-                   |> Customizations.footerLinks
-                   |> Customizations.unpackLinks,
-                 )}
-              </div>
-            </div>
-            <div className="w-1/2">
-              <div className="flex">
-                <div className="w-1/2">
-                  <div
-                    className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
-                    <div className="flex items-center">
-                      <span className="uppercase font-bold text-sm">
-                        {"Social" |> str}
-                      </span>
-                      {editIcon(
-                         "ml-3",
-                         showEditor(
-                           LinksEditor(
-                             SchoolCustomize__LinksEditor.SocialLink,
-                           ),
-                           send,
-                         ),
-                         "Edit social media links",
-                       )}
-                    </div>
-                    {socialLinks(
-                       state.customizations
-                       |> Customizations.socialLinks
-                       |> Customizations.unpackLinks,
-                     )}
-                  </div>
-                </div>
-                <div className="w-1/2">
-                  <div
-                    className="p-3 bg-black border border-dashed border-gray-900 rounded h-full">
-                    <div className="flex items-center">
-                      <span className="uppercase font-bold text-sm">
-                        {"Contact" |> str}
-                      </span>
-                      {editIcon(
-                         "ml-3",
-                         showEditor(ContactsEditor, send),
-                         "Edit contact details",
-                       )}
-                    </div>
-                    {address(state.customizations |> Customizations.address)}
-                    {emailAddress(
-                       state.customizations |> Customizations.emailAddress,
-                     )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
             <div
-              className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
-              {footerLogo(
-                 schoolName,
-                 state.customizations |> Customizations.logoOnDarkBg,
-               )}
+              className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2 ml-6">
+              <div> {"Terms of Use" |> str} </div>
               {editIcon(
                  "ml-3",
-                 showEditor(ImagesEditor, send),
-                 "Edit logo (on dark backgrounds)",
+                 showEditor(
+                   AgreementsEditor(
+                     SchoolCustomize__AgreementsEditor.TermsOfUse,
+                   ),
+                   send,
+                 ),
+                 "Edit terms of use",
                )}
             </div>
-            <div className="flex items-center text-sm">
-              <div
-                className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
-                <div> {"Privacy Policy" |> str} </div>
-                {editIcon(
-                   "ml-3",
-                   showEditor(
-                     AgreementsEditor(
-                       SchoolCustomize__AgreementsEditor.PrivacyPolicy,
-                     ),
-                     send,
-                   ),
-                   "Edit privacy policy",
-                 )}
-              </div>
-              <div
-                className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2 ml-6">
-                <div> {"Terms of Use" |> str} </div>
-                {editIcon(
-                   "ml-3",
-                   showEditor(
-                     AgreementsEditor(
-                       SchoolCustomize__AgreementsEditor.TermsOfUse,
-                     ),
-                     send,
-                   ),
-                   "Edit terms of use",
-                 )}
-              </div>
-              <div className="ml-6 flex items-center">
-                <i className="far fa-copyright" />
-                <span className="ml-1">
-                  {(
-                     Js.Date.make()
-                     |> Js.Date.getFullYear
-                     |> int_of_float
-                     |> string_of_int
-                   )
-                   ++ " "
-                   ++ schoolName
-                   |> str}
-                </span>
-              </div>
+            <div className="ml-6 flex items-center">
+              <i className="far fa-copyright" />
+              <span className="ml-1">
+                {(
+                   Js.Date.make()
+                   |> Js.Date.getFullYear
+                   |> int_of_float
+                   |> string_of_int
+                 )
+                 ++ " "
+                 ++ schoolName
+                 |> str}
+              </span>
             </div>
           </div>
-        </div>
-        <div className="mt-6 font-bold"> {"Icon" |> str} </div>
-        <div className="mt-3 w-2/4 max-w-sm">
-          <div className="bg-gray-400 rounded-t-lg h-12 flex items-end">
-            <div className="w-full flex items-center pr-3">
-              <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
-              <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
-              <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
-              <div
-                className="p-3 ml-4 bg-gray-100 rounded-t-lg flex items-center">
-                <img
-                  src={
-                    state.customizations
-                    |> Customizations.icon
-                    |> Customizations.url
-                  }
-                  className="h-5 w-5"
-                />
-                <span className="ml-1 text-sm font-semibold">
-                  {schoolName |> str}
-                </span>
-              </div>
-              {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
-            </div>
-          </div>
-          <div className="bg-gray-100 border border-t-0 h-16 rounded-b-lg" />
         </div>
       </div>
-      {editor(state, send, authenticityToken)}
-    </div>,
+      <div className="mt-6 font-bold"> {"Icon" |> str} </div>
+      <div className="mt-3 w-2/4 max-w-sm">
+        <div className="bg-gray-400 rounded-t-lg h-12 flex items-end">
+          <div className="w-full flex items-center pr-3">
+            <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
+            <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
+            <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
+            <div
+              className="p-3 ml-4 bg-gray-100 rounded-t-lg flex items-center">
+              <img
+                src={
+                  state.customizations
+                  |> Customizations.icon
+                  |> Customizations.url
+                }
+                className="h-5 w-5"
+              />
+              <span className="ml-1 text-sm font-semibold">
+                {schoolName |> str}
+              </span>
+            </div>
+            {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
+          </div>
+        </div>
+        <div className="bg-gray-100 border border-t-0 h-16 rounded-b-lg" />
+      </div>
+    </div>
+    {editor(state, send, authenticityToken)}
+  </div>;
 };

@@ -58,8 +58,8 @@ let successMessage = (accessEndsAt, isSingleFounder) => {
   switch (accessEndsAt) {
   | Some(date) =>
     switch (date |> DateFns.isBefore(Js.Date.make()), isSingleFounder) {
-    | (true, true) => "Student archived successfully"
-    | (true, false) => "Team archived successfully"
+    | (true, true) => "Student has been updated, and moved to list of inactive students"
+    | (true, false) => "Team has been updated, and moved to list of inactive students"
     | (false, true)
     | (false, false) => "Student updated successfully"
     }
@@ -153,12 +153,6 @@ let handleEligibleTeamCoachList =
 
        (coach |> Coach.id, coach |> Coach.name, selected);
      });
-};
-
-let accessEndsAtHelpMessage = isSingleStudent => {
-  isSingleStudent
-    ? "Student can't submit his work from the specified date"
-    : "Team members can't submit their work from the specified date";
 };
 
 let studentTeam = (teams, student) =>
@@ -379,13 +373,16 @@ let make =
         <label
           className="tracking-wide text-xs font-semibold"
           htmlFor="access-ends-at-input">
-          {"Access ends at" |> str}
+          {(isSingleFounder ? "Student's" : "Team's")
+           ++ " Access Ends On"
+           |> str}
         </label>
         <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
         <HelpIcon
           className="ml-2"
           link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-          {accessEndsAtHelpMessage(isSingleFounder) |> str}
+          {"If set, students will not be able to complete targets after this date."
+           |> str}
         </HelpIcon>
         <DatePicker
           onChange={date => send(UpdateAccessEndsAt(date))}

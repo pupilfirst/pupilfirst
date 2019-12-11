@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Inactive students index', js: true do
   include UserSpecHelper
+  include NotificationHelper
 
   # Setup a course
   let!(:school) { create :school, :current }
@@ -21,25 +22,30 @@ feature 'Inactive students index', js: true do
 
     access_ended_student = access_ended_team.founders.first
     expect(page).to have_text(access_ended_student.name)
+
     check "select-team-#{access_ended_team.id}"
-    expect(page).to have_button('Mark Team Active')
-    click_button 'Mark Team Active'
+    click_button 'Reactivate Students'
+
     expect(page).to have_text("Teams marked active successfully!")
     expect(access_ended_team.reload.access_ends_at).to eq(nil)
 
+    dismiss_notification
     exited_student = exited_team.founders.first
     expect(page).to have_text(exited_student.name)
+
     check "select-team-#{exited_team.id}"
-    expect(page).to have_button('Mark Team Active')
-    click_button 'Mark Team Active'
+    click_button 'Reactivate Students'
+
     expect(page).to have_text("Teams marked active successfully!")
     expect(exited_team.reload.exited_at).to eq(nil)
 
     inactive_student = inactive_team.founders.first
     expect(page).to have_text(inactive_student.name)
+
+    dismiss_notification
     check "select-team-#{inactive_team.id}"
-    expect(page).to have_button('Mark Team Active')
-    click_button 'Mark Team Active'
+    click_button 'Reactivate Students'
+
     expect(page).to have_text("Teams marked active successfully!")
     expect(inactive_team.reload.exited_at).to eq(nil)
     expect(inactive_team.access_ends_at).to eq(nil)

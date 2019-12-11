@@ -43,8 +43,9 @@ let make = (~student) => {
     </label>
     <HelpIcon
       className="ml-2"
-      link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-      {"The student will lose all access to the course. " |> str}
+      link="https://docs.pupilfirst.com/#/students?id=student-actions">
+      {"Marking a student as dropped out will remove all of their access to the course."
+       |> str}
     </HelpIcon>
     <div className="mt-2">
       <button

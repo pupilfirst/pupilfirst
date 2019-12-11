@@ -317,7 +317,7 @@ let make =
         <a
           className="btn btn-default no-underline"
           href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
-          {"Student Archive" |> str}
+          {"Inactive Students" |> str}
         </a>
       </div>
     </div>

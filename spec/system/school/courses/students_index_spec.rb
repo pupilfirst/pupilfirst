@@ -286,7 +286,7 @@ feature 'School students index', js: true do
     scenario 'School admin updates Access ends at' do
       sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-      expect(page).to have_link("Student Archive", href: school_course_inactive_students_path(course))
+      expect(page).to have_link("Inactive Students", href: school_course_inactive_students_path(course))
 
       founder = inactive_team_1.founders.first
       expect(page).to have_text(founder.name)
@@ -306,7 +306,7 @@ feature 'School students index', js: true do
       fill_in 'Access ends at', with: 1.day.ago.iso8601
       click_button 'Update Student'
 
-      expect(page).to have_text("Team archived successfully")
+      expect(page).to have_text("Team has been updated, and moved to list of inactive students")
       dismiss_notification
 
       expect(founder.reload.startup.access_ends_at.to_date).to eq(1.day.ago.to_date)

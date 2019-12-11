@@ -1,0 +1,19 @@
+<div>
+  <div class="max-w-5xl mx-auto">
+    <h1><%= current_school.name %></h1>
+    <h3>About School</h3>
+    <div>
+      <h2>
+        Featured Courses
+      </h2>
+      <div>
+        <% @courses.map do |course| %>
+          <div>
+            <%= course.name %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

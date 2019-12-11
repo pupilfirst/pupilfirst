@@ -34,10 +34,10 @@ class FacultyMailer < SchoolMailer
   # @param faculty [Faculty] Coach who needs to be notified about the submission.
   def student_submission_notification(timeline_event, faculty)
     @faculty = faculty
+    @submission = timeline_event
 
     @submission_from = if timeline_event.founders.count == 1
-      # TODO: Replace with pick(:name) with Rails 6.
-      timeline_event.founders.first.name
+      timeline_event.founders.joins(:user).pick(:name)
     else
       "team #{timeline_event.founders.first.startup.name}"
     end

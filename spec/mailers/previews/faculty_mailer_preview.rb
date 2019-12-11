@@ -15,6 +15,7 @@ class FacultyMailerPreview < ActionMailer::Preview
     founder = Founder.first
 
     timeline_event = TimelineEvent.new(
+      id: 1,
       founders: founder.startup.founders,
       target: founder.course.targets.first
     )

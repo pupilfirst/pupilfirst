@@ -53,7 +53,7 @@ If you click the _Dropout Student_ button, the student will lose _all_ access to
 
 ## Inactive Students
 
-Students whose access to a course has ended, or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, click the _Inactive Students_ button at the top-right of the students page. Here, all of your previous students are listed, with an option to _Re-activate_ them, if required.
+Students whose access to a course has ended, or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, click the _Inactive Students_ button at the top-right of the students page. Inactive students can be reactivated by selecting one or more students or teams, and then choosing the _Reactivate Students_ option.
 
 ## Teaming up students
 

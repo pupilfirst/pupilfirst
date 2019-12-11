@@ -16,6 +16,8 @@ class School < ApplicationRecord
 
   acts_as_taggable_on :founder_tags
 
+  normalize_attribute :about
+
   has_one_attached :logo_on_light_bg
   has_one_attached :logo_on_dark_bg
   has_one_attached :icon

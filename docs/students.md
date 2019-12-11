@@ -51,7 +51,7 @@ In addition to editing a student's details, you can switch to the _Actions_ tab 
 **Has this student dropped out?**\
 If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their home page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
-## Inactive Students
+## Inactive students
 
 Students whose access to a course has ended, or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, click the _Inactive Students_ button at the top-right of the students page. Inactive students can be reactivated by selecting one or more students or teams, and then choosing the _Reactivate Students_ option.
 

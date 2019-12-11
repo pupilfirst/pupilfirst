@@ -283,7 +283,7 @@ feature 'School students index', js: true do
     let!(:inactive_team_1) { create :startup, level: level_1 }
     let(:access_ends_at) { 1.day.from_now }
 
-    scenario 'School admin updates Access ends at' do
+    scenario 'School admin updates access end date' do
       sign_in_user school_admin.user, referer: school_course_students_path(course)
 
       expect(page).to have_link("Inactive Students", href: school_course_inactive_students_path(course))
@@ -294,7 +294,7 @@ feature 'School students index', js: true do
       find("a", text: founder.name).click
 
       expect(page).to have_text(founder.startup.name)
-      fill_in 'Access ends at', with: access_ends_at.iso8601
+      fill_in "Team's Access Ends On", with: access_ends_at.iso8601
       click_button 'Update Student'
 
       expect(page).to have_text("Student updated successfully")
@@ -303,7 +303,7 @@ feature 'School students index', js: true do
       expect(founder.reload.startup.access_ends_at.to_date).to eq(access_ends_at.to_date)
 
       find("a", text: founder.name).click
-      fill_in 'Access ends at', with: 1.day.ago.iso8601
+      fill_in "Team's Access Ends On", with: 1.day.ago.iso8601
       click_button 'Update Student'
 
       expect(page).to have_text("Team has been updated, and moved to list of inactive students")

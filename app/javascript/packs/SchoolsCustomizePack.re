@@ -13,7 +13,7 @@ let decodeProps = json =>
     customizations:
       json |> field("customizations", SchoolCustomize__Customizations.decode),
     schoolName: json |> field("schoolName", string),
-    schoolAbout: json |> field("schoolName", optional(string)),
+    schoolAbout: json |> field("schoolAbout", optional(string)),
   };
 
 let props = DomUtils.parseJsonAttribute() |> decodeProps;
@@ -23,6 +23,7 @@ ReactDOMRe.renderToElementWithId(
     authenticityToken={props.authenticityToken}
     customizations={props.customizations}
     schoolName={props.schoolName}
+    schoolAbout={props.schoolAbout}
   />,
   "react-root",
 );

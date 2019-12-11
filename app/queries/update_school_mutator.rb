@@ -5,8 +5,6 @@ class UpdateSchoolMutator < ApplicationQuery
   property :about, validates: { length: { maximum: 500 } }
 
   def update_school
-    current_school.name = name
-    current_school.about = about if about.present?
-    current_school.save!
+    current_school.update!(name: name, about: about)
   end
 end

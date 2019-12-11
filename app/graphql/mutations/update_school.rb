@@ -1,11 +1,11 @@
 module Mutations
   class UpdateSchool < GraphQL::Schema::Mutation
     argument :name, String, required: true
-    argument :about, String, required: false
+    argument :about, String, required: true
 
     description "Update a School details"
 
-    field :success, Boolean, null: true
+    field :success, Boolean, null: false
 
     def resolve(params)
       mutator = UpdateSchoolMutator.new(context, params)

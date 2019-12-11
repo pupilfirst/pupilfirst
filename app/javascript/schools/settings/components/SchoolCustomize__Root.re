@@ -8,6 +8,7 @@ let str = ReasonReact.string;
 
 type editor =
   | LinksEditor(SchoolCustomize__LinksEditor.kind)
+  | DeatilsEditor
   | ImagesEditor
   | ContactsEditor
   | AgreementsEditor(SchoolCustomize__AgreementsEditor.kind);
@@ -15,6 +16,8 @@ type editor =
 type state = {
   visibleEditor: option(editor),
   customizations: Customizations.t,
+  schoolName: string,
+  schoolAbout: option(string),
 };
 
 type action =
@@ -26,6 +29,7 @@ type action =
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
+  | UpdateSchoolDetails(string, option(string))
   | UpdateImages(Js.Json.t);
 
 let headerLogo = (schoolName, logoOnLightBg) =>
@@ -200,13 +204,26 @@ let editor = (state, send, authenticityToken) =>
            updateImagesCB={json => send(UpdateImages(json))}
            authenticityToken
          />
+       | DeatilsEditor =>
+         <SchoolCustomize__DetailsEditor
+           name={state.schoolName}
+           about={state.schoolAbout}
+           updateDetailsCB={(name, about) =>
+             send(UpdateSchoolDetails(name, about))
+           }
+         />
        }}
     </SchoolAdmin__EditorDrawer>
 
   | None => ReasonReact.null
   };
 
-let initialState = customizations => {visibleEditor: None, customizations};
+let initialState = (customizations, schoolName, schoolAbout) => {
+  visibleEditor: None,
+  customizations,
+  schoolName,
+  schoolAbout,
+};
 
 let reducer = (state, action) =>
   switch (action) {
@@ -243,19 +260,29 @@ let reducer = (state, action) =>
         |> Customizations.updateEmailAddress(emailAddress),
     }
   | UpdateImages(json) => {
+      ...state,
       customizations:
         state.customizations |> Customizations.updateImages(json),
+      visibleEditor: None,
+    }
+  | UpdateSchoolDetails(schoolName, schoolAbout) => {
+      ...state,
+      schoolName,
+      schoolAbout,
       visibleEditor: None,
     }
   };
 
 [@react.component]
-let make = (~authenticityToken, ~customizations, ~schoolName) => {
+let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
   let (state, send) =
-    React.useReducer(reducer, initialState(customizations));
+    React.useReducer(
+      reducer,
+      initialState(customizations, schoolName, schoolAbout),
+    );
   <div>
     <div className="px-6 pt-6 w-full xl:max-w-6xl mx-auto">
-      <div className="font-bold"> {"Header" |> str} </div>
+      <div className="font-bold"> {"Home Page" |> str} </div>
       <div
         className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
         <div className="flex items-center bg-gray-200 rounded p-2">
@@ -303,23 +330,45 @@ let make = (~authenticityToken, ~customizations, ~schoolName) => {
            }}
         </div>
       </div>
-      <div className="-mt-12 relative">
-        <div
-          className="text-right max-w-2xl mx-auto text-white text-xs font-semibold">
-          <div
-            className="text-xs btn cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600"
-            onClick={showEditor(ImagesEditor, send)}>
-            <i className="fas fa-pencil-alt mr-2"></i>
-            <span> {"change image" |> str} </span>
+      <div className="-mt-40 relative">
+        <div className="max-w-2xl mx-auto text-white text-xs font-semibold">
+          <div className="text-white">
+            <div className="text-sm"> {"Hello, welcome to" |> str} </div>
+            <div
+              onClick={showEditor(DeatilsEditor, send)}
+              className="text-3xl font-bold">
+              <span> {state.schoolName |> str} </span>
+              <i className="fas fa-pencil-alt text-sm ml-2" />
+            </div>
+          </div>
+          <div className="flex justify-end mt-6">
+            <button
+              className="btn btn-default"
+              onClick={showEditor(ImagesEditor, send)}>
+              <i className="fas fa-pencil-alt mr-2" />
+              <span> {"change image" |> str} </span>
+            </button>
           </div>
         </div>
-        <div className="max-w-2xl mx-auto bg-primary-900">
+        <div className="max-w-2xl mx-auto bg-primary-900 mt-2">
+          <button
+            className="btn btn-default"
+            onClick={showEditor(DeatilsEditor, send)}>
+            <i className="fas fa-pencil-alt mr-2" />
+            <span> {"Edit" |> str} </span>
+          </button>
           <div className="mx-auto flex justify-center text-white p-10">
-            <div className="w-1/2 text-2xl font-bold text-center">
+            <div className="w-1/3 text-2xl font-bold text-center">
               {"About" |> str}
             </div>
-            <div className="w-1/2 text-xs text-left">
-              {"replace with course description" |> str}
+            <div className="w-2/3 text-sm text-left">
+              {(
+                 switch (state.schoolAbout) {
+                 | Some(about) => about
+                 | None => "Add more details about the school."
+                 }
+               )
+               |> str}
             </div>
           </div>
         </div>
@@ -330,7 +379,6 @@ let make = (~authenticityToken, ~customizations, ~schoolName) => {
           {"All the courses with featured flag will listed here" |> str}
         </div>
       </div>
-      <div className="mt-6 font-bold"> {"Footer" |> str} </div>
       <div className="mt-3 w-full">
         <div
           className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
@@ -481,7 +529,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName) => {
                 }
                 className="h-5 w-5"
               />
-              <span className="ml-1 text-sm font-semibold">
+              <span className="ml-1 text-xs font-semibold max-w-xs truncate">
                 {schoolName |> str}
               </span>
             </div>

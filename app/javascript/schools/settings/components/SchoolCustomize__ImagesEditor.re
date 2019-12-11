@@ -7,6 +7,7 @@ let str = ReasonReact.string;
 type action =
   | SelectLogoOnLightBgFile(string, bool)
   | SelectLogoOnDarkBgFile(string, bool)
+  | SelectCoverImageFile(string, bool)
   | SelectIconFile(string, bool)
   | BeginUpdate
   | ErrorOccured
@@ -15,6 +16,8 @@ type action =
 type state = {
   logoOnLightBgFilename: option(string),
   logoOnLightBgInvalid: bool,
+  coverImageFilename: option(string),
+  coverImageInvalid: bool,
   logoOnDarkBgFilename: option(string),
   logoOnDarkBgInvalid: bool,
   iconFilename: option(string),
@@ -61,40 +64,6 @@ let updateButtonDisabled = state =>
     || state.iconInvalid;
   };
 
-let optionalImageLabelText = (image, selectedFilename) =>
-  switch (selectedFilename) {
-  | Some(name) =>
-    <span>
-      {"You have selected " |> str}
-      <code className="mr-1"> {name |> str} </code>
-      {" to replace the current image." |> str}
-    </span>
-  | None =>
-    switch (image) {
-    | Some(existingImage) =>
-      <span>
-        {"Please pick a file to replace " |> str}
-        <code> {existingImage |> Customizations.filename |> str} </code>
-      </span>
-    | None => "Please choose an image file to customize" |> str
-    }
-  };
-
-let iconLabelText = (icon, iconFilename) =>
-  switch (iconFilename) {
-  | Some(name) =>
-    <span>
-      {"You have selected " |> str}
-      <code className="mr-1"> {name |> str} </code>
-      {" to replace the current icon." |> str}
-    </span>
-  | None =>
-    <span>
-      {"Please pick a file to replace " |> str}
-      <code> {icon |> Customizations.filename |> str} </code>
-    </span>
-  };
-
 let maxAllowedSize = 2 * 1024 * 1024;
 
 let isInvalidImageFile = image =>
@@ -122,14 +91,59 @@ let updateLogoOnDarkBg = (send, event) => {
   );
 };
 
+let updateCoverImage = (send, event) => {
+  let imageFile = ReactEvent.Form.target(event)##files[0];
+  send(
+    SelectCoverImageFile(imageFile##name, imageFile |> isInvalidImageFile),
+  );
+};
+
 let updateIcon = (send, event) => {
   let imageFile = ReactEvent.Form.target(event)##files[0];
   send(SelectIconFile(imageFile##name, imageFile |> isInvalidImageFile));
 };
 
+let imageUploader =
+    (
+      ~id,
+      ~disabled,
+      ~name,
+      ~onChange,
+      ~labelText,
+      ~optionalImageLabel,
+      ~errorState,
+      ~errorMessage,
+    ) => {
+  <div key=id className="mt-4">
+    <label
+      className="block tracking-wide text-gray-800 text-xs font-semibold"
+      htmlFor=id>
+      {labelText |> str}
+    </label>
+    <input
+      disabled
+      className="hidden"
+      name
+      type_="file"
+      accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+      id
+      required=false
+      multiple=false
+      onChange
+    />
+    <label className="file-input-label mt-2" htmlFor=id>
+      <i className="fas fa-upload" />
+      <span className="ml-2 truncate"> optionalImageLabel </span>
+    </label>
+    <School__InputGroupError message=errorMessage active=errorState />
+  </div>;
+};
+
 let initialState = () => {
   logoOnLightBgFilename: None,
   logoOnLightBgInvalid: false,
+  coverImageFilename: None,
+  coverImageInvalid: false,
   logoOnDarkBgFilename: None,
   logoOnDarkBgInvalid: false,
   iconFilename: None,
@@ -158,18 +172,15 @@ let reducer = (state, action) =>
       iconInvalid: invalid,
       formDirty: true,
     }
+  | SelectCoverImageFile(name, invalid) => {
+      ...state,
+      coverImageFilename: Some(name),
+      coverImageInvalid: invalid,
+      formDirty: true,
+    }
   | BeginUpdate => {...state, updating: true}
   | ErrorOccured => {...state, updating: false}
-  | DoneUpdating => {
-      updating: false,
-      formDirty: false,
-      logoOnLightBgFilename: None,
-      logoOnLightBgInvalid: false,
-      logoOnDarkBgFilename: None,
-      logoOnDarkBgInvalid: false,
-      iconFilename: None,
-      iconInvalid: false,
-    }
+  | DoneUpdating => initialState()
   };
 
 [@react.component]
@@ -177,6 +188,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
   let (state, send) = React.useReducer(reducer, initialState());
   let logoOnLightBg = customizations |> Customizations.logoOnLightBg;
   let logoOnDarkBg = customizations |> Customizations.logoOnDarkBg;
+  let coverImage = customizations |> Customizations.coverImage;
   let icon = customizations |> Customizations.icon;
 
   <form
@@ -189,99 +201,52 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
       {"Manage Images" |> str}
     </h5>
     <DisablingCover disabled={state.updating}>
-      <div key="sc-images-editor__logo-on-400-bg-input-group" className="mt-4">
-        <label
-          className="block tracking-wide text-gray-800 text-xs font-semibold"
-          htmlFor="sc-images-editor__logo-on-400-bg-input">
-          {"Logo on a light background" |> str}
-        </label>
-        <input
-          disabled={state.updating}
-          className="hidden"
-          name="logo_on_light_bg"
-          type_="file"
-          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-          id="sc-images-editor__logo-on-400-bg-input"
-          required=false
-          multiple=false
-          onChange={updateLogoOnLightBg(send)}
-        />
-        <label
-          className="file-input-label mt-2"
-          htmlFor="sc-images-editor__logo-on-400-bg-input">
-          <i className="fas fa-upload" />
-          <span className="ml-2 truncate">
-            {optionalImageLabelText(
-               logoOnLightBg,
-               state.logoOnLightBgFilename,
-             )}
-          </span>
-        </label>
-        <School__InputGroupError
-          message="must be a JPEG / PNG under 2 MB in size"
-          active={state.logoOnLightBgInvalid}
-        />
-      </div>
-      <div key="sc-images-editor__logo-on-600-bg-input-group" className="mt-4">
-        <label
-          className="block tracking-wide text-gray-800 text-xs font-semibold"
-          htmlFor="sc-images-editor__logo-on-600-bg-input">
-          {"Logo on a dark background" |> str}
-        </label>
-        <input
-          disabled={state.updating}
-          className="hidden"
-          name="logo_on_dark_bg"
-          type_="file"
-          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-          id="sc-images-editor__logo-on-600-bg-input"
-          required=false
-          multiple=false
-          onChange={updateLogoOnDarkBg(send)}
-        />
-        <label
-          className="file-input-label mt-2"
-          htmlFor="sc-images-editor__logo-on-600-bg-input">
-          <i className="fas fa-upload" />
-          <span className="ml-2 truncate">
-            {optionalImageLabelText(logoOnDarkBg, state.logoOnDarkBgFilename)}
-          </span>
-        </label>
-        <School__InputGroupError
-          message="must be a JPEG / PNG under 2 MB in size"
-          active={state.logoOnDarkBgInvalid}
-        />
-      </div>
-      <div key="sc-images-editor__icon-input-group" className="mt-4">
-        <label
-          className="block tracking-wide text-gray-800 text-xs font-semibold"
-          htmlFor="sc-images-editor__icon-input">
-          {"Icon" |> str}
-        </label>
-        <input
-          disabled={state.updating}
-          className="hidden"
-          name="icon"
-          type_="file"
-          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-          id="sc-images-editor__icon-input"
-          required=false
-          multiple=false
-          onChange={updateIcon(send)}
-        />
-        <label
-          className="file-input-label mt-2"
-          htmlFor="sc-images-editor__icon-input">
-          <i className="fas fa-upload" />
-          <span className="ml-2 truncate">
-            {iconLabelText(icon, state.iconFilename)}
-          </span>
-        </label>
-        <School__InputGroupError
-          message="must be a JPEG / PNG under 2 MB in size"
-          active={state.iconInvalid}
-        />
-      </div>
+      <SchoolCustomize__ImageUploader
+        id="sc-images-editor__logo-on-400-bg-input"
+        disabled={state.updating}
+        name="logo_on_light_bg"
+        onChange={updateLogoOnLightBg(send)}
+        labelText="Logo on a light background"
+        optionalImageName={
+          logoOnLightBg |> OptionUtils.map(Customizations.filename)
+        }
+        optionalSelectedImageName={state.logoOnLightBgFilename}
+        errorState={state.logoOnLightBgInvalid}
+      />
+      <SchoolCustomize__ImageUploader
+        id="sc-images-editor__logo-on-600-bg-input"
+        disabled={state.updating}
+        name="logo_on_dark_bg"
+        onChange={updateLogoOnDarkBg(send)}
+        labelText="Logo on a dark background"
+        optionalImageName={
+          logoOnDarkBg |> OptionUtils.map(Customizations.filename)
+        }
+        optionalSelectedImageName={state.logoOnDarkBgFilename}
+        errorState={state.logoOnDarkBgInvalid}
+      />
+      <SchoolCustomize__ImageUploader
+        id="sc-images-editor__icon-input"
+        disabled={state.updating}
+        name="icon"
+        onChange={updateIcon(send)}
+        labelText="Icon"
+        optionalImageName={Some(icon |> Customizations.filename)}
+        optionalSelectedImageName={state.iconFilename}
+        errorState={state.iconInvalid}
+      />
+      <SchoolCustomize__ImageUploader
+        id="sc-images-editor__cover-image-input"
+        disabled={state.updating}
+        name="cover_image"
+        onChange={updateCoverImage(send)}
+        labelText="Cover Image for school"
+        optionalImageName={
+          coverImage |> OptionUtils.map(Customizations.filename)
+        }
+        optionalSelectedImageName={state.coverImageFilename}
+        errorState={state.coverImageInvalid}
+      />
       <div className="flex justify-end">
         <button
           type_="submit"

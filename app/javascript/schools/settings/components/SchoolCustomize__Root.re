@@ -243,9 +243,9 @@ let reducer = (state, action) =>
         |> Customizations.updateEmailAddress(emailAddress),
     }
   | UpdateImages(json) => {
-      ...state,
       customizations:
         state.customizations |> Customizations.updateImages(json),
+      visibleEditor: None,
     }
   };
 
@@ -286,6 +286,48 @@ let make = (~authenticityToken, ~customizations, ~schoolName) => {
                "Edit header links",
              )}
           </div>
+        </div>
+      </div>
+      <div className="relative bg-primary-900">
+        <div className="relative pb-1/2 md:pb-1/4">
+          {switch (state.customizations |> Customizations.coverImage) {
+           | Some(image) =>
+             <img
+               className="absolute h-full w-full object-cover"
+               src={image |> Customizations.url}
+             />
+           | None =>
+             <div
+               className="student-course__cover-default absolute h-full w-full svg-bg-pattern-1"
+             />
+           }}
+        </div>
+      </div>
+      <div className="-mt-12 relative">
+        <div
+          className="text-right max-w-2xl mx-auto text-white text-xs font-semibold">
+          <div
+            className="text-xs btn cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600"
+            onClick={showEditor(ImagesEditor, send)}>
+            <i className="fas fa-pencil-alt mr-2"></i>
+            <span> {"change image" |> str} </span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto bg-primary-900">
+          <div className="mx-auto flex justify-center text-white p-10">
+            <div className="w-1/2 text-2xl font-bold text-center">
+              {"About" |> str}
+            </div>
+            <div className="w-1/2 text-xs text-left">
+              {"replace with course description" |> str}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mx-auto text-center pt-6">
+        <div className="text-2xl font-bold"> {"Featured course" |> str} </div>
+        <div className="text-xs">
+          {"All the courses with featured flag will listed here" |> str}
         </div>
       </div>
       <div className="mt-6 font-bold"> {"Footer" |> str} </div>

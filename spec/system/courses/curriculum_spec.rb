@@ -56,16 +56,6 @@ feature "Student's view of Course Curriculum", js: true do
     create(:timeline_event_grade, timeline_event: submission_failed_target, evaluation_criterion: evaluation_criterion, grade: 1)
   end
 
-  # TODO: Active this spec after implementing a tour of the course curriclum interface.
-  # context 'when student has not visited the course curriculum page before' do
-  #   let(:dashboard_toured) { false }
-  #
-  #   scenario 'student sees tour of the interface' do
-  #     sign_in_user founder.user, referer: student_dashboard_path
-  #     expect(page).to have_selector('.introjs-overlay')
-  #   end
-  # end
-
   context 'when student has exited the programme' do
     scenario 'ex-student attempts to visit course curriculum' do
       student.update!(exited: true)
@@ -183,20 +173,6 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).not_to have_content(level_6_target.title)
   end
 
-  # TODO: Student should be able to trigger an intro to the interface manually.
-  # scenario 'student can trigger the intro manually' do
-  #   sign_in_user student.user, referer: student_dashboard_path
-  #
-  #   # There should be no tour open right now.
-  #   expect(page).to_not have_selector('.introjs-tooltipReferenceLayer', visible: false)
-  #
-  #   # Founder can manually start a dashboard tour.
-  #   find('.founder-dashboard-actionbar__show-more-menu-dots').click
-  #   find('a[id=filter-targets-dropdown__tour-button]').click
-  #
-  #   expect(page).to have_selector('.introjs-tooltipReferenceLayer', visible: false)
-  # end
-
   context "when the students's course has a level 0 in it" do
     let(:level_0) { create :level, :zero, course: course }
     let(:target_group_l0) { create :target_group, level: level_0 }
@@ -275,51 +251,6 @@ feature "Student's view of Course Curriculum", js: true do
         # Attempting to visit the course page directly should show a 404.
         visit curriculum_course_path(course_2)
         expect(page).to have_text("The page you were looking for doesn't exist!")
-      end
-    end
-  end
-
-  context 'when student is in level one with milestone targets complete' do
-    let(:team_l1) { create :team, level: level_1 }
-    let(:student_tl1) { create :student, startup: team_l1 }
-
-    before do
-      # Create the submission...
-      submission = create(:timeline_event, :latest, founders: [student_tl1], target: completed_target_l1, passed_at: 1.day.ago)
-      # ...and grade it.
-      create(:timeline_event_grade, timeline_event: submission, evaluation_criterion: evaluation_criterion, grade: 2)
-    end
-
-    scenario 'student levels up' do
-      sign_in_user student_tl1.user, referer: curriculum_course_path(course)
-
-      # When level up is pending, student should not be shown any targets or target groups.
-      expect(page).not_to have_text(target_group_l1.name)
-      expect(page).not_to have_text(completed_target_l1.title)
-
-      # There should be a level up notice on the page.
-      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
-      click_button('Level Up')
-
-      # Student should be on level 2 page.
-      expect(page).to have_text(completed_target_l2.title)
-
-      # The team should have leveled up.
-      expect(team_l1.reload.level).to eq(level_2)
-    end
-
-    context "when the level doesn't have any milestone target group" do
-      let!(:target_group_l1) { create :target_group, level: level_1, milestone: false }
-
-      scenario 'student cannot level up' do
-        sign_in_user student_tl1.user, referer: curriculum_course_path(course)
-
-        # Student should be on shown level 1.
-        expect(page).to have_text(completed_target_l1.title)
-
-        # There should be no level up notice or a button.
-        expect(page).not_to have_button('Level Up')
-        expect(page).not_to have_text('You have successfully completed all milestone targets required to level up.')
       end
     end
   end

@@ -9,7 +9,7 @@ class CoursePolicy < ApplicationPolicy
     return false if founder.blank?
 
     # Dropped out students cannot access course dashboard.
-    founder.dropped_out?
+    !founder.dropped_out?
   end
 
   def leaderboard?

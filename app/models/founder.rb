@@ -113,7 +113,7 @@ class Founder < ApplicationRecord
   end
 
   def dropped_out?
-    startup.exited_at.nil?
+    startup.exited_at?
   end
 
   def pending_connect_request_for?(faculty)

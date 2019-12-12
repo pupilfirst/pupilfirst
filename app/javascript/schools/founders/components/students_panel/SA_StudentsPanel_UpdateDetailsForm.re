@@ -166,16 +166,23 @@ let studentTeam = (teams, student) =>
 
 let initialState =
     (student, teams, schoolCoaches, courseCoachIds, teamCoachIds) => {
-  name: student |> Student.name,
-  teamName: student |> studentTeam(teams) |> Team.name,
-  tagsToApply: student |> Student.tags,
-  teamCoaches:
-    handleEligibleTeamCoachList(schoolCoaches, courseCoachIds, teamCoachIds),
-  excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
-  title: student |> Student.title,
-  affiliation: student |> Student.affiliation |> OptionUtils.toString,
-  saving: false,
-  accessEndsAt: student |> studentTeam(teams) |> Team.accessEndsAt,
+  let team = student |> studentTeam(teams);
+  {
+    name: student |> Student.name,
+    teamName: team |> Team.name,
+    tagsToApply: student |> Student.tags,
+    teamCoaches:
+      handleEligibleTeamCoachList(
+        schoolCoaches,
+        courseCoachIds,
+        teamCoachIds,
+      ),
+    excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
+    title: student |> Student.title,
+    affiliation: student |> Student.affiliation |> OptionUtils.toString,
+    saving: false,
+    accessEndsAt: team |> Team.accessEndsAt,
+  };
 };
 
 let reducer = (state, action) =>

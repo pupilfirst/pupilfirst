@@ -112,6 +112,10 @@ class Founder < ApplicationRecord
     startup.present? && startup.exited_at.nil?
   end
 
+  def dropped_out?
+    startup.exited_at.nil?
+  end
+
   def pending_connect_request_for?(faculty)
     startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
   end

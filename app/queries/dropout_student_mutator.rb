@@ -3,7 +3,7 @@ class DropoutStudentMutator < ApplicationQuery
 
   property :id, validates: { presence: true }
 
-  validate :student_must_exist
+  validate :active_student_must_exist
 
   def execute
     ::Founders::MarkAsExitedService.new(student).execute
@@ -11,13 +11,13 @@ class DropoutStudentMutator < ApplicationQuery
 
   private
 
-  def student_must_exist
-    return if student.present?
+  def active_student_must_exist
+    return if student.present? && !student.dropped_out?
 
-    errors[:base] << "Unable to find Student with id: #{id}"
+    errors[:base] << "Unable to find an active student with id: #{id}"
   end
 
   def student
-    @student ||= current_school.founders.find(id)
+    @student ||= current_school.founders.find_by(id: id)
   end
 end

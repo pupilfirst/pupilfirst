@@ -11,7 +11,7 @@ describe Founders::MarkAsExitedService do
       old_startup = student.startup
 
       expect { subject.execute }.to change { student.reload.startup.exited_at }.from(nil)
-      expect(student.startup).not_to eq(old_startup.id)
+      expect(student.startup.id).not_to eq(old_startup.id)
     end
   end
 

@@ -70,7 +70,8 @@ feature 'User signing in by supplying email address', js: true do
 
         # can sign in with the same password
         click_link "Sign Out"
-        expect(page).to have_content("Sign in")
+        expect(page).to have_content(school.name)
+        click_link 'Sign In'
         click_button 'Continue with email'
         fill_in 'Email Address', with: user.email
         fill_in 'Password', with: password

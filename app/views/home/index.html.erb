@@ -1,19 +1,77 @@
-<div>
+<% presenter = ::Home::IndexPresenter.new(self, current_school) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+<% end %>
+
+<div class="pb-10">
+  <div class="relative bg-primary-900">
+    <div class="relative pb-1/2 md:pb-1/4">
+      <% if presenter.cover_image.present? %>
+        <img class="absolute h-full w-full object-cover" src=<%= presenter.cover_image %>/>
+      <% else %>
+        <div class="student-course__cover-default absolute h-full w-full svg-bg-pattern-1"></div>
+      <% end %>
+    </div>
+  </div>
   <div class="max-w-5xl mx-auto">
-    <h1><%= current_school.name %></h1>
-    <h3>About School</h3>
-    <div>
-      <h2>
-        Featured Courses
-      </h2>
-      <div>
-        <% @courses.map do |course| %>
-          <div>
-            <%= course.name %>
-          </div>
-        <% end %>
+    <div class="font-bold text-3xl"><%= current_school.name %></div>
+
+    <div class="mt-6 p-10 bg-primary-900">
+      <div class="flex flex-col md:flex-row text-white">
+        <div class="w-1/3 text-right">
+          <div class="font-bold text-2xl pr-10">About</div>
+        </div>
+        <div class="w-2/3 text-sm">
+          <div><%= presenter.about %></div>
+        </div>
       </div>
     </div>
+
+    <% if presenter.courses.any? %>
+      <div>
+        <div class="font-bold text-3xl mt-6 text-center">
+          Featured Courses
+        </div>
+        <div class="mx-auto">
+          <div class="flex flex-wrap flex-1 lg:-mx-5">
+            <% presenter.courses.map do |course| %>
+              <div class="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+                <div class="flex overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
+                  <div>
+                    <div class="relative">
+                      <div class="relative pb-1/2 bg-gray-800">
+                        <% if presenter.course_thumbnail(course).present? %>
+                          <img
+                            class="absolute h-full w-full object-cover"
+                            src=<%= presenter.course_thumbnail(course) %>
+                            />
+                        <% else %>
+                          <div class="user-home-course__cover absolute h-full w-full svg-bg-pattern-1"></div>
+                        <% end %>
+                      </div>
+                      <div class="user-home-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50">
+                        <h4 class="user-home-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
+                          <%= course.name %>
+                        </h4>
+                      </div>
+                    </div>
+                    <div class="user-home-course__description text-sm px-6 pt-4 w-full leading-relaxed">
+                      <%= course.description %>
+                    </div>
+                    <div class="p-4 mx-auto justify-center flex">
+                      <a class="w-full btn btn-large btn-primary-ghost" href="/courses/<%= course.id %>">
+                        View Course
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
 

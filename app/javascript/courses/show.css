@@ -1,56 +1,17 @@
-.course-show__hero {
-  position: relative;
-  border-radius: 1.875rem;
+.course-show__cover-default {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 
-.course-show__hero:before {
-  @apply absolute left-0 w-full;
-  content: '';
-  background-image: url('./shared/images/courses-apply-pattern.svg');
-  background-repeat: repeat-x;
-  background-size: 70%;
-  background-position: center bottom;
-}
-
-.course-show__hero:before {
-  @apply h-3 top-0;
-  opacity: 0.4;
-}
-
-.course-show__footer-cta {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-}
-
-.course-show__hero-bg-pattern {
-  height: 3rem;
-  background-image: url('./shared/images/courses-apply-pattern.svg');
-  opacity: 0.4;
-  background-repeat: repeat-x;
-  background-size: 82%;
-  background-position: top center;
-}
-
-@screen md {
-  .course-show__hero:before {
-    background-size: 40%;
-  }
-  .course-show__hero-bg-pattern {
-    height: 7rem;
-    background-size: 45%;
-  }
-}
-
-@screen lg {
-  .course-show__hero:before {
-    background-size: 40%;
-  }
-  .course-show__hero-bg-pattern {
-    height: 10rem;
-    background-size: 45%;
-  }
+.course-show__cover-default:before {
+  position: absolute;
+  content: " ";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  background-color: rgba(0, 0, 0, 0.3);
 }

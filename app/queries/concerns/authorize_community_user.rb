@@ -15,4 +15,8 @@ module AuthorizeCommunityUser
   def authorized_update?
     authorized_create? && (creator == current_user || current_coach.present?)
   end
+
+  def current_coach
+    current_user.faculty
+  end
 end

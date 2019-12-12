@@ -68,7 +68,7 @@ let updateName = (send, name) => {
 
 let updateDescription = (send, description) => {
   let lengthOfDescription = description |> String.length;
-  let hasError = lengthOfDescription < 2 || lengthOfDescription >= 151;
+  let hasError = lengthOfDescription < 2 || lengthOfDescription >= 150;
   send(UpdateDescription(description, hasError));
 };
 
@@ -415,7 +415,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     type_="text"
                     placeholder="Type course description here"
                     value={state.description}
-                    maxLength=151
+                    maxLength=150
                     onChange={event =>
                       updateDescription(
                         send,

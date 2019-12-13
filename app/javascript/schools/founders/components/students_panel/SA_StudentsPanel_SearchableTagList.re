@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 let str = ReasonReact.string;
 
 type state = string;
@@ -6,9 +7,6 @@ let handleClick = (tag, send, clickCB) => {
   clickCB(tag);
   send("");
 };
-
-let component =
-  ReasonReact.reducerComponent("SA_StudentsPanel_SearchableTagList");
 
 let search =
     (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB) => {
@@ -65,70 +63,57 @@ let search =
   };
 };
 
+let reducer = (_state, searchString) => {
+  searchString;
+};
+
+[@react.component]
 let make =
-    (
-      ~unselectedTags,
-      ~selectedTags,
-      ~addTagCB,
-      ~removeTagCB,
-      ~allowNewTags,
-      _children,
-    ) => {
-  ...component,
-  initialState: () => "",
-  reducer: (searchString, _state) => ReasonReact.Update(searchString),
-  render: ({state, send}) => {
-    let results =
-      search(
-        state,
-        send,
-        allowNewTags,
-        selectedTags,
-        unselectedTags,
-        addTagCB,
-      );
-    <div className="mt-2">
-      {if (selectedTags |> ListUtils.isNotEmpty) {
-         <div className="flex flex-wrap">
-           {selectedTags
-            |> List.sort(String.compare)
-            |> List.map(tag =>
-                 <div
-                   key=tag
-                   className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-                   <span className="px-2 py-px"> {tag |> str} </span>
-                   <span
-                     title={"Remove tag " ++ tag}
-                     className="flex items-center px-2 h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
-                     onClick={_e => handleClick(tag, send, removeTagCB)}>
-                     <i className="fas fa-times" />
-                   </span>
-                 </div>
-               )
-            |> Array.of_list
-            |> ReasonReact.array}
-         </div>;
-       } else {
-         ReasonReact.null;
-       }}
-      <input
-        value=state
-        onChange={event => send(ReactEvent.Form.target(event)##value)}
-        className="appearance-none block bg-white leading-snug border border-gray-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray-500"
-        id="tags"
-        type_="text"
-        placeholder={
-          allowNewTags ? "Search for, or add new tags" : "Select tags"
-        }
-      />
-      {if (results |> ListUtils.isNotEmpty) {
-         <div
-           className="flex flex-wrap border border-gray-400 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
-           {results |> Array.of_list |> ReasonReact.array}
-         </div>;
-       } else {
-         ReasonReact.null;
-       }}
-    </div>;
-  },
+    (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTags) => {
+  let (state, send) = React.useReducer(reducer, "");
+  let results =
+    search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB);
+  <div className="mt-2">
+    {if (selectedTags |> ListUtils.isNotEmpty) {
+       <div className="flex flex-wrap">
+         {selectedTags
+          |> List.sort(String.compare)
+          |> List.map(tag =>
+               <div
+                 key=tag
+                 className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+                 <span className="px-2 py-px"> {tag |> str} </span>
+                 <span
+                   title={"Remove tag " ++ tag}
+                   className="flex items-center px-2 h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
+                   onClick={_e => handleClick(tag, send, removeTagCB)}>
+                   <i className="fas fa-times" />
+                 </span>
+               </div>
+             )
+          |> Array.of_list
+          |> ReasonReact.array}
+       </div>;
+     } else {
+       ReasonReact.null;
+     }}
+    <input
+      value=state
+      onChange={event => send(ReactEvent.Form.target(event)##value)}
+      className="appearance-none block bg-white leading-snug border border-gray-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray-500"
+      id="tags"
+      type_="text"
+      placeholder={
+        allowNewTags ? "Search for, or add new tags" : "Select tags"
+      }
+    />
+    {if (results |> ListUtils.isNotEmpty) {
+       <div
+         className="flex flex-wrap border border-gray-400 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
+         {results |> Array.of_list |> ReasonReact.array}
+       </div>;
+     } else {
+       ReasonReact.null;
+     }}
+  </div>;
 };

@@ -26,7 +26,8 @@ module Schools
             id: team.id,
             name: team.name,
             coach_ids: team.faculty_startup_enrollments.pluck(:faculty_id),
-            level_number: team.level.number
+            level_number: team.level.number,
+            access_ends_at: team.access_ends_at
           }
         end
       end
@@ -40,7 +41,6 @@ module Schools
               email: student.user.email,
               team_id: student.startup_id,
               tags: student.taggings.map { |tagging| tagging.tag.name } & founder_tags,
-              exited: student.exited,
               excluded_from_leaderboard: student.excluded_from_leaderboard,
               title: student.user.title,
               affiliation: student.user.affiliation
@@ -83,7 +83,7 @@ module Schools
       end
 
       def founders
-        @founders ||= Founder.where(startup: startups)
+        @founders ||= Founder.active.where(startup: startups)
       end
     end
   end

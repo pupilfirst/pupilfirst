@@ -2,7 +2,7 @@ class CreateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :name, validates: { presence: true, length: { minimum: 2, maximum: 50 } }
-  property :description, validates: { presence: true, length: { minimum: 2, maximum: 151 } }
+  property :description, validates: { presence: true, length: { minimum: 2, maximum: 150 } }
   property :max_grade, validates: { presence: { message: 'MaxGradeBlank' } }
   property :pass_grade, validates: { presence: { message: 'PassGradeBlank' } }
   property :grades_and_labels, validates: { presence: { message: 'GradesAndLabelsBlank' } }
@@ -12,7 +12,7 @@ class CreateCourseMutator < ApplicationQuery
   property :featured
 
   def correct_grades_and_labels
-    return if (@course.max_grade == (grade_labels.values - [""]).count) && (@course.max_grade == grades_and_labels.count)
+    return if @course.max_grade == (grade_labels.values - [""]).count
 
     raise "CreateCourseMutator received invalid grades and labels #{grades_and_labels}"
   end
@@ -39,7 +39,7 @@ class CreateCourseMutator < ApplicationQuery
 
   def grade_labels
     grades_and_labels.map do |grades_and_label|
-      [grades_and_label[:grade].to_s, grades_and_label[:label]]
+      [grades_and_label[:grade].to_s, grades_and_label[:label].strip]
     end.to_h
   end
 end

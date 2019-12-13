@@ -1,8 +1,8 @@
 module Founders
   class MarkAsExitedService
-    # @param id [Integer] ID of student to mark as dropped out
-    def initialize(id)
-      @student = Founder.find(id)
+    # @param student [Student] mark as dropped out
+    def initialize(student)
+      @student = student
     end
 
     def execute
@@ -10,17 +10,18 @@ module Founders
         if create_new_team?
           startup = Startup.create!(
             name: @student.name,
-            level: @student.startup.level
+            level: @student.startup.level,
+            exited_at: Time.zone.now
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
-          @student.update!(startup: startup, exited: true)
+          @student.update!(startup: startup)
         else
           # Remove all coach enrollments.
           FacultyStartupEnrollment.where(startup: @student.startup).destroy_all
 
-          # Mark the student as exited.
-          @student.update!(exited: true)
+          # Mark the startup as exited.
+          @student.startup.update!(exited_at: Time.zone.now)
         end
       end
     end

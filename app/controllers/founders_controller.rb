@@ -5,7 +5,7 @@ class FoundersController < ApplicationController
   def show
     @founder = authorize(Founder.find(params[:id]))
     # Show site wide notice to exited founders
-    @sitewide_notice = @founder.exited? if @founder.user == current_user
+    @sitewide_notice = @founder.startup.exited_at? if @founder.user == current_user
     @timeline_events = Kaminari.paginate_array(events_for_display).page(params[:page]).per(20)
   end
 

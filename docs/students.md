@@ -41,10 +41,19 @@ If the student is in a team (details below), then you'll be able to edit the tea
 **Personal Coaches**\
 This list allows you to [directly assign coaches](/coaches?id=student-team-coaches) to a student (or team), which will allow those coaches to review submission from that student (or team).
 
-**Has this student dropped out?**\
-If set to _Yes_, then the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their home page (marked as _Dropped Out_), but they will not be able to access its curriculum.
+**Access Ends On**\
+If set, the course will be marked as _ended_ for the student (or team) on this date. Students will retain access to the course, and their own submissions, but they will not be able to complete new targets.
 
-!> This form is currently missing the option to set the access end date for a student. For the latest updates, please check [the related issue on Github](https://github.com/SVdotCO/pupilfirst/issues/126).
+## Student actions
+
+In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
+
+**Has this student dropped out?**\
+If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their home page (marked as _Dropped Out_), but they will not be able to access its curriculum.
+
+## Inactive students
+
+Students whose access to a course has ended, or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, click the _Inactive Students_ button at the top-right of the students page. Inactive students can be reactivated by selecting one or more students or teams, and then choosing the _Reactivate Students_ option.
 
 ## Teaming up students
 

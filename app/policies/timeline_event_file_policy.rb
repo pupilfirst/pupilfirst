@@ -23,7 +23,7 @@ class TimelineEventFilePolicy < ApplicationPolicy
 
     # At least one of the student profiles must be non-exited AND non-ended (course AND access).
     user.founders.includes(:startup, :course) do |founder|
-      !(founder.exited? || founder.access_ended? || founder.course.ended?)
+      !(founder.startup.exited_at? || founder.access_ended? || founder.course.ended?)
     end.any?
   end
 

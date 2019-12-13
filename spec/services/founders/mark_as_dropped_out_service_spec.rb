@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::MarkAsExitedService do
+describe Founders::MarkAsDroppedOutService do
   subject { described_class.new(student) }
 
   describe '#execute' do
@@ -10,7 +10,7 @@ describe Founders::MarkAsExitedService do
     it 'creates a new startup in the same level and mark the founder as exited' do
       old_startup = student.startup
 
-      expect { subject.execute }.to change { student.reload.startup.exited_at }.from(nil)
+      expect { subject.execute }.to change { student.reload.startup.dropped_out_at }.from(nil)
       expect(student.startup.id).not_to eq(old_startup.id)
     end
   end
@@ -29,7 +29,7 @@ describe Founders::MarkAsExitedService do
 
       # The student should be in the same team.
       expect(student.reload.startup).to eq(team)
-      expect(student.startup.exited_at).not_to eq(nil)
+      expect(student.startup.dropped_out_at).not_to eq(nil)
     end
   end
 end

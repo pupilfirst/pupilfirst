@@ -1,4 +1,4 @@
-class AddExitedAtToFoundersTable < ActiveRecord::Migration[6.0]
+class MoveExitedFromFoundersToDroppedOutInStartupTable < ActiveRecord::Migration[6.0]
   class User < ActiveRecord::Base
     has_many :founders
   end
@@ -15,7 +15,7 @@ class AddExitedAtToFoundersTable < ActiveRecord::Migration[6.0]
   end
 
   def change
-    add_column :startups, :exited_at, :datetime
+    add_column :startups, :dropped_out_at, :datetime
 
     Startup.reset_column_information
     Founder.all.each do |student|
@@ -25,12 +25,14 @@ class AddExitedAtToFoundersTable < ActiveRecord::Migration[6.0]
         startup = Startup.create!(
           name: student.name,
           level_id: student.startup.level_id,
-          exited_at: student.updated_at
+          dropped_out_at: student.updated_at
         )
         student.update!(startup: startup)
       else
-        student.startup.update!(exited_at: student.updated_at)
+        student.startup.update!(dropped_out_at: student.updated_at)
       end
     end
+
+    remove_column :founders, :exited, :boolean
   end
 end

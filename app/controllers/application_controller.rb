@@ -93,10 +93,10 @@ class ApplicationController < ActionController::Base
         founders = current_user.founders
 
         # Try to select founder from value stored in cookie.
-        founder = founder_id.present? ? founders.not_exited.find_by(id: founder_id) : nil
+        founder = founder_id.present? ? founders.not_dropped_out.find_by(id: founder_id) : nil
 
         # Return selected founder, if any, or return the first founder (if any).
-        founder.presence || founders.not_exited.first
+        founder.presence || founders.not_dropped_out.first
       end
     end
   end
@@ -161,9 +161,9 @@ class ApplicationController < ActionController::Base
     # User must be logged in.
     authenticate_user!
 
-    return if current_founder.present? && current_founder.startup.exited_at.nil?
+    return if current_founder.present? && !current_founder.dropped_out?
 
-    redirect_to 'https://www.sv.co'
+    redirect_to root_path
   end
 
   def authenticate_school_admin!

@@ -94,7 +94,7 @@ module Schools
 
       Startup.transaction do
         course.startups.where(id: params[:team_ids]).each do |startup|
-          startup.update!(access_ends_at: nil, exited_at: nil)
+          startup.update!(access_ends_at: nil, dropped_out_at: nil)
         end
 
         render json: { message: 'Teams marked active successfully!', error: nil }

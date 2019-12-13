@@ -1,5 +1,5 @@
 module Founders
-  class MarkAsExitedService
+  class MarkAsDroppedOutService
     # @param student [Student] mark as dropped out
     def initialize(student)
       @student = student
@@ -11,7 +11,7 @@ module Founders
           startup = Startup.create!(
             name: @student.name,
             level: @student.startup.level,
-            exited_at: Time.zone.now
+            dropped_out_at: Time.zone.now
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
@@ -21,7 +21,7 @@ module Founders
           FacultyStartupEnrollment.where(startup: @student.startup).destroy_all
 
           # Mark the startup as exited.
-          @student.startup.update!(exited_at: Time.zone.now)
+          @student.startup.update!(dropped_out_at: Time.zone.now)
         end
       end
     end

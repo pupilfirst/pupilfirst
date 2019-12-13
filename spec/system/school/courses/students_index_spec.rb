@@ -341,7 +341,7 @@ feature 'School students index', js: true do
     expect(founder.reload.startup.name).to eq(founder_user.name)
 
     # The team should have been marked as exited.
-    expect(founder.startup.exited_at).not_to eq(nil)
+    expect(founder.startup.dropped_out_at).not_to eq(nil)
 
     # The student should be in a team without any directly linked coaches.
     expect(founder.startup.faculty.count).to eq(0)
@@ -360,7 +360,7 @@ feature 'School students index', js: true do
     expect(page).not_to have_text(founder_user.name)
 
     lone_user_team = lone_student.reload.startup
-    expect(lone_user_team.exited_at).not_to eq(nil)
+    expect(lone_user_team.dropped_out_at).not_to eq(nil)
     # The student's team should not have changed.
     expect(lone_user_team).to eq(team_with_lone_student)
 

@@ -18,7 +18,7 @@ describe DailyDigestService do
   let(:team_1) { create :startup }
   let(:team_2) { create :team }
   let(:team_3) { create :startup }
-  let(:team_4) { create :team, exited_at: 1.day.ago }
+  let(:team_4) { create :team, dropped_out_at: 1.day.ago }
 
   let(:t2_student_regular) { create :founder, startup: team_2 }
   let(:t2_student_digest_inactive) { create :founder, startup: team_2 }

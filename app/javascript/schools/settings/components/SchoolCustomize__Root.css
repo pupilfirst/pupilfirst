@@ -9,3 +9,15 @@
 .school-customize__footer-bottom-container {
   background-color: #1C1626;
 }
+
+.school-customize__featured-courses-header:before {
+  position: absolute;
+  content: "";
+  width: 60px;
+  height: 5px;
+  border-radius: 20px;
+  background-color: theme(colors.primary.500);
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -315,8 +315,19 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </div>
         </div>
       </div>
-      <div className="relative bg-primary-900">
-        <div className="relative pb-1/2 md:pb-1/4">
+      <div className="relative bg-gray-300">
+        <div className="absolute right-0 z-10 pt-3 pr-3">
+          <button
+            className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 cursor-pointer rounded"
+            onClick={showEditor(ImagesEditor, send)}>
+            <i className="fas fa-pencil-alt" />
+            <span className="font-semibold ml-2">
+              {"Change cover" |> str}
+            </span>
+          </button>
+        </div>
+        <div
+          className="relative pb-1/2 md:pb-1/4 rounded-b-lg overflow-hidden">
           {switch (state.customizations |> Customizations.coverImage) {
            | Some(image) =>
              <img
@@ -330,38 +341,32 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
            }}
         </div>
       </div>
-      <div className="-mt-40 relative">
-        <div className="max-w-2xl mx-auto text-white text-xs font-semibold">
-          <div className="text-white">
-            <div className="text-sm"> {"Hello, welcome to" |> str} </div>
-            <div
-              onClick={showEditor(DeatilsEditor, send)}
-              className="text-3xl font-bold">
+      <div
+        className="max-w-3xl relative mx-auto bg-primary-900 shadow-xl rounded-lg -mt-7">
+        <div
+          className="relative mx-auto flex flex-col justify-center items-center text-white p-10 text-center">
+          <p> {{js|👋 |js} |> str} {"Hello, welcome to" |> str} </p>
+          <div onClick={showEditor(DeatilsEditor, send)}>
+            <h1
+              className="flex items-center border border-dashed border-gray-800 hover:border-primary-300 hover:text-primary-200 cursor-text rounded px-2 py-1 text-3xl mt-1">
               <span> {state.schoolName |> str} </span>
-              <i className="fas fa-pencil-alt text-sm ml-2" />
-            </div>
+              <button
+                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ml-1 cursor-pointer rounded"
+                onClick={showEditor(DeatilsEditor, send)}>
+                <i className="fas fa-pencil-alt" />
+              </button>
+            </h1>
           </div>
-          <div className="flex justify-end mt-6">
-            <button
-              className="btn btn-default"
-              onClick={showEditor(ImagesEditor, send)}>
-              <i className="fas fa-pencil-alt mr-2" />
-              <span> {"change image" |> str} </span>
-            </button>
-          </div>
-        </div>
-        <div className="max-w-2xl mx-auto bg-primary-900 mt-2">
-          <button
-            className="btn btn-default"
-            onClick={showEditor(DeatilsEditor, send)}>
-            <i className="fas fa-pencil-alt mr-2" />
-            <span> {"Edit" |> str} </span>
-          </button>
-          <div className="mx-auto flex justify-center text-white p-10">
-            <div className="w-1/3 text-2xl font-bold text-center">
-              {"About" |> str}
+          <div
+            onClick={showEditor(DeatilsEditor, send)}
+            className="w-full max-w-lg mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
+            <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
+              <button
+                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">
+                <i className="fas fa-pencil-alt" />
+              </button>
             </div>
-            <div className="w-2/3 text-sm text-left">
+            <p className="text-sm">
               {(
                  switch (state.schoolAbout) {
                  | Some(about) => about
@@ -369,17 +374,30 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                  }
                )
                |> str}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="mx-auto text-center pt-8 mt-8">
+        <h2
+          className="school-customize__featured-courses-header relative text-2xl font-bold">
+          {"Featured Courses" |> str}
+        </h2>
+        <div className="text-sm">
+          {"All the courses with featured flag will listed here" |> str}
+        </div>
+        <div className="max-w-3xl mx-auto mt-4">
+          <div className="flex flex-wrap flex-1 lg:-mx-5">
+            <div className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+              <div
+                className="flex overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
+                {"All the courses with featured flag will listed here" |> str}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="mx-auto text-center pt-6">
-        <div className="text-2xl font-bold"> {"Featured course" |> str} </div>
-        <div className="text-xs">
-          {"All the courses with featured flag will listed here" |> str}
-        </div>
-      </div>
-      <div className="mt-3 w-full">
+      <div className="mt-8 w-full">
         <div
           className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
           <div className="w-1/2">

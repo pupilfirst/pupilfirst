@@ -101,6 +101,9 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="details-editor__about">
           {"About" |> str}
+          <span className="font-normal">
+            {" (Maximum 500 characters)" |> str}
+          </span>
         </label>
         <textarea
           maxLength=500

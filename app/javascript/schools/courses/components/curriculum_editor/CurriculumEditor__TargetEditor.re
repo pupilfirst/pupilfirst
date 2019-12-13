@@ -543,7 +543,7 @@ let selectVersionCB =
 };
 
 let targetRoleClasses = selected => {
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded p-4 items-center cursor-pointer text-left "
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left "
   ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
@@ -843,10 +843,11 @@ let make =
                         "mr-4 "
                         ++ targetRoleClasses(state.role == Target.Student)
                       }>
-                      <span className="mb-1 mr-2">
-                        <img className="w-12 h-12" src=markIcon />
+                      <span
+                        className="mr-4">
+                        <Icon className="if i-users-check-light text-3xl" />
                       </span>
-                      <span>
+                      <span className="text-sm">
                         {"All students must submit." |> str}
                       </span>
                     </button>
@@ -856,11 +857,12 @@ let make =
                         dispatch(UpdateTargetRole(Target.Team));
                       }}
                       className={targetRoleClasses(state.role == Target.Team)}>
-                      <span className="mb-1 mr-2">
-                        <img className="w-12 h-12" src=quizIcon />
+                      <span
+                        className="mr-4">
+                        <Icon className="if i-user-check-light text-2xl" />
                       </span>
-                      <span>
-                        {"Only one student in a team needs to submit." |> str}
+                      <span className="text-sm">
+                        {"Only one student in a team" |>str} <br/> {" needs to submit." |> str}
                       </span>
                     </button>
                   </div>

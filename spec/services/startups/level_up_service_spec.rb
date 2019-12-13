@@ -44,23 +44,5 @@ describe Startups::LevelUpService do
         expect { subject.execute }.to change { team.reload.level }.from(level_3_course_2).to(level_4_course_2)
       end
     end
-
-    context 'when team is at level 2 with targets pending review in l1' do
-      let(:l2_target_group) { create :target_group, level: level_2, milestone: true }
-      let(:l2_target) { create :target, target_group: l2_target_group }
-      let(:l1_target_group) { create :target_group, level: level_1, milestone: true }
-      let(:l1_target) { create :target, target_group: l1_target_group }
-      let(:team) { create :startup, level: level_2 }
-      let(:student) { team.founders.first }
-
-      before do
-        submit_target student, l1_target
-        complete_target student, l2_target
-      end
-
-      it 'raises error' do
-        expect { subject.execute }.to raise_error "Previous level's milestones are incomplete"
-      end
-    end
   end
 end

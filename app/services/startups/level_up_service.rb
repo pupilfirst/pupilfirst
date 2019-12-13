@@ -1,5 +1,5 @@
 module Startups
-  # This service should be used to upgrade a startup to the next level.
+  # This service should be used to move a team to the next level.
   class LevelUpService
     def initialize(startup)
       @startup = startup

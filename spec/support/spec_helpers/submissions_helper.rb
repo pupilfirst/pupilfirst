@@ -34,7 +34,7 @@ module SubmissionsHelper
   private
 
   def submission_options(target, student, grade)
-    students = student.is_a?(Array) ? student : [student]
+    students = student.respond_to?(:to_a) ? student.to_a : [student]
 
     (passed_at, evaluated_at) = if target.evaluation_criteria.present?
       case grade

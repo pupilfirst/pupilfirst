@@ -12,10 +12,6 @@ module Home
 
     alias school_name page_title
 
-    def about
-      @school.about.presence || "Sample about"
-    end
-
     def courses
       @school.courses.where(featured: true)
     end

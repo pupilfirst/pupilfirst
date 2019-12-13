@@ -14,23 +14,32 @@
       <% end %>
     </div>
   </div>
-  <div class="max-w-5xl mx-auto -mt-10 relative">
-    <div class="px-10 pb-10 pt-6 bg-primary-900">
-      <div class="font-bold text-3xl text-white"><%= current_school.name %></div>
-      <div class="flex flex-col md:flex-row text-white">
-        <div class="w-1/3 text-right">
-          <div class="font-bold text-2xl pr-10">About</div>
+  <div class="max-w-5xl mx-auto">
+    <div
+      class="relative bg-primary-900 shadow-xl rounded-lg -mt-7">
+      <div
+        class="relative mx-auto flex flex-col justify-center items-center text-white p-10 text-center">
+        <p>👋 Hello, welcome to </p>
+        <div>
+          <h1 class="flex items-center border-gray-800 rounded px-2 py-1 text-3xl mt-1">
+            <span> <%= current_school.name %> </span>
+          </h1>
         </div>
-        <div class="w-2/3 text-sm">
-          <div><%= presenter.about %></div>
-        </div>
+        <% if current_school.about.present? %>
+          <div class="w-full max-w-lg mt-2 relative flex items-center justify-center rounded px-8 py-5">
+            <p class="text-sm">
+              <%= current_school.about %>
+            </p>
+          </div>
+        <% end %>
       </div>
     </div>
-
     <% if presenter.courses.any? %>
       <div>
-        <div class="font-bold text-3xl mt-6 text-center">
-          Featured Courses
+        <div class="mx-auto text-center pt-8 mt-8">
+          <h2 class="school-customize__featured-courses-header relative text-2xl font-bold">
+            Featured Courses
+          </h2>
         </div>
         <div class="mx-auto">
           <div class="flex flex-wrap flex-1 lg:-mx-5">
@@ -73,4 +82,3 @@
     <% end %>
   </div>
 </div>
-

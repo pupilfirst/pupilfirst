@@ -351,7 +351,6 @@ ActiveRecord::Schema.define(version: 2019_12_11_081532) do
     t.integer "university_id"
     t.string "roles"
     t.string "slack_user_id"
-    t.boolean "exited", default: false
     t.integer "user_id"
     t.integer "college_id"
     t.boolean "dashboard_toured"
@@ -564,6 +563,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_081532) do
     t.string "slug"
     t.integer "level_id"
     t.datetime "access_ends_at"
+    t.datetime "dropped_out_at"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
   end

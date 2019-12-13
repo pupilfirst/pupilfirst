@@ -5,7 +5,6 @@ type t = {
   teamId: string,
   email: string,
   tags: list(string),
-  exited: bool,
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: option(string),
@@ -27,14 +26,10 @@ let email = t => t.email;
 
 let tags = t => t.tags;
 
-let exited = t => t.exited;
-
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
-let updateInfo =
-    (~exited, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+let updateInfo = (~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
   ...student,
-  exited,
   excludedFromLeaderboard,
   title,
   affiliation,
@@ -46,7 +41,6 @@ let decode = json =>
     teamId: json |> field("teamId", string),
     email: json |> field("email", string),
     tags: json |> field("tags", list(string)),
-    exited: json |> field("exited", bool),
     excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
     name: json |> field("name", string),
     avatarUrl: json |> optional(field("avatarUrl", string)),
@@ -62,7 +56,6 @@ let encode = (name, teamName, t) =>
       ("name", name |> string),
       ("team_name", teamName |> string),
       ("email", t.email |> string),
-      ("exited", t.exited |> bool),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
       ("title", t.title |> string),
       ("affiliation", t.affiliation |> OptionUtils.toString |> string),

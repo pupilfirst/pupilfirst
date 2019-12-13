@@ -2,11 +2,11 @@
   "name": "pupil-first",
   "private": true,
   "dependencies": {
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.7.4",
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@glennsl/bs-json": "5.0.1",
     "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "^4.0.7",
+    "@rails/webpacker": "^4.2.2",
     "babel-plugin-prismjs": "^1.1.0",
     "babel-plugin-react-css-modules": "^3.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
@@ -46,7 +46,7 @@
     "reason-react": ">=0.7.0",
     "sass-loader": "^7.1.0",
     "tailwindcss": "^1.0.5",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.9.0"
   },
   "resolutions": {
     "lodash.mergewith": "^4.6.2",

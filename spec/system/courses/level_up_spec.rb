@@ -25,9 +25,8 @@ feature "Student levelling up", js: true do
       sign_in_user student.user, referer: curriculum_course_path(course)
 
       expect(page).to have_text(target_l2.title)
-      expect(page).to have_text("You have targets in the previous level that are failed, or are pending review by a coach.")
-      expect(page).to have_text("You're done with this level, but you have targets in the last level that you haven't passed.")
-      expect(page).to have_text("You can level up once all you have passed all targets in the last level.")
+      expect(page).to have_text("You're at Level 2, but you have targets in the Level 1 that are failed, or are pending review by a coach.")
+      expect(page).to have_text("You'll need to pass all milestone targets in Level 1 to continue leveling up.")
       expect(page).not_to have_button('Level Up')
     end
   end
@@ -71,31 +70,39 @@ feature "Student levelling up", js: true do
     expect(team.reload.level).to eq(level_2)
   end
 
-  context 'when a student is in level 2 has a target pending review in level 1' do
+  context 'when a student is in level 2 and has completed all milestone targets there' do
+    let(:team) { create :startup, level: level_2 }
+
     before do
-      submit_target target_l1, student
+      complete_target target_l2, student
     end
 
-    include_examples 'student is blocked from leveling up'
-  end
+    context 'when student has a milestone target with a submission pending review in level 1' do
+      before do
+        submit_target target_l1, student
+      end
 
-  context 'when a student in in level 2 has a failed target in level 1' do
-    before do
-      submit_target target_l1, student, grade: SubmissionsHelper::GRADE_FAIL
+      include_examples 'student is blocked from leveling up'
     end
 
-    include_examples 'student is blocked from leveling up'
-  end
+    context 'when student has a milestone target with a failed submission in level 1' do
+      before do
+        submit_target target_l1, student, grade: SubmissionsHelper::GRADE_FAIL
+      end
 
-  context 'when a student in level 2 has passed all milestone targets in level 1' do
-    before do
-      complete_target target_l1, student
+      include_examples 'student is blocked from leveling up'
     end
 
-    scenario 'student is shown the option to level up again' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+    context 'when the student has passed all milestone targets in level 1' do
+      before do
+        complete_target target_l1, student
+      end
 
-      expect(page).to have_button('Level Up')
+      scenario 'student is shown the option to level up again' do
+        sign_in_user student.user, referer: curriculum_course_path(course)
+
+        expect(page).to have_button('Level Up')
+      end
     end
   end
 

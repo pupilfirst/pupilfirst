@@ -4,6 +4,7 @@ type t =
   | CourseComplete
   | AccessEnded
   | LevelUp
+  | LevelUpBlocked(int)
   | Nothing;
 
 let courseEndedImage: string = [%raw "require('../images/course-ended.svg')"];
@@ -21,5 +22,6 @@ let icon = t =>
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
   | LevelUp => levelUpImage
-  | Nothing => levelUpImage
+  | LevelUpBlocked(_) => levelUpImage
+  | Nothing => ""
   };

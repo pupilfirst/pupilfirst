@@ -53,6 +53,26 @@ let accessEndedMessage = () => {
   showNotice(~title, ~description, ~notice=Notice.AccessEnded, ());
 };
 
+let levelUpBlockedMessage = levelNumber => {
+  let title = "Level Up Blocked";
+  let currentLevel = levelNumber |> string_of_int;
+  let lastLevel = levelNumber - 1 |> string_of_int;
+  let description =
+    "You're at Level "
+    ++ currentLevel
+    ++ ", but you have targets in the Level "
+    ++ lastLevel
+    ++ " that are failed, or are pending review by a coach. You'll need to pass all milestone targets in Level "
+    ++ lastLevel
+    ++ " to continue leveling up.";
+  showNotice(
+    ~title,
+    ~description,
+    ~notice=Notice.LevelUpBlocked(levelNumber),
+    (),
+  );
+};
+
 let renderLevelUp = (course, authenticityToken) => {
   let title = "Ready to Level Up!";
   let description = "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!";
@@ -71,6 +91,7 @@ let make = (~notice, ~course, ~authenticityToken) => {
   | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()
   | LevelUp => renderLevelUp(course, authenticityToken)
+  | LevelUpBlocked(levelNumber) => levelUpBlockedMessage(levelNumber)
   | Nothing => React.null
   };
 };

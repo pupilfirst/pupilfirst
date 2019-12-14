@@ -107,11 +107,10 @@ let handleLockedLevel = level =>
      }}
   </div>;
 
-let computeLevelUp =
-    (levels, teamLevel, targetGroups, targets, statusOfTargets) => {
+let statusOfMilestoneTargets = (targetGroups, targets, level, statusOfTargets) => {
   let targetGroupsInLevel =
     targetGroups
-    |> List.filter(tg => tg |> TargetGroup.levelId == (teamLevel |> Level.id));
+    |> List.filter(tg => tg |> TargetGroup.levelId == (level |> Level.id));
   let milestoneTargetGroupIds =
     targetGroupsInLevel
     |> List.filter(tg => tg |> TargetGroup.milestone)
@@ -124,27 +123,75 @@ let computeLevelUp =
        )
     |> List.map(t => t |> Target.id);
 
-  let statusOfMilestoneTargets =
-    statusOfTargets
-    |> List.filter(ts =>
-         (ts |> TargetStatus.targetId)->List.mem(milestoneTargetIds)
-       );
+  statusOfTargets
+  |> List.filter(ts =>
+       (ts |> TargetStatus.targetId)->List.mem(milestoneTargetIds)
+     );
+};
 
-  let nextLevelNumber = (teamLevel |> Level.number) + 1;
+let isLevelComplete = (targetStatuses, eligibleStatuses) => {
+  targetStatuses
+  |> ListUtils.isNotEmpty
+  && targetStatuses
+  |> TargetStatus.matchesStatuses(eligibleStatuses);
+};
+
+let computeLevelUp =
+    (levels, teamLevel, targetGroups, targets, statusOfTargets) => {
+  let lastLevel =
+    switch (teamLevel |> Level.number) {
+    | 0
+    | 1 => None
+    | levelTwoOrAbove =>
+      levels
+      |> ListUtils.findOpt(l => l |> Level.number == levelTwoOrAbove - 1)
+    };
+
+  let statusOfCurrentMilestoneTargets =
+    statusOfMilestoneTargets(
+      targetGroups,
+      targets,
+      teamLevel,
+      statusOfTargets,
+    );
+
+  let currentLevelComplete =
+    isLevelComplete(
+      statusOfCurrentMilestoneTargets,
+      TargetStatus.currentLevelStatuses,
+    );
+
+  let lastLevelComplete =
+    switch (lastLevel) {
+    | None => true
+    | Some(level) =>
+      let statusOfLastMilestoneTargets =
+        statusOfMilestoneTargets(
+          targetGroups,
+          targets,
+          level,
+          statusOfTargets,
+        );
+
+      isLevelComplete(
+        statusOfLastMilestoneTargets,
+        TargetStatus.lastLevelStatuses,
+      );
+    };
 
   let nextLevel =
-    levels |> ListUtils.findOpt(l => l |> Level.number == nextLevelNumber);
+    levels
+    |> ListUtils.findOpt(l =>
+         l |> Level.number == (teamLevel |> Level.number) + 1
+       );
 
-  let canLevelUp =
-    statusOfMilestoneTargets
-    |> ListUtils.isNotEmpty
-    && statusOfMilestoneTargets
-    |> TargetStatus.canLevelUp;
-
-  switch (nextLevel, canLevelUp) {
-  | (Some(level), true) => level |> Level.isLocked ? Notice.Nothing : LevelUp
-  | (None, true) => CourseComplete
-  | (Some(_) | None, false) => Nothing
+  switch (nextLevel, currentLevelComplete, lastLevelComplete) {
+  | (Some(level), true, true) =>
+    level |> Level.isLocked ? Notice.Nothing : LevelUp
+  | (None, true, true) => CourseComplete
+  | (Some(_), true, false) => LevelUpBlocked(teamLevel |> Level.number)
+  | (Some(_) | None, false, false | true)
+  | (None, true, false) => Nothing
   };
 };
 

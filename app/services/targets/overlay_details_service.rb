@@ -49,7 +49,7 @@ module Targets
 
     def pending_founder_ids
       @founder.startup.founders.where.not(id: @founder).reject do |founder|
-        founder.exited? || founder.timeline_events.where(target: @target).passed.exists?
+        founder.timeline_events.where(target: @target).passed.exists?
       end.map(&:id)
     end
 

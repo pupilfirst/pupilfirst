@@ -277,34 +277,40 @@ feature 'School students index', js: true do
       founder.reload
       expect(founder.startup.faculty.last).to eq(coach)
     end
+  end
 
-    context 'when there is an inactive team' do
-      let!(:inactive_team_1) { create :startup, level: level_1, access_ends_at: 1.day.ago }
+  context 'school admin marks team as inactive' do
+    let!(:inactive_team_1) { create :startup, level: level_1 }
+    let(:access_ends_at) { 1.day.from_now }
 
-      scenario 'School admin manipulates inactive teams' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+    scenario 'School admin updates access end date' do
+      sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-        # Student except inactive one should be listed.
-        expect(page).to have_text(name_1)
-        expect(page).to have_text(name_2)
-        expect(page).not_to have_text(inactive_team_1.founders.first.name)
+      expect(page).to have_link("Inactive Students", href: school_course_inactive_students_path(course))
 
-        click_link 'Inactive Students'
+      founder = inactive_team_1.founders.first
+      expect(page).to have_text(founder.name)
 
-        expect(page).to have_text(inactive_team_1.founders.first.name)
+      find("a", text: founder.name).click
 
-        check "select-team-#{inactive_team_1.id}"
+      expect(page).to have_text(founder.startup.name)
+      fill_in "Team's Access Ends On", with: access_ends_at.iso8601
+      click_button 'Update Student'
 
-        expect(page).to have_button('Mark Team Active')
+      expect(page).to have_text("Student updated successfully")
+      dismiss_notification
 
-        click_button 'Mark Team Active'
+      expect(founder.reload.startup.access_ends_at.to_date).to eq(access_ends_at.to_date)
 
-        expect(page).to have_text("Teams marked active successfully!")
+      find("a", text: founder.name).click
+      fill_in "Team's Access Ends On", with: 1.day.ago.iso8601
+      click_button 'Update Student'
 
-        visit school_course_students_path(course)
+      expect(page).to have_text("Team has been updated, and moved to list of inactive students")
+      dismiss_notification
 
-        expect(page).to have_text(inactive_team_1.founders.first.name)
-      end
+      expect(founder.reload.startup.access_ends_at.to_date).to eq(1.day.ago.to_date)
+      expect(page).not_to have_text(founder.name)
     end
   end
 
@@ -326,16 +332,16 @@ feature 'School students index', js: true do
     expect(page).to have_text(founder.startup.name)
     expect(coach.startups.count).to eq(3)
 
-    find('button[title="Prevent this student from accessing the course"]').click
-    click_button 'Update Student'
-    expect(page).to have_text("Student updated successfully")
-    dismiss_notification
+    click_button 'Actions'
+    click_button 'Dropout Student'
 
-    # The student should have been marked as exited.
-    expect(founder.reload.exited).to eq(true)
+    expect(page).not_to have_text(founder_user.name)
 
     # The student's team name should now be the student's own name.
-    expect(founder.startup.name).to eq(founder_user.name)
+    expect(founder.reload.startup.name).to eq(founder_user.name)
+
+    # The team should have been marked as exited.
+    expect(founder.startup.dropped_out_at).not_to eq(nil)
 
     # The student should be in a team without any directly linked coaches.
     expect(founder.startup.faculty.count).to eq(0)
@@ -348,13 +354,14 @@ feature 'School students index', js: true do
 
     find("a", text: lone_student.name).click
 
-    find('button[title="Prevent this student from accessing the course"]').click
-    click_button 'Update Student'
-    expect(page).to have_text("Student updated successfully")
-    dismiss_notification
+    click_button 'Actions'
+    click_button 'Dropout Student'
 
-    # The student's team should not have changed.
+    expect(page).not_to have_text(founder_user.name)
+
     lone_user_team = lone_student.reload.startup
+    expect(lone_user_team.dropped_out_at).not_to eq(nil)
+    # The student's team should not have changed.
     expect(lone_user_team).to eq(team_with_lone_student)
 
     # All coaches should have been removed from the team.

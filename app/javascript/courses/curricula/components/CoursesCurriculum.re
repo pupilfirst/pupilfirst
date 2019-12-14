@@ -7,6 +7,14 @@ open CoursesCurriculum__Types;
 
 let str = React.string;
 
+type state = {
+  selectedLevelId: string,
+  showLevelZero: bool,
+  latestSubmissions: list(LatestSubmission.t),
+  statusOfTargets: list(TargetStatus.t),
+  notice: Notice.t,
+};
+
 let selectTarget = target =>
   ReasonReactRouter.push("/targets/" ++ (target |> Target.id));
 
@@ -75,16 +83,23 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
   </div>;
 };
 
-let addSubmission = (setLatestSubmissions, latestSubmission) =>
-  setLatestSubmissions(submissions => {
+let addSubmission = (setState, latestSubmission) =>
+  setState(state => {
     let withoutSubmissionForThisTarget =
-      submissions
+      state.latestSubmissions
       |> List.filter(s =>
            s
            |> LatestSubmission.targetId
            != (latestSubmission |> LatestSubmission.targetId)
          );
-    [latestSubmission, ...withoutSubmissionForThisTarget];
+
+    {
+      ...state,
+      latestSubmissions: [
+        latestSubmission,
+        ...withoutSubmissionForThisTarget,
+      ],
+    };
   });
 
 let handleLockedLevel = level =>
@@ -278,44 +293,6 @@ let make =
     | None => None
     };
 
-  let (selectedLevelId, setSelectedLevelId) =
-    React.useState(() =>
-      switch (targetLevelId, levelZero) {
-      | (Some(targetLevelId), Some(levelZero)) =>
-        levelZero |> Level.id == targetLevelId ? teamLevelId : targetLevelId
-      | (Some(targetLevelId), None) => targetLevelId
-      | (None, _) => teamLevelId
-      }
-    );
-
-  let (showLevelZero, setShowLevelZero) =
-    React.useState(() =>
-      switch (levelZero, targetLevelId) {
-      | (Some(levelZero), Some(targetLevelId)) =>
-        levelZero |> Level.id == targetLevelId
-      | (Some(_), None)
-      | (None, Some(_))
-      | (None, None) => false
-      }
-    );
-
-  let currentLevelId =
-    switch (levelZero, showLevelZero) {
-    | (Some(levelZero), true) => levelZero |> Level.id
-    | (Some(_), false)
-    | (None, true | false) => selectedLevelId
-    };
-
-  let currentLevel =
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == currentLevelId,
-         "Could not find currentLevel with id " ++ currentLevelId,
-       );
-
-  let (latestSubmissions, setLatestSubmissions) =
-    React.useState(() => submissions);
-
   /* Curried function so that this can be re-used when a new submission is created. */
   let computeTargetStatus =
     TargetStatus.compute(
@@ -329,42 +306,96 @@ let make =
 
   let initialRender = React.useRef(true);
 
-  let (statusOfTargets, setStatusOfTargets) =
-    React.useState(() => computeTargetStatus(latestSubmissions));
+  let (state, setState) =
+    React.useState(() => {
+      let statusOfTargets = computeTargetStatus(submissions);
+
+      {
+        selectedLevelId:
+          switch (targetLevelId, levelZero) {
+          | (Some(targetLevelId), Some(levelZero)) =>
+            levelZero |> Level.id == targetLevelId
+              ? teamLevelId : targetLevelId
+          | (Some(targetLevelId), None) => targetLevelId
+          | (None, _) => teamLevelId
+          },
+        showLevelZero:
+          switch (levelZero, targetLevelId) {
+          | (Some(levelZero), Some(targetLevelId)) =>
+            levelZero |> Level.id == targetLevelId
+          | (Some(_), None)
+          | (None, Some(_))
+          | (None, None) => false
+          },
+        latestSubmissions: submissions,
+        statusOfTargets,
+        notice:
+          computeNotice(
+            levels,
+            teamLevel,
+            targetGroups,
+            targets,
+            statusOfTargets,
+            course,
+            team,
+            preview,
+          ),
+      };
+    });
+
+  let currentLevelId =
+    switch (levelZero, state.showLevelZero) {
+    | (Some(levelZero), true) => levelZero |> Level.id
+    | (Some(_), false)
+    | (None, true | false) => state.selectedLevelId
+    };
+
+  let currentLevel =
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == currentLevelId,
+         "Could not find currentLevel with id " ++ currentLevelId,
+       );
 
   React.useEffect1(
     () => {
       if (initialRender |> React.Ref.current) {
         initialRender->React.Ref.setCurrent(false);
       } else {
-        setStatusOfTargets(_ => computeTargetStatus(latestSubmissions));
+        let newStatusOfTargets = computeTargetStatus(state.latestSubmissions);
+
+        setState(state =>
+          {
+            ...state,
+            statusOfTargets: newStatusOfTargets,
+            notice:
+              computeNotice(
+                levels,
+                teamLevel,
+                targetGroups,
+                targets,
+                newStatusOfTargets,
+                course,
+                team,
+                preview,
+              ),
+          }
+        );
       };
       None;
     },
-    [|latestSubmissions|],
+    [|state.latestSubmissions|],
   );
 
   let targetGroupsInLevel =
     targetGroups
     |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
 
-  let notice =
-    computeNotice(
-      levels,
-      teamLevel,
-      targetGroups,
-      targets,
-      statusOfTargets,
-      course,
-      team,
-      preview,
-    );
-
   <div className="bg-gray-100 pt-11 pb-8 -mt-7">
     {switch (selectedTarget) {
      | Some(target) =>
        let targetStatus =
-         statusOfTargets
+         state.statusOfTargets
          |> ListUtils.unsafeFind(
               ts => ts |> TargetStatus.targetId == (target |> Target.id),
               "Could not find targetStatus for selectedTarget with ID "
@@ -376,9 +407,9 @@ let make =
          course
          targetStatus
          authenticityToken
-         addSubmissionCB={addSubmission(setLatestSubmissions)}
+         addSubmissionCB={addSubmission(setState)}
          targets
-         statusOfTargets
+         statusOfTargets={state.statusOfTargets}
          changeTargetCB=selectTarget
          users
          evaluationCriteria
@@ -388,18 +419,26 @@ let make =
 
      | None => React.null
      }}
-    <CoursesCurriculum__NoticeManager notice course authenticityToken />
-    {switch (notice) {
+    <CoursesCurriculum__NoticeManager
+      notice={state.notice}
+      course
+      authenticityToken
+    />
+    {switch (state.notice) {
      | LevelUp => React.null
      | _anyOtherNotice =>
        <div>
          <div className="px-3">
            <CoursesCurriculum__LevelSelector
              levels
-             selectedLevelId
-             setSelectedLevelId
-             showLevelZero
-             setShowLevelZero
+             selectedLevelId={state.selectedLevelId}
+             setSelectedLevelId={selectedLevelId =>
+               setState(state => {...state, selectedLevelId})
+             }
+             showLevelZero={state.showLevelZero}
+             setShowLevelZero={showLevelZero =>
+               setState(state => {...state, showLevelZero})
+             }
              levelZero
            />
          </div>
@@ -408,7 +447,11 @@ let make =
             : targetGroupsInLevel
               |> TargetGroup.sort
               |> List.map(targetGroup =>
-                   renderTargetGroup(targetGroup, targets, statusOfTargets)
+                   renderTargetGroup(
+                     targetGroup,
+                     targets,
+                     state.statusOfTargets,
+                   )
                  )
               |> Array.of_list
               |> React.array}

@@ -83,7 +83,7 @@ The method of completion tab lets you decide how your students can complete the 
 **Any prerequisite target?**\
 You can select other targets from the same level as pre-requisite targets. This will _lock_ the target until the student has completed the prerequisites.
 
-**Is this target reviewed by a coach?**\
+**Will a coach review submissions on this target?**\
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.
 
 **Choose evaluation criteria from your list**\

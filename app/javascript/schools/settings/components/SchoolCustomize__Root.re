@@ -80,7 +80,7 @@ let sitemap = links =>
     <div className="flex flex-wrap">
       {links
        |> List.map(((id, title, _)) =>
-            <div className="w-1/3 pr-4 mt-3 text-sm" key=id>
+            <div className="w-1/3 pr-4 mt-3 text-xs font-semibold" key=id>
               {title |> str}
             </div>
           )
@@ -111,7 +111,7 @@ let address = a =>
   switch (a) {
   | Some(a) =>
     <div
-      className="text-sm mt-3 leading-normal"
+      className="text-xs font-semibold mt-3 leading-normal"
       dangerouslySetInnerHTML={
         "__html": a |> Markdown.parse(Markdown.Permissive),
       }
@@ -126,7 +126,7 @@ let address = a =>
 let emailAddress = email =>
   switch (email) {
   | Some(email) =>
-    <div className="text-sm mt-4">
+    <div className="text-xs font-semibold mt-4">
       {"React us at " |> str}
       <span className="font-bold"> {email |> str} </span>
     </div>
@@ -140,7 +140,7 @@ let emailAddress = email =>
 let footerLogo = (schoolName, logoOnDarkBg) =>
   switch (logoOnDarkBg) {
   | Some(logo) => <img className="h-8" src={logo |> Customizations.url} />
-  | None => <span className="text-xl font-bold"> {schoolName |> str} </span>
+  | None => <span className="text-lg font-bold"> {schoolName |> str} </span>
   };
 
 let editIcon = (additionalClasses, clickHandler, title) =>
@@ -281,7 +281,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       initialState(customizations, schoolName, schoolAbout),
     );
   <div>
-    <div className="px-6 pt-6 w-full xl:max-w-6xl mx-auto">
+    <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <div className="font-bold"> {"Home Page" |> str} </div>
       <div
         className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
@@ -345,7 +345,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         className="max-w-3xl relative mx-auto bg-primary-900 shadow-xl rounded-lg -mt-7">
         <div
           className="relative mx-auto flex flex-col justify-center items-center text-white p-10 text-center">
-          <p> {{js|👋 |js} |> str} {"Hello, welcome to" |> str} </p>
+          <p> {"Hello, welcome to" |> str} </p>
           <div onClick={showEditor(DeatilsEditor, send)}>
             <h1
               className="flex items-center border border-dashed border-gray-800 hover:border-primary-300 hover:text-primary-200 cursor-text rounded px-2 py-1 text-3xl mt-1">
@@ -359,7 +359,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </div>
           <div
             onClick={showEditor(DeatilsEditor, send)}
-            className="w-full max-w-lg mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
+            className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
             <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
               <button
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">
@@ -399,10 +399,10 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       </div>
       <div className="mt-8 w-full">
         <div
-          className="school-customize__footer-top-container rounded-t-lg text-white p-6 flex">
-          <div className="w-1/2">
+          className="school-customize__footer-top-container rounded-t-lg p-6 flex">
+          <div className="w-2/5">
             <div
-              className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
+              className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full mr-2">
               <div className="flex items-center">
                 <span className="uppercase font-bold text-sm">
                   {"Sitemap" |> str}
@@ -423,11 +423,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                )}
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-3/5">
             <div className="flex">
-              <div className="w-1/2">
+              <div className="w-3/5">
                 <div
-                  className="p-3 bg-black border border-dashed border-gray-900 rounded h-full mr-2">
+                  className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full mr-2">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm">
                       {"Social" |> str}
@@ -448,9 +448,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                    )}
                 </div>
               </div>
-              <div className="w-1/2">
+              <div className="w-2/5">
                 <div
-                  className="p-3 bg-black border border-dashed border-gray-900 rounded h-full">
+                  className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm">
                       {"Contact" |> str}
@@ -471,12 +471,12 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </div>
         </div>
         <div
-          className="school-customize__footer-bottom-container rounded-b-lg text-white p-6 flex justify-between">
+          className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div
-            className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
+            className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2">
             {footerLogo(
                schoolName,
-               state.customizations |> Customizations.logoOnDarkBg,
+               state.customizations |> Customizations.logoOnLightBg,
              )}
             {editIcon(
                "ml-3",
@@ -486,7 +486,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </div>
           <div className="flex items-center text-sm">
             <div
-              className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2">
+              className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 text-xs">
               <div> {"Privacy Policy" |> str} </div>
               {editIcon(
                  "ml-3",
@@ -500,7 +500,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                )}
             </div>
             <div
-              className="flex items-center bg-black border border-dashed border-gray-900 rounded p-2 ml-6">
+              className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
               <div> {"Terms of Use" |> str} </div>
               {editIcon(
                  "ml-3",
@@ -513,7 +513,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                  "Edit terms of use",
                )}
             </div>
-            <div className="ml-6 flex items-center">
+            <div className="ml-6 flex items-center text-xs text-gray-600">
               <i className="far fa-copyright" />
               <span className="ml-1">
                 {(

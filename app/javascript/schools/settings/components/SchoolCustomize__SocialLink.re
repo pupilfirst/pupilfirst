@@ -24,8 +24,7 @@ let iconClass = url =>
 
 [@react.component]
 let make = (~url) => {
-  <div
-    className="h-9 w-9 border-0 rounded-full bg-gray-100 mr-3 mt-3 flex items-center justify-center">
-    <i className={"text-black text-xl " ++ iconClass(url)} />
+  <div className="h-9 w-9 mr-2 mt-2 flex items-center justify-center">
+    <i className={"text-xl " ++ iconClass(url)} />
   </div>;
 };

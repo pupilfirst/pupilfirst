@@ -3,11 +3,11 @@
 }
 
 .school-customize__footer-top-container {
-  background-color: #271F33;
+  background-color: theme(colors.gray.200);
 }
 
 .school-customize__footer-bottom-container {
-  background-color: #1C1626;
+  background-color: theme(colors.gray.300);
 }
 
 .school-customize__featured-courses-header:before {

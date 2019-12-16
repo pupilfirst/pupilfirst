@@ -855,7 +855,7 @@ let make =
                   <label
                     className="block tracking-wide text-sm font-semibold mr-6"
                     htmlFor="evaluated">
-                    {"Is this target reviewed by a coach?" |> str}
+                    {"Will a coach review submissions on this target?" |> str}
                   </label>
                   <div
                     id="evaluated"

@@ -3,6 +3,7 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
   <%= stylesheet_pack_tag 'home/index', media: 'all' %>
+  <%= stylesheet_pack_tag 'shared/markdownBlockCSS', media: 'all' %>
 <% end %>
 
 <div class="pb-10 bg-gray-100">
@@ -26,9 +27,11 @@
         </h1>
         <% if current_school.about.present? %>
           <div class="w-full max-w-3xl mt-2 leading-relaxed relative flex items-center justify-center rounded">
-            <p class="text-sm lg:text-base">
-              <%= current_school.about %>
-            </p>
+            <div class="text-sm lg:text-base markdown-block markdown-block__area-of-text">
+              <p>
+                <%= current_school.about %>
+              </p>
+            </div>
           </div>
         <% end %>
       </div>
@@ -45,34 +48,34 @@
             <% presenter.courses.map do |course| %>
               <div class="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
                 <div class="flex overflow-hidden shadow bg-white rounded-lg flex flex-col h-full" aria-label="<%= course.name %>">
-                    <div class="relative">
-                      <div class="relative pb-1/2 bg-gray-200">
-                        <% if presenter.course_thumbnail(course).present? %>
-                          <img
-                            class="absolute h-full w-full object-cover"
-                            src=<%= presenter.course_thumbnail(course) %>
-                            />
-                        <% else %>
-                          <div class="school-index-course__cover absolute h-full w-full svg-bg-pattern-1"></div>
-                        <% end %>
-                      </div>
-                      <div class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50">
-                        <h4 class="school-index-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
-                          <%= course.name %>
-                        </h4>
-                      </div>
+                  <div class="relative">
+                    <div class="relative pb-1/2 bg-gray-200">
+                      <% if presenter.course_thumbnail(course).present? %>
+                        <img
+                          class="absolute h-full w-full object-cover"
+                          src=<%= presenter.course_thumbnail(course) %>
+                          />
+                      <% else %>
+                        <div class="school-index-course__cover absolute h-full w-full svg-bg-pattern-1"></div>
+                      <% end %>
                     </div>
-                    <div class="flex flex-col justify-between h-full">
-                      <div class="school-index-course__description text-sm px-6 pt-6 w-full leading-relaxed">
-                        <%= course.description %>
-                      </div>
-                      <div class="flex w-full p-6 justify-center">
-                        <a class="w-full btn btn-default" href="/courses/<%= course.id %>">
-                          View Course
-                          <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                      </div>
+                    <div class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50">
+                      <h4 class="school-index-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
+                        <%= course.name %>
+                      </h4>
                     </div>
+                  </div>
+                  <div class="flex flex-col justify-between h-full">
+                    <div class="school-index-course__description text-sm px-6 pt-6 w-full leading-relaxed">
+                      <%= course.description %>
+                    </div>
+                    <div class="flex w-full p-6 justify-center">
+                      <a class="w-full btn btn-default" href="/courses/<%= course.id %>">
+                        View Course
+                        <i class="fas fa-arrow-right ml-2"></i>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             <% end %>

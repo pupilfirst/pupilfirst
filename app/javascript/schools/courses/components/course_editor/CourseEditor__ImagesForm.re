@@ -172,7 +172,7 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB) => {
           </label>
           <HelpIcon
             className="text-xs ml-1"
-            alignment=HelpIcon.AlignLeft
+            responsiveAlignment={HelpIcon.NonResponsive(AlignLeft)}
             link="https://docs.pupilfirst.com/#/courses?id=course-images">
             {"The thumbnail will be displayed on the homepage, and here in the admin courses list."
              |> str}
@@ -209,7 +209,7 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB) => {
           </label>
           <HelpIcon
             className="text-xs ml-1"
-            alignment=HelpIcon.AlignLeft
+            responsiveAlignment={HelpIcon.NonResponsive(AlignLeft)}
             link="https://docs.pupilfirst.com/#/courses?id=course-images">
             {"The cover image for a course will be displayed at the top of all student pages within the course."
              |> str}

@@ -139,7 +139,7 @@ module CourseExports
         # Only scan 'active' students. Also filter by tag, if applicable.
         scope = course.founders.active.includes(:user)
         tags.present? ? scope.tagged_with(tags, any: true) : scope
-      end
+      end.order('users.email')
     end
 
     def targets

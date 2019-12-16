@@ -5,13 +5,15 @@ external sanitize: (string, string) => string = "default";
 type profile =
   | Comment
   | QuestionAndAnswer
-  | Permissive;
+  | Permissive
+  | Paragraph;
 
 let profileString = profile =>
   switch (profile) {
   | Comment => "comment"
   | QuestionAndAnswer => "questionAndAnswer"
   | Permissive => "permissive"
+  | Paragraph => "paragraph"
   };
 
 let parse = (profile, markdown) =>

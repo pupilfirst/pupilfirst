@@ -273,6 +273,13 @@ let reducer = (state, action) =>
     }
   };
 
+let about = state => {
+  switch (state.schoolAbout) {
+  | Some(about) => about
+  | None => "Add more details about the school."
+  };
+};
+
 [@react.component]
 let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
   let (state, send) =
@@ -367,13 +374,10 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               </button>
             </div>
             <p className="text-sm">
-              {(
-                 switch (state.schoolAbout) {
-                 | Some(about) => about
-                 | None => "Add more details about the school."
-                 }
-               )
-               |> str}
+              <MarkdownBlock
+                profile=Markdown.Paragraph
+                markdown={about(state)}
+              />
             </p>
           </div>
         </div>

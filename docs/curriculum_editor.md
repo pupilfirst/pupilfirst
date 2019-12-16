@@ -96,6 +96,11 @@ If you answered _No_ to whether a coach will review submissions for the target, 
 2. Visit a link to complete the target: You'll be asked for the link.
 3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
 
+**How should teams tackle this target?**\
+If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed milestone target, then all students in the team will need to pass for the team to [be eligible to level up](/taking_courses?id=leveling-up).
+
+For those targets where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the target, the submission will be credited to all students in the team. If work on the target is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
+
 **Do you have any completion instructions for the student?**\
 Text entered here will be displayed right next to where the students take action on a target. For targets that are simply marked as complete or completed by visiting a link, this will be at the end of the main content, next to the button that completes the target. For quizzes and reviewed submissions, this will be at the top of the page that displays the quiz, or the submission form.
 

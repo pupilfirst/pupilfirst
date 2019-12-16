@@ -1038,10 +1038,16 @@ let make =
                  }}
                 <div className="mt-6">
                   <label
-                    className="block tracking-wide text-sm font-semibold mr-6"
+                    className="inline-block tracking-wide text-sm font-semibold"
                     htmlFor="role">
                     {"How should teams tackle this target?" |> str}
                   </label>
+                  <HelpIcon
+                    className="ml-1"
+                    link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
+                    {"Should students in a team submit work on a target individually, or together?"
+                     |> str}
+                  </HelpIcon>
                   <div id="role" className="flex mt-4">
                     <button
                       onClick={_event => {

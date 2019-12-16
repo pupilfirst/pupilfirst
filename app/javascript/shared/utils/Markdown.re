@@ -6,14 +6,14 @@ type profile =
   | Comment
   | QuestionAndAnswer
   | Permissive
-  | Paragraph;
+  | AreaOfText;
 
 let profileString = profile =>
   switch (profile) {
   | Comment => "comment"
   | QuestionAndAnswer => "questionAndAnswer"
   | Permissive => "permissive"
-  | Paragraph => "paragraph"
+  | AreaOfText => "areaOfText"
   };
 
 let parse = (profile, markdown) =>

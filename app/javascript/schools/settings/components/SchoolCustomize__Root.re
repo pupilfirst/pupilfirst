@@ -375,7 +375,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             </div>
             <p className="text-sm">
               <MarkdownBlock
-                profile=Markdown.Paragraph
+                profile=Markdown.AreaOfText
                 markdown={about(state)}
               />
             </p>

@@ -12,7 +12,7 @@ let profileClasses = (profile: Markdown.profile) =>
   | Comment => "markdown-block__comment "
   | QuestionAndAnswer => "markdown-block__question-and-answer "
   | Permissive => "markdown-block__permissive "
-  | Paragraph => "markdown-block__paragraph "
+  | AreaOfText => "markdown-block__area-of-text "
   };
 
 let markdownBlockClasses = (profile, className) => {

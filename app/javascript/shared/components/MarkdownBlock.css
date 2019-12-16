@@ -367,6 +367,6 @@
  * Styling used in root
  */
 
-.markdown-block__paragraph p {
+.markdown-block__area-of-text p {
   @apply markdown-block__p leading-relaxed;
 }

@@ -49,7 +49,7 @@ sanitizationProfiles.comment = [
   "sub"
 ];
 
-sanitizationProfiles.paragraph = [
+sanitizationProfiles.areaOfText = [
   "p",
   "em",
   "strong",

@@ -240,7 +240,7 @@ feature 'Curriculum Editor', js: true do
 
       click_button 'Next Step'
 
-      expect(page).to have_text('Any prerequisite targets?')
+      expect(page).to have_text('Are there any prerequisite targets?')
 
       within("div#evaluated") do
         click_button 'No'
@@ -348,7 +348,7 @@ feature 'Curriculum Editor', js: true do
 
       click_button 'Next Step'
 
-      expect(page).to have_text('Any prerequisite targets?')
+      expect(page).to have_text('Are there any prerequisite targets?')
 
       within("div#evaluated") do
         click_button 'No'
@@ -399,7 +399,7 @@ feature 'Curriculum Editor', js: true do
       expect(page).to have_text(existing_content_block.file.filename)
 
       click_button 'Next Step'
-      click_button 'All students must submit.'
+      click_button 'All students must submit individually.'
 
       expect(page).to have_text('Do you have any completion instructions for the student?')
 
@@ -728,7 +728,7 @@ feature 'Curriculum Editor', js: true do
 
       click_button 'Next Step'
 
-      expect(page).to have_text('Any prerequisite targets?')
+      expect(page).to have_text('Are there any prerequisite targets?')
 
       within("div#evaluated") do
         click_button 'No'

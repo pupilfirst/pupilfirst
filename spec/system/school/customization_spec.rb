@@ -28,6 +28,7 @@ feature 'School Customization', js: true do
     attach_file 'logo_on_light_bg', image_path('logo_lipsum_on_light_bg.png'), visible: false
     attach_file 'logo_on_dark_bg', image_path('logo_lipsum_on_dark_bg.png'), visible: false
     attach_file 'icon', image_path('icon_pupilfirst.png'), visible: false
+    attach_file 'cover_image', image_path('cover_image.jpg'), visible: false
 
     click_button 'Update Images'
 
@@ -36,6 +37,7 @@ feature 'School Customization', js: true do
     expect(school.reload.logo_on_light_bg.filename).to eq('logo_lipsum_on_light_bg.png')
     expect(school.logo_on_dark_bg.filename).to eq('logo_lipsum_on_dark_bg.png')
     expect(school.icon.filename).to eq('icon_pupilfirst.png')
+    expect(school.cover_image.filename).to eq('cover_image.jpg')
   end
 
   scenario 'school admin sets custom links' do
@@ -181,6 +183,30 @@ feature 'School Customization', js: true do
 
     expect(SchoolString::PrivacyPolicy.for(school)).to eq(privacy_policy)
     expect(SchoolString::TermsOfUse.for(school)).to eq(terms_of_use)
+  end
+
+  scenario 'school admin customizes school name and about' do
+    sign_in_user school_admin.user, referer: customize_school_path
+
+    expect(page).to have_content(school.name)
+    expect(page).to have_content('Add more details about the school')
+
+    # Edit basic contact details.
+    find('div[aria-label="Edit school details"]').click
+
+    about = Faker::Lorem.paragraphs(2).join(" ")
+    name = Faker::Name.name
+
+    fill_in 'School Name', with: name
+    fill_in 'About', with: about
+
+    click_button 'Update'
+
+    expect(page).to have_content('Details updated successfully!')
+    dismiss_notification
+
+    expect(school.reload.name).to eq(name)
+    expect(school.about).to eq(about)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

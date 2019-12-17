@@ -240,7 +240,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled={state.updating}
         name="cover_image"
         onChange={updateCoverImage(send)}
-        labelText="Cover Image for school"
+        labelText="Cover image"
         optionalImageName={
           coverImage |> OptionUtils.map(Customizations.filename)
         }

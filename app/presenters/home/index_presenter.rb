@@ -23,5 +23,9 @@ module Home
     def course_thumbnail(course)
       view.url_for(course.thumbnail) if course.thumbnail.attached?
     end
+
+    def about_html
+      Kramdown::Document.new(@school.about).to_html.html_safe
+    end
   end
 end

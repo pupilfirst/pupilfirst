@@ -45,7 +45,7 @@ let updateSchoolQuery = (state, send, updateDetailsCB) => {
 };
 
 let updateButtonDisabled = state => {
-  state.saving || state.name |> String.length < 1;
+  !state.formDirty || state.saving || state.name |> String.length < 1;
 };
 
 let initialState = (name, about) => {

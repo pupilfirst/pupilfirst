@@ -365,6 +365,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             </h1>
           </div>
           <div
+            ariaLabel="Edit school details"
             onClick={showEditor(DeatilsEditor, send)}
             className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
             <div className="absolute right-0 top-0 z-10 pt-2 pr-2">

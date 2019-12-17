@@ -2,8 +2,8 @@
 
 let str = ReasonReact.string;
 
-let optionalImageLabelText = (optionalImageName, optionalSelectedImageName) =>
-  switch (optionalSelectedImageName) {
+let imageLabel = (imageName, selectedImageName) =>
+  switch (selectedImageName) {
   | Some(name) =>
     <span>
       {"You have selected " |> str}
@@ -11,7 +11,7 @@ let optionalImageLabelText = (optionalImageName, optionalSelectedImageName) =>
       {" to replace the current image." |> str}
     </span>
   | None =>
-    switch (optionalImageName) {
+    switch (imageName) {
     | Some(existingName) =>
       <span> {"Please pick a file to replace " ++ existingName |> str} </span>
     | None => "Please choose an image file to customize" |> str
@@ -26,8 +26,8 @@ let make =
       ~name,
       ~onChange,
       ~labelText,
-      ~optionalImageName,
-      ~optionalSelectedImageName,
+      ~imageName,
+      ~selectedImageName,
       ~errorState,
       ~errorMessage="must be a JPEG / PNG under 2 MB in size",
     ) => {
@@ -51,7 +51,7 @@ let make =
     <label className="file-input-label mt-2" htmlFor=id>
       <i className="fas fa-upload" />
       <span className="ml-2 truncate">
-        {optionalImageLabelText(optionalImageName, optionalSelectedImageName)}
+        {imageLabel(imageName, selectedImageName)}
       </span>
     </label>
     <School__InputGroupError message=errorMessage active=errorState />

@@ -19,7 +19,7 @@ feature 'Manual User Sign Out', js: true do
       visit edit_user_path
 
       # User should be signed out.
-      expect(page).to have_text(user.school.name)
+      expect(page).to have_text('Hello, welcome')
 
       # Log the user in again.
       user.regenerate_login_token
@@ -34,7 +34,7 @@ feature 'Manual User Sign Out', js: true do
       visit edit_user_path
 
       # User should be signed out.
-      expect(page).to have_text(user.school.name)
+      expect(page).to have_text('Hello, welcome')
     end
   end
 
@@ -52,7 +52,7 @@ feature 'Manual User Sign Out', js: true do
         visit edit_user_path
 
         # User should be signed out.
-        expect(page).to have_text(user.school.name)
+        expect(page).to have_text('Hello, welcome')
       end
     end
   end

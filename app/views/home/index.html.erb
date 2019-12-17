@@ -3,7 +3,11 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
   <%= stylesheet_pack_tag 'home/index', media: 'all' %>
-  <%= stylesheet_pack_tag 'shared/markdownBlockCSS', media: 'all' %>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
 
 <div class="pb-10 bg-gray-100">
@@ -27,11 +31,7 @@
         </h1>
         <% if current_school.about.present? %>
           <div class="w-full max-w-3xl mt-2 leading-relaxed relative flex items-center justify-center rounded">
-            <div class="text-sm lg:text-base markdown-block markdown-block__area-of-text">
-              <p>
-                <%= presenter.about_html %>
-              </p>
-            </div>
+            <div class="convert-markdown text-sm lg:text-base" data-json-props="<%= { markdown: current_school.about, profile: "areaOfText" }.to_json %>"></div>
           </div>
         <% end %>
       </div>

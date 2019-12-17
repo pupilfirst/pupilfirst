@@ -16,7 +16,7 @@ let decodeProps = json =>
     schoolAbout: json |> field("schoolAbout", optional(string)),
   };
 
-let props = DomUtils.parseJsonAttribute() |> decodeProps;
+let props = DomUtils.parseJsonTag(~id="school-customize-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <SchoolCustomize__Root
@@ -25,5 +25,5 @@ ReactDOMRe.renderToElementWithId(
     schoolName={props.schoolName}
     schoolAbout={props.schoolAbout}
   />,
-  "react-root",
+  "school-customize",
 );

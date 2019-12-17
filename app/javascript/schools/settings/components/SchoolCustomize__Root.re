@@ -8,7 +8,7 @@ let str = ReasonReact.string;
 
 type editor =
   | LinksEditor(SchoolCustomize__LinksEditor.kind)
-  | DeatilsEditor
+  | DetailsEditor
   | ImagesEditor
   | ContactsEditor
   | AgreementsEditor(SchoolCustomize__AgreementsEditor.kind);
@@ -29,8 +29,10 @@ type action =
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
-  | UpdateSchoolDetails(string, option(string))
-  | UpdateImages(Js.Json.t);
+  | UpdateSchoolDetails(name, about)
+  | UpdateImages(Js.Json.t)
+and name = string
+and about = option(string);
 
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch (logoOnLightBg) {
@@ -204,7 +206,7 @@ let editor = (state, send, authenticityToken) =>
            updateImagesCB={json => send(UpdateImages(json))}
            authenticityToken
          />
-       | DeatilsEditor =>
+       | DetailsEditor =>
          <SchoolCustomize__DetailsEditor
            name={state.schoolName}
            about={state.schoolAbout}
@@ -290,8 +292,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
   <div>
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <div className="font-bold"> {"Home Page" |> str} </div>
-      <div
-        className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
+      <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-200 rounded p-2">
           {headerLogo(
              schoolName,
@@ -353,20 +354,20 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div
           className="relative mx-auto flex flex-col justify-center items-center text-white p-10 text-center">
           <p> {"Hello, welcome to" |> str} </p>
-          <div onClick={showEditor(DeatilsEditor, send)}>
+          <div onClick={showEditor(DetailsEditor, send)}>
             <h1
               className="flex items-center border border-dashed border-gray-800 hover:border-primary-300 hover:text-primary-200 cursor-text rounded px-2 py-1 text-3xl mt-1">
               <span> {state.schoolName |> str} </span>
               <button
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ml-1 cursor-pointer rounded"
-                onClick={showEditor(DeatilsEditor, send)}>
+                onClick={showEditor(DetailsEditor, send)}>
                 <i className="fas fa-pencil-alt" />
               </button>
             </h1>
           </div>
           <div
             ariaLabel="Edit school details"
-            onClick={showEditor(DeatilsEditor, send)}
+            onClick={showEditor(DetailsEditor, send)}
             className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
             <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
               <button
@@ -374,12 +375,12 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 <i className="fas fa-pencil-alt" />
               </button>
             </div>
-            <p className="text-sm">
+            <div className="text-sm">
               <MarkdownBlock
                 profile=Markdown.AreaOfText
                 markdown={about(state)}
               />
-            </p>
+            </div>
           </div>
         </div>
       </div>

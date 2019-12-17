@@ -1,17 +1,18 @@
 [@bs.config {jsx: 3}];
 exception RootAttributeMissing(string);
+exception InvalidProfile(string);
 
 open Webapi.Dom;
 
 type props = {
   markdown: string,
-  permissive: bool,
+  profile: string,
 };
 
 let decodeProps = json =>
   Json.Decode.{
     markdown: json |> field("markdown", string),
-    permissive: json |> field("permissive", bool),
+    profile: json |> field("profile", string),
   };
 
 let parseElement = (element, attribute) =>
@@ -24,6 +25,16 @@ let parseElement = (element, attribute) =>
   |> Json.parseOrRaise
   |> decodeProps;
 
+let profileType = profile => {
+  switch (profile) {
+  | "comment" => Markdown.Comment
+  | "questionAndAnswer" => Markdown.QuestionAndAnswer
+  | "permissive" => Markdown.Permissive
+  | "areaOfText" => Markdown.AreaOfText
+  | profile => raise(InvalidProfile(profile))
+  };
+};
+
 let parseMarkdown =
     (~attributeName="convert-markdown", ~attribute="data-json-props", ()) =>
   document
@@ -31,14 +42,12 @@ let parseMarkdown =
   |> HtmlCollection.toArray
   |> Array.map(element => {
        let props = parseElement(element, attribute);
-       let profile =
-         props.permissive ? Markdown.Permissive : Markdown.QuestionAndAnswer;
        element
        |> ReactDOMRe.render(
             <MarkdownBlock
               markdown={props.markdown}
               className="leading-normal text-sm"
-              profile
+              profile={profileType(props.profile)}
             />,
           );
      });

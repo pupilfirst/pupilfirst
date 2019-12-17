@@ -61,8 +61,8 @@ feature 'Index spec', js: true do
 
   context 'When an user visits a school without any featured courses' do
     before do
-      course_1.update!(featured: false)
-      course_2.update!(featured: false)
+      let!(:course_1) { create :course, school: school, featured: false }
+      let!(:course_2) { create :course, school: school, featured: false }
     end
 
     scenario 'Featured course section will be hidden' do

@@ -201,50 +201,44 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
       {"Manage Images" |> str}
     </h5>
     <DisablingCover disabled={state.updating}>
-      <SchoolCustomize__ImageUploader
+      <SchoolCustomize__ImageFileInput
         id="sc-images-editor__logo-on-400-bg-input"
         disabled={state.updating}
         name="logo_on_light_bg"
         onChange={updateLogoOnLightBg(send)}
         labelText="Logo on a light background"
-        optionalImageName={
-          logoOnLightBg |> OptionUtils.map(Customizations.filename)
-        }
-        optionalSelectedImageName={state.logoOnLightBgFilename}
+        imageName={logoOnLightBg |> OptionUtils.map(Customizations.filename)}
+        selectedImageName={state.logoOnLightBgFilename}
         errorState={state.logoOnLightBgInvalid}
       />
-      <SchoolCustomize__ImageUploader
+      <SchoolCustomize__ImageFileInput
         id="sc-images-editor__logo-on-600-bg-input"
         disabled={state.updating}
         name="logo_on_dark_bg"
         onChange={updateLogoOnDarkBg(send)}
         labelText="Logo on a dark background"
-        optionalImageName={
-          logoOnDarkBg |> OptionUtils.map(Customizations.filename)
-        }
-        optionalSelectedImageName={state.logoOnDarkBgFilename}
+        imageName={logoOnDarkBg |> OptionUtils.map(Customizations.filename)}
+        selectedImageName={state.logoOnDarkBgFilename}
         errorState={state.logoOnDarkBgInvalid}
       />
-      <SchoolCustomize__ImageUploader
+      <SchoolCustomize__ImageFileInput
         id="sc-images-editor__icon-input"
         disabled={state.updating}
         name="icon"
         onChange={updateIcon(send)}
         labelText="Icon"
-        optionalImageName={Some(icon |> Customizations.filename)}
-        optionalSelectedImageName={state.iconFilename}
+        imageName={Some(icon |> Customizations.filename)}
+        selectedImageName={state.iconFilename}
         errorState={state.iconInvalid}
       />
-      <SchoolCustomize__ImageUploader
+      <SchoolCustomize__ImageFileInput
         id="sc-images-editor__cover-image-input"
         disabled={state.updating}
         name="cover_image"
         onChange={updateCoverImage(send)}
         labelText="Cover image"
-        optionalImageName={
-          coverImage |> OptionUtils.map(Customizations.filename)
-        }
-        optionalSelectedImageName={state.coverImageFilename}
+        imageName={coverImage |> OptionUtils.map(Customizations.filename)}
+        selectedImageName={state.coverImageFilename}
         errorState={state.coverImageInvalid}
       />
       <div className="flex justify-end">

@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-let component = ReasonReact.statelessComponent("SchoolCustomize__SocialLink");
-
 let test = (value, url) => {
   let tester = Js.Re.fromString(value);
   url |> Js.Re.test_(tester);

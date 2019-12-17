@@ -59,7 +59,7 @@ module CourseExports
         ec.name + " (Average Grade)"
       end
 
-      rows = targets.map do |target|
+      values = targets.map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
 
         [
@@ -73,9 +73,9 @@ module CourseExports
         ] + average_grades(target)
       end
 
-      table.row do |row|
-        row.add_cells(["ID", "Level", "Name", "Completion Method", "Milestone?", "Students with submissions", "Submissions pending review"] + evaluation_criteria_names)
-      end
+      rows = ([
+        ["ID", "Level", "Name", "Completion Method", "Milestone?", "Students with submissions", "Submissions pending review"] + evaluation_criteria_names
+      ] + values).transpose
 
       table.add_rows(rows)
     end

@@ -21,3 +21,10 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+.school-customize__featured-courses-empty-placeholder {
+  min-height: 18rem;
+  background-image: url('images/no-courses-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}

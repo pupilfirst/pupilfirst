@@ -107,6 +107,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
         </label>
         <textarea
           maxLength=500
+          rows=7
           placeholder="Add more details about the school."
           className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="details-editor__about"

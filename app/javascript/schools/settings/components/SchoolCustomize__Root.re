@@ -291,7 +291,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <div className="font-bold"> {"Home Page" |> str} </div>
       <div
-        className="border rounded-lg px-5 py-4 flex justify-between mt-3 shadow">
+        className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-200 rounded p-2">
           {headerLogo(
              schoolName,
@@ -390,15 +390,10 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div className="text-sm">
           {"All the courses with featured flag will listed here" |> str}
         </div>
-        <div className="max-w-3xl mx-auto mt-4">
-          <div className="flex flex-wrap flex-1 lg:-mx-5">
-            <div className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
-              <div
-                className="flex overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
-                {"All the courses with featured flag will listed here" |> str}
-              </div>
-            </div>
-          </div>
+        <div className="max-w-2xl bg-gray-100 rounded-lg mx-auto p-3 mt-4">
+          <div
+            className="school-customize__featured-courses-empty-placeholder"
+          />
         </div>
       </div>
       <div className="mt-8 w-full">

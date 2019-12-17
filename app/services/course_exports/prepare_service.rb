@@ -55,10 +55,6 @@ module CourseExports
     end
 
     def populate_targets_table(table)
-      evaluation_criteria_names = EvaluationCriterion.where(id: evaluation_criteria_ids).map do |ec|
-        ec.name + " (Average Grade)"
-      end
-
       values = targets.map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
 
@@ -70,7 +66,7 @@ module CourseExports
           milestone,
           students_with_submissions(target),
           submissions_pending_review(target)
-        ] + average_grades(target)
+        ] + average_grades_for_target(target)
       end
 
       rows = ([
@@ -80,17 +76,29 @@ module CourseExports
       table.add_rows(rows)
     end
 
+    def evaluation_criteria_names
+      @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).map do |ec|
+        ec.name + " (Average Grade)"
+      end
+    end
+
     def evaluation_criteria_ids
       @evaluation_criteria_ids ||= targets.map do |target|
         target.evaluation_criteria.pluck(:id)
       end.flatten.uniq
     end
 
-    def average_grades(target)
+    def average_grades_for_target(target)
       empty_grades = Array.new(evaluation_criteria_ids.length)
 
       target.evaluation_criteria.pluck(:id).each_with_object(empty_grades) do |evaluation_criterion_id, grades|
         grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(:timeline_event).where(timeline_events: { target_id: target.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade).round(2)
+      end
+    end
+
+    def average_grades_for_student(student)
+      evaluation_criteria_ids.map do |evaluation_criterion_id|
+        TimelineEventGrade.joins(timeline_event: :founders).where(founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
       end
     end
 
@@ -105,11 +113,18 @@ module CourseExports
     def populate_students_table(table)
       student_rows = students.map do |student|
         user = student.user
-        [user.email, user.name, user.title, user.affiliation, student.tags.pluck(:name).join(', ')]
+
+        [
+          user.email,
+          user.name,
+          user.title,
+          user.affiliation,
+          student.tags.pluck(:name).join(', ')
+        ] + average_grades_for_student(student)
       end
 
       table.row do |row|
-        row.add_cells ["Email Address", "Name", "Title", "Affiliation", "Tags"]
+        row.add_cells ["Email Address", "Name", "Title", "Affiliation", "Tags"] + evaluation_criteria_names
       end
 
       table.add_rows student_rows

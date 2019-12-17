@@ -26,7 +26,7 @@ module Schools
 
       form = Schools::Founders::EditForm.new(student)
 
-      response = if form.validate(params[:founder].merge(tags: params[:tags], coach_ids: params[:coach_ids]))
+      response = if form.validate(params[:founder].merge(tags: params[:tags], access_ends_at: params[:access_ends_at], coach_ids: params[:coach_ids]))
         form.save
         presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
         { teams: presenter.teams, students: presenter.students, error: nil }

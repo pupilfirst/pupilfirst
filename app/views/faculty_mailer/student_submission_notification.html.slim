@@ -7,7 +7,7 @@
 = content_for :title_button_text do
   | Visit Dashboard
 
-= content_for(:title_button_link, review_course_url(@startup.course))
+= content_for(:title_button_link, timeline_event_url(@submission))
 
 = content_for :salutation do
   | Hello #{@faculty.name},

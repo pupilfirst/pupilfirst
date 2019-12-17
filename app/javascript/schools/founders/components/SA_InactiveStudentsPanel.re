@@ -94,6 +94,7 @@ let make =
           <div className="flex items-center justify-between">
             <div className="flex pl-3 ">
               <input
+                id="search"
                 type_="search"
                 className="bg-white border rounded-lg block w-64 text-sm appearance-none leading-normal mr-2 px-3 py-2"
                 placeholder="Search by student or team name..."
@@ -127,7 +128,7 @@ let make =
                      )
                    }
                    className="mr-3 btn btn-primary focus:outline-none">
-                   {"Mark Team Active" |> str}
+                   {"Reactivate Students" |> str}
                  </button>}
           </div>
         </div>
@@ -151,26 +152,24 @@ let make =
                         key={team |> Team.id}
                         id={team |> Team.name}
                         className="student-team-container flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
-                        {
-                          let isChecked =
-                            state.selectedTeams |> List.mem(team);
-                          let checkboxId = "select-team-" ++ (team |> Team.id);
-                          <label
-                            className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-100"
-                            htmlFor=checkboxId>
-                            <input
-                              className="leading-tight"
-                              type_="checkbox"
-                              id=checkboxId
-                              checked=isChecked
-                              onChange={
-                                isChecked
-                                  ? _e => send(DeselectTeam(team))
-                                  : (_e => send(SelectTeam(team)))
-                              }
-                            />
-                          </label>;
-                        }
+                        {let isChecked =
+                           state.selectedTeams |> List.mem(team);
+                         let checkboxId = "select-team-" ++ (team |> Team.id);
+                         <label
+                           className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-100"
+                           htmlFor=checkboxId>
+                           <input
+                             className="leading-tight"
+                             type_="checkbox"
+                             id=checkboxId
+                             checked=isChecked
+                             onChange={
+                               isChecked
+                                 ? _e => send(DeselectTeam(team))
+                                 : (_e => send(SelectTeam(team)))
+                             }
+                           />
+                         </label>}
                         <div className="flex-1 w-3/5 order-last border-l">
                           {team
                            |> studentsInTeam(state.students)

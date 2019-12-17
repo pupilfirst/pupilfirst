@@ -543,7 +543,7 @@ let selectVersionCB =
 };
 
 let targetRoleClasses = selected => {
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded p-4 items-center cursor-pointer text-left "
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left "
   ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
@@ -827,53 +827,18 @@ let make =
                 )
               }>
               <div className="max-w-3xl py-6 px-3 mx-auto">
-                <div className="mb-6">
-                  <label
-                    className="block tracking-wide text-sm font-semibold mr-6"
-                    htmlFor="role">
-                    {"How should teams tackle this target?" |> str}
-                  </label>
-                  <div id="role" className="flex mt-4">
-                    <button
-                      onClick={_event => {
-                        ReactEvent.Mouse.preventDefault(_event);
-                        dispatch(UpdateTargetRole(Target.Student));
-                      }}
-                      className={
-                        "mr-4 "
-                        ++ targetRoleClasses(state.role == Target.Student)
-                      }>
-                      <span className="mb-1 mr-2">
-                        <img className="w-12 h-12" src=markIcon />
-                      </span>
-                      <span>
-                        {"All students must submit." |> str}
-                      </span>
-                    </button>
-                    <button
-                      onClick={_event => {
-                        ReactEvent.Mouse.preventDefault(_event);
-                        dispatch(UpdateTargetRole(Target.Team));
-                      }}
-                      className={targetRoleClasses(state.role == Target.Team)}>
-                      <span className="mb-1 mr-2">
-                        <img className="w-12 h-12" src=quizIcon />
-                      </span>
-                      <span>
-                        {"Only one student in a team needs to submit." |> str}
-                      </span>
-                    </button>
-                  </div>
-                </div>
                 {showPrerequisiteTargets
                    ? <div>
                        <label
                          className="block tracking-wide text-sm font-semibold mb-2"
                          htmlFor="prerequisite_targets">
-                         {"Any prerequisite targets?" |> str}
+                         {"Are there any prerequisite targets?" |> str}
                        </label>
                        <div id="prerequisite_targets" className="mb-6">
                          <School__SelectBox
+                           noSelectionHeading="No prerequisites selected"
+                           noSelectionDescription="This target will not have any prerequisites."
+                           emptyListDescription="There are no other targets available for selection."
                            items={
                              state.prerequisiteTargets
                              |> School__SelectBox.convertOldItems
@@ -890,7 +855,7 @@ let make =
                   <label
                     className="block tracking-wide text-sm font-semibold mr-6"
                     htmlFor="evaluated">
-                    {"Is this target reviewed by a coach?" |> str}
+                    {"Will a coach review submissions on this target?" |> str}
                   </label>
                   <div
                     id="evaluated"
@@ -914,36 +879,6 @@ let make =
                       {"No" |> str}
                     </button>
                   </div>
-                </div>
-                <div className="mb-6">
-                  <label
-                    className="block tracking-wide text-sm font-semibold mr-6"
-                    htmlFor="completion-instructions">
-                    {"Do you have any completion instructions for the student?"
-                     |> str}
-                    <span className="ml-1 text-xs font-normal">
-                      {"(optional)" |> str}
-                    </span>
-                  </label>
-                  <div className="text-xs mt-1 text-gray-800">
-                    {"These instructions will be displayed close to where students complete the target."
-                     |> str}
-                  </div>
-                  <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="completion-instructions"
-                    type_="text"
-                    maxLength=255
-                    placeholder="Do these specific things to complete this target!"
-                    value={state.completionInstructions}
-                    onChange={event =>
-                      dispatch(
-                        UpdateCompletionInstructions(
-                          ReactEvent.Form.target(event)##value,
-                        ),
-                      )
-                    }
-                  />
                 </div>
                 {targetEvaluated()
                    ? ReasonReact.null
@@ -1101,6 +1036,83 @@ let make =
                         : ReasonReact.null}
                    </div>
                  }}
+                <div className="mt-6">
+                  <label
+                    className="inline-block tracking-wide text-sm font-semibold"
+                    htmlFor="role">
+                    {"How should teams tackle this target?" |> str}
+                  </label>
+                  <HelpIcon
+                    className="ml-1"
+                    link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
+                    {"Should students in a team submit work on a target individually, or together?"
+                     |> str}
+                  </HelpIcon>
+                  <div id="role" className="flex mt-4">
+                    <button
+                      onClick={_event => {
+                        ReactEvent.Mouse.preventDefault(_event);
+                        dispatch(UpdateTargetRole(Target.Student));
+                      }}
+                      className={
+                        "mr-4 "
+                        ++ targetRoleClasses(state.role == Target.Student)
+                      }>
+                      <span className="mr-4">
+                        <Icon className="if i-users-check-light text-3xl" />
+                      </span>
+                      <span className="text-sm">
+                        {"All students must submit individually." |> str}
+                      </span>
+                    </button>
+                    <button
+                      onClick={_event => {
+                        ReactEvent.Mouse.preventDefault(_event);
+                        dispatch(UpdateTargetRole(Target.Team));
+                      }}
+                      className={targetRoleClasses(state.role == Target.Team)}>
+                      <span className="mr-4">
+                        <Icon className="if i-user-check-light text-2xl" />
+                      </span>
+                      <span className="text-sm">
+                        {"Only one student in a team" |> str}
+                        <br />
+                        {" needs to submit." |> str}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <label
+                    className="tracking-wide text-sm font-semibold"
+                    htmlFor="completion-instructions">
+                    {"Do you have any completion instructions for the student?"
+                     |> str}
+                    <span className="ml-1 text-xs font-normal">
+                      {"(optional)" |> str}
+                    </span>
+                  </label>
+                  <HelpIcon
+                    link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
+                    className="ml-1">
+                    {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
+                     |> str}
+                  </HelpIcon>
+                  <input
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="completion-instructions"
+                    type_="text"
+                    maxLength=255
+                    value={state.completionInstructions}
+                    onChange={event =>
+                      dispatch(
+                        UpdateCompletionInstructions(
+                          ReactEvent.Form.target(event)##value,
+                        ),
+                      )
+                    }
+                  />
+                </div>
               </div>
             </div>
           </div>

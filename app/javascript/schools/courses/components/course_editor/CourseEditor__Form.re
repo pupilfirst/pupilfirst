@@ -68,7 +68,7 @@ let updateName = (send, name) => {
 
 let updateDescription = (send, description) => {
   let lengthOfDescription = description |> String.length;
-  let hasError = lengthOfDescription < 2 || lengthOfDescription >= 151;
+  let hasError = lengthOfDescription < 2 || lengthOfDescription >= 150;
   send(UpdateDescription(description, hasError));
 };
 
@@ -392,6 +392,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     id="name"
                     type_="text"
                     placeholder="Type course name here"
+                    maxLength=50
                     value={state.name}
                     onChange={event =>
                       updateName(send, ReactEvent.Form.target(event)##value)
@@ -414,6 +415,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     type_="text"
                     placeholder="Type course description here"
                     value={state.description}
+                    maxLength=150
                     onChange={event =>
                       updateDescription(
                         send,

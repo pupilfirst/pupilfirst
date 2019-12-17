@@ -35,6 +35,7 @@ module Courses
         }
       end
     end
+
     # rubocop:enable Metrics/MethodLength
 
     def default_props
@@ -135,7 +136,7 @@ module Courses
     end
 
     def current_student
-      @current_student ||= @course.founders.not_exited.find_by(user_id: current_user.id)
+      @current_student ||= @course.founders.not_dropped_out.find_by(user_id: current_user.id)
     end
 
     def open_level_ids

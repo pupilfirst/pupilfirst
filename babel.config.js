@@ -22,8 +22,10 @@ module.exports = function(api) {
         {
           targets: {
             node: "current"
-          }
-        }
+          },
+          modules: "commonjs"
+        },
+        "@babel/preset-react"
       ],
       (isProductionEnv || isDevelopmentEnv) && [
         "@babel/preset-env",
@@ -75,7 +77,7 @@ module.exports = function(api) {
         }
       ],
       isProductionEnv && [
-        require("babel-plugin-transform-react-remove-prop-types").default,
+        "babel-plugin-transform-react-remove-prop-types",
         {
           removeImport: true
         }

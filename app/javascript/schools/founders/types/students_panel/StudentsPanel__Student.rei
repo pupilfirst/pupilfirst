@@ -12,7 +12,6 @@ let tags: t => list(string);
 
 let updateInfo:
   (
-    ~exited: bool,
     ~excludedFromLeaderboard: bool,
     ~title: string,
     ~affiliation: option(string),
@@ -21,8 +20,6 @@ let updateInfo:
   t;
 
 let encode: (string, string, t) => Js.Json.t;
-
-let exited: t => bool;
 
 let excludedFromLeaderboard: t => bool;
 

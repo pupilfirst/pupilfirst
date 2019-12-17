@@ -15,20 +15,45 @@ let toggleHelp = (setHelpVisible, _event) => {
   setHelpVisible(helpVisible => !helpVisible);
 };
 
-type alignment =
+type responsiveAlignment =
+  | NonResponsive(alignment)
+  | Responsive(alignment, alignment)
+and alignment =
   | AlignLeft
   | AlignRight
   | AlignCenter;
 
-let alignmentClass = position =>
-  switch (position) {
+let alignmentClass = alignment =>
+  switch (alignment) {
   | AlignLeft => " left-0"
   | AlignRight => " right-0"
   | AlignCenter => " help-icon__help-container--center"
   };
 
+let responsiveAlignmentClass = responsiveAlignment =>
+  switch (responsiveAlignment) {
+  | NonResponsive(alignment) => alignmentClass(alignment)
+  | Responsive(mobileAlignment, desktopAlignment) =>
+    let mobileClass = mobileAlignment |> alignmentClass;
+
+    let desktopClass =
+      switch (desktopAlignment) {
+      | AlignLeft => " md:right-auto md:left-0"
+      | AlignRight => " md:left-auto md:right-0"
+      | AlignCenter => " help-icon__help-container--md-center"
+      };
+
+    mobileClass ++ " " ++ desktopClass;
+  };
+
 [@react.component]
-let make = (~className="", ~link=?, ~alignment=AlignCenter, ~children) => {
+let make =
+    (
+      ~className="",
+      ~link=?,
+      ~responsiveAlignment=NonResponsive(AlignCenter),
+      ~children,
+    ) => {
   let (helpVisible, setHelpVisible) = React.useState(() => false);
 
   React.useEffect1(
@@ -64,8 +89,8 @@ let make = (~className="", ~link=?, ~alignment=AlignCenter, ~children) => {
        ? <div
            onClick={event => event |> ReactEvent.Mouse.stopPropagation}
            className={
-             "help-icon__help-container overflow-y-auto mt-1 border border-gray-900 absolute z-50 p-2 rounded-lg bg-gray-900 text-white max-w-xs text-center"
-             ++ (alignment |> alignmentClass)
+             "help-icon__help-container overflow-y-auto mt-1 border border-gray-900 absolute z-50 px-4 py-3 shadow-lg leading-snug rounded-lg bg-gray-900 text-white max-w-xs text-center"
+             ++ (responsiveAlignment |> responsiveAlignmentClass)
            }>
            children
            {link
@@ -85,13 +110,13 @@ let make = (~className="", ~link=?, ~alignment=AlignCenter, ~children) => {
 };
 
 module Jsx2 = {
-  let make = (~className=?, ~link=?, ~alignment=?, children) =>
+  let make = (~className=?, ~link=?, ~responsiveAlignment=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
       makeProps(
         ~className?,
         ~link?,
-        ~alignment?,
+        ~responsiveAlignment?,
         ~children=children |> React.array,
         (),
       ),

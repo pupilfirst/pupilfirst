@@ -28,8 +28,8 @@ feature 'User Home', js: true do
   # Course 4 - Founder Exited
   let(:course_4) { create :course, school: school }
   let(:course_4_level_1) { create :level, :one, course: course_4 }
-  let(:course_4_startup_1) { create :team, level: course_4_level_1 }
-  let!(:course_4_founder_1) { create :founder, startup: course_4_startup_1, user: founder.user, exited: true }
+  let(:course_4_startup_1) { create :team, level: course_4_level_1, dropped_out_at: 1.day.ago }
+  let!(:course_4_founder_1) { create :founder, startup: course_4_startup_1, user: founder.user }
 
   # seed community
   let!(:community_1) { create :community, school: school, target_linkable: true }

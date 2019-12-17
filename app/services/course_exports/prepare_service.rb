@@ -55,18 +55,16 @@ module CourseExports
     end
 
     def populate_targets_table(table)
-      target_rows = course.targets.live.includes(:level, :evaluation_criteria, :quiz, :target_group).map do |target|
+      target_rows = targets.map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
         [target_id(target), target.level.number, target.title, target_type(target), milestone]
       end
-
-      sorted_target_rows = target_rows.sort_by { |data| data[1] }
 
       table.row do |row|
         row.add_cells ["ID", "Level", "Name", "Completion Method", "Milestone?"]
       end
 
-      table.add_rows(sorted_target_rows)
+      table.add_rows(target_rows)
     end
 
     def populate_students_table(table)
@@ -143,10 +141,15 @@ module CourseExports
     end
 
     def targets
-      @targets ||= course.targets.live
-        .joins(:level)
-        .includes(:level, :evaluation_criteria, :quiz, :target_group)
-        .order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+      @targets ||= begin
+        scope = course.targets.live
+          .joins(:level)
+          .includes(:level, :evaluation_criteria, :quiz, :target_group)
+
+        scope = @course_export.reviewed_only ? scope.joins(:evaluation_criteria) : scope
+
+        scope.order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+      end
     end
 
     def target_id(target)

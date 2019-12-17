@@ -41,7 +41,8 @@ module Schools
             id: export.id,
             created_at: export.created_at,
             file: file,
-            tags: export.tag_list
+            tags: export.tag_list,
+            reviewed_only: export.reviewed_only
           }
         end
       end

@@ -41,14 +41,14 @@ module Schools
             id: export.id,
             created_at: export.created_at,
             file: file,
-            tags: export.tag_list,
+            tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only
           }
         end
       end
 
       def course_exports
-        @course_exports ||= @course.course_exports.order(created_at: :DESC).with_attached_file.limit(50).load
+        @course_exports ||= @course.course_exports.order(created_at: :DESC).includes(:tags).with_attached_file.limit(50).load
       end
     end
   end

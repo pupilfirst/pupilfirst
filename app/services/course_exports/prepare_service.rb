@@ -55,16 +55,51 @@ module CourseExports
     end
 
     def populate_targets_table(table)
-      target_rows = targets.map do |target|
+      evaluation_criteria_names = EvaluationCriterion.where(id: evaluation_criteria_ids).map do |ec|
+        ec.name + " (Average Grade)"
+      end
+
+      rows = targets.map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
-        [target_id(target), target.level.number, target.title, target_type(target), milestone]
+
+        [
+          target_id(target),
+          target.level.number,
+          target.title,
+          target_type(target),
+          milestone,
+          students_with_submissions(target),
+          submissions_pending_review(target)
+        ] + average_grades(target)
       end
 
       table.row do |row|
-        row.add_cells ["ID", "Level", "Name", "Completion Method", "Milestone?"]
+        row.add_cells(["ID", "Level", "Name", "Completion Method", "Milestone?", "Students with submissions", "Submissions pending review"] + evaluation_criteria_names)
       end
 
-      table.add_rows(target_rows)
+      table.add_rows(rows)
+    end
+
+    def evaluation_criteria_ids
+      @evaluation_criteria_ids ||= targets.map do |target|
+        target.evaluation_criteria.pluck(:id)
+      end.flatten.uniq
+    end
+
+    def average_grades(target)
+      empty_grades = Array.new(evaluation_criteria_ids.length)
+
+      target.evaluation_criteria.pluck(:id).each_with_object(empty_grades) do |evaluation_criterion_id, grades|
+        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(:timeline_event).where(timeline_events: { target_id: target.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade).round(2)
+      end
+    end
+
+    def students_with_submissions(target)
+      target.timeline_events.joins(:founders).distinct('founders.id').count('founders.id')
+    end
+
+    def submissions_pending_review(target)
+      target.timeline_events.pending_review.distinct.count
     end
 
     def populate_students_table(table)
@@ -130,6 +165,7 @@ module CourseExports
         grading[grade_index] = { value: grade, style: style }
       end
     end
+
     # rubocop:enable Metrics/CyclomaticComplexity
 
     def students

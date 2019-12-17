@@ -42,10 +42,6 @@ feature 'Index spec', js: true do
   end
 
   context 'When an user visits a school without an about' do
-    before do
-      school.update!(about: "")
-    end
-
     scenario 'Page will render correctly' do
       visit root_path
 
@@ -53,17 +49,14 @@ feature 'Index spec', js: true do
 
       within("div[aria-label=\"#{course_1.name}\"]") do
         expect(page).to have_text(course_1.name)
-        expect(page).to have_text(course_1.description)
         expect(page).to have_link("View Course", href: course_path(course_1))
       end
     end
   end
 
   context 'When an user visits a school without any featured courses' do
-    before do
-      let!(:course_1) { create :course, school: school, featured: false }
-      let!(:course_2) { create :course, school: school, featured: false }
-    end
+    let!(:course_1) { create :course, school: school, featured: false }
+    let!(:course_2) { create :course, school: school, featured: false }
 
     scenario 'Featured course section will be hidden' do
       visit root_path

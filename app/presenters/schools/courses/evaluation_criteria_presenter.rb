@@ -14,7 +14,7 @@ module Schools
 
       def props
         {
-          evaluation_criteria: @course.evaluation_criteria.map { |ec| { id: ec.id, name: ec.name } }
+          course_id: @course.id
         }
       end
     end

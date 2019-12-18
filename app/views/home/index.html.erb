@@ -24,13 +24,13 @@
     <div
       class="school-index__about flex relative bg-primary-900 shadow-xl rounded-lg mx-3 lg:mx-0 -mt-7">
       <div
-        class="relative mx-auto flex flex-col justify-center items-center text-white px-6 py-8 md:p-10 text-center">
+        class="relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10">
         <p class="md:text-xl">Hello, welcome to </p>
-        <h1 class="flex items-center border-gray-800 rounded leading-tight text-3xl md:text-5xl">
+        <h1 class="leading-tight text-3xl md:text-5xl">
           <span> <%= current_school.name %> </span>
         </h1>
         <% if current_school.about.present? %>
-          <div class="w-full max-w-3xl mt-2 leading-relaxed relative flex items-center justify-center rounded">
+          <div class="w-full max-w-2xl mt-2 leading-relaxed relative flex items-center justify-center rounded">
             <div class="convert-markdown text-sm lg:text-base" data-json-props="<%= { markdown: current_school.about, profile: "areaOfText" }.to_json %>"></div>
           </div>
         <% end %>

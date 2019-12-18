@@ -1,0 +1,87 @@
+<% presenter = ::Home::IndexPresenter.new(self, current_school) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'home/index', media: 'all' %>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
+<% end %>
+
+<div class="pb-10 bg-gray-100">
+  <div class="relative bg-primary-200">
+    <div class="relative pb-1/2 md:pb-1/4">
+      <% if presenter.cover_image.present? %>
+        <img class="absolute h-full w-full object-cover" src=<%= presenter.cover_image %>/>
+      <% else %>
+        <div class="school-index__cover-default absolute h-full w-full svg-bg-pattern-1"></div>
+      <% end %>
+    </div>
+  </div>
+  <div class="max-w-4xl 2xl:max-w-5xl mx-auto">
+    <div
+      class="school-index__about flex relative bg-primary-900 shadow-xl rounded-lg mx-3 lg:mx-0 -mt-7">
+      <div
+        class="relative mx-auto flex flex-col justify-center items-center text-white px-6 py-8 md:p-10 text-center">
+        <p class="md:text-xl">Hello, welcome to </p>
+        <h1 class="flex items-center border-gray-800 rounded leading-tight text-3xl md:text-5xl">
+          <span> <%= current_school.name %> </span>
+        </h1>
+        <% if current_school.about.present? %>
+          <div class="w-full max-w-3xl mt-2 leading-relaxed relative flex items-center justify-center rounded">
+            <div class="convert-markdown text-sm lg:text-base" data-json-props="<%= { markdown: current_school.about, profile: "areaOfText" }.to_json %>"></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <% if presenter.courses.any? %>
+      <div>
+        <div class="mx-auto text-center pt-8 mt-8">
+          <h2 class="school-index-featured-courses__header relative text-2xl font-bold">
+            Featured Courses
+          </h2>
+        </div>
+        <div class="mx-auto">
+          <div class="flex flex-wrap flex-1 lg:-mx-5">
+            <% presenter.courses.map do |course| %>
+              <div class="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+                <div class="flex overflow-hidden shadow bg-white rounded-lg flex flex-col h-full" aria-label="<%= course.name %>">
+                  <div class="relative">
+                    <div class="relative pb-1/2 bg-gray-200">
+                      <% if presenter.course_thumbnail(course).present? %>
+                        <img
+                          class="absolute h-full w-full object-cover"
+                          src=<%= presenter.course_thumbnail(course) %>
+                          />
+                      <% else %>
+                        <div class="school-index-course__cover absolute h-full w-full svg-bg-pattern-1"></div>
+                      <% end %>
+                    </div>
+                    <div class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50">
+                      <h4 class="school-index-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
+                        <%= course.name %>
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="flex flex-col justify-between h-full">
+                    <div class="school-index-course__description text-sm px-6 pt-6 w-full leading-relaxed">
+                      <%= course.description %>
+                    </div>
+                    <div class="flex w-full p-6 justify-center">
+                      <a class="w-full btn btn-default" href="/courses/<%= course.id %>">
+                        View Course
+                        <i class="fas fa-arrow-right ml-2"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

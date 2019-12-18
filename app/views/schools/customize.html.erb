@@ -1,12 +1,16 @@
 <% content_for(:head) do %>
   <title><%= current_school.name %> | Customization</title>
+  <%= stylesheet_pack_tag 'SchoolsCustomizePack', media: 'all' %>
 <% end %>
 
 <% content_for(:tail) do %>
-  <%= stylesheet_pack_tag 'SchoolsCustomizePack', media: 'all' %>
   <%= javascript_pack_tag 'SchoolsCustomizePack', nonce: true %>
 <% end %>
 
 <% presenter = Schools::CustomizePresenter.new(self) %>
 
-<div class="w-full overflow-y-auto" id="react-root" data-json-props="<%= presenter.json_props %>"></div>
+<script type="application/json" id="school-customize-data">
+  <%= presenter.json_props.html_safe %>
+</script>
+
+<div id="school-customize" class="w-full overflow-y-auto"></div>

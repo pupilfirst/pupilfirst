@@ -92,13 +92,13 @@ module CourseExports
       empty_grades = Array.new(evaluation_criteria_ids.length)
 
       target.evaluation_criteria.pluck(:id).each_with_object(empty_grades) do |evaluation_criterion_id, grades|
-        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(:timeline_event).where(timeline_events: { target_id: target.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade).round(2)
+        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { target_id: target.id, latest: true }, founders: { id: students.pluck(:id) }, evaluation_criterion_id: evaluation_criterion_id).distinct.average(:grade).round(2)
       end
     end
 
     def average_grades_for_student(student)
       evaluation_criteria_ids.map do |evaluation_criterion_id|
-        TimelineEventGrade.joins(timeline_event: :founders).where(founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
+        TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { latest: true }, founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
       end
     end
 
@@ -156,8 +156,8 @@ module CourseExports
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def compute_grading_for_submissions(student, target_ids)
-      TimelineEvent.where(latest: true).includes(:timeline_event_grades)
-        .joins(:founders).where(founders: { id: student.id }).distinct
+      TimelineEvent.includes(:timeline_event_grades)
+        .joins(:founders).where(founders: { id: student.id }).order(:created_at).distinct
         .each_with_object([]) do |submission, grading|
         grade_index = target_ids.index(submission.target_id)
 
@@ -177,8 +177,28 @@ module CourseExports
             [evaluation_grade, 'failing-grade']
         end
 
-        grading[grade_index] = { value: grade, style: style }
+        append_grade(grading, grade_index, grade, style)
       end
+    end
+
+    # If a grade has already been stored, separate it from the next one with a semi-colon in the same cell.
+    def append_grade(grading, grade_index, grade, style)
+      # Store the grade as a number if we're not dealing with a complex grade.
+      parsed_grade = begin
+        integer_grade = grade.to_i
+        integer_grade.to_s == grade ? integer_grade : grade
+      end
+
+      grading[grade_index] = if grading[grade_index].present?
+        {
+          value: "#{grading[grade_index][:value]};#{parsed_grade}",
+          style: style
+        }
+      else
+        { value: parsed_grade, style: style }
+      end
+
+      grading
     end
 
     # rubocop:enable Metrics/CyclomaticComplexity

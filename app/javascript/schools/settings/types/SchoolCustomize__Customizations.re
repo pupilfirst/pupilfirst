@@ -14,7 +14,6 @@ type file = {
 
 type schoolImages = {
   logoOnLightBg: option(file),
-  logoOnDarkBg: option(file),
   coverImage: option(file),
   icon: file,
 };
@@ -35,7 +34,6 @@ type t = {
 };
 
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg;
-let logoOnDarkBg = t => t.schoolImages.logoOnDarkBg;
 let icon = t => t.schoolImages.icon;
 let coverImage = t => t.schoolImages.coverImage;
 
@@ -150,7 +148,6 @@ let decodeImages = json =>
   Json.Decode.{
     logoOnLightBg: json |> field("logoOnLightBg", optional(decodeFile)),
     coverImage: json |> field("coverImage", optional(decodeFile)),
-    logoOnDarkBg: json |> field("logoOnDarkBg", optional(decodeFile)),
     icon: json |> field("icon", decodeFile),
   };
 

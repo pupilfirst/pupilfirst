@@ -26,7 +26,6 @@ feature 'School Customization', js: true do
 
     # Happy path.
     attach_file 'logo_on_light_bg', image_path('logo_lipsum_on_light_bg.png'), visible: false
-    attach_file 'logo_on_dark_bg', image_path('logo_lipsum_on_dark_bg.png'), visible: false
     attach_file 'icon', image_path('icon_pupilfirst.png'), visible: false
     attach_file 'cover_image', image_path('cover_image.jpg'), visible: false
 
@@ -35,7 +34,6 @@ feature 'School Customization', js: true do
     expect(page).to have_content('Images have been updated successfully')
 
     expect(school.reload.logo_on_light_bg.filename).to eq('logo_lipsum_on_light_bg.png')
-    expect(school.logo_on_dark_bg.filename).to eq('logo_lipsum_on_dark_bg.png')
     expect(school.icon.filename).to eq('icon_pupilfirst.png')
     expect(school.cover_image.filename).to eq('cover_image.jpg')
   end

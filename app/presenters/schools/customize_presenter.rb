@@ -16,7 +16,6 @@ module Schools
     def school_images
       {
         logoOnLightBg: image_details(current_school.logo_on_light_bg),
-        logoOnDarkBg: image_details(current_school.logo_on_dark_bg),
         icon: current_school.icon.attached? ? file_details(current_school.icon) : { url: '/favicon.png', filename: 'pupilfirst_icon.png' },
         coverImage: image_details(current_school.cover_image)
       }

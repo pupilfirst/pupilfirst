@@ -390,7 +390,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           {"Featured Courses" |> str}
         </h2>
         <div className="text-sm">
-          {"All the courses with featured flag will listed here" |> str}
+          {"Featured courses will be listed here" |> str}
         </div>
         <div className="max-w-2xl bg-gray-100 rounded-lg mx-auto p-3 mt-4">
           <div

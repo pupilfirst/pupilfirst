@@ -48,6 +48,36 @@ let getEvaluationCriteria = (authenticityToken, courseId, setState, ()) => {
   None;
 };
 
+let openEditor = (event, evaluationCriterion, setState) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  setState(state =>
+    {...state, editorAction: ShowEditor(Some(evaluationCriterion))}
+  );
+};
+
+let showEvaluationCriterion = (evaluationCriterion, setState) => {
+  <div className="flex items-center shadow bg-white rounded-lg mb-4">
+    <div className="course-faculty__list-item flex w-full items-center">
+      <a
+        onClick={event => openEditor(event, evaluationCriterion, setState)}
+        className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
+        <div className="flex w-full text-sm justify-between">
+          <span className="flex-1 font-semibold py-5 px-5">
+            {evaluationCriterion
+             |> EvaluationCriterionEditor__EvaluationCriterion.name
+             |> str}
+          </span>
+          <span
+            className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
+            <i className="fas fa-edit text-normal" />
+            <span className="ml-1"> {"Edit" |> str} </span>
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make = (~courseId) => {
   let (state, setState) =
@@ -66,7 +96,7 @@ let make = (~courseId) => {
          closeDrawerCB={() =>
            setState(state => {...state, editorAction: Hidden})
          }>
-         <EvaluationCriterionEditor__Form />
+         <EvaluationCriterionEditor__Form evaluationCriterion />
        </SchoolAdmin__EditorDrawer>
      }}
     <div className="flex px-6 py-2 items-center justify-between">
@@ -83,23 +113,9 @@ let make = (~courseId) => {
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-2xl w-full mx-auto relative">
-        <div className="flex items-center shadow bg-white rounded-lg mb-4">
-          <div className="course-faculty__list-item flex w-full items-center">
-            <a
-              className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
-              <div className="flex w-full text-sm justify-between">
-                <span className="flex-1 font-semibold py-5 px-5">
-                  {"Name" |> str}
-                </span>
-                <span
-                  className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
-                  <i className="fas fa-edit text-normal" />
-                  <span className="ml-1"> {"Edit" |> str} </span>
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
+        {state.evaluationCriteria
+         |> Array.map(ec => showEvaluationCriterion(ec, setState))
+         |> React.array}
       </div>
     </div>
   </div>;

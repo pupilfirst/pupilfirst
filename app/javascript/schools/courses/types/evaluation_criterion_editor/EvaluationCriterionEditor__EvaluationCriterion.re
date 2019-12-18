@@ -17,6 +17,8 @@ let maxGrade = t => t.maxGrade;
 
 let passGrade = t => t.passGrade;
 
+let gradesAndLabels = t => t.gradesAndLabels;
+
 let makeFromJs = evaluationCriterion => {
   name: evaluationCriterion##name,
   id: evaluationCriterion##id,

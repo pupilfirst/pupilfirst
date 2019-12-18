@@ -9,13 +9,12 @@ let showNotice =
       ~title,
       ~description,
       ~notice,
-      ~classes="max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg px-6 pt-4 pb-8",
+      ~classes="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-lg px-6 pt-6 pb-8",
       (),
     ) =>
   <div className=classes>
-    <img className="w-64 mx-auto" src={notice |> Notice.icon} />
-    <div
-      className="max-w-xl font-semibold text-2xl mx-auto mt-1 leading-tight">
+    <img className="h-50 mx-auto" src={notice |> Notice.icon} />
+    <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
       {title |> str}
     </div>
     <div className="text-sm max-w-lg mx-auto mt-2"> {description |> str} </div>

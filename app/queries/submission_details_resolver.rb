@@ -41,7 +41,7 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     submission_criteria = EvaluationCriterion.joins(timeline_event_grades: :timeline_event)
       .where(timeline_events: { id: submissions })
-      .distinct.as_json(only: evaluation_criteria_fields)
+      .as_json(only: evaluation_criteria_fields)
 
     (target_criteria + submission_criteria).uniq
   end

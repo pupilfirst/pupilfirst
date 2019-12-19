@@ -11,12 +11,12 @@
 <% end %>
 
 <div class="pb-10 bg-gray-100">
-  <div class="relative bg-primary-200">
+  <div class="relative bg-gray-300 border-b">
     <div class="relative pb-1/2 md:pb-1/4">
       <% if presenter.cover_image.present? %>
         <img class="absolute h-full w-full object-cover" src=<%= presenter.cover_image %>/>
       <% else %>
-        <div class="school-index__cover-default absolute h-full w-full svg-bg-pattern-1"></div>
+        <div class="school-index__cover-default opacity-75 absolute h-full w-full svg-bg-pattern-6"></div>
       <% end %>
     </div>
   </div>

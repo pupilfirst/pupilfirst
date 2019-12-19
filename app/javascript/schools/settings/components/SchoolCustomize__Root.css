@@ -2,6 +2,12 @@
   @apply ml-0;
 }
 
+.school-customize__cover-default {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
 .school-customize__footer-top-container {
   background-color: theme(colors.gray.200);
 }

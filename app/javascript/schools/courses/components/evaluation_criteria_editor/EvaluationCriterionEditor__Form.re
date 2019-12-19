@@ -22,7 +22,15 @@ module CreateEvaluationCriterionQuery = [%graphql
    mutation($name: String!, $courseId: ID!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
      createEvaluationCriterion(courseId: $courseId, name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
        evaluationCriterion {
-         id
+        id
+        description
+        name
+        maxGrade
+        passGrade
+        gradesAndLabels {
+          grade
+          label
+        }
        }
      }
    }
@@ -34,7 +42,15 @@ module UpdateEvaluationCriterionQuery = [%graphql
    mutation($id: ID!, $description: String!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
     updateEvaluationCriterion(id: $id, name: $name, description: $description, gradesAndLabels: $gradesAndLabels){
        evaluationCriterion {
-         id
+        id
+        description
+        name
+        maxGrade
+        passGrade
+        gradesAndLabels {
+          grade
+          label
+        }
        }
       }
    }
@@ -84,7 +100,7 @@ let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
 };
 
 let updateEvaluationCriterion =
-    (state, setState, updateCriterionCB, criterion) => {
+    (state, setState, addOrUpdateCriterionCB, criterion) => {
   setState(state => {...state, saving: true});
 
   let jsGradeAndLabelArray =
@@ -108,14 +124,18 @@ let updateEvaluationCriterion =
 
   response
   |> Js.Promise.then_(result => {
-       Js.log(result##updateEvaluationCriterion##evaluationCriterion##id);
-       setState(state => {...state, saving: false, dirty: false});
+       let updatedCriterion =
+         EvaluationCriterion.makeFromJs(
+           result##updateEvaluationCriterion##evaluationCriterion,
+         );
+       addOrUpdateCriterionCB(updatedCriterion);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let createEvaluationCriterion = (state, setState, updateCriterionCB, courseId) => {
+let createEvaluationCriterion =
+    (state, setState, addOrUpdateCriterionCB, courseId) => {
   setState(state => {...state, saving: true});
 
   let jsGradeAndLabelArray =
@@ -141,8 +161,11 @@ let createEvaluationCriterion = (state, setState, updateCriterionCB, courseId) =
 
   response
   |> Js.Promise.then_(result => {
-       Js.log(result##createEvaluationCriterion##evaluationCriterion##id);
-       setState(state => {...state, saving: false, dirty: false});
+       let newCriterion =
+         EvaluationCriterion.makeFromJs(
+           result##createEvaluationCriterion##evaluationCriterion,
+         );
+       addOrUpdateCriterionCB(newCriterion);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -171,7 +194,7 @@ let saveDisabled = state => {
 };
 
 [@react.component]
-let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
+let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
   let (state, setState) =
     React.useState(() =>
       switch (evaluationCriterion) {
@@ -505,7 +528,7 @@ let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
                       updateEvaluationCriterion(
                         state,
                         setState,
-                        updateCriterionCB,
+                        addOrUpdateCriterionCB,
                         criterion,
                       )
                     }
@@ -520,7 +543,7 @@ let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
                       createEvaluationCriterion(
                         state,
                         setState,
-                        updateCriterionCB,
+                        addOrUpdateCriterionCB,
                         courseId,
                       )
                     }

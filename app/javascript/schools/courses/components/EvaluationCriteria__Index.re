@@ -80,6 +80,16 @@ let showEvaluationCriterion = (evaluationCriterion, setState) => {
   </div>;
 };
 
+let addOrUpdateCriterionCB = (state, setState, criterion) => {
+  let updatedCriteria =
+    state.evaluationCriteria
+    |> Js.Array.filter(ec =>
+         EvaluationCriterion.id(ec) != EvaluationCriterion.id(criterion)
+       )
+    |> Array.append([|criterion|]);
+  setState(_ => {evaluationCriteria: updatedCriteria, editorAction: Hidden});
+};
+
 [@react.component]
 let make = (~courseId) => {
   let (state, setState) =
@@ -98,7 +108,11 @@ let make = (~courseId) => {
          closeDrawerCB={() =>
            setState(state => {...state, editorAction: Hidden})
          }>
-         <EvaluationCriterionEditor__Form evaluationCriterion courseId />
+         <EvaluationCriterionEditor__Form
+           evaluationCriterion
+           courseId
+           addOrUpdateCriterionCB={addOrUpdateCriterionCB(state, setState)}
+         />
        </SchoolAdmin__EditorDrawer>
      }}
     <div className="flex px-6 py-2 items-center justify-between">

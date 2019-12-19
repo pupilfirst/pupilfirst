@@ -8,21 +8,25 @@ module CourseExports
       spreadsheet = RODF::Spreadsheet.new
       add_custom_styles(spreadsheet)
 
-      spreadsheet.table 'Targets' do |table|
-        populate_targets_table(table)
-      end
-
-      spreadsheet.table 'Students' do |table|
-        populate_students_table(table)
-      end
-
-      spreadsheet.table 'Submissions' do |table|
-        populate_submissions_table(table)
+      tables.each do |table|
+        spreadsheet.table(table[:title]) do |rodf_table|
+          rodf_table.add_rows table[:rows]
+        end
       end
 
       io = StringIO.new(spreadsheet.bytes)
 
+      @course_export.json_data = tables.to_json
       @course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
+      @course_export.save!
+    end
+
+    def tables
+      @tables ||= [
+        { title: 'Targets', rows: target_rows },
+        { title: 'Students', rows: student_rows },
+        { title: 'Submissions', rows: submission_rows }
+      ]
     end
 
     private
@@ -54,7 +58,7 @@ module CourseExports
       "#{name}.ods"
     end
 
-    def populate_targets_table(table)
+    def target_rows
       values = targets.map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
 
@@ -69,22 +73,20 @@ module CourseExports
         ] + average_grades_for_target(target)
       end
 
-      rows = ([
-        ["ID", "Level", "Name", "Completion Method", "Milestone?", "Students with submissions", "Submissions pending review"] + evaluation_criteria_names
+      ([
+        ['ID', 'Level', 'Name', 'Completion Method', 'Milestone?', 'Students with submissions', 'Submissions pending review'] + evaluation_criteria_names
       ] + values).transpose
-
-      table.add_rows(rows)
     end
 
     def evaluation_criteria_names
-      @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).map do |ec|
+      @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).order(:name).map do |ec|
         ec.name + " (Average Grade)"
       end
     end
 
     def evaluation_criteria_ids
       @evaluation_criteria_ids ||= targets.map do |target|
-        target.evaluation_criteria.pluck(:id)
+        target.evaluation_criteria.order(:name).pluck(:id)
       end.flatten.uniq
     end
 
@@ -92,7 +94,7 @@ module CourseExports
       empty_grades = Array.new(evaluation_criteria_ids.length)
 
       target.evaluation_criteria.pluck(:id).each_with_object(empty_grades) do |evaluation_criterion_id, grades|
-        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { target_id: target.id, latest: true }, founders: { id: students.pluck(:id) }, evaluation_criterion_id: evaluation_criterion_id).distinct.average(:grade).round(2)
+        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { target_id: target.id, latest: true }, founders: { id: students.pluck(:id) }, evaluation_criterion_id: evaluation_criterion_id).distinct.average(:grade)&.round(2)
       end
     end
 
@@ -110,8 +112,8 @@ module CourseExports
       target.timeline_events.pending_review.distinct.count
     end
 
-    def populate_students_table(table)
-      student_rows = students.map do |student|
+    def student_rows
+      rows = students.map do |student|
         user = student.user
 
         [
@@ -123,34 +125,21 @@ module CourseExports
         ] + average_grades_for_student(student)
       end
 
-      table.row do |row|
-        row.add_cells ["Email Address", "Name", "Title", "Affiliation", "Tags"] + evaluation_criteria_names
-      end
-
-      table.add_rows student_rows
+      [['Email Address', 'Name', 'Title', 'Affiliation', 'Tags'] + evaluation_criteria_names] + rows
     end
 
-    def populate_submissions_table(table)
+    def submission_rows
       # Lay out the top row of target IDs.
-      table.row do |row|
-        row.cell 'Student Email / Target ID'
-
-        formatted_target_ids = targets.map do |target|
-          target_id(target)
-        end
-
-        row.add_cells(formatted_target_ids)
+      header = ['Student Email / Target ID'] + targets.map do |target|
+        target_id(target)
       end
 
       target_ids = targets.pluck(:id)
 
       # Now populate status for each student.
-      students.each do |student|
+      [header] + students.map do |student|
         grading = compute_grading_for_submissions(student, target_ids)
-
-        table.row do |row|
-          row.add_cells([student.user.email] + grading)
-        end
+        [student.user.email] + grading
       end
     end
 

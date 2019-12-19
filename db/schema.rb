@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_113157) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "reviewed_only", default: false
+    t.text "json_data"
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end

@@ -224,11 +224,11 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 /* Footer Style */
 
 .footer__container {
-  background-color: #271f33;
+  background-color: theme(colors.gray.200);
 }
 
 .footer__bottom {
-  background-color: #1c1626;
+  background-color: theme(colors.gray.300);
 }
 
 @screen md {

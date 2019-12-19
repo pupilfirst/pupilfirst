@@ -39,7 +39,7 @@
 <%= render 'layouts/pretender_tailwind' if @pretender %>
 <section class="min-h-full flex flex-col items-stretch">
   <%= yield :nav %>
-  <main class="flex-grow">
+  <main class="flex-grow bg-gray-100">
     <% if content_for?(:wrapper) %>
       <%= yield :wrapper %>
     <% else %>

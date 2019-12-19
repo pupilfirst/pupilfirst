@@ -8,15 +8,16 @@ module Schools
           images: school_images,
           links: school_links
         },
-        schoolName: current_school.name
+        schoolName: current_school.name,
+        schoolAbout: current_school.about
       }.to_json
     end
 
     def school_images
       {
-        logoOnLightBg: current_school.logo_on_light_bg.attached? ? file_details(current_school.logo_on_light_bg) : nil,
-        logoOnDarkBg: current_school.logo_on_dark_bg.attached? ? file_details(current_school.logo_on_dark_bg) : nil,
-        icon: current_school.icon.attached? ? file_details(current_school.icon) : { url: '/favicon.png', filename: 'pupilfirst_icon.png' }
+        logoOnLightBg: image_details(current_school.logo_on_light_bg),
+        icon: current_school.icon.attached? ? file_details(current_school.icon) : { url: '/favicon.png', filename: 'pupilfirst_icon.png' },
+        coverImage: image_details(current_school.cover_image)
       }
     end
 
@@ -29,6 +30,10 @@ module Schools
         privacyPolicy: SchoolString::PrivacyPolicy.for(current_school),
         termsOfUse: SchoolString::TermsOfUse.for(current_school)
       }
+    end
+
+    def image_details(image)
+      image.attached? ? file_details(image) : nil
     end
 
     def file_details(file)

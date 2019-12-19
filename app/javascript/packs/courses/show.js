@@ -1,1 +1,1 @@
-import "courses/show.css";
+import "courses/show/show.css";

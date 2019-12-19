@@ -21,6 +21,8 @@ feature 'Target Overlay', js: true do
   let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence }
   let!(:target_l2) { create :target, target_group: target_group_l2 }
   let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
+  let!(:target_draft) { create :target, :draft, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
+  let!(:target_archived) { create :target, :archived, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
 
   # Quiz target
   let!(:quiz_target) { create :target, target_group: target_group_l1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence }
@@ -667,5 +669,17 @@ feature 'Target Overlay', js: true do
         expect(page).to have_button('Submit Quiz', disabled: true)
       end
     end
+  end
+
+  scenario "student visits a draft target page directly" do
+    sign_in_user student.user, referer: target_path(target_draft)
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
+  end
+
+  scenario "student visits a archived target page directly" do
+    sign_in_user student.user, referer: target_path(target_archived)
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
   end
 end

@@ -16,9 +16,12 @@ class School < ApplicationRecord
 
   acts_as_taggable_on :founder_tags
 
+  normalize_attribute :about
+
   has_one_attached :logo_on_light_bg
   has_one_attached :logo_on_dark_bg
   has_one_attached :icon
+  has_one_attached :cover_image
 
   def logo_variant(variant, background: :light)
     logo = background == :light ? logo_on_light_bg : logo_on_dark_bg

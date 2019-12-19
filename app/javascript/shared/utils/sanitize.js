@@ -49,6 +49,17 @@ sanitizationProfiles.comment = [
   "sub"
 ];
 
+sanitizationProfiles.areaOfText = [
+  "p",
+  "em",
+  "strong",
+  "del",
+  "s",
+  "a",
+  "sup",
+  "sub"
+];
+
 const allowedCodeClasses = [
   "language-javascript",
   "language-js", // javascript

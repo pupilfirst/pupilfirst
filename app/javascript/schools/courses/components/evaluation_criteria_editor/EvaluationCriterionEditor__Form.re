@@ -79,8 +79,8 @@ let make = (~evaluationCriterion) => {
         }
       }
     );
-  <div>
-    <div className="mx-8 pt-8">
+  <div className="mx-auto bg-white">
+    <div className="max-w-2xl p-6 mx-auto">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {(
            switch (evaluationCriterion) {

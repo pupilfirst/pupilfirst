@@ -14,7 +14,7 @@ type file = {
 
 type schoolImages = {
   logoOnLightBg: option(file),
-  logoOnDarkBg: option(file),
+  coverImage: option(file),
   icon: file,
 };
 
@@ -34,8 +34,8 @@ type t = {
 };
 
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg;
-let logoOnDarkBg = t => t.schoolImages.logoOnDarkBg;
 let icon = t => t.schoolImages.icon;
+let coverImage = t => t.schoolImages.coverImage;
 
 let url = file => file.url;
 let filename = file => file.filename;
@@ -146,12 +146,8 @@ let decodeFile = json =>
 
 let decodeImages = json =>
   Json.Decode.{
-    logoOnLightBg:
-      json
-      |> field("logoOnLightBg", nullable(decodeFile))
-      |> Js.Null.toOption,
-    logoOnDarkBg:
-      json |> field("logoOnDarkBg", nullable(decodeFile)) |> Js.Null.toOption,
+    logoOnLightBg: json |> field("logoOnLightBg", optional(decodeFile)),
+    coverImage: json |> field("coverImage", optional(decodeFile)),
     icon: json |> field("icon", decodeFile),
   };
 
@@ -159,13 +155,10 @@ let updateImages = (json, t) => {...t, schoolImages: json |> decodeImages};
 
 let decodeStrings = json =>
   Json.Decode.{
-    address: json |> field("address", nullable(string)) |> Js.Null.toOption,
-    emailAddress:
-      json |> field("emailAddress", nullable(string)) |> Js.Null.toOption,
-    privacyPolicy:
-      json |> field("privacyPolicy", nullable(string)) |> Js.Null.toOption,
-    termsOfUse:
-      json |> field("termsOfUse", nullable(string)) |> Js.Null.toOption,
+    address: json |> field("address", optional(string)),
+    emailAddress: json |> field("emailAddress", optional(string)),
+    privacyPolicy: json |> field("privacyPolicy", optional(string)),
+    termsOfUse: json |> field("termsOfUse", optional(string)),
   };
 
 let decodeLink = json => {

@@ -143,11 +143,13 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__permissive b, .markdown-block__permissive strong {
+.markdown-block__permissive b,
+.markdown-block__permissive strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__permissive s, .markdown-block__permissive del {
+.markdown-block__permissive s,
+.markdown-block__permissive del {
   @apply markdown-block__strikethrough;
 }
 
@@ -187,7 +189,8 @@
   @apply markdown-block__blockquote;
 }
 
-.markdown-block__permissive blockquote code, .markdown-block__permissive blockquote pre {
+.markdown-block__permissive blockquote code,
+.markdown-block__permissive blockquote pre {
   @apply font-normal text-sm;
 }
 
@@ -268,11 +271,13 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__question-and-answer b, .markdown-block__question-and-answer strong {
+.markdown-block__question-and-answer b,
+.markdown-block__question-and-answer strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__question-and-answer s, .markdown-block__question-and-answer del {
+.markdown-block__question-and-answer s,
+.markdown-block__question-and-answer del {
   @apply markdown-block__strikethrough;
 }
 
@@ -330,11 +335,13 @@
   @apply markdown-block__em;
 }
 
-.markdown-block__comment b, .markdown-block__comment strong {
+.markdown-block__comment b,
+.markdown-block__comment strong {
   @apply markdown-block__strong;
 }
 
-.markdown-block__comment s, .markdown-block__comment del {
+.markdown-block__comment s,
+.markdown-block__comment del {
   @apply markdown-block__strikethrough;
 }
 
@@ -354,4 +361,12 @@
 .markdown-block__comment sub {
   @apply markdown-block__sup-sub;
   bottom: -0.25em;
+}
+
+/*
+ * Styling used in root
+ */
+
+.markdown-block__area-of-text p {
+  @apply markdown-block__p leading-relaxed;
 }

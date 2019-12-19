@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SchoolCustomize__SocialLink");
+[@bs.config {jsx: 3}];
 
 let test = (value, url) => {
   let tester = Js.Re.fromString(value);
@@ -20,11 +20,9 @@ let iconClass = url =>
   | _unknownUrl => "fas fa-users"
   };
 
-let make = (~url, _children) => {
-  ...component,
-  render: _self =>
-    <div
-      className="h-9 w-9 border-0 rounded-full bg-gray-100 mr-3 mt-3 flex items-center justify-center">
-      <i className={"text-black text-xl " ++ iconClass(url)} />
-    </div>,
+[@react.component]
+let make = (~url) => {
+  <div className="h-8 w-8 mr-2 mt-2 flex items-center justify-center">
+    <i className={"text-xl " ++ iconClass(url)} />
+  </div>;
 };

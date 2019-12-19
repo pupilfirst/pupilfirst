@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open SchoolCustomize__Types;
 
 [%bs.raw {|require("./SchoolCustomize__AgreementsEditor.css")|}];
@@ -19,9 +21,6 @@ type state = {
   updating: bool,
   formDirty: bool,
 };
-
-let component =
-  ReasonReact.reducerComponent("SchoolCustomize__AgreementsEditor");
 
 let kindToString = kind =>
   switch (kind) {
@@ -99,6 +98,33 @@ let handleUpdateAgreement =
 
 let updateAgreementDisabled = state => !state.formDirty;
 
+let initialState = (kind, customizations) => {
+  let agreement =
+    switch (kind) {
+    | PrivacyPolicy => customizations |> Customizations.privacyPolicy
+    | TermsOfUse => customizations |> Customizations.termsOfUse
+    };
+
+  {
+    agreement:
+      switch (agreement) {
+      | Some(agreement) => agreement
+      | None => ""
+      },
+    updating: false,
+    formDirty: false,
+  };
+};
+
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateAgreement(agreement) => {...state, agreement, formDirty: true}
+  | BeginUpdate => {...state, updating: true}
+  | ErrorOccured => {...state, updating: false}
+  | DoneUpdating => {...state, updating: false, formDirty: false}
+  };
+
+[@react.component]
 let make =
     (
       ~kind,
@@ -106,76 +132,47 @@ let make =
       ~authenticityToken,
       ~updatePrivacyPolicyCB,
       ~updateTermsOfUseCB,
-      _children,
     ) => {
-  ...component,
-  initialState: () => {
-    let agreement =
-      switch (kind) {
-      | PrivacyPolicy => customizations |> Customizations.privacyPolicy
-      | TermsOfUse => customizations |> Customizations.termsOfUse
-      };
-
-    {
-      agreement:
-        switch (agreement) {
-        | Some(agreement) => agreement
-        | None => ""
-        },
-      updating: false,
-      formDirty: false,
-    };
-  },
-  reducer: (action, state) =>
-    switch (action) {
-    | UpdateAgreement(agreement) =>
-      ReasonReact.Update({...state, agreement, formDirty: true})
-    | BeginUpdate => ReasonReact.Update({...state, updating: true})
-    | ErrorOccured => ReasonReact.Update({...state, updating: false})
-    | DoneUpdating =>
-      ReasonReact.Update({...state, updating: false, formDirty: false})
-    },
-  render: ({state, send}) =>
-    <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-        {"Manage " ++ (kind |> kindToString) |> str}
-      </h5>
-      <DisablingCover.Jsx2
-        disabled={state.updating} containerClasses="flex flex-col flex-1">
-        <div
-          key="agreements-editor__input-group"
-          className="mt-3 flex flex-col flex-1">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold"
-            htmlFor="agreements-editor__value">
-            {"Body of Agreement " |> str}
-            <i className="fab fa-markdown text-base" />
-          </label>
-          <textarea
-            maxLength=10000
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 flex-1"
-            id="agreements-editor__value"
-            placeholder="Leave the agreement body empty to hide the footer link."
-            onChange={handleAgreementChange(send)}
-            value={state.agreement}
-          />
-        </div>
-        <button
-          key="agreements-editor__update-button"
-          disabled={updateAgreementDisabled(state)}
-          onClick={
-            handleUpdateAgreement(
-              state,
-              send,
-              kind,
-              authenticityToken,
-              updatePrivacyPolicyCB,
-              updateTermsOfUseCB,
-            )
-          }
-          className="w-full btn btn-large btn-primary mt-4">
-          {updateAgreementText(state.updating, kind) |> str}
-        </button>
-      </DisablingCover.Jsx2>
-    </div>,
+  let (state, send) =
+    React.useReducer(reducer, initialState(kind, customizations));
+  <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
+    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+      {"Manage " ++ (kind |> kindToString) |> str}
+    </h5>
+    <DisablingCover
+      disabled={state.updating} containerClasses="flex flex-col flex-1">
+      <div
+        key="agreements-editor__input-group"
+        className="mt-3 flex flex-col flex-1">
+        <label
+          className="inline-block tracking-wide text-xs font-semibold"
+          htmlFor="agreements-editor__value">
+          {"Body of Agreement " |> str}
+          <i className="fab fa-markdown text-base" />
+        </label>
+        <textarea
+          maxLength=10000
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 flex-1"
+          id="agreements-editor__value"
+          placeholder="Leave the agreement body empty to hide the footer link."
+          onChange={handleAgreementChange(send)}
+          value={state.agreement}
+        />
+      </div>
+      <button
+        key="agreements-editor__update-button"
+        disabled={updateAgreementDisabled(state)}
+        onClick={handleUpdateAgreement(
+          state,
+          send,
+          kind,
+          authenticityToken,
+          updatePrivacyPolicyCB,
+          updateTermsOfUseCB,
+        )}
+        className="w-full btn btn-large btn-primary mt-4">
+        {updateAgreementText(state.updating, kind) |> str}
+      </button>
+    </DisablingCover>
+  </div>;
 };

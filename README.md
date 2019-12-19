@@ -204,3 +204,9 @@ By default, the development and test environment run jobs in-line with a request
 application to defer them instead, you can execute the jobs with:
 
     $ rake jobs:workoff
+## Documentation
+
+    docsify serve docs -p 3010
+The `-p` option sets the port. Visit `localhost:PORT` to view docs locally.
+
+

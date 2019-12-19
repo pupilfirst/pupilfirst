@@ -23,5 +23,14 @@ module Home
     def course_thumbnail(course)
       view.url_for(course.thumbnail) if course.thumbnail.attached?
     end
+
+    def about
+      @school.about
+    end
+
+    def school_name_classes
+      classes = "relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10"
+      @school.about.present? ? "#{classes} text-left" : "#{classes} text-center"
+    end
   end
 end

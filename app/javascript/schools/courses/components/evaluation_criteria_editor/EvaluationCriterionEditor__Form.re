@@ -65,6 +65,7 @@ let updateMaxGrade = (value, state, setState) =>
   } else {
     setState(state => {...state, selectedGrade: value, maxGrade: value});
   };
+
 let updatePassGrade = (value, setState) => {
   setState(state => {...state, passGrade: value});
 };
@@ -79,7 +80,7 @@ let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
          == (updatedGradeAndLabel |> GradesAndLabels.grade)
            ? updatedGradeAndLabel : gl
        );
-  setState(state => {...state, gradesAndLabels});
+  setState(state => {...state, gradesAndLabels, dirty: true});
 };
 
 let updateEvaluationCriterion =

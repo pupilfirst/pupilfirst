@@ -65,6 +65,9 @@ let updateMaxGrade = (value, state, setState) =>
   } else {
     setState(state => {...state, selectedGrade: value, maxGrade: value});
   };
+let updatePassGrade = (value, setState) => {
+  setState(state => {...state, passGrade: value});
+};
 
 let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
   let updatedGradeAndLabel = GradesAndLabels.update(value, gradeAndLabel);
@@ -105,6 +108,7 @@ let updateEvaluationCriterion =
   response
   |> Js.Promise.then_(result => {
        Js.log(result##updateEvaluationCriterion##evaluationCriterion##id);
+       setState(state => {...state, saving: false, dirty: false});
        Js.Promise.resolve();
      })
   |> ignore;
@@ -137,6 +141,7 @@ let createEvaluationCriterion = (state, setState, updateCriterionCB, courseId) =
   response
   |> Js.Promise.then_(result => {
        Js.log(result##createEvaluationCriterion##evaluationCriterion##id);
+       setState(state => {...state, saving: false, dirty: false});
        Js.Promise.resolve();
      })
   |> ignore;
@@ -148,6 +153,20 @@ let updateName = (setState, value) => {
 
 let updateDescription = (setState, value) => {
   setState(state => {...state, dirty: true, description: value});
+};
+
+let saveDisabled = state => {
+  let hasValidGrades =
+    state.gradesAndLabels
+    |> Js.Array.filter(gl => gl |> GradesAndLabels.grade <= state.maxGrade)
+    |> Array.map(gl => gl |> GradesAndLabels.valid)
+    |> Js.Array.filter(value => !value)
+    |> ArrayUtils.isEmpty;
+  let hasValidName = String.length(state.name) > 1;
+  let hasValidDescription = String.length(state.description) > 1;
+  !state.dirty
+  || state.saving
+  || !(hasValidGrades && hasValidName && hasValidDescription);
 };
 
 [@react.component]
@@ -191,7 +210,14 @@ let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
          )
          |> str}
       </h5>
-      <DisablingCover disabled=false>
+      <DisablingCover
+        disabled={state.saving}
+        message={
+          switch (evaluationCriterion) {
+          | Some(_ec) => "Updating..."
+          | None => "Saving..."
+          }
+        }>
         <div key="evaluation-criterion-editor" className="mt-3">
           <div className="mt-5">
             <label
@@ -297,13 +323,9 @@ let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
                 | None =>
                   <select
                     onChange={event =>
-                      setState(state =>
-                        {
-                          ...state,
-                          passGrade:
-                            ReactEvent.Form.target(event)##value
-                            |> int_of_string,
-                        }
+                      updatePassGrade(
+                        ReactEvent.Form.target(event)##value |> int_of_string,
+                        setState,
                       )
                     }
                     value={state.passGrade |> string_of_int}
@@ -477,7 +499,7 @@ let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
                {switch (evaluationCriterion) {
                 | Some(criterion) =>
                   <button
-                    disabled=false
+                    disabled={saveDisabled(state)}
                     onClick={_ =>
                       updateEvaluationCriterion(
                         state,
@@ -492,6 +514,7 @@ let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
 
                 | None =>
                   <button
+                    disabled={saveDisabled(state)}
                     onClick={_ =>
                       createEvaluationCriterion(
                         state,

@@ -18,7 +18,7 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
     EvaluationCriterion.transaction do
       ec = EvaluationCriterion.create!(
         name: name, description: description,
-        course: course,
+        course_id: course_id,
         max_grade: max_grade,
         pass_grade: pass_grade,
         grade_labels: grade_labels
@@ -33,9 +33,5 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
     grades_and_labels.map do |grades_and_label|
       [grades_and_label[:grade].to_s, grades_and_label[:label].strip]
     end.to_h
-  end
-
-  def course
-    Course.find(course_id)
   end
 end

@@ -14,7 +14,7 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   end
 
   def correct_grades_and_labels
-    return if @course.max_grade == (grade_labels.values - [""]).count
+    return if evaluation_criterion.max_grade == (grade_labels.values - [""]).count
 
     raise "UpdateEvaluationCriterionMutator received invalid grades and labels #{grades_and_labels}"
   end
@@ -37,7 +37,7 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   end
 
   def evaluation_criterion
-    @evaluation_criterion ||= EvaluationCriterion.find(:id)
+    @evaluation_criterion ||= EvaluationCriterion.find_by(id: id)
   end
 
   def authorized?

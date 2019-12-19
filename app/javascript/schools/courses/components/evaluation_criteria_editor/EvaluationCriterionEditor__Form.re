@@ -13,7 +13,33 @@ type state = {
   passGrade: int,
   selectedGrade: int,
   gradesAndLabels: array(GradesAndLabels.t),
+  saving: bool,
+  dirty: bool,
 };
+
+module CreateEvaluationCriterionQuery = [%graphql
+  {|
+   mutation($name: String!, $courseId: ID!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createEvaluationCriterion(courseId: $courseId, name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
+       evaluationCriterion {
+         id
+       }
+     }
+   }
+   |}
+];
+
+module UpdateEvaluationCriterionQuery = [%graphql
+  {|
+   mutation($id: ID!, $description: String!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+    updateEvaluationCriterion(id: $id, name: $name, description: $description, gradesAndLabels: $gradesAndLabels){
+       evaluationCriterion {
+         id
+       }
+      }
+   }
+   |}
+];
 
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
@@ -53,8 +79,79 @@ let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
   setState(state => {...state, gradesAndLabels});
 };
 
+let updateEvaluationCriterion =
+    (state, setState, updateCriterionCB, criterion) => {
+  setState(state => {...state, saving: true});
+
+  let jsGradeAndLabelArray =
+    state.gradesAndLabels
+    |> Js.Array.filter(gradesAndLabel =>
+         gradesAndLabel |> GradesAndLabels.grade <= state.maxGrade
+       )
+    |> Array.map(gl => gl |> GradesAndLabels.asJsType);
+
+  let updateCriterionQuery =
+    UpdateEvaluationCriterionQuery.make(
+      ~id=criterion |> EvaluationCriterion.id,
+      ~name=state.name,
+      ~description=state.description,
+      ~gradesAndLabels=jsGradeAndLabelArray,
+      (),
+    );
+  let response =
+    updateCriterionQuery
+    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
+
+  response
+  |> Js.Promise.then_(result => {
+       Js.log(result##updateEvaluationCriterion##evaluationCriterion##id);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let createEvaluationCriterion = (state, setState, updateCriterionCB, courseId) => {
+  setState(state => {...state, saving: true});
+
+  let jsGradeAndLabelArray =
+    state.gradesAndLabels
+    |> Js.Array.filter(gradesAndLabel =>
+         gradesAndLabel |> GradesAndLabels.grade <= state.maxGrade
+       )
+    |> Array.map(gl => gl |> GradesAndLabels.asJsType);
+
+  let createCriterionQuery =
+    CreateEvaluationCriterionQuery.make(
+      ~name=state.name,
+      ~description=state.description,
+      ~maxGrade=state.maxGrade,
+      ~passGrade=state.passGrade,
+      ~courseId,
+      ~gradesAndLabels=jsGradeAndLabelArray,
+      (),
+    );
+  let response =
+    createCriterionQuery
+    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
+
+  response
+  |> Js.Promise.then_(result => {
+       Js.log(result##createEvaluationCriterion##evaluationCriterion##id);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let updateName = (setState, value) => {
+  setState(state => {...state, dirty: true, name: value});
+};
+
+let updateDescription = (setState, value) => {
+  setState(state => {...state, dirty: true, description: value});
+};
+
 [@react.component]
-let make = (~evaluationCriterion) => {
+let make = (~evaluationCriterion, ~courseId, ~updateCriterionCB=?) => {
   let (state, setState) =
     React.useState(() =>
       switch (evaluationCriterion) {
@@ -68,6 +165,8 @@ let make = (~evaluationCriterion) => {
             possibleGradeValues
             |> List.map(i => GradesAndLabels.empty(i))
             |> Array.of_list,
+          saving: false,
+          dirty: false,
         }
       | Some(ec) => {
           name: ec |> EvaluationCriterion.name,
@@ -76,6 +175,8 @@ let make = (~evaluationCriterion) => {
           passGrade: ec |> EvaluationCriterion.passGrade,
           selectedGrade: 1,
           gradesAndLabels: ec |> EvaluationCriterion.gradesAndLabels,
+          saving: false,
+          dirty: false,
         }
       }
     );
@@ -101,6 +202,9 @@ let make = (~evaluationCriterion) => {
             <input
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="name"
+              onChange={event =>
+                updateName(setState, ReactEvent.Form.target(event)##value)
+              }
               type_="text"
               placeholder="Type course name here"
               maxLength=50
@@ -121,6 +225,12 @@ let make = (~evaluationCriterion) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="description"
               type_="text"
+              onChange={event =>
+                updateDescription(
+                  setState,
+                  ReactEvent.Form.target(event)##value,
+                )
+              }
               placeholder="Type description for the evaluation criterion"
               maxLength=50
               value={state.description}
@@ -368,12 +478,29 @@ let make = (~evaluationCriterion) => {
                 | Some(criterion) =>
                   <button
                     disabled=false
+                    onClick={_ =>
+                      updateEvaluationCriterion(
+                        state,
+                        setState,
+                        updateCriterionCB,
+                        criterion,
+                      )
+                    }
                     className="w-full btn btn-large btn-primary mt-3">
                     {"Update Criterion" |> str}
                   </button>
 
                 | None =>
-                  <button className="w-full btn btn-large btn-primary mt-3">
+                  <button
+                    onClick={_ =>
+                      createEvaluationCriterion(
+                        state,
+                        setState,
+                        updateCriterionCB,
+                        courseId,
+                      )
+                    }
+                    className="w-full btn btn-large btn-primary mt-3">
                     {"Create Criterion" |> str}
                   </button>
                 }}

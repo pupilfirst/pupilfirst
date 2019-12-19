@@ -56,7 +56,9 @@ let openEditor = (event, evaluationCriterion, setState) => {
 };
 
 let showEvaluationCriterion = (evaluationCriterion, setState) => {
-  <div className="flex items-center shadow bg-white rounded-lg mb-4">
+  <div
+    key={evaluationCriterion |> EvaluationCriterion.id}
+    className="flex items-center shadow bg-white rounded-lg mb-4">
     <div className="course-faculty__list-item flex w-full items-center">
       <a
         onClick={event => openEditor(event, evaluationCriterion, setState)}
@@ -96,7 +98,7 @@ let make = (~courseId) => {
          closeDrawerCB={() =>
            setState(state => {...state, editorAction: Hidden})
          }>
-         <EvaluationCriterionEditor__Form evaluationCriterion />
+         <EvaluationCriterionEditor__Form evaluationCriterion courseId />
        </SchoolAdmin__EditorDrawer>
      }}
     <div className="flex px-6 py-2 items-center justify-between">

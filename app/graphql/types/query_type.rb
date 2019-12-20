@@ -34,6 +34,13 @@ module Types
       argument :student_id, ID, required: true
     end
 
+    field :course_teams, Types::CourseTeamType.connection_type, null: false do
+      argument :course_id, ID, required: true
+      argument :level_id, ID, required: false
+      argument :search, String, required: false
+      argument :tag, String, required: false
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -72,6 +79,11 @@ module Types
     def student_submissions(args)
       resolver = StudentSubmissionsResolver.new(context, args)
       resolver.student_submissions
+    end
+
+    def course_teams(args)
+      resolver = CourseTeamsResolver.new(context, args)
+      resolver.course_teams
     end
   end
 end

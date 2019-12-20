@@ -10,8 +10,6 @@ module CoursesQuery = [%graphql
       name
       description
       endsAt
-      maxGrade
-      passGrade
       enableLeaderboard
       about
       publicSignup
@@ -23,10 +21,6 @@ module CoursesQuery = [%graphql
       thumbnail{
         url
         filename
-      }
-      gradesAndLabels {
-        grade
-        label
       }
     }
   }

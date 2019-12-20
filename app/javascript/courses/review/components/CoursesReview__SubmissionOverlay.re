@@ -14,7 +14,7 @@ module SubmissionDetailsQuery = [%graphql
       submissionDetails(submissionId: $submissionId) {
         targetId, targetTitle, userNames, levelNumber, levelId
         evaluationCriteria{
-          id, name
+          id, name, maxGrade, passGrade, gradesAndLabels { grade label}
         },
         reviewChecklist{
           title

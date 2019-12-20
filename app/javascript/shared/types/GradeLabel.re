@@ -17,6 +17,11 @@ let label = t => t.label;
 let labelFor = (gradeLabels, grade) =>
   gradeLabels |> List.find(gradeLabel => gradeLabel.grade == grade) |> label;
 
+let makeFromJs = rawGradeLabel => {
+  label: rawGradeLabel##label,
+  grade: rawGradeLabel##grade,
+};
+
 let maxGrade = gradeLabels => {
   let rec aux = (max, remains) =>
     switch (remains) {

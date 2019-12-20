@@ -49,7 +49,12 @@ module Courses
     end
 
     def evaluation_criteria
-      @course.evaluation_criteria.as_json(only: %i[id name])
+      @course.evaluation_criteria.map do |ec|
+        grades_and_labels = ec.grade_labels.map do |grade, label|
+          { grade: grade.to_i, label: label }
+        end
+        ec.attributes.slice('id', 'name', 'max_grade', 'pass_grade').merge!(grades_and_labels: grades_and_labels)
+      end
     end
 
     def team_details_for_preview_mode
@@ -65,10 +70,7 @@ module Courses
     end
 
     def course_details
-      details = @course.attributes.slice('id', 'ends_at')
-
-      details['grade_labels'] = @course.grade_labels_to_props
-      details
+      @course.attributes.slice('id', 'ends_at')
     end
 
     def levels

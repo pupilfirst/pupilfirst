@@ -58,15 +58,15 @@ let selectionToString = (targetStatus, overlaySelection) =>
   };
 
 let selectableTabs = targetDetails =>
-  targetDetails |> TargetDetails.communities |> ListUtils.isNotEmpty ?
-    [Learn, Discuss] : [Learn];
+  targetDetails |> TargetDetails.communities |> ListUtils.isNotEmpty
+    ? [Learn, Discuss] : [Learn];
 
 let tabClasses = (selection, overlaySelection) =>
   "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold"
   ++ (
-    overlaySelection == selection ?
-      " course-overlay__body-tab-item--selected" :
-      " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
+    overlaySelection == selection
+      ? " course-overlay__body-tab-item--selected"
+      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
   );
 
 let scrollCompleteButtonIntoView = () => {
@@ -124,51 +124,47 @@ let overlaySelectionOptions =
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
 
   <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
-    {
-      selectableTabs(targetDetails)
-      |> List.map(selection =>
-           tabButton(
-             selection,
+    {selectableTabs(targetDetails)
+     |> List.map(selection =>
+          tabButton(
+            selection,
+            overlaySelection,
+            setOverlaySelection,
+            targetStatus,
+          )
+        )
+     |> Array.of_list
+     |> React.array}
+    {switch (targetStatus |> TargetStatus.status, completionType) {
+     | (Pending | Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
+       tabButton(
+         Complete(completionType),
+         overlaySelection,
+         setOverlaySelection,
+         targetStatus,
+       )
+     | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
+       targetDetails |> TargetDetails.submissions |> ListUtils.isNotEmpty
+         ? tabButton(
+             Complete(completionType),
              overlaySelection,
              setOverlaySelection,
              targetStatus,
            )
-         )
-      |> Array.of_list
-      |> React.array
-    }
-    {
-      switch (targetStatus |> TargetStatus.status, completionType) {
-      | (Pending | Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
-        tabButton(
-          Complete(completionType),
-          overlaySelection,
-          setOverlaySelection,
-          targetStatus,
-        )
-      | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
-        targetDetails |> TargetDetails.submissions |> ListUtils.isNotEmpty ?
-          tabButton(
-            Complete(completionType),
-            overlaySelection,
-            setOverlaySelection,
-            targetStatus,
-          ) :
-          React.null
-      | (
-          Pending | Submitted | Passed | Failed,
-          LinkToComplete | MarkAsComplete,
-        ) =>
-        tabLink(
-          Complete(completionType),
-          overlaySelection,
-          setOverlaySelection,
-          targetStatus,
-          setScrollToSelection,
-        )
-      | (Locked(_), _) => React.null
-      }
-    }
+         : React.null
+     | (
+         Pending | Submitted | Passed | Failed,
+         LinkToComplete | MarkAsComplete,
+       ) =>
+       tabLink(
+         Complete(completionType),
+         overlaySelection,
+         setOverlaySelection,
+         targetStatus,
+         setScrollToSelection,
+       )
+     | (Locked(_), _) => React.null
+     }}
   </div>;
 };
 
@@ -284,17 +280,13 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         </div>
       </div>
     </div>
-    {
-      preview ?
-        <div>
-          {
-            renderLocked(
+    {preview
+       ? <div>
+           {renderLocked(
               "You are currently looking at a preview of this course.",
-            )
-          }
-        </div> :
-        React.null
-    }
+            )}
+         </div>
+       : React.null}
   </div>;
 
 let renderLockReason = reason =>
@@ -312,31 +304,29 @@ let prerequisitesIncomplete =
     {renderLockReason(reason)}
     <div
       className="course-overlay__prerequisite-targets z-10 max-w-3xl mx-auto bg-white text-center rounded-lg overflow-hidden shadow mt-6">
-      {
-        prerequisiteTargets
-        |> List.map(target => {
-             let targetStatus =
-               statusOfTargets
-               |> List.find(ts =>
-                    ts |> TargetStatus.targetId == (target |> Target.id)
-                  );
+      {prerequisiteTargets
+       |> List.map(target => {
+            let targetStatus =
+              statusOfTargets
+              |> List.find(ts =>
+                   ts |> TargetStatus.targetId == (target |> Target.id)
+                 );
 
-             <div
-               ariaLabel={"Select Target " ++ (target |> Target.id)}
-               key={target |> Target.id}
-               className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-               onClick={_ => changeTargetCB(target)}>
-               <span className="font-semibold text-left leading-snug">
-                 {target |> Target.title |> str}
-               </span>
-               <span className={targetStatusClasses(targetStatus)}>
-                 {targetStatus |> TargetStatus.statusToString |> str}
-               </span>
-             </div>;
-           })
-        |> Array.of_list
-        |> React.array
-      }
+            <div
+              ariaLabel={"Select Target " ++ (target |> Target.id)}
+              key={target |> Target.id}
+              className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
+              onClick={_ => changeTargetCB(target)}>
+              <span className="font-semibold text-left leading-snug">
+                {target |> Target.title |> str}
+              </span>
+              <span className={targetStatusClasses(targetStatus)}>
+                {targetStatus |> TargetStatus.statusToString |> str}
+              </span>
+            </div>;
+          })
+       |> Array.of_list
+       |> React.array}
     </div>
   </div>;
 };
@@ -399,7 +389,6 @@ let completeSection =
       targetStatus,
       addSubmissionCB,
       evaluationCriteria,
-      gradeLabels,
       coaches,
       users,
       preview,
@@ -408,77 +397,78 @@ let completeSection =
   let addVerifiedSubmissionCB =
     addVerifiedSubmission(target, setTargetDetails, addSubmissionCB);
   <div className={completeSectionClasses(overlaySelection, completionType)}>
-    {
-      switch (targetStatus |> TargetStatus.status, completionType) {
-      | (Pending, Evaluated) =>
-        [|
-          <CoursesCurriculum__CompletionInstructions
-            key="completion-instructions"
-            targetDetails
-            title="Instructions"
-          />,
-          <CoursesCurriculum__SubmissionForm
-            key="courses-curriculum-submission-form"
-            authenticityToken
-            target
-            addSubmissionCB={
-              addSubmission(target, setTargetDetails, addSubmissionCB)
-            }
-            preview
-          />,
-        |]
-        |> React.array
-      | (Pending, TakeQuiz) =>
-        [|
-          <CoursesCurriculum__CompletionInstructions
-            key="completion-instructions"
-            targetDetails
-            title="Instructions"
-          />,
-          <CoursesCurriculum__Quiz
-            key="courses-curriculum-quiz"
-            target
-            targetDetails
-            authenticityToken
-            addSubmissionCB=addVerifiedSubmissionCB
-            preview
-          />,
-        |]
-        |> React.array
+    {switch (targetStatus |> TargetStatus.status, completionType) {
+     | (Pending, Evaluated) =>
+       [|
+         <CoursesCurriculum__CompletionInstructions
+           key="completion-instructions"
+           targetDetails
+           title="Instructions"
+         />,
+         <CoursesCurriculum__SubmissionForm
+           key="courses-curriculum-submission-form"
+           authenticityToken
+           target
+           addSubmissionCB={addSubmission(
+             target,
+             setTargetDetails,
+             addSubmissionCB,
+           )}
+           preview
+         />,
+       |]
+       |> React.array
+     | (Pending, TakeQuiz) =>
+       [|
+         <CoursesCurriculum__CompletionInstructions
+           key="completion-instructions"
+           targetDetails
+           title="Instructions"
+         />,
+         <CoursesCurriculum__Quiz
+           key="courses-curriculum-quiz"
+           target
+           targetDetails
+           authenticityToken
+           addSubmissionCB=addVerifiedSubmissionCB
+           preview
+         />,
+       |]
+       |> React.array
 
-      | (
-          Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
-          Evaluated | TakeQuiz,
-        ) =>
-        <CoursesCurriculum__SubmissionsAndFeedback
-          targetDetails
-          target
-          authenticityToken
-          gradeLabels
-          evaluationCriteria
-          addSubmissionCB={
-            addSubmission(target, setTargetDetails, addSubmissionCB)
-          }
-          targetStatus
-          coaches
-          users
-          preview
-        />
-      | (
-          Pending | Submitted | Passed | Failed,
-          LinkToComplete | MarkAsComplete,
-        ) =>
-        <CoursesCurriculum__AutoVerify
-          target
-          targetDetails
-          authenticityToken
-          targetStatus
-          addSubmissionCB=addVerifiedSubmissionCB
-          preview
-        />
-      | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
-      }
-    }
+     | (
+         Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
+         Evaluated | TakeQuiz,
+       ) =>
+       <CoursesCurriculum__SubmissionsAndFeedback
+         targetDetails
+         target
+         authenticityToken
+         evaluationCriteria
+         addSubmissionCB={addSubmission(
+           target,
+           setTargetDetails,
+           addSubmissionCB,
+         )}
+         targetStatus
+         coaches
+         users
+         preview
+       />
+     | (
+         Pending | Submitted | Passed | Failed,
+         LinkToComplete | MarkAsComplete,
+       ) =>
+       <CoursesCurriculum__AutoVerify
+         target
+         targetDetails
+         authenticityToken
+         targetStatus
+         addSubmissionCB=addVerifiedSubmissionCB
+         preview
+       />
+     | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
+     }}
   </div>;
 };
 
@@ -488,27 +478,25 @@ let renderPendingStudents = (pendingUserIds, users) =>
       {"You have team members who are yet to complete this target:" |> str}
     </div>
     <div className="flex justify-center flex-wrap">
-      {
-        pendingUserIds
-        |> List.map(studentId => {
-             let user =
-               users
-               |> ListUtils.unsafeFind(
-                    u => u |> User.id == studentId,
-                    "Unable to find user with id "
-                    ++ studentId
-                    ++ "in CoursesCurriculum__Overlay",
-                  );
+      {pendingUserIds
+       |> List.map(studentId => {
+            let user =
+              users
+              |> ListUtils.unsafeFind(
+                   u => u |> User.id == studentId,
+                   "Unable to find user with id "
+                   ++ studentId
+                   ++ "in CoursesCurriculum__Overlay",
+                 );
 
-             <div
-               title={(user |> User.name) ++ " has not completed this target."}
-               className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
-               <img src={user |> User.avatarUrl} />
-             </div>;
-           })
-        |> Array.of_list
-        |> React.array
-      }
+            <div
+              title={(user |> User.name) ++ " has not completed this target."}
+              className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
+              <img src={user |> User.avatarUrl} />
+            </div>;
+          })
+       |> Array.of_list
+       |> React.array}
     </div>
   </div>;
 
@@ -516,8 +504,8 @@ let handlePendingStudents = (targetStatus, targetDetails, users) =>
   switch (targetDetails, targetStatus |> TargetStatus.status) {
   | (Some(targetDetails), Submitted | Passed) =>
     let pendingUserIds = targetDetails |> TargetDetails.pendingUserIds;
-    pendingUserIds |> ListUtils.isNotEmpty ?
-      renderPendingStudents(pendingUserIds, users) : React.null;
+    pendingUserIds |> ListUtils.isNotEmpty
+      ? renderPendingStudents(pendingUserIds, users) : React.null;
   | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
   };
 
@@ -558,109 +546,100 @@ let make =
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
-        {
-          handleLocked(
-            target,
-            targets,
-            targetStatus,
-            statusOfTargets,
-            changeTargetCB,
-          )
-        }
+        {handleLocked(
+           target,
+           targets,
+           targetStatus,
+           statusOfTargets,
+           changeTargetCB,
+         )}
         {handlePendingStudents(targetStatus, targetDetails, users)}
-        {
-          switch (targetDetails) {
-          | Some(targetDetails) =>
-            overlaySelectionOptions(
-              overlaySelection,
-              setOverlaySelection,
-              targetDetails,
-              targetStatus,
-              setScrollToSelection,
-            )
-          | None =>
-            <div
-              className="course-overlay__skeleton-head-container max-w-3xl w-full mx-auto">
-              <div
-                className="course-overlay__skeleton-head-wrapper bg-white h-13 flex items-center justify-between border border-b-0 rounded-t-lg mt-5 md:mt-7">
-                <div
-                  className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
-                />
-                <div
-                  className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
-                />
-                <div
-                  className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
-                />
-              </div>
-            </div>
-          }
-        }
+        {switch (targetDetails) {
+         | Some(targetDetails) =>
+           overlaySelectionOptions(
+             overlaySelection,
+             setOverlaySelection,
+             targetDetails,
+             targetStatus,
+             setScrollToSelection,
+           )
+         | None =>
+           <div
+             className="course-overlay__skeleton-head-container max-w-3xl w-full mx-auto">
+             <div
+               className="course-overlay__skeleton-head-wrapper bg-white h-13 flex items-center justify-between border border-b-0 rounded-t-lg mt-5 md:mt-7">
+               <div
+                 className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
+               />
+               <div
+                 className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
+               />
+               <div
+                 className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
+               />
+             </div>
+           </div>
+         }}
       </div>
     </div>
-    {
-      switch (targetDetails) {
-      | Some(targetDetails) =>
-        <div
-          className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0 pb-8">
-          {learnSection(targetDetails, overlaySelection)}
-          {discussSection(target, targetDetails, overlaySelection)}
-          {
-            completeSection(
-              overlaySelection,
-              target,
-              targetDetails,
-              setTargetDetails,
-              authenticityToken,
-              targetStatus,
-              addSubmissionCB,
-              evaluationCriteria,
-              course |> Course.gradeLabels,
-              coaches,
-              users,
-              preview,
-            )
-          }
-        </div>
+    {switch (targetDetails) {
+     | Some(targetDetails) =>
+       <div
+         className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0 pb-8">
+         {learnSection(targetDetails, overlaySelection)}
+         {discussSection(target, targetDetails, overlaySelection)}
+         {completeSection(
+            overlaySelection,
+            target,
+            targetDetails,
+            setTargetDetails,
+            authenticityToken,
+            targetStatus,
+            addSubmissionCB,
+            evaluationCriteria,
+            coaches,
+            users,
+            preview,
+          )}
+       </div>
 
-      | None =>
-        <div
-          className="course-overlay__skeleton-body-container max-w-3xl w-full pb-4 mx-auto">
-          <div
-            className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
-            <div
-              className="course-overlay__skeleton-line-placeholder-md mt-4 w-2/4 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-image-placeholder mt-5 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-2/5 skeleton-animate"
-            />
-          </div>
-          <div
-            className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
-            />
-            <div
-              className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
-            />
-          </div>
-        </div>
-      }
-    }
+     | None =>
+       <div
+         className="course-overlay__skeleton-body-container max-w-3xl w-full pb-4 mx-auto">
+         <div
+           className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
+           <div
+             className="course-overlay__skeleton-line-placeholder-md mt-4 w-2/4 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-image-placeholder mt-5 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 w-2/5 skeleton-animate"
+           />
+         </div>
+         <div
+           className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate"
+           />
+           <div
+             className="course-overlay__skeleton-line-placeholder-sm mt-4 w-3/4 skeleton-animate"
+           />
+         </div>
+       </div>
+     }}
   </div>;
 };

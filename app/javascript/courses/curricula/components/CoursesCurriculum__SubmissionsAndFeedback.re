@@ -5,7 +5,7 @@ let str = React.string;
 
 open CoursesCurriculum__Types;
 
-let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
+let gradeBar = (evaluationCriteria, grade) => {
   let criterion =
     evaluationCriteria
     |> ListUtils.findOpt(c =>
@@ -21,7 +21,13 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
       Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
 
     <div key={gradeNumber |> string_of_int} className="mb-4">
-      <CoursesCurriculum__GradeBar grading gradeLabels passGrade />
+      <CoursesCurriculum__GradeBar
+        grading
+        gradeLabels={
+          criterion |> EvaluationCriterion.gradesAndLabels |> Array.to_list
+        }
+        passGrade={criterion |> EvaluationCriterion.passGrade}
+      />
     </div>;
   | None => React.null
   };
@@ -116,12 +122,11 @@ let submissions =
       targetStatus,
       targetDetails,
       evaluationCriteria,
-      gradeLabels,
       authenticityToken,
       coaches,
       users,
     ) => {
-  let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
+  let curriedGradeBar = gradeBar(evaluationCriteria);
 
   targetDetails
   |> TargetDetails.submissions
@@ -313,7 +318,6 @@ let make =
       ~targetDetails,
       ~target,
       ~authenticityToken,
-      ~gradeLabels,
       ~evaluationCriteria,
       ~addSubmissionCB,
       ~targetStatus,
@@ -358,7 +362,6 @@ let make =
            targetStatus,
            targetDetails,
            evaluationCriteria,
-           gradeLabels,
            authenticityToken,
            coaches,
            users,

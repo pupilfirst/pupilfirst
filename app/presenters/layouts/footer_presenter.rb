@@ -36,9 +36,9 @@ module Layouts
 
     def logo_url
       if current_school.present?
-        view.url_for(current_school.logo_variant(:mid, background: :dark))
+        view.url_for(current_school.logo_variant(:mid, background: :light))
       else
-        view.image_url('shared/pupilfirst-logo-white.svg')
+        view.image_url('shared/pupilfirst-logo.svg')
       end
     end
 

@@ -20,23 +20,22 @@ body {
   @apply w-full h-full antialiased;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: theme(colors.gray.500) theme(colors.gray.100);
-}
-
-::-webkit-scrollbar {
-  width: 11px;
-}
-
-::-webkit-scrollbar-track {
-  background: theme(colors.gray.100);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: theme(colors.gray.500);
-  border-radius: 6px;
-  border: 3px solid theme(colors.gray.100);
+@screen md {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme(colors.gray.500) theme(colors.gray.100);
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: theme(colors.gray.100);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: theme(colors.gray.500);
+    border-radius: 6px;
+    border: 3px solid theme(colors.gray.100);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -225,11 +224,11 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 /* Footer Style */
 
 .footer__container {
-  background-color: #271f33;
+  background-color: theme(colors.gray.200);
 }
 
 .footer__bottom {
-  background-color: #1c1626;
+  background-color: theme(colors.gray.300);
 }
 
 @screen md {

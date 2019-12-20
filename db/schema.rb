@@ -526,6 +526,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_113157) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "about"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

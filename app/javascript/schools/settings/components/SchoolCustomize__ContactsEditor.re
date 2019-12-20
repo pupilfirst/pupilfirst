@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open SchoolCustomize__Types;
 
 let str = ReasonReact.string;
@@ -16,9 +18,6 @@ type state = {
   updating: bool,
   formDirty: bool,
 };
-
-let component =
-  ReasonReact.reducerComponent("SchoolCustomize__ContactsEditor");
 
 let handleInputChange = (callback, event) => {
   let value = ReactEvent.Form.target(event)##value;
@@ -103,109 +102,104 @@ let updateButtonDisabled = state =>
     !state.formDirty || state.emailAddressInvalid;
   };
 
-let optionToString = o =>
-  switch (o) {
-  | Some(v) => v
-  | None => ""
+let initialState = customizations => {
+  address:
+    customizations |> Customizations.address |> OptionUtils.default(""),
+  emailAddress:
+    customizations |> Customizations.emailAddress |> OptionUtils.default(""),
+  emailAddressInvalid: false,
+  updating: false,
+  formDirty: false,
+};
+
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateAddress(address) => {...state, address, formDirty: true}
+  | UpdateEmailAddress(emailAddress, invalid) => {
+      ...state,
+      emailAddress,
+      emailAddressInvalid: invalid,
+      formDirty: true,
+    }
+  | BeginUpdate => {...state, updating: true}
+  | ErrorOccured => {...state, updating: false}
+  | DoneUpdating => {...state, updating: false, formDirty: false}
   };
 
+[@react.component]
 let make =
     (
       ~customizations,
       ~authenticityToken,
       ~updateAddressCB,
       ~updateEmailAddressCB,
-      _children,
     ) => {
-  ...component,
-  initialState: () => {
-    address: customizations |> Customizations.address |> optionToString,
-    emailAddress:
-      customizations |> Customizations.emailAddress |> optionToString,
-    emailAddressInvalid: false,
-    updating: false,
-    formDirty: false,
-  },
-  reducer: (action, state) =>
-    switch (action) {
-    | UpdateAddress(address) =>
-      ReasonReact.Update({...state, address, formDirty: true})
-    | UpdateEmailAddress(emailAddress, invalid) =>
-      ReasonReact.Update({
-        ...state,
-        emailAddress,
-        emailAddressInvalid: invalid,
-        formDirty: true,
-      })
-    | BeginUpdate => ReasonReact.Update({...state, updating: true})
-    | ErrorOccured => ReasonReact.Update({...state, updating: false})
-    | DoneUpdating =>
-      ReasonReact.Update({...state, updating: false, formDirty: false})
-    },
-  render: ({state, send}) =>
-    <div className="mx-8 pt-8">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-        {"Manage Contact Details" |> str}
-      </h5>
-      <DisablingCover.Jsx2 disabled={state.updating}>
-        <div key="contacts-editor__address-input-group" className="mt-3">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold"
-            htmlFor="contacts-editor__address">
-            {"Contact Address " |> str}
-            <i className="fab fa-markdown text-base" />
-          </label>
-          <textarea
-            maxLength=1000
-            className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="contacts-editor__address"
-            placeholder="Leave the address empty to hide the footer section."
-            onChange={handleInputChange(address =>
-              send(UpdateAddress(address))
-            )}
-            value={state.address}
-          />
-        </div>
-        <div key="contacts-editor__email-address-input-group" className="mt-3">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold"
-            htmlFor="contacts-editor__email-address">
-            {"Email Address" |> str}
-          </label>
-          <input
-            type_="text"
-            maxLength=250
-            className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="contacts-editor__email-address"
-            placeholder="Leave the email address empty to hide the footer link."
-            onChange={handleInputChange(emailAddress =>
-              send(
-                UpdateEmailAddress(
-                  emailAddress,
-                  emailAddress |> EmailUtils.isInvalid(true),
-                ),
-              )
-            )}
-            value={state.emailAddress}
-          />
-          <School__InputGroupError.Jsx2
-            message="is not a valid email address"
-            active={state.emailAddressInvalid}
-          />
-        </div>
-        <button
-          key="contacts-editor__update-button"
-          disabled={updateButtonDisabled(state)}
-          onClick={handleUpdateContactDetails(
-            state,
-            send,
-            authenticityToken,
-            updateAddressCB,
-            updateEmailAddressCB,
+  let (state, send) =
+    React.useReducer(reducer, initialState(customizations));
+
+  <div className="mx-8 pt-8">
+    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+      {"Manage Contact Details" |> str}
+    </h5>
+    <DisablingCover disabled={state.updating}>
+      <div key="contacts-editor__address-input-group" className="mt-3">
+        <label
+          className="inline-block tracking-wide text-xs font-semibold"
+          htmlFor="contacts-editor__address">
+          {"Contact Address " |> str}
+          <i className="fab fa-markdown text-base" />
+        </label>
+        <textarea
+          maxLength=1000
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="contacts-editor__address"
+          placeholder="Leave the address empty to hide the footer section."
+          onChange={handleInputChange(address =>
+            send(UpdateAddress(address))
           )}
-          className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
-          {updateContactDetailsButtonText(state.updating) |> str}
-        </button>
-      </DisablingCover.Jsx2>
-    </div>,
+          value={state.address}
+        />
+      </div>
+      <div key="contacts-editor__email-address-input-group" className="mt-3">
+        <label
+          className="inline-block tracking-wide text-xs font-semibold"
+          htmlFor="contacts-editor__email-address">
+          {"Email Address" |> str}
+        </label>
+        <input
+          type_="text"
+          maxLength=250
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="contacts-editor__email-address"
+          placeholder="Leave the email address empty to hide the footer link."
+          onChange={handleInputChange(emailAddress =>
+            send(
+              UpdateEmailAddress(
+                emailAddress,
+                emailAddress |> EmailUtils.isInvalid(true),
+              ),
+            )
+          )}
+          value={state.emailAddress}
+        />
+        <School__InputGroupError
+          message="is not a valid email address"
+          active={state.emailAddressInvalid}
+        />
+      </div>
+      <button
+        key="contacts-editor__update-button"
+        disabled={updateButtonDisabled(state)}
+        onClick={handleUpdateContactDetails(
+          state,
+          send,
+          authenticityToken,
+          updateAddressCB,
+          updateEmailAddressCB,
+        )}
+        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        {updateContactDetailsButtonText(state.updating) |> str}
+      </button>
+    </DisablingCover>
+  </div>;
 };

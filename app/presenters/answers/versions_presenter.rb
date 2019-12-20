@@ -21,7 +21,7 @@ module Answers
     def markdown_prop(markdown)
       {
         markdown: markdown,
-        permissive: false
+        profile: "questionAndAnswer"
       }.to_json
     end
 

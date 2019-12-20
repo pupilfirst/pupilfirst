@@ -1,10 +1,7 @@
 class HomeController < ApplicationController
   def index
-    if current_user.present?
-      redirect_to after_sign_in_path_for(current_user)
-    else
-      redirect_to new_user_session_path
-    end
+    @courses = current_school.courses.where(featured: true)
+    render layout: 'student'
   end
 
   def styleguide

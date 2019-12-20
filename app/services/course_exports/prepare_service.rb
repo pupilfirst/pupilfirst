@@ -121,7 +121,7 @@ module CourseExports
           user.name,
           user.title,
           user.affiliation,
-          student.tags.pluck(:name).join(', ')
+          student.tags.order(:name).pluck(:name).join(', ')
         ] + average_grades_for_student(student)
       end
 
@@ -178,13 +178,16 @@ module CourseExports
         integer_grade.to_s == grade ? integer_grade : grade
       end
 
-      grading[grade_index] = if grading[grade_index].present?
-        {
-          value: "#{grading[grade_index][:value]};#{parsed_grade}",
-          style: style
-        }
+      value = if grading[grade_index].present?
+        "#{grading[grade_index][:value]};#{parsed_grade}"
       else
-        { value: parsed_grade, style: style }
+        parsed_grade
+      end
+
+      grading[grade_index] = if style.present?
+        { value: value, style: style }
+      else
+        value
       end
 
       grading

@@ -173,7 +173,7 @@ let make = (~authenticityToken, ~course, ~exports, ~tags) => {
              />
              <div className="mt-5">
                <label
-                 className="block tracking-wide text-sm font-semibold mr-6 mb-3"
+                 className="block tracking-wide text-xs font-semibold mr-6 mb-3"
                  htmlFor="targets_filter">
                  {"Which targets should the export include?" |> str}
                </label>

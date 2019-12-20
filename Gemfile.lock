@@ -521,7 +521,7 @@ GEM
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-contrib (2.1.0)
       rack (~> 2.0)
     rack-cors (1.0.6)

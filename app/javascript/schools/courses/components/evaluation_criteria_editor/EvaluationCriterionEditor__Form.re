@@ -262,7 +262,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             />
             <School__InputGroupError
               message="Enter a valid name"
-              active={state.name |> String.length < 1}
+              active={state.dirty && state.name |> String.length < 1}
             />
           </div>
           <div className="mt-5">
@@ -287,7 +287,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             />
             <School__InputGroupError
               message="Enter a valid description"
-              active={state.description |> String.length < 1}
+              active={state.dirty && state.description |> String.length < 1}
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ module Layouts
     end
 
     def nav_links
-      footer_links = [{ title: 'Home', url: '/' }]
+      footer_links = current_user.present? ? [{ title: 'Home', url: '/home' }] : []
 
       return footer_links if current_school.blank?
 

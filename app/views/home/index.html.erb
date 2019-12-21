@@ -52,6 +52,7 @@
                     <div class="relative pb-1/2 bg-gray-200">
                       <% if presenter.course_thumbnail(course).present? %>
                         <img
+                          alt="Thumbnail for course <%= course.name %>"
                           class="absolute h-full w-full object-cover"
                           src=<%= presenter.course_thumbnail(course) %>
                           />
@@ -70,9 +71,14 @@
                       <%= course.description %>
                     </div>
                     <div class="flex w-full p-6 justify-center">
-                      <a class="w-full btn btn-default" href="/courses/<%= course.id %>">
-                        View Course
-                        <i class="fas fa-arrow-right ml-2"></i>
+                      <a class="w-full btn <%= course.public_signup? ? 'btn-primary' : 'btn-default' %>" href="/courses/<%= course.id %>">
+                        <% if course.public_signup? %>
+                          <i class="fas fa-feather-alt mr-2"></i>
+                          Get started
+                        <% else %>
+                          <i class="fas fa-info-circle mr-2"></i>
+                          Learn more
+                        <% end %>
                       </a>
                     </div>
                   </div>

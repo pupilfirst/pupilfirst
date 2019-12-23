@@ -212,4 +212,8 @@ class Target < ApplicationRecord
 
     content_versions.where(version_on: latest_content_version_date)
   end
+
+  def live?
+    visibility == VISIBILITY_LIVE
+  end
 end

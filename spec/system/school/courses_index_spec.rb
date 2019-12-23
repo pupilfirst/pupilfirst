@@ -36,8 +36,8 @@ feature 'Courses Index', js: true do
     # Add a new course
     click_button 'Add New Course'
 
-    fill_in 'Course Name', with: course_name
-    fill_in 'Description', with: description
+    fill_in 'Course name', with: course_name
+    fill_in 'Course description', with: description
 
     within('div#public-signup') do
       click_button 'No'
@@ -86,8 +86,8 @@ feature 'Courses Index', js: true do
 
       find("a[title='Edit #{course_1.name}']").click
 
-      fill_in 'Name', with: new_course_name, fill_options: { clear: :backspace }
-      fill_in 'Description', with: new_description, fill_options: { clear: :backspace }
+      fill_in 'Course name', with: new_course_name, fill_options: { clear: :backspace }
+      fill_in 'Course description', with: new_description, fill_options: { clear: :backspace }
       fill_in 'Course end date', with: course_end_date.iso8601
 
       replace_markdown new_about

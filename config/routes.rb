@@ -68,6 +68,7 @@ Rails.application.routes.draw do
       post 'students', action: 'create_students'
       post 'mark_teams_active'
       get 'students'
+      get 'students_v2'
       get 'inactive_students'
       post 'delete_coach_enrollment'
       post 'update_coach_enrollments'

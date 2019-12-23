@@ -1,0 +1,5 @@
+module Team = StudentsEditor__Team;
+module Student = StudentsEditor__Student;
+module Coach = StudentsEditor__Coach;
+module StudentInfo = StudentsEditor__StudentInfo;
+module Level = StudentsEditor__Level;

@@ -53,6 +53,11 @@ module Schools
       @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
     end
 
+    # GET /school/courses/:course_id/students
+    def students_v2
+      @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
+    end
+
     def inactive_students
       @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
 

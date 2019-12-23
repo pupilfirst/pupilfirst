@@ -24,6 +24,7 @@ module Schools
       # All course authors can view the curricula
       user.course_authors.where(course: record).present?
     end
+
     alias attach_images? update?
     alias delete_coach_enrollment? update?
     alias update_coach_enrollments? delete_coach_enrollment?
@@ -32,6 +33,7 @@ module Schools
     alias create_students? delete_coach_enrollment?
     alias mark_teams_active? delete_coach_enrollment?
     alias exports? show?
+    alias students_v2? students?
 
     class Scope < ::CoursePolicy::Scope
     end

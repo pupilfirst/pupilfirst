@@ -38,7 +38,7 @@ module Types
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false
       argument :search, String, required: false
-      argument :tag, String, required: false
+      argument :tags, [String], required: false
     end
 
     def courses

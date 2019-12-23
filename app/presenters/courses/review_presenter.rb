@@ -17,8 +17,6 @@ module Courses
         levels: levels,
         pending_submissions: pending_submissions,
         course_id: @course.id,
-        grade_labels: @course.grade_labels_to_props,
-        pass_grade: @course.pass_grade,
         current_coach: current_coach_details
       }
     end

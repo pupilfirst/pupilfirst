@@ -8,7 +8,7 @@ module Types
     field :grades_and_labels, [Types::GradeAndLabelType], null: false
 
     def grades_and_labels
-      object.grade_labels.map do |grade, label|
+      object['grade_labels'].map do |grade, label|
         { grade: grade.to_i, label: label }
       end
     end

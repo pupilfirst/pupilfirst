@@ -183,8 +183,6 @@ let make =
     (
       ~authenticityToken,
       ~submission,
-      ~gradeLabels,
-      ~passGrade,
       ~updateSubmissionCB,
       ~submissionNumber,
       ~currentCoach,
@@ -225,10 +223,8 @@ let make =
       <CoursesReview__GradeCard
         authenticityToken
         submission
-        gradeLabels
         evaluationCriteria
         targetEvaluationCriteriaIds
-        passGrade
         reviewChecklist
         updateSubmissionCB={updateSubmission(
           ~feedbackUpdate=false,

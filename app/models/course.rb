@@ -30,19 +30,8 @@ class Course < ApplicationRecord
     name.include? 'Apple'
   end
 
-  # Hack to enable editing grade_labels as an activeadmin text field
-  def grade_labels=(labels)
-    labels.is_a?(String) ? super(JSON.parse(labels)) : super(labels)
-  end
-
   def ended?
     ends_at.present? && ends_at.past?
-  end
-
-  def grade_labels_to_props
-    grade_labels.map do |key, value|
-      { grade: key.to_i, label: value }
-    end
   end
 
   def cover_url

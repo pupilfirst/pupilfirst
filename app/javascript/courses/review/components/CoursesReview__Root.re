@@ -154,9 +154,7 @@ let make =
       ~authenticityToken,
       ~levels,
       ~pendingSubmissions,
-      ~gradeLabels,
       ~courseId,
-      ~passGrade,
       ~currentCoach,
     ) => {
   let (state, setState) =
@@ -177,8 +175,6 @@ let make =
          authenticityToken
          courseId
          submissionId
-         gradeLabels
-         passGrade
          currentCoach
          removePendingSubmissionCB={removePendingSubmission(setState)}
          updateReviewedSubmissionCB={updateReviewedSubmission(setState)}

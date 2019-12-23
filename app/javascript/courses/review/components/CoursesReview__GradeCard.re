@@ -18,7 +18,7 @@ type state = {
 let passed = (grades, evaluationCriteria) =>
   grades
   |> Js.Array.filter(g => {
-       let passgrade =
+       let passGrade =
          evaluationCriteria
          |> ArrayUtils.unsafeFind(
               ec =>
@@ -26,9 +26,10 @@ let passed = (grades, evaluationCriteria) =>
                 == (g |> Grade.evaluationCriterionId),
               "CoursesReview__GradeCard: Unable to find evaluation criterion with id - "
               ++ (g |> Grade.evaluationCriterionId),
-            );
+            )
+         |> EvaluationCriterion.passGrade;
 
-       g |> Grade.value < 3;
+       g |> Grade.value < passGrade;
      })
   |> ArrayUtils.isEmpty;
 
@@ -187,22 +188,22 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
 };
 
 let showGradePill =
-    (key, evaluvationCriterion, gradeValue, passGrade, state, setState) =>
+    (key, evaluationCriterion, gradeValue, passGrade, state, setState) =>
   <div
     ariaLabel={
       "evaluation-criterion-"
-      ++ (evaluvationCriterion |> EvaluationCriterion.id)
+      ++ (evaluationCriterion |> EvaluationCriterion.id)
     }
     key={key |> string_of_int}
     className="md:pr-8 mt-4">
     {gradePillHeader(
-       evaluvationCriterion |> EvaluationCriterion.name,
+       evaluationCriterion |> EvaluationCriterion.name,
        gradeValue,
-       evaluvationCriterion |> EvaluationCriterion.gradesAndLabels,
+       evaluationCriterion |> EvaluationCriterion.gradesAndLabels,
      )}
     <div
       className="course-review-grade-card__grade-bar inline-flex w-full text-center mt-1">
-      {evaluvationCriterion
+      {evaluationCriterion
        |> EvaluationCriterion.gradesAndLabels
        |> Array.map(gradeLabel => {
             let gradeLabelGrade = gradeLabel |> GradeLabel.grade;
@@ -210,7 +211,7 @@ let showGradePill =
             <div
               key={gradeLabelGrade |> string_of_int}
               onClick={handleGradePillClick(
-                evaluvationCriterion |> EvaluationCriterion.id,
+                evaluationCriterion |> EvaluationCriterion.id,
                 gradeLabelGrade,
                 state,
                 setState,

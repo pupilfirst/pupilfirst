@@ -258,7 +258,7 @@ let featuredButton = (featured, send) =>
     <label
       className="block tracking-wide text-xs font-semibold mr-6"
       htmlFor="featured">
-      {"Feature course in school home page?" |> str}
+      {"Feature course in school homepage?" |> str}
     </label>
     <div
       id="featured"
@@ -385,7 +385,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                   <label
                     className="inline-block tracking-wide text-xs font-semibold "
                     htmlFor="name">
-                    {"Course Name" |> str}
+                    {"Course name" |> str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -399,7 +399,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                     }
                   />
                   <School__InputGroupError.Jsx2
-                    message="Enter a valid name"
+                    message="A name is required (2-50 characters)"
                     active={state.hasNameError}
                   />
                 </div>
@@ -407,13 +407,13 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="description">
-                    {"Course Description" |> str}
+                    {"Course description" |> str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="description"
                     type_="text"
-                    placeholder="Type course description here"
+                    placeholder="Short description for this course"
                     value={state.description}
                     maxLength=150
                     onChange={event =>
@@ -425,7 +425,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                   />
                 </div>
                 <School__InputGroupError.Jsx2
-                  message="Supplied description must be between 1 and 150 characters in length"
+                  message="A description is required (2-150 characters)"
                   active={state.hasDescriptionError}
                 />
                 <div className="mt-5">

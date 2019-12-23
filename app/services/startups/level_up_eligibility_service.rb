@@ -5,69 +5,90 @@ module Startups
     def initialize(startup, founder)
       @startup = startup
       @founder = founder
-      @cofounders_pending = false
+      @team_members_pending = false
     end
 
     ELIGIBILITY_ELIGIBLE = -'eligible'
     ELIGIBILITY_NOT_ELIGIBLE = -'not_eligible'
-    ELIGIBILITY_COFOUNDERS_PENDING = -'cofounders_pending'
+    ELIGIBILITY_TEAM_MEMBERS_PENDING = -'team_members_pending'
     ELIGIBILITY_DATE_LOCKED = -'date_locked'
 
-    ELIGIBLE_STATUSES = [
+    CURRENT_LEVEL_ELIGIBLE_STATUSES = [
       Targets::StatusService::STATUS_SUBMITTED,
       Targets::StatusService::STATUS_PASSED
     ].freeze
+
+    PREVIOUS_LEVEL_ELIGIBLE_STATUSES = [Targets::StatusService::STATUS_PASSED].freeze
 
     def eligible?
       eligibility == ELIGIBILITY_ELIGIBLE
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def eligibility
       @eligibility ||= begin
-        if milestone_targets.any?
-          all_targets_attempted = milestone_targets.all? do |target|
-            target_attempted?(target)
+        if next_level.blank?
+          ELIGIBILITY_NOT_ELIGIBLE
+        elsif next_level_unlock_date&.future?
+          ELIGIBILITY_DATE_LOCKED
+        elsif current_level_milestone_targets.any?
+          current_level_targets_attempted = current_level_milestone_targets.all? do |target|
+            target_eligible?(target, CURRENT_LEVEL_ELIGIBLE_STATUSES)
           end
 
-          if all_targets_attempted
-            return ELIGIBILITY_COFOUNDERS_PENDING if @cofounders_pending
+          return ELIGIBILITY_TEAM_MEMBERS_PENDING if @team_members_pending
 
-            return ELIGIBILITY_DATE_LOCKED if next_level_unlock_date&.future?
-
-            return ELIGIBILITY_ELIGIBLE
+          previous_level_targets_completed = previous_level_milestone_targets.all? do |target|
+            target_eligible?(target, PREVIOUS_LEVEL_ELIGIBLE_STATUSES)
           end
+
+          return ELIGIBILITY_TEAM_MEMBERS_PENDING if @team_members_pending
+
+          current_level_targets_attempted && previous_level_targets_completed ? ELIGIBILITY_ELIGIBLE : ELIGIBILITY_NOT_ELIGIBLE
+        else
+          ELIGIBILITY_NOT_ELIGIBLE
         end
-
-        ELIGIBILITY_NOT_ELIGIBLE
       end
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+    def next_level
+      @next_level ||= current_level.course.levels.find_by(number: current_level.number + 1)
     end
 
     def next_level_unlock_date
-      @next_level_unlock_date ||= begin
-        next_level = current_level.course.levels.find_by(number: current_level.number + 1)
-        next_level&.unlock_on
-      end
+      @next_level_unlock_date ||= next_level.unlock_on
     end
 
     private
 
-    def milestone_targets
+    def current_level_milestone_targets
       milestone_groups = current_level.target_groups.where(milestone: true)
-
-      return Target.none if milestone_groups.empty?
-
       Target.where(target_group: milestone_groups).live
     end
 
-    def target_attempted?(target)
+    def previous_level_milestone_targets
+      if current_level.number > 1
+        last_level = current_level.course.levels.find_by(number: current_level.number - 1)
+
+        raise 'Could not find last level for computing level up eligibility' if last_level.blank?
+
+        milestone_groups = last_level.target_groups.where(milestone: true)
+        Target.where(target_group: milestone_groups).live
+      else
+        Target.none
+      end
+    end
+
+    def target_eligible?(target, eligibility)
       if target.founder_role?
         completed_founders = @startup.founders.all.select do |startup_founder|
-          target.status(startup_founder).in? ELIGIBLE_STATUSES
+          target.status(startup_founder).in?(eligibility)
         end
 
         if @founder.in?(completed_founders)
           # Mark that some co-founders haven't yet completed target if applicable.
-          @cofounders_pending = completed_founders.count != @startup.founders.count
+          @team_members_pending ||= completed_founders.count != @startup.founders.count
 
           # Founder has completed this target.
           true
@@ -75,7 +96,7 @@ module Startups
           false
         end
       else
-        Targets::StatusService.new(target, @founder).status.in? ELIGIBLE_STATUSES
+        target.status(@founder).in?(eligibility)
       end
     end
 

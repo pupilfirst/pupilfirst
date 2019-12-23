@@ -5,12 +5,12 @@ after 'development:schools' do
 
   # Header links
   3.times do
-    school.school_links.where(kind: 'header', title: Faker::Lorem.word).first_or_create!(url: Faker::Internet.url)
+    school.school_links.where(kind: 'header', title: Faker::Lorem.word.capitalize).first_or_create!(url: Faker::Internet.url)
   end
 
   # Footer links
   6.times do
-    school.school_links.where(kind: 'footer', title: Faker::Lorem.word).first_or_create!(url: Faker::Internet.url)
+    school.school_links.where(kind: 'footer', title: Faker::Lorem.word.capitalize).first_or_create!(url: Faker::Internet.url)
   end
 
   # Social links

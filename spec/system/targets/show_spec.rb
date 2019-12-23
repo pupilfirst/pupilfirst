@@ -583,41 +583,6 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_group_l2.name)
   end
 
-  context 'when the student has only one reviewed milestone target left in a level' do
-    before do
-      complete_target student, prerequisite_target
-      complete_target student, quiz_target
-    end
-
-    scenario 'student can level up immediately after submitting the milestone target' do
-      sign_in_user student.user, referer: target_path(target_l1)
-      find('.course-overlay__body-tab-item', text: 'Complete').click
-
-      expect(page).to have_text(target_l1.completion_instructions)
-
-      fill_in 'Work on your submission', with: Faker::Lorem.sentence
-      click_button 'Submit'
-
-      expect(page).to have_content('Your submission has been queued for review')
-
-      # Let's check the curriculum view to make sure that only the level up option is visible now.
-      click_button 'Close'
-
-      expect(page).not_to have_text(target_l1.title)
-      expect(page).not_to have_text(target_group_l1.name)
-      expect(page).not_to have_text(prerequisite_target.title)
-      expect(page).not_to have_text(quiz_target.title)
-
-      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
-
-      click_button('Level Up')
-
-      # This should level up the student and show them the next level.
-      expect(page).to have_text(target_l2.title)
-      expect(page).to have_text(target_group_l2.name)
-    end
-  end
-
   context 'when accessing preview mode of curriculum' do
     let(:school_admin) { create :school_admin }
 

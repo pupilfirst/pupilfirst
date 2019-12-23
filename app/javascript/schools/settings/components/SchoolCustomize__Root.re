@@ -344,7 +344,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
              />
            | None =>
              <div
-               className="student-course__cover-default absolute h-full w-full svg-bg-pattern-1"
+               className="school-customize__cover-default absolute h-full w-full svg-bg-pattern-6"
              />
            }}
         </div>

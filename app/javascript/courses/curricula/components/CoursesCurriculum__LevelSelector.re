@@ -9,9 +9,9 @@ let levelSelectorClasses = isSelected => {
   let defaultClasses = "w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold ";
   defaultClasses
   ++ (
-    isSelected ?
-      "course-level-tab__selected bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500" :
-      ""
+    isSelected
+      ? "course-level-tab__selected bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500"
+      : ""
   );
 };
 
@@ -23,8 +23,8 @@ let updateSelectedLevel =
 
   switch (level) {
   | Some(_) =>
-    showLevelZero ? setShowLevelZero(_ => false) : ();
-    setSelectedLevelId(_ => selectedLevelId);
+    showLevelZero ? setShowLevelZero(false) : ();
+    setSelectedLevelId(selectedLevelId);
   | None => ()
   };
 };
@@ -51,54 +51,46 @@ let make =
     levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
   <div
     className="flex justify-center max-w-sm mx-auto mt-4 rounded-lg overflow-hidden bg-primary-100 border border-gray-400 h-11">
-    {
-      switch (currentLevel, showLevelZero) {
-      | (Some(level), true) =>
-        <div
-          className="w-1/2 bg-white px-4 py-2 focus:outline-none text-sm font-semibold hover:bg-gray-100 hover:text-primary-500 truncate leading-loose "
-          onClick=(_ => setShowLevelZero(_ => false))>
-          {levelName(level) |> str}
-        </div>
-      | (None, true)
-      | (Some(_) | None, false) =>
-        <select
-          name="selected_level"
-          className={levelSelectorClasses(!showLevelZero)}
-          onChange={
-            updateSelectedLevel(
-              orderedLevels,
-              setSelectedLevelId,
-              showLevelZero,
-              setShowLevelZero,
-            )
-          }
-          value=selectedLevelId>
-          {
-            orderedLevels
-            |> List.map(l =>
-                 <option value={l |> Level.id} key={l |> Level.id}>
-                   {levelName(l) |> str}
-                 </option>
-               )
-            |> Array.of_list
-            |> React.array
-          }
-        </select>
-      }
-    }
-    {
-      switch (levelZero) {
-      | Some(level) =>
-        <button
-          className={
-            "border-l bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
-            ++ levelSelectorClasses(showLevelZero)
-          }
-          onClick=(_e => setShowLevelZero(_ => true))>
-          {level |> Level.name |> str}
-        </button>
-      | None => React.null
-      }
-    }
+    {switch (currentLevel, showLevelZero) {
+     | (Some(level), true) =>
+       <div
+         className="w-1/2 bg-white px-4 py-2 focus:outline-none text-sm font-semibold hover:bg-gray-100 hover:text-primary-500 truncate leading-loose "
+         onClick={_ => setShowLevelZero(false)}>
+         {levelName(level) |> str}
+       </div>
+     | (None, true)
+     | (Some(_) | None, false) =>
+       <select
+         name="selected_level"
+         className={levelSelectorClasses(!showLevelZero)}
+         onChange={updateSelectedLevel(
+           orderedLevels,
+           setSelectedLevelId,
+           showLevelZero,
+           setShowLevelZero,
+         )}
+         value=selectedLevelId>
+         {orderedLevels
+          |> List.map(l =>
+               <option value={l |> Level.id} key={l |> Level.id}>
+                 {levelName(l) |> str}
+               </option>
+             )
+          |> Array.of_list
+          |> React.array}
+       </select>
+     }}
+    {switch (levelZero) {
+     | Some(level) =>
+       <button
+         className={
+           "border-l bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
+           ++ levelSelectorClasses(showLevelZero)
+         }
+         onClick={_e => setShowLevelZero(true)}>
+         {level |> Level.name |> str}
+       </button>
+     | None => React.null
+     }}
   </div>;
 };

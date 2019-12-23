@@ -72,44 +72,6 @@ describe Targets::StatusService do
           end
         end
       end
-
-      context 'when the target is a milestone target' do
-        let(:level_2_milestone_target_group) do
-          create :target_group, level: level_2, milestone: true
-        end
-        let(:founder_target_1) do
-          create :target, target_group: level_2_milestone_target_group, role: Target::ROLE_STUDENT
-        end
-        let(:level_1_milestone_target_group) do
-          create :target_group, level: level_1, milestone: true
-        end
-        let!(:level_1_team_target) do
-          create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_TEAM
-        end
-        let!(:leve1_1_founder_target) do
-          create :target, target_group: level_1_milestone_target_group, role: Target::ROLE_STUDENT
-        end
-
-        context 'when there are pending milestones in the previous level' do
-          it 'returns :milestone_locked' do
-            expect(subject.status).to eq(Targets::StatusService::STATUS_MILESTONE_LOCKED)
-          end
-        end
-
-        context 'when all previous level milestones are completed' do
-          let!(:submission_1) do
-            create :timeline_event, founders: [founder_2, founder_1], target: level_1_team_target, passed_at: 1.day.ago, latest: true
-          end
-
-          let!(:submission_2) do
-            create :timeline_event, founders: [founder_1], target: leve1_1_founder_target, passed_at: 1.day.ago, latest: true
-          end
-
-          it 'returns :pending' do
-            expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
-          end
-        end
-      end
     end
 
     context 'when the target has a submission' do

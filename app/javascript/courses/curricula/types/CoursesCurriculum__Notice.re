@@ -4,6 +4,7 @@ type t =
   | CourseComplete
   | AccessEnded
   | LevelUp
+  | LevelUpBlocked(int)
   | Nothing;
 
 let courseEndedImage: string = [%raw "require('../images/course-ended.svg')"];
@@ -13,6 +14,9 @@ let courseCompleteImage: string = [%raw
 let accessEndedImage: string = [%raw "require('../images/access-ended.svg')"];
 let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
 let previewModeImage: string = [%raw "require('../images/preview-mode.svg')"];
+let levelUpBlockedImage: string = [%raw
+  "require('../images/level-up-blocked.svg')"
+];
 
 let icon = t =>
   switch (t) {
@@ -21,5 +25,6 @@ let icon = t =>
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
   | LevelUp => levelUpImage
-  | Nothing => levelUpImage
+  | LevelUpBlocked(_) => levelUpBlockedImage
+  | Nothing => ""
   };

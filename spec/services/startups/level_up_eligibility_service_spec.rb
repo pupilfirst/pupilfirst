@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Startups::LevelUpEligibilityService do
-  include FounderSpecHelper
+  include SubmissionsHelper
 
-  subject { described_class.new(startup, startup.founders.first) }
+  subject { described_class.new(startup, student) }
 
   let(:course_1) { create :course }
   let!(:course_2) { create :course }
@@ -11,29 +11,23 @@ describe Startups::LevelUpEligibilityService do
   let!(:level_2) { create :level, :two, unlock_on: 5.days.ago, course: course_1 }
   let!(:level_2_c2) { create :level, :two, unlock_on: 2.days.from_now, course: course_2 }
   let(:startup) { create :startup, level: level_1 }
+  let(:student) { startup.founders.first }
+  let(:students) { startup.founders }
   let!(:milestone_targets) { create :target_group, level: level_1, milestone: true }
-  let!(:founder_target) { create :target, :for_founders, target_group: milestone_targets }
-  let!(:startup_target) { create :target, :for_startup, target_group: milestone_targets }
+  let!(:team_target) { create :target, :for_startup, target_group: milestone_targets }
   let!(:non_milestone_targets) { create :target_group, level: level_1 }
-  let!(:non_milestone_founder_target) { create :target, :for_founders, target_group: non_milestone_targets }
-  let!(:non_milestone_startup_target) { create :target, :for_startup, target_group: non_milestone_targets }
+  let!(:non_milestone_team_target) { create :target, :for_startup, target_group: non_milestone_targets }
 
   # Presence of an archived milestone target should not alter results.
-  let!(:archived_startup_target) { create :target, :for_startup, :archived, target_group: milestone_targets }
-
-  before do
-    # Create another founder in startup.
-    create :founder, startup: startup
-  end
+  let!(:archived_team_target) { create :target, :for_startup, :archived, target_group: milestone_targets }
 
   describe '#eligibility' do
     context 'when startup has submitted all milestone targets' do
       before do
-        submit_target startup.founders.first, founder_target
-        complete_target startup.founders.first, startup_target
+        complete_target team_target, students
 
         # Not all non-milestone targets need to be submitted.
-        submit_target startup.founders.first, non_milestone_startup_target
+        submit_target non_milestone_team_target, students
       end
 
       context 'when the next level is open' do
@@ -57,23 +51,40 @@ describe Startups::LevelUpEligibilityService do
       end
     end
 
-    context 'when only one student has submitted all milestone targets' do
-      it "returns 'cofounders_pending'" do
-        submit_target startup.founders.first, non_milestone_founder_target
-        submit_target startup.founders.first, non_milestone_startup_target
-        submit_target startup.founders.first, startup_target
+    context 'when there is a target that must be submitted individually by all students' do
+      let!(:individual_target) { create :target, :for_founders, target_group: milestone_targets }
 
-        # Only one student has submitted the individual target.
-        create_timeline_event startup.founders.first, founder_target, passed: true
+      before do
+        submit_target non_milestone_team_target, students
+        submit_target team_target, students
+      end
 
-        expect(subject.eligibility).to eq('cofounders_pending')
+      context 'when only one student has submitted the individual target' do
+        before do
+          # Only one student has submitted the individual target.
+          submit_target individual_target, student
+        end
+
+        it "returns 'team_members_pending'" do
+          expect(subject.eligibility).to eq('team_members_pending')
+        end
+      end
+
+      context 'when all students have submitted work on the individual target' do
+        before do
+          # Each student should submit on their own.
+          students.each { |s| submit_target individual_target, s }
+        end
+
+        it "returns 'eligible'" do
+          expect(subject.eligibility).to eq('eligible')
+        end
       end
     end
 
     context 'when milestone targets are incomplete' do
       it "returns 'not_eligible'" do
-        submit_target startup.founders.first, non_milestone_founder_target
-        submit_target startup.founders.first, non_milestone_startup_target
+        submit_target non_milestone_team_target, students
 
         expect(subject.eligibility).to eq('not_eligible')
       end
@@ -89,12 +100,11 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when there are more than one milestone target groups' do
       let!(:second_milestone_target_group) { create :target_group, level: level_1, milestone: true }
-      let!(:milestone_founder_target_g2) { create :target, :for_founders, target_group: second_milestone_target_group }
+      let!(:milestone_team_target_g2) { create :target, :for_startup, target_group: second_milestone_target_group }
 
       before do
         # Submit all targets in the first milestone target group.
-        submit_target startup.founders.first, founder_target
-        submit_target startup.founders.first, startup_target
+        submit_target team_target, students
       end
 
       context 'when the second milestone target group contains incomplete targets' do
@@ -106,11 +116,89 @@ describe Startups::LevelUpEligibilityService do
       context 'when the second milestone target group has also been fully completed' do
         before do
           # Submit target in the second milestone group.
-          submit_target startup.founders.first, milestone_founder_target_g2
+          submit_target milestone_team_target_g2, students
         end
 
         it "returns 'eligible'" do
           expect(subject.eligibility).to eq('eligible')
+        end
+      end
+    end
+
+    context 'when team is in the second level' do
+      let(:startup) { create :startup, level: level_2 }
+      let(:milestone_target_group_l2) { create :target_group, level: level_2, milestone: true }
+      let!(:milestone_target_l2) { create :target, target_group: milestone_target_group_l2, role: Target::ROLE_TEAM }
+      let!(:level_3) { create :level, :three, course: course_1 }
+      let(:evaluation_criterion) { create :evaluation_criterion, course: course_1 }
+      let!(:team_target) { create :target, :for_startup, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
+
+      before do
+        complete_target milestone_target_l2, students
+      end
+
+      context "when student has a submission pending review in level 1" do
+        before do
+          submit_target team_target, students
+        end
+
+        it "returns 'not_eligible'" do
+          expect(subject.eligibility).to eq('not_eligible')
+        end
+      end
+
+      context 'when student has a failed submission in level 1' do
+        before do
+          submit_target team_target, student, grade: SubmissionsHelper::GRADE_FAIL
+        end
+
+        it "returns 'not_eligible'" do
+          expect(subject.eligibility).to eq('not_eligible')
+        end
+      end
+
+      context 'when there is a target in L1 that must be submitted individually by all students' do
+        let!(:individual_target) { create :target, :for_founders, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
+
+        before do
+          complete_target team_target, students
+          complete_target individual_target, student
+        end
+
+        context 'when student has team-mates with a pending review in level 1' do
+          before do
+            startup.founders.where.not(id: student).each do |other_student|
+              submit_target individual_target, other_student
+            end
+          end
+
+          it "returns 'team_members_pending'" do
+            expect(subject.eligibility).to eq('team_members_pending')
+          end
+        end
+
+        context 'when student has a team-mate with a failed submission in level 1' do
+          before do
+            startup.founders.where.not(id: student).each do |other_student|
+              submit_target individual_target, other_student, grade: SubmissionsHelper::GRADE_FAIL
+            end
+          end
+
+          it "returns 'team_members_pending'" do
+            expect(subject.eligibility).to eq('team_members_pending')
+          end
+        end
+
+        context 'when student has a team-mate with a failed submission in level 1' do
+          before do
+            startup.founders.where.not(id: student).each do |other_student|
+              complete_target individual_target, other_student
+            end
+          end
+
+          it "returns 'team_members_pending'" do
+            expect(subject.eligibility).to eq('eligible')
+          end
         end
       end
     end
@@ -126,7 +214,7 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when eligibility is not "eligible"' do
       it 'returns false' do
-        %w[not_eligible cofounders_pending date_locked].each do |ineligible_marker|
+        %w[not_eligible team_members_pending date_locked].each do |ineligible_marker|
           allow(subject).to receive(:eligibility).and_return(ineligible_marker)
           expect(subject.eligible?).to eq(false)
         end

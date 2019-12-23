@@ -14,7 +14,7 @@ Levels are the top organizational unit within a course, and act as an indicator 
 
 1. Levels can hold many _groups_ of targets.
 2. All students begin in the first level - **Level 1**.
-3. Students can move up through levels, after they've submitted work on [milestone targets](/targets?id=milestone-targets). We call this _leveling up_, or to _level up_.
+3. Students can move up through levels, after they've submitted work on [milestone targets](/targets?id=milestone-targets). We call this [leveling up](/taking_courses?id=leveling-up), or to _level up_.
 4. Courses can have any number of levels, but you probably don't want to go overboard.
 
 ?> **For all the non-gamers out there:** The phrase _level up_, is borrowed from the world of gaming. Roughly, it means _to progress to the next level_ - an activity that is common in modern role-playing games where one's character advances to the next level of development.

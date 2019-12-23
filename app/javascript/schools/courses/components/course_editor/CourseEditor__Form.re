@@ -381,6 +381,33 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
                 {enablePublicSignupButton(state.publicSignup, send)}
               </div>
             </div>
+            <div className="mx-auto">
+              <div className="max-w-2xl p-6 mx-auto">
+                <div className="flex">
+                  {switch (course) {
+                   | Some(course) =>
+                     <button
+                       disabled={saveDisabled(state)}
+                       onClick={_ =>
+                         updateCourse(state, send, updateCourseCB, course)
+                       }
+                       className="w-full btn btn-large btn-primary mt-3">
+                       {"Update Course" |> str}
+                     </button>
+
+                   | None =>
+                     <button
+                       disabled={saveDisabled(state)}
+                       onClick={_ =>
+                         createCourse(state, send, updateCourseCB)
+                       }
+                       className="w-full btn btn-large btn-primary mt-3">
+                       {"Create Course" |> str}
+                     </button>
+                   }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

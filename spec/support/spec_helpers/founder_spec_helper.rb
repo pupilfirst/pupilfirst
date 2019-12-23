@@ -1,3 +1,7 @@
+# TODO: Replace all usage of FounderSpecHelper with new SubmissionsHelper.
+#
+# IMPORTANT: Use SubmissionsHelper instead of this module.
+#
 # Some helpers to deal with founders in specs.
 module FounderSpecHelper
   # This 'completes' a target for a founder - both startup and founder role targets.

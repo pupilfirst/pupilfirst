@@ -10,7 +10,7 @@ To create a new course, head to the Courses menu from the school administration 
 
 The form that pops up will ask you for a few details:
 
-**Name**\
+**Course name**\
 The name of the course, that will publicly displayed.
 
 **Course description**\
@@ -21,6 +21,9 @@ If set, your course will go into a _read-only_ mode after this date, and student
 
 **About**\
 This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
+
+**Feature course in school homepage?**\
+If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
 **Enable public signup for this course?**\
 If enabled, members of the public will be able to sign up for your course.

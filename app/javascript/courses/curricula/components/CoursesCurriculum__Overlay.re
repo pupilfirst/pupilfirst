@@ -346,8 +346,7 @@ let handleLocked =
       )
     | CourseLocked
     | AccessLocked
-    | LevelLocked
-    | PreviousLevelMilestonesIncomplete => renderLockReason(reason)
+    | LevelLocked => renderLockReason(reason)
     }
   | Pending
   | Submitted

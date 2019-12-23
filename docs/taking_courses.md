@@ -22,6 +22,18 @@ This is a part of what _teachers_ do - get to know your student, what they need,
 
 We can, and will continue to [build features to make the review process easier](/reviewing_submissions?id=review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
 
+## Leveling Up
+
+Students level up by completing milestone targets. There are two conditions that must be satisfied before they're allowed to level up:
+
+1. Students are allowed to level up as soon as they've submitted work on all their milestone targets.
+
+   ?> This means that students don't (always) need to wait for grading on reviewed targets. This is allowed so that students aren't held up by delays that can occur in reviewing student submissions.
+
+2. If on Level 2 or higher, students must not have any failed submissions, or those pending review by a coach in the _previous_ level.
+
+   ?> This blocks students from leveling up continuously simply by submitting work, and that students must re-submit work on a previous level's failed milestone target, or wait for a coach to review work on the previous level. Note that the block on leveling up can only appear if your course contains targets where submissions are reviewed by coaches.
+
 ## Participating in the Community
 
 When a community is linked to one or more courses, students in those courses can post questions in the community. In addition to this, if a community has the _Discuss Targets_ option is enabled, then students will see the _Discuss_ tab when they open targets. The tab shows questions other students have asked about the target in the past.

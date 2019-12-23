@@ -19,7 +19,6 @@ type lockReason =
   | CourseLocked
   | AccessLocked
   | LevelLocked
-  | PreviousLevelMilestonesIncomplete
   | PrerequisitesIncomplete;
 
 type status =
@@ -86,12 +85,6 @@ let compute =
       |> List.find(l => l |> Level.id == (team |> Team.levelId))
       |> Level.number;
 
-    /* Create a mutable cache of levels and their milestone completion status. */
-    let levelCache =
-      levels
-      |> List.map(l => (l |> Level.number |> string_of_int, true))
-      |> Js.Dict.fromList;
-
     /* Cache level number, milestone boolean, and submission status for all targets. */
     let targetsCache =
       targets
@@ -132,11 +125,6 @@ let compute =
              | None => SubmissionMissing
              };
 
-           /* If any milestone target is incomplete, mark that level as having incomplete milestones. */
-           if (milestone && submissionStatus != SubmissionPassed) {
-             Js.Dict.set(levelCache, levelNumber |> string_of_int, false);
-           };
-
            {
              targetId,
              levelNumber,
@@ -157,15 +145,6 @@ let compute =
            | SubmissionMissing =>
              if (ct.levelNumber > studentLevelNumber) {
                Locked(LevelLocked);
-             } else if (ct.milestone
-                        && ct.levelNumber > 1
-                        && !(
-                             ct.levelNumber
-                             - 1
-                             |> string_of_int
-                             |> Js.Dict.unsafeGet(levelCache)
-                           )) {
-               Locked(PreviousLevelMilestonesIncomplete);
              } else if (!(
                           ct.prerequisiteTargetIds
                           |> allTargetsComplete(targetsCache)
@@ -188,7 +167,6 @@ let lockReasonToString = lr =>
   | CourseLocked => "The course has ended and submissions are disabled for all targets!"
   | AccessLocked => "Your access to this course has ended."
   | LevelLocked => "You must level up to complete this target."
-  | PreviousLevelMilestonesIncomplete => "Previous level's milestone targets have not been reviewed yet."
   | PrerequisitesIncomplete => "This target has pre-requisites that are incomplete."
   };
 
@@ -211,9 +189,12 @@ let canSubmit = (~resubmittable, t) =>
   | (_, Locked(_)) => false
   };
 
-let canLevelUp = targetStatus => {
-  let validStatuses = [|Submitted, Passed|] |> Array.to_list;
-  let attemptedTarget =
-    targetStatus |> List.filter(t => t.status->List.mem(validStatuses));
-  targetStatus == attemptedTarget;
+let currentLevelStatuses = [Submitted, Passed];
+let lastLevelStatuses = [Passed];
+
+let matchesStatuses = (statuses, ts) => {
+  let matchedTargetStatuses =
+    ts |> List.filter(t => t.status->List.mem(statuses));
+
+  ts == matchedTargetStatuses;
 };

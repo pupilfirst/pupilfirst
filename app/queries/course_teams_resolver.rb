@@ -7,36 +7,6 @@ class CourseTeamsResolver < ApplicationQuery
   property :tags
 
   def course_teams
-    teams
-  end
-
-  def filtered_teams
-    level_filtered = if level_id.present?
-      teams_in_course.where(level_id: level_id)
-    else
-      teams_in_course
-    end
-
-    search_and_level_filtered = if search.present?
-      level_filtered.where('users.name ILIKE ?', "%#{search}%").or(
-        level_filtered.where('startups.name ILIKE ?', "%#{search}%")
-      )
-    else
-      level_filtered
-    end
-
-    tags.present? ? search_and_level_filtered.tagged_with(tags, any: true) : search_and_level_filtered
-  end
-
-  def course
-    @course ||= Course.find(course_id)
-  end
-
-  def teams_in_course
-    course.startups.active.joins(founders: :user).includes(:faculty_startup_enrollments, founders: [taggings: :tag, user: { avatar_attachment: :blob }]).order('startups.name')
-  end
-
-  def teams
     filtered_teams.map do |team|
       {
         id: team.id,
@@ -48,6 +18,8 @@ class CourseTeamsResolver < ApplicationQuery
       }
     end
   end
+
+  private
 
   def students(team)
     team.founders.map do |student|
@@ -70,7 +42,30 @@ class CourseTeamsResolver < ApplicationQuery
     end
   end
 
+  def course
+    @course ||= Course.find(course_id)
+  end
+
   def founder_tags
     @founder_tags ||= current_school.founder_tag_list
+  end
+
+  def teams_by_tag
+    teams = course.startups.active.joins(founders: :user).includes(:faculty_startup_enrollments, founders: [taggings: :tag, user: { avatar_attachment: :blob }]).distinct.order('startups.name')
+    tags.present? ? teams.where(tags: { name: tags }) : teams
+  end
+
+  def teams_by_level_and_tag
+    level_id.present? ? teams_by_tag.where(level_id: level_id) : teams_by_tag
+  end
+
+  def filtered_teams
+    if search.present?
+      teams_by_level_and_tag.where('users.name ILIKE ?', "%#{search}%").or(
+        teams_by_level_and_tag.where('startups.name ILIKE ?', "%#{search}%")
+      )
+    else
+      teams_by_level_and_tag
+    end
   end
 end

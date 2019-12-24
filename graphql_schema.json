@@ -5745,13 +5745,9 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "EvaluationCriterion",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "EvaluationCriterion",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

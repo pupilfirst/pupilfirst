@@ -8,10 +8,12 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
   property :grades_and_labels, validates: { presence: true }
   property :course_id, validates: { presence: true }
 
-  def correct_grades_and_labels
-    return if @course.max_grade == (grade_labels.values - [""]).count
+  validate :unique_name_and_grade_params
 
-    raise "CreateEvaluationCriterionMutator received invalid grades and labels #{grades_and_labels}"
+  def unique_name_and_grade_params
+    return if course.evaluation_criteria.find_by(name: name, max_grade: max_grade, pass_grade: pass_grade).blank?
+
+    errors[:base] << "Evaluation criterion not unique for this course"
   end
 
   def create_evaluation_criterion
@@ -33,5 +35,9 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
     grades_and_labels.map do |grades_and_label|
       [grades_and_label[:grade].to_s, grades_and_label[:label].strip]
     end.to_h
+  end
+
+  def course
+    @course ||= Course.find_by(id: course_id)
   end
 end

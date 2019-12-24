@@ -9,16 +9,17 @@ module Mutations
 
     description "Create a new evaluation criterion."
 
-    field :evaluation_criterion, Types::EvaluationCriterionType, null: false
+    field :evaluation_criterion, Types::EvaluationCriterionType, null: true
 
     def resolve(params)
       mutator = CreateEvaluationCriterionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, 'Done!', 'Evaluation criterion created successfully!')
-        { evaluation_criterion: mutator.create_evaluation_criterion, errors: [] }
+        { evaluation_criterion: mutator.create_evaluation_criterion }
       else
-        { evaluation_criterion: nil, errors: mutator.error_messages }
+        mutator.notify_errors
+        { evaluation_criterion: nil }
       end
     end
   end

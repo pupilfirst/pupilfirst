@@ -5,7 +5,7 @@ class EvaluationCriterion < ApplicationRecord
 
   belongs_to :course
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: %i[course_id max_grade pass_grade] }
   validates :description, presence: true
   validates :course, presence: true
 

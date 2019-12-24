@@ -161,11 +161,13 @@ let createEvaluationCriterion =
 
   response
   |> Js.Promise.then_(result => {
-       let newCriterion =
-         EvaluationCriterion.makeFromJs(
-           result##createEvaluationCriterion##evaluationCriterion,
-         );
-       addOrUpdateCriterionCB(newCriterion);
+       switch (result##createEvaluationCriterion##evaluationCriterion) {
+       | Some(criterion) =>
+         let newCriterion = EvaluationCriterion.makeFromJs(criterion);
+         addOrUpdateCriterionCB(newCriterion);
+         setState(state => {...state, saving: false});
+       | None => setState(state => {...state, saving: false})
+       };
        Js.Promise.resolve();
      })
   |> ignore;

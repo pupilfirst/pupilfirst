@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open CurriculumEditor__Types;
 
 type props = {
@@ -21,15 +23,10 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
-    ~id="curriculum-editor",
-    ~attribute="data-props",
-    (),
-  )
-  |> decodeProps;
+  DomUtils.parseJsonTag(~id="curriculum-editor-props", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CurriculumEditor
+  <CurriculumEditor__Root
     course={props.course}
     evaluationCriteria={props.evaluationCriteria}
     levels={props.levels}

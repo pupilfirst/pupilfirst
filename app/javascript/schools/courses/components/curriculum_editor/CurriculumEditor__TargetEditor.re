@@ -1204,33 +1204,3 @@ let make =
     </div>
   </div>;
 };
-
-module Jsx2 = {
-  let make =
-      (
-        ~target,
-        ~targetGroupId,
-        ~evaluationCriteria,
-        ~targets,
-        ~targetGroupIdsInLevel,
-        ~authenticityToken,
-        ~updateTargetCB,
-        ~hideEditorActionCB,
-        _children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~target,
-        ~targetGroupId,
-        ~evaluationCriteria,
-        ~targets,
-        ~targetGroupIdsInLevel,
-        ~authenticityToken,
-        ~updateTargetCB,
-        ~hideEditorActionCB,
-        (),
-      ),
-      _children,
-    );
-};

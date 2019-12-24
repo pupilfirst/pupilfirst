@@ -13,10 +13,15 @@ type blockType =
   | Image(url, caption)
   | Embed(url, embedCode);
 
+type id =
+  | Unpersisted
+  | Persisted(string);
+
 type t = {
-  id: string,
+  id,
   blockType,
   sortIndex: int,
+  dirty: bool,
 };
 
 let decodeMarkdownContent = json =>
@@ -52,9 +57,10 @@ let decode = json => {
     };
 
   {
-    id: json |> field("id", string),
+    id: Persisted(json |> field("id", string)),
     blockType,
     sortIndex: json |> field("sortIndex", int),
+    dirty: false,
   };
 };
 
@@ -70,8 +76,12 @@ let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
 let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
 
-let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
-
+let make = (id, blockType, sortIndex, dirty) => {
+  id: Persisted(id),
+  blockType,
+  sortIndex,
+  dirty,
+};
 
 let blockTypeAsString = blockType =>
   switch (blockType) {

@@ -5,3 +5,5 @@ module TargetGroup = CurriculumEditor__TargetGroup;
 module Target = CurriculumEditor__Target;
 module AnswerOption = CurriculumEditor__AnswerOption;
 module QuizQuestion = CurriculumEditor__QuizQuestion;
+module MethodOfCompletion = CurriculumEditor__MethodOfCompletion;
+module Role = CurriculumEditor__Role;

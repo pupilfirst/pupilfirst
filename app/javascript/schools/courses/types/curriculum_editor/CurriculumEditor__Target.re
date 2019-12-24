@@ -1,10 +1,6 @@
 exception InvalidVisibilityValue(string);
 exception InvalidRoleValue(string);
 
-type role =
-  | Student
-  | Team;
-
 type visibility =
   | Draft
   | Live
@@ -12,39 +8,21 @@ type visibility =
 
 type t = {
   id: string,
-  role,
   targetGroupId: string,
   title: string,
-  evaluationCriteria: list(int),
-  prerequisiteTargets: list(int),
-  quiz: list(CurriculumEditor__QuizQuestion.t),
-  linkToComplete: option(string),
   sortIndex: int,
   visibility,
-  completionInstructions: option(string),
 };
 
 let id = t => t.id;
 
 let title = t => t.title;
 
-let completionInstructions = t => t.completionInstructions;
-
 let targetGroupId = t => t.targetGroupId;
-
-let evaluationCriteria = t => t.evaluationCriteria;
-
-let prerequisiteTargets = t => t.prerequisiteTargets;
-
-let quiz = t => t.quiz;
-
-let linkToComplete = t => t.linkToComplete;
 
 let sortIndex = t => t.sortIndex;
 
 let visibility = t => t.visibility;
-
-let role = t => t.role;
 
 let decodeVisbility = visibilityString =>
   switch (visibilityString) {
@@ -54,30 +32,13 @@ let decodeVisbility = visibilityString =>
   | _ => raise(InvalidVisibilityValue("Unknown Value"))
   };
 
-let decodeRole = roleString =>
-  switch (roleString) {
-  | "student" => Student
-  | "team" => Team
-  | role => raise(InvalidRoleValue("Unknown Value :" ++ role))
-  };
-
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     targetGroupId: json |> field("targetGroupId", string),
     title: json |> field("title", string),
-    evaluationCriteria: json |> field("evaluationCriteria", list(int)),
-    prerequisiteTargets: json |> field("prerequisiteTargets", list(int)),
-    quiz: json |> field("quiz", list(CurriculumEditor__QuizQuestion.decode)),
-    linkToComplete:
-      json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     sortIndex: json |> field("sortIndex", int),
     visibility: decodeVisbility(json |> field("visibility", string)),
-    role: decodeRole(json |> field("role", string)),
-    completionInstructions:
-      json
-      |> field("completionInstructions", nullable(string))
-      |> Js.Null.toOption,
   };
 
 let updateList = (targets, target) => {
@@ -85,31 +46,13 @@ let updateList = (targets, target) => {
   oldTargets |> List.rev |> List.append([target]) |> List.rev;
 };
 
-let create =
-    (
-      ~id,
-      ~targetGroupId,
-      ~title,
-      ~evaluationCriteria,
-      ~prerequisiteTargets,
-      ~quiz,
-      ~linkToComplete,
-      ~sortIndex,
-      ~visibility,
-      ~completionInstructions,
-      ~role,
-    ) => {
+let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility) => {
   id,
   targetGroupId,
   title,
-  evaluationCriteria,
-  prerequisiteTargets,
-  quiz,
-  linkToComplete,
+
   sortIndex,
   visibility,
-  completionInstructions,
-  role,
 };
 
 let sort = targets =>
@@ -130,29 +73,11 @@ let updateSortIndex = sortedTargets =>
          ~id=t.id,
          ~targetGroupId=t.targetGroupId,
          ~title=t.title,
-         ~evaluationCriteria=t.evaluationCriteria,
-         ~prerequisiteTargets=t.prerequisiteTargets,
-         ~quiz=t.quiz,
-         ~linkToComplete=t.linkToComplete,
          ~sortIndex,
          ~visibility=t.visibility,
-         ~completionInstructions=t.completionInstructions,
-         ~role=t.role,
        )
      );
 
 let template = (id, targetGroupId, title) => {
-  create(
-    ~id,
-    ~targetGroupId,
-    ~title,
-    ~evaluationCriteria=[],
-    ~prerequisiteTargets=[],
-    ~quiz=[],
-    ~linkToComplete=None,
-    ~sortIndex=999,
-    ~visibility=Draft,
-    ~completionInstructions=None,
-    ~role=Student,
-  );
+  create(~id, ~targetGroupId, ~title, ~sortIndex=999, ~visibility=Draft);
 };

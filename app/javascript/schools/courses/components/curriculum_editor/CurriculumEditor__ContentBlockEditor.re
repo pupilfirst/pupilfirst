@@ -14,9 +14,8 @@ type action =
   | UpdateFileName(string);
 
 type state = {
-  id: string,
   contentBlockPropertyText: string,
-  contentBlock: option(ContentBlock.t),
+  contentBlock: ContentBlock.t,
   sortIndex: int,
   savingContentBlock: bool,
   markdownContent: string,
@@ -29,11 +28,7 @@ let reducer = (state, action) =>
   | UpdateContentBlockPropertyText(text) => {
       ...state,
       contentBlockPropertyText: text,
-      formDirty:
-        switch (state.contentBlock) {
-        | Some(_contentBlock) => true
-        | None => true
-        },
+      formDirty: true,
     }
   | UpdateSaving => {...state, savingContentBlock: !state.savingContentBlock}
   | UpdateMarkdown(text) => {
@@ -213,14 +208,13 @@ let actionBarTextInputVisible =
 
 let handleDeleteContentBlock =
     (contentBlock, authenticityToken, removeTargetContentCB, sortIndex) =>
-  Webapi.Dom.window
-  |> Webapi.Dom.Window.confirm(
-       "Are you sure you want to delete this content?. You cannot undo this.",
-     )
-    ? switch (contentBlock) {
-      | Some(contentBlock) =>
-        let id = ContentBlock.id(contentBlock);
-        DeleteContentBlockMutation.make(~id, ())
+  switch (contentBlock |> ContentBlock.id) {
+  | Persisted(id) =>
+    Webapi.Dom.window
+    |> Webapi.Dom.Window.confirm(
+         "Are you sure you want to delete this content?. You cannot undo this.",
+       )
+      ? DeleteContentBlockMutation.make(~id, ())
         |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
         |> Js.Promise.then_(response => {
              let versions =
@@ -230,10 +224,11 @@ let handleDeleteContentBlock =
                ? removeTargetContentCB(sortIndex, versions) : ();
              Js.Promise.resolve();
            })
-        |> ignore;
-      | None => removeTargetContentCB(sortIndex, [||])
-      }
-    : ();
+        |> ignore
+      : ()
+  | Unpersisted => removeTargetContentCB(sortIndex, [||])
+  };
+
 let decodeContent =
     (blockType: ContentBlock.blockType, fileUrl, state, content) =>
   Json.Decode.(
@@ -278,7 +273,8 @@ let updateNewContentBlock =
     };
   let contentBlockType =
     json |> field("content", decodeContent(blockType, fileUrl, state));
-  let newContentBlock = ContentBlock.make(id, contentBlockType, sortIndex);
+  let newContentBlock =
+    ContentBlock.make(id, contentBlockType, sortIndex, false);
   createNewContentCB(newContentBlock, versions);
 };
 
@@ -310,6 +306,7 @@ let createContentBlock =
 
 let updateContentBlock =
     (
+      id,
       contentBlock,
       state,
       dispatch,
@@ -331,7 +328,6 @@ let updateContentBlock =
       ContentBlock.makeImageBlock(url, state.contentBlockPropertyText)
     | Embed(_url, _embedCode) => contentBlock |> ContentBlock.blockType
     };
-  let id = state.id;
   let text =
     switch (contentBlock |> ContentBlock.blockType) {
     | Markdown(_markdown) => state.markdownContent
@@ -372,9 +368,10 @@ let submitForm =
     ) => {
   dispatch(UpdateSaving);
   ReactEvent.Form.preventDefault(event);
-  switch (contentBlock) {
-  | Some(contentBlock) =>
+  switch (contentBlock |> ContentBlock.id) {
+  | Persisted(id) =>
     updateContentBlock(
+      id,
       contentBlock,
       state,
       dispatch,
@@ -382,7 +379,7 @@ let submitForm =
       sortIndex,
       updateContentBlockCB,
     )
-  | None =>
+  | Unpersisted =>
     let element =
       ReactEvent.Form.target(event) |> DomUtils.EventTarget.unsafeToElement;
 
@@ -440,11 +437,6 @@ let make =
       ~authenticityToken,
     ) => {
   let initialState = {
-    id:
-      switch (contentBlock) {
-      | Some(contentBlock) => contentBlock |> ContentBlock.id
-      | None => ""
-      },
     contentBlockPropertyText:
       switch (blockType) {
       | Markdown(_markdown) => ""

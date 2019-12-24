@@ -15,66 +15,62 @@ let quizIcon: string = [%raw
 ];
 
 let str = ReasonReact.string;
-type methodOfCompletion =
-  | Evaluated
-  | VisitLink
-  | TakeQuiz
-  | MarkAsComplete;
 
-type activeStep =
+type step =
   | AddContent
   | TargetActions;
 
-type evaluationCriterion = (int, string, bool);
+type targetFieldErrors = {
+  title: bool,
+  linkToComplete: bool,
+  quiz: bool,
+};
 
-type prerequisiteTarget = (int, string, bool);
-
-type resource = (int, string);
-
-type state = {
-  title: string,
-  role: Target.role,
-  evaluationCriteria: list(evaluationCriterion),
-  prerequisiteTargets: list(prerequisiteTarget),
+type loadedState = {
+  role: Role.t,
+  prerequisiteTargetIds: list(string),
+  methodOfCompletion: MethodOfCompletion.t,
+  completionInstructions: option(string),
   contentBlocks: list(ContentBlock.t),
   versions: array(string),
   selectedVersion: string,
   previewMode: bool,
-  methodOfCompletion,
-  quiz: list(QuizQuestion.t),
-  linkToComplete: string,
-  hasTitleError: bool,
-  hasLinktoCompleteError: bool,
-  isValidQuiz: bool,
-  dirty: bool,
-  saving: bool,
-  activeStep,
-  visibility: Target.visibility,
-  contentEditorDirty: bool,
-  completionInstructions: string,
-  loadingContentBlocks: bool,
+  targetFieldErrors,
+  targetFieldsDirty: bool,
+};
+
+type networkState =
+  | EditorLoaded(loadedState)
+  | EditorLoading
+  | EditorSaving;
+
+type state = {
+  target: Target.t,
+  step,
+  networkState,
 };
 
 type action =
-  | UpdateTitle(string, bool)
-  | UpdateLinkToComplete(string, bool)
-  | UpdateEvaluationCriterion(int, string, bool)
-  | UpdatePrerequisiteTargets(int, string, bool)
-  | UpdateMethodOfCompletion(methodOfCompletion)
+  | UpdateTitle(string)
+  | AddEvaluationCriterion(string)
+  | RemoveEvaluationCriterion(string)
+  | AddPrerequisiteTarget(string)
+  | RemovePrerequisiteTarget(string)
+  | SelectMarkAsComplete
+  | SelectLink(string)
+  | SelectQuiz
   | AddQuizQuestion
   | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
   | RemoveQuizQuestion(QuizQuestion.id)
-  | UpdateSaving
-  | UpdateActiveStep(activeStep)
+  | SelectStep(step)
   | UpdateVisibility(Target.visibility)
-  | UpdateContentEditorDirty(bool)
   | UpdateContentBlocks(list(ContentBlock.t), array(string))
   | SwitchPreviewMode(bool)
   | LoadOldVersion(list(ContentBlock.t), string, array(string))
   | UpdateVersions(array(string))
   | UpdateCompletionInstructions(string)
   | SetLoadingContentBlocks
-  | UpdateTargetRole(Target.role);
+  | UpdateTargetRole(Role.t);
 
 let updateTitle = (send, title) => {
   let hasError = title |> String.length < 2;
@@ -554,6 +550,41 @@ let targetRoleClasses = selected => {
 let switchViewModeCB = (send, previewMode) =>
   send(SwitchPreviewMode(previewMode));
 
+let computeInitialState =
+    (target, targets, evaluationCriteria, targetGroupIdsInLevel) => {
+  title: target |> Target.title,
+  role: target |> Target.role,
+  evaluationCriteria:
+    cacheCurrentEvaluationCriteria(evaluationCriteria, target),
+  prerequisiteTargets:
+    cachePrerequisiteTargets(
+      eligibleTargets(targets, targetGroupIdsInLevel),
+      target,
+    ),
+  contentBlocks: [],
+  versions: [||],
+  selectedVersion: "",
+  quiz: handleQuiz(target),
+  linkToComplete:
+    switch (target |> Target.linkToComplete) {
+    | Some(linkToComplete) => linkToComplete
+    | None => ""
+    },
+  methodOfCompletion: handleMethodOfCompletion(target),
+  hasTitleError: false,
+  hasLinktoCompleteError: false,
+  previewMode: true,
+  dirty: false,
+  isValidQuiz: true,
+  saving: false,
+  activeStep: AddContent,
+  visibility: target |> Target.visibility,
+  contentEditorDirty: false,
+  completionInstructions:
+    target |> Target.completionInstructions |> OptionUtils.toString,
+  loadingContentBlocks: true,
+};
+
 [@react.component]
 let make =
     (
@@ -566,41 +597,12 @@ let make =
       ~updateTargetCB,
       ~hideEditorActionCB,
     ) => {
-  let initialState = {
-    title: target |> Target.title,
-    role: target |> Target.role,
-    evaluationCriteria:
-      cacheCurrentEvaluationCriteria(evaluationCriteria, target),
-    prerequisiteTargets:
-      cachePrerequisiteTargets(
-        eligibleTargets(targets, targetGroupIdsInLevel),
-        target,
-      ),
-    contentBlocks: [],
-    versions: [||],
-    selectedVersion: "",
-    quiz: handleQuiz(target),
-    linkToComplete:
-      switch (target |> Target.linkToComplete) {
-      | Some(linkToComplete) => linkToComplete
-      | None => ""
-      },
-    methodOfCompletion: handleMethodOfCompletion(target),
-    hasTitleError: false,
-    hasLinktoCompleteError: false,
-    previewMode: true,
-    dirty: false,
-    isValidQuiz: true,
-    saving: false,
-    activeStep: AddContent,
-    visibility: target |> Target.visibility,
-    contentEditorDirty: false,
-    completionInstructions:
-      target |> Target.completionInstructions |> OptionUtils.toString,
-    loadingContentBlocks: true,
-  };
-
-  let (state, dispatch) = React.useReducer(reducer, initialState);
+  let (state, dispatch) =
+    React.useReducerWithMapState(
+      reducer,
+      (target, targets, evaluationCriteria, targetGroupIdsInLevel),
+      computeInitialState,
+    );
 
   React.useEffect1(
     loadContentBlocks(target, dispatch, None, authenticityToken),

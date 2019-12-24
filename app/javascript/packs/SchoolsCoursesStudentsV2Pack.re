@@ -7,7 +7,7 @@ type props = {
   courseCoachIds: list(string),
   schoolCoaches: list(Coach.t),
   levels: list(Level.t),
-  studentTags: list(string),
+  studentTags: array(string),
 };
 
 let decodeProps = json =>
@@ -16,7 +16,7 @@ let decodeProps = json =>
     courseCoachIds: json |> field("courseCoachIds", list(string)),
     schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
     levels: json |> field("levels", list(Level.decode)),
-    studentTags: json |> field("studentTags", list(string)),
+    studentTags: json |> field("studentTags", array(string)),
   };
 
 let props =

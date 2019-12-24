@@ -53,38 +53,26 @@ let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
 };
 
 let getTeams =
-    (courseId, cursor, updateTeamsCB, selectedLevel, search, teams, tags) => {
+    (courseId, cursor, updateTeamsCB, selectedLevelId, search, teams, tags) => {
   (
-    switch (selectedLevel, search, cursor) {
-    | (Some(level), Some(search), Some(cursor)) =>
+    switch (selectedLevelId, search, cursor) {
+    | (Some(levelId), Some(search), Some(cursor)) =>
       CourseTeamsQuery.make(
         ~courseId,
-        ~levelId=level |> Level.id,
+        ~levelId,
         ~search,
         ~after=cursor,
         ~tags,
         (),
       )
-    | (Some(level), Some(search), None) =>
-      CourseTeamsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~search,
-        ~tags,
-        (),
-      )
+    | (Some(levelId), Some(search), None) =>
+      CourseTeamsQuery.make(~courseId, ~levelId, ~search, ~tags, ())
     | (None, Some(search), Some(cursor)) =>
       CourseTeamsQuery.make(~courseId, ~search, ~after=cursor, ~tags, ())
-    | (Some(level), None, Some(cursor)) =>
-      CourseTeamsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~after=cursor,
-        ~tags,
-        (),
-      )
-    | (Some(level), None, None) =>
-      CourseTeamsQuery.make(~courseId, ~levelId=level |> Level.id, ~tags, ())
+    | (Some(levelId), None, Some(cursor)) =>
+      CourseTeamsQuery.make(~courseId, ~levelId, ~after=cursor, ~tags, ())
+    | (Some(levelId), None, None) =>
+      CourseTeamsQuery.make(~courseId, ~levelId, ~tags, ())
     | (None, Some(search), None) =>
       CourseTeamsQuery.make(~courseId, ~search, ~tags, ())
     | (None, None, Some(cursor)) =>
@@ -136,8 +124,8 @@ let make =
     [|courseId|],
   );
 
-  <div className="flex bg-gray-100 pb-6 px-6">
-    <div className="flex flex-col max-w-3xl mx-auto w-full">
+  <div className="pb-6 px-6">
+    <div className="max-w-3xl mx-auto w-full">
       <div className="w-full py-3 rounded-b-lg">
         {teamsList(teams)
          |> Array.map(team => {
@@ -240,6 +228,28 @@ let make =
             })
          |> React.array}
       </div>
+      {switch ((teams: Page.t)) {
+       | Unloaded
+       | FullyLoaded(_) => React.null
+       | PartiallyLoaded(teams, cursor) =>
+         <div>
+           <button
+             className="btn btn-primary"
+             onClick={_ =>
+               getTeams(
+                 courseId,
+                 Some(cursor),
+                 updateTeamsCB,
+                 selectedLevelId,
+                 search,
+                 teams,
+                 tags,
+               )
+             }>
+             {"Load More" |> str}
+           </button>
+         </div>
+       }}
     </div>
   </div>;
 };

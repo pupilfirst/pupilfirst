@@ -20,7 +20,7 @@ type state = {
   filter,
   selectedStudents: list(Student.t),
   formVisible,
-  tags: list(string),
+  tags: array(string),
   filterVisible: bool,
 };
 
@@ -158,15 +158,16 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
      switch (state.formVisible) {
      | None => ReasonReact.null
      | CreateForm =>
-       <SchoolAdmin__EditorDrawer
-         closeDrawerCB={() => send(UpdateFormVisible(None))}>
-         <SA_StudentsPanel_CreateForm
-           courseId
-           submitFormCB
-           studentTags={state.tags}
-           authenticityToken=""
-         />
-       </SchoolAdmin__EditorDrawer>
+       //  <SchoolAdmin__EditorDrawer
+       //    closeDrawerCB={() => send(UpdateFormVisible(None))}>
+       //    <SA_StudentsPanel_CreateForm
+       //      courseId
+       //      submitFormCB
+       //      studentTags={state.tags}
+       //      authenticityToken=""
+       //    />
+       //  </SchoolAdmin__EditorDrawer>
+       React.null
      | UpdateForm(student) =>
        //  let teamCoachIds =
        //    state.teams

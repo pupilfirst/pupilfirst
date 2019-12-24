@@ -2,9 +2,8 @@ type t = {
   id: string,
   name: string,
   avatarUrl: option(string),
-  teamId: string,
   email: string,
-  tags: list(string),
+  tags: array(string),
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: option(string),
@@ -15,8 +14,6 @@ let name = t => t.name;
 let avatarUrl = t => t.avatarUrl;
 
 let id = t => t.id;
-
-let teamId = t => t.teamId;
 
 let title = t => t.title;
 
@@ -35,24 +32,45 @@ let updateInfo = (~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
   affiliation,
 };
 
-let decode = json =>
-  Json.Decode.{
-    id: json |> field("id", string),
-    teamId: json |> field("teamId", string),
-    email: json |> field("email", string),
-    tags: json |> field("tags", list(string)),
-    excludedFromLeaderboard: json |> field("excludedFromLeaderboard", bool),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    title: json |> field("title", string),
-    affiliation: json |> optional(field("affiliation", string)),
-  };
+let make =
+    (
+      ~id,
+      ~name,
+      ~avatarUrl,
+      ~email,
+      ~tags,
+      ~excludedFromLeaderboard,
+      ~title,
+      ~affiliation,
+    ) => {
+  id,
+  name,
+  avatarUrl,
+
+  email,
+  tags,
+  excludedFromLeaderboard,
+  title,
+  affiliation,
+};
+
+let makeFromJS = studentDetails => {
+  make(
+    ~id=studentDetails##id,
+    ~name=studentDetails##name,
+    ~avatarUrl=studentDetails##avatarUrl,
+    ~email=studentDetails##email,
+    ~tags=studentDetails##tags,
+    ~excludedFromLeaderboard=studentDetails##excludedFromLeaderboard,
+    ~title=studentDetails##title,
+    ~affiliation=studentDetails##affiliation,
+  );
+};
 
 let encode = (name, teamName, t) =>
   Json.Encode.(
     object_([
       ("id", t.id |> string),
-      ("team_id", t.teamId |> string),
       ("name", name |> string),
       ("team_name", teamName |> string),
       ("email", t.email |> string),

@@ -171,9 +171,9 @@ let averageGradeCharts =
                className={
                  "student-overlay__pie-chart "
                  ++ (
-                   averageGrade > passGrade
-                     ? "student-overlay__pie-chart--pass"
-                     : "student-overlay__pie-chart--fail"
+                   averageGrade < passGrade
+                     ? "student-overlay__pie-chart--fail"
+                     : "student-overlay__pie-chart--pass"
                  )
                }
                viewBox="0 0 32 32">
@@ -181,9 +181,9 @@ let averageGradeCharts =
                  className={
                    "student-overlay__pie-chart-circle "
                    ++ (
-                     averageGrade > passGrade
-                       ? "student-overlay__pie-chart-circle--pass"
-                       : "student-overlay__pie-chart-circle--fail"
+                     averageGrade < passGrade
+                       ? "student-overlay__pie-chart-circle--fail"
+                       : "student-overlay__pie-chart-circle--pass"
                    )
                  }
                  strokeDasharray={

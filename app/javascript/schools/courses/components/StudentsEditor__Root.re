@@ -16,72 +16,77 @@ type filter = {
 };
 
 type state = {
-  teams: Page.t,
+  pagedTeams: Page.t,
   filter,
-  selectedStudents: list(Student.t),
+  selectedStudents: list((Student.t, teamId)),
   formVisible,
   tags: array(string),
   filterVisible: bool,
-};
+}
+and teamId = string;
 
 type action =
-  | SelectStudent(Student.t)
+  | SelectStudent(Student.t, teamId)
   | DeselectStudent(Student.t)
   | DeselectAllStudents
   | UpdateFormVisible(formVisible)
   | ToggleFilterVisibility
   | UpdateTeams(Page.t);
 
-// let selectedAcrossTeams = selectedStudents =>
-//   selectedStudents
-//   |> List.map(s => s |> Student.id)
-//   |> ListUtils.distinct
-//   |> List.length > 1;
+let selectedAcrossTeams = selectedStudents =>
+  selectedStudents
+  |> List.map(((_, teamId)) => teamId)
+  |> ListUtils.distinct
+  |> List.length > 1;
 
-// let studentsInTeam = (students, teamId) =>
-//   students |> List.filter(student => Student.teamId(student) === teamId);
+let studentsInSelectedTeam = (teams, selectedTeamId) => {
+  teams |> List.find(t => Team.id(t) == selectedTeamId) |> Team.students;
+};
 
-// let selectedPartialTeam = (selectedStudents, teams, students) => {
-//   let selectedTeam =
-//     teams
-//     |> List.find(t =>
-//          Team.id(t) == (selectedStudents |> List.hd |> Student.teamId)
-//        );
-//   let studentsInSelectedTeam =
-//     studentsInTeam(students, selectedTeam |> Team.id);
-//   selectedStudents |> List.length < (studentsInSelectedTeam |> List.length);
-// };
+let selectedPartialTeam = (selectedStudents, teams) => {
+  let (_selectedStudent, selectedTeamId) = selectedStudents |> List.hd;
 
-// let selectedWithinLevel = (selectedStudents, teams) => {
-//   let teamIds =
-//     selectedStudents |> List.map(student => student |> Student.teamId);
-//   let selectedUniqTeams =
-//     teams |> List.filter(team => List.mem(team |> Team.id, teamIds));
-//   let selectedLevelNumbers =
-//     selectedUniqTeams
-//     |> List.map(team => team |> Team.levelId |> int_of_string);
-//   selectedLevelNumbers
-//   |> List.sort_uniq((ln1, ln2) => ln1 - ln2)
-//   |> List.length == 1;
-// };
+  selectedStudents
+  |> List.length
+  < (studentsInSelectedTeam(teams, selectedTeamId) |> Array.length);
+};
 
-// let isGroupable = (selectedStudents, teams, students) =>
-//   selectedStudents
-//   |> List.length > 1
-//   && selectedWithinLevel(selectedStudents, teams)
-//   && (
-//     selectedAcrossTeams(selectedStudents)
-//     || selectedPartialTeam(selectedStudents, teams, students)
-//   );
+let selectedWithinLevel = (selectedStudents, teams) => {
+  let teamIds = selectedStudents |> List.map(((student, teamId)) => teamId);
 
-// let isMoveOutable = (selectedStudents, students) =>
-//   selectedStudents
-//   |> List.length == 1
-//   && selectedStudents
-//   |> List.hd
-//   |> Student.teamId
-//   |> studentsInTeam(students)
-//   |> List.length > 1;
+  let selectedUniqTeams =
+    teams |> List.filter(team => List.mem(team |> Team.id, teamIds));
+
+  let selectedLevelNumbers =
+    selectedUniqTeams
+    |> List.map(team => team |> Team.levelId |> int_of_string);
+
+  selectedLevelNumbers
+  |> List.sort_uniq((ln1, ln2) => ln1 - ln2)
+  |> List.length == 1;
+};
+
+let isGroupable = (selectedStudents, teams) =>
+  if (selectedStudents |> List.length > 1) {
+    selectedWithinLevel(selectedStudents, teams)
+    && (
+      selectedAcrossTeams(selectedStudents)
+      || selectedPartialTeam(selectedStudents, teams)
+    );
+  } else {
+    false;
+  };
+
+let isMoveOutable = (selectedStudents, teams) => {
+  let onlyOneSelected = selectedStudents |> List.length == 1;
+
+  if (onlyOneSelected == true) {
+    let (_selectedStudent, selectedTeamId) = selectedStudents |> List.hd;
+    studentsInSelectedTeam(teams, selectedTeamId) |> Array.length > 1;
+  } else {
+    false;
+  };
+};
 
 let handleTeamUpResponse = (send, json) => {
   // let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
@@ -96,12 +101,13 @@ let handleTeamUpResponse = (send, json) => {
 
 let handleErrorCB = () => ();
 
-let teamUp = (students, responseCB, authenticityToken) => {
+let teamUp = (selectedStudents, responseCB) => {
+  let students = selectedStudents |> List.map(((s, _)) => s);
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
     "authenticity_token",
-    authenticityToken |> Js.Json.string,
+    AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(
     payload,
@@ -115,7 +121,7 @@ let teamUp = (students, responseCB, authenticityToken) => {
 let emptyFilter = () => {searchString: None, tags: [||], levelId: None};
 
 let initialState = tags => {
-  teams: Unloaded,
+  pagedTeams: Unloaded,
   selectedStudents: [],
   filter: emptyFilter(),
   formVisible: None,
@@ -125,22 +131,29 @@ let initialState = tags => {
 
 let reducer = (state, action) =>
   switch (action) {
-  | SelectStudent(student) => {
+  | SelectStudent(student, teamId) => {
       ...state,
-      selectedStudents: [student, ...state.selectedStudents],
+      selectedStudents: [(student, teamId), ...state.selectedStudents],
     }
 
   | DeselectStudent(student) => {
       ...state,
       selectedStudents:
         state.selectedStudents
-        |> List.filter(s => Student.id(s) !== Student.id(student)),
+        |> List.filter(((s, _)) => Student.id(s) !== Student.id(student)),
     }
 
   | DeselectAllStudents => {...state, selectedStudents: []}
   | UpdateFormVisible(formVisible) => {...state, formVisible}
   | ToggleFilterVisibility => {...state, filterVisible: !state.filterVisible}
-  | UpdateTeams(pagedTeams) => {...state, teams: pagedTeams}
+  | UpdateTeams(pagedTeams) => {...state, pagedTeams}
+  };
+
+let teamsList = pagedTeams =>
+  switch (pagedTeams) {
+  | Page.Unloaded => [||]
+  | Page.PartiallyLoaded(teams, _cursor) => teams
+  | Page.FullyLoaded(teams) => teams
   };
 
 [@react.component]
@@ -148,26 +161,28 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
   let updateTeams = pagedTeams => send(UpdateTeams(pagedTeams));
-  let selectStudent = student => send(SelectStudent(student));
+  let selectStudent = (student, teamId) => {
+    send(SelectStudent(student, teamId));
+  };
   let deselectStudent = student => send(DeselectStudent(student));
   let showEditForm = student =>
     send(UpdateFormVisible(UpdateForm(student)));
+  let teams = teamsList(state.pagedTeams) |> Array.to_list;
 
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
-    {let submitFormCB = (teams, students, tags) => ();
+    {let submitFormCB = () => ();
      switch (state.formVisible) {
      | None => ReasonReact.null
      | CreateForm =>
-       //  <SchoolAdmin__EditorDrawer
-       //    closeDrawerCB={() => send(UpdateFormVisible(None))}>
-       //    <SA_StudentsPanel_CreateForm
-       //      courseId
-       //      submitFormCB
-       //      studentTags={state.tags}
-       //      authenticityToken=""
-       //    />
-       //  </SchoolAdmin__EditorDrawer>
-       React.null
+       <SchoolAdmin__EditorDrawer
+         closeDrawerCB={() => send(UpdateFormVisible(None))}>
+         <StudentsEditor__CreateForm
+           courseId
+           submitFormCB
+           studentTags={state.tags |> Array.to_list}
+         />
+       </SchoolAdmin__EditorDrawer>
+
      | UpdateForm(student) =>
        //  let teamCoachIds =
        //    state.teams
@@ -196,6 +211,72 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         {"Inactive Students" |> str}
       </a>
     </div>
+    <div>
+      <div className="px-6">
+        <div
+          className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+          <div className="flex">
+            <label className="flex items-center leading-tight mr-4 my-auto">
+              <input
+                className="leading-tight"
+                type_="checkbox"
+                htmlFor="selected-students"
+                checked={state.selectedStudents |> List.length > 0}
+                onChange={_ => send(DeselectAllStudents)}
+              />
+              <span
+                id="selected-students" className="ml-2 text-sm text-gray-600">
+                {let selectedCount = state.selectedStudents |> List.length;
+
+                 selectedCount > 0
+                   ? (selectedCount |> string_of_int) ++ " selected" |> str
+                   : React.null}
+              </span>
+            </label>
+          </div>
+          <div className="flex">
+            {false
+               ? <button
+                   className="bg-gray-200 hover:bg-gray-400 hover:text-gray-800 focus:outline-none text-gray-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
+                   {"Add tags" |> str}
+                 </button>
+               : ReasonReact.null}
+            {isGroupable(state.selectedStudents, teams)
+               ? <button
+                   onClick={_e =>
+                     teamUp(
+                       state.selectedStudents,
+                       handleTeamUpResponse(send),
+                     )
+                   }
+                   className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                   {"Group as Team" |> str}
+                 </button>
+               : ReasonReact.null}
+            {isMoveOutable(state.selectedStudents, teams)
+               ? <button
+                   onClick={_e =>
+                     teamUp(
+                       state.selectedStudents,
+                       handleTeamUpResponse(send),
+                     )
+                   }
+                   className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                   {"Move out from Team" |> str}
+                 </button>
+               : ReasonReact.null}
+            {state.selectedStudents |> List.length > 0
+               ? ReasonReact.null
+               : <button
+                   onClick={_e => send(UpdateFormVisible(CreateForm))}
+                   className="btn btn-primary ml-4">
+                   <i className="fas fa-user-plus mr-2" />
+                   <span> {"Add New Students" |> str} </span>
+                 </button>}
+          </div>
+        </div>
+      </div>
+    </div>
     <div className="overflow-y-scroll">
       <StudentsEditor__TeamsList
         levels
@@ -203,7 +284,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         tags=studentTags
         selectedLevelId={state.filter.levelId}
         search={state.filter.searchString}
-        teams={state.teams}
+        pagedTeams={state.pagedTeams}
         selectedStudents={state.selectedStudents}
         selectStudentCB=selectStudent
         deselectStudentCB=deselectStudent

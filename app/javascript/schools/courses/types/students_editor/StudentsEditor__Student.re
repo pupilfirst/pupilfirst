@@ -25,8 +25,10 @@ let tags = t => t.tags;
 
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
-let updateInfo = (~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+let updateInfo =
+    (~name, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
   ...student,
+  name,
   excludedFromLeaderboard,
   title,
   affiliation,
@@ -46,7 +48,6 @@ let make =
   id,
   name,
   avatarUrl,
-
   email,
   tags,
   excludedFromLeaderboard,
@@ -67,11 +68,11 @@ let makeFromJS = studentDetails => {
   );
 };
 
-let encode = (name, teamName, t) =>
+let encode = (teamName, t) =>
   Json.Encode.(
     object_([
       ("id", t.id |> string),
-      ("name", name |> string),
+      ("name", t.name |> string),
       ("team_name", teamName |> string),
       ("email", t.email |> string),
       ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),

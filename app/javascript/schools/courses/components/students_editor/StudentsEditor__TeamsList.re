@@ -110,7 +110,7 @@ let make =
       ~updateTeamsCB,
       ~selectedLevelId,
       ~search,
-      ~teams,
+      ~pagedTeams,
       ~selectedStudents,
       ~selectStudentCB,
       ~deselectStudentCB,
@@ -124,12 +124,14 @@ let make =
     [|courseId|],
   );
 
+  let selectedStudentsList = selectedStudents |> List.map(((s, _)) => s);
+
   <div className="pb-6 px-6">
     <div className="max-w-3xl mx-auto w-full">
       <div className="w-full py-3 rounded-b-lg">
-        {teamsList(teams)
+        {teamsList(pagedTeams)
          |> Array.map(team => {
-              let singleStudent = team |> Team.singleStudent;
+              let isSingleStudent = team |> Team.isSingleStudent;
               <div
                 key={team |> Team.id}
                 id={team |> Team.name}
@@ -138,7 +140,8 @@ let make =
                   {team
                    |> Team.students
                    |> Array.map(student => {
-                        let isChecked = selectedStudents |> List.mem(student);
+                        let isChecked =
+                          selectedStudentsList |> List.mem(student);
                         let checkboxId =
                           "select-student-" ++ (student |> Student.id);
                         <div
@@ -157,8 +160,17 @@ let make =
                                   checked=isChecked
                                   onChange={
                                     isChecked
-                                      ? _e => selectStudentCB(student)
-                                      : (_e => deselectStudentCB(student))
+                                      ? _e => {
+                                          deselectStudentCB(student);
+                                        }
+                                      : (
+                                        _e => {
+                                          selectStudentCB(
+                                            student,
+                                            team |> Team.id,
+                                          );
+                                        }
+                                      )
                                   }
                                 />
                               </label>
@@ -205,7 +217,7 @@ let make =
                 </div>
                 <div className="flex w-2/5 items-center">
                   <div className="w-3/5 py-4 px-3">
-                    {singleStudent
+                    {isSingleStudent
                        ? ReasonReact.null
                        : <div className="students-team--name mb-5">
                            <p className="text-xs"> {"Team" |> str} </p>
@@ -228,7 +240,7 @@ let make =
             })
          |> React.array}
       </div>
-      {switch ((teams: Page.t)) {
+      {switch ((pagedTeams: Page.t)) {
        | Unloaded
        | FullyLoaded(_) => React.null
        | PartiallyLoaded(teams, cursor) =>

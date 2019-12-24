@@ -19,7 +19,7 @@ let levelId = t => t.levelId;
 
 let students = t => t.students;
 
-let singleStudent = t => t.students |> Array.length == 1;
+let isSingleStudent = t => t.students |> Array.length == 1;
 
 let make = (~id, ~name, ~students, ~coachIds, ~levelId, ~accessEndsAt) => {
   id,

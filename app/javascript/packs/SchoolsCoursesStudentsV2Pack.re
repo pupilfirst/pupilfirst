@@ -4,18 +4,18 @@ open StudentsEditor__Types;
 
 type props = {
   courseId: string,
-  courseCoachIds: list(string),
-  schoolCoaches: list(Coach.t),
-  levels: list(Level.t),
+  courseCoachIds: array(string),
+  schoolCoaches: array(Coach.t),
+  levels: array(Level.t),
   studentTags: array(string),
 };
 
 let decodeProps = json =>
   Json.Decode.{
     courseId: json |> field("courseId", string),
-    courseCoachIds: json |> field("courseCoachIds", list(string)),
-    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
-    levels: json |> field("levels", list(Level.decode)),
+    courseCoachIds: json |> field("courseCoachIds", array(string)),
+    schoolCoaches: json |> field("schoolCoaches", array(Coach.decode)),
+    levels: json |> field("levels", array(Level.decode)),
     studentTags: json |> field("studentTags", array(string)),
   };
 

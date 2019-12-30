@@ -4,10 +4,12 @@ open StudentsEditor__Types;
 
 let str = React.string;
 
+type teamId = string;
+
 type formVisible =
   | None
   | CreateForm
-  | UpdateForm(Student.t);
+  | UpdateForm(Student.t, teamId);
 
 type filter = {
   searchString: option(string),
@@ -22,8 +24,7 @@ type state = {
   formVisible,
   tags: array(string),
   filterVisible: bool,
-}
-and teamId = string;
+};
 
 type action =
   | SelectStudent(Student.t, teamId)
@@ -165,8 +166,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
     send(SelectStudent(student, teamId));
   };
   let deselectStudent = student => send(DeselectStudent(student));
-  let showEditForm = student =>
-    send(UpdateFormVisible(UpdateForm(student)));
+  let showEditForm = (student, teamId) =>
+    send(UpdateFormVisible(UpdateForm(student, teamId)));
   let teams = teamsList(state.pagedTeams) |> Array.to_list;
 
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
@@ -183,26 +184,22 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          />
        </SchoolAdmin__EditorDrawer>
 
-     | UpdateForm(student) =>
-       //  let teamCoachIds =
-       //    state.teams
-       //    |> List.find(team => Team.id(team) == Student.teamId(student))
-       //    |> Team.coachIds;
-       React.null
-     //  <SchoolAdmin__EditorDrawer
-     //    closeDrawerCB={() => send(UpdateFormVisible(None))}>
-     //   //  <SA_StudentsPanel_UpdateForm
-     //   //    student
-     //   //    isSingleFounder=false
-     //   //    teams={state.teams}
-     //   //    studentTags={state.tags}
-     //   //    teamCoachIds
-     //   //    courseCoachIds
-     //   //    schoolCoaches
-     //   //    submitFormCB
-     //   //    authenticityToken=""
-     //   //  />
-     //  </SchoolAdmin__EditorDrawer>;
+     | UpdateForm(student, teamId) =>
+       let team = teams |> List.find(team => Team.id(team) == teamId);
+       let teamCoachIds = team |> Team.coachIds |> Array.to_list;
+
+       <SchoolAdmin__EditorDrawer
+         closeDrawerCB={() => send(UpdateFormVisible(None))}>
+         <StudentsEditor__UpdateForm
+           student
+           team
+           studentTags={state.tags |> Array.to_list}
+           teamCoachIds
+           courseCoachIds={courseCoachIds |> Array.to_list}
+           schoolCoaches={schoolCoaches |> Array.to_list}
+           submitFormCB
+         />
+       </SchoolAdmin__EditorDrawer>;
      }}
     <div className="px-6 py-2">
       <a

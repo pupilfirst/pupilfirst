@@ -144,6 +144,7 @@ let make =
                           selectedStudentsList |> List.mem(student);
                         let checkboxId =
                           "select-student-" ++ (student |> Student.id);
+                        let teamId = team |> Team.id;
                         <div
                           key={student |> Student.id}
                           id={student |> Student.name}
@@ -165,10 +166,7 @@ let make =
                                         }
                                       : (
                                         _e => {
-                                          selectStudentCB(
-                                            student,
-                                            team |> Team.id,
-                                          );
+                                          selectStudentCB(student, teamId);
                                         }
                                       )
                                   }
@@ -177,7 +175,9 @@ let make =
                               <a
                                 className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100"
                                 id={(student |> Student.name) ++ "_edit"}
-                                onClick={_e => showEditFormCB(student)}>
+                                onClick={_e =>
+                                  showEditFormCB(student, teamId)
+                                }>
                                 {switch (student |> Student.avatarUrl) {
                                  | Some(avatarUrl) =>
                                    <img

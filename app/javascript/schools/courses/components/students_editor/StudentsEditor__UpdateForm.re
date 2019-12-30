@@ -29,7 +29,6 @@ let make =
       ~courseCoachIds,
       ~schoolCoaches,
       ~submitFormCB,
-      ~authenticityToken,
     ) => {
   let (view, setView) = React.useState(() => DetailsTab);
   <div className="mx-auto bg-white">

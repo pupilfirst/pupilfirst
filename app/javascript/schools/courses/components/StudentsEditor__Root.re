@@ -11,15 +11,9 @@ type formVisible =
   | CreateForm
   | UpdateForm(Student.t, teamId);
 
-type filter = {
-  searchString: option(string),
-  tags: array(string),
-  levelId: option(string),
-};
-
 type state = {
   pagedTeams: Page.t,
-  filter,
+  filter: Filter.t,
   selectedStudents: list((Student.t, teamId)),
   formVisible,
   tags: array(string),
@@ -32,7 +26,8 @@ type action =
   | DeselectAllStudents
   | UpdateFormVisible(formVisible)
   | ToggleFilterVisibility
-  | UpdateTeams(Page.t);
+  | UpdateTeams(Page.t)
+  | UpdateFilter(Filter.t);
 
 let selectedAcrossTeams = selectedStudents =>
   selectedStudents
@@ -119,12 +114,10 @@ let teamUp = (selectedStudents, responseCB) => {
   Api.create(url, payload, responseCB, handleErrorCB);
 };
 
-let emptyFilter = () => {searchString: None, tags: [||], levelId: None};
-
 let initialState = tags => {
   pagedTeams: Unloaded,
   selectedStudents: [],
-  filter: emptyFilter(),
+  filter: Filter.empty(),
   formVisible: None,
   tags,
   filterVisible: false,
@@ -148,6 +141,7 @@ let reducer = (state, action) =>
   | UpdateFormVisible(formVisible) => {...state, formVisible}
   | ToggleFilterVisibility => {...state, filterVisible: !state.filterVisible}
   | UpdateTeams(pagedTeams) => {...state, pagedTeams}
+  | UpdateFilter(filter) => {...state, filter, pagedTeams: Unloaded}
   };
 
 let teamsList = pagedTeams =>
@@ -169,6 +163,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
   let showEditForm = (student, teamId) =>
     send(UpdateFormVisible(UpdateForm(student, teamId)));
   let teams = teamsList(state.pagedTeams) |> Array.to_list;
+  let updateFilter = filter => send(UpdateFilter(filter));
 
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
     {let submitFormCB = () => ();
@@ -207,6 +202,16 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
         {"Inactive Students" |> str}
       </a>
+    </div>
+    <div className="w-full">
+      <div className="mx-auto max-w-3xl">
+        <StudentsEditor__Search
+          filter={state.filter}
+          updateFilterCB=updateFilter
+          tags=studentTags
+          levels
+        />
+      </div>
     </div>
     <div>
       <div className="px-6">
@@ -278,9 +283,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
       <StudentsEditor__TeamsList
         levels
         courseId
-        tags=studentTags
-        selectedLevelId={state.filter.levelId}
-        search={state.filter.searchString}
+        filter={state.filter}
         pagedTeams={state.pagedTeams}
         selectedStudents={state.selectedStudents}
         selectStudentCB=selectStudent

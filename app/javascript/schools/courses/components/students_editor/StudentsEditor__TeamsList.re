@@ -106,22 +106,38 @@ let make =
     (
       ~levels,
       ~courseId,
-      ~tags,
       ~updateTeamsCB,
-      ~selectedLevelId,
-      ~search,
+      ~filter,
       ~pagedTeams,
       ~selectedStudents,
       ~selectStudentCB,
       ~deselectStudentCB,
       ~showEditFormCB,
     ) => {
+  let tags = filter |> Filter.tags;
+  let selectedLevelId = filter |> Filter.levelId;
+  let searchString = filter |> Filter.searchString;
+
   React.useEffect1(
     () => {
-      getTeams(courseId, None, updateTeamsCB, None, None, [||], [||]);
+      switch ((pagedTeams: Page.t)) {
+      | Unloaded =>
+        getTeams(
+          courseId,
+          None,
+          updateTeamsCB,
+          selectedLevelId,
+          searchString,
+          [||],
+          tags,
+        )
+      | PartiallyLoaded(_, _) => ()
+      | FullyLoaded(_) => ()
+      };
+
       None;
     },
-    [|courseId|],
+    [|pagedTeams|],
   );
 
   let selectedStudentsList = selectedStudents |> List.map(((s, _)) => s);
@@ -256,7 +272,7 @@ let make =
                  Some(cursor),
                  updateTeamsCB,
                  selectedLevelId,
-                 search,
+                 searchString,
                  teams,
                  tags,
                )

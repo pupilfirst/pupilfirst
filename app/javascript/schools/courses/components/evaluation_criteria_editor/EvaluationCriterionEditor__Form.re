@@ -182,17 +182,11 @@ let updateDescription = (setState, value) => {
 };
 
 let saveDisabled = state => {
-  let hasValidGrades =
-    state.gradesAndLabels
-    |> Js.Array.filter(gl => gl |> GradesAndLabels.grade <= state.maxGrade)
-    |> Array.map(gl => gl |> GradesAndLabels.valid)
-    |> Js.Array.filter(value => !value)
-    |> ArrayUtils.isEmpty;
   let hasValidName = String.length(state.name) > 1;
   let hasValidDescription = String.length(state.description) > 1;
   !state.dirty
   || state.saving
-  || !(hasValidGrades && hasValidName && hasValidDescription);
+  || !(hasValidName && hasValidDescription);
 };
 
 let labelClasses = (grade, passGrade) => {

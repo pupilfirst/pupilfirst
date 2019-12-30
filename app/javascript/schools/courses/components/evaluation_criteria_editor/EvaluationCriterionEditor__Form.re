@@ -195,6 +195,56 @@ let saveDisabled = state => {
   || !(hasValidGrades && hasValidName && hasValidDescription);
 };
 
+let labelClasses = (grade, passGrade) => {
+  let failGradeClasses = "bg-red-300 text-red-700 border-red-500";
+  let passGradeClasses = "bg-green-300 text-green-700 border-green-500";
+  "w-12 p-3 text-center  mr-3 rounded-lg border  leading-tight "
+  ++ {
+    grade < passGrade ? failGradeClasses : passGradeClasses;
+  };
+};
+
+let labelEditor = (state, setState) => {
+  <div>
+    {let labels = [||];
+     for (grade in 1 to state.maxGrade) {
+       let gradeAndLabel =
+         state.gradesAndLabels
+         |> ArrayUtils.unsafeFind(
+              gradeAndLabel => gradeAndLabel |> GradesAndLabels.grade == grade,
+              "Unable to find grade and label in evaluation criterion editor",
+            );
+       labels
+       |> Js.Array.push(
+            <div key={grade |> string_of_int} className="flex flex-wrap mt-2">
+              <div className={labelClasses(grade, state.passGrade)}>
+                {grade |> string_of_int |> str}
+              </div>
+              <div className="flex-1">
+                <input
+                  className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type_="text"
+                  value={gradeAndLabel |> GradesAndLabels.label}
+                  onChange={event =>
+                    updateGradeLabel(
+                      ReactEvent.Form.target(event)##value,
+                      gradeAndLabel,
+                      state,
+                      setState,
+                    )
+                  }
+                  placeholder="Grade label"
+                />
+              </div>
+            </div>,
+          )
+       |> ignore;
+     };
+
+     labels |> React.array}
+  </div>;
+};
+
 [@react.component]
 let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
   let (state, setState) =
@@ -373,147 +423,9 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
              <label
                className="block tracking-wide text-xs font-semibold mb-2"
                htmlFor="grades">
-               {"Grades" |> str}
+               {"Grade Labels" |> str}
              </label>
-             <div className="flex">
-               <div
-                 className="flex flex-col bg-white p-6 shadow items-center justify-center rounded w-full">
-                 <h2
-                   className="grades__score-circle rounded-full h-24 w-24 flex items-center justify-center border-2 border-green-400 p-4 mb-4">
-                   {(state.selectedGrade |> string_of_int)
-                    ++ "/"
-                    ++ (state.maxGrade |> string_of_int)
-                    |> str}
-                 </h2>
-                 <div>
-                   {state.gradesAndLabels
-                    |> Js.Array.filter(gradeAndLabel =>
-                         gradeAndLabel
-                         |> GradesAndLabels.grade == state.selectedGrade
-                       )
-                    |> Array.map(gradeAndLabel =>
-                         <div
-                           key={
-                             gradeAndLabel
-                             |> GradesAndLabels.grade
-                             |> string_of_int
-                           }>
-                           <input
-                             className="text-center grades__label-input appearance-none inline-block bg-white border border-gray-400 rounded py-2 px-4 mb-6 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                             id={
-                               "label"
-                               ++ (
-                                 gradeAndLabel
-                                 |> GradesAndLabels.grade
-                                 |> string_of_int
-                               )
-                             }
-                             type_="text"
-                             placeholder="Type grade label"
-                             value={gradeAndLabel |> GradesAndLabels.label}
-                             onChange={event =>
-                               updateGradeLabel(
-                                 ReactEvent.Form.target(event)##value,
-                                 gradeAndLabel,
-                                 state,
-                                 setState,
-                               )
-                             }
-                           />
-                         </div>
-                       )
-                    |> ReasonReact.array}
-                 </div>
-                 <div className="grade-bar__container w-full mb-6">
-                   <ul className="grade-bar__track flex justify-between">
-                     {state.gradesAndLabels
-                      |> Js.Array.filter(gradesAndLabel =>
-                           gradesAndLabel
-                           |> GradesAndLabels.grade <= state.maxGrade
-                         )
-                      |> Array.map(gradesAndLabel =>
-                           <li
-                             key={
-                               gradesAndLabel
-                               |> GradesAndLabels.grade
-                               |> string_of_int
-                             }
-                             className="flex flex-1 grade-bar__track-segment justify-center items-center relative"
-                             onClick={_ =>
-                               setState(state =>
-                                 {
-                                   ...state,
-                                   selectedGrade:
-                                     gradesAndLabel |> GradesAndLabels.grade,
-                                 }
-                               )
-                             }>
-                             <span
-                               className="grade-bar__track-segment-title whitespace-no-wrap text-xs z-20">
-                               {(
-                                  gradesAndLabel |> GradesAndLabels.valid
-                                    ? gradesAndLabel |> GradesAndLabels.label
-                                    : "Add grade label"
-                                )
-                                |> str}
-                             </span>
-                             <label
-                               htmlFor={
-                                 "label"
-                                 ++ (
-                                   gradesAndLabel
-                                   |> GradesAndLabels.grade
-                                   |> string_of_int
-                                 )
-                               }
-                               className={
-                                 "flex items-center justify-center z-10 grade-bar__pointer"
-                                 ++ gradeBarBulletClasses(
-                                      gradesAndLabel
-                                      |> GradesAndLabels.grade
-                                      == state.selectedGrade,
-                                      gradesAndLabel
-                                      |> GradesAndLabels.grade
-                                      >= state.passGrade,
-                                      !(
-                                        gradesAndLabel |> GradesAndLabels.valid
-                                      ),
-                                    )
-                               }>
-                               {gradesAndLabel
-                                |> GradesAndLabels.grade
-                                |> string_of_int
-                                |> str}
-                             </label>
-                           </li>
-                         )
-                      |> ReasonReact.array}
-                   </ul>
-                 </div>
-                 <div className="flex justify-between items-center pt-6 pb-5">
-                   <div className="flex justify-center items-center mx-4">
-                     <span
-                       className="grade-bar__pointer-legend grade-bar__pointer-legend-failed"
-                     />
-                     <span className="ml-2 text-xs"> {"Fail" |> str} </span>
-                   </div>
-                   <div className="flex justify-center items-center mx-4">
-                     <span
-                       className="grade-bar__pointer-legend grade-bar__pointer-legend-passed"
-                     />
-                     <span className="ml-2 text-xs"> {"Passed" |> str} </span>
-                   </div>
-                   <div className="flex justify-center items-center mx-4">
-                     <span
-                       className="grade-bar__pointer-legend grade-bar__pointer--pulse"
-                     />
-                     <span className="ml-2 text-xs">
-                       {"Add grade label" |> str}
-                     </span>
-                   </div>
-                 </div>
-               </div>
-             </div>
+             {labelEditor(state, setState)}
              <div className="mt-3 mb-3 text-xs">
                <span className="leading-normal">
                  <strong> {"Important:" |> str} </strong>

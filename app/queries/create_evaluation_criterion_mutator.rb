@@ -33,7 +33,9 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
 
   def grade_labels
     grades_and_labels.map do |grades_and_label|
-      [grades_and_label[:grade].to_s, grades_and_label[:label].strip]
+      grade = grades_and_label[:grade]
+      label = grades_and_label[:label].strip
+      [grade.to_s, label.presence || grade.humanize]
     end.to_h
   end
 

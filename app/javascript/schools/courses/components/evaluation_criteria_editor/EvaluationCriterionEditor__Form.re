@@ -11,7 +11,6 @@ type state = {
   description: string,
   maxGrade: int,
   passGrade: int,
-  selectedGrade: int,
   gradesAndLabels: array(GradesAndLabels.t),
   saving: bool,
   dirty: bool,
@@ -75,11 +74,9 @@ let gradeBarBulletClasses = (selected, passed, empty) => {
 
 let updateMaxGrade = (value, state, setState) =>
   if (value <= state.passGrade) {
-    setState(state =>
-      {...state, passGrade: 1, selectedGrade: value, maxGrade: value}
-    );
+    setState(state => {...state, passGrade: 1, maxGrade: value});
   } else {
-    setState(state => {...state, selectedGrade: value, maxGrade: value});
+    setState(state => {...state, maxGrade: value});
   };
 
 let updatePassGrade = (value, setState) => {
@@ -184,9 +181,7 @@ let updateDescription = (setState, value) => {
 let saveDisabled = state => {
   let hasValidName = String.length(state.name) > 1;
   let hasValidDescription = String.length(state.description) > 1;
-  !state.dirty
-  || state.saving
-  || !(hasValidName && hasValidDescription);
+  !state.dirty || state.saving || !(hasValidName && hasValidDescription);
 };
 
 let labelClasses = (grade, passGrade) => {
@@ -249,7 +244,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
           description: "",
           maxGrade: 5,
           passGrade: 2,
-          selectedGrade: 1,
           gradesAndLabels:
             possibleGradeValues
             |> List.map(i => GradesAndLabels.empty(i))
@@ -262,7 +256,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
           description: ec |> EvaluationCriterion.description,
           maxGrade: ec |> EvaluationCriterion.maxGrade,
           passGrade: ec |> EvaluationCriterion.passGrade,
-          selectedGrade: 1,
           gradesAndLabels: ec |> EvaluationCriterion.gradesAndLabels,
           saving: false,
           dirty: false,

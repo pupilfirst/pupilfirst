@@ -16,3 +16,18 @@ let decode = json =>
     name: json |> field("name", string),
     number: json |> field("number", int),
   };
+
+let unsafeLevelNumber = (levels, componentName, levelId) =>
+  "Level "
+  ++ (
+    levels
+    |> ArrayUtils.unsafeFind(
+         l => l.id == levelId,
+         "Unable to find level with id: "
+         ++ levelId
+         ++ "in StudentdEditor__"
+         ++ componentName,
+       )
+    |> number
+    |> string_of_int
+  );

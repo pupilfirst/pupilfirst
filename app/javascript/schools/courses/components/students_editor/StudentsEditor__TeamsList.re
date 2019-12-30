@@ -231,7 +231,10 @@ let make =
                         {"Level" |> str}
                       </div>
                       <div className="font-bold">
-                        {team |> Team.levelId |> str}
+                        {team
+                         |> Team.levelId
+                         |> Level.unsafeLevelNumber(levels, "TeamsList")
+                         |> str}
                       </div>
                     </span>
                   </div>

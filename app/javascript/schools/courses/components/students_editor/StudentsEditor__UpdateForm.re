@@ -25,7 +25,6 @@ let make =
       ~student,
       ~team,
       ~studentTags,
-      ~teamCoachIds,
       ~courseCoachIds,
       ~schoolCoaches,
       ~submitFormCB,
@@ -78,7 +77,6 @@ let make =
           student
           team
           studentTags
-          teamCoachIds
           courseCoachIds
           schoolCoaches
           submitFormCB

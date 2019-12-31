@@ -20,16 +20,16 @@ let search =
        );
 
   switch (normalizedString) {
-  | "" => []
+  | "" => [||]
   | searchString =>
     let allTags =
-      List.append(selectedTags, unselectedTags)
-      |> List.map(String.lowercase_ascii);
+      Array.append(selectedTags, unselectedTags)
+      |> Array.map(String.lowercase_ascii);
     /* If addition of tag is allowed, and it IS new, then display that option at the front. */
     let initial =
       if (allowNewTags
-          && !(allTags |> List.mem(searchString |> String.lowercase_ascii))) {
-        [
+          && !(allTags |> Array.mem(searchString |> String.lowercase_ascii))) {
+        [|
           <span
             title={"Add new tag " ++ searchString}
             key=searchString
@@ -38,19 +38,19 @@ let search =
             {searchString |> str}
             <i className="fas fa-plus ml-1 text-sm text-primary-600" />
           </span>,
-        ];
+        |];
       } else {
-        [];
+        [||];
       };
     let searchResults =
       unselectedTags
-      |> List.filter(tag =>
+      |> Js.Array.filter(tag =>
            tag
            |> String.lowercase_ascii
            |> Js.String.includes(searchString |> String.lowercase_ascii)
          )
-      |> List.sort(String.compare)
-      |> List.map(tag =>
+      |> ArrayUtils.copyAndSort(String.compare)
+      |> Array.map(tag =>
            <span
              title={"Pick tag " ++ tag}
              key=tag
@@ -59,7 +59,7 @@ let search =
              {tag |> str}
            </span>
          );
-    initial @ searchResults;
+    initial |> Array.append(searchResults);
   };
 };
 
@@ -74,11 +74,11 @@ let make =
   let results =
     search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB);
   <div className="mt-2">
-    {if (selectedTags |> ListUtils.isNotEmpty) {
+    {if (selectedTags |> ArrayUtils.isNotEmpty) {
        <div className="flex flex-wrap">
          {selectedTags
-          |> List.sort(String.compare)
-          |> List.map(tag =>
+          |> ArrayUtils.copyAndSort(String.compare)
+          |> Array.map(tag =>
                <div
                  key=tag
                  className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
@@ -91,11 +91,10 @@ let make =
                  </span>
                </div>
              )
-          |> Array.of_list
-          |> ReasonReact.array}
+          |> React.array}
        </div>;
      } else {
-       ReasonReact.null;
+       React.null;
      }}
     <input
       value=state
@@ -107,13 +106,13 @@ let make =
         allowNewTags ? "Search for, or add new tags" : "Select tags"
       }
     />
-    {if (results |> ListUtils.isNotEmpty) {
+    {if (results |> ArrayUtils.isNotEmpty) {
        <div
          className="flex flex-wrap border border-gray-400 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
-         {results |> Array.of_list |> ReasonReact.array}
+         {results |> React.array}
        </div>;
      } else {
-       ReasonReact.null;
+       React.null;
      }}
   </div>;
 };

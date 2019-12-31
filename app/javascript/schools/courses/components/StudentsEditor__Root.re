@@ -162,7 +162,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
   let deselectStudent = student => send(DeselectStudent(student));
   let showEditForm = (student, teamId) =>
     send(UpdateFormVisible(UpdateForm(student, teamId)));
-  let teams = teamsList(state.pagedTeams) |> Array.to_list;
+  let teamsArray = teamsList(state.pagedTeams);
+  let teams = teamsArray |> Array.to_list;
   let updateFilter = filter => send(UpdateFilter(filter));
 
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
@@ -180,18 +181,16 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
        </SchoolAdmin__EditorDrawer>
 
      | UpdateForm(student, teamId) =>
-       let team = teams |> List.find(team => Team.id(team) == teamId);
-       let teamCoachIds = team |> Team.coachIds |> Array.to_list;
+       let team = teamId |> Team.unsafeFind(teamsArray, "Root");
 
        <SchoolAdmin__EditorDrawer
          closeDrawerCB={() => send(UpdateFormVisible(None))}>
          <StudentsEditor__UpdateForm
            student
            team
-           studentTags={state.tags |> Array.to_list}
-           teamCoachIds
-           courseCoachIds={courseCoachIds |> Array.to_list}
-           schoolCoaches={schoolCoaches |> Array.to_list}
+           studentTags={state.tags}
+           courseCoachIds
+           schoolCoaches
            submitFormCB
          />
        </SchoolAdmin__EditorDrawer>;

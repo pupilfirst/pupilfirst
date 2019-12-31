@@ -56,3 +56,14 @@ let makeFromJS = teamDetails => {
        }
      );
 };
+
+let unsafeFind = (teams, componentName, teamId) => {
+  teams
+  |> ArrayUtils.unsafeFind(
+       team => team.id == teamId,
+       "Unable to find team with id: "
+       ++ teamId
+       ++ "in StudentdEditor__"
+       ++ componentName,
+     );
+};

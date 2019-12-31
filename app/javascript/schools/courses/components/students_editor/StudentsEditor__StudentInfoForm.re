@@ -181,23 +181,24 @@ let make = (~addToListCB, ~studentTags, ~emailsToAdd) => {
       />
     </div>
     <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold"
-        htmlFor="tags">
-        {"Tags" |> str}
-      </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
-      <StudentsEditor__SearchableTagList
-        unselectedTags={
-          studentTags
-          |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))
-        }
-        selectedTags={state.tagsToApply}
-        addTagCB={tag => send(AddTag(tag))}
-        removeTagCB={tag => send(RemoveTag(tag))}
-        allowNewTags=true
-      />
-    </div>
+
+        <label
+          className="inline-block tracking-wide text-xs font-semibold"
+          htmlFor="tags">
+          {"Tags" |> str}
+        </label>
+        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      </div>
+      // <StudentsEditor__SearchableTagList
+      //   unselectedTags={
+      //     studentTags
+      //     |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))
+      //   }
+      //   selectedTags={state.tagsToApply}
+      //   addTagCB={tag => send(AddTag(tag))}
+      //   removeTagCB={tag => send(RemoveTag(tag))}
+      //   allowNewTags=true
+      // />
     <button
       onClick={_e => handleAdd(state, send, emailsToAdd, addToListCB)}
       disabled={formInvalid(state, emailsToAdd)}

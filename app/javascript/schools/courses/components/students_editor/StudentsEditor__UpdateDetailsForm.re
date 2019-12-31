@@ -7,8 +7,8 @@ type teamCoachlist = (string, string, bool);
 type state = {
   name: string,
   teamName: string,
-  tagsToApply: list(string),
-  teamCoaches: list(teamCoachlist),
+  tagsToApply: array(string),
+  teamCoaches: array(teamCoachlist),
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: string,
@@ -90,8 +90,8 @@ let updateStudent = (student, state, send, responseCB) => {
 
   let enrolledCoachIds =
     state.teamCoaches
-    |> List.filter(((_, _, selected)) => selected == true)
-    |> List.map(((key, _, _)) => key);
+    |> Js.Array.filter(((_, _, selected)) => selected == true)
+    |> Array.map(((key, _, _)) => key);
 
   let updatedStudent =
     Student.updateInfo(
@@ -109,12 +109,12 @@ let updateStudent = (student, state, send, responseCB) => {
   Js.Dict.set(
     payload,
     "tags",
-    state.tagsToApply |> Json.Encode.(list(string)),
+    state.tagsToApply |> Json.Encode.(array(string)),
   );
   Js.Dict.set(
     payload,
     "coach_ids",
-    enrolledCoachIds |> Json.Encode.(list(string)),
+    enrolledCoachIds |> Json.Encode.(array(string)),
   );
 
   Js.Dict.set(
@@ -135,19 +135,18 @@ let boolBtnClasses = selected => {
   classes ++ (selected ? " toggle-button__button--active" : "");
 };
 
-let handleEligibleTeamCoachList =
-    (schoolCoaches, courseCoachIds, teamCoachIds) => {
-  let selectedTeamCoachIds = teamCoachIds |> Array.of_list;
+let handleEligibleTeamCoachList = (schoolCoaches, courseCoachIds, team) => {
+  let selectedTeamCoachIds = team |> Team.coachIds;
   let allowedTeamCoaches =
     schoolCoaches
-    |> List.filter(coach =>
+    |> Js.Array.filter(coach =>
          !(
            courseCoachIds
-           |> List.exists(courseCoachId => courseCoachId == Coach.id(coach))
+           |> Array.exists(courseCoachId => courseCoachId == Coach.id(coach))
          )
        );
   allowedTeamCoaches
-  |> List.map(coach => {
+  |> Array.map(coach => {
        let coachId = coach |> Coach.id;
        let selected =
          selectedTeamCoachIds
@@ -158,18 +157,13 @@ let handleEligibleTeamCoachList =
      });
 };
 
-let initialState =
-    (student, team, schoolCoaches, courseCoachIds, teamCoachIds) => {
+let initialState = (student, team, schoolCoaches, courseCoachIds) => {
   {
     name: student |> Student.name,
     teamName: team |> Team.name,
-    tagsToApply: student |> Student.tags |> Array.to_list,
+    tagsToApply: student |> Student.tags,
     teamCoaches:
-      handleEligibleTeamCoachList(
-        schoolCoaches,
-        courseCoachIds,
-        teamCoachIds,
-      ),
+      handleEligibleTeamCoachList(schoolCoaches, courseCoachIds, team),
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
     title: student |> Student.title,
     affiliation: student |> Student.affiliation |> OptionUtils.toString,
@@ -182,15 +176,21 @@ let reducer = (state, action) =>
   switch (action) {
   | UpdateName(name) => {...state, name}
   | UpdateTeamName(teamName) => {...state, teamName}
-  | AddTag(tag) => {...state, tagsToApply: [tag, ...state.tagsToApply]}
+  | AddTag(tag) => {
+      ...state,
+      tagsToApply: state.tagsToApply |> Array.append([|tag|]),
+    }
   | RemoveTag(tag) => {
       ...state,
-      tagsToApply: state.tagsToApply |> List.filter(t => t !== tag),
+      tagsToApply: state.tagsToApply |> Js.Array.filter(t => t !== tag),
     }
   | UpdateCoachesList(key, value, selected) =>
     let oldCoach =
-      state.teamCoaches |> List.filter(((item, _, _)) => item != key);
-    {...state, teamCoaches: [(key, value, selected), ...oldCoach]};
+      state.teamCoaches |> Js.Array.filter(((item, _, _)) => item != key);
+    {
+      ...state,
+      teamCoaches: oldCoach |> Array.append([|(key, value, selected)|]),
+    };
   | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) => {
       ...state,
       excludedFromLeaderboard,
@@ -207,7 +207,6 @@ let make =
       ~student,
       ~team,
       ~studentTags,
-      ~teamCoachIds,
       ~courseCoachIds,
       ~schoolCoaches,
       ~submitFormCB,
@@ -215,13 +214,7 @@ let make =
   let (state, send) =
     React.useReducer(
       reducer,
-      initialState(
-        student,
-        team,
-        schoolCoaches,
-        courseCoachIds,
-        teamCoachIds,
-      ),
+      initialState(student, team, schoolCoaches, courseCoachIds),
     );
 
   let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
@@ -321,7 +314,7 @@ let make =
           </span>
           <div className="mt-2">
             <School__SelectBox
-              items={state.teamCoaches}
+              items={state.teamCoaches |> Array.to_list}
               selectCB=multiSelectCoachEnrollmentsCB
             />
           </div>
@@ -331,10 +324,10 @@ let make =
         <div className="mb-2 text-xs font-semibold">
           {"Tags applied:" |> str}
         </div>
-        <SA_StudentsPanel_SearchableTagList
+        <StudentsEditor__SearchableTagList
           unselectedTags={
             studentTags
-            |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))
+            |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))
           }
           selectedTags={state.tagsToApply}
           addTagCB={tag => send(AddTag(tag))}

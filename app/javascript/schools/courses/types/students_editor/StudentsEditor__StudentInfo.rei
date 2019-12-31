@@ -4,7 +4,7 @@ let name: t => string;
 
 let email: t => string;
 
-let tags: t => list(string);
+let tags: t => array(string);
 
 let title: t => string;
 
@@ -12,4 +12,4 @@ let affiliation: t => string;
 
 let encode: t => Js.Json.t;
 
-let make: (string, string, string, string, list(string)) => t;
+let make: (string, string, string, string, array(string)) => t;

@@ -176,7 +176,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          <StudentsEditor__CreateForm
            courseId
            submitFormCB
-           studentTags={state.tags |> Array.to_list}
+           studentTags={state.tags}
          />
        </SchoolAdmin__EditorDrawer>
 

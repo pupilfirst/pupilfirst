@@ -9,7 +9,7 @@ type state = {
   affiliation: string,
   hasNameError: bool,
   hasEmailError: bool,
-  tagsToApply: list(string),
+  tagsToApply: array(string),
 };
 
 type action =
@@ -35,7 +35,7 @@ let updateEmail = (send, email) => {
 };
 
 let hasEmailDuplication = (email, emailsToAdd) => {
-  emailsToAdd |> List.exists(emailToAdd => email == emailToAdd);
+  emailsToAdd |> Array.exists(emailToAdd => email == emailToAdd);
 };
 
 let formInvalid = (state, emailsToAdd) =>
@@ -66,7 +66,7 @@ let initialState = () => {
   affiliation: "",
   hasNameError: false,
   hasEmailError: false,
-  tagsToApply: [],
+  tagsToApply: [||],
 };
 
 let reducer = (state, action) =>
@@ -84,10 +84,13 @@ let reducer = (state, action) =>
       hasEmailError: false,
       tagsToApply: state.tagsToApply,
     }
-  | AddTag(tag) => {...state, tagsToApply: [tag, ...state.tagsToApply]}
+  | AddTag(tag) => {
+      ...state,
+      tagsToApply: state.tagsToApply |> Array.append([|tag|]),
+    }
   | RemoveTag(tag) => {
       ...state,
-      tagsToApply: state.tagsToApply |> List.filter(t => t != tag),
+      tagsToApply: state.tagsToApply |> Js.Array.filter(t => t != tag),
     }
   };
 
@@ -181,24 +184,23 @@ let make = (~addToListCB, ~studentTags, ~emailsToAdd) => {
       />
     </div>
     <div className="mt-5">
-
-        <label
-          className="inline-block tracking-wide text-xs font-semibold"
-          htmlFor="tags">
-          {"Tags" |> str}
-        </label>
-        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
-      </div>
-      // <StudentsEditor__SearchableTagList
-      //   unselectedTags={
-      //     studentTags
-      //     |> List.filter(tag => !(state.tagsToApply |> List.mem(tag)))
-      //   }
-      //   selectedTags={state.tagsToApply}
-      //   addTagCB={tag => send(AddTag(tag))}
-      //   removeTagCB={tag => send(RemoveTag(tag))}
-      //   allowNewTags=true
-      // />
+      <label
+        className="inline-block tracking-wide text-xs font-semibold"
+        htmlFor="tags">
+        {"Tags" |> str}
+      </label>
+      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+    </div>
+    <StudentsEditor__SearchableTagList
+      unselectedTags={
+        studentTags
+        |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))
+      }
+      selectedTags={state.tagsToApply}
+      addTagCB={tag => send(AddTag(tag))}
+      removeTagCB={tag => send(RemoveTag(tag))}
+      allowNewTags=true
+    />
     <button
       onClick={_e => handleAdd(state, send, emailsToAdd, addToListCB)}
       disabled={formInvalid(state, emailsToAdd)}

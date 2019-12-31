@@ -1,7 +1,7 @@
 type t = {
   name: string,
   email: string,
-  tags: list(string),
+  tags: array(string),
   title: string,
   affiliation: string,
 };
@@ -23,7 +23,7 @@ let encode = t =>
       ("email", t.email |> string),
       ("title", t.title |> string),
       ("affiliation", t.affiliation |> string),
-      ("tags", t.tags |> list(string)),
+      ("tags", t.tags |> array(string)),
     ])
   );
 

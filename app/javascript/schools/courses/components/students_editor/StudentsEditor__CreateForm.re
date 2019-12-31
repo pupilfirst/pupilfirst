@@ -3,7 +3,7 @@
 open StudentsEditor__Types;
 
 type state = {
-  studentsToAdd: list(StudentInfo.t),
+  studentsToAdd: array(StudentInfo.t),
   saving: bool,
 };
 
@@ -14,22 +14,24 @@ type action =
 
 let str = React.string;
 
-let formInvalid = state => state.studentsToAdd |> ListUtils.isEmpty;
+let formInvalid = state => state.studentsToAdd |> ArrayUtils.isEmpty;
 let handleErrorCB = (send, ()) => send(SetSaving(false));
 
 /* Get the tags applied to a list of students. */
 let appliedTags = students =>
   students
-  |> List.map(student => student |> StudentInfo.tags)
+  |> Array.map(student => student |> StudentInfo.tags |> Array.to_list)
+  |> Array.to_list
   |> List.flatten
-  |> ListUtils.distinct;
+  |> ListUtils.distinct
+  |> Array.of_list;
 
 /*
  * This is a union of tags reported by the parent component, and tags currently applied to students listed in the form. This allows the
  * form to suggest tags that haven't yet been persisted, but have been applied to at least one of the students in the list.
  */
 let allKnownTags = (incomingTags, appliedTags) =>
-  incomingTags |> List.append(appliedTags) |> ListUtils.distinct;
+  incomingTags |> Array.append(appliedTags) |> ArrayUtils.distinct;
 
 let handleResponseCB = (submitCB, state, json) => {
   // let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
@@ -69,7 +71,7 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
   Js.Dict.set(
     payload,
     "students",
-    state.studentsToAdd |> Json.Encode.(list(StudentInfo.encode)),
+    state.studentsToAdd |> Json.Encode.(array(StudentInfo.encode)),
   );
 
   let url = "/school/courses/" ++ courseId ++ "/students";
@@ -94,19 +96,19 @@ let renderTitleAndAffiliation = (title, affiliation) => {
   };
 };
 
-let initialState = () => {studentsToAdd: [], saving: false};
+let initialState = () => {studentsToAdd: [||], saving: false};
 
 let reducer = (state, action) =>
   switch (action) {
   | AddStudentInfo(studentInfo) => {
       ...state,
-      studentsToAdd: [studentInfo, ...state.studentsToAdd],
+      studentsToAdd: state.studentsToAdd |> Array.append([|studentInfo|]),
     }
   | RemoveStudentInfo(studentInfo) => {
       ...state,
       studentsToAdd:
         state.studentsToAdd
-        |> List.filter(s =>
+        |> Js.Array.filter(s =>
              StudentInfo.email(s) !== StudentInfo.email(studentInfo)
            ),
     }
@@ -129,7 +131,7 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
         )}
         emailsToAdd={
           state.studentsToAdd
-          |> List.map(student => student |> StudentInfo.email)
+          |> Array.map(student => student |> StudentInfo.email)
         }
       />
       <div>
@@ -138,7 +140,7 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
             {"These new students will be added to the course:" |> str}
           </div>
           {switch (state.studentsToAdd) {
-           | [] =>
+           | [||] =>
              <div
                className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
                {"This list is empty! Add some students using the form above."
@@ -146,7 +148,7 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
              </div>
            | studentInfos =>
              studentInfos
-             |> List.map(studentInfo =>
+             |> Array.map(studentInfo =>
                   <div
                     key={studentInfo |> StudentInfo.email}
                     className="flex justify-between bg-white-100 border shadow rounded-lg mt-2">
@@ -169,14 +171,13 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
                       <div className="flex flex-wrap">
                         {studentInfo
                          |> StudentInfo.tags
-                         |> List.map(tag =>
+                         |> Array.map(tag =>
                               <div
                                 key=tag
                                 className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
                                 {tag |> str}
                               </div>
                             )
-                         |> Array.of_list
                          |> React.array}
                       </div>
                     </div>
@@ -189,14 +190,13 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
                     </button>
                   </div>
                 )
-             |> Array.of_list
              |> React.array
            }}
         </div>
       </div>
       <div className="flex mt-4">
         <button
-          disabled={state.saving || state.studentsToAdd |> ListUtils.isEmpty}
+          disabled={state.saving || state.studentsToAdd |> ArrayUtils.isEmpty}
           onClick={saveStudents(
             state,
             send,

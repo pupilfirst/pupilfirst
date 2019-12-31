@@ -43,7 +43,7 @@ let handleClick = (suggestion, setState) =>
 
 let applyFilter = (filter, setState, updateFilterCB) => {
   updateFilterCB(filter);
-  setState(state => {...state, searchInput: "", filter});
+  setState(_ => {searchInput: "", filter});
 };
 
 let clearFilter = (setState, updateFilterCB) =>

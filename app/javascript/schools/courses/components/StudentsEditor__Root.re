@@ -17,7 +17,6 @@ type state = {
   selectedStudents: list((Student.t, teamId)),
   formVisible,
   tags: array(string),
-  filterVisible: bool,
 };
 
 type action =
@@ -25,7 +24,6 @@ type action =
   | DeselectStudent(Student.t)
   | DeselectAllStudents
   | UpdateFormVisible(formVisible)
-  | ToggleFilterVisibility
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t);
 
@@ -120,7 +118,6 @@ let initialState = tags => {
   filter: Filter.empty(),
   formVisible: None,
   tags,
-  filterVisible: false,
 };
 
 let reducer = (state, action) =>
@@ -139,7 +136,6 @@ let reducer = (state, action) =>
 
   | DeselectAllStudents => {...state, selectedStudents: []}
   | UpdateFormVisible(formVisible) => {...state, formVisible}
-  | ToggleFilterVisibility => {...state, filterVisible: !state.filterVisible}
   | UpdateTeams(pagedTeams) => {...state, pagedTeams}
   | UpdateFilter(filter) => {
       ...state,

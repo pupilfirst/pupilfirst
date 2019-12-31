@@ -21,3 +21,12 @@ let addTag = (tag, t) => {
 let changeLevelId = (levelId, t) => {...t, levelId, searchString: None};
 
 let changeSearchString = (searchString, t) => {...t, searchString};
+
+let removeTag = (tag, t) => {
+  ...t,
+  tags: t.tags |> Js.Array.filter(ts => ts != tag),
+};
+
+let removeLevelId = t => {...t, levelId: None};
+
+let removeSearchString = t => {...t, searchString: None};

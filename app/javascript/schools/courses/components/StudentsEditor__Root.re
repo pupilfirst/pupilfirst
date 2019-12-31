@@ -141,7 +141,11 @@ let reducer = (state, action) =>
   | UpdateFormVisible(formVisible) => {...state, formVisible}
   | ToggleFilterVisibility => {...state, filterVisible: !state.filterVisible}
   | UpdateTeams(pagedTeams) => {...state, pagedTeams}
-  | UpdateFilter(filter) => {...state, filter, pagedTeams: Unloaded}
+  | UpdateFilter(filter) => {
+      ...state,
+      filter,
+      pagedTeams: state.filter == filter ? state.pagedTeams : Unloaded,
+    }
   };
 
 let teamsList = pagedTeams =>

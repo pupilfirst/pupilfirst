@@ -140,7 +140,7 @@ let make =
     [|pagedTeams|],
   );
 
-  let selectedStudentsList = selectedStudents |> List.map(((s, _)) => s);
+  let selectedStudentsList = selectedStudents |> Array.map(((s, _)) => s);
 
   <div className="pb-6 px-6">
     <div className="max-w-3xl mx-auto w-full">
@@ -157,7 +157,7 @@ let make =
                    |> Team.students
                    |> Array.map(student => {
                         let isChecked =
-                          selectedStudentsList |> List.mem(student);
+                          selectedStudentsList |> Array.mem(student);
                         let checkboxId =
                           "select-student-" ++ (student |> Student.id);
                         let teamId = team |> Team.id;

@@ -50,7 +50,10 @@ module Courses
       EvaluationCriterion.create!(
         description: name,
         name: name,
-        course: @course
+        course: @course,
+        max_grade: 3,
+        pass_grade: 2,
+        grade_labels: { 1 => 'Bad', 2 => 'Good', 3 => 'Great' }
       )
     end
   end

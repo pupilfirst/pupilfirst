@@ -13,9 +13,6 @@ module Courses
       Course.transaction do
         Course.create!(name: new_name,
                        description: @course.description,
-                       grade_labels: @course.grade_labels,
-                       max_grade: @course.max_grade,
-                       pass_grade: @course.pass_grade,
                        school: school).tap do |new_course|
           evaluation_criteria_translation = create_evaluation_criteria(new_course)
           levels = create_levels(new_course)
@@ -34,7 +31,10 @@ module Courses
       @course.evaluation_criteria.each_with_object({}) do |old_ec, translation|
         new_ec = new_course.evaluation_criteria.create!(
           description: old_ec.description,
-          name: old_ec.name
+          name: old_ec.name,
+          max_grade: old_ec.max_grade,
+          pass_grade: old_ec.pass_grade,
+          grade_labels: old_ec.grade_labels
         )
 
         translation[old_ec.id] = new_ec.id

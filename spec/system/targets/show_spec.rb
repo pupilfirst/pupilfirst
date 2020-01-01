@@ -7,7 +7,7 @@ feature 'Target Overlay', js: true do
   include FounderSpecHelper
 
   let(:course) { create :course }
-  let!(:criterion_1) { create :evaluation_criterion, course: course }
+  let!(:criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: { 1 => 'Bad', 2 => 'Good', 3 => 'Great', 4 => 'Wow' } }
   let!(:criterion_2) { create :evaluation_criterion, course: course }
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
@@ -318,7 +318,7 @@ feature 'Target Overlay', js: true do
       create(:timeline_event_grade, timeline_event: submission_1, evaluation_criterion: criterion_2, grade: 1) # Failed criterion
 
       # Second submissions should have passed on both criteria.
-      create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_1, grade: 3)
+      create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_1, grade: 4)
       create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_2, grade: 2)
     end
 
@@ -350,8 +350,11 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content(submission_2.description)
         expect(page).to have_link('https://www.example.com/proper_link')
 
-        expect(page).to have_content("#{criterion_1.name}: Great")
+        submission_grades = submission_2.timeline_event_grades
+        expect(page).to have_content("#{criterion_1.name}: Wow")
+        expect(page).to have_text("#{submission_grades.where(evaluation_criterion: criterion_1).first.grade}/#{criterion_1.max_grade}")
         expect(page).to have_content("#{criterion_2.name}: Good")
+        expect(page).to have_text("#{submission_grades.where(evaluation_criterion: criterion_2).first.grade}/#{criterion_2.max_grade}")
 
         expect(page).to have_content(coach_3.name)
         expect(page).to have_content(coach_3.title)

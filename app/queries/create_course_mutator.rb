@@ -8,12 +8,6 @@ class CreateCourseMutator < ApplicationQuery
   property :about, validates: { length: { maximum: 10_000 } }
   property :featured
 
-  def correct_grades_and_labels
-    return if @course.max_grade == (grade_labels.values - [""]).count
-
-    raise "CreateCourseMutator received invalid grades and labels #{grades_and_labels}"
-  end
-
   def create_course
     Course.transaction do
       course = Course.create!(

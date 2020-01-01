@@ -42,7 +42,7 @@ let updateTagSelection = (setState, key, _value, selected) =>
     }
   );
 
-module CreateCoruseExportQuery = [%graphql
+module CreateCourseExportQuery = [%graphql
   {|
  mutation($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!) {
   createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly){
@@ -80,7 +80,7 @@ let createCourseExport =
     |> List.map(((tagId, _, _)) => tagId)
     |> Array.of_list;
 
-  CreateCoruseExportQuery.make(
+  CreateCourseExportQuery.make(
     ~courseId=course |> Course.id,
     ~tagIds,
     ~reviewedOnly=state.reviewedOnly,

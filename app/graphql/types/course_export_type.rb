@@ -3,6 +3,7 @@ module Types
     field :id, ID, null: false
     field :created_at, String, null: false
     field :tags, [String], null: false
+    field :reviewedOnly, Boolean, null: false
 
     def tags
       object.tag_list

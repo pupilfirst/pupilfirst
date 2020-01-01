@@ -7,33 +7,47 @@ module SubmissionsHelper
     submit_target(target, student, grade: GRADE_PASS)
   end
 
+  def fail_target(target, student)
+    submit_target(target, student, grade: GRADE_FAIL)
+  end
+
   def submit_target(target, student, grade: GRADE_NONE)
     options = submission_options(target, student, grade)
 
-    submission = FactoryBot.create(:timeline_event, options)
+    FactoryBot.create(:timeline_event, options).tap do |submission|
+      if target.evaluation_criteria.present? && grade != GRADE_NONE
+        target.evaluation_criteria.each do |ec|
+          computed_grade = case grade
+            when GRADE_PASS
+              rand(target.course.pass_grade..target.course.max_grade)
+            else
+              target.course.pass_grade - 1
+          end
 
-    if target.evaluation_criteria.present? && grade != GRADE_NONE
-      target.evaluation_criteria.each do |ec|
-        computed_grade = case grade
-          when GRADE_PASS
-            rand(target.course.pass_grade..target.course.max_grade)
-          else
-            target.course.pass_grade - 1
+          create(
+            :timeline_event_grade,
+            timeline_event: submission,
+            grade: computed_grade,
+            evaluation_criterion: ec
+          )
         end
-
-        create(
-          :timeline_event_grade,
-          timeline_event: submission,
-          grade: computed_grade,
-          evaluation_criterion: ec
-        )
       end
     end
   end
 
   private
 
-  def submission_options(target, student, grade)
+  # This is a hack to avoid having to pass an evaluator ID.
+  def evaluator(students)
+    school = students.first.school
+
+    school.faculty.first || begin
+      user = FactoryBot.create(:user, school: school)
+      FactoryBot.create(:faculty, user: user)
+    end
+  end
+
+  def submission_options(target, student, grade) # rubocop:disable Metrics/MethodLength
     students = student.respond_to?(:to_a) ? student.to_a : [student]
 
     (passed_at, evaluated_at) = if target.evaluation_criteria.present?
@@ -54,7 +68,8 @@ module SubmissionsHelper
       target: target,
       latest: true,
       passed_at: passed_at,
-      evaluated_at: evaluated_at
+      evaluated_at: evaluated_at,
+      evaluator: evaluated_at.present? ? evaluator(students) : nil
     }
   end
 end

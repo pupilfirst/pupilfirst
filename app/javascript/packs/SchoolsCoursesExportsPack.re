@@ -11,7 +11,7 @@ let decodeProps = json =>
   );
 
 let (authenticityToken, course, exports, tags) =
-  DomUtils.parseJsonAttribute(~id="schools-courses-exports__root", ())
+  DomUtils.parseJsonTag(~id="schools-courses-exports__props", ())
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(

@@ -19,9 +19,9 @@ module SubmissionsHelper
         target.evaluation_criteria.each do |ec|
           computed_grade = case grade
             when GRADE_PASS
-              rand(target.course.pass_grade..target.course.max_grade)
+              rand(ec.pass_grade..ec.max_grade)
             else
-              target.course.pass_grade - 1
+              ec.pass_grade - 1
           end
 
           create(

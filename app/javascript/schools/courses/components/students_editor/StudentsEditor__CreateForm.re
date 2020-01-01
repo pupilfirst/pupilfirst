@@ -34,15 +34,11 @@ let allKnownTags = (incomingTags, appliedTags) =>
   incomingTags |> Array.append(appliedTags) |> ArrayUtils.distinct;
 
 let handleResponseCB = (submitCB, state, json) => {
-  // let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  // let students =
-  //   json |> Json.Decode.(field("students", list(Student.decode)));
-
   let (studentsAdded, studentsRequested) =
     json |> Json.Decode.(field("studentCount", pair(int, int)));
   let tags = state.studentsToAdd |> appliedTags;
 
-  // submitCB(teams, students, tags);
+  submitCB(tags);
 
   if (studentsAdded == studentsRequested) {
     Notification.success(

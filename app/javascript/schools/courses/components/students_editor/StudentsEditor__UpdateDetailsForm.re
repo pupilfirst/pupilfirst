@@ -67,11 +67,8 @@ let successMessage = (accessEndsAt, isSingleFounder) => {
   };
 };
 
-let handleResponseCB = (submitCB, state, isSingleStudent, json) => {
-  // let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  // let students =
-  //   json |> Json.Decode.(field("students", list(Student.decode)));
-  // submitCB(teams, students, state.tagsToApply);
+let handleResponseCB = (submitCB, state, isSingleStudent, _json) => {
+  submitCB(state.tagsToApply);
   Notification.success(
     "Success",
     successMessage(state.accessEndsAt, isSingleStudent),

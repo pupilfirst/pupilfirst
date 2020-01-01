@@ -25,7 +25,8 @@ type action =
   | DeselectAllStudents
   | UpdateFormVisible(formVisible)
   | UpdateTeams(Page.t)
-  | UpdateFilter(Filter.t);
+  | UpdateFilter(Filter.t)
+  | RefreshData(array(string));
 
 let selectedAcrossTeams = selectedStudents =>
   selectedStudents
@@ -47,7 +48,8 @@ let selectedPartialTeam = (selectedStudents, teams) => {
 };
 
 let selectedWithinLevel = (selectedStudents, teams) => {
-  let teamIds = selectedStudents |> Array.map(((student, teamId)) => teamId);
+  let teamIds =
+    selectedStudents |> Array.map(((_student, teamId)) => teamId);
 
   let selectedUniqTeams =
     teams |> Js.Array.filter(team => Array.mem(team |> Team.id, teamIds));
@@ -56,7 +58,9 @@ let selectedWithinLevel = (selectedStudents, teams) => {
     selectedUniqTeams
     |> Array.map(team => team |> Team.levelId |> int_of_string);
 
-  selectedLevelNumbers |> ArrayUtils.distinct |> Array.length == 1;
+  selectedLevelNumbers
+  |> ArrayUtils.sort_uniq((ln1, ln2) => ln1 - ln2)
+  |> Array.length == 1;
 };
 
 let isGroupable = (selectedStudents, teams) =>
@@ -74,6 +78,7 @@ let isMoveOutable = (selectedStudents, teams) => {
   let onlyOneSelected = selectedStudents |> Array.length == 1;
 
   if (onlyOneSelected == true) {
+    // Todo: Re-write logic with a safer function
     let (_selectedStudent, selectedTeamId) = selectedStudents[0];
     studentsInSelectedTeam(teams, selectedTeamId) |> Array.length > 1;
   } else {
@@ -81,15 +86,9 @@ let isMoveOutable = (selectedStudents, teams) => {
   };
 };
 
-let handleTeamUpResponse = (send, json) => {
-  // let teams = json |> Json.Decode.(field("teams", list(Team.decode)));
-  // let students =
-  //   json |> Json.Decode.(field("students", list(Student.decode)));
-  // send(RefreshDataAfterTeamUp(teams, students));
-  Notification.success(
-    "Success!",
-    "Teams updated successfully",
-  );
+let handleTeamUpResponse = (send, _json) => {
+  send(RefreshData([||]));
+  Notification.success("Success!", "Teams updated successfully");
 };
 
 let handleErrorCB = () => ();
@@ -144,6 +143,15 @@ let reducer = (state, action) =>
       filter,
       pagedTeams: state.filter == filter ? state.pagedTeams : Unloaded,
     }
+  | RefreshData(tags) => {
+      ...state,
+      pagedTeams: Unloaded,
+      tags:
+        state.tags
+        |> Array.append(tags)
+        |> ArrayUtils.sort_uniq(String.compare),
+      formVisible: None,
+    }
   };
 
 let teamsList = pagedTeams =>
@@ -168,7 +176,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
   let updateFilter = filter => send(UpdateFilter(filter));
 
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
-    {let submitFormCB = () => ();
+    {let submitFormCB = tagsToApply => send(RefreshData(tagsToApply));
      switch (state.formVisible) {
      | None => ReasonReact.null
      | CreateForm =>
@@ -208,7 +216,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         <StudentsEditor__Search
           filter={state.filter}
           updateFilterCB=updateFilter
-          tags=studentTags
+          tags=state.tags
           levels
         />
       </div>

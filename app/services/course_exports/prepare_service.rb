@@ -8,21 +8,25 @@ module CourseExports
       spreadsheet = RODF::Spreadsheet.new
       add_custom_styles(spreadsheet)
 
-      spreadsheet.table 'Targets' do |table|
-        populate_targets_table(table)
-      end
-
-      spreadsheet.table 'Students' do |table|
-        populate_students_table(table)
-      end
-
-      spreadsheet.table 'Submissions' do |table|
-        populate_submissions_table(table)
+      tables.each do |table|
+        spreadsheet.table(table[:title]) do |rodf_table|
+          rodf_table.add_rows table[:rows]
+        end
       end
 
       io = StringIO.new(spreadsheet.bytes)
 
+      @course_export.json_data = tables.to_json
       @course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
+      @course_export.save!
+    end
+
+    def tables
+      @tables ||= [
+        { title: 'Targets', rows: target_rows },
+        { title: 'Students', rows: student_rows },
+        { title: 'Submissions', rows: submission_rows }
+      ]
     end
 
     private
@@ -54,62 +58,95 @@ module CourseExports
       "#{name}.ods"
     end
 
-    def populate_targets_table(table)
-      target_rows = course.targets.live.includes(:level, :evaluation_criteria, :quiz, :target_group).map do |target|
+    def target_rows
+      values = targets.map do |target|
         milestone = target.target_group.milestone ? 'Yes' : 'No'
-        [target_id(target), target.level.number, target.title, target_type(target), milestone]
+
+        [
+          target_id(target),
+          target.level.number,
+          target.title,
+          target_type(target),
+          milestone,
+          students_with_submissions(target),
+          submissions_pending_review(target)
+        ] + average_grades_for_target(target)
       end
 
-      sorted_target_rows = target_rows.sort_by { |data| data[1] }
-
-      table.row do |row|
-        row.add_cells ["ID", "Level", "Name", "Completion Method", "Milestone?"]
-      end
-
-      table.add_rows(sorted_target_rows)
+      ([
+        ['ID', 'Level', 'Name', 'Completion Method', 'Milestone?', 'Students with submissions', 'Submissions pending review'] + evaluation_criteria_names
+      ] + values).transpose
     end
 
-    def populate_students_table(table)
-      student_rows = students.map do |student|
+    def evaluation_criteria_names
+      @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).order(:name).map do |ec|
+        ec.name + " (Average Grade)"
+      end
+    end
+
+    def evaluation_criteria_ids
+      @evaluation_criteria_ids ||= targets.map do |target|
+        target.evaluation_criteria.order(:name).pluck(:id)
+      end.flatten.uniq
+    end
+
+    def average_grades_for_target(target)
+      empty_grades = Array.new(evaluation_criteria_ids.length)
+
+      target.evaluation_criteria.pluck(:id).each_with_object(empty_grades) do |evaluation_criterion_id, grades|
+        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { target_id: target.id, latest: true }, founders: { id: students.pluck(:id) }, evaluation_criterion_id: evaluation_criterion_id).distinct.average(:grade)&.round(2)
+      end
+    end
+
+    def average_grades_for_student(student)
+      evaluation_criteria_ids.map do |evaluation_criterion_id|
+        TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { latest: true }, founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
+      end
+    end
+
+    def students_with_submissions(target)
+      target.timeline_events.joins(:founders).distinct('founders.id').count('founders.id')
+    end
+
+    def submissions_pending_review(target)
+      target.timeline_events.pending_review.distinct.count
+    end
+
+    def student_rows
+      rows = students.map do |student|
         user = student.user
-        [user.email, user.name, user.title, user.affiliation, student.tags.pluck(:name).join(', ')]
+
+        [
+          user.email,
+          user.name,
+          user.title,
+          user.affiliation,
+          student.tags.order(:name).pluck(:name).join(', ')
+        ] + average_grades_for_student(student)
       end
 
-      table.row do |row|
-        row.add_cells ["Email Address", "Name", "Title", "Affiliation", "Tags"]
-      end
-
-      table.add_rows student_rows
+      [['Email Address', 'Name', 'Title', 'Affiliation', 'Tags'] + evaluation_criteria_names] + rows
     end
 
-    def populate_submissions_table(table)
+    def submission_rows
       # Lay out the top row of target IDs.
-      table.row do |row|
-        row.cell 'Student Email / Target ID'
-
-        formatted_target_ids = targets.map do |target|
-          target_id(target)
-        end
-
-        row.add_cells(formatted_target_ids)
+      header = ['Student Email / Target ID'] + targets.map do |target|
+        target_id(target)
       end
 
       target_ids = targets.pluck(:id)
 
       # Now populate status for each student.
-      students.each do |student|
+      [header] + students.map do |student|
         grading = compute_grading_for_submissions(student, target_ids)
-
-        table.row do |row|
-          row.add_cells([student.user.email] + grading)
-        end
+        [student.user.email] + grading
       end
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def compute_grading_for_submissions(student, target_ids)
-      TimelineEvent.where(latest: true).includes(:timeline_event_grades)
-        .joins(:founders).where(founders: { id: student.id }).distinct
+      TimelineEvent.includes(:timeline_event_grades)
+        .joins(:founders).where(founders: { id: student.id }).order(:created_at).distinct
         .each_with_object([]) do |submission, grading|
         grade_index = target_ids.index(submission.target_id)
 
@@ -129,9 +166,33 @@ module CourseExports
             [evaluation_grade, 'failing-grade']
         end
 
-        grading[grade_index] = { value: grade, style: style }
+        append_grade(grading, grade_index, grade, style)
       end
     end
+
+    # If a grade has already been stored, separate it from the next one with a semi-colon in the same cell.
+    def append_grade(grading, grade_index, grade, style)
+      # Store the grade as a number if we're not dealing with a complex grade.
+      parsed_grade = begin
+        integer_grade = grade.to_i
+        integer_grade.to_s == grade ? integer_grade : grade
+      end
+
+      value = if grading[grade_index].present?
+        "#{grading[grade_index][:value]};#{parsed_grade}"
+      else
+        parsed_grade
+      end
+
+      grading[grade_index] = if style.present?
+        { value: value, style: style }
+      else
+        value
+      end
+
+      grading
+    end
+
     # rubocop:enable Metrics/CyclomaticComplexity
 
     def students
@@ -139,14 +200,19 @@ module CourseExports
         # Only scan 'active' students. Also filter by tag, if applicable.
         scope = course.founders.active.includes(:user)
         tags.present? ? scope.tagged_with(tags, any: true) : scope
-      end
+      end.order('users.email')
     end
 
     def targets
-      @targets ||= course.targets.live
-        .joins(:level)
-        .includes(:level, :evaluation_criteria, :quiz, :target_group)
-        .order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+      @targets ||= begin
+        scope = course.targets.live
+          .joins(:level)
+          .includes(:level, :evaluation_criteria, :quiz, :target_group)
+
+        scope = @course_export.reviewed_only ? scope.joins(:evaluation_criteria) : scope
+
+        scope.order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+      end
     end
 
     def target_id(target)

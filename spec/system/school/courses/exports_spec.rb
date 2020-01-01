@@ -43,6 +43,7 @@ feature 'Course Exports', js: true do
     expect(export.user).to eq(school_admin.user)
     expect(export.course).to eq(course)
     expect(export.tag_list).to be_empty
+    expect(export.reviewed_only).to eq(false)
 
     # The empty list message should have disappeared.
     expect(page).not_to have_text("You haven't exported anything yet!")
@@ -84,5 +85,22 @@ feature 'Course Exports', js: true do
 
     expect(page).to have_text('tag 1')
     expect(page).to have_text('tag 2')
+  end
+
+  scenario 'school admin creates an export with only reviewed submissions' do
+    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+
+    find('h5', text: 'Create a new export').click
+    click_button('Only targets with reviewed submissions')
+
+    click_button('Create Export')
+
+    expect(page).to have_text('Your export is being processed')
+
+    # The Course report should be accurate.
+    export = CourseExport.last
+    expect(export.reviewed_only).to eq(true)
+
+    expect(page).to have_text('Reviewed Submissions Only')
   end
 end

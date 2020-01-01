@@ -116,6 +116,8 @@ RSpec.configure do |config|
   config.before(:each, js: true) do
     Capybara.page.driver.browser.manage.window.maximize unless Capybara.javascript_driver == :cuprite
   end
+
+  include AnObjectLikeMatcher
 end
 
 Capybara.register_driver :chrome do |app|

@@ -31,7 +31,7 @@ FactoryBot.define do
           },
           {
             url: "https://www.slideshare.net/erickjones014/amazing-fact-about-cats-72889434",
-            embed_code: "<iframe src=\"https://www.slideshare.net/slideshow/embed_code/key/sy7hfDK8aAqhO\" width=\"427\" height=\"356\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\" style=\"border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;\" allowfullscreen> </iframe> <div style=\"margin-bottom:5px\"> <strong> <a href=\"https://www.slideshare.net/erickjones014/amazing-fact-about-cats-72889434\" title=\"Amazing Fact About Cats\" target=\"_blank\">Amazing Fact About Cats</a> </strong> from <strong><a href=\"https://www.slideshare.net/erickjones014\" target=\"_blank\">erickjones014</a></strong> </div>\n\n" # rubocop:disable Metrics/LineLength
+            embed_code: "<iframe src=\"https://www.slideshare.net/slideshow/embed_code/key/sy7hfDK8aAqhO\" width=\"427\" height=\"356\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\" style=\"border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;\" allowfullscreen> </iframe> <div style=\"margin-bottom:5px\"> <strong> <a href=\"https://www.slideshare.net/erickjones014/amazing-fact-about-cats-72889434\" title=\"Amazing Fact About Cats\" target=\"_blank\">Amazing Fact About Cats</a> </strong> from <strong><a href=\"https://www.slideshare.net/erickjones014\" target=\"_blank\">erickjones014</a></strong> </div>\n\n"
           }
         ].sample
       end

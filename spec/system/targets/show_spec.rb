@@ -4,7 +4,6 @@ feature 'Target Overlay', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
-  include FounderSpecHelper
 
   let(:course) { create :course }
   let!(:criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: { 1 => 'Bad', 2 => 'Good', 3 => 'Great', 4 => 'Wow' } }

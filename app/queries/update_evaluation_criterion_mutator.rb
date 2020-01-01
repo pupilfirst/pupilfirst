@@ -5,18 +5,11 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   property :grades_and_labels, validates: { presence: true }
 
   validate :valid_ec_id
-  validate :correct_grades_and_labels
 
   def valid_ec_id
     return if evaluation_criterion.present?
 
     raise "UpdateEvaluationCriterionMutator received non-existent evaluation criterion ID #{id}"
-  end
-
-  def correct_grades_and_labels
-    return if evaluation_criterion.max_grade == (grade_labels.values - [""]).count
-
-    raise "UpdateEvaluationCriterionMutator received invalid grades and labels #{grades_and_labels}"
   end
 
   def update_evaluation_criterion

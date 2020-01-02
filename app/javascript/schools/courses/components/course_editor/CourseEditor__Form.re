@@ -1,5 +1,3 @@
-[%bs.raw {|require("./CourseEditor__Form.css")|}];
-
 open CourseEditor__Types;
 
 let str = ReasonReact.string;

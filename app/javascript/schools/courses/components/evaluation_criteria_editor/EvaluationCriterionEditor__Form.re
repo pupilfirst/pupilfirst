@@ -68,8 +68,8 @@ let gradeBarBulletClasses = (selected, passed, empty) => {
 };
 
 let updateMaxGrade = (value, state, setState) =>
-  if (value <= state.passGrade) {
-    setState(state => {...state, passGrade: 1, maxGrade: value});
+  if (value < state.passGrade) {
+    setState(state => {...state, passGrade: value, maxGrade: value});
   } else {
     setState(state => {...state, maxGrade: value});
   };
@@ -179,50 +179,38 @@ let labelClasses = (grade, passGrade) => {
   };
 };
 
-let labelEditor = (state, setState) => {
-  <div ariaLabel="label-editor">
-    {let labels = [||];
-     for (grade in 1 to state.maxGrade) {
-       let gradeAndLabel =
-         state.gradesAndLabels
-         |> ArrayUtils.unsafeFind(
-              gradeAndLabel => gradeAndLabel |> GradeLabel.grade == grade,
-              "Unable to find grade and label in evaluation criterion editor",
-            );
-       labels
-       |> Js.Array.push(
-            <div key={grade |> string_of_int} className="flex flex-wrap mt-2">
-              <div className={labelClasses(grade, state.passGrade)}>
-                {grade |> string_of_int |> str}
-              </div>
-              <div className="flex-1">
-                <input
-                  id={"grade-label-for-" ++ (grade |> string_of_int)}
-                  className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type_="text"
-                  value={gradeAndLabel |> GradeLabel.label}
-                  onChange={event =>
-                    updateGradeLabel(
-                      ReactEvent.Form.target(event)##value,
-                      gradeAndLabel,
-                      state,
-                      setState,
-                    )
-                  }
-                  placeholder={
-                    "Label for grade "
-                    ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)
-                  }
-                />
-              </div>
-            </div>,
-          )
-       |> ignore;
-     };
+let labels = (state, setState) =>
+  state.gradesAndLabels
+  |> Js.Array.filter(gnl => gnl |> GradeLabel.grade <= state.maxGrade)
+  |> Array.map(gradeAndLabel => {
+       let grade = gradeAndLabel |> GradeLabel.grade;
 
-     labels |> React.array}
-  </div>;
-};
+       <div key={grade |> string_of_int} className="flex flex-wrap mt-2">
+         <div className={labelClasses(grade, state.passGrade)}>
+           {grade |> string_of_int |> str}
+         </div>
+         <div className="flex-1">
+           <input
+             id={"grade-label-for-" ++ (grade |> string_of_int)}
+             className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             type_="text"
+             value={gradeAndLabel |> GradeLabel.label}
+             onChange={event =>
+               updateGradeLabel(
+                 ReactEvent.Form.target(event)##value,
+                 gradeAndLabel,
+                 state,
+                 setState,
+               )
+             }
+             placeholder={
+               "Label for grade "
+               ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)
+             }
+           />
+         </div>
+       </div>;
+     });
 
 [@react.component]
 let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
@@ -393,7 +381,9 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                  </div>
                </div>
              </div>
-             {labelEditor(state, setState)}
+             <div ariaLabel="label-editor">
+               {labels(state, setState) |> React.array}
+             </div>
              <div className="mt-3 mb-3 text-xs">
                <span className="leading-normal">
                  <strong> {"Important:" |> str} </strong>

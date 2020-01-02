@@ -464,7 +464,7 @@ feature 'Curriculum Editor', js: true do
 
       expect(page).to have_text('Atleast one has to be selected')
 
-      find("div[title='Select #{evaluation_criterion.name}']").click
+      find("div[title='Select #{evaluation_criterion.display_name}']").click
 
       within("div#evaluated") do
         click_button 'No'

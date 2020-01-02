@@ -66,14 +66,14 @@ describe CourseExports::PrepareService do
           ['Milestone?', 'No', 'Yes', 'Yes', 'Yes'],
           ['Students with submissions', 1, 2, 2, 1],
           ['Submissions pending review', 0, 0, 0, 1],
-          ['Criterion A (Average Grade)', nil, nil, (evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil],
-          ['Criterion B (Average Grade)', nil, nil, (evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil]
+          ['Criterion A (2,3) - Average', nil, nil, (evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil],
+          ['Criterion B (2,3) - Average', nil, nil, (evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil]
         ]
       },
       {
         title: 'Students',
         rows: [
-          ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (Average Grade)', 'Criterion B (Average Grade)'],
+          ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
           [student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
           [student_2.email, student_2.name, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
         ]
@@ -121,14 +121,14 @@ describe CourseExports::PrepareService do
               ['Milestone?', 'Yes', 'Yes'],
               ['Students with submissions', 2, 1],
               ['Submissions pending review', 0, 1],
-              ['Criterion A (Average Grade)', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
-              ['Criterion B (Average Grade)', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]
+              ['Criterion A (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
+              ['Criterion B (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]
             ]
           },
           {
             title: 'Students',
             rows: [
-              ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (Average Grade)', 'Criterion B (Average Grade)'],
+              ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
               [student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
             ]
           },

@@ -80,7 +80,7 @@ module CourseExports
 
     def evaluation_criteria_names
       @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).order(:name).map do |ec|
-        ec.name + " (Average Grade)"
+        ec.display_name + " (Average Grade)"
       end
     end
 

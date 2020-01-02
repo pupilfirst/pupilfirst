@@ -15,7 +15,7 @@ class EvaluationCriterion < ApplicationRecord
   validates :course, presence: true
 
   def display_name
-    name + ' | ' + course.name
+    name + " (#{pass_grade},#{max_grade})"
   end
 
   private

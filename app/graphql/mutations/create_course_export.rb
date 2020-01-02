@@ -2,6 +2,7 @@ module Mutations
   class CreateCourseExport < GraphQL::Schema::Mutation
     argument :course_id, ID, required: true
     argument :tag_ids, [ID], required: true
+    argument :reviewed_only, Boolean, required: true
 
     description "Request a course export."
 

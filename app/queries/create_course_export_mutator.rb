@@ -3,6 +3,7 @@ class CreateCourseExportMutator < ApplicationQuery
 
   property :course_id, validates: { presence: { message: 'CourseIdBlank' } }
   property :tag_ids
+  property :reviewed_only
 
   validate :require_valid_course
   validate :require_valid_tags
@@ -21,7 +22,7 @@ class CreateCourseExportMutator < ApplicationQuery
 
   def create_course_export
     CourseExport.transaction do
-      export = CourseExport.new(course: course, user: current_user)
+      export = CourseExport.new(course: course, user: current_user, reviewed_only: !!reviewed_only)
       tag_names = tags.pluck(:name)
       export.tag_list.add(*tag_names)
       export.save!

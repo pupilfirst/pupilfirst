@@ -53,7 +53,7 @@ class Founder < ApplicationRecord
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { not_dropped_out.access_active }
 
-  delegate :email, :name, :phone, :communication_address, :title, :key_skills, :about,
+  delegate :email, :name, :phone, :communication_address, :title, :affiliation, :key_skills, :about,
     :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
     :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, :initials_avatar, to: :user
 

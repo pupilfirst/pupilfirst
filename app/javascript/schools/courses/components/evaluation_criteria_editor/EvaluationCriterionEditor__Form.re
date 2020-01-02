@@ -397,7 +397,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     value={state.passGrade |> string_of_int}
                     className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 rounded-none leading-tight focus:outline-none">
                     {possibleGradeValues
-                     |> List.filter(g => g < state.maxGrade)
+                     |> List.filter(g => g <= state.maxGrade)
                      |> List.map(possibleGradeValue =>
                           <option
                             key={possibleGradeValue |> string_of_int}

@@ -49,20 +49,21 @@
 
 .grade-bar__pointer-legend {
   position: relative;
-  width: 18px;
-  height: 18px;
-  border: 1px solid #e5e5e5;
+  width: 16px;
+  height: 16px;
   background-color: white;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
 .grade-bar__pointer-legend-failed {
-  background-color: #f85359;
+  border: 1px solid #f56565;
+  background-color: #feb2b2;
 }
 
 .grade-bar__pointer-legend-passed {
-  background-color: #39b54a;
+  border: 1px solid #48bb78;
+  background-color: #9ae6b4;
 }
 
 .grade-bar__pointer--selected {

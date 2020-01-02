@@ -209,7 +209,10 @@ let labelEditor = (state, setState) => {
                       setState,
                     )
                   }
-                  placeholder="Grade label"
+                  placeholder={
+                    "Label for grade "
+                    ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)
+                  }
                 />
               </div>
             </div>,
@@ -369,11 +372,27 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   </select>
                 }}
              </div>
-             <label
-               className="block tracking-wide text-xs font-semibold mb-2"
-               htmlFor="grades">
-               {"Grade Labels" |> str}
-             </label>
+             <div className="flex justify-between">
+               <label
+                 className="block tracking-wide text-xs font-semibold mb-2"
+                 htmlFor="grades">
+                 {"Grade Labels" |> str}
+               </label>
+               <div className="flex">
+                 <div className="flex justify-center items-center ml-4">
+                   <span
+                     className="grade-bar__pointer-legend grade-bar__pointer-legend-failed"
+                   />
+                   <span className="ml-2 text-xs"> {"Fail" |> str} </span>
+                 </div>
+                 <div className="flex justify-center items-center ml-4">
+                   <span
+                     className="grade-bar__pointer-legend grade-bar__pointer-legend-passed"
+                   />
+                   <span className="ml-2 text-xs"> {"Pass" |> str} </span>
+                 </div>
+               </div>
+             </div>
              {labelEditor(state, setState)}
              <div className="mt-3 mb-3 text-xs">
                <span className="leading-normal">

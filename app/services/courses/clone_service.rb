@@ -30,7 +30,6 @@ module Courses
     def create_evaluation_criteria(new_course)
       @course.evaluation_criteria.each_with_object({}) do |old_ec, translation|
         new_ec = new_course.evaluation_criteria.create!(
-          description: old_ec.description,
           name: old_ec.name,
           max_grade: old_ec.max_grade,
           pass_grade: old_ec.pass_grade,

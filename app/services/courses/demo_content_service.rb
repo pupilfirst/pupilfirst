@@ -48,7 +48,6 @@ module Courses
 
     def create_evaluation_criterion(name)
       EvaluationCriterion.create!(
-        description: name,
         name: name,
         course: @course,
         max_grade: 3,

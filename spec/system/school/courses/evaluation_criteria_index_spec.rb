@@ -123,7 +123,7 @@ feature 'Evaluation criteria index spec', js: true do
     select evaluation_criterion_1.pass_grade, from: 'pass_grade'
 
     click_button 'Create Criterion'
-    expect(page).to have_text("Evaluation criterion not unique for this course")
+    expect(page).to have_text("Criterion already exists with same name, max grade and pass grade")
     dismiss_notification
   end
 end

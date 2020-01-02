@@ -13,7 +13,7 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
   def unique_name_and_grade_params
     return if course.evaluation_criteria.find_by(name: name, max_grade: max_grade, pass_grade: pass_grade).blank?
 
-    errors[:base] << "Evaluation criterion not unique for this course"
+    errors[:base] << "Criterion already exists with same name, max grade and pass grade"
   end
 
   def create_evaluation_criterion

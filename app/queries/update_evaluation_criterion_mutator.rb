@@ -1,7 +1,6 @@
 class UpdateEvaluationCriterionMutator < ApplicationQuery
   property :id
   property :name, validates: { presence: true, length: { minimum: 1, maximum: 50 } }
-  property :description, validates: { presence: true, length: { minimum: 1, maximum: 150 } }
   property :grades_and_labels, validates: { presence: true }
 
   validate :valid_ec_id
@@ -15,7 +14,6 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   def update_evaluation_criterion
     evaluation_criterion.update!(
       name: name,
-      description: description,
       grade_labels: grade_labels
     )
     evaluation_criterion

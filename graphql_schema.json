@@ -1033,22 +1033,6 @@
         "description": "",
         "fields": [
           {
-            "name": "description",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "gradesAndLabels",
             "description": "",
             "args": [],
@@ -3674,20 +3658,6 @@
                 "defaultValue": null
               },
               {
-                "name": "description",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "maxGrade",
                 "description": "",
                 "type": {
@@ -4921,20 +4891,6 @@
               },
               {
                 "name": "name",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "description",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",

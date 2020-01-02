@@ -4,25 +4,21 @@
 
 let str = React.string;
 
-open EvaluationCriteriaEditor__Types;
-
 type state = {
   name: string,
-  description: string,
   maxGrade: int,
   passGrade: int,
-  gradesAndLabels: array(GradesAndLabels.t),
+  gradesAndLabels: array(GradeLabel.t),
   saving: bool,
   dirty: bool,
 };
 
 module CreateEvaluationCriterionQuery = [%graphql
   {|
-   mutation($name: String!, $courseId: ID!, $description: String!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-     createEvaluationCriterion(courseId: $courseId, name: $name, description: $description, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
+   mutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createEvaluationCriterion(courseId: $courseId, name: $name, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
        evaluationCriterion {
         id
-        description
         name
         maxGrade
         passGrade
@@ -38,11 +34,10 @@ module CreateEvaluationCriterionQuery = [%graphql
 
 module UpdateEvaluationCriterionQuery = [%graphql
   {|
-   mutation($id: ID!, $description: String!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-    updateEvaluationCriterion(id: $id, name: $name, description: $description, gradesAndLabels: $gradesAndLabels){
+   mutation($id: ID!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+    updateEvaluationCriterion(id: $id, name: $name, gradesAndLabels: $gradesAndLabels){
        evaluationCriterion {
         id
-        description
         name
         maxGrade
         passGrade
@@ -84,13 +79,11 @@ let updatePassGrade = (value, setState) => {
 };
 
 let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
-  let updatedGradeAndLabel = GradesAndLabels.update(value, gradeAndLabel);
+  let updatedGradeAndLabel = GradeLabel.update(value, gradeAndLabel);
   let gradesAndLabels =
     state.gradesAndLabels
     |> Array.map(gl =>
-         gl
-         |> GradesAndLabels.grade
-         == (updatedGradeAndLabel |> GradesAndLabels.grade)
+         gl |> GradeLabel.grade == (updatedGradeAndLabel |> GradeLabel.grade)
            ? updatedGradeAndLabel : gl
        );
   setState(state => {...state, gradesAndLabels, dirty: true});
@@ -103,15 +96,14 @@ let updateEvaluationCriterion =
   let jsGradeAndLabelArray =
     state.gradesAndLabels
     |> Js.Array.filter(gradesAndLabel =>
-         gradesAndLabel |> GradesAndLabels.grade <= state.maxGrade
+         gradesAndLabel |> GradeLabel.grade <= state.maxGrade
        )
-    |> Array.map(gl => gl |> GradesAndLabels.asJsType);
+    |> Array.map(gl => gl |> GradeLabel.asJsType);
 
   let updateCriterionQuery =
     UpdateEvaluationCriterionQuery.make(
       ~id=criterion |> EvaluationCriterion.id,
       ~name=state.name,
-      ~description=state.description,
       ~gradesAndLabels=jsGradeAndLabelArray,
       (),
     );
@@ -138,14 +130,13 @@ let createEvaluationCriterion =
   let jsGradeAndLabelArray =
     state.gradesAndLabels
     |> Js.Array.filter(gradesAndLabel =>
-         gradesAndLabel |> GradesAndLabels.grade <= state.maxGrade
+         gradesAndLabel |> GradeLabel.grade <= state.maxGrade
        )
-    |> Array.map(gl => gl |> GradesAndLabels.asJsType);
+    |> Array.map(gl => gl |> GradeLabel.asJsType);
 
   let createCriterionQuery =
     CreateEvaluationCriterionQuery.make(
       ~name=state.name,
-      ~description=state.description,
       ~maxGrade=state.maxGrade,
       ~passGrade=state.passGrade,
       ~courseId,
@@ -174,14 +165,9 @@ let updateName = (setState, value) => {
   setState(state => {...state, dirty: true, name: value});
 };
 
-let updateDescription = (setState, value) => {
-  setState(state => {...state, dirty: true, description: value});
-};
-
 let saveDisabled = state => {
   let hasValidName = String.length(state.name) > 1;
-  let hasValidDescription = String.length(state.description) > 1;
-  !state.dirty || state.saving || !(hasValidName && hasValidDescription);
+  !state.dirty || state.saving || !hasValidName;
 };
 
 let labelClasses = (grade, passGrade) => {
@@ -200,7 +186,7 @@ let labelEditor = (state, setState) => {
        let gradeAndLabel =
          state.gradesAndLabels
          |> ArrayUtils.unsafeFind(
-              gradeAndLabel => gradeAndLabel |> GradesAndLabels.grade == grade,
+              gradeAndLabel => gradeAndLabel |> GradeLabel.grade == grade,
               "Unable to find grade and label in evaluation criterion editor",
             );
        labels
@@ -214,7 +200,7 @@ let labelEditor = (state, setState) => {
                   id={"grade-label-for-" ++ (grade |> string_of_int)}
                   className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type_="text"
-                  value={gradeAndLabel |> GradesAndLabels.label}
+                  value={gradeAndLabel |> GradeLabel.label}
                   onChange={event =>
                     updateGradeLabel(
                       ReactEvent.Form.target(event)##value,
@@ -242,19 +228,17 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
       switch (evaluationCriterion) {
       | None => {
           name: "",
-          description: "",
           maxGrade: 5,
           passGrade: 2,
           gradesAndLabels:
             possibleGradeValues
-            |> List.map(i => GradesAndLabels.empty(i))
+            |> List.map(i => GradeLabel.empty(i))
             |> Array.of_list,
           saving: false,
           dirty: false,
         }
       | Some(ec) => {
           name: ec |> EvaluationCriterion.name,
-          description: ec |> EvaluationCriterion.description,
           maxGrade: ec |> EvaluationCriterion.maxGrade,
           passGrade: ec |> EvaluationCriterion.passGrade,
           gradesAndLabels: ec |> EvaluationCriterion.gradesAndLabels,
@@ -303,31 +287,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <School__InputGroupError
               message="Enter a valid name"
               active={state.dirty && state.name |> String.length < 1}
-            />
-          </div>
-          <div className="mt-5">
-            <label
-              className="inline-block tracking-wide text-xs font-semibold "
-              htmlFor="description">
-              {"Description" |> str}
-            </label>
-            <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="description"
-              type_="text"
-              onChange={event =>
-                updateDescription(
-                  setState,
-                  ReactEvent.Form.target(event)##value,
-                )
-              }
-              placeholder="Description for evaluation criterion"
-              maxLength=50
-              value={state.description}
-            />
-            <School__InputGroupError
-              message="Enter a valid description"
-              active={state.dirty && state.description |> String.length < 1}
             />
           </div>
         </div>

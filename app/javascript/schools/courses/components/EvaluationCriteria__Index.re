@@ -2,15 +2,13 @@
 
 let str = React.string;
 
-open EvaluationCriteriaEditor__Types;
-
 type editorAction =
-  | ShowEditor(option(EvaluationCriterionEditor__EvaluationCriterion.t))
+  | ShowEditor(option(EvaluationCriterion.t))
   | Hidden;
 
 type state = {
   editorAction,
-  evaluationCriteria: array(EvaluationCriterionEditor__EvaluationCriterion.t),
+  evaluationCriteria: array(EvaluationCriterion.t),
 };
 
 module EvaluationCriteriaQuery = [%graphql
@@ -18,7 +16,6 @@ module EvaluationCriteriaQuery = [%graphql
     query($courseId: ID!) {
       evaluationCriteria(courseId: $courseId) {
         id
-        description
         name
         maxGrade
         passGrade
@@ -37,9 +34,7 @@ let getEvaluationCriteria = (authenticityToken, courseId, setState, ()) => {
   |> Js.Promise.then_(response => {
        let evaluationCriteria =
          response##evaluationCriteria
-         |> Js.Array.map(ec =>
-              EvaluationCriterionEditor__EvaluationCriterion.makeFromJs(ec)
-            );
+         |> Js.Array.map(ec => EvaluationCriterion.makeFromJs(ec));
        setState(state => {...state, evaluationCriteria});
        Js.Promise.resolve();
      })

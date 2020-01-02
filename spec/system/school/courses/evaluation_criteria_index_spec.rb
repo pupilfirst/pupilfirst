@@ -14,7 +14,6 @@ feature 'Evaluation criteria index spec', js: true do
   let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   let(:new_ec_name) { Faker::Lorem.words(2).join(" ") }
-  let(:new_ec_description) { Faker::Lorem.words(5).join(" ") }
 
   scenario 'school admin visits the evaluation criteria index for the course' do
     sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
@@ -30,7 +29,6 @@ feature 'Evaluation criteria index spec', js: true do
     expect(page).to have_text('Maximum grade is')
 
     fill_in 'Name', with: new_ec_name
-    fill_in 'Description', with: new_ec_description
 
     within('div[aria-label="label-editor"]') do
       expect(page).to have_selector('input', count: 5)
@@ -57,7 +55,6 @@ feature 'Evaluation criteria index spec', js: true do
     evaluation_criterion = EvaluationCriterion.last
 
     expect(evaluation_criterion.name).to eq(new_ec_name)
-    expect(evaluation_criterion.description).to eq(new_ec_description)
     expect(evaluation_criterion.max_grade).to eq(4)
     expect(evaluation_criterion.pass_grade).to eq(2)
     expect(evaluation_criterion.grade_labels["1"]).to eq('Bad')
@@ -73,7 +70,6 @@ feature 'Evaluation criteria index spec', js: true do
     expect(page).to have_text('Maximum grade is')
 
     fill_in 'Name', with: new_ec_name
-    fill_in 'Description', with: new_ec_description
     select '4', from: 'max_grade'
     select '2', from: 'pass_grade'
 
@@ -96,7 +92,6 @@ feature 'Evaluation criteria index spec', js: true do
     find("a[title='Edit #{evaluation_criterion_1.name}']").click
 
     fill_in 'Name', with: new_ec_name
-    fill_in 'Description', with: new_ec_description
     fill_in 'grade-label-for-3', with: 'New Label'
 
     click_button 'Update Criterion'
@@ -107,7 +102,6 @@ feature 'Evaluation criteria index spec', js: true do
     evaluation_criterion_1.reload
 
     expect(evaluation_criterion_1.name).to eq(new_ec_name)
-    expect(evaluation_criterion_1.description).to eq(new_ec_description)
     expect(evaluation_criterion_1.grade_labels["3"]).to eq('New Label')
   end
 
@@ -117,7 +111,6 @@ feature 'Evaluation criteria index spec', js: true do
     find('h5', text: 'Add New Evaluation Criterion').click
 
     fill_in 'Name', with: evaluation_criterion_1.name
-    fill_in 'Description', with: 'Some Description'
 
     select evaluation_criterion_1.max_grade, from: 'max_grade'
     select evaluation_criterion_1.pass_grade, from: 'pass_grade'

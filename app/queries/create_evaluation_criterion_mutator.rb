@@ -2,7 +2,6 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :name, validates: { presence: true, length: { minimum: 2, maximum: 50 } }
-  property :description, validates: { presence: true, length: { minimum: 2, maximum: 150 } }
   property :max_grade, validates: { presence: true }
   property :pass_grade, validates: { presence: true }
   property :grades_and_labels, validates: { presence: true }
@@ -19,7 +18,7 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
   def create_evaluation_criterion
     EvaluationCriterion.transaction do
       ec = EvaluationCriterion.create!(
-        name: name, description: description,
+        name: name,
         course_id: course_id,
         max_grade: max_grade,
         pass_grade: pass_grade,

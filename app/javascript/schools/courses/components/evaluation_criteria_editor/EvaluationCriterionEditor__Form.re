@@ -194,7 +194,7 @@ let labelClasses = (grade, passGrade) => {
 };
 
 let labelEditor = (state, setState) => {
-  <div>
+  <div ariaLabel="label-editor">
     {let labels = [||];
      for (grade in 1 to state.maxGrade) {
        let gradeAndLabel =
@@ -211,6 +211,7 @@ let labelEditor = (state, setState) => {
               </div>
               <div className="flex-1">
                 <input
+                  id={"grade-label-for-" ++ (grade |> string_of_int)}
                   className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type_="text"
                   value={gradeAndLabel |> GradesAndLabels.label}
@@ -295,7 +296,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                 updateName(setState, ReactEvent.Form.target(event)##value)
               }
               type_="text"
-              placeholder="Type course name here"
+              placeholder="Evaluation criterion name"
               maxLength=50
               value={state.name}
             />
@@ -307,7 +308,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
           <div className="mt-5">
             <label
               className="inline-block tracking-wide text-xs font-semibold "
-              htmlFor="name">
+              htmlFor="description">
               {"Description" |> str}
             </label>
             <input
@@ -320,7 +321,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   ReactEvent.Form.target(event)##value,
                 )
               }
-              placeholder="Type description for the evaluation criterion"
+              placeholder="Description for evaluation criterion"
               maxLength=50
               value={state.description}
             />
@@ -357,6 +358,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                         setState,
                       )
                     }
+                    id="max_grade"
                     value={state.maxGrade |> string_of_int}
                     className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 leading-tight rounded-none focus:outline-none">
                     {possibleGradeValues
@@ -391,6 +393,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                         setState,
                       )
                     }
+                    id="pass_grade"
                     value={state.passGrade |> string_of_int}
                     className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 rounded-none leading-tight focus:outline-none">
                     {possibleGradeValues

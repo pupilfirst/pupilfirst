@@ -61,13 +61,12 @@ let showEvaluationCriterion = (evaluationCriterion, setState) => {
     className="flex items-center shadow bg-white rounded-lg mb-4">
     <div className="course-faculty__list-item flex w-full items-center">
       <a
+        title={"Edit " ++ (evaluationCriterion |> EvaluationCriterion.name)}
         onClick={event => openEditor(event, evaluationCriterion, setState)}
         className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
         <div className="flex w-full text-sm justify-between">
           <span className="flex-1 font-semibold py-5 px-5">
-            {evaluationCriterion
-             |> EvaluationCriterionEditor__EvaluationCriterion.name
-             |> str}
+            {evaluationCriterion |> EvaluationCriterion.name |> str}
           </span>
           <span
             className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">

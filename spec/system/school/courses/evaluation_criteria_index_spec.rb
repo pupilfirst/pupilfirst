@@ -80,10 +80,10 @@ feature 'Evaluation criteria index spec', js: true do
 
     evaluation_criterion = EvaluationCriterion.last
 
-    expect(evaluation_criterion.grade_labels["1"]).to eq('one')
-    expect(evaluation_criterion.grade_labels["2"]).to eq('two')
-    expect(evaluation_criterion.grade_labels["3"]).to eq('three')
-    expect(evaluation_criterion.grade_labels["4"]).to eq('four')
+    expect(evaluation_criterion.grade_labels["1"]).to eq('One')
+    expect(evaluation_criterion.grade_labels["2"]).to eq('Two')
+    expect(evaluation_criterion.grade_labels["3"]).to eq('Three')
+    expect(evaluation_criterion.grade_labels["4"]).to eq('Four')
   end
 
   scenario 'school admin updates an evaluation criterion' do

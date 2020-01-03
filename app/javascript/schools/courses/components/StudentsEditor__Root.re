@@ -17,7 +17,7 @@ type selectedStudent = {
   teamId: string,
   avatarUrl: option(string),
   levelId: string,
-  isSingleStudent: bool,
+  studentsCount: int,
 };
 
 type state = {
@@ -47,6 +47,15 @@ let studentsInSelectedTeam = (teams, selectedTeamId) => {
   selectedTeamId |> Team.unsafeFind(teams, "Root") |> Team.students;
 };
 
+let partOfTeamSelected = selectedStudents => {
+  let selectedStudentsCount = selectedStudents |> Array.length;
+
+  selectedStudents
+  |> Array.map(s => s.studentsCount < selectedStudentsCount)
+  |> Js.Array.filter(t => !t)
+  |> Array.length == selectedStudentsCount;
+};
+
 let selectedWithinLevel = selectedStudents => {
   selectedStudents
   |> Array.map(s => s.levelId)
@@ -57,13 +66,14 @@ let selectedWithinLevel = selectedStudents => {
 let isGroupable = selectedStudents =>
   if (selectedStudents |> Array.length > 1) {
     selectedWithinLevel(selectedStudents)
-    && selectedAcrossTeams(selectedStudents);
+    && selectedAcrossTeams(selectedStudents)
+    || partOfTeamSelected(selectedStudents);
   } else {
     false;
   };
 
 let isMoveOutable = selectedStudents => {
-  selectedStudents |> Array.map(s => s.isSingleStudent) == [|false|];
+  selectedStudents |> Array.map(s => s.studentsCount) == [|1|];
 };
 
 let handleTeamUpResponse = (send, _json) => {
@@ -146,7 +156,7 @@ let selectStudent = (send, student, team) => {
     teamId: team |> Team.id,
     avatarUrl: student.avatarUrl,
     levelId: team |> Team.levelId,
-    isSingleStudent: team |> Team.isSingleStudent,
+    studentsCount: team |> Team.students |> Array.length,
   };
   send(SelectStudent(selectedStudent));
 };

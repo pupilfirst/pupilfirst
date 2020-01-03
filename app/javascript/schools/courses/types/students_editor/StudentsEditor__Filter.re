@@ -1,7 +1,13 @@
+type sortBy =
+  | Name
+  | CreatedAt
+  | UpdatedAt;
+
 type t = {
   searchString: option(string),
   tags: array(string),
   levelId: option(string),
+  sortBy,
 };
 
 let searchString = t => t.searchString;
@@ -10,7 +16,14 @@ let tags = t => t.tags;
 
 let levelId = t => t.levelId;
 
-let empty = () => {searchString: None, tags: [||], levelId: None};
+let sortBy = t => t.sortBy;
+
+let empty = () => {
+  searchString: None,
+  tags: [||],
+  levelId: None,
+  sortBy: Name,
+};
 
 let addTag = (tag, t) => {
   ...t,
@@ -30,3 +43,20 @@ let removeTag = (tag, t) => {
 let removeLevelId = t => {...t, levelId: None};
 
 let removeSearchString = t => {...t, searchString: None};
+
+let updateSortBy = (sortBy, t) => {...t, sortBy};
+
+let sortByStrings = t => {
+  switch (t.sortBy) {
+  | Name => "name"
+  | CreatedAt => "created_at"
+  | UpdatedAt => "updated_at"
+  };
+};
+
+let sortByListForDropdown = t =>
+  switch (t.sortBy) {
+  | Name => [|CreatedAt, UpdatedAt|]
+  | CreatedAt => [|Name, UpdatedAt|]
+  | UpdatedAt => [|Name, CreatedAt|]
+  };

@@ -195,7 +195,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       handleRemoveFilter(filter, updateFilterCB),
     );
 
-  <div className="mt-2">
+  <div className="w-full">
     <div className="flex justify-between">
       <div> {selectedFilters |> React.array} </div>
       {selectedFilters |> ArrayUtils.isEmpty

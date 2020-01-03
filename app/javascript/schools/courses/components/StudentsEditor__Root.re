@@ -152,16 +152,50 @@ let selectStudent = (send, student, team) => {
 
 let deselectStudent = (send, studentId) => send(DeselectStudent(studentId));
 
+let updateFilter = (send, filter) => send(UpdateFilter(filter));
+
+let dropDownContents = (updateFilterCB, filter) => {
+  filter
+  |> Filter.sortByListForDropdown
+  |> Array.map(sortBy => {
+       let (text, iconClass) =
+         switch ((sortBy: Filter.sortBy)) {
+         | Name => ("Name", "fas fa-user")
+         | CreatedAt => ("Created At", "fas fa-user")
+         | UpdatedAt => ("Updated At", "fas fa-user")
+         };
+       <div
+         onClick={_ => updateFilterCB(filter |> Filter.updateSortBy(sortBy))}
+         className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
+         <i className=iconClass />
+         <span className="ml-2"> {text |> str} </span>
+       </div>;
+     });
+};
+
+let dropDownSelected = filter => {
+  let (text, iconClass) =
+    switch (filter |> Filter.sortBy) {
+    | Name => ("Name", "fas fa-user")
+    | CreatedAt => ("Created At", "fas fa-user")
+    | UpdatedAt => ("Updated At", "fas fa-user")
+    };
+  <div
+    className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
+    <i className=iconClass />
+    <span className="ml-2"> {text |> str} </span>
+  </div>;
+};
+
+let updateTeams = (send, pagedTeams) => send(UpdateTeams(pagedTeams));
+let showEditForm = (send, student, teamId) =>
+  send(UpdateFormVisible(UpdateForm(student, teamId)));
+
 [@react.component]
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
-  let updateTeams = pagedTeams => send(UpdateTeams(pagedTeams));
-  let showEditForm = (student, teamId) =>
-    send(UpdateFormVisible(UpdateForm(student, teamId)));
   let teams = teamsList(state.pagedTeams);
-  let updateFilter = filter => send(UpdateFilter(filter));
-
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
     {let submitFormCB = tagsToApply => send(RefreshData(tagsToApply));
      switch (state.formVisible) {
@@ -208,12 +242,20 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
     </div>
     <div className="w-full">
       <div className="mx-auto max-w-3xl">
-        <StudentsEditor__Search
-          filter={state.filter}
-          updateFilterCB=updateFilter
-          tags={state.tags}
-          levels
-        />
+        <div className="flex w-full items-center">
+          <StudentsEditor__Search
+            filter={state.filter}
+            updateFilterCB={updateFilter(send)}
+            tags={state.tags}
+            levels
+          />
+          <div className="w-1/4 ml-2 mt-2">
+            {<Dropdown
+               selected={dropDownSelected(state.filter)}
+               contents={dropDownContents(updateFilter(send), state.filter)}
+             />}
+          </div>
+        </div>
         <div className="flex flex-wrap">
           {state.selectedStudents
            |> Array.map(selectedStudent =>
@@ -315,8 +357,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         selectedStudentIds={state.selectedStudents |> Array.map(s => s.id)}
         selectStudentCB={selectStudent(send)}
         deselectStudentCB={deselectStudent(send)}
-        showEditFormCB=showEditForm
-        updateTeamsCB=updateTeams
+        showEditFormCB={showEditForm(send)}
+        updateTeamsCB={updateTeams(send)}
       />
     </div>
   </div>;

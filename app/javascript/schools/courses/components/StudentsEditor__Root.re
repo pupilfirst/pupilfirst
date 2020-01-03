@@ -11,17 +11,26 @@ type formVisible =
   | CreateForm
   | UpdateForm(Student.t, teamId);
 
+type selectedStudent = {
+  name: string,
+  id: string,
+  teamId: string,
+  avatarUrl: option(string),
+  levelId: string,
+  isSingleStudent: bool,
+};
+
 type state = {
   pagedTeams: Page.t,
   filter: Filter.t,
-  selectedStudents: array((Student.t, teamId)),
+  selectedStudents: array(selectedStudent),
   formVisible,
   tags: array(string),
 };
 
 type action =
-  | SelectStudent(Student.t, teamId)
-  | DeselectStudent(Student.t)
+  | SelectStudent(selectedStudent)
+  | DeselectStudent(string)
   | DeselectAllStudents
   | UpdateFormVisible(formVisible)
   | UpdateTeams(Page.t)
@@ -30,7 +39,7 @@ type action =
 
 let selectedAcrossTeams = selectedStudents =>
   selectedStudents
-  |> Array.map(((_, teamId)) => teamId)
+  |> Array.map(s => s.teamId)
   |> ArrayUtils.distinct
   |> Array.length > 1;
 
@@ -38,52 +47,23 @@ let studentsInSelectedTeam = (teams, selectedTeamId) => {
   selectedTeamId |> Team.unsafeFind(teams, "Root") |> Team.students;
 };
 
-let selectedPartialTeam = (selectedStudents, teams) => {
-  // Todo: Re-write logic with a safer function
-  let (_selectedStudent, selectedTeamId) = selectedStudents[0];
-
+let selectedWithinLevel = selectedStudents => {
   selectedStudents
-  |> Array.length
-  < (studentsInSelectedTeam(teams, selectedTeamId) |> Array.length);
-};
-
-let selectedWithinLevel = (selectedStudents, teams) => {
-  let teamIds =
-    selectedStudents |> Array.map(((_student, teamId)) => teamId);
-
-  let selectedUniqTeams =
-    teams |> Js.Array.filter(team => Array.mem(team |> Team.id, teamIds));
-
-  let selectedLevelNumbers =
-    selectedUniqTeams
-    |> Array.map(team => team |> Team.levelId |> int_of_string);
-
-  selectedLevelNumbers
-  |> ArrayUtils.sort_uniq((ln1, ln2) => ln1 - ln2)
+  |> Array.map(s => s.levelId)
+  |> ArrayUtils.sort_uniq(String.compare)
   |> Array.length == 1;
 };
 
-let isGroupable = (selectedStudents, teams) =>
+let isGroupable = selectedStudents =>
   if (selectedStudents |> Array.length > 1) {
-    selectedWithinLevel(selectedStudents, teams)
-    && (
-      selectedAcrossTeams(selectedStudents)
-      || selectedPartialTeam(selectedStudents, teams)
-    );
+    selectedWithinLevel(selectedStudents)
+    && selectedAcrossTeams(selectedStudents);
   } else {
     false;
   };
 
-let isMoveOutable = (selectedStudents, teams) => {
-  let onlyOneSelected = selectedStudents |> Array.length == 1;
-
-  if (onlyOneSelected == true) {
-    // Todo: Re-write logic with a safer function
-    let (_selectedStudent, selectedTeamId) = selectedStudents[0];
-    studentsInSelectedTeam(teams, selectedTeamId) |> Array.length > 1;
-  } else {
-    false;
-  };
+let isMoveOutable = selectedStudents => {
+  selectedStudents |> Array.map(s => s.isSingleStudent) == [|false|];
 };
 
 let handleTeamUpResponse = (send, _json) => {
@@ -94,7 +74,7 @@ let handleTeamUpResponse = (send, _json) => {
 let handleErrorCB = () => ();
 
 let teamUp = (selectedStudents, responseCB) => {
-  let students = selectedStudents |> Array.map(((s, _)) => s);
+  let studentIds = selectedStudents |> Array.map(s => s.id);
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
@@ -104,7 +84,7 @@ let teamUp = (selectedStudents, responseCB) => {
   Js.Dict.set(
     payload,
     "founder_ids",
-    students |> Array.map(s => s |> Student.id) |> Json.Encode.(array(string)),
+    studentIds |> Json.Encode.(array(string)),
   );
   let url = "/school/students/team_up";
   Api.create(url, payload, responseCB, handleErrorCB);
@@ -120,19 +100,16 @@ let initialState = tags => {
 
 let reducer = (state, action) =>
   switch (action) {
-  | SelectStudent(student, teamId) => {
+  | SelectStudent(selectedStudent) => {
       ...state,
       selectedStudents:
-        state.selectedStudents |> Array.append([|(student, teamId)|]),
+        state.selectedStudents |> Array.append([|selectedStudent|]),
     }
 
-  | DeselectStudent(student) => {
+  | DeselectStudent(id) => {
       ...state,
       selectedStudents:
-        state.selectedStudents
-        |> Js.Array.filter(((s, _)) =>
-             Student.id(s) !== Student.id(student)
-           ),
+        state.selectedStudents |> Js.Array.filter(s => s.id != id),
     }
 
   | DeselectAllStudents => {...state, selectedStudents: [||]}
@@ -161,14 +138,24 @@ let teamsList = pagedTeams =>
   | Page.FullyLoaded(teams) => teams
   };
 
+let selectStudent = (send, student, team) => {
+  let selectedStudent = {
+    name: student |> Student.name,
+    id: student |> Student.id,
+    teamId: team |> Team.id,
+    avatarUrl: student.avatarUrl,
+    levelId: team |> Team.levelId,
+    isSingleStudent: team |> Team.isSingleStudent,
+  };
+  send(SelectStudent(selectedStudent));
+};
+
 [@react.component]
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
   let updateTeams = pagedTeams => send(UpdateTeams(pagedTeams));
-  let selectStudent = (student, teamId) => {
-    send(SelectStudent(student, teamId));
-  };
+
   let deselectStudent = student => send(DeselectStudent(student));
   let showEditForm = (student, teamId) =>
     send(UpdateFormVisible(UpdateForm(student, teamId)));
@@ -216,7 +203,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         <StudentsEditor__Search
           filter={state.filter}
           updateFilterCB=updateFilter
-          tags=state.tags
+          tags={state.tags}
           levels
         />
       </div>
@@ -251,7 +238,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                    {"Add tags" |> str}
                  </button>
                : React.null}
-            {isGroupable(state.selectedStudents, teams)
+            {isGroupable(state.selectedStudents)
                ? <button
                    onClick={_e =>
                      teamUp(
@@ -263,7 +250,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                    {"Group as Team" |> str}
                  </button>
                : React.null}
-            {isMoveOutable(state.selectedStudents, teams)
+            {isMoveOutable(state.selectedStudents)
                ? <button
                    onClick={_e =>
                      teamUp(
@@ -293,8 +280,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         courseId
         filter={state.filter}
         pagedTeams={state.pagedTeams}
-        selectedStudents={state.selectedStudents}
-        selectStudentCB=selectStudent
+        selectedStudentIds={state.selectedStudents |> Array.map(s => s.id)}
+        selectStudentCB={selectStudent(send)}
         deselectStudentCB=deselectStudent
         showEditFormCB=showEditForm
         updateTeamsCB=updateTeams

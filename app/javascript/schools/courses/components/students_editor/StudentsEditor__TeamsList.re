@@ -109,7 +109,7 @@ let make =
       ~updateTeamsCB,
       ~filter,
       ~pagedTeams,
-      ~selectedStudents,
+      ~selectedStudentIds,
       ~selectStudentCB,
       ~deselectStudentCB,
       ~showEditFormCB,
@@ -140,29 +140,28 @@ let make =
     [|pagedTeams|],
   );
 
-  let selectedStudentsList = selectedStudents |> Array.map(((s, _)) => s);
-
   <div className="pb-6 px-6">
     <div className="max-w-3xl mx-auto w-full">
       <div className="w-full py-3 rounded-b-lg">
         {teamsList(pagedTeams)
          |> Array.map(team => {
               let isSingleStudent = team |> Team.isSingleStudent;
+              let teamId = team |> Team.id;
               <div
-                key={team |> Team.id}
+                key=teamId
                 id={team |> Team.name}
                 className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden">
                 <div className="flex flex-col flex-1 w-3/5">
                   {team
                    |> Team.students
                    |> Array.map(student => {
+                        let studentId = student |> Student.id;
                         let isChecked =
-                          selectedStudentsList |> Array.mem(student);
-                        let checkboxId =
-                          "select-student-" ++ (student |> Student.id);
-                        let teamId = team |> Team.id;
+                          selectedStudentIds |> Array.mem(studentId);
+                        let checkboxId = "select-student-" ++ studentId;
+
                         <div
-                          key={student |> Student.id}
+                          key=studentId
                           id={student |> Student.name}
                           className="student-team__card h-full cursor-pointer flex items-center bg-white">
                           <div className="flex flex-1 w-3/5 h-full">
@@ -178,11 +177,11 @@ let make =
                                   onChange={
                                     isChecked
                                       ? _e => {
-                                          deselectStudentCB(student);
+                                          deselectStudentCB(studentId);
                                         }
                                       : (
                                         _e => {
-                                          selectStudentCB(student, teamId);
+                                          selectStudentCB(student, team);
                                         }
                                       )
                                   }

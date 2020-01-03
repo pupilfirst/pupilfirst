@@ -426,6 +426,7 @@ let make = (~courseId, ~studentId, ~levels) => {
                 )}
              </div>
            </div>
+           { studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty ?
            <div className="mt-8">
              <h6 className="font-semibold"> {"Average Grades" |> str} </h6>
              <div className="flex -mx-2 flex-wrap">
@@ -434,7 +435,8 @@ let make = (~courseId, ~studentId, ~levels) => {
                   studentDetails |> StudentDetails.averageGrades,
                 )}
              </div>
-           </div>
+           </div> : React.null
+           }
          </div>
          <div
            className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">

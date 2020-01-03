@@ -51,7 +51,7 @@ let partOfTeamSelected = selectedStudents => {
   let selectedStudentsCount = selectedStudents |> Array.length;
 
   selectedStudents
-  |> Array.map(s => s.studentsCount < selectedStudentsCount)
+  |> Array.map(s => s.studentsCount <= selectedStudentsCount)
   |> Js.Array.filter(t => !t)
   |> Array.length == selectedStudentsCount;
 };

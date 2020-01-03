@@ -25,7 +25,7 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
     grades_and_labels.map do |grades_and_label|
       grade = grades_and_label[:grade]
       label = grades_and_label[:label].strip
-      [grade.to_s, label.presence || grade.humanize]
+      [grade.to_s, label.presence || grade.humanize.capitalize]
     end.to_h
   end
 

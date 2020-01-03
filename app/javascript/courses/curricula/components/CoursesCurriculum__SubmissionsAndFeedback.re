@@ -85,7 +85,7 @@ let submissionStatusIcon = (~passed) => {
 
 let undoSubmissionCB = () => Webapi.Dom.(location |> Location.reload);
 
-let gradingSection = (~grades, ~gradeBar, ~passed) =>
+let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
   <div>
     <div className="w-full md:hidden">
       {statusBar(
@@ -102,7 +102,7 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
         className="w-full md:w-1/2 flex-shrink-0 md:order-first px-4 md:px-6">
         <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
         <div className="mt-3">
-          {grades
+          {grades |> Grade.sortByCriterion(evaluationCriteria)
            |> List.map(grade => gradeBar(grade))
            |> Array.of_list
            |> React.array}
@@ -215,10 +215,16 @@ let submissions =
                  }}
               </div>
             | Passed =>
-              gradingSection(~grades, ~passed=true, ~gradeBar=curriedGradeBar)
+              gradingSection(
+                ~grades,
+                ~evaluationCriteria,
+                ~passed=true,
+                ~gradeBar=curriedGradeBar,
+              )
             | Failed =>
               gradingSection(
                 ~grades,
+                ~evaluationCriteria,
                 ~passed=false,
                 ~gradeBar=curriedGradeBar,
               )

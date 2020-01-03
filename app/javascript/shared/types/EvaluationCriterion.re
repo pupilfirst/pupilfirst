@@ -20,7 +20,10 @@ let id = t => t.id;
 
 let maxGrade = t => t.maxGrade;
 
-let passGrade = t => t.passGrade;
+let sort = evaluationCriteria => {
+  evaluationCriteria
+  |> ArrayUtils.copyAndSort((x, y) => String.compare(x.name, y.name));
+};
 
 let name = t => t.name;
 

@@ -236,6 +236,7 @@ let showGradePill =
 let showGrades = (grades, evaluationCriteria, state) =>
   <div>
     {grades
+     |> Grade.sortByCriterion(evaluationCriteria)
      |> Array.mapi((key, grade) => {
           let ec =
             findEvaluvationCriterion(

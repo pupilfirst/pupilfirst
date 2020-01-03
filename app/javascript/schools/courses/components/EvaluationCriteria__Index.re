@@ -124,10 +124,7 @@ let make = (~courseId) => {
     <div className="px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-2xl w-full mx-auto relative">
         {state.evaluationCriteria
-         |> ArrayUtils.copyAndSort((x, y) =>
-              (EvaluationCriterion.id(x) |> int_of_string)
-              - (EvaluationCriterion.id(y) |> int_of_string)
-            )
+         |> EvaluationCriterion.sort
          |> Array.map(ec => showEvaluationCriterion(ec, setState))
          |> React.array}
       </div>

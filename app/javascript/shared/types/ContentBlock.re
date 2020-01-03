@@ -1,4 +1,5 @@
 exception UnexpectedBlockType(string);
+exception UpdateBlockTypeMismatch(string, string);
 
 type markdown = string;
 type url = string;
@@ -13,15 +14,12 @@ type blockType =
   | Image(url, caption)
   | Embed(url, embedCode);
 
-type id =
-  | Unpersisted
-  | Persisted(string);
+type id = string;
 
 type t = {
   id,
   blockType,
   sortIndex: int,
-  dirty: bool,
 };
 
 let decodeMarkdownContent = json =>
@@ -57,10 +55,9 @@ let decode = json => {
     };
 
   {
-    id: Persisted(json |> field("id", string)),
+    id: json |> field("id", string),
     blockType,
     sortIndex: json |> field("sortIndex", int),
-    dirty: false,
   };
 };
 
@@ -70,23 +67,48 @@ let id = t => t.id;
 let blockType = t => t.blockType;
 let sortIndex = t => t.sortIndex;
 
-let makeMarkdownBlock = markdown => Markdown(markdown);
-let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
-let makeFileBlock = (fileUrl, title, fileName) =>
-  File(fileUrl, title, fileName);
-let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
+let make = (id, sortIndex, blockType) => {id, sortIndex, blockType};
 
-let make = (id, blockType, sortIndex, dirty) => {
-  id: Persisted(id),
-  blockType,
-  sortIndex,
-  dirty,
-};
+let makeMarkdownBlock = (~id, ~sortIndex, ~markdown) =>
+  Markdown(markdown) |> make(id, sortIndex);
 
-let blockTypeAsString = blockType =>
+let makeImageBlock = (~id, ~sortIndex, ~fileUrl, ~caption) =>
+  Image(fileUrl, caption) |> make(id, sortIndex);
+
+let makeFileBlock = (~id, ~sortIndex, ~fileUrl, ~title, ~fileName) =>
+  File(fileUrl, title, fileName) |> make(id, sortIndex);
+
+let makeEmbedBlock = (~id, ~sortIndex, ~url, ~embedCode) =>
+  Embed(url, embedCode) |> make(id, sortIndex);
+
+let blockTypeToString = blockType =>
   switch (blockType) {
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
   | Image(_url, _caption) => "image"
   | Embed(_url, _embedCode) => "embed"
   };
+
+let updateMarkdownBlock = (markdown, t) => {
+  ...t,
+  blockType: Markdown(markdown),
+};
+
+let updateFileBlock = (title, t) => {
+  switch (t.blockType) {
+  | File(url, _title, filename) => {
+      ...t,
+      blockType: File(url, title, filename),
+    }
+  | otherType =>
+    raise(UpdateBlockTypeMismatch("file", otherType |> blockTypeToString))
+  };
+};
+
+let updateImageBlock = (caption, t) => {
+  switch (t.blockType) {
+  | Image(url, _caption) => {...t, blockType: Image(url, caption)}
+  | otherType =>
+    raise(UpdateBlockTypeMismatch("image", otherType |> blockTypeToString))
+  };
+};

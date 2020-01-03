@@ -74,22 +74,6 @@ let removeTargetContentCB =
   };
 };
 
-let newContentBlockCB =
-    (updateTargetContentBlocks, sortIndex, blockType: ContentBlock.blockType) =>
-  updateTargetContentBlocks(targetContentBlocks => {
-    let (lowerCBs, upperCBs) =
-      targetContentBlocks
-      |> List.partition(((index, _, _, _)) => index < sortIndex);
-    let newComponentKey = Js.Date.now() |> Js.Float.toString;
-    let updatedUpperCBs =
-      upperCBs
-      |> List.map(((index, blockType, cb, id)) =>
-           (index + 1, blockType, cb, id)
-         )
-      |> List.append([(sortIndex, blockType, None, newComponentKey)]);
-    List.append(lowerCBs, updatedUpperCBs);
-  });
-
 let swapContentBlockCB =
     (
       targetContentBlocks,
@@ -246,7 +230,7 @@ let make =
       switch (previewMode) {
       | false =>
         [|
-          <CurriculumEditor__ContentTypePicker
+          <CurriculumEditor__ContentBlockCreator
             key="static-content-picker"
             sortIndex={
               switch (sortedContentBlocks) {
@@ -258,46 +242,52 @@ let make =
               }
             }
             staticMode=true
-            newContentBlockCB={newContentBlockCB(updateTargetContentBlocks)}
+            createNewContentCB={createNewContentCB(
+              addNewVersionCB,
+              updateTargetContentBlocks,
+            )}
           />,
         |]
         |> Array.append(
              sortedContentBlocks
              |> List.map(((sortIndex, blockType, contentBlock, id)) =>
-                  <CurriculumEditor__ContentBlockEditor
-                    key=id
-                    editorId=id
-                    target
-                    contentBlock
-                    removeTargetContentCB={removeTargetContentCB(
-                      contentBlock,
-                      sortedContentBlocks,
-                      addNewVersionCB,
-                      updateTargetContentBlocks,
-                      toggleSortContentBlock,
-                    )}
-                    blockType
-                    sortIndex
-                    newContentBlockCB={newContentBlockCB(
-                      updateTargetContentBlocks,
-                    )}
-                    createNewContentCB={createNewContentCB(
-                      addNewVersionCB,
-                      updateTargetContentBlocks,
-                    )}
-                    updateContentBlockCB={updateContentBlockCB(
-                      addNewVersionCB,
-                      updateTargetContentBlocks,
-                    )}
-                    blockCount={targetContentBlocks |> List.length}
-                    swapContentBlockCB={swapContentBlockCB(
-                      sortedContentBlocks,
-                      updateTargetContentBlocks,
-                      toggleSortContentBlock,
-                    )}
-                    targetContentBlocks
-                    authenticityToken
-                  />
+                  <div key=id>
+                    <CurriculumEditor__ContentBlockCreator
+                      key={sortIndex |> string_of_int}
+                      sortIndex
+                      createNewContentCB={createNewContentCB(
+                        addNewVersionCB,
+                        updateTargetContentBlocks,
+                      )}
+                      staticMode=false
+                    />
+                    <CurriculumEditor__ContentBlockEditor
+                      editorId=id
+                      target
+                      contentBlock
+                      removeTargetContentCB={removeTargetContentCB(
+                        contentBlock,
+                        sortedContentBlocks,
+                        addNewVersionCB,
+                        updateTargetContentBlocks,
+                        toggleSortContentBlock,
+                      )}
+                      blockType
+                      sortIndex
+                      updateContentBlockCB={updateContentBlockCB(
+                        addNewVersionCB,
+                        updateTargetContentBlocks,
+                      )}
+                      blockCount={targetContentBlocks |> List.length}
+                      swapContentBlockCB={swapContentBlockCB(
+                        sortedContentBlocks,
+                        updateTargetContentBlocks,
+                        toggleSortContentBlock,
+                      )}
+                      targetContentBlocks
+                      authenticityToken
+                    />
+                  </div>
                 )
              |> Array.of_list,
            )

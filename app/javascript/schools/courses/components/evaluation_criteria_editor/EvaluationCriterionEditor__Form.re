@@ -282,11 +282,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
           </div>
         </div>
         {<div className="mx-auto">
-           <div className="max-w-2xl p-6 mx-auto">
-             <h5
-               className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-               {"Grades" |> str}
-             </h5>
+           <div className="max-w-2xl pt-6 mx-auto">
              <div className="mb-4">
                <span
                  className="inline-block tracking-wide text-sm font-semibold mr-2"
@@ -364,7 +360,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                <label
                  className="block tracking-wide text-xs font-semibold mb-2"
                  htmlFor="grades">
-                 {"Grade Labels" |> str}
+                 {"Grade and Labels" |> str}
                </label>
                <div className="flex">
                  <div className="flex justify-center items-center ml-4">

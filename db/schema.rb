@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_02_072958) do
+ActiveRecord::Schema.define(version: 2019_12_16_113157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 2020_01_02_072958) do
     t.integer "max_grade"
     t.integer "pass_grade"
     t.json "grade_labels"
+    t.string "description"
     t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end
 

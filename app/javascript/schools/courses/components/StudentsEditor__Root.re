@@ -150,13 +150,13 @@ let selectStudent = (send, student, team) => {
   send(SelectStudent(selectedStudent));
 };
 
+let deselectStudent = (send, studentId) => send(DeselectStudent(studentId));
+
 [@react.component]
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
   let updateTeams = pagedTeams => send(UpdateTeams(pagedTeams));
-
-  let deselectStudent = student => send(DeselectStudent(student));
   let showEditForm = (student, teamId) =>
     send(UpdateFormVisible(UpdateForm(student, teamId)));
   let teams = teamsList(state.pagedTeams);
@@ -191,12 +191,20 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          />
        </SchoolAdmin__EditorDrawer>;
      }}
-    <div className="px-6 py-2">
+    <div className="max-w-3xl w-full mx-auto flex justify-between py-2 mt-4">
       <a
         className="btn btn-default no-underline"
         href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
         {"Inactive Students" |> str}
       </a>
+      {state.selectedStudents |> Array.length > 0
+         ? React.null
+         : <button
+             onClick={_e => send(UpdateFormVisible(CreateForm))}
+             className="btn btn-primary ml-4">
+             <i className="fas fa-user-plus mr-2" />
+             <span> {"Add New Students" |> str} </span>
+           </button>}
     </div>
     <div className="w-full">
       <div className="mx-auto max-w-3xl">
@@ -206,73 +214,97 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
           tags={state.tags}
           levels
         />
+        <div className="flex flex-wrap">
+          {state.selectedStudents
+           |> Array.map(selectedStudent =>
+                <div
+                  className="flex items-center bg-white border border-gray-300 px-2 py-1 mr-1 rounded-lg mt-2">
+                  {switch (selectedStudent.avatarUrl) {
+                   | Some(avatarUrl) =>
+                     <img
+                       className="w-5 h-5 rounded-full mr-2 object-cover"
+                       src=avatarUrl
+                     />
+                   | None =>
+                     <Avatar
+                       name={selectedStudent.name}
+                       className="w-5 h-5 mr-2"
+                     />
+                   }}
+                  <div className="text-sm">
+                    <span className="text-black font-semibold inline-block ">
+                      {selectedStudent.name |> str}
+                    </span>
+                    <button
+                      className="ml-2 hover:bg-gray-300 cursor-pointer"
+                      onClick={_ => deselectStudent(send, selectedStudent.id)}>
+                      <i className="fas fa-times" />
+                    </button>
+                  </div>
+                </div>
+              )
+           |> React.array}
+        </div>
       </div>
     </div>
     <div>
-      <div className="px-6">
-        <div
-          className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
-          <div className="flex">
-            <label className="flex items-center leading-tight mr-4 my-auto">
-              <input
-                className="leading-tight"
-                type_="checkbox"
-                htmlFor="selected-students"
-                checked={state.selectedStudents |> Array.length > 0}
-                onChange={_ => send(DeselectAllStudents)}
-              />
-              <span
-                id="selected-students" className="ml-2 text-sm text-gray-600">
-                {let selectedCount = state.selectedStudents |> Array.length;
+      {state.selectedStudents |> ArrayUtils.isEmpty
+         ? React.null
+         : <div className="px-6">
+             <div
+               className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
+               <div className="flex">
+                 <label
+                   className="flex items-center leading-tight mr-4 my-auto">
+                   <input
+                     className="leading-tight"
+                     type_="checkbox"
+                     htmlFor="selected-students"
+                     checked={state.selectedStudents |> Array.length > 0}
+                     onChange={_ => send(DeselectAllStudents)}
+                   />
+                   <span
+                     id="selected-students"
+                     className="ml-2 text-sm text-gray-600">
+                     {let selectedCount =
+                        state.selectedStudents |> Array.length;
 
-                 selectedCount > 0
-                   ? (selectedCount |> string_of_int) ++ " selected" |> str
-                   : React.null}
-              </span>
-            </label>
-          </div>
-          <div className="flex">
-            {false
-               ? <button
-                   className="bg-gray-200 hover:bg-gray-400 hover:text-gray-800 focus:outline-none text-gray-600 text-sm font-semibold py-2 px-4 rounded inline-flex items-center mx-2">
-                   {"Add tags" |> str}
-                 </button>
-               : React.null}
-            {isGroupable(state.selectedStudents)
-               ? <button
-                   onClick={_e =>
-                     teamUp(
-                       state.selectedStudents,
-                       handleTeamUpResponse(send),
-                     )
-                   }
-                   className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                   {"Group as Team" |> str}
-                 </button>
-               : React.null}
-            {isMoveOutable(state.selectedStudents)
-               ? <button
-                   onClick={_e =>
-                     teamUp(
-                       state.selectedStudents,
-                       handleTeamUpResponse(send),
-                     )
-                   }
-                   className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                   {"Move out from Team" |> str}
-                 </button>
-               : React.null}
-            {state.selectedStudents |> Array.length > 0
-               ? React.null
-               : <button
-                   onClick={_e => send(UpdateFormVisible(CreateForm))}
-                   className="btn btn-primary ml-4">
-                   <i className="fas fa-user-plus mr-2" />
-                   <span> {"Add New Students" |> str} </span>
-                 </button>}
-          </div>
-        </div>
-      </div>
+                      selectedCount > 0
+                        ? (selectedCount |> string_of_int)
+                          ++ " selected"
+                          |> str
+                        : React.null}
+                   </span>
+                 </label>
+               </div>
+               <div className="flex">
+                 {isGroupable(state.selectedStudents)
+                    ? <button
+                        onClick={_e =>
+                          teamUp(
+                            state.selectedStudents,
+                            handleTeamUpResponse(send),
+                          )
+                        }
+                        className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                        {"Group as Team" |> str}
+                      </button>
+                    : React.null}
+                 {isMoveOutable(state.selectedStudents)
+                    ? <button
+                        onClick={_e =>
+                          teamUp(
+                            state.selectedStudents,
+                            handleTeamUpResponse(send),
+                          )
+                        }
+                        className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
+                        {"Move out from Team" |> str}
+                      </button>
+                    : React.null}
+               </div>
+             </div>
+           </div>}
     </div>
     <div className="overflow-y-scroll">
       <StudentsEditor__TeamsList
@@ -282,7 +314,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         pagedTeams={state.pagedTeams}
         selectedStudentIds={state.selectedStudents |> Array.map(s => s.id)}
         selectStudentCB={selectStudent(send)}
-        deselectStudentCB=deselectStudent
+        deselectStudentCB={deselectStudent(send)}
         showEditFormCB=showEditForm
         updateTeamsCB=updateTeams
       />

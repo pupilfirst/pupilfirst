@@ -6,8 +6,8 @@ open StudentsEditor__Types;
 
 module CourseTeamsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!]) {
-      courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags) {
+    query($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!) {
+      courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy) {
         nodes {
         id,
         name,
@@ -53,7 +53,16 @@ let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
 };
 
 let getTeams =
-    (courseId, cursor, updateTeamsCB, selectedLevelId, search, teams, tags) => {
+    (
+      courseId,
+      cursor,
+      updateTeamsCB,
+      selectedLevelId,
+      search,
+      teams,
+      tags,
+      sortBy,
+    ) => {
   (
     switch (selectedLevelId, search, cursor) {
     | (Some(levelId), Some(search), Some(cursor)) =>
@@ -63,21 +72,37 @@ let getTeams =
         ~search,
         ~after=cursor,
         ~tags,
+        ~sortBy,
         (),
       )
     | (Some(levelId), Some(search), None) =>
-      CourseTeamsQuery.make(~courseId, ~levelId, ~search, ~tags, ())
+      CourseTeamsQuery.make(~courseId, ~levelId, ~search, ~tags, ~sortBy, ())
     | (None, Some(search), Some(cursor)) =>
-      CourseTeamsQuery.make(~courseId, ~search, ~after=cursor, ~tags, ())
+      CourseTeamsQuery.make(
+        ~courseId,
+        ~search,
+        ~after=cursor,
+        ~tags,
+        ~sortBy,
+        (),
+      )
     | (Some(levelId), None, Some(cursor)) =>
-      CourseTeamsQuery.make(~courseId, ~levelId, ~after=cursor, ~tags, ())
+      CourseTeamsQuery.make(
+        ~courseId,
+        ~levelId,
+        ~after=cursor,
+        ~tags,
+        ~sortBy,
+        (),
+      )
     | (Some(levelId), None, None) =>
-      CourseTeamsQuery.make(~courseId, ~levelId, ~tags, ())
+      CourseTeamsQuery.make(~courseId, ~levelId, ~tags, ~sortBy, ())
     | (None, Some(search), None) =>
-      CourseTeamsQuery.make(~courseId, ~search, ~tags, ())
+      CourseTeamsQuery.make(~courseId, ~search, ~tags, ~sortBy, ())
     | (None, None, Some(cursor)) =>
-      CourseTeamsQuery.make(~courseId, ~after=cursor, ~tags, ())
-    | (None, None, None) => CourseTeamsQuery.make(~courseId, ~tags, ())
+      CourseTeamsQuery.make(~courseId, ~after=cursor, ~tags, ~sortBy, ())
+    | (None, None, None) =>
+      CourseTeamsQuery.make(~courseId, ~tags, ~sortBy, ())
     }
   )
   |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
@@ -117,6 +142,7 @@ let make =
   let tags = filter |> Filter.tags;
   let selectedLevelId = filter |> Filter.levelId;
   let searchString = filter |> Filter.searchString;
+  let sortBy = filter |> Filter.sortByStrings;
 
   React.useEffect1(
     () => {
@@ -130,6 +156,7 @@ let make =
           searchString,
           [||],
           tags,
+          sortBy,
         )
       | PartiallyLoaded(_, _) => ()
       | FullyLoaded(_) => ()
@@ -274,6 +301,7 @@ let make =
                  searchString,
                  teams,
                  tags,
+                 sortBy,
                )
              }>
              {"Load More" |> str}

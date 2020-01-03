@@ -128,6 +128,7 @@ let reducer = (state, action) =>
         |> Array.append(tags)
         |> ArrayUtils.sort_uniq(String.compare),
       formVisible: None,
+      selectedStudents: [||],
     }
   };
 

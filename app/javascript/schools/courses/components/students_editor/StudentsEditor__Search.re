@@ -15,8 +15,7 @@ type suggestion = {
 };
 
 let suggestions = (tags, levels) => {
-  let tagSuggestions =
-    tags |> Array.map(t => {title: "Tag: " ++ t, resourceType: Tag});
+  let tagSuggestions = tags |> Array.map(t => {title: t, resourceType: Tag});
   let levelSuggestions =
     levels
     |> Array.map(l =>
@@ -75,7 +74,7 @@ let showSuggestions = (applyFilterCB, title, suggestions: array(suggestion)) => 
                 title={"Pick filter " ++ suggestion.title}
                 key={suggestion.title}
                 className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
-                onMouseDown={_e =>
+                onClick={_e =>
                   applyFilterCB(
                     suggestion.title,
                     Some(suggestion.resourceType),
@@ -219,7 +218,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       />
     </div>
     <div />
-    {if (searchInput != "") {
+    {if (searchInput |> String.trim != "") {
        <div
          className="border border-gray-400 bg-white mt-1 rounded-lg shadow-lg relative px-4 pt-2 pb-3">
          {searchResult(

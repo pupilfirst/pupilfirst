@@ -45,7 +45,10 @@ let isGroupable = selectedStudents =>
   };
 
 let isMoveOutable = selectedStudents => {
-  selectedStudents |> Array.map(s => s.studentsCount) == [|1|];
+  selectedStudents
+  |> Array.length == 1
+  && selectedStudents
+  |> Array.map(s => s.studentsCount) != [|1|];
 };
 
 let make = (~name, ~id, ~teamId, ~avatarUrl, ~levelId, ~studentsCount) => {

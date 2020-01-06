@@ -25,7 +25,6 @@ type state = {
 type action =
   | SelectStudent(SelectedStudent.t)
   | DeselectStudent(string)
-  | DeselectAllStudents
   | UpdateFormVisible(formVisible)
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t)
@@ -84,7 +83,6 @@ let reducer = (state, action) =>
         |> Js.Array.filter(s => s |> SelectedStudent.id != id),
     }
 
-  | DeselectAllStudents => {...state, selectedStudents: [||]}
   | UpdateFormVisible(formVisible) => {...state, formVisible}
   | UpdateTeams(pagedTeams) => {...state, pagedTeams, loading: false}
   | UpdateFilter(filter) => {
@@ -145,6 +143,7 @@ let dropDownContents = (updateFilterCB, filter) => {
          | UpdatedAt => ("Updated At", "fas fa-user")
          };
        <div
+         key=text
          onClick={_ => updateFilterCB(filter |> Filter.updateSortBy(sortBy))}
          className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
          <i className=iconClass />
@@ -286,30 +285,6 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          : <div className="px-6">
              <div
                className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
-               <div className="flex">
-                 <label
-                   className="flex items-center leading-tight mr-4 my-auto">
-                   <input
-                     className="leading-tight"
-                     type_="checkbox"
-                     htmlFor="selected-students"
-                     checked={state.selectedStudents |> Array.length > 0}
-                     onChange={_ => send(DeselectAllStudents)}
-                   />
-                   <span
-                     id="selected-students"
-                     className="ml-2 text-sm text-gray-600">
-                     {let selectedCount =
-                        state.selectedStudents |> Array.length;
-
-                      selectedCount > 0
-                        ? (selectedCount |> string_of_int)
-                          ++ " selected"
-                          |> str
-                        : React.null}
-                   </span>
-                 </label>
-               </div>
                <div className="flex">
                  {state.selectedStudents |> SelectedStudent.isGroupable
                     ? <button

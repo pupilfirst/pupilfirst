@@ -149,7 +149,7 @@ module Courses
         if @params_on.present? && @params_on.match?(/\A20\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\Z/)
           Time.zone.parse(@params_on).end_of_day
         else
-          Time.zone.now.end_of_day
+          Time.zone.now
         end
       end
     end

@@ -19,6 +19,7 @@ type state = {
   selectedStudents: array(SelectedStudent.t),
   formVisible,
   tags,
+  loading: bool,
 };
 
 type action =
@@ -29,7 +30,8 @@ type action =
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t)
   | RefreshData(tags)
-  | UpdateTeam(Team.t, tags);
+  | UpdateTeam(Team.t, tags)
+  | SetLoading(bool);
 
 let handleTeamUpResponse = (send, _json) => {
   send(RefreshData([||]));
@@ -64,6 +66,7 @@ let initialState = tags => {
   filter: Filter.empty(),
   formVisible: None,
   tags,
+  loading: false,
 };
 
 let reducer = (state, action) =>
@@ -83,7 +86,7 @@ let reducer = (state, action) =>
 
   | DeselectAllStudents => {...state, selectedStudents: [||]}
   | UpdateFormVisible(formVisible) => {...state, formVisible}
-  | UpdateTeams(pagedTeams) => {...state, pagedTeams}
+  | UpdateTeams(pagedTeams) => {...state, pagedTeams, loading: false}
   | UpdateFilter(filter) => {
       ...state,
       filter,
@@ -103,6 +106,7 @@ let reducer = (state, action) =>
       formVisible: None,
       selectedStudents: [||],
     }
+  | SetLoading(loading) => {...state, loading}
   };
 
 let teamsList = pagedTeams =>
@@ -171,6 +175,8 @@ let submitForm = (send, tagsToApply) => send(RefreshData(tagsToApply));
 
 let updateForm = (send, tagsToApply, team) =>
   send(UpdateTeam(team, tagsToApply));
+
+let setLoading = (send, loading) => send(SetLoading(loading));
 
 [@react.component]
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
@@ -346,6 +352,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         deselectStudentCB={deselectStudent(send)}
         showEditFormCB={showEditForm(send)}
         updateTeamsCB={updateTeams(send)}
+        loading={state.loading}
+        setLoadingCB={setLoading(send)}
       />
     </div>
   </div>;

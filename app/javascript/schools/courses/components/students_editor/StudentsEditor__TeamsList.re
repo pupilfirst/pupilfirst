@@ -52,17 +52,12 @@ let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
   updateTeamsCB(teams);
 };
 
-let getTeams =
-    (
-      courseId,
-      cursor,
-      updateTeamsCB,
-      selectedLevelId,
-      search,
-      teams,
-      tags,
-      sortBy,
-    ) => {
+let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB) => {
+  let tags = filter |> Filter.tags;
+  let selectedLevelId = filter |> Filter.levelId;
+  let search = filter |> Filter.searchString;
+  let sortBy = filter |> Filter.sortByStrings;
+  setLoadingCB(true);
   (
     switch (selectedLevelId, search, cursor) {
     | (Some(levelId), Some(search), Some(cursor)) =>
@@ -126,6 +121,121 @@ let teamsList = teams =>
   | FullyLoaded(teams) => teams
   };
 
+let teamCard =
+    (
+      team,
+      selectedStudentIds,
+      selectStudentCB,
+      deselectStudentCB,
+      showEditFormCB,
+      levels,
+    ) => {
+  let isSingleStudent = team |> Team.isSingleStudent;
+  let teamId = team |> Team.id;
+  <div
+    key=teamId
+    id={team |> Team.name}
+    className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden">
+    <div className="flex flex-col flex-1 w-3/5">
+      {team
+       |> Team.students
+       |> Array.map(student => {
+            let studentId = student |> Student.id;
+            let isChecked = selectedStudentIds |> Array.mem(studentId);
+            let checkboxId = "select-student-" ++ studentId;
+
+            <div
+              key=studentId
+              id={student |> Student.name}
+              className="student-team__card h-full cursor-pointer flex items-center bg-white">
+              <div className="flex flex-1 w-3/5 h-full">
+                <div className="flex items-center w-full">
+                  <label
+                    className="flex items-center h-full border-r text-gray-500 leading-tight font-bold px-4 py-5 hover:bg-gray-100"
+                    htmlFor=checkboxId>
+                    <input
+                      className="leading-tight"
+                      type_="checkbox"
+                      id=checkboxId
+                      checked=isChecked
+                      onChange={
+                        isChecked
+                          ? _e => {
+                              deselectStudentCB(studentId);
+                            }
+                          : (
+                            _e => {
+                              selectStudentCB(student, team);
+                            }
+                          )
+                      }
+                    />
+                  </label>
+                  <a
+                    className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100"
+                    id={(student |> Student.name) ++ "_edit"}
+                    onClick={_e => showEditFormCB(student, teamId)}>
+                    {switch (student |> Student.avatarUrl) {
+                     | Some(avatarUrl) =>
+                       <img
+                         className="w-10 h-10 rounded-full mr-4 object-cover"
+                         src=avatarUrl
+                       />
+                     | None =>
+                       <Avatar
+                         name={student |> Student.name}
+                         className="w-10 h-10 mr-4"
+                       />
+                     }}
+                    <div className="text-sm flex flex-col">
+                      <p className="text-black font-semibold inline-block ">
+                        {student |> Student.name |> str}
+                      </p>
+                      <div className="flex flex-wrap">
+                        {student
+                         |> Student.tags
+                         |> Array.map(tag =>
+                              <div
+                                key=tag
+                                className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
+                                {tag |> str}
+                              </div>
+                            )
+                         |> React.array}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>;
+          })
+       |> React.array}
+    </div>
+    <div className="flex w-2/5 items-center">
+      <div className="w-3/5 py-4 px-3">
+        {isSingleStudent
+           ? ReasonReact.null
+           : <div className="students-team--name mb-5">
+               <p className="text-xs"> {"Team" |> str} </p>
+               <h4> {team |> Team.name |> str} </h4>
+             </div>}
+      </div>
+      <div className="w-2/5 text-center">
+        <span
+          className="inline-flex flex-col items-center rounded bg-gray-200 px-2 pt-2 pb-1 border">
+          <div className="text-xs font-semibold"> {"Level" |> str} </div>
+          <div className="font-bold">
+            {team
+             |> Team.levelId
+             |> Level.unsafeLevelNumber(levels, "TeamsList")
+             |> str}
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make =
     (
@@ -138,27 +248,15 @@ let make =
       ~selectStudentCB,
       ~deselectStudentCB,
       ~showEditFormCB,
+      ~loading,
+      ~setLoadingCB,
     ) => {
-  let tags = filter |> Filter.tags;
-  let selectedLevelId = filter |> Filter.levelId;
-  let searchString = filter |> Filter.searchString;
-  let sortBy = filter |> Filter.sortByStrings;
-
   React.useEffect1(
     () => {
       switch ((pagedTeams: Page.t)) {
       | Unloaded =>
-        getTeams(
-          courseId,
-          None,
-          updateTeamsCB,
-          selectedLevelId,
-          searchString,
-          [||],
-          tags,
-          sortBy,
-        )
-      | PartiallyLoaded(_, _) => ()
+        getTeams(courseId, None, updateTeamsCB, [||], filter, setLoadingCB)
+      | PartiallyLoaded(_, _)
       | FullyLoaded(_) => ()
       };
 
@@ -169,144 +267,52 @@ let make =
 
   <div className="pb-6 px-6">
     <div className="max-w-3xl mx-auto w-full">
-      <div className="w-full py-3 rounded-b-lg">
-        {teamsList(pagedTeams)
-         |> Array.map(team => {
-              let isSingleStudent = team |> Team.isSingleStudent;
-              let teamId = team |> Team.id;
-              <div
-                key=teamId
-                id={team |> Team.name}
-                className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden">
-                <div className="flex flex-col flex-1 w-3/5">
-                  {team
-                   |> Team.students
-                   |> Array.map(student => {
-                        let studentId = student |> Student.id;
-                        let isChecked =
-                          selectedStudentIds |> Array.mem(studentId);
-                        let checkboxId = "select-student-" ++ studentId;
-
-                        <div
-                          key=studentId
-                          id={student |> Student.name}
-                          className="student-team__card h-full cursor-pointer flex items-center bg-white">
-                          <div className="flex flex-1 w-3/5 h-full">
-                            <div className="flex items-center w-full">
-                              <label
-                                className="flex items-center h-full border-r text-gray-500 leading-tight font-bold px-4 py-5 hover:bg-gray-100"
-                                htmlFor=checkboxId>
-                                <input
-                                  className="leading-tight"
-                                  type_="checkbox"
-                                  id=checkboxId
-                                  checked=isChecked
-                                  onChange={
-                                    isChecked
-                                      ? _e => {
-                                          deselectStudentCB(studentId);
-                                        }
-                                      : (
-                                        _e => {
-                                          selectStudentCB(student, team);
-                                        }
-                                      )
-                                  }
-                                />
-                              </label>
-                              <a
-                                className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100"
-                                id={(student |> Student.name) ++ "_edit"}
-                                onClick={_e =>
-                                  showEditFormCB(student, teamId)
-                                }>
-                                {switch (student |> Student.avatarUrl) {
-                                 | Some(avatarUrl) =>
-                                   <img
-                                     className="w-10 h-10 rounded-full mr-4 object-cover"
-                                     src=avatarUrl
-                                   />
-                                 | None =>
-                                   <Avatar
-                                     name={student |> Student.name}
-                                     className="w-10 h-10 mr-4"
-                                   />
-                                 }}
-                                <div className="text-sm flex flex-col">
-                                  <p
-                                    className="text-black font-semibold inline-block ">
-                                    {student |> Student.name |> str}
-                                  </p>
-                                  <div className="flex flex-wrap">
-                                    {student
-                                     |> Student.tags
-                                     |> Array.map(tag =>
-                                          <div
-                                            key=tag
-                                            className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
-                                            {tag |> str}
-                                          </div>
-                                        )
-                                     |> React.array}
-                                  </div>
-                                </div>
-                              </a>
-                            </div>
-                          </div>
-                        </div>;
-                      })
-                   |> React.array}
-                </div>
-                <div className="flex w-2/5 items-center">
-                  <div className="w-3/5 py-4 px-3">
-                    {isSingleStudent
-                       ? ReasonReact.null
-                       : <div className="students-team--name mb-5">
-                           <p className="text-xs"> {"Team" |> str} </p>
-                           <h4> {team |> Team.name |> str} </h4>
-                         </div>}
-                  </div>
-                  <div className="w-2/5 text-center">
-                    <span
-                      className="inline-flex flex-col items-center rounded bg-gray-200 px-2 pt-2 pb-1 border">
-                      <div className="text-xs font-semibold">
-                        {"Level" |> str}
-                      </div>
-                      <div className="font-bold">
-                        {team
-                         |> Team.levelId
-                         |> Level.unsafeLevelNumber(levels, "TeamsList")
-                         |> str}
-                      </div>
-                    </span>
-                  </div>
-                </div>
-              </div>;
-            })
-         |> React.array}
+      <div className="w-full pt-4 rounded-b-lg">
+        <div className="max-w-3xl mx-auto" />
+        {switch ((pagedTeams: Page.t)) {
+         | Unloaded =>
+           SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
+         | PartiallyLoaded(_, _)
+         | FullyLoaded(_) =>
+           teamsList(pagedTeams)
+           |> Array.map(team => {
+                teamCard(
+                  team,
+                  selectedStudentIds,
+                  selectStudentCB,
+                  deselectStudentCB,
+                  showEditFormCB,
+                  levels,
+                )
+              })
+           |> React.array
+         }}
       </div>
       {switch ((pagedTeams: Page.t)) {
        | Unloaded
        | FullyLoaded(_) => React.null
        | PartiallyLoaded(teams, cursor) =>
-         <div>
-           <button
-             className="btn btn-primary"
-             onClick={_ =>
-               getTeams(
-                 courseId,
-                 Some(cursor),
-                 updateTeamsCB,
-                 selectedLevelId,
-                 searchString,
-                 teams,
-                 tags,
-                 sortBy,
-               )
-             }>
-             {"Load More" |> str}
-           </button>
-         </div>
+         loading
+           ? SkeletonLoading.multiple(
+               ~count=3,
+               ~element=SkeletonLoading.card(),
+             )
+           : <div className="pt-4">
+               <button
+                 className="btn btn-primary"
+                 onClick={_ =>
+                   getTeams(
+                     courseId,
+                     Some(cursor),
+                     updateTeamsCB,
+                     teams,
+                     filter,
+                     setLoadingCB,
+                   )
+                 }>
+                 {"Load More" |> str}
+               </button>
+             </div>
        }}
     </div>
   </div>;

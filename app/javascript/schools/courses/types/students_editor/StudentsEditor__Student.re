@@ -68,6 +68,11 @@ let makeFromJS = studentDetails => {
   );
 };
 
+let updateStudent =
+    (~name, ~email, ~tags, ~excludedFromLeaderboard, ~title, ~affiliation, t) => {
+  {...t, name, email, tags, excludedFromLeaderboard, title, affiliation};
+};
+
 let encode = (teamName, t) =>
   Json.Encode.(
     object_([

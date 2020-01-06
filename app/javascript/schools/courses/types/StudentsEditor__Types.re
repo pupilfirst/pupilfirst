@@ -5,3 +5,4 @@ module StudentInfo = StudentsEditor__StudentInfo;
 module Level = StudentsEditor__Level;
 module Page = StudentsEditor__Page;
 module Filter = StudentsEditor__Filter;
+module SelectedStudent = StudentsEditor__SelectedStudent;

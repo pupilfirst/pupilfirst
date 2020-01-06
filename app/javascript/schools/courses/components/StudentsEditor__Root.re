@@ -11,70 +11,22 @@ type formVisible =
   | CreateForm
   | UpdateForm(Student.t, teamId);
 
-type selectedStudent = {
-  name: string,
-  id: string,
-  teamId: string,
-  avatarUrl: option(string),
-  levelId: string,
-  studentsCount: int,
-};
-
 type state = {
   pagedTeams: Page.t,
   filter: Filter.t,
-  selectedStudents: array(selectedStudent),
+  selectedStudents: array(SelectedStudent.t),
   formVisible,
   tags: array(string),
 };
 
 type action =
-  | SelectStudent(selectedStudent)
+  | SelectStudent(SelectedStudent.t)
   | DeselectStudent(string)
   | DeselectAllStudents
   | UpdateFormVisible(formVisible)
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t)
   | RefreshData(array(string));
-
-let selectedAcrossTeams = selectedStudents =>
-  selectedStudents
-  |> Array.map(s => s.teamId)
-  |> ArrayUtils.distinct
-  |> Array.length > 1;
-
-let studentsInSelectedTeam = (teams, selectedTeamId) => {
-  selectedTeamId |> Team.unsafeFind(teams, "Root") |> Team.students;
-};
-
-let partOfTeamSelected = selectedStudents => {
-  let selectedStudentsCount = selectedStudents |> Array.length;
-
-  selectedStudents
-  |> Array.map(s => s.studentsCount <= selectedStudentsCount)
-  |> Js.Array.filter(t => !t)
-  |> Array.length == selectedStudentsCount;
-};
-
-let selectedWithinLevel = selectedStudents => {
-  selectedStudents
-  |> Array.map(s => s.levelId)
-  |> ArrayUtils.sort_uniq(String.compare)
-  |> Array.length == 1;
-};
-
-let isGroupable = selectedStudents =>
-  if (selectedStudents |> Array.length > 1) {
-    selectedWithinLevel(selectedStudents)
-    && selectedAcrossTeams(selectedStudents)
-    || partOfTeamSelected(selectedStudents);
-  } else {
-    false;
-  };
-
-let isMoveOutable = selectedStudents => {
-  selectedStudents |> Array.map(s => s.studentsCount) == [|1|];
-};
 
 let handleTeamUpResponse = (send, _json) => {
   send(RefreshData([||]));
@@ -84,7 +36,7 @@ let handleTeamUpResponse = (send, _json) => {
 let handleErrorCB = () => ();
 
 let teamUp = (selectedStudents, responseCB) => {
-  let studentIds = selectedStudents |> Array.map(s => s.id);
+  let studentIds = selectedStudents |> Array.map(s => s |> SelectedStudent.id);
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
@@ -119,7 +71,8 @@ let reducer = (state, action) =>
   | DeselectStudent(id) => {
       ...state,
       selectedStudents:
-        state.selectedStudents |> Js.Array.filter(s => s.id != id),
+        state.selectedStudents
+        |> Js.Array.filter(s => s |> SelectedStudent.id != id),
     }
 
   | DeselectAllStudents => {...state, selectedStudents: [||]}
@@ -150,14 +103,16 @@ let teamsList = pagedTeams =>
   };
 
 let selectStudent = (send, student, team) => {
-  let selectedStudent = {
-    name: student |> Student.name,
-    id: student |> Student.id,
-    teamId: team |> Team.id,
-    avatarUrl: student.avatarUrl,
-    levelId: team |> Team.levelId,
-    studentsCount: team |> Team.students |> Array.length,
-  };
+  let selectedStudent =
+    SelectedStudent.make(
+      ~name=student |> Student.name,
+      ~id=student |> Student.id,
+      ~teamId=team |> Team.id,
+      ~avatarUrl=student.avatarUrl,
+      ~levelId=team |> Team.levelId,
+      ~studentsCount=team |> Team.students |> Array.length,
+    );
+
   send(SelectStudent(selectedStudent));
 };
 
@@ -202,21 +157,22 @@ let updateTeams = (send, pagedTeams) => send(UpdateTeams(pagedTeams));
 let showEditForm = (send, student, teamId) =>
   send(UpdateFormVisible(UpdateForm(student, teamId)));
 
+let submitForm = (send, tagsToApply) => send(RefreshData(tagsToApply));
+
 [@react.component]
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
   let teams = teamsList(state.pagedTeams);
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
-    {let submitFormCB = tagsToApply => send(RefreshData(tagsToApply));
-     switch (state.formVisible) {
+    {switch (state.formVisible) {
      | None => ReasonReact.null
      | CreateForm =>
        <SchoolAdmin__EditorDrawer
          closeDrawerCB={() => send(UpdateFormVisible(None))}>
          <StudentsEditor__CreateForm
            courseId
-           submitFormCB
+           submitFormCB={submitForm(send)}
            studentTags={state.tags}
          />
        </SchoolAdmin__EditorDrawer>
@@ -232,7 +188,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
            studentTags={state.tags}
            courseCoachIds
            schoolCoaches
-           submitFormCB
+           submitFormCB={submitForm(send)}
          />
        </SchoolAdmin__EditorDrawer>;
      }}
@@ -272,7 +228,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
            |> Array.map(selectedStudent =>
                 <div
                   className="flex items-center bg-white border border-gray-300 px-2 py-1 mr-1 rounded-lg mt-2">
-                  {switch (selectedStudent.avatarUrl) {
+                  {switch (selectedStudent |> SelectedStudent.avatarUrl) {
                    | Some(avatarUrl) =>
                      <img
                        className="w-5 h-5 rounded-full mr-2 object-cover"
@@ -280,17 +236,22 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                      />
                    | None =>
                      <Avatar
-                       name={selectedStudent.name}
+                       name={selectedStudent |> SelectedStudent.name}
                        className="w-5 h-5 mr-2"
                      />
                    }}
                   <div className="text-sm">
                     <span className="text-black font-semibold inline-block ">
-                      {selectedStudent.name |> str}
+                      {selectedStudent |> SelectedStudent.name |> str}
                     </span>
                     <button
                       className="ml-2 hover:bg-gray-300 cursor-pointer"
-                      onClick={_ => deselectStudent(send, selectedStudent.id)}>
+                      onClick={_ =>
+                        deselectStudent(
+                          send,
+                          selectedStudent |> SelectedStudent.id,
+                        )
+                      }>
                       <i className="fas fa-times" />
                     </button>
                   </div>
@@ -331,7 +292,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                  </label>
                </div>
                <div className="flex">
-                 {isGroupable(state.selectedStudents)
+                 {state.selectedStudents |> SelectedStudent.isGroupable
                     ? <button
                         onClick={_e =>
                           teamUp(
@@ -343,7 +304,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                         {"Group as Team" |> str}
                       </button>
                     : React.null}
-                 {isMoveOutable(state.selectedStudents)
+                 {state.selectedStudents |> SelectedStudent.isMoveOutable
                     ? <button
                         onClick={_e =>
                           teamUp(
@@ -365,7 +326,9 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         courseId
         filter={state.filter}
         pagedTeams={state.pagedTeams}
-        selectedStudentIds={state.selectedStudents |> Array.map(s => s.id)}
+        selectedStudentIds={
+          state.selectedStudents |> Array.map(s => s |> SelectedStudent.id)
+        }
         selectStudentCB={selectStudent(send)}
         deselectStudentCB={deselectStudent(send)}
         showEditFormCB={showEditForm(send)}

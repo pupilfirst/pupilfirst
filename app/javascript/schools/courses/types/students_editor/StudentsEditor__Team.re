@@ -57,6 +57,19 @@ let makeFromJS = teamDetails => {
      );
 };
 
+let updateTeam = (name, student, coachIds, accessEndsAt, t) => {
+  let students =
+    t.students
+    |> Array.map(s =>
+         s
+         |> StudentsEditor__Student.id
+         == (student |> StudentsEditor__Student.id)
+           ? student : s
+       );
+
+  {...t, name, coachIds, accessEndsAt, students};
+};
+
 let unsafeFind = (teams, componentName, teamId) => {
   teams
   |> ArrayUtils.unsafeFind(

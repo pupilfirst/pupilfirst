@@ -331,5 +331,6 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         setLoadingCB={setLoading(send)}
       />
     </div>
+    <LoadingSpinner loading={state.loading} />
   </div>;
 };

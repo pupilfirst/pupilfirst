@@ -11,7 +11,7 @@ class CourseTeamsResolver < ApplicationQuery
     if search.present?
       teams_by_level_and_tag.where('users.name ILIKE ?', "%#{search}%").or(
         teams_by_level_and_tag.where('startups.name ILIKE ?', "%#{search}%")
-      )
+      ).or(teams_by_level_and_tag.where('users.email ILIKE ?', "%#{search}%"))
     else
       teams_by_level_and_tag
     end

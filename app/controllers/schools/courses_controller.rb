@@ -46,12 +46,8 @@ module Schools
       render json: { coach_ids: course.faculty.pluck(:id), error: nil }
     end
 
-    def students
-      @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
-    end
-
     # GET /school/courses/:course_id/students
-    def students_v2
+    def students
       @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
     end
 

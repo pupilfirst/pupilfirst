@@ -6,6 +6,8 @@ let str = React.string;
 
 type teamId = string;
 
+type tags = array(string);
+
 type formVisible =
   | None
   | CreateForm
@@ -16,7 +18,7 @@ type state = {
   filter: Filter.t,
   selectedStudents: array(SelectedStudent.t),
   formVisible,
-  tags: array(string),
+  tags,
 };
 
 type action =
@@ -26,7 +28,8 @@ type action =
   | UpdateFormVisible(formVisible)
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t)
-  | RefreshData(array(string));
+  | RefreshData(tags)
+  | UpdateTeam(Team.t, tags);
 
 let handleTeamUpResponse = (send, _json) => {
   send(RefreshData([||]));
@@ -34,6 +37,9 @@ let handleTeamUpResponse = (send, _json) => {
 };
 
 let handleErrorCB = () => ();
+
+let addTags = (oldtags, newTags) =>
+  oldtags |> Array.append(newTags) |> ArrayUtils.sort_uniq(String.compare);
 
 let teamUp = (selectedStudents, responseCB) => {
   let studentIds = selectedStudents |> Array.map(s => s |> SelectedStudent.id);
@@ -86,10 +92,14 @@ let reducer = (state, action) =>
   | RefreshData(tags) => {
       ...state,
       pagedTeams: Unloaded,
-      tags:
-        state.tags
-        |> Array.append(tags)
-        |> ArrayUtils.sort_uniq(String.compare),
+      tags: addTags(state.tags, tags),
+      formVisible: None,
+      selectedStudents: [||],
+    }
+  | UpdateTeam(team, tags) => {
+      ...state,
+      pagedTeams: state.pagedTeams |> Page.updateTeam(team),
+      tags: addTags(state.tags, tags),
       formVisible: None,
       selectedStudents: [||],
     }
@@ -159,6 +169,9 @@ let showEditForm = (send, student, teamId) =>
 
 let submitForm = (send, tagsToApply) => send(RefreshData(tagsToApply));
 
+let updateForm = (send, tagsToApply, team) =>
+  send(UpdateTeam(team, tagsToApply));
+
 [@react.component]
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
@@ -188,7 +201,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
            studentTags={state.tags}
            courseCoachIds
            schoolCoaches
-           submitFormCB={submitForm(send)}
+           updateFormCB={updateForm(send)}
          />
        </SchoolAdmin__EditorDrawer>;
      }}

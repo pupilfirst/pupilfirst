@@ -57,9 +57,9 @@ let makeFromJS = teamDetails => {
      );
 };
 
-let updateTeam = (name, student, coachIds, accessEndsAt, t) => {
+let update = (~name, ~student, ~coachIds, ~accessEndsAt, ~team) => {
   let students =
-    t.students
+    team.students
     |> Array.map(s =>
          s
          |> StudentsEditor__Student.id
@@ -67,7 +67,11 @@ let updateTeam = (name, student, coachIds, accessEndsAt, t) => {
            ? student : s
        );
 
-  {...t, name, coachIds, accessEndsAt, students};
+  {...team, name, coachIds, accessEndsAt, students};
+};
+
+let replaceTeam = (team, teams) => {
+  teams |> Array.map(t => t.id == team.id ? team : t);
 };
 
 let unsafeFind = (teams, componentName, teamId) => {

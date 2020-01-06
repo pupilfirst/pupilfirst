@@ -68,9 +68,9 @@ let makeFromJS = studentDetails => {
   );
 };
 
-let updateStudent =
-    (~name, ~email, ~tags, ~excludedFromLeaderboard, ~title, ~affiliation, t) => {
-  {...t, name, email, tags, excludedFromLeaderboard, title, affiliation};
+let update =
+    (~name, ~tags, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+  {...student, name, tags, excludedFromLeaderboard, title, affiliation};
 };
 
 let encode = (teamName, t) =>

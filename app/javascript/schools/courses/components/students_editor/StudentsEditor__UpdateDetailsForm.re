@@ -2,7 +2,10 @@
 
 open StudentsEditor__Types;
 
-type teamCoachlist = (string, string, bool);
+type teamCoachlist = (coachId, coachName, selected)
+and coachId = string
+and coachName = string
+and selected = bool;
 
 type state = {
   name: string,
@@ -67,11 +70,38 @@ let successMessage = (accessEndsAt, isSingleFounder) => {
   };
 };
 
-let handleResponseCB = (submitCB, state, isSingleStudent, _json) => {
-  submitCB(state.tagsToApply);
+let enrolledCoachIds = teamCoaches =>
+  teamCoaches
+  |> Js.Array.filter(((_, _, selected)) => selected == true)
+  |> Array.map(((key, _, _)) => key);
+
+let handleResponseCB = (updateFormCB, state, student, team, _json) => {
+  let affiliation =
+    switch (state.affiliation |> String.trim) {
+    | "" => None
+    | text => Some(text)
+    };
+  let newStudent =
+    Student.update(
+      ~name=state.name,
+      ~tags=state.tagsToApply,
+      ~excludedFromLeaderboard=state.excludedFromLeaderboard,
+      ~title=state.title,
+      ~affiliation,
+      ~student,
+    );
+  let newTeam =
+    Team.update(
+      ~name=state.teamName,
+      ~student=newStudent,
+      ~coachIds=enrolledCoachIds(state.teamCoaches),
+      ~accessEndsAt=state.accessEndsAt,
+      ~team,
+    );
+  updateFormCB(state.tagsToApply, newTeam);
   Notification.success(
     "Success",
-    successMessage(state.accessEndsAt, isSingleStudent),
+    successMessage(state.accessEndsAt, team |> Team.isSingleStudent),
   );
 };
 
@@ -84,11 +114,6 @@ let updateStudent = (student, state, send, responseCB) => {
     "authenticity_token",
     AuthenticityToken.fromHead() |> Js.Json.string,
   );
-
-  let enrolledCoachIds =
-    state.teamCoaches
-    |> Js.Array.filter(((_, _, selected)) => selected == true)
-    |> Array.map(((key, _, _)) => key);
 
   let updatedStudent =
     Student.updateInfo(
@@ -111,7 +136,7 @@ let updateStudent = (student, state, send, responseCB) => {
   Js.Dict.set(
     payload,
     "coach_ids",
-    enrolledCoachIds |> Json.Encode.(array(string)),
+    enrolledCoachIds(state.teamCoaches) |> Json.Encode.(array(string)),
   );
 
   Js.Dict.set(
@@ -206,7 +231,7 @@ let make =
       ~studentTags,
       ~courseCoachIds,
       ~schoolCoaches,
-      ~submitFormCB,
+      ~updateFormCB,
     ) => {
   let (state, send) =
     React.useReducer(
@@ -390,7 +415,7 @@ let make =
             student,
             state,
             send,
-            handleResponseCB(submitFormCB, state, isSingleStudent),
+            handleResponseCB(updateFormCB, state, student, team),
           )
         }
         className="w-full btn btn-large btn-primary">

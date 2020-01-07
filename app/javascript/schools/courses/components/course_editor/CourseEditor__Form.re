@@ -292,7 +292,8 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
               <div className="max-w-2xl p-6 mx-auto">
                 <h5
                   className="uppercase text-center border-b border-gray-400 pb-2">
-                  {"Course Details" |> str}
+                  {(course == None ? "Add New Course" : "Edit Course Details")
+                   |> str}
                 </h5>
                 <div className="mt-5">
                   <label

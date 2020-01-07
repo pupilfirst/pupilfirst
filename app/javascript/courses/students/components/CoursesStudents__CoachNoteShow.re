@@ -42,7 +42,7 @@ let deleteIcon = (note, removeCoachNote, removeNoteCB, setState, state) => {
   <button
     className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 focus:outline-none "
     disabled={state.archiving}
-    ariaLabel={"Delete " ++ (note |> CoachNote.id)}
+    title={"Delete " ++ (note |> CoachNote.id)}
     onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB, setState)}>
     <FaIcon
       classes={state.archiving ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"}
@@ -53,7 +53,10 @@ let deleteIcon = (note, removeCoachNote, removeNoteCB, setState, state) => {
 [@react.component]
 let make = (~note, ~userId, ~removeNoteCB) => {
   let (state, setState) = React.useState(() => {archiving: false});
-  <div className="mt-4" key={note |> CoachNote.id}>
+  <div
+    className="mt-4"
+    key={note |> CoachNote.id}
+    ariaLabel={"Note " ++ (note |> CoachNote.id)}>
     <div className="flex justify-between">
       <div className="flex">
         {switch (note |> CoachNote.author) {

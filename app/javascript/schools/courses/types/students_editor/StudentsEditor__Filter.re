@@ -25,13 +25,9 @@ let empty = () => {
   sortBy: Name,
 };
 
-let addTag = (tag, t) => {
-  ...t,
-  tags: t.tags |> Array.append([|tag|]),
-  searchString: None,
-};
+let addTag = (tag, t) => {...t, tags: t.tags |> Array.append([|tag|])};
 
-let changeLevelId = (levelId, t) => {...t, levelId, searchString: None};
+let changeLevelId = (levelId, t) => {...t, levelId};
 
 let changeSearchString = (searchString, t) => {...t, searchString};
 

@@ -131,7 +131,6 @@ let handleRemoveFilter = (filter, updateFilterCB, title, resourceType) => {
     | Some(r) =>
       switch (r) {
       | Level(_) => filter |> Filter.removeLevelId
-
       | Tag => filter |> Filter.removeTag(title)
       }
     | None => filter |> Filter.removeSearchString
@@ -143,7 +142,17 @@ let tagPill = (title, resourceType, removeFilterCB) => {
   <span
     key=title
     className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden ">
-    {title |> str}
+    {(
+       switch (resourceType) {
+       | Some(r) =>
+         switch (r) {
+         | Level(_) => title
+         | Tag => "Tag: " ++ title
+         }
+       | None => title
+       }
+     )
+     |> str}
     <span
       className="ml-1 text-red-500 px-1 border-2 border-red-200 m-1 hover:shadow hover:border-red-500 hover:bg-red-100 hover:text-red-600"
       onClick={_ => removeFilterCB(title, resourceType)}>

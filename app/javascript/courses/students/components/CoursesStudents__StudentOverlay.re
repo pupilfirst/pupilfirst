@@ -360,7 +360,7 @@ let addNoteCB = (setState, studentDetails, note) => {
 };
 
 [@react.component]
-let make = (~courseId, ~studentId, ~levels) => {
+let make = (~courseId, ~studentId, ~levels, ~userId) => {
   let (state, setState) =
     React.useState(() =>
       {studentData: Loading, selectedTab: Notes, submissions: Unloaded}
@@ -481,6 +481,7 @@ let make = (~courseId, ~studentId, ~levels) => {
                   studentId
                   coachNotes={studentDetails |> StudentDetails.coachNotes}
                   addNoteCB={addNoteCB(setState, studentDetails)}
+                  userId
                 />
               | Submissions =>
                 <CoursesStudents__SubmissionsList

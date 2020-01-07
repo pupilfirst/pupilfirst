@@ -274,7 +274,7 @@ let applicableLevels = levels => {
 };
 
 [@react.component]
-let make = (~levels, ~course) => {
+let make = (~levels, ~course, ~userId) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -312,7 +312,7 @@ let make = (~levels, ~course) => {
   <div>
     {switch (url.path) {
      | ["students", studentId, "report"] =>
-       <CoursesStudents__StudentOverlay courseId studentId levels />
+       <CoursesStudents__StudentOverlay courseId studentId levels userId />
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">

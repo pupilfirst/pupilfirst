@@ -11,6 +11,8 @@ let title = t => t.title;
 
 let avatarUrl = t => t.avatarUrl;
 
+let id = t => t.id;
+
 let make = (~name, ~title, ~avatarUrl, ~id) => {name, title, avatarUrl, id};
 
 let makeFromJs = coachData => {

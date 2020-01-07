@@ -64,50 +64,71 @@ let updateCoachNoteCB = (setState, newNote) => {
 let saveNoteButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
-let showCoachNote = note => {
+let removeCoachNote = (id, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  Js.log(id);
+};
+
+let showCoachNote = (note, userId) => {
   <div className="mt-4" key={note |> CoachNote.id}>
-    <div className="flex">
-      {switch (note |> CoachNote.author) {
-       | Some(coach) =>
-         switch (coach |> Coach.avatarUrl) {
-         | Some(avatarUrl) =>
-           <img
-             className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-             src=avatarUrl
-           />
+    <div className="flex justify-between">
+      <div className="flex">
+        {switch (note |> CoachNote.author) {
+         | Some(coach) =>
+           switch (coach |> Coach.avatarUrl) {
+           | Some(avatarUrl) =>
+             <img
+               className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+               src=avatarUrl
+             />
+           | None =>
+             <Avatar
+               name={coach |> Coach.name}
+               className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+             />
+           }
+
          | None =>
            <Avatar
-             name={coach |> Coach.name}
-             className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+             name="?"
+             className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
            />
-         }
-
-       | None =>
-         <Avatar
-           name="?"
-           className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-         />
-       }}
-      <div>
-        <p className="text-sm font-semibold inline-block leading-snug">
-          {(
-             switch (note |> CoachNote.author) {
-             | Some(coach) => coach |> Coach.name
-             | None => "Deleted Coach"
-             }
-           )
-           |> str}
-        </p>
-        <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
-          {(
-             switch (note |> CoachNote.author) {
-             | Some(coach) => coach |> Coach.title
-             | None => "Unknown"
-             }
-           )
-           |> str}
-        </p>
+         }}
+        <div>
+          <p className="text-sm font-semibold inline-block leading-snug">
+            {(
+               switch (note |> CoachNote.author) {
+               | Some(coach) => coach |> Coach.name
+               | None => "Deleted Coach"
+               }
+             )
+             |> str}
+          </p>
+          <p
+            className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+            {(
+               switch (note |> CoachNote.author) {
+               | Some(coach) => coach |> Coach.title
+               | None => "Unknown"
+               }
+             )
+             |> str}
+          </p>
+        </div>
       </div>
+      {let showDeleteIcon =
+         switch (note |> CoachNote.author) {
+         | None => false
+         | Some(coach) => Coach.id(coach) == userId
+         };
+       showDeleteIcon
+         ? <div
+             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+             ariaLabel={"Delete " ++ (note |> CoachNote.id)}
+             onClick={removeCoachNote(note |> CoachNote.id)}>
+             <i className="fas fa-trash-alt" />
+           </div>
+         : React.null}
     </div>
     <div className="ml-10 md:ml-13 mt-2">
       <p
@@ -124,7 +145,7 @@ let showCoachNote = note => {
 };
 
 [@react.component]
-let make = (~studentId, ~coachNotes, ~addNoteCB) => {
+let make = (~studentId, ~coachNotes, ~addNoteCB, ~userId) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
   <div>
     <DisablingCover disabled={state.saving} message="Saving...">
@@ -166,7 +187,7 @@ let make = (~studentId, ~coachNotes, ~addNoteCB) => {
          : React.null}
       {coachNotes
        |> CoachNote.sort
-       |> Array.map(note => showCoachNote(note))
+       |> Array.map(note => showCoachNote(note, userId))
        |> React.array}
     </div>
   </div>;

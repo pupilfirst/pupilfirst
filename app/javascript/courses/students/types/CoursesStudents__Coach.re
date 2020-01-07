@@ -2,7 +2,7 @@ type t = {
   name: string,
   title: string,
   avatarUrl: option(string),
-  userId: string,
+  id: string,
 };
 
 let name = t => t.name;
@@ -11,18 +11,13 @@ let title = t => t.title;
 
 let avatarUrl = t => t.avatarUrl;
 
-let make = (~name, ~title, ~avatarUrl, ~userId) => {
-  name,
-  title,
-  avatarUrl,
-  userId,
-};
+let make = (~name, ~title, ~avatarUrl, ~id) => {name, title, avatarUrl, id};
 
 let makeFromJs = coachData => {
   make(
     ~name=coachData##name,
     ~title=coachData##title,
     ~avatarUrl=coachData##avatarUrl,
-    ~userId=coachData##userId,
+    ~id=coachData##id,
   );
 };

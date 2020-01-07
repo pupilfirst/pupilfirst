@@ -5,7 +5,7 @@ feature 'School students index', js: true do
   include NotificationHelper
 
   # Setup a course with a single founder target, ...
-  let!(:school) { create :school, :current }
+  let!(:school) { create :school, :current, founder_tag_list: ["Single Student"] }
   let!(:course) { create :course, school: school }
 
   let!(:school_admin) { create :school_admin, school: school }
@@ -17,7 +17,7 @@ feature 'School students index', js: true do
   let!(:startup_2) { create :startup, level: level_2 }
 
   let(:team_with_lone_student) { create :team, level: level_2 }
-  let!(:lone_student) { create :founder, startup: team_with_lone_student }
+  let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: ["Single Student"] }
 
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
@@ -395,5 +395,40 @@ feature 'School students index', js: true do
 
     expect(page).to have_text('email address not unique for student')
     expect(page).to have_button('Add to List', disabled: true)
+  end
+
+  scenario 'search' do
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # filter by level
+    fill_in "Search", with: "level"
+    click_button level_2.name
+    expect(page).to have_text(startup_2.name)
+    expect(page).not_to have_text(startup_1.name)
+    click_button "Remove filter Level 2: #{level_2.name}"
+
+    # filter by tag
+    fill_in "Search", with: "Single Student"
+    click_button "Pick tag Single Student"
+    expect(page).to have_text(lone_student.name)
+    expect(page).not_to have_text(startup_1.name)
+    expect(page).not_to have_text(startup_2.name)
+    click_button "Remove filter Single Student"
+
+    # filter by name
+    name = startup_1.founders.first.name
+    fill_in "Search", with: name
+    click_button name
+    expect(page).to have_text(startup_1.name)
+    click_button "Remove filter #{name}"
+
+    # filter by email
+    email = startup_1.founders.first.email
+    fill_in "Search", with: email
+    click_button email
+    expect(page).to have_text(startup_1.name)
+    expect(page).not_to have_text(startup_2.name)
+    expect(page).not_to have_text(lone_student.name)
+    click_button "Remove filter #{email}"
   end
 end

@@ -129,33 +129,22 @@ let dropDownContents = (updateFilterCB, filter) => {
   filter
   |> Filter.sortByListForDropdown
   |> Array.map(sortBy => {
-       let (text, iconClass) =
-         switch ((sortBy: Filter.sortBy)) {
-         | Name => ("Name", "fas fa-user")
-         | CreatedAt => ("Created At", "fas fa-user")
-         | UpdatedAt => ("Updated At", "fas fa-user")
-         };
+       let title = filter |> Filter.sortByTitle;
        <div
-         key=text
+         key=title
          onClick={_ => updateFilterCB(filter |> Filter.updateSortBy(sortBy))}
          className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
-         <i className=iconClass />
-         <span className="ml-2"> {text |> str} </span>
+         <i className={filter |> Filter.sortByIcon} />
+         <span className="ml-2"> {title |> str} </span>
        </div>;
      });
 };
 
 let dropDownSelected = filter => {
-  let (text, iconClass) =
-    switch (filter |> Filter.sortBy) {
-    | Name => ("Name", "fas fa-user")
-    | CreatedAt => ("Created At", "fas fa-user")
-    | UpdatedAt => ("Updated At", "fas fa-user")
-    };
   <div
     className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
-    <i className=iconClass />
-    <span className="ml-2"> {text |> str} </span>
+    <i className={filter |> Filter.sortByIcon} />
+    <span className="ml-2"> {filter |> Filter.sortByTitle |> str} </span>
   </div>;
 };
 

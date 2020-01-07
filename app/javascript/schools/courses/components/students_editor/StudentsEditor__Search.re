@@ -48,13 +48,24 @@ let clearFilter = (setSearchInput, updateFilterCB) => {
   Filter.empty() |> updateFilter(setSearchInput, updateFilterCB);
 };
 
+let suggestionTitle = (title, resourceType) => {
+  switch (resourceType) {
+  | Some(rt) =>
+    switch (rt) {
+    | Tag => "Pick tag " ++ title
+    | Level(_) => "Pick " ++ title
+    }
+  | None => "Search " ++ title
+  };
+};
+
 let searchByName = (searchInput, applyFilterCB) => {
   [|
     <div key="searchByName" className="mt-2">
       <span> {"Search for " |> str} </span>
       <button
         onClick={_ => applyFilterCB(searchInput, None)}
-        title={"Pick filter " ++ searchInput}
+        title={suggestionTitle(searchInput, None)}
         className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden">
         {searchInput |> str}
       </button>
@@ -71,7 +82,10 @@ let showSuggestions = (applyFilterCB, title, suggestions: array(suggestion)) => 
         {suggestions
          |> Array.map(suggestion =>
               <button
-                title={"Pick filter " ++ suggestion.title}
+                title={suggestionTitle(
+                  suggestion.title,
+                  Some(suggestion.resourceType),
+                )}
                 key={suggestion.title}
                 className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
                 onClick={_e =>
@@ -153,11 +167,12 @@ let tagPill = (title, resourceType, removeFilterCB) => {
        }
      )
      |> str}
-    <span
+    <button
+      title={"Remove filter " ++ title}
       className="ml-1 text-red-500 px-1 border-2 border-red-200 m-1 hover:shadow hover:border-red-500 hover:bg-red-100 hover:text-red-600"
       onClick={_ => removeFilterCB(title, resourceType)}>
-      {"x" |> str}
-    </span>
+      <FaIcon classes="fas fa-times" />
+    </button>
   </span>;
 };
 

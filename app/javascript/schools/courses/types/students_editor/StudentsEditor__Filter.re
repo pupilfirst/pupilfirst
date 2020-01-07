@@ -56,3 +56,19 @@ let sortByListForDropdown = t =>
   | CreatedAt => [|Name, UpdatedAt|]
   | UpdatedAt => [|Name, CreatedAt|]
   };
+
+let sortByTitle = t => {
+  switch (t.sortBy) {
+  | Name => "Name"
+  | CreatedAt => "last created"
+  | UpdatedAt => "last updated"
+  };
+};
+
+let sortByIcon = t => {
+  switch (t.sortBy) {
+  | Name => "fas fa-user"
+  | CreatedAt => "fas fa-user"
+  | UpdatedAt => "fas fa-user"
+  };
+};

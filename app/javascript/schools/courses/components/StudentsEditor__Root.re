@@ -129,23 +129,26 @@ let dropDownContents = (updateFilterCB, filter) => {
   filter
   |> Filter.sortByListForDropdown
   |> Array.map(sortBy => {
-       let title = filter |> Filter.sortByTitle;
-       <div
+       let title = sortBy |> Filter.sortByTitle;
+       <button
          key=title
+         title={"Order by " ++ title}
          onClick={_ => updateFilterCB(filter |> Filter.updateSortBy(sortBy))}
          className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
-         <i className={filter |> Filter.sortByIcon} />
+         <i className={sortBy |> Filter.sortByIcon} />
          <span className="ml-2"> {title |> str} </span>
-       </div>;
+       </button>;
      });
 };
 
 let dropDownSelected = filter => {
-  <div
+  let title = filter |> Filter.sortBy |> Filter.sortByTitle;
+  <button
+    title={"Order by " ++ title}
     className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
-    <i className={filter |> Filter.sortByIcon} />
-    <span className="ml-2"> {filter |> Filter.sortByTitle |> str} </span>
-  </div>;
+    <i className={filter |> Filter.sortBy |> Filter.sortByIcon} />
+    <span className="ml-2"> {title |> str} </span>
+  </button>;
 };
 
 let updateTeams = (send, pagedTeams) => send(UpdateTeams(pagedTeams));

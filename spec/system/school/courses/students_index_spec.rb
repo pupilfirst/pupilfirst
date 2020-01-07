@@ -397,7 +397,7 @@ feature 'School students index', js: true do
     expect(page).to have_button('Add to List', disabled: true)
   end
 
-  scenario 'search' do
+  scenario 'school admin tries to filter students' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # filter by level
@@ -430,5 +430,37 @@ feature 'School students index', js: true do
     expect(page).not_to have_text(startup_2.name)
     expect(page).not_to have_text(lone_student.name)
     click_button "Remove filter #{email}"
+  end
+
+  scenario 'school admin can order students' do
+    30.times do
+      create :startup, level: level_1
+    end
+
+    teams = course.startups
+    teams_order_by_created_at = teams.order(:created_at)
+    team_order_by_updated_at = teams.order(:updated_at)
+    teams_order_by_name_at = teams.order(:name)
+
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # order by created_at
+    click_button "Order by name"
+    click_button "Order by last created"
+    expect(page).to have_text(teams_order_by_created_at.last.name)
+    click_button('Load More')
+    expect(page).to have_text(teams_order_by_created_at.first.name)
+
+    click_button "Order by last created"
+    click_button "Order by last updated"
+    expect(page).to have_text(team_order_by_updated_at.last.name)
+    click_button('Load More')
+    expect(page).to have_text(team_order_by_updated_at.first.name)
+
+    click_button "Order by last updated"
+    click_button "Order by name"
+    expect(page).to have_text(teams_order_by_name_at.first.name)
+    click_button('Load More')
+    expect(page).to have_text(teams_order_by_name_at.last.name)
   end
 end

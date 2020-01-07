@@ -84,3 +84,10 @@ let unsafeFind = (teams, componentName, teamId) => {
        ++ componentName,
      );
 };
+
+let active = t => {
+  switch (t.accessEndsAt) {
+  | Some(date) => date |> DateFns.isAfter(Js.Date.make())
+  | None => true
+  };
+};

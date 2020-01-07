@@ -12,14 +12,14 @@ module DropoutStudentQuery = [%graphql
  |}
 ];
 
-let dropoutStudent = (id, setSaving, event) => {
+let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
   DropoutStudentQuery.make(~id, ())
   |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
   |> Js.Promise.then_(response => {
        response##dropoutStudent##success
-         ? DomUtils.reload() : setSaving(_ => false);
+         ? reloadTeamsCB() : setSaving(_ => false);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -32,7 +32,7 @@ let submitButtonIcons = saving => {
 };
 
 [@react.component]
-let make = (~student) => {
+let make = (~student, ~reloadTeamsCB) => {
   let (saving, setSaving) = React.useState(() => false);
 
   <div className="mt-5">
@@ -51,7 +51,11 @@ let make = (~student) => {
       <button
         disabled=saving
         className="btn btn-danger btn-large"
-        onClick={dropoutStudent(student |> Student.id, setSaving)}>
+        onClick={dropoutStudent(
+          student |> Student.id,
+          setSaving,
+          reloadTeamsCB,
+        )}>
         <FaIcon classes={submitButtonIcons(saving)} />
         <span className="ml-2"> {"Dropout Student" |> str} </span>
       </button>

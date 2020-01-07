@@ -13,3 +13,10 @@ let updateTeam = (team, t) => {
     FullyLoaded(teams |> StudentsEditor__Team.replaceTeam(team))
   };
 };
+
+let teams = teams =>
+  switch (teams) {
+  | Unloaded => [||]
+  | PartiallyLoaded(teams, _cursor) => teams
+  | FullyLoaded(teams) => teams
+  };

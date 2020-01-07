@@ -114,13 +114,6 @@ let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB) =>
   |> ignore;
 };
 
-let teamsList = teams =>
-  switch ((teams: Page.t)) {
-  | Unloaded => [||]
-  | PartiallyLoaded(teams, _cursor) => teams
-  | FullyLoaded(teams) => teams
-  };
-
 let teamCard =
     (
       team,
@@ -274,7 +267,8 @@ let make =
            SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
          | PartiallyLoaded(_, _)
          | FullyLoaded(_) =>
-           teamsList(pagedTeams)
+           pagedTeams
+           |> Page.teams
            |> Array.map(team => {
                 teamCard(
                   team,

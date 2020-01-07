@@ -40,8 +40,6 @@ feature 'School students index', js: true do
   scenario 'School admin adds new students' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-    # list all students
-    expect(page).to have_text("All levels")
     expect(page).to have_text(startup_1.founders.first.name)
     expect(page).to have_text(startup_2.founders.last.name)
 

@@ -75,7 +75,7 @@ let enrolledCoachIds = teamCoaches =>
   |> Js.Array.filter(((_, _, selected)) => selected == true)
   |> Array.map(((key, _, _)) => key);
 
-let handleResponseCB = (updateFormCB, state, student, team, _json) => {
+let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   let affiliation =
     switch (state.affiliation |> String.trim) {
     | "" => None
@@ -96,12 +96,16 @@ let handleResponseCB = (updateFormCB, state, student, team, _json) => {
       ~student=newStudent,
       ~coachIds=enrolledCoachIds(state.teamCoaches),
       ~accessEndsAt=state.accessEndsAt,
-      ~team,
+      ~team=oldTeam,
     );
-  updateFormCB(state.tagsToApply, newTeam);
+
+// Remove inactive teams from the list
+  let team = newTeam |> Team.active ? Some(newTeam) : None;
+
+  updateFormCB(state.tagsToApply, team);
   Notification.success(
     "Success",
-    successMessage(state.accessEndsAt, team |> Team.isSingleStudent),
+    successMessage(state.accessEndsAt, newTeam |> Team.isSingleStudent),
   );
 };
 

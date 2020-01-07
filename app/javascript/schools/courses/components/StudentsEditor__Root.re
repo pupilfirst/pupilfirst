@@ -107,13 +107,6 @@ let reducer = (state, action) =>
   | SetLoading(loading) => {...state, loading}
   };
 
-let teamsList = pagedTeams =>
-  switch (pagedTeams) {
-  | Page.Unloaded => [||]
-  | Page.PartiallyLoaded(teams, _cursor) => teams
-  | Page.FullyLoaded(teams) => teams
-  };
-
 let selectStudent = (send, student, team) => {
   let selectedStudent =
     SelectedStudent.make(
@@ -167,13 +160,20 @@ let dropDownSelected = filter => {
 };
 
 let updateTeams = (send, pagedTeams) => send(UpdateTeams(pagedTeams));
+
 let showEditForm = (send, student, teamId) =>
   send(UpdateFormVisible(UpdateForm(student, teamId)));
 
 let submitForm = (send, tagsToApply) => send(RefreshData(tagsToApply));
 
-let updateForm = (send, tagsToApply, team) =>
-  send(UpdateTeam(team, tagsToApply));
+let updateForm = (send, tagsToApply, team) => {
+  switch (team) {
+  | Some(t) => send(UpdateTeam(t, tagsToApply))
+  | None => send(RefreshData(tagsToApply))
+  };
+};
+
+let reloadTeams = (send, ()) => send(RefreshData([||]));
 
 let setLoading = (send, loading) => send(SetLoading(loading));
 
@@ -181,7 +181,6 @@ let setLoading = (send, loading) => send(SetLoading(loading));
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
-  let teams = teamsList(state.pagedTeams);
   <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
     {switch (state.formVisible) {
      | None => ReasonReact.null
@@ -196,8 +195,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
        </SchoolAdmin__EditorDrawer>
 
      | UpdateForm(student, teamId) =>
-       let team = teamId |> Team.unsafeFind(teams, "Root");
-
+       let team =
+         teamId |> Team.unsafeFind(state.pagedTeams |> Page.teams, "Root");
        <SchoolAdmin__EditorDrawer
          closeDrawerCB={() => send(UpdateFormVisible(None))}>
          <StudentsEditor__UpdateForm
@@ -207,6 +206,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
            courseCoachIds
            schoolCoaches
            updateFormCB={updateForm(send)}
+           reloadTeamsCB={reloadTeams(send)}
          />
        </SchoolAdmin__EditorDrawer>;
      }}

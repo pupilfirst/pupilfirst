@@ -219,32 +219,35 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       handleRemoveFilter(filter, updateFilterCB),
     );
 
-  <div className="w-full">
-    <div className="flex justify-between">
-      <div> {selectedFilters |> React.array} </div>
-      {selectedFilters |> ArrayUtils.isEmpty
-         ? React.null
-         : <button
-             className="btn btn-danger ml-2 px-4"
-             onClick={_ => clearFilter(setSearchInput, updateFilterCB)}>
-             {"Clear" |> str}
-           </button>}
-    </div>
-    <div className="flex ">
+  <div className="w-full relative">
+    <div className="flex flex-col">
+      <label className="block text-tiny uppercase font-semibold">
+        {"Filter by:" |> str}
+      </label>
+      <div className="flex items-center">
+        <div> {selectedFilters |> React.array} </div>
+        {selectedFilters |> ArrayUtils.isEmpty
+           ? React.null
+           : <button
+               className="btn btn-danger btn-small ml-2 px-4"
+               onClick={_ => clearFilter(setSearchInput, updateFilterCB)}>
+               {"Clear" |> str}
+             </button>}
+      </div>
       <input
         autoComplete="off"
         value=searchInput
         onChange={handleOnchange(setSearchInput)}
-        className="appearance-none block bg-white leading-snug border border-gray-400 rounded-lg w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block bg-white border border-gray-400 rounded w-full py-2 px-4 mt-1 focus:outline-none focus:bg-white focus:border-gray-500"
         id="search"
         type_="text"
-        placeholder="Search"
+        placeholder="Search for name, tag or level"
       />
     </div>
     <div />
     {if (searchInput |> String.trim != "") {
        <div
-         className="border border-gray-400 bg-white mt-1 rounded-lg shadow-lg relative px-4 pt-2 pb-3">
+         className="w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 pt-2 pb-3">
          {searchResult(
             searchInput,
             applyFilter(filter, setSearchInput, updateFilterCB),

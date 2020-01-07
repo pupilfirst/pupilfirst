@@ -128,7 +128,7 @@ let teamCard =
   <div
     key=teamId
     id={team |> Team.name}
-    className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-4 overflow-hidden">
+    className="student-team-container flex items-strecth shadow bg-white rounded-lg mt-3 overflow-hidden">
     <div className="flex flex-col flex-1 w-3/5">
       {team
        |> Team.students
@@ -144,7 +144,7 @@ let teamCard =
               <div className="flex flex-1 w-3/5 h-full">
                 <div className="flex items-center w-full">
                   <label
-                    className="flex items-center h-full border-r text-gray-500 leading-tight font-bold px-4 py-5 hover:bg-gray-100"
+                    className="flex items-center h-full text-gray-500 leading-tight font-bold px-4 py-5 hover:bg-gray-100"
                     htmlFor=checkboxId>
                     <input
                       className="leading-tight"
@@ -258,9 +258,9 @@ let make =
     [|pagedTeams|],
   );
 
-  <div className="pb-6 px-6">
+  <div className="pb-6">
     <div className="max-w-3xl mx-auto w-full">
-      <div className="w-full pt-4 rounded-b-lg">
+      <div className="w-full pt-2">
         <div className="max-w-3xl mx-auto" />
         {switch ((pagedTeams: Page.t)) {
          | Unloaded =>

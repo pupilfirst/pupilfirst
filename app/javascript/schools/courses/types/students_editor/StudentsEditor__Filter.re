@@ -59,16 +59,16 @@ let sortByListForDropdown = t =>
 
 let sortByTitle = sortBy => {
   switch (sortBy) {
-  | Name => "name"
-  | CreatedAt => "last created"
-  | UpdatedAt => "last updated"
+  | Name => "Name"
+  | CreatedAt => "Last Created"
+  | UpdatedAt => "Last Updated"
   };
 };
 
 let sortByIcon = sortBy => {
   switch (sortBy) {
-  | Name => "fas fa-user"
-  | CreatedAt => "fas fa-user"
-  | UpdatedAt => "fas fa-user"
+  | Name => "fas fa-user text-gray-800"
+  | CreatedAt => "fas fa-user text-gray-800"
+  | UpdatedAt => "fas fa-user text-gray-800"
   };
 };

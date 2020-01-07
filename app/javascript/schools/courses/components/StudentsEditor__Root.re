@@ -134,7 +134,7 @@ let dropDownContents = (updateFilterCB, filter) => {
          key=title
          title={"Order by " ++ title}
          onClick={_ => updateFilterCB(filter |> Filter.updateSortBy(sortBy))}
-         className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
+         className="w-full font-semibold text-xs p-3 text-left focus:outline-none   ">
          <i className={sortBy |> Filter.sortByIcon} />
          <span className="ml-2"> {title |> str} </span>
        </button>;
@@ -145,9 +145,10 @@ let dropDownSelected = filter => {
   let title = filter |> Filter.sortBy |> Filter.sortByTitle;
   <button
     title={"Order by " ++ title}
-    className="block bg-white leading-snug border border-gray-400 rounded-lg focus:outline-none focus:bg-white focus:border-gray-500 px-6 py-3 ">
+    className="block bg-white leading-snug font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 p-3 text-xs ">
     <i className={filter |> Filter.sortBy |> Filter.sortByIcon} />
     <span className="ml-2"> {title |> str} </span>
+    <i className="fas fa-caret-down ml-3" />
   </button>;
 };
 
@@ -173,7 +174,7 @@ let setLoading = (send, loading) => send(SetLoading(loading));
 let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
-  <div className="flex flex-1 flex-col bg-gray-100 overflow-hidden">
+  <div className="flex flex-1 flex-col">
     {switch (state.formVisible) {
      | None => ReasonReact.null
      | CreateForm =>
@@ -202,76 +203,100 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          />
        </SchoolAdmin__EditorDrawer>;
      }}
-    <div className="max-w-3xl w-full mx-auto flex justify-between py-2 mt-4">
-      <a
-        className="btn btn-default no-underline"
-        href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
-        {"Inactive Students" |> str}
-      </a>
-      {state.selectedStudents |> Array.length > 0
-         ? React.null
-         : <button
-             onClick={_e => send(UpdateFormVisible(CreateForm))}
-             className="btn btn-primary ml-4">
-             <i className="fas fa-user-plus mr-2" />
-             <span> {"Add New Students" |> str} </span>
-           </button>}
-    </div>
-    <div className="w-full">
-      <div className="mx-auto max-w-3xl">
-        <div className="flex w-full items-center">
-          <StudentsEditor__Search
-            filter={state.filter}
-            updateFilterCB={updateFilter(send)}
-            tags={state.tags}
-            levels
-          />
-          <div className="w-1/4 ml-2 mt-2">
-            {<Dropdown
-               selected={dropDownSelected(state.filter)}
-               contents={dropDownContents(updateFilter(send), state.filter)}
-             />}
+    <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
+      <div
+        className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
+        <ul className="flex font-semibold text-sm items-end">
+          <li
+            className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
+            <span> {"All Students" |> str} </span>
+          </li>
+          <li
+            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900">
+            <a
+              className="block px-3 py-3 md:py-2 text-gray-800"
+              href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
+              {"Inactive Students" |> str}
+            </a>
+          </li>
+        </ul>
+        {state.selectedStudents |> Array.length > 0
+           ? React.null
+           : <div className="pb-2">
+               <button
+                 onClick={_e => send(UpdateFormVisible(CreateForm))}
+                 className="btn btn-primary ml-4">
+                 <i className="fas fa-user-plus mr-2" />
+                 <span> {"Add New Students" |> str} </span>
+               </button>
+             </div>}
+      </div>
+      <div className="bg-gray-100 sticky top-0">
+        <div
+          className="border rounded-lg mx-auto max-w-3xl mt-4 p-5 bg-white ">
+          <div className="">
+            <div className="flex w-full items-end">
+              <StudentsEditor__Search
+                filter={state.filter}
+                updateFilterCB={updateFilter(send)}
+                tags={state.tags}
+                levels
+              />
+              <div className="ml-2 flex-shrink-0">
+                <label className="block text-tiny uppercase font-semibold">
+                  {"Sort by:" |> str}
+                </label>
+                <div className="mt-1">
+                  {<Dropdown
+                     selected={dropDownSelected(state.filter)}
+                     contents={dropDownContents(
+                       updateFilter(send),
+                       state.filter,
+                     )}
+                   />}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap">
+              {state.selectedStudents
+               |> Array.map(selectedStudent =>
+                    <div
+                      className="flex items-center bg-white border border-gray-300 px-2 py-1 mr-1 rounded-lg mt-2">
+                      {switch (selectedStudent |> SelectedStudent.avatarUrl) {
+                       | Some(avatarUrl) =>
+                         <img
+                           className="w-5 h-5 rounded-full mr-2 object-cover"
+                           src=avatarUrl
+                         />
+                       | None =>
+                         <Avatar
+                           name={selectedStudent |> SelectedStudent.name}
+                           className="w-5 h-5 mr-2"
+                         />
+                       }}
+                      <div className="text-sm">
+                        <span
+                          className="text-black font-semibold inline-block ">
+                          {selectedStudent |> SelectedStudent.name |> str}
+                        </span>
+                        <button
+                          className="ml-2 hover:bg-gray-300 cursor-pointer"
+                          onClick={_ =>
+                            deselectStudent(
+                              send,
+                              selectedStudent |> SelectedStudent.id,
+                            )
+                          }>
+                          <i className="fas fa-times" />
+                        </button>
+                      </div>
+                    </div>
+                  )
+               |> React.array}
+            </div>
           </div>
         </div>
-        <div className="flex flex-wrap">
-          {state.selectedStudents
-           |> Array.map(selectedStudent =>
-                <div
-                  className="flex items-center bg-white border border-gray-300 px-2 py-1 mr-1 rounded-lg mt-2">
-                  {switch (selectedStudent |> SelectedStudent.avatarUrl) {
-                   | Some(avatarUrl) =>
-                     <img
-                       className="w-5 h-5 rounded-full mr-2 object-cover"
-                       src=avatarUrl
-                     />
-                   | None =>
-                     <Avatar
-                       name={selectedStudent |> SelectedStudent.name}
-                       className="w-5 h-5 mr-2"
-                     />
-                   }}
-                  <div className="text-sm">
-                    <span className="text-black font-semibold inline-block ">
-                      {selectedStudent |> SelectedStudent.name |> str}
-                    </span>
-                    <button
-                      className="ml-2 hover:bg-gray-300 cursor-pointer"
-                      onClick={_ =>
-                        deselectStudent(
-                          send,
-                          selectedStudent |> SelectedStudent.id,
-                        )
-                      }>
-                      <i className="fas fa-times" />
-                    </button>
-                  </div>
-                </div>
-              )
-           |> React.array}
-        </div>
       </div>
-    </div>
-    <div>
       {state.selectedStudents |> ArrayUtils.isEmpty
          ? React.null
          : <div className="px-6">
@@ -305,23 +330,23 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                </div>
              </div>
            </div>}
-    </div>
-    <div className="overflow-y-scroll">
-      <StudentsEditor__TeamsList
-        levels
-        courseId
-        filter={state.filter}
-        pagedTeams={state.pagedTeams}
-        selectedStudentIds={
-          state.selectedStudents |> Array.map(s => s |> SelectedStudent.id)
-        }
-        selectStudentCB={selectStudent(send)}
-        deselectStudentCB={deselectStudent(send)}
-        showEditFormCB={showEditForm(send)}
-        updateTeamsCB={updateTeams(send)}
-        loading={state.loading}
-        setLoadingCB={setLoading(send)}
-      />
+      <div>
+        <StudentsEditor__TeamsList
+          levels
+          courseId
+          filter={state.filter}
+          pagedTeams={state.pagedTeams}
+          selectedStudentIds={
+            state.selectedStudents |> Array.map(s => s |> SelectedStudent.id)
+          }
+          selectStudentCB={selectStudent(send)}
+          deselectStudentCB={deselectStudent(send)}
+          showEditFormCB={showEditForm(send)}
+          updateTeamsCB={updateTeams(send)}
+          loading={state.loading}
+          setLoadingCB={setLoading(send)}
+        />
+      </div>
     </div>
     <LoadingSpinner loading={state.loading} />
   </div>;

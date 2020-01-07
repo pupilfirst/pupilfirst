@@ -95,6 +95,9 @@ module.exports = {
         '5': '5px',
         '6': '6px',
       },
+      fontSize: {
+        'tiny': '.625rem',
+      },
       screens: {
         '2xl': '1824px',
         // => @media (min-width: 1824px) { ... }

@@ -219,7 +219,7 @@ let make =
                    className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
                    {isCourseAuthor
                       ? <img src=schoolIconPath alt=schoolName />
-                      : <a href="/school">
+                      : <a className="text-xs" href="/school">
                           <img src=schoolIconPath alt=schoolName />
                         </a>}
                  </div>

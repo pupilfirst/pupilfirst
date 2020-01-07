@@ -11,6 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.archive
+        mutator.notify(:success, "Success", "Note removed successfully")
         { success: true }
       else
         mutator.notify_errors

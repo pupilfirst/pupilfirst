@@ -359,6 +359,15 @@ let addNoteCB = (setState, studentDetails, note) => {
   );
 };
 
+let removeNoteCB = (setState, studentDetails, noteId) => {
+  setState(state =>
+    {
+      ...state,
+      studentData: Loaded(StudentDetails.removeNote(noteId, studentDetails)),
+    }
+  );
+};
+
 [@react.component]
 let make = (~courseId, ~studentId, ~levels, ~userId) => {
   let (state, setState) =
@@ -482,6 +491,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId) => {
                   coachNotes={studentDetails |> StudentDetails.coachNotes}
                   addNoteCB={addNoteCB(setState, studentDetails)}
                   userId
+                  removeNoteCB={removeNoteCB(setState, studentDetails)}
                 />
               | Submissions =>
                 <CoursesStudents__SubmissionsList

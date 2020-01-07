@@ -30,6 +30,16 @@ module CreateCoachNotesMutation = [%graphql
    |}
 ];
 
+module ArchiveCoachNoteMutation = [%graphql
+  {|
+   mutation($id: ID!) {
+    archiveCoachNote(id: $id) {
+       success
+      }
+    }
+   |}
+];
+
 let saveNote = (authenticityToken, studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true});
   CreateCoachNotesMutation.make(
@@ -64,12 +74,28 @@ let updateCoachNoteCB = (setState, newNote) => {
 let saveNoteButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
-let removeCoachNote = (id, event) => {
+let removeCoachNote = (id, removeNoteCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  Js.log(id);
+  if (Webapi.Dom.(
+        window |> Window.confirm("Are you sure you want to delete this note?")
+      )) {
+    ArchiveCoachNoteMutation.make(~id, ())
+    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+    |> Js.Promise.then_(response => {
+         if (response##archiveCoachNote##success) {
+           removeNoteCB(id);
+         } else {
+           ();
+         };
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  } else {
+    ();
+  };
 };
 
-let showCoachNote = (note, userId) => {
+let showCoachNote = (note, userId, removeNoteCB) => {
   <div className="mt-4" key={note |> CoachNote.id}>
     <div className="flex justify-between">
       <div className="flex">
@@ -123,9 +149,9 @@ let showCoachNote = (note, userId) => {
          };
        showDeleteIcon
          ? <div
-             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+             className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
              ariaLabel={"Delete " ++ (note |> CoachNote.id)}
-             onClick={removeCoachNote(note |> CoachNote.id)}>
+             onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB)}>
              <i className="fas fa-trash-alt" />
            </div>
          : React.null}
@@ -145,7 +171,7 @@ let showCoachNote = (note, userId) => {
 };
 
 [@react.component]
-let make = (~studentId, ~coachNotes, ~addNoteCB, ~userId) => {
+let make = (~studentId, ~coachNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
   <div>
     <DisablingCover disabled={state.saving} message="Saving...">
@@ -187,7 +213,7 @@ let make = (~studentId, ~coachNotes, ~addNoteCB, ~userId) => {
          : React.null}
       {coachNotes
        |> CoachNote.sort
-       |> Array.map(note => showCoachNote(note, userId))
+       |> Array.map(note => showCoachNote(note, userId, removeNoteCB))
        |> React.array}
     </div>
   </div>;

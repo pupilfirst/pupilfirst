@@ -333,6 +333,8 @@ feature 'School students index', js: true do
     click_button 'Actions'
     click_button 'Dropout Student'
 
+    dismiss_notification
+
     expect(page).not_to have_text(founder_user.name)
 
     # The student's team name should now be the student's own name.

@@ -133,9 +133,9 @@ feature "Course students report", js: true do
     add_markdown(note_2)
     click_button('Save Note')
     dismiss_notification
-    expect(page).to have_text(course_coach.name, count: 2)
-    expect(page).to have_text(course_coach.title, count: 2)
-    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 2)
+    expect(page).to have_text(course_coach.name, count: 3)
+    expect(page).to have_text(course_coach.title, count: 3)
+    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 4)
     expect(CoachNote.where(student: founder).last.note).to eq(note_2)
   end
 

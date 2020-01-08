@@ -289,7 +289,7 @@ let make =
       ~loading,
       ~setLoadingCB,
       ~updateFilterCB,
-      ~refreshMe,
+      ~refreshTeams,
     ) => {
   React.useEffect1(
     () => {
@@ -305,7 +305,7 @@ let make =
 
       None;
     },
-    [|refreshMe|],
+    [|refreshTeams|],
   );
 
   <div className="pb-6">

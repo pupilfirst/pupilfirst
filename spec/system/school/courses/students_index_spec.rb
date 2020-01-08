@@ -4,8 +4,11 @@ feature 'School students index', js: true do
   include UserSpecHelper
   include NotificationHelper
 
+  tag1 = "Single Student"
+  tag2 = "Team"
+  tags = [tag1, tag2]
   # Setup a course with a single founder target, ...
-  let!(:school) { create :school, :current, founder_tag_list: ["Single Student"] }
+  let!(:school) { create :school, :current, founder_tag_list: tags }
   let!(:course) { create :course, school: school }
 
   let!(:school_admin) { create :school_admin, school: school }
@@ -17,7 +20,7 @@ feature 'School students index', js: true do
   let!(:startup_2) { create :startup, level: level_2 }
 
   let(:team_with_lone_student) { create :team, level: level_2 }
-  let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: ["Single Student"] }
+  let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: tags }
 
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
@@ -403,30 +406,31 @@ feature 'School students index', js: true do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # filter by level
-    fill_in "Search", with: "level"
+    fill_in "search", with: "level"
     click_button level_2.name
     expect(page).to have_text(startup_2.name)
     expect(page).not_to have_text(startup_1.name)
     click_button "Remove filter Level 2: #{level_2.name}"
 
     # filter by tag
-    fill_in "Search", with: "Single Student"
+    fill_in "search", with: tag1
     click_button "Pick tag Single Student"
     expect(page).to have_text(lone_student.name)
+    expect(page).to have_text(tag2)
     expect(page).not_to have_text(startup_1.name)
     expect(page).not_to have_text(startup_2.name)
     click_button "Remove filter Single Student"
 
     # filter by name
     name = startup_1.founders.first.name
-    fill_in "Search", with: name
+    fill_in "search", with: name
     click_button name
     expect(page).to have_text(startup_1.name)
     click_button "Remove filter #{name}"
 
     # filter by email
     email = startup_1.founders.first.email
-    fill_in "Search", with: email
+    fill_in "search", with: email
     click_button email
     expect(page).to have_text(startup_1.name)
     expect(page).not_to have_text(startup_2.name)
@@ -447,20 +451,20 @@ feature 'School students index', js: true do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     # order by created_at
-    click_button "Order by name"
-    click_button "Order by last created"
+    click_button "Order by Name"
+    click_button "Order by Last Created"
     expect(page).to have_text(teams_order_by_created_at.last.name)
     click_button('Load More')
     expect(page).to have_text(teams_order_by_created_at.first.name)
 
-    click_button "Order by last created"
-    click_button "Order by last updated"
+    click_button "Order by Last Created"
+    click_button "Order by Last Updated"
     expect(page).to have_text(team_order_by_updated_at.last.name)
     click_button('Load More')
     expect(page).to have_text(team_order_by_updated_at.first.name)
 
-    click_button "Order by last updated"
-    click_button "Order by name"
+    click_button "Order by Last Updated"
+    click_button "Order by Name"
     expect(page).to have_text(teams_order_by_name_at.first.name)
     click_button('Load More')
     expect(page).to have_text(teams_order_by_name_at.last.name)

@@ -24,7 +24,7 @@ class CourseTeamsResolver < ApplicationQuery
   end
 
   def teams_by_tag
-    teams = course.startups.active.includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } }).distinct.order("startups.#{sort_by_string}")
+    teams = course.startups.active.joins(founders: :user).includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } }).distinct.order("startups.#{sort_by_string}")
     tags.present? ? teams.joins(founders: [taggings: :tag]).where(tags: { name: tags }) : teams.includes(founders: [taggings: :tag])
   end
 

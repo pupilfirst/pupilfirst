@@ -20,6 +20,7 @@ type state = {
   formVisible,
   tags,
   loading: Loading.t,
+  refreshMe: bool,
 };
 
 type action =
@@ -66,6 +67,7 @@ let initialState = tags => {
   formVisible: None,
   tags,
   loading: Loading.NotLoading,
+  refreshMe: false,
 };
 
 let reducer = (state, action) =>
@@ -89,10 +91,10 @@ let reducer = (state, action) =>
       pagedTeams,
       loading: Loading.NotLoading,
     }
-  | UpdateFilter(filter) => {...state, filter}
+  | UpdateFilter(filter) => {...state, filter, refreshMe: !state.refreshMe}
   | RefreshData(tags) => {
       ...state,
-      pagedTeams: Unloaded,
+      refreshMe: !state.refreshMe,
       tags: addTags(state.tags, tags),
       formVisible: None,
       selectedStudents: [||],
@@ -346,6 +348,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
           loading={state.loading}
           setLoadingCB={setLoading(send)}
           updateFilterCB={updateFilter(send)}
+          refreshMe={state.refreshMe}
         />
       </div>
     </div>

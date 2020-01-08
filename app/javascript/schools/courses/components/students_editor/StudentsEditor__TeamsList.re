@@ -285,52 +285,23 @@ let make =
       ~loading,
       ~setLoadingCB,
       ~updateFilterCB,
+      ~refreshMe,
     ) => {
   React.useEffect1(
     () => {
-      switch (pagedTeams) {
-      | Page.Unloaded => ()
-      | PartiallyLoaded(_)
-      | FullyLoaded(_) =>
-        getTeams(
-          courseId,
-          None,
-          updateTeamsCB,
-          [||],
-          filter,
-          setLoadingCB,
-          Loading.Reloading,
-        )
-      };
+      getTeams(
+        courseId,
+        None,
+        updateTeamsCB,
+        [||],
+        filter,
+        setLoadingCB,
+        Loading.Reloading,
+      );
 
       None;
     },
-    [|filter|],
-  );
-
-  // How do you write "if the filter has changed, or if the page has changed TO Unloaded"
-
-  React.useEffect1(
-    () => {
-      switch (pagedTeams) {
-      | Page.Unloaded =>
-        getTeams(
-          courseId,
-          None,
-          updateTeamsCB,
-          [||],
-          filter,
-          setLoadingCB,
-          Loading.Reloading,
-        )
-
-      | PartiallyLoaded(_, _)
-      | FullyLoaded(_) => ()
-      };
-
-      None;
-    },
-    [|pagedTeams|],
+    [|refreshMe|],
   );
 
   <div className="pb-6">

@@ -52,12 +52,13 @@ let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
   updateTeamsCB(teams);
 };
 
-let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB) => {
+let getTeams =
+    (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB, loading) => {
   let tags = filter |> Filter.tags;
   let selectedLevelId = filter |> Filter.levelId;
   let search = filter |> Filter.searchString;
   let sortBy = filter |> Filter.sortByStrings;
-  setLoadingCB(true);
+  setLoadingCB(loading);
   (
     switch (selectedLevelId, search, cursor) {
     | (Some(levelId), Some(search), Some(cursor)) =>
@@ -287,9 +288,42 @@ let make =
     ) => {
   React.useEffect1(
     () => {
-      switch ((pagedTeams: Page.t)) {
-      | Unloaded =>
-        getTeams(courseId, None, updateTeamsCB, [||], filter, setLoadingCB)
+      switch (pagedTeams) {
+      | Page.Unloaded => ()
+      | PartiallyLoaded(_)
+      | FullyLoaded(_) =>
+        getTeams(
+          courseId,
+          None,
+          updateTeamsCB,
+          [||],
+          filter,
+          setLoadingCB,
+          Loading.Reloading,
+        )
+      };
+
+      None;
+    },
+    [|filter|],
+  );
+
+  // How do you write "if the filter has changed, or if the page has changed TO Unloaded"
+
+  React.useEffect1(
+    () => {
+      switch (pagedTeams) {
+      | Page.Unloaded =>
+        getTeams(
+          courseId,
+          None,
+          updateTeamsCB,
+          [||],
+          filter,
+          setLoadingCB,
+          Loading.Reloading,
+        )
+
       | PartiallyLoaded(_, _)
       | FullyLoaded(_) => ()
       };
@@ -325,7 +359,7 @@ let make =
        | Unloaded
        | FullyLoaded(_) => React.null
        | PartiallyLoaded(teams, cursor) =>
-         loading
+         loading == Loading.LoadingMore
            ? SkeletonLoading.multiple(
                ~count=3,
                ~element=SkeletonLoading.card(),
@@ -341,6 +375,7 @@ let make =
                      teams,
                      filter,
                      setLoadingCB,
+                     Loading.LoadingMore,
                    )
                  }>
                  {"Load More" |> str}

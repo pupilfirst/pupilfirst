@@ -19,7 +19,7 @@ type state = {
   selectedStudents: array(SelectedStudent.t),
   formVisible,
   tags,
-  loading: bool,
+  loading: Loading.t,
 };
 
 type action =
@@ -30,7 +30,7 @@ type action =
   | UpdateFilter(Filter.t)
   | RefreshData(tags)
   | UpdateTeam(Team.t, tags)
-  | SetLoading(bool);
+  | SetLoading(Loading.t);
 
 let handleTeamUpResponse = (send, _json) => {
   send(RefreshData([||]));
@@ -65,7 +65,7 @@ let initialState = tags => {
   filter: Filter.empty(),
   formVisible: None,
   tags,
-  loading: false,
+  loading: Loading.NotLoading,
 };
 
 let reducer = (state, action) =>
@@ -84,12 +84,12 @@ let reducer = (state, action) =>
     }
 
   | UpdateFormVisible(formVisible) => {...state, formVisible}
-  | UpdateTeams(pagedTeams) => {...state, pagedTeams, loading: false}
-  | UpdateFilter(filter) => {
+  | UpdateTeams(pagedTeams) => {
       ...state,
-      filter,
-      pagedTeams: state.filter == filter ? state.pagedTeams : Unloaded,
+      pagedTeams,
+      loading: Loading.NotLoading,
     }
+  | UpdateFilter(filter) => {...state, filter}
   | RefreshData(tags) => {
       ...state,
       pagedTeams: Unloaded,
@@ -349,6 +349,12 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         />
       </div>
     </div>
-    <LoadingSpinner loading={state.loading} />
+    {let loading =
+       switch (state.loading) {
+       | NotLoading => false
+       | Reloading => true
+       | LoadingMore => false
+       };
+     <LoadingSpinner loading />}
   </div>;
 };

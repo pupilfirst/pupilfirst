@@ -16,9 +16,9 @@ module ArchiveCoachNoteMutation = [%graphql
    |}
 ];
 
-let removeCoachNote = (id, removeNoteCB, setState, event) => {
+let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  setState(_state => {archiving: true});
+  setArchiving(_ => true);
   if (Webapi.Dom.(
         window |> Window.confirm("Are you sure you want to delete this note?")
       )) {
@@ -28,7 +28,7 @@ let removeCoachNote = (id, removeNoteCB, setState, event) => {
          if (response##archiveCoachNote##success) {
            removeNoteCB(id);
          } else {
-           setState(_state => {archiving: false});
+           setArchiving(_ => false);
          };
          Js.Promise.resolve();
        })
@@ -38,21 +38,26 @@ let removeCoachNote = (id, removeNoteCB, setState, event) => {
   };
 };
 
-let deleteIcon = (note, removeCoachNote, removeNoteCB, setState, state) => {
+let deleteIcon =
+    (note, removeCoachNote, removeNoteCB, setArchiving, archiving) => {
   <button
     className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 focus:outline-none "
-    disabled={state.archiving}
+    disabled=archiving
     title={"Delete " ++ (note |> CoachNote.id)}
-    onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB, setState)}>
+    onClick={removeCoachNote(
+      note |> CoachNote.id,
+      removeNoteCB,
+      setArchiving,
+    )}>
     <FaIcon
-      classes={state.archiving ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"}
+      classes={archiving ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"}
     />
   </button>;
 };
 
 [@react.component]
 let make = (~note, ~userId, ~removeNoteCB) => {
-  let (state, setState) = React.useState(() => {archiving: false});
+  let (archiving, setArchiving) = React.useState(() => false);
   <div
     className="mt-4"
     key={note |> CoachNote.id}
@@ -108,7 +113,13 @@ let make = (~note, ~userId, ~removeNoteCB) => {
          | Some(coach) => Coach.id(coach) == userId
          };
        showDeleteIcon
-         ? deleteIcon(note, removeCoachNote, removeNoteCB, setState, state)
+         ? deleteIcon(
+             note,
+             removeCoachNote,
+             removeNoteCB,
+             setArchiving,
+             archiving,
+           )
          : React.null}
     </div>
     <div className="ml-10 md:ml-13 mt-2">

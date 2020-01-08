@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+[%bs.raw {|require("./StudentsEditor__Search.css")|}];
 
 open StudentsEditor__Types;
 
@@ -20,8 +21,14 @@ type suggestion = {
 let suggestions = (tags, levels, filter) => {
   let tagSuggestions =
     tags
+    |> Js.Array.filter(t => !(filter |> Filter.tags |> Array.mem(t)))
     |> Array.map(t =>
-         {title: "Tag", name: t, searchString: t, resourceType: Tag}
+         {
+           title: "Tag:",
+           name: t,
+           searchString: "tag " ++ t,
+           resourceType: Tag,
+         }
        );
   let levelSuggestions =
     (
@@ -33,7 +40,7 @@ let suggestions = (tags, levels, filter) => {
     )
     |> Array.map(l =>
          {
-           title: "Level " ++ (l |> Level.number |> string_of_int),
+           title: "Level " ++ (l |> Level.number |> string_of_int) ++ ":",
            name: l |> Level.name,
            searchString: l |> Level.title,
            resourceType: Level(l |> Level.id),
@@ -73,14 +80,14 @@ let suggestionTitle = suggestion => {
 };
 
 let tagPillClasses = (resourceType, showHover) => {
-  "cursor-pointer items-center rounded mt-2 text-xs overflow-hidden "
+  "rounded text-xs overflow-hidden "
   ++ (
     switch (resourceType) {
     | Level(_) =>
       "bg-orange-200 text-orange-800 "
       ++ (showHover ? "hover:bg-orange-300 hover:text-orange-900" : "")
     | Tag =>
-      "bg-gray-200 text-gray-800 "
+      "bg-gray-300 text-gray-900 "
       ++ (showHover ? "hover:bg-gray-300 hover:text-gray-900" : "")
     | NameOrEmail =>
       "bg-purple-200 text-purple-800 "
@@ -113,7 +120,7 @@ let searchResult = (searchInput, applyFilterCB, tags, levels, filter) => {
       |> ArrayUtils.copyAndSort((x, y) => String.compare(x.name, y.name))
       |> Array.append([|
            {
-             title: "Name or Email",
+             title: "Name or Email:",
              name: searchString,
              searchString,
              resourceType: NameOrEmail,
@@ -125,10 +132,18 @@ let searchResult = (searchInput, applyFilterCB, tags, levels, filter) => {
          <button
            title={suggestionTitle(suggestion)}
            key={suggestion.name}
-           className="px-2 py-px block text-xs"
+           className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
            onClick={_e => applyFilterCB(suggestion)}>
-           <span className="mr-2"> {suggestion.title |> str} </span>
-           <span className={tagPillClasses(suggestion.resourceType, true)}>
+           <span className="mr-2 w-1/6 text-right">
+             {suggestion.title |> str}
+           </span>
+           <span
+             className={
+               "px-2 py-px "
+               ++ {
+                 tagPillClasses(suggestion.resourceType, true);
+               }
+             }>
              {suggestion.name |> str}
            </span>
          </button>
@@ -148,7 +163,14 @@ let handleRemoveFilter = (filter, updateFilterCB, name, resourceType) => {
 };
 
 let tagPill = (name, resourceType, removeFilterCB) => {
-  <div key=name className={tagPillClasses(resourceType, false)}>
+  <div
+    key=name
+    className={
+      "inline-flex mr-1 "
+      ++ {
+        tagPillClasses(resourceType, false);
+      }
+    }>
     <span className="pl-2 py-px">
       {(
          switch (resourceType) {
@@ -161,9 +183,9 @@ let tagPill = (name, resourceType, removeFilterCB) => {
     </span>
     <button
       title={"Remove filter " ++ name}
-      className="ml-2 text-red-500 px-2 py-px border-l"
+      className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
       onClick={_ => removeFilterCB(name, resourceType)}>
-      <FaIcon classes="fas fa-times" />
+      <Icon className="if i-times-light" />
     </button>
   </div>;
 };
@@ -238,7 +260,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     <div />
     {if (searchInput |> String.trim != "") {
        <div
-         className="w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 pt-2 pb-3">
+         className="student-editor__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 pt-2 pb-3">
          {searchResult(
             searchInput,
             applyFilter(filter, setSearchInput, updateFilterCB),

@@ -72,3 +72,11 @@ let sortByIcon = sortBy => {
   | UpdatedAt => "fas fa-user text-gray-800"
   };
 };
+
+let isEmpty = t =>
+  switch (t.searchString, t.levelId, t.tags |> ArrayUtils.isEmpty) {
+  | (None, None, true) => true
+  | (_, _, _) => false
+  };
+
+let clear = t => {...t, searchString: None, levelId: None, tags: [||]};

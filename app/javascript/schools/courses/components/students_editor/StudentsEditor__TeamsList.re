@@ -229,6 +229,46 @@ let teamCard =
   </div>;
 };
 
+let showEmpty = (filter, updateFilterCB) => {
+  <div>
+    {filter |> Filter.isEmpty
+       ? React.null
+       : <button onClick={_ => updateFilterCB(filter |> Filter.clear)}>
+           {"Clear Filter" |> str}
+         </button>}
+    <div> {"Nothing to show" |> str} </div>
+  </div>;
+};
+
+let showTeams =
+    (
+      selectedStudentIds,
+      selectStudentCB,
+      deselectStudentCB,
+      showEditFormCB,
+      levels,
+      filter,
+      updateFilterCB,
+      teams,
+    ) => {
+  switch (teams) {
+  | [||] => showEmpty(filter, updateFilterCB)
+  | teams =>
+    teams
+    |> Array.map(team => {
+         teamCard(
+           team,
+           selectedStudentIds,
+           selectStudentCB,
+           deselectStudentCB,
+           showEditFormCB,
+           levels,
+         )
+       })
+    |> React.array
+  };
+};
+
 [@react.component]
 let make =
     (
@@ -243,6 +283,7 @@ let make =
       ~showEditFormCB,
       ~loading,
       ~setLoadingCB,
+      ~updateFilterCB,
     ) => {
   React.useEffect1(
     () => {
@@ -269,17 +310,15 @@ let make =
          | FullyLoaded(_) =>
            pagedTeams
            |> Page.teams
-           |> Array.map(team => {
-                teamCard(
-                  team,
-                  selectedStudentIds,
-                  selectStudentCB,
-                  deselectStudentCB,
-                  showEditFormCB,
-                  levels,
-                )
-              })
-           |> React.array
+           |> showTeams(
+                selectedStudentIds,
+                selectStudentCB,
+                deselectStudentCB,
+                showEditFormCB,
+                levels,
+                filter,
+                updateFilterCB,
+              )
          }}
       </div>
       {switch ((pagedTeams: Page.t)) {

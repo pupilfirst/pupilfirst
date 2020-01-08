@@ -247,6 +247,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                 </label>
                 <div className="mt-1">
                   {<Dropdown
+                     right=true
                      selected={dropDownSelected(state.filter)}
                      contents={dropDownContents(
                        updateFilter(send),
@@ -344,6 +345,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
           updateTeamsCB={updateTeams(send)}
           loading={state.loading}
           setLoadingCB={setLoading(send)}
+          updateFilterCB={updateFilter(send)}
         />
       </div>
     </div>

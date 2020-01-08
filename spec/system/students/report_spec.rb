@@ -41,6 +41,8 @@ feature "Course students report", js: true do
   let(:submission_target_l3) { create(:timeline_event, latest: true, target: target_l3, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
   let(:submission_quiz_target_1) { create(:timeline_event, latest: true, target: quiz_target_1, passed_at: 1.day.ago, quiz_score: '1/3') }
   let(:submission_quiz_target_2) { create(:timeline_event, latest: true, target: quiz_target_2, passed_at: 1.day.ago, quiz_score: '3/5') }
+  let!(:coach_note_1) { create :coach_note, author: course_coach.user, student: team.founders.first }
+  let!(:coach_note_2) { create :coach_note, author: team_coach.user, student: team.founders.first }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
@@ -119,7 +121,6 @@ feature "Course students report", js: true do
 
     # Add few notes
     find('li', text: 'Notes').click
-    expect(page).to have_text('No notes here!')
     note_1 = Faker::Markdown.sandwich(2)
     note_2 = Faker::Markdown.sandwich(2)
     add_markdown(note_1)
@@ -132,9 +133,9 @@ feature "Course students report", js: true do
     add_markdown(note_2)
     click_button('Save Note')
     dismiss_notification
-    expect(page).to have_text(course_coach.name, count: 2)
-    expect(page).to have_text(course_coach.title, count: 2)
-    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 2)
+    expect(page).to have_text(course_coach.name, count: 3)
+    expect(page).to have_text(course_coach.title, count: 3)
+    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 4)
     expect(CoachNote.where(student: founder).last.note).to eq(note_2)
   end
 
@@ -187,7 +188,6 @@ feature "Course students report", js: true do
 
     # Add a note
     find('li', text: 'Notes').click
-    expect(page).to have_text('No notes here!')
     note = Faker::Markdown.sandwich(2)
     add_markdown(note)
     click_button('Save Note')
@@ -195,6 +195,28 @@ feature "Course students report", js: true do
     expect(page).to have_text(team_coach.name)
     expect(page).to have_text(team_coach.title)
     expect(CoachNote.where(student: founder).last.note).to eq(note)
+
+    # Archive a note
+    expect(page).to have_text(coach_note_1.note)
+    expect(page).to have_text(coach_note_2.note)
+
+    accept_confirm do
+      within("div[aria-label='Note #{coach_note_2.id}']") do
+        find("button[title='Delete #{coach_note_2.id}']").click
+      end
+    end
+    dismiss_notification
+    expect(page).to_not have_text(coach_note_2)
+    expect(coach_note_2.reload.archived_at).to_not eq(nil)
+
+    within("div[aria-label='Note #{coach_note_1.id}']") do
+      expect(page).not_to have_selector('.fa-trash-alt')
+    end
+
+    # Indicate empty notes
+    CoachNote.where(student: founder).destroy_all
+    visit student_report_path(founder)
+    expect(page).to have_text('No notes here!')
   end
 
   scenario 'unauthorized coach attempts to access student report' do

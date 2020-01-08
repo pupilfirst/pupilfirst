@@ -80,7 +80,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def coach_notes
-    CoachNote.where(student_id: student_id).includes(author: { avatar_attachment: :blob }).order('created_at DESC').limit(20)
+    CoachNote.not_archived.where(student_id: student_id).includes(author: { avatar_attachment: :blob }).order('created_at DESC').limit(20)
   end
 
   def submissions

@@ -15,6 +15,7 @@ ActiveAdmin.register Startup do
   filter :created_at
 
   scope :admitted, default: true
+  scope :inactive
   scope :all
 
   controller do

@@ -14,7 +14,8 @@ module Courses
     def props
       {
         levels: levels,
-        course: course_details
+        course: course_details,
+        user_id: current_user.id
       }
     end
 

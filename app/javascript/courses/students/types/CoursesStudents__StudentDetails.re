@@ -87,6 +87,13 @@ let addNewNote = (note, t) => {
   {...t, coachNotes: notes};
 };
 
+let removeNote = (noteId, t) => {
+  let notes =
+    t.coachNotes
+    |> Js.Array.filter(note => CoursesStudents__CoachNote.id(note) != noteId);
+  {...t, coachNotes: notes};
+};
+
 let computeAverageQuizScore = quizScores => {
   let sumOfPercentageScores =
     quizScores

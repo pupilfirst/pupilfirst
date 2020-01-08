@@ -27,10 +27,6 @@ ActiveAdmin.register Founder do
 
   menu label: 'Founders'
 
-  scope :admitted, default: true
-  scope :inactive
-  scope :all
-
   filter :user_email, as: :string
   filter :name
 

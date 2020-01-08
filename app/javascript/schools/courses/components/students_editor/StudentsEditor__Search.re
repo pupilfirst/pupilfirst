@@ -60,7 +60,7 @@ let suggestionTitle = (title, resourceType) => {
 };
 
 let tagPillClasses = (resourceType, showHover) => {
-  "inline-flex cursor-pointer items-center rounded mt-1 mr-1 text-xs overflow-hidden "
+  "block cursor-pointer items-center rounded mt-2 text-xs overflow-hidden "
   ++ (
     switch (resourceType) {
     | Some(r) =>
@@ -82,7 +82,7 @@ let tagPillClasses = (resourceType, showHover) => {
 let searchByName = (searchInput, applyFilterCB) => {
   [|
     <div key="searchByName" className="mt-2">
-      <span> {"Search for " |> str} </span>
+      <span className="text-right text-xs"> {"Name or Email: " |> str} </span>
       <button
         onClick={_ => applyFilterCB(searchInput, None)}
         title={suggestionTitle(searchInput, None)}
@@ -97,8 +97,7 @@ let showSuggestions = (applyFilterCB, title, suggestions: array(suggestion)) => 
   switch (suggestions) {
   | [||] => [||]
   | suggestions => [|
-      <div key=title className="mt-2">
-        <div> {" Matching " ++ title |> str} </div>
+      <div key=title>
         {suggestions
          |> Array.map(suggestion =>
               <button
@@ -247,14 +246,14 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       <label className="block text-tiny uppercase font-semibold">
         {"Filter by:" |> str}
       </label>
-      <div className="flex items-center">
+      <div className="flex justify-between items-end">
         <div> {selectedFilters |> React.array} </div>
         {selectedFilters |> ArrayUtils.isEmpty
            ? React.null
            : <button
-               className="btn btn-danger btn-small ml-2 px-4"
+               className="btn btn-subtle btn-small ml-2 px-4 border"
                onClick={_ => clearFilter(setSearchInput, updateFilterCB)}>
-               {"Clear" |> str}
+               {"Clear Filter" |> str}
              </button>}
       </div>
       <input

@@ -231,13 +231,17 @@ let teamCard =
 };
 
 let showEmpty = (filter, updateFilterCB) => {
-  <div>
+  <div className="flex flex-col-reverse items-center p-5 text-center">
     {filter |> Filter.isEmpty
-       ? React.null
-       : <button onClick={_ => updateFilterCB(filter |> Filter.clear)}>
-           {"Clear Filter" |> str}
-         </button>}
-    <div> {"Nothing to show" |> str} </div>
+       ? <div> {"No students here." |> str} </div>
+       : <div>
+           <div> {"Sorry, No results found :(" |> str} </div>
+           <button
+             className="btn btn-large btn-default mt-4"
+             onClick={_ => updateFilterCB(filter |> Filter.clear)}>
+             {"Clear Filter" |> str}
+           </button>
+         </div>}
   </div>;
 };
 

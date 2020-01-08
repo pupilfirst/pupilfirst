@@ -128,7 +128,7 @@ let teamCard =
   <div
     key=teamId
     id={team |> Team.name}
-    className="student-team-container flex items-strecth shadow bg-white rounded-lg mt-3 overflow-hidden">
+    className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-3 overflow-hidden">
     <div className="flex flex-col flex-1 w-3/5">
       {team
        |> Team.students
@@ -260,7 +260,7 @@ let make =
 
   <div className="pb-6">
     <div className="max-w-3xl mx-auto w-full">
-      <div className="w-full pt-2">
+      <div>
         <div className="max-w-3xl mx-auto" />
         {switch ((pagedTeams: Page.t)) {
          | Unloaded =>

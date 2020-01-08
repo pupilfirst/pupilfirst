@@ -231,10 +231,9 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                </button>
              </div>}
       </div>
-      <div className="bg-gray-100 sticky top-0">
-        <div
-          className="border rounded-lg mx-auto max-w-3xl mt-4 p-5 bg-white ">
-          <div className="">
+      <div className="bg-gray-100 sticky top-0 py-3">
+        <div className="border rounded-lg mx-auto max-w-3xl p-5 bg-white ">
+          <div>
             <div className="flex w-full items-end">
               <StudentsEditor__Search
                 filter={state.filter}

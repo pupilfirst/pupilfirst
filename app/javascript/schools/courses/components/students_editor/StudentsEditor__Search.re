@@ -59,6 +59,26 @@ let suggestionTitle = (title, resourceType) => {
   };
 };
 
+let tagPillClasses = (resourceType, showHover) => {
+  "inline-flex cursor-pointer items-center rounded mt-1 mr-1 text-xs overflow-hidden "
+  ++ (
+    switch (resourceType) {
+    | Some(r) =>
+      switch (r) {
+      | Level(_) =>
+        "bg-orange-200 text-orange-800 "
+        ++ (showHover ? "hover:bg-orange-300 hover:text-orange-900" : "")
+      | Tag =>
+        "bg-gray-200 text-gray-800 "
+        ++ (showHover ? "hover:bg-gray-300 hover:text-gray-900" : "")
+      }
+    | None =>
+      "bg-purple-200 text-purple-800 "
+      ++ (showHover ? "hover:bg-purple-300 hover:text-purple-900" : "")
+    }
+  );
+};
+
 let searchByName = (searchInput, applyFilterCB) => {
   [|
     <div key="searchByName" className="mt-2">
@@ -66,8 +86,8 @@ let searchByName = (searchInput, applyFilterCB) => {
       <button
         onClick={_ => applyFilterCB(searchInput, None)}
         title={suggestionTitle(searchInput, None)}
-        className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden">
-        {searchInput |> str}
+        className={tagPillClasses(None, true)}>
+        <span className="px-2 py-px"> {searchInput |> str} </span>
       </button>
     </div>,
   |];
@@ -87,14 +107,17 @@ let showSuggestions = (applyFilterCB, title, suggestions: array(suggestion)) => 
                   Some(suggestion.resourceType),
                 )}
                 key={suggestion.title}
-                className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
+                className={tagPillClasses(
+                  Some(suggestion.resourceType),
+                  true,
+                )}
                 onClick={_e =>
                   applyFilterCB(
                     suggestion.title,
                     Some(suggestion.resourceType),
                   )
                 }>
-                {suggestion.title |> str}
+                <span className="px-2 py-px"> {suggestion.title |> str} </span>
               </button>
             )
          |> React.array}
@@ -153,27 +176,27 @@ let handleRemoveFilter = (filter, updateFilterCB, title, resourceType) => {
 };
 
 let tagPill = (title, resourceType, removeFilterCB) => {
-  <span
-    key=title
-    className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden ">
-    {(
-       switch (resourceType) {
-       | Some(r) =>
-         switch (r) {
-         | Level(_) => title
-         | Tag => "Tag: " ++ title
+  <div key=title className={tagPillClasses(resourceType, false)}>
+    <span className="pl-2 py-px">
+      {(
+         switch (resourceType) {
+         | Some(r) =>
+           switch (r) {
+           | Level(_) => title
+           | Tag => "Tag: " ++ title
+           }
+         | None => title
          }
-       | None => title
-       }
-     )
-     |> str}
+       )
+       |> str}
+    </span>
     <button
       title={"Remove filter " ++ title}
-      className="ml-1 text-red-500 px-1 border-2 border-red-200 m-1 hover:shadow hover:border-red-500 hover:bg-red-100 hover:text-red-600"
+      className="ml-2 text-red-500 px-2 py-px border-l"
       onClick={_ => removeFilterCB(title, resourceType)}>
       <FaIcon classes="fas fa-times" />
     </button>
-  </span>;
+  </div>;
 };
 
 let computeSelectedFilters = (filter, levels, removeFilterCB) => {
@@ -238,7 +261,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
         autoComplete="off"
         value=searchInput
         onChange={handleOnchange(setSearchInput)}
-        className="appearance-none block bg-white border border-gray-400 rounded w-full py-2 px-4 mt-1 focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block bg-white border border-gray-400 rounded w-full py-2 px-4 mt-1 focus:outline-none focus:bg-white focus:border-primary-300"
         id="search"
         type_="text"
         placeholder="Search for name, tag or level"

@@ -211,8 +211,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
      }}
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
       <div
-        className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
-        <ul className="flex font-semibold text-sm items-end">
+        className="max-w-3xl w-full mx-auto flex justify-between items-center border-b mt-4">
+        <ul className="flex font-semibold text-sm">
           <li
             className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
             <span> {"All Students" |> str} </span>
@@ -228,14 +228,12 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         </ul>
         {state.selectedStudents |> Array.length > 0
            ? React.null
-           : <div className="pb-2">
-               <button
-                 onClick={_e => send(UpdateFormVisible(CreateForm))}
-                 className="btn btn-primary ml-4">
-                 <i className="fas fa-user-plus mr-2" />
-                 <span> {"Add New Students" |> str} </span>
-               </button>
-             </div>}
+           : <button
+               onClick={_e => send(UpdateFormVisible(CreateForm))}
+               className="btn btn-primary ml-4">
+               <i className="fas fa-user-plus mr-2" />
+               <span> {"Add New Students" |> str} </span>
+             </button>}
       </div>
       <div className="bg-gray-100 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl bg-white ">

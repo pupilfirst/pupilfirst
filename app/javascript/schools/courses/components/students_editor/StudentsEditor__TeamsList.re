@@ -229,7 +229,10 @@ let teamCard =
        : <div className="flex w-2/5 items-center border-l border-gray-200">
            <div className="w-4/6 py-4 pl-5 pr-4">
              <div className="students-team--name mb-5">
-               <p className="inline-block text-xs bg-green-200 leading-tight px-1 py-px rounded"> {"Team" |> str} </p>
+               <p
+                 className="inline-block text-xs bg-green-200 leading-tight px-1 py-px rounded">
+                 {"Team" |> str}
+               </p>
                <h4> {team |> Team.name |> str} </h4>
              </div>
            </div>
@@ -320,7 +323,6 @@ let make =
   <div className="pb-6">
     <div className="max-w-3xl mx-auto w-full">
       <div>
-        <div className="max-w-3xl mx-auto" />
         {switch ((pagedTeams: Page.t)) {
          | Unloaded =>
            SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
@@ -350,7 +352,7 @@ let make =
              )
            : <div className="pt-4">
                <button
-                 className="btn btn-primary"
+                 className="btn btn-primary-ghost cursor-pointer w-full"
                  onClick={_ =>
                    getTeams(
                      courseId,

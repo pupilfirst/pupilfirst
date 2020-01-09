@@ -193,7 +193,7 @@ let teamCard =
                     />
                   </label>
                   <a
-                    className="flex flex-1 self-stretch items-center py-4 pl-4 pr-5 hover:bg-gray-100 justify-between"
+                    className="flex flex-1 items-center py-4 px-4 hover:bg-gray-100 justify-between"
                     id={(student |> Student.name) ++ "_edit"}
                     onClick={_e => showEditFormCB(student, teamId)}>
                     <div className="flex">
@@ -208,7 +208,7 @@ let teamCard =
                            |> Array.map(tag =>
                                 <div
                                   key=tag
-                                  className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
+                                  className="bg-gray-300 rounded mt-1 mr-1 py-px px-2 text-xs text-gray-900">
                                   {tag |> str}
                                 </div>
                               )
@@ -226,14 +226,14 @@ let teamCard =
     </div>
     {isSingleStudent
        ? React.null
-       : <div className="flex w-2/5 items-center">
-           <div className="w-3/5 py-4 px-3">
+       : <div className="flex w-2/5 items-center border-l border-gray-200">
+           <div className="w-4/6 py-4 pl-5 pr-4">
              <div className="students-team--name mb-5">
-               <p className="text-xs"> {"Team" |> str} </p>
+               <p className="inline-block text-xs bg-green-200 leading-tight px-1 py-px rounded"> {"Team" |> str} </p>
                <h4> {team |> Team.name |> str} </h4>
              </div>
            </div>
-           <div className="w-2/5 text-right pr-5">
+           <div className="w-2/6 text-right pr-4">
              {team |> levelInfo(levels)}
            </div>
          </div>}

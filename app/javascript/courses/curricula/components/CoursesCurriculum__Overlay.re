@@ -388,7 +388,6 @@ let completeSection =
       targetStatus,
       addSubmissionCB,
       evaluationCriteria,
-      gradeLabels,
       coaches,
       users,
       preview,
@@ -444,7 +443,6 @@ let completeSection =
          targetDetails
          target
          authenticityToken
-         gradeLabels
          evaluationCriteria
          addSubmissionCB={addSubmission(
            target,
@@ -598,7 +596,6 @@ let make =
             targetStatus,
             addSubmissionCB,
             evaluationCriteria,
-            course |> Course.gradeLabels,
             coaches,
             users,
             preview,

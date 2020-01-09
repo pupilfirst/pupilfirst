@@ -47,19 +47,11 @@ module TimelineEvents
     end
 
     def all_grades_valid?(grades)
-      grades.values.all? { |grade| grade.in?(1..max_grade) }
-    end
-
-    def max_grade
-      @max_grade ||= @timeline_event.founder.startup.course.max_grade
-    end
-
-    def pass_grade
-      @pass_grade ||= @timeline_event.founder.startup.course.pass_grade
+      grades.all? { |ec_id, grade| grade.in?(1..EvaluationCriterion.find(ec_id).max_grade) }
     end
 
     def failed?(grades)
-      grades.values.any? { |grade| grade < pass_grade }
+      grades.any? { |ec_id, grade| grade < EvaluationCriterion.find(ec_id).pass_grade }
     end
   end
 end

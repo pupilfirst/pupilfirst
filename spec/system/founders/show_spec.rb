@@ -2,7 +2,6 @@ require 'rails_helper'
 
 feature 'Founder Show' do
   include UserSpecHelper
-  include FounderSpecHelper
 
   # Setup a course with a single founder target, ...
   let(:school) { create :school, :current }

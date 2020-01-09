@@ -32,7 +32,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def evaluation_criteria_fields
-    %w[name id]
+    %w[name id max_grade pass_grade grade_labels]
   end
 
   def evaluation_criteria
@@ -41,7 +41,7 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     submission_criteria = EvaluationCriterion.joins(timeline_event_grades: :timeline_event)
       .where(timeline_events: { id: submissions })
-      .distinct.as_json(only: evaluation_criteria_fields)
+      .as_json(only: evaluation_criteria_fields)
 
     (target_criteria + submission_criteria).uniq
   end

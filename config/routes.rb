@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       member do
         get 'curriculum'
         get 'exports'
+        get 'evaluation_criteria'
         post 'attach_images'
       end
 
@@ -198,10 +199,6 @@ Rails.application.routes.draw do
   resources :timeline_events, only: %i[show], path: 'submissions'
 
   resources :courses, only: %i[show] do
-    resource :coach_dashboard, controller: 'coach_dashboard', only: %i[show] do
-      get 'timeline_events'
-    end
-
     member do
       get 'review', action: 'review'
       get 'students', action: 'students'

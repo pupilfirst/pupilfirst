@@ -14,7 +14,7 @@ module SubmissionDetailsQuery = [%graphql
       submissionDetails(submissionId: $submissionId) {
         targetId, targetTitle, userNames, levelNumber, levelId
         evaluationCriteria{
-          id, name
+          id, name, maxGrade, passGrade, gradeLabels { grade label}
         },
         reviewChecklist{
           title
@@ -149,8 +149,6 @@ let make =
       ~authenticityToken,
       ~courseId,
       ~submissionId,
-      ~gradeLabels,
-      ~passGrade,
       ~currentCoach,
       ~removePendingSubmissionCB,
       ~updateReviewedSubmissionCB,
@@ -181,8 +179,6 @@ let make =
                    key={index |> string_of_int}
                    authenticityToken
                    submission
-                   gradeLabels
-                   passGrade
                    targetEvaluationCriteriaIds={
                      submissionDetails
                      |> SubmissionDetails.targetEvaluationCriteriaIds

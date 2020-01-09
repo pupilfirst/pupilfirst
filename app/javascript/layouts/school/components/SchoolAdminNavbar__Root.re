@@ -10,6 +10,7 @@ type courseSelection =
   | Students
   | CourseCoaches
   | Curriculum
+  | EvaluationCriteria
   | CourseExports;
 
 type settingsSelection =
@@ -147,6 +148,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
                "Coaches",
              ),
              secondaryNavOption(
+               "/school/courses/" ++ courseId ++ "/evaluation_criteria",
+               courseSelection,
+               EvaluationCriteria,
+               "Evaluation Criteria",
+             ),
+             secondaryNavOption(
                "/school/courses/" ++ courseId ++ "/exports",
                courseSelection,
                CourseExports,
@@ -196,6 +203,10 @@ let make =
       )
     | ["school", "courses", courseId, "exports"] => (
         SelectedCourse(courseId, CourseExports),
+        true,
+      )
+    | ["school", "courses", courseId, "evaluation_criteria"] => (
+        SelectedCourse(courseId, EvaluationCriteria),
         true,
       )
     | ["school", "communities"] => (Communities, false)

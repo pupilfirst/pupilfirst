@@ -32,6 +32,7 @@ module Schools
     alias create_students? delete_coach_enrollment?
     alias mark_teams_active? delete_coach_enrollment?
     alias exports? show?
+    alias evaluation_criteria? show?
 
     class Scope < ::CoursePolicy::Scope
     end

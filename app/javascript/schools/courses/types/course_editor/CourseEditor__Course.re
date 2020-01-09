@@ -15,9 +15,6 @@ type t = {
   name: string,
   description: string,
   endsAt: option(Js.Date.t),
-  maxGrade: int,
-  passGrade: int,
-  gradesAndLabels: list(CourseEditor__GradesAndLabels.t),
   about: option(string),
   publicSignup: bool,
   thumbnail: option(Image.t),
@@ -36,12 +33,6 @@ let about = t => t.about;
 let publicSignup = t => t.publicSignup;
 
 let description = t => t.description;
-
-let maxGrade = t => t.maxGrade;
-
-let passGrade = t => t.passGrade;
-
-let gradesAndLabels = t => t.gradesAndLabels;
 
 let featured = t => t.featured;
 
@@ -93,9 +84,6 @@ let create =
       ~name,
       ~description,
       ~endsAt,
-      ~maxGrade,
-      ~passGrade,
-      ~gradesAndLabels,
       ~about,
       ~publicSignup,
       ~cover,
@@ -106,9 +94,6 @@ let create =
   name,
   description,
   endsAt,
-  maxGrade,
-  passGrade,
-  gradesAndLabels,
   about,
   publicSignup,
   cover,
@@ -126,23 +111,11 @@ let makeFromJs = rawCourse => {
       |> OptionUtils.map(DateFns.parseString)
     | None => None
     };
-  let gradesAndLabels =
-    rawCourse##gradesAndLabels
-    |> Array.map(gradesAndLabel =>
-         CourseEditor__GradesAndLabels.create(
-           gradesAndLabel##grade,
-           gradesAndLabel##label,
-         )
-       )
-    |> Array.to_list;
   create(
     ~id=rawCourse##id,
     ~name=rawCourse##name,
     ~description=rawCourse##description,
     ~endsAt,
-    ~maxGrade=rawCourse##maxGrade,
-    ~passGrade=rawCourse##passGrade,
-    ~gradesAndLabels,
     ~about=rawCourse##about,
     ~publicSignup=rawCourse##publicSignup,
     ~thumbnail=makeImageFromJs(rawCourse##thumbnail),

@@ -15,9 +15,22 @@ type state = {
   saving: bool,
 };
 
-let passed = (grades, passgrade) =>
+let passed = (grades, evaluationCriteria) =>
   grades
-  |> Js.Array.filter(g => g |> Grade.value < passgrade)
+  |> Js.Array.filter(g => {
+       let passGrade =
+         evaluationCriteria
+         |> ArrayUtils.unsafeFind(
+              ec =>
+                EvaluationCriterion.id(ec)
+                == (g |> Grade.evaluationCriterionId),
+              "CoursesReview__GradeCard: Unable to find evaluation criterion with id - "
+              ++ (g |> Grade.evaluationCriterionId),
+            )
+         |> EvaluationCriterion.passGrade;
+
+       g |> Grade.value < passGrade;
+     })
   |> ArrayUtils.isEmpty;
 
 module CreateGradingMutation = [%graphql
@@ -60,7 +73,7 @@ let gradeSubmissionQuery =
       submissionId,
       state,
       setState,
-      passGrade,
+      evaluationCriteria,
       updateSubmissionCB,
     ) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
@@ -82,7 +95,7 @@ let gradeSubmissionQuery =
        response##createGrading##success
          ? updateSubmissionCB(
              ~grades=state.grades,
-             ~passed=Some(passed(state.grades, passGrade)),
+             ~passed=Some(passed(state.grades, evaluationCriteria)),
              ~newFeedback=Some(state.newFeedback),
            )
          : ();
@@ -118,7 +131,7 @@ let handleGradePillClick =
   };
 };
 
-let findEvaluvationCriterion = (evaluationCriteria, evaluationCriterionId) =>
+let findEvaluationCriterion = (evaluationCriteria, evaluationCriterionId) =>
   switch (
     evaluationCriteria
     |> Js.Array.find(ec =>
@@ -175,37 +188,30 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
 };
 
 let showGradePill =
-    (
-      key,
-      gradeLabels,
-      evaluvationCriterion,
-      gradeValue,
-      passGrade,
-      state,
-      setState,
-    ) =>
+    (key, evaluationCriterion, gradeValue, passGrade, state, setState) =>
   <div
     ariaLabel={
       "evaluation-criterion-"
-      ++ (evaluvationCriterion |> EvaluationCriterion.id)
+      ++ (evaluationCriterion |> EvaluationCriterion.id)
     }
     key={key |> string_of_int}
     className="md:pr-8 mt-4">
     {gradePillHeader(
-       evaluvationCriterion |> EvaluationCriterion.name,
+       evaluationCriterion |> EvaluationCriterion.name,
        gradeValue,
-       gradeLabels,
+       evaluationCriterion |> EvaluationCriterion.gradesAndLabels,
      )}
     <div
       className="course-review-grade-card__grade-bar inline-flex w-full text-center mt-1">
-      {gradeLabels
+      {evaluationCriterion
+       |> EvaluationCriterion.gradesAndLabels
        |> Array.map(gradeLabel => {
             let gradeLabelGrade = gradeLabel |> GradeLabel.grade;
 
             <div
               key={gradeLabelGrade |> string_of_int}
               onClick={handleGradePillClick(
-                evaluvationCriterion |> EvaluationCriterion.id,
+                evaluationCriterion |> EvaluationCriterion.id,
                 gradeLabelGrade,
                 state,
                 setState,
@@ -227,35 +233,34 @@ let showGradePill =
     </div>
   </div>;
 
-let showGrades = (grades, gradeLabels, passGrade, evaluationCriteria, state) =>
+let showGrades = (grades, evaluationCriteria, state) =>
   <div>
     {grades
-     |> Array.mapi((key, grade) =>
+     |> Grade.sort(evaluationCriteria)
+     |> Array.mapi((key, grade) => {
+          let gradeEcId = Grade.evaluationCriterionId(grade);
+          let ec =
+            evaluationCriteria
+            |> ArrayUtils.unsafeFind(
+                 ec => ec |> EvaluationCriterion.id == gradeEcId,
+                 "Unable to find evaluation Criterion with id: "
+                 ++ gradeEcId
+                 ++ "in CoursesRevew__GradeCard",
+               );
+
           showGradePill(
             key,
-            gradeLabels,
-            findEvaluvationCriterion(
-              evaluationCriteria,
-              grade |> Grade.evaluationCriterionId,
-            ),
+            ec,
             grade |> Grade.value,
-            passGrade,
+            ec |> EvaluationCriterion.passGrade,
             state,
             None,
-          )
-        )
+          );
+        })
      |> React.array}
   </div>;
 let renderGradePills =
-    (
-      gradeLabels,
-      evaluationCriteria,
-      targetEvaluationCriteriaIds,
-      grades,
-      passGrade,
-      state,
-      setState,
-    ) =>
+    (evaluationCriteria, targetEvaluationCriteriaIds, grades, state, setState) =>
   targetEvaluationCriteriaIds
   |> Array.mapi((key, evaluationCriterionId) => {
        let ec =
@@ -277,15 +282,9 @@ let renderGradePills =
          | None => 0
          };
 
-       showGradePill(
-         key,
-         gradeLabels,
-         ec,
-         gradeValue,
-         passGrade,
-         state,
-         Some(setState),
-       );
+       let passGrade = ec |> EvaluationCriterion.passGrade;
+
+       showGradePill(key, ec, gradeValue, passGrade, state, Some(setState));
      })
   |> React.array;
 let gradeStatusClasses = (color, status) =>
@@ -410,7 +409,7 @@ let gradeSubmission =
       submissionId,
       state,
       setState,
-      passGrade,
+      evaluationCriteria,
       updateSubmissionCB,
       status,
       event,
@@ -423,7 +422,7 @@ let gradeSubmission =
       submissionId,
       state,
       setState,
-      passGrade,
+      evaluationCriteria,
       updateSubmissionCB,
     )
   | Grading
@@ -460,8 +459,7 @@ let reviewButtonDisabled = status =>
   | Ungraded => true
   };
 
-let computeStatus =
-    (submission, selectedGrades, evaluationCriteria, passGrade) =>
+let computeStatus = (submission, selectedGrades, evaluationCriteria) =>
   switch (
     submission |> Submission.passedAt,
     submission |> Submission.grades |> ArrayUtils.isNotEmpty,
@@ -475,7 +473,7 @@ let computeStatus =
                |> Array.length != (evaluationCriteria |> Array.length)) {
       Grading;
     } else {
-      Graded(passed(selectedGrades, passGrade));
+      Graded(passed(selectedGrades, evaluationCriteria));
     }
   };
 
@@ -492,9 +490,7 @@ let make =
     (
       ~authenticityToken,
       ~submission,
-      ~gradeLabels,
       ~evaluationCriteria,
-      ~passGrade,
       ~reviewChecklist,
       ~updateSubmissionCB,
       ~updateReviewChecklistCB,
@@ -503,8 +499,7 @@ let make =
     ) => {
   let (state, setState) =
     React.useState(() => {grades: [||], newFeedback: "", saving: false});
-  let status =
-    computeStatus(submission, state.grades, evaluationCriteria, passGrade);
+  let status = computeStatus(submission, state.grades, evaluationCriteria);
   <DisablingCover disabled={state.saving}>
     <div className=" ">
       {showFeedbackForm(
@@ -528,23 +523,14 @@ let make =
             {switch (submission |> Submission.grades) {
              | [||] =>
                renderGradePills(
-                 gradeLabels,
                  evaluationCriteria,
                  targetEvaluationCriteriaIds,
                  state.grades,
-                 passGrade,
                  state,
                  setState,
                )
 
-             | grades =>
-               showGrades(
-                 grades,
-                 gradeLabels,
-                 passGrade,
-                 evaluationCriteria,
-                 state,
-               )
+             | grades => showGrades(grades, evaluationCriteria, state)
              }}
           </div>
           {submissionStatusIcon(
@@ -567,7 +553,7 @@ let make =
              submission |> Submission.id,
              state,
              setState,
-             passGrade,
+             evaluationCriteria,
              updateSubmissionCB,
              status,
            )}>

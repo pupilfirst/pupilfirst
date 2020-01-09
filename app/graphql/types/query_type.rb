@@ -34,6 +34,10 @@ module Types
       argument :student_id, ID, required: true
     end
 
+    field :evaluation_criteria, [Types::EvaluationCriterionType], null: false do
+      argument :course_id, ID, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -72,6 +76,11 @@ module Types
     def student_submissions(args)
       resolver = StudentSubmissionsResolver.new(context, args)
       resolver.student_submissions
+    end
+
+    def evaluation_criteria(args)
+      resolver = EvaluationCriteriaResolver.new(context, args)
+      resolver.evaluation_criteria
     end
   end
 end

@@ -294,6 +294,9 @@ ActiveRecord::Schema.define(version: 2020_01_03_101143) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.bigint "course_id"
+    t.integer "max_grade"
+    t.integer "pass_grade"
+    t.jsonb "grade_labels"
     t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end
 

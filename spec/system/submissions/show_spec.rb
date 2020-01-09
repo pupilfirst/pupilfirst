@@ -11,7 +11,8 @@ feature 'Submissions show' do
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_founders, target_group: target_group }
   let(:auto_verify_target) { create :target, :for_founders, target_group: target_group }
-  let(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
+  let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+  let(:evaluation_criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   let(:team) { create :startup, level: level }
@@ -55,8 +56,8 @@ feature 'Submissions show' do
       feedback = Faker::Markdown.sandwich(6)
       add_markdown(feedback)
       expect(page).to have_content('Grade Card')
-
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        expect(page).to have_selector('.course-review-grade-card__grade-pill', count: 4)
         find("div[title='Bad']").click
       end
 
@@ -65,6 +66,7 @@ feature 'Submissions show' do
         expect(page).to have_text('Reviewing')
       end
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        expect(page).to have_selector('.course-review-grade-card__grade-pill', count: 3)
         find("div[title='Bad']").click
       end
 
@@ -281,7 +283,7 @@ feature 'Submissions show' do
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         expect(page).to have_text(evaluation_criterion_1.name)
-        expect(page).to have_text("#{timeline_event_grade.grade}/#{course.max_grade}")
+        expect(page).to have_text("#{timeline_event_grade.grade}/#{evaluation_criterion_1.max_grade}")
       end
 
       expect(page).to have_button("Add feedback")
@@ -358,12 +360,12 @@ feature 'Submissions show' do
         # Evaluation criteria at the point of grading are shown for reviewed submissions
         within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
           expect(page).to have_text(evaluation_criterion_1.name)
-          expect(page).to have_text("#{timeline_event_grade_1.grade}/#{course.max_grade}")
+          expect(page).to have_text("#{timeline_event_grade_1.grade}/#{evaluation_criterion_1.max_grade}")
         end
 
         within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
           expect(page).to have_text(evaluation_criterion_2.name)
-          expect(page).to have_text("#{timeline_event_grade_2.grade}/#{course.max_grade}")
+          expect(page).to have_text("#{timeline_event_grade_2.grade}/#{evaluation_criterion_2.max_grade}")
         end
       end
 

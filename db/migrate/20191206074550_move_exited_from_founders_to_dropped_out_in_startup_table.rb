@@ -14,7 +14,7 @@ class MoveExitedFromFoundersToDroppedOutInStartupTable < ActiveRecord::Migration
     has_many :founders
   end
 
-  def change
+  def up
     add_column :startups, :dropped_out_at, :datetime
 
     Startup.reset_column_information
@@ -34,5 +34,19 @@ class MoveExitedFromFoundersToDroppedOutInStartupTable < ActiveRecord::Migration
     end
 
     remove_column :founders, :exited, :boolean
+  end
+
+  def down
+    add_column :founders, :exited, :boolean
+
+    Founder.reset_column_information
+
+    Startup.all.each do |startup|
+      next unless startup.dropped_out_at.present?
+
+      startup.founders.update_all(exited: true)
+    end
+
+    remove_column :startups, :dropped_out_at, :datetime
   end
 end

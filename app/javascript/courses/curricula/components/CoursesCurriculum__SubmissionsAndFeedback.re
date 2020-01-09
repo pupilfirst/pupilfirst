@@ -5,7 +5,7 @@ let str = React.string;
 
 open CoursesCurriculum__Types;
 
-let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
+let gradeBar = (evaluationCriteria, grade) => {
   let criterion =
     evaluationCriteria
     |> ListUtils.findOpt(c =>
@@ -21,7 +21,7 @@ let gradeBar = (gradeLabels, passGrade, evaluationCriteria, grade) => {
       Grading.make(~criterionId, ~criterionName, ~grade=gradeNumber);
 
     <div key={gradeNumber |> string_of_int} className="mb-4">
-      <GradeBar grading gradeLabels passGrade />
+      <CoursesCurriculum__GradeBar grading criterion />
     </div>;
   | None => React.null
   };
@@ -79,7 +79,7 @@ let submissionStatusIcon = (~passed) => {
 
 let undoSubmissionCB = () => Webapi.Dom.(location |> Location.reload);
 
-let gradingSection = (~grades, ~gradeBar, ~passed) =>
+let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
   <div>
     <div className="w-full md:hidden">
       {statusBar(
@@ -97,6 +97,7 @@ let gradingSection = (~grades, ~gradeBar, ~passed) =>
         <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
         <div className="mt-3">
           {grades
+           |> Grade.sort(evaluationCriteria)
            |> List.map(grade => gradeBar(grade))
            |> Array.of_list
            |> React.array}
@@ -116,12 +117,11 @@ let submissions =
       targetStatus,
       targetDetails,
       evaluationCriteria,
-      gradeLabels,
       authenticityToken,
       coaches,
       users,
     ) => {
-  let curriedGradeBar = gradeBar(gradeLabels, 2, evaluationCriteria);
+  let curriedGradeBar = gradeBar(evaluationCriteria);
 
   targetDetails
   |> TargetDetails.submissions
@@ -210,10 +210,16 @@ let submissions =
                  }}
               </div>
             | Passed =>
-              gradingSection(~grades, ~passed=true, ~gradeBar=curriedGradeBar)
+              gradingSection(
+                ~grades,
+                ~evaluationCriteria,
+                ~passed=true,
+                ~gradeBar=curriedGradeBar,
+              )
             | Failed =>
               gradingSection(
                 ~grades,
+                ~evaluationCriteria,
                 ~passed=false,
                 ~gradeBar=curriedGradeBar,
               )
@@ -313,7 +319,6 @@ let make =
       ~targetDetails,
       ~target,
       ~authenticityToken,
-      ~gradeLabels,
       ~evaluationCriteria,
       ~addSubmissionCB,
       ~targetStatus,
@@ -358,7 +363,6 @@ let make =
            targetStatus,
            targetDetails,
            evaluationCriteria,
-           gradeLabels,
            authenticityToken,
            coaches,
            users,

@@ -25,16 +25,6 @@ let isFail = (passGrade, grading) =>
 let anyFail = (passGrade, evaluation) =>
   evaluation |> List.exists(grading => grading |> isFail(passGrade));
 
-let clearedEvaluation = evaluation =>
-  evaluation
-  |> List.map(grading =>
-       {
-         criterionId: grading.criterionId,
-         criterionName: grading.criterionName,
-         grade: None,
-       }
-     );
-
 let criterionId = t => t.criterionId;
 
 let criterionName = t => t.criterionName;

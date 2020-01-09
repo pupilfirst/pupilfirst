@@ -240,7 +240,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
       <div className="bg-gray-100 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl p-5 bg-white ">
           <div>
-            <div className="flex w-full items-end">
+            <div className="flex w-full items-start">
               <StudentsEditor__Search
                 filter={state.filter}
                 updateFilterCB={updateFilter(send)}

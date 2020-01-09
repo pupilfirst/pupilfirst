@@ -166,7 +166,7 @@ let tagPill = (name, resourceType, removeFilterCB) => {
   <div
     key=name
     className={
-      "inline-flex mr-1 "
+      "inline-flex mt-1 mr-1 "
       ++ {
         tagPillClasses(resourceType, false);
       }
@@ -233,29 +233,23 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     );
 
   <div className="w-full relative">
-    <div className="flex flex-col">
+    <div>
       <label className="block text-tiny uppercase font-semibold">
         {"Filter by:" |> str}
       </label>
-      <div className="flex justify-between items-end">
-        <div> {selectedFilters |> React.array} </div>
-        {selectedFilters |> ArrayUtils.isEmpty
-           ? React.null
-           : <button
-               className="btn btn-subtle btn-small ml-2 px-4 border"
-               onClick={_ => clearFilter(setSearchInput, updateFilterCB)}>
-               {"Clear Filter" |> str}
-             </button>}
+      <div
+        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full pt-1 pb-2 px-4 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
+        {selectedFilters |> React.array}
+        <input
+          autoComplete="off"
+          value=searchInput
+          onChange={handleOnchange(setSearchInput)}
+          className="flex-grow mt-1 appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+          id="search"
+          type_="text"
+          placeholder="Search for name, tag or level"
+        />
       </div>
-      <input
-        autoComplete="off"
-        value=searchInput
-        onChange={handleOnchange(setSearchInput)}
-        className="appearance-none block bg-white border border-gray-400 rounded w-full py-2 px-4 mt-1 focus:outline-none focus:bg-white focus:border-primary-300"
-        id="search"
-        type_="text"
-        placeholder="Search for name, tag or level"
-      />
     </div>
     <div />
     {if (searchInput |> String.trim != "") {

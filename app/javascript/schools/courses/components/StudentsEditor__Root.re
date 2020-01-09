@@ -357,10 +357,14 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
       </div>
     </div>
     {let loading =
-       switch (state.loading) {
-       | NotLoading => false
-       | Reloading => true
-       | LoadingMore => false
+       switch (state.pagedTeams) {
+       | Unloaded => false
+       | _ =>
+         switch (state.loading) {
+         | NotLoading => false
+         | Reloading => true
+         | LoadingMore => false
+         }
        };
      <LoadingSpinner loading />}
   </div>;

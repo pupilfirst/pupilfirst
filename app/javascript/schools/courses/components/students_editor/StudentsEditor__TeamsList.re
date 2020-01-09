@@ -115,6 +115,33 @@ let getTeams =
   |> ignore;
 };
 
+let studentAvatar = student => {
+  switch (student |> Student.avatarUrl) {
+  | Some(avatarUrl) =>
+    <img
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+      src=avatarUrl
+    />
+  | None =>
+    <Avatar
+      name={student |> Student.name}
+      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+    />
+  };
+};
+
+let levelInfo = (levels, team) =>
+  <span
+    className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
+    <div className="text-xs font-semibold"> {"Level" |> str} </div>
+    <div className="font-bold">
+      {team
+       |> Team.levelId
+       |> Level.unsafeLevelNumber(levels, "TeamsList")
+       |> str}
+    </div>
+  </span>;
+
 let teamCard =
     (
       team,
@@ -166,38 +193,30 @@ let teamCard =
                     />
                   </label>
                   <a
-                    className="flex flex-1 self-stretch items-center py-4 px-4 hover:bg-gray-100"
+                    className="flex flex-1 self-stretch items-center py-4 pl-4 pr-5 hover:bg-gray-100 justify-between"
                     id={(student |> Student.name) ++ "_edit"}
                     onClick={_e => showEditFormCB(student, teamId)}>
-                    {switch (student |> Student.avatarUrl) {
-                     | Some(avatarUrl) =>
-                       <img
-                         className="w-10 h-10 rounded-full mr-4 object-cover"
-                         src=avatarUrl
-                       />
-                     | None =>
-                       <Avatar
-                         name={student |> Student.name}
-                         className="w-10 h-10 mr-4"
-                       />
-                     }}
-                    <div className="text-sm flex flex-col">
-                      <p className="text-black font-semibold inline-block ">
-                        {student |> Student.name |> str}
-                      </p>
-                      <div className="flex flex-wrap">
-                        {student
-                         |> Student.tags
-                         |> Array.map(tag =>
-                              <div
-                                key=tag
-                                className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
-                                {tag |> str}
-                              </div>
-                            )
-                         |> React.array}
+                    <div className="flex">
+                      {studentAvatar(student)}
+                      <div className="text-sm flex flex-col">
+                        <p className="text-black font-semibold inline-block ">
+                          {student |> Student.name |> str}
+                        </p>
+                        <div className="flex flex-wrap">
+                          {student
+                           |> Student.tags
+                           |> Array.map(tag =>
+                                <div
+                                  key=tag
+                                  className="bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 py-px px-2 text-xs text-gray-900">
+                                  {tag |> str}
+                                </div>
+                              )
+                           |> React.array}
+                        </div>
                       </div>
                     </div>
+                    {isSingleStudent ? team |> levelInfo(levels) : React.null}
                   </a>
                 </div>
               </div>
@@ -205,32 +224,23 @@ let teamCard =
           })
        |> React.array}
     </div>
-    <div className="flex w-2/5 items-center">
-      <div className="w-3/5 py-4 px-3">
-        {isSingleStudent
-           ? ReasonReact.null
-           : <div className="students-team--name mb-5">
+    {isSingleStudent
+       ? React.null
+       : <div className="flex w-2/5 items-center">
+           <div className="w-3/5 py-4 px-3">
+             <div className="students-team--name mb-5">
                <p className="text-xs"> {"Team" |> str} </p>
                <h4> {team |> Team.name |> str} </h4>
-             </div>}
-      </div>
-      <div className="w-2/5 text-center">
-        <span
-          className="inline-flex flex-col items-center rounded bg-gray-200 px-2 pt-2 pb-1 border">
-          <div className="text-xs font-semibold"> {"Level" |> str} </div>
-          <div className="font-bold">
-            {team
-             |> Team.levelId
-             |> Level.unsafeLevelNumber(levels, "TeamsList")
-             |> str}
-          </div>
-        </span>
-      </div>
-    </div>
+             </div>
+           </div>
+           <div className="w-2/5 text-right pr-5">
+             {team |> levelInfo(levels)}
+           </div>
+         </div>}
   </div>;
 };
 
-let showEmpty = (filter, updateFilterCB) => {
+let showEmpty = (filter, updateFilterCB) =>
   <div className="flex flex-col-reverse items-center p-5 text-center">
     {filter |> Filter.isEmpty
        ? <div> {"No students here." |> str} </div>
@@ -243,7 +253,6 @@ let showEmpty = (filter, updateFilterCB) => {
            </button>
          </div>}
   </div>;
-};
 
 let showTeams =
     (

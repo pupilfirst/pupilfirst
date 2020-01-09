@@ -14,8 +14,21 @@ module Schools
 
       def props
         {
-          course_id: @course.id
+          course_id: @course.id,
+          evaluation_criteria: evaluation_criteria
         }
+      end
+
+      def evaluation_criteria
+        @course.evaluation_criteria.map do |ec|
+          {
+            id: ec.id,
+            name: ec.name,
+            max_grade: ec.max_grade,
+            pass_grade: ec.pass_grade,
+            grade_labels: ec.grade_labels
+          }
+        end
       end
     end
   end

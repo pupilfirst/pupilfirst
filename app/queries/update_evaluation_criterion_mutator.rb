@@ -25,15 +25,16 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
     grades_and_labels.map do |grades_and_label|
       grade = grades_and_label[:grade]
       label = grades_and_label[:label].strip
-      { grade: grade, label: label.presence || grade.humanize.capitalize }
+      label = label.present? ? label[0..40] : grade.humanize.capitalize
+      { grade: grade, label: label }
     end
   end
 
   def evaluation_criterion
-    @evaluation_criterion ||= EvaluationCriterion.find_by(id: id)
+    EvaluationCriterion.find_by(course: current_school.courses, id: id)
   end
 
   def authorized?
-    current_school_admin.present? && evaluation_criterion.course.in?(current_school.courses)
+    current_school_admin.present?
   end
 end

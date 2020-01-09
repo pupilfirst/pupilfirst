@@ -103,13 +103,13 @@ class CreateGradingMutator < ApplicationQuery
 
   def max_grades
     @max_grades ||= grade_hash.keys.each_with_object({}) do |ec_id, max_grades_hash|
-      max_grades_hash[ec_id] = EvaluationCriterion.find(ec_id).max_grade
+      max_grades_hash[ec_id] = evaluation_criteria.find(ec_id).max_grade
     end
   end
 
   def pass_grades
     @pass_grades ||= grade_hash.keys.each_with_object({}) do |ec_id, pass_grades_hash|
-      pass_grades_hash[ec_id] = EvaluationCriterion.find(ec_id).pass_grade
+      pass_grades_hash[ec_id] = evaluation_criteria.find(ec_id).pass_grade
     end
   end
 

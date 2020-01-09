@@ -151,7 +151,7 @@ let dropDownSelected = filter => {
   let title = filter |> Filter.sortBy |> Filter.sortByTitle;
   <button
     title={"Order by " ++ title}
-    className="block bg-white leading-snug font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 p-3 text-xs ">
+    className="block bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 p-3 text-xs ">
     <i className={filter |> Filter.sortBy |> Filter.sortByIcon} />
     <span className="ml-2"> {title |> str} </span>
     <i className="fas fa-caret-down ml-3" />
@@ -211,8 +211,8 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
      }}
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
       <div
-        className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
-        <ul className="flex font-semibold text-sm items-end">
+        className="max-w-3xl w-full mx-auto flex justify-between items-center border-b mt-4">
+        <ul className="flex font-semibold text-sm">
           <li
             className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
             <span> {"All Students" |> str} </span>
@@ -228,19 +228,17 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
         </ul>
         {state.selectedStudents |> Array.length > 0
            ? React.null
-           : <div className="pb-2">
-               <button
-                 onClick={_e => send(UpdateFormVisible(CreateForm))}
-                 className="btn btn-primary ml-4">
-                 <i className="fas fa-user-plus mr-2" />
-                 <span> {"Add New Students" |> str} </span>
-               </button>
-             </div>}
+           : <button
+               onClick={_e => send(UpdateFormVisible(CreateForm))}
+               className="btn btn-primary ml-4">
+               <i className="fas fa-user-plus mr-2" />
+               <span> {"Add New Students" |> str} </span>
+             </button>}
       </div>
       <div className="bg-gray-100 sticky top-0 py-3">
-        <div className="border rounded-lg mx-auto max-w-3xl p-5 bg-white ">
+        <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
           <div>
-            <div className="flex w-full items-start">
+            <div className="flex w-full items-start p-4">
               <StudentsEditor__Search
                 filter={state.filter}
                 updateFilterCB={updateFilter(send)}
@@ -263,79 +261,83 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap">
-              {state.selectedStudents
-               |> Array.map(selectedStudent =>
-                    <div
-                      className="flex items-center bg-white border border-gray-300 px-2 py-1 mr-1 rounded-lg mt-2">
-                      {switch (selectedStudent |> SelectedStudent.avatarUrl) {
-                       | Some(avatarUrl) =>
-                         <img
-                           className="w-5 h-5 rounded-full mr-2 object-cover"
-                           src=avatarUrl
-                         />
-                       | None =>
-                         <Avatar
-                           name={selectedStudent |> SelectedStudent.name}
-                           className="w-5 h-5 mr-2"
-                         />
-                       }}
-                      <div className="text-sm">
-                        <span
-                          className="text-black font-semibold inline-block ">
-                          {selectedStudent |> SelectedStudent.name |> str}
-                        </span>
-                        <button
-                          className="ml-2 hover:bg-gray-300 cursor-pointer"
-                          onClick={_ =>
-                            deselectStudent(
-                              send,
-                              selectedStudent |> SelectedStudent.id,
-                            )
-                          }>
-                          <i className="fas fa-times" />
-                        </button>
-                      </div>
-                    </div>
-                  )
-               |> React.array}
-            </div>
+            {state.selectedStudents |> ArrayUtils.isEmpty
+               ? React.null
+               : <div
+                   className="flex justify-between bg-gray-100 px-4 pb-3 pt-1 rounded-b-lg">
+                   <div className="flex flex-wrap">
+                     {state.selectedStudents
+                      |> Array.map(selectedStudent =>
+                           <div
+                             className="flex items-center bg-white border border-gray-400 rounded-full mr-2 mt-2 overflow-hidden">
+                             {switch (
+                                selectedStudent |> SelectedStudent.avatarUrl
+                              ) {
+                              | Some(avatarUrl) =>
+                                <img
+                                  className="w-5 h-5 rounded-full mr-2 ml-px my-px object-cover"
+                                  src=avatarUrl
+                                />
+                              | None =>
+                                <Avatar
+                                  name={
+                                    selectedStudent |> SelectedStudent.name
+                                  }
+                                  className="w-5 h-5 mr-2 ml-px my-px"
+                                />
+                              }}
+                             <div className="flex h-full items-center">
+                               <span
+                                 className="text-xs font-semibold pr-2 leading-tight ">
+                                 {selectedStudent
+                                  |> SelectedStudent.name
+                                  |> str}
+                               </span>
+                               <button
+                                 className="flex h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-400 hover:text-white "
+                                 onClick={_ =>
+                                   deselectStudent(
+                                     send,
+                                     selectedStudent |> SelectedStudent.id,
+                                   )
+                                 }>
+                                 <Icon className="if i-times-light" />
+                               </button>
+                             </div>
+                           </div>
+                         )
+                      |> React.array}
+                   </div>
+                   <div className="pt-1">
+                     {state.selectedStudents |> SelectedStudent.isGroupable
+                        ? <button
+                            onClick={_e =>
+                              teamUp(
+                                state.selectedStudents,
+                                handleTeamUpResponse(send),
+                              )
+                            }
+                            className="btn btn-small btn-primary">
+                            {"Group as Team" |> str}
+                          </button>
+                        : React.null}
+                     {state.selectedStudents |> SelectedStudent.isMoveOutable
+                        ? <button
+                            onClick={_e =>
+                              teamUp(
+                                state.selectedStudents,
+                                handleTeamUpResponse(send),
+                              )
+                            }
+                            className="btn btn-small btn-danger">
+                            {"Move out from Team" |> str}
+                          </button>
+                        : React.null}
+                   </div>
+                 </div>}
           </div>
         </div>
       </div>
-      {state.selectedStudents |> ArrayUtils.isEmpty
-         ? React.null
-         : <div className="px-6">
-             <div
-               className="max-w-3xl h-16 mx-auto relative rounded border-b p-4 mt-3 w-full flex items-center justify-between">
-               <div className="flex">
-                 {state.selectedStudents |> SelectedStudent.isGroupable
-                    ? <button
-                        onClick={_e =>
-                          teamUp(
-                            state.selectedStudents,
-                            handleTeamUpResponse(send),
-                          )
-                        }
-                        className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                        {"Group as Team" |> str}
-                      </button>
-                    : React.null}
-                 {state.selectedStudents |> SelectedStudent.isMoveOutable
-                    ? <button
-                        onClick={_e =>
-                          teamUp(
-                            state.selectedStudents,
-                            handleTeamUpResponse(send),
-                          )
-                        }
-                        className="bg-transparent hover:bg-purple-600 focus:outline-none text-purple-600 text-sm font-semibold hover:text-white py-2 px-4 border border-puple hover:border-transparent rounded">
-                        {"Move out from Team" |> str}
-                      </button>
-                    : React.null}
-               </div>
-             </div>
-           </div>}
       <div>
         <StudentsEditor__TeamsList
           levels

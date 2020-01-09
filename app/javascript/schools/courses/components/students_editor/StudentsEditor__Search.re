@@ -238,23 +238,23 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
         {"Filter by:" |> str}
       </label>
       <div
-        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full pt-1 pb-2 px-4 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
+        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full pt-1 pb-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
         {selectedFilters |> React.array}
         <input
           autoComplete="off"
           value=searchInput
           onChange={handleOnchange(setSearchInput)}
-          className="flex-grow mt-1 appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+          className="flex-grow mt-1 appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
           id="search"
           type_="text"
-          placeholder="Search for name, tag or level"
+          placeholder="Type name, tag or level"
         />
       </div>
     </div>
     <div />
     {if (searchInput |> String.trim != "") {
        <div
-         className="student-editor__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 pt-2 pb-3">
+         className="student-editor__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2">
          {searchResult(
             searchInput,
             applyFilter(filter, setSearchInput, updateFilterCB),

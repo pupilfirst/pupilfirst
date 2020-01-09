@@ -11,6 +11,7 @@ module SubmissionsHelper
     submit_target(target, student, grade: GRADE_FAIL)
   end
 
+  # rubocop:disable Metrics/MethodLength
   def submit_target(target, student, grade: GRADE_NONE)
     options = submission_options(target, student, grade)
 
@@ -21,7 +22,9 @@ module SubmissionsHelper
             when GRADE_PASS
               rand(ec.pass_grade..ec.max_grade)
             else
-              ec.pass_grade - 1
+              (ec.pass_grade - 1).tap do |failing_grade|
+                raise "Spec asked for failed status on a target with non-failing criteria" if failing_grade.zero?
+              end
           end
 
           create(
@@ -34,6 +37,7 @@ module SubmissionsHelper
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 

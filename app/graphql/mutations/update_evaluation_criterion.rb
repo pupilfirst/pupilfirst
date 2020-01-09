@@ -6,16 +6,17 @@ module Mutations
 
     description "Update an evaluation criterion."
 
-    field :evaluation_criterion, Types::EvaluationCriterionType, null: false
+    field :evaluation_criterion, Types::EvaluationCriterionType, null: true
 
     def resolve(params)
       mutator = UpdateEvaluationCriterionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, 'Done!', 'Evaluation criterion updated successfully!')
-        { evaluation_criterion: mutator.update_evaluation_criterion, errors: [] }
+        { evaluation_criterion: mutator.update_evaluation_criterion }
       else
-        { evaluation_criterion: nil, errors: mutator.error_messages }
+        mutator.notify_errors
+        { evaluation_criterion: nil }
       end
     end
   end

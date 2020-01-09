@@ -14,7 +14,8 @@ class AddGradeColumnsToEvaluationCriteria < ActiveRecord::Migration[6.0]
     EvaluationCriterion.reset_column_information
 
     EvaluationCriterion.includes(:course).all.each do |ec|
-      ec.update!(ec.course.slice(:max_grade, :pass_grade, :grade_labels))
+      grade_labels = ec.course.grade_labels.map { |grade, label| { 'grade' => grade.to_i, 'label' => label } }
+      ec.update!(ec.course.slice(:max_grade, :pass_grade).merge!(grade_labels: grade_labels))
     end
   end
 end

@@ -11,38 +11,6 @@ type state = {
   evaluationCriteria: array(EvaluationCriterion.t),
 };
 
-module EvaluationCriteriaQuery = [%graphql
-  {|
-    query($courseId: ID!) {
-      evaluationCriteria(courseId: $courseId) {
-        id
-        name
-        maxGrade
-        passGrade
-        gradeLabels {
-          grade
-          label
-        }
-      }
-    }
-  |}
-];
-
-let getEvaluationCriteria = (authenticityToken, courseId, setState, ()) => {
-  EvaluationCriteriaQuery.make(~courseId, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
-  |> Js.Promise.then_(response => {
-       let evaluationCriteria =
-         response##evaluationCriteria
-         |> Js.Array.map(ec => EvaluationCriterion.makeFromJs(ec));
-       setState(state => {...state, evaluationCriteria});
-       Js.Promise.resolve();
-     })
-  |> ignore;
-
-  None;
-};
-
 let openEditor = (event, evaluationCriterion, setState) => {
   event |> ReactEvent.Mouse.preventDefault;
   setState(state =>
@@ -85,14 +53,9 @@ let addOrUpdateCriterionCB = (state, setState, criterion) => {
 };
 
 [@react.component]
-let make = (~courseId) => {
+let make = (~courseId, ~evaluationCriteria) => {
   let (state, setState) =
-    React.useState(() => {editorAction: Hidden, evaluationCriteria: [||]});
-
-  React.useEffect1(
-    getEvaluationCriteria(AuthenticityToken.fromHead(), courseId, setState),
-    [|courseId|],
-  );
+    React.useState(() => {editorAction: Hidden, evaluationCriteria});
 
   <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">
     {switch (state.editorAction) {

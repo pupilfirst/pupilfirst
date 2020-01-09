@@ -8,24 +8,30 @@ let make = (~evaluationCriterionId, ~value) => {
   value,
 };
 
-let sortByCriterion = (criteria, grades) => {
-  let gradeEcIds =
-    grades |> Array.map(grade => grade.evaluationCriterionId) |> Array.to_list;
-  let sortedCriteria =
-    criteria
-    |> Js.Array.filter(ec =>
-         gradeEcIds |> List.mem(EvaluationCriterion.id(ec))
-       )
-    |> EvaluationCriterion.sort;
-
-  sortedCriteria
-  |> Array.map(criterion =>
-       grades
-       |> Array.to_list
-       |> List.find(grade =>
-            grade.evaluationCriterionId == EvaluationCriterion.id(criterion)
-          )
-     );
+let sort = (criteria, grades) => {
+  grades
+  |> ArrayUtils.copyAndSort((g1, g2) => {
+       let ec1 =
+         criteria
+         |> ArrayUtils.unsafeFind(
+              ec => EvaluationCriterion.id(ec) == g1.evaluationCriterionId,
+              "Unable to find evaluation criterion with ID: "
+              ++ g1.evaluationCriterionId
+              ++ " in CoursesReview__Grade",
+            );
+       let ec2 =
+         criteria
+         |> ArrayUtils.unsafeFind(
+              ec => EvaluationCriterion.id(ec) == g2.evaluationCriterionId,
+              "Unable to find evaluation criterion with ID: "
+              ++ g2.evaluationCriterionId
+              ++ " in CoursesReview__Grade",
+            );
+       String.compare(
+         ec1 |> EvaluationCriterion.name,
+         ec2 |> EvaluationCriterion.name,
+       );
+     });
 };
 
 let evaluationCriterionId = t => t.evaluationCriterionId;

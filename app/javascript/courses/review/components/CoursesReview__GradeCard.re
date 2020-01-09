@@ -131,7 +131,7 @@ let handleGradePillClick =
   };
 };
 
-let findEvaluvationCriterion = (evaluationCriteria, evaluationCriterionId) =>
+let findEvaluationCriterion = (evaluationCriteria, evaluationCriterionId) =>
   switch (
     evaluationCriteria
     |> Js.Array.find(ec =>
@@ -236,13 +236,18 @@ let showGradePill =
 let showGrades = (grades, evaluationCriteria, state) =>
   <div>
     {grades
-     |> Grade.sortByCriterion(evaluationCriteria)
+     |> Grade.sort(evaluationCriteria)
      |> Array.mapi((key, grade) => {
+          let gradeEcId = Grade.evaluationCriterionId(grade);
           let ec =
-            findEvaluvationCriterion(
-              evaluationCriteria,
-              grade |> Grade.evaluationCriterionId,
-            );
+            evaluationCriteria
+            |> ArrayUtils.unsafeFind(
+                 ec => ec |> EvaluationCriterion.id == gradeEcId,
+                 "Unable to find evaluation Criterion with id: "
+                 ++ gradeEcId
+                 ++ "in CoursesRevew__GradeCard",
+               );
+
           showGradePill(
             key,
             ec,

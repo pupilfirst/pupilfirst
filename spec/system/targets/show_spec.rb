@@ -6,7 +6,8 @@ feature 'Target Overlay', js: true do
   include NotificationHelper
 
   let(:course) { create :course }
-  let!(:criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: { 1 => 'Bad', 2 => 'Good', 3 => 'Great', 4 => 'Wow' } }
+  let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+  let!(:criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
   let!(:criterion_2) { create :evaluation_criterion, course: course }
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }

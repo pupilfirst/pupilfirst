@@ -23,7 +23,7 @@ let empty = grade => {grade, label: ""};
 
 let update = (label, t) => {...t, label};
 
-let asJsType = t => {"grade": t.grade, "label": t.label};
+let asJsObject = t => {"grade": t.grade, "label": t.label};
 
 let valid = t => t.label |> Js.String.trim |> Js.String.length >= 1;
 

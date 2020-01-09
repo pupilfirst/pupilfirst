@@ -93,17 +93,21 @@ let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
   </div>;
 
 [@react.component]
-let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade) =>
+let make = (~grading, ~gradeSelectCB=?, ~criterion) => {
+  let gradeLabels =
+    criterion |> EvaluationCriterion.gradesAndLabels |> Array.to_list;
+  let passGrade = criterion |> EvaluationCriterion.passGrade;
   <div className="flex-column" role="toolbar">
     {gradeBarHeader(grading, gradeLabels)}
     {gradeBarPanel(grading, gradeLabels, gradeSelectCB, passGrade)}
   </div>;
+};
 
 module Jsx2 = {
-  let make = (~grading, ~gradeLabels, ~gradeSelectCB=?, ~passGrade, children) =>
+  let make = (~grading, ~gradeSelectCB=?, criterion, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~grading, ~gradeLabels, ~gradeSelectCB?, ~passGrade, ()),
+      makeProps(~grading, ~gradeSelectCB?, ~criterion, ()),
       children,
     );
 };

@@ -98,7 +98,7 @@ let updateEvaluationCriterion =
     |> Js.Array.filter(gradesAndLabel =>
          gradesAndLabel |> GradeLabel.grade <= state.maxGrade
        )
-    |> Array.map(gl => gl |> GradeLabel.asJsType);
+    |> Array.map(gl => gl |> GradeLabel.asJsObject);
 
   let updateCriterionQuery =
     UpdateEvaluationCriterionQuery.make(
@@ -134,7 +134,7 @@ let createEvaluationCriterion =
     |> Js.Array.filter(gradesAndLabel =>
          gradesAndLabel |> GradeLabel.grade <= state.maxGrade
        )
-    |> Array.map(gl => gl |> GradeLabel.asJsType);
+    |> Array.map(gl => gl |> GradeLabel.asJsObject);
 
   let createCriterionQuery =
     CreateEvaluationCriterionQuery.make(
@@ -196,6 +196,7 @@ let labels = (state, setState) =>
              id={"grade-label-for-" ++ (grade |> string_of_int)}
              className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
              type_="text"
+             maxLength=40
              value={gradeAndLabel |> GradeLabel.label}
              onChange={event =>
                updateGradeLabel(

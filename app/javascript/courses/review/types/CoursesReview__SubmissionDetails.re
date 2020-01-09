@@ -59,7 +59,7 @@ let decodeJS = details =>
              ~passGrade=ec##passGrade,
              ~gradesAndLabels={
                ec##gradeLabels
-               |> Js.Array.map(gradeAndLabel =>
+               |> Array.map(gradeAndLabel =>
                     GradeLabel.makeFromJs(gradeAndLabel)
                   );
              },

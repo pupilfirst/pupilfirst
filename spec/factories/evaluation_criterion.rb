@@ -3,6 +3,6 @@ FactoryBot.define do
     sequence(:name) { |i| (Faker::Lorem.words(2) + [i.to_s]).join(' ') }
     max_grade { 3 }
     pass_grade { 2 }
-    grade_labels { { 1 => 'Bad', 2 => 'Good', 3 => 'Great' } }
+    grade_labels { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }] }
   end
 end

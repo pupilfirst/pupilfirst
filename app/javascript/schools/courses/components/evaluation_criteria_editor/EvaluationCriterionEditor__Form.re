@@ -22,7 +22,7 @@ module CreateEvaluationCriterionQuery = [%graphql
         name
         maxGrade
         passGrade
-        gradesAndLabels {
+        gradeLabels {
           grade
           label
         }
@@ -41,7 +41,7 @@ module UpdateEvaluationCriterionQuery = [%graphql
         name
         maxGrade
         passGrade
-        gradesAndLabels {
+        gradeLabels {
           grade
           label
         }
@@ -113,11 +113,13 @@ let updateEvaluationCriterion =
 
   response
   |> Js.Promise.then_(result => {
-       let updatedCriterion =
-         EvaluationCriterion.makeFromJs(
-           result##updateEvaluationCriterion##evaluationCriterion,
-         );
-       addOrUpdateCriterionCB(updatedCriterion);
+       switch (result##updateEvaluationCriterion##evaluationCriterion) {
+       | Some(criterion) =>
+         let updatedCriterion = EvaluationCriterion.makeFromJs(criterion);
+         addOrUpdateCriterionCB(updatedCriterion);
+         setState(state => {...state, saving: false});
+       | None => setState(state => {...state, saving: false})
+       };
        Js.Promise.resolve();
      })
   |> ignore;

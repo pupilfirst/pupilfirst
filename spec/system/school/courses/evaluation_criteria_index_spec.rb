@@ -15,6 +15,11 @@ feature 'Evaluation criteria index spec', js: true do
 
   let(:new_ec_name) { Faker::Lorem.words(2).join(" ") }
 
+  def label_for_grade(grade_labels, grade)
+    grade_label = grade_labels.detect { |grade_label| grade_label['grade'] == grade }
+    grade_label['label']
+  end
+
   scenario 'school admin visits the evaluation criteria index for the course' do
     sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
 
@@ -52,15 +57,15 @@ feature 'Evaluation criteria index spec', js: true do
     dismiss_notification
 
     expect(page).to have_text(new_ec_name)
-    evaluation_criterion = EvaluationCriterion.last
+    evaluation_criterion = course.evaluation_criteria.last
 
     expect(evaluation_criterion.name).to eq(new_ec_name)
     expect(evaluation_criterion.max_grade).to eq(4)
     expect(evaluation_criterion.pass_grade).to eq(2)
-    expect(evaluation_criterion.grade_labels["1"]).to eq('Bad')
-    expect(evaluation_criterion.grade_labels["2"]).to eq('Good')
-    expect(evaluation_criterion.grade_labels["3"]).to eq('Great')
-    expect(evaluation_criterion.grade_labels["4"]).to eq('Wow')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq('Bad')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 2)).to eq('Good')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 3)).to eq('Great')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 4)).to eq('Wow')
   end
 
   scenario 'school admin adds a new criterion without labels' do
@@ -78,12 +83,12 @@ feature 'Evaluation criteria index spec', js: true do
     expect(page).to have_text("Evaluation criterion created successfully")
     dismiss_notification
 
-    evaluation_criterion = EvaluationCriterion.last
+    evaluation_criterion = course.evaluation_criteria.last
 
-    expect(evaluation_criterion.grade_labels["1"]).to eq('One')
-    expect(evaluation_criterion.grade_labels["2"]).to eq('Two')
-    expect(evaluation_criterion.grade_labels["3"]).to eq('Three')
-    expect(evaluation_criterion.grade_labels["4"]).to eq('Four')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq('One')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 2)).to eq('Two')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 3)).to eq('Three')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 4)).to eq('Four')
   end
 
   scenario 'school admin updates an evaluation criterion' do
@@ -102,7 +107,7 @@ feature 'Evaluation criteria index spec', js: true do
     evaluation_criterion_1.reload
 
     expect(evaluation_criterion_1.name).to eq(new_ec_name)
-    expect(evaluation_criterion_1.grade_labels["3"]).to eq('New Label')
+    expect(label_for_grade(evaluation_criterion_1.grade_labels, 3)).to eq('New Label')
   end
 
   scenario 'school admin attempts to create a duplicate criterion' do
@@ -117,6 +122,10 @@ feature 'Evaluation criteria index spec', js: true do
 
     click_button 'Create Criterion'
     expect(page).to have_text("Criterion already exists with same name, max grade and pass grade")
-    dismiss_notification
+  end
+
+  scenario 'user who is not logged in gets redirected to sign in page' do
+    visit evaluation_criteria_school_course_path(course)
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

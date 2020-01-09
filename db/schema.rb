@@ -289,14 +289,14 @@ ActiveRecord::Schema.define(version: 2020_01_03_101143) do
   end
 
   create_table "evaluation_criteria", force: :cascade do |t|
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
     t.bigint "course_id"
     t.integer "max_grade"
     t.integer "pass_grade"
-    t.json "grade_labels"
-    t.string "description"
+    t.jsonb "grade_labels"
     t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end
 

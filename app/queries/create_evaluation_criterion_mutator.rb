@@ -17,14 +17,13 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
 
   def create_evaluation_criterion
     EvaluationCriterion.transaction do
-      ec = EvaluationCriterion.create!(
+      EvaluationCriterion.create!(
         name: name,
         course_id: course_id,
         max_grade: max_grade,
         pass_grade: pass_grade,
         grade_labels: grade_labels
       )
-      ec
     end
   end
 
@@ -34,8 +33,8 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
     grades_and_labels.map do |grades_and_label|
       grade = grades_and_label[:grade]
       label = grades_and_label[:label].strip
-      [grade.to_s, label.presence || grade.humanize.capitalize]
-    end.to_h
+      { grade: grade, label: label.presence || grade.humanize.capitalize }
+    end
   end
 
   def course

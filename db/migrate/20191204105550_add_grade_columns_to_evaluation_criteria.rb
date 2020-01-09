@@ -9,7 +9,7 @@ class AddGradeColumnsToEvaluationCriteria < ActiveRecord::Migration[6.0]
   def change
     add_column :evaluation_criteria, :max_grade, :integer
     add_column :evaluation_criteria, :pass_grade, :integer
-    add_column :evaluation_criteria, :grade_labels, :json
+    add_column :evaluation_criteria, :grade_labels, :jsonb
 
     EvaluationCriterion.reset_column_information
 

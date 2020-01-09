@@ -19,7 +19,7 @@ module EvaluationCriteriaQuery = [%graphql
         name
         maxGrade
         passGrade
-        gradesAndLabels {
+        gradeLabels {
           grade
           label
         }

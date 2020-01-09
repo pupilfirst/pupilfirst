@@ -11,7 +11,8 @@ feature 'Submissions show' do
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_founders, target_group: target_group }
   let(:auto_verify_target) { create :target, :for_founders, target_group: target_group }
-  let(:evaluation_criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: { 1 => 'Bad', 2 => 'Good', 3 => 'Great', 4 => 'Wow' } }
+  let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+  let(:evaluation_criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   let(:team) { create :startup, level: level }
@@ -22,8 +23,6 @@ feature 'Submissions show' do
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :faculty_startup_enrollment, faculty: team_coach, startup: team
-    # Update grade labels for evaluation_criterion_1
-    # evaluation_criterion_1.update!(grade_labels: evaluation_criterion_1.grade_labels.merge!({ 4 => 'Wow' }))
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]

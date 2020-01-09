@@ -10,8 +10,7 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
-    gradesAndLabels:
-      json |> field("gradesAndLabels", array(GradeLabel.decode)),
+    gradesAndLabels: json |> field("gradeLabels", array(GradeLabel.decode)),
     maxGrade: json |> field("maxGrade", int),
     passGrade: json |> field("passGrade", int),
   };
@@ -37,7 +36,7 @@ let makeFromJs = evaluationCriterion => {
   maxGrade: evaluationCriterion##maxGrade,
   passGrade: evaluationCriterion##passGrade,
   gradesAndLabels:
-    evaluationCriterion##gradesAndLabels
+    evaluationCriterion##gradeLabels
     |> Js.Array.map(gL => gL |> GradeLabel.makeFromJs),
 };
 

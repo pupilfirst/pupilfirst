@@ -50,10 +50,7 @@ module Courses
 
     def evaluation_criteria
       @course.evaluation_criteria.map do |ec|
-        grades_and_labels = ec.grade_labels.map do |grade, label|
-          { grade: grade.to_i, label: label }
-        end
-        ec.attributes.slice('id', 'name', 'max_grade', 'pass_grade').merge!(grades_and_labels: grades_and_labels)
+        ec.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'grade_labels')
       end
     end
 

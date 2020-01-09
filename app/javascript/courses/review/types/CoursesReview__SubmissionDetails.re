@@ -58,7 +58,7 @@ let decodeJS = details =>
              ~maxGrade=ec##maxGrade,
              ~passGrade=ec##passGrade,
              ~gradesAndLabels={
-               ec##gradesAndLabels
+               ec##gradeLabels
                |> Js.Array.map(gradeAndLabel =>
                     GradeLabel.makeFromJs(gradeAndLabel)
                   );

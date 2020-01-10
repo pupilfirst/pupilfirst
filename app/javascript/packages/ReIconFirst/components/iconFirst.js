@@ -1,5 +1,5 @@
-import "./iconFirst/style.css";
-let iconData = require("./iconFirst/paths.json");
+import "./iconFirst.css";
+let iconData = require("../data/paths.json");
 
 const xmlns = "http://www.w3.org/2000/svg";
 

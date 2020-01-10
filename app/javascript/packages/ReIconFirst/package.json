@@ -1,13 +1,12 @@
 {
-  "name": "@pupilfirst/search",
+  "name": "@pupilfirst/re-icons",
   "version": "0.1.0",
-  "description": "Tailwind styled Reason React Search component",
+  "description": "Pupilfirst Icons",
   "keywords": [
-    "Reason",
-    "React",
-    "Search",
-    "Tailwind",
-    "UI"
+    "Icons",
+    "Pupilfirst",
+    "ReasonReact",
+    "ReasonMl"
   ],
   "contributors": [
     "Bodhish Thomas <bodhish@gmail.com>",
@@ -15,16 +14,9 @@
     "Mahesh Krishna Kumar <maheshcet@gmail.com>",
     "Vinu T. V. <vinutv91@gmail.com>"
   ],
-  "homepage": "https://github.com/svdotCO/pupilfirst",
+  "homepage": "https://github.com/SVdotCO/pupilfirst#readme",
   "license": "MIT",
-  "main": "components/ReMultiselect.re",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
+  "main": "/components/iconFirst.js",
   "publishConfig": {
     "access": "public"
   },

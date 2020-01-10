@@ -267,8 +267,8 @@ feature "Student's view of Course Curriculum", js: true do
       # Course name should be displayed.
       expect(page).to have_content(course.name)
 
-      # The 'Max level' should be selected.
-      expect(page).to have_select("selected_level", selected: "L6: #{locked_level_6.name}")
+      # The first level should be selected.
+      expect(page).to have_select("selected_level", selected: "L1: #{level_1.name}")
 
       level_names = [level_1, level_2, level_3, level_4, level_5, locked_level_6].map do |l|
         "L#{l.number}: #{l.name}"
@@ -276,6 +276,8 @@ feature "Student's view of Course Curriculum", js: true do
 
       # All levels should be included in the select dropdown.
       expect(page).to have_select("selected_level", options: level_names)
+
+      select("L6: #{locked_level_6.name}", from: 'selected_level')
 
       # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for
       # 'regular' students.

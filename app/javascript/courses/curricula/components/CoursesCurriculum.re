@@ -313,12 +313,19 @@ let make =
 
       {
         selectedLevelId:
-          switch (targetLevelId, levelZero) {
-          | (Some(targetLevelId), Some(levelZero)) =>
+          switch (preview, targetLevelId, levelZero) {
+          | (true, None, None) =>
+            let levelOne =
+              levels |> List.find_opt(level => level |> Level.number == 1);
+            switch (levelOne) {
+            | Some(levelOne) => levelOne |> Level.id
+            | None => teamLevelId
+            };
+          | (_, Some(targetLevelId), Some(levelZero)) =>
             levelZero |> Level.id == targetLevelId
               ? teamLevelId : targetLevelId
-          | (Some(targetLevelId), None) => targetLevelId
-          | (None, _) => teamLevelId
+          | (_, Some(targetLevelId), None) => targetLevelId
+          | (_, None, _) => teamLevelId
           },
         showLevelZero:
           switch (levelZero, targetLevelId) {

@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+let notFoundIcon: string = [%raw "require('./images/no-students-found.svg')"];
+
 let str = React.string;
 
 open StudentsEditor__Types;
@@ -247,8 +249,11 @@ let showEmpty = (filter, updateFilterCB) =>
   <div className="flex flex-col-reverse items-center p-5 text-center">
     {filter |> Filter.isEmpty
        ? <div> {"No students here." |> str} </div>
-       : <div>
-           <div> {"Sorry, No results found :(" |> str} </div>
+       : <div className="max-w-md w-full">
+           <img className="w-full" src=notFoundIcon />
+           <p className="text-2xl font-semibold text-gray-800 mt-2">
+             {"Sorry, No students found :(" |> str}
+           </p>
            <button
              className="btn btn-large btn-default mt-4"
              onClick={_ => updateFilterCB(filter |> Filter.clear)}>

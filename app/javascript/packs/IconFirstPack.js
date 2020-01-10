@@ -1,3 +1,3 @@
-import { addListener } from "packages/ReIconFirst/components/iconFirst.js";
+import { addListener } from "packages/IconFirst/components/iconFirst.js";
 
 addListener();

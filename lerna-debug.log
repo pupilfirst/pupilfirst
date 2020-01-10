@@ -1,0 +1,12 @@
+33 error Error: Command failed: git commit -F /tmp/d92149b6-fc33-4ee0-b4ad-b436bd35e9a3/lerna-commit.txt
+33 error Running pre-commit hooks
+33 error
+33 error ✓ All pre-commit hooks passed
+33 error
+33 error On branch issues/90/paginate-students-list-in-SA
+33 error Your branch is up to date with 'origin/issues/90/paginate-students-list-in-SA'.
+33 error
+33 error nothing to commit, working tree clean
+33 error
+33 error     at makeError (/home/bodhi/code/pupilfirst/node_modules/execa/index.js:174:9)
+33 error     at Promise.all.then.arr (/home/bodhi/code/pupilfirst/node_modules/execa/index.js:278:16)

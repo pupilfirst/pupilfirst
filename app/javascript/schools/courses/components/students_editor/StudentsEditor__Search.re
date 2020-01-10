@@ -163,30 +163,32 @@ let handleRemoveFilter = (filter, updateFilterCB, name, resourceType) => {
 };
 
 let tagPill = (name, resourceType, removeFilterCB) => {
-  <div
-    key=name
-    className={
-      "inline-flex mt-1 mr-1 "
-      ++ {
-        tagPillClasses(resourceType, false);
-      }
-    }>
-    <span className="pl-2 py-px">
-      {(
-         switch (resourceType) {
-         | NameOrEmail
-         | Level(_) => name
-         | Tag => "Tag: " ++ name
-         }
-       )
-       |> str}
-    </span>
-    <button
-      title={"Remove filter " ++ name}
-      className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
-      onClick={_ => removeFilterCB(name, resourceType)}>
-      <Icon className="if i-times-light" />
-    </button>
+  <div className="inline-block py-px mr-1">
+    <div
+      key=name
+      className={
+        "inline-flex "
+        ++ {
+          tagPillClasses(resourceType, false);
+        }
+      }>
+      <span className="pl-2 py-px">
+        {(
+           switch (resourceType) {
+           | NameOrEmail
+           | Level(_) => name
+           | Tag => "Tag: " ++ name
+           }
+         )
+         |> str}
+      </span>
+      <button
+        title={"Remove filter " ++ name}
+        className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
+        onClick={_ => removeFilterCB(name, resourceType)}>
+        <Icon className="if i-times-light" />
+      </button>
+    </div>
   </div>;
 };
 
@@ -238,20 +240,19 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
         {"Filter by:" |> str}
       </label>
       <div
-        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full pt-1 pb-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
+        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
         {selectedFilters |> React.array}
         <input
           autoComplete="off"
           value=searchInput
           onChange={handleOnchange(setSearchInput)}
-          className="flex-grow mt-1 appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
+          className="flex-grow appearance-none bg-transparent border-none text-gray-700 py-px mr-3 leading-relaxed focus:outline-none"
           id="search"
           type_="text"
           placeholder="Type name, tag or level"
         />
       </div>
     </div>
-    <div />
     {if (searchInput |> String.trim != "") {
        <div
          className="student-editor__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2">

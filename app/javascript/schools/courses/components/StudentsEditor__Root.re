@@ -151,7 +151,7 @@ let dropDownSelected = filter => {
   let title = filter |> Filter.sortBy |> Filter.sortByTitle;
   <button
     title={"Order by " ++ title}
-    className="block bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 p-3 text-xs ">
+    className="block bg-white leading-loose font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-3 py-2 text-xs ">
     <i className={filter |> Filter.sortBy |> Filter.sortByIcon} />
     <span className="ml-2"> {title |> str} </span>
     <i className="fas fa-caret-down ml-3" />

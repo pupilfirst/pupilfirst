@@ -9,7 +9,9 @@ let decodeProps = json =>
     json |> field("userId", string),
   );
 
-let (levels, course, userId) = DomUtils.parseJsonAttribute() |> decodeProps;
+let (levels, course, userId) =
+  DomUtils.parseJsonTag(~id="school-course-students__props", ())
+  |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CoursesStudents__Root levels course userId />,

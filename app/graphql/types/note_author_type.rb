@@ -3,7 +3,7 @@ module Types
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
-    field :id, String, null: false
+    field :user_id, ID, null: false
 
     def avatar_url
       if object.avatar.attached?
@@ -13,6 +13,10 @@ module Types
 
     def title
       object.full_title
+    end
+
+    def user_id
+      object.id
     end
   end
 end

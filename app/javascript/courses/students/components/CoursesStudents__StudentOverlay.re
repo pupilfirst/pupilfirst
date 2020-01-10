@@ -37,7 +37,7 @@ module StudentDetailsQuery = [%graphql
               name
               title
               avatarUrl
-              id
+              userId
             }
           }
           levelId

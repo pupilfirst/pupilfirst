@@ -110,7 +110,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
       {let showDeleteIcon =
          switch (note |> CoachNote.author) {
          | None => false
-         | Some(coach) => Coach.id(coach) == userId
+         | Some(coach) => Coach.userId(coach) == userId
          };
        showDeleteIcon
          ? deleteIcon(

@@ -68,7 +68,7 @@ feature "Course students report", js: true do
     submission_target_l3.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
   end
 
-  scenario 'coach opens the student report, checks performance and makes notes' do
+  scenario 'coach opens the student report and checks performance' do
     sign_in_user course_coach.user, referer: students_course_path(course)
 
     expect(page).to have_text(team.name)
@@ -118,25 +118,6 @@ feature "Course students report", js: true do
       expect(page).to have_link(href: "/submissions/#{submission_target_l1_1.id}")
       expect(page).to have_link(href: "/submissions/#{submission_target_l3.id}")
     end
-
-    # Add few notes
-    find('li', text: 'Notes').click
-    note_1 = Faker::Markdown.sandwich(2)
-    note_2 = Faker::Markdown.sandwich(2)
-    add_markdown(note_1)
-    click_button('Save Note')
-    dismiss_notification
-    expect(page).to have_text(course_coach.name)
-    expect(page).to have_text(course_coach.title)
-    expect(CoachNote.where(student: founder).last.note).to eq(note_1)
-
-    add_markdown(note_2)
-    click_button('Save Note')
-    dismiss_notification
-    expect(page).to have_text(course_coach.name, count: 3)
-    expect(page).to have_text(course_coach.title, count: 3)
-    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 4)
-    expect(CoachNote.where(student: founder).last.note).to eq(note_2)
   end
 
   scenario 'coach loads more submissions' do
@@ -186,17 +167,8 @@ feature "Course students report", js: true do
       expect(page).to have_content('Failed')
     end
 
-    # Add a note
+    # Check notes
     find('li', text: 'Notes').click
-    note = Faker::Markdown.sandwich(2)
-    add_markdown(note)
-    click_button('Save Note')
-    dismiss_notification
-    expect(page).to have_text(team_coach.name)
-    expect(page).to have_text(team_coach.title)
-    expect(CoachNote.where(student: founder).last.note).to eq(note)
-
-    # Archive a note
     expect(page).to have_text(coach_note_1.note)
     expect(page).to have_text(coach_note_2.note)
 
@@ -206,17 +178,70 @@ feature "Course students report", js: true do
       end
     end
     dismiss_notification
-    expect(page).to_not have_text(coach_note_2)
+    expect(page).to_not have_text(coach_note_2.note)
     expect(coach_note_2.reload.archived_at).to_not eq(nil)
 
     within("div[aria-label='Note #{coach_note_1.id}']") do
       expect(page).not_to have_selector('.fa-trash-alt')
     end
+  end
 
-    # Indicate empty notes
-    CoachNote.where(student: founder).destroy_all
-    visit student_report_path(founder)
-    expect(page).to have_text('No notes here!')
+  scenario 'coach adds few notes for a student' do
+    founder = team.founders.first
+    sign_in_user course_coach.user, referer: student_report_path(founder)
+
+    find('li', text: 'Notes').click
+    note_1 = Faker::Markdown.sandwich(2)
+    note_2 = Faker::Markdown.sandwich(2)
+    add_markdown(note_1)
+    click_button('Save Note')
+    dismiss_notification
+    expect(page).to have_text(course_coach.name)
+    expect(page).to have_text(course_coach.title)
+    expect(CoachNote.where(student: founder).last.note).to eq(note_1)
+
+    add_markdown(note_2)
+    click_button('Save Note')
+    dismiss_notification
+    expect(page).to have_text(course_coach.name, count: 3)
+    expect(page).to have_text(course_coach.title, count: 3)
+    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 4)
+    expect(CoachNote.where(student: founder).last.note).to eq(note_2)
+  end
+
+  context 'when a coach sees existing notes on the report page' do
+    scenario 'coach can archive her own notes' do
+      founder = team.founders.first
+      sign_in_user team_coach.user, referer: student_report_path(founder)
+
+      expect(page).to have_text(coach_note_1.note)
+      expect(page).to have_text(coach_note_2.note)
+
+      accept_confirm do
+        within("div[aria-label='Note #{coach_note_2.id}']") do
+          find("button[title='Delete #{coach_note_2.id}']").click
+        end
+      end
+
+      dismiss_notification
+      expect(page).to_not have_text(coach_note_2.note)
+      expect(coach_note_2.reload.archived_at).to_not eq(nil)
+    end
+
+    scenario "coach cannot archive others' notes" do
+      founder = team.founders.first
+      sign_in_user team_coach.user, referer: student_report_path(founder)
+
+      within("div[aria-label='Note #{coach_note_1.id}']") do
+        expect(page).not_to have_selector('.fa-trash-alt')
+      end
+    end
+
+    scenario 'coach is indicated if there are no notes' do
+      founder = team.founders.last
+      sign_in_user team_coach.user, referer: student_report_path(founder)
+      expect(page).to have_text('No notes here!')
+    end
   end
 
   scenario 'unauthorized coach attempts to access student report' do

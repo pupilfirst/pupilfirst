@@ -53,7 +53,7 @@ let applyFilter = (selection, updateSelectionCB, event) => {
   focus("reMultiselect__search-input");
 };
 
-let searchResult = (searchInput, unselected, updateSelectionCB) => {
+let searchResult = (searchInput, unselected, labelSuffix, updateSelectionCB) => {
   // Remove all excess space characters from the user input.
   let normalizedString = {
     searchInput
@@ -78,7 +78,9 @@ let searchResult = (searchInput, unselected, updateSelectionCB) => {
            onClick={applyFilter(selection, updateSelectionCB)}>
            {switch (selection |> Selectable.label) {
             | Some(label) =>
-              <span className="mr-2 w-1/6 text-right"> {label |> str} </span>
+              <span className="mr-2 w-1/6 text-right">
+                {label ++ labelSuffix |> str}
+              </span>
             | None => React.null
             }}
            <span
@@ -96,7 +98,7 @@ let removeSelection = (clearSelectionCB, selection, event) => {
   clearSelectionCB(selection);
 };
 
-let showSelected = (clearSelectionCB, selected) => {
+let showSelected = (clearSelectionCB, labelSuffix, selected) => {
   selected
   |> Array.mapi((index, selection) => {
        let item = selection |> Selectable.item;
@@ -106,7 +108,7 @@ let showSelected = (clearSelectionCB, selected) => {
          <span className="pl-2 py-px">
            {(
               switch (selection |> Selectable.label) {
-              | Some(label) => label ++ " " ++ item
+              | Some(label) => label ++ labelSuffix ++ item
               | None => item
               }
             )
@@ -131,7 +133,7 @@ let make =
       ~clearSelectionCB,
       ~value,
       ~onChange,
-      ~labelSuffix=":",
+      ~labelSuffix=": ",
     ) => {
   <div className="w-full relative">
     <div>
@@ -142,7 +144,9 @@ let make =
       </label>
       <div
         className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full pt-1 pb-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
-        {selected |> showSelected(clearSelectionCB) |> React.array}
+        {selected
+         |> showSelected(clearSelectionCB, labelSuffix)
+         |> React.array}
         <input
           autoComplete="off"
           value
@@ -158,7 +162,8 @@ let make =
     {if (value |> String.trim != "") {
        <div
          className="ReMultiselect__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2">
-         {searchResult(value, unselected, updateSelectionCB) |> React.array}
+         {searchResult(value, unselected, labelSuffix, updateSelectionCB)
+          |> React.array}
        </div>;
      } else {
        React.null;

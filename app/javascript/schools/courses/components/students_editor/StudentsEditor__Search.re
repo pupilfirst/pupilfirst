@@ -11,7 +11,7 @@ let updateFilter = (setSearchInput, updateFilterCB, filter) => {
 let makeSelectableLevel = level => {
   Selectable.make(
     ~id=Some(level |> Level.id),
-    ~label=Some("Level " ++ (level |> Level.number |> string_of_int) ++ ":"),
+    ~label=Some("Level " ++ (level |> Level.number |> string_of_int)),
     ~item=level |> Level.name,
     ~color="orange",
     ~searchString=level |> Level.title,
@@ -23,7 +23,7 @@ let makeSelectableLevel = level => {
 let makeSelectableTag = tag => {
   Selectable.make(
     ~id=None,
-    ~label=Some("Tag:"),
+    ~label=Some("Tag"),
     ~item=tag,
     ~searchString="tag " ++ tag,
     ~resourceType="tag",
@@ -34,7 +34,7 @@ let makeSelectableTag = tag => {
 let makeSelectableSearch = searchInput => {
   Selectable.make(
     ~id=None,
-    ~label=Some("Name or Email:"),
+    ~label=Some("Name or Email"),
     ~item=searchInput,
     ~color="purple",
     ~searchString=searchInput,
@@ -130,6 +130,5 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     clearSelectionCB={clearSelection(filter, updateFilterCB)}
     value=searchInput
     onChange={updateSearchInput(setSearchInput)}
-    labelSuffix=":"
   />;
 };

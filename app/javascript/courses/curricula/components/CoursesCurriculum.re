@@ -202,7 +202,7 @@ let computeLevelUp =
 
   switch (nextLevel, currentLevelComplete, lastLevelComplete) {
   | (Some(level), true, true) =>
-    level |> Level.isLocked ? Notice.Nothing : LevelUp
+    level |> Level.isUnlocked ? Notice.LevelUp : Nothing
   | (None, true, true) => CourseComplete
   | (Some(_), true, false) => LevelUpBlocked(teamLevel |> Level.number)
   | (Some(_) | None, false, false | true)
@@ -243,6 +243,7 @@ let make =
       ~users,
       ~evaluationCriteria,
       ~preview,
+      ~accessLockedLevels,
     ) => {
   let url = ReasonReactRouter.useUrl();
 
@@ -442,9 +443,19 @@ let make =
              levelZero
            />
          </div>
-         {currentLevel |> Level.isLocked
-            ? handleLockedLevel(currentLevel)
-            : targetGroupsInLevel
+         {currentLevel |> Level.isLocked && accessLockedLevels
+            ? <div
+                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
+                {"This level is still locked for students, and will be unlocked on "
+                 |> str}
+                <strong>
+                  {currentLevel |> Level.unlockDateString |> str}
+                </strong>
+                {"." |> str}
+              </div>
+            : React.null}
+         {currentLevel |> Level.isUnlocked || accessLockedLevels
+            ? targetGroupsInLevel
               |> TargetGroup.sort
               |> List.map(targetGroup =>
                    renderTargetGroup(
@@ -454,7 +465,8 @@ let make =
                    )
                  )
               |> Array.of_list
-              |> React.array}
+              |> React.array
+            : handleLockedLevel(currentLevel)}
        </div>
      }}
   </div>;

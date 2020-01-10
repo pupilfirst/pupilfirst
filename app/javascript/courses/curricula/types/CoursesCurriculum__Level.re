@@ -19,10 +19,23 @@ let name = t => t.name;
 let number = t => t.number;
 let unlockOn = t => t.unlockOn;
 
-let isLocked = t =>
+let isUnlocked = t =>
   switch (t.unlockOn) {
-  | Some(date) => date |> DateFns.parseString |> DateFns.isFuture
-  | None => false
+  | Some(date) => date |> DateFns.parseString |> DateFns.isPast
+  | None => true
   };
 
+let isLocked = t => !(t |> isUnlocked);
+
 let sort = levels => levels |> List.sort((x, y) => x.number - y.number);
+
+let unlockDateString = t =>
+  switch (t.unlockOn) {
+  | None =>
+    Rollbar.error(
+      "unlockDateString was called for a CoursesCurriculum__Level without unlockOn",
+    );
+    "";
+  | Some(unlockOn) =>
+    unlockOn |> DateFns.parseString |> DateFns.format("MMM D")
+  };

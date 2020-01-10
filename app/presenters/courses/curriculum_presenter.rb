@@ -44,7 +44,8 @@ module Courses
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,
-        targets: targets
+        targets: targets,
+        access_locked_levels: access_locked_levels
       }
     end
 
@@ -138,8 +139,23 @@ module Courses
       @current_student ||= @course.founders.not_dropped_out.find_by(user_id: current_user.id)
     end
 
+    # Admins and coaches who have review access in this course have access to locked levels as well.
+    def access_locked_levels
+      @access_locked_levels ||= begin
+        current_school_admin.present? || (current_user.faculty.present? && CoursePolicy.new(pundit_user, @course).review?)
+      end
+    end
+
     def open_level_ids
-      @open_level_ids ||= @course.levels.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Date.today)).pluck(:id)
+      @open_level_ids ||= begin
+        scope = @course.levels
+
+        if access_locked_levels
+          scope
+        else
+          scope.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Date.today))
+        end.pluck(:id)
+      end
     end
   end
 end

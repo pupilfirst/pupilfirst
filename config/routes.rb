@@ -112,14 +112,6 @@ Rails.application.routes.draw do
 
   resource :user, only: %i[edit update]
 
-  resources :timeline_events, only: %i[] do
-    member do
-      post 'review'
-      post 'undo_review'
-      post 'send_feedback'
-    end
-  end
-
   resources :timeline_event_files, only: %i[create] do
     member do
       get 'download'

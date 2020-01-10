@@ -7,6 +7,7 @@ class GraphqlController < ApplicationController
     operation_name = params[:operationName]
 
     context = {
+      pundit_user: pundit_user,
       current_school: current_school,
       current_user: current_user,
       current_school_admin: current_school_admin,

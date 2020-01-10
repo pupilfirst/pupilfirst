@@ -149,6 +149,8 @@ class ApplicationController < ActionController::Base
     )
   end
 
+  helper_method :pundit_user
+
   private
 
   def sign_out_if_required

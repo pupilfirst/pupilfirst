@@ -120,7 +120,7 @@ let updateSearchInput = (setSearchInput, searchInput) => {
 let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
   let (searchInput, setSearchInput) = React.useState(() => "");
   <ReMultiselect
-    selections={selections(tags, levels, filter, searchInput)}
+    unselected={selections(tags, levels, filter, searchInput)}
     selected={appliedFilters(filter, levels)}
     updateSelectionCB={updateSelection(
       filter,
@@ -128,7 +128,8 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       setSearchInput,
     )}
     clearSelectionCB={clearSelection(filter, updateFilterCB)}
-    searchInput
-    updateSearchInputCB={updateSearchInput(setSearchInput)}
+    value=searchInput
+    onChange={updateSearchInput(setSearchInput)}
+    labelSuffix=":"
   />;
 };

@@ -53,7 +53,7 @@ let applyFilter = (selection, updateSelectionCB, event) => {
   focus("reMultiselect__search-input");
 };
 
-let searchResult = (searchInput, selections, updateSelectionCB) => {
+let searchResult = (searchInput, unselected, updateSelectionCB) => {
   // Remove all excess space characters from the user input.
   let normalizedString = {
     searchInput
@@ -67,7 +67,7 @@ let searchResult = (searchInput, selections, updateSelectionCB) => {
   switch (normalizedString) {
   | "" => [||]
   | searchString =>
-    let matchingSelections = selections |> Selectable.search(searchString);
+    let matchingSelections = unselected |> Selectable.search(searchString);
 
     matchingSelections
     |> Array.mapi((index, selection) =>
@@ -106,7 +106,7 @@ let showSelected = (clearSelectionCB, selected) => {
          <span className="pl-2 py-px">
            {(
               switch (selection |> Selectable.label) {
-              | Some(label) => label ++ ": " ++ item
+              | Some(label) => label ++ " " ++ item
               | None => item
               }
             )
@@ -125,12 +125,13 @@ let showSelected = (clearSelectionCB, selected) => {
 [@react.component]
 let make =
     (
-      ~selections,
+      ~unselected,
       ~selected,
       ~updateSelectionCB,
       ~clearSelectionCB,
-      ~searchInput,
-      ~updateSearchInputCB,
+      ~value,
+      ~onChange,
+      ~labelSuffix=":",
     ) => {
   <div className="w-full relative">
     <div>
@@ -144,10 +145,8 @@ let make =
         {selected |> showSelected(clearSelectionCB) |> React.array}
         <input
           autoComplete="off"
-          value=searchInput
-          onChange={e =>
-            updateSearchInputCB(ReactEvent.Form.target(e)##value)
-          }
+          value
+          onChange={e => onChange(ReactEvent.Form.target(e)##value)}
           className="flex-grow mt-1 appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
           id="reMultiselect__search-input"
           type_="text"
@@ -156,11 +155,10 @@ let make =
       </div>
     </div>
     <div />
-    {if (searchInput |> String.trim != "") {
+    {if (value |> String.trim != "") {
        <div
          className="ReMultiselect__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2">
-         {searchResult(searchInput, selections, updateSelectionCB)
-          |> React.array}
+         {searchResult(value, unselected, updateSelectionCB) |> React.array}
        </div>;
      } else {
        React.null;

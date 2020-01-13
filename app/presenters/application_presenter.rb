@@ -15,6 +15,7 @@ class ApplicationPresenter
   attr_reader :view
 
   delegate(
+    :pundit_user,
     :current_user,
     :current_host,
     :current_domain,

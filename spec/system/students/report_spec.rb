@@ -74,7 +74,8 @@ feature "Course students report", js: true do
     expect(page).to have_text(team.name)
     founder = team.founders.first
 
-    find("div[aria-label='student-card-#{founder.id}']").click
+    click_link founder.name
+
     expect(page).to have_text(founder.name)
     expect(page).to have_text('Level Progress')
     expect(page).to have_selector('.student-overlay__student-level', count: course.levels.where.not(number: 0).count)
@@ -96,6 +97,7 @@ feature "Course students report", js: true do
 
     # Average Grades
     expect(page).to have_text('Average Grades')
+
     within("div[aria-label='average-grade-for-criterion-#{evaluation_criterion_1.id}']") do
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content('1.7/3')
@@ -108,8 +110,10 @@ feature "Course students report", js: true do
 
     # Check submissions of student
     find('li', text: 'Submissions').click
+
     expect(page).to have_content(target_l1.title)
     expect(page).to_not have_content(target_4.title)
+
     within("div[aria-label='student-submission-card-#{submission_target_l1_2.id}']") do
       expect(page).to have_content('Failed')
     end

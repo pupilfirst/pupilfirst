@@ -39,7 +39,7 @@ feature "Student levelling up", js: true do
     expect(page).not_to have_button('Level Up')
 
     # Let's submit work on the target in L1.
-    find("div[aria-label='Select Target #{target_l1.id}'").click
+    click_link target_l1.title
     find('.course-overlay__body-tab-item', text: 'Complete').click
 
     expect(page).to have_text(target_l1.completion_instructions)
@@ -66,7 +66,7 @@ feature "Student levelling up", js: true do
 
     click_button('Level Up')
 
-    expect(page).to have_text(target_l2.title)
+    expect(page).to have_link(target_l2.title)
     expect(team.reload.level).to eq(level_2)
   end
 

@@ -15,8 +15,10 @@ type state = {
   selectedLevel: option(Level.t),
 };
 
-let openOverlay = submissionId =>
+let openOverlay = (submissionId, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
   ReasonReactRouter.push("/submissions/" ++ submissionId);
+};
 
 let updateLevel = (level, setState) => {
   setState(state =>

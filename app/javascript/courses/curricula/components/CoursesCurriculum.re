@@ -15,8 +15,10 @@ type state = {
   notice: Notice.t,
 };
 
-let selectTarget = target =>
+let selectTarget = (target, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
   ReasonReactRouter.push("/targets/" ++ (target |> Target.id));
+};
 
 let targetStatusClasses = targetStatus => {
   let statusClasses =
@@ -34,18 +36,19 @@ let rendertarget = (target, statusOfTargets) => {
          "Could not find targetStatus for listed target with ID " ++ targetId,
        );
 
-  <div
+  <a
+    href={"/targets/" ++ targetId}
     key={"target-" ++ targetId}
     className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
     ariaLabel={"Select Target " ++ targetId}
-    onClick={_e => selectTarget(target)}>
+    onClick={selectTarget(target)}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
     <span className={targetStatusClasses(targetStatus)}>
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
-  </div>;
+  </a>;
 };
 
 let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {

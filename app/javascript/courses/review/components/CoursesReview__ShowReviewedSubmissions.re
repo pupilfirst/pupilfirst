@@ -128,9 +128,10 @@ let showSubmission = (submissions, levels, openOverlayCB) =>
     {submissions
      |> SubmissionInfo.sort
      |> Array.map(submission =>
-          <div
+          <a
+            href={"/submissions/" ++ (submission |> SubmissionInfo.id)}
             key={submission |> SubmissionInfo.id}
-            onClick={_ => openOverlayCB(submission |> SubmissionInfo.id)}
+            onClick={openOverlayCB(submission |> SubmissionInfo.id)}
             ariaLabel={
               "reviewed-submission-card-" ++ (submission |> SubmissionInfo.id)
             }
@@ -174,7 +175,7 @@ let showSubmission = (submissions, levels, openOverlayCB) =>
                </div>
              | None => React.null
              }}
-          </div>
+          </a>
         )
      |> React.array}
   </div>;

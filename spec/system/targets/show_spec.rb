@@ -51,7 +51,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_content(target_l1.title)
 
     # Click on the target.
-    find("div[aria-label='Select Target #{target_l1.id}'").click
+    click_link target_l1.title
 
     # The overlay should now be visible.
     expect(page).to have_selector('.course-overlay__body-tab-item')
@@ -156,12 +156,12 @@ feature 'Target Overlay', js: true do
     # The status should also be updated on the home page.
     click_button 'Close'
 
-    within("div[aria-label='Select Target #{target_l1.id}'") do
+    within("a[aria-label='Select Target #{target_l1.id}'") do
       expect(page).to have_content('Submitted')
     end
 
     # Return to the submissions & feedback tab on the target overlay.
-    find("div[aria-label='Select Target #{target_l1.id}'").click
+    click_link target_l1.title
     find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
     # The submission contents should be on the page.

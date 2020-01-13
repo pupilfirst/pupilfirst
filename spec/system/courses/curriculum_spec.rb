@@ -101,27 +101,27 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(pending_target_g2.title)
 
     # All targets should have the right status written next to their titles.
-    within("div[aria-label='Select Target #{completed_target_l4.id}']") do
+    within("a[aria-label='Select Target #{completed_target_l4.id}']") do
       expect(page).to have_content('Passed')
     end
 
-    within("div[aria-label='Select Target #{pending_target_g1.id}']") do
+    within("a[aria-label='Select Target #{pending_target_g1.id}']") do
       expect(page).to have_content('Pending')
     end
 
-    within("div[aria-label='Select Target #{submitted_target.id}']") do
+    within("a[aria-label='Select Target #{submitted_target.id}']") do
       expect(page).to have_content('Submitted')
     end
 
-    within("div[aria-label='Select Target #{failed_target.id}']") do
+    within("a[aria-label='Select Target #{failed_target.id}']") do
       expect(page).to have_content('Failed')
     end
 
-    within("div[aria-label='Select Target #{target_with_prerequisites.id}']") do
+    within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
       expect(page).to have_content('Locked')
     end
 
-    within("div[aria-label='Select Target #{pending_target_g2.id}']") do
+    within("a[aria-label='Select Target #{pending_target_g2.id}']") do
       expect(page).to have_content('Pending')
     end
 
@@ -150,7 +150,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(target_group_l2.description)
     expect(page).to have_content(completed_target_l2.title)
 
-    within("div[aria-label='Select Target #{completed_target_l2.id}']") do
+    within("a[aria-label='Select Target #{completed_target_l2.id}']") do
       expect(page).to have_content('Passed')
     end
 
@@ -163,11 +163,14 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(target_group_l5.name)
     expect(page).to have_content(target_group_l5.description)
     expect(page).to have_content(level_5_target_1.title)
-    find("div[aria-label='Select Target #{level_5_target_1.id}'").click
+
+    click_link level_5_target_1.title
+
     expect(page).to have_content('You must level up to complete this target.')
 
     # Ensure level 6 is displayed as locked.
     select("L6: #{locked_level_6.name}", from: 'selected_level')
+
     expect(page).not_to have_content(target_group_l6.name)
     expect(page).not_to have_content(target_group_l6.description)
     expect(page).not_to have_content(level_6_target.title)
@@ -192,7 +195,7 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(target_group_l0.description)
       expect(page).to have_content(level_0_target.title)
 
-      within("div[aria-label='Select Target #{level_0_target.id}']") do
+      within("a[aria-label='Select Target #{level_0_target.id}']") do
         expect(page).to have_content('Pending')
       end
     end
@@ -288,15 +291,16 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(level_5_target_1.title)
 
       # All targets should have the right status written next to their titles.
-      within("div[aria-label='Select Target #{level_5_target_1.id}']") do
+      within("a[aria-label='Select Target #{level_5_target_1.id}']") do
         expect(page).to have_content('Pending')
       end
 
-      within("div[aria-label='Select Target #{level_5_target_2.id}']") do
+      within("a[aria-label='Select Target #{level_5_target_2.id}']") do
         expect(page).to have_content('Pending')
       end
 
-      find("div[aria-label='Select Target #{level_5_target_1.id}'").click
+      click_link level_5_target_1.title
+
       expect(page).to have_content('You are currently looking at a preview of this course.')
     end
   end

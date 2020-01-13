@@ -312,18 +312,19 @@ let prerequisitesIncomplete =
                    ts |> TargetStatus.targetId == (target |> Target.id)
                  );
 
-            <div
+            <a
+              href={"/targets/" ++ (target |> Target.id)}
               ariaLabel={"Select Target " ++ (target |> Target.id)}
               key={target |> Target.id}
               className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-              onClick={_ => changeTargetCB(target)}>
+              onClick={changeTargetCB(target)}>
               <span className="font-semibold text-left leading-snug">
                 {target |> Target.title |> str}
               </span>
               <span className={targetStatusClasses(targetStatus)}>
                 {targetStatus |> TargetStatus.statusToString |> str}
               </span>
-            </div>;
+            </a>;
           })
        |> Array.of_list
        |> React.array}

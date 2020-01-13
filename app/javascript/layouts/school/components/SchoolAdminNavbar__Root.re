@@ -201,6 +201,17 @@ let make =
         SelectedCourse(courseId, Curriculum),
         true,
       )
+    | [
+        "school",
+        "courses",
+        courseId,
+        "targets",
+        _targetId,
+        "content" | "versions" | "details",
+      ] => (
+        SelectedCourse(courseId, Curriculum),
+        true,
+      )
     | ["school", "courses", courseId, "exports"] => (
         SelectedCourse(courseId, CourseExports),
         true,

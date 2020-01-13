@@ -56,6 +56,14 @@ Rails.application.routes.draw do
         get 'exports'
         get 'evaluation_criteria'
         post 'attach_images'
+
+        resources :targets, only: [] do
+          member do
+            get 'content'
+            get 'details'
+            get 'versions'
+          end
+        end
       end
 
       resources :levels, only: %i[create]
@@ -89,9 +97,6 @@ Rails.application.routes.draw do
     resources :targets, only: %i[update] do
       resource :quiz, only: %i[create]
       resource :content_block, only: %i[create]
-      member do
-        get 'content'
-      end
     end
 
     resources :communities, only: %i[index]

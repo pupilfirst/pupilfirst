@@ -175,6 +175,8 @@ let make =
     send(UpdateTargetGroup(targetGroup, Hidden));
   };
 
+  let url = ReasonReactRouter.useUrl();
+
   <div className="flex-1 flex flex-col">
     <div className="bg-white p-4 md:hidden shadow border-b">
       <button
@@ -184,6 +186,30 @@ let make =
         </span>
       </button>
     </div>
+    {switch (url.path) {
+     | ["school", "courses", _courseId, "targets", _targetId, ...rest] =>
+       <SchoolAdmin__EditorDrawer closeDrawerCB={() => ()}>
+         {switch (rest) {
+          | ["content"] => <div> {"Content editor goes here" |> str} </div>
+          | ["details"] =>
+            <div> {"Target details editor goes here" |> str} </div>
+          | ["versions"] =>
+            <div> {"Target version selector goes here" |> str} </div>
+          | [otherRoute, ..._] =>
+            Rollbar.warning(
+              "Unexpected route encounted in school admin curriculum editor: "
+              ++ otherRoute,
+            );
+            React.null;
+          | [] =>
+            Rollbar.warning(
+              "Unexpected route encounted in school admin curriculum editor: /targets/:id/",
+            );
+            React.null;
+          }}
+       </SchoolAdmin__EditorDrawer>
+     | _otherRoutes => React.null
+     }}
     {switch (state.editorAction) {
      | Hidden => ReasonReact.null
      | ShowTargetEditor(targetGroupId, target) =>

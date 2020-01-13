@@ -1,9 +1,11 @@
 module Schools
   class TargetPolicy < ApplicationPolicy
-    def create?
+    def update?
       LevelPolicy.new(@pundit_user, record).create?
     end
 
-    alias update? create?
+    alias content? update?
+    alias details? update?
+    alias versions? update?
   end
 end

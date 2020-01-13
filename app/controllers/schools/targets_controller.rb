@@ -2,6 +2,8 @@ module Schools
   class TargetsController < SchoolsController
     before_action :load_target, only: %w[update]
 
+    layout 'school'
+
     # PATCH /school/targets/:id
     def update
       form = ::Schools::Targets::UpdateForm.new(@target)
@@ -16,8 +18,16 @@ module Schools
 
     # GET /school/targets/:id/content
     def content
-      render json: camelize_keys(stringify_ids(Targets::FetchContentService.new(@target).details))
+      target = authorize(Target.find(params[:id]), policy_class: Schools::TargetPolicy)
+      @course = target.course
+      render 'schools/courses/curriculum'
     end
+
+    # GET /school/targets/:id/details
+    alias details content
+
+    # GET /school/targets/:id/versions
+    alias versions content
 
     protected
 

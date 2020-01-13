@@ -42,7 +42,7 @@ let tagPillClasses = (color, showHover) => {
   ++ (
     showHover
       ? "px-2 py-px hover:" ++ bgColor300 ++ "hover:" ++ textColor900
-      : " inline-flex mt-1 mr-1"
+      : "inline-flex"
   );
 };
 
@@ -102,24 +102,26 @@ let showSelected = (clearSelectionCB, labelSuffix, selected) => {
   selected
   |> Array.mapi((index, selection) => {
        let item = selection |> Selectable.item;
-       <div
-         key={index |> string_of_int}
-         className={tagPillClasses(selection |> Selectable.color, false)}>
-         <span className="pl-2 py-px">
-           {(
-              switch (selection |> Selectable.label) {
-              | Some(label) => label ++ labelSuffix ++ item
-              | None => item
-              }
-            )
-            |> str}
-         </span>
-         <button
-           title={"Remove selection: " ++ item}
-           className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
-           onClick={removeSelection(clearSelectionCB, selection)}>
-           <Icon className="if i-times-light" />
-         </button>
+       <div className="inline-block py-px mr-1">
+         <div
+           key={index |> string_of_int}
+           className={tagPillClasses(selection |> Selectable.color, false)}>
+           <span className="pl-2 py-px">
+             {(
+                switch (selection |> Selectable.label) {
+                | Some(label) => label ++ labelSuffix ++ item
+                | None => item
+                }
+              )
+              |> str}
+           </span>
+           <button
+             title={"Remove selection: " ++ item}
+             className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
+             onClick={removeSelection(clearSelectionCB, selection)}>
+             <Icon className="if i-times-light" />
+           </button>
+         </div>
        </div>;
      });
 };
@@ -143,7 +145,7 @@ let make =
         {"Filter by:" |> str}
       </label>
       <div
-        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full pt-1 pb-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
+        className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
         {selected
          |> showSelected(clearSelectionCB, labelSuffix)
          |> React.array}
@@ -151,7 +153,7 @@ let make =
           autoComplete="off"
           value
           onChange={e => onChange(ReactEvent.Form.target(e)##value)}
-          className="flex-grow mt-1 appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
+          className="flex-grow appearance-none bg-transparent border-none text-gray-700 py-px mr-3 leading-relaxed focus:outline-none"
           id="reMultiselect__search-input"
           type_="text"
           placeholder="Type name, tag or level"

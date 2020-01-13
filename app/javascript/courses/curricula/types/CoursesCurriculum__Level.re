@@ -29,6 +29,14 @@ let isLocked = t => !(t |> isUnlocked);
 
 let sort = levels => levels |> List.sort((x, y) => x.number - y.number);
 
+let first = levels =>
+  switch (levels |> sort) {
+  | [] =>
+    Rollbar.error("Failed to find the first level from a course's levels.");
+    raise(Not_found);
+  | [firstLevel, ..._rest] => firstLevel
+  };
+
 let unlockDateString = t =>
   switch (t.unlockOn) {
   | None =>

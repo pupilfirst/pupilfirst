@@ -314,13 +314,7 @@ let make =
       {
         selectedLevelId:
           switch (preview, targetLevelId, levelZero) {
-          | (true, None, None) =>
-            let levelOne =
-              levels |> List.find_opt(level => level |> Level.number == 1);
-            switch (levelOne) {
-            | Some(levelOne) => levelOne |> Level.id
-            | None => teamLevelId
-            };
+          | (true, None, None) => levels |> Level.first |> Level.id
           | (_, Some(targetLevelId), Some(levelZero)) =>
             levelZero |> Level.id == targetLevelId
               ? teamLevelId : targetLevelId

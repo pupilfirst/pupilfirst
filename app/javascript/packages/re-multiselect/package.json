@@ -32,14 +32,12 @@
   "devDependencies": {
     "bs-platform": "7.0.1",
     "bsb-js": "^1.1.7",
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.4",
+    "tailwindcss": "^1.1.4"
   },
   "dependencies": {
     "bs-webapi": "^0.15.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "reason-react": ">=0.7.0",
-    "tailwindcss": "^1.1.4"
+    "reason-react": ">=0.7.0"
   },
   "scripts": {
     "dev": "parcel index.html",

@@ -1,10 +1,32 @@
 [@bs.config {jsx: 3}];
 
+type size =
+  | Normal
+  | Large;
+
+let drawerClasses = size => {
+  let defaultClasses = "drawer-right";
+
+  defaultClasses
+  ++ (
+    switch (size) {
+    | Normal => ""
+    | Large => " drawer-right-large"
+    }
+  );
+};
+
 [@react.component]
-let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", ~children) =>
+let make =
+    (
+      ~closeDrawerCB,
+      ~closeButtonTitle="Close Editor",
+      ~size=Normal,
+      ~children,
+    ) =>
   <div>
     <div className="blanket" />
-    <div className="drawer-right">
+    <div className={drawerClasses(size)}>
       <div className="drawer-right__close absolute">
         <button
           onClick={e => {

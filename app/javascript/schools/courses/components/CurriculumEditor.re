@@ -189,6 +189,7 @@ let make =
     {switch (url.path) {
      | ["school", "courses", _courseId, "targets", _targetId, ...rest] =>
        <SchoolAdmin__EditorDrawer
+         size=SchoolAdmin__EditorDrawer.Large
          closeDrawerCB={() =>
            ReasonReactRouter.push(
              "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",

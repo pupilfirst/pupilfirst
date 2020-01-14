@@ -67,9 +67,9 @@ let sortByTitle = sortBy => {
 
 let sortByIcon = sortBy => {
   switch (sortBy) {
-  | Name => "fas fa-user text-gray-800"
-  | CreatedAt => "fas fa-user text-gray-800"
-  | UpdatedAt => "fas fa-user text-gray-800"
+  | Name => "if i-sort-alpha-down-solid text-sm text-gray-800"
+  | CreatedAt => "fas fa-user text-sm text-gray-800"
+  | UpdatedAt => "fas fa-user text-sm text-gray-800"
   };
 };
 

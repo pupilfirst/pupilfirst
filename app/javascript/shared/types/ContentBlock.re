@@ -59,6 +59,7 @@ let decode = json => {
 };
 
 let sort = blocks => blocks |> List.sort((x, y) => x.sortIndex - y.sortIndex);
+let sortArray = blocks => blocks |> Array.to_list |> sort |> Array.of_list;
 
 let id = t => t.id;
 let blockType = t => t.blockType;
@@ -71,7 +72,6 @@ let makeFileBlock = (fileUrl, title, fileName) =>
 let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
-
 
 let blockTypeAsString = blockType =>
   switch (blockType) {

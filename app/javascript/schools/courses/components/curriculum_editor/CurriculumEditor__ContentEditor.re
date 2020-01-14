@@ -90,6 +90,51 @@ let loadContentBlocks = (targetId, send) => {
   |> ignore;
 };
 
+let editor = (targetId, state, send) => {
+  let currentVersion =
+    switch (state.versions) {
+    | [||] => <span className="italic"> {"Not Versioned" |> str} </span>
+    | versions =>
+      let latestVersion =
+        versions->Array.unsafe_get(0)
+        |> DateFns.parseString
+        |> DateFns.format("Do MMMM YYYY");
+
+      latestVersion |> str;
+    };
+
+  let sortedContentBlocks = state.contentBlocks |> ContentBlock.sortArray;
+
+  <div>
+    <div className="flex justify-between items-end">
+      <a
+        href={"/targets/" ++ targetId}
+        target="_blank"
+        className="py-2 px-3 font-semibold rounded-lg text-sm focus:outline-none bg-primary-100 text-primary-500">
+        <FaIcon classes="fas fa-external-link-alt" />
+        <span className="ml-2"> {"Preview" |> str} </span>
+      </a>
+      <div className="w-1/6">
+        <label className="text-xs block text-gray-600 mb-1">
+          {"Version" |> str}
+        </label>
+        <span className="truncate text-left"> currentVersion </span>
+      </div>
+    </div>
+    {sortedContentBlocks
+     |> Array.map(contentBlock => {
+          <CurriculumEditor__ContentBlockEditor2
+            key={contentBlock |> ContentBlock.id}
+            targetId
+            contentBlock
+            removeContentBlockCB={_contentBlockId => ()}
+            updateContentBlockCB={_contentBlock => ()}
+          />
+        })
+     |> React.array}
+  </div>;
+};
+
 [@react.component]
 let make = (~targetId) => {
   let (state, send) =
@@ -109,6 +154,6 @@ let make = (~targetId) => {
            ~count=2,
            ~element=SkeletonLoading.contents(),
          )
-       : <div> {"Show loaded content" |> str} </div>}
+       : editor(targetId, state, send)}
   </div>;
 };

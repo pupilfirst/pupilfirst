@@ -28,14 +28,6 @@ If enabled, the course will be displayed on the list of featured courses on your
 **Enable public signup for this course?**\
 If enabled, members of the public will be able to sign up for your course.
 
-**Grades**\
-These are the grades that coaches can assign when they're reviewing a student's submission. You'll need to set a maximum grade (up to 10), and a minimum passing grade, and assign labels to each grade.
-
-- If the passing grade is set to 1, then it will be impossible for students to _fail_ during grading.
-- The labels for each grade helps to give them meaning, and to differentiate them for coaches.
-
-!> This mechanics of grading will change soon. See the [related issue on Github](https://github.com/SVdotCO/pupilfirst/issues/14) for more details.
-
 ## Editing courses
 
 To edit a course's details, simply click on the course in the Courses menu. The form for editing a course is identical to the one that you used to create it.

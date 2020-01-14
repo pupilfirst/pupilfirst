@@ -16,18 +16,34 @@
   ],
   "homepage": "https://github.com/SVdotCO/pupilfirst#readme",
   "license": "MIT",
-  "main": "/components/iconFirst.js",
+  "main": "/src/iconFirst.js",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SVdotCO/pupilfirst.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "url": "git+https://github.com/SVdotCO/pupilfirst.git",
+    "directory": "app/javascript/packages/pf-icon"
   },
   "bugs": {
     "url": "https://github.com/SVdotCO/pupilfirst/issues"
+  },
+  "devDependencies": {
+    "bs-platform": "7.0.1",
+    "bsb-js": "^1.1.7",
+    "parcel-bundler": "^1.12.4",
+    "tailwindcss": "^1.1.4"
+  },
+  "dependencies": {
+    "data": "^0.6.1",
+    "reason-react": ">=0.7.0"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "postinstall": "bsb -clean-world && bsb -make-world",
+    "re:build": "bsb -make-world -clean-world",
+    "re:watch": "bsb -make-world -clean-world -w"
   }
 }

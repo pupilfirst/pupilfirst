@@ -197,8 +197,7 @@ let make =
          }>
          {switch (rest) {
           | ["content"] => <CurriculumEditor__ContentEditor targetId />
-          | ["details"] =>
-            <div> {"Target details editor goes here" |> str} </div>
+          | ["details"] => <CurriculumEditor__TargetDetailsEditor targetId />
           | ["versions"] =>
             <div> {"Target version selector goes here" |> str} </div>
           | [otherRoute, ..._] =>

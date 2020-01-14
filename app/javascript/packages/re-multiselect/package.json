@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "bs-webapi": "^0.15.2",
-    "reason-react": ">=0.7.0"
+    "reason-react": ">=0.7.0",
+    "@pupilfirst/pf-icon": "0.1.1"
   },
   "scripts": {
     "dev": "parcel index.html",

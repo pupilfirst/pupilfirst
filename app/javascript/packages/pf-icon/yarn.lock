@@ -1215,11 +1215,6 @@ bs-platform@7.0.1:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.1.tgz#1d7b0ef6088b998dceee5db74a7cd8f01c20a3bd"
   integrity sha512-UjStdtHhbtC/l6vKJ1XRDqrPk7rFf5PLYHtRX3akDXEYVnTbN36z0g4DEr5mU8S0N945e33HYts9x+i7hKKpZQ==
 
-bsb-js@^1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/bsb-js/-/bsb-js-1.1.7.tgz#12cc91e974f5896b3a2aa8358419d24e56f552c3"
-  integrity sha512-FSR7d5Kb6KfVI5sLz9bEeD9pbA9F4Zbkk1xa6R9CJtyd+dJ7mIkxoXqv7cw7HWcuee+VpIhmjYzrplnFd/5Qgg==
-
 buffer-equal@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/buffer-equal/-/buffer-equal-0.0.1.tgz#91bc74b11ea405bc916bc6aa908faafa5b4aac4b"
@@ -1791,13 +1786,6 @@ data-urls@^1.1.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
-
-data@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/data/-/data-0.6.1.tgz#f363b07224f48e7cfd71d3df46c4b11f6f8e5f75"
-  integrity sha1-82OwciT0jnz9cdPfRsSxH2+OX3U=
-  dependencies:
-    "0" underscore
 
 deasync@^0.1.14:
   version "0.1.19"
@@ -5092,11 +5080,6 @@ uncss@^0.17.2:
     postcss "^7.0.17"
     postcss-selector-parser "6.0.2"
     request "^2.88.0"
-
-underscore@:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.2.tgz#0c8d6f536d6f378a5af264a72f7bec50feb7cf2f"
-  integrity sha512-D39qtimx0c1fI3ya1Lnhk3E9nONswSKhnffBI0gME9C99fYOkNi04xs8K6pePLhvl1frbDemkaBQ5ikWllR2HQ==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

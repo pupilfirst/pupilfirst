@@ -30,12 +30,10 @@
   },
   "devDependencies": {
     "bs-platform": "7.0.1",
-    "bsb-js": "^1.1.7",
     "parcel-bundler": "^1.12.4",
     "tailwindcss": "^1.1.4"
   },
   "dependencies": {
-    "data": "^0.6.1",
     "reason-react": ">=0.7.0"
   },
   "scripts": {

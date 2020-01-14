@@ -1,17 +1,17 @@
 module Example = {
   let str = React.string;
 
-  module ResourceType = {
+  module Identifier = {
     type t =
       | Name
       | Flower
       | CartoonCharacter;
   };
 
-  module Selectable = ReMultiselect__Selectable.Make(ResourceType);
+  module ReMultiselect2 = ReMultiselect2.Make(Identifier);
 
   type selection = {
-    resourceType: ResourceType.t,
+    identifier: Identifier.t,
     item: string,
   };
 
@@ -21,45 +21,45 @@ module Example = {
   };
 
   let makeSelectableFlower = flower => {
-    Selectable.make(
-      ~label=Some("Flower"),
+    ReMultiselect2.Selectable.make(
+      ~label="Flower",
       ~item=flower,
       ~color="yellow",
       ~searchString="flower " ++ flower,
-      ~resourceType=Flower,
+      ~identifier=Identifier.Flower,
       (),
     );
   };
 
   let makeSelectableCartoonCharacter = character => {
-    Selectable.make(
-      ~label=Some("Character"),
+    ReMultiselect2.Selectable.make(
+      ~label="Character",
       ~item=character,
       ~color="green",
       ~searchString="character " ++ character,
-      ~resourceType=CartoonCharacter,
+      ~identifier=CartoonCharacter,
       (),
     );
   };
 
   let makeSelectableSearch = searchInput => {
-    Selectable.make(
-      ~label=Some("Name"),
+    ReMultiselect2.Selectable.make(
+      ~label="Name",
       ~item=searchInput,
       ~color="purple",
       ~searchString=searchInput,
-      ~resourceType=Name,
+      ~identifier=Name,
       (),
     );
   };
 
   let selected = selected => {
     selected
-    |> Array.map(filter => {
-         switch (filter.resourceType) {
-         | Name => makeSelectableSearch(filter.item)
-         | Flower => makeSelectableFlower(filter.item)
-         | CartoonCharacter => makeSelectableCartoonCharacter(filter.item)
+    |> Array.map(selection => {
+         switch (selection.identifier) {
+         | Name => makeSelectableSearch(selection.item)
+         | Flower => makeSelectableFlower(selection.item)
+         | CartoonCharacter => makeSelectableCartoonCharacter(selection.item)
          }
        });
   };
@@ -89,8 +89,8 @@ module Example = {
 
   let updateSelection = (setState, selectable) => {
     let selection = {
-      resourceType: selectable |> Selectable.resourceType,
-      item: selectable |> Selectable.item,
+      identifier: selectable |> ReMultiselect2.Selectable.identifier,
+      item: selectable |> ReMultiselect2.Selectable.item,
     };
 
     setState(s =>
@@ -99,16 +99,16 @@ module Example = {
   };
 
   let clearSelection = (selected, setState, selectable) => {
-    ()//   |> Js.Array.filter(s =>
+    ()// let newSelected =
+      //   selected
+      //   |> Js.Array.filter(s =>
       //        !(
       //          selectable
-      //          |> Selectable.resourceType == s.resourceType
+      //          |> Selectable.selectable == s.selectable
       //          && selectable
       //          |> Selectable.item == s.item
-      //        )
-      //      );
-      ; //   selected
- // let newSelected =
+      ; //      );
+ //        )
       // setState(s => {searchInput: "", selected: newSelected});
   };
 
@@ -121,7 +121,7 @@ module Example = {
     let (state, setState) =
       React.useState(() => {searchInput: "", selected: [||]});
 
-    <ReMultiselect
+    <ReMultiselect2
       unselected={selections(state.searchInput)}
       selected={selected(state.selected)}
       updateSelectionCB={updateSelection(setState)}

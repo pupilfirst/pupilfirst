@@ -1,13 +1,13 @@
-module type T = {type t;};
+module type Identifier = {type t;};
 
-module Make = (T: T) => {
+module Make = (Identifier: Identifier) => {
   type t = {
     id: option(string),
     label: option(string),
     item: string,
     color: string,
     searchString: string,
-    resourceType: T.t,
+    identifier: Identifier.t,
   };
 
   let make =
@@ -17,7 +17,7 @@ module Make = (T: T) => {
         ~item,
         ~color="gray",
         ~searchString=item,
-        ~resourceType,
+        ~identifier,
         (),
       ) => {
     id,
@@ -25,7 +25,7 @@ module Make = (T: T) => {
     item,
     color,
     searchString,
-    resourceType,
+    identifier,
   };
 
   let id = t => t.id;
@@ -38,7 +38,7 @@ module Make = (T: T) => {
 
   let searchString = t => t.searchString;
 
-  let resourceType = t => t.resourceType;
+  let identifier = t => t.identifier;
 
   let copyAndSort = (f, t) => {
     let cp = t |> Array.copy;
@@ -56,7 +56,7 @@ module Make = (T: T) => {
     |> copyAndSort((x, y) => String.compare(x.item, y.item));
 };
 
-// type resourceType;
+// type identifier;
 
 // type t = {
 //   id: option(string),
@@ -64,5 +64,5 @@ module Make = (T: T) => {
 //   item: string,
 //   color: string,
 //   searchString: string,
-//   resourceType: ResourceType.t,
+//   identifier: ResourceType.t,
 // };

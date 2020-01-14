@@ -187,7 +187,7 @@ let make =
       </button>
     </div>
     {switch (url.path) {
-     | ["school", "courses", _courseId, "targets", _targetId, ...rest] =>
+     | ["school", "courses", _courseId, "targets", targetId, ...rest] =>
        <SchoolAdmin__EditorDrawer
          size=SchoolAdmin__EditorDrawer.Large
          closeDrawerCB={() =>
@@ -196,7 +196,7 @@ let make =
            )
          }>
          {switch (rest) {
-          | ["content"] => <div> {"Content editor goes here" |> str} </div>
+          | ["content"] => <CurriculumEditor__ContentEditor targetId />
           | ["details"] =>
             <div> {"Target details editor goes here" |> str} </div>
           | ["versions"] =>

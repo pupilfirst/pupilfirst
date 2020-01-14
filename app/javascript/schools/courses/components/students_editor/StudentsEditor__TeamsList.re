@@ -245,22 +245,33 @@ let teamCard =
   </div>;
 };
 
-let showEmpty = (filter, updateFilterCB) =>
-  <div className="flex flex-col-reverse items-center p-5 text-center">
-    {filter |> Filter.isEmpty
-       ? <div> {"No students here." |> str} </div>
-       : <div className="max-w-md w-full">
-           <img className="w-full" src=notFoundIcon />
-           <p className="text-2xl font-semibold text-gray-800 mt-2">
-             {"Sorry, No students found :(" |> str}
-           </p>
-           <button
-             className="btn btn-large btn-default mt-4"
-             onClick={_ => updateFilterCB(filter |> Filter.clear)}>
-             {"Clear Filter" |> str}
-           </button>
-         </div>}
-  </div>;
+let showEmpty = (filter, updateFilterCB) => {
+  filter |> Filter.isEmpty
+    ? <div> {"No students here." |> str} </div>
+    : <div className="flex">
+        <div className="w-1/2">
+          <p className="text-xl font-semibold mt-4 pr-2">
+            {"Sorry, no results found." |> str}
+          </p>
+          <ul className="list-disc text-gray-800 text-sm ml-5 mt-2">
+            <li className="py-1">
+              {"Make sure the spelling is correct." |> str}
+            </li>
+            <li className="py-1">
+              {"Try removing the search filter options." |> str}
+            </li>
+          </ul>
+          <button
+            className="btn btn-default mt-4"
+            onClick={_ => updateFilterCB(filter |> Filter.clear)}>
+            {"Clear Filter" |> str}
+          </button>
+        </div>
+        <div className="w-1/2">
+          <img className="w-full" src=notFoundIcon />
+        </div>
+      </div>;
+};
 
 let showTeams =
     (

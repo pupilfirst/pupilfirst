@@ -106,6 +106,49 @@ feature "Student levelling up", js: true do
     end
   end
 
+  context 'when a student is in level 1 and has completed all milestone targets there, but level 2 is locked' do
+    let(:level_2) { create :level, :two, course: course, unlock_on: 1.week.from_now }
+
+    before do
+      complete_target target_l1, student
+    end
+
+    scenario 'regular student cannot level up' do
+      sign_in_user student.user, referer: curriculum_course_path(course)
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).not_to have_button('Level Up')
+    end
+
+    context 'when the user is a school admin' do
+      before do
+        create :school_admin, user: student.user, school: student.school
+      end
+
+      scenario 'school admin levels up to locked level' do
+        sign_in_user student.user, referer: curriculum_course_path(course)
+        click_button('Level Up')
+
+        expect(page).to have_link(target_l2.title)
+      end
+    end
+
+    context 'when the user is a coach in the course' do
+      let(:coach) { create :faculty, user: student.user }
+
+      before do
+        create :faculty_startup_enrollment, faculty: coach, startup: team
+      end
+
+      scenario 'coach levels up to locked level' do
+        sign_in_user student.user, referer: curriculum_course_path(course)
+        click_button('Level Up')
+
+        expect(page).to have_link(target_l2.title)
+      end
+    end
+  end
+
   context "when a level doesn't have any milestone target group" do
     let!(:target_group_l1) { create :target_group, level: level_1, milestone: false }
 

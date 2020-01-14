@@ -3,12 +3,13 @@ module Example = {
 
   module Identifier = {
     type t =
-      | Name
-      | Flower
-      | CartoonCharacter;
+      | City
+      | State
+      | Country
+      | Search;
   };
 
-  module ReMultiselect2 = ReMultiselect2.Make(Identifier);
+  module ReMultiselect = ReMultiselect.Make(Identifier);
 
   type selection = {
     identifier: Identifier.t,
@@ -20,35 +21,46 @@ module Example = {
     selected: array(selection),
   };
 
-  let makeSelectableFlower = flower => {
-    ReMultiselect2.Selectable.make(
-      ~label="Flower",
-      ~item=flower,
-      ~color="yellow",
-      ~searchString="flower " ++ flower,
-      ~identifier=Identifier.Flower,
+  let makeSelectableCity = city => {
+    ReMultiselect.Selectable.make(
+      ~label="City",
+      ~item=city,
+      ~color="orange",
+      ~searchString="city " ++ city,
+      ~identifier=City,
       (),
     );
   };
 
-  let makeSelectableCartoonCharacter = character => {
-    ReMultiselect2.Selectable.make(
-      ~label="Character",
-      ~item=character,
+  let makeSelectableState = state => {
+    ReMultiselect.Selectable.make(
+      ~label="State",
+      ~item=state,
       ~color="green",
-      ~searchString="character " ++ character,
-      ~identifier=CartoonCharacter,
+      ~searchString="state " ++ state,
+      ~identifier=State,
+      (),
+    );
+  };
+
+  let makeSelectableCounty = country => {
+    ReMultiselect.Selectable.make(
+      ~label="Country",
+      ~item=country,
+      ~color="blue",
+      ~searchString="Country " ++ country,
+      ~identifier=Country,
       (),
     );
   };
 
   let makeSelectableSearch = searchInput => {
-    ReMultiselect2.Selectable.make(
-      ~label="Name",
+    ReMultiselect.Selectable.make(
+      ~label="Search",
       ~item=searchInput,
       ~color="purple",
       ~searchString=searchInput,
-      ~identifier=Name,
+      ~identifier=Search,
       (),
     );
   };
@@ -57,29 +69,34 @@ module Example = {
     selected
     |> Array.map(selection => {
          switch (selection.identifier) {
-         | Name => makeSelectableSearch(selection.item)
-         | Flower => makeSelectableFlower(selection.item)
-         | CartoonCharacter => makeSelectableCartoonCharacter(selection.item)
+         | City => makeSelectableCity(selection.item)
+         | State => makeSelectableState(selection.item)
+         | Country => makeSelectableCounty(selection.item)
+         | Search => makeSelectableSearch(selection.item)
          }
        });
   };
 
   let selections = searchInput => {
-    let cartoonCharacterSuggestions =
-      [|"Mickey Mouse", "Donald Duck", "Popeye", "Bufs Bunny"|]
-      |> Array.map(t => makeSelectableCartoonCharacter(t));
+    let citySuggestions =
+      [|"Chicago", "San Francisco", "Los Angeles"|]
+      |> Array.map(t => makeSelectableCity(t));
 
-    let flowerSuggestions =
-      [|"Rose", "Sunflowe", "Jasmine"|]
-      |> Array.map(l => makeSelectableFlower(l));
+    let stateSuggestions =
+      [|"Washington", "California", "Mississippi"|]
+      |> Array.map(l => makeSelectableState(l));
+
+    let countrySuggestions =
+      [|"India", "USA", "Canada"|] |> Array.map(l => makeSelectableCounty(l));
 
     let searchSuggestion =
       searchInput |> Js.String.trim == ""
         ? [||] : [|makeSelectableSearch(searchInput)|];
 
     searchSuggestion
-    |> Array.append(cartoonCharacterSuggestions)
-    |> Array.append(flowerSuggestions);
+    |> Array.append(citySuggestions)
+    |> Array.append(stateSuggestions)
+    |> Array.append(countrySuggestions);
   };
 
   let updateFilter = (setSearchInput, updateFilterCB, filter) => {
@@ -89,8 +106,8 @@ module Example = {
 
   let updateSelection = (setState, selectable) => {
     let selection = {
-      identifier: selectable |> ReMultiselect2.Selectable.identifier,
-      item: selectable |> ReMultiselect2.Selectable.item,
+      identifier: selectable |> ReMultiselect.Selectable.identifier,
+      item: selectable |> ReMultiselect.Selectable.item,
     };
 
     setState(s =>
@@ -99,17 +116,17 @@ module Example = {
   };
 
   let clearSelection = (selected, setState, selectable) => {
-    ()// let newSelected =
-      //   selected
-      //   |> Js.Array.filter(s =>
-      //        !(
-      //          selectable
-      //          |> Selectable.selectable == s.selectable
-      //          && selectable
-      //          |> Selectable.item == s.item
-      ; //      );
- //        )
-      // setState(s => {searchInput: "", selected: newSelected});
+    let newSelected =
+      selected
+      |> Js.Array.filter(s =>
+           !(
+             selectable
+             |> ReMultiselect.Selectable.identifier == s.identifier
+             && selectable
+             |> ReMultiselect.Selectable.item == s.item
+           )
+         );
+    setState(_ => {searchInput: "", selected: newSelected});
   };
 
   let updateSearchInput = (setState, searchInput) => {
@@ -120,15 +137,26 @@ module Example = {
   let make = () => {
     let (state, setState) =
       React.useState(() => {searchInput: "", selected: [||]});
-
-    <ReMultiselect2
-      unselected={selections(state.searchInput)}
-      selected={selected(state.selected)}
-      updateSelectionCB={updateSelection(setState)}
-      clearSelectionCB={clearSelection(state.selected, setState)}
-      value={state.searchInput}
-      onChange={updateSearchInput(setState)}
-    />;
+    <div className="max-w-md w-full mx-auto p-6">
+      <h1 className="text-center text-2xl font-bold">
+        {"re-multiselect" |> str}
+      </h1>
+      <div className="mt-4">
+        <label
+          className="block text-xs font-semibold"
+          htmlFor="reMultiselect__search-input">
+          {"Filter by:" |> str}
+        </label>
+        <ReMultiselect
+          unselected={selections(state.searchInput)}
+          selected={selected(state.selected)}
+          updateSelectionCB={updateSelection(setState)}
+          clearSelectionCB={clearSelection(state.selected, setState)}
+          value={state.searchInput}
+          onChange={updateSearchInput(setState)}
+        />
+      </div>
+    </div>;
   };
 };
 

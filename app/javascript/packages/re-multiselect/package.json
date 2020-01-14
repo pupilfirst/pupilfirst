@@ -38,7 +38,8 @@
     "bs-webapi": "^0.15.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "reason-react": ">=0.7.0"
+    "reason-react": ">=0.7.0",
+    "tailwindcss": "^1.1.4"
   },
   "scripts": {
     "dev": "parcel index.html",

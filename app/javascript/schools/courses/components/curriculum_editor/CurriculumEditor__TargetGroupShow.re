@@ -79,6 +79,7 @@ let make =
       ~updateTargetGroupSortIndexCB,
       ~authenticityToken,
       ~index,
+      ~course,
     ) => {
   let (state, send) =
     React.useReducer(
@@ -210,6 +211,7 @@ let make =
             updateTargetSortIndexCB
             authenticityToken
             index
+            course
           />
         )
      |> Array.of_list

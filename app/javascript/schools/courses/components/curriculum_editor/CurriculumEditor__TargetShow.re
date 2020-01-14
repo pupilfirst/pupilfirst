@@ -29,6 +29,20 @@ let updateSortIndex =
 
 let sortIndexHiddenClass = bool => bool ? " invisible" : "";
 
+let editorLink = (linkPrefix, linkSuffix, iconClass) => {
+  let link = linkPrefix ++ linkSuffix;
+  <a
+    onClick={event => {
+      event |> ReactEvent.Mouse.preventDefault;
+      event |> ReactEvent.Mouse.stopPropagation;
+      ReasonReactRouter.push(link);
+    }}
+    href=link
+    className="text-xs py-1 px-2 rounded-lg border mr-2 hover:bg-gray-800 hover:text-white hover:border-gray-800">
+    <FaIcon classes={"fas " ++ iconClass} />
+  </a>;
+};
+
 [@react.component]
 let make =
     (
@@ -39,7 +53,15 @@ let make =
       ~updateTargetSortIndexCB,
       ~authenticityToken,
       ~index,
+      ~course,
     ) => {
+  let linkPrefix =
+    "/school/courses/"
+    ++ (course |> Course.id)
+    ++ "/targets/"
+    ++ (target |> Target.id)
+    ++ "/";
+
   <div
     className="flex target-group__target-container border-t bg-white overflow-hidden items-center relative hover:bg-gray-100 hover:text-primary-500">
     {targets |> List.length == 1
@@ -92,15 +114,20 @@ let make =
       <p className="font-semibold text-sm">
         {target |> Target.title |> str}
       </p>
-      {switch (target |> Target.visibility) {
-       | Draft =>
-         <span
-           className="target-group__target-draft-pill flex-shrink-0 items-center leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400">
-           <i className="fas fa-file-signature text-sm" />
-           <span className="ml-1"> {"Draft" |> str} </span>
-         </span>
-       | _ => React.null
-       }}
+      <div className="items-center">
+        {editorLink(linkPrefix, "content", "fa-pen-nib")}
+        {editorLink(linkPrefix, "details", "fa-list-alt")}
+        {editorLink(linkPrefix, "versions", "fa-code-branch")}
+        {switch (target |> Target.visibility) {
+         | Draft =>
+           <span
+             className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400">
+             <i className="fas fa-file-signature text-sm" />
+             <span className="ml-1"> {"Draft" |> str} </span>
+           </span>
+         | _ => React.null
+         }}
+      </div>
     </div>
   </div>;
 };

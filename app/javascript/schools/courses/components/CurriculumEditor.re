@@ -188,7 +188,12 @@ let make =
     </div>
     {switch (url.path) {
      | ["school", "courses", _courseId, "targets", _targetId, ...rest] =>
-       <SchoolAdmin__EditorDrawer closeDrawerCB={() => ()}>
+       <SchoolAdmin__EditorDrawer
+         closeDrawerCB={() =>
+           ReasonReactRouter.push(
+             "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
+           )
+         }>
          {switch (rest) {
           | ["content"] => <div> {"Content editor goes here" |> str} </div>
           | ["details"] =>
@@ -322,6 +327,7 @@ let make =
                 )}
                 authenticityToken
                 index
+                course
               />
             )
          |> Array.of_list

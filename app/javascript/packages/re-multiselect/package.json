@@ -1,0 +1,51 @@
+{
+  "name": "@pupilfirst/multiselect",
+  "version": "0.1.1-alpha.0",
+  "description": "Tailwind styled Reason React multiselect component",
+  "keywords": [
+    "Reason",
+    "React",
+    "Search",
+    "Tailwind",
+    "UI"
+  ],
+  "contributors": [
+    "Bodhish Thomas <bodhish@gmail.com>",
+    "Hari Gopal <mail@harigopal.in>",
+    "Mahesh Krishna Kumar <maheshcet@gmail.com>",
+    "Vinu T. V. <vinutv91@gmail.com>"
+  ],
+  "homepage": "https://github.com/svdotCO/pupilfirst",
+  "license": "MIT",
+  "main": "components/ReMultiselect.re",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SVdotCO/pupilfirst.git",
+    "directory": "app/javascript/packages/re-multiselect"
+  },
+  "bugs": {
+    "url": "https://github.com/SVdotCO/pupilfirst/issues"
+  },
+  "devDependencies": {
+    "bs-platform": "7.0.1",
+    "bsb-js": "^1.1.7",
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "bs-webapi": "^0.15.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "reason-react": ">=0.7.0"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "postinstall": "bsb -clean-world && bsb -make-world",
+    "re:build": "bsb -make-world -clean-world",
+    "re:watch": "bsb -make-world -clean-world -w"
+  }
+}

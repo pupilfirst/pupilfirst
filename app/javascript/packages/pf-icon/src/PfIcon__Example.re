@@ -2,6 +2,8 @@
 
 let str = React.string;
 
+module Icon = PfIcon__Icon;
+
 module Example = {
   let icons = [|
     "plus-circle",

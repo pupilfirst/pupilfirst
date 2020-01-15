@@ -4,6 +4,8 @@
 
 let str = React.string;
 
+module Icon = PfIcon__Icon;
+
 module DomUtils = {
   exception RootElementMissing(string);
 
@@ -41,7 +43,6 @@ module type Identifier = {type t;};
 module Make = (Identifier: Identifier) => {
   module Selectable = {
     type t = {
-      id: option(string),
       label: option(string),
       item: string,
       color: string,
@@ -50,24 +51,13 @@ module Make = (Identifier: Identifier) => {
     };
 
     let make =
-        (
-          ~id=None,
-          ~label=?,
-          ~item,
-          ~color="gray",
-          ~searchString=item,
-          ~identifier,
-          (),
-        ) => {
-      id,
+        (~label=?, ~item, ~color="gray", ~searchString=item, ~identifier, ()) => {
       label,
       item,
       color,
       searchString,
       identifier,
     };
-
-    let id = t => t.id;
 
     let label = t => t.label;
 
@@ -185,9 +175,9 @@ module Make = (Identifier: Identifier) => {
              <button
                title={"Remove selection: " ++ item}
                className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
-               onClick={removeSelection(clearSelectionCB, selection)}
-               //  <Icon className="if i-times-light" />
-             />
+               onClick={removeSelection(clearSelectionCB, selection)}>
+               <Icon className="if i-times-light" />
+             </button>
            </div>
          </div>;
        });

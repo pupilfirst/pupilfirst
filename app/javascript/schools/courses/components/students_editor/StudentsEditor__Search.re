@@ -1,7 +1,16 @@
 [@bs.config {jsx: 3}];
 open StudentsEditor__Types;
 
-module Selectable = ReMultiselect__Selectable;
+let str = React.string;
+
+module Identifier = {
+  type t =
+    | Level(string)
+    | Tag
+    | NameOrEmail;
+};
+
+module ReMultiselect = ReMultiselect.Make(Identifier);
 
 let updateFilter = (setSearchInput, updateFilterCB, filter) => {
   updateFilterCB(filter);
@@ -9,36 +18,33 @@ let updateFilter = (setSearchInput, updateFilterCB, filter) => {
 };
 
 let makeSelectableLevel = level => {
-  Selectable.make(
-    ~id=Some(level |> Level.id),
-    ~label=Some("Level " ++ (level |> Level.number |> string_of_int)),
+  ReMultiselect.Selectable.make(
+    ~label="Level " ++ (level |> Level.number |> string_of_int),
     ~item=level |> Level.name,
     ~color="orange",
     ~searchString=level |> Level.title,
-    ~resourceType="level",
+    ~identifier=Level(level |> Level.id),
     (),
   );
 };
 
 let makeSelectableTag = tag => {
-  Selectable.make(
-    ~id=None,
-    ~label=Some("Tag"),
+  ReMultiselect.Selectable.make(
+    ~label="Tag",
     ~item=tag,
     ~searchString="tag " ++ tag,
-    ~resourceType="tag",
+    ~identifier=Tag,
     (),
   );
 };
 
 let makeSelectableSearch = searchInput => {
-  Selectable.make(
-    ~id=None,
-    ~label=Some("Name or Email"),
+  ReMultiselect.Selectable.make(
+    ~label="Name or Email",
     ~item=searchInput,
     ~color="purple",
     ~searchString=searchInput,
-    ~resourceType="nameOrEmail",
+    ~identifier=NameOrEmail,
     (),
   );
 };
@@ -63,7 +69,7 @@ let appliedFilters = (filter, levels) => {
   searchString |> Array.append(tags) |> Array.append(level);
 };
 
-let selections = (tags, levels, filter, searchInput) => {
+let unselected = (tags, levels, filter, searchInput) => {
   let tagSuggestions =
     tags
     |> Js.Array.filter(t => !(filter |> Filter.tags |> Array.mem(t)))
@@ -88,13 +94,15 @@ let selections = (tags, levels, filter, searchInput) => {
 
 let updateSelection = (filter, updateFilterCB, setSearchInput, selectable) => {
   (
-    switch (selectable |> Selectable.id) {
-    | Some(id) => filter |> Filter.changeLevelId(Some(id))
-    | None =>
-      selectable |> Selectable.resourceType == "tag"
-        ? filter |> Filter.addTag(selectable |> Selectable.item)
-        : filter
-          |> Filter.changeSearchString(Some(selectable |> Selectable.item))
+    switch (selectable |> ReMultiselect.Selectable.identifier) {
+    | Level(id) => filter |> Filter.changeLevelId(Some(id))
+    | Tag =>
+      filter |> Filter.addTag(selectable |> ReMultiselect.Selectable.item)
+    | NameOrEmail =>
+      filter
+      |> Filter.changeSearchString(
+           Some(selectable |> ReMultiselect.Selectable.item),
+         )
     }
   )
   |> updateFilter(setSearchInput, updateFilterCB);
@@ -102,12 +110,11 @@ let updateSelection = (filter, updateFilterCB, setSearchInput, selectable) => {
 
 let clearSelection = (filter, updateFilterCB, selectable) => {
   let newFilter =
-    switch (selectable |> Selectable.id) {
-    | Some(_) => filter |> Filter.removeLevelId
-    | None =>
-      selectable |> Selectable.resourceType == "tag"
-        ? filter |> Filter.removeTag(selectable |> Selectable.item)
-        : filter |> Filter.removeSearchString
+    switch (selectable |> ReMultiselect.Selectable.identifier) {
+    | Level(id) => filter |> Filter.removeLevelId
+    | Tag =>
+      filter |> Filter.removeTag(selectable |> ReMultiselect.Selectable.item)
+    | NameOrEmail => filter |> Filter.removeSearchString
     };
 
   updateFilterCB(newFilter);
@@ -119,16 +126,23 @@ let updateSearchInput = (setSearchInput, searchInput) => {
 [@react.component]
 let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
   let (searchInput, setSearchInput) = React.useState(() => "");
-  <ReMultiselect
-    unselected={selections(tags, levels, filter, searchInput)}
-    selected={appliedFilters(filter, levels)}
-    updateSelectionCB={updateSelection(
-      filter,
-      updateFilterCB,
-      setSearchInput,
-    )}
-    clearSelectionCB={clearSelection(filter, updateFilterCB)}
-    value=searchInput
-    onChange={updateSearchInput(setSearchInput)}
-  />;
+  <div className="inline-block w-full">
+    <label
+      className="block text-tiny font-semibold"
+      htmlFor="reMultiselect__search-input">
+      {"Filter by:" |> str}
+    </label>
+    <ReMultiselect
+      unselected={unselected(tags, levels, filter, searchInput)}
+      selected={appliedFilters(filter, levels)}
+      updateSelectionCB={updateSelection(
+        filter,
+        updateFilterCB,
+        setSearchInput,
+      )}
+      clearSelectionCB={clearSelection(filter, updateFilterCB)}
+      value=searchInput
+      onChange={updateSearchInput(setSearchInput)}
+    />
+  </div>;
 };

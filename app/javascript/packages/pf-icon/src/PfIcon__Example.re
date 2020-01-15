@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [%bs.raw {|require("./PfIcon__Example.css")|}];
 
 let str = React.string;
@@ -54,17 +56,18 @@ module Example = {
       <h1 className="text-center text-2xl font-bold"> {"pf-icon" |> str} </h1>
       <div className="mt-4">
         {icons
-         |> Array.map(icon =>
-              <div className="flex items-center mt-4">
-                <Icon className={"text-2xl if i-" ++ icon} />
+         |> Array.map(icon => {
+              let iconClasses = "text-2xl if i-" ++ icon;
+              <div key=icon className="flex items-center mt-4">
+                <Icon className=iconClasses />
                 <div className="ml-4">
                   <div className="font-semibold text-xl"> {icon |> str} </div>
                   <div className="text-gray-900  text-sm">
-                    {"<i if i-" ++ icon ++ " />" |> str}
+                    {"< " ++ iconClasses ++ " />" |> str}
                   </div>
                 </div>
-              </div>
-            )
+              </div>;
+            })
          |> React.array}
       </div>
     </div>;

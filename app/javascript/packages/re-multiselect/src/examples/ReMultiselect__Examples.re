@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Example = {
   let str = React.string;
 
@@ -147,15 +149,15 @@ module Example = {
           htmlFor="reMultiselect__search-input">
           {"Filter by:" |> str}
         </label>
-        <ReMultiselect
-          unselected={selections(state.searchInput)}
-          selected={selected(state.selected)}
-          updateSelectionCB={updateSelection(setState)}
-          clearSelectionCB={clearSelection(state.selected, setState)}
-          value={state.searchInput}
-          onChange={updateSearchInput(setState)}
-        />
       </div>
+      <ReMultiselect
+        unselected={selections(state.searchInput)}
+        selected={selected(state.selected)}
+        updateSelectionCB={updateSelection(setState)}
+        clearSelectionCB={clearSelection(state.selected, setState)}
+        value={state.searchInput}
+        onChange={updateSearchInput(setState)}
+      />
     </div>;
   };
 };

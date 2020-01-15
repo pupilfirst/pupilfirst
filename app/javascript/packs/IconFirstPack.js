@@ -1,3 +1,3 @@
-import { addListener } from "packages/IconFirst/components/iconFirst.js";
+import { addListener } from "packages/pf-icon/src/iconFirst.js";
 
 addListener();

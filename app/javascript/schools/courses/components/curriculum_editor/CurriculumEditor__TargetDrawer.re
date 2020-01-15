@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+[%bs.raw {|require("./CurriculumEditor__TargetDrawer.css")|}];
+
 let str = React.string;
 
 open CurriculumEditor__Types;
@@ -10,13 +12,13 @@ type page =
   | Versions;
 
 let tab = (page, selectedPage, pathPrefix) => {
-  let defaultClasses = "curriculum-editor__drawer-tab-item cursor-pointer";
+  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer";
 
-  let (number, title, pathSuffix) =
+  let (number, title, pathSuffix, iconClass) =
     switch (page) {
-    | Content => (1, "Content", "content")
-    | Details => (2, "Details", "details")
-    | Versions => (3, "Versions", "versions")
+    | Content => (1, "Content", "content", "fa-pen-nib")
+    | Details => (2, "Details", "details", "fa-list-alt")
+    | Versions => (3, "Versions", "versions", "fa-code-branch")
     };
 
   let path = pathPrefix ++ pathSuffix;
@@ -24,7 +26,7 @@ let tab = (page, selectedPage, pathPrefix) => {
 
   let classes =
     selected
-      ? defaultClasses ++ " curriculum-editor__drawer-tab-item--selected"
+      ? defaultClasses ++ " curriculum-editor__target-drawer-tab--selected"
       : defaultClasses;
 
   <a
@@ -34,9 +36,7 @@ let tab = (page, selectedPage, pathPrefix) => {
       ReasonReactRouter.push(path);
     }}
     className=classes>
-    <span className="curriculum-editor__tab-step-number">
-      {number |> string_of_int |> str}
-    </span>
+    <FaIcon classes={"fas " ++ iconClass} />
     <span className="ml-2"> {title |> str} </span>
   </a>;
 };

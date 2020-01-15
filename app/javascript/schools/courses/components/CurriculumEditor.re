@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-[%bs.raw {|require("./CurriculumEditor.css")|}];
-
 let str = ReasonReact.string;
 
 open CurriculumEditor__Types;

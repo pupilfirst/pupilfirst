@@ -7,6 +7,7 @@
   - [Coaches](/coaches.md)
   - [Curriculum Editor](/curriculum_editor.md)
   - [Targets](targets.md)
+  - [Evaluation Criteria](evaluation_criteria.md)
   - [Communities](/communities.md)
   - [Exporting data](/exporting_data.md)
   - [School Customization](/school_customization.md)

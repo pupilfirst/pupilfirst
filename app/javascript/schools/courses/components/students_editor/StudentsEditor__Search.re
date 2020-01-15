@@ -143,7 +143,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       value=searchInput
       onChange={updateSearchInput(setSearchInput)}
       id
-      placeholder="Type name, tag or level "
+      placeholder="Type name, tag or level"
     />
   </div>;
 };

@@ -79,7 +79,7 @@ module Example = {
        });
   };
 
-  let selections = searchInput => {
+  let unselected = searchInput => {
     let citySuggestions =
       [|"Chicago", "San Francisco", "Los Angeles"|]
       |> Array.map(t => makeSelectableCity(t));
@@ -151,12 +151,13 @@ module Example = {
         </label>
       </div>
       <ReMultiselect
-        unselected={selections(state.searchInput)}
+        unselected={unselected(state.searchInput)}
         selected={selected(state.selected)}
         updateSelectionCB={updateSelection(setState)}
         clearSelectionCB={clearSelection(state.selected, setState)}
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
+        placeholder="Type city, state or country"
       />
     </div>;
   };

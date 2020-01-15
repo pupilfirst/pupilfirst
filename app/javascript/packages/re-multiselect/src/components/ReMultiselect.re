@@ -192,6 +192,7 @@ module Make = (Identifier: Identifier) => {
         ~onChange,
         ~labelSuffix=": ",
         ~id=?,
+        ~placeholder="Search",
       ) => {
     let (inputId, _setId) =
       React.useState(() =>
@@ -218,7 +219,7 @@ module Make = (Identifier: Identifier) => {
             className="flex-grow appearance-none bg-transparent border-none text-gray-700 py-px mr-3 leading-relaxed focus:outline-none"
             id=inputId
             type_="text"
-            placeholder="Type name, tag or level"
+            placeholder
           />
         </div>
       </div>

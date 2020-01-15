@@ -360,11 +360,19 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                 }}
              </div>
              <div className="flex justify-between">
-               <label
-                 className="block tracking-wide text-xs font-semibold mb-2"
-                 htmlFor="grades">
-                 {"Grade and Labels" |> str}
-               </label>
+               <div className="flex items-center">
+                 <label
+                   className="block tracking-wide text-xs font-semibold"
+                   htmlFor="grades">
+                   {"Grade and Labels" |> str}
+                 </label>
+                 <HelpIcon
+                   className="ml-2"
+                   link="https://docs.pupilfirst.com/#/evaluation_criteria">
+                   {"Assign labels for each grade, to reflect in grade cards for students and coaches"
+                    |> str}
+                 </HelpIcon>
+               </div>
                <div className="flex">
                  <div className="flex justify-center items-center ml-4">
                    <span

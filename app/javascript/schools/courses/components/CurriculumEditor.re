@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+[%bs.raw {|require("./CurriculumEditor.css")|}];
+
 let str = ReasonReact.string;
 
 open CurriculumEditor__Types;
@@ -175,8 +177,6 @@ let make =
     send(UpdateTargetGroup(targetGroup, Hidden));
   };
 
-  let url = ReasonReactRouter.useUrl();
-
   <div className="flex-1 flex flex-col">
     <div className="bg-white p-4 md:hidden shadow border-b">
       <button
@@ -186,43 +186,7 @@ let make =
         </span>
       </button>
     </div>
-    {switch (url.path) {
-     | ["school", "courses", _courseId, "targets", targetId, ...rest] =>
-       let target =
-         targets
-         |> ListUtils.unsafeFind(
-              t => t |> Target.id == targetId,
-              "Could not find target for editor drawer with the ID "
-              ++ targetId,
-            );
-
-       <SchoolAdmin__EditorDrawer
-         size=SchoolAdmin__EditorDrawer.Large
-         closeDrawerCB={() =>
-           ReasonReactRouter.push(
-             "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
-           )
-         }>
-         {switch (rest) {
-          | ["content"] => <CurriculumEditor__ContentEditor target />
-          | ["details"] => <CurriculumEditor__TargetDetailsEditor targetId />
-          | ["versions"] =>
-            <div> {"Target version selector goes here" |> str} </div>
-          | [otherRoute, ..._] =>
-            Rollbar.warning(
-              "Unexpected route encounted in school admin curriculum editor: "
-              ++ otherRoute,
-            );
-            React.null;
-          | [] =>
-            Rollbar.warning(
-              "Unexpected route encounted in school admin curriculum editor: /targets/:id/",
-            );
-            React.null;
-          }}
-       </SchoolAdmin__EditorDrawer>;
-     | _otherRoutes => React.null
-     }}
+    <CurriculumEditor__TargetDrawer targets course />
     {switch (state.editorAction) {
      | Hidden => ReasonReact.null
      | ShowTargetEditor(targetGroupId, target) =>

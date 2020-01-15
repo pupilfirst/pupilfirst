@@ -11,7 +11,7 @@ module Example = {
       | Search;
   };
 
-  module ReMultiselect = ReMultiselect.Make(Identifier);
+  module Multiselect = ReMultiselect.Make(Identifier);
 
   type selection = {
     identifier: Identifier.t,
@@ -24,7 +24,7 @@ module Example = {
   };
 
   let makeSelectableCity = city => {
-    ReMultiselect.Selectable.make(
+    Multiselect.Selectable.make(
       ~label="City",
       ~item=city,
       ~color="orange",
@@ -35,7 +35,7 @@ module Example = {
   };
 
   let makeSelectableState = state => {
-    ReMultiselect.Selectable.make(
+    Multiselect.Selectable.make(
       ~label="State",
       ~item=state,
       ~color="green",
@@ -46,7 +46,7 @@ module Example = {
   };
 
   let makeSelectableCounty = country => {
-    ReMultiselect.Selectable.make(
+    Multiselect.Selectable.make(
       ~label="Country",
       ~item=country,
       ~color="blue",
@@ -57,7 +57,7 @@ module Example = {
   };
 
   let makeSelectableSearch = searchInput => {
-    ReMultiselect.Selectable.make(
+    Multiselect.Selectable.make(
       ~label="Search",
       ~item=searchInput,
       ~color="purple",
@@ -101,15 +101,10 @@ module Example = {
     |> Array.append(countrySuggestions);
   };
 
-  let updateFilter = (setSearchInput, updateFilterCB, filter) => {
-    updateFilterCB(filter);
-    setSearchInput(_ => "");
-  };
-
   let updateSelection = (setState, selectable) => {
     let selection = {
-      identifier: selectable |> ReMultiselect.Selectable.identifier,
-      item: selectable |> ReMultiselect.Selectable.item,
+      identifier: selectable |> Multiselect.Selectable.identifier,
+      item: selectable |> Multiselect.Selectable.item,
     };
 
     setState(s =>
@@ -123,9 +118,9 @@ module Example = {
       |> Js.Array.filter(s =>
            !(
              selectable
-             |> ReMultiselect.Selectable.identifier == s.identifier
+             |> Multiselect.Selectable.identifier == s.identifier
              && selectable
-             |> ReMultiselect.Selectable.item == s.item
+             |> Multiselect.Selectable.item == s.item
            )
          );
     setState(_ => {searchInput: "", selected: newSelected});
@@ -150,7 +145,7 @@ module Example = {
           {"Filter by:" |> str}
         </label>
       </div>
-      <ReMultiselect
+      <Multiselect
         unselected={unselected(state.searchInput)}
         selected={selected(state.selected)}
         updateSelectionCB={updateSelection(setState)}

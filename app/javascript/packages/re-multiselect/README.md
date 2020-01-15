@@ -1,16 +1,10 @@
 # `@pupilfirst/multiselect`
 
-multiselect dropdown component for reason react projects
+Multiselect dropdown component for reason react projects
 
 ## Demo
 
-[re-multiselect.pupilfirst.com/](http://re-multiselect.pupilfirst.com/)
-
-## Examples
-
-[Usage in Pupilfirst]()
-
-[Demo]()
+[multiselect.pupilfirst.com](http://re-multiselect.pupilfirst.com/)
 
 ## Installation
 
@@ -30,79 +24,99 @@ Then add `@pupilfirst/multiselect` to bs-dependencies in your bsconfig.json. A m
 
 ## Usage
 
-### `ReMultiSelect` module
-
-`ReMultiselect` is a functor that accepts an Identifer with `type t`.
+## Examples
 
 ```reason
 module Identifier = {
-  type t;
+  type t =
+    | City(index)
+    | Country(index)
+  and index = int;
 };
 
-// Alias ReMultiselect with an Identifier
+// create a Multiselect
+module Multiselect = ReMultiselect.Make(Identifier);
 
-module ReMultiselect = ReMultiselect.Make(Identifier);
+type state = {
+  selected: array(Multiselect.Selectable.t),
+  searchString: string,
+};
+
+let unselected =
+  [|"Delhi", "Beijing", "Washington D.C"|]
+  |> Array.mapi((index, city) =>
+        Multiselect.Selectable.make(~item=city, ~identifier=City(index), ())
+      );
+
+[@react.component]
+let make = () => {
+  let (state, setState) =
+    React.useState(() => {searchString: "", selected: [||]});
+  <Multiselect
+    unselected
+    selected={state.selected}
+    updateSelectionCB={selectable =>
+      setState(s =>
+        {
+          searchString: "",
+          selected: s.selected |> Array.append([|selectable|]),
+        }
+      )
+    }
+    clearSelectionCB={_ => ()}
+    value={state.searchString}
+    onChange={searchString => setState(s => {...s, searchString})}
+  />;
+};
+
 ```
 
-`type t` be of any type that reason supports, ex string, int, variant, etc.
+### Other examples
 
-example:
+[Real world Usage in Pupilfirst]()
 
-```reason
-  module Identifier = {
-    type t = City | State | Country
-  };
-```
+[Code for Multiselect Demo]()
 
-### `ReMultiSelect.Selectable` type
+## Documentation
 
-ReMultiselect accepts a type `ReMultiselect.Selectable.t`
+`ReMultiselect.Make` is a functor that accepts a module with with `type t`. This enables you to pass through any kind of data that identifies each selectable item in your application.
 
-`t.label`: label for item, example: `some("Country")` (optional)
+#### `ReMultiselect` component
 
-`t.item`: the item you want to be searched for: `"USA"`
+`ReMultiselect` is a Reason-React component that accepts an array of unselected and selected items both of which have to be of the type `ReMultiSelect.Selectable.t`
 
-`t.color`: default is gray. You can choose any color from tailwind. example: `"green"` (optional)
+`ReMultiselect` component accepts:
 
-`t.searchString`: The string you want to compare against. example `"Country USA United States of America"` note:`"USA"` show up even if the user searches for `"United stated of America"` or `"Country"` (optional)
+- `id`: `string` (optional - should be uniq if you are using multiple)
 
-`t.identifier`: its your type t. example `Country`
+- `placeholder`: `string` (optional)
 
-You can make a `ReMultiselect.Selectable.t` using make function
+- `value`: `string`
 
-example
+- `labelSuffix`: `string` (optional)
 
-```reason
-ReMultiselect.Selectable.make(
-  ~label="Country",
-  ~item="USA",
-  ~color="green",
-  ~searchString="Country USA United States of America",
-  ~identifier=Country,
-  (),
-);
-```
+- `unselected`: `array(ReMultiselect.Selectable.t)`
 
-### `ReMultiSelect` component
+- `selected`: `array(ReMultiselect.Selectable.t)`
 
-`ReMultiSelect` component accepts
+- `onChange`: `string => unit` (onChange for value)
 
-`id`: `string` (optional - should be uniq if you are using multiple)
+- `updateSelectionCB`: `ReMultiselect.Selectable.t => unit` (onClick on selection)
 
-`placeholder`: `string` (optional)
+- `clearSelectionCB`: `ReMultiselect.Selectable.t => unit` (onClick on clear)
 
-`value`: `string`
+#### `ReMultiselect.Selectable` type
 
-`labelSuffix`: `string` (optional)
+`ReMultiselect` accepts a type `ReMultiselect.Selectable.t`
 
-`unselected`: `array(`ReMultiselect.Selectable.t)`
+- `t.label`: label for item, example: `some("Country")` (optional)
 
-`selected`: `array(ReMultiselect.Selectable.t)`
+- `t.item`: the item you want to be searched for: `"USA"`
 
-`onChange`: `string => unit` (onChange for value)
+- `t.color`: default is gray. You can choose any color from tailwind. example: `"green"` (optional)
 
-`updateSelectionCB`: `ReMultiselect.Selectable.t => unit` (onClick on selection)
+- `t.searchString`: The string you want to compare against. example `"Country USA United States of America"` note:`"USA"` show up even if the user searches for `"United stated of America"` or `"Country"` (optional)
 
-`clearSelectionCB`: `ReMultiselect.Selectable.t => unit` (onClick on clear)
+- `t.identifier`: its your type t.
 
-example: Check examples folder
+Detailed example: Check examples folder

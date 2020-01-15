@@ -158,7 +158,7 @@ module Make = (Identifier: Identifier) => {
     selected
     |> Array.mapi((index, selection) => {
          let item = selection |> Selectable.item;
-         <div key={index |> string_of_int} className="inline-block py-px mr-1">
+         <div key={index |> string_of_int} className="inline-flex py-1 mr-2">
            <div
              className={tagPillClasses(selection |> Selectable.color, false)}>
              <span className="pl-2 py-px">
@@ -216,7 +216,7 @@ module Make = (Identifier: Identifier) => {
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)##value)}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 py-px mr-3 leading-relaxed focus:outline-none"
+            className="flex-grow appearance-none bg-transparent border-none text-gray-700 mr-3 leading-snug focus:outline-none"
             id=inputId
             type_="text"
             placeholder
@@ -226,7 +226,7 @@ module Make = (Identifier: Identifier) => {
       <div />
       {if (value |> String.trim != "") {
          <div
-           className="ReMultiselect__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2">
+           className="ReMultiselect__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
            {searchResult(
               value,
               unselected,

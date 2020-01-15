@@ -249,8 +249,8 @@ let showEmpty = (filter, updateFilterCB) => {
   filter |> Filter.isEmpty
     ? <div> {"No students here." |> str} </div>
     : <div className="flex">
-        <div className="w-1/2">
-          <p className="text-xl font-semibold mt-4 pr-2">
+        <div className="w-1/2 px-3">
+          <p className="text-xl font-semibold mt-4">
             {"Sorry, no results found." |> str}
           </p>
           <ul className="list-disc text-gray-800 text-sm ml-5 mt-2">

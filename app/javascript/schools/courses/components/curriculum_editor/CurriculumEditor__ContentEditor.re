@@ -90,7 +90,7 @@ let loadContentBlocks = (targetId, send) => {
   |> ignore;
 };
 
-let editor = (targetId, state, send) => {
+let editor = (target, state, send) => {
   let currentVersion =
     switch (state.versions) {
     | [||] => <span className="italic"> {"Not Versioned" |> str} </span>
@@ -105,15 +105,20 @@ let editor = (targetId, state, send) => {
 
   let sortedContentBlocks = state.contentBlocks |> ContentBlock.sortArray;
 
-  <div>
+  <div className="mt-2">
     <div className="flex justify-between items-end">
-      <a
-        href={"/targets/" ++ targetId}
-        target="_blank"
-        className="py-2 px-3 font-semibold rounded-lg text-sm focus:outline-none bg-primary-100 text-primary-500">
-        <FaIcon classes="fas fa-external-link-alt" />
-        <span className="ml-2"> {"Preview" |> str} </span>
-      </a>
+      {switch (target |> Target.visibility) {
+       | Live =>
+         <a
+           href={"/targets/" ++ (target |> Target.id)}
+           target="_blank"
+           className="py-2 px-3 font-semibold rounded-lg text-sm focus:outline-none bg-primary-100 text-primary-500">
+           <FaIcon classes="fas fa-external-link-alt" />
+           <span className="ml-2"> {"View as Student" |> str} </span>
+         </a>
+       | Draft
+       | Archived => React.null
+       }}
       <div className="w-1/6">
         <label className="text-xs block text-gray-600 mb-1">
           {"Version" |> str}
@@ -125,7 +130,7 @@ let editor = (targetId, state, send) => {
      |> Array.map(contentBlock => {
           <CurriculumEditor__ContentBlockEditor2
             key={contentBlock |> ContentBlock.id}
-            targetId
+            targetId={target |> Target.id}
             contentBlock
             removeContentBlockCB={_contentBlockId => ()}
             updateContentBlockCB={_contentBlock => ()}
@@ -136,7 +141,7 @@ let editor = (targetId, state, send) => {
 };
 
 [@react.component]
-let make = (~targetId) => {
+let make = (~target) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -144,16 +149,17 @@ let make = (~targetId) => {
     );
 
   React.useEffect0(() => {
-    loadContentBlocks(targetId, send);
+    loadContentBlocks(target |> Target.id, send);
     None;
   });
 
   <div className="max-w-3xl py-6 px-3 mx-auto">
+    <h2> {target |> Target.title |> str} </h2>
     {state.loading
        ? SkeletonLoading.multiple(
            ~count=2,
            ~element=SkeletonLoading.contents(),
          )
-       : editor(targetId, state, send)}
+       : editor(target, state, send)}
   </div>;
 };

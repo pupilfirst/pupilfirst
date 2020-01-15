@@ -188,6 +188,14 @@ let make =
     </div>
     {switch (url.path) {
      | ["school", "courses", _courseId, "targets", targetId, ...rest] =>
+       let target =
+         targets
+         |> ListUtils.unsafeFind(
+              t => t |> Target.id == targetId,
+              "Could not find target for editor drawer with the ID "
+              ++ targetId,
+            );
+
        <SchoolAdmin__EditorDrawer
          size=SchoolAdmin__EditorDrawer.Large
          closeDrawerCB={() =>
@@ -196,7 +204,7 @@ let make =
            )
          }>
          {switch (rest) {
-          | ["content"] => <CurriculumEditor__ContentEditor targetId />
+          | ["content"] => <CurriculumEditor__ContentEditor target />
           | ["details"] => <CurriculumEditor__TargetDetailsEditor targetId />
           | ["versions"] =>
             <div> {"Target version selector goes here" |> str} </div>
@@ -212,7 +220,7 @@ let make =
             );
             React.null;
           }}
-       </SchoolAdmin__EditorDrawer>
+       </SchoolAdmin__EditorDrawer>;
      | _otherRoutes => React.null
      }}
     {switch (state.editorAction) {

@@ -44,7 +44,6 @@
     "dev": "parcel index.html",
     "build": "parcel build index.html",
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "postinstall": "bsb -clean-world && bsb -make-world",
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w"
   }

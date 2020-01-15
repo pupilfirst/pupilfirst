@@ -22,9 +22,7 @@ Then add `@pupilfirst/multiselect` to bs-dependencies in your bsconfig.json. A m
 }
 ```
 
-## Usage
-
-## Examples
+## Minimal Example
 
 ```reason
 module Identifier = {
@@ -71,52 +69,64 @@ let make = () => {
 
 ```
 
+See this code, and a more advanced version, in action here: https://re-multiselect.pupilfirst.com
+
 ### Other examples
 
-[Real world Usage in Pupilfirst]()
+- [Real world Usage in Pupilfirst]()
 
-[Code for Multiselect Demo]()
-
-## Documentation
+## Usage
 
 `ReMultiselect.Make` is a functor that accepts a module with with `type t`. This enables you to pass through any kind of data that identifies each selectable item in your application.
 
-#### `ReMultiselect` component
+### `ReMultiselect` component
 
-`ReMultiselect` is a Reason-React component that accepts an array of unselected and selected items both of which have to be of the type `ReMultiSelect.Selectable.t`
+`ReMultiselect` is a Reason-React component that accepts an array of unselected and selected items, both of which have to be of the type `ReMultiSelect.Selectable.t`.
 
-`ReMultiselect` component accepts:
+The `ReMultiselect` component accepts:
 
-- `id`: `string` (optional - should be uniq if you are using multiple)
+- `id`: `string` (optional) - `id` of the input element; you can use this to label the input.
 
-- `placeholder`: `string` (optional)
+- `placeholder`: `string` (optional) - placeholder for the input element.
 
-- `value`: `string`
+- `value`: `string` - value of input element; this is
+a controlled component - you hold the state.
 
-- `labelSuffix`: `string` (optional)
+- `onChange`: `string => unit` - `onChange` for the input element.
 
-- `unselected`: `array(ReMultiselect.Selectable.t)`
+- `unselected`: `array(ReMultiselect.Selectable.t)` - the array of unselected options.
 
-- `selected`: `array(ReMultiselect.Selectable.t)`
+- `selected`: `array(ReMultiselect.Selectable.t)` - the array of selected options.
 
-- `onChange`: `string => unit` (onChange for value)
+- `selectCB`: `ReMultiselect.Selectable.t => unit` - callback for when a item is selected.
 
-- `updateSelectionCB`: `ReMultiselect.Selectable.t => unit` (onClick on selection)
+- `deselectCB`: `ReMultiselect.Selectable.t => unit` - callback for when an item is removed.
 
-- `clearSelectionCB`: `ReMultiselect.Selectable.t => unit` (onClick on clear)
+- `labelSuffix`: `string` (optional) - defaults to `:` - this is the separator between the _selectable's_ `label` and `title`.
 
-#### `ReMultiselect.Selectable` type
+### `ReMultiselect.Selectable` type
 
-`ReMultiselect` accepts a type `ReMultiselect.Selectable.t`
+`ReMultiselect` operated using a type `ReMultiselect.Selectable.t`. You'll need to work with in in the `selected`, `unselected`, `selectCB` and `deselectCB` props.
 
-- `t.label`: label for item, example: `some("Country")` (optional)
+These can be created by calling the `ReMultiselect.Selectable.make` function. For example:
 
-- `t.item`: the item you want to be searched for: `"USA"`
+```reason
+Multiselect.Selectable.make(
+  ~label="Country",
+  ~value="USA",
+  ~searchString="Country USA United States of America",
+  ~color="orange",
+  ~identifier=Identifier.Country(1),
+  ()
+);
+```
 
-- `t.color`: default is gray. You can choose any color from tailwind. example: `"green"` (optional)
+- `t.label`: `option(string)` - label for a selectable item.
 
-- `t.searchString`: The string you want to compare against. example `"Country USA United States of America"` note:`"USA"` show up even if the user searches for `"United stated of America"` or `"Country"` (optional)
+- `t.value`: `string` - the name, or title of a item.
 
-- `t.identifier`: its your type t.
+- `t.searchString`: `option(string)` - the string you want to compare the user's input against. For example, if the `searchString` for an item is `"Country USA United States of America"`, it will show up if the user searches for `"United stated of America"` or `"Country"`, or `USA`. If left out, the `searchString` will default to `value`.
 
-Detailed example: Check examples folder
+- `t.color`: `option(string)` - defaults to `gray`. You can choose any color from your Tailwind config.
+
+- `t.identifier`: `Identifier.t` - This is your internal data type; this value will be passed in calls to `selectCB` and `deselectCB`, and can be used to identify an item in your data store.

@@ -34,6 +34,6 @@ The student submission here received a grade of 5 for evaluation criterion with 
 
 Here's how grading based on multiple criteria looks in the coach's review interface. The target here is graded on two criteria, each of which has it's own grading scale.
 
-![Coach review interface for target with multiple criterion](https://res.cloudinary.com/sv-co/image/upload/v1572951850/pupilfirst_changelog/2020/move_grading_scale_to_evaluation_criteria_pwfeno.png)
+![Coach review interface for target with multiple criterion](https://res.cloudinary.com/sv-co/image/upload/v1579080296/pupilfirst_documentation/evaluation_criteria/multiple_evaluation_criteria_coach_interface_y5pssn.png)
 
 

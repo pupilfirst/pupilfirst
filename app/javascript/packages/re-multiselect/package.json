@@ -1,6 +1,6 @@
 {
   "name": "@pupilfirst/multiselect",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Tailwind styled Reason React multiselect component",
   "keywords": [
     "Reason",

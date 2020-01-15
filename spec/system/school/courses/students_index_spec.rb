@@ -410,23 +410,23 @@ feature 'School students index', js: true do
     click_button level_2.name
     expect(page).to have_text(startup_2.name)
     expect(page).not_to have_text(startup_1.name)
-    click_button "Remove filter Level 2: #{level_2.name}"
+    click_button "Remove selection: #{level_2.name}"
 
     # filter by tag
     fill_in "search", with: tag1
-    click_button "Pick tag Single Student"
+    click_button "Pick Tag: Single Student"
     expect(page).to have_text(lone_student.name)
     expect(page).to have_text(tag2)
     expect(page).not_to have_text(startup_1.name)
     expect(page).not_to have_text(startup_2.name)
-    click_button "Remove filter Single Student"
+    click_button "Remove selection: Single Student"
 
     # filter by name
     name = startup_1.founders.first.name
     fill_in "search", with: name
     click_button name
     expect(page).to have_text(startup_1.name)
-    click_button "Remove filter #{name}"
+    click_button "Remove selection: #{name}"
 
     # filter by email
     email = startup_1.founders.first.email
@@ -435,7 +435,7 @@ feature 'School students index', js: true do
     expect(page).to have_text(startup_1.name)
     expect(page).not_to have_text(startup_2.name)
     expect(page).not_to have_text(lone_student.name)
-    click_button "Remove filter #{email}"
+    click_button "Remove selection: #{email}"
   end
 
   scenario 'school admin can order students' do

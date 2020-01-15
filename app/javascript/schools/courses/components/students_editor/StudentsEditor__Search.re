@@ -111,7 +111,7 @@ let updateSelection = (filter, updateFilterCB, setSearchInput, selectable) => {
 let clearSelection = (filter, updateFilterCB, selectable) => {
   let newFilter =
     switch (selectable |> ReMultiselect.Selectable.identifier) {
-    | Level(id) => filter |> Filter.removeLevelId
+    | Level(_id) => filter |> Filter.removeLevelId
     | Tag =>
       filter |> Filter.removeTag(selectable |> ReMultiselect.Selectable.item)
     | NameOrEmail => filter |> Filter.removeSearchString
@@ -126,10 +126,9 @@ let updateSearchInput = (setSearchInput, searchInput) => {
 [@react.component]
 let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
   let (searchInput, setSearchInput) = React.useState(() => "");
+  let id = "search";
   <div className="inline-block w-full">
-    <label
-      className="block text-tiny font-semibold"
-      htmlFor="reMultiselect__search-input">
+    <label className="block text-tiny font-semibold" htmlFor=id>
       {"Filter by:" |> str}
     </label>
     <ReMultiselect
@@ -143,6 +142,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       clearSelectionCB={clearSelection(filter, updateFilterCB)}
       value=searchInput
       onChange={updateSearchInput(setSearchInput)}
+      id
     />
   </div>;
 };

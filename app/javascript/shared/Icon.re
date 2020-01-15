@@ -1,1 +1,1 @@
-include PfIcon__Icon;
+include PfIcon;

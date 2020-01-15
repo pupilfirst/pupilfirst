@@ -4,8 +4,6 @@
 
 let str = React.string;
 
-module Icon = PfIcon__Icon;
-
 module DomUtils = {
   exception RootElementMissing(string);
 
@@ -176,7 +174,7 @@ module Make = (Identifier: Identifier) => {
                title={"Remove selection: " ++ item}
                className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
                onClick={removeSelection(clearSelectionCB, selection)}>
-               <Icon className="if i-times-light" />
+               <PfIcon className="if i-times-light" />
              </button>
            </div>
          </div>;

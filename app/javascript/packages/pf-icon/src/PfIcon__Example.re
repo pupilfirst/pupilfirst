@@ -4,12 +4,9 @@
 
 let str = React.string;
 
-module Icon = PfIcon__Icon;
-
 module Example = {
   let icons = [|
     "plus-circle",
-    "default",
     "lamp-solid",
     "check-light",
     "times-light",
@@ -52,18 +49,29 @@ module Example = {
 
   [@react.component]
   let make = () => {
-    <div className="max-w-md w-full mx-auto p-6 bg-white border shadow">
-      <h1 className="text-center text-2xl font-bold"> {"pf-icon" |> str} </h1>
-      <div className="mt-4">
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-center text-2xl font-bold pt-4">
+        {"pf-icon" |> str}
+      </h1>
+      <div
+        className="mx-2 mt-4 flex md:flex-row flex-col flex-wrap bg-white border rounded px-2">
         {icons
          |> Array.map(icon => {
-              let iconClasses = "text-2xl if i-" ++ icon;
-              <div key=icon className="flex items-center mt-4">
-                <Icon className=iconClasses />
-                <div className="ml-4">
+              let iconClasses = "if i-" ++ icon;
+              <div
+                key=icon
+                className="flex items-center mt-4 md:w-1/2 w-full px-2">
+                <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
+                <div className="ml-4 overflow-x-auto">
                   <div className="font-semibold text-xl"> {icon |> str} </div>
-                  <div className="text-gray-900  text-sm">
-                    {"< " ++ iconClasses ++ " />" |> str}
+                  <div className="overflow-x-auto">
+                    <code
+                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-no-wrap">
+                      {"<PfIcon className=\""
+                       ++ iconClasses
+                       ++ " if-fw\" />"
+                       |> str}
+                    </code>
                   </div>
                 </div>
               </div>;

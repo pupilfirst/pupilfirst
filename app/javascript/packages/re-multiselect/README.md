@@ -1,6 +1,6 @@
 # `@pupilfirst/multiselect`
 
-Multiselect dropdown component for reason react projects
+A multi-select dropdown component for ReasonReact projects.
 
 ## Demo
 
@@ -27,9 +27,9 @@ Then add `@pupilfirst/multiselect` to bs-dependencies in your bsconfig.json. A m
 ```reason
 module Identifier = {
   type t =
-    | City(index)
-    | Country(index)
-  and index = int;
+    | City(code)
+    | Country(code)
+  and code = int;
 };
 
 // create a Multiselect
@@ -40,11 +40,12 @@ type state = {
   searchString: string,
 };
 
-let unselected =
-  [|"Delhi", "Beijing", "Washington D.C"|]
-  |> Array.mapi((index, city) =>
-        Multiselect.Selectable.make(~item=city, ~identifier=City(index), ())
-      );
+let unselected = [|
+  Multiselect.Selectable.make(~item="Delhi", ~identifier=City(1), ()),
+  Multiselect.Selectable.make(~item="India", ~identifier=Country(91), ()),
+  Multiselect.Selectable.make(~item="Washington D.C", ~identifier=City(2), ()),
+  Multiselect.Selectable.make(~item="USA", ~identifier=Country(1), ()),
+|];
 
 [@react.component]
 let make = () => {
@@ -83,26 +84,19 @@ See this code, and a more advanced version, in action here: https://re-multisele
 
 `ReMultiselect` is a Reason-React component that accepts an array of unselected and selected items, both of which have to be of the type `ReMultiSelect.Selectable.t`.
 
-The `ReMultiselect` component accepts:
+The `ReMultiselect` component accepts the following props:
 
-- `id`: `string` (optional) - `id` of the input element; you can use this to label the input.
-
-- `placeholder`: `string` (optional) - placeholder for the input element.
-
-- `value`: `string` - value of input element; this is
-a controlled component - you hold the state.
-
-- `onChange`: `string => unit` - `onChange` for the input element.
-
-- `unselected`: `array(ReMultiselect.Selectable.t)` - the array of unselected options.
-
-- `selected`: `array(ReMultiselect.Selectable.t)` - the array of selected options.
-
-- `selectCB`: `ReMultiselect.Selectable.t => unit` - callback for when a item is selected.
-
-- `deselectCB`: `ReMultiselect.Selectable.t => unit` - callback for when an item is removed.
-
-- `labelSuffix`: `string` (optional) - defaults to `:` - this is the separator between the _selectable's_ `label` and `title`.
+| Prop | Type | Description |
+|---------------|--------------------------------------|----------------------------------------------------------------------------------------|
+| `id` | `string` (optional) | `id` of the input element; you can use this to label the input. |
+| `placeholder` | `string` (optional) | Placeholder for the input element. |
+| `value` | `string` | Value of input element; this is a controlled component - you hold the state. |
+| `onChange` | `string => unit` | `onChange` for the input element. |
+| `unselected` | `array(ReMultiselect.Selectable.t)` | The array of unselected options. |
+| `selected` | `array(ReMultiselect.Selectable.t)` | The array of selected options. |
+| `selectCB` | `ReMultiselect.Selectable.t => unit` | Callback for when an item is selected. |
+| `deselectCB` | `ReMultiselect.Selectable.t => unit` | Callback for when an item is removed. |
+| `labelSuffix` | `string` (optional) | This is the separator between the _selectable's_ `label` and `title`. Defaults to `:`. |
 
 ### `ReMultiselect.Selectable` type
 
@@ -121,12 +115,10 @@ Multiselect.Selectable.make(
 );
 ```
 
-- `t.label`: `option(string)` - label for a selectable item.
-
-- `t.value`: `string` - the name, or title of a item.
-
-- `t.searchString`: `option(string)` - the string you want to compare the user's input against. For example, if the `searchString` for an item is `"Country USA United States of America"`, it will show up if the user searches for `"United stated of America"` or `"Country"`, or `USA`. If left out, the `searchString` will default to `value`.
-
-- `t.color`: `option(string)` - defaults to `gray`. You can choose any color from your Tailwind config.
-
-- `t.identifier`: `Identifier.t` - This is your internal data type; this value will be passed in calls to `selectCB` and `deselectCB`, and can be used to identify an item in your data store.
+| Argument | Type | Description |
+|----------------|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `label` | `option(string)` | Label for a selectable item. |
+| `value` | `string` | The name, or title of a item. |
+| `searchString` | `option(string)` | The string you want to compare the user's input against. For example, if the `searchString` for an item is `"Country USA United States of America"`, it will show up if the user searches for `"United stated of America"` or `"Country"`, or `USA`. If left out, the `searchString` will default to `value`. |
+| `color` | `option(string)` | Defaults to `gray`. You can choose any color from your Tailwind config. |
+| `identifier` | `Identifier.t` | This is your internal data type; this value will be passed in calls to `selectCB` and `deselectCB`, and can be used to identify an item in your data store. |

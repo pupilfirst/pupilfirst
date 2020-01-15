@@ -91,8 +91,11 @@ let make = (~targets, ~course) => {
       }>
       <div>
         <div className="bg-gray-200 pt-6">
+          <div className="max-w-3xl mx-auto">
+            <h3> {target |> Target.title |> str} </h3>
+          </div>
           <div
-            className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+            className="flex w-full max-w-3xl mx-auto text-sm px-3 -mb-px mt-2">
             {tab(Content, selectedPage, pathPrefix)}
             {tab(Details, selectedPage, pathPrefix)}
             {tab(Versions, selectedPage, pathPrefix)}

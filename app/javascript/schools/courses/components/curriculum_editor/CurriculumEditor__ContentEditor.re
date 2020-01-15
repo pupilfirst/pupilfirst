@@ -121,7 +121,7 @@ let editor = (target, state, send) => {
        }}
       <div className="w-1/6">
         <label className="text-xs block text-gray-600 mb-1">
-          {"Version" |> str}
+          {"Last Updated" |> str}
         </label>
         <span className="truncate text-left"> currentVersion </span>
       </div>
@@ -154,7 +154,6 @@ let make = (~target) => {
   });
 
   <div className="max-w-3xl py-6 px-3 mx-auto">
-    <h2> {target |> Target.title |> str} </h2>
     {state.loading
        ? SkeletonLoading.multiple(
            ~count=2,

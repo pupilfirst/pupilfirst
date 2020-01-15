@@ -1,8 +1,8 @@
 [@bs.config {jsx: 3}];
 
-module Example = {
-  let str = React.string;
+let str = React.string;
 
+module DetailedExample = {
   module Identifier = {
     type t =
       | City
@@ -134,10 +134,8 @@ module Example = {
   let make = () => {
     let (state, setState) =
       React.useState(() => {searchInput: "", selected: [||]});
-    <div className="max-w-md w-full mx-auto p-6">
-      <h1 className="text-center text-2xl font-bold">
-        {"re-multiselect" |> str}
-      </h1>
+    <div className="mt-4">
+      <h2 className="text-xl font-semibold"> {"Detailed Example" |> str} </h2>
       <div className="mt-4">
         <label
           className="block text-xs font-semibold"
@@ -158,4 +156,69 @@ module Example = {
   };
 };
 
-ReactDOMRe.renderToElementWithId(<Example />, "root");
+module MinimalExample = {
+  module Identifier = {
+    type t =
+      | City(code)
+      | Country(code)
+    and code = int;
+  };
+
+  // create a Multiselect
+  module Multiselect = ReMultiselect.Make(Identifier);
+
+  type state = {
+    selected: array(Multiselect.Selectable.t),
+    searchString: string,
+  };
+
+  let unselected = [|
+    Multiselect.Selectable.make(~item="Delhi", ~identifier=City(1), ()),
+    Multiselect.Selectable.make(~item="India", ~identifier=Country(91), ()),
+    Multiselect.Selectable.make(
+      ~item="Washington D.C",
+      ~identifier=City(2),
+      (),
+    ),
+    Multiselect.Selectable.make(~item="USA", ~identifier=Country(1), ()),
+  |];
+
+  let clearSelection = (selected, setState, selectable) => {
+    let newSelected = selected |> Js.Array.filter(s => s == selectable);
+    setState(_ => {searchString: "", selected: newSelected});
+  };
+
+  [@react.component]
+  let make = () => {
+    let (state, setState) =
+      React.useState(() => {searchString: "", selected: [||]});
+    <div className="mt-4">
+      <h2 className="text-xl font-semibold"> {"Minimal Example" |> str} </h2>
+      <div className="mt-4">
+        <label
+          className="block text-xs font-semibold"
+          htmlFor="reMultiselect__search-input">
+          {"Filter by:" |> str}
+        </label>
+      </div>
+      <Multiselect
+        unselected
+        selected={state.selected}
+        updateSelectionCB={selectable =>
+          setState(s =>
+            {
+              searchString: "",
+              selected: s.selected |> Array.append([|selectable|]),
+            }
+          )
+        }
+        clearSelectionCB={clearSelection(state.selected, setState)}
+        value={state.searchString}
+        onChange={searchString => setState(s => {...s, searchString})}
+      />
+    </div>;
+  };
+};
+
+ReactDOMRe.renderToElementWithId(<DetailedExample />, "DetailedExample");
+ReactDOMRe.renderToElementWithId(<MinimalExample />, "MinimalExample");

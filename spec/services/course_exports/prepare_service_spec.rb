@@ -119,7 +119,7 @@ describe CourseExports::PrepareService do
               ['Name', target_l1_evaluated.title, target_l2_evaluated.title],
               ['Completion Method', 'Graded', 'Graded'],
               ['Milestone?', 'Yes', 'Yes'],
-              ['Students with submissions', 2, 1],
+              ['Students with submissions', 1, 1],
               ['Submissions pending review', 0, 1],
               ['Criterion A (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
               ['Criterion B (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]

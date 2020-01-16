@@ -146,16 +146,15 @@ let eligiblePrerequisiteTargets = (targetId, targets, state, targetGroups) => {
 let prerequisiteTargetsForSelector = (targetId, targets, state, targetGroups) => {
   let selectedTargetIds = state.prerequisiteTargets;
   eligiblePrerequisiteTargets(targetId, targets, state, targetGroups)
-  |> List.map(criterion => {
+  |> List.map(target => {
+       let id = target |> Target.id;
        let selected =
          selectedTargetIds
-         |> Js.Array.findIndex(selectedTargetId =>
-              targetId == selectedTargetId
-            )
+         |> Js.Array.findIndex(selectedTargetId => id == selectedTargetId)
          > (-1);
        (
-         criterion |> Target.id |> int_of_string,
-         criterion |> Target.title,
+         target |> Target.id |> int_of_string,
+         target |> Target.title,
          selected,
        );
      });

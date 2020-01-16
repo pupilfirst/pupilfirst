@@ -4,6 +4,12 @@
 
 let str = React.string;
 
+let copyAndSort = (f, t) => {
+  let cp = t |> Array.copy;
+  cp |> Array.sort(f);
+  cp;
+};
+
 module Example = {
   let icons = [|
     "plus-circle",
@@ -47,39 +53,86 @@ module Example = {
     "clock-light",
   |];
 
+  let search = searchString => {
+    let normalizedString = {
+      searchString
+      |> Js.String.trim
+      |> Js.String.replaceByRe(
+           Js.Re.fromStringWithFlags("\\s+", ~flags="g"),
+           " ",
+         );
+    };
+
+    switch (normalizedString) {
+    | "" => icons
+    | searchString =>
+      icons
+      |> Js.Array.filter(icon =>
+           icon |> String.lowercase_ascii |> Js.String.includes(searchString)
+         )
+      |> copyAndSort(String.compare)
+    };
+  };
+
+  let onChange = (setSearchString, event) => {
+    let searchString = ReactEvent.Form.target(event)##value;
+    setSearchString(_ => searchString);
+  };
+
   [@react.component]
   let make = () => {
+    let (searchString, setSearchString) = React.useState(() => "");
     <div className="max-w-5xl mx-auto">
       <h1 className="text-center text-2xl font-bold pt-4">
         {"pf-icon" |> str}
       </h1>
-      <div
-        className="mx-2 mt-4 flex md:flex-row flex-col flex-wrap bg-white border rounded px-2">
-        {icons
-         |> Array.map(icon => {
-              let iconClasses = "if i-" ++ icon;
-              <div
-                key=icon
-                className="flex items-center mt-4 md:w-1/2 w-full px-2">
-                <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
-                <div className="ml-4 overflow-x-auto">
-                  <div className="font-semibold text-xl"> {icon |> str} </div>
-                  <div className="overflow-x-auto">
-                    <code
-                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-no-wrap">
-                      {"<PfIcon className=\""
-                       ++ iconClasses
-                       ++ " if-fw\" />"
-                       |> str}
-                    </code>
-                  </div>
-                </div>
-              </div>;
-            })
-         |> React.array}
+      <div>
+        <div className="mt-4">
+          <input
+            autoComplete="off"
+            value=searchString
+            onChange={onChange(setSearchString)}
+            type_="text"
+            placeholder="Search"
+            className="mx-2 text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700 focus:outline-none md:w-2/5"
+          />
+        </div>
+        <div
+          className="mx-2 mt-4 flex md:flex-row flex-col flex-wrap bg-white border rounded px-2">
+          {switch (search(searchString)) {
+           | [||] =>
+             <div className="p-4 text-sm text-center w-full">
+               {"Icon not found" |> str}
+             </div>
+           | resultIcons =>
+             resultIcons
+             |> Array.map(icon => {
+                  let iconClasses = "if i-" ++ icon;
+                  <div
+                    key=icon
+                    className="flex items-center mt-4 md:w-1/2 w-full px-2">
+                    <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
+                    <div className="ml-4 overflow-x-auto">
+                      <div className="font-semibold text-xl">
+                        {icon |> str}
+                      </div>
+                      <div className="overflow-x-auto">
+                        <code
+                          className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-no-wrap">
+                          {"<PfIcon className=\""
+                           ++ iconClasses
+                           ++ " if-fw\" />"
+                           |> str}
+                        </code>
+                      </div>
+                    </div>
+                  </div>;
+                })
+             |> React.array
+           }}
+        </div>
       </div>
     </div>;
   };
 };
-
 ReactDOMRe.renderToElementWithId(<Example />, "root");

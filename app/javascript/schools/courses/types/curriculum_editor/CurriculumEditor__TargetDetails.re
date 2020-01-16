@@ -32,6 +32,12 @@ let role = t => t.role;
 
 let visibility = t => t.visibility;
 
+let quiz = t => t.quiz;
+
+let prerequisiteTargets = t => t.prerequisiteTargets;
+
+let evaluationCriteria = t => t.evaluationCriteria;
+
 let decodeVisbility = visibilityString =>
   switch (visibilityString) {
   | "draft" => Draft

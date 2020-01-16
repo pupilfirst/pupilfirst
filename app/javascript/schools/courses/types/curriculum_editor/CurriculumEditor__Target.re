@@ -117,6 +117,14 @@ let sort = targets =>
 
 let archive = t => {...t, visibility: Archived};
 
+let archived = t => {
+  switch (t.visibility) {
+  | Archived => true
+  | Live => false
+  | Draft => false
+  };
+};
+
 let removeTarget = (target, targets) =>
   targets |> List.filter(t => t.id != target.id);
 

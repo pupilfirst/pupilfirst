@@ -21,7 +21,7 @@ type t = {
   role,
   evaluationCriteria: array(string),
   prerequisiteTargets: array(string),
-  quiz: array(CurriculumEditor__QuizQuestion.t),
+  quiz: array(TargetDetails__QuizQuestion.t),
   linkToComplete: option(string),
   visibility,
   completionInstructions: option(string),
@@ -51,7 +51,11 @@ let makeFromJs = targetData => {
   role: decodeRole(targetData##role),
   evaluationCriteria: targetData##evaluationCriteria,
   prerequisiteTargets: targetData##prerequisiteTargets,
-  quiz: [||],
+  quiz:
+    targetData##quiz
+    |> Array.map(quizQuestion =>
+         quizQuestion |> TargetDetails__QuizQuestion.makeFromJs
+       ),
   linkToComplete: targetData##linkToComplete,
   completionInstructions: targetData##completionInstructions,
   visibility: decodeVisbility(targetData##visibility),

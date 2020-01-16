@@ -5,6 +5,7 @@ class TargetDetailsResolver < ApplicationQuery
     {
       title: target.title,
       role: target.role,
+      quiz: quiz,
       evaluation_criteria: target.evaluation_criteria.pluck(:id),
       prerequisite_targets: target.prerequisite_targets.pluck(:id),
       completion_instructions: target.completion_instructions,
@@ -19,5 +20,34 @@ class TargetDetailsResolver < ApplicationQuery
 
   def target
     @target = current_school.targets.where(id: target_id).first
+  end
+
+  def quiz
+    if target.quiz.present?
+      target.quiz.quiz_questions.map do |quiz_question|
+        {
+          id: quiz_question.id,
+          question: quiz_question.question,
+          answer_options: answer_options(quiz_question)
+        }
+      end
+    else
+      []
+    end
+  end
+
+  def answer_options(quiz_question)
+    quiz_question.answer_options.map do |answer_option|
+      {
+        id: answer_option.id,
+        answer: answer_option.value,
+        hint: answer_option.hint,
+        correct_answer: correct_answer?(quiz_question, answer_option)
+      }
+    end
+  end
+
+  def correct_answer?(quiz_question, answer_option)
+    quiz_question.correct_answer == answer_option
   end
 end

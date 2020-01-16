@@ -25,7 +25,7 @@ type state = {
   evaluationCriteria: array(string),
   prerequisiteTargets: array(string),
   methodOfCompletion,
-  quiz: array(QuizQuestion.t),
+  quiz: array(TargetDetails__QuizQuestion.t),
   linkToComplete: option(string),
   dirty: bool,
   saving: bool,
@@ -44,6 +44,16 @@ module TargetDetailsQuery = [%graphql
         title
         evaluationCriteria
         prerequisiteTargets
+        quiz {
+          id
+          question
+          answerOptions {
+            id
+            answer
+            hint
+            correctAnswer
+          }
+        }
         completionInstructions
         visibility
         linkToComplete
@@ -79,7 +89,7 @@ let loadTargetDetails = (targetId, send) => {
 };
 
 [@react.component]
-let make = (~targetId, ~eligiblePrerequisites=?, ~evaluationCriteria=?) => {
+let make = (~targetId, ~targets=?, ~targetGroupId=?) => {
   let (state, send) =
     React.useReducer(
       reducer,

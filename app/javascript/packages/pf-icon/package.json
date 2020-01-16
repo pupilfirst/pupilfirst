@@ -25,9 +25,6 @@
     "url": "git+https://github.com/SVdotCO/pupilfirst.git",
     "directory": "app/javascript/packages/pf-icon"
   },
-  "bugs": {
-    "url": "https://github.com/SVdotCO/pupilfirst/issues"
-  },
   "devDependencies": {
     "bs-platform": "7.0.1",
     "parcel-bundler": "^1.12.4",

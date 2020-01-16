@@ -10,7 +10,7 @@ module Identifier = {
     | NameOrEmail;
 };
 
-module ReMultiselect = ReMultiselect.Make(Identifier);
+module MultiselectDropdown = MultiselectDropdown.Make(Identifier);
 
 let updateFilter = (setSearchInput, updateFilterCB, filter) => {
   updateFilterCB(filter);
@@ -18,7 +18,7 @@ let updateFilter = (setSearchInput, updateFilterCB, filter) => {
 };
 
 let makeSelectableLevel = level => {
-  ReMultiselect.Selectable.make(
+  MultiselectDropdown.Selectable.make(
     ~label="Level " ++ (level |> Level.number |> string_of_int),
     ~item=level |> Level.name,
     ~color="orange",
@@ -29,7 +29,7 @@ let makeSelectableLevel = level => {
 };
 
 let makeSelectableTag = tag => {
-  ReMultiselect.Selectable.make(
+  MultiselectDropdown.Selectable.make(
     ~label="Tag",
     ~item=tag,
     ~searchString="tag " ++ tag,
@@ -39,7 +39,7 @@ let makeSelectableTag = tag => {
 };
 
 let makeSelectableSearch = searchInput => {
-  ReMultiselect.Selectable.make(
+  MultiselectDropdown.Selectable.make(
     ~label="Name or Email",
     ~item=searchInput,
     ~color="purple",
@@ -94,14 +94,15 @@ let unselected = (tags, levels, filter, searchInput) => {
 
 let updateSelection = (filter, updateFilterCB, setSearchInput, selectable) => {
   (
-    switch (selectable |> ReMultiselect.Selectable.identifier) {
+    switch (selectable |> MultiselectDropdown.Selectable.identifier) {
     | Level(id) => filter |> Filter.changeLevelId(Some(id))
     | Tag =>
-      filter |> Filter.addTag(selectable |> ReMultiselect.Selectable.item)
+      filter
+      |> Filter.addTag(selectable |> MultiselectDropdown.Selectable.item)
     | NameOrEmail =>
       filter
       |> Filter.changeSearchString(
-           Some(selectable |> ReMultiselect.Selectable.item),
+           Some(selectable |> MultiselectDropdown.Selectable.item),
          )
     }
   )
@@ -110,10 +111,11 @@ let updateSelection = (filter, updateFilterCB, setSearchInput, selectable) => {
 
 let clearSelection = (filter, updateFilterCB, selectable) => {
   let newFilter =
-    switch (selectable |> ReMultiselect.Selectable.identifier) {
+    switch (selectable |> MultiselectDropdown.Selectable.identifier) {
     | Level(_id) => filter |> Filter.removeLevelId
     | Tag =>
-      filter |> Filter.removeTag(selectable |> ReMultiselect.Selectable.item)
+      filter
+      |> Filter.removeTag(selectable |> MultiselectDropdown.Selectable.item)
     | NameOrEmail => filter |> Filter.removeSearchString
     };
 
@@ -131,7 +133,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     <label className="block text-tiny font-semibold" htmlFor=id>
       {"Filter by:" |> str}
     </label>
-    <ReMultiselect
+    <MultiselectDropdown
       unselected={unselected(tags, levels, filter, searchInput)}
       selected={appliedFilters(filter, levels)}
       updateSelectionCB={updateSelection(

@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
-[%bs.raw {|require("./ReMultiselect.css")|}];
+[%bs.raw {|require("./MultiselectDropdown.css")|}];
 
 let str = React.string;
 
@@ -226,7 +226,7 @@ module Make = (Identifier: Identifier) => {
       <div />
       {if (value |> String.trim != "") {
          <div
-           className="ReMultiselect__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
+           className="MultiselectDropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
            {searchResult(
               value,
               unselected,

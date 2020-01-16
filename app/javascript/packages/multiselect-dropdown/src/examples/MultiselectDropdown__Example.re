@@ -11,7 +11,7 @@ module DetailedExample = {
       | Search;
   };
 
-  module Multiselect = ReMultiselect.Make(Identifier);
+  module Multiselect = MultiselectDropdown.Make(Identifier);
 
   type selection = {
     identifier: Identifier.t,
@@ -139,7 +139,7 @@ module DetailedExample = {
       <div className="mt-4">
         <label
           className="block text-xs font-semibold"
-          htmlFor="reMultiselect__search-input">
+          htmlFor="MultiselectDropdown__search-input-detailed-example">
           {"Filter by:" |> str}
         </label>
       </div>
@@ -165,7 +165,7 @@ module MinimalExample = {
   };
 
   // create a Multiselect
-  module Multiselect = ReMultiselect.Make(Identifier);
+  module Multiselect = MultiselectDropdown.Make(Identifier);
 
   type state = {
     selected: array(Multiselect.Selectable.t),
@@ -197,7 +197,7 @@ module MinimalExample = {
       <div className="mt-4">
         <label
           className="block text-xs font-semibold"
-          htmlFor="reMultiselect__search-input">
+          htmlFor="MultiselectDropdown__search-input">
           {"Filter by:" |> str}
         </label>
       </div>

@@ -1,7 +1,7 @@
 {
-  "name": "@pupilfirst/multiselect",
-  "version": "0.1.6",
-  "description": "Tailwind styled Reason React multiselect component",
+  "name": "@pupilfirst/multiselect-dropdown",
+  "version": "0.1.0",
+  "description": "Tailwind styled Reason React multiselect dropdown component",
   "keywords": [
     "Reason",
     "React",
@@ -17,17 +17,14 @@
   ],
   "homepage": "https://github.com/svdotCO/pupilfirst",
   "license": "MIT",
-  "main": "components/ReMultiselect.re",
+  "main": "components/MultiselectDropdown.re",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SVdotCO/pupilfirst.git",
-    "directory": "app/javascript/packages/re-multiselect"
-  },
-  "bugs": {
-    "url": "https://github.com/SVdotCO/pupilfirst/issues"
+    "directory": "app/javascript/packages/multiselect-dropdown"
   },
   "devDependencies": {
     "bs-platform": "7.0.1",

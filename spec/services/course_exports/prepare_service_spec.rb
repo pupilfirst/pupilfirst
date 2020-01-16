@@ -105,6 +105,7 @@ describe CourseExports::PrepareService do
       let(:course_export) { create :course_export, course: course, user: school_admin.user, reviewed_only: true }
 
       before do
+        submit_target target_l1_evaluated, student_1
         course_export.tag_list.add('tag 1')
         course_export.save!
       end
@@ -120,7 +121,7 @@ describe CourseExports::PrepareService do
               ['Completion Method', 'Graded', 'Graded'],
               ['Milestone?', 'Yes', 'Yes'],
               ['Students with submissions', 1, 1],
-              ['Submissions pending review', 0, 1],
+              ['Submissions pending review', 1, 1],
               ['Criterion A (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
               ['Criterion B (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]
             ]
@@ -136,7 +137,7 @@ describe CourseExports::PrepareService do
             title: 'Submissions',
             rows: [
               ['Student Email / Target ID', "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
-              [student_1.email, { 'value' => submission_grading(student_1_reviewed_submission), 'style' => 'passing-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }]
+              [student_1.email, { 'value' => "#{submission_grading(student_1_reviewed_submission)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }]
             ]
           }
         ]

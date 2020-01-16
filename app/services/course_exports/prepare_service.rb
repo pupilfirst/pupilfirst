@@ -105,7 +105,7 @@ module CourseExports
     end
 
     def students_with_submissions(target)
-      target.timeline_events.joins(:founders).where(founders: { id: students.pluck(:id) }).distinct('founders.id').count
+      target.timeline_events.joins(:founders).where(founders: { id: students.pluck(:id) }).distinct('founders.id').count('founders.id')
     end
 
     def submissions_pending_review(target)

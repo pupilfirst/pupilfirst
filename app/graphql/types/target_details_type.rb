@@ -2,6 +2,7 @@ module Types
   class TargetDetailsType < Types::BaseObject
     field :title, String, null: false
     field :role, String, null: false
+    field :target_group_id, ID, null: false
     field :evaluation_criteria, [ID], null: false
     field :prerequisite_targets, [ID], null: false
     field :quiz, [TargetQuizType], null: false

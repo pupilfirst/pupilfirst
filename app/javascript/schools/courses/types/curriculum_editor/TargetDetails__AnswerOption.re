@@ -12,13 +12,6 @@ let answer = t => t.answer;
 
 let correctAnswer = t => t.correctAnswer;
 
-let decode = json =>
-  Json.Decode.{
-    id: json |> field("id", string),
-    answer: json |> field("answer", string),
-    correctAnswer: json |> field("correctAnswer", bool),
-  };
-
 let empty = (id, correctAnswer) => {id, answer: "", correctAnswer};
 
 let updateAnswer = (answer, t) => {...t, answer};

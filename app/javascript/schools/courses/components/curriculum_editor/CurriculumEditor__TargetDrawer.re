@@ -42,7 +42,7 @@ let tab = (page, selectedPage, pathPrefix) => {
 };
 
 [@react.component]
-let make = (~targets, ~course) => {
+let make = (~targets, ~targetGroups, ~evaluationCriteria, ~course) => {
   let url = ReasonReactRouter.useUrl();
 
   switch (url.path) {
@@ -65,7 +65,12 @@ let make = (~targets, ~course) => {
       switch (pageName) {
       | "content" => (<CurriculumEditor__ContentEditor target />, Content)
       | "details" => (
-          <CurriculumEditor__TargetDetailsEditor targetId />,
+          <CurriculumEditor__TargetDetailsEditor
+            targetId
+            targets
+            targetGroups
+            evaluationCriteria
+          />,
           Details,
         )
       | "versions" => (

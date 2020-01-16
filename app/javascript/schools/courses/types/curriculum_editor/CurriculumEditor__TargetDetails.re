@@ -21,6 +21,7 @@ type t = {
   role,
   evaluationCriteria: array(string),
   prerequisiteTargets: array(string),
+  targetGroupId: string,
   quiz: array(TargetDetails__QuizQuestion.t),
   linkToComplete: option(string),
   visibility,
@@ -49,6 +50,7 @@ let decodeRole = roleString =>
 let makeFromJs = targetData => {
   title: targetData##title,
   role: decodeRole(targetData##role),
+  targetGroupId: targetData##targetGroupId,
   evaluationCriteria: targetData##evaluationCriteria,
   prerequisiteTargets: targetData##prerequisiteTargets,
   quiz:

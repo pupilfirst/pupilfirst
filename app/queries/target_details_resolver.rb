@@ -6,6 +6,7 @@ class TargetDetailsResolver < ApplicationQuery
       title: target.title,
       role: target.role,
       quiz: quiz,
+      target_group_id: target.target_group_id,
       evaluation_criteria: target.evaluation_criteria.pluck(:id),
       prerequisite_targets: target.prerequisite_targets.pluck(:id),
       completion_instructions: target.completion_instructions,

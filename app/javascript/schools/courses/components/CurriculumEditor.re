@@ -184,7 +184,12 @@ let make =
         </span>
       </button>
     </div>
-    <CurriculumEditor__TargetDrawer targets course />
+    <CurriculumEditor__TargetDrawer
+      targets
+      targetGroups
+      evaluationCriteria
+      course
+    />
     {switch (state.editorAction) {
      | Hidden => ReasonReact.null
      | ShowTargetEditor(targetGroupId, target) =>

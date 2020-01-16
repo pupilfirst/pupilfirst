@@ -44,7 +44,8 @@ type action =
   | UpdateTitle(string)
   | UpdatePrerequisiteTargets(prerequisiteTarget)
   | UpdateMethodOfCompletion(methodOfCompletion)
-  | UpdateEvaluationCriteria(evaluationCriterion);
+  | UpdateEvaluationCriteria(evaluationCriterion)
+  | UpdateLinkToComplete(string);
 
 module TargetDetailsQuery = [%graphql
   {|
@@ -104,7 +105,7 @@ let reducer = (state, action) =>
       quiz: targetDetails.quiz,
       loading: false,
     };
-  | UpdateTitle(title) => {...state, title}
+  | UpdateTitle(title) => {...state, title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTarget) =>
     let (targetId, _title, selected) = prerequisiteTarget;
     let currentPrerequisiteTargets = state.prerequisiteTargets;
@@ -116,10 +117,12 @@ let reducer = (state, action) =>
             |> Js.Array.concat([|targetId |> string_of_int|])
           : currentPrerequisiteTargets
             |> Js.Array.filter(id => id != (targetId |> string_of_int)),
+      dirty: true,
     };
   | UpdateMethodOfCompletion(methodOfCompletion) => {
       ...state,
       methodOfCompletion,
+      dirty: true,
     }
   | UpdateEvaluationCriteria(evaluationCriterion) =>
     let (evaluationCriterionId, _title, selected) = evaluationCriterion;
@@ -134,7 +137,13 @@ let reducer = (state, action) =>
             |> Js.Array.filter(id =>
                  id != (evaluationCriterionId |> string_of_int)
                ),
+      dirty: true,
     };
+  | UpdateLinkToComplete(linkToComplete) => {
+      ...state,
+      linkToComplete: Some(linkToComplete),
+      dirty: true,
+    }
   };
 
 let loadTargetDetails = (targetId, send) => {
@@ -291,6 +300,41 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
   </div>;
 };
 
+let updateLinkToComplete = (send, event) => {
+  send(UpdateLinkToComplete(ReactEvent.Form.target(event)##value));
+};
+
+let linkEditor = (state, send) => {
+  <div className="mt-5">
+    <label
+      className="inline-block tracking-wide text-sm font-semibold"
+      htmlFor="link_to_complete">
+      {"Link to complete" |> str}
+    </label>
+    <span> {"*" |> str} </span>
+    <input
+      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+      id="link_to_complete"
+      type_="text"
+      placeholder="Paste link to complete"
+      value={
+        switch (state.linkToComplete) {
+        | Some(link) => link
+        | None => ""
+        }
+      }
+      onChange={updateLinkToComplete(send)}
+    />
+    {switch (state.linkToComplete) {
+     | Some(_link) =>
+       <div className="drawer-right-form__error-msg">
+         {"not a valid link" |> str}
+       </div>
+     | None => React.null
+     }}
+  </div>;
+};
+
 [@react.component]
 let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
   let (state, send) =
@@ -390,7 +434,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
               evaluationCriteriaEditor(state, evaluationCriteria, send)
             | MarkAsComplete => React.null
             | TakeQuiz => React.null
-            | VisitLink => React.null
+            | VisitLink => linkEditor(state, send)
             }}
          </div>}
   </div>;

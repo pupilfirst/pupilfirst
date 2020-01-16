@@ -13,10 +13,6 @@
 
 //= require moment
 //= require select2-full
-//= require google_tag_manager
-//= require youtube
-//= require limit_max_int
-//= require inspectlet
 //= require video
 //= require jquery.scrollTo
 //= require jquery-stickit

@@ -9,18 +9,6 @@ Rails.application.config.content_security_policy do |policy|
     Rails.application.config.action_controller.asset_host
   end
 
-  def google_analytics_csp
-    {
-      connect: 'https://www.google-analytics.com'
-    }
-  end
-
-  def inspectlet_csp
-    {
-      connect: %w[https://hn.inspectlet.com wss://ws.inspectlet.com]
-    }
-  end
-
   def facebook_csp
     { frame: 'https://www.facebook.com' }
   end
@@ -62,7 +50,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def connect_sources
-    sources = [*inspectlet_csp[:connect], google_analytics_csp[:connect], rollbar_csp[:connect]]
+    sources = [rollbar_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end

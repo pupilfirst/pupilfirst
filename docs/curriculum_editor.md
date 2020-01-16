@@ -6,7 +6,7 @@ However, your students will always need instruction before they can effectively 
 
 The curriculum editor organizes content into _levels_, which contains many _groups_ of _targets_, each of which can hold the text and other rich media that you want your students to see.
 
-![Curriculum editor in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574237953/pupilfirst_documentation/curriculum_editor/curriculum_editor_page_j13pxw.png)
+![Curriculum editor in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1579025594/pupilfirst_documentation/curriculum_editor/curriculum_editor_page_nx0fbq.png)
 
 ## What are levels?
 
@@ -38,7 +38,7 @@ To create a target, click the _Create a target_ option inside a target group, en
 
 After creating a target, you can click on it in the curriculum to open the target editor. It will open up in the _preview_ mode.
 
-![Target editor, in preview mode](https://res.cloudinary.com/sv-co/image/upload/v1574148290/pupilfirst_documentation/curriculum_editor/target_editor_preview_mode_froofq.png)
+![Target editor, in preview mode](https://res.cloudinary.com/sv-co/image/upload/v1579025835/pupilfirst_documentation/curriculum_editor/target_editor_preview_mode_dnvpxt.png)
 
 To switch to editing the target, switch to the _Edit_ mode. You can now edit and add new blocks of content. You'll notice that you can add different types of these _content blocks_.
 

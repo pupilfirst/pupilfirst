@@ -24,12 +24,21 @@ module Startups
       eligibility == ELIGIBILITY_ELIGIBLE
     end
 
+    def regular_student?
+      return false if @founder.user.school_admin.present?
+
+      coach = @founder.user.faculty
+      return false if coach.present? && @startup.course.in?(coach.reviewable_courses)
+
+      true
+    end
+
     # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def eligibility
       @eligibility ||= begin
         if next_level.blank?
           ELIGIBILITY_NOT_ELIGIBLE
-        elsif next_level_unlock_date&.future?
+        elsif next_level_unlock_date&.future? && regular_student?
           ELIGIBILITY_DATE_LOCKED
         elsif current_level_milestone_targets.any?
           current_level_targets_attempted = current_level_milestone_targets.all? do |target|

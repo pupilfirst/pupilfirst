@@ -155,7 +155,14 @@ let isLevelComplete = (targetStatuses, eligibleStatuses) => {
 };
 
 let computeLevelUp =
-    (levels, teamLevel, targetGroups, targets, statusOfTargets) => {
+    (
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      accessLockedLevels,
+    ) => {
   let lastLevel =
     switch (teamLevel |> Level.number) {
     | 0
@@ -205,7 +212,7 @@ let computeLevelUp =
 
   switch (nextLevel, currentLevelComplete, lastLevelComplete) {
   | (Some(level), true, true) =>
-    level |> Level.isUnlocked ? Notice.LevelUp : Nothing
+    level |> Level.isUnlocked || accessLockedLevels ? Notice.LevelUp : Nothing
   | (None, true, true) => CourseComplete
   | (Some(_), true, false) => LevelUpBlocked(teamLevel |> Level.number)
   | (Some(_) | None, false, false | true)
@@ -223,13 +230,21 @@ let computeNotice =
       course,
       team,
       preview,
+      accessLockedLevels,
     ) =>
   switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
   | (true, _, _) => Notice.Preview
   | (false, true, true | false) => CourseEnded
   | (false, false, true) => AccessEnded
   | (false, false, false) =>
-    computeLevelUp(levels, teamLevel, targetGroups, targets, statusOfTargets)
+    computeLevelUp(
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      accessLockedLevels,
+    )
   };
 
 [@react.component]
@@ -344,6 +359,7 @@ let make =
             course,
             team,
             preview,
+            accessLockedLevels,
           ),
       };
     });
@@ -383,6 +399,7 @@ let make =
                 course,
                 team,
                 preview,
+                accessLockedLevels,
               ),
           }
         );

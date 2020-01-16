@@ -84,18 +84,6 @@ let isValidQuizQuestion = t => {
   validQuestion && hasZeroInvalidAnswerOptions && hasOnlyOneCorrectAnswerOption;
 };
 
-let makeFromJs = quizData => {
-  {
-    id: quizData##id,
-    question: quizData##question,
-    answerOptions:
-      quizData##answerOptions
-      |> List.map(answerOption =>
-           answerOption |> CurriculumEditor__AnswerOption.makeFromJs
-         ),
-  };
-};
-
 let encoder = t =>
   Json.Encode.(
     object_([

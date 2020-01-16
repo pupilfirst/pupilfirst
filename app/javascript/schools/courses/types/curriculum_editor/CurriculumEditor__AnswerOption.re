@@ -30,12 +30,6 @@ let markAsIncorrect = t => {...t, correctAnswer: false};
 let isValidAnswerOption = t =>
   t.answer |> Js.String.trim |> Js.String.length >= 1;
 
-let makeFromJs = answerData => {
-  id: answerData##id,
-  answer: answerData##answer,
-  correctAnswer: answerData##correctAnswer,
-};
-
 let encoder = t =>
   Json.Encode.(
     object_([

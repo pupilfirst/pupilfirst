@@ -46,3 +46,6 @@ examples.txt
 
 # Ignore .graphql_ppx_cache
 .graphql_ppx_cache
+
+# Ignore logs from lerna
+lerna-debug.log

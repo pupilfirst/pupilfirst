@@ -11,7 +11,8 @@ type state = {
 };
 
 type action =
-  | LoadContent(array(ContentBlock.t), array(string));
+  | LoadContent(array(ContentBlock.t), array(string))
+  | AddContentBlock(ContentBlock.t);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -20,11 +21,28 @@ let reducer = (state, action) =>
       contentBlocks,
       versions,
     }
+  | AddContentBlock(newContentBlock) =>
+    let newBlockSortIndex = newContentBlock |> ContentBlock.sortIndex;
+    {
+      ...state,
+      contentBlocks:
+        state.contentBlocks
+        |> Array.map(contentBlock => {
+             let sortIndex = contentBlock |> ContentBlock.sortIndex;
+
+             if (sortIndex < newBlockSortIndex) {
+               contentBlock;
+             } else {
+               contentBlock |> ContentBlock.incrementSortIndex;
+             };
+           })
+        |> Array.append([|newContentBlock|]),
+    };
   };
 
 module ContentQuery = [%graphql
   {|
-    query($targetId: ID!, $versionOn: Date ) {
+    query($targetId: ID!, $versionOn: Date) {
       contentBlocks(targetId: $targetId, versionOn: $versionOn) {
         id
         blockType
@@ -61,23 +79,7 @@ let loadContentBlocks = (targetId, send) => {
   response
   |> Js.Promise.then_(result => {
        let contentBlocks =
-         result##contentBlocks
-         |> Js.Array.map(rawContentBlock => {
-              let id = rawContentBlock##id;
-              let sortIndex = rawContentBlock##sortIndex;
-              let blockType =
-                switch (rawContentBlock##content) {
-                | `MarkdownBlock(content) =>
-                  ContentBlock.Markdown(content##markdown)
-                | `FileBlock(content) =>
-                  File(content##url, content##title, content##filename)
-                | `ImageBlock(content) =>
-                  Image(content##url, content##caption)
-                | `EmbedBlock(content) =>
-                  Embed(content##url, content##embedCode)
-                };
-              ContentBlock.make(id, blockType, sortIndex);
-            });
+         result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
        let versions =
          result##versions
@@ -89,6 +91,9 @@ let loadContentBlocks = (targetId, send) => {
      })
   |> ignore;
 };
+
+let addContentBlock = (send, contentBlock) =>
+  send(AddContentBlock(contentBlock));
 
 let editor = (target, state, send) => {
   let currentVersion =
@@ -132,7 +137,7 @@ let editor = (target, state, send) => {
             <CurriculumEditor__ContentBlockCreator
               target
               aboveContentBlock=contentBlock
-              addContentBlockCB={_contentBlock => ()}
+              addContentBlockCB={addContentBlock(send)}
             />
             <CurriculumEditor__ContentBlockEditor2
               targetId={target |> Target.id}
@@ -146,7 +151,7 @@ let editor = (target, state, send) => {
      |> React.array}
     <CurriculumEditor__ContentBlockCreator
       target
-      addContentBlockCB={_contentBlock => ()}
+      addContentBlockCB={addContentBlock(send)}
     />
   </div>;
 };

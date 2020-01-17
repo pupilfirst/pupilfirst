@@ -5,18 +5,19 @@ module Mutations
 
     description "Deletes a target content block."
 
-    field :success, Boolean, null: false
+    field :content_block, Types::ContentBlockType, null: true
 
     def resolve(params)
       mutator = CreateMarkdownContentBlockMutator.new(context, params)
 
-      if mutator.valid?
+      content_block = if mutator.valid?
         mutator.create_markdown_content_block
-        { success: true }
       else
         mutator.notify_errors
-        { success: false }
+        nil
       end
+
+      { content_block: content_block }
     end
   end
 end

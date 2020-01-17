@@ -10,7 +10,30 @@ module CreateMarkdownCotentBlock = [%graphql
   {|
     mutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
-        success
+        contentBlock {
+          id
+          blockType
+          sortIndex
+          content {
+            ... on ImageBlock {
+              caption
+              url
+              filename
+            }
+            ... on FileBlock {
+              title
+              url
+              filename
+            }
+            ... on MarkdownBlock {
+              markdown
+            }
+            ... on EmbedBlock {
+              url
+              embedCode
+            }
+          }
+        }
       }
     }
   |}
@@ -22,19 +45,26 @@ type blockType =
   | Image
   | Embed;
 
-type state = {visible: bool};
+type state = {
+  visible: bool,
+  saving: bool,
+};
 
 type action =
-  | ToggleVisibility;
+  | ToggleVisibility
+  | ToggleSaving
+  | FinishSaving(bool);
+
+let computeInitialState = isAboveTarget => {
+  {visible: !isAboveTarget, saving: false};
+};
 
 let reducer = (state, action) =>
   switch (action) {
   | ToggleVisibility => {...state, visible: !state.visible}
+  | ToggleSaving => {...state, saving: !state.saving}
+  | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
   };
-
-let computeInitialState = isAboveTarget => {
-  {visible: !isAboveTarget};
-};
 
 let containerClasses = (visible, isAboveTarget) => {
   let classes = "content-block-creator py-3";
@@ -43,13 +73,20 @@ let containerClasses = (visible, isAboveTarget) => {
 
 let createMarkdownContentBlock =
     (target, aboveContentBlock, send, addContentBlockCB) => {
+  send(ToggleSaving);
   let aboveContentBlockId =
     aboveContentBlock |> OptionUtils.map(ContentBlock.id);
   let targetId = target |> Target.id;
   CreateMarkdownCotentBlock.make(~targetId, ~aboveContentBlockId?, ())
   |> GraphqlQuery.sendQuery2
   |> Js.Promise.then_(result => {
-       Js.log("done!");
+       switch (result##createMarkdownContentBlock##contentBlock) {
+       | Some(contentBlock) =>
+         contentBlock |> ContentBlock.makeFromJs |> addContentBlockCB;
+         send(FinishSaving(aboveContentBlock != None));
+       | None => send(ToggleSaving)
+       };
+
        Js.Promise.resolve();
      })
   |> ignore;
@@ -108,30 +145,32 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
       computeInitialState,
     );
 
-  <div className={containerClasses(state.visible, isAboveContentBlock)}>
-    {switch (aboveContentBlock) {
-     | Some(contentBlock) =>
-       <div
-         className="content-block-creator__plus-button-container relative cursor-pointer"
-         onClick={_event => send(ToggleVisibility)}>
+  <DisablingCover disabled={state.saving} message="Creating...">
+    <div className={containerClasses(state.visible, isAboveContentBlock)}>
+      {switch (aboveContentBlock) {
+       | Some(contentBlock) =>
          <div
-           id={"add-block-above-" ++ (contentBlock |> ContentBlock.id)}
-           title="Add block"
-           className="content-block-creator__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
-           <i
-             className="fas fa-plus text-base content-block-creator__plus-button-icon"
-           />
+           className="content-block-creator__plus-button-container relative cursor-pointer"
+           onClick={_event => send(ToggleVisibility)}>
+           <div
+             id={"add-block-above-" ++ (contentBlock |> ContentBlock.id)}
+             title="Add block"
+             className="content-block-creator__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
+             <i
+               className="fas fa-plus text-base content-block-creator__plus-button-icon"
+             />
+           </div>
          </div>
-       </div>
-     | None => <div className="h-10" />
-     }}
-    <div
-      className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
-      {[|Markdown, Image, Embed, File|]
-       |> Array.map(
-            button(target, aboveContentBlock, send, addContentBlockCB),
-          )
-       |> React.array}
+       | None => <div className="h-10" />
+       }}
+      <div
+        className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
+        {[|Markdown, Image, Embed, File|]
+         |> Array.map(
+              button(target, aboveContentBlock, send, addContentBlockCB),
+            )
+         |> React.array}
+      </div>
     </div>
-  </div>;
+  </DisablingCover>;
 };

@@ -73,6 +73,21 @@ let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
+let makeFromJs = js => {
+  let id = js##id;
+  let sortIndex = js##sortIndex;
+  let blockType =
+    switch (js##content) {
+    | `MarkdownBlock(content) => Markdown(content##markdown)
+    | `FileBlock(content) =>
+      File(content##url, content##title, content##filename)
+    | `ImageBlock(content) => Image(content##url, content##caption)
+    | `EmbedBlock(content) => Embed(content##url, content##embedCode)
+    };
+
+  make(id, blockType, sortIndex);
+};
+
 let blockTypeAsString = blockType =>
   switch (blockType) {
   | Markdown(_markdown) => "markdown"
@@ -80,3 +95,5 @@ let blockTypeAsString = blockType =>
   | Image(_url, _caption) => "image"
   | Embed(_url, _embedCode) => "embed"
   };
+
+let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};

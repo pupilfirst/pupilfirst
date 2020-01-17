@@ -88,3 +88,7 @@ let sendQuery = (authenticityToken, ~notify=true, q) =>
          }
        )
   );
+
+let sendQuery2 = (~notify=true, q) => {
+  sendQuery(AuthenticityToken.fromHead(), ~notify, q);
+};

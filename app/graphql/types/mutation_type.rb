@@ -41,5 +41,6 @@ module Types
     field :update_evaluation_criterion, mutation: Mutations::UpdateEvaluationCriterion, null: false
     field :update_school, mutation: Mutations::UpdateSchool, null: false
     field :archive_coach_note, mutation: Mutations::ArchiveCoachNote, null: false
+    field :create_markdown_content_block, mutation: Mutations::CreateMarkdownContentBlock, null: false
   end
 end

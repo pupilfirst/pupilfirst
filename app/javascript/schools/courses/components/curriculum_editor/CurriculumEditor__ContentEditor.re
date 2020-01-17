@@ -128,15 +128,26 @@ let editor = (target, state, send) => {
     </div>
     {sortedContentBlocks
      |> Array.map(contentBlock => {
-          <CurriculumEditor__ContentBlockEditor2
-            key={contentBlock |> ContentBlock.id}
-            targetId={target |> Target.id}
-            contentBlock
-            removeContentBlockCB={_contentBlockId => ()}
-            updateContentBlockCB={_contentBlock => ()}
-          />
+          <div key={contentBlock |> ContentBlock.id}>
+            <CurriculumEditor__ContentBlockCreator
+              target
+              aboveContentBlock=contentBlock
+              addContentBlockCB={_contentBlock => ()}
+            />
+            <CurriculumEditor__ContentBlockEditor2
+              targetId={target |> Target.id}
+              setDirty={(_dirty, _targetId) => ()}
+              contentBlock
+              removeContentBlockCB={_contentBlockId => ()}
+              updateContentBlockCB={_contentBlock => ()}
+            />
+          </div>
         })
      |> React.array}
+    <CurriculumEditor__ContentBlockCreator
+      target
+      addContentBlockCB={_contentBlock => ()}
+    />
   </div>;
 };
 

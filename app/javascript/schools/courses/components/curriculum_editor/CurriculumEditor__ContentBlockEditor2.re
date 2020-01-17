@@ -6,6 +6,12 @@ open CurriculumEditor__Types;
 
 [@react.component]
 let make =
-    (~targetId, ~contentBlock, ~removeContentBlockCB, ~updateContentBlockCB) => {
+    (
+      ~targetId,
+      ~contentBlock,
+      ~setDirty,
+      ~removeContentBlockCB,
+      ~updateContentBlockCB,
+    ) => {
   <div> {"Content Block Editor" |> str} </div>;
 };

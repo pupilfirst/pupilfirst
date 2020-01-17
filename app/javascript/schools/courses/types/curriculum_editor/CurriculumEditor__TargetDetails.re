@@ -10,12 +10,6 @@ type visibility =
   | Live
   | Archived;
 
-type methodOfCompletion =
-  | Evaluated
-  | VisitLink
-  | TakeQuiz
-  | MarkAsComplete;
-
 type t = {
   title: string,
   role,
@@ -38,7 +32,7 @@ let prerequisiteTargets = t => t.prerequisiteTargets;
 
 let evaluationCriteria = t => t.evaluationCriteria;
 
-let decodeVisbility = visibilityString =>
+let decodeVisibility = visibilityString =>
   switch (visibilityString) {
   | "draft" => Draft
   | "live" => Live
@@ -66,5 +60,5 @@ let makeFromJs = targetData => {
        ),
   linkToComplete: targetData##linkToComplete,
   completionInstructions: targetData##completionInstructions,
-  visibility: decodeVisbility(targetData##visibility),
+  visibility: decodeVisibility(targetData##visibility),
 };

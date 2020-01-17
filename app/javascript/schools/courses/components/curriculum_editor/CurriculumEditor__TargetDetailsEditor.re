@@ -20,15 +20,6 @@ type methodOfCompletion =
   | TakeQuiz
   | MarkAsComplete;
 
-type role =
-  | Student
-  | Team;
-
-type visibility =
-  | Draft
-  | Live
-  | Archived;
-
 type evaluationCriterion = (int, string, bool);
 
 type prerequisiteTarget = (int, string, bool);
@@ -56,7 +47,14 @@ type action =
   | UpdateMethodOfCompletion(methodOfCompletion)
   | UpdateEvaluationCriteria(evaluationCriterion)
   | UpdateLinkToComplete(string)
-  | UpdateCompletionInstructions(string);
+  | UpdateCompletionInstructions(string)
+  | UpdateTargetRole(TargetDetails.role)
+  | AddQuizQuestion
+  | UpdateQuizQuestion(
+      TargetDetails__QuizQuestion.id,
+      TargetDetails__QuizQuestion.t,
+    )
+  | RemoveQuizQuestion(TargetDetails__QuizQuestion.id);
 
 module TargetDetailsQuery = [%graphql
   {|
@@ -119,6 +117,9 @@ let reducer = (state, action) =>
   switch (action) {
   | LoadTargetDetails(targetDetails) =>
     let methodOfCompletion = computeMethodOfCompletion(targetDetails);
+    let quiz =
+      targetDetails.quiz |> ArrayUtils.isNotEmpty
+        ? targetDetails.quiz : [|TargetDetails__QuizQuestion.empty("0")|];
     {
       ...state,
       title: targetDetails.title,
@@ -131,7 +132,7 @@ let reducer = (state, action) =>
         | Some(link) => link
         | None => ""
         },
-      quiz: targetDetails.quiz,
+      quiz,
       completionInstructions:
         switch (targetDetails.completionInstructions) {
         | Some(instructions) => instructions
@@ -183,6 +184,30 @@ let reducer = (state, action) =>
       completionInstructions: instruction,
       dirty: true,
     }
+  | UpdateTargetRole(role) => {...state, role, dirty: true}
+  | AddQuizQuestion =>
+    let quiz =
+      Array.append(
+        state.quiz,
+        [|
+          TargetDetails__QuizQuestion.empty(
+            Js.Date.now() |> Js.Float.toString,
+          ),
+        |],
+      );
+    {...state, quiz, dirty: true};
+  | UpdateQuizQuestion(id, quizQuestion) =>
+    let quiz =
+      state.quiz
+      |> Array.map(q =>
+           TargetDetails__QuizQuestion.id(q) == id ? quizQuestion : q
+         );
+    {...state, quiz, dirty: true};
+  | RemoveQuizQuestion(id) =>
+    let quiz =
+      state.quiz
+      |> Js.Array.filter(q => TargetDetails__QuizQuestion.id(q) != id);
+    {...state, quiz, dirty: true};
   };
 
 let updateTitle = (send, event) => {
@@ -274,6 +299,15 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " toggle-button__button--active" : "");
 };
 
+let targetRoleClasses = selected => {
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left "
+  ++ (
+    selected
+      ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
+      : "border-gray-400 hover:bg-gray-200 bg-white"
+  );
+};
+
 let targetEvaluated = methodOfCompletion =>
   switch (methodOfCompletion) {
   | Evaluated => true
@@ -339,6 +373,11 @@ let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
   send(UpdateMethodOfCompletion(methodOfCompletion));
 };
 
+let updateTargetRole = (role, send, event) => {
+  ReactEvent.Mouse.preventDefault(event);
+  send(UpdateTargetRole(role));
+};
+
 let linkEditor = (state, send) => {
   <div className="mt-5">
     <label
@@ -382,7 +421,10 @@ let methodOfCompletionSelector = (state, send) => {
           <button
             onClick={updateMethodOfCompletion(MarkAsComplete, send)}
             className={methodOfCompletionButtonClasses(
-              state.methodOfCompletion == MarkAsComplete,
+              switch (state.methodOfCompletion) {
+              | MarkAsComplete => true
+              | _ => false
+              },
             )}>
             <div className="mb-1">
               <img className="w-12 h-12" src=markIcon />
@@ -394,7 +436,10 @@ let methodOfCompletionSelector = (state, send) => {
           <button
             onClick={updateMethodOfCompletion(VisitLink, send)}
             className={methodOfCompletionButtonClasses(
-              state.methodOfCompletion == VisitLink,
+              switch (state.methodOfCompletion) {
+              | VisitLink => true
+              | _ => false
+              },
             )}>
             <div className="mb-1">
               <img className="w-12 h-12" src=linkIcon />
@@ -406,7 +451,10 @@ let methodOfCompletionSelector = (state, send) => {
           <button
             onClick={updateMethodOfCompletion(TakeQuiz, send)}
             className={methodOfCompletionButtonClasses(
-              state.methodOfCompletion == TakeQuiz,
+              switch (state.methodOfCompletion) {
+              | TakeQuiz => true
+              | _ => false
+              },
             )}>
             <div className="mb-1">
               <img className="w-12 h-12" src=quizIcon />
@@ -416,6 +464,58 @@ let methodOfCompletionSelector = (state, send) => {
         </div>
       </div>
     </div>
+  </div>;
+};
+
+let isValidQuiz = quiz => {
+  quiz
+  |> Js.Array.filter(quizQuestion =>
+       quizQuestion |> TargetDetails__QuizQuestion.isValidQuizQuestion != true
+     )
+  |> Array.length == 0;
+};
+
+let addQuizQuestion = (send, event) => {
+  ReactEvent.Mouse.preventDefault(event);
+  send(AddQuizQuestion);
+};
+let updateQuizQuestionCB = (send, id, quizQuestion) =>
+  send(UpdateQuizQuestion(id, quizQuestion));
+
+let removeQuizQuestionCB = (send, id) => send(RemoveQuizQuestion(id));
+let questionCanBeRemoved = state => state.quiz |> Array.length > 1;
+
+let quizEditor = (state, send) => {
+  <div>
+    <h3
+      className="block tracking-wide font-semibold mb-2"
+      htmlFor="Quiz question 1">
+      {"Prepare the quiz now." |> str}
+    </h3>
+    {isValidQuiz(state.quiz)
+       ? ReasonReact.null
+       : <School__InputGroupError
+           message="All questions must be filled in, and all questions should have at least two answers."
+           active=true
+         />}
+    {state.quiz
+     |> Array.mapi((index, quizQuestion) =>
+          <CurriculumEditor__TargetQuizQuestion2
+            key={quizQuestion |> TargetDetails__QuizQuestion.id}
+            questionNumber=index
+            quizQuestion
+            updateQuizQuestionCB={updateQuizQuestionCB(send)}
+            removeQuizQuestionCB={removeQuizQuestionCB(send)}
+            questionCanBeRemoved={questionCanBeRemoved(state)}
+          />
+        )
+     |> ReasonReact.array}
+    <a
+      onClick={addQuizQuestion(send)}
+      className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
+      <i className="fas fa-plus-circle text-lg" />
+      <h5 className="font-semibold ml-2"> {"Add another Question" |> str} </h5>
+    </a>
   </div>;
 };
 
@@ -516,9 +616,59 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
             | Evaluated =>
               evaluationCriteriaEditor(state, evaluationCriteria, send)
             | MarkAsComplete => React.null
-            | TakeQuiz => React.null
+            | TakeQuiz => quizEditor(state, send)
             | VisitLink => linkEditor(state, send)
             }}
+           <div className="mt-6">
+             <label
+               className="inline-block tracking-wide text-sm font-semibold"
+               htmlFor="role">
+               {"How should teams tackle this target?" |> str}
+             </label>
+             <HelpIcon
+               className="ml-1"
+               link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
+               {"Should students in a team submit work on a target individually, or together?"
+                |> str}
+             </HelpIcon>
+             <div id="role" className="flex mt-4">
+               <button
+                 onClick={updateTargetRole(TargetDetails.Student, send)}
+                 className={
+                   "mr-4 "
+                   ++ targetRoleClasses(
+                        switch (state.role) {
+                        | TargetDetails.Student => true
+                        | Team => false
+                        },
+                      )
+                 }>
+                 <span className="mr-4">
+                   <Icon className="if i-users-check-light text-3xl" />
+                 </span>
+                 <span className="text-sm">
+                   {"All students must submit individually." |> str}
+                 </span>
+               </button>
+               <button
+                 onClick={updateTargetRole(TargetDetails.Team, send)}
+                 className={targetRoleClasses(
+                   switch (state.role) {
+                   | TargetDetails.Team => true
+                   | Student => false
+                   },
+                 )}>
+                 <span className="mr-4">
+                   <Icon className="if i-user-check-light text-2xl" />
+                 </span>
+                 <span className="text-sm">
+                   {"Only one student in a team" |> str}
+                   <br />
+                   {" needs to submit." |> str}
+                 </span>
+               </button>
+             </div>
+           </div>
            <div className="mt-6">
              <label
                className="tracking-wide text-sm font-semibold"

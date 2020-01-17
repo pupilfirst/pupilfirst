@@ -245,9 +245,9 @@ let teamCard =
   </div>;
 };
 
-let showEmpty = (filter, updateFilterCB) => {
-  filter |> Filter.isEmpty
-    ? <div> {"No students here." |> str} </div>
+let showEmpty = (filter, loading, updateFilterCB) => {
+  loading == Loading.NotLoading && filter |> Filter.isEmpty
+    ? <div className="text-center"> {"No students here." |> str} </div>
     : <div className="flex">
         <div className="w-1/2 px-3">
           <p className="text-xl font-semibold mt-4">
@@ -282,10 +282,11 @@ let showTeams =
       levels,
       filter,
       updateFilterCB,
+      loading,
       teams,
     ) => {
   switch (teams) {
-  | [||] => showEmpty(filter, updateFilterCB)
+  | [||] => showEmpty(filter, loading, updateFilterCB)
   | teams =>
     teams
     |> Array.map(team => {
@@ -354,6 +355,7 @@ let make =
                 levels,
                 filter,
                 updateFilterCB,
+                loading,
               )
          }}
       </div>

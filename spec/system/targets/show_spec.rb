@@ -4,10 +4,10 @@ feature 'Target Overlay', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
-  include FounderSpecHelper
 
   let(:course) { create :course }
-  let!(:criterion_1) { create :evaluation_criterion, course: course }
+  let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+  let!(:criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
   let!(:criterion_2) { create :evaluation_criterion, course: course }
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
@@ -51,7 +51,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_content(target_l1.title)
 
     # Click on the target.
-    find("div[aria-label='Select Target #{target_l1.id}'").click
+    click_link target_l1.title
 
     # The overlay should now be visible.
     expect(page).to have_selector('.course-overlay__body-tab-item')
@@ -156,12 +156,12 @@ feature 'Target Overlay', js: true do
     # The status should also be updated on the home page.
     click_button 'Close'
 
-    within("div[aria-label='Select Target #{target_l1.id}'") do
+    within("a[aria-label='Select Target #{target_l1.id}'") do
       expect(page).to have_content('Submitted')
     end
 
     # Return to the submissions & feedback tab on the target overlay.
-    find("div[aria-label='Select Target #{target_l1.id}'").click
+    click_link target_l1.title
     find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
     # The submission contents should be on the page.
@@ -318,7 +318,7 @@ feature 'Target Overlay', js: true do
       create(:timeline_event_grade, timeline_event: submission_1, evaluation_criterion: criterion_2, grade: 1) # Failed criterion
 
       # Second submissions should have passed on both criteria.
-      create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_1, grade: 3)
+      create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_1, grade: 4)
       create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_2, grade: 2)
     end
 
@@ -350,8 +350,11 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content(submission_2.description)
         expect(page).to have_link('https://www.example.com/proper_link')
 
-        expect(page).to have_content("#{criterion_1.name}: Great")
+        submission_grades = submission_2.timeline_event_grades
+        expect(page).to have_content("#{criterion_1.name}: Wow")
+        expect(page).to have_text("#{submission_grades.where(evaluation_criterion: criterion_1).first.grade}/#{criterion_1.max_grade}")
         expect(page).to have_content("#{criterion_2.name}: Good")
+        expect(page).to have_text("#{submission_grades.where(evaluation_criterion: criterion_2).first.grade}/#{criterion_2.max_grade}")
 
         expect(page).to have_content(coach_3.name)
         expect(page).to have_content(coach_3.title)

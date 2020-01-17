@@ -48,9 +48,11 @@ module Courses
 
     def create_evaluation_criterion(name)
       EvaluationCriterion.create!(
-        description: name,
         name: name,
-        course: @course
+        course: @course,
+        max_grade: 3,
+        pass_grade: 2,
+        grade_labels: [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }]
       )
     end
   end

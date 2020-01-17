@@ -2,10 +2,7 @@ module Mutations
   class CreateCourse < GraphQL::Schema::Mutation
     argument :name, String, required: true
     argument :description, String, required: true
-    argument :max_grade, Integer, required: true
-    argument :pass_grade, Integer, required: true
     argument :ends_at, Types::DateType, required: false
-    argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
     argument :featured, Boolean, required: true

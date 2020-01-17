@@ -44,12 +44,15 @@ module Courses
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,
-        targets: targets
+        targets: targets,
+        access_locked_levels: access_locked_levels
       }
     end
 
     def evaluation_criteria
-      @course.evaluation_criteria.as_json(only: %i[id name])
+      @course.evaluation_criteria.map do |ec|
+        ec.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'grade_labels')
+      end
     end
 
     def team_details_for_preview_mode
@@ -65,10 +68,7 @@ module Courses
     end
 
     def course_details
-      details = @course.attributes.slice('id', 'ends_at')
-
-      details['grade_labels'] = @course.grade_labels_to_props
-      details
+      @course.attributes.slice('id', 'ends_at')
     end
 
     def levels
@@ -139,8 +139,23 @@ module Courses
       @current_student ||= @course.founders.not_dropped_out.find_by(user_id: current_user.id)
     end
 
+    # Admins and coaches who have review access in this course have access to locked levels as well.
+    def access_locked_levels
+      @access_locked_levels ||= begin
+        current_school_admin.present? || (current_user.faculty.present? && CoursePolicy.new(pundit_user, @course).review?)
+      end
+    end
+
     def open_level_ids
-      @open_level_ids ||= @course.levels.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Date.today)).pluck(:id)
+      @open_level_ids ||= begin
+        scope = @course.levels
+
+        if access_locked_levels
+          scope
+        else
+          scope.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Date.today))
+        end.pluck(:id)
+      end
     end
   end
 end

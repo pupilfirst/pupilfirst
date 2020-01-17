@@ -251,7 +251,8 @@ let updateSearchInputString = (setState, event) => {
   setState(state => {...state, searchInputString});
 };
 
-let openOverlayCB = studentId => {
+let openOverlayCB = (studentId, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
   ReasonReactRouter.push("/students/" ++ studentId ++ "/report");
 };
 

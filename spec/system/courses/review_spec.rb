@@ -68,17 +68,19 @@ feature 'Course review' do
       # All pending submissions should be listed (excluding the auto-verified one)
       expect(page).not_to have_text(auto_verify_target.title)
 
-      within("div[aria-label='pending-submission-card-#{submission_l1_t1.id}']") do
+      within("a[aria-label='pending-submission-card-#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l1.founders.first.user.name)
       end
-      within("div[aria-label='pending-submission-card-#{submission_l2_t2.id}']") do
+
+      within("a[aria-label='pending-submission-card-#{submission_l2_t2.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l2.founders.first.user.name)
       end
-      within("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+
+      within("a[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text("Level 3")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -87,13 +89,14 @@ feature 'Course review' do
       # The 'reviewed' tab should show reviewed submissions
       click_button 'Reviewed'
 
-      within("div[aria-label='reviewed-submission-card-#{submission_l1_t3.id}']") do
+      within("a[aria-label='reviewed-submission-card-#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l3.founders.first.user.name)
         expect(page).to have_text("Passed")
       end
-      within("div[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
+
+      within("a[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -172,7 +175,7 @@ feature 'Course review' do
         expect(page).to have_content('1')
       end
 
-      within("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+      within("a[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text("Level 3")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -185,12 +188,13 @@ feature 'Course review' do
       # The 'reviewed' tab should show reviewed submissions
       click_button 'Reviewed'
 
-      within("div[aria-label='reviewed-submission-card-#{submission_l1_t3.id}']") do
+      within("a[aria-label='reviewed-submission-card-#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
-      within("div[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
+
+      within("a[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -200,10 +204,12 @@ feature 'Course review' do
     scenario 'coach can access submissions from review dashboard', js: true do
       sign_in_user coach.user, referer: review_course_path(course)
 
-      within("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+      within("a[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
       end
-      find("div[aria-label='pending-submission-card-#{submission_l3_t3.id}']").click
+
+      click_link submission_l3_t3.title
+
       # submissions overlay should be visible
       expect(page).to have_text('Submission #1')
     end

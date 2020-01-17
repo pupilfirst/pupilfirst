@@ -32,7 +32,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def evaluation_criteria_fields
-    %w[name id]
+    %w[name id max_grade pass_grade grade_labels]
   end
 
   def evaluation_criteria

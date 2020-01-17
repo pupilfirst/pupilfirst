@@ -15,8 +15,10 @@ type state = {
   notice: Notice.t,
 };
 
-let selectTarget = target =>
+let selectTarget = (target, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
   ReasonReactRouter.push("/targets/" ++ (target |> Target.id));
+};
 
 let targetStatusClasses = targetStatus => {
   let statusClasses =
@@ -34,18 +36,19 @@ let rendertarget = (target, statusOfTargets) => {
          "Could not find targetStatus for listed target with ID " ++ targetId,
        );
 
-  <div
+  <a
+    href={"/targets/" ++ targetId}
     key={"target-" ++ targetId}
     className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
     ariaLabel={"Select Target " ++ targetId}
-    onClick={_e => selectTarget(target)}>
+    onClick={selectTarget(target)}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
     <span className={targetStatusClasses(targetStatus)}>
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
-  </div>;
+  </a>;
 };
 
 let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
@@ -152,7 +155,14 @@ let isLevelComplete = (targetStatuses, eligibleStatuses) => {
 };
 
 let computeLevelUp =
-    (levels, teamLevel, targetGroups, targets, statusOfTargets) => {
+    (
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      accessLockedLevels,
+    ) => {
   let lastLevel =
     switch (teamLevel |> Level.number) {
     | 0
@@ -202,7 +212,7 @@ let computeLevelUp =
 
   switch (nextLevel, currentLevelComplete, lastLevelComplete) {
   | (Some(level), true, true) =>
-    level |> Level.isLocked ? Notice.Nothing : LevelUp
+    level |> Level.isUnlocked || accessLockedLevels ? Notice.LevelUp : Nothing
   | (None, true, true) => CourseComplete
   | (Some(_), true, false) => LevelUpBlocked(teamLevel |> Level.number)
   | (Some(_) | None, false, false | true)
@@ -220,13 +230,21 @@ let computeNotice =
       course,
       team,
       preview,
+      accessLockedLevels,
     ) =>
   switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
   | (true, _, _) => Notice.Preview
   | (false, true, true | false) => CourseEnded
   | (false, false, true) => AccessEnded
   | (false, false, false) =>
-    computeLevelUp(levels, teamLevel, targetGroups, targets, statusOfTargets)
+    computeLevelUp(
+      levels,
+      teamLevel,
+      targetGroups,
+      targets,
+      statusOfTargets,
+      accessLockedLevels,
+    )
   };
 
 [@react.component]
@@ -243,6 +261,7 @@ let make =
       ~users,
       ~evaluationCriteria,
       ~preview,
+      ~accessLockedLevels,
     ) => {
   let url = ReasonReactRouter.useUrl();
 
@@ -312,12 +331,13 @@ let make =
 
       {
         selectedLevelId:
-          switch (targetLevelId, levelZero) {
-          | (Some(targetLevelId), Some(levelZero)) =>
+          switch (preview, targetLevelId, levelZero) {
+          | (true, None, None) => levels |> Level.first |> Level.id
+          | (_, Some(targetLevelId), Some(levelZero)) =>
             levelZero |> Level.id == targetLevelId
               ? teamLevelId : targetLevelId
-          | (Some(targetLevelId), None) => targetLevelId
-          | (None, _) => teamLevelId
+          | (_, Some(targetLevelId), None) => targetLevelId
+          | (_, None, _) => teamLevelId
           },
         showLevelZero:
           switch (levelZero, targetLevelId) {
@@ -339,6 +359,7 @@ let make =
             course,
             team,
             preview,
+            accessLockedLevels,
           ),
       };
     });
@@ -378,6 +399,7 @@ let make =
                 course,
                 team,
                 preview,
+                accessLockedLevels,
               ),
           }
         );
@@ -442,9 +464,19 @@ let make =
              levelZero
            />
          </div>
-         {currentLevel |> Level.isLocked
-            ? handleLockedLevel(currentLevel)
-            : targetGroupsInLevel
+         {currentLevel |> Level.isLocked && accessLockedLevels
+            ? <div
+                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
+                {"This level is still locked for students, and will be unlocked on "
+                 |> str}
+                <strong>
+                  {currentLevel |> Level.unlockDateString |> str}
+                </strong>
+                {"." |> str}
+              </div>
+            : React.null}
+         {currentLevel |> Level.isUnlocked || accessLockedLevels
+            ? targetGroupsInLevel
               |> TargetGroup.sort
               |> List.map(targetGroup =>
                    renderTargetGroup(
@@ -454,7 +486,8 @@ let make =
                    )
                  )
               |> Array.of_list
-              |> React.array}
+              |> React.array
+            : handleLockedLevel(currentLevel)}
        </div>
      }}
   </div>;

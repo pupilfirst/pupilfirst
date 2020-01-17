@@ -15,12 +15,6 @@ feature 'Courses Index', js: true do
   let(:course_name) { Faker::Lorem.words(2).join ' ' }
   let(:description) { Faker::Lorem.sentences.join ' ' }
 
-  let(:grade_label_1) { Faker::Lorem.words(2).join ' ' }
-  let(:grade_label_2) { Faker::Lorem.words(2).join ' ' }
-  let(:grade_label_3) { Faker::Lorem.words(2).join ' ' }
-  let(:grade_label_4) { Faker::Lorem.words(2).join ' ' }
-  let(:grade_label_5) { Faker::Lorem.words(2).join ' ' }
-
   def file_path(filename)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
@@ -43,15 +37,6 @@ feature 'Courses Index', js: true do
       click_button 'No'
     end
 
-    fill_in 'label1', with: grade_label_1
-    find('label[for=label2]').click
-    fill_in 'label2', with: grade_label_2
-    find('label[for=label3]').click
-    fill_in 'label3', with: grade_label_3
-    find('label[for=label4]').click
-    fill_in 'label4', with: grade_label_4
-    find('label[for=label5]').click
-    fill_in 'label5', with: grade_label_5
     click_button 'Create Course'
 
     expect(page).to have_text("Course created successfully")
@@ -66,13 +51,6 @@ feature 'Courses Index', js: true do
     expect(course.about).to eq(nil)
     expect(course.enable_leaderboard).to eq(false)
     expect(course.public_signup).to eq(false)
-    expect(course.max_grade).to eq(5)
-    expect(course.pass_grade).to eq(2)
-    expect(course.grade_labels["1"]).to eq(grade_label_1)
-    expect(course.grade_labels["2"]).to eq(grade_label_2)
-    expect(course.grade_labels["3"]).to eq(grade_label_3)
-    expect(course.grade_labels["4"]).to eq(grade_label_4)
-    expect(course.grade_labels["5"]).to eq(grade_label_5)
   end
 
   context 'when a course exists' do

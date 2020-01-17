@@ -80,7 +80,7 @@ module CourseExports
 
     def evaluation_criteria_names
       @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).order(:name).map do |ec|
-        ec.name + " (Average Grade)"
+        ec.display_name + " - Average"
       end
     end
 
@@ -105,11 +105,11 @@ module CourseExports
     end
 
     def students_with_submissions(target)
-      target.timeline_events.joins(:founders).distinct('founders.id').count('founders.id')
+      target.timeline_events.joins(:founders).where(founders: { id: students.pluck(:id) }).distinct('founders.id').count('founders.id')
     end
 
     def submissions_pending_review(target)
-      target.timeline_events.pending_review.distinct.count
+      target.timeline_events.pending_review.joins(:founders).where(founders: { id: students.pluck(:id) }).distinct('timeline_events.id').count
     end
 
     def student_rows

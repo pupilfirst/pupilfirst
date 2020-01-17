@@ -41,6 +41,7 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:level_5_target_1) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
   let!(:level_5_target_2) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
   let!(:level_6_target) { create :target, target_group: target_group_l6, role: Target::ROLE_TEAM }
+  let!(:level_6_draft_target) { create :target, :draft, target_group: target_group_l6, role: Target::ROLE_TEAM }
 
   # Submissions
   let!(:submission_completed_target_l1) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l1, passed_at: 1.day.ago) }
@@ -101,27 +102,27 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(pending_target_g2.title)
 
     # All targets should have the right status written next to their titles.
-    within("div[aria-label='Select Target #{completed_target_l4.id}']") do
+    within("a[aria-label='Select Target #{completed_target_l4.id}']") do
       expect(page).to have_content('Passed')
     end
 
-    within("div[aria-label='Select Target #{pending_target_g1.id}']") do
+    within("a[aria-label='Select Target #{pending_target_g1.id}']") do
       expect(page).to have_content('Pending')
     end
 
-    within("div[aria-label='Select Target #{submitted_target.id}']") do
+    within("a[aria-label='Select Target #{submitted_target.id}']") do
       expect(page).to have_content('Submitted')
     end
 
-    within("div[aria-label='Select Target #{failed_target.id}']") do
+    within("a[aria-label='Select Target #{failed_target.id}']") do
       expect(page).to have_content('Failed')
     end
 
-    within("div[aria-label='Select Target #{target_with_prerequisites.id}']") do
+    within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
       expect(page).to have_content('Locked')
     end
 
-    within("div[aria-label='Select Target #{pending_target_g2.id}']") do
+    within("a[aria-label='Select Target #{pending_target_g2.id}']") do
       expect(page).to have_content('Pending')
     end
 
@@ -150,7 +151,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(target_group_l2.description)
     expect(page).to have_content(completed_target_l2.title)
 
-    within("div[aria-label='Select Target #{completed_target_l2.id}']") do
+    within("a[aria-label='Select Target #{completed_target_l2.id}']") do
       expect(page).to have_content('Passed')
     end
 
@@ -158,16 +159,19 @@ feature "Student's view of Course Curriculum", js: true do
     # TODO: Implement this.
     # expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')
 
-    # Visit the read-only level 5 and ensure that content is in 'preview mode'.
+    # Visit the read-only level 5 and ensure that content is in read-only mode.
     select("L5: #{level_5.name}", from: 'selected_level')
     expect(page).to have_content(target_group_l5.name)
     expect(page).to have_content(target_group_l5.description)
     expect(page).to have_content(level_5_target_1.title)
-    find("div[aria-label='Select Target #{level_5_target_1.id}'").click
+
+    click_link level_5_target_1.title
+
     expect(page).to have_content('You must level up to complete this target.')
 
-    # Ensure level 6 is displayed as locked.
+    # Ensure level 6 is displayed as locked. - the content should not be visible.
     select("L6: #{locked_level_6.name}", from: 'selected_level')
+
     expect(page).not_to have_content(target_group_l6.name)
     expect(page).not_to have_content(target_group_l6.description)
     expect(page).not_to have_content(level_6_target.title)
@@ -192,7 +196,7 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(target_group_l0.description)
       expect(page).to have_content(level_0_target.title)
 
-      within("div[aria-label='Select Target #{level_0_target.id}']") do
+      within("a[aria-label='Select Target #{level_0_target.id}']") do
         expect(page).to have_content('Pending')
       end
     end
@@ -266,8 +270,8 @@ feature "Student's view of Course Curriculum", js: true do
       # Course name should be displayed.
       expect(page).to have_content(course.name)
 
-      # The 'Max level' should be selected.
-      expect(page).to have_select("selected_level", selected: "L6: #{locked_level_6.name}")
+      # The first level should be selected.
+      expect(page).to have_select("selected_level", selected: "L1: #{level_1.name}")
 
       level_names = [level_1, level_2, level_3, level_4, level_5, locked_level_6].map do |l|
         "L#{l.number}: #{l.name}"
@@ -276,10 +280,17 @@ feature "Student's view of Course Curriculum", js: true do
       # All levels should be included in the select dropdown.
       expect(page).to have_select("selected_level", options: level_names)
 
-      # Ensure level 6 is displayed as locked.
-      expect(page).not_to have_content(target_group_l6.name)
-      expect(page).not_to have_content(target_group_l6.description)
-      expect(page).not_to have_content(level_6_target.title)
+      select("L6: #{locked_level_6.name}", from: 'selected_level')
+
+      # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for
+      # 'regular' students.
+      expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_on.strftime('%b %-d')}")
+      expect(page).to have_content(target_group_l6.name)
+      expect(page).to have_content(target_group_l6.description)
+      expect(page).to have_content(level_6_target.title)
+
+      # However, Level 6 should not show the draft target.
+      expect(page).not_to have_content(level_6_draft_target.title)
 
       # Visit the level 5 and ensure that content is in 'preview mode'.
       select("L5: #{level_5.name}", from: 'selected_level')
@@ -288,16 +299,42 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(level_5_target_1.title)
 
       # All targets should have the right status written next to their titles.
-      within("div[aria-label='Select Target #{level_5_target_1.id}']") do
+      within("a[aria-label='Select Target #{level_5_target_1.id}']") do
         expect(page).to have_content('Pending')
       end
 
-      within("div[aria-label='Select Target #{level_5_target_2.id}']") do
+      within("a[aria-label='Select Target #{level_5_target_2.id}']") do
         expect(page).to have_content('Pending')
       end
 
-      find("div[aria-label='Select Target #{level_5_target_1.id}'").click
+      click_link level_5_target_1.title
+
       expect(page).to have_content('You are currently looking at a preview of this course.')
+    end
+  end
+
+  context 'when the student is also a coach' do
+    let(:coach) { create :faculty, user: student.user }
+
+    before do
+      # Enroll the student as a coach who can review her own submissions.
+      create :faculty_startup_enrollment, faculty: coach, startup: team
+    end
+
+    scenario 'coach accesses content in locked levels' do
+      sign_in_user student.user, referer: curriculum_course_path(course)
+
+      select("L6: #{locked_level_6.name}", from: 'selected_level')
+
+      # Being a coach, level 6 should be accessible, but there should be a notice saying when the level will open for
+      # 'regular' students.
+      expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_on.strftime('%b %-d')}")
+      expect(page).to have_content(target_group_l6.name)
+      expect(page).to have_content(target_group_l6.description)
+      expect(page).to have_content(level_6_target.title)
+
+      # However, Level 6 should not show the draft target.
+      expect(page).not_to have_content(level_6_draft_target.title)
     end
   end
 end

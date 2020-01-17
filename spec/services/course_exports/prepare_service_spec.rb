@@ -66,14 +66,14 @@ describe CourseExports::PrepareService do
           ['Milestone?', 'No', 'Yes', 'Yes', 'Yes'],
           ['Students with submissions', 1, 2, 2, 1],
           ['Submissions pending review', 0, 0, 0, 1],
-          ['Criterion A (Average Grade)', nil, nil, (evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil],
-          ['Criterion B (Average Grade)', nil, nil, (evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil]
+          ['Criterion A (2,3) - Average', nil, nil, (evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil],
+          ['Criterion B (2,3) - Average', nil, nil, (evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil]
         ]
       },
       {
         title: 'Students',
         rows: [
-          ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (Average Grade)', 'Criterion B (Average Grade)'],
+          ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
           [student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
           [student_2.email, student_2.name, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
         ]
@@ -105,6 +105,7 @@ describe CourseExports::PrepareService do
       let(:course_export) { create :course_export, course: course, user: school_admin.user, reviewed_only: true }
 
       before do
+        submit_target target_l1_evaluated, student_1
         course_export.tag_list.add('tag 1')
         course_export.save!
       end
@@ -119,16 +120,16 @@ describe CourseExports::PrepareService do
               ['Name', target_l1_evaluated.title, target_l2_evaluated.title],
               ['Completion Method', 'Graded', 'Graded'],
               ['Milestone?', 'Yes', 'Yes'],
-              ['Students with submissions', 2, 1],
-              ['Submissions pending review', 0, 1],
-              ['Criterion A (Average Grade)', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
-              ['Criterion B (Average Grade)', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]
+              ['Students with submissions', 1, 1],
+              ['Submissions pending review', 1, 1],
+              ['Criterion A (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
+              ['Criterion B (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]
             ]
           },
           {
             title: 'Students',
             rows: [
-              ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (Average Grade)', 'Criterion B (Average Grade)'],
+              ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
               [student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
             ]
           },
@@ -136,7 +137,7 @@ describe CourseExports::PrepareService do
             title: 'Submissions',
             rows: [
               ['Student Email / Target ID', "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
-              [student_1.email, { 'value' => submission_grading(student_1_reviewed_submission), 'style' => 'passing-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }]
+              [student_1.email, { 'value' => "#{submission_grading(student_1_reviewed_submission)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }]
             ]
           }
         ]

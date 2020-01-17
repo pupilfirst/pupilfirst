@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Courses::CloneService do
-  include FounderSpecHelper
+  include SubmissionsHelper
 
   subject { described_class.new(course) }
 
@@ -45,11 +45,11 @@ describe Courses::CloneService do
   end
 
   before do
-    complete_target(startup_l1.founders.first, target_l1_1_1)
-    complete_target(startup_l2.founders.first, target_l1_1_1)
-    complete_target(startup_l2.founders.first, target_l1_1_2)
-    complete_target(startup_l2.founders.first, target_l1_2)
-    complete_target(startup_l2.founders.first, target_l2_1)
+    complete_target(target_l1_1_1, startup_l1.founders.first)
+    complete_target(target_l1_1_1, startup_l2.founders.first)
+    complete_target(target_l1_1_2, startup_l2.founders.first)
+    complete_target(target_l1_2, startup_l2.founders.first)
+    complete_target(target_l2_1, startup_l2.founders.first)
 
     # Set correct answers for all quiz questions.
     quiz_question_1.update!(correct_answer: q1_answer_2)
@@ -98,7 +98,7 @@ describe Courses::CloneService do
 
       evaluated_targets = new_course.targets.joins(:target_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
-      expect(evaluated_targets.first.evaluation_criteria.pluck(:description, :name)).to eq([[ec_1.description, ec_1.name]])
+      expect(evaluated_targets.first.evaluation_criteria.pluck(:name, :max_grade, :pass_grade, :grade_labels)).to eq([[ec_1.name, ec_1.max_grade, ec_1.pass_grade, ec_1.grade_labels]])
 
       # content block should have been cloned
       expect(new_course.content_blocks.count).to eq(original_content_blocks_count)

@@ -37,6 +37,8 @@ module Types
     field :delete_school_admin, mutation: Mutations::DeleteSchoolAdmin, null: false
     field :create_coach_note, mutation: Mutations::CreateCoachNote, null: false
     field :dropout_student, mutation: Mutations::DropoutStudent, null: false
+    field :create_evaluation_criterion, mutation: Mutations::CreateEvaluationCriterion, null: false
+    field :update_evaluation_criterion, mutation: Mutations::UpdateEvaluationCriterion, null: false
     field :update_school, mutation: Mutations::UpdateSchool, null: false
     field :archive_coach_note, mutation: Mutations::ArchiveCoachNote, null: false
   end

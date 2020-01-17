@@ -1,0 +1,17 @@
+.grade-bar__pointer-legend {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.grade-bar__pointer-legend-failed {
+  border: 1px solid #f56565;
+  background-color: #feb2b2;
+}
+
+.grade-bar__pointer-legend-passed {
+  border: 1px solid #48bb78;
+  background-color: #9ae6b4;
+}

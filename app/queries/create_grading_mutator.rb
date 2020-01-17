@@ -98,18 +98,22 @@ class CreateGradingMutator < ApplicationQuery
   end
 
   def all_grades_valid?
-    grade_hash.values.all? { |grade| grade.in?(1..max_grade) }
+    grade_hash.all? { |ec_id, grade| grade.in?(1..max_grades[ec_id]) }
   end
 
-  def max_grade
-    @max_grade ||= @course.max_grade
+  def max_grades
+    @max_grades ||= grade_hash.keys.each_with_object({}) do |ec_id, max_grades_hash|
+      max_grades_hash[ec_id] = evaluation_criteria.find(ec_id).max_grade
+    end
   end
 
-  def pass_grade
-    @pass_grade ||= @course.pass_grade
+  def pass_grades
+    @pass_grades ||= grade_hash.keys.each_with_object({}) do |ec_id, pass_grades_hash|
+      pass_grades_hash[ec_id] = evaluation_criteria.find(ec_id).pass_grade
+    end
   end
 
   def failed?
-    grade_hash.values.any? { |grade| grade < pass_grade }
+    grade_hash.any? { |ec_id, grade| grade < pass_grades[ec_id] }
   end
 end

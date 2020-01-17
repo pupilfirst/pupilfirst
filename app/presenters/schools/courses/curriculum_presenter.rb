@@ -30,7 +30,7 @@ module Schools
         @course.evaluation_criteria.map do |criteria|
           {
             id: criteria.id,
-            name: criteria.name
+            name: criteria.display_name
           }
         end
       end

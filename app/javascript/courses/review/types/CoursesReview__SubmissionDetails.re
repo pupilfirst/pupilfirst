@@ -52,7 +52,18 @@ let decodeJS = details =>
     ~evaluationCriteria=
       details##evaluationCriteria
       |> Js.Array.map(ec =>
-           EvaluationCriterion.make(~id=ec##id, ~name=ec##name)
+           EvaluationCriterion.make(
+             ~id=ec##id,
+             ~name=ec##name,
+             ~maxGrade=ec##maxGrade,
+             ~passGrade=ec##passGrade,
+             ~gradesAndLabels={
+               ec##gradeLabels
+               |> Array.map(gradeAndLabel =>
+                    GradeLabel.makeFromJs(gradeAndLabel)
+                  );
+             },
+           )
          ),
     ~reviewChecklist=
       details##reviewChecklist |> CoursesReview__ReviewChecklistItem.makeFromJs,

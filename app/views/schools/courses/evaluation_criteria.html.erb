@@ -1,0 +1,13 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | Evaluation Criteria</title>
+  <%= stylesheet_pack_tag 'SchoolsCoursesEvaluationCriteriaPack', media: 'all' %>
+<% end %>
+
+<%= content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolsCoursesEvaluationCriteriaPack', nonce: true %>
+<% end %>
+
+<% presenter = Schools::Courses::EvaluationCriteriaPresenter.new(self, @course) %>
+
+<script id="schools-courses-evaluation-criteria__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+<div id="schools-courses-evaluation-criteria__root" class="flex flex-1 h-screen bg-gray-100"></div>

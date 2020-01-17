@@ -39,7 +39,7 @@ feature "Student levelling up", js: true do
     expect(page).not_to have_button('Level Up')
 
     # Let's submit work on the target in L1.
-    find("div[aria-label='Select Target #{target_l1.id}'").click
+    click_link target_l1.title
     find('.course-overlay__body-tab-item', text: 'Complete').click
 
     expect(page).to have_text(target_l1.completion_instructions)
@@ -66,7 +66,7 @@ feature "Student levelling up", js: true do
 
     click_button('Level Up')
 
-    expect(page).to have_text(target_l2.title)
+    expect(page).to have_link(target_l2.title)
     expect(team.reload.level).to eq(level_2)
   end
 
@@ -102,6 +102,49 @@ feature "Student levelling up", js: true do
         sign_in_user student.user, referer: curriculum_course_path(course)
 
         expect(page).to have_button('Level Up')
+      end
+    end
+  end
+
+  context 'when a student is in level 1 and has completed all milestone targets there, but level 2 is locked' do
+    let(:level_2) { create :level, :two, course: course, unlock_on: 1.week.from_now }
+
+    before do
+      complete_target target_l1, student
+    end
+
+    scenario 'regular student cannot level up' do
+      sign_in_user student.user, referer: curriculum_course_path(course)
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).not_to have_button('Level Up')
+    end
+
+    context 'when the user is a school admin' do
+      before do
+        create :school_admin, user: student.user, school: student.school
+      end
+
+      scenario 'school admin levels up to locked level' do
+        sign_in_user student.user, referer: curriculum_course_path(course)
+        click_button('Level Up')
+
+        expect(page).to have_link(target_l2.title)
+      end
+    end
+
+    context 'when the user is a coach in the course' do
+      let(:coach) { create :faculty, user: student.user }
+
+      before do
+        create :faculty_startup_enrollment, faculty: coach, startup: team
+      end
+
+      scenario 'coach levels up to locked level' do
+        sign_in_user student.user, referer: curriculum_course_path(course)
+        click_button('Level Up')
+
+        expect(page).to have_link(target_l2.title)
       end
     end
   end

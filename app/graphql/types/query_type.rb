@@ -42,6 +42,10 @@ module Types
       argument :sort_by, String, required: true
     end
 
+    field :evaluation_criteria, [Types::EvaluationCriterionType], null: false do
+      argument :course_id, ID, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -85,6 +89,11 @@ module Types
     def course_teams(args)
       resolver = CourseTeamsResolver.new(context, args)
       resolver.course_teams
+    end
+
+    def evaluation_criteria(args)
+      resolver = EvaluationCriteriaResolver.new(context, args)
+      resolver.evaluation_criteria
     end
   end
 end

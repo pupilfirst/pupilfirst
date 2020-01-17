@@ -189,7 +189,6 @@ let make =
     | ["school", "customize"] => (Settings(Customization), true)
     | ["school", "courses"] => (Courses, false)
     | ["school", "courses", courseId, "students"]
-    | ["school", "courses", courseId, "students_v2"]
     | ["school", "courses", courseId, "inactive_students"] => (
         SelectedCourse(courseId, Students),
         true,

@@ -86,17 +86,20 @@ See this code, and a more advanced version, in action here: https://re-multisele
 
 The `MultiselectDropdown` component accepts the following props:
 
-| Prop          | Type                                       | Description                                                                            |
-| ------------- | ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `id`          | `string` (optional)                        | `id` of the input element; you can use this to label the input.                        |
-| `placeholder` | `string` (optional)                        | Placeholder for the input element.                                                     |
-| `value`       | `string`                                   | Value of input element; this is a controlled component - you hold the state.           |
-| `onChange`    | `string => unit`                           | `onChange` for the input element.                                                      |
-| `unselected`  | `array(MultiselectDropdown.Selectable.t)`  | The array of unselected options.                                                       |
-| `selected`    | `array(MultiselectDropdown.Selectable.t)`  | The array of selected options.                                                         |
-| `selectCB`    | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is selected.                                                 |
-| `deselectCB`  | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is removed.                                                  |
-| `labelSuffix` | `string` (optional)                        | This is the separator between the _selectable's_ `label` and `title`. Defaults to `:`. |
+| Prop           | Type                                       | Description                                                                            |
+| -------------- | ------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `id`           | `string` (optional)                        | `id` of the input element; you can use this to label the input.                        |
+| `placeholder`  | `string` (optional)                        | Placeholder for the input element.                                                     |
+| `value`        | `string`                                   | Value of input element; this is a controlled component - you hold the state.           |
+| `onChange`     | `string => unit`                           | `onChange` for the input element.                                                      |
+| `unselected`   | `array(MultiselectDropdown.Selectable.t)`  | The array of unselected options.                                                       |
+| `selected`     | `array(MultiselectDropdown.Selectable.t)`  | The array of selected options.                                                         |
+| `selectCB`     | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is selected.                                                 |
+| `deselectCB`   | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is removed.                                                  |
+| `labelSuffix`  | `string` (optional)                        | This is the separator between the _selectable's_ `label` and `title`. Defaults to `:`. |
+| `emptyMessage` | `string` (optional)                        | Empty message shown when the search result is empty. Defaults to `No results found`.   |
+
+emptyMessage
 
 ### `MultiselectDropdown.Selectable` type
 

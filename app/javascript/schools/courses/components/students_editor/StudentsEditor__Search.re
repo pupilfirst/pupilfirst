@@ -20,7 +20,7 @@ let updateFilter = (setSearchInput, updateFilterCB, filter) => {
 let makeSelectableLevel = level => {
   MultiselectDropdown.Selectable.make(
     ~label="Level " ++ (level |> Level.number |> string_of_int),
-    ~item=level |> Level.name,
+    ~value=level |> Level.name,
     ~color="orange",
     ~searchString=level |> Level.title,
     ~identifier=Level(level |> Level.id),
@@ -31,7 +31,7 @@ let makeSelectableLevel = level => {
 let makeSelectableTag = tag => {
   MultiselectDropdown.Selectable.make(
     ~label="Tag",
-    ~item=tag,
+    ~value=tag,
     ~searchString="tag " ++ tag,
     ~identifier=Tag,
     (),
@@ -41,7 +41,7 @@ let makeSelectableTag = tag => {
 let makeSelectableSearch = searchInput => {
   MultiselectDropdown.Selectable.make(
     ~label="Name or Email",
-    ~item=searchInput,
+    ~value=searchInput,
     ~color="purple",
     ~searchString=searchInput,
     ~identifier=NameOrEmail,
@@ -92,30 +92,30 @@ let unselected = (tags, levels, filter, searchInput) => {
   |> Array.append(levelSuggestions);
 };
 
-let updateSelection = (filter, updateFilterCB, setSearchInput, selectable) => {
+let select = (filter, updateFilterCB, setSearchInput, selectable) => {
   (
     switch (selectable |> MultiselectDropdown.Selectable.identifier) {
     | Level(id) => filter |> Filter.changeLevelId(Some(id))
     | Tag =>
       filter
-      |> Filter.addTag(selectable |> MultiselectDropdown.Selectable.item)
+      |> Filter.addTag(selectable |> MultiselectDropdown.Selectable.value)
     | NameOrEmail =>
       filter
       |> Filter.changeSearchString(
-           Some(selectable |> MultiselectDropdown.Selectable.item),
+           Some(selectable |> MultiselectDropdown.Selectable.value),
          )
     }
   )
   |> updateFilter(setSearchInput, updateFilterCB);
 };
 
-let clearSelection = (filter, updateFilterCB, selectable) => {
+let deselect = (filter, updateFilterCB, selectable) => {
   let newFilter =
     switch (selectable |> MultiselectDropdown.Selectable.identifier) {
     | Level(_id) => filter |> Filter.removeLevelId
     | Tag =>
       filter
-      |> Filter.removeTag(selectable |> MultiselectDropdown.Selectable.item)
+      |> Filter.removeTag(selectable |> MultiselectDropdown.Selectable.value)
     | NameOrEmail => filter |> Filter.removeSearchString
     };
 
@@ -136,12 +136,8 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     <MultiselectDropdown
       unselected={unselected(tags, levels, filter, searchInput)}
       selected={appliedFilters(filter, levels)}
-      updateSelectionCB={updateSelection(
-        filter,
-        updateFilterCB,
-        setSearchInput,
-      )}
-      clearSelectionCB={clearSelection(filter, updateFilterCB)}
+      selectCB={select(filter, updateFilterCB, setSearchInput)}
+      deselectCB={deselect(filter, updateFilterCB)}
       value=searchInput
       onChange={updateSearchInput(setSearchInput)}
       id

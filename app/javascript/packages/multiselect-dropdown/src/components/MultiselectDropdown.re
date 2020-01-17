@@ -42,16 +42,23 @@ module Make = (Identifier: Identifier) => {
   module Selectable = {
     type t = {
       label: option(string),
-      item: string,
+      value: string,
       color: string,
       searchString: string,
       identifier: Identifier.t,
     };
 
     let make =
-        (~label=?, ~item, ~color="gray", ~searchString=item, ~identifier, ()) => {
+        (
+          ~label=?,
+          ~value,
+          ~color="gray",
+          ~searchString=value,
+          ~identifier,
+          (),
+        ) => {
       label,
-      item,
+      value,
       color,
       searchString,
       identifier,
@@ -59,7 +66,7 @@ module Make = (Identifier: Identifier) => {
 
     let label = t => t.label;
 
-    let item = t => t.item;
+    let value = t => t.value;
 
     let color = t => t.color;
 
@@ -74,14 +81,14 @@ module Make = (Identifier: Identifier) => {
            |> String.lowercase_ascii
            |> Js.String.includes(searchString |> String.lowercase_ascii)
          )
-      |> copyAndSort((x, y) => String.compare(x.item, y.item));
+      |> copyAndSort((x, y) => String.compare(x.value, y.value));
   };
 
   let selectionTitle = selection => {
-    let item = selection |> Selectable.item;
+    let value = selection |> Selectable.value;
     switch (selection |> Selectable.label) {
-    | Some(label) => "Pick " ++ label ++ ": " ++ item
-    | None => "Pick " ++ item
+    | Some(label) => "Pick " ++ label ++ ": " ++ value
+    | None => "Pick " ++ value
     };
   };
 
@@ -101,15 +108,14 @@ module Make = (Identifier: Identifier) => {
     );
   };
 
-  let applyFilter = (selection, updateSelectionCB, id, event) => {
+  let applyFilter = (selection, selectCB, id, event) => {
     event |> ReactEvent.Mouse.preventDefault;
 
-    updateSelectionCB(selection);
+    selectCB(selection);
     DomUtils.focus(id);
   };
 
-  let searchResult =
-      (searchInput, unselected, labelSuffix, id, updateSelectionCB) => {
+  let searchResult = (searchInput, unselected, labelSuffix, id, selectCB) => {
     // Remove all excess space characters from the user input.
     let normalizedString = {
       searchInput
@@ -131,7 +137,7 @@ module Make = (Identifier: Identifier) => {
              key={index |> string_of_int}
              title={selectionTitle(selection)}
              className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
-             onClick={applyFilter(selection, updateSelectionCB, id)}>
+             onClick={applyFilter(selection, selectCB, id)}>
              {switch (selection |> Selectable.label) {
               | Some(label) =>
                 <span className="mr-2 w-1/6 text-right">
@@ -141,39 +147,39 @@ module Make = (Identifier: Identifier) => {
               }}
              <span
                className={tagPillClasses(selection |> Selectable.color, true)}>
-               {selection |> Selectable.item |> str}
+               {selection |> Selectable.value |> str}
              </span>
            </button>
          );
     };
   };
 
-  let removeSelection = (clearSelectionCB, selection, event) => {
+  let removeSelection = (deselectCB, selection, event) => {
     event |> ReactEvent.Mouse.preventDefault;
 
-    clearSelectionCB(selection);
+    deselectCB(selection);
   };
 
-  let showSelected = (clearSelectionCB, labelSuffix, selected) => {
+  let showSelected = (deselectCB, labelSuffix, selected) => {
     selected
     |> Array.mapi((index, selection) => {
-         let item = selection |> Selectable.item;
+         let value = selection |> Selectable.value;
          <div key={index |> string_of_int} className="inline-flex py-1 mr-2">
            <div
              className={tagPillClasses(selection |> Selectable.color, false)}>
              <span className="pl-2 py-px">
                {(
                   switch (selection |> Selectable.label) {
-                  | Some(label) => label ++ labelSuffix ++ item
-                  | None => item
+                  | Some(label) => label ++ labelSuffix ++ value
+                  | None => value
                   }
                 )
                 |> str}
              </span>
              <button
-               title={"Remove selection: " ++ item}
+               title={"Remove selection: " ++ value}
                className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
-               onClick={removeSelection(clearSelectionCB, selection)}>
+               onClick={removeSelection(deselectCB, selection)}>
                <PfIcon className="if i-times-light" />
              </button>
            </div>
@@ -184,15 +190,16 @@ module Make = (Identifier: Identifier) => {
   [@react.component]
   let make =
       (
-        ~unselected,
-        ~selected,
-        ~updateSelectionCB,
-        ~clearSelectionCB,
-        ~value,
-        ~onChange,
-        ~labelSuffix=": ",
         ~id=?,
         ~placeholder="Search",
+        ~onChange,
+        ~value,
+        ~unselected,
+        ~selected,
+        ~selectCB,
+        ~deselectCB,
+        ~labelSuffix=": ",
+        ~emptyMessage="No results found",
       ) => {
     let (inputId, _setId) =
       React.useState(() =>
@@ -205,13 +212,14 @@ module Make = (Identifier: Identifier) => {
           ++ (Js.Math.random_int(100000, 999999) |> string_of_int)
         }
       );
+
+    let results =
+      searchResult(value, unselected, labelSuffix, inputId, selectCB);
     <div className="w-full relative">
       <div>
         <div
           className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
-          {selected
-           |> showSelected(clearSelectionCB, labelSuffix)
-           |> React.array}
+          {selected |> showSelected(deselectCB, labelSuffix) |> React.array}
           <input
             autoComplete="off"
             value
@@ -227,14 +235,10 @@ module Make = (Identifier: Identifier) => {
       {if (value |> String.trim != "") {
          <div
            className="MultiselectDropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
-           {searchResult(
-              value,
-              unselected,
-              labelSuffix,
-              inputId,
-              updateSelectionCB,
-            )
-            |> React.array}
+           {switch (results) {
+            | [||] => <div> {emptyMessage |> str} </div>
+            | results => results |> React.array
+            }}
          </div>;
        } else {
          React.null;

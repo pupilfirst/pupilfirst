@@ -15,7 +15,7 @@ module DetailedExample = {
 
   type selection = {
     identifier: Identifier.t,
-    item: string,
+    value: string,
   };
 
   type state = {
@@ -26,7 +26,7 @@ module DetailedExample = {
   let makeSelectableCity = city => {
     Multiselect.Selectable.make(
       ~label="City",
-      ~item=city,
+      ~value=city,
       ~color="orange",
       ~searchString="city " ++ city,
       ~identifier=City,
@@ -37,7 +37,7 @@ module DetailedExample = {
   let makeSelectableState = state => {
     Multiselect.Selectable.make(
       ~label="State",
-      ~item=state,
+      ~value=state,
       ~color="green",
       ~searchString="state " ++ state,
       ~identifier=State,
@@ -48,7 +48,7 @@ module DetailedExample = {
   let makeSelectableCounty = country => {
     Multiselect.Selectable.make(
       ~label="Country",
-      ~item=country,
+      ~value=country,
       ~color="blue",
       ~searchString="Country " ++ country,
       ~identifier=Country,
@@ -59,7 +59,7 @@ module DetailedExample = {
   let makeSelectableSearch = searchInput => {
     Multiselect.Selectable.make(
       ~label="Search",
-      ~item=searchInput,
+      ~value=searchInput,
       ~color="purple",
       ~searchString=searchInput,
       ~identifier=Search,
@@ -71,10 +71,10 @@ module DetailedExample = {
     selected
     |> Array.map(selection => {
          switch (selection.identifier) {
-         | City => makeSelectableCity(selection.item)
-         | State => makeSelectableState(selection.item)
-         | Country => makeSelectableCounty(selection.item)
-         | Search => makeSelectableSearch(selection.item)
+         | City => makeSelectableCity(selection.value)
+         | State => makeSelectableState(selection.value)
+         | Country => makeSelectableCounty(selection.value)
+         | Search => makeSelectableSearch(selection.value)
          }
        });
   };
@@ -101,10 +101,10 @@ module DetailedExample = {
     |> Array.append(countrySuggestions);
   };
 
-  let updateSelection = (setState, selectable) => {
+  let select = (setState, selectable) => {
     let selection = {
       identifier: selectable |> Multiselect.Selectable.identifier,
-      item: selectable |> Multiselect.Selectable.item,
+      value: selectable |> Multiselect.Selectable.value,
     };
 
     setState(s =>
@@ -112,7 +112,7 @@ module DetailedExample = {
     );
   };
 
-  let clearSelection = (selected, setState, selectable) => {
+  let deselect = (selected, setState, selectable) => {
     let newSelected =
       selected
       |> Js.Array.filter(s =>
@@ -120,7 +120,7 @@ module DetailedExample = {
              selectable
              |> Multiselect.Selectable.identifier == s.identifier
              && selectable
-             |> Multiselect.Selectable.item == s.item
+             |> Multiselect.Selectable.value == s.value
            )
          );
     setState(_ => {searchInput: "", selected: newSelected});
@@ -146,8 +146,8 @@ module DetailedExample = {
       <Multiselect
         unselected={unselected(state.searchInput)}
         selected={selected(state.selected)}
-        updateSelectionCB={updateSelection(setState)}
-        clearSelectionCB={clearSelection(state.selected, setState)}
+        selectCB={select(setState)}
+        deselectCB={deselect(state.selected, setState)}
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
         placeholder="Type city, state or country"
@@ -173,17 +173,17 @@ module MinimalExample = {
   };
 
   let unselected = [|
-    Multiselect.Selectable.make(~item="Delhi", ~identifier=City(1), ()),
-    Multiselect.Selectable.make(~item="India", ~identifier=Country(91), ()),
+    Multiselect.Selectable.make(~value="Delhi", ~identifier=City(1), ()),
+    Multiselect.Selectable.make(~value="India", ~identifier=Country(91), ()),
     Multiselect.Selectable.make(
-      ~item="Washington D.C",
+      ~value="Washington D.C",
       ~identifier=City(2),
       (),
     ),
-    Multiselect.Selectable.make(~item="USA", ~identifier=Country(1), ()),
+    Multiselect.Selectable.make(~value="USA", ~identifier=Country(1), ()),
   |];
 
-  let clearSelection = (selected, setState, selectable) => {
+  let deselect = (selected, setState, selectable) => {
     let newSelected = selected |> Js.Array.filter(s => s == selectable);
     setState(_ => {searchString: "", selected: newSelected});
   };
@@ -204,7 +204,7 @@ module MinimalExample = {
       <Multiselect
         unselected
         selected={state.selected}
-        updateSelectionCB={selectable =>
+        selectCB={selectable =>
           setState(s =>
             {
               searchString: "",
@@ -212,7 +212,7 @@ module MinimalExample = {
             }
           )
         }
-        clearSelectionCB={clearSelection(state.selected, setState)}
+        deselectCB={deselect(state.selected, setState)}
         value={state.searchString}
         onChange={searchString => setState(s => {...s, searchString})}
       />

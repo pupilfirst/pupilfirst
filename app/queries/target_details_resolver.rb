@@ -20,7 +20,7 @@ class TargetDetailsResolver < ApplicationQuery
   end
 
   def target
-    @target = current_school.targets.where(id: target_id).first
+    @target ||= current_school.targets.where(id: target_id).includes(quiz: { quiz_questions: %I[answer_options correct_answer] }).first
   end
 
   def quiz

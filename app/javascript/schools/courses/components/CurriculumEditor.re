@@ -185,7 +185,7 @@ let make =
       </button>
     </div>
     <CurriculumEditor__TargetDrawer
-      targets
+      targets={state.targets}
       targetGroups
       evaluationCriteria
       course

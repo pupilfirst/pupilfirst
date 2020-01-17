@@ -2,6 +2,16 @@
 
 open CurriculumEditor__Types;
 
+let markIcon: string = [%raw
+  "require('./images/target-complete-mark-icon.svg')"
+];
+let linkIcon: string = [%raw
+  "require('./images/target-complete-link-icon.svg')"
+];
+let quizIcon: string = [%raw
+  "require('./images/target-complete-quiz-icon.svg')"
+];
+
 let str = React.string;
 
 type methodOfCompletion =
@@ -31,12 +41,12 @@ type state = {
   prerequisiteTargets: array(string),
   methodOfCompletion,
   quiz: array(TargetDetails__QuizQuestion.t),
-  linkToComplete: option(string),
+  linkToComplete: string,
   dirty: bool,
   saving: bool,
   loading: bool,
   visibility: TargetDetails.visibility,
-  completionInstructions: option(string),
+  completionInstructions: string,
 };
 
 type action =
@@ -45,7 +55,8 @@ type action =
   | UpdatePrerequisiteTargets(prerequisiteTarget)
   | UpdateMethodOfCompletion(methodOfCompletion)
   | UpdateEvaluationCriteria(evaluationCriterion)
-  | UpdateLinkToComplete(string);
+  | UpdateLinkToComplete(string)
+  | UpdateCompletionInstructions(string);
 
 module TargetDetailsQuery = [%graphql
   {|
@@ -73,6 +84,19 @@ module TargetDetailsQuery = [%graphql
   }
 |}
 ];
+
+let loadTargetDetails = (targetId, send) => {
+  let response =
+    TargetDetailsQuery.make(~targetId, ())
+    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead(), ~notify=true);
+  response
+  |> Js.Promise.then_(result => {
+       let targetDetails = TargetDetails.makeFromJs(result##targetDetails);
+       send(LoadTargetDetails(targetDetails));
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
 
 let computeMethodOfCompletion = targetDetails => {
   let hasQuiz = targetDetails |> TargetDetails.quiz |> Array.length > 0;
@@ -102,7 +126,17 @@ let reducer = (state, action) =>
       evaluationCriteria: targetDetails.evaluationCriteria,
       prerequisiteTargets: targetDetails.prerequisiteTargets,
       methodOfCompletion,
+      linkToComplete:
+        switch (targetDetails.linkToComplete) {
+        | Some(link) => link
+        | None => ""
+        },
       quiz: targetDetails.quiz,
+      completionInstructions:
+        switch (targetDetails.completionInstructions) {
+        | Some(instructions) => instructions
+        | None => ""
+        },
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
@@ -141,23 +175,15 @@ let reducer = (state, action) =>
     };
   | UpdateLinkToComplete(linkToComplete) => {
       ...state,
-      linkToComplete: Some(linkToComplete),
+      linkToComplete,
+      dirty: true,
+    }
+  | UpdateCompletionInstructions(instruction) => {
+      ...state,
+      completionInstructions: instruction,
       dirty: true,
     }
   };
-
-let loadTargetDetails = (targetId, send) => {
-  let response =
-    TargetDetailsQuery.make(~targetId, ())
-    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead(), ~notify=true);
-  response
-  |> Js.Promise.then_(result => {
-       let targetDetails = TargetDetails.makeFromJs(result##targetDetails);
-       send(LoadTargetDetails(targetDetails));
-       Js.Promise.resolve();
-     })
-  |> ignore;
-};
 
 let updateTitle = (send, event) => {
   let title = ReactEvent.Form.target(event)##value;
@@ -304,6 +330,15 @@ let updateLinkToComplete = (send, event) => {
   send(UpdateLinkToComplete(ReactEvent.Form.target(event)##value));
 };
 
+let updateCompletionInstructions = (send, event) => {
+  send(UpdateCompletionInstructions(ReactEvent.Form.target(event)##value));
+};
+
+let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
+  ReactEvent.Mouse.preventDefault(event);
+  send(UpdateMethodOfCompletion(methodOfCompletion));
+};
+
 let linkEditor = (state, send) => {
   <div className="mt-5">
     <label
@@ -317,21 +352,70 @@ let linkEditor = (state, send) => {
       id="link_to_complete"
       type_="text"
       placeholder="Paste link to complete"
-      value={
-        switch (state.linkToComplete) {
-        | Some(link) => link
-        | None => ""
-        }
-      }
+      value={state.linkToComplete}
       onChange={updateLinkToComplete(send)}
     />
-    {switch (state.linkToComplete) {
-     | Some(_link) =>
-       <div className="drawer-right-form__error-msg">
-         {"not a valid link" |> str}
-       </div>
-     | None => React.null
-     }}
+    {state.linkToComplete |> UrlUtils.isInvalid(false)
+       ? <School__InputGroupError message="Enter a valid link" active=true />
+       : React.null}
+  </div>;
+};
+
+let methodOfCompletionButtonClasses = value => {
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
+  value
+    ? defaultClasses
+      ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
+    : defaultClasses ++ " opacity-75 text-gray-900";
+};
+
+let methodOfCompletionSelector = (state, send) => {
+  <div>
+    <div className="mb-6">
+      <label
+        className="block tracking-wide text-sm font-semibold mr-6 mb-3"
+        htmlFor="method_of_completion">
+        {"How do you want the student to complete the target?" |> str}
+      </label>
+      <div id="method_of_completion" className="flex -mx-2">
+        <div className="w-1/3 px-2">
+          <button
+            onClick={updateMethodOfCompletion(MarkAsComplete, send)}
+            className={methodOfCompletionButtonClasses(
+              state.methodOfCompletion == MarkAsComplete,
+            )}>
+            <div className="mb-1">
+              <img className="w-12 h-12" src=markIcon />
+            </div>
+            {"Simply mark the target as completed." |> str}
+          </button>
+        </div>
+        <div className="w-1/3 px-2">
+          <button
+            onClick={updateMethodOfCompletion(VisitLink, send)}
+            className={methodOfCompletionButtonClasses(
+              state.methodOfCompletion == VisitLink,
+            )}>
+            <div className="mb-1">
+              <img className="w-12 h-12" src=linkIcon />
+            </div>
+            {"Visit a link to complete the target." |> str}
+          </button>
+        </div>
+        <div className="w-1/3 px-2">
+          <button
+            onClick={updateMethodOfCompletion(TakeQuiz, send)}
+            className={methodOfCompletionButtonClasses(
+              state.methodOfCompletion == TakeQuiz,
+            )}>
+            <div className="mb-1">
+              <img className="w-12 h-12" src=quizIcon />
+            </div>
+            {"Take a quiz to complete the target." |> str}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>;
 };
 
@@ -348,18 +432,21 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
         prerequisiteTargets: [||],
         methodOfCompletion: Evaluated,
         quiz: [||],
-        linkToComplete: None,
+        linkToComplete: "",
         dirty: false,
         saving: false,
         loading: true,
         visibility: TargetDetails.Draft,
-        completionInstructions: None,
+        completionInstructions: "",
       },
     );
-  React.useEffect0(() => {
-    loadTargetDetails(targetId, send);
-    None;
-  });
+  React.useEffect1(
+    () => {
+      loadTargetDetails(targetId, send);
+      None;
+    },
+    [|targetId|],
+  );
 
   <div className="max-w-3xl py-6 px-3 mx-auto" id="target-properties">
     {state.loading
@@ -408,20 +495,14 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                id="evaluated"
                className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
                <button
-                 onClick={_event => {
-                   ReactEvent.Mouse.preventDefault(_event);
-                   send(UpdateMethodOfCompletion(Evaluated));
-                 }}
+                 onClick={updateMethodOfCompletion(Evaluated, send)}
                  className={booleanButtonClasses(
                    targetEvaluated(state.methodOfCompletion),
                  )}>
                  {"Yes" |> str}
                </button>
                <button
-                 onClick={_event => {
-                   ReactEvent.Mouse.preventDefault(_event);
-                   send(UpdateMethodOfCompletion(MarkAsComplete));
-                 }}
+                 onClick={updateMethodOfCompletion(MarkAsComplete, send)}
                  className={booleanButtonClasses(
                    !targetEvaluated(state.methodOfCompletion),
                  )}>
@@ -429,6 +510,8 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                </button>
              </div>
            </div>
+           {targetEvaluated(state.methodOfCompletion)
+              ? React.null : methodOfCompletionSelector(state, send)}
            {switch (state.methodOfCompletion) {
             | Evaluated =>
               evaluationCriteriaEditor(state, evaluationCriteria, send)
@@ -436,6 +519,31 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
             | TakeQuiz => React.null
             | VisitLink => linkEditor(state, send)
             }}
+           <div className="mt-6">
+             <label
+               className="tracking-wide text-sm font-semibold"
+               htmlFor="completion-instructions">
+               {"Do you have any completion instructions for the student?"
+                |> str}
+               <span className="ml-1 text-xs font-normal">
+                 {"(optional)" |> str}
+               </span>
+             </label>
+             <HelpIcon
+               link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
+               className="ml-1">
+               {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
+                |> str}
+             </HelpIcon>
+             <input
+               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+               id="completion-instructions"
+               type_="text"
+               maxLength=255
+               value={state.completionInstructions}
+               onChange={updateCompletionInstructions(send)}
+             />
+           </div>
          </div>}
   </div>;
 };

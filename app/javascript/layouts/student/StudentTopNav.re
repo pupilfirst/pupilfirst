@@ -16,7 +16,7 @@ let headerLink = (key, link) =>
     </a>
   </div>;
 
-let signOutLink = authenticityToken =>
+let signOutLink = () =>
   <div
     key="Logout-button"
     className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
@@ -46,7 +46,7 @@ let signInLink = () =>
   </div>;
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
-let headerLinks = (links, authenticityToken, isLoggedIn) => {
+let headerLinks = (links, isLoggedIn) => {
   let (visibleLinks, dropdownLinks) =
     switch (links, isMobile()) {
     | (links, true) => (links, [])
@@ -66,16 +66,14 @@ let headerLinks = (links, authenticityToken, isLoggedIn) => {
     ->List.append([
         <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
-    ->List.append([
-        isLoggedIn ? signOutLink(authenticityToken) : signInLink(),
-      ])
+    ->List.append([isLoggedIn ? signOutLink() : signInLink()])
     |> Array.of_list
     |> ReasonReact.array
   };
 };
 
 [@react.component]
-let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
+let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile());
 
   React.useEffect(() => {
@@ -123,7 +121,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
         {!menuHidden && !isMobile()
            ? <div
                className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
-               {headerLinks(links, authenticityToken, isLoggedIn)}
+               {headerLinks(links, isLoggedIn)}
              </div>
            : React.null}
       </nav>
@@ -131,7 +129,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~authenticityToken, ~isLoggedIn) => {
     {isMobile() && !menuHidden
        ? <div
            className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-           {headerLinks(links, authenticityToken, isLoggedIn)}
+           {headerLinks(links, isLoggedIn)}
          </div>
        : React.null}
   </div>;

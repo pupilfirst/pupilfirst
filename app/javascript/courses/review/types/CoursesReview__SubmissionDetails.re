@@ -2,7 +2,7 @@ type t = {
   submissions: array(CoursesReview__Submission.t),
   targetId: string,
   targetTitle: string,
-  userNames: string,
+  students: array(CoursesReview__Student.t),
   levelNumber: string,
   levelId: string,
   evaluationCriteria: array(EvaluationCriterion.t),
@@ -13,7 +13,7 @@ let submissions = t => t.submissions;
 let targetId = t => t.targetId;
 let targetTitle = t => t.targetTitle;
 let levelNumber = t => t.levelNumber;
-let userNames = t => t.userNames;
+let students = t => t.students;
 let evaluationCriteria = t => t.evaluationCriteria;
 let reviewChecklist = t => t.reviewChecklist;
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds;
@@ -22,7 +22,7 @@ let make =
       ~submissions,
       ~targetId,
       ~targetTitle,
-      ~userNames,
+      ~students,
       ~levelNumber,
       ~evaluationCriteria,
       ~levelId,
@@ -32,7 +32,7 @@ let make =
   submissions,
   targetId,
   targetTitle,
-  userNames,
+  students,
   levelNumber,
   evaluationCriteria,
   levelId,
@@ -45,7 +45,8 @@ let decodeJS = details =>
     ~submissions=details##submissions |> CoursesReview__Submission.makeFromJs,
     ~targetId=details##targetId,
     ~targetTitle=details##targetTitle,
-    ~userNames=details##userNames,
+    ~students=
+      details##students |> Array.map(CoursesReview__Student.makeFromJs),
     ~levelNumber=details##levelNumber,
     ~levelId=details##levelId,
     ~targetEvaluationCriteriaIds=details##targetEvaluationCriteriaIds,
@@ -81,7 +82,7 @@ let updateSubmission = (t, submission) =>
       |> Array.append([|submission|]),
     ~targetId=t.targetId,
     ~targetTitle=t.targetTitle,
-    ~userNames=t.userNames,
+    ~students=t.students,
     ~levelNumber=t.levelNumber,
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,
@@ -108,7 +109,10 @@ let makeSubmissionInfo = (t, submission) =>
     ~title=t.targetTitle,
     ~createdAt=submission |> CoursesReview__Submission.createdAt,
     ~levelId=t.levelId,
-    ~userNames=t.userNames,
+    ~userNames=
+      t.students
+      |> Array.map(student => student |> CoursesReview__Student.name)
+      |> Js.Array.joinWith(", "),
     ~status=
       Some(
         CoursesReview__SubmissionInfo.makeStatus(
@@ -123,7 +127,7 @@ let updateReviewChecklist = (reviewChecklist, t) => {
     ~submissions=t.submissions,
     ~targetId=t.targetId,
     ~targetTitle=t.targetTitle,
-    ~userNames=t.userNames,
+    ~students=t.students,
     ~levelNumber=t.levelNumber,
     ~levelId=t.levelId,
     ~evaluationCriteria=t.evaluationCriteria,

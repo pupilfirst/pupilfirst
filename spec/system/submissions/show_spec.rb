@@ -30,8 +30,10 @@ feature 'Submissions show' do
 
   context 'with a pending submission' do
     let(:submission_pending) { create(:timeline_event, latest: true, target: target) }
+    let(:student) { team.founders.first }
+
     before do
-      submission_pending.founders << team.founders.first
+      submission_pending.founders << student
     end
 
     scenario 'coach visits submission show', js: true do
@@ -39,10 +41,12 @@ feature 'Submissions show' do
 
       within("div[aria-label='submissions-overlay-header']") do
         expect(page).to have_content('Level 1')
-        expect(page).to have_content("Submitted by #{team.founders.first.user.name}")
+        expect(page).to have_content("Submitted by #{student.name}")
+        expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
         expect(page).to have_link("View Target", href: "/targets/#{target.id}")
         expect(page).to have_content(target.title)
       end
+
       expect(page).to have_content('Add Your Feedback')
       expect(page).to have_content('Grade Card')
       expect(page).to have_content(evaluation_criterion_1.name)
@@ -258,8 +262,9 @@ feature 'Submissions show' do
   context 'with a reviewed submission' do
     let(:submission_reviewed) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
     let!(:timeline_event_grade) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_1) }
+
     before do
-      submission_reviewed.founders << team.founders.first
+      submission_reviewed.founders << team.founders
     end
 
     scenario 'coach visits submission show', js: true do
@@ -267,10 +272,17 @@ feature 'Submissions show' do
 
       within("div[aria-label='submissions-overlay-header']") do
         expect(page).to have_content('Level 1')
-        expect(page).to have_content("Submitted by #{team.founders.first.user.name}")
+        expect(page).to have_content("Submitted by #{team.founders.map(&:name).join(', ')}")
+
+        # Each name should be linked to the report page.
+        team.founders.each do |student|
+          expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
+        end
+
         expect(page).to have_link("View Target", href: "/targets/#{target.id}")
         expect(page).to have_content(target.title)
       end
+
       expect(page).to have_content('Submission #1')
       expect(page).to have_content('Passed')
 
@@ -298,8 +310,11 @@ feature 'Submissions show' do
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")
       end
+
       expect(page).to have_button("Add feedback")
+
       click_button "Add feedback"
+
       expect(page).not_to have_button("Add feedback")
       expect(page).to have_button("Share Feedback", disabled: true)
 
@@ -314,6 +329,7 @@ feature 'Submissions show' do
       within("div[aria-label='feedback-section']") do
         expect(page).to have_text(coach.name)
       end
+
       submission = submission_reviewed.reload
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
@@ -328,6 +344,7 @@ feature 'Submissions show' do
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")
       end
+
       click_button "Undo Grading"
 
       expect(page).to have_text("Add Your Feedback")

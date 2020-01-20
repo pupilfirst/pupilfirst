@@ -1,0 +1,13 @@
+/.cache
+/dist
+/lib
+/node_modules
+
+# Ignore these associated with reason-react and bsb
+.merlin
+npm-debug.log
+.DS_Store
+.bsb.lock
+*.bs.js
+
+yarn.lock

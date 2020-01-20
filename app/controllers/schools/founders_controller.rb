@@ -1,22 +1,18 @@
 module Schools
   class FoundersController < SchoolsController
-    include StringifyIds
-    include CamelizeKeys
-
     # POST /school/students/team_up?founder_ids=&team_name=
     def team_up
       authorize(Founder, policy_class: Schools::FounderPolicy)
       form = Schools::Founders::TeamUpForm.new(Reform::OpenForm.new)
 
       response = if form.validate(params)
-        startup = form.save
-        presenter = Schools::Founders::IndexPresenter.new(view_context, startup.course)
-        { teams: presenter.teams, students: presenter.students, error: nil }
+        form.save
+        { error: nil }
       else
         { error: form.errors.full_messages.join(', ') }
       end
 
-      render json: camelize_keys(stringify_ids(response))
+      render json: response
     end
 
     # PATCH /school/students/:id
@@ -28,13 +24,12 @@ module Schools
 
       response = if form.validate(params[:founder].merge(tags: params[:tags], access_ends_at: params[:access_ends_at], coach_ids: params[:coach_ids]))
         form.save
-        presenter = Schools::Founders::IndexPresenter.new(view_context, @course)
-        { teams: presenter.teams, students: presenter.students, error: nil }
+        { error: nil }
       else
         { error: form.errors.full_messages.join(', ') }
       end
 
-      render json: camelize_keys(stringify_ids(response))
+      render json: response
     end
 
     private

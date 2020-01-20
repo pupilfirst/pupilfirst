@@ -4,8 +4,11 @@ feature 'School students index', js: true do
   include UserSpecHelper
   include NotificationHelper
 
+  tag1 = "Single Student"
+  tag2 = "Team"
+  tags = [tag1, tag2]
   # Setup a course with a single founder target, ...
-  let!(:school) { create :school, :current }
+  let!(:school) { create :school, :current, founder_tag_list: tags }
   let!(:course) { create :course, school: school }
 
   let!(:school_admin) { create :school_admin, school: school }
@@ -17,7 +20,7 @@ feature 'School students index', js: true do
   let!(:startup_2) { create :startup, level: level_2 }
 
   let(:team_with_lone_student) { create :team, level: level_2 }
-  let!(:lone_student) { create :founder, startup: team_with_lone_student }
+  let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: tags }
 
   let(:name_1) { Faker::Name.name }
   let(:email_1) { Faker::Internet.email(name_1) }
@@ -40,8 +43,6 @@ feature 'School students index', js: true do
   scenario 'School admin adds new students' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
-    # list all students
-    expect(page).to have_text("All levels")
     expect(page).to have_text(startup_1.founders.first.name)
     expect(page).to have_text(startup_2.founders.last.name)
 
@@ -335,6 +336,8 @@ feature 'School students index', js: true do
     click_button 'Actions'
     click_button 'Dropout Student'
 
+    dismiss_notification
+
     expect(page).not_to have_text(founder_user.name)
 
     # The student's team name should now be the student's own name.
@@ -397,5 +400,84 @@ feature 'School students index', js: true do
 
     expect(page).to have_text('email address not unique for student')
     expect(page).to have_button('Add to List', disabled: true)
+  end
+
+  scenario 'school admin tries to filter students' do
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # filter by level
+    fill_in "search", with: "level"
+    click_button level_2.name
+    expect(page).to have_text(startup_2.name)
+    expect(page).not_to have_text(startup_1.name)
+    click_button "Remove selection: #{level_2.name}"
+
+    # filter by tag
+    fill_in "search", with: tag1
+    click_button "Pick Tag: Single Student"
+    expect(page).to have_text(lone_student.name)
+    expect(page).to have_text(tag2)
+    expect(page).not_to have_text(startup_1.name)
+    expect(page).not_to have_text(startup_2.name)
+    click_button "Remove selection: Single Student"
+
+    # filter by name
+    name = startup_1.founders.first.name
+    fill_in "search", with: name
+    click_button name
+    expect(page).to have_text(startup_1.name)
+    click_button "Remove selection: #{name}"
+
+    # filter by team name
+    team_name = startup_2.name
+    fill_in "search", with: team_name
+    click_button team_name
+    expect(page).to have_text(startup_2.founders.first.name)
+    expect(page).not_to have_text(lone_student.name)
+    click_button "Remove selection: #{team_name}"
+
+    # filter by email
+    email = startup_1.founders.first.email
+    fill_in "search", with: email
+    click_button email
+    expect(page).to have_text(startup_1.name)
+    expect(page).not_to have_text(startup_2.name)
+    expect(page).not_to have_text(lone_student.name)
+    click_button "Remove selection: #{email}"
+  end
+
+  scenario 'school admin can order students' do
+    30.times do
+      create :startup, level: level_1
+    end
+
+    teams = course.startups
+    teams_order_by_created_at = teams.order(:created_at)
+    team_order_by_updated_at = teams.order(:updated_at)
+    teams_order_by_name_at = teams.order(:name)
+
+    sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+    # order by created_at
+    click_button "Order by Name"
+    click_button "Order by Last Created"
+    expect(page).to have_text(teams_order_by_created_at.last.name)
+    expect(page).not_to have_text(teams_order_by_created_at.first.name)
+    click_button('Load More')
+    expect(page).to have_text(teams_order_by_created_at.first.name)
+
+    click_button "Order by Last Created"
+    click_button "Order by Last Updated"
+    expect(page).to have_text(team_order_by_updated_at.last.name)
+    expect(page).not_to have_text(team_order_by_updated_at.first.name)
+    click_button('Load More')
+    expect(page).to have_text(team_order_by_updated_at.first.name)
+
+    click_button "Order by Last Updated"
+    click_button "Order by Name"
+    expect(page).to have_text(teams_order_by_name_at.first.name)
+    expect(page).not_to have_text(teams_order_by_name_at.last.name)
+    click_button('Load More')
+    expect(page).to have_text(teams_order_by_name_at.last.name)
   end
 end

@@ -1,8 +1,5 @@
 module Schools
   class CoursesController < SchoolsController
-    include CamelizeKeys
-    include StringifyIds
-
     layout 'school'
 
     def index
@@ -49,6 +46,7 @@ module Schools
       render json: { coach_ids: course.faculty.pluck(:id), error: nil }
     end
 
+    # GET /school/courses/:course_id/students
     def students
       @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
     end
@@ -67,25 +65,18 @@ module Schools
 
     # POST /school/courses/:course_id/students?students[]=
     def create_students
-      course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
+      authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
 
       form = Schools::Founders::CreateForm.new(Reform::OpenForm.new)
 
       response = if form.validate(params)
         student_count = form.save
-        presenter = Schools::Founders::IndexPresenter.new(view_context, course)
-
-        {
-          teams: presenter.teams,
-          students: presenter.students,
-          error: nil,
-          studentCount: student_count
-        }
+        { error: nil, studentCount: student_count }
       else
         { error: form.errors.full_messages.join(', ') }
       end
 
-      render json: camelize_keys(stringify_ids(response))
+      render json: response
     end
 
     # POST /school/courses/:course_id/mark_teams_active?team_ids[]=

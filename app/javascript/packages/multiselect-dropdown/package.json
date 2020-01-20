@@ -16,7 +16,7 @@
     "Mahesh Krishna Kumar <maheshcet@gmail.com>",
     "Vinu T. V. <vinutv91@gmail.com>"
   ],
-  "homepage": "https://github.com/svdotCO/pupilfirst",
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/packages/multiselect-dropdown",
   "license": "MIT",
   "main": "components/MultiselectDropdown.re",
   "publishConfig": {

@@ -9,31 +9,19 @@ module DomUtils = {
 
   open Webapi.Dom;
 
-  module OptionUtils = {
-    let map = (f, v) =>
-      switch (v) {
-      | Some(v) => Some(f(v))
-      | None => None
-      };
-  };
-
   let focus = id => {
     (
-      switch (document |> Document.getElementById(id)) {
-      | Some(el) => el
-      | None => raise(RootElementMissing(id))
-      }
+      (
+        switch (document |> Document.getElementById(id)) {
+        | Some(el) => el
+        | None => raise(RootElementMissing(id))
+        }
+      )
+      |> Element.asHtmlElement
     )
-    |> Element.asHtmlElement
-    |> OptionUtils.map(HtmlElement.focus)
+    ->Belt.Option.map(HtmlElement.focus)
     |> ignore;
   };
-};
-
-let copyAndSort = (f, t) => {
-  let cp = t |> Array.copy;
-  cp |> Array.sort(f);
-  cp;
 };
 
 module type Identifier = {type t;};
@@ -75,13 +63,17 @@ module Make = (Identifier: Identifier) => {
     let identifier = t => t.identifier;
 
     let search = (searchString, selections) =>
-      selections
-      |> Js.Array.filter(selection =>
-           selection.searchString
-           |> String.lowercase_ascii
-           |> Js.String.includes(searchString |> String.lowercase_ascii)
-         )
-      |> copyAndSort((x, y) => String.compare(x.value, y.value));
+      (
+        selections
+        |> Js.Array.filter(selection =>
+             selection.searchString
+             |> String.lowercase_ascii
+             |> Js.String.includes(searchString |> String.lowercase_ascii)
+           )
+      )
+      ->Belt.SortArray.stableSortBy((x, y) =>
+          String.compare(x.value, y.value)
+        );
   };
 
   let selectionTitle = selection => {
@@ -234,7 +226,7 @@ module Make = (Identifier: Identifier) => {
       <div />
       {if (value |> String.trim != "") {
          <div
-           className="MultiselectDropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
+           className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
            {switch (results) {
             | [||] => <div> {emptyMessage |> str} </div>
             | results => results |> React.array

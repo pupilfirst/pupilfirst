@@ -4,7 +4,7 @@ A multi-select dropdown component for ReasonReact projects.
 
 ## Demo
 
-[multiselect.pupilfirst.com](http://re-multiselect.pupilfirst.com/)
+[multiselect-dropdown.pupilfirst.com](http://multiselect-dropdown.pupilfirst.com/)
 
 ## Installation
 
@@ -70,11 +70,11 @@ let make = () => {
 
 ```
 
-See this code, and a more advanced version, in action here: https://re-multiselect.pupilfirst.com
+See this code, and a more advanced version, in action here: https://multiselect-dropdown.pupilfirst.com
 
 ### Other examples
 
-- [Real world Usage in Pupilfirst]()
+- [Real world Usage in Pupilfirst](https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/schools/courses/components/students_editor/StudentsEditor__Search.re)
 
 ## Usage
 

@@ -4,7 +4,7 @@
 
 @tailwind utilities;
 
-.MultiselectDropdown__search-dropdown {
+.multiselect-dropdown__search-dropdown {
   max-height: 20rem;
   overflow: auto;
 }

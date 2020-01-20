@@ -42,7 +42,7 @@ let removeSearchString = t => {...t, searchString: None};
 
 let updateSortBy = (sortBy, t) => {...t, sortBy};
 
-let sortByStrings = t => {
+let sortByToString = t => {
   switch (t.sortBy) {
   | Name => "name"
   | CreatedAt => "created_at"
@@ -50,7 +50,7 @@ let sortByStrings = t => {
   };
 };
 
-let sortByListForDropdown = t =>
+let dropdownOptionsForSortBy = t =>
   switch (t.sortBy) {
   | Name => [|CreatedAt, UpdatedAt|]
   | CreatedAt => [|Name, UpdatedAt|]

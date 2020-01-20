@@ -59,7 +59,7 @@ let getTeams =
   let tags = filter |> Filter.tags;
   let selectedLevelId = filter |> Filter.levelId;
   let search = filter |> Filter.searchString;
-  let sortBy = filter |> Filter.sortByStrings;
+  let sortBy = filter |> Filter.sortByToString;
   setLoadingCB(loading);
   (
     switch (selectedLevelId, search, cursor) {
@@ -139,7 +139,9 @@ let levelInfo = (levels, team) =>
     <div className="font-bold">
       {team
        |> Team.levelId
-       |> Level.unsafeLevelNumber(levels, "TeamsList")
+       |> Level.unsafeFind(levels, "TeamsList")
+       |> Level.number
+       |> string_of_int
        |> str}
     </div>
   </span>;

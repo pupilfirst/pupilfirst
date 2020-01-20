@@ -49,11 +49,11 @@ let makeSelectableSearch = searchInput => {
   );
 };
 
-let appliedFilters = (filter, levels) => {
+let selected = (filter, levels) => {
   let level =
     switch (filter |> Filter.levelId) {
     | Some(id) => [|
-        makeSelectableLevel(id |> Level.unsafeLevel(levels, "Search")),
+        makeSelectableLevel(id |> Level.unsafeFind(levels, "Search")),
       |]
     | None => [||]
     };
@@ -135,7 +135,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     </label>
     <MultiselectDropdown
       unselected={unselected(tags, levels, filter, searchInput)}
-      selected={appliedFilters(filter, levels)}
+      selected={selected(filter, levels)}
       selectCB={select(filter, updateFilterCB, setSearchInput)}
       deselectCB={deselect(filter, updateFilterCB)}
       value=searchInput

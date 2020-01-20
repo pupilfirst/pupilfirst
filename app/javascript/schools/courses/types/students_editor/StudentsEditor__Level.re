@@ -17,7 +17,7 @@ let decode = json =>
     number: json |> field("number", int),
   };
 
-let unsafeLevel = (levels, componentName, levelId) => {
+let unsafeFind = (levels, componentName, levelId) => {
   levels
   |> ArrayUtils.unsafeFind(
        l => l.id == levelId,
@@ -27,9 +27,6 @@ let unsafeLevel = (levels, componentName, levelId) => {
        ++ componentName,
      );
 };
-
-let unsafeLevelNumber = (levels, componentName, levelId) =>
-  unsafeLevel(levels, componentName, levelId) |> number |> string_of_int;
 
 let title = t => {
   "Level " ++ (t.number |> string_of_int) ++ ": " ++ t.name;

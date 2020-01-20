@@ -14,8 +14,8 @@ let updateTeam = (team, t) => {
   };
 };
 
-let teams = teams =>
-  switch (teams) {
+let teams = t =>
+  switch (t) {
   | Unloaded => [||]
   | PartiallyLoaded(teams, _cursor) => teams
   | FullyLoaded(teams) => teams

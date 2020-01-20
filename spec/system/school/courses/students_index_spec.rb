@@ -428,6 +428,14 @@ feature 'School students index', js: true do
     expect(page).to have_text(startup_1.name)
     click_button "Remove selection: #{name}"
 
+    # filter by team name
+    team_name = startup_2.name
+    fill_in "search", with: team_name
+    click_button team_name
+    expect(page).to have_text(startup_2.founders.first.name)
+    expect(page).not_to have_text(lone_student.name)
+    click_button "Remove selection: #{team_name}"
+
     # filter by email
     email = startup_1.founders.first.email
     fill_in "search", with: email
@@ -454,18 +462,21 @@ feature 'School students index', js: true do
     click_button "Order by Name"
     click_button "Order by Last Created"
     expect(page).to have_text(teams_order_by_created_at.last.name)
+    expect(page).not_to have_text(teams_order_by_created_at.first.name)
     click_button('Load More')
     expect(page).to have_text(teams_order_by_created_at.first.name)
 
     click_button "Order by Last Created"
     click_button "Order by Last Updated"
     expect(page).to have_text(team_order_by_updated_at.last.name)
+    expect(page).not_to have_text(team_order_by_updated_at.first.name)
     click_button('Load More')
     expect(page).to have_text(team_order_by_updated_at.first.name)
 
     click_button "Order by Last Updated"
     click_button "Order by Name"
     expect(page).to have_text(teams_order_by_name_at.first.name)
+    expect(page).not_to have_text(teams_order_by_name_at.last.name)
     click_button('Load More')
     expect(page).to have_text(teams_order_by_name_at.last.name)
   end

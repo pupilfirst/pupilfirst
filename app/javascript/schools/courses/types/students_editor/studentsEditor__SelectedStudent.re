@@ -4,7 +4,7 @@ type t = {
   teamId: string,
   avatarUrl: option(string),
   levelId: string,
-  studentsCount: int,
+  teamSize: int,
 };
 
 let id = t => t.id;
@@ -20,12 +20,11 @@ let selectedAcrossTeams = selectedStudents =>
   |> Array.length > 1;
 
 let partOfTeamSelected = selectedStudents => {
-  let selectedStudentsCount = selectedStudents |> Array.length;
+  let selectedTeamSize = selectedStudents |> Array.length;
 
   selectedStudents
-  |> Array.map(s => s.studentsCount <= selectedStudentsCount)
-  |> Js.Array.filter(t => !t)
-  |> Array.length == selectedStudentsCount;
+  |> Js.Array.filter(s => s.teamSize > selectedTeamSize)
+  |> Array.length == selectedTeamSize;
 };
 
 let selectedWithinLevel = selectedStudents => {
@@ -48,14 +47,14 @@ let isMoveOutable = selectedStudents => {
   selectedStudents
   |> Array.length == 1
   && selectedStudents
-  |> Array.map(s => s.studentsCount) != [|1|];
+  |> Array.map(s => s.teamSize) != [|1|];
 };
 
-let make = (~name, ~id, ~teamId, ~avatarUrl, ~levelId, ~studentsCount) => {
+let make = (~name, ~id, ~teamId, ~avatarUrl, ~levelId, ~teamSize) => {
   name,
   id,
   teamId,
   avatarUrl,
   levelId,
-  studentsCount,
+  teamSize,
 };

@@ -121,7 +121,7 @@ let selectStudent = (send, student, team) => {
       ~teamId=team |> Team.id,
       ~avatarUrl=student.avatarUrl,
       ~levelId=team |> Team.levelId,
-      ~studentsCount=team |> Team.students |> Array.length,
+      ~teamSize=team |> Team.students |> Array.length,
     );
 
   send(SelectStudent(selectedStudent));
@@ -133,7 +133,7 @@ let updateFilter = (send, filter) => send(UpdateFilter(filter));
 
 let dropDownContents = (updateFilterCB, filter) => {
   filter
-  |> Filter.sortByListForDropdown
+  |> Filter.dropdownOptionsForSortBy
   |> Array.map(sortBy => {
        let title = sortBy |> Filter.sortByTitle;
        <button

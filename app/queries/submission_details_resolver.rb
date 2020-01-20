@@ -6,7 +6,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       submissions: submissions.includes(:startup_feedback, :timeline_event_grades, :evaluator).order("timeline_events.created_at").reverse,
       target_id: target.id,
       target_title: target.title,
-      user_names: user_names,
+      students: students,
       level_number: level.number,
       level_id: level.id,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
@@ -50,10 +50,13 @@ class SubmissionDetailsResolver < ApplicationQuery
     @level ||= target.level
   end
 
-  def user_names
-    submission.founders.map do |founder|
-      founder.user.name
-    end.join(', ')
+  def students
+    submission.founders.joins(:user).map do |student|
+      {
+        id: student.id,
+        name: student.name
+      }
+    end
   end
 
   def authorized?

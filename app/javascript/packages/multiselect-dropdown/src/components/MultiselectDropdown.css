@@ -1,0 +1,10 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.multiselect-dropdown__search-dropdown {
+  max-height: 20rem;
+  overflow: auto;
+}

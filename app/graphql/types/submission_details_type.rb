@@ -3,7 +3,7 @@ module Types
     field :submissions, [Types::SubmissionType], null: false
     field :target_id, ID, null: false
     field :target_title, String, null: false
-    field :user_names, String, null: false
+    field :students, [Types::StudentMiniType], null: false
     field :level_number, String, null: false
     field :level_id, ID, null: false
     field :evaluation_criteria, [Types::EvaluationCriterionType], null: false

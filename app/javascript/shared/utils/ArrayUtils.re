@@ -25,3 +25,8 @@ let unsafeFind = (p, message, l) =>
 let flatten = t => {
   t |> Array.to_list |> List.flatten |> Array.of_list;
 };
+
+let distinct = t => t |> Array.to_list |> ListUtils.distinct |> Array.of_list;
+
+let sort_uniq = (f, t) =>
+  t |> Array.to_list |> List.sort_uniq(f) |> Array.of_list;

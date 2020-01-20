@@ -12,7 +12,11 @@ module SubmissionDetailsQuery = [%graphql
   {|
     query($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, userNames, levelNumber, levelId
+        targetId, targetTitle, levelNumber, levelId
+        students {
+          id
+          name
+        },
         evaluationCriteria{
           id, name, maxGrade, passGrade, gradeLabels { grade label}
         },
@@ -93,9 +97,25 @@ let headerSection = (submissionDetails, courseId) =>
         </div>
         <div className="text-left mt-1 text-xs text-gray-800">
           <span> {"Submitted by " |> str} </span>
-          <span className="font-semibold">
-            {submissionDetails |> SubmissionDetails.userNames |> str}
-          </span>
+          {let studentCount =
+             submissionDetails |> SubmissionDetails.students |> Array.length;
+
+           submissionDetails
+           |> SubmissionDetails.students
+           |> Array.mapi((index, student) => {
+                let commaRequired = index + 1 != studentCount;
+                <span>
+                  <a
+                    className="font-semibold underline"
+                    key={student |> Student.id}
+                    href={"/students/" ++ (student |> Student.id) ++ "/report"}
+                    target="_blank">
+                    {student |> Student.name |> str}
+                  </a>
+                  {(commaRequired ? ", " : "") |> str}
+                </span>;
+              })
+           |> React.array}
         </div>
       </div>
       <div

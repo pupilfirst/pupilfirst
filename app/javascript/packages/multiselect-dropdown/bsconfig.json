@@ -1,0 +1,23 @@
+{
+  "name": "@pupilfirst/multiselect-dropdown",
+  "reason": {
+    "react-jsx": 3
+  },
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
+  "bs-dependencies": ["reason-react", "bs-webapi", "@pupilfirst/pf-icon"],
+  "suffix": ".bs.js",
+  "refmt": 3,
+  "warnings": {
+    "error": "+8"
+  }
+}

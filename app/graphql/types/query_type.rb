@@ -34,6 +34,14 @@ module Types
       argument :student_id, ID, required: true
     end
 
+    field :course_teams, Types::CourseTeamType.connection_type, null: false do
+      argument :course_id, ID, required: true
+      argument :level_id, ID, required: false
+      argument :search, String, required: false
+      argument :tags, [String], required: false
+      argument :sort_by, String, required: true
+    end
+
     field :evaluation_criteria, [Types::EvaluationCriterionType], null: false do
       argument :course_id, ID, required: true
     end
@@ -80,6 +88,11 @@ module Types
     def student_submissions(args)
       resolver = StudentSubmissionsResolver.new(context, args)
       resolver.student_submissions
+    end
+
+    def course_teams(args)
+      resolver = CourseTeamsResolver.new(context, args)
+      resolver.course_teams
     end
 
     def evaluation_criteria(args)

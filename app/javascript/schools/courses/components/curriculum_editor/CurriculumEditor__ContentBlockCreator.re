@@ -1,12 +1,14 @@
 [@bs.config {jsx: 3}];
 
+exception FormNotFound(string);
+
 [%bs.raw {|require("./CurriculumEditor__ContentBlockCreator.css")|}];
 
 open CurriculumEditor__Types;
 
 let str = React.string;
 
-module CreateMarkdownCotentBlock = [%graphql
+module CreateMarkdownContentBlock = [%graphql
   {|
     mutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
@@ -48,15 +50,18 @@ type blockType =
 type state = {
   visible: bool,
   saving: bool,
+  error: option(string),
 };
 
 type action =
   | ToggleVisibility
   | ToggleSaving
-  | FinishSaving(bool);
+  | FinishSaving(bool)
+  | SetError(string)
+  | FailToUpload;
 
 let computeInitialState = isAboveTarget => {
-  {visible: !isAboveTarget, saving: false};
+  {visible: !isAboveTarget, saving: false, error: None};
 };
 
 let reducer = (state, action) =>
@@ -64,6 +69,15 @@ let reducer = (state, action) =>
   | ToggleVisibility => {...state, visible: !state.visible}
   | ToggleSaving => {...state, saving: !state.saving}
   | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
+  | SetError(error) => {...state, error: Some(error)}
+  | FailToUpload => {
+      ...state,
+      saving: false,
+      error:
+        Some(
+          "Failed to upload file. Please check message in notification, and try again.",
+        ),
+    }
   };
 
 let containerClasses = (visible, isAboveTarget) => {
@@ -77,7 +91,7 @@ let createMarkdownContentBlock =
   let aboveContentBlockId =
     aboveContentBlock |> OptionUtils.map(ContentBlock.id);
   let targetId = target |> Target.id;
-  CreateMarkdownCotentBlock.make(~targetId, ~aboveContentBlockId?, ())
+  CreateMarkdownContentBlock.make(~targetId, ~aboveContentBlockId?, ())
   |> GraphqlQuery.sendQuery2
   |> Js.Promise.then_(result => {
        switch (result##createMarkdownContentBlock##contentBlock) {
@@ -92,10 +106,27 @@ let createMarkdownContentBlock =
   |> ignore;
 };
 
+let elementId = (prefix, aboveContentBlock) =>
+  prefix
+  ++ (
+    switch (aboveContentBlock) {
+    | Some(contentBlock) => contentBlock |> ContentBlock.id
+    | None => "bottom"
+    }
+  );
+
+let fileInputId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-file-input-");
+let imageInputId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-image-input-");
+let fileFormId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-file-form-");
+let imageFormId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-image-form-");
+
 let onClick =
     (target, aboveContentBlock, send, addContentBlockCB, blockType, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-
+  // event |> ReactEvent.Mouse.preventDefault;
   switch (blockType) {
   | Markdown =>
     createMarkdownContentBlock(
@@ -111,15 +142,19 @@ let onClick =
 };
 
 let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
-  let (faIcon, buttonText) =
+  let fileId = aboveContentBlock |> fileInputId;
+  let imageId = aboveContentBlock |> imageInputId;
+
+  let (faIcon, buttonText, htmlFor) =
     switch (blockType) {
-    | Markdown => ("fab fa-markdown", "Markdown")
-    | File => ("far fa-file-alt", "File")
-    | Image => ("far fa-image", "Image")
-    | Embed => ("fas fa-code", "Embed")
+    | Markdown => ("fab fa-markdown", "Markdown", None)
+    | File => ("far fa-file-alt", "File", Some(fileId))
+    | Image => ("far fa-image", "Image", Some(imageId))
+    | Embed => ("fas fa-code", "Embed", None)
     };
 
-  <div
+  <label
+    ?htmlFor
     key=buttonText
     className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
     onClick={onClick(
@@ -131,7 +166,142 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     )}>
     <i className={faIcon ++ " text-2xl"} />
     <p className="font-semibold"> {buttonText |> str} </p>
-  </div>;
+  </label>;
+};
+
+let maxAllowedFileSize = 5 * 1024 * 1024;
+
+let isInvalidFile = file => file##size > maxAllowedFileSize;
+
+let isInvalidImageFile = image =>
+  (
+    switch (image##_type) {
+    | "image/jpeg"
+    | "image/gif"
+    | "image/png" => false
+    | _ => true
+    }
+  )
+  || image
+  |> isInvalidFile;
+
+let uploadFile =
+    (target, aboveContentBlock, send, addContentBlockCB, blockType, formData) =>
+  Api.sendFormData(
+    "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+    formData,
+    json => {
+      Notification.success(
+        "Done!",
+        "File uploaded successfully.",
+        // updateNewContentBlock(
+        //   json,
+        //   blockType,
+        //   sortIndex,
+        //   state,
+        //   createNewContentCB,
+        // );
+      )
+    },
+    () => send(FailToUpload),
+  );
+
+let submitForm =
+    (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+  let formId =
+    switch (blockType) {
+    | `File => fileFormId(aboveContentBlock)
+    | `Image => imageFormId(aboveContentBlock)
+    };
+
+  let element = ReactDOMRe._getElementById(formId);
+
+  switch (element) {
+  | Some(element) =>
+    DomUtils.FormData.create(element)
+    |> uploadFile(
+         target,
+         aboveContentBlock,
+         send,
+         addContentBlockCB,
+         blockType,
+       )
+  | None =>
+    Rollbar.error(
+      "Could not find form to upload file for content block: " ++ formId,
+    );
+    raise(FormNotFound(formId));
+  };
+};
+
+let handleFileInputChange =
+    (target, aboveContentBlock, send, addContentBlockCB, blockType, event) => {
+  event |> ReactEvent.Form.preventDefault;
+
+  switch (ReactEvent.Form.target(event)##files) {
+  | [||] => ()
+  | files =>
+    let file = files[0];
+
+    let error =
+      switch (blockType) {
+      | `File =>
+        file |> isInvalidFile
+          ? Some("Please select a file with a size less than 5 MB.") : None
+      | `Image =>
+        file |> isInvalidImageFile
+          ? Some(
+              "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB.",
+            )
+          : None
+      };
+
+    switch (error) {
+    | Some(error) => send(SetError(error))
+    | None =>
+      // let filename = file##name;
+      send(ToggleSaving);
+      submitForm(
+        target,
+        aboveContentBlock,
+        send,
+        addContentBlockCB,
+        blockType,
+      );
+    };
+  };
+};
+
+let uploadForm =
+    (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+  let fileSelectionHandler =
+    handleFileInputChange(target, aboveContentBlock, send, addContentBlockCB);
+
+  let (fileId, formId, onChange, fileType) =
+    switch (blockType) {
+    | `File => (
+        fileInputId(aboveContentBlock),
+        fileFormId(aboveContentBlock),
+        fileSelectionHandler(`File),
+        "file",
+      )
+    | `Image => (
+        imageInputId(aboveContentBlock),
+        imageFormId(aboveContentBlock),
+        fileSelectionHandler(`Image),
+        "image",
+      )
+    };
+
+  <form className="hidden" id=formId>
+    <input
+      name="authenticity_token"
+      type_="hidden"
+      value={AuthenticityToken.fromHead()}
+    />
+    <input type_="hidden" name="block_type" value=fileType />
+    <input type_="file" id=fileId onChange required=true multiple=false />
+  </form>;
 };
 
 [@react.component]
@@ -146,6 +316,8 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
     );
 
   <DisablingCover disabled={state.saving} message="Creating...">
+    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
+    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
     <div className={containerClasses(state.visible, isAboveContentBlock)}>
       {switch (aboveContentBlock) {
        | Some(contentBlock) =>

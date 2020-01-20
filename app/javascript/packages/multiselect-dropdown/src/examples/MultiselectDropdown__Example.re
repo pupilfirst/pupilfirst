@@ -81,15 +81,33 @@ module DetailedExample = {
 
   let unselected = searchInput => {
     let citySuggestions =
-      [|"Chicago", "San Francisco", "Los Angeles"|]
+      [|
+        "Chicago",
+        "San Francisco",
+        "Los Angeles",
+        "Busan",
+        "Jerusalem",
+        "Bangalore",
+        "Cochin",
+        "Chennai",
+      |]
       |> Array.map(t => makeSelectableCity(t));
 
     let stateSuggestions =
-      [|"Washington", "California", "Mississippi"|]
+      [|
+        "Washington",
+        "California",
+        "Mississippi",
+        "Kuala Lumpur",
+        "Kerala",
+        "Karnataka",
+        "Tamil Nadu",
+      |]
       |> Array.map(l => makeSelectableState(l));
 
     let countrySuggestions =
-      [|"India", "USA", "Canada"|] |> Array.map(l => makeSelectableCounty(l));
+      [|"India", "USA", "Canada", "China", "Japan", "Egypt", "Korea"|]
+      |> Array.map(l => makeSelectableCounty(l));
 
     let searchSuggestion =
       searchInput |> Js.String.trim == ""
@@ -184,7 +202,7 @@ module MinimalExample = {
   |];
 
   let deselect = (selected, setState, selectable) => {
-    let newSelected = selected |> Js.Array.filter(s => s == selectable);
+    let newSelected = selected |> Js.Array.filter(s => s != selectable);
     setState(_ => {searchString: "", selected: newSelected});
   };
 
@@ -208,7 +226,7 @@ module MinimalExample = {
           setState(s =>
             {
               searchString: "",
-              selected: s.selected |> Array.append([|selectable|]),
+              selected: [|selectable|] |> Array.append(s.selected),
             }
           )
         }

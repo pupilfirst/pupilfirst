@@ -141,7 +141,7 @@ module Make = (Selectable: Selectable) => {
              </span>
              <button
                title={"Remove selection: " ++ value}
-               className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
+               className="ml-1 text-red-700 px-2 py-px focus:outline-none hover:bg-red-400 hover:text-white flex items-center"
                onClick={removeSelection(onDeselect, selection)}>
                <PfIcon className="if i-times-light" />
              </button>

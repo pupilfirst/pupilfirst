@@ -70,7 +70,7 @@ let make = () => {
   <Multiselect
     unselected
     selected={state.selected}
-    SelectCB={selectable =>
+    onSelect={selectable =>
       setState(s =>
         {
           searchString: "",
@@ -78,7 +78,7 @@ let make = () => {
         }
       )
     }
-    deselectCB={_ => ()}
+    onDeselect={_ => ()}
     value={state.searchString}
     onChange={searchString => setState(s => {...s, searchString})}
   />;
@@ -117,7 +117,7 @@ The `MultiselectDropdown` component accepts the following props:
 | `onChange`     | `string => unit`                           | `onChange` for the input element.                                                      |
 | `unselected`   | `array(MultiselectDropdown.Selectable.t)`  | The array of unselected options.                                                       |
 | `selected`     | `array(MultiselectDropdown.Selectable.t)`  | The array of selected options.                                                         |
-| `selectCB`     | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is selected.                                                 |
-| `deselectCB`   | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is removed.                                                  |
+| `onSelect`     | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is selected.                                                 |
+| `onDeselect`   | `MultiselectDropdown.Selectable.t => unit` | Callback for when an item is removed.                                                  |
 | `labelSuffix`  | `string` (optional)                        | This is the separator between the _selectable's_ `label` and `title`. Defaults to `:`. |
 | `emptyMessage` | `string` (optional)                        | Empty message shown when the search result is empty. Defaults to `No results found`.   |

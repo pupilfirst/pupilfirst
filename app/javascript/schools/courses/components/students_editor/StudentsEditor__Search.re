@@ -134,8 +134,8 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
     <MultiselectDropdown
       unselected={unselected(tags, levels, filter, searchInput)}
       selected={selected(filter, levels)}
-      selectCB={select(filter, updateFilterCB, setSearchInput)}
-      deselectCB={deselect(filter, updateFilterCB)}
+      onSelect={select(filter, updateFilterCB, setSearchInput)}
+      onDeselect={deselect(filter, updateFilterCB)}
       value=searchInput
       onChange={updateSearchInput(setSearchInput)}
       id

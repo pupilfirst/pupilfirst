@@ -133,8 +133,8 @@ module DetailedExample = {
       <Multiselect
         unselected={unselected(state.searchInput)}
         selected={state.selected}
-        selectCB={select(setState)}
-        deselectCB={deselect(state.selected, setState)}
+        onSelect={select(setState)}
+        onDeselect={deselect(state.selected, setState)}
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
         placeholder="Type city, state or country"
@@ -203,7 +203,7 @@ module MinimalExample = {
       <Multiselect
         unselected
         selected={state.selected}
-        selectCB={selectable =>
+        onSelect={selectable =>
           setState(s =>
             {
               searchString: "",
@@ -211,7 +211,7 @@ module MinimalExample = {
             }
           )
         }
-        deselectCB={deselect(state.selected, setState)}
+        onDeselect={deselect(state.selected, setState)}
         value={state.searchString}
         onChange={searchString => setState(s => {...s, searchString})}
       />

@@ -60,7 +60,7 @@ feature 'Target Content Version Management', js: true do
       target_1.content_versions.create!(content_block: cb_7, version_on: 2.days.ago, sort_index: 1)
     end
 
-    scenario 'modifies content today' do
+    scenario 'modifies content today', broken: true do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       expect(page).to have_text(target_1.title)
@@ -135,7 +135,7 @@ feature 'Target Content Version Management', js: true do
       expect(target_1.latest_content_versions.count).to eq(4)
     end
 
-    scenario 'modifies content on a future date' do
+    scenario 'modifies content on a future date', broken: true do
       travel_to 2.days.from_now do
         sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 

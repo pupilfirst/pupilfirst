@@ -13,28 +13,7 @@ module CreateMarkdownContentBlock = [%graphql
     mutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
-          id
-          blockType
-          sortIndex
-          content {
-            ... on ImageBlock {
-              caption
-              url
-              filename
-            }
-            ... on FileBlock {
-              title
-              url
-              filename
-            }
-            ... on MarkdownBlock {
-              markdown
-            }
-            ... on EmbedBlock {
-              url
-              embedCode
-            }
-          }
+          ...ContentBlock.Fragments.AllFields
         }
       }
     }
@@ -67,7 +46,7 @@ let computeInitialState = isAboveTarget => {
 let reducer = (state, action) =>
   switch (action) {
   | ToggleVisibility => {...state, visible: !state.visible}
-  | ToggleSaving => {...state, saving: !state.saving}
+  | ToggleSaving => {...state, saving: !state.saving, error: None}
   | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
   | SetError(error) => {...state, error: Some(error)}
   | FailToUpload => {
@@ -170,7 +149,6 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
 };
 
 let maxAllowedFileSize = 5 * 1024 * 1024;
-
 let isInvalidFile = file => file##size > maxAllowedFileSize;
 
 let isInvalidImageFile = image =>
@@ -186,22 +164,15 @@ let isInvalidImageFile = image =>
   |> isInvalidFile;
 
 let uploadFile =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType, formData) =>
+    (target, send, addContentBlockCB, isAboveContentBlock, formData) =>
   Api.sendFormData(
     "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
     formData,
     json => {
-      Notification.success(
-        "Done!",
-        "File uploaded successfully.",
-        // updateNewContentBlock(
-        //   json,
-        //   blockType,
-        //   sortIndex,
-        //   state,
-        //   createNewContentCB,
-        // );
-      )
+      Notification.success("Done!", "File uploaded successfully.");
+      let contentBlock = json |> ContentBlock.decode;
+      addContentBlockCB(contentBlock);
+      send(FinishSaving(isAboveContentBlock));
     },
     () => send(FailToUpload),
   );
@@ -219,13 +190,7 @@ let submitForm =
   switch (element) {
   | Some(element) =>
     DomUtils.FormData.create(element)
-    |> uploadFile(
-         target,
-         aboveContentBlock,
-         send,
-         addContentBlockCB,
-         blockType,
-       )
+    |> uploadFile(target, send, addContentBlockCB, aboveContentBlock != None)
   | None =>
     Rollbar.error(
       "Could not find form to upload file for content block: " ++ formId,
@@ -251,7 +216,7 @@ let handleFileInputChange =
       | `Image =>
         file |> isInvalidImageFile
           ? Some(
-              "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB.",
+              "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.",
             )
           : None
       };
@@ -300,7 +265,23 @@ let uploadForm =
       value={AuthenticityToken.fromHead()}
     />
     <input type_="hidden" name="block_type" value=fileType />
-    <input type_="file" id=fileId onChange required=true multiple=false />
+    <input
+      type_="file"
+      name="file"
+      id=fileId
+      onChange
+      required=true
+      multiple=false
+    />
+    {switch (aboveContentBlock) {
+     | Some(contentBlock) =>
+       <input
+         type_="hidden"
+         name="above_content_block_id"
+         value={contentBlock |> ContentBlock.id}
+       />
+     | None => React.null
+     }}
   </form>;
 };
 
@@ -343,6 +324,11 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
             )
          |> React.array}
       </div>
+      {switch (state.error) {
+       | Some(error) =>
+         <School__InputGroupError message=error active={state.visible} />
+       | None => React.null
+       }}
     </div>
   </DisablingCover>;
 };

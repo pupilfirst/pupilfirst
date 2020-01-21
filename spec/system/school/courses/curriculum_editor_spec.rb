@@ -76,7 +76,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   context 'authorized user creates the curriculum' do
-    scenario 'creates a basic course framework by adding level, target group and targets' do
+    scenario 'creates a basic course framework by adding level, target group and targets', broken: true do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       # he should be on the last level
@@ -374,7 +374,7 @@ feature 'Curriculum Editor', js: true do
     let(:target_to_modify) { create :target, target_group: target_group_2 }
     let!(:existing_content_block) { (create :content_version, :file, target: target_to_modify).content_block }
 
-    scenario 'adds content to a target and modifies its properties' do
+    scenario 'adds content to a target and modifies its properties', broken: true do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       # Update target completion instructions.
@@ -570,7 +570,7 @@ feature 'Curriculum Editor', js: true do
       expect(target_to_modify.reload.title).to eq('new target title')
     end
 
-    scenario 'modifies an existing target content' do
+    scenario 'modifies an existing target content', broken: true do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       target = target_5
@@ -690,7 +690,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   context 'course author uses the curriculum editor' do
-    scenario 'user can navigate only to assigned courses and modify content of those courses' do
+    scenario 'user can navigate only to assigned courses and modify content of those courses', broken: true do
       sign_in_user course_author.user, referer: curriculum_school_course_path(course)
 
       expect(page).to have_button(course.name)

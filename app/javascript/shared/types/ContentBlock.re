@@ -97,3 +97,32 @@ let blockTypeAsString = blockType =>
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
+
+module Fragments = [%graphql
+  {|
+  fragment allFields on ContentBlock {
+    id
+    blockType
+    sortIndex
+    content {
+      ... on ImageBlock {
+        caption
+        url
+        filename
+      }
+      ... on FileBlock {
+        title
+        url
+        filename
+      }
+      ... on MarkdownBlock {
+        markdown
+      }
+      ... on EmbedBlock {
+        url
+        embedCode
+      }
+    }
+  }
+|}
+];

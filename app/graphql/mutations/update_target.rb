@@ -4,11 +4,11 @@ module Mutations
     argument :title, String, required: true
     argument :role, String, required: true
     argument :target_group_id, ID, required: true
-    argument :evaluation_criteria, [ID], required: true
-    argument :prerequisite_targets, [ID], required: true
-    argument :quiz, [Types::TargetQuizType], required: true
-    argument :completion_instructions, String, required: true
-    argument :link_to_complete, String, required: true
+    argument :evaluation_criteria, [ID], required: false
+    argument :prerequisite_targets, [ID], required: false
+    argument :quiz, [Types::TargetQuizInputType], required: false
+    argument :completion_instructions, String, required: false
+    argument :link_to_complete, String, required: false
     argument :visibility, String, required: true
 
     description "Update a target"

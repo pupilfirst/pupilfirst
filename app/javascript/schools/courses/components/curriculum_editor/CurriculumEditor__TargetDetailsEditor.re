@@ -55,7 +55,8 @@ type action =
       TargetDetails__QuizQuestion.t,
     )
   | RemoveQuizQuestion(TargetDetails__QuizQuestion.id)
-  | UpdateVisibility(TargetDetails.visibility);
+  | UpdateVisibility(TargetDetails.visibility)
+  | UpdateSaving;
 
 module TargetDetailsQuery = [%graphql
   {|
@@ -210,6 +211,7 @@ let reducer = (state, action) =>
       |> Js.Array.filter(q => TargetDetails__QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateSaving => {...state, saving: !state.saving}
   };
 
 let updateTitle = (send, event) => {
@@ -538,6 +540,22 @@ let saveDisabled = state => {
   !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
 };
 
+module UpdateTargetQuery = [%graphql
+  {|
+   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!],$prerequisiteTargets: [ID!], $quiz: [TargetQuizInput!], $completionInstructions: String, $linkToComplete: String, $visibility: String! ) {
+     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility  ) {
+        success
+       }
+     }
+   |}
+];
+
+let updateTarget = (state, send, event) => {
+  ReactEvent.Mouse.preventDefault(event);
+  send(UpdateSaving);
+  ();
+};
+
 [@react.component]
 let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
   let (state, send) =
@@ -761,7 +779,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  <button
                    key="target-actions-step"
                    disabled={saveDisabled(state)}
-                   //  onClick={_e => updateTarget(true, target |> Target.id)}
+                   onClick={updateTarget(state, send)}
                    className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                    {"Update Target" |> str}
                  </button>

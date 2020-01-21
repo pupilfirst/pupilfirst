@@ -24,57 +24,28 @@ module DomUtils = {
   };
 };
 
-module type Identifier = {type t;};
+module type Selectable = {
+  type t;
+  let label: t => option(string);
+  let value: t => string;
+  let searchString: t => string;
+  let color: t => string;
+};
 
-module Make = (Identifier: Identifier) => {
-  module Selectable = {
-    type t = {
-      label: option(string),
-      value: string,
-      color: string,
-      searchString: string,
-      identifier: Identifier.t,
-    };
-
-    let make =
-        (
-          ~label=?,
-          ~value,
-          ~color="gray",
-          ~searchString=value,
-          ~identifier,
-          (),
-        ) => {
-      label,
-      value,
-      color,
-      searchString,
-      identifier,
-    };
-
-    let label = t => t.label;
-
-    let value = t => t.value;
-
-    let color = t => t.color;
-
-    let searchString = t => t.searchString;
-
-    let identifier = t => t.identifier;
-
-    let search = (searchString, selections) =>
-      (
-        selections
-        |> Js.Array.filter(selection =>
-             selection.searchString
-             |> String.lowercase_ascii
-             |> Js.String.includes(searchString |> String.lowercase_ascii)
-           )
-      )
-      ->Belt.SortArray.stableSortBy((x, y) =>
-          String.compare(x.value, y.value)
-        );
-  };
+module Make = (Selectable: Selectable) => {
+  let search = (searchString, selections) =>
+    (
+      selections
+      |> Js.Array.filter(selection =>
+           selection
+           |> Selectable.searchString
+           |> String.lowercase_ascii
+           |> Js.String.includes(searchString |> String.lowercase_ascii)
+         )
+    )
+    ->Belt.SortArray.stableSortBy((x, y) =>
+        String.compare(x |> Selectable.value, y |> Selectable.value)
+      );
 
   let selectionTitle = selection => {
     let value = selection |> Selectable.value;
@@ -121,7 +92,7 @@ module Make = (Identifier: Identifier) => {
     switch (normalizedString) {
     | "" => [||]
     | searchString =>
-      let matchingSelections = unselected |> Selectable.search(searchString);
+      let matchingSelections = unselected |> search(searchString);
 
       matchingSelections
       |> Array.mapi((index, selection) =>

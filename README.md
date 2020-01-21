@@ -124,17 +124,6 @@ committing changes.
 This will also seed data useful for development. Once you've started the server, you should be able to sign in as
 `admin@example.com` (use the _Continue as Developer_ option in dev env), to test access to all interfaces.
 
-#### Optional: Manually mark data migrations as complete
-
-There is an [unacknowledged issue with the data-migrate gem](https://github.com/ilyakatz/data-migrate/issues/82) that
-leaves the list of data migrations unpopulated when the database is seeded. If you intend to run data migrations, or are
-setting up the platform for production use, you'll need to manually mark all existing data migrations as `up`. To do
-this, run the contents of `db/data_schema.rb` in the Rails console - it should look something like this:
-
-```ruby
-DataMigrate::Data.define(version: USE_VALUE_FROM_DATA_SCHEMA_FILE)
-```
-
 ### Set up a reverse-proxy using Nginx
 
 Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your web application running on port 3000

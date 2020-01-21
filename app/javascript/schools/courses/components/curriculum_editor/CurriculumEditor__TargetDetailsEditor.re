@@ -54,7 +54,8 @@ type action =
       TargetDetails__QuizQuestion.id,
       TargetDetails__QuizQuestion.t,
     )
-  | RemoveQuizQuestion(TargetDetails__QuizQuestion.id);
+  | RemoveQuizQuestion(TargetDetails__QuizQuestion.id)
+  | UpdateVisibility(TargetDetails.visibility);
 
 module TargetDetailsQuery = [%graphql
   {|
@@ -97,9 +98,9 @@ let loadTargetDetails = (targetId, send) => {
 };
 
 let computeMethodOfCompletion = targetDetails => {
-  let hasQuiz = targetDetails |> TargetDetails.quiz |> Array.length > 0;
+  let hasQuiz = targetDetails |> TargetDetails.quiz |> ArrayUtils.isNotEmpty;
   let hasEvaluationCriteria =
-    targetDetails.evaluationCriteria |> Array.length > 0;
+    targetDetails.evaluationCriteria |> ArrayUtils.isNotEmpty;
   let hasLinkToComplete =
     switch (targetDetails.linkToComplete) {
     | Some(_) => true
@@ -208,6 +209,7 @@ let reducer = (state, action) =>
       state.quiz
       |> Js.Array.filter(q => TargetDetails__QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
+  | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
   };
 
 let updateTitle = (send, event) => {
@@ -378,6 +380,11 @@ let updateTargetRole = (role, send, event) => {
   send(UpdateTargetRole(role));
 };
 
+let updateVisibility = (visibility, send, event) => {
+  ReactEvent.Mouse.preventDefault(event);
+  send(UpdateVisibility(visibility));
+};
+
 let linkEditor = (state, send) => {
   <div className="mt-5">
     <label
@@ -472,7 +479,7 @@ let isValidQuiz = quiz => {
   |> Js.Array.filter(quizQuestion =>
        quizQuestion |> TargetDetails__QuizQuestion.isValidQuizQuestion != true
      )
-  |> Array.length == 0;
+  |> ArrayUtils.isEmpty;
 };
 
 let addQuizQuestion = (send, event) => {
@@ -517,6 +524,18 @@ let quizEditor = (state, send) => {
       <h5 className="font-semibold ml-2"> {"Add another Question" |> str} </h5>
     </a>
   </div>;
+};
+
+let saveDisabled = state => {
+  let hasValidTitle = state.title |> String.length > 1;
+  let hasValidMethodOfCompletion =
+    switch (state.methodOfCompletion) {
+    | TakeQuiz => isValidQuiz(state.quiz)
+    | MarkAsComplete => true
+    | Evaluated => state.evaluationCriteria |> ArrayUtils.isNotEmpty
+    | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
+    };
+  !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
 };
 
 [@react.component]
@@ -693,6 +712,61 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                value={state.completionInstructions}
                onChange={updateCompletionInstructions(send)}
              />
+           </div>
+           <div className="bg-white p-6">
+             <div
+               className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">
+               <div className="flex items-center flex-shrink-0">
+                 <label
+                   className="block tracking-wide text-sm font-semibold mr-3"
+                   htmlFor="archived">
+                   {"Target Visibility" |> str}
+                 </label>
+                 <div
+                   id="visibility"
+                   className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                   <button
+                     onClick={updateVisibility(Live, send)}
+                     className={booleanButtonClasses(
+                       switch (state.visibility) {
+                       | Live => true
+                       | _ => false
+                       },
+                     )}>
+                     {"Live" |> str}
+                   </button>
+                   <button
+                     onClick={updateVisibility(Archived, send)}
+                     className={booleanButtonClasses(
+                       switch (state.visibility) {
+                       | Archived => true
+                       | _ => false
+                       },
+                     )}>
+                     {"Archived" |> str}
+                   </button>
+                   <button
+                     onClick={updateVisibility(Draft, send)}
+                     className={booleanButtonClasses(
+                       switch (state.visibility) {
+                       | Draft => true
+                       | _ => false
+                       },
+                     )}>
+                     {"Draft" |> str}
+                   </button>
+                 </div>
+               </div>
+               <div className="w-auto">
+                 <button
+                   key="target-actions-step"
+                   disabled={saveDisabled(state)}
+                   //  onClick={_e => updateTarget(true, target |> Target.id)}
+                   className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                   {"Update Target" |> str}
+                 </button>
+               </div>
+             </div>
            </div>
          </div>}
   </div>;

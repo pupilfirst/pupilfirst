@@ -14,12 +14,12 @@ describe Startups::LevelUpEligibilityService do
   let(:student) { startup.founders.first }
   let(:students) { startup.founders }
   let!(:milestone_targets) { create :target_group, level: level_1, milestone: true }
-  let!(:team_target) { create :target, :for_startup, target_group: milestone_targets }
+  let!(:team_target) { create :target, :for_team, target_group: milestone_targets }
   let!(:non_milestone_targets) { create :target_group, level: level_1 }
-  let!(:non_milestone_team_target) { create :target, :for_startup, target_group: non_milestone_targets }
+  let!(:non_milestone_team_target) { create :target, :for_team, target_group: non_milestone_targets }
 
   # Presence of an archived milestone target should not alter results.
-  let!(:archived_team_target) { create :target, :for_startup, :archived, target_group: milestone_targets }
+  let!(:archived_team_target) { create :target, :for_team, :archived, target_group: milestone_targets }
 
   describe '#eligibility' do
     context 'when startup has submitted all milestone targets' do
@@ -100,7 +100,7 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when there are more than one milestone target groups' do
       let!(:second_milestone_target_group) { create :target_group, level: level_1, milestone: true }
-      let!(:milestone_team_target_g2) { create :target, :for_startup, target_group: second_milestone_target_group }
+      let!(:milestone_team_target_g2) { create :target, :for_team, target_group: second_milestone_target_group }
 
       before do
         # Submit all targets in the first milestone target group.
@@ -131,7 +131,7 @@ describe Startups::LevelUpEligibilityService do
       let!(:milestone_target_l2) { create :target, target_group: milestone_target_group_l2, role: Target::ROLE_TEAM }
       let!(:level_3) { create :level, :three, course: course_1 }
       let(:evaluation_criterion) { create :evaluation_criterion, course: course_1 }
-      let!(:team_target) { create :target, :for_startup, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
+      let!(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
 
       before do
         complete_target milestone_target_l2, students

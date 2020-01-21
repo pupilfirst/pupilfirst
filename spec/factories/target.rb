@@ -25,7 +25,7 @@ FactoryBot.define do
       role { Target::ROLE_STUDENT }
     end
 
-    trait :for_startup do
+    trait :for_team do
       role { Target::ROLE_TEAM }
     end
 

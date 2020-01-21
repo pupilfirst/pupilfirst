@@ -11,7 +11,7 @@ describe Users::InitializeSchoolService do
 
   let(:level_one) { create :level, :one, course: course }
   let(:target_group_l1_1) { create :target_group, level: level_one, milestone: true }
-  let!(:target_l1_1_1) { create :target, :with_content, :for_startup, target_group: target_group_l1_1 }
+  let!(:target_l1_1_1) { create :target, :with_content, :for_team, target_group: target_group_l1_1 }
 
   let(:new_name) { Faker::Lorem.words(2).join(' ') }
 

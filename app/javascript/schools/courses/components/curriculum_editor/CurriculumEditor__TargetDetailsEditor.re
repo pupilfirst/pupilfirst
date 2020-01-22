@@ -142,6 +142,7 @@ let reducer = (state, action) =>
         | Some(instructions) => instructions
         | None => ""
         },
+      visibility: targetDetails.visibility,
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
@@ -621,8 +622,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
            ~count=2,
            ~element=SkeletonLoading.contents(),
          )
-       : <DisablingCover
-           message="Saving..." disabled={state.saving}>
+       : <DisablingCover message="Saving..." disabled={state.saving}>
            <div className="mt-2">
              <label
                className="inline-block tracking-wide text-sm font-semibold mb-2"

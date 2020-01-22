@@ -621,194 +621,197 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
            ~count=2,
            ~element=SkeletonLoading.contents(),
          )
-       : <div className="mt-2">
-           <label
-             className="inline-block tracking-wide text-sm font-semibold mb-2"
-             htmlFor="title">
-             {"Title" |> str}
-           </label>
-           <span> {"*" |> str} </span>
-           <div
-             className="flex items-center border-b border-gray-400 pb-2 mb-4">
-             <input
-               className="appearance-none block w-full bg-white text-2xl pr-4 font-semibold text-gray-900 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
-               id="title"
-               type_="text"
-               placeholder="Type target title here"
-               onChange={updateTitle(send)}
-               value={state.title}
-             />
-           </div>
-           <School__InputGroupError
-             message="Enter a valid title"
-             active={state.title |> String.length < 1}
-           />
-           {prerequisiteTargetEditor(
-              send,
-              prerequisiteTargetsForSelector(
-                targetId,
-                targets,
-                state,
-                targetGroups,
-              ),
-            )}
-           <div className="flex items-center mb-6">
+       : <DisablingCover
+           message="Saving..." disabled={state.saving}>
+           <div className="mt-2">
              <label
-               className="block tracking-wide text-sm font-semibold mr-6"
-               htmlFor="evaluated">
-               {"Will a coach review submissions on this target?" |> str}
+               className="inline-block tracking-wide text-sm font-semibold mb-2"
+               htmlFor="title">
+               {"Title" |> str}
              </label>
+             <span> {"*" |> str} </span>
              <div
-               id="evaluated"
-               className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-               <button
-                 onClick={updateMethodOfCompletion(Evaluated, send)}
-                 className={booleanButtonClasses(
-                   targetEvaluated(state.methodOfCompletion),
-                 )}>
-                 {"Yes" |> str}
-               </button>
-               <button
-                 onClick={updateMethodOfCompletion(MarkAsComplete, send)}
-                 className={booleanButtonClasses(
-                   !targetEvaluated(state.methodOfCompletion),
-                 )}>
-                 {"No" |> str}
-               </button>
+               className="flex items-center border-b border-gray-400 pb-2 mb-4">
+               <input
+                 className="appearance-none block w-full bg-white text-2xl pr-4 font-semibold text-gray-900 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+                 id="title"
+                 type_="text"
+                 placeholder="Type target title here"
+                 onChange={updateTitle(send)}
+                 value={state.title}
+               />
              </div>
-           </div>
-           {targetEvaluated(state.methodOfCompletion)
-              ? React.null : methodOfCompletionSelector(state, send)}
-           {switch (state.methodOfCompletion) {
-            | Evaluated =>
-              evaluationCriteriaEditor(state, evaluationCriteria, send)
-            | MarkAsComplete => React.null
-            | TakeQuiz => quizEditor(state, send)
-            | VisitLink => linkEditor(state, send)
-            }}
-           <div className="mt-6">
-             <label
-               className="inline-block tracking-wide text-sm font-semibold"
-               htmlFor="role">
-               {"How should teams tackle this target?" |> str}
-             </label>
-             <HelpIcon
-               className="ml-1"
-               link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
-               {"Should students in a team submit work on a target individually, or together?"
-                |> str}
-             </HelpIcon>
-             <div id="role" className="flex mt-4">
-               <button
-                 onClick={updateTargetRole(TargetDetails.Student, send)}
-                 className={
-                   "mr-4 "
-                   ++ targetRoleClasses(
-                        switch (state.role) {
-                        | TargetDetails.Student => true
-                        | Team => false
-                        },
-                      )
-                 }>
-                 <span className="mr-4">
-                   <Icon className="if i-users-check-light text-3xl" />
-                 </span>
-                 <span className="text-sm">
-                   {"All students must submit individually." |> str}
-                 </span>
-               </button>
-               <button
-                 onClick={updateTargetRole(TargetDetails.Team, send)}
-                 className={targetRoleClasses(
-                   switch (state.role) {
-                   | TargetDetails.Team => true
-                   | Student => false
-                   },
-                 )}>
-                 <span className="mr-4">
-                   <Icon className="if i-user-check-light text-2xl" />
-                 </span>
-                 <span className="text-sm">
-                   {"Only one student in a team" |> str}
-                   <br />
-                   {" needs to submit." |> str}
-                 </span>
-               </button>
-             </div>
-           </div>
-           <div className="mt-6">
-             <label
-               className="tracking-wide text-sm font-semibold"
-               htmlFor="completion-instructions">
-               {"Do you have any completion instructions for the student?"
-                |> str}
-               <span className="ml-1 text-xs font-normal">
-                 {"(optional)" |> str}
-               </span>
-             </label>
-             <HelpIcon
-               link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
-               className="ml-1">
-               {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
-                |> str}
-             </HelpIcon>
-             <input
-               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-               id="completion-instructions"
-               type_="text"
-               maxLength=255
-               value={state.completionInstructions}
-               onChange={updateCompletionInstructions(send)}
+             <School__InputGroupError
+               message="Enter a valid title"
+               active={state.title |> String.length < 1}
              />
-           </div>
-           <div className="bg-white p-6">
-             <div
-               className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">
-               <div className="flex items-center flex-shrink-0">
-                 <label
-                   className="block tracking-wide text-sm font-semibold mr-3"
-                   htmlFor="archived">
-                   {"Target Visibility" |> str}
-                 </label>
-                 <div
-                   id="visibility"
-                   className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-                   {[|TargetDetails.Live, Archived, Draft|]
-                    |> Array.map(visibility =>
-                         <button
-                           onClick={updateVisibility(visibility, send)}
-                           className={booleanButtonClasses(
-                             switch (state.visibility, visibility) {
-                             | (Live, TargetDetails.Live) => true
-                             | (Archived, Archived) => true
-                             | (Draft, Draft) => true
-                             | _anyOtherCombo => false
-                             },
-                           )}>
-                           {(
-                              switch (visibility) {
-                              | Live => "Live"
-                              | Archived => "Archived"
-                              | Draft => "Draft"
-                              }
-                            )
-                            |> str}
-                         </button>
-                       )
-                    |> React.array}
-                 </div>
-               </div>
-               <div className="w-auto">
+             {prerequisiteTargetEditor(
+                send,
+                prerequisiteTargetsForSelector(
+                  targetId,
+                  targets,
+                  state,
+                  targetGroups,
+                ),
+              )}
+             <div className="flex items-center mb-6">
+               <label
+                 className="block tracking-wide text-sm font-semibold mr-6"
+                 htmlFor="evaluated">
+                 {"Will a coach review submissions on this target?" |> str}
+               </label>
+               <div
+                 id="evaluated"
+                 className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
                  <button
-                   key="target-actions-step"
-                   disabled={saveDisabled(state)}
-                   onClick={updateTarget(targetId, state, send)}
-                   className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                   {"Update Target" |> str}
+                   onClick={updateMethodOfCompletion(Evaluated, send)}
+                   className={booleanButtonClasses(
+                     targetEvaluated(state.methodOfCompletion),
+                   )}>
+                   {"Yes" |> str}
+                 </button>
+                 <button
+                   onClick={updateMethodOfCompletion(MarkAsComplete, send)}
+                   className={booleanButtonClasses(
+                     !targetEvaluated(state.methodOfCompletion),
+                   )}>
+                   {"No" |> str}
                  </button>
                </div>
              </div>
+             {targetEvaluated(state.methodOfCompletion)
+                ? React.null : methodOfCompletionSelector(state, send)}
+             {switch (state.methodOfCompletion) {
+              | Evaluated =>
+                evaluationCriteriaEditor(state, evaluationCriteria, send)
+              | MarkAsComplete => React.null
+              | TakeQuiz => quizEditor(state, send)
+              | VisitLink => linkEditor(state, send)
+              }}
+             <div className="mt-6">
+               <label
+                 className="inline-block tracking-wide text-sm font-semibold"
+                 htmlFor="role">
+                 {"How should teams tackle this target?" |> str}
+               </label>
+               <HelpIcon
+                 className="ml-1"
+                 link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
+                 {"Should students in a team submit work on a target individually, or together?"
+                  |> str}
+               </HelpIcon>
+               <div id="role" className="flex mt-4">
+                 <button
+                   onClick={updateTargetRole(TargetDetails.Student, send)}
+                   className={
+                     "mr-4 "
+                     ++ targetRoleClasses(
+                          switch (state.role) {
+                          | TargetDetails.Student => true
+                          | Team => false
+                          },
+                        )
+                   }>
+                   <span className="mr-4">
+                     <Icon className="if i-users-check-light text-3xl" />
+                   </span>
+                   <span className="text-sm">
+                     {"All students must submit individually." |> str}
+                   </span>
+                 </button>
+                 <button
+                   onClick={updateTargetRole(TargetDetails.Team, send)}
+                   className={targetRoleClasses(
+                     switch (state.role) {
+                     | TargetDetails.Team => true
+                     | Student => false
+                     },
+                   )}>
+                   <span className="mr-4">
+                     <Icon className="if i-user-check-light text-2xl" />
+                   </span>
+                   <span className="text-sm">
+                     {"Only one student in a team" |> str}
+                     <br />
+                     {" needs to submit." |> str}
+                   </span>
+                 </button>
+               </div>
+             </div>
+             <div className="mt-6">
+               <label
+                 className="tracking-wide text-sm font-semibold"
+                 htmlFor="completion-instructions">
+                 {"Do you have any completion instructions for the student?"
+                  |> str}
+                 <span className="ml-1 text-xs font-normal">
+                   {"(optional)" |> str}
+                 </span>
+               </label>
+               <HelpIcon
+                 link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
+                 className="ml-1">
+                 {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
+                  |> str}
+               </HelpIcon>
+               <input
+                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                 id="completion-instructions"
+                 type_="text"
+                 maxLength=255
+                 value={state.completionInstructions}
+                 onChange={updateCompletionInstructions(send)}
+               />
+             </div>
+             <div className="bg-white p-6">
+               <div
+                 className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">
+                 <div className="flex items-center flex-shrink-0">
+                   <label
+                     className="block tracking-wide text-sm font-semibold mr-3"
+                     htmlFor="archived">
+                     {"Target Visibility" |> str}
+                   </label>
+                   <div
+                     id="visibility"
+                     className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                     {[|TargetDetails.Live, Archived, Draft|]
+                      |> Array.map(visibility =>
+                           <button
+                             onClick={updateVisibility(visibility, send)}
+                             className={booleanButtonClasses(
+                               switch (state.visibility, visibility) {
+                               | (Live, TargetDetails.Live) => true
+                               | (Archived, Archived) => true
+                               | (Draft, Draft) => true
+                               | _anyOtherCombo => false
+                               },
+                             )}>
+                             {(
+                                switch (visibility) {
+                                | Live => "Live"
+                                | Archived => "Archived"
+                                | Draft => "Draft"
+                                }
+                              )
+                              |> str}
+                           </button>
+                         )
+                      |> React.array}
+                   </div>
+                 </div>
+                 <div className="w-auto">
+                   <button
+                     key="target-actions-step"
+                     disabled={saveDisabled(state)}
+                     onClick={updateTarget(targetId, state, send)}
+                     className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+                     {"Update Target" |> str}
+                   </button>
+                 </div>
+               </div>
+             </div>
            </div>
-         </div>}
+         </DisablingCover>}
   </div>;
 };

@@ -11,11 +11,16 @@ class UpdateTargetMutator < ApplicationQuery
   property :visibility, validates: { presence: true, inclusion: { in: Target.valid_visibility_types } }
 
   validate :target_group_exists
+  validate :target_exists
   validate :only_one_method_of_completion
   validate :course_has_not_ended
 
   def target_group_exists
-    errors[:base] << 'Invalid Target Group id' if target_group.blank?
+    errors[:base] << 'Target group does not exist' if target_group.blank?
+  end
+
+  def target_exists
+    errors[:base] << 'Target does not exist ' if target.blank?
   end
 
   def only_one_method_of_completion

@@ -92,13 +92,15 @@ let makeFromJs = quizData => {
   };
 };
 
-let encoder = t =>
-  Json.Encode.(
-    object_([
-      ("question", t.question |> string),
-      (
-        "answerOption",
-        t.answerOptions |> array(TargetDetails__AnswerOption.encoder),
-      ),
-    ])
-  );
+let quizAsObject = quiz => {
+  quiz
+  |> Array.map(quiz =>
+       {
+         "question": quiz.question,
+         "answerOptions":
+           TargetDetails__AnswerOption.quizAnswersAsObject(
+             quiz.answerOptions,
+           ),
+       }
+     );
+};

@@ -29,10 +29,7 @@ let makeFromJs = answerData => {
   correctAnswer: answerData##correctAnswer,
 };
 
-let encoder = t =>
-  Json.Encode.(
-    object_([
-      ("answer", t.answer |> string),
-      ("correctAnswer", t.correctAnswer |> bool),
-    ])
-  );
+let quizAnswersAsObject = quizAnswers => {
+  quizAnswers
+  |> Array.map(qa => {"answer": qa.answer, "correctAnswer": qa.correctAnswer});
+};

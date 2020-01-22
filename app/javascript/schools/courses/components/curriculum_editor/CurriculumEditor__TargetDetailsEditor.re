@@ -41,7 +41,7 @@ type state = {
 };
 
 type action =
-  | LoadTargetDetails(TargetDetails.t)
+  | SaveTargetDetails(TargetDetails.t)
   | UpdateTitle(string)
   | UpdatePrerequisiteTargets(prerequisiteTarget)
   | UpdateMethodOfCompletion(methodOfCompletion)
@@ -56,7 +56,8 @@ type action =
     )
   | RemoveQuizQuestion(TargetDetails__QuizQuestion.id)
   | UpdateVisibility(TargetDetails.visibility)
-  | UpdateSaving;
+  | UpdateSaving
+  | ResetEditor;
 
 module TargetDetailsQuery = [%graphql
   {|
@@ -92,7 +93,7 @@ let loadTargetDetails = (targetId, send) => {
   response
   |> Js.Promise.then_(result => {
        let targetDetails = TargetDetails.makeFromJs(result##targetDetails);
-       send(LoadTargetDetails(targetDetails));
+       send(SaveTargetDetails(targetDetails));
        Js.Promise.resolve();
      })
   |> ignore;
@@ -117,7 +118,7 @@ let computeMethodOfCompletion = targetDetails => {
 
 let reducer = (state, action) =>
   switch (action) {
-  | LoadTargetDetails(targetDetails) =>
+  | SaveTargetDetails(targetDetails) =>
     let methodOfCompletion = computeMethodOfCompletion(targetDetails);
     let quiz =
       targetDetails.quiz |> ArrayUtils.isNotEmpty
@@ -126,6 +127,7 @@ let reducer = (state, action) =>
       ...state,
       title: targetDetails.title,
       role: targetDetails.role,
+      targetGroupId: targetDetails.targetGroupId,
       evaluationCriteria: targetDetails.evaluationCriteria,
       prerequisiteTargets: targetDetails.prerequisiteTargets,
       methodOfCompletion,
@@ -212,6 +214,7 @@ let reducer = (state, action) =>
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
   | UpdateSaving => {...state, saving: !state.saving}
+  | ResetEditor => {...state, saving: false, dirty: false}
   };
 
 let updateTitle = (send, event) => {
@@ -417,6 +420,42 @@ let methodOfCompletionButtonClasses = value => {
     : defaultClasses ++ " opacity-75 text-gray-900";
 };
 
+let methodOfCompletionSelection = polyMethodOfCompletion =>
+  switch (polyMethodOfCompletion) {
+  | `TakeQuiz => TakeQuiz
+  | `VisitLink => VisitLink
+  | `MarkAsComplete => MarkAsComplete
+  };
+
+let methodOfCompletionButton = (methodOfCompletion, state, send) => {
+  let buttonString =
+    switch (methodOfCompletion) {
+    | `TakeQuiz => "Take a quiz to complete the target."
+    | `VisitLink => "Visit a link to complete the target."
+    | `MarkAsComplete => "Simply mark the target as completed."
+    };
+
+  let selected =
+    switch (state.methodOfCompletion, methodOfCompletion) {
+    | (TakeQuiz, `TakeQuiz) => true
+    | (VisitLink, `VisitLink) => true
+    | (MarkAsComplete, `MarkAsComplete) => true
+    | _anyOtherCombo => false
+    };
+
+  <div className="w-1/3 px-2">
+    <button
+      onClick={updateMethodOfCompletion(
+        methodOfCompletion |> methodOfCompletionSelection,
+        send,
+      )}
+      className={methodOfCompletionButtonClasses(selected)}>
+      <div className="mb-1"> <img className="w-12 h-12" src=quizIcon /> </div>
+      {buttonString |> str}
+    </button>
+  </div>;
+};
+
 let methodOfCompletionSelector = (state, send) => {
   <div>
     <div className="mb-6">
@@ -426,51 +465,11 @@ let methodOfCompletionSelector = (state, send) => {
         {"How do you want the student to complete the target?" |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2">
-        <div className="w-1/3 px-2">
-          <button
-            onClick={updateMethodOfCompletion(MarkAsComplete, send)}
-            className={methodOfCompletionButtonClasses(
-              switch (state.methodOfCompletion) {
-              | MarkAsComplete => true
-              | _ => false
-              },
-            )}>
-            <div className="mb-1">
-              <img className="w-12 h-12" src=markIcon />
-            </div>
-            {"Simply mark the target as completed." |> str}
-          </button>
-        </div>
-        <div className="w-1/3 px-2">
-          <button
-            onClick={updateMethodOfCompletion(VisitLink, send)}
-            className={methodOfCompletionButtonClasses(
-              switch (state.methodOfCompletion) {
-              | VisitLink => true
-              | _ => false
-              },
-            )}>
-            <div className="mb-1">
-              <img className="w-12 h-12" src=linkIcon />
-            </div>
-            {"Visit a link to complete the target." |> str}
-          </button>
-        </div>
-        <div className="w-1/3 px-2">
-          <button
-            onClick={updateMethodOfCompletion(TakeQuiz, send)}
-            className={methodOfCompletionButtonClasses(
-              switch (state.methodOfCompletion) {
-              | TakeQuiz => true
-              | _ => false
-              },
-            )}>
-            <div className="mb-1">
-              <img className="w-12 h-12" src=quizIcon />
-            </div>
-            {"Take a quiz to complete the target." |> str}
-          </button>
-        </div>
+        {[|`MarkAsComplete, `VisitLink, `TakeQuiz|]
+         |> Array.map(methodOfCompletion =>
+              methodOfCompletionButton(methodOfCompletion, state, send)
+            )
+         |> React.array}
       </div>
     </div>
   </div>;
@@ -542,7 +541,7 @@ let saveDisabled = state => {
 
 module UpdateTargetQuery = [%graphql
   {|
-   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!],$prerequisiteTargets: [ID!], $quiz: [TargetQuizInput!], $completionInstructions: String, $linkToComplete: String, $visibility: String! ) {
+   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility  ) {
         success
        }
@@ -550,9 +549,40 @@ module UpdateTargetQuery = [%graphql
    |}
 ];
 
-let updateTarget = (state, send, event) => {
+let updateTarget = (targetId, state, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(UpdateSaving);
+  let role = state.role |> TargetDetails.roleAsString;
+  let visibility = state.visibility |> TargetDetails.visibilityAsString;
+  let quiz =
+    state.quiz
+    |> Js.Array.filter(question =>
+         TargetDetails__QuizQuestion.isValidQuizQuestion(question)
+       )
+    |> TargetDetails__QuizQuestion.quizAsObject;
+  let updateTargetQuery =
+    UpdateTargetQuery.make(
+      ~id=targetId,
+      ~targetGroupId=state.targetGroupId,
+      ~title=state.title,
+      ~role,
+      ~evaluationCriteria=state.evaluationCriteria,
+      ~prerequisiteTargets=state.prerequisiteTargets,
+      ~quiz,
+      ~completionInstructions=state.completionInstructions,
+      ~linkToComplete=state.linkToComplete,
+      ~visibility,
+      (),
+    );
+  let response =
+    updateTargetQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
+  response
+  |> Js.Promise.then_(result => {
+       result##updateTarget##success
+         ? send(ResetEditor) : send(UpdateSaving);
+       Js.Promise.resolve();
+     })
+  |> ignore;
   ();
 };
 
@@ -743,43 +773,36 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  <div
                    id="visibility"
                    className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-                   <button
-                     onClick={updateVisibility(Live, send)}
-                     className={booleanButtonClasses(
-                       switch (state.visibility) {
-                       | Live => true
-                       | _ => false
-                       },
-                     )}>
-                     {"Live" |> str}
-                   </button>
-                   <button
-                     onClick={updateVisibility(Archived, send)}
-                     className={booleanButtonClasses(
-                       switch (state.visibility) {
-                       | Archived => true
-                       | _ => false
-                       },
-                     )}>
-                     {"Archived" |> str}
-                   </button>
-                   <button
-                     onClick={updateVisibility(Draft, send)}
-                     className={booleanButtonClasses(
-                       switch (state.visibility) {
-                       | Draft => true
-                       | _ => false
-                       },
-                     )}>
-                     {"Draft" |> str}
-                   </button>
+                   {[|TargetDetails.Live, Archived, Draft|]
+                    |> Array.map(visibility =>
+                         <button
+                           onClick={updateVisibility(visibility, send)}
+                           className={booleanButtonClasses(
+                             switch (state.visibility, visibility) {
+                             | (Live, TargetDetails.Live) => true
+                             | (Archived, Archived) => true
+                             | (Draft, Draft) => true
+                             | _anyOtherCombo => false
+                             },
+                           )}>
+                           {(
+                              switch (visibility) {
+                              | Live => "Live"
+                              | Archived => "Archived"
+                              | Draft => "Draft"
+                              }
+                            )
+                            |> str}
+                         </button>
+                       )
+                    |> React.array}
                  </div>
                </div>
                <div className="w-auto">
                  <button
                    key="target-actions-step"
                    disabled={saveDisabled(state)}
-                   onClick={updateTarget(state, send)}
+                   onClick={updateTarget(targetId, state, send)}
                    className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                    {"Update Target" |> str}
                  </button>

@@ -40,6 +40,19 @@ let decodeVisibility = visibilityString =>
   | _ => raise(InvalidVisibilityValue("Unknown Value"))
   };
 
+let visibilityAsString = visibility =>
+  switch (visibility) {
+  | Draft => "draft"
+  | Live => "live"
+  | Archived => "archived"
+  };
+
+let roleAsString = role =>
+  switch (role) {
+  | Student => "student"
+  | Team => "team"
+  };
+
 let decodeRole = roleString =>
   switch (roleString) {
   | "student" => Student

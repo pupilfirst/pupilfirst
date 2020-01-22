@@ -3,7 +3,7 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def submission_details
     {
-      submissions: submissions.includes(:startup_feedback, :timeline_event_grades, :evaluator).order("timeline_events.created_at").reverse,
+      submissions: submissions_from_same_set_of_students,
       target_id: target.id,
       target_title: target.title,
       students: students,
@@ -21,10 +21,20 @@ class SubmissionDetailsResolver < ApplicationQuery
     @submission ||= TimelineEvent.find_by(id: submission_id)
   end
 
+  def submissions_from_same_set_of_students
+    submissions.includes(:startup_feedback, :timeline_event_grades, :evaluator)
+      .order("timeline_events.created_at DESC")
+      .select { |s| s.timeline_event_owners.pluck(:founder_id).sort == student_ids }
+  end
+
   def submissions
     TimelineEvent.where(target_id: submission.target_id)
-      .includes(:timeline_event_owners)
-      .where(timeline_event_owners: { founder_id: submission.founders.pluck(:id) })
+      .joins(:timeline_event_owners)
+      .where(timeline_event_owners: { founder_id: student_ids }).distinct
+  end
+
+  def student_ids
+    @student_ids ||= submission.founders.pluck(:id).sort
   end
 
   def target

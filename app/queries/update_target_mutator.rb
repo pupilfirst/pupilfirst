@@ -1,4 +1,6 @@
 class UpdateTargetMutator < ApplicationQuery
+  include AuthorizeAuthor
+
   property :id, validates: { presence: true }
   property :title, validates: { presence: true, length: { minimum: 1, maximum: 250 } }
   property :target_group_id, validates: { presence: true }
@@ -20,7 +22,7 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def target_exists
-    errors[:base] << 'Target does not exist ' if target.blank?
+    errors[:base] << 'Target does not exist' if target.blank?
   end
 
   def only_one_method_of_completion
@@ -32,7 +34,7 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def course_has_not_ended
-    !target_group.course.ended?
+    errors[:base] << 'Course has ended' if target_group.course.ended?
   end
 
   def update
@@ -41,16 +43,16 @@ class UpdateTargetMutator < ApplicationQuery
 
   private
 
-  def authorized?
-    Schools::TargetPolicy.new(pundit_user, target).update?
-  end
-
   def target_group
     @target_group ||= TargetGroup.find_by(id: target_group_id)
   end
 
   def target
     @target ||= Target.find_by(id: id)
+  end
+
+  def course
+    @course ||= target_group.course
   end
 
   def target_params

@@ -3,6 +3,7 @@ class UpdateTargetMutator < ApplicationQuery
   property :title, validates: { presence: true, length: { minimum: 1, maximum: 250 } }
   property :target_group_id, validates: { presence: true }
   property :role, validates: { presence: true, inclusion: { in: Target.valid_roles } }
+  property :prerequisite_targets
   property :evaluation_criteria
   property :quiz
   property :completion_instructions
@@ -18,7 +19,7 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def only_one_method_of_completion
-    completion_criteria = [evaluation_criterion_ids.present?, link_to_complete.present?, quiz.present?]
+    completion_criteria = [evaluation_criteria.present?, link_to_complete.present?, quiz.present?]
 
     return if completion_criteria.one? || completion_criteria.none?
 
@@ -36,7 +37,7 @@ class UpdateTargetMutator < ApplicationQuery
   private
 
   def authorized?
-    School::TargetPolicy.new(pundit_user, target).update?
+    Schools::TargetPolicy.new(pundit_user, target).update?
   end
 
   def target_group
@@ -53,7 +54,7 @@ class UpdateTargetMutator < ApplicationQuery
       title: title,
       visibility: visibility,
       target_group_id: target_group_id,
-      prerequisite_target_ids: prerequisite_target_ids,
+      prerequisite_target_ids: prerequisite_targets,
       evaluation_criterion_ids: evaluation_criteria,
       quiz: quiz,
       link_to_complete: link_to_complete,

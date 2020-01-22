@@ -4,9 +4,9 @@ module Mutations
     argument :title, String, required: true
     argument :role, String, required: true
     argument :target_group_id, ID, required: true
-    argument :evaluation_criteria, [ID], required: false
-    argument :prerequisite_targets, [ID], required: false
-    argument :quiz, [Types::TargetQuizInputType], required: false
+    argument :evaluation_criteria, [ID], required: true
+    argument :prerequisite_targets, [ID], required: true
+    argument :quiz, [Types::TargetQuizInputType], required: true
     argument :completion_instructions, String, required: false
     argument :link_to_complete, String, required: false
     argument :visibility, String, required: true
@@ -19,7 +19,7 @@ module Mutations
       mutator = UpdateTargetMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Evaluation criterion updated successfully!')
+        mutator.notify(:success, 'Done!', 'Target updated successfully!')
         mutator.update
         { success: true }
       else

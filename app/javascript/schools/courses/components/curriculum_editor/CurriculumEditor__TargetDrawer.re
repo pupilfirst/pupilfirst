@@ -74,7 +74,7 @@ let make = (~targets, ~targetGroups, ~evaluationCriteria, ~course) => {
           Details,
         )
       | "versions" => (
-          <div> {"Target version selector goes here" |> str} </div>,
+          <CurriculumEditor__VersionsEditor targetId />,
           Versions,
         )
       | otherPage =>

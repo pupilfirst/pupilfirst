@@ -1,6 +1,6 @@
 require_relative '../../lib/active_admin/current_admin_user'
 
-ActiveAdmin::BaseController.send(:include, ActiveAdmin::CurrentAdminUser)
+ActiveAdmin::BaseController.include ActiveAdmin::CurrentAdminUser
 
 # Customize <head> for all active admin pages.
 ActiveAdmin::Views::Pages::Base.class_eval do

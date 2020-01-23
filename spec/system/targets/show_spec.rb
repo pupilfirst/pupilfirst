@@ -116,7 +116,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_button('Submit')
 
     find('a', text: 'Upload File').click
-    attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
+    attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
     find('a', text: 'Add URL').click
     fill_in 'attachment_url', with: 'https://example.com?q=2'
     click_button 'Attach link'
@@ -616,7 +616,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_button('Submit', disabled: true)
 
       find('a', text: 'Upload File').click
-      attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
+      attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
       find('a', text: 'Add URL').click
       fill_in 'attachment_url', with: 'https://example.com?q=2'
       click_button 'Attach link'

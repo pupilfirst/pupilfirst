@@ -10,7 +10,7 @@ module Users
       if oauth_origin.present?
         if @email.blank?
           redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)
-          return
+          nil
         else
           sign_in_at_oauth_origin
         end

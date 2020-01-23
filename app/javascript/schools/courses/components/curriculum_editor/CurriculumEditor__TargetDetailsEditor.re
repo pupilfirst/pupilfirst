@@ -88,8 +88,7 @@ module TargetDetailsQuery = [%graphql
 
 let loadTargetDetails = (targetId, send) => {
   let response =
-    TargetDetailsQuery.make(~targetId, ())
-    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead(), ~notify=true);
+    TargetDetailsQuery.make(~targetId, ()) |> GraphqlQuery.sendQuery2;
   response
   |> Js.Promise.then_(result => {
        let targetDetails = TargetDetails.makeFromJs(result##targetDetails);
@@ -278,10 +277,13 @@ let multiSelectEvaluationCriteriaCB = (send, key, value, selected) => {
 
 let prerequisiteTargetEditor = (send, prerequisiteTargetsData) => {
   prerequisiteTargetsData |> ListUtils.isNotEmpty
-    ? <div>
+    ? <div className="mb-6">
         <label
           className="block tracking-wide text-sm font-semibold mb-2"
           htmlFor="prerequisite_targets">
+          <span className="mr-2">
+            <i className="fas fa-list text-base" />
+          </span>
           {"Are there any prerequisite targets?" |> str}
         </label>
         <div id="prerequisite_targets" className="mb-6">
@@ -348,6 +350,7 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
     <label
       className="block tracking-wide text-sm font-semibold mr-6 mb-2"
       htmlFor="evaluation_criteria">
+      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
       {"Choose evaluation criteria from your list" |> str}
     </label>
     {validNumberOfEvaluationCriteria(state)
@@ -398,7 +401,6 @@ let linkEditor = (state, send) => {
       htmlFor="link_to_complete">
       {"Link to complete" |> str}
     </label>
-    <span> {"*" |> str} </span>
     <input
       className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
       id="link_to_complete"
@@ -575,8 +577,7 @@ let updateTarget = (targetId, state, send, event) => {
       ~visibility,
       (),
     );
-  let response =
-    updateTargetQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
+  let response = updateTargetQuery |> GraphqlQuery.sendQuery2;
   response
   |> Js.Promise.then_(result => {
        result##updateTarget##success
@@ -624,16 +625,17 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
          )
        : <DisablingCover message="Saving..." disabled={state.saving}>
            <div className="mt-2">
-             <label
-               className="inline-block tracking-wide text-sm font-semibold mb-2"
-               htmlFor="title">
-               {"Title" |> str}
-             </label>
-             <span> {"*" |> str} </span>
-             <div
-               className="flex items-center border-b border-gray-400 pb-2 mb-4">
+             <div className="mb-6">
+               <label
+                 className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
+                 htmlFor="title">
+                 <span className="mr-2">
+                   <i className="fas fa-list text-base" />
+                 </span>
+                 {"Title" |> str}
+               </label>
                <input
-                 className="appearance-none block w-full bg-white text-2xl pr-4 font-semibold text-gray-900 leading-tight hover:border-gray-500 focus:outline-none focus:bg-white focus:border-gray-500"
+                 className="block w-full bg-white px-4 py-2 appearance-none font-semibold text-gray-900 leading-tight border text-sm border-gray-400 rounded-lg focus:outline-none"
                  id="title"
                  type_="text"
                  placeholder="Type target title here"
@@ -658,6 +660,9 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                <label
                  className="block tracking-wide text-sm font-semibold mr-6"
                  htmlFor="evaluated">
+                 <span className="mr-2">
+                   <i className="fas fa-list text-base" />
+                 </span>
                  {"Will a coach review submissions on this target?" |> str}
                </label>
                <div
@@ -688,10 +693,13 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
               | TakeQuiz => quizEditor(state, send)
               | VisitLink => linkEditor(state, send)
               }}
-             <div className="mt-6">
+             <div className="mb-6">
                <label
                  className="inline-block tracking-wide text-sm font-semibold"
                  htmlFor="role">
+                 <span className="mr-2">
+                   <i className="fas fa-list text-base" />
+                 </span>
                  {"How should teams tackle this target?" |> str}
                </label>
                <HelpIcon
@@ -738,10 +746,13 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  </button>
                </div>
              </div>
-             <div className="mt-6">
+             <div className="mb-6">
                <label
                  className="tracking-wide text-sm font-semibold"
                  htmlFor="completion-instructions">
+                 <span className="mr-2">
+                   <i className="fas fa-list text-base" />
+                 </span>
                  {"Do you have any completion instructions for the student?"
                   |> str}
                  <span className="ml-1 text-xs font-normal">
@@ -763,13 +774,16 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  onChange={updateCompletionInstructions(send)}
                />
              </div>
-             <div className="bg-white p-6">
+             <div className="bg-white">
                <div
-                 className="flex max-w-3xl w-full justify-between items-center px-3 mx-auto">
+                 className="flex w-full justify-between items-center mx-auto">
                  <div className="flex items-center flex-shrink-0">
                    <label
                      className="block tracking-wide text-sm font-semibold mr-3"
                      htmlFor="archived">
+                     <span className="mr-2">
+                       <i className="fas fa-list text-base" />
+                     </span>
                      {"Target Visibility" |> str}
                    </label>
                    <div

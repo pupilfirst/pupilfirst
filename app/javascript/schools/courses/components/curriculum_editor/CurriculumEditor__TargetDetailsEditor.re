@@ -286,7 +286,7 @@ let prerequisiteTargetEditor = (send, prerequisiteTargetsData) => {
           </span>
           {"Are there any prerequisite targets?" |> str}
         </label>
-        <div id="prerequisite_targets" className="mb-6">
+        <div id="prerequisite_targets" className="mb-6 ml-6">
           <School__SelectBox
             noSelectionHeading="No prerequisites selected"
             noSelectionDescription="This target will not have any prerequisites."
@@ -353,21 +353,23 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
       {"Choose evaluation criteria from your list" |> str}
     </label>
-    {validNumberOfEvaluationCriteria(state)
-       ? React.null
-       : <div className="drawer-right-form__error-msg">
-           {"Atleast one has to be selected" |> str}
-         </div>}
-    <School__SelectBox
-      items={
-        evaluationCriteriaForSelector(state, evaluationCriteria)
-        |> School__SelectBox.convertOldItems
-      }
-      selectCB={
-        multiSelectEvaluationCriteriaCB(send)
-        |> School__SelectBox.convertOldCallback
-      }
-    />
+    {<div className="ml-6">
+       {validNumberOfEvaluationCriteria(state)
+          ? React.null
+          : <div className="drawer-right-form__error-msg mb-2">
+              {"Atleast one has to be selected" |> str}
+            </div>}
+       <School__SelectBox
+         items={
+           evaluationCriteriaForSelector(state, evaluationCriteria)
+           |> School__SelectBox.convertOldItems
+         }
+         selectCB={
+           multiSelectEvaluationCriteriaCB(send)
+           |> School__SelectBox.convertOldCallback
+         }
+       />
+     </div>}
   </div>;
 };
 
@@ -395,23 +397,29 @@ let updateVisibility = (visibility, send, event) => {
 };
 
 let linkEditor = (state, send) => {
-  <div className="mt-5">
+  <div className="mb-6">
     <label
       className="inline-block tracking-wide text-sm font-semibold"
       htmlFor="link_to_complete">
+      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
       {"Link to complete" |> str}
     </label>
-    <input
-      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-      id="link_to_complete"
-      type_="text"
-      placeholder="Paste link to complete"
-      value={state.linkToComplete}
-      onChange={updateLinkToComplete(send)}
-    />
-    {state.linkToComplete |> UrlUtils.isInvalid(false)
-       ? <School__InputGroupError message="Enter a valid link" active=true />
-       : React.null}
+    <div className="ml-6">
+      <input
+        className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        id="link_to_complete"
+        type_="text"
+        placeholder="Paste link to complete"
+        value={state.linkToComplete}
+        onChange={updateLinkToComplete(send)}
+      />
+      {state.linkToComplete |> UrlUtils.isInvalid(false)
+         ? <School__InputGroupError
+             message="Enter a valid link"
+             active=true
+           />
+         : React.null}
+    </div>
   </div>;
 };
 
@@ -465,6 +473,7 @@ let methodOfCompletionSelector = (state, send) => {
       <label
         className="block tracking-wide text-sm font-semibold mr-6 mb-3"
         htmlFor="method_of_completion">
+        <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
         {"How do you want the student to complete the target?" |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2">
@@ -498,35 +507,40 @@ let questionCanBeRemoved = state => state.quiz |> Array.length > 1;
 
 let quizEditor = (state, send) => {
   <div>
-    <h3
-      className="block tracking-wide font-semibold mb-2"
+    <label
+      className="block tracking-wide text-sm font-semibold mr-6 mb-3"
       htmlFor="Quiz question 1">
+      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
       {"Prepare the quiz now." |> str}
-    </h3>
-    {isValidQuiz(state.quiz)
-       ? ReasonReact.null
-       : <School__InputGroupError
-           message="All questions must be filled in, and all questions should have at least two answers."
-           active=true
-         />}
-    {state.quiz
-     |> Array.mapi((index, quizQuestion) =>
-          <CurriculumEditor__TargetQuizQuestion2
-            key={quizQuestion |> TargetDetails__QuizQuestion.id}
-            questionNumber=index
-            quizQuestion
-            updateQuizQuestionCB={updateQuizQuestionCB(send)}
-            removeQuizQuestionCB={removeQuizQuestionCB(send)}
-            questionCanBeRemoved={questionCanBeRemoved(state)}
-          />
-        )
-     |> ReasonReact.array}
-    <a
-      onClick={addQuizQuestion(send)}
-      className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
-      <i className="fas fa-plus-circle text-lg" />
-      <h5 className="font-semibold ml-2"> {"Add another Question" |> str} </h5>
-    </a>
+    </label>
+    {<div className="ml-6">
+       {isValidQuiz(state.quiz)
+          ? ReasonReact.null
+          : <School__InputGroupError
+              message="All questions must be filled in, and all questions should have at least two answers."
+              active=true
+            />}
+       {state.quiz
+        |> Array.mapi((index, quizQuestion) =>
+             <CurriculumEditor__TargetQuizQuestion2
+               key={quizQuestion |> TargetDetails__QuizQuestion.id}
+               questionNumber=index
+               quizQuestion
+               updateQuizQuestionCB={updateQuizQuestionCB(send)}
+               removeQuizQuestionCB={removeQuizQuestionCB(send)}
+               questionCanBeRemoved={questionCanBeRemoved(state)}
+             />
+           )
+        |> ReasonReact.array}
+       <a
+         onClick={addQuizQuestion(send)}
+         className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
+         <i className="fas fa-plus-circle text-lg" />
+         <h5 className="font-semibold ml-2">
+           {"Add another Question" |> str}
+         </h5>
+       </a>
+     </div>}
   </div>;
 };
 
@@ -634,19 +648,21 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  </span>
                  {"Title" |> str}
                </label>
-               <input
-                 className="block w-full bg-white px-4 py-2 appearance-none font-semibold text-gray-900 leading-tight border text-sm border-gray-400 rounded-lg focus:outline-none"
-                 id="title"
-                 type_="text"
-                 placeholder="Type target title here"
-                 onChange={updateTitle(send)}
-                 value={state.title}
-               />
+               <div className="ml-6">
+                 <input
+                   className="block w-full bg-white px-4 py-3 my-2 appearance-none font-semibold text-gray-900 leading-tight border text-sm border-gray-400 rounded-lg focus:outline-none"
+                   id="title"
+                   type_="text"
+                   placeholder="Type target title here"
+                   onChange={updateTitle(send)}
+                   value={state.title}
+                 />
+                 <School__InputGroupError
+                   message="Enter a valid title"
+                   active={state.title |> String.length < 1}
+                 />
+               </div>
              </div>
-             <School__InputGroupError
-               message="Enter a valid title"
-               active={state.title |> String.length < 1}
-             />
              {prerequisiteTargetEditor(
                 send,
                 prerequisiteTargetsForSelector(
@@ -708,7 +724,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  {"Should students in a team submit work on a target individually, or together?"
                   |> str}
                </HelpIcon>
-               <div id="role" className="flex mt-4">
+               <div id="role" className="flex mt-4 ml-6">
                  <button
                    onClick={updateTargetRole(TargetDetails.Student, send)}
                    className={
@@ -765,14 +781,16 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                  {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
                   |> str}
                </HelpIcon>
-               <input
-                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                 id="completion-instructions"
-                 type_="text"
-                 maxLength=255
-                 value={state.completionInstructions}
-                 onChange={updateCompletionInstructions(send)}
-               />
+               <div className="ml-6">
+                 <input
+                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   id="completion-instructions"
+                   type_="text"
+                   maxLength=255
+                   value={state.completionInstructions}
+                   onChange={updateCompletionInstructions(send)}
+                 />
+               </div>
              </div>
              <div className="bg-white">
                <div

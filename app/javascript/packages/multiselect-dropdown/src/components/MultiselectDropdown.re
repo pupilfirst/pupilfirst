@@ -24,57 +24,28 @@ module DomUtils = {
   };
 };
 
-module type Identifier = {type t;};
+module type Selectable = {
+  type t;
+  let label: t => option(string);
+  let value: t => string;
+  let searchString: t => string;
+  let color: t => string;
+};
 
-module Make = (Identifier: Identifier) => {
-  module Selectable = {
-    type t = {
-      label: option(string),
-      value: string,
-      color: string,
-      searchString: string,
-      identifier: Identifier.t,
-    };
-
-    let make =
-        (
-          ~label=?,
-          ~value,
-          ~color="gray",
-          ~searchString=value,
-          ~identifier,
-          (),
-        ) => {
-      label,
-      value,
-      color,
-      searchString,
-      identifier,
-    };
-
-    let label = t => t.label;
-
-    let value = t => t.value;
-
-    let color = t => t.color;
-
-    let searchString = t => t.searchString;
-
-    let identifier = t => t.identifier;
-
-    let search = (searchString, selections) =>
-      (
-        selections
-        |> Js.Array.filter(selection =>
-             selection.searchString
-             |> String.lowercase_ascii
-             |> Js.String.includes(searchString |> String.lowercase_ascii)
-           )
-      )
-      ->Belt.SortArray.stableSortBy((x, y) =>
-          String.compare(x.value, y.value)
-        );
-  };
+module Make = (Selectable: Selectable) => {
+  let search = (searchString, selections) =>
+    (
+      selections
+      |> Js.Array.filter(selection =>
+           selection
+           |> Selectable.searchString
+           |> String.lowercase_ascii
+           |> Js.String.includes(searchString |> String.lowercase_ascii)
+         )
+    )
+    ->Belt.SortArray.stableSortBy((x, y) =>
+        String.compare(x |> Selectable.value, y |> Selectable.value)
+      );
 
   let selectionTitle = selection => {
     let value = selection |> Selectable.value;
@@ -100,14 +71,14 @@ module Make = (Identifier: Identifier) => {
     );
   };
 
-  let applyFilter = (selection, selectCB, id, event) => {
+  let applyFilter = (selection, onSelect, id, event) => {
     event |> ReactEvent.Mouse.preventDefault;
 
-    selectCB(selection);
+    onSelect(selection);
     DomUtils.focus(id);
   };
 
-  let searchResult = (searchInput, unselected, labelSuffix, id, selectCB) => {
+  let searchResult = (searchInput, unselected, labelSuffix, id, onSelect) => {
     // Remove all excess space characters from the user input.
     let normalizedString = {
       searchInput
@@ -121,7 +92,7 @@ module Make = (Identifier: Identifier) => {
     switch (normalizedString) {
     | "" => [||]
     | searchString =>
-      let matchingSelections = unselected |> Selectable.search(searchString);
+      let matchingSelections = unselected |> search(searchString);
 
       matchingSelections
       |> Array.mapi((index, selection) =>
@@ -129,7 +100,7 @@ module Make = (Identifier: Identifier) => {
              key={index |> string_of_int}
              title={selectionTitle(selection)}
              className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
-             onClick={applyFilter(selection, selectCB, id)}>
+             onClick={applyFilter(selection, onSelect, id)}>
              {switch (selection |> Selectable.label) {
               | Some(label) =>
                 <span className="mr-2 w-1/6 text-right">
@@ -146,13 +117,13 @@ module Make = (Identifier: Identifier) => {
     };
   };
 
-  let removeSelection = (deselectCB, selection, event) => {
+  let removeSelection = (onDeselect, selection, event) => {
     event |> ReactEvent.Mouse.preventDefault;
 
-    deselectCB(selection);
+    onDeselect(selection);
   };
 
-  let showSelected = (deselectCB, labelSuffix, selected) => {
+  let showSelected = (onDeselect, labelSuffix, selected) => {
     selected
     |> Array.mapi((index, selection) => {
          let value = selection |> Selectable.value;
@@ -170,8 +141,8 @@ module Make = (Identifier: Identifier) => {
              </span>
              <button
                title={"Remove selection: " ++ value}
-               className="ml-1 text-red-700 px-2 py-px flex focus:outline-none hover:bg-red-400 hover:text-white"
-               onClick={removeSelection(deselectCB, selection)}>
+               className="ml-1 text-red-700 px-2 py-px focus:outline-none hover:bg-red-400 hover:text-white flex items-center"
+               onClick={removeSelection(onDeselect, selection)}>
                <PfIcon className="if i-times-light" />
              </button>
            </div>
@@ -188,8 +159,8 @@ module Make = (Identifier: Identifier) => {
         ~value,
         ~unselected,
         ~selected,
-        ~selectCB,
-        ~deselectCB,
+        ~onSelect,
+        ~onDeselect,
         ~labelSuffix=": ",
         ~emptyMessage="No results found",
       ) => {
@@ -206,12 +177,12 @@ module Make = (Identifier: Identifier) => {
       );
 
     let results =
-      searchResult(value, unselected, labelSuffix, inputId, selectCB);
+      searchResult(value, unselected, labelSuffix, inputId, onSelect);
     <div className="w-full relative">
       <div>
         <div
           className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
-          {selected |> showSelected(deselectCB, labelSuffix) |> React.array}
+          {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             autoComplete="off"
             value

@@ -9,8 +9,8 @@ feature 'Founder Show' do
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1 }
   let(:target_1) { create :target, :for_founders, target_group: target_group }
-  let(:target_2) { create :target, :for_startup, target_group: target_group }
-  let(:target_3) { create :target, :for_startup, target_group: target_group }
+  let(:target_2) { create :target, :for_team, target_group: target_group }
+  let(:target_3) { create :target, :for_team, target_group: target_group }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:startup) { create :startup, level: level_1 }

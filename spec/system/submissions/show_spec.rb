@@ -466,4 +466,52 @@ feature 'Submissions show' do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
   end
+
+  context 'with reviewed submissions from 2 teams' do
+    let(:target) { create :target, :for_team, target_group: target_group }
+
+    let(:submission_reviewed_1) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let(:submission_reviewed_2) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let(:submission_reviewed_3) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let(:submission_reviewed_4) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+
+    let(:team_1) { create :startup, level: level }
+    let(:team_2) { create :startup, level: level }
+
+    let!(:timeline_event_grade_1) { create(:timeline_event_grade, timeline_event: submission_reviewed_1, evaluation_criterion: evaluation_criterion_1) }
+    let!(:timeline_event_grade_2) { create(:timeline_event_grade, timeline_event: submission_reviewed_2, evaluation_criterion: evaluation_criterion_1) }
+    let!(:timeline_event_grade_3) { create(:timeline_event_grade, timeline_event: submission_reviewed_3, evaluation_criterion: evaluation_criterion_1) }
+    let!(:timeline_event_grade_4) { create(:timeline_event_grade, timeline_event: submission_reviewed_4, evaluation_criterion: evaluation_criterion_1) }
+
+    before do
+      submission_reviewed_1.founders << team_1.founders
+      submission_reviewed_1.founders << team_2.founders.first
+
+      submission_reviewed_2.founders << team_1.founders
+      submission_reviewed_2.founders << team_2.founders
+
+      submission_reviewed_3.founders << team_1.founders
+      submission_reviewed_3.founders << team_2.founders
+    end
+
+    scenario 'coach visits submission show', js: true do
+      sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed_1)
+
+      # submission 1
+      expect(page).to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(team_1.founders.last.name)
+      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).not_to have_text(submission_reviewed_2.description)
+      expect(page).not_to have_text(submission_reviewed_3.description)
+
+      # submission 2 and 3
+      visit timeline_event_path(submission_reviewed_3)
+
+      expect(page).to have_text(team_1.founders.last.name)
+      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to have_text(submission_reviewed_3.description)
+      expect(page).to have_text(submission_reviewed_2.description)
+      expect(page).not_to have_text(submission_reviewed_1.description)
+    end
+  end
 end

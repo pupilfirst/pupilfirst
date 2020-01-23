@@ -14,6 +14,7 @@ feature 'Course review' do
   let(:target_l1) { create :target, :for_founders, target_group: target_group_l1 }
   let(:target_l2) { create :target, :for_founders, target_group: target_group_l2 }
   let(:target_l3) { create :target, :for_founders, target_group: target_group_l3 }
+  let(:team_target) { create :target, :for_team, target_group: target_group_l2 }
   let(:auto_verify_target) { create :target, :for_founders, target_group: target_group_l1 }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
@@ -38,6 +39,7 @@ feature 'Course review' do
     # Create a couple of passed submissions for the team 3.
     let(:submission_l1_t3) { create(:timeline_event, latest: true, target: target_l1, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
     let(:submission_l2_t3) { create(:timeline_event, latest: true, target: target_l2, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: nil) }
+    let(:team_submission) { create(:timeline_event, latest: true, target: team_target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: nil) }
     let(:auto_verified_submission) { create(:timeline_event, latest: true, target: auto_verify_target, passed_at: 1.day.ago) }
 
     # Create a couple of pending submissions for the teams.
@@ -53,6 +55,7 @@ feature 'Course review' do
       submission_l1_t3.founders << team_l3.founders.first
       submission_l2_t3.founders << team_l3.founders.first
       submission_l3_t3.founders << team_l3.founders.first
+      team_submission.founders << team_l3.founders
       submission_l2_t3.startup_feedback << feedback
     end
 
@@ -103,6 +106,8 @@ feature 'Course review' do
         expect(page).to have_text("Failed")
         expect(page).to have_text("Feedback Sent")
       end
+
+      expect(page).to have_text(team_target.title).once
     end
 
     scenario 'coach uses the level filter', js: true do

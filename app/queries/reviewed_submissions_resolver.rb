@@ -3,7 +3,7 @@ class ReviewedSubmissionsResolver < ApplicationQuery
   property :level_id
 
   def reviewed_submissions
-    submissions.evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).order("created_at DESC")
+    submissions.evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).distinct.order("created_at DESC")
   end
 
   def authorized?

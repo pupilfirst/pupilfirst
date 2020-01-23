@@ -246,7 +246,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB, ~preview) => {
       disabled={isDescriptionDisabled(state.formState)}
       value={state.description}
       className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
-      placeholder="Describe your work, attach any links or files, and then hit submit!"
+      placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
       onChange={updateDescription(send)}
     />
     <CoursesCurriculum__Attachments

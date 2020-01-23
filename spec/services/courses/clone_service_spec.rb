@@ -13,9 +13,9 @@ describe Courses::CloneService do
   let(:target_group_l1_1) { create :target_group, level: level_one, milestone: true }
   let(:target_group_l1_2) { create :target_group, level: level_one }
   let(:target_group_l2) { create :target_group, level: level_two, milestone: true }
-  let(:target_l1_1_1) { create :target, :with_content, :for_startup, target_group: target_group_l1_1 }
-  let(:target_l1_1_2) { create :target, :with_content, :for_startup, target_group: target_group_l1_1 }
-  let(:target_l1_2) { create :target, :with_content, :for_startup, target_group: target_group_l1_2 }
+  let(:target_l1_1_1) { create :target, :with_content, :for_team, target_group: target_group_l1_1 }
+  let(:target_l1_1_2) { create :target, :with_content, :for_team, target_group: target_group_l1_1 }
+  let(:target_l1_2) { create :target, :with_content, :for_team, target_group: target_group_l1_2 }
   let(:target_l2_1) { create :target, :with_content, :for_founders, target_group: target_group_l2 }
   let!(:target_l2_2) { create :target, :with_content, :for_founders, target_group: target_group_l2 }
   let(:startup_l1) { create :startup, level: level_one }

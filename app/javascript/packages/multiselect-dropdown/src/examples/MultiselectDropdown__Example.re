@@ -3,80 +3,60 @@
 let str = React.string;
 
 module DetailedExample = {
-  module Identifier = {
+  module Selectable = {
     type t =
-      | City
-      | State
-      | Country
-      | Search;
+      | City(name)
+      | State(name)
+      | Country(name)
+      | Search(string)
+    and name = string;
+
+    let label = t => {
+      let labelString =
+        switch (t) {
+        | City(_) => "City"
+        | State(_) => "State"
+        | Country(_) => "Country"
+        | Search(_) => "Search"
+        };
+      Some(labelString);
+    };
+
+    let value = t =>
+      switch (t) {
+      | City(name) => name
+      | State(name) => name
+      | Country(name) => name
+      | Search(input) => input
+      };
+
+    let searchString = t =>
+      switch (t) {
+      | City(name) => "city " ++ name
+      | State(name) => "state" ++ name
+      | Country(name) => "country" ++ name
+      | Search(input) => input
+      };
+
+    let color = t =>
+      switch (t) {
+      | City(_) => "orange"
+      | State(_) => "green"
+      | Country(_) => "blue"
+      | Search(_) => "purple"
+      };
+
+    let makeCity = name => City(name);
+    let makeState = name => State(name);
+    let makeCountry = name => Country(name);
+    let makeSearch = input => Search(input);
   };
 
-  module Multiselect = MultiselectDropdown.Make(Identifier);
-
-  type selection = {
-    identifier: Identifier.t,
-    value: string,
-  };
+  module Multiselect = MultiselectDropdown.Make(Selectable);
 
   type state = {
     searchInput: string,
-    selected: array(selection),
-  };
-
-  let makeSelectableCity = city => {
-    Multiselect.Selectable.make(
-      ~label="City",
-      ~value=city,
-      ~color="orange",
-      ~searchString="city " ++ city,
-      ~identifier=City,
-      (),
-    );
-  };
-
-  let makeSelectableState = state => {
-    Multiselect.Selectable.make(
-      ~label="State",
-      ~value=state,
-      ~color="green",
-      ~searchString="state " ++ state,
-      ~identifier=State,
-      (),
-    );
-  };
-
-  let makeSelectableCounty = country => {
-    Multiselect.Selectable.make(
-      ~label="Country",
-      ~value=country,
-      ~color="blue",
-      ~searchString="Country " ++ country,
-      ~identifier=Country,
-      (),
-    );
-  };
-
-  let makeSelectableSearch = searchInput => {
-    Multiselect.Selectable.make(
-      ~label="Search",
-      ~value=searchInput,
-      ~color="purple",
-      ~searchString=searchInput,
-      ~identifier=Search,
-      (),
-    );
-  };
-
-  let selected = selected => {
-    selected
-    |> Array.map(selection => {
-         switch (selection.identifier) {
-         | City => makeSelectableCity(selection.value)
-         | State => makeSelectableState(selection.value)
-         | Country => makeSelectableCounty(selection.value)
-         | Search => makeSelectableSearch(selection.value)
-         }
-       });
+    selected: array(Selectable.t),
   };
 
   let unselected = searchInput => {
@@ -91,7 +71,7 @@ module DetailedExample = {
         "Cochin",
         "Chennai",
       |]
-      |> Array.map(t => makeSelectableCity(t));
+      |> Array.map(t => Selectable.makeCity(t));
 
     let stateSuggestions =
       [|
@@ -103,15 +83,15 @@ module DetailedExample = {
         "Karnataka",
         "Tamil Nadu",
       |]
-      |> Array.map(l => makeSelectableState(l));
+      |> Array.map(l => Selectable.makeState(l));
 
     let countrySuggestions =
       [|"India", "USA", "Canada", "China", "Japan", "Egypt", "Korea"|]
-      |> Array.map(l => makeSelectableCounty(l));
+      |> Array.map(l => Selectable.makeCountry(l));
 
     let searchSuggestion =
       searchInput |> Js.String.trim == ""
-        ? [||] : [|makeSelectableSearch(searchInput)|];
+        ? [||] : [|Selectable.makeSearch(searchInput)|];
 
     searchSuggestion
     |> Array.append(citySuggestions)
@@ -120,27 +100,16 @@ module DetailedExample = {
   };
 
   let select = (setState, selectable) => {
-    let selection = {
-      identifier: selectable |> Multiselect.Selectable.identifier,
-      value: selectable |> Multiselect.Selectable.value,
-    };
-
     setState(s =>
-      {searchInput: "", selected: [|selection|] |> Array.append(s.selected)}
+      {
+        searchInput: "",
+        selected: [|selectable|] |> Array.append(s.selected),
+      }
     );
   };
 
   let deselect = (selected, setState, selectable) => {
-    let newSelected =
-      selected
-      |> Js.Array.filter(s =>
-           !(
-             selectable
-             |> Multiselect.Selectable.identifier == s.identifier
-             && selectable
-             |> Multiselect.Selectable.value == s.value
-           )
-         );
+    let newSelected = selected |> Js.Array.filter(s => s != selectable);
     setState(_ => {searchInput: "", selected: newSelected});
   };
 
@@ -163,9 +132,9 @@ module DetailedExample = {
       </div>
       <Multiselect
         unselected={unselected(state.searchInput)}
-        selected={selected(state.selected)}
-        selectCB={select(setState)}
-        deselectCB={deselect(state.selected, setState)}
+        selected={state.selected}
+        onSelect={select(setState)}
+        onDeselect={deselect(state.selected, setState)}
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
         placeholder="Type city, state or country"
@@ -175,30 +144,42 @@ module DetailedExample = {
 };
 
 module MinimalExample = {
-  module Identifier = {
+  module Selectable = {
     type t =
-      | City(code)
-      | Country(code)
-    and code = int;
+      | City(pincode, name)
+      | Country(countryCode, name)
+    and pincode = string
+    and countryCode = string
+    and name = string;
+
+    let label = _t => None;
+
+    let value = t =>
+      switch (t) {
+      | City(_pincode, name) => name
+      | Country(_countryCode, name) => name
+      };
+
+    let searchString = t => t |> value;
+    let color = _t => "gray";
+
+    let makeCountry = (~name, ~countryCode) => Country(countryCode, name);
+    let makeCity = (~name, ~pincode) => City(pincode, name);
   };
 
   // create a Multiselect
-  module Multiselect = MultiselectDropdown.Make(Identifier);
+  module Multiselect = MultiselectDropdown.Make(Selectable);
 
   type state = {
-    selected: array(Multiselect.Selectable.t),
+    selected: array(Selectable.t),
     searchString: string,
   };
 
   let unselected = [|
-    Multiselect.Selectable.make(~value="Delhi", ~identifier=City(1), ()),
-    Multiselect.Selectable.make(~value="India", ~identifier=Country(91), ()),
-    Multiselect.Selectable.make(
-      ~value="Washington D.C",
-      ~identifier=City(2),
-      (),
-    ),
-    Multiselect.Selectable.make(~value="USA", ~identifier=Country(1), ()),
+    Selectable.makeCity(~name="Delhi", ~pincode=""),
+    Selectable.makeCountry(~name="India", ~countryCode="91"),
+    Selectable.makeCity(~name="Washington D.C", ~pincode=""),
+    Selectable.makeCountry(~name="USA", ~countryCode="1"),
   |];
 
   let deselect = (selected, setState, selectable) => {
@@ -222,7 +203,7 @@ module MinimalExample = {
       <Multiselect
         unselected
         selected={state.selected}
-        selectCB={selectable =>
+        onSelect={selectable =>
           setState(s =>
             {
               searchString: "",
@@ -230,7 +211,7 @@ module MinimalExample = {
             }
           )
         }
-        deselectCB={deselect(state.selected, setState)}
+        onDeselect={deselect(state.selected, setState)}
         value={state.searchString}
         onChange={searchString => setState(s => {...s, searchString})}
       />

@@ -14,11 +14,11 @@ type page =
 let tab = (page, selectedPage, pathPrefix) => {
   let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer";
 
-  let (number, title, pathSuffix, iconClass) =
+  let (title, pathSuffix, iconClass) =
     switch (page) {
-    | Content => (1, "Content", "content", "fa-pen-nib")
-    | Details => (2, "Details", "details", "fa-list-alt")
-    | Versions => (3, "Versions", "versions", "fa-code-branch")
+    | Content => ("Content", "content", "fa-pen-nib")
+    | Details => ("Details", "details", "fa-list-alt")
+    | Versions => ("Versions", "versions", "fa-code-branch")
     };
 
   let path = pathPrefix ++ pathSuffix;

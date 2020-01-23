@@ -20,14 +20,13 @@ module CreateMarkdownContentBlock = [%graphql
   |}
 ];
 
-type blockType =
-  | Markdown
-  | File
-  | Image
-  | Embed;
+type ui =
+  | Hidden
+  | BlockSelector
+  | EmbedForm(string);
 
 type state = {
-  visible: bool,
+  ui,
   saving: bool,
   error: option(string),
 };
@@ -37,15 +36,26 @@ type action =
   | ToggleSaving
   | FinishSaving(bool)
   | SetError(string)
-  | FailToUpload;
+  | FailToUpload
+  | ShowEmbedForm
+  | HideEmbedForm
+  | UpdateEmbedUrl(string);
 
 let computeInitialState = isAboveTarget => {
-  {visible: !isAboveTarget, saving: false, error: None};
+  {ui: isAboveTarget ? Hidden : BlockSelector, saving: false, error: None};
 };
 
 let reducer = (state, action) =>
   switch (action) {
-  | ToggleVisibility => {...state, visible: !state.visible}
+  | ToggleVisibility =>
+    let ui =
+      switch (state.ui) {
+      | Hidden => BlockSelector
+      | BlockSelector
+      | EmbedForm(_) => Hidden
+      };
+
+    {...state, ui};
   | ToggleSaving => {...state, saving: !state.saving, error: None}
   | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
   | SetError(error) => {...state, error: Some(error)}
@@ -57,6 +67,9 @@ let reducer = (state, action) =>
           "Failed to upload file. Please check message in notification, and try again.",
         ),
     }
+  | ShowEmbedForm => {...state, ui: EmbedForm("")}
+  | HideEmbedForm => {...state, ui: BlockSelector}
+  | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
   };
 
 let containerClasses = (visible, isAboveTarget) => {
@@ -103,20 +116,20 @@ let fileFormId = aboveContentBlock =>
 let imageFormId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-form-");
 
-let onClick =
+let onBlockTypeSelect =
     (target, aboveContentBlock, send, addContentBlockCB, blockType, event) => {
   // event |> ReactEvent.Mouse.preventDefault;
   switch (blockType) {
-  | Markdown =>
+  | `Markdown =>
     createMarkdownContentBlock(
       target,
       aboveContentBlock,
       send,
       addContentBlockCB,
     )
-  | File => ()
-  | Image => ()
-  | Embed => ()
+  | `File => ()
+  | `Image => ()
+  | `Embed => send(ShowEmbedForm)
   };
 };
 
@@ -126,17 +139,17 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
 
   let (faIcon, buttonText, htmlFor) =
     switch (blockType) {
-    | Markdown => ("fab fa-markdown", "Markdown", None)
-    | File => ("far fa-file-alt", "File", Some(fileId))
-    | Image => ("far fa-image", "Image", Some(imageId))
-    | Embed => ("fas fa-code", "Embed", None)
+    | `Markdown => ("fab fa-markdown", "Markdown", None)
+    | `File => ("far fa-file-alt", "File", Some(fileId))
+    | `Image => ("far fa-image", "Image", Some(imageId))
+    | `Embed => ("fas fa-code", "Embed", None)
     };
 
   <label
     ?htmlFor
     key=buttonText
     className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
-    onClick={onClick(
+    onClick={onBlockTypeSelect(
       target,
       aboveContentBlock,
       send,
@@ -285,6 +298,41 @@ let uploadForm =
   </form>;
 };
 
+let visible = state =>
+  switch (state.ui) {
+  | Hidden => false
+  | BlockSelector
+  | EmbedForm(_) => true
+  };
+
+let updateEmbedUrl = (send, event) => {
+  let value = ReactEvent.Form.target(event)##value;
+  send(UpdateEmbedUrl(value));
+};
+
+let creatorToggler = (state, send, contentBlock) => {
+  let (action, icon) =
+    switch (state.ui) {
+    | Hidden
+    | BlockSelector => (
+        ToggleVisibility,
+        "fa-plus content-block-creator__plus-button-icon",
+      )
+    | EmbedForm(_) => (HideEmbedForm, "fa-undo-alt")
+    };
+
+  <div
+    className="content-block-creator__plus-button-container relative cursor-pointer"
+    onClick={_event => send(action)}>
+    <div
+      id={"add-block-above-" ++ (contentBlock |> ContentBlock.id)}
+      title="Add block"
+      className="content-block-creator__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
+      <FaIcon classes={"text-base fas " ++ icon} />
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
   let isAboveContentBlock = aboveContentBlock != None;
@@ -299,34 +347,47 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
-    <div className={containerClasses(state.visible, isAboveContentBlock)}>
+    <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {switch (aboveContentBlock) {
-       | Some(contentBlock) =>
-         <div
-           className="content-block-creator__plus-button-container relative cursor-pointer"
-           onClick={_event => send(ToggleVisibility)}>
-           <div
-             id={"add-block-above-" ++ (contentBlock |> ContentBlock.id)}
-             title="Add block"
-             className="content-block-creator__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
-             <i
-               className="fas fa-plus text-base content-block-creator__plus-button-icon"
-             />
-           </div>
-         </div>
+       | Some(contentBlock) => creatorToggler(state, send, contentBlock)
        | None => <div className="h-10" />
        }}
-      <div
-        className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
-        {[|Markdown, Image, Embed, File|]
-         |> Array.map(
-              button(target, aboveContentBlock, send, addContentBlockCB),
-            )
-         |> React.array}
+      <div className="content-block-creator__inner-container">
+        {switch (state.ui) {
+         | Hidden => React.null
+         | BlockSelector =>
+           <div
+             className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
+             {[|`Markdown, `Image, `Embed, `File|]
+              |> Array.map(
+                   button(target, aboveContentBlock, send, addContentBlockCB),
+                 )
+              |> React.array}
+           </div>
+         | EmbedForm(url) =>
+           <div
+             className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+             <label className="text-xs font-semibold">
+               {"URL to Embed" |> str}
+             </label>
+             <div className="flex mt-1">
+               <input
+                 placeholder="https://www.youtube.com/watch?v="
+                 className="w-full mr-2 py-1 px-2 border rounded"
+                 type_="text"
+                 value=url
+                 onChange={updateEmbedUrl(send)}
+               />
+               <div>
+                 <button className="btn btn-success"> {"Save" |> str} </button>
+               </div>
+             </div>
+           </div>
+         }}
       </div>
       {switch (state.error) {
        | Some(error) =>
-         <School__InputGroupError message=error active={state.visible} />
+         <School__InputGroupError message=error active={state |> visible} />
        | None => React.null
        }}
     </div>

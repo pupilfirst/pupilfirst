@@ -4,7 +4,7 @@
   transition: all 0.25s ease-in-out;
 }
 
-.content-block-creator--open .content-block-creator__block-content-type {
+.content-block-creator--open .content-block-creator__inner-container {
   animation: slideDown 0.25s ease-in-out;
 }
 

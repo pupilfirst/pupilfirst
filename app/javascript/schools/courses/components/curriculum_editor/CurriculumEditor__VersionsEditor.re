@@ -4,59 +4,30 @@ let str = React.string;
 
 open CurriculumEditor__Types;
 
-type state = {
-  loading: bool,
-  contentBlocks: array(ContentBlock.t),
-  versions: array(string),
-};
+type state =
+  | Loading
+  | Loaded(contentBlocks, selectedVersion, versions)
+and contentBlocks = array(ContentBlock.t)
+and selectedVersion = string
+and versions = array(string);
 
 type action =
-  | LoadContent(array(ContentBlock.t), array(string));
+  | LoadContent(array(ContentBlock.t), array(string), selectedVersion)
+  | SetLoading;
 
-let reducer = (state, action) =>
+let reducer = (_state, action) =>
   switch (action) {
-  | LoadContent(contentBlocks, versions) => {
-      loading: false,
-      contentBlocks,
-      versions,
-    }
+  | LoadContent(contentBlocks, versions, selectedVersion) =>
+    Loaded(contentBlocks, selectedVersion, versions)
+  | SetLoading => Loading
   };
 
-module ContentQuery = [%graphql
-  {|
-    query($targetId: ID!, $versionOn: Date) {
-      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
-        id
-        blockType
-        sortIndex
-        content {
-          ... on ImageBlock {
-            caption
-            url
-            filename
-          }
-          ... on FileBlock {
-            title
-            url
-            filename
-          }
-          ... on MarkdownBlock {
-            markdown
-          }
-          ... on EmbedBlock {
-            url
-            embedCode
-          }
-        }
-      }
-      versions(targetId: $targetId)
-  }
-|}
-];
+let loadContentBlocks = (targetId, send, version) => {
+  let versionOn = Belt.Option.map(version, Js.Json.string);
+  send(SetLoading);
 
-let loadContentBlocks = (targetId, send) => {
-  let response = ContentQuery.make(~targetId, ()) |> GraphqlQuery.sendQuery2;
-  response
+  ContentBlock.Query.make(~targetId, ~versionOn?, ())
+  |> GraphqlQuery.sendQuery2
   |> Js.Promise.then_(result => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
@@ -65,14 +36,19 @@ let loadContentBlocks = (targetId, send) => {
          result##versions
          |> Array.map(version => version |> Json.Decode.string);
 
-       send(LoadContent(contentBlocks, versions));
+       let selectedVersion =
+         switch (version) {
+         | Some(v) => v
+         | None => versions[0]
+         };
+       send(LoadContent(contentBlocks, versions, selectedVersion));
 
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let showDropdown = (versions, selectedVersion) => {
+let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   let contents =
     versions
     |> Js.Array.filter(version => version != selectedVersion)
@@ -80,6 +56,7 @@ let showDropdown = (versions, selectedVersion) => {
          <button
            id=version
            key=version
+           onClick={_ => loadContentBlocksCB(Some(version))}
            className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
            {version |> DateTime.stingToFormatedTime(DateTime.OnlyDate) |> str}
          </button>
@@ -110,13 +87,14 @@ let showDropdown = (versions, selectedVersion) => {
     : <Dropdown selected contents right=true />;
 };
 
-let showContentBlocks = (contentBlocks, versions) => {
+let showContentBlocks =
+    (contentBlocks, versions, selectedVersion, loadContentBlocksCB) => {
   <div>
     <div>
       <label className="text-xs block text-gray-600 mb-1">
         {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
       </label>
-      {showDropdown(versions, versions[0])}
+      {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
     </div>
     <TargetContentView contentBlocks={contentBlocks |> Array.to_list} />
   </div>;
@@ -127,20 +105,29 @@ let make = (~targetId) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {loading: true, contentBlocks: [||], versions: [||]},
+      {
+        Loading;
+      },
     );
 
+  let loadContentBlocksCB = loadContentBlocks(targetId, send);
+
   React.useEffect0(() => {
-    loadContentBlocks(targetId, send);
+    loadContentBlocksCB(None);
     None;
   });
 
   <div className="max-w-3xl py-6 px-3 mx-auto">
-    {state.loading
-       ? SkeletonLoading.multiple(
-           ~count=2,
-           ~element=SkeletonLoading.contents(),
-         )
-       : showContentBlocks(state.contentBlocks, state.versions)}
+    {switch (state) {
+     | Loading =>
+       SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.contents())
+     | Loaded(contentBlocks, selectedVersion, versions) =>
+       showContentBlocks(
+         contentBlocks,
+         versions,
+         selectedVersion,
+         loadContentBlocksCB,
+       )
+     }}
   </div>;
 };

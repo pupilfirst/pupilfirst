@@ -126,3 +126,35 @@ module Fragments = [%graphql
   }
 |}
 ];
+
+module Query = [%graphql
+  {|
+    query($targetId: ID!, $versionOn: Date) {
+      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
+        id
+        blockType
+        sortIndex
+        content {
+          ... on ImageBlock {
+            caption
+            url
+            filename
+          }
+          ... on FileBlock {
+            title
+            url
+            filename
+          }
+          ... on MarkdownBlock {
+            markdown
+          }
+          ... on EmbedBlock {
+            url
+            embedCode
+          }
+        }
+      }
+      versions(targetId: $targetId)
+  }
+|}
+];

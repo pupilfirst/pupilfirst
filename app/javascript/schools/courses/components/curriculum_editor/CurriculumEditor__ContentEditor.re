@@ -40,41 +40,9 @@ let reducer = (state, action) =>
     };
   };
 
-module ContentQuery = [%graphql
-  {|
-    query($targetId: ID!, $versionOn: Date) {
-      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
-        id
-        blockType
-        sortIndex
-        content {
-          ... on ImageBlock {
-            caption
-            url
-            filename
-          }
-          ... on FileBlock {
-            title
-            url
-            filename
-          }
-          ... on MarkdownBlock {
-            markdown
-          }
-          ... on EmbedBlock {
-            url
-            embedCode
-          }
-        }
-      }
-      versions(targetId: $targetId)
-  }
-|}
-];
-
 let loadContentBlocks = (targetId, send) => {
   let response =
-    ContentQuery.make(~targetId, ())
+    ContentBlock.Query.make(~targetId, ())
     |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead(), ~notify=true);
   response
   |> Js.Promise.then_(result => {

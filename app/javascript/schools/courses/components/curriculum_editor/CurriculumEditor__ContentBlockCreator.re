@@ -345,7 +345,7 @@ let updateEmbedUrl = (send, event) => {
   send(UpdateEmbedUrl(value));
 };
 
-let creatorToggler = (state, send, contentBlock) => {
+let creatorToggler = (state, send, contentBlockId) => {
   let (action, icon) =
     switch (state.ui) {
     | Hidden
@@ -360,7 +360,7 @@ let creatorToggler = (state, send, contentBlock) => {
     className="content-block-creator__plus-button-container relative cursor-pointer"
     onClick={_event => send(action)}>
     <div
-      id={"add-block-above-" ++ (contentBlock |> ContentBlock.id)}
+      id={"add-block-above-" ++ contentBlockId}
       title="Add block"
       className="content-block-creator__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
       <FaIcon classes={"text-base fas " ++ icon} />
@@ -430,8 +430,14 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {switch (aboveContentBlock) {
-       | Some(contentBlock) => creatorToggler(state, send, contentBlock)
-       | None => <div className="h-10" />
+       | Some(contentBlock) =>
+         creatorToggler(state, send, contentBlock |> ContentBlock.id)
+       | None =>
+         switch (state.ui) {
+         | Hidden
+         | BlockSelector => <div className="h-10" />
+         | EmbedForm(_) => creatorToggler(state, send, "bottom")
+         }
        }}
       <div className="content-block-creator__inner-container">
         {switch (state.ui) {

@@ -8,7 +8,7 @@
   animation: slideDown 0.25s ease-in-out;
 }
 
-.content-block-creator__plus-button-container:before {
+.content-block-creator__top-button-container:before {
   content: "";
   @apply absolute w-full h-px border-t border-dashed border-gray-500;
   top: 50%;
@@ -28,27 +28,27 @@
   user-select: none;
 }
 
-.content-block-creator--open .content-block-creator__plus-button {
+.content-block-creator--open .content-block-creator__top-button {
   @apply bg-primary-900 text-primary-200 border-transparent;
 }
 
-.content-block-creator--open .content-block-creator__plus-button-container {
+.content-block-creator--open .content-block-creator__top-button-container {
   opacity: 1;
 }
 
-.content-block-creator--open .content-block-creator__plus-button-container:before {
+.content-block-creator--open .content-block-creator__top-button-container:before {
   @apply border-t-0;
 }
 
 @screen xl {
-  .content-block-creator__plus-button-container {
+  .content-block-creator__top-button-container {
     opacity: 0;
   }
-  .content-block-creator:hover .content-block-creator__plus-button-container {
+  .content-block-creator:hover .content-block-creator__top-button-container {
     transition: opacity 0.25s;
     opacity: 1;
   }
-  .content-block-creator:not(.content-block-creator--open):hover .content-block-creator__plus-button {
+  .content-block-creator:not(.content-block-creator--open):hover .content-block-creator__top-button {
     @apply shadow-lg;
   }
 }

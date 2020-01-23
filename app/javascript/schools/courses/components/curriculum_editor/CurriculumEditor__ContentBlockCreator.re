@@ -152,8 +152,7 @@ let imageFormId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-form-");
 
 let onBlockTypeSelect =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType, event) => {
-  // event |> ReactEvent.Mouse.preventDefault;
+    (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) => {
   switch (blockType) {
   | `Markdown =>
     createMarkdownContentBlock(
@@ -345,34 +344,11 @@ let updateEmbedUrl = (send, event) => {
   send(UpdateEmbedUrl(value));
 };
 
-let creatorToggler = (state, send, contentBlockId) => {
-  let (action, icon) =
-    switch (state.ui) {
-    | Hidden
-    | BlockSelector => (
-        ToggleVisibility,
-        "fa-plus content-block-creator__plus-button-icon",
-      )
-    | EmbedForm(_) => (HideEmbedForm, "fa-undo-alt")
-    };
-
-  <div
-    className="content-block-creator__plus-button-container relative cursor-pointer"
-    onClick={_event => send(action)}>
-    <div
-      id={"add-block-above-" ++ contentBlockId}
-      title="Add block"
-      className="content-block-creator__plus-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
-      <FaIcon classes={"text-base fas " ++ icon} />
-    </div>
-  </div>;
-};
-
 let embedUrlRegexes = [|
-  [%bs.re "/https:\/\/.*slideshare\.net/"],
-  [%bs.re "/https:\/\/.*vimeo\.com/"],
-  [%bs.re "/https:\/\/.*youtube\.com/"],
-  [%bs.re "/https:\/\/.*youtu\.be/"],
+  [%bs.re "/https:\\/\\/.*slideshare\\.net/"],
+  [%bs.re "/https:\\/\\/.*vimeo\\.com/"],
+  [%bs.re "/https:\\/\\/.*youtube\\.com/"],
+  [%bs.re "/https:\\/\\/.*youtu\\.be/"],
 |];
 
 let validEmbedUrl = url =>
@@ -414,6 +390,50 @@ let onEmbedFormSave =
   };
 };
 
+let topButton = (handler, id, title, icon) =>
+  <div
+    className="content-block-creator__top-button-container relative cursor-pointer"
+    onClick=handler>
+    <div
+      id={"top-button-" ++ id}
+      title
+      className="content-block-creator__top-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
+      <FaIcon classes={"text-base fas " ++ icon} />
+    </div>
+  </div>;
+
+let closeEmbedFormButton = (send, aboveContentBlock) => {
+  let id =
+    aboveContentBlock
+    |> OptionUtils.map(ContentBlock.id)
+    |> OptionUtils.default("bottom");
+
+  topButton(
+    _e => send(HideEmbedForm),
+    id,
+    "Close Embed Form",
+    "fa-undo-alt",
+  );
+};
+
+let toggleVisibilityButton = (send, contentBlock) =>
+  topButton(
+    _e => send(ToggleVisibility),
+    contentBlock |> ContentBlock.id,
+    "Toggle Content Block Form",
+    "fa-plus content-block-creator__plus-button-icon",
+  );
+
+let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
+  switch (state.ui, aboveContentBlock) {
+  | (EmbedForm(_), Some(_) | None) =>
+    closeEmbedFormButton(send, aboveContentBlock)
+  | (Hidden, None)
+  | (BlockSelector, None) => <div className="h-10" /> // Spacer.
+  | (Hidden | BlockSelector, Some(contentBlock)) =>
+    toggleVisibilityButton(send, contentBlock)
+  };
+
 [@react.component]
 let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
   let isAboveContentBlock = aboveContentBlock != None;
@@ -429,16 +449,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
-      {switch (aboveContentBlock) {
-       | Some(contentBlock) =>
-         creatorToggler(state, send, contentBlock |> ContentBlock.id)
-       | None =>
-         switch (state.ui) {
-         | Hidden
-         | BlockSelector => <div className="h-10" />
-         | EmbedForm(_) => creatorToggler(state, send, "bottom")
-         }
-       }}
+      {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">
         {switch (state.ui) {
          | Hidden => React.null

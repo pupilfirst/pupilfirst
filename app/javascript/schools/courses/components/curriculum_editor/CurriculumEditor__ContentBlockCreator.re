@@ -20,6 +20,18 @@ module CreateMarkdownContentBlock = [%graphql
   |}
 ];
 
+module CreateEmbedContentBlock = [%graphql
+  {|
+    mutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!) {
+      createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  |}
+];
+
 type ui =
   | Hidden
   | BlockSelector
@@ -36,6 +48,7 @@ type action =
   | ToggleSaving
   | FinishSaving(bool)
   | SetError(string)
+  | FailedToCreate
   | FailToUpload
   | ShowEmbedForm
   | HideEmbedForm
@@ -59,6 +72,14 @@ let reducer = (state, action) =>
   | ToggleSaving => {...state, saving: !state.saving, error: None}
   | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
   | SetError(error) => {...state, error: Some(error)}
+  | FailedToCreate => {
+      ...state,
+      saving: false,
+      error:
+        Some(
+          "An unexpected error occured. Please reload the page and try again.",
+        ),
+    }
   | FailToUpload => {
       ...state,
       saving: false,
@@ -77,6 +98,18 @@ let containerClasses = (visible, isAboveTarget) => {
   classes ++ (visible || !isAboveTarget ? " content-block-creator--open" : "");
 };
 
+let handleGraphqlCreateResponse =
+    (aboveContentBlock, send, addContentBlockCB, contentBlock) => {
+  switch (contentBlock) {
+  | Some(contentBlock) =>
+    contentBlock |> ContentBlock.makeFromJs |> addContentBlockCB;
+    send(FinishSaving(aboveContentBlock != None));
+  | None => send(ToggleSaving)
+  };
+
+  Js.Promise.resolve();
+};
+
 let createMarkdownContentBlock =
     (target, aboveContentBlock, send, addContentBlockCB) => {
   send(ToggleSaving);
@@ -85,14 +118,16 @@ let createMarkdownContentBlock =
   let targetId = target |> Target.id;
   CreateMarkdownContentBlock.make(~targetId, ~aboveContentBlockId?, ())
   |> GraphqlQuery.sendQuery2
-  |> Js.Promise.then_(result => {
-       switch (result##createMarkdownContentBlock##contentBlock) {
-       | Some(contentBlock) =>
-         contentBlock |> ContentBlock.makeFromJs |> addContentBlockCB;
-         send(FinishSaving(aboveContentBlock != None));
-       | None => send(ToggleSaving)
-       };
-
+  |> Js.Promise.then_(result =>
+       handleGraphqlCreateResponse(
+         aboveContentBlock,
+         send,
+         addContentBlockCB,
+         result##createMarkdownContentBlock##contentBlock,
+       )
+     )
+  |> Js.Promise.catch(_ => {
+       send(FailedToCreate);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -333,6 +368,52 @@ let creatorToggler = (state, send, contentBlock) => {
   </div>;
 };
 
+let embedUrlRegexes = [|
+  [%bs.re "/https:\/\/.*slideshare\.net/"],
+  [%bs.re "/https:\/\/.*vimeo\.com/"],
+  [%bs.re "/https:\/\/.*youtube\.com/"],
+  [%bs.re "/https:\/\/.*youtu\.be/"],
+|];
+
+let validEmbedUrl = url =>
+  Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url));
+
+let onEmbedFormSave =
+    (target, aboveContentBlock, url, send, addContentBlockCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  if (url |> validEmbedUrl) {
+    send(ToggleSaving);
+
+    let aboveContentBlockId =
+      aboveContentBlock |> OptionUtils.map(ContentBlock.id);
+
+    let targetId = target |> Target.id;
+
+    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ())
+    |> GraphqlQuery.sendQuery2
+    |> Js.Promise.then_(result =>
+         handleGraphqlCreateResponse(
+           aboveContentBlock,
+           send,
+           addContentBlockCB,
+           result##createEmbedContentBlock##contentBlock,
+         )
+       )
+    |> Js.Promise.catch(_ => {
+         send(FailedToCreate);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  } else {
+    send(
+      SetError(
+        "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
+      ),
+    );
+  };
+};
+
 [@react.component]
 let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
   let isAboveContentBlock = aboveContentBlock != None;
@@ -370,17 +451,31 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
              <label className="text-xs font-semibold">
                {"URL to Embed" |> str}
              </label>
+             <HelpIcon
+               className="ml-2 text-xs"
+               link="https://docs.pupilfirst.com/#/curriculum_editor?id=content-block-types">
+               {"We support YouTube, Vimeo, and Slideshare URLs. Just copy & paste the full URL to the page that contains the resource that you'd like to embed."
+                |> str}
+             </HelpIcon>
              <div className="flex mt-1">
                <input
                  placeholder="https://www.youtube.com/watch?v="
-                 className="w-full mr-2 py-1 px-2 border rounded"
+                 className="w-full py-1 px-2 border rounded"
                  type_="text"
                  value=url
                  onChange={updateEmbedUrl(send)}
                />
-               <div>
-                 <button className="btn btn-success"> {"Save" |> str} </button>
-               </div>
+               <button
+                 className="ml-2 btn btn-success"
+                 onClick={onEmbedFormSave(
+                   target,
+                   aboveContentBlock,
+                   url,
+                   send,
+                   addContentBlockCB,
+                 )}>
+                 {"Save" |> str}
+               </button>
              </div>
            </div>
          }}

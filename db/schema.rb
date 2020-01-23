@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_10_071219) do
+ActiveRecord::Schema.define(version: 2020_01_23_122954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -216,6 +216,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_071219) do
     t.bigint "content_block_id"
     t.date "version_on"
     t.integer "sort_index"
+    t.datetime "version_at"
     t.index ["content_block_id"], name: "index_content_versions_on_content_block_id"
     t.index ["target_id"], name: "index_content_versions_on_target_id"
     t.index ["version_on"], name: "index_content_versions_on_version_on"

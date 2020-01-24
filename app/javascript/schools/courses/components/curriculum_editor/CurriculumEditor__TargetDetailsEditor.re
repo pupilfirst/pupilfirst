@@ -650,7 +650,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                </label>
                <div className="ml-6">
                  <input
-                   className="block w-full bg-white px-4 py-3 my-2 appearance-none font-semibold text-gray-900 leading-tight border text-sm border-gray-400 rounded-lg focus:outline-none"
+                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                    id="title"
                    type_="text"
                    placeholder="Type target title here"

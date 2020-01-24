@@ -1,5 +1,4 @@
 exception InvalidVisibilityValue(string);
-exception InvalidRoleValue(string);
 
 type visibility =
   | Draft

@@ -566,20 +566,37 @@ module UpdateTargetQuery = [%graphql
    |}
 ];
 
-let updateTarget = (targetId, state, send, event) => {
+let updateTarget = (target, state, send,updateTargetCB, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(UpdateSaving);
+  let id = target |> Target.id;
+  let sortIndex = target |> Target.sortIndex;
   let role = state.role |> TargetDetails.roleAsString;
-  let visibility = state.visibility |> TargetDetails.visibilityAsString;
+  let visibilityAsString =
+    state.visibility |> TargetDetails.visibilityAsString;
   let quiz =
     state.quiz
     |> Js.Array.filter(question =>
          TargetDetails__QuizQuestion.isValidQuizQuestion(question)
        )
     |> TargetDetails__QuizQuestion.quizAsObject;
+  let visibility =
+    switch (state.visibility) {
+    | Live => Target.Live
+    | Archived => Archived
+    | Draft => Draft
+    };
+  let newTarget =
+    Target.create(
+      ~id,
+      ~targetGroupId=state.targetGroupId,
+      ~title=state.title,
+      ~sortIndex,
+      ~visibility,
+    );
   let updateTargetQuery =
     UpdateTargetQuery.make(
-      ~id=targetId,
+      ~id,
       ~targetGroupId=state.targetGroupId,
       ~title=state.title,
       ~role,
@@ -588,14 +605,18 @@ let updateTarget = (targetId, state, send, event) => {
       ~quiz,
       ~completionInstructions=state.completionInstructions,
       ~linkToComplete=state.linkToComplete,
-      ~visibility,
+      ~visibility=visibilityAsString,
       (),
     );
   let response = updateTargetQuery |> GraphqlQuery.sendQuery2;
   response
   |> Js.Promise.then_(result => {
        result##updateTarget##success
-         ? send(ResetEditor) : send(UpdateSaving);
+         ? {
+           send(ResetEditor);
+           updateTargetCB(newTarget);
+         }
+         : send(UpdateSaving);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -603,7 +624,8 @@ let updateTarget = (targetId, state, send, event) => {
 };
 
 [@react.component]
-let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
+let make =
+    (~target, ~targets, ~targetGroups, ~evaluationCriteria, ~updateTargetCB) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -623,6 +645,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
         completionInstructions: "",
       },
     );
+  let targetId = target |> Target.id;
   React.useEffect1(
     () => {
       loadTargetDetails(targetId, send);
@@ -836,7 +859,7 @@ let make = (~targetId, ~targets, ~targetGroups, ~evaluationCriteria) => {
                    <button
                      key="target-actions-step"
                      disabled={saveDisabled(state)}
-                     onClick={updateTarget(targetId, state, send)}
+                     onClick={updateTarget(target, state, send,updateTargetCB)}
                      className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                      {"Update Target" |> str}
                    </button>

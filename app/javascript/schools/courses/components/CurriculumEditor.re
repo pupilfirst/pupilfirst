@@ -23,7 +23,7 @@ type action =
   | SelectLevel(Level.t)
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
-  | UpdateTargetGroup(TargetGroup.t, editorAction)
+  | UpdateTargetGroup(TargetGroup.t)
   | UpdateTargetGroups(list(TargetGroup.t))
   | UpdateTarget(Target.t)
   | UpdateTargets(list(Target.t))
@@ -36,10 +36,10 @@ let reducer = (state, action) =>
   | UpdateLevels(level) =>
     let newLevels = level |> Level.updateList(state.levels);
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level};
-  | UpdateTargetGroup(targetGroup, action) =>
+  | UpdateTargetGroup(targetGroup) =>
     let newtargetGroups =
       targetGroup |> TargetGroup.updateList(state.targetGroups);
-    {...state, targetGroups: newtargetGroups, editorAction: action};
+    {...state, targetGroups: newtargetGroups};
   | UpdateTargetGroups(targetGroups) => {...state, targetGroups}
   | UpdateTarget(target) =>
     let newtargets = target |> Target.updateList(state.targets);
@@ -140,20 +140,24 @@ let make =
   let showTargetGroupEditorCB = targetGroup =>
     send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
 
-  let updateTargetCB = (target, closeEditor) => {
+  let updateTargetCB = target => {
     let targetGroup =
-      state.targetGroups |> TargetGroup.find(target |> Target.targetGroupId);
+      state.targetGroups
+      |> ListUtils.unsafeFind(
+           tg => TargetGroup.id(tg) == Target.targetGroupId(target),
+           "Unabltge to find target group with ID: "
+           ++ Target.targetGroupId(target),
+         );
 
-    let newTargetGroup =
-      target |> Target.visibility === Archived
-        ? targetGroup : targetGroup |> TargetGroup.archive(false);
-
-    let editorAction =
-      closeEditor
-        ? Hidden : ShowTargetEditor(newTargetGroup |> TargetGroup.id, target);
+    let updatedTargetGroup =
+      switch (target |> Target.visibility) {
+      | Archived => targetGroup
+      | Draft
+      | Live => targetGroup |> TargetGroup.unarchive
+      };
 
     send(UpdateTarget(target));
-    send(UpdateTargetGroup(newTargetGroup, editorAction));
+    send(UpdateTargetGroup(updatedTargetGroup));
   };
 
   let updateTargetGroupsCB = targetGroup => {
@@ -172,7 +176,7 @@ let make =
       }
       : ();
 
-    send(UpdateTargetGroup(targetGroup, Hidden));
+    send(UpdateTargetGroup(targetGroup));
   };
 
   <div className="flex-1 flex flex-col">
@@ -189,6 +193,7 @@ let make =
       targetGroups
       evaluationCriteria
       course
+      updateTargetCB
     />
     {switch (state.editorAction) {
      | Hidden => ReasonReact.null

@@ -22,7 +22,10 @@ type t = {
   completionInstructions: option(string),
 };
 
+let title = t => t.title;
 let role = t => t.role;
+
+let targetGroupId = t => t.targetGroupId;
 
 let visibility = t => t.visibility;
 

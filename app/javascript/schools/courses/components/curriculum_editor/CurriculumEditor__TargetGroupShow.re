@@ -108,7 +108,7 @@ let make =
       Target.template(targetId, targetGroupId, state.targetTitle);
     send(UpdateTargetSaving);
     send(UpdateTargetTitle(""));
-    updateTargetCB(newTarget, false);
+    updateTargetCB(newTarget);
     showTargetEditorCB(targetGroupId, newTarget);
   };
   let handleCreateTarget = (title, targetGroupId) => {

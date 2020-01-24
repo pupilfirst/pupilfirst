@@ -412,7 +412,7 @@ let closeEmbedFormButton = (send, aboveContentBlock) => {
     _e => send(HideEmbedForm),
     id,
     "Close Embed Form",
-    "fa-undo-alt",
+    "fa-level-up-alt",
   );
 };
 

@@ -1,8 +1,8 @@
 module ContentBlockCreatable
   include ActiveSupport::Concern
 
-  def authorized?
-    target.present? && (current_school_admin.present? || current_user.course_authors.where(course: target.level.course).exists?)
+  def course
+    @course ||= target.level.course if target.present?
   end
 
   def target

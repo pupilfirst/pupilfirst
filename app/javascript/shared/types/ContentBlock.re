@@ -14,10 +14,11 @@ type blockType =
   | Embed(url, embedCode);
 
 type t = {
-  id: string,
+  id,
   blockType,
   sortIndex: int,
-};
+}
+and id = string;
 
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));

@@ -12,7 +12,8 @@ type state = {
 
 type action =
   | LoadContent(array(ContentBlock.t), array(string))
-  | AddContentBlock(ContentBlock.t);
+  | AddContentBlock(ContentBlock.t)
+  | RemoveContentBlock(ContentBlock.id);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -38,6 +39,14 @@ let reducer = (state, action) =>
            })
         |> Array.append([|newContentBlock|]),
     };
+  | RemoveContentBlock(contentBlockId) => {
+      ...state,
+      contentBlocks:
+        state.contentBlocks
+        |> Js.Array.filter(contentBlock =>
+             contentBlock |> ContentBlock.id != contentBlockId
+           ),
+    }
   };
 
 let loadContentBlocks = (targetId, send) => {
@@ -63,6 +72,9 @@ let loadContentBlocks = (targetId, send) => {
 let addContentBlock = (send, contentBlock) =>
   send(AddContentBlock(contentBlock));
 
+let removeContentBlock = (send, contentBlockId) =>
+  send(RemoveContentBlock(contentBlockId));
+
 let editor = (target, state, send) => {
   let currentVersion =
     switch (state.versions) {
@@ -77,6 +89,9 @@ let editor = (target, state, send) => {
     };
 
   let sortedContentBlocks = state.contentBlocks |> ContentBlock.sortArray;
+  let removeContentBlockCB =
+    state.contentBlocks |> Array.length > 1
+      ? Some(removeContentBlock(send)) : None;
 
   <div className="mt-2">
     <div className="flex justify-between items-end">
@@ -111,7 +126,7 @@ let editor = (target, state, send) => {
               targetId={target |> Target.id}
               setDirty={(_dirty, _targetId) => ()}
               contentBlock
-              removeContentBlockCB={_contentBlockId => ()}
+              ?removeContentBlockCB
               updateContentBlockCB={_contentBlock => ()}
             />
           </div>

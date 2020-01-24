@@ -1,4 +1,5 @@
 class CreateEmbedContentBlockMutator < ApplicationQuery
+  include AuthorizeAuthor
   include ContentBlockCreatable
 
   property :target_id, validates: { presence: true }

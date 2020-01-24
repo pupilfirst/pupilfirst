@@ -13,4 +13,9 @@ class ContentBlock < ApplicationRecord
 
   validates :block_type, inclusion: { in: valid_block_types }
   validates :content, presence: true
+
+  # TODO: Fix this when new target_versions table is introduced.
+  def latest_version
+    content_versions.order(version_on: :DESC).first
+  end
 end

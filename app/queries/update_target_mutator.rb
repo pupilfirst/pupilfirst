@@ -15,7 +15,6 @@ class UpdateTargetMutator < ApplicationQuery
   validate :target_group_exists
   validate :target_exists
   validate :only_one_method_of_completion
-  validate :course_has_not_ended
 
   def target_group_exists
     errors[:base] << 'Target group does not exist' if target_group.blank?
@@ -33,10 +32,6 @@ class UpdateTargetMutator < ApplicationQuery
     errors[:base] << 'More than one method of completion'
   end
 
-  def course_has_not_ended
-    errors[:base] << 'Course has ended' if target_group.course.ended?
-  end
-
   def update
     ::Targets::UpdateService.new(target).execute(target_params)
   end
@@ -44,11 +39,11 @@ class UpdateTargetMutator < ApplicationQuery
   private
 
   def target_group
-    @target_group ||= TargetGroup.find_by(id: target_group_id)
+    @target_group ||= target.target_group
   end
 
   def target
-    @target ||= Target.find_by(id: id)
+    @target ||= current_school.targets.where(id: id).first
   end
 
   def course

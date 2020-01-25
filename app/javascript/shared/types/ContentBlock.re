@@ -99,6 +99,24 @@ let blockTypeAsString = blockType =>
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
 
+let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex});
+
+let moveUp = (t, ts) =>
+  ts
+  |> Array.to_list
+  |> sort
+  |> ListUtils.swapUp(t)
+  |> reindex
+  |> Array.of_list;
+
+let moveDown = (t, ts) =>
+  ts
+  |> Array.to_list
+  |> sort
+  |> ListUtils.swapDown(t)
+  |> reindex
+  |> Array.of_list;
+
 module Fragments = [%graphql
   {|
   fragment allFields on ContentBlock {

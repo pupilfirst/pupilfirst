@@ -1,4 +1,5 @@
 module Mutations
+  # TODO: Remove this mutation and related code after switching to new target editor.
   class SortContentBlocks < GraphQL::Schema::Mutation
     argument :content_block_ids, [ID], required: true
 

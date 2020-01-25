@@ -23,6 +23,7 @@ module Types
     field :delete_content_block, mutation: Mutations::DeleteContentBlock, null: false
     field :level_up, mutation: Mutations::LevelUp, null: false
     field :sort_content_blocks, mutation: Mutations::SortContentBlocks, null: false
+    field :move_content_block, mutation: Mutations::MoveContentBlock, null: false
     field :update_content_block, mutation: Mutations::UpdateContentBlock, null: false
     field :create_applicant, mutation: Mutations::CreateApplicant, null: false
     field :create_school_admin, mutation: Mutations::CreateSchoolAdmin, null: false

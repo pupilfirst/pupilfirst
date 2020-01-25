@@ -54,7 +54,6 @@ module DeleteContentBlockMutation = [%graphql
    mutation($id: ID!) {
     deleteContentBlock(id: $id) {
        success
-       versions
      }
    }
    |}
@@ -211,29 +210,29 @@ let actionBarTextInputVisible =
   | _ => true
   };
 
-let handleDeleteContentBlock =
-    (contentBlock, authenticityToken, removeTargetContentCB, sortIndex) =>
-  Webapi.Dom.window
-  |> Webapi.Dom.Window.confirm(
-       "Are you sure you want to delete this content?. You cannot undo this.",
-     )
-    ? switch (contentBlock) {
-      | Some(contentBlock) =>
-        let id = ContentBlock.id(contentBlock);
-        DeleteContentBlockMutation.make(~id, ())
-        |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
-        |> Js.Promise.then_(response => {
-             let versions =
-               response##deleteContentBlock##versions
-               |> Array.map(version => version |> Json.Decode.string);
-             response##deleteContentBlock##success
-               ? removeTargetContentCB(sortIndex, versions) : ();
-             Js.Promise.resolve();
-           })
-        |> ignore;
-      | None => removeTargetContentCB(sortIndex, [||])
-      }
-    : ();
+// let handleDeleteContentBlock =
+//     (contentBlock, authenticityToken, removeTargetContentCB, sortIndex) =>
+//   Webapi.Dom.window
+//   |> Webapi.Dom.Window.confirm(
+//        "Are you sure you want to delete this content?. You cannot undo this.",
+//      )
+//     ? switch (contentBlock) {
+//       | Some(contentBlock) =>
+//         let id = ContentBlock.id(contentBlock);
+//         DeleteContentBlockMutation.make(~id, ())
+//         |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true)
+//         |> Js.Promise.then_(response => {
+//              let versions =
+//                response##deleteContentBlock##versions
+//                |> Array.map(version => version |> Json.Decode.string);
+//              response##deleteContentBlock##success
+//                ? removeTargetContentCB(sortIndex, versions) : ();
+//              Js.Promise.resolve();
+//            })
+//         |> ignore;
+//       | None => removeTargetContentCB(sortIndex, [||])
+//       }
+//     : ();
 let decodeContent =
     (blockType: ContentBlock.blockType, fileUrl, state, content) =>
   Json.Decode.(
@@ -514,13 +513,13 @@ let make =
             <button
               title="Delete block"
               onClick={_event =>
-                handleDeleteContentBlock(
-                  contentBlock,
-                  authenticityToken,
-                  removeTargetContentCB,
-                  sortIndex,
-                )
-              }
+                // handleDeleteContentBlock(
+                //   contentBlock,
+                //   authenticityToken,
+                //   removeTargetContentCB,
+                //   sortIndex,
+                // )
+                ()}
               className="px-3 py-2 text-gray-700 hover:text-red-500 hover:bg-red-100 focus:outline-none">
               <i className="fas fa-trash-alt" />
             </button>

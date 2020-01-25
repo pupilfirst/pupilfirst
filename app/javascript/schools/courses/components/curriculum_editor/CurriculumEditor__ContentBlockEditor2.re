@@ -31,7 +31,17 @@ module DeleteContentBlockMutation = [%graphql
   |}
 ];
 
-let controlIcon = (icon, color, handler) => {
+module MoveContentBlockMutation = [%graphql
+  {|
+    mutation($id: ID!, $direction: MoveDirection!) {
+      moveContentBlock(id: $id, direction: $direction) {
+        success
+      }
+    }
+  |}
+];
+
+let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses =
     switch (color) {
     | `Grey => "hover:bg-gray-200"
@@ -39,6 +49,7 @@ let controlIcon = (icon, color, handler) => {
     };
 
   <button
+    title
     disabled={handler == None}
     className={"p-2 " ++ buttonClasses}
     onClick=?handler>
@@ -48,10 +59,20 @@ let controlIcon = (icon, color, handler) => {
 
 let confirm = message => Webapi.Dom.(window |> Window.confirm(message));
 
-let onMoveUp = Some(event => ());
-let onMoveDown = Some(event => ());
+let onMove = (contentBlock, cb, direction, _event) => {
+  // We don't actually handle the response for this query.
+  MoveContentBlockMutation.make(
+    ~id=contentBlock |> ContentBlock.id,
+    ~direction,
+    (),
+  )
+  |> GraphqlQuery.sendQuery2
+  |> ignore;
 
-let onDelete = (contentBlock, removeContentBlockCB, send, event) =>
+  cb(contentBlock);
+};
+
+let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
   if (confirm("Are you sure you want to delete this block?")) {
     send(StartSaving("Deleting..."));
     let id = contentBlock |> ContentBlock.id;
@@ -67,7 +88,7 @@ let onDelete = (contentBlock, removeContentBlockCB, send, event) =>
 
          Js.Promise.resolve();
        })
-    |> Js.Promise.catch(error => {
+    |> Js.Promise.catch(_error => {
          send(FailSaving);
          Js.Promise.resolve();
        })
@@ -76,13 +97,24 @@ let onDelete = (contentBlock, removeContentBlockCB, send, event) =>
 
 let onUndo =
   Some(
-    event =>
+    _event =>
       if (confirm("Are you sure you want to undo your changes to this block?")) {
         ();
       },
   );
 
-let onSave = Some(event => ());
+let onSave = Some(_event => ());
+
+let innerEditor = contentBlock =>
+  (
+    switch (contentBlock |> ContentBlock.blockType) {
+    | ContentBlock.Embed(_) => "Embed Block"
+    | Markdown(_) => "Markdown Block"
+    | File(_) => "File Block"
+    | Image(_) => "Image Block"
+    }
+  )
+  |> str;
 
 [@react.component]
 let make =
@@ -91,6 +123,8 @@ let make =
       ~contentBlock,
       ~setDirty,
       ~removeContentBlockCB=?,
+      ~moveContentBlockUpCB=?,
+      ~moveContentBlockDownCB=?,
       ~updateContentBlockCB,
     ) => {
   let (state, send) =
@@ -98,19 +132,45 @@ let make =
 
   <DisablingCover disabled={state.saving != None} message=?{state.saving}>
     <div className="flex">
-      <div className="flex-grow"> {"Inner Editor" |> str} </div>
+      <div className="flex-grow"> {innerEditor(contentBlock)} </div>
       <div
         className="flex-shrink-0 mt-2 border-gray-300 bg-gray-100 border-t border-b border-r rounded-tr rounded-br flex flex-col text-xs">
-        {controlIcon("fa-arrow-up", `Grey, onMoveUp)}
-        {controlIcon("fa-arrow-down", `Grey, onMoveDown)}
         {controlIcon(
-           "fa-trash-alt",
-           `Grey,
-           removeContentBlockCB
-           |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
+           ~icon="fa-arrow-up",
+           ~title="Move Up",
+           ~color=`Grey,
+           ~handler=
+             moveContentBlockUpCB
+             |> OptionUtils.map(cb => onMove(contentBlock, cb, `Up)),
          )}
-        {controlIcon("fa-undo-alt", `Grey, onUndo)}
-        {controlIcon("fa-check", `Green, onSave)}
+        {controlIcon(
+           ~icon="fa-arrow-down",
+           ~title="Move Down",
+           ~color=`Grey,
+           ~handler=
+             moveContentBlockDownCB
+             |> OptionUtils.map(cb => onMove(contentBlock, cb, `Down)),
+         )}
+        {controlIcon(
+           ~icon="fa-trash-alt",
+           ~title="Delete",
+           ~color=`Grey,
+           ~handler=
+             removeContentBlockCB
+             |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
+         )}
+        {controlIcon(
+           ~icon="fa-undo-alt",
+           ~title="Undo Changes",
+           ~color=`Grey,
+           ~handler=onUndo,
+         )}
+        {controlIcon(
+           ~icon="fa-check",
+           ~title="Save Changes",
+           ~color=`Green,
+           ~handler=onSave,
+         )}
       </div>
     </div>
   </DisablingCover>;

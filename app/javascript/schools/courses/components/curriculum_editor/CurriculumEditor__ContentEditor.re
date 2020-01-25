@@ -13,7 +13,9 @@ type state = {
 type action =
   | LoadContent(array(ContentBlock.t), array(string))
   | AddContentBlock(ContentBlock.t)
-  | RemoveContentBlock(ContentBlock.id);
+  | RemoveContentBlock(ContentBlock.id)
+  | MoveContentBlockUp(ContentBlock.t)
+  | MoveContentBlockDown(ContentBlock.t);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -47,6 +49,15 @@ let reducer = (state, action) =>
              contentBlock |> ContentBlock.id != contentBlockId
            ),
     }
+  | MoveContentBlockUp(contentBlock) => {
+      ...state,
+      contentBlocks: state.contentBlocks |> ContentBlock.moveUp(contentBlock),
+    }
+  | MoveContentBlockDown(contentBlock) => {
+      ...state,
+      contentBlocks:
+        state.contentBlocks |> ContentBlock.moveDown(contentBlock),
+    }
   };
 
 let loadContentBlocks = (targetId, send) => {
@@ -75,6 +86,12 @@ let addContentBlock = (send, contentBlock) =>
 let removeContentBlock = (send, contentBlockId) =>
   send(RemoveContentBlock(contentBlockId));
 
+let moveContentBlockUp = (send, contentBlock) =>
+  send(MoveContentBlockUp(contentBlock));
+
+let moveContentBlockDown = (send, contentBlock) =>
+  send(MoveContentBlockDown(contentBlock));
+
 let editor = (target, state, send) => {
   let currentVersion =
     switch (state.versions) {
@@ -89,9 +106,10 @@ let editor = (target, state, send) => {
     };
 
   let sortedContentBlocks = state.contentBlocks |> ContentBlock.sortArray;
+  let numberOfContentBlocks = state.contentBlocks |> Array.length;
+
   let removeContentBlockCB =
-    state.contentBlocks |> Array.length > 1
-      ? Some(removeContentBlock(send)) : None;
+    numberOfContentBlocks > 1 ? Some(removeContentBlock(send)) : None;
 
   <div className="mt-2">
     <div className="flex justify-between items-end">
@@ -115,7 +133,13 @@ let editor = (target, state, send) => {
       </div>
     </div>
     {sortedContentBlocks
-     |> Array.map(contentBlock => {
+     |> Array.mapi((index, contentBlock) => {
+          let moveContentBlockUpCB =
+            index == 0 ? None : Some(moveContentBlockUp(send));
+          let moveContentBlockDownCB =
+            index + 1 == numberOfContentBlocks
+              ? None : Some(moveContentBlockDown(send));
+
           <div key={contentBlock |> ContentBlock.id}>
             <CurriculumEditor__ContentBlockCreator
               target
@@ -127,9 +151,11 @@ let editor = (target, state, send) => {
               setDirty={(_dirty, _targetId) => ()}
               contentBlock
               ?removeContentBlockCB
+              ?moveContentBlockUpCB
+              ?moveContentBlockDownCB
               updateContentBlockCB={_contentBlock => ()}
             />
-          </div>
+          </div>;
         })
      |> React.array}
     <CurriculumEditor__ContentBlockCreator

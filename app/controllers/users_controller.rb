@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     if @form.validate(params[:users_edit])
       @form.save!
       flash[:success] = 'Your profile has been updated.'
-      redirect_back(fallback_location: home_path)
+      redirect_to edit_user_path
     else
       render 'edit'
     end

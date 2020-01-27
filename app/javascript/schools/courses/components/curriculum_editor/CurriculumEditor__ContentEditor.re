@@ -4,10 +4,13 @@ let str = React.string;
 
 open CurriculumEditor__Types;
 
+module IdSet = Set.Make(String);
+
 type state = {
   loading: bool,
   contentBlocks: array(ContentBlock.t),
   versions: array(string),
+  dirtyContentBlockIds: IdSet.t,
 };
 
 type action =
@@ -15,7 +18,8 @@ type action =
   | AddContentBlock(ContentBlock.t)
   | RemoveContentBlock(ContentBlock.id)
   | MoveContentBlockUp(ContentBlock.t)
-  | MoveContentBlockDown(ContentBlock.t);
+  | MoveContentBlockDown(ContentBlock.t)
+  | SetDirty(ContentBlock.id, bool);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -23,6 +27,7 @@ let reducer = (state, action) =>
       loading: false,
       contentBlocks,
       versions,
+      dirtyContentBlockIds: IdSet.empty,
     }
   | AddContentBlock(newContentBlock) =>
     let newBlockSortIndex = newContentBlock |> ContentBlock.sortIndex;
@@ -58,6 +63,13 @@ let reducer = (state, action) =>
       contentBlocks:
         state.contentBlocks |> ContentBlock.moveDown(contentBlock),
     }
+  | SetDirty(contentBlockId, dirty) =>
+    let operation = dirty ? IdSet.add : IdSet.remove;
+    {
+      ...state,
+      dirtyContentBlockIds:
+        operation(contentBlockId, state.dirtyContentBlockIds),
+    };
   };
 
 let loadContentBlocks = (targetId, send) => {
@@ -91,6 +103,10 @@ let moveContentBlockUp = (send, contentBlock) =>
 
 let moveContentBlockDown = (send, contentBlock) =>
   send(MoveContentBlockDown(contentBlock));
+
+let setDirty = (contentBlockId, send, dirty) => {
+  send(SetDirty(contentBlockId, dirty));
+};
 
 let editor = (target, state, send) => {
   let currentVersion =
@@ -139,6 +155,11 @@ let editor = (target, state, send) => {
           let moveContentBlockDownCB =
             index + 1 == numberOfContentBlocks
               ? None : Some(moveContentBlockDown(send));
+          let isDirty =
+            state.dirtyContentBlockIds
+            |> IdSet.mem(contentBlock |> ContentBlock.id);
+          let updateContentBlockCB =
+            isDirty ? Some(_contentBlock => ()) : None;
 
           <div key={contentBlock |> ContentBlock.id}>
             <CurriculumEditor__ContentBlockCreator
@@ -148,12 +169,12 @@ let editor = (target, state, send) => {
             />
             <CurriculumEditor__ContentBlockEditor2
               targetId={target |> Target.id}
-              setDirty={(_dirty, _targetId) => ()}
+              setDirtyCB={setDirty(contentBlock |> ContentBlock.id, send)}
               contentBlock
               ?removeContentBlockCB
               ?moveContentBlockUpCB
               ?moveContentBlockDownCB
-              updateContentBlockCB={_contentBlock => ()}
+              ?updateContentBlockCB
             />
           </div>;
         })
@@ -170,7 +191,12 @@ let make = (~target) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {loading: true, contentBlocks: [||], versions: [||]},
+      {
+        loading: true,
+        contentBlocks: [||],
+        versions: [||],
+        dirtyContentBlockIds: IdSet.empty,
+      },
     );
 
   React.useEffect0(() => {

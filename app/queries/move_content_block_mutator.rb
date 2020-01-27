@@ -8,12 +8,17 @@ class MoveContentBlockMutator < ApplicationQuery
   # TODO: Update this method when target_versions table is introduced.
   def move_content_block
     ContentBlock.transaction do
-      versions = ContentVersion.where(version_on: latest_version_date).order(sort_index: :ASC).to_a
+      versions = ContentVersion.where(version_on: latest_version_date)
+        .order(sort_index: :ASC) # Order the versions by current sort_index
+        .includes(:target, :content_block) # Avoid N+! in save! because target and content_block presence will be validated.
+        .to_a # We'll re-order the array...
 
       direction == 'Up' ? swap_up(versions, content_version) : swap_down(versions, content_version)
 
+      # ...and then re-index the re-ordered array.
       versions.each_with_index do |version, index|
-        version.update!(sort_index: index)
+        version.sort_index = index
+        version.save!
       end
     end
   end

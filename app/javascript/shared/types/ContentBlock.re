@@ -117,6 +117,30 @@ let moveDown = (t, ts) =>
   |> reindex
   |> Array.of_list;
 
+let updateFile = (title, t) =>
+  switch (t.blockType) {
+  | File(url, _, filename) => {...t, blockType: File(url, title, filename)}
+  | Markdown(_)
+  | Image(_)
+  | Embed(_) => t
+  };
+
+let updateImage = (caption, t) =>
+  switch (t.blockType) {
+  | Image(url, _) => {...t, blockType: Image(url, caption)}
+  | Markdown(_)
+  | File(_)
+  | Embed(_) => t
+  };
+
+let updateMarkdown = (markdown, t) =>
+  switch (t.blockType) {
+  | Markdown(_) => {...t, blockType: Markdown(markdown)}
+  | File(_)
+  | Image(_)
+  | Embed(_) => t
+  };
+
 module Fragments = [%graphql
   {|
   fragment allFields on ContentBlock {

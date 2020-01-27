@@ -13,12 +13,14 @@ let computeInitialState = contentBlock => {saving: None, contentBlock};
 
 type action =
   | StartSaving(string)
-  | FailSaving;
+  | FailSaving
+  | UpdateContentBlock(ContentBlock.t);
 
 let reducer = (state, action) =>
   switch (action) {
   | StartSaving(message) => {...state, saving: Some(message)}
   | FailSaving => {...state, saving: None}
+  | UpdateContentBlock(contentBlock) => {...state, contentBlock}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -45,7 +47,7 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses =
     switch (color) {
     | `Grey => "hover:bg-gray-200"
-    | `Green => "bg-green-600 hover:bg-green-700 text-white rounded-br"
+    | `Green => "bg-green-600 hover:bg-green-700 text-white rounded-b"
     };
 
   <button
@@ -95,33 +97,43 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
     |> ignore;
   };
 
-let onUndo =
-  Some(
-    _event =>
-      if (confirm("Are you sure you want to undo your changes to this block?")) {
-        ();
-      },
-  );
+let onUndo = (originalContentBlock, setDirty, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
 
-let onSave = Some(_event => ());
+  if (confirm("Are you sure you want to undo your changes to this block?")) {
+    setDirty(false);
+    send(UpdateContentBlock(originalContentBlock));
+  };
+};
 
-let innerEditor = contentBlock =>
-  (
-    switch (contentBlock |> ContentBlock.blockType) {
-    | ContentBlock.Embed(_) => "Embed Block"
-    | Markdown(_) => "Markdown Block"
-    | File(_) => "File Block"
-    | Image(_) => "Image Block"
-    }
-  )
-  |> str;
+let onSave = (contentBlock, removeContentBlockCB, send, _event) => ();
+
+let updateTitle = (originalContentBlock, setDirtyCB, send, newTitle) => {
+  let newContentBlock =
+    originalContentBlock |> ContentBlock.updateFile(newTitle);
+
+  setDirtyCB(newContentBlock != originalContentBlock);
+  send(UpdateContentBlock(newContentBlock));
+};
+
+let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
+  let updateTitleCB = updateTitle(originalContentBlock, setDirtyCB, send);
+
+  switch (contentBlock |> ContentBlock.blockType) {
+  | ContentBlock.Embed(_) => "Embed Block" |> str
+  | Markdown(_) => "Markdown Block" |> str
+  | File(url, title, filename) =>
+    <CurriculumEditor__FileBlockEditor url title filename updateTitleCB />
+  | Image(_) => "Image Block" |> str
+  };
+};
 
 [@react.component]
 let make =
     (
       ~targetId,
       ~contentBlock,
-      ~setDirty,
+      ~setDirtyCB,
       ~removeContentBlockCB=?,
       ~moveContentBlockUpCB=?,
       ~moveContentBlockDownCB=?,
@@ -132,9 +144,11 @@ let make =
 
   <DisablingCover disabled={state.saving != None} message=?{state.saving}>
     <div className="flex">
-      <div className="flex-grow"> {innerEditor(contentBlock)} </div>
+      <div className="flex-grow">
+        {innerEditor(contentBlock, state.contentBlock, setDirtyCB, send)}
+      </div>
       <div
-        className="flex-shrink-0 mt-2 border-gray-300 bg-gray-100 border-t border-b border-r rounded-tr rounded-br flex flex-col text-xs">
+        className="ml-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs">
         {controlIcon(
            ~icon="fa-arrow-up",
            ~title="Move Up",
@@ -163,13 +177,17 @@ let make =
            ~icon="fa-undo-alt",
            ~title="Undo Changes",
            ~color=`Grey,
-           ~handler=onUndo,
+           ~handler=
+             updateContentBlockCB
+             |> OptionUtils.map(_cb => onUndo(contentBlock, setDirtyCB, send)),
          )}
         {controlIcon(
            ~icon="fa-check",
            ~title="Save Changes",
            ~color=`Green,
-           ~handler=onSave,
+           ~handler=
+             updateContentBlockCB
+             |> OptionUtils.map(cb => onSave(contentBlock, cb, send)),
          )}
       </div>
     </div>

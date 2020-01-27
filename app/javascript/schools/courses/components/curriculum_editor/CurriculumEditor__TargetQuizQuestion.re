@@ -21,34 +21,38 @@ let make =
 
   let updateQuestion = question =>
     updateQuizQuestionCB(
-      quizQuestion |> QuizQuestion.id,
-      quizQuestion |> QuizQuestion.updateQuestion(question),
+      quizQuestion |> TargetDetails__QuizQuestion.id,
+      quizQuestion |> TargetDetails__QuizQuestion.updateQuestion(question),
     );
 
   let updateAnswerOptionCB = (id, answer) =>
     updateQuizQuestionCB(
-      quizQuestion |> QuizQuestion.id,
-      quizQuestion |> QuizQuestion.replace(id, answer),
+      quizQuestion |> TargetDetails__QuizQuestion.id,
+      quizQuestion |> TargetDetails__QuizQuestion.replace(id, answer),
     );
   let removeAnswerOptionCB = id =>
     updateQuizQuestionCB(
-      quizQuestion |> QuizQuestion.id,
-      quizQuestion |> QuizQuestion.removeAnswerOption(id),
+      quizQuestion |> TargetDetails__QuizQuestion.id,
+      quizQuestion |> TargetDetails__QuizQuestion.removeAnswerOption(id),
     );
   let markAsCorrectCB = id =>
     updateQuizQuestionCB(
-      quizQuestion |> QuizQuestion.id,
-      quizQuestion |> QuizQuestion.markAsCorrect(id),
+      quizQuestion |> TargetDetails__QuizQuestion.id,
+      quizQuestion |> TargetDetails__QuizQuestion.markAsCorrect(id),
     );
 
   let addAnswerOption = () =>
     updateQuizQuestionCB(
-      quizQuestion |> QuizQuestion.id,
+      quizQuestion |> TargetDetails__QuizQuestion.id,
       quizQuestion
-      |> QuizQuestion.newAnswerOption(Js.Date.now() |> Js.Float.toString),
+      |> TargetDetails__QuizQuestion.newAnswerOption(
+           Js.Date.now() |> Js.Float.toString,
+         ),
     );
   let canBeDeleted =
-    quizQuestion |> QuizQuestion.answerOptions |> List.length > 2;
+    quizQuestion
+    |> TargetDetails__QuizQuestion.answerOptions
+    |> Array.length > 2;
   let questionId = questionNumber + 1 |> string_of_int;
 
   <div
@@ -60,59 +64,52 @@ let make =
         {"Question " ++ questionId |> str}
       </label>
       <div className="quiz-maker__question-remove-button invisible">
-        {
-          questionCanBeRemoved ?
-            <button
-              className="flex items-center flex-shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
-              type_="button"
-              title="Remove Quiz Question"
-              onClick={
-                event => {
-                  ReactEvent.Mouse.preventDefault(event);
-                  removeQuizQuestionCB(quizQuestion |> QuizQuestion.id);
-                }
-              }>
-              <i className="fas fa-trash-alt text-lg" />
-            </button> :
-            ReasonReact.null
-        }
+        {questionCanBeRemoved
+           ? <button
+               className="flex items-center flex-shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
+               type_="button"
+               title="Remove Quiz Question"
+               onClick={event => {
+                 ReactEvent.Mouse.preventDefault(event);
+                 removeQuizQuestionCB(
+                   quizQuestion |> TargetDetails__QuizQuestion.id,
+                 );
+               }}>
+               <i className="fas fa-trash-alt text-lg" />
+             </button>
+           : ReasonReact.null}
       </div>
     </div>
     <div className="my-2 bg-white">
       <MarkdownEditor
         textareaId={"quiz_question_" ++ questionId}
         placeholder="Type the question here (supports markdown)"
-        value={quizQuestion |> QuizQuestion.question}
+        value={quizQuestion |> TargetDetails__QuizQuestion.question}
         updateMarkdownCB=updateQuestion
         profile=Markdown.Permissive
         defaultView=MarkdownEditor.Edit
       />
     </div>
     <div className="quiz-maker__answers-container relative">
-      {
-        quizQuestion
-        |> QuizQuestion.answerOptions
-        |> List.mapi((index, answerOption) =>
-             <CurriculumEditor__TargetQuizAnswer
-               key={answerOption |> AnswerOption.id}
-               answerOption
-               updateAnswerOptionCB
-               removeAnswerOptionCB
-               canBeDeleted
-               markAsCorrectCB
-               answerOptionId={answerOptionId(questionId, index)}
-             />
-           )
-        |> Array.of_list
-        |> React.array
-      }
+      {quizQuestion
+       |> TargetDetails__QuizQuestion.answerOptions
+       |> Array.mapi((index, answerOption) =>
+            <CurriculumEditor__TargetQuizAnswer
+              key={answerOption |> TargetDetails__AnswerOption.id}
+              answerOption
+              updateAnswerOptionCB
+              removeAnswerOptionCB
+              canBeDeleted
+              markAsCorrectCB
+              answerOptionId={answerOptionId(questionId, index)}
+            />
+          )
+       |> React.array}
       <div
-        onClick={
-          _event => {
-            ReactEvent.Mouse.preventDefault(_event);
-            addAnswerOption();
-          }
-        }
+        onClick={_event => {
+          ReactEvent.Mouse.preventDefault(_event);
+          addAnswerOption();
+        }}
         className="quiz-maker__add-answer-option cursor-pointer relative">
         <div
           className="flex items-center border border-dashed border-primary-500 justify-center text-gray-600 quiz-maker__add-answer-option-pointer quiz-maker__add-answer-option-pointer">

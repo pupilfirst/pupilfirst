@@ -522,7 +522,7 @@ let quizEditor = (state, send) => {
             />}
        {state.quiz
         |> Array.mapi((index, quizQuestion) =>
-             <CurriculumEditor__TargetQuizQuestion2
+             <CurriculumEditor__TargetQuizQuestion
                key={quizQuestion |> TargetDetails__QuizQuestion.id}
                questionNumber=index
                quizQuestion

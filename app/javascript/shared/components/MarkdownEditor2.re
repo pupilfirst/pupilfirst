@@ -61,7 +61,7 @@ let computeInitialState = () => {
 let containerClasses = mode =>
   switch (mode) {
   | Windowed(_) => ""
-  | Fullscreen(_) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen"
+  | Fullscreen(_) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col"
   };
 
 let modeIcon = (desiredMode, currentMode) => {
@@ -81,17 +81,39 @@ let modeIcon = (desiredMode, currentMode) => {
   <FaIcon classes={"fas " ++ icon} />;
 };
 
-let controls = (send, mode) => {
-  let buttonClasses = "btn btn-primary ml-2 p-1";
+let onClickFullscreen = (state, send, _event) => {
+  switch (state.mode) {
+  | Windowed(_) => TextareaAutosize.destroy(state.id)
+  | Fullscreen(_) => () // Do nothing here. We'll fix this in an effect.
+  };
 
-  <div>
+  send(ClickFullscreen);
+};
+
+let onClickSplit = (state, send, event) => {
+  switch (state.mode) {
+  | Windowed(_) => TextareaAutosize.destroy(state.id)
+  | Fullscreen(_) => () // This should have no effect on textarea autosizing in full-screen mode.
+  };
+
+  send(ClickSplit);
+};
+
+let controls = (state, send) => {
+  let buttonClasses = "border rounded-lg p-1 bg-gray-200 hover:bg-gray-300 ";
+  let {mode} = state;
+
+  <div className="bg-gray-100 p-1">
     <button className=buttonClasses onClick={_ => send(ClickPreview)}>
       {modeIcon(`Preview, mode)}
     </button>
-    <button className=buttonClasses onClick={_ => send(ClickSplit)}>
+    <button
+      className={buttonClasses ++ "ml-2"} onClick={onClickSplit(state, send)}>
       {modeIcon(`Split, mode)}
     </button>
-    <button className=buttonClasses onClick={_ => send(ClickFullscreen)}>
+    <button
+      className={buttonClasses ++ "ml-2"}
+      onClick={onClickFullscreen(state, send)}>
       {modeIcon(`Fullscreen, mode)}
     </button>
   </div>;
@@ -100,25 +122,53 @@ let controls = (send, mode) => {
 let modeClasses = mode =>
   switch (mode) {
   | Windowed(_) => ""
-  | Fullscreen(_) => "flex"
+  | Fullscreen(_) => "flex flex-grow"
   };
 
 let editorContainerClasses = mode =>
-  switch (mode) {
-  | Windowed(`Editor) => ""
-  | Windowed(`Preview) => "hidden"
-  | Fullscreen(`Editor) => "w-full"
-  | Fullscreen(`Preview) => "hidden"
-  | Fullscreen(`Split) => "w-1/2"
-  };
+  "border "
+  ++ (
+    switch (mode) {
+    | Windowed(`Editor) => ""
+    | Windowed(`Preview) => "hidden"
+    | Fullscreen(`Editor) => "w-full"
+    | Fullscreen(`Preview) => "hidden"
+    | Fullscreen(`Split) => "w-1/2"
+    }
+  );
+
 let previewContainerClasses = mode =>
-  switch (mode) {
-  | Windowed(`Editor) => "hidden"
-  | Windowed(`Preview) => ""
-  | Fullscreen(`Editor) => "hidden"
-  | Fullscreen(`Preview) => "w-full"
-  | Fullscreen(`Split) => "w-1/2"
-  };
+  "px-2 "
+  ++ (
+    switch (mode) {
+    | Windowed(`Editor) => "hidden"
+    | Windowed(`Preview) => ""
+    | Fullscreen(`Editor) => "hidden"
+    | Fullscreen(`Preview) => "w-full"
+    | Fullscreen(`Split) => "w-1/2"
+    }
+  );
+
+let focusOnEditor = id => {
+  Webapi.Dom.(
+    document
+    |> Document.getElementById(id)
+    |> OptionUtils.flatMap(HtmlElement.ofElement)
+    |> OptionUtils.mapWithDefault(element => element |> HtmlElement.focus, ())
+  );
+};
+
+let footer = <div className="bg-gray-100 p-1"> {"Footer" |> str} </div>;
+
+let textareaClasses = mode => {
+  "w-full p-2 outline-none "
+  ++ (
+    switch (mode) {
+    | Windowed(_) => ""
+    | Fullscreen(_) => "h-full resize-none"
+    }
+  );
+};
 
 [@react.component]
 let make = (~value, ~onChange) => {
@@ -130,20 +180,33 @@ let make = (~value, ~onChange) => {
     Some(() => TextareaAutosize.destroy(state.id));
   });
 
+  React.useEffect1(
+    () => {
+      switch (state.mode) {
+      | Windowed(_) => TextareaAutosize.create(state.id)
+      | Fullscreen(_) => () // Do nothing. This was handled in the click handler.
+      };
+
+      None;
+    },
+    [|state.mode|],
+  );
+
   <div className={containerClasses(state.mode)}>
-    {controls(send, state.mode)}
+    {controls(state, send)}
     <div className={modeClasses(state.mode)}>
       <div className={editorContainerClasses(state.mode)}>
         <textarea
           onChange
           id={state.id}
           value
-          className="w-full h-full border p-2"
+          className={textareaClasses(state.mode)}
         />
       </div>
       <div className={previewContainerClasses(state.mode)}>
         <MarkdownBlock markdown=value profile=Markdown.Permissive />
       </div>
     </div>
+    footer
   </div>;
 };

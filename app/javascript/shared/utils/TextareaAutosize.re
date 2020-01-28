@@ -3,12 +3,14 @@ open Webapi.Dom;
 [@bs.module] external autosize: Dom.element => unit = "autosize";
 [@bs.module "autosize"]
 external autosizeDestroy: Dom.element => unit = "destroy";
+[@bs.module "autosize"]
+external autosizeUpdate: Dom.element => unit = "update";
 
-let withElement = (action, id) =>
-  switch (document |> Document.getElementById(id)) {
-  | Some(element) => action(element)
-  | None => ()
-  };
+let perform = (f, id) =>
+  document
+  |> Document.getElementById(id)
+  |> OptionUtils.mapWithDefault(element => element |> f, ());
 
-let create = id => id |> withElement(element => element |> autosize);
-let destroy = id => id |> withElement(element => element |> autosizeDestroy);
+let create = id => id |> perform(autosize);
+let update = id => id |> perform(autosizeUpdate);
+let destroy = id => id |> perform(autosizeDestroy);

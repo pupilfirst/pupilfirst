@@ -97,8 +97,6 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
   </button>;
 };
 
-let confirm = message => Webapi.Dom.(window |> Window.confirm(message));
-
 let onMove = (contentBlock, cb, direction, _event) => {
   // We don't actually handle the response for this query.
   MoveContentBlockMutation.make(
@@ -113,7 +111,7 @@ let onMove = (contentBlock, cb, direction, _event) => {
 };
 
 let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
-  if (confirm("Are you sure you want to delete this block?")) {
+  WindowUtils.confirm("Are you sure you want to delete this block?", () => {
     send(StartSaving("Deleting..."));
     let id = contentBlock |> ContentBlock.id;
 
@@ -133,15 +131,16 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
          Js.Promise.resolve();
        })
     |> ignore;
-  };
+  });
 
 let onUndo = (originalContentBlock, setDirty, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
-  if (confirm("Are you sure you want to undo your changes to this block?")) {
+  WindowUtils.confirm(
+    "Are you sure you want to undo your changes to this block?", () => {
     setDirty(false);
     send(UpdateContentBlock(originalContentBlock));
-  };
+  });
 };
 
 let handleUpdateResult = (updateContentBlockCB, send, contentBlock) => {
@@ -216,13 +215,12 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
 [@react.component]
 let make =
     (
-      ~targetId,
       ~contentBlock,
       ~setDirtyCB,
       ~removeContentBlockCB=?,
       ~moveContentBlockUpCB=?,
       ~moveContentBlockDownCB=?,
-      ~updateContentBlockCB,
+      ~updateContentBlockCB=?,
     ) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, contentBlock, computeInitialState);

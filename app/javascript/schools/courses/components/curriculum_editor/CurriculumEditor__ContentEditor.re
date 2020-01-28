@@ -186,7 +186,6 @@ let editor = (target, state, send) => {
               addContentBlockCB={addContentBlock(send)}
             />
             <CurriculumEditor__ContentBlockEditor2
-              targetId={target |> Target.id}
               setDirtyCB={setDirty(contentBlock |> ContentBlock.id, send)}
               contentBlock
               ?removeContentBlockCB
@@ -205,7 +204,7 @@ let editor = (target, state, send) => {
 };
 
 [@react.component]
-let make = (~target) => {
+let make = (~target, ~setDirtyCB) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -221,6 +220,15 @@ let make = (~target) => {
     loadContentBlocks(target |> Target.id, send);
     None;
   });
+
+  React.useEffect1(
+    () => {
+      let dirty = !(state.dirtyContentBlockIds |> IdSet.is_empty);
+      setDirtyCB(dirty);
+      None;
+    },
+    [|state.dirtyContentBlockIds|],
+  );
 
   <div className="max-w-3xl py-6 px-3 mx-auto">
     {state.loading

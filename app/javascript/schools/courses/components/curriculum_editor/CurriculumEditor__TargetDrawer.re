@@ -11,7 +11,17 @@ type page =
   | Details
   | Versions;
 
-let tab = (page, selectedPage, pathPrefix) => {
+let confirmDirtyAction = (dirty, action) =>
+  if (dirty) {
+    WindowUtils.confirm(
+      "There are unsaved changes. Are you sure you want to discard them?", () =>
+      action()
+    );
+  } else {
+    action();
+  };
+
+let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
   let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer";
 
   let (title, pathSuffix, iconClass) =
@@ -33,7 +43,13 @@ let tab = (page, selectedPage, pathPrefix) => {
     href=path
     onClick={e => {
       e |> ReactEvent.Mouse.preventDefault;
-      ReasonReactRouter.push(path);
+      confirmDirtyAction(
+        dirty,
+        () => {
+          setDirty(_ => false);
+          ReasonReactRouter.push(path);
+        },
+      );
     }}
     className=classes>
     <FaIcon classes={"fas " ++ iconClass} />
@@ -41,10 +57,16 @@ let tab = (page, selectedPage, pathPrefix) => {
   </a>;
 };
 
+let closeDrawer = course =>
+  ReasonReactRouter.push(
+    "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
+  );
+
 [@react.component]
 let make =
     (~targets, ~targetGroups, ~evaluationCriteria, ~course, ~updateTargetCB) => {
   let url = ReasonReactRouter.useUrl();
+  let (dirty, setDirty) = React.useState(() => false);
 
   switch (url.path) {
   | ["school", "courses", _courseId, "targets", targetId, pageName] =>
@@ -64,7 +86,13 @@ let make =
 
     let (innerComponent, selectedPage) =
       switch (pageName) {
-      | "content" => (<CurriculumEditor__ContentEditor target />, Content)
+      | "content" => (
+          <CurriculumEditor__ContentEditor
+            target
+            setDirtyCB={dirty => setDirty(_ => dirty)}
+          />,
+          Content,
+        )
       | "details" => (
           <CurriculumEditor__TargetDetailsEditor
             target
@@ -92,19 +120,18 @@ let make =
     <SchoolAdmin__EditorDrawer
       size=SchoolAdmin__EditorDrawer.Large
       closeDrawerCB={() =>
-        ReasonReactRouter.push(
-          "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
-        )
+        confirmDirtyAction(dirty, () => closeDrawer(course))
       }>
       <div>
         <div className="bg-gray-200 pt-6">
           <div className="max-w-3xl px-3 mx-auto">
             <h3> {target |> Target.title |> str} </h3>
           </div>
-          <div className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
-            {tab(Content, selectedPage, pathPrefix)}
-            {tab(Details, selectedPage, pathPrefix)}
-            {tab(Versions, selectedPage, pathPrefix)}
+          <div
+            className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
+            {tab(Content, selectedPage, pathPrefix, dirty, setDirty)}
+            {tab(Details, selectedPage, pathPrefix, dirty, setDirty)}
+            {tab(Versions, selectedPage, pathPrefix, dirty, setDirty)}
           </div>
         </div>
         <div className="bg-white">

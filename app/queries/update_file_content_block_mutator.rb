@@ -3,7 +3,7 @@ class UpdateFileContentBlockMutator < ApplicationQuery
   include ContentBlockEditable
 
   property :id, validates: { presence: true }
-  property :title, validates: { length: { maximum: 128 } }
+  property :title, validates: { length: { maximum: 60 } }
 
   validate :must_be_a_file_block
 

@@ -38,6 +38,7 @@ let make = (~url, ~title, ~filename, ~updateTitleCB) => {
             let newTitle = ReactEvent.Form.target(event)##value;
             updateTitleCB(newTitle);
           }}
+          maxLength=60
           type_="text"
           value=title
           placeholder="A title for this file"

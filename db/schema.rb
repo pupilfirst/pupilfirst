@@ -208,7 +208,10 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
     t.json "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sort_index"
+    t.bigint "target_versions_id"
     t.index ["block_type"], name: "index_content_blocks_on_block_type"
+    t.index ["target_versions_id"], name: "index_content_blocks_on_target_versions_id"
   end
 
   create_table "content_versions", force: :cascade do |t|
@@ -216,7 +219,6 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
     t.bigint "content_block_id"
     t.date "version_on"
     t.integer "sort_index"
-    t.datetime "version_at"
     t.index ["content_block_id"], name: "index_content_versions_on_content_block_id"
     t.index ["target_id"], name: "index_content_versions_on_target_id"
     t.index ["version_on"], name: "index_content_versions_on_version_on"
@@ -646,6 +648,14 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
     t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
+  create_table "target_versions", force: :cascade do |t|
+    t.datetime "version_at"
+    t.bigint "target_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["target_id"], name: "index_target_versions_on_target_id"
+  end
+
   create_table "targets", id: :serial, force: :cascade do |t|
     t.string "role"
     t.string "title"
@@ -868,6 +878,7 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
   add_foreign_key "target_questions", "targets"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
+  add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "user_activities", "users"

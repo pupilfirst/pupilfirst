@@ -30,6 +30,8 @@ type state = {
   role: TargetDetails.role,
   evaluationCriteria: array(string),
   prerequisiteTargets: array(string),
+  prerequisiteSearchInput: string,
+  evaluationCriteriaSearchInput: string,
   methodOfCompletion,
   quiz: array(TargetDetails__QuizQuestion.t),
   linkToComplete: string,
@@ -43,9 +45,11 @@ type state = {
 type action =
   | SaveTargetDetails(TargetDetails.t)
   | UpdateTitle(string)
-  | UpdatePrerequisiteTargets(prerequisiteTarget)
+  | UpdatePrerequisiteTargets(array(string))
   | UpdateMethodOfCompletion(methodOfCompletion)
   | UpdateEvaluationCriteria(evaluationCriterion)
+  | UpdatePrerequisiteSearchInput(string)
+  | UpdateEvaluationCriteriaSearchInput(string)
   | UpdateLinkToComplete(string)
   | UpdateCompletionInstructions(string)
   | UpdateTargetRole(TargetDetails.role)
@@ -145,19 +149,15 @@ let reducer = (state, action) =>
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
-  | UpdatePrerequisiteTargets(prerequisiteTarget) =>
-    let (targetId, _title, selected) = prerequisiteTarget;
-    let currentPrerequisiteTargets = state.prerequisiteTargets;
-    {
+  | UpdatePrerequisiteTargets(prerequisiteTargets) => {
       ...state,
-      prerequisiteTargets:
-        selected
-          ? currentPrerequisiteTargets
-            |> Js.Array.concat([|targetId |> string_of_int|])
-          : currentPrerequisiteTargets
-            |> Js.Array.filter(id => id != (targetId |> string_of_int)),
+      prerequisiteTargets,
       dirty: true,
-    };
+    }
+  | UpdatePrerequisiteSearchInput(prerequisiteSearchInput) => {
+      ...state,
+      prerequisiteSearchInput,
+    }
   | UpdateMethodOfCompletion(methodOfCompletion) => {
       ...state,
       methodOfCompletion,
@@ -178,6 +178,10 @@ let reducer = (state, action) =>
                ),
       dirty: true,
     };
+  | UpdateEvaluationCriteriaSearchInput(evaluationCriteriaSearchInput) => {
+      ...state,
+      evaluationCriteriaSearchInput,
+    }
   | UpdateLinkToComplete(linkToComplete) => {
       ...state,
       linkToComplete,
@@ -247,36 +251,50 @@ let eligiblePrerequisiteTargets = (targetId, targets, targetGroups) => {
   |> List.filter(target =>
        targetGroupsInSameLevel |> List.mem(Target.targetGroupId(target))
      )
-  |> List.filter(target => Target.id(target) != targetId);
-};
-
-let prerequisiteTargetsForSelector = (targetId, targets, state, targetGroups) => {
-  let selectedTargetIds = state.prerequisiteTargets;
-  eligiblePrerequisiteTargets(targetId, targets, targetGroups)
-  |> List.map(target => {
-       let id = target |> Target.id;
-       let selected =
-         selectedTargetIds
-         |> Js.Array.findIndex(selectedTargetId => id == selectedTargetId)
-         > (-1);
-       (
-         target |> Target.id |> int_of_string,
-         target |> Target.title,
-         selected,
-       );
-     });
-};
-
-let multiSelectPrerequisiteTargetsCB = (send, key, value, selected) => {
-  send(UpdatePrerequisiteTargets((key, value, selected)));
+  |> List.filter(target => Target.id(target) != targetId)
+  |> Array.of_list;
 };
 
 let multiSelectEvaluationCriteriaCB = (send, key, value, selected) => {
   send(UpdateEvaluationCriteria((key, value, selected)));
 };
 
-let prerequisiteTargetEditor = (send, prerequisiteTargetsData) => {
-  prerequisiteTargetsData |> ListUtils.isNotEmpty
+let setPrerequisiteSearch = (send, value) => {
+  send(UpdatePrerequisiteSearchInput(value));
+};
+
+let selectPrerequisiteTarget = (send, state, target) => {
+  let updatedPrerequisites =
+    state.prerequisiteTargets |> Js.Array.concat([|target |> Target.id|]);
+  send(UpdatePrerequisiteTargets(updatedPrerequisites));
+};
+
+module SelectablePrerequisiteTargets = {
+  type t = Target.t;
+
+  let value = t => t |> Target.title;
+  let searchString = value;
+
+  let make = (target): t => target;
+};
+
+module MultiSelectForPrerequisiteTargets =
+  CurriculumEditor__MultiselectInline.Make(SelectablePrerequisiteTargets);
+
+let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
+  let selected =
+    eligiblePrerequisiteTargets
+    |> Js.Array.filter(target =>
+         state.prerequisiteTargets |> Array.mem(Target.id(target))
+       )
+    |> Array.map(target => SelectablePrerequisiteTargets.make(target));
+  let unselected =
+    eligiblePrerequisiteTargets
+    |> Js.Array.filter(target =>
+         !(state.prerequisiteTargets |> Array.mem(Target.id(target)))
+       )
+    |> Array.map(target => SelectablePrerequisiteTargets.make(target));
+  eligiblePrerequisiteTargets |> ArrayUtils.isNotEmpty
     ? <div className="mb-6">
         <label
           className="block tracking-wide text-sm font-semibold mb-2"
@@ -287,17 +305,13 @@ let prerequisiteTargetEditor = (send, prerequisiteTargetsData) => {
           {"Are there any prerequisite targets?" |> str}
         </label>
         <div id="prerequisite_targets" className="mb-6 ml-6">
-          <School__SelectBox
-            noSelectionHeading="No prerequisites selected"
-            noSelectionDescription="This target will not have any prerequisites."
-            emptyListDescription="There are no other targets available for selection."
-            items={
-              prerequisiteTargetsData |> School__SelectBox.convertOldItems
-            }
-            selectCB={
-              multiSelectPrerequisiteTargetsCB(send)
-              |> School__SelectBox.convertOldCallback
-            }
+          <MultiSelectForPrerequisiteTargets
+            selected
+            unselected
+            onChange={setPrerequisiteSearch(send)}
+            value={state.prerequisiteSearchInput}
+            onSelect={selectPrerequisiteTarget(send, state)}
+            onDeselect={() => Js.log("deselected")}
           />
         </div>
       </div>
@@ -438,7 +452,7 @@ let methodOfCompletionSelection = polyMethodOfCompletion =>
   | `MarkAsComplete => MarkAsComplete
   };
 
-let methodOfCompletionButton = (methodOfCompletion, state, send) => {
+let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   let buttonString =
     switch (methodOfCompletion) {
     | `TakeQuiz => "Take a quiz to complete the target."
@@ -454,7 +468,7 @@ let methodOfCompletionButton = (methodOfCompletion, state, send) => {
     | _anyOtherCombo => false
     };
 
-  <div className="w-1/3 px-2">
+  <div key={index |> string_of_int} className="w-1/3 px-2">
     <button
       onClick={updateMethodOfCompletion(
         methodOfCompletion |> methodOfCompletionSelection,
@@ -478,8 +492,8 @@ let methodOfCompletionSelector = (state, send) => {
       </label>
       <div id="method_of_completion" className="flex -mx-2">
         {[|`MarkAsComplete, `VisitLink, `TakeQuiz|]
-         |> Array.map(methodOfCompletion =>
-              methodOfCompletionButton(methodOfCompletion, state, send)
+         |> Array.mapi((index, methodOfCompletion) =>
+              methodOfCompletionButton(methodOfCompletion, state, send, index)
             )
          |> React.array}
       </div>
@@ -566,7 +580,7 @@ module UpdateTargetQuery = [%graphql
    |}
 ];
 
-let updateTarget = (target, state, send,updateTargetCB, event) => {
+let updateTarget = (target, state, send, updateTargetCB, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(UpdateSaving);
   let id = target |> Target.id;
@@ -634,7 +648,9 @@ let make =
         targetGroupId: "",
         role: TargetDetails.Student,
         evaluationCriteria: [||],
+        evaluationCriteriaSearchInput: "",
         prerequisiteTargets: [||],
+        prerequisiteSearchInput: "",
         methodOfCompletion: Evaluated,
         quiz: [||],
         linkToComplete: "",
@@ -688,12 +704,8 @@ let make =
              </div>
              {prerequisiteTargetEditor(
                 send,
-                prerequisiteTargetsForSelector(
-                  targetId,
-                  targets,
-                  state,
-                  targetGroups,
-                ),
+                eligiblePrerequisiteTargets(targetId, targets, targetGroups),
+                state,
               )}
              <div className="flex items-center mb-6">
                <label
@@ -831,8 +843,9 @@ let make =
                      id="visibility"
                      className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
                      {[|TargetDetails.Live, Archived, Draft|]
-                      |> Array.map(visibility =>
+                      |> Array.mapi((index, visibility) =>
                            <button
+                             key={index |> string_of_int}
                              onClick={updateVisibility(visibility, send)}
                              className={booleanButtonClasses(
                                switch (state.visibility, visibility) {
@@ -859,7 +872,12 @@ let make =
                    <button
                      key="target-actions-step"
                      disabled={saveDisabled(state)}
-                     onClick={updateTarget(target, state, send,updateTargetCB)}
+                     onClick={updateTarget(
+                       target,
+                       state,
+                       send,
+                       updateTargetCB,
+                     )}
                      className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
                      {"Update Target" |> str}
                    </button>

@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-open CurriculumEditor__Types;
-
 let str = React.string;
 
 [@react.component]

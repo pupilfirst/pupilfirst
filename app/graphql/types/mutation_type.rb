@@ -44,6 +44,9 @@ module Types
     field :archive_coach_note, mutation: Mutations::ArchiveCoachNote, null: false
     field :create_markdown_content_block, mutation: Mutations::CreateMarkdownContentBlock, null: false
     field :create_embed_content_block, mutation: Mutations::CreateEmbedContentBlock, null: false
+    field :update_file_block, mutation: Mutations::UpdateFileContentBlock, null: false
+    field :update_markdown_block, mutation: Mutations::UpdateMarkdownContentBlock, null: false
+    field :update_image_block, mutation: Mutations::UpdateImageContentBlock, null: false
     field :update_target, mutation: Mutations::UpdateTarget, null: false
   end
 end

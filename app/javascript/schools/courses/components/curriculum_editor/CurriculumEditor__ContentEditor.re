@@ -16,6 +16,7 @@ type state = {
 type action =
   | LoadContent(array(ContentBlock.t), array(string))
   | AddContentBlock(ContentBlock.t)
+  | UpdateContentBlock(ContentBlock.t)
   | RemoveContentBlock(ContentBlock.id)
   | MoveContentBlockUp(ContentBlock.t)
   | MoveContentBlockDown(ContentBlock.t)
@@ -46,6 +47,19 @@ let reducer = (state, action) =>
            })
         |> Array.append([|newContentBlock|]),
     };
+  | UpdateContentBlock(updatedContentBlock) => {
+      ...state,
+      contentBlocks:
+        state.contentBlocks
+        |> Array.map(contentBlock => {
+             contentBlock
+             |> ContentBlock.id == (updatedContentBlock |> ContentBlock.id)
+               ? updatedContentBlock : contentBlock
+           }),
+      dirtyContentBlockIds:
+        state.dirtyContentBlockIds
+        |> IdSet.remove(updatedContentBlock |> ContentBlock.id),
+    }
   | RemoveContentBlock(contentBlockId) => {
       ...state,
       contentBlocks:
@@ -108,6 +122,10 @@ let setDirty = (contentBlockId, send, dirty) => {
   send(SetDirty(contentBlockId, dirty));
 };
 
+let updateContentBlock = (send, contentBlock) => {
+  send(UpdateContentBlock(contentBlock));
+};
+
 let editor = (target, state, send) => {
   let currentVersion =
     switch (state.versions) {
@@ -159,7 +177,7 @@ let editor = (target, state, send) => {
             state.dirtyContentBlockIds
             |> IdSet.mem(contentBlock |> ContentBlock.id);
           let updateContentBlockCB =
-            isDirty ? Some(_contentBlock => ()) : None;
+            isDirty ? Some(updateContentBlock(send)) : None;
 
           <div key={contentBlock |> ContentBlock.id}>
             <CurriculumEditor__ContentBlockCreator

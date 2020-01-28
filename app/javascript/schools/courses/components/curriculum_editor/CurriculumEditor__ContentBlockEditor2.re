@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+exception InvalidBlockTypeForUpdate;
+
 let str = React.string;
 
 open CurriculumEditor__Types;
@@ -13,13 +15,13 @@ let computeInitialState = contentBlock => {saving: None, contentBlock};
 
 type action =
   | StartSaving(string)
-  | FailSaving
+  | FinishSaving
   | UpdateContentBlock(ContentBlock.t);
 
 let reducer = (state, action) =>
   switch (action) {
   | StartSaving(message) => {...state, saving: Some(message)}
-  | FailSaving => {...state, saving: None}
+  | FinishSaving => {...state, saving: None}
   | UpdateContentBlock(contentBlock) => {...state, contentBlock}
   };
 
@@ -38,6 +40,42 @@ module MoveContentBlockMutation = [%graphql
     mutation($id: ID!, $direction: MoveDirection!) {
       moveContentBlock(id: $id, direction: $direction) {
         success
+      }
+    }
+  |}
+];
+
+module UpdateFileBlockMutation = [%graphql
+  {|
+    mutation($id: ID!, $title: String!) {
+      updateFileBlock(id: $id, title: $title) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  |}
+];
+
+module UpdateMarkdownBlockMutation = [%graphql
+  {|
+    mutation($id: ID!, $markdown: String!) {
+      updateMarkdownBlock(id: $id, markdown: $markdown) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  |}
+];
+
+module UpdateImageBlockMutation = [%graphql
+  {|
+    mutation($id: ID!, $caption: String!) {
+      updateImageBlock(id: $id, caption: $caption) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
       }
     }
   |}
@@ -85,13 +123,13 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
          if (result##deleteContentBlock##success) {
            removeContentBlockCB(id);
          } else {
-           send(FailSaving);
+           send(FinishSaving);
          };
 
          Js.Promise.resolve();
        })
     |> Js.Promise.catch(_error => {
-         send(FailSaving);
+         send(FinishSaving);
          Js.Promise.resolve();
        })
     |> ignore;
@@ -106,7 +144,54 @@ let onUndo = (originalContentBlock, setDirty, send, event) => {
   };
 };
 
-let onSave = (contentBlock, removeContentBlockCB, send, _event) => ();
+let handleUpdateResult = (updateContentBlockCB, send, contentBlock) => {
+  switch (contentBlock) {
+  | Some(contentBlock) =>
+    contentBlock |> ContentBlock.makeFromJs |> updateContentBlockCB;
+    send(FinishSaving);
+  | None => send(FinishSaving)
+  };
+  Js.Promise.resolve();
+};
+
+let updateContentBlockBlock =
+    (mutation, contentBlockExtractor, updateContentBlockCB, send) => {
+  send(StartSaving("Updating..."));
+
+  mutation
+  |> GraphqlQuery.sendQuery2
+  |> Js.Promise.then_(result => {
+       result
+       |> contentBlockExtractor
+       |> handleUpdateResult(updateContentBlockCB, send)
+     })
+  |> Js.Promise.catch(_error => {
+       send(FinishSaving);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let onSave = (contentBlock, updateContentBlockCB, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  let id = contentBlock |> ContentBlock.id;
+
+  switch (contentBlock |> ContentBlock.blockType) {
+  | ContentBlock.File(_url, title, _filename) =>
+    let mutation = UpdateFileBlockMutation.make(~id, ~title, ());
+    let extractor = result => result##updateFileBlock##contentBlock;
+    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, send);
+  | Markdown(markdown) =>
+    let mutation = UpdateMarkdownBlockMutation.make(~id, ~markdown, ());
+    let extractor = result => result##updateMarkdownBlock##contentBlock;
+    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, send);
+  | Image(_url, caption) =>
+    let mutation = UpdateImageBlockMutation.make(~id, ~caption, ());
+    let extractor = result => result##updateImageBlock##contentBlock;
+    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, send);
+  | Embed(_) => raise(InvalidBlockTypeForUpdate)
+  };
+};
 
 let updateTitle = (originalContentBlock, setDirtyCB, send, newTitle) => {
   let newContentBlock =
@@ -187,7 +272,7 @@ let make =
            ~color=`Green,
            ~handler=
              updateContentBlockCB
-             |> OptionUtils.map(cb => onSave(contentBlock, cb, send)),
+             |> OptionUtils.map(cb => onSave(state.contentBlock, cb, send)),
          )}
       </div>
     </div>

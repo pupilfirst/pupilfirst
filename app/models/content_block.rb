@@ -18,4 +18,20 @@ class ContentBlock < ApplicationRecord
   def latest_version
     content_versions.order(version_on: :DESC).first
   end
+
+  def file?
+    BLOCK_TYPE_FILE == block_type
+  end
+
+  def image?
+    BLOCK_TYPE_IMAGE == block_type
+  end
+
+  def embed?
+    BLOCK_TYPE_EMBED == block_type
+  end
+
+  def markdown?
+    BLOCK_TYPE_MARKDOWN == block_type
+  end
 end

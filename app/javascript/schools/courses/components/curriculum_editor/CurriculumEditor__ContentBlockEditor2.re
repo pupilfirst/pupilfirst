@@ -205,7 +205,10 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
 
   switch (contentBlock |> ContentBlock.blockType) {
   | ContentBlock.Embed(_) => "Embed Block" |> str
-  | Markdown(_) => "Markdown Block" |> str
+  | Markdown(markdown) =>
+    <textarea className="w-full h-full border p-2">
+      {markdown |> str}
+    </textarea>
   | File(url, title, filename) =>
     <CurriculumEditor__FileBlockEditor url title filename updateTitleCB />
   | Image(_) => "Image Block" |> str
@@ -226,8 +229,8 @@ let make =
     React.useReducerWithMapState(reducer, contentBlock, computeInitialState);
 
   <DisablingCover disabled={state.saving != None} message=?{state.saving}>
-    <div className="flex">
-      <div className="flex-grow">
+    <div className="flex items-start">
+      <div className="flex-grow self-stretch">
         {innerEditor(contentBlock, state.contentBlock, setDirtyCB, send)}
       </div>
       <div

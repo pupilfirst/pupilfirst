@@ -2678,6 +2678,11 @@ autoprefixer@^9.4.5, autoprefixer@^9.6.1:
     postcss "^7.0.23"
     postcss-value-parser "^4.0.2"
 
+autosize@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/autosize/-/autosize-4.0.2.tgz#073cfd07c8bf45da4b9fd153437f5bafbba1e4c9"
+  integrity sha512-jnSyH2d+qdfPGpWlcuhGiHmqBJ6g3X+8T+iRwFrHPLVcdoGJE/x6Qicm6aDHfTsbgZKxyV8UU/YB2p4cjKDRRA==
+
 await-to-js@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/await-to-js/-/await-to-js-2.1.1.tgz#c2093cd5a386f2bb945d79b292817bbc3f41b31b"

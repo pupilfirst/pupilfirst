@@ -4,8 +4,15 @@ let str = React.string;
 
 open CurriculumEditor__Types;
 
+let onChange = (contentBlock, updateContentBlockCB, event) => {
+  event |> ReactEvent.Form.preventDefault;
+  let newTitle = ReactEvent.Form.target(event)##value;
+  let newContentBlock = contentBlock |> ContentBlock.updateFile(newTitle);
+  updateContentBlockCB(newContentBlock);
+};
+
 [@react.component]
-let make = (~url, ~title, ~filename, ~updateTitleCB) => {
+let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
   <div className="relative border border-gray-400 rounded-lg">
     <div
       className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
@@ -33,11 +40,7 @@ let make = (~url, ~title, ~filename, ~updateTitleCB) => {
         <span className="text-sm ml-1"> {"(optional)" |> str} </span>
         <input
           className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
-          onChange={event => {
-            event |> ReactEvent.Form.preventDefault;
-            let newTitle = ReactEvent.Form.target(event)##value;
-            updateTitleCB(newTitle);
-          }}
+          onChange={onChange(contentBlock, updateContentBlockCB)}
           maxLength=60
           type_="text"
           value=title

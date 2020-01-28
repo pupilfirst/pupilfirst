@@ -88,13 +88,15 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
     | `Green => "bg-green-600 hover:bg-green-700 text-white rounded-b"
     };
 
-  <button
-    title
-    disabled={handler == None}
-    className={"p-2 " ++ buttonClasses}
-    onClick=?handler>
-    <FaIcon classes={"fas fa-fw " ++ icon} />
-  </button>;
+  handler == None
+    ? React.null
+    : <button
+        title
+        disabled={handler == None}
+        className={"p-2 " ++ buttonClasses}
+        onClick=?handler>
+        <FaIcon classes={"fas fa-fw " ++ icon} />
+      </button>;
 };
 
 let onMove = (contentBlock, cb, direction, _event) => {
@@ -192,25 +194,32 @@ let onSave = (contentBlock, updateContentBlockCB, send, event) => {
   };
 };
 
-let updateTitle = (originalContentBlock, setDirtyCB, send, newTitle) => {
-  let newContentBlock =
-    originalContentBlock |> ContentBlock.updateFile(newTitle);
-
+let updateContentBlockCB =
+    (originalContentBlock, setDirtyCB, send, newContentBlock) => {
   setDirtyCB(newContentBlock != originalContentBlock);
   send(UpdateContentBlock(newContentBlock));
 };
 
 let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
-  let updateTitleCB = updateTitle(originalContentBlock, setDirtyCB, send);
+  let updateContentBlockCB =
+    updateContentBlockCB(originalContentBlock, setDirtyCB, send);
 
   switch (contentBlock |> ContentBlock.blockType) {
   | ContentBlock.Embed(_) => "Embed Block" |> str
   | Markdown(markdown) =>
-    <textarea className="w-full h-full border p-2">
-      {markdown |> str}
-    </textarea>
+    <CurriculumEditor__MarkdownBlockEditor
+      markdown
+      contentBlock
+      updateContentBlockCB
+    />
   | File(url, title, filename) =>
-    <CurriculumEditor__FileBlockEditor url title filename updateTitleCB />
+    <CurriculumEditor__FileBlockEditor
+      url
+      title
+      filename
+      contentBlock
+      updateContentBlockCB
+    />
   | Image(_) => "Image Block" |> str
   };
 };

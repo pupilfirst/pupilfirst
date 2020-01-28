@@ -18,7 +18,7 @@ class UpdateMarkdownContentBlockMutator < ApplicationQuery
   private
 
   def must_be_a_markdown_block
-    return if content_block.markdown
+    return if content_block.markdown?
 
     errors[:base] << 'This is not a markdown block'
   end

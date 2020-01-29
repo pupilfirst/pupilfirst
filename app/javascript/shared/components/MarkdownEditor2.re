@@ -10,15 +10,21 @@ type mode =
   | Fullscreen(fullscreenMode)
   | Windowed(windowedMode);
 
+type selection = (selectionStart, selectionEnd)
+and selectionStart = int
+and selectionEnd = int;
+
 type state = {
   id: string,
   mode,
+  selection,
 };
 
 type action =
   | ClickPreview
   | ClickSplit
-  | ClickFullscreen;
+  | ClickFullscreen
+  | SetSelection(selection);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -51,11 +57,17 @@ let reducer = (state, action) =>
       | Fullscreen(`Split) => Windowed(`Editor)
       };
     {...state, mode};
+  | SetSelection(selection) => {...state, selection}
   };
 
-let computeInitialState = () => {
-  id: DateTime.randomId(),
-  mode: Windowed(`Editor),
+let computeInitialState = ((textareaId, mode)) => {
+  let id =
+    switch (textareaId) {
+    | Some(id) => id
+    | None => DateTime.randomId()
+    };
+
+  {id, mode, selection: (0, 0)};
 };
 
 let containerClasses = mode =>
@@ -70,15 +82,15 @@ let modeIcon = (desiredMode, currentMode) => {
     | (
         `Preview,
         Windowed(`Editor) | Fullscreen(`Editor) | Fullscreen(`Split),
-      ) => "fa-eye"
-    | (`Preview, Windowed(`Preview) | Fullscreen(`Preview)) => "fa-pen-nib"
-    | (`Split, Windowed(_) | Fullscreen(`Editor) | Fullscreen(`Preview)) => "fa-columns"
-    | (`Split, Fullscreen(`Split)) => "fa-window-maximize"
-    | (`Fullscreen, Windowed(_)) => "fa-expand"
-    | (`Fullscreen, Fullscreen(_)) => "fa-compress"
+      ) => "fas fa-eye"
+    | (`Preview, Windowed(`Preview) | Fullscreen(`Preview)) => "fas fa-pen-nib"
+    | (`Split, Windowed(_) | Fullscreen(`Editor) | Fullscreen(`Preview)) => "fas fa-columns"
+    | (`Split, Fullscreen(`Split)) => "far fa-window-maximize"
+    | (`Fullscreen, Windowed(_)) => "fas fa-expand"
+    | (`Fullscreen, Fullscreen(_)) => "fas fa-compress"
     };
 
-  <FaIcon classes={"fas fa-fw " ++ icon} />;
+  <FaIcon classes={"fa-fw " ++ icon} />;
 };
 
 let onClickFullscreen = (state, send, _event) => {
@@ -90,7 +102,17 @@ let onClickFullscreen = (state, send, _event) => {
   send(ClickFullscreen);
 };
 
-let onClickSplit = (state, send, event) => {
+let onClickPreview = (state, send, _event) => {
+  switch (state.mode) {
+  | Windowed(`Editor) => TextareaAutosize.destroy(state.id)
+  | Windowed(`Preview)
+  | Fullscreen(_) => () // Do nothing here. We'll fix this in an effect.
+  };
+
+  send(ClickPreview);
+};
+
+let onClickSplit = (state, send, _event) => {
   switch (state.mode) {
   | Windowed(_) => TextareaAutosize.destroy(state.id)
   | Fullscreen(_) => () // This should have no effect on textarea autosizing in full-screen mode.
@@ -104,7 +126,7 @@ let controls = (state, send) => {
   let {mode} = state;
 
   <div className="bg-gray-100 p-1">
-    <button className=buttonClasses onClick={_ => send(ClickPreview)}>
+    <button className=buttonClasses onClick={onClickPreview(state, send)}>
       {modeIcon(`Preview, mode)}
     </button>
     <button
@@ -170,24 +192,51 @@ let textareaClasses = mode => {
   );
 };
 
-[@react.component]
-let make = (~value, ~onChange) => {
-  let (state, send) =
-    React.useReducerWithMapState(reducer, (), computeInitialState);
+let onChangeWrapper = (onChange, event) => {
+  let value = ReactEvent.Form.target(event)##value;
+  onChange(value);
+};
 
-  React.useEffect0(() => {
-    TextareaAutosize.create(state.id);
-    Some(() => TextareaAutosize.destroy(state.id));
-  });
+let onSelect = (send, event) => {
+  let htmlInputElement =
+    ReactEvent.Selection.target(event)
+    |> DomUtils.EventTarget.unsafeToHtmlInputElement;
+
+  let selection =
+    Webapi.Dom.(
+      htmlInputElement |> HtmlInputElement.selectionStart,
+      htmlInputElement |> HtmlInputElement.selectionEnd,
+    );
+
+  send(SetSelection(selection));
+};
+
+[@react.component]
+let make =
+    (
+      ~value,
+      ~onChange,
+      ~profile,
+      ~textareaId=?,
+      ~maxLength=1000,
+      ~defaultMode=Windowed(`Editor),
+    ) => {
+  let (state, send) =
+    React.useReducerWithMapState(
+      reducer,
+      (textareaId, defaultMode),
+      computeInitialState,
+    );
 
   React.useEffect1(
     () => {
       switch (state.mode) {
-      | Windowed(_) => TextareaAutosize.create(state.id)
+      | Windowed(`Editor) => TextareaAutosize.create(state.id)
+      | Windowed(`Preview)
       | Fullscreen(_) => () // Do nothing. This was handled in the click handler.
       };
 
-      None;
+      Some(() => TextareaAutosize.destroy(state.id));
     },
     [|state.mode|],
   );
@@ -198,14 +247,16 @@ let make = (~value, ~onChange) => {
       <div className={editorContainerClasses(state.mode)}>
         <textarea
           rows=4
-          onChange
+          maxLength
+          onSelect={onSelect(send)}
+          onChange={onChangeWrapper(onChange)}
           id={state.id}
           value
           className={textareaClasses(state.mode)}
         />
       </div>
       <div className={previewContainerClasses(state.mode)}>
-        <MarkdownBlock markdown=value profile=Markdown.Permissive />
+        <MarkdownBlock markdown=value profile />
       </div>
     </div>
     footer

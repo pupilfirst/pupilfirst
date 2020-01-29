@@ -4,8 +4,7 @@ let str = React.string;
 
 open CurriculumEditor__Types;
 
-let onChange = (contentBlock, updateContentBlockCB, event) => {
-  let value = ReactEvent.Form.target(event)##value;
+let onChange = (contentBlock, updateContentBlockCB, value) => {
   let newContentBlock = contentBlock |> ContentBlock.updateMarkdown(value);
   updateContentBlockCB(newContentBlock);
 };
@@ -14,6 +13,9 @@ let onChange = (contentBlock, updateContentBlockCB, event) => {
 let make = (~markdown, ~contentBlock, ~updateContentBlockCB) => {
   <MarkdownEditor2
     value=markdown
+    profile=Markdown.Permissive
+    defaultMode={MarkdownEditor2.Windowed(`Preview)}
+    maxLength=10000
     onChange={onChange(contentBlock, updateContentBlockCB)}
   />;
 };

@@ -60,14 +60,16 @@ let reducer = (state, action) =>
   | SetSelection(selection) => {...state, selection}
   };
 
-let computeInitialState = ((textareaId, mode)) => {
+let computeInitialState = ((value, textareaId, mode)) => {
   let id =
     switch (textareaId) {
     | Some(id) => id
     | None => DateTime.randomId()
     };
 
-  {id, mode, selection: (0, 0)};
+  let length = value |> String.length;
+
+  {id, mode, selection: (length, length)};
 };
 
 let containerClasses = mode =>
@@ -314,7 +316,7 @@ let make =
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      (textareaId, defaultMode),
+      (value, textareaId, defaultMode),
       computeInitialState,
     );
 

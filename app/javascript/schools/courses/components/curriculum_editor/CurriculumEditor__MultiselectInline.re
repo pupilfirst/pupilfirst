@@ -73,17 +73,18 @@ module Make = (Selectable: Selectable) => {
            |> Array.mapi((index, selected) =>
                 <span
                   key={index |> string_of_int}
-                  className="flex items-center justify-between bg-white font-semibold text-xs border rounded mb-2">
-                  <div className="p-3 flex-1">
+                  className="inline-block items-center justify-between font-semibold text-xs rounded mb-2 mr-2">
+                  <span
+                    className="p-2 flex-1 bg-orange-200 border border-orange-500 h-full">
                     {selected |> Selectable.value |> str}
-                  </div>
+                  </span>
                   <button
-                    className="flex p-3 text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none"
+                    className="p-2 items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none border border-orange-500"
                     title="Remove"
-                    onClick={_event => {
-                      ReactEvent.Mouse.preventDefault(_event);
+                    onClick={event => {
+                      ReactEvent.Mouse.preventDefault(event);
 
-                      onDeselect();
+                      onDeselect(selected);
                     }}>
                     <PfIcon className="if i-times-light" />
                   </button>

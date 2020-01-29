@@ -269,6 +269,13 @@ let selectPrerequisiteTarget = (send, state, target) => {
   send(UpdatePrerequisiteTargets(updatedPrerequisites));
 };
 
+let deSelectPrerequisiteTarget = (send, state, target) => {
+  let updatedPrerequisites =
+    state.prerequisiteTargets
+    |> Js.Array.filter(targetId => targetId != Target.id(target));
+  send(UpdatePrerequisiteTargets(updatedPrerequisites));
+};
+
 module SelectablePrerequisiteTargets = {
   type t = Target.t;
 
@@ -311,7 +318,7 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
             onChange={setPrerequisiteSearch(send)}
             value={state.prerequisiteSearchInput}
             onSelect={selectPrerequisiteTarget(send, state)}
-            onDeselect={() => Js.log("deselected")}
+            onDeselect={deSelectPrerequisiteTarget(send, state)}
           />
         </div>
       </div>

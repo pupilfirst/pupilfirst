@@ -4,8 +4,6 @@ exception InvalidBlockTypeForUpdate;
 
 let str = React.string;
 
-open CurriculumEditor__Types;
-
 type state = {
   saving: option(string),
   contentBlock: ContentBlock.t,

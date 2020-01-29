@@ -121,23 +121,113 @@ let onClickSplit = (state, send, _event) => {
   send(ClickSplit);
 };
 
-let controls = (state, send) => {
+let insertAt = (textToInsert, position, sourceText) => {
+  let head = sourceText->String.sub(0, position);
+  let tail =
+    sourceText->String.sub(
+      position,
+      (sourceText |> String.length) - position,
+    );
+
+  head ++ textToInsert ++ tail;
+};
+
+let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
+  let head = sourceText->String.sub(0, selectionStart);
+  let selection =
+    sourceText->String.sub(selectionStart, selectionEnd - selectionStart);
+  let tail =
+    sourceText->String.sub(
+      selectionEnd,
+      (sourceText |> String.length) - selectionEnd,
+    );
+
+  head ++ wrapper ++ selection ++ wrapper ++ tail;
+};
+
+let updateTextareaAfterDelay = state =>
+  switch (state.mode) {
+  | Windowed(_) =>
+    Js.Global.setTimeout(() => TextareaAutosize.update(state.id), 100)
+    |> ignore
+  | Fullscreen(_) => () // Autosizing is turned off in full-screen mode.
+  };
+
+let onClickPhraseModifier =
+    (value, state, onChange, ~insert, ~wrapper, _event) => {
+  let (selectionStart, selectionEnd) = state.selection;
+
+  let newValue =
+    if (selectionStart == selectionEnd) {
+      value |> insertAt(insert, selectionStart);
+    } else {
+      value |> wrapWith(wrapper, selectionStart, selectionEnd);
+    };
+
+  onChange(newValue);
+  updateTextareaAfterDelay(state);
+};
+
+let controls = (value, state, send, onChange) => {
   let buttonClasses = "border rounded-lg p-1 bg-gray-200 hover:bg-gray-300 ";
   let {mode} = state;
 
-  <div className="bg-gray-100 p-1">
-    <button className=buttonClasses onClick={onClickPreview(state, send)}>
-      {modeIcon(`Preview, mode)}
-    </button>
-    <button
-      className={buttonClasses ++ "ml-2"} onClick={onClickSplit(state, send)}>
-      {modeIcon(`Split, mode)}
-    </button>
-    <button
-      className={buttonClasses ++ "ml-2"}
-      onClick={onClickFullscreen(state, send)}>
-      {modeIcon(`Fullscreen, mode)}
-    </button>
+  <div className="bg-gray-100 p-1 flex justify-between">
+    <div>
+      <button
+        className=buttonClasses
+        onClick={onClickPhraseModifier(
+          value,
+          state,
+          onChange,
+          ~insert="**bold**",
+          ~wrapper="**",
+        )}>
+        <FaIcon classes="fas fa-bold fa-fw" />
+      </button>
+      <button
+        className={buttonClasses ++ "ml-2"}
+        onClick={onClickPhraseModifier(
+          value,
+          state,
+          onChange,
+          ~insert="*italics*",
+          ~wrapper="*",
+        )}>
+        <FaIcon classes="fas fa-italic fa-fw" />
+      </button>
+      <button
+        className={buttonClasses ++ "ml-2"}
+        onClick={onClickPhraseModifier(
+          value,
+          state,
+          onChange,
+          ~insert="~~strikethrough~~",
+          ~wrapper="~~",
+        )}>
+        <FaIcon classes="fas fa-strikethrough fa-fw" />
+      </button>
+    </div>
+    <div>
+      <button className=buttonClasses onClick={onClickPreview(state, send)}>
+        {modeIcon(`Preview, mode)}
+      </button>
+      <button
+        className={buttonClasses ++ "ml-2"}
+        onClick={onClickSplit(state, send)}>
+        {modeIcon(`Split, mode)}
+      </button>
+      <button
+        className={buttonClasses ++ "ml-2"}
+        onClick={onClickFullscreen(state, send)}>
+        {modeIcon(`Fullscreen, mode)}
+        {switch (mode) {
+         | Fullscreen(_) =>
+           <span className="ml-2"> {"Exit full-screen" |> str} </span>
+         | Windowed(_) => React.null
+         }}
+      </button>
+    </div>
   </div>;
 };
 
@@ -242,7 +332,7 @@ let make =
   );
 
   <div className={containerClasses(state.mode)}>
-    {controls(state, send)}
+    {controls(value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>
       <div className={editorContainerClasses(state.mode)}>
         <textarea

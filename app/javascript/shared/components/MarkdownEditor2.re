@@ -158,16 +158,54 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   head ++ wrapper ++ selection ++ wrapper ++ tail;
 };
 
-let updateTextareaAfterDelay = state =>
+/**
+  * After changing the Markdown using any of the controls or key commands, the
+  * textarea element will need to be manually "synced" in two ways:
+  *
+  * 1. The autosize update function needs to be called to let it know that we
+  *    have changed the value of the textare from the outside.
+  * 2. The cursor position will have jumped to the end of the text-area because
+  *    of the manual change of value of the controlled component; we'll need to
+  *    manually set the cursor position after the component has had a change to
+  *    re-render.
+  *
+  * This function is making an assumption that re-render can happen in 25ms.
+  * The need for these manual adjustments can be visibly seen by increasing the
+  * renderDelay to something like 1000ms.
+ **/
+let updateTextareaAfterDelay = (state, cursorPosition) => {
+  let renderDelay = 25; //ms
+
   switch (state.mode) {
   | Windowed(_) =>
-    Js.Global.setTimeout(() => TextareaAutosize.update(state.id), 100)
+    Js.Global.setTimeout(
+      () => TextareaAutosize.update(state.id),
+      renderDelay,
+    )
     |> ignore
   | Fullscreen(_) => () // Autosizing is turned off in full-screen mode.
   };
 
-let onClickPhraseModifier =
-    (value, state, onChange, ~insert, ~wrapper, _event) => {
+  Webapi.Dom.(
+    switch (document |> Document.getElementById(state.id)) {
+    | Some(element) =>
+      Js.Global.setTimeout(
+        () =>
+          element
+          |> DomUtils.Element.unsafeToHtmlInputElement
+          |> HtmlInputElement.setSelectionRange(
+               cursorPosition,
+               cursorPosition,
+             ),
+        renderDelay,
+      )
+      |> ignore
+    | None => () // Avoid messing with the DOM if the textarea can't be found.
+    }
+  );
+};
+
+let modifyPhrase = (value, state, onChange, ~insert, ~wrapper) => {
   let (selectionStart, selectionEnd) = state.selection;
 
   let newValue =
@@ -177,9 +215,24 @@ let onClickPhraseModifier =
       value |> wrapWith(wrapper, selectionStart, selectionEnd);
     };
 
+  let offset = (newValue |> String.length) - (value |> String.length);
+
   onChange(newValue);
-  updateTextareaAfterDelay(state);
+  updateTextareaAfterDelay(state, selectionEnd + offset);
 };
+
+let chooseBold = (value, state, onChange) =>
+  modifyPhrase(value, state, onChange, ~insert="**bold**", ~wrapper="**");
+let chooseItalics = (value, state, onChange) =>
+  modifyPhrase(value, state, onChange, ~insert="*italics*", ~wrapper="*");
+let chooseStrikethrough = (value, state, onChange) =>
+  modifyPhrase(
+    value,
+    state,
+    onChange,
+    ~insert="~~strikethrough~~",
+    ~wrapper="~~",
+  );
 
 let controls = (value, state, send, onChange) => {
   let buttonClasses = "border rounded-lg p-1 bg-gray-200 hover:bg-gray-300 ";
@@ -189,35 +242,17 @@ let controls = (value, state, send, onChange) => {
     <div>
       <button
         className=buttonClasses
-        onClick={onClickPhraseModifier(
-          value,
-          state,
-          onChange,
-          ~insert="**bold**",
-          ~wrapper="**",
-        )}>
+        onClick={_ => chooseBold(value, state, onChange)}>
         <FaIcon classes="fas fa-bold fa-fw" />
       </button>
       <button
         className={buttonClasses ++ "ml-2"}
-        onClick={onClickPhraseModifier(
-          value,
-          state,
-          onChange,
-          ~insert="*italics*",
-          ~wrapper="*",
-        )}>
+        onClick={_ => chooseItalics(value, state, onChange)}>
         <FaIcon classes="fas fa-italic fa-fw" />
       </button>
       <button
         className={buttonClasses ++ "ml-2"}
-        onClick={onClickPhraseModifier(
-          value,
-          state,
-          onChange,
-          ~insert="~~strikethrough~~",
-          ~wrapper="~~",
-        )}>
+        onClick={_ => chooseStrikethrough(value, state, onChange)}>
         <FaIcon classes="fas fa-strikethrough fa-fw" />
       </button>
     </div>
@@ -320,6 +355,19 @@ let handleEscapeKey = (send, event) =>
   | _anyOtherKey => ()
   };
 
+let handleKeyboardControls = (value, state, onChange, event) => {
+  let ctrlKey = Webapi.Dom.KeyboardEvent.ctrlKey;
+  let metaKey = Webapi.Dom.KeyboardEvent.metaKey;
+
+  switch (event |> Webapi.Dom.KeyboardEvent.key) {
+  | "b" when event |> ctrlKey || event |> metaKey =>
+    chooseBold(value, state, onChange)
+  | "i" when event |> ctrlKey || event |> metaKey =>
+    chooseItalics(value, state, onChange)
+  | _anyOtherKey => ()
+  };
+};
+
 [@react.component]
 let make =
     (
@@ -357,12 +405,40 @@ let make =
     let documentEventTarget = Webapi.Dom.(document |> Document.asEventTarget);
 
     documentEventTarget
-    |> Webapi.Dom.EventTarget.addKeyUpEventListener(curriedHandler);
+    |> Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler);
 
     Some(
       () =>
         documentEventTarget
-        |> Webapi.Dom.EventTarget.removeKeyUpEventListener(curriedHandler),
+        |> Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
+    );
+  });
+
+  // Handle keyboard shortcuts for Bold and Italics buttons.
+  React.useEffect(() => {
+    let curriedHandler = handleKeyboardControls(value, state, onChange);
+    let textareaEventTarget =
+      Webapi.Dom.(
+        document
+        |> Document.getElementById(state.id)
+        |> OptionUtils.map(Element.asEventTarget)
+      );
+
+    textareaEventTarget
+    |> OptionUtils.mapWithDefault(
+         Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler),
+         (),
+       );
+
+    Some(
+      () =>
+        textareaEventTarget
+        |> OptionUtils.mapWithDefault(
+             Webapi.Dom.EventTarget.removeKeyDownEventListener(
+               curriedHandler,
+             ),
+             (),
+           ),
     );
   });
 

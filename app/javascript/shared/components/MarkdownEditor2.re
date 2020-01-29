@@ -78,7 +78,7 @@ let modeIcon = (desiredMode, currentMode) => {
     | (`Fullscreen, Fullscreen(_)) => "fa-compress"
     };
 
-  <FaIcon classes={"fas " ++ icon} />;
+  <FaIcon classes={"fas fa-fw " ++ icon} />;
 };
 
 let onClickFullscreen = (state, send, _event) => {
@@ -197,6 +197,7 @@ let make = (~value, ~onChange) => {
     <div className={modeClasses(state.mode)}>
       <div className={editorContainerClasses(state.mode)}>
         <textarea
+          rows=4
           onChange
           id={state.id}
           value

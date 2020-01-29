@@ -3,7 +3,7 @@ class UpdateImageContentBlockMutator < ApplicationQuery
   include ContentBlockEditable
 
   property :id, validates: { presence: true }
-  property :caption, validates: { length: { maximum: 128 } }
+  property :caption, validates: { length: { maximum: 250 } }
 
   validate :must_be_an_image_block
 

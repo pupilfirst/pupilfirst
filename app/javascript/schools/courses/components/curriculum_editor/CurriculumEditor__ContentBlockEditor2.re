@@ -205,7 +205,11 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
     updateContentBlockCB(originalContentBlock, setDirtyCB, send);
 
   switch (contentBlock |> ContentBlock.blockType) {
-  | ContentBlock.Embed(_) => "Embed Block" |> str
+  | ContentBlock.Embed(_url, embedCode) =>
+    <div
+      className="content-block__embed rounded-lg overflow-hidden"
+      dangerouslySetInnerHTML={"__html": embedCode}
+    />
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor
       markdown
@@ -220,7 +224,13 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
       contentBlock
       updateContentBlockCB
     />
-  | Image(_) => "Image Block" |> str
+  | Image(url, caption) =>
+    <CurriculumEditor__ImageBlockEditor
+      url
+      caption
+      contentBlock
+      updateContentBlockCB
+    />
   };
 };
 

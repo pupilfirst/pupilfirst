@@ -313,6 +313,8 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
         </label>
         <div id="prerequisite_targets" className="mb-6 ml-6">
           <MultiSelectForPrerequisiteTargets
+            placeholder="Search targets"
+            emptyMessage="No targets selected"
             selected
             unselected
             onChange={setPrerequisiteSearch(send)}

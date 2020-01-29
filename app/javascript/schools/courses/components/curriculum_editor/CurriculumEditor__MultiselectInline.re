@@ -51,7 +51,7 @@ module Make = (Selectable: Selectable) => {
         ~selected,
         ~onSelect,
         ~onDeselect,
-        ~emptyMessage="No results found",
+        ~emptyMessage="No items selected",
       ) => {
     let (inputId, _setId) =
       React.useState(() =>
@@ -68,46 +68,51 @@ module Make = (Selectable: Selectable) => {
     let searchResults = searchUnselected(value, unselected);
 
     <div className="p-6 border rounded bg-gray-100">
-      {selected |> Array.length > 0
-         ? selected
-           |> Array.mapi((index, selected) =>
-                <span
-                  key={index |> string_of_int}
-                  className="inline-block items-center justify-between font-semibold text-xs rounded mb-2 mr-2">
+      <div>
+        {selected |> Array.length > 0
+           ? selected
+             |> Array.mapi((index, selected) =>
                   <span
-                    className="p-2 flex-1 bg-orange-200 border border-orange-500 h-full">
-                    {selected |> Selectable.value |> str}
-                  </span>
-                  <button
-                    className="p-2 items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none border border-orange-500"
-                    title="Remove"
-                    onClick={event => {
-                      ReactEvent.Mouse.preventDefault(event);
+                    key={index |> string_of_int}
+                    className="inline-block items-center justify-between font-semibold text-xs rounded mb-2 mr-2">
+                    <span
+                      className="p-2 flex-1 bg-orange-200 border border-orange-500 h-full">
+                      {selected |> Selectable.value |> str}
+                    </span>
+                    <button
+                      className="p-2 items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none border border-orange-500"
+                      title="Remove"
+                      onClick={event => {
+                        ReactEvent.Mouse.preventDefault(event);
 
-                      onDeselect(selected);
-                    }}>
-                    <PfIcon className="if i-times-light" />
-                  </button>
-                </span>
-              )
-           |> React.array
-         : <div
-             className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 rounded px-3 pt-3 ">
-             <i className="fas fa-inbox text-3xl" />
-             <h5 className="mt-1 font-semibold"> {emptyMessage |> str} </h5>
-             <span className="text-xs"> {emptyMessage |> str} </span>
-           </div>}
+                        onDeselect(selected);
+                      }}>
+                      <PfIcon className="if i-times-light" />
+                    </button>
+                  </span>
+                )
+             |> React.array
+           : <div
+               className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 rounded px-3 pt-3 ">
+               <i className="fas fa-inbox text-3xl" />
+               <h5 className="mt-1 font-semibold"> {emptyMessage |> str} </h5>
+             </div>}
+        {unselected |> Array.length > 0
+           ? <div className="text-xs font-semibold mt-2">
+               {"Add more from the list below:" |> str}
+             </div>
+           : React.null}
+      </div>
       {unselected |> Array.length > 0
-         ? <div className="flex relative pt-4">
-             <div
-               className="select-list__group text-sm bg-white rounded shadow pb-2 w-full">
+         ? <div className="flex relative pt-3">
+             <div className="text-sm bg-white rounded shadow pb-2 w-full">
                {unselected |> Array.length > 3
                   ? <div className="px-3 pt-3 pb-2">
                       <input
                         id=inputId
                         className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-normal focus:outline-none"
                         type_="text"
-                        placeholder="Type to Search"
+                        placeholder
                         onChange={event =>
                           onChange(ReactEvent.Form.target(event)##value)
                         }
@@ -128,8 +133,11 @@ module Make = (Selectable: Selectable) => {
                            onSelect(item);
                          }}
                          title={"Select " ++ (item |> Selectable.value)}
-                         className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
-                         {item |> Selectable.value |> str}
+                         className="flex items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
+                         <PfIcon className="if i-plus-circle" />
+                         <span className="ml-2">
+                           {item |> Selectable.value |> str}
+                         </span>
                        </div>
                      )
                   |> React.array}

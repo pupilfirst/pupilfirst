@@ -14,10 +14,16 @@ type selection = (selectionStart, selectionEnd)
 and selectionStart = int
 and selectionEnd = int;
 
+type uploadState =
+  | Uploading
+  | ReadyToUpload(uploadError)
+and uploadError = option(string);
+
 type state = {
   id: string,
   mode,
   selection,
+  uploadState,
 };
 
 type action =
@@ -25,7 +31,10 @@ type action =
   | ClickSplit
   | ClickFullscreen
   | SetSelection(selection)
-  | PressEscapeKey;
+  | PressEscapeKey
+  | SetUploadError(uploadError)
+  | SetUploading
+  | FinishUploading;
 
 let reducer = (state, action) =>
   switch (action) {
@@ -69,6 +78,9 @@ let reducer = (state, action) =>
       | Fullscreen(`Split) => Windowed(`Editor)
       };
     {...state, mode};
+  | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
+  | SetUploading => {...state, uploadState: Uploading}
+  | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
   };
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -80,7 +92,7 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
   let length = value |> String.length;
 
-  {id, mode, selection: (length, length)};
+  {id, mode, selection: (length, length), uploadState: ReadyToUpload(None)};
 };
 
 let containerClasses = mode =>
@@ -205,20 +217,25 @@ let updateTextareaAfterDelay = (state, cursorPosition) => {
   );
 };
 
-let modifyPhrase = (value, state, onChange, ~insert, ~wrapper) => {
+let finalizeChange = (~oldValue, ~newValue, ~state, ~onChange) => {
+  let offset = (newValue |> String.length) - (oldValue |> String.length);
+  let (_, selectionEnd) = state.selection;
+
+  onChange(newValue);
+  updateTextareaAfterDelay(state, selectionEnd + offset);
+};
+
+let modifyPhrase = (oldValue, state, onChange, ~insert, ~wrapper) => {
   let (selectionStart, selectionEnd) = state.selection;
 
   let newValue =
     if (selectionStart == selectionEnd) {
-      value |> insertAt(insert, selectionStart);
+      oldValue |> insertAt(insert, selectionStart);
     } else {
-      value |> wrapWith(wrapper, selectionStart, selectionEnd);
+      oldValue |> wrapWith(wrapper, selectionStart, selectionEnd);
     };
 
-  let offset = (newValue |> String.length) - (value |> String.length);
-
-  onChange(newValue);
-  updateTextareaAfterDelay(state, selectionEnd + offset);
+  finalizeChange(~oldValue, ~newValue, ~state, ~onChange);
 };
 
 let chooseBold = (value, state, onChange) =>
@@ -235,7 +252,7 @@ let chooseStrikethrough = (value, state, onChange) =>
   );
 
 let controls = (value, state, send, onChange) => {
-  let buttonClasses = "border rounded-lg p-1 bg-gray-200 hover:bg-gray-300 ";
+  let buttonClasses = "border rounded p-1 hover:bg-gray-300 ";
   let {mode} = state;
 
   <div className="bg-gray-100 p-1 flex justify-between">
@@ -261,12 +278,12 @@ let controls = (value, state, send, onChange) => {
         {modeIcon(`Preview, mode)}
       </button>
       <button
-        className={buttonClasses ++ "ml-2"}
+        className={buttonClasses ++ "ml-2 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(`Split, mode)}
       </button>
       <button
-        className={buttonClasses ++ "ml-2"}
+        className={buttonClasses ++ "ml-2 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(`Fullscreen, mode)}
         {switch (mode) {
@@ -318,10 +335,135 @@ let focusOnEditor = id => {
   );
 };
 
-let footer = <div className="bg-gray-100 p-1"> {"Footer" |> str} </div>;
+let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
+  let errors = json |> Json.Decode.(field("errors", array(string)));
+
+  if (errors == [||]) {
+    let markdownEmbedCode =
+      json |> Json.Decode.(field("markdownEmbedCode", string));
+
+    let insert = "\n" ++ markdownEmbedCode ++ "\n";
+    let (_, selectionEnd) = state.selection;
+    let newValue = oldValue |> insertAt(insert, selectionEnd);
+    finalizeChange(~oldValue, ~newValue, ~state, ~onChange);
+    send(FinishUploading);
+  } else {
+    send(
+      SetUploadError(
+        Some(
+          "Failed to attach file! " ++ (errors |> Js.Array.joinWith(", ")),
+        ),
+      ),
+    );
+  };
+};
+
+let submitForm = (formId, oldValue, state, send, onChange) => {
+  ReactDOMRe._getElementById(formId)
+  |> OptionUtils.mapWithDefault(
+       element => {
+         let formData = DomUtils.FormData.create(element);
+
+         Api.sendFormData(
+           "/markdown_attachments/",
+           formData,
+           handleUploadFileResponse(oldValue, state, send, onChange),
+           () =>
+           send(
+             SetUploadError(
+               Some(
+                 "An unexpected error occured! Please reload the page before trying again.",
+               ),
+             ),
+           )
+         );
+       },
+       (),
+     );
+};
+
+let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
+  switch (ReactEvent.Form.target(event)##files) {
+  | [||] => ()
+  | files =>
+    let file = files[0];
+    let maxFileSize = 5 * 1024 * 1024;
+
+    let error =
+      file##size > maxFileSize
+        ? Some("The maximum file size is 5 MB. Please select another file.")
+        : None;
+
+    switch (error) {
+    | Some(_) => send(SetUploadError(error))
+    | None =>
+      send(SetUploading);
+      submitForm(fileFormId, oldValue, state, send, onChange);
+    };
+  };
+
+let footer = (oldValue, state, send, onChange) => {
+  let {id} = state;
+  let fileFormId = id ++ "-file-form";
+  let fileInputId = id ++ "-file-input";
+
+  <div
+    className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
+    <form
+      className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
+      id=fileFormId>
+      <input
+        name="authenticity_token"
+        type_="hidden"
+        value={AuthenticityToken.fromHead()}
+      />
+      <input
+        className="hidden"
+        type_="file"
+        name="markdown_attachment[file]"
+        id=fileInputId
+        multiple=false
+        onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
+      />
+      {switch (state.uploadState) {
+       | ReadyToUpload(error) =>
+         <label
+           className="text-xs px-3 py-1 flex-grow cursor-pointer"
+           htmlFor=fileInputId>
+           {switch (error) {
+            | Some(error) =>
+              <span className="text-red-500">
+                <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+                {error |> str}
+              </span>
+            | None =>
+              <span>
+                <FaIcon classes="far fa-file-image mr-2" />
+                {"Click here to attach a file." |> str}
+              </span>
+            }}
+         </label>
+       | Uploading =>
+         <span className="text-xs px-3 py-1 flex-grow cursor-wait">
+           <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
+           {"Please wait for the file to upload..." |> str}
+         </span>
+       }}
+    </form>
+    <a
+      href="/help/markdown_editor"
+      target="_blank"
+      className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
+      <FaIcon classes="fab fa-markdown text-sm" />
+      <span className="text-xs ml-1 font-semibold hidden sm:inline">
+        {"Need help?" |> str}
+      </span>
+    </a>
+  </div>;
+};
 
 let textareaClasses = mode => {
-  "w-full p-2 outline-none "
+  "w-full p-2 outline-none font-mono "
   ++ (
     switch (mode) {
     | Windowed(_) => ""
@@ -446,20 +588,25 @@ let make =
     {controls(value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>
       <div className={editorContainerClasses(state.mode)}>
-        <textarea
-          rows=4
-          maxLength
-          onSelect={onSelect(send)}
-          onChange={onChangeWrapper(onChange)}
-          id={state.id}
-          value
-          className={textareaClasses(state.mode)}
-        />
+        <DisablingCover
+          containerClasses="h-full"
+          disabled={state.uploadState == Uploading}
+          message="Uploading...">
+          <textarea
+            rows=4
+            maxLength
+            onSelect={onSelect(send)}
+            onChange={onChangeWrapper(onChange)}
+            id={state.id}
+            value
+            className={textareaClasses(state.mode)}
+          />
+        </DisablingCover>
       </div>
       <div className={previewContainerClasses(state.mode)}>
         <MarkdownBlock markdown=value profile />
       </div>
     </div>
-    footer
+    {footer(value, state, send, onChange)}
   </div>;
 };

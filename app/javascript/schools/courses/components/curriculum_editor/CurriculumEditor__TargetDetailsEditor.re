@@ -22,8 +22,6 @@ type methodOfCompletion =
 
 type evaluationCriterion = (int, string, bool);
 
-type prerequisiteTarget = (int, string, bool);
-
 type state = {
   title: string,
   targetGroupId: string,
@@ -47,7 +45,7 @@ type action =
   | UpdateTitle(string)
   | UpdatePrerequisiteTargets(array(string))
   | UpdateMethodOfCompletion(methodOfCompletion)
-  | UpdateEvaluationCriteria(evaluationCriterion)
+  | UpdateEvaluationCriteria(array(string))
   | UpdatePrerequisiteSearchInput(string)
   | UpdateEvaluationCriteriaSearchInput(string)
   | UpdateLinkToComplete(string)
@@ -163,21 +161,11 @@ let reducer = (state, action) =>
       methodOfCompletion,
       dirty: true,
     }
-  | UpdateEvaluationCriteria(evaluationCriterion) =>
-    let (evaluationCriterionId, _title, selected) = evaluationCriterion;
-    let currentEcIds = state.evaluationCriteria;
-    {
+  | UpdateEvaluationCriteria(evaluationCriteria) => {
       ...state,
-      evaluationCriteria:
-        selected
-          ? currentEcIds
-            |> Js.Array.concat([|evaluationCriterionId |> string_of_int|])
-          : currentEcIds
-            |> Js.Array.filter(id =>
-                 id != (evaluationCriterionId |> string_of_int)
-               ),
+      evaluationCriteria,
       dirty: true,
-    };
+    }
   | UpdateEvaluationCriteriaSearchInput(evaluationCriteriaSearchInput) => {
       ...state,
       evaluationCriteriaSearchInput,
@@ -253,10 +241,6 @@ let eligiblePrerequisiteTargets = (targetId, targets, targetGroups) => {
      )
   |> List.filter(target => Target.id(target) != targetId)
   |> Array.of_list;
-};
-
-let multiSelectEvaluationCriteriaCB = (send, key, value, selected) => {
-  send(UpdateEvaluationCriteria((key, value, selected)));
 };
 
 let setPrerequisiteSearch = (send, value) => {
@@ -352,23 +336,50 @@ let targetEvaluated = methodOfCompletion =>
 let validNumberOfEvaluationCriteria = state =>
   state.evaluationCriteria |> ArrayUtils.isNotEmpty;
 
-let evaluationCriteriaForSelector = (state, evaluationCriteria) => {
-  let selectedEcIds = state.evaluationCriteria;
-  evaluationCriteria
-  |> List.map(ec => {
-       let ecId = ec |> EvaluationCriteria.id;
-       let selected =
-         selectedEcIds
-         |> Js.Array.findIndex(selectedEcId => ecId == selectedEcId) > (-1);
-       (
-         ec |> EvaluationCriteria.id |> int_of_string,
-         ec |> EvaluationCriteria.name,
-         selected,
-       );
-     });
+let setEvaluationCriteriaSearch = (send, value) => {
+  send(UpdateEvaluationCriteriaSearchInput(value));
 };
 
+let selectEvaluationCriterion = (send, state, evaluationCriterion) => {
+  let updatedEvaluationCriteria =
+    state.evaluationCriteria
+    |> Js.Array.concat([|evaluationCriterion |> EvaluationCriteria.id|]);
+  send(UpdatePrerequisiteTargets(updatedEvaluationCriteria));
+};
+
+let deSelectEvaluationCriterion = (send, state, evaluationCriterion) => {
+  let updatedEvaluationCriteria =
+    state.evaluationCriteria
+    |> Js.Array.filter(ecId =>
+         ecId != EvaluationCriteria.id(evaluationCriterion)
+       );
+  send(UpdateEvaluationCriteria(updatedEvaluationCriteria));
+};
+module SelectableEvaluationCriteria = {
+  type t = EvaluationCriteria.t;
+
+  let value = t => t |> EvaluationCriteria.name;
+  let searchString = value;
+
+  let make = (evaluationCriterion): t => evaluationCriterion;
+};
+
+module MultiSelectForEvaluationCriteria =
+  CurriculumEditor__MultiselectInline.Make(SelectableEvaluationCriteria);
+
 let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
+  let selected =
+    evaluationCriteria
+    |> Js.Array.filter(ec =>
+         state.evaluationCriteria |> Array.mem(EvaluationCriteria.id(ec))
+       )
+    |> Array.map(ec => SelectableEvaluationCriteria.make(ec));
+  let unselected =
+    evaluationCriteria
+    |> Js.Array.filter(ec =>
+         !(state.evaluationCriteria |> Array.mem(EvaluationCriteria.id(ec)))
+       )
+    |> Array.map(ec => SelectableEvaluationCriteria.make(ec));
   <div id="evaluation_criteria" className="mb-6">
     <label
       className="block tracking-wide text-sm font-semibold mr-6 mb-2"
@@ -376,23 +387,23 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
       {"Choose evaluation criteria from your list" |> str}
     </label>
-    {<div className="ml-6">
-       {validNumberOfEvaluationCriteria(state)
-          ? React.null
-          : <div className="drawer-right-form__error-msg mb-2">
-              {"Atleast one has to be selected" |> str}
-            </div>}
-       <School__SelectBox
-         items={
-           evaluationCriteriaForSelector(state, evaluationCriteria)
-           |> School__SelectBox.convertOldItems
-         }
-         selectCB={
-           multiSelectEvaluationCriteriaCB(send)
-           |> School__SelectBox.convertOldCallback
-         }
-       />
-     </div>}
+    <div className="ml-6">
+      {validNumberOfEvaluationCriteria(state)
+         ? React.null
+         : <div className="drawer-right-form__error-msg mb-2">
+             {"Atleast one has to be selected" |> str}
+           </div>}
+      <MultiSelectForEvaluationCriteria
+        placeholder="Search evaluation criteria"
+        emptyMessage="No criteria selected"
+        selected
+        unselected
+        onChange={setEvaluationCriteriaSearch(send)}
+        value={state.evaluationCriteriaSearchInput}
+        onSelect={selectEvaluationCriterion(send, state)}
+        onDeselect={deSelectEvaluationCriterion(send, state)}
+      />
+    </div>
   </div>;
 };
 
@@ -748,7 +759,11 @@ let make =
                 ? React.null : methodOfCompletionSelector(state, send)}
              {switch (state.methodOfCompletion) {
               | Evaluated =>
-                evaluationCriteriaEditor(state, evaluationCriteria, send)
+                evaluationCriteriaEditor(
+                  state,
+                  evaluationCriteria |> Array.of_list,
+                  send,
+                )
               | MarkAsComplete => React.null
               | TakeQuiz => quizEditor(state, send)
               | VisitLink => linkEditor(state, send)

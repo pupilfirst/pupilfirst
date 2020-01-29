@@ -24,7 +24,8 @@ type action =
   | ClickPreview
   | ClickSplit
   | ClickFullscreen
-  | SetSelection(selection);
+  | SetSelection(selection)
+  | PressEscapeKey;
 
 let reducer = (state, action) =>
   switch (action) {
@@ -58,6 +59,16 @@ let reducer = (state, action) =>
       };
     {...state, mode};
   | SetSelection(selection) => {...state, selection}
+  | PressEscapeKey =>
+    let mode =
+      switch (state.mode) {
+      | Fullscreen(`Editor) => Windowed(`Editor)
+      | Windowed(`Preview)
+      | Fullscreen(`Preview) => Windowed(`Preview)
+      | Windowed(`Editor)
+      | Fullscreen(`Split) => Windowed(`Editor)
+      };
+    {...state, mode};
   };
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -303,6 +314,12 @@ let onSelect = (send, event) => {
   send(SetSelection(selection));
 };
 
+let handleEscapeKey = (send, event) =>
+  switch (event |> Webapi.Dom.KeyboardEvent.key) {
+  | "Escape" => send(PressEscapeKey)
+  | _anyOtherKey => ()
+  };
+
 [@react.component]
 let make =
     (
@@ -320,6 +337,7 @@ let make =
       computeInitialState,
     );
 
+  // Reset autosize when switching from full-screen mode.
   React.useEffect1(
     () => {
       switch (state.mode) {
@@ -332,6 +350,21 @@ let make =
     },
     [|state.mode|],
   );
+
+  // Use Escape key to close full-screen mode.
+  React.useEffect0(() => {
+    let curriedHandler = handleEscapeKey(send);
+    let documentEventTarget = Webapi.Dom.(document |> Document.asEventTarget);
+
+    documentEventTarget
+    |> Webapi.Dom.EventTarget.addKeyUpEventListener(curriedHandler);
+
+    Some(
+      () =>
+        documentEventTarget
+        |> Webapi.Dom.EventTarget.removeKeyUpEventListener(curriedHandler),
+    );
+  });
 
   <div className={containerClasses(state.mode)}>
     {controls(value, state, send, onChange)}

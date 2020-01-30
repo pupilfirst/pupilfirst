@@ -256,23 +256,29 @@ let controls = (value, state, send, onChange) => {
   let {mode} = state;
 
   <div className="bg-gray-100 p-1 flex justify-between">
-    <div>
-      <button
-        className=buttonClasses
-        onClick={_ => chooseBold(value, state, onChange)}>
-        <FaIcon classes="fas fa-bold fa-fw" />
-      </button>
-      <button
-        className={buttonClasses ++ "ml-2"}
-        onClick={_ => chooseItalics(value, state, onChange)}>
-        <FaIcon classes="fas fa-italic fa-fw" />
-      </button>
-      <button
-        className={buttonClasses ++ "ml-2"}
-        onClick={_ => chooseStrikethrough(value, state, onChange)}>
-        <FaIcon classes="fas fa-strikethrough fa-fw" />
-      </button>
-    </div>
+    {switch (mode) {
+     | Windowed(`Preview)
+     | Fullscreen(`Preview) => <div />
+     | Windowed(`Editor)
+     | Fullscreen(`Editor | `Split) =>
+       <div>
+         <button
+           className=buttonClasses
+           onClick={_ => chooseBold(value, state, onChange)}>
+           <FaIcon classes="fas fa-bold fa-fw" />
+         </button>
+         <button
+           className={buttonClasses ++ "ml-2"}
+           onClick={_ => chooseItalics(value, state, onChange)}>
+           <FaIcon classes="fas fa-italic fa-fw" />
+         </button>
+         <button
+           className={buttonClasses ++ "ml-2"}
+           onClick={_ => chooseStrikethrough(value, state, onChange)}>
+           <FaIcon classes="fas fa-strikethrough fa-fw" />
+         </button>
+       </div>
+     }}
     <div>
       <button className=buttonClasses onClick={onClickPreview(state, send)}>
         {modeIcon(`Preview, mode)}
@@ -414,59 +420,65 @@ let footer = (oldValue, state, send, onChange) => {
   let fileFormId = id ++ "-file-form";
   let fileInputId = id ++ "-file-input";
 
-  <div
-    className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
-    <form
-      className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
-      id=fileFormId>
-      <input
-        name="authenticity_token"
-        type_="hidden"
-        value={AuthenticityToken.fromHead()}
-      />
-      <input
-        className="hidden"
-        type_="file"
-        name="markdown_attachment[file]"
-        id=fileInputId
-        multiple=false
-        onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
-      />
-      {switch (state.uploadState) {
-       | ReadyToUpload(error) =>
-         <label
-           className="text-xs px-3 py-1 flex-grow cursor-pointer"
-           htmlFor=fileInputId>
-           {switch (error) {
-            | Some(error) =>
-              <span className="text-red-500">
-                <FaIcon classes="fas fa-exclamation-triangle mr-2" />
-                {error |> str}
-              </span>
-            | None =>
-              <span>
-                <FaIcon classes="far fa-file-image mr-2" />
-                {"Click here to attach a file." |> str}
-              </span>
-            }}
-         </label>
-       | Uploading =>
-         <span className="text-xs px-3 py-1 flex-grow cursor-wait">
-           <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
-           {"Please wait for the file to upload..." |> str}
-         </span>
-       }}
-    </form>
-    <a
-      href="/help/markdown_editor"
-      target="_blank"
-      className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
-      <FaIcon classes="fab fa-markdown text-sm" />
-      <span className="text-xs ml-1 font-semibold hidden sm:inline">
-        {"Need help?" |> str}
-      </span>
-    </a>
-  </div>;
+  switch (state.mode) {
+  | Windowed(`Preview)
+  | Fullscreen(`Preview) => React.null
+  | Windowed(`Editor)
+  | Fullscreen(`Editor | `Split) =>
+    <div
+      className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
+      <form
+        className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
+        id=fileFormId>
+        <input
+          name="authenticity_token"
+          type_="hidden"
+          value={AuthenticityToken.fromHead()}
+        />
+        <input
+          className="hidden"
+          type_="file"
+          name="markdown_attachment[file]"
+          id=fileInputId
+          multiple=false
+          onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
+        />
+        {switch (state.uploadState) {
+         | ReadyToUpload(error) =>
+           <label
+             className="text-xs px-3 py-1 flex-grow cursor-pointer"
+             htmlFor=fileInputId>
+             {switch (error) {
+              | Some(error) =>
+                <span className="text-red-500">
+                  <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+                  {error |> str}
+                </span>
+              | None =>
+                <span>
+                  <FaIcon classes="far fa-file-image mr-2" />
+                  {"Click here to attach a file." |> str}
+                </span>
+              }}
+           </label>
+         | Uploading =>
+           <span className="text-xs px-3 py-1 flex-grow cursor-wait">
+             <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
+             {"Please wait for the file to upload..." |> str}
+           </span>
+         }}
+      </form>
+      <a
+        href="/help/markdown_editor"
+        target="_blank"
+        className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
+        <FaIcon classes="fab fa-markdown text-sm" />
+        <span className="text-xs ml-1 font-semibold hidden sm:inline">
+          {"Need help?" |> str}
+        </span>
+      </a>
+    </div>
+  };
 };
 
 let textareaClasses = mode => {

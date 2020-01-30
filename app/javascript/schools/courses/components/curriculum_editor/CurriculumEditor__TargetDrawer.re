@@ -100,6 +100,7 @@ let make =
             targetGroups
             evaluationCriteria
             updateTargetCB
+            setDirtyCB={dirty => setDirty(_ => dirty)}
           />,
           Details,
         )

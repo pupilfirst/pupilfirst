@@ -659,7 +659,14 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
 
 [@react.component]
 let make =
-    (~target, ~targets, ~targetGroups, ~evaluationCriteria, ~updateTargetCB) => {
+    (
+      ~target,
+      ~targets,
+      ~targetGroups,
+      ~evaluationCriteria,
+      ~updateTargetCB,
+      ~setDirtyCB,
+    ) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -688,6 +695,14 @@ let make =
       None;
     },
     [|targetId|],
+  );
+
+  React.useEffect1(
+    () => {
+      setDirtyCB(state.dirty);
+      None;
+    },
+    [|state.dirty|],
   );
 
   <div className="max-w-3xl py-6 px-3 mx-auto" id="target-properties">

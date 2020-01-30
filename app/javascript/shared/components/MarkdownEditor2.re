@@ -315,16 +315,23 @@ let editorContainerClasses = mode =>
   );
 
 let previewContainerClasses = mode =>
-  "px-2 "
+  "px-2 mb-2 "
   ++ (
     switch (mode) {
     | Windowed(`Editor) => "hidden"
     | Windowed(`Preview) => ""
     | Fullscreen(`Editor) => "hidden"
-    | Fullscreen(`Preview) => "w-full"
-    | Fullscreen(`Split) => "w-1/2"
+    | Fullscreen(`Preview) => "w-full relative"
+    | Fullscreen(`Split) => "w-1/2 relative"
     }
   );
+
+let previewClasses = mode =>
+  switch (mode) {
+  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto"
+  | Fullscreen(`Editor)
+  | Windowed(_) => ""
+  };
 
 let focusOnEditor = id => {
   Webapi.Dom.(
@@ -604,7 +611,11 @@ let make =
         </DisablingCover>
       </div>
       <div className={previewContainerClasses(state.mode)}>
-        <MarkdownBlock markdown=value profile />
+        <MarkdownBlock
+          markdown=value
+          profile
+          className={previewClasses(state.mode)}
+        />
       </div>
     </div>
     {footer(value, state, send, onChange)}

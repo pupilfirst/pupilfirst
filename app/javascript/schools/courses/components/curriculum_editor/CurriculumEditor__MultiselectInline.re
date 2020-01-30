@@ -148,8 +148,13 @@ module Make = (Selectable: Selectable) => {
                            onSelect(item);
                          }}
                          title={"Select " ++ (item |> Selectable.value)}
-                         className="flex items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
-                         <PfIcon className="if i-plus-circle" />
+                         className="flex multiselect-item items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
+                         <i
+                           className="far fa-square select-icon-unchecked text-2xl"
+                         />
+                         <i
+                           className="far fa-plus-square select-icon-selected text-2xl"
+                         />
                          <span className="ml-2">
                            {item |> Selectable.value |> str}
                          </span>

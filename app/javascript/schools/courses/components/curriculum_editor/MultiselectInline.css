@@ -1,0 +1,11 @@
+.multiselect-item .select-icon-selected {
+  display: none;
+}
+.multiselect-item:hover .select-icon-unchecked,
+.multiselect-item:active .select-icon-unchecked {
+  display: none;
+}
+.multiselect-item:hover .select-icon-selected,
+.multiselect-item:active .select-icon-selected {
+  display: inline-flex;
+}

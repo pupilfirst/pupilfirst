@@ -327,14 +327,14 @@ let previewContainerClasses = mode =>
     | Windowed(`Editor) => "hidden"
     | Windowed(`Preview) => ""
     | Fullscreen(`Editor) => "hidden"
-    | Fullscreen(`Preview) => "w-full relative"
+    | Fullscreen(`Preview) => "w-screen mx-auto"
     | Fullscreen(`Split) => "w-1/2 relative"
     }
   );
 
 let previewClasses = mode =>
   switch (mode) {
-  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto"
+  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto w-full"
   | Fullscreen(`Editor)
   | Windowed(_) => ""
   };
@@ -623,11 +623,13 @@ let make =
         </DisablingCover>
       </div>
       <div className={previewContainerClasses(state.mode)}>
-        <MarkdownBlock
-          markdown=value
-          profile
-          className={previewClasses(state.mode)}
-        />
+        <div className={previewClasses(state.mode)}>
+          <MarkdownBlock
+            markdown=value
+            profile
+            className="max-w-3xl mx-auto"
+          />
+        </div>
       </div>
     </div>
     {footer(value, state, send, onChange)}

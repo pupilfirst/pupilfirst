@@ -40,6 +40,14 @@ module Make = (Selectable: Selectable) => {
     };
   };
 
+  let borderColor = colorForSelected => {
+    "border border-" ++ colorForSelected ++ "-500";
+  };
+
+  let selectedItemClasses = colorForSelected => {
+    "bg-" ++ colorForSelected ++ "-200 " ++ borderColor(colorForSelected);
+  };
+
   [@react.component]
   let make =
       (
@@ -52,6 +60,7 @@ module Make = (Selectable: Selectable) => {
         ~onSelect,
         ~onDeselect,
         ~emptyMessage="No items selected",
+        ~colorForSelected="orange",
       ) => {
     let (inputId, _setId) =
       React.useState(() =>
@@ -76,11 +85,17 @@ module Make = (Selectable: Selectable) => {
                     key={index |> string_of_int}
                     className="inline-block items-center justify-between font-semibold text-xs rounded mb-2 mr-2">
                     <span
-                      className="p-2 flex-1 bg-orange-200 border border-orange-500 h-full">
+                      className={
+                        "p-2 flex-1 h-full "
+                        ++ selectedItemClasses(colorForSelected)
+                      }>
                       {selected |> Selectable.value |> str}
                     </span>
                     <button
-                      className="p-2 items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none border border-orange-500"
+                      className={
+                        "p-2 items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none "
+                        ++ borderColor(colorForSelected)
+                      }
                       title="Remove"
                       onClick={event => {
                         ReactEvent.Mouse.preventDefault(event);

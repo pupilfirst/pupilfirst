@@ -29,9 +29,10 @@ let updateSortIndex =
 
 let sortIndexHiddenClass = bool => bool ? " invisible" : "";
 
-let editorLink = (linkPrefix, linkSuffix, iconClass) => {
+let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
   let link = linkPrefix ++ linkSuffix;
   <a
+    title={"Edit " ++ linkSuffix ++ " of target " ++ (target |> Target.title)}
     onClick={event => {
       event |> ReactEvent.Mouse.preventDefault;
       event |> ReactEvent.Mouse.stopPropagation;
@@ -115,9 +116,9 @@ let make =
         {target |> Target.title |> str}
       </p>
       <div className="items-center">
-        {editorLink(linkPrefix, "content", "fa-pen-nib")}
-        {editorLink(linkPrefix, "details", "fa-list-alt")}
-        {editorLink(linkPrefix, "versions", "fa-code-branch")}
+        {editorLink(linkPrefix, "content", target, "fa-pen-nib")}
+        {editorLink(linkPrefix, "details", target, "fa-list-alt")}
+        {editorLink(linkPrefix, "versions", target, "fa-code-branch")}
         {switch (target |> Target.visibility) {
          | Draft =>
            <span

@@ -246,7 +246,11 @@ let make =
     React.useReducerWithMapState(reducer, contentBlock, computeInitialState);
 
   <DisablingCover disabled={state.saving != None} message=?{state.saving}>
-    <div className="flex items-start">
+    <div
+      className="flex items-start"
+      ariaLabel={
+        "Editor for content block " ++ (contentBlock |> ContentBlock.id)
+      }>
       <div className="flex-grow self-stretch">
         {innerEditor(contentBlock, state.contentBlock, setDirtyCB, send)}
       </div>

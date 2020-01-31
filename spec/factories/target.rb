@@ -37,5 +37,11 @@ FactoryBot.define do
         create(:content_version, :embed, target: target)
       end
     end
+
+    trait :with_file do
+      after(:create) do |target|
+        create(:content_version, :file, target: target)
+      end
+    end
   end
 end

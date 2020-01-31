@@ -436,7 +436,13 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
 
 [@react.component]
 let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
-  let isAboveContentBlock = aboveContentBlock != None;
+  let (embedInputId, isAboveContentBlock) =
+    switch (aboveContentBlock) {
+    | Some(contentBlock) =>
+      let id = "embed-" ++ (contentBlock |> ContentBlock.id);
+      (id, true);
+    | None => ("embed-bottom", false)
+    };
 
   let (state, send) =
     React.useReducerWithMapState(
@@ -465,7 +471,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
          | EmbedForm(url) =>
            <div
              className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
-             <label className="text-xs font-semibold">
+             <label htmlFor=embedInputId className="text-xs font-semibold">
                {"URL to Embed" |> str}
              </label>
              <HelpIcon
@@ -476,6 +482,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
              </HelpIcon>
              <div className="flex mt-1">
                <input
+                 id=embedInputId
                  placeholder="https://www.youtube.com/watch?v="
                  className="w-full py-1 px-2 border rounded"
                  type_="text"

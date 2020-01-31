@@ -612,6 +612,7 @@ let make =
           disabled={state.uploadState == Uploading}
           message="Uploading...">
           <textarea
+            ariaLabel="Markdown editor"
             rows=4
             maxLength
             onSelect={onSelect(send)}

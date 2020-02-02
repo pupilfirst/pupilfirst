@@ -270,7 +270,7 @@ module SelectablePrerequisiteTargets = {
 };
 
 module MultiSelectForPrerequisiteTargets =
-  CurriculumEditor__MultiselectInline.Make(SelectablePrerequisiteTargets);
+  MultiselectInline.Make(SelectablePrerequisiteTargets);
 
 let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
   let selected =
@@ -365,7 +365,7 @@ module SelectableEvaluationCriteria = {
 };
 
 module MultiSelectForEvaluationCriteria =
-  CurriculumEditor__MultiselectInline.Make(SelectableEvaluationCriteria);
+  MultiselectInline.Make(SelectableEvaluationCriteria);
 
 let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
   let selected =

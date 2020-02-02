@@ -344,7 +344,7 @@ let selectEvaluationCriterion = (send, state, evaluationCriterion) => {
   let updatedEvaluationCriteria =
     state.evaluationCriteria
     |> Js.Array.concat([|evaluationCriterion |> EvaluationCriteria.id|]);
-  send(UpdatePrerequisiteTargets(updatedEvaluationCriteria));
+  send(UpdateEvaluationCriteria(updatedEvaluationCriteria));
 };
 
 let deSelectEvaluationCriterion = (send, state, evaluationCriterion) => {

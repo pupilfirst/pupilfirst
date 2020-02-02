@@ -2,10 +2,10 @@ class ContentVersionResolver < ApplicationQuery
   property :target_id
 
   def versions
-    if target.content_versions.present?
-      target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
+    if target.target_versions.present?
+      target.target_versions.order('version_at DESC').distinct(:version_at).pluck(:version_at)
     else
-      ContentVersion.none
+      TargetVersion.none
     end
   end
 

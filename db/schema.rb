@@ -208,10 +208,10 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
     t.json "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "sort_index"
-    t.bigint "target_versions_id"
+    t.integer "sort_index", default: 0, null: false
+    t.bigint "target_version_id"
     t.index ["block_type"], name: "index_content_blocks_on_block_type"
-    t.index ["target_versions_id"], name: "index_content_blocks_on_target_versions_id"
+    t.index ["target_version_id"], name: "index_content_blocks_on_target_version_id"
   end
 
   create_table "content_versions", force: :cascade do |t|

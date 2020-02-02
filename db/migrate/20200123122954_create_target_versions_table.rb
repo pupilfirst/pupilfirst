@@ -25,8 +25,8 @@ class CreateTargetVersionsTable < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_column :content_blocks, :sort_index, :integer
-    add_reference :content_blocks, :target_versions, index: true
+    add_column :content_blocks, :sort_index, :integer, null: false, default: 0
+    add_reference :content_blocks, :target_version, index: true
 
     TargetVersion.reset_column_information
     ContentBlock.reset_column_information
@@ -36,11 +36,11 @@ class CreateTargetVersionsTable < ActiveRecord::Migration[6.0]
       content_versions.each_with_index do |content_version, index|
         target_version = TargetVersion.where(version_at: content_version.version_on, target_id: content_version.target_id).first_or_create!
         if index.zero?
-          content_block.update!(sort_index: content_version.sort_index, target_versions_id: target_version.id)
+          content_block.update!(sort_index: content_version.sort_index, target_version_id: target_version.id)
         else
           new_content_block = content_block.dup
           new_content_block.sort_index = content_version.sort_index
-          new_content_block.target_versions_id = target_version
+          new_content_block.target_version_id = target_version
           new_content_block.save!
         end
       end

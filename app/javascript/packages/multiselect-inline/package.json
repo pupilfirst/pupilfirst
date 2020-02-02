@@ -1,0 +1,47 @@
+{
+  "name": "@pupilfirst/multiselect-inline",
+  "version": "1.0.0",
+  "description": "A multi-select inline dropdown component for ReasonReact projects",
+  "keywords": [
+    "Reason",
+    "React",
+    "Tailwind",
+    "UI",
+    "Pupilfirst"
+  ],
+  "contributors": [
+    "Bodhish Thomas <bodhish@gmail.com>",
+    "Hari Gopal <mail@harigopal.in>",
+    "Mahesh Krishna Kumar <maheshcet@gmail.com>",
+    "Vinu T. V. <vinutv91@gmail.com>"
+  ],
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/overhaul-target-editor/app/javascript/packages/multiselect-inline",
+  "license": "MIT",
+  "main": "components/MultiselectInline.re",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/overhaul-target-editor/app/javascript/packages/multiselect-dropdown"
+  },
+  "devDependencies": {
+    "bs-platform": "7.0.1",
+    "bsb-js": "^1.1.7",
+    "parcel-bundler": "^1.12.4",
+    "tailwindcss": "^1.1.4"
+  },
+  "dependencies": {
+    "@pupilfirst/pf-icon": "^0.1.9",
+    "bs-webapi": "^0.15.2",
+    "reason-react": ">=0.7.0"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "re:build": "bsb -make-world -clean-world",
+    "re:watch": "bsb -make-world -clean-world -w"
+  },
+  "gitHead": "8419b9d77820306d973c3721199d3146751f56e8"
+}

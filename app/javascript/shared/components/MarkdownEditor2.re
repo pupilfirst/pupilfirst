@@ -529,6 +529,36 @@ let handleKeyboardControls = (value, state, onChange, event) => {
   };
 };
 
+module ScrollSync = {
+  open Webapi.Dom;
+
+  /*
+   * There's a tiny bit of math involved in correctly mapping the source
+   * element's scroll position to the desired scroll of the target element.
+   * The source's scrollTop varies from zero to a number that's the difference
+   * between its scrollHeight and its offsetHeight; the same applies for the
+   * target. This needs to be taken into account when mapping one scroll
+   * position to the other.
+   */
+  let scrollTargetToSource = (~source, ~target, _event) => {
+    let sourceScrollTop = source |> Element.scrollTop;
+    let sourceOffsetHeight =
+      source |> Element.unsafeAsHtmlElement |> HtmlElement.offsetHeight;
+    let sourceScrollHeight = source |> Element.scrollHeight;
+
+    let scrollFraction =
+      sourceScrollTop
+      /. (sourceScrollHeight - sourceOffsetHeight |> float_of_int);
+
+    let maxTargetScrollTop =
+      (target |> Element.scrollHeight)
+      - (target |> Element.unsafeAsHtmlElement |> HtmlElement.offsetHeight)
+      |> float_of_int;
+
+    target->Element.setScrollTop(scrollFraction *. maxTargetScrollTop);
+  };
+};
+
 [@react.component]
 let make =
     (
@@ -603,6 +633,44 @@ let make =
     );
   });
 
+  React.useEffect1(
+    () => {
+      let textarea =
+        Webapi.Dom.(document |> Document.getElementById(state.id));
+      let preview =
+        Webapi.Dom.(
+          document |> Document.getElementById(state.id ++ "-preview")
+        );
+
+      switch (textarea, preview) {
+      | (Some(textarea), Some(preview)) =>
+        let scrollCallback =
+          ScrollSync.scrollTargetToSource(~source=textarea, ~target=preview);
+
+        switch (state.mode) {
+        | Fullscreen(`Split) =>
+          textarea
+          |> Webapi.Dom.Element.addEventListener("scroll", scrollCallback);
+
+          Some(
+            () =>
+              textarea
+              |> Webapi.Dom.Element.removeEventListener(
+                   "scroll",
+                   scrollCallback,
+                 ),
+          );
+        | _anyOtherMode =>
+          textarea
+          |> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback);
+          None;
+        };
+      | (_, _) => None
+      };
+    },
+    [|state.mode|],
+  );
+
   <div className={containerClasses(state.mode)}>
     {controls(value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>
@@ -624,7 +692,8 @@ let make =
         </DisablingCover>
       </div>
       <div className={previewContainerClasses(state.mode)}>
-        <div className={previewClasses(state.mode)}>
+        <div
+          id={state.id ++ "-preview"} className={previewClasses(state.mode)}>
           <MarkdownBlock
             markdown=value
             profile

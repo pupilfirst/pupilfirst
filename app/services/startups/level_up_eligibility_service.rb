@@ -90,7 +90,7 @@ module Startups
     end
 
     def target_eligible?(target, eligibility)
-      if target.founder_role?
+      if target.individual_target?
         completed_founders = @startup.founders.all.select do |startup_founder|
           target.status(startup_founder).in?(eligibility)
         end

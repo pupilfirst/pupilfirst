@@ -32,7 +32,7 @@ module AuthorizeStudent
   end
 
   def founders
-    if target.founder_event?
+    if target.individual_target?
       [founder]
     else
       founder.startup.founders

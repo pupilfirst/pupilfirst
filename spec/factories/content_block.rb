@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :content_block do
+    sequence(:sort_index) { |n| n }
+    target_version
     trait :markdown do
       block_type { ContentBlock::BLOCK_TYPE_MARKDOWN }
       content { { markdown: Faker::Markdown.sandwich(5) } }

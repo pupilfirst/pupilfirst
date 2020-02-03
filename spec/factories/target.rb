@@ -31,16 +31,18 @@ FactoryBot.define do
 
     trait :with_content do
       after(:create) do |target|
-        create(:content_version, :image, target: target)
-        create(:content_version, :markdown, target: target)
-        create(:content_version, :file, target: target)
-        create(:content_version, :embed, target: target)
+        target_version = create(:target_version, target: target)
+        create(:content_block, :image, target_version: target_version)
+        create(:content_block, :markdown, target_version: target_version)
+        create(:content_block, :file, target_version: target_version)
+        create(:content_block, :embed, target_version: target_version)
       end
     end
 
     trait :with_file do
       after(:create) do |target|
-        create(:content_version, :file, target: target)
+        target_version = create(:target_version, target: target)
+        create(:content_block, :file, target_version: target_version)
       end
     end
   end

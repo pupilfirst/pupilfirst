@@ -31,6 +31,7 @@ type action =
   | ClickSplit
   | ClickFullscreen
   | SetSelection(selection)
+  | BumpSelection(int)
   | PressEscapeKey
   | SetUploadError(uploadError)
   | SetUploading
@@ -68,6 +69,9 @@ let reducer = (state, action) =>
       };
     {...state, mode};
   | SetSelection(selection) => {...state, selection}
+  | BumpSelection(offset) =>
+    let (selectionStart, selectionEnd) = state.selection;
+    {...state, selection: (selectionStart + offset, selectionEnd + offset)};
   | PressEscapeKey =>
     let mode =
       switch (state.mode) {
@@ -217,16 +221,35 @@ let updateTextareaAfterDelay = (state, cursorPosition) => {
   );
 };
 
-let finalizeChange = (~oldValue, ~newValue, ~state, ~onChange) => {
+let finalizeChange = (~oldValue, ~newValue, ~state, ~send, ~onChange) => {
   let offset = (newValue |> String.length) - (oldValue |> String.length);
   let (_, selectionEnd) = state.selection;
 
+  // The cursor needs to be bumped to account for changed value.
+  send(BumpSelection(offset / 2));
+
+  // Report the modified value to the parent.
   onChange(newValue);
+
+  // Update the textarea after state changes are applied. Read more in function's documentation.
   updateTextareaAfterDelay(state, selectionEnd + offset);
 };
 
-let modifyPhrase = (oldValue, state, onChange, ~insert, ~wrapper) => {
+type phraseModifer =
+  | Bold
+  | Italic
+  | Strikethrough;
+
+let insertAndWrapper = phraseModifer =>
+  switch (phraseModifer) {
+  | Bold => ("**bold**", "**")
+  | Italic => ("*italics*", "*")
+  | Strikethrough => ("~~strikethrough~~", "~~")
+  };
+
+let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
   let (selectionStart, selectionEnd) = state.selection;
+  let (insert, wrapper) = phraseModifer |> insertAndWrapper;
 
   let newValue =
     if (selectionStart == selectionEnd) {
@@ -235,25 +258,13 @@ let modifyPhrase = (oldValue, state, onChange, ~insert, ~wrapper) => {
       oldValue |> wrapWith(wrapper, selectionStart, selectionEnd);
     };
 
-  finalizeChange(~oldValue, ~newValue, ~state, ~onChange);
+  finalizeChange(~oldValue, ~newValue, ~state, ~send, ~onChange);
 };
-
-let chooseBold = (value, state, onChange) =>
-  modifyPhrase(value, state, onChange, ~insert="**bold**", ~wrapper="**");
-let chooseItalics = (value, state, onChange) =>
-  modifyPhrase(value, state, onChange, ~insert="*italics*", ~wrapper="*");
-let chooseStrikethrough = (value, state, onChange) =>
-  modifyPhrase(
-    value,
-    state,
-    onChange,
-    ~insert="~~strikethrough~~",
-    ~wrapper="~~",
-  );
 
 let controls = (value, state, send, onChange) => {
   let buttonClasses = "border rounded p-1 hover:bg-gray-300 ";
   let {mode} = state;
+  let curriedModifyPhrase = modifyPhrase(value, state, send, onChange);
 
   <div className="bg-gray-100 p-1 flex justify-between">
     {switch (mode) {
@@ -263,18 +274,17 @@ let controls = (value, state, send, onChange) => {
      | Fullscreen(`Editor | `Split) =>
        <div>
          <button
-           className=buttonClasses
-           onClick={_ => chooseBold(value, state, onChange)}>
+           className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
            <FaIcon classes="fas fa-bold fa-fw" />
          </button>
          <button
            className={buttonClasses ++ "ml-2"}
-           onClick={_ => chooseItalics(value, state, onChange)}>
+           onClick={_ => curriedModifyPhrase(Italic)}>
            <FaIcon classes="fas fa-italic fa-fw" />
          </button>
          <button
            className={buttonClasses ++ "ml-2"}
-           onClick={_ => chooseStrikethrough(value, state, onChange)}>
+           onClick={_ => curriedModifyPhrase(Strikethrough)}>
            <FaIcon classes="fas fa-strikethrough fa-fw" />
          </button>
        </div>
@@ -516,15 +526,15 @@ let handleEscapeKey = (send, event) =>
   | _anyOtherKey => ()
   };
 
-let handleKeyboardControls = (value, state, onChange, event) => {
+let handleKeyboardControls = (value, state, send, onChange, event) => {
   let ctrlKey = Webapi.Dom.KeyboardEvent.ctrlKey;
   let metaKey = Webapi.Dom.KeyboardEvent.metaKey;
+  let curriedModifyPhrase = modifyPhrase(value, state, send, onChange);
 
   switch (event |> Webapi.Dom.KeyboardEvent.key) {
-  | "b" when event |> ctrlKey || event |> metaKey =>
-    chooseBold(value, state, onChange)
+  | "b" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
   | "i" when event |> ctrlKey || event |> metaKey =>
-    chooseItalics(value, state, onChange)
+    curriedModifyPhrase(Italic)
   | _anyOtherKey => ()
   };
 };
@@ -607,7 +617,7 @@ let make =
 
   // Handle keyboard shortcuts for Bold and Italics buttons.
   React.useEffect(() => {
-    let curriedHandler = handleKeyboardControls(value, state, onChange);
+    let curriedHandler = handleKeyboardControls(value, state, send, onChange);
     let textareaEventTarget =
       Webapi.Dom.(
         document

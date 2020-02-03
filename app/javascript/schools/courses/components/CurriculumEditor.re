@@ -175,8 +175,8 @@ let make =
         send(UpdateTargets(newTargets));
       }
       : ();
-
     send(UpdateTargetGroup(targetGroup));
+    send(UpdateEditorAction(Hidden));
   };
 
   <div className="flex-1 flex flex-col">

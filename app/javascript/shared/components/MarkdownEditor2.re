@@ -331,20 +331,17 @@ let editorContainerClasses = mode =>
   );
 
 let previewContainerClasses = mode =>
-  "px-2 mb-2 "
-  ++ (
-    switch (mode) {
-    | Windowed(`Editor) => "hidden"
-    | Windowed(`Preview) => ""
-    | Fullscreen(`Editor) => "hidden"
-    | Fullscreen(`Preview) => "w-screen mx-auto"
-    | Fullscreen(`Split) => "w-1/2 relative"
-    }
-  );
+  switch (mode) {
+  | Windowed(`Editor) => "hidden"
+  | Windowed(`Preview) => ""
+  | Fullscreen(`Editor) => "hidden"
+  | Fullscreen(`Preview) => "w-screen mx-auto"
+  | Fullscreen(`Split) => "w-1/2 relative"
+  };
 
 let previewClasses = mode =>
   switch (mode) {
-  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto w-full"
+  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto w-full px-2 pb-8"
   | Fullscreen(`Editor)
   | Windowed(_) => ""
   };
@@ -492,11 +489,11 @@ let footer = (oldValue, state, send, onChange) => {
 };
 
 let textareaClasses = mode => {
-  "w-full p-2 outline-none font-mono "
+  "w-full outline-none font-mono "
   ++ (
     switch (mode) {
-    | Windowed(_) => ""
-    | Fullscreen(_) => "h-full resize-none"
+    | Windowed(_) => "p-2"
+    | Fullscreen(_) => "px-2 pt-4 pb-8 h-full resize-none"
     }
   );
 };

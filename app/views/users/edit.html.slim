@@ -25,9 +25,13 @@
         = f.text_field :github_url, label_class: 'col-form-label', label: 'Github Profile URL', maxlength: 255, required: false
         = f.text_field :behance_url, label_class: 'col-form-label', label: 'Behance Portfolio URL', maxlength: 255, required: false
 
-        h3.mt-4 #{current_user.encrypted_password.present? ? "Change your current password" : "Set a password for signing in"}
+        - if current_user.encrypted_password.present?
+          h3.mt-4 Change your current password
 
-        = f.password_field :current_password, label_class: 'col-form-label', label: 'Current Password', maxlength: 128, required: false, placeholder: "Leave this blank if you don't have a password right now."
+          = f.password_field :current_password, label_class: 'col-form-label', label: 'Current Password', maxlength: 128, required: false, placeholder: "Your current password."
+        - else
+          h3.mt-4 Set a password for signing in
+
         = f.password_field :new_password, label_class: 'col-form-label', label: 'New Password', maxlength: 128, required: false, placeholder: "Your new password."
         = f.password_field :new_password_confirmation, label_class: 'col-form-label', label: 'Confirm your New Password', maxlength: 128, required: false, placeholder: "Type your new password again."
 

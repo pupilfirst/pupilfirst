@@ -11,6 +11,7 @@ class CreateTargetVersionsTable < ActiveRecord::Migration[6.0]
 
   class ContentBlock < ActiveRecord::Base
     has_many :content_versions, dependent: :restrict_with_error
+    has_one_attached :file
   end
 
   class TargetVersion < ActiveRecord::Base

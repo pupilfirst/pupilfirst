@@ -144,6 +144,8 @@ module Targets
     end
 
     def content_blocks
+      return [] if @target.current_content_blocks.blank?
+
       @target.current_content_blocks.with_attached_file.map do |content_block|
         cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index')
         if content_block.file.attached?

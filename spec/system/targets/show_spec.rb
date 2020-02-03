@@ -70,7 +70,7 @@ feature 'Target Overlay', js: true do
     # Learning content should include an embed, a markdown block, an image, and a file to download.
     expect(page).to have_selector('.learn-content-block__embed')
     expect(page).to have_selector('.markdown-block')
-    content_blocks = ContentBlock.where(id: target_l1.latest_content_versions.pluck(:content_block_id))
+    content_blocks = target_l1.current_content_blocks
     image_caption = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_IMAGE).content['caption']
     expect(page).to have_content(image_caption)
     file_title = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_FILE).content['title']

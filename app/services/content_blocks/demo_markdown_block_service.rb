@@ -10,7 +10,7 @@ module ContentBlocks
         content_block = ContentBlock.create!(
           block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
           content: { markdown: content_block_text },
-          sort_index: 0,
+          sort_index: 1,
           target_version: target_version
         )
         content_block

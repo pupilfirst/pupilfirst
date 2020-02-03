@@ -25,7 +25,7 @@ class ContentBlockResolver < ApplicationQuery
   end
 
   def target_version
-    target.target_versions.find_by(version_at: version_at)
+    target.target_versions.find_by(version_at: version_at.in_time_zone)
   end
 
   def target

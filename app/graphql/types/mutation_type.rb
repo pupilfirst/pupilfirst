@@ -48,5 +48,6 @@ module Types
     field :update_markdown_block, mutation: Mutations::UpdateMarkdownContentBlock, null: false
     field :update_image_block, mutation: Mutations::UpdateImageContentBlock, null: false
     field :update_target, mutation: Mutations::UpdateTarget, null: false
+    field :create_target_version, mutation: Mutations::CreateTargetVersion, null: false
   end
 end

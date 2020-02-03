@@ -204,7 +204,7 @@ class Target < ApplicationRecord
   end
 
   def current_target_version
-    target_versions.find_by(version_at: latest_target_version_date)
+    target_versions.order(version_at: :desc).first
   end
 
   def current_content_blocks

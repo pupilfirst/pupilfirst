@@ -34,7 +34,7 @@ class CreateTargetVersionsTable < ActiveRecord::Migration[6.0]
     ContentBlock.all.each do |content_block|
       content_versions = content_block.content_versions
       content_versions.each_with_index do |content_version, index|
-        target_version = TargetVersion.where(version_at: content_version.version_on, target_id: content_version.target_id).first_or_create!
+        target_version = TargetVersion.where(version_at: content_version.version_on.beginning_of_day, target_id: content_version.target_id).first_or_create!
         if index.zero?
           content_block.update!(sort_index: content_version.sort_index, target_version_id: target_version.id)
         else

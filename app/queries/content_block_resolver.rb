@@ -2,19 +2,31 @@ class ContentBlockResolver < ApplicationQuery
   property :target_id
   property :version_at
 
+  validate :target_version_must_be_valid
+
   def content_blocks
     if version_at.present?
-      content_data(target.target_versions.where(version_at: version_at).first.content_blocks)
+      content_data(target_version.content_blocks)
     else
       content_data(target.current_content_blocks)
     end
   end
 
+  private
+
   def authorized?
     current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
   end
 
-  private
+  def target_version_must_be_valid
+    return if version_at.nil? || target_version.present?
+
+    errors[:base] << 'Target version does not exist'
+  end
+
+  def target_version
+    target.target_versions.find_by(version_at: version_at)
+  end
 
   def target
     @target ||= Target.find(target_id.to_i)

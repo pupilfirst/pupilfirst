@@ -510,7 +510,7 @@ let methodOfCompletionSelector = (state, send) => {
         <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
         {"How do you want the student to complete the target?" |> str}
       </label>
-      <div id="method_of_completion" className="flex -mx-2">
+      <div id="method_of_completion" className="flex -mx-2 pl-6">
         {[|`MarkAsComplete, `VisitLink, `TakeQuiz|]
          |> Array.mapi((index, methodOfCompletion) =>
               methodOfCompletionButton(methodOfCompletion, state, send, index)

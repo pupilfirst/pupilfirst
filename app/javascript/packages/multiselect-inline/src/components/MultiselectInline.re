@@ -83,17 +83,17 @@ module Make = (Selectable: Selectable) => {
              |> Array.mapi((index, selected) =>
                   <span
                     key={index |> string_of_int}
-                    className="inline-block items-center justify-between font-semibold text-xs rounded mb-2 mr-2">
+                    className="inline-flex font-semibold text-xs rounded mb-2 mr-2">
                     <span
                       className={
-                        "p-2 flex-1 h-full "
+                        "px-2 py-1 flex-1 rounded-l "
                         ++ selectedItemClasses(colorForSelected)
                       }>
                       {selected |> Selectable.value |> str}
                     </span>
                     <button
                       className={
-                        "p-2 items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none "
+                        "inline-flex flex-shrink-0 px-2 py-1 text-sm border-l-0 rounded-r items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none "
                         ++ borderColor(colorForSelected)
                       }
                       title="Remove"
@@ -150,10 +150,10 @@ module Make = (Selectable: Selectable) => {
                          title={"Select " ++ (item |> Selectable.value)}
                          className="flex multiselect-item items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
                          <i
-                           className="far fa-square select-icon-unchecked text-2xl"
+                           className="far fa-square select-icon-unchecked text-gray-400 text-xl"
                          />
                          <i
-                           className="far fa-plus-square select-icon-selected text-2xl"
+                           className="far fa-plus-square select-icon-selected text-xl"
                          />
                          <span className="ml-2">
                            {item |> Selectable.value |> str}

@@ -1,10 +1,10 @@
 class ContentBlockResolver < ApplicationQuery
   property :target_id
-  property :version_on
+  property :version_at
 
   def content_blocks
-    if version_on.present?
-      content_data(target.target_versions.where(version_at: version_on).content_blocks)
+    if version_at.present?
+      content_data(target.target_versions.where(version_at: version_at).first.content_blocks)
     else
       content_data(target.current_content_blocks)
     end

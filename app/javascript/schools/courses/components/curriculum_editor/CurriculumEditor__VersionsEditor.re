@@ -8,11 +8,11 @@ type state =
   | Loading
   | Loaded(contentBlocks, selectedVersion, versions)
 and contentBlocks = array(ContentBlock.t)
-and selectedVersion = string
-and versions = array(string);
+and selectedVersion = Js.Date.t
+and versions = array(Js.Date.t);
 
 type action =
-  | LoadContent(array(ContentBlock.t), array(string), selectedVersion)
+  | LoadContent(array(ContentBlock.t), versions, selectedVersion)
   | SetLoading;
 
 let reducer = (_state, action) =>
@@ -23,10 +23,14 @@ let reducer = (_state, action) =>
   };
 
 let loadContentBlocks = (targetId, send, version) => {
-  let versionOn = Belt.Option.map(version, Js.Json.string);
+  let versionAt =
+    version
+    |> OptionUtils.map(Js.Date.toISOString)
+    |> OptionUtils.map(Js.Json.string);
+
   send(SetLoading);
 
-  ContentBlock.Query.make(~targetId, ~versionOn?, ())
+  ContentBlock.Query.make(~targetId, ~versionAt?, ())
   |> GraphqlQuery.sendQuery2
   |> Js.Promise.then_(result => {
        let contentBlocks =
@@ -34,7 +38,7 @@ let loadContentBlocks = (targetId, send, version) => {
 
        let versions =
          result##versions
-         |> Array.map(version => version |> Json.Decode.string);
+         |> Array.map(v => v |> Json.Decode.string |> DateFns.parseString);
 
        let selectedVersion =
          switch (version) {
@@ -52,15 +56,17 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   let contents =
     versions
     |> Js.Array.filter(version => version != selectedVersion)
-    |> Array.map(version =>
+    |> Array.map(version => {
+         let isoVersion = version |> Js.Date.toISOString;
+
          <button
-           id=version
-           key=version
+           id=isoVersion
+           key=isoVersion
            onClick={_ => loadContentBlocksCB(Some(version))}
            className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
-           {version |> DateTime.stingToFormatedTime(DateTime.OnlyDate) |> str}
-         </button>
-       );
+           {version |> DateFns.distanceInWordsToNow(~addSuffix=true) |> str}
+         </button>;
+       });
 
   let selected =
     <button
@@ -68,7 +74,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
       <span className="flex items-center py-2 px-3">
         <span className="truncate text-left">
           {selectedVersion
-           |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
+           |> DateFns.distanceInWordsToNow(~addSuffix=true)
            |> str}
         </span>
       </span>
@@ -80,9 +86,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   versions |> Array.length == 1
     ? <div
         className="text-sm appearance-none bg-white border focus:outline-none font-semibold rounded border-transparent cursor-auto">
-        {selectedVersion
-         |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
-         |> str}
+        {selectedVersion |> DateFns.distanceInWordsToNow |> str}
       </div>
     : <Dropdown selected contents right=true />;
 };

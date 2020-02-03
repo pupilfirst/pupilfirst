@@ -32,11 +32,11 @@
                 "defaultValue": null
               },
               {
-                "name": "versionOn",
+                "name": "versionAt",
                 "description": "",
                 "type": {
                   "kind": "SCALAR",
-                  "name": "Date",
+                  "name": "ISO8601DateTime",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -614,7 +614,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Date",
+                    "name": "ISO8601DateTime",
                     "ofType": null
                   }
                 }
@@ -641,8 +641,8 @@
       },
       {
         "kind": "SCALAR",
-        "name": "Date",
-        "description": "An ISO 8601-encoded date",
+        "name": "ISO8601DateTime",
+        "description": "An ISO 8601-encoded datetime",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1591,16 +1591,6 @@
         ],
         "inputFields": null,
         "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "ISO8601DateTime",
-        "description": "An ISO 8601-encoded datetime",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -6853,6 +6843,16 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Date",
+        "description": "An ISO 8601-encoded date",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
         "possibleTypes": null
       },
       {

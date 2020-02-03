@@ -5,12 +5,16 @@ module ContentBlocks
     end
 
     def execute
-      content_block = ContentBlock.create!(
-        block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
-        content: { markdown: content_block_text }
-      )
-      @target.content_versions.create!(content_block: content_block, sort_index: 1, version_on: Date.today)
-      content_block
+      ContentBlock.transaction do
+        target_version = @target.target_versions.create!(version_at: Time.now)
+        content_block = ContentBlock.create!(
+          block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
+          content: { markdown: content_block_text },
+          sort_index: 0,
+          target_version: target_version
+        )
+        content_block
+      end
     end
 
     def content_block_text

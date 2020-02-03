@@ -42,6 +42,7 @@ class CreateTargetVersionsTable < ActiveRecord::Migration[6.0]
           new_content_block.sort_index = content_version.sort_index
           new_content_block.target_version_id = target_version
           new_content_block.save!
+          new_content_block.file.attach(content_block.file.blob) if content_block.file.attached?
         end
       end
     end

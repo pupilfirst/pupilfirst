@@ -49,7 +49,7 @@ class CreateTargetVersionsTable < ActiveRecord::Migration[6.0]
   end
 
   def down
-    remove_reference :content_blocks, :target_versions
+    remove_reference :content_blocks, :target_version
     remove_column :content_blocks, :sort_index
     drop_table :target_versions
   end

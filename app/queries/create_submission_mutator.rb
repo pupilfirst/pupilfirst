@@ -6,16 +6,9 @@ class CreateSubmissionMutator < ApplicationQuery
   property :links, validates: { urls: true }
   property :file_ids
 
-  validate :no_pending_submission_already
   validate :all_files_should_be_new
   validate :maximum_three_attachments
   validate :ensure_submittability
-
-  def no_pending_submission_already
-    return if founder.timeline_events.where(target_id: target_id).pending_review.empty?
-
-    errors[:base] << 'You already have a submission that is pending review'
-  end
 
   def all_files_should_be_new
     return if timeline_event_files.where.not(timeline_event_id: nil).empty?
@@ -36,7 +29,7 @@ class CreateSubmissionMutator < ApplicationQuery
 
     return if submittable && (submission_required || submitted_but_resubmittable)
 
-    errors[:base] << 'NotSubmittable'
+    errors[:base] << "NotSubmittable(#{target_status})"
   end
 
   def create_submission

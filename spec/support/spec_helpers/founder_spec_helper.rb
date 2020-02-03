@@ -12,7 +12,7 @@ module FounderSpecHelper
   def submit_target(founder, target, passed: false, passed_at: Time.zone.now, grade: nil)
     startup = founder.startup
 
-    if target.founder_role?
+    if target.individual_target?
       startup.founders.each do |startup_founder|
         create_timeline_event(startup_founder, target, passed: passed, passed_at: passed_at, grade: grade)
       end

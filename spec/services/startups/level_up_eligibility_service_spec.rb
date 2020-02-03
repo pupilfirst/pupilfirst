@@ -24,10 +24,10 @@ describe Startups::LevelUpEligibilityService do
   describe '#eligibility' do
     context 'when startup has submitted all milestone targets' do
       before do
-        complete_target team_target, students
+        complete_target team_target, student
 
         # Not all non-milestone targets need to be submitted.
-        submit_target non_milestone_team_target, students
+        submit_target non_milestone_team_target, student
       end
 
       context 'when the next level is open' do
@@ -55,8 +55,8 @@ describe Startups::LevelUpEligibilityService do
       let!(:individual_target) { create :target, :for_founders, target_group: milestone_targets }
 
       before do
-        submit_target non_milestone_team_target, students
-        submit_target team_target, students
+        submit_target non_milestone_team_target, student
+        submit_target team_target, student
       end
 
       context 'when only one student has submitted the individual target' do
@@ -84,7 +84,7 @@ describe Startups::LevelUpEligibilityService do
 
     context 'when milestone targets are incomplete' do
       it "returns 'not_eligible'" do
-        submit_target non_milestone_team_target, students
+        submit_target non_milestone_team_target, student
 
         expect(subject.eligibility).to eq('not_eligible')
       end
@@ -104,7 +104,7 @@ describe Startups::LevelUpEligibilityService do
 
       before do
         # Submit all targets in the first milestone target group.
-        submit_target team_target, students
+        submit_target team_target, student
       end
 
       context 'when the second milestone target group contains incomplete targets' do
@@ -116,7 +116,7 @@ describe Startups::LevelUpEligibilityService do
       context 'when the second milestone target group has also been fully completed' do
         before do
           # Submit target in the second milestone group.
-          submit_target milestone_team_target_g2, students
+          submit_target milestone_team_target_g2, student
         end
 
         it "returns 'eligible'" do
@@ -134,12 +134,12 @@ describe Startups::LevelUpEligibilityService do
       let!(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
 
       before do
-        complete_target milestone_target_l2, students
+        complete_target milestone_target_l2, student
       end
 
       context "when student has a submission pending review in level 1" do
         before do
-          submit_target team_target, students
+          submit_target team_target, student
         end
 
         it "returns 'not_eligible'" do
@@ -161,7 +161,7 @@ describe Startups::LevelUpEligibilityService do
         let!(:individual_target) { create :target, :for_founders, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
 
         before do
-          complete_target team_target, students
+          complete_target team_target, student
           complete_target individual_target, student
         end
 

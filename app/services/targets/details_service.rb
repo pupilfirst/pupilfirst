@@ -67,8 +67,6 @@ module Targets
     end
 
     def pending_user_ids
-      return [] unless @target.founder_role?
-
       @founder.startup.founders.where.not(id: @founder).reject do |founder|
         founder.timeline_events.where(target: @target).passed.exists?
       end.map(&:user_id)
@@ -86,7 +84,15 @@ module Targets
     end
 
     def submissions
-      @target.timeline_events.joins(:founders).where(founders: { id: @founder }).load
+      scope = @target.timeline_events.joins(:founders).where(founders: { id: @founder })
+
+      if @target.individual_target?
+        scope.load
+      else
+        scope.select do |submission|
+          submission.founder_ids.sort == @founder.team_student_ids
+        end
+      end
     end
 
     def feedback_for_submissions

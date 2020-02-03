@@ -139,6 +139,7 @@ class Target < ApplicationRecord
   end
 
   def founder_role?
+    ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
     role == Target::ROLE_STUDENT
   end
 
@@ -164,6 +165,7 @@ class Target < ApplicationRecord
   end
 
   def founder_event?
+    ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
     role == ROLE_STUDENT
   end
 
@@ -173,6 +175,10 @@ class Target < ApplicationRecord
 
   def team_target?
     role == ROLE_TEAM
+  end
+
+  def individual_target?
+    role == ROLE_STUDENT
   end
 
   # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team

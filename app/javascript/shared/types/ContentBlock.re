@@ -172,8 +172,8 @@ module Fragments = [%graphql
 
 module Query = [%graphql
   {|
-    query($targetId: ID!, $versionOn: Date) {
-      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
+    query($targetId: ID!, $versionAt: ISO8601DateTime) {
+      contentBlocks(targetId: $targetId, versionAt: $versionAt) {
         id
         blockType
         sortIndex

@@ -4,10 +4,10 @@ module Types
 
     field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true
-      argument :version_on, Types::DateType, required: false
+      argument :version_at, GraphQL::Types::ISO8601DateTime, required: false
     end
 
-    field :versions, [Types::DateType], null: false do
+    field :versions, [GraphQL::Types::ISO8601DateTime], null: false do
       argument :target_id, ID, required: true
     end
 

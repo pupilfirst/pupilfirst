@@ -278,8 +278,8 @@ let handleEditorClosure = (hideEditorActionCB, state) =>
 
 module ContentBlocksQuery = [%graphql
   {|
-    query($targetId: ID!, $versionOn: Date ) {
-      contentBlocks(targetId: $targetId, versionOn: $versionOn) {
+    query($targetId: ID!, $versionAt: Date ) {
+      contentBlocks(targetId: $targetId, versionAt: $versionAt) {
         id
         blockType
         sortIndex
@@ -320,9 +320,9 @@ module RestoreContentVersionMutation = [%graphql
 
 let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) => {
   let targetId = target |> Target.id;
-  let versionOn = Belt.Option.map(selectedVersion, Js.Json.string);
+  let versionAt = Belt.Option.map(selectedVersion, Js.Json.string);
   let response =
-    ContentBlocksQuery.make(~targetId, ~versionOn?, ())
+    ContentBlocksQuery.make(~targetId, ~versionAt?, ())
     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
   response
   |> Js.Promise.then_(result => {
@@ -348,12 +348,12 @@ let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) =
        let versions =
          result##versions
          |> Array.map(version => version |> Json.Decode.string);
-       switch (versionOn) {
-       | Some(versionOn) =>
+       switch (versionAt) {
+       | Some(versionAt) =>
          send(
            LoadOldVersion(
              contentBlocks,
-             versionOn |> Json.Decode.string,
+             versionAt |> Json.Decode.string,
              versions,
            ),
          )

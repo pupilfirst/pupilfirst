@@ -13,17 +13,18 @@ feature "Course students list", js: true do
   let(:team_coach) { create :faculty, school: school }
 
   # Create few teams
-  let!(:team_1) { create :startup, level: level_1 }
-  let!(:team_2) { create :startup, level: level_2 }
-  let!(:team_3) { create :startup, level: level_2 }
-  let!(:team_4) { create :startup, level: level_3 }
-  let!(:team_5) { create :startup, level: level_3 }
-  let!(:team_6) { create :startup, level: level_3 }
+  let!(:team_1) { create :startup, level: level_1, name: 'Zucchini' } # This will always be around the bottom of the list.
+  let!(:team_2) { create :startup, level: level_2, name: 'Apple' } # This will always be around the top.
+  let!(:team_3) { create :startup, level: level_2, name: 'Banana' }
+  let!(:team_4) { create :startup, level: level_3, name: 'Blueberry' }
+  let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
+  let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
+
     10.times do
-      create :startup, level: level_3
+      create :startup, level: level_3, name: "C #{Faker::Lorem.word} #{rand(10)}" # These will be in the middle of the list.
     end
 
     create :faculty_startup_enrollment, faculty: team_coach, startup: team_6
@@ -106,7 +107,7 @@ feature "Course students list", js: true do
     # Switch to level which will have pagination
     click_button "Level 2 | #{level_2.name}"
     click_button "Level 3 | #{level_3.name}"
-    expect(page).to_not have_text(team_1.name)
+    expect(page).to_not have_text(team_2.name)
 
     click_button('Load More...')
     expect(page).to have_text(team_6.name)
@@ -115,9 +116,12 @@ feature "Course students list", js: true do
     click_button "Level 3 | #{level_3.name}"
     click_button 'All Levels'
 
+    expect(page).to have_text(team_2.name)
+
     click_button('Load More...')
+
     expect(page).to have_text(team_1.name)
-    expect(page).to have_text(team_3.name)
+    expect(page).to have_text(team_5.name)
     expect(page).to have_text(team_6.name)
   end
 

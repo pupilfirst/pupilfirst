@@ -127,6 +127,7 @@ module Make = (Selectable: Selectable) => {
                         id=inputId
                         className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-normal focus:outline-none"
                         type_="text"
+                        value
                         placeholder
                         onChange={event =>
                           onChange(ReactEvent.Form.target(event)##value)

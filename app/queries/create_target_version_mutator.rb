@@ -1,6 +1,6 @@
 class CreateTargetVersionMutator < ApplicationQuery
   property :target_id
-  property :version_at
+  property :target_version_id
 
   validate :target_version_must_be_valid
   validate :target_exists
@@ -12,7 +12,7 @@ class CreateTargetVersionMutator < ApplicationQuery
   private
 
   def target_version_must_be_valid
-    return if version_at.nil? || target_version.present?
+    return if target_version_id.nil? || target_version.present?
 
     errors[:base] << 'Target version does not exist'
   end
@@ -26,7 +26,7 @@ class CreateTargetVersionMutator < ApplicationQuery
   end
 
   def target_version
-    @target_version ||= target.target_versions.find_by(version_at: version_at)
+    @target_version ||= target.target_versions.find_by(id: target_version_id)
   end
 
   def authorized?

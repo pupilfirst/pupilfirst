@@ -199,12 +199,8 @@ class Target < ApplicationRecord
     visibility == VISIBILITY_LIVE
   end
 
-  def latest_target_version_date
-    target_versions.maximum(:version_at)
-  end
-
   def current_target_version
-    target_versions.order(version_at: :desc).first if target_versions.present?
+    target_versions.order(created_at: :desc).first if target_versions.present?
   end
 
   def current_content_blocks

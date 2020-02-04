@@ -95,7 +95,7 @@ module Courses
 
     def create_content_blocks(targets)
       targets.each do |old_target, new_target|
-        new_version = new_target.target_versions.create!(version_at: Time.zone.now)
+        new_version = new_target.target_versions.create!
         old_target.current_content_blocks&.each do |content_block|
           old_content_block = content_block
           # create content block

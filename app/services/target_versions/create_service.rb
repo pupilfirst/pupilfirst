@@ -7,7 +7,7 @@ module TargetVersions
 
     def execute
       content_blocks = @target.current_content_blocks
-      target_version = target_version.presence || @target.target_versions.create!(version_at: DateTime.now)
+      target_version = target_version.presence || @target.target_versions.create!
       copy_content_blocks(content_blocks, target_version)
     end
 

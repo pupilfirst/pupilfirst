@@ -649,7 +649,6 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
   end
 
   create_table "target_versions", force: :cascade do |t|
-    t.datetime "version_at"
     t.bigint "target_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

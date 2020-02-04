@@ -6,7 +6,7 @@ module ContentBlocks
 
     def execute
       ContentBlock.transaction do
-        target_version = @target.target_versions.create!(version_at: Time.now)
+        target_version = @target.target_versions.create!
         content_block = ContentBlock.create!(
           block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
           content: { markdown: content_block_text },

@@ -3,7 +3,7 @@ class TargetVersionResolver < ApplicationQuery
 
   def versions
     if target.target_versions.present?
-      target.target_versions.order('version_at DESC')
+      target.target_versions.order('created_at DESC')
     else
       TargetVersion.none
     end

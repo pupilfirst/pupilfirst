@@ -37,6 +37,7 @@ module SubmissionsHelper
       end
     end
   end
+
   # rubocop:enable Metrics/MethodLength
 
   private
@@ -52,7 +53,11 @@ module SubmissionsHelper
   end
 
   def submission_options(target, student, grade) # rubocop:disable Metrics/MethodLength
-    students = student.respond_to?(:to_a) ? student.to_a : [student]
+    students = if target.team_target?
+      student.startup.founders
+    else
+      [student]
+    end
 
     (passed_at, evaluated_at) = if target.evaluation_criteria.present?
       case grade

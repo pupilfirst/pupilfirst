@@ -373,27 +373,31 @@ let make = (~levels, ~course, ~userId) => {
          | PartiallyLoaded(teams, cursor) =>
            <div>
              <CoursesStudents__TeamsList levels teams openOverlayCB />
-             {state.loading == LoadingMore
-                ? SkeletonLoading.multiple(
-                    ~count=3,
-                    ~element=SkeletonLoading.card(),
-                  )
-                : <button
-                    className="btn btn-primary-ghost cursor-pointer w-full mt-8"
-                    onClick={_ =>
-                      getTeams(
-                        AuthenticityToken.fromHead(),
-                        courseId,
-                        Some(cursor),
-                        setState,
-                        state.filter.level,
-                        state.filter.search,
-                        teams,
-                        LoadingMore,
-                      )
-                    }>
-                    {"Load More..." |> str}
-                  </button>}
+             {switch (state.loading) {
+              | LoadingMore =>
+                SkeletonLoading.multiple(
+                  ~count=3,
+                  ~element=SkeletonLoading.card(),
+                )
+              | NotLoading =>
+                <button
+                  className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                  onClick={_ =>
+                    getTeams(
+                      AuthenticityToken.fromHead(),
+                      courseId,
+                      Some(cursor),
+                      setState,
+                      state.filter.level,
+                      state.filter.search,
+                      teams,
+                      LoadingMore,
+                    )
+                  }>
+                  {"Load More..." |> str}
+                </button>
+              | Reloading => React.null
+              }}
            </div>
          | FullyLoaded(teams) =>
            <CoursesStudents__TeamsList levels teams openOverlayCB />

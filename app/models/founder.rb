@@ -180,4 +180,8 @@ class Founder < ApplicationRecord
   def access_ended?
     startup.access_ends_at.present? && startup.access_ends_at.past?
   end
+
+  def team_student_ids
+    @team_student_ids ||= startup.founder_ids.sort
+  end
 end

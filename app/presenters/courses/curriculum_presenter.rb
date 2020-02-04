@@ -106,9 +106,11 @@ module Courses
     end
 
     def submissions
-      current_student.timeline_events.where(latest: true).map do |timeline_event|
-        timeline_event.attributes.slice('target_id', 'passed_at', 'evaluator_id')
-      end
+      current_student.timeline_events.joins(:target).where(latest: true).map do |submission|
+        if submission.target.individual_target? || submission.founder_ids.sort == current_student.team_student_ids
+          submission.attributes.slice('target_id', 'passed_at', 'evaluator_id')
+        end
+      end - [nil]
     end
 
     def faculty

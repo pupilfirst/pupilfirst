@@ -23,7 +23,11 @@ module Targets
     private
 
     def linked_event
-      @linked_event ||= @founder.latest_submissions.find_by(target: @target)
+      @linked_event ||= @founder.latest_submissions
+        .where(target: @target)
+        .order(created_at: :desc).find do |submission|
+        @target.individual_target? ? true : submission.founder_ids.sort == @founder.team_student_ids
+      end
     end
 
     def status_from_event

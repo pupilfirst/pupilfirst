@@ -42,6 +42,5 @@
     "test": "echo \"Error: run tests from root\" && exit 1",
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w"
-  },
-  "gitHead": "8419b9d77820306d973c3721199d3146751f56e8"
+  }
 }

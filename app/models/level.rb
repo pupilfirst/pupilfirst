@@ -20,10 +20,9 @@ class Level < ApplicationRecord
   end
 
   def unlocked
+    ActiveSupport::Deprecation.warn('Use `unlocked?` instead.')
     unlocked?
   end
-
-  deprecate unlocked: 'Use `unlocked?` instead.'
 
   def unlocked?
     !unlock_on&.future?

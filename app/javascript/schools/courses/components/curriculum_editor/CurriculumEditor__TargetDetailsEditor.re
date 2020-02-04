@@ -150,6 +150,7 @@ let reducer = (state, action) =>
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
       ...state,
       prerequisiteTargets,
+      prerequisiteSearchInput: "",
       dirty: true,
     }
   | UpdatePrerequisiteSearchInput(prerequisiteSearchInput) => {
@@ -164,6 +165,7 @@ let reducer = (state, action) =>
   | UpdateEvaluationCriteria(evaluationCriteria) => {
       ...state,
       evaluationCriteria,
+      evaluationCriteriaSearchInput: "",
       dirty: true,
     }
   | UpdateEvaluationCriteriaSearchInput(evaluationCriteriaSearchInput) => {

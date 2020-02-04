@@ -48,13 +48,11 @@ let loadContentBlocks = (targetId, send, version) => {
 };
 
 let versionText = version => {
-  <div className="flex flex-col items-center ">
-    <span>
-      {"Version " ++ (version |> Version.index |> string_of_int) |> str}
+  <div>
+    <span className="font-semibold text-lg">
+      {"#" ++ (version |> Version.index |> string_of_int) ++ " " |> str}
     </span>
-    <span className="truncate text-left text-tiny">
-      {version |> Version.versionAt |> str}
-    </span>
+    <span className="text-xs"> {version |> Version.versionAt |> str} </span>
   </div>;
 };
 
@@ -69,14 +67,14 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
            id
            key=id
            onClick={_ => loadContentBlocksCB(Some(version))}
-           className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 w-full">
+           className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 w-full text-left">
            {versionText(version)}
          </button>;
        });
 
   let selected =
     <button
-      className="text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none font-semibold border-gray-400 hover:bg-gray-100 hover:shadow-lg">
+      className="text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none border-gray-400 hover:bg-gray-100 hover:shadow-lg">
       <span className="py-2 px-3"> {versionText(selectedVersion)} </span>
       <span className="text-right px-3 py-2 border-l border-gray-400">
         <i className="fas fa-chevron-down text-sm" />

@@ -200,6 +200,7 @@ module Query = [%graphql
       versions(targetId: $targetId){
         id
         createdAt
+        updatedAt
       }
   }
 |}

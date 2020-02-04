@@ -129,7 +129,10 @@ let editor = (target, state, send) => {
     switch (state.versions) {
     | [||] => <span className="italic"> {"Not Versioned" |> str} </span>
     | versions =>
-      let latestVersion = versions->Array.unsafe_get(0) |> Version.versionAt;
+      let latestVersion =
+        versions->Array.unsafe_get(0)
+        |> Version.updatedAt
+        |> DateFns.format("MMM D, YYYY HH:MM");
 
       latestVersion |> str;
     };

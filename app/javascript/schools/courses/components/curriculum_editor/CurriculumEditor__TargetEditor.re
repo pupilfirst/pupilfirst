@@ -276,37 +276,37 @@ let handleEditorClosure = (hideEditorActionCB, state) =>
       ? hideEditorActionCB() : ()
   };
 
-module ContentBlocksQuery = [%graphql
-  {|
-    query($targetId: ID!, $versionAt: Date ) {
-      contentBlocks(targetId: $targetId, versionAt: $versionAt) {
-        id
-        blockType
-        sortIndex
-        content {
-          ... on ImageBlock {
-            caption
-            url
-            filename
-          }
-          ... on FileBlock {
-            title
-            url
-            filename
-          }
-          ... on MarkdownBlock {
-            markdown
-          }
-          ... on EmbedBlock {
-            url
-            embedCode
-          }
-        }
-      }
-      versions(targetId: $targetId)
-  }
-|}
-];
+// module ContentBlocksQuery = [%graphql
+//   {|
+//     query($targetId: ID!, $versionAt: Date ) {
+//       contentBlocks(targetId: $targetId, versionAt: $versionAt) {
+//         id
+//         blockType
+//         sortIndex
+//         content {
+//           ... on ImageBlock {
+//             caption
+//             url
+//             filename
+//           }
+//           ... on FileBlock {
+//             title
+//             url
+//             filename
+//           }
+//           ... on MarkdownBlock {
+//             markdown
+//           }
+//           ... on EmbedBlock {
+//             url
+//             embedCode
+//           }
+//         }
+//       }
+//       versions(targetId: $targetId)
+//   }
+// |}
+// ];
 
 module RestoreContentVersionMutation = [%graphql
   {|
@@ -318,52 +318,52 @@ module RestoreContentVersionMutation = [%graphql
    |}
 ];
 
-let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) => {
-  let targetId = target |> Target.id;
-  let versionAt = Belt.Option.map(selectedVersion, Js.Json.string);
-  let response =
-    ContentBlocksQuery.make(~targetId, ~versionAt?, ())
-    |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
-  response
-  |> Js.Promise.then_(result => {
-       let contentBlocks =
-         result##contentBlocks
-         |> Js.Array.map(rawContentBlock => {
-              let id = rawContentBlock##id;
-              let sortIndex = rawContentBlock##sortIndex;
-              let blockType =
-                switch (rawContentBlock##content) {
-                | `MarkdownBlock(content) =>
-                  ContentBlock.Markdown(content##markdown)
-                | `FileBlock(content) =>
-                  File(content##url, content##title, content##filename)
-                | `ImageBlock(content) =>
-                  Image(content##url, content##caption)
-                | `EmbedBlock(content) =>
-                  Embed(content##url, content##embedCode)
-                };
-              ContentBlock.make(id, blockType, sortIndex);
-            })
-         |> Array.to_list;
-       let versions =
-         result##versions
-         |> Array.map(version => version |> Json.Decode.string);
-       switch (versionAt) {
-       | Some(versionAt) =>
-         send(
-           LoadOldVersion(
-             contentBlocks,
-             versionAt |> Json.Decode.string,
-             versions,
-           ),
-         )
-       | None => send(UpdateContentBlocks(contentBlocks, versions))
-       };
-       Js.Promise.resolve();
-     })
-  |> ignore;
-  None;
-};
+// let loadContentBlocks = (target, send, selectedVersion, authenticityToken, ()) => {
+//   let targetId = target |> Target.id;
+//   let versionAt = Belt.Option.map(selectedVersion, Js.Json.string);
+//   let response =
+//     ContentBlocksQuery.make(~targetId, ~versionAt?, ())
+//     |> GraphqlQuery.sendQuery(authenticityToken, ~notify=true);
+//   response
+//   |> Js.Promise.then_(result => {
+//        let contentBlocks =
+//          result##contentBlocks
+//          |> Js.Array.map(rawContentBlock => {
+//               let id = rawContentBlock##id;
+//               let sortIndex = rawContentBlock##sortIndex;
+//               let blockType =
+//                 switch (rawContentBlock##content) {
+//                 | `MarkdownBlock(content) =>
+//                   ContentBlock.Markdown(content##markdown)
+//                 | `FileBlock(content) =>
+//                   File(content##url, content##title, content##filename)
+//                 | `ImageBlock(content) =>
+//                   Image(content##url, content##caption)
+//                 | `EmbedBlock(content) =>
+//                   Embed(content##url, content##embedCode)
+//                 };
+//               ContentBlock.make(id, blockType, sortIndex);
+//             })
+//          |> Array.to_list;
+//        let versions =
+//          result##versions
+//          |> Array.map(version => version |> Json.Decode.string);
+//        switch (versionAt) {
+//        | Some(versionAt) =>
+//          send(
+//            LoadOldVersion(
+//              contentBlocks,
+//              versionAt |> Json.Decode.string,
+//              versions,
+//            ),
+//          )
+//        | None => send(UpdateContentBlocks(contentBlocks, versions))
+//        };
+//        Js.Promise.resolve();
+//      })
+//   |> ignore;
+//   None;
+// };
 
 let currentDateString = () => Js.Date.make() |> DateFns.format("YYYY-MM-DD");
 
@@ -394,38 +394,38 @@ let handleRestoreVersionCB =
 let addNewVersionCB = (dispatch, versions) =>
   dispatch(UpdateVersions(versions));
 
-let selectVersionCB =
-    (target, state, send, authenticityToken, selectedVersion) => {
-  send(SetLoadingContentBlocks);
-  selectedVersion == state.versions[0]
-    ? loadContentBlocks(target, send, None, authenticityToken, ()) |> ignore
-    : (
-        switch (state.contentEditorDirty) {
-        | false =>
-          loadContentBlocks(
-            target,
-            send,
-            Some(selectedVersion),
-            authenticityToken,
-            (),
-          )
-        | true =>
-          Webapi.Dom.window
-          |> Webapi.Dom.Window.confirm(
-               "There are unsaved changes in the current version! Are you sure you want to switch version?",
-             )
-            ? loadContentBlocks(
-                target,
-                send,
-                Some(selectedVersion),
-                authenticityToken,
-                (),
-              )
-            : None
-        }
-      )
-      |> ignore;
-};
+// let selectVersionCB =
+//     (target, state, send, authenticityToken, selectedVersion) => {
+//   send(SetLoadingContentBlocks);
+//   selectedVersion == state.versions[0]
+//     ? loadContentBlocks(target, send, None, authenticityToken, ()) |> ignore
+//     : (
+//         switch (state.contentEditorDirty) {
+//         | false =>
+//           loadContentBlocks(
+//             target,
+//             send,
+//             Some(selectedVersion),
+//             authenticityToken,
+//             (),
+//           )
+//         | true =>
+//           Webapi.Dom.window
+//           |> Webapi.Dom.Window.confirm(
+//                "There are unsaved changes in the current version! Are you sure you want to switch version?",
+//              )
+//             ? loadContentBlocks(
+//                 target,
+//                 send,
+//                 Some(selectedVersion),
+//                 authenticityToken,
+//                 (),
+//               )
+//             : None
+//         }
+//       )
+//       |> ignore;
+// };
 
 let targetRoleClasses = selected => {
   "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left "
@@ -471,10 +471,10 @@ let make =
 
   let (state, dispatch) = React.useReducer(reducer, initialState);
 
-  React.useEffect1(
-    loadContentBlocks(target, dispatch, None, authenticityToken),
-    [|target |> Target.id|],
-  );
+  // React.useEffect1([|
+  //   // loadContentBlocks(target, dispatch, None, authenticityToken),
+  //   target |> Target.id,
+  // |]);
 
   // let targetEvaluated = () =>
   //   switch (state.methodOfCompletion) {
@@ -651,26 +651,26 @@ let make =
                        {"not a valid title" |> str}
                      </div>
                    : ReasonReact.null}
-                {state.versions |> Array.length > 0
-                   ? <CurriculumEditor__TargetVersionSelector
-                       selectVersionCB={selectVersionCB(
-                         target,
-                         state,
-                         dispatch,
-                         authenticityToken,
-                       )}
-                       versions={state.versions}
-                       selectedVersion={state.selectedVersion}
-                       previewMode={state.previewMode}
-                       switchViewModeCB={switchViewModeCB(dispatch)}
-                       handleRestoreVersionCB={handleRestoreVersionCB(
-                         target,
-                         dispatch,
-                         state,
-                         authenticityToken,
-                       )}
-                     />
-                   : React.null}
+                // {state.versions |> Array.length > 0
+                //    ? <CurriculumEditor__TargetVersionSelector
+                //        selectVersionCB={selectVersionCB(
+                //          target,
+                //          state,
+                //          dispatch,
+                //          authenticityToken,
+                //        )}
+                //        versions={state.versions}
+                //        selectedVersion={state.selectedVersion}
+                //        previewMode={state.previewMode}
+                //        switchViewModeCB={switchViewModeCB(dispatch)}
+                //        handleRestoreVersionCB={handleRestoreVersionCB(
+                //          target,
+                //          dispatch,
+                //          state,
+                //          authenticityToken,
+                //        )}
+                //      />
+                //    : React.null}
                 <CurriculumEditor__TargetContentEditor
                   key={target |> Target.id}
                   target

@@ -1,11 +1,11 @@
 class ContentBlockResolver < ApplicationQuery
   property :target_id
-  property :version_at
+  property :target_version_id
 
   validate :target_version_must_be_valid
 
   def content_blocks
-    if version_at.present?
+    if target_version_id.present?
       content_data(target_version.content_blocks)
     else
       content_data(target.current_content_blocks)
@@ -19,13 +19,13 @@ class ContentBlockResolver < ApplicationQuery
   end
 
   def target_version_must_be_valid
-    return if version_at.nil? || target_version.present?
+    return if target_version_id.nil? || target_version.present?
 
     errors[:base] << 'Target version does not exist'
   end
 
   def target_version
-    target.target_versions.find_by(version_at: version_at.in_time_zone)
+    target.target_versions.find_by(id: target_version_id)
   end
 
   def target

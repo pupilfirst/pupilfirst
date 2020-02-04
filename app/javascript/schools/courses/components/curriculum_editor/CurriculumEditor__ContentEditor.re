@@ -9,12 +9,12 @@ module IdSet = Set.Make(String);
 type state = {
   loading: bool,
   contentBlocks: array(ContentBlock.t),
-  versions: array(string),
+  versions: array(Version.t),
   dirtyContentBlockIds: IdSet.t,
 };
 
 type action =
-  | LoadContent(array(ContentBlock.t), array(string))
+  | LoadContent(array(ContentBlock.t), array(Version.t))
   | AddContentBlock(ContentBlock.t)
   | UpdateContentBlock(ContentBlock.t)
   | RemoveContentBlock(ContentBlock.id)
@@ -95,9 +95,7 @@ let loadContentBlocks = (targetId, send) => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
-       let versions =
-         result##versions
-         |> Array.map(version => version |> Json.Decode.string);
+       let versions = Version.makeFromJs(result##versions);
 
        send(LoadContent(contentBlocks, versions));
 
@@ -131,10 +129,7 @@ let editor = (target, state, send) => {
     switch (state.versions) {
     | [||] => <span className="italic"> {"Not Versioned" |> str} </span>
     | versions =>
-      let latestVersion =
-        versions->Array.unsafe_get(0)
-        |> DateFns.parseString
-        |> DateFns.format("Do MMMM YYYY");
+      let latestVersion = versions->Array.unsafe_get(0) |> Version.versionAt;
 
       latestVersion |> str;
     };

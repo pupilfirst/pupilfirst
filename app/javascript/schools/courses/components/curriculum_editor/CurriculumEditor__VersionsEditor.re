@@ -8,8 +8,8 @@ type state =
   | Loading
   | Loaded(contentBlocks, selectedVersion, versions)
 and contentBlocks = array(ContentBlock.t)
-and selectedVersion = Js.Date.t
-and versions = array(Js.Date.t);
+and selectedVersion = Version.t
+and versions = array(Version.t);
 
 type action =
   | LoadContent(array(ContentBlock.t), versions, selectedVersion)
@@ -23,22 +23,17 @@ let reducer = (_state, action) =>
   };
 
 let loadContentBlocks = (targetId, send, version) => {
-  let versionAt =
-    version
-    |> OptionUtils.map(Js.Date.toISOString)
-    |> OptionUtils.map(Js.Json.string);
+  let targetVersionId = version |> OptionUtils.map(Version.id);
 
   send(SetLoading);
 
-  ContentBlock.Query.make(~targetId, ~versionAt?, ())
+  ContentBlock.Query.make(~targetId, ~targetVersionId?, ())
   |> GraphqlQuery.sendQuery2
   |> Js.Promise.then_(result => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
-       let versions =
-         result##versions
-         |> Array.map(v => v |> Json.Decode.string |> DateFns.parseString);
+       let versions = result##versions |> Version.makeFromJs;
 
        let selectedVersion =
          switch (version) {
@@ -52,32 +47,37 @@ let loadContentBlocks = (targetId, send, version) => {
   |> ignore;
 };
 
+let versionText = version => {
+  <div className="flex flex-col items-center ">
+    <span>
+      {"Version " ++ (version |> Version.index |> string_of_int) |> str}
+    </span>
+    <span className="truncate text-left text-tiny">
+      {version |> Version.versionAt |> str}
+    </span>
+  </div>;
+};
+
 let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   let contents =
     versions
     |> Js.Array.filter(version => version != selectedVersion)
     |> Array.map(version => {
-         let isoVersion = version |> Js.Date.toISOString;
+         let id = version |> Version.id;
 
          <button
-           id=isoVersion
-           key=isoVersion
+           id
+           key=id
            onClick={_ => loadContentBlocksCB(Some(version))}
-           className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
-           {version |> DateFns.distanceInWordsToNow(~addSuffix=true) |> str}
+           className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 w-full">
+           {versionText(version)}
          </button>;
        });
 
   let selected =
     <button
       className="text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none font-semibold border-gray-400 hover:bg-gray-100 hover:shadow-lg">
-      <span className="flex items-center py-2 px-3">
-        <span className="truncate text-left">
-          {selectedVersion
-           |> DateFns.distanceInWordsToNow(~addSuffix=true)
-           |> str}
-        </span>
-      </span>
+      <span className="py-2 px-3"> {versionText(selectedVersion)} </span>
       <span className="text-right px-3 py-2 border-l border-gray-400">
         <i className="fas fa-chevron-down text-sm" />
       </span>
@@ -86,7 +86,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   versions |> Array.length == 1
     ? <div
         className="text-sm appearance-none bg-white border focus:outline-none font-semibold rounded border-transparent cursor-auto">
-        {selectedVersion |> DateFns.distanceInWordsToNow |> str}
+        {selectedVersion |> Version.versionAt |> str}
       </div>
     : <Dropdown selected contents right=true />;
 };

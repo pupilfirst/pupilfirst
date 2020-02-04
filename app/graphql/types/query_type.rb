@@ -4,10 +4,10 @@ module Types
 
     field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true
-      argument :version_at, GraphQL::Types::ISO8601DateTime, required: false
+      argument :target_version_id, ID, required: false
     end
 
-    field :versions, [GraphQL::Types::ISO8601DateTime], null: false do
+    field :versions, [Types::TargetVersionType], null: false do
       argument :target_id, ID, required: true
     end
 
@@ -66,7 +66,7 @@ module Types
     end
 
     def versions(args)
-      resolver = ContentVersionResolver.new(context, args)
+      resolver = TargetVersionResolver.new(context, args)
       resolver.versions
     end
 

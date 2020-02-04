@@ -1,3 +1,9 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
 .multiselect-item .select-icon-selected {
   display: none;
 }

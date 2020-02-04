@@ -23,13 +23,13 @@ class CreateTargetVersionMutator < ApplicationQuery
   end
 
   def content_should_change
-    return if target_version.blank? && target_version.created_at != target_version.updated_at
+    return if target_version.blank?
+
+    return if target.current_target_version.id != target_version.id
+
+    return if target_version.created_at != target_version.updated_at
 
     errors[:base] << 'Please update target content before creating a version'
-  end
-
-  def less_than_3_versions_per_day
-    ta
   end
 
   def target

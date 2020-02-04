@@ -34,3 +34,8 @@ let makeFromJs = js => {
 };
 
 let versionAt = t => t.createdAt |> DateFns.format("MMM D, YYYY HH:MM");
+
+let isLatestTargetVersion = (versions, t) => {
+  let length = versions |> Array.length;
+  t.index == length;
+};

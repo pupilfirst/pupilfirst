@@ -22,6 +22,16 @@ let reducer = (_state, action) =>
   | SetLoading => Loading
   };
 
+module CreateTargetVersionMutation = [%graphql
+  {|
+   mutation($targetId: ID!, $targetVersionId: ID) {
+    createTargetVersion(targetId: $targetId, targetVersionId: $targetVersionId) {
+       success
+     }
+   }
+   |}
+];
+
 let loadContentBlocks = (targetId, send, version) => {
   let targetVersionId = version |> OptionUtils.map(Version.id);
 
@@ -42,6 +52,20 @@ let loadContentBlocks = (targetId, send, version) => {
          };
        send(LoadContent(contentBlocks, versions, selectedVersion));
 
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let createTargetVersion = (targetId, targetVersion, send) => {
+  let targetVersionId = targetVersion |> Version.id;
+
+  send(SetLoading);
+
+  CreateTargetVersionMutation.make(~targetId, ~targetVersionId, ())
+  |> GraphqlQuery.sendQuery2
+  |> Js.Promise.then_(_result => {
+       loadContentBlocks(targetId, send, None);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -90,13 +114,33 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
 };
 
 let showContentBlocks =
-    (contentBlocks, versions, selectedVersion, loadContentBlocksCB) => {
+    (
+      contentBlocks,
+      versions,
+      selectedVersion,
+      loadContentBlocksCB,
+      targetId,
+      send,
+    ) => {
   <div>
-    <div>
-      <label className="text-xs block text-gray-600 mb-1">
-        {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
-      </label>
-      {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
+    <div className="flex items-end">
+      <div>
+        <label className="text-xs block text-gray-600 mb-1">
+          {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
+        </label>
+        {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
+      </div>
+      <div className="ml-2">
+        <button
+          className="text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none border-gray-400 hover:bg-gray-100 hover:shadow-lg px-2 py-3"
+          onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>
+          {(
+             selectedVersion |> Version.isLatestTargetVersion(versions)
+               ? "Create a target Version" : "Restore target Version"
+           )
+           |> str}
+        </button>
+      </div>
     </div>
     <TargetContentView contentBlocks={contentBlocks |> Array.to_list} />
   </div>;
@@ -129,6 +173,8 @@ let make = (~targetId) => {
          versions,
          selectedVersion,
          loadContentBlocksCB,
+         targetId,
+         send,
        )
      }}
   </div>;

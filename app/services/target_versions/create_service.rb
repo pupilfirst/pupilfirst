@@ -6,14 +6,17 @@ module TargetVersions
     end
 
     def execute
-      content_blocks = @target.current_content_blocks
-      target_version = target_version.presence || @target.target_versions.create!
-      copy_content_blocks(content_blocks, target_version)
+      if @target_version.present?
+        copy_content_blocks(@target_version.content_blocks)
+      else
+        copy_content_blocks(@target.current_content_blocks)
+      end
     end
 
     private
 
-    def copy_content_blocks(content_blocks, target_version)
+    def copy_content_blocks(content_blocks)
+      target_version = @target.target_versions.create!
       content_blocks.each do |old_content_block|
         new_content_block = old_content_block.dup
         new_content_block.target_version_id = target_version.id

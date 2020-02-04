@@ -1,3 +1,8 @@
+type navigation = {
+  previous: option(string),
+  next: option(string),
+};
+
 type t = {
   pendingUserIds: list(string),
   submissions: list(CoursesCurriculum__Submission.t),
@@ -10,18 +15,26 @@ type t = {
   evaluated: bool,
   grading: list(CoursesCurriculum__Grade.t),
   completionInstructions: option(string),
+  navigation,
 };
 
 let submissions = t => t.submissions;
 let submissionAttachments = t => t.submissionAttachments;
 let pendingUserIds = t => t.pendingUserIds;
 let feedback = t => t.feedback;
+let navigation = t => (t.navigation.previous, t.navigation.next);
 
 type completionType =
   | Evaluated
   | TakeQuiz
   | LinkToComplete
   | MarkAsComplete;
+
+let decodeNavigation = json =>
+  Json.Decode.{
+    previous: json |> optional(field("previous", string)),
+    next: json |> optional(field("next", string)),
+  };
 
 let decode = json =>
   Json.Decode.{
@@ -51,6 +64,7 @@ let decode = json =>
       json
       |> field("completionInstructions", nullable(string))
       |> Js.Null.toOption,
+    navigation: json |> field("navigation", decodeNavigation),
   };
 
 let computeCompletionType = targetDetails => {

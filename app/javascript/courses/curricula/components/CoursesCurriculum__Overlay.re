@@ -509,6 +509,78 @@ let handlePendingStudents = (targetStatus, targetDetails, users) =>
   | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
   };
 
+let performQuickNavigation = (url, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  // Scroll to the top of the overlay before pushing the new URL.
+  Webapi.Dom.(
+    switch (document |> Document.getElementById("target-overlay")) {
+    | Some(element) => Webapi.Dom.Element.setScrollTop(element, 0.0)
+    | None => ()
+    }
+  );
+
+  ReasonReactRouter.push(url);
+};
+
+let navigationLink = (direction, url) => {
+  let (leftIcon, longText, shortText, rightIcon) =
+    switch (direction) {
+    | `Previous => (
+        Some("fa-arrow-left"),
+        "Previous Target",
+        "Previous",
+        None,
+      )
+    | `Next => (None, "Next Target", "Next", Some("fa-arrow-right"))
+    };
+
+  let arrow = icon =>
+    icon->Belt.Option.mapWithDefault(React.null, icon =>
+      <FaIcon classes={"fas " ++ icon} />
+    );
+
+  <a
+    href=url
+    onClick={performQuickNavigation(url)}
+    className="block p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+    {arrow(leftIcon)}
+    <span className="mx-2 hidden md:inline"> {longText |> str} </span>
+    <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
+    {arrow(rightIcon)}
+  </a>;
+};
+
+let quickNavigationLinks = targetDetails => {
+  let (previous, next) = targetDetails |> TargetDetails.navigation;
+
+  <div className="pb-6">
+    <hr className="my-6" />
+    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+      {switch (previous, next) {
+       | (Some(previousUrl), Some(nextUrl)) =>
+         [|
+           <div key="previous" className="w-1/2 mr-2">
+             {navigationLink(`Previous, previousUrl)}
+           </div>,
+           <div key="next" className="w-1/2 ml-2">
+             {navigationLink(`Next, nextUrl)}
+           </div>,
+         |]
+         |> React.array
+
+       | (Some(previousUrl), None) =>
+         <div className="w-full">
+           {navigationLink(`Previous, previousUrl)}
+         </div>
+       | (None, Some(nextUrl)) =>
+         <div className="w-full"> {navigationLink(`Next, nextUrl)} </div>
+       | (None, None) => React.null
+       }}
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make =
     (
@@ -542,6 +614,7 @@ let make =
   });
 
   <div
+    id="target-overlay"
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
@@ -584,23 +657,26 @@ let make =
     </div>
     {switch (targetDetails) {
      | Some(targetDetails) =>
-       <div
-         className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0 pb-8">
-         {learnSection(targetDetails, overlaySelection)}
-         {discussSection(target, targetDetails, overlaySelection)}
-         {completeSection(
-            overlaySelection,
-            target,
-            targetDetails,
-            setTargetDetails,
-            authenticityToken,
-            targetStatus,
-            addSubmissionCB,
-            evaluationCriteria,
-            coaches,
-            users,
-            preview,
-          )}
+       <div>
+         <div
+           className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
+           {learnSection(targetDetails, overlaySelection)}
+           {discussSection(target, targetDetails, overlaySelection)}
+           {completeSection(
+              overlaySelection,
+              target,
+              targetDetails,
+              setTargetDetails,
+              authenticityToken,
+              targetStatus,
+              addSubmissionCB,
+              evaluationCriteria,
+              coaches,
+              users,
+              preview,
+            )}
+         </div>
+         {quickNavigationLinks(targetDetails)}
        </div>
 
      | None =>

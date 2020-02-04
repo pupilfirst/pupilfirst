@@ -33,6 +33,7 @@ module Targets
 
     def default_props
       {
+        navigation: links_to_adjacent_targets,
         quiz_questions: quiz_questions,
         content_blocks: content_blocks,
         communities: community_details,
@@ -40,6 +41,29 @@ module Targets
         evaluated: @target.evaluation_criteria.exists?,
         completion_instructions: @target.completion_instructions
       }
+    end
+
+    def links_to_adjacent_targets
+      links = {}
+
+      sorted_target_ids = @target.level
+        .target_groups
+        .joins(:targets)
+        .merge(Target.live)
+        .order('target_groups.sort_index', 'targets.sort_index')
+        .pluck('targets.id')
+
+      target_index = sorted_target_ids.index(@target.id)
+
+      if target_index.present?
+        previous_target_id = sorted_target_ids[target_index - 1] if target_index.positive?
+        next_target_id = sorted_target_ids[target_index + 1]
+
+        links[:previous] = "/targets/#{previous_target_id}" if previous_target_id.present?
+        links[:next] = "/targets/#{next_target_id}" if next_target_id.present?
+      end
+
+      links
     end
 
     def communities

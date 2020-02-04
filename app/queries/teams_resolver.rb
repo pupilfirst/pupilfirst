@@ -40,6 +40,7 @@ class TeamsResolver < ApplicationQuery
   end
 
   def teams_in_course
-    reviewable_teams.active.joins(founders: :user).includes(founders: [user: { avatar_attachment: :blob }]).order('startups.name')
+    reviewable_teams.active.joins(founders: :user).includes(founders: [user: { avatar_attachment: :blob }])
+      .select('"startups".*, LOWER(startups.name) AS startup_name').order('startup_name')
   end
 end

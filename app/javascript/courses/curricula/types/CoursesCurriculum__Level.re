@@ -47,3 +47,20 @@ let unlockDateString = t =>
   | Some(unlockOn) =>
     unlockOn |> DateFns.parseString |> DateFns.format("MMM D")
   };
+
+let findByLevelNumber = (levels, levelNumber) =>
+  levels |> List.find_opt(l => l.number == levelNumber);
+
+let next = (levels, t) => {
+  t.number + 1 |> findByLevelNumber(levels);
+};
+
+let previous = (levels, t) => {
+  let previousLevelNumber = t.number - 1;
+
+  if (previousLevelNumber == 0) {
+    None;
+  } else {
+    previousLevelNumber |> findByLevelNumber(levels);
+  };
+};

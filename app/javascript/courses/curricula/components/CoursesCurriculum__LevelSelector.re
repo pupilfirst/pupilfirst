@@ -76,7 +76,7 @@ let make =
     (
       ~levels,
       ~teamLevel,
-      ~selectedLevelId,
+      ~selectedLevel,
       ~setSelectedLevelId,
       ~showLevelZero,
       ~setShowLevelZero,
@@ -84,13 +84,6 @@ let make =
     ) => {
   let orderedLevels =
     levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
-
-  let selectedLevel =
-    levels
-    |> ListUtils.unsafeFind(
-         l => l |> Level.id == selectedLevelId,
-         "Could not find selectedLevel with ID " ++ selectedLevelId,
-       );
 
   <div className="px-3 md:px-0">
     <div

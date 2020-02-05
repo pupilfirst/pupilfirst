@@ -70,7 +70,7 @@ module Example = {
       <div className="mt-4">
         <label
           className="block text-xs font-semibold"
-          htmlFor="MultiselectDropdown__search-input-detailed-example">
+          htmlFor="MultiselectInline__search-input-example">
           {"Select your sports:" |> str}
         </label>
       </div>

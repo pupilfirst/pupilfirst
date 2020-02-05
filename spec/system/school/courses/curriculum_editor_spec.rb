@@ -148,9 +148,6 @@ feature 'Curriculum Editor', js: true do
     target = target_group.reload.targets.last
 
     expect(target.title).to eq(new_target_1_title)
-
-    find('#target-editor-close').click
-
     expect(page).to have_text(new_target_1_title)
 
     within("div#target-show-#{target.id}") do

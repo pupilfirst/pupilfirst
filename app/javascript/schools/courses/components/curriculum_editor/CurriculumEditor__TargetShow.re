@@ -48,8 +48,6 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
 let make =
     (
       ~target,
-      ~targetGroup,
-      ~showTargetEditorCB,
       ~targets,
       ~updateTargetSortIndexCB,
       ~authenticityToken,
@@ -109,9 +107,10 @@ let make =
     <div
       id={"target-show-" ++ (target |> Target.id)}
       className={targetClasses(target, targets)}
-      onClick={_e =>
-        showTargetEditorCB(targetGroup |> TargetGroup.id, target)
-      }>
+      onClick={event => {
+        event |> ReactEvent.Mouse.preventDefault;
+        ReasonReactRouter.push(linkPrefix ++ "content");
+      }}>
       <p className="font-semibold text-sm">
         {target |> Target.title |> str}
       </p>

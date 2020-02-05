@@ -72,7 +72,6 @@ let make =
       ~targetGroups,
       ~targets,
       ~showTargetGroupEditorCB,
-      ~showTargetEditorCB,
       ~updateTargetCB,
       ~showArchived,
       ~updateTargetSortIndexCB,
@@ -109,7 +108,6 @@ let make =
     send(UpdateTargetSaving);
     send(UpdateTargetTitle(""));
     updateTargetCB(newTarget);
-    showTargetEditorCB(targetGroupId, newTarget);
   };
   let handleCreateTarget = (title, targetGroupId) => {
     send(UpdateTargetSaving);
@@ -205,8 +203,6 @@ let make =
           <CurriculumEditor__TargetShow
             key={target |> Target.id}
             target
-            targetGroup
-            showTargetEditorCB
             targets=targetsToDisplay
             updateTargetSortIndexCB
             authenticityToken

@@ -6,7 +6,6 @@ open CurriculumEditor__Types;
 
 type editorAction =
   | Hidden
-  | ShowTargetEditor(string, Target.t)
   | ShowTargetGroupEditor(option(TargetGroup.t))
   | ShowLevelEditor(option(Level.t));
 
@@ -131,12 +130,6 @@ let make =
     state.showArchived
       ? targetGroupsInLevel
       : targetGroupsInLevel |> List.filter(tg => !(tg |> TargetGroup.archived));
-  let targetGroupIdsInLevel =
-    targetGroupsInLevel
-    |> List.filter(tg => !(tg |> TargetGroup.archived))
-    |> List.map(tg => tg |> TargetGroup.id);
-  let showTargetEditorCB = (targetGroupId, target) =>
-    send(UpdateEditorAction(ShowTargetEditor(targetGroupId, target)));
   let showTargetGroupEditorCB = targetGroup =>
     send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)));
 
@@ -197,17 +190,6 @@ let make =
     />
     {switch (state.editorAction) {
      | Hidden => ReasonReact.null
-     | ShowTargetEditor(targetGroupId, target) =>
-       <CurriculumEditor__TargetEditor
-         target
-         targetGroupId
-         evaluationCriteria
-         targets={state.targets}
-         targetGroupIdsInLevel
-         authenticityToken
-         updateTargetCB
-         hideEditorActionCB
-       />
      | ShowTargetGroupEditor(targetGroup) =>
        <CurriculumEditor__TargetGroupEditor
          targetGroup
@@ -297,7 +279,6 @@ let make =
                 targetGroups=targetGroupsToDisplay
                 targets={state.targets}
                 showTargetGroupEditorCB
-                showTargetEditorCB
                 updateTargetCB
                 showArchived={state.showArchived}
                 updateTargetSortIndexCB={updateTargetSortIndex(state, send)}

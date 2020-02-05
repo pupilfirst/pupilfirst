@@ -183,7 +183,7 @@ let editor = (target, state, send) => {
               aboveContentBlock=contentBlock
               addContentBlockCB={addContentBlock(send)}
             />
-            <CurriculumEditor__ContentBlockEditor2
+            <CurriculumEditor__ContentBlockEditor
               setDirtyCB={setDirty(contentBlock |> ContentBlock.id, send)}
               contentBlock
               ?removeContentBlockCB

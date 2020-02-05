@@ -94,11 +94,6 @@ Rails.application.routes.draw do
 
     resources :target_groups, only: %i[update]
 
-    resources :targets, only: %i[update] do
-      resource :quiz, only: %i[create]
-      resource :content_block, only: %i[create]
-    end
-
     resources :communities, only: %i[index]
   end
 

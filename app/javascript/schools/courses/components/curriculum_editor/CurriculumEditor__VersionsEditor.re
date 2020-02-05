@@ -142,7 +142,7 @@ let showContentBlocks =
         </button>
       </div>
     </div>
-    <TargetContentView contentBlocks={contentBlocks |> Array.to_list} />
+    <TargetContentView contentBlocks />
   </div>;
 };
 

@@ -59,8 +59,8 @@ let decode = json => {
   };
 };
 
-let sort = blocks => blocks |> List.sort((x, y) => x.sortIndex - y.sortIndex);
-let sortArray = blocks => blocks |> Array.to_list |> sort |> Array.of_list;
+let sort = blocks =>
+  blocks |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex);
 
 let id = t => t.id;
 let blockType = t => t.blockType;
@@ -103,16 +103,16 @@ let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex});
 
 let moveUp = (t, ts) =>
   ts
-  |> Array.to_list
   |> sort
+  |> Array.to_list
   |> ListUtils.swapUp(t)
   |> reindex
   |> Array.of_list;
 
 let moveDown = (t, ts) =>
   ts
-  |> Array.to_list
   |> sort
+  |> Array.to_list
   |> ListUtils.swapDown(t)
   |> reindex
   |> Array.of_list;

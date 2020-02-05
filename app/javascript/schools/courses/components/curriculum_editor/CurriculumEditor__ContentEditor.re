@@ -137,7 +137,7 @@ let editor = (target, state, send) => {
       latestVersion |> str;
     };
 
-  let sortedContentBlocks = state.contentBlocks |> ContentBlock.sortArray;
+  let sortedContentBlocks = state.contentBlocks |> ContentBlock.sort;
   let numberOfContentBlocks = state.contentBlocks |> Array.length;
 
   let removeContentBlockCB =

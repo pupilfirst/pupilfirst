@@ -450,20 +450,19 @@ let make =
      | LevelUp => React.null
      | _anyOtherNotice =>
        <div>
-         <div className="px-3">
-           <CoursesCurriculum__LevelSelector
-             levels
-             selectedLevelId={state.selectedLevelId}
-             setSelectedLevelId={selectedLevelId =>
-               setState(state => {...state, selectedLevelId})
-             }
-             showLevelZero={state.showLevelZero}
-             setShowLevelZero={showLevelZero =>
-               setState(state => {...state, showLevelZero})
-             }
-             levelZero
-           />
-         </div>
+         <CoursesCurriculum__LevelSelector
+           levels
+           teamLevel
+           selectedLevelId={state.selectedLevelId}
+           setSelectedLevelId={selectedLevelId =>
+             setState(state => {...state, selectedLevelId})
+           }
+           showLevelZero={state.showLevelZero}
+           setShowLevelZero={showLevelZero =>
+             setState(state => {...state, showLevelZero})
+           }
+           levelZero
+         />
          {currentLevel |> Level.isLocked && accessLockedLevels
             ? <div
                 className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">

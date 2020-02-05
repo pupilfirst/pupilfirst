@@ -15,30 +15,67 @@ let levelSelectorClasses = isSelected => {
   );
 };
 
-let updateSelectedLevel =
-    (levels, setSelectedLevelId, showLevelZero, setShowLevelZero, event) => {
-  let selectedLevelId = ReactEvent.Form.target(event)##value;
-  let level =
-    levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
-
-  switch (level) {
-  | Some(_) =>
-    showLevelZero ? setShowLevelZero(false) : ();
-    setSelectedLevelId(selectedLevelId);
-  | None => ()
-  };
-};
-
 let levelName = level =>
   "L"
   ++ (level |> Level.number |> string_of_int)
   ++ ": "
   ++ (level |> Level.name);
 
+let numberedLevelSelector = (selectedLevel, setShowLevelZero) => {
+  let defaultClasses = "rounded-l-lg font-semibold focus:outline-none cursor-pointer ";
+
+  let additionalClasses =
+    switch (setShowLevelZero) {
+    | Some(_) => "w-1/2 bg-white px-4 py-2 hover:bg-gray-100 hover:text-primary-500 truncate leading-loose text-sm"
+    | None => "w-full focus:shadow-inner bg-primary-100 border-t border-b px-2 h-10 flex items-center justify-between"
+    };
+
+  <button
+    onClick={_ =>
+      Belt.Option.mapWithDefault(setShowLevelZero, (), f => f(false))
+    }
+    className={defaultClasses ++ additionalClasses}>
+    <span className="flex-grow text-center truncate w-0">
+      {selectedLevel |> levelName |> str}
+    </span>
+    {setShowLevelZero == None
+       ? <FaIcon classes="fas fa-caret-down ml-1" /> : React.null}
+  </button>;
+};
+
+let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
+  let teamLevelNumber = teamLevel |> Level.number;
+  orderedLevels
+  |> List.map(level => {
+       let levelNumber = level |> Level.number;
+
+       let icon =
+         if (levelNumber < teamLevelNumber) {
+           "fas fa-check text-green-500";
+         } else if (levelNumber == teamLevelNumber) {
+           "fas fa-map-marker-alt text-blue-400";
+         } else if (level |> Level.isUnlocked) {
+           "inline-block";
+         } else {
+           "fas fa-lock text-gray-600";
+         };
+
+       <button
+         className="focus:outline-none p-2 w-full text-left"
+         key={level |> Level.id}
+         onClick={_ => setSelectedLevelId(level |> Level.id)}>
+         <span className="mr-2"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
+         {levelName(level) |> str}
+       </button>;
+     })
+  |> Array.of_list;
+};
+
 [@react.component]
 let make =
     (
       ~levels,
+      ~teamLevel,
       ~selectedLevelId,
       ~setSelectedLevelId,
       ~showLevelZero,
@@ -47,50 +84,40 @@ let make =
     ) => {
   let orderedLevels =
     levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
-  let currentLevel =
-    levels |> ListUtils.findOpt(l => l |> Level.id == selectedLevelId);
-  <div
-    className="flex justify-center max-w-sm mx-auto mt-4 rounded-lg overflow-hidden bg-primary-100 border border-gray-400 h-11">
-    {switch (currentLevel, showLevelZero) {
-     | (Some(level), true) =>
-       <div
-         className="w-1/2 bg-white px-4 py-2 focus:outline-none text-sm font-semibold hover:bg-gray-100 hover:text-primary-500 truncate leading-loose "
-         onClick={_ => setShowLevelZero(false)}>
-         {levelName(level) |> str}
-       </div>
-     | (None, true)
-     | (Some(_) | None, false) =>
-       <select
-         name="selected_level"
-         className={levelSelectorClasses(!showLevelZero)}
-         onChange={updateSelectedLevel(
-           orderedLevels,
-           setSelectedLevelId,
-           showLevelZero,
-           setShowLevelZero,
-         )}
-         value=selectedLevelId>
-         {orderedLevels
-          |> List.map(l =>
-               <option value={l |> Level.id} key={l |> Level.id}>
-                 {levelName(l) |> str}
-               </option>
-             )
-          |> Array.of_list
-          |> React.array}
-       </select>
-     }}
-    {switch (levelZero) {
-     | Some(level) =>
-       <button
-         className={
-           "border-l bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
-           ++ levelSelectorClasses(showLevelZero)
-         }
-         onClick={_e => setShowLevelZero(true)}>
-         {level |> Level.name |> str}
-       </button>
-     | None => React.null
-     }}
+
+  let selectedLevel =
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == selectedLevelId,
+         "Could not find selectedLevel with ID " ++ selectedLevelId,
+       );
+
+  <div className="px-3 md:px-0">
+    <div
+      className="flex justify-center max-w-sm md:max-w-xl mx-auto mt-4 rounded-lg bg-primary-100 border border-gray-400 h-11">
+      {showLevelZero
+         ? numberedLevelSelector(selectedLevel, Some(setShowLevelZero))
+         : <Dropdown
+             selected={numberedLevelSelector(selectedLevel, None)}
+             contents={selectableLevels(
+               orderedLevels,
+               teamLevel,
+               setSelectedLevelId,
+             )}
+             className="flex-grow"
+           />}
+      {switch (levelZero) {
+       | Some(level) =>
+         <button
+           className={
+             "border-l rounded-r-lg bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
+             ++ levelSelectorClasses(showLevelZero)
+           }
+           onClick={_e => setShowLevelZero(true)}>
+           {level |> Level.name |> str}
+         </button>
+       | None => React.null
+       }}
+    </div>
   </div>;
 };

@@ -204,10 +204,7 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
 
   switch (contentBlock |> ContentBlock.blockType) {
   | ContentBlock.Embed(_url, embedCode) =>
-    <div
-      className="content-block__embed rounded-lg overflow-hidden"
-      dangerouslySetInnerHTML={"__html": embedCode}
-    />
+    TargetContentView.embedContentBlock("", embedCode)
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor
       markdown

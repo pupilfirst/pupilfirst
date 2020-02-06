@@ -681,34 +681,35 @@ let make =
   <div className={containerClasses(state.mode)}>
     {controls(value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>
-      <div className={editorContainerClasses(state.mode)}>
-        <DisablingCover
-          containerClasses="h-full"
-          disabled={state.uploadState == Uploading}
-          message="Uploading...">
-          <textarea
-            ariaLabel="Markdown editor"
-            rows=4
-            maxLength
-            onSelect={onSelect(send)}
-            onChange={onChangeWrapper(onChange)}
-            id={state.id}
-            value
-            className={textareaClasses(state.mode)}
-          />
-        </DisablingCover>
-      </div>
-      <div className={previewContainerClasses(state.mode)}>
-        <div
-          id={state.id ++ "-preview"} className={previewClasses(state.mode)}>
-          <MarkdownBlock
-            markdown=value
-            profile
-            className="max-w-3xl mx-auto"
-          />
+
+        <div className={editorContainerClasses(state.mode)}>
+          <DisablingCover
+            containerClasses="h-full"
+            disabled={state.uploadState == Uploading}
+            message="Uploading...">
+            <textarea
+              ariaLabel="Markdown editor"
+              rows=4
+              maxLength
+              onSelect={onSelect(send)}
+              onChange={onChangeWrapper(onChange)}
+              id={state.id}
+              value
+              className={textareaClasses(state.mode)}
+            />
+          </DisablingCover>
         </div>
       </div>
-    </div>
+      // <div className={previewContainerClasses(state.mode)}>
+      //   <div
+      //     id={state.id ++ "-preview"} className={previewClasses(state.mode)}>
+      //     <MarkdownBlock
+      //       markdown=value
+      //       profile
+      //       className="max-w-3xl mx-auto"
+      //     />
+      //   </div>
+      // </div>
     {footer(value, state, send, onChange)}
   </div>;
 };

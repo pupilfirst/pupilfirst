@@ -50,6 +50,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :targets, only: %i[update] do
+      resource :content_block, only: %i[create]
+    end
+
     resources :courses, only: %i[index] do
       member do
         get 'curriculum'

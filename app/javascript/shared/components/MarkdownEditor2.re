@@ -275,17 +275,17 @@ let controls = (value, state, send, onChange) => {
        <div>
          <button
            className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
-           <FaIcon classes="fas fa-bold fa-fw" />
+           <i className="fas fa-bold fa-fw" />
          </button>
          <button
            className={buttonClasses ++ "ml-2"}
            onClick={_ => curriedModifyPhrase(Italic)}>
-           <FaIcon classes="fas fa-italic fa-fw" />
+           <i className="fas fa-italic fa-fw" />
          </button>
          <button
            className={buttonClasses ++ "ml-2"}
            onClick={_ => curriedModifyPhrase(Strikethrough)}>
-           <FaIcon classes="fas fa-strikethrough fa-fw" />
+           <i className="fas fa-strikethrough fa-fw" />
          </button>
        </div>
      }}
@@ -458,19 +458,19 @@ let footer = (oldValue, state, send, onChange) => {
              {switch (error) {
               | Some(error) =>
                 <span className="text-red-500">
-                  <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+                  <i className="fas fa-exclamation-triangle mr-2" />
                   {error |> str}
                 </span>
               | None =>
                 <span>
-                  <FaIcon classes="far fa-file-image mr-2" />
+                  <i className="far fa-file-image mr-2" />
                   {"Click here to attach a file." |> str}
                 </span>
               }}
            </label>
          | Uploading =>
            <span className="text-xs px-3 py-1 flex-grow cursor-wait">
-             <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
+             <i className="fas fa-spinner fa-pulse mr-2" />
              {"Please wait for the file to upload..." |> str}
            </span>
          }}
@@ -479,7 +479,7 @@ let footer = (oldValue, state, send, onChange) => {
         href="/help/markdown_editor"
         target="_blank"
         className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
-        <FaIcon classes="fab fa-markdown text-sm" />
+        <i className="fab fa-markdown text-sm" />
         <span className="text-xs ml-1 font-semibold hidden sm:inline">
           {"Need help?" |> str}
         </span>
@@ -681,35 +681,34 @@ let make =
   <div className={containerClasses(state.mode)}>
     {controls(value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>
-
-        <div className={editorContainerClasses(state.mode)}>
-          <DisablingCover
-            containerClasses="h-full"
-            disabled={state.uploadState == Uploading}
-            message="Uploading...">
-            <textarea
-              ariaLabel="Markdown editor"
-              rows=4
-              maxLength
-              onSelect={onSelect(send)}
-              onChange={onChangeWrapper(onChange)}
-              id={state.id}
-              value
-              className={textareaClasses(state.mode)}
-            />
-          </DisablingCover>
+      <div className={editorContainerClasses(state.mode)}>
+        <DisablingCover
+          containerClasses="h-full"
+          disabled={state.uploadState == Uploading}
+          message="Uploading...">
+          <textarea
+            ariaLabel="Markdown editor"
+            rows=4
+            maxLength
+            onSelect={onSelect(send)}
+            onChange={onChangeWrapper(onChange)}
+            id={state.id}
+            value
+            className={textareaClasses(state.mode)}
+          />
+        </DisablingCover>
+      </div>
+      <div className={previewContainerClasses(state.mode)}>
+        <div
+          id={state.id ++ "-preview"} className={previewClasses(state.mode)}>
+          <MarkdownBlock
+            markdown=value
+            profile
+            className="max-w-3xl mx-auto"
+          />
         </div>
       </div>
-      // <div className={previewContainerClasses(state.mode)}>
-      //   <div
-      //     id={state.id ++ "-preview"} className={previewClasses(state.mode)}>
-      //     <MarkdownBlock
-      //       markdown=value
-      //       profile
-      //       className="max-w-3xl mx-auto"
-      //     />
-      //   </div>
-      // </div>
+    </div>
     {footer(value, state, send, onChange)}
   </div>;
 };

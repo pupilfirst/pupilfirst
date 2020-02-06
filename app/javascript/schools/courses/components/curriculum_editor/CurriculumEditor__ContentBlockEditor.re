@@ -5,22 +5,31 @@ exception InvalidBlockTypeForUpdate;
 let str = React.string;
 
 type state = {
+  dirty: bool,
   saving: option(string),
   contentBlock: ContentBlock.t,
 };
 
-let computeInitialState = contentBlock => {saving: None, contentBlock};
+let computeInitialState = contentBlock => {
+  saving: None,
+  contentBlock,
+  dirty: false,
+};
 
 type action =
   | StartSaving(string)
   | FinishSaving
-  | UpdateContentBlock(ContentBlock.t);
+  | UpdateContentBlock(ContentBlock.t, bool);
 
 let reducer = (state, action) =>
   switch (action) {
   | StartSaving(message) => {...state, saving: Some(message)}
   | FinishSaving => {...state, saving: None}
-  | UpdateContentBlock(contentBlock) => {...state, contentBlock}
+  | UpdateContentBlock(contentBlock, dirty) => {
+      ...state,
+      contentBlock,
+      dirty,
+    }
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -139,7 +148,7 @@ let onUndo = (originalContentBlock, setDirty, send, event) => {
   WindowUtils.confirm(
     "Are you sure you want to undo your changes to this block?", () => {
     setDirty(false);
-    send(UpdateContentBlock(originalContentBlock));
+    send(UpdateContentBlock(originalContentBlock, false));
   });
 };
 
@@ -193,14 +202,20 @@ let onSave = (contentBlock, updateContentBlockCB, send, event) => {
 };
 
 let updateContentBlockCB =
-    (originalContentBlock, setDirtyCB, send, newContentBlock) => {
-  setDirtyCB(newContentBlock != originalContentBlock);
-  send(UpdateContentBlock(newContentBlock));
+    (originalContentBlock, setDirtyCB, state, send, newContentBlock) => {
+  let dirty = newContentBlock != originalContentBlock;
+
+  if (state.dirty != dirty) {
+    setDirtyCB(dirty);
+  };
+
+  send(UpdateContentBlock(newContentBlock, dirty));
 };
 
-let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, send) => {
+let innerEditor =
+    (originalContentBlock, contentBlock, setDirtyCB, state, send) => {
   let updateContentBlockCB =
-    updateContentBlockCB(originalContentBlock, setDirtyCB, send);
+    updateContentBlockCB(originalContentBlock, setDirtyCB, state, send);
 
   switch (contentBlock |> ContentBlock.blockType) {
   | ContentBlock.Embed(_url, embedCode) =>
@@ -249,7 +264,13 @@ let make =
         "Editor for content block " ++ (contentBlock |> ContentBlock.id)
       }>
       <div className="flex-grow self-stretch">
-        {innerEditor(contentBlock, state.contentBlock, setDirtyCB, send)}
+        {innerEditor(
+           contentBlock,
+           state.contentBlock,
+           setDirtyCB,
+           state,
+           send,
+         )}
       </div>
       <div
         className="ml-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs">

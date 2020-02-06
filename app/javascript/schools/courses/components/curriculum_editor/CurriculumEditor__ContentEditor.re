@@ -4,13 +4,11 @@ let str = React.string;
 
 open CurriculumEditor__Types;
 
-module IdSet = Set.Make(String);
-
 type state = {
   loading: bool,
   contentBlocks: array(ContentBlock.t),
   versions: array(Version.t),
-  dirtyContentBlockIds: IdSet.t,
+  dirtyContentBlockIds: Belt.Set.String.t,
 };
 
 type action =
@@ -28,7 +26,7 @@ let reducer = (state, action) =>
       loading: false,
       contentBlocks,
       versions,
-      dirtyContentBlockIds: IdSet.empty,
+      dirtyContentBlockIds: Belt.Set.String.empty,
     }
   | AddContentBlock(newContentBlock) =>
     let newBlockSortIndex = newContentBlock |> ContentBlock.sortIndex;
@@ -58,7 +56,7 @@ let reducer = (state, action) =>
            }),
       dirtyContentBlockIds:
         state.dirtyContentBlockIds
-        |> IdSet.remove(updatedContentBlock |> ContentBlock.id),
+        ->Belt.Set.String.remove(updatedContentBlock |> ContentBlock.id),
     }
   | RemoveContentBlock(contentBlockId) => {
       ...state,
@@ -78,11 +76,11 @@ let reducer = (state, action) =>
         state.contentBlocks |> ContentBlock.moveDown(contentBlock),
     }
   | SetDirty(contentBlockId, dirty) =>
-    let operation = dirty ? IdSet.add : IdSet.remove;
+    let operation = dirty ? Belt.Set.String.add : Belt.Set.String.remove;
     {
       ...state,
       dirtyContentBlockIds:
-        operation(contentBlockId, state.dirtyContentBlockIds),
+        operation(state.dirtyContentBlockIds, contentBlockId),
     };
   };
 
@@ -173,7 +171,7 @@ let editor = (target, state, send) => {
               ? None : Some(moveContentBlockDown(send));
           let isDirty =
             state.dirtyContentBlockIds
-            |> IdSet.mem(contentBlock |> ContentBlock.id);
+            ->Belt.Set.String.has(contentBlock |> ContentBlock.id);
           let updateContentBlockCB =
             isDirty ? Some(updateContentBlock(send)) : None;
 
@@ -210,7 +208,7 @@ let make = (~target, ~setDirtyCB) => {
         loading: true,
         contentBlocks: [||],
         versions: [||],
-        dirtyContentBlockIds: IdSet.empty,
+        dirtyContentBlockIds: Belt.Set.String.empty,
       },
     );
 
@@ -221,7 +219,7 @@ let make = (~target, ~setDirtyCB) => {
 
   React.useEffect1(
     () => {
-      let dirty = !(state.dirtyContentBlockIds |> IdSet.is_empty);
+      let dirty = !(state.dirtyContentBlockIds |> Belt.Set.String.isEmpty);
       setDirtyCB(dirty);
       None;
     },

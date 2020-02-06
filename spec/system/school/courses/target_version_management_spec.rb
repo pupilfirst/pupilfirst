@@ -60,12 +60,6 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_text('#3')
       target_1.current_target_version.touch
       click_button 'Create a version'
-      expect(page).to have_text('Target version created successfully!')
-      dismiss_notification
-
-      expect(page).to have_text('#4')
-      target_1.current_target_version.touch
-      click_button 'Create a version'
       expect(page).to have_text('You cannot create more than 3 versions per day')
       dismiss_notification
     end
@@ -86,18 +80,8 @@ feature 'Target Content Version Management', js: true do
       dismiss_notification
 
       expect(page).to have_text('#2')
-
-      click_button 'Create a version'
-      expect(page).to have_text('Please update target content before creating a version')
-      dismiss_notification
-
       target_1.current_target_version.content_blocks.last.delete
       target_1.current_target_version.touch
-
-      click_button 'Create a version'
-      expect(page).to have_text('Target version created successfully!')
-      dismiss_notification
-      expect(page).to have_text('#3')
 
       click_button "Select version #{target_1.current_target_version.id}"
       click_button "Select version #{target_version_v1.id}"
@@ -106,7 +90,7 @@ feature 'Target Content Version Management', js: true do
       expect(page).to have_text('Target version created successfully!')
       dismiss_notification
 
-      expect(page).to have_text('#4')
+      expect(page).to have_text('#3')
       expect(target_1.current_target_version.content_blocks.order(:sort_index).map { |cb| cb.slice(:block_type, :content, :sort_index) }).to match_array(content_blocks_v1)
     end
   end

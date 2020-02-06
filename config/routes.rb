@@ -56,13 +56,13 @@ Rails.application.routes.draw do
         get 'exports'
         get 'evaluation_criteria'
         post 'attach_images'
+      end
 
-        resources :targets, only: [] do
-          member do
-            get 'content'
-            get 'details'
-            get 'versions'
-          end
+      resources :targets, only: [] do
+        member do
+          get 'content'
+          get 'details'
+          get 'versions'
         end
       end
 

@@ -2,17 +2,17 @@ module Schools
   class TargetsController < SchoolsController
     layout 'school'
 
-    # GET /school/targets/:id/content
+    # GET /school/courses/:course_id/targets/:id/content
     def content
-      target = authorize(Target.find(params[:id]), policy_class: Schools::TargetPolicy)
-      @course = target.course
+      @course = current_school.courses.find(params[:course_id])
+      authorize(@course.targets.find(params[:id]), policy_class: Schools::TargetPolicy)
       render 'schools/courses/curriculum'
     end
 
-    # GET /school/targets/:id/details
+    # GET /school/courses/:course_id/targets/:id/details
     alias details content
 
-    # GET /school/targets/:id/versions
+    # GET /school/courses/:course_id/targets/:id/versions
     alias versions content
   end
 end

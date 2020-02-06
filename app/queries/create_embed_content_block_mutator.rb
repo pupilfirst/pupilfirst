@@ -17,7 +17,8 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   def create_embed_content_block
     ContentBlock.transaction do
       embed_block = create_embed_block
-      Targets::CreateContentVersionService.new(target, above_content_block).create(embed_block)
+      shift_content_blocks_below(embed_block)
+      json_attributes(embed_block)
     end
   end
 
@@ -30,9 +31,10 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   end
 
   def create_embed_block
-    ContentBlock.create!(
+    target_version.content_blocks.create!(
       block_type: ContentBlock::BLOCK_TYPE_EMBED,
-      content: { url: url, embed_code: embed_code }
+      content: { url: url, embed_code: embed_code },
+      sort_index: sort_index
     )
   end
 end

@@ -6,9 +6,7 @@ class UpdateImageContentBlockMutator < ApplicationQuery
   property :caption, validates: { length: { maximum: 250 } }
 
   validate :must_be_an_image_block
-
-  # TODO: Implement an equivalent of this when target_versions table is present.
-  # validate :must_be_latest_version
+  validate :must_be_latest_version
 
   def update_image_content_block
     content_block.update!(content: { caption: caption.strip })

@@ -6,9 +6,7 @@ class UpdateMarkdownContentBlockMutator < ApplicationQuery
   property :markdown, validates: { length: { maximum: 10_000 } }
 
   validate :must_be_a_markdown_block
-
-  # TODO: Implement an equivalent of this when target_versions table is present.
-  # validate :must_be_latest_version
+  validate :must_be_latest_version
 
   def update_markdown_content_block
     content_block.update!(content: { markdown: markdown.strip })

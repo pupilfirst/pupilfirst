@@ -19,8 +19,7 @@ module ContentBlockEditable
 
   def json_attributes
     attributes = content_block.attributes
-      .slice('id', 'block_type', 'content')
-      .merge(content_version.slice('sort_index'))
+      .slice('id', 'block_type', 'content', 'sort_index')
       .with_indifferent_access
 
     if content_block.file.attached?
@@ -33,11 +32,17 @@ module ContentBlockEditable
     attributes
   end
 
-  def content_version
-    @content_version ||= target.content_versions.find_by(content_block: content_block, version_on: latest_version_date)
+  def target_version
+    @target_version ||= target.current_target_version
   end
 
-  def latest_version_date
-    @latest_version_date ||= target.latest_content_version_date
+  def content_blocks
+    @content_blocks ||= target_version.content_blocks
+  end
+
+  def must_be_latest_version
+    return if content_blocks.where(id: id).present?
+
+    errors[:base] << 'You cannot edit an older version'
   end
 end

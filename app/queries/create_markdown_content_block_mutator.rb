@@ -8,14 +8,16 @@ class CreateMarkdownContentBlockMutator < ApplicationQuery
   def create_markdown_content_block
     ContentBlock.transaction do
       markdown_block = create_markdown_block
-      Targets::CreateContentVersionService.new(target, above_content_block).create(markdown_block)
+      shift_content_blocks_below(markdown_block)
+      json_attributes(markdown_block)
     end
   end
 
   private
 
   def create_markdown_block
-    ContentBlock.create!(
+    target_version.content_blocks.create!(
+      sort_index: sort_index,
       block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
       content: { markdown: "" }
     )

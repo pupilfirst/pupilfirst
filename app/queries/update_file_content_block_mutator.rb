@@ -6,9 +6,7 @@ class UpdateFileContentBlockMutator < ApplicationQuery
   property :title, validates: { length: { maximum: 60 } }
 
   validate :must_be_a_file_block
-
-  # TODO: Implement an equivalent of this when target_versions table is present.
-  # validate :must_be_latest_version
+  validate :must_be_latest_version
 
   def update_file_content_block
     content_block.update!(content: { title: title.strip })

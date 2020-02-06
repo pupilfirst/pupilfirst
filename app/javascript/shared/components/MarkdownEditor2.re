@@ -365,7 +365,7 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
     let insert = "\n" ++ markdownEmbedCode ++ "\n";
     let (_, selectionEnd) = state.selection;
     let newValue = oldValue |> insertAt(insert, selectionEnd);
-    finalizeChange(~oldValue, ~newValue, ~state, ~onChange);
+    finalizeChange(~oldValue, ~newValue, ~state, ~send, ~onChange);
     send(FinishUploading);
   } else {
     send(

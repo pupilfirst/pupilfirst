@@ -10,6 +10,7 @@ class UpdateImageContentBlockMutator < ApplicationQuery
 
   def update_image_content_block
     content_block.update!(content: { caption: caption.strip })
+    target_version.touch # rubocop:disable Rails/SkipsModelValidations
     json_attributes
   end
 

@@ -8,7 +8,7 @@ module ContentBlockEditable
   def target
     @target ||= begin
       if content_block.present?
-        content_block.latest_version.target
+        content_block.target_version.target
       end
     end
   end
@@ -43,6 +43,6 @@ module ContentBlockEditable
   def must_be_latest_version
     return if content_blocks.where(id: id).present?
 
-    errors[:base] << 'You cannot edit an older version'
+    errors[:base] << 'You can only edit blocks in the current version.'
   end
 end

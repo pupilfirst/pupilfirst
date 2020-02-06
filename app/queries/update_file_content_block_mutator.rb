@@ -10,6 +10,7 @@ class UpdateFileContentBlockMutator < ApplicationQuery
 
   def update_file_content_block
     content_block.update!(content: { title: title.strip })
+    target_version.touch # rubocop:disable Rails/SkipsModelValidations
     json_attributes
   end
 

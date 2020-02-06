@@ -2,17 +2,23 @@ class SortContentBlocksMutator < ApplicationQuery
   property :content_block_ids, validates: { presence: true }
 
   def sort
-    ::ContentBlocks::SortService.new(content_block_ids).execute
-  end
+    ContentBlock.transaction do
+      content_block_ids.each_with_index do |id, index|
+        content_blocks.where(id: id).update!(sort_index: index + 1)
+      end
 
-  def target_versions
-    target.content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
+      target_version.touch # rubocop:disable Rails/SkipsModelValidations
+    end
   end
 
   private
 
   def target
-    ContentVersion.where(content_block_id: content_block_ids).first.target
+    @target ||= ContentBlock.where(id: content_block_ids.first).target
+  end
+
+  def content_blocks
+    @content_blocks ||= target.current_content_blocks
   end
 
   def authorized?

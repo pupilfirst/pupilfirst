@@ -18,6 +18,7 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
     ContentBlock.transaction do
       embed_block = create_embed_block
       shift_content_blocks_below(embed_block)
+      target_version.touch # rubocop:disable Rails/SkipsModelValidations
       json_attributes(embed_block)
     end
   end

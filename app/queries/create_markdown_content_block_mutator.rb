@@ -9,6 +9,7 @@ class CreateMarkdownContentBlockMutator < ApplicationQuery
     ContentBlock.transaction do
       markdown_block = create_markdown_block
       shift_content_blocks_below(markdown_block)
+      target_version.touch # rubocop:disable Rails/SkipsModelValidations
       json_attributes(markdown_block)
     end
   end

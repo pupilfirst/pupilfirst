@@ -10,6 +10,7 @@ class UpdateMarkdownContentBlockMutator < ApplicationQuery
 
   def update_markdown_content_block
     content_block.update!(content: { markdown: markdown.strip })
+    target_version.touch # rubocop:disable Rails/SkipsModelValidations
     json_attributes
   end
 

@@ -150,7 +150,7 @@ feature 'Curriculum Editor', js: true do
     expect(target.title).to eq(new_target_1_title)
     expect(page).to have_text(new_target_1_title)
 
-    within("div#target-show-#{target.id}") do
+    within("a#target-show-#{target.id}") do
       expect(page).to have_text('Draft')
     end
   end

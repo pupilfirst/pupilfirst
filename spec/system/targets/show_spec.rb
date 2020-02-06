@@ -18,14 +18,14 @@ feature 'Target Overlay', js: true do
   let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_l0) { create :target, target_group: target_group_l0 }
-  let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence }
+  let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
   let!(:target_l2) { create :target, target_group: target_group_l2 }
-  let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
+  let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, sort_index: 2 }
   let!(:target_draft) { create :target, :draft, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
   let!(:target_archived) { create :target, :archived, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
 
   # Quiz target
-  let!(:quiz_target) { create :target, target_group: target_group_l1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence }
+  let!(:quiz_target) { create :target, target_group: target_group_l1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence, sort_index: 3 }
   let!(:quiz) { create :quiz, target: quiz_target }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -672,6 +672,30 @@ feature 'Target Overlay', js: true do
         expect(page).to have_button('Submit Quiz', disabled: true)
       end
     end
+  end
+
+  scenario 'student navigates between targets using quick navigation bar' do
+    sign_in_user student.user, referer: target_path(target_l1)
+
+    expect(page).to have_text(target_l1.title)
+
+    expect(page).not_to have_link('Previous Target')
+    click_link 'Next Target'
+
+    expect(page).to have_text(prerequisite_target.title)
+
+    click_link 'Next Target'
+
+    expect(page).to have_text(quiz_target.title)
+    expect(page).not_to have_link('Next Target')
+
+    click_link 'Previous Target'
+
+    expect(page).to have_text(prerequisite_target.title)
+
+    click_link 'Previous Target'
+
+    expect(page).to have_text(target_l1.title)
   end
 
   scenario "student visits a draft target page directly" do

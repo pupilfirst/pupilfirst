@@ -491,15 +491,10 @@ let performQuickNavigation = (url, send, event) => {
 };
 
 let navigationLink = (direction, url, send) => {
-  let (leftIcon, longText, shortText, rightIcon) =
+  let (leftIcon, text, rightIcon) =
     switch (direction) {
-    | `Previous => (
-        Some("fa-arrow-left"),
-        "Previous Target",
-        "Previous",
-        None,
-      )
-    | `Next => (None, "Next Target", "Next", Some("fa-arrow-right"))
+    | `Previous => (Some("fa-arrow-left"), "Previous Target", None)
+    | `Next => (None, "Next Target", Some("fa-arrow-right"))
     };
 
   let arrow = icon =>
@@ -510,12 +505,19 @@ let navigationLink = (direction, url, send) => {
   <a
     href=url
     onClick={performQuickNavigation(url, send)}
-    className="block p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
     {arrow(leftIcon)}
-    <span className="mx-2 hidden md:inline"> {longText |> str} </span>
-    <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
+    <span className="mx-2 hidden md:inline"> {text |> str} </span>
     {arrow(rightIcon)}
   </a>;
+};
+
+let scrollOverlayToTop = _event => {
+  let element =
+    Webapi.Dom.(document |> Document.getElementById("target-overlay"));
+  element->Belt.Option.mapWithDefault((), element =>
+    element->Webapi.Dom.Element.setScrollTop(0.0)
+  );
 };
 
 let quickNavigationLinks = (targetDetails, send) => {
@@ -524,28 +526,28 @@ let quickNavigationLinks = (targetDetails, send) => {
   <div className="pb-6">
     <hr className="my-6" />
     <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
-      {switch (previous, next) {
-       | (Some(previousUrl), Some(nextUrl)) =>
-         [|
-           <div key="previous" className="w-1/2 mr-2">
-             {navigationLink(`Previous, previousUrl, send)}
-           </div>,
-           <div key="next" className="w-1/2 ml-2">
-             {navigationLink(`Next, nextUrl, send)}
-           </div>,
-         |]
-         |> React.array
-
-       | (Some(previousUrl), None) =>
-         <div className="w-full">
-           {navigationLink(`Previous, previousUrl, send)}
-         </div>
-       | (None, Some(nextUrl)) =>
-         <div className="w-full">
-           {navigationLink(`Next, nextUrl, send)}
-         </div>
-       | (None, None) => React.null
-       }}
+      <div className="w-1/3 mr-2">
+        {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
+           navigationLink(`Previous, previousUrl, send)
+         )}
+      </div>
+      <div className="w-1/3 mx-2">
+        <button
+          onClick=scrollOverlayToTop
+          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+          <span className="mx-2 hidden md:inline">
+            {"Scroll to Top" |> str}
+          </span>
+          <span className="mx-2 md:hidden">
+            <i className="fas fa-arrow-up" />
+          </span>
+        </button>
+      </div>
+      <div className="w-1/3 ml-2">
+        {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
+           navigationLink(`Next, nextUrl, send)
+         )}
+      </div>
     </div>
   </div>;
 };

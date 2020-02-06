@@ -181,6 +181,29 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).not_to have_content(level_6_target.title)
   end
 
+  scenario 'student navigates between levels using the quick navigation links' do
+    sign_in_user student.user, referer: curriculum_course_path(course)
+
+    expect(page).to have_button("L4: #{level_4.name}")
+
+    click_button 'Next Level'
+
+    expect(page).to have_button("L5: #{level_5.name}")
+
+    click_button 'Next Level'
+
+    expect(page).to have_button("L6: #{locked_level_6.name}")
+    expect(page).not_to have_button('Next Level')
+
+    click_button 'Previous Level'
+    click_button "L5: #{level_5.name}"
+    click_button "L2: #{level_2.name}"
+    click_button 'Previous Level'
+
+    expect(page).to have_button("L1: #{level_1.name}")
+    expect(page).not_to have_button('Previous Level')
+  end
+
   context "when the students's course has a level 0 in it" do
     let(:level_0) { create :level, :zero, course: course }
     let(:target_group_l0) { create :target_group, level: level_0 }

@@ -25,7 +25,8 @@ feature 'Target Content Editor', js: true do
     # Open the content editor for the target.
     find("a[title='Edit content of target #{target.title}']").click
 
-    expect(target.content_versions.count).to eq(1)
+    expect(target.target_versions.count).to eq(1)
+    expect(target.current_target_version.content_blocks.count).to eq(1)
 
     # Try adding a new markdown block.
     within('.content-block-creator--open') do
@@ -33,7 +34,7 @@ feature 'Target Content Editor', js: true do
     end
 
     expect(page).to have_selector('textarea[aria-label="Markdown editor"]')
-    expect(target.content_versions.count).to eq(2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
 
     cb = ContentBlock.last
 
@@ -78,9 +79,9 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'school admin adds and edits an image block' do
-    sign_in_user school_admin.user, referer: content_school_target_path(target)
+    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
-    expect(target.content_versions.count).to eq(1)
+    expect(target.current_target_version.content_blocks.count).to eq(1)
 
     filename = 'logo_lipsum_on_light_bg.png'
 
@@ -91,8 +92,10 @@ feature 'Target Content Editor', js: true do
       end
     end
 
+    dismiss_notification
+
     expect(page).to have_text(filename)
-    expect(target.content_versions.count).to eq(2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
     expect(page).not_to have_selector("button[title='Save Changes']")
 
     cb = ContentBlock.last
@@ -124,9 +127,9 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'school admin adds and edits a file block' do
-    sign_in_user school_admin.user, referer: content_school_target_path(target)
+    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
-    expect(target.content_versions.count).to eq(1)
+    expect(target.current_target_version.content_blocks.count).to eq(1)
 
     filename = 'pdf-sample.pdf'
 
@@ -137,8 +140,9 @@ feature 'Target Content Editor', js: true do
       end
     end
 
+    dismiss_notification
     expect(page).to have_text(filename)
-    expect(target.content_versions.count).to eq(2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
     expect(page).not_to have_selector("button[title='Save Changes']")
 
     cb = ContentBlock.last
@@ -168,16 +172,15 @@ feature 'Target Content Editor', js: true do
       accept_confirm do
         find("button[title='Undo Changes']").click
       end
-
       expect(page).not_to have_selector("button[title='Undo Changes']")
       expect(page).to have_selector("input[value='#{new_title}'")
     end
   end
 
   scenario 'school admin adds an embed block' do
-    sign_in_user school_admin.user, referer: content_school_target_path(target)
+    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
-    expect(target.content_versions.count).to eq(1)
+    expect(target.current_target_version.content_blocks.count).to eq(1)
     expect(page).to have_selector('button[title="Delete"]', count: 0) # There is only one block - so the button should be hidden.
 
     embed_url = 'https://www.youtube.com/watch?v=3QDYbQIS8cQ'
@@ -191,9 +194,8 @@ feature 'Target Content Editor', js: true do
       fill_in('URL to Embed', with: embed_url)
       click_button('Save')
     end
-
     expect(page).to have_selector('button[title="Delete"]', count: 2)
-    expect(target.content_versions.count).to eq(2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
 
     cb = ContentBlock.last
 
@@ -204,17 +206,14 @@ feature 'Target Content Editor', js: true do
 
   context 'when a target has many content blocks' do
     let!(:target) { create :target, target_group: target_group_1 }
-    let!(:first_content_version) { create(:content_version, :image, target: target, sort_index: 0) }
-    let!(:second_content_version) { create(:content_version, :markdown, target: target, sort_index: 1) }
-    let!(:third_content_version) { create(:content_version, :file, target: target, sort_index: 2) }
-    let!(:fourth_content_version) { create(:content_version, :file, target: target, sort_index: 3) }
-    let(:first_block) { first_content_version.content_block }
-    let(:second_block) { second_content_version.content_block }
-    let(:third_block) { third_content_version.content_block }
-    let(:fourth_block) { fourth_content_version.content_block }
+    let!(:target_version) { create(:target_version, target: target) }
+    let!(:first_block) { create(:content_block, :image, target_version: target_version, sort_index: 0) }
+    let!(:second_block) { create(:content_block, :markdown, target_version: target_version, sort_index: 1) }
+    let!(:third_block) { create(:content_block, :file, target_version: target_version, sort_index: 2) }
+    let!(:fourth_block) { create(:content_block, :file, target_version: target_version, sort_index: 3) }
 
     scenario 'school admin changes the sort order of existing content blocks' do
-      sign_in_user school_admin.user, referer: content_school_target_path(target)
+      sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
       # The first block should only have the "move down" button.
       within("div[aria-label='Editor for content block #{first_block.id}'") do
@@ -252,14 +251,14 @@ feature 'Target Content Editor', js: true do
 
       sleep(0.1)
 
-      expect(second_content_version.reload.sort_index).to eq(0)
-      expect(first_content_version.reload.sort_index).to eq(1)
-      expect(fourth_content_version.reload.sort_index).to eq(2)
-      expect(third_content_version.reload.sort_index).to eq(3)
+      expect(second_block.reload.sort_index).to eq(0)
+      expect(first_block.reload.sort_index).to eq(1)
+      expect(fourth_block.reload.sort_index).to eq(2)
+      expect(third_block.reload.sort_index).to eq(3)
     end
 
     scenario 'admin deletes an existing content block' do
-      sign_in_user school_admin.user, referer: content_school_target_path(target)
+      sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
       expect(page).to have_selector('button[title="Delete"]', count: 4)
 
@@ -273,16 +272,15 @@ feature 'Target Content Editor', js: true do
       end
 
       expect(page).to have_selector('button[title="Delete"]', count: 3)
-      expect(ContentVersion.count).to eq(3)
-      expect(ContentVersion.pluck(:id)).not_to include(first_content_version.id)
+      expect(TargetVersion.count).to eq(1)
+      expect(TargetVersion.first.content_blocks.pluck(:id)).not_to include(first_block.id)
       expect(ContentBlock.count).to eq(3)
-      expect(ContentBlock.pluck(:id)).not_to include(first_block.id)
     end
   end
 
   scenario 'course author edits the content of a target' do
     # This is a quick and incomplete test that checks access to this interface.
-    sign_in_user course_author.user, referer: content_school_target_path(target)
+    sign_in_user course_author.user, referer: content_school_course_target_path(course, target)
 
     first_block = ContentBlock.first
 
@@ -307,7 +305,7 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'admin is warned before switching tabs or closing the editor when there are unsaved changes' do
-    sign_in_user school_admin.user, referer: content_school_target_path(target)
+    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
     first_block = ContentBlock.first
     new_title = Faker::Lorem.words(3).join(' ')

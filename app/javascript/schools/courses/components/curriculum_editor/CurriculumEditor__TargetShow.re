@@ -104,8 +104,9 @@ let make =
              <i className="fas fa-arrow-down text-sm" />
            </div>
          </div>}
-    <div
+    <a
       id={"target-show-" ++ (target |> Target.id)}
+      title={"Edit content of target " ++ (target |> Target.title)}
       className={targetClasses(target, targets)}
       onClick={event => {
         event |> ReactEvent.Mouse.preventDefault;
@@ -127,6 +128,6 @@ let make =
         {editorLink(linkPrefix, "details", target, "fa-list-alt")}
         {editorLink(linkPrefix, "versions", target, "fa-code-branch")}
       </div>
-    </div>
+    </a>
   </div>;
 };

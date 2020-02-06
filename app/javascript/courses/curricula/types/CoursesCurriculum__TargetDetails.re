@@ -95,3 +95,13 @@ let grades = (submissionId, t) =>
   |> List.filter(grade =>
        grade |> CoursesCurriculum__Grade.submissionId == submissionId
      );
+
+let addSubmission = (submission, t) => {
+  ...t,
+  submissions: [submission, ...t |> submissions],
+};
+
+let addSubmissionAttachments = (attachments, t) => {
+  ...t,
+  submissionAttachments: attachments @ (t |> submissionAttachments),
+};

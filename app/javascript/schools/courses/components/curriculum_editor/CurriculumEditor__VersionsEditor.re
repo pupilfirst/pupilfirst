@@ -138,7 +138,7 @@ let showContentBlocks =
           onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>
           {(
              selectedVersion |> Version.isLatestTargetVersion(versions)
-               ? "Create a version" : "Restore version"
+               ? "Save this version" : "Restore this version"
            )
            |> str}
         </button>

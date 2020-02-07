@@ -36,7 +36,7 @@ class CreateTargetVersionMutator < ApplicationQuery
 
     return if target_version.created_at != target_version.updated_at
 
-    errors[:base] << 'Please update target content before creating a version'
+    errors[:base] << 'There are no changes from the previous version. Please make changes before trying to save this version.'
   end
 
   def target

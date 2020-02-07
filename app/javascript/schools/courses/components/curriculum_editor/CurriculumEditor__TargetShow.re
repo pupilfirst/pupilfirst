@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+[%bs.raw {|require("./CurriculumEditor__TargetShow.css")|}];
+
 open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
@@ -39,8 +41,8 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
       ReasonReactRouter.push(link);
     }}
     href=link
-    className="text-xs py-1 px-2 rounded-lg border mr-2 hover:bg-gray-800 hover:text-white hover:border-gray-800">
-    <FaIcon classes={"fas " ++ iconClass} />
+    className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
+    <i className={"fas fa-fw " ++ iconClass} />
   </a>;
 };
 
@@ -62,7 +64,7 @@ let make =
     ++ "/";
 
   <div
-    className="flex target-group__target-container border-t bg-white overflow-hidden items-center relative hover:bg-gray-100 hover:text-primary-500">
+    className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-100 hover:text-primary-500">
     {targets |> List.length == 1
        ? React.null
        : <div
@@ -125,9 +127,9 @@ let make =
            </span>
          | _ => React.null
          }}
-        {editorLink(linkPrefix, "details", target, "fa-list-alt")}
-        {editorLink(linkPrefix, "versions", target, "fa-code-branch")}
       </div>
     </a>
+    {editorLink(linkPrefix, "details", target, "fa-list-alt")}
+    {editorLink(linkPrefix, "versions", target, "fa-code-branch")}
   </div>;
 };

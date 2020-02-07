@@ -273,7 +273,7 @@ let controlsContainerClasses = mode =>
   );
 
 let controls = (value, state, send, onChange) => {
-  let buttonClasses = "border rounded p-1 hover:bg-gray-300 ";
+  let buttonClasses = "border rounded p-1 hover:bg-gray-300 focus:outline-none ";
   let {mode} = state;
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange);
 

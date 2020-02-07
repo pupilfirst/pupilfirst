@@ -52,7 +52,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
       );
     }}
     className=classes>
-    <FaIcon classes={"fas " ++ iconClass} />
+    <i className={"fas " ++ iconClass} />
     <span className="ml-2"> {title |> str} </span>
   </a>;
 };

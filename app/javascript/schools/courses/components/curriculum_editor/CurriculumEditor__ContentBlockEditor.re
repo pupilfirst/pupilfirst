@@ -100,9 +100,9 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
     : <button
         title
         disabled={handler == None}
-        className={"p-2 " ++ buttonClasses}
+        className={"p-2 focus:outline-none " ++ buttonClasses}
         onClick=?handler>
-        <FaIcon classes={"fas fa-fw " ++ icon} />
+        <i className={"fas fa-fw " ++ icon} />
       </button>;
 };
 

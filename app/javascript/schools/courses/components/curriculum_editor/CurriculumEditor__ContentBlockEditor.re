@@ -19,17 +19,19 @@ let computeInitialState = contentBlock => {
 type action =
   | StartSaving(string)
   | FinishSaving
-  | UpdateContentBlock(ContentBlock.t, bool);
+  | UpdateContentBlock(ContentBlock.t, bool)
+  | FailSaving;
 
 let reducer = (state, action) =>
   switch (action) {
   | StartSaving(message) => {...state, saving: Some(message)}
-  | FinishSaving => {...state, saving: None}
+  | FinishSaving => {...state, saving: None, dirty: false}
   | UpdateContentBlock(contentBlock, dirty) => {
       ...state,
       contentBlock,
       dirty,
     }
+  | FailSaving => {...state, saving: None}
   };
 
 module DeleteContentBlockMutation = [%graphql
@@ -142,28 +144,30 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
     |> ignore;
   });
 
-let onUndo = (originalContentBlock, setDirty, send, event) => {
+let onUndo = (originalContentBlock, setDirtyCB, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   WindowUtils.confirm(
     "Are you sure you want to undo your changes to this block?", () => {
-    setDirty(false);
+    setDirtyCB(false);
     send(UpdateContentBlock(originalContentBlock, false));
   });
 };
 
-let handleUpdateResult = (updateContentBlockCB, send, contentBlock) => {
+let handleUpdateResult =
+    (updateContentBlockCB, setDirtyCB, send, contentBlock) => {
   switch (contentBlock) {
   | Some(contentBlock) =>
     contentBlock |> ContentBlock.makeFromJs |> updateContentBlockCB;
     send(FinishSaving);
-  | None => send(FinishSaving)
+    setDirtyCB(false);
+  | None => send(FailSaving)
   };
   Js.Promise.resolve();
 };
 
 let updateContentBlockBlock =
-    (mutation, contentBlockExtractor, updateContentBlockCB, send) => {
+    (mutation, contentBlockExtractor, updateContentBlockCB, setDirtyCB, send) => {
   send(StartSaving("Updating..."));
 
   mutation
@@ -171,7 +175,7 @@ let updateContentBlockBlock =
   |> Js.Promise.then_(result => {
        result
        |> contentBlockExtractor
-       |> handleUpdateResult(updateContentBlockCB, send)
+       |> handleUpdateResult(updateContentBlockCB, setDirtyCB, send)
      })
   |> Js.Promise.catch(_error => {
        send(FinishSaving);
@@ -180,7 +184,7 @@ let updateContentBlockBlock =
   |> ignore;
 };
 
-let onSave = (contentBlock, updateContentBlockCB, send, event) => {
+let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   let id = contentBlock |> ContentBlock.id;
 
@@ -188,15 +192,33 @@ let onSave = (contentBlock, updateContentBlockCB, send, event) => {
   | ContentBlock.File(_url, title, _filename) =>
     let mutation = UpdateFileBlockMutation.make(~id, ~title, ());
     let extractor = result => result##updateFileBlock##contentBlock;
-    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, send);
+    updateContentBlockBlock(
+      mutation,
+      extractor,
+      updateContentBlockCB,
+      setDirtyCB,
+      send,
+    );
   | Markdown(markdown) =>
     let mutation = UpdateMarkdownBlockMutation.make(~id, ~markdown, ());
     let extractor = result => result##updateMarkdownBlock##contentBlock;
-    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, send);
+    updateContentBlockBlock(
+      mutation,
+      extractor,
+      updateContentBlockCB,
+      setDirtyCB,
+      send,
+    );
   | Image(_url, caption) =>
     let mutation = UpdateImageBlockMutation.make(~id, ~caption, ());
     let extractor = result => result##updateImageBlock##contentBlock;
-    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, send);
+    updateContentBlockBlock(
+      mutation,
+      extractor,
+      updateContentBlockCB,
+      setDirtyCB,
+      send,
+    );
   | Embed(_) => raise(InvalidBlockTypeForUpdate)
   };
 };
@@ -312,7 +334,9 @@ let make =
            ~color=`Green,
            ~handler=
              updateContentBlockCB
-             |> OptionUtils.map(cb => onSave(state.contentBlock, cb, send)),
+             |> OptionUtils.map(cb =>
+                  onSave(state.contentBlock, cb, setDirtyCB, send)
+                ),
          )}
       </div>
     </div>

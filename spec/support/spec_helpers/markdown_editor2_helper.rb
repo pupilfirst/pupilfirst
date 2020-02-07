@@ -1,14 +1,17 @@
 module MarkdownEditor2Helper
   def replace_markdown(markdown)
-    editor = find("textarea[aria-label='Markdown editor']")
-    editor.click
-    editor.send_keys(*delete_sequence(editor), markdown)
+    add_markdown(markdown, replace: true)
   end
 
-  def add_markdown(markdown)
+  def add_markdown(markdown, replace: false)
     editor = find("textarea[aria-label='Markdown editor']")
     editor.click
-    editor.send_keys(markdown)
+
+    if replace
+      editor.send_keys(*delete_sequence(editor), markdown)
+    else
+      editor.send_keys(markdown)
+    end
   end
 
   private

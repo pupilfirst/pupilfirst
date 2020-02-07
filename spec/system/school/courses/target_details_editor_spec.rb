@@ -88,7 +88,8 @@ feature 'Target Details Editor', js: true do
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
-    expect(page).to have_text('Title')
+
+    expect(page).to have_text('Will a coach review submissions on this target?')
 
     within("div#evaluated") do
       click_button 'No'

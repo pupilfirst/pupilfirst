@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+[%bs.raw {|require("./MarkdownEditor2.css")|}];
+
 let str = React.string;
 
 type fullscreenMode = [ | `Editor | `Preview | `Split];
@@ -261,12 +263,21 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
   finalizeChange(~oldValue, ~newValue, ~state, ~send, ~onChange);
 };
 
+let controlsContainerClasses = mode =>
+  "border border-gray-200 bg-gray-100 p-1 flex justify-between "
+  ++ (
+    switch (mode) {
+    | Windowed(_) => "rounded-t"
+    | Fullscreen(_) => ""
+    }
+  );
+
 let controls = (value, state, send, onChange) => {
   let buttonClasses = "border rounded p-1 hover:bg-gray-300 ";
   let {mode} = state;
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange);
 
-  <div className="bg-gray-100 p-1 flex justify-between">
+  <div className={controlsContainerClasses(state.mode)}>
     {switch (mode) {
      | Windowed(`Preview)
      | Fullscreen(`Preview) => <div />
@@ -319,10 +330,10 @@ let modeClasses = mode =>
   };
 
 let editorContainerClasses = mode =>
-  "border "
+  "border-r border-gray-200 "
   ++ (
     switch (mode) {
-    | Windowed(`Editor) => ""
+    | Windowed(`Editor) => "border-l"
     | Windowed(`Preview) => "hidden"
     | Fullscreen(`Editor) => "w-full"
     | Fullscreen(`Preview) => "hidden"
@@ -331,13 +342,16 @@ let editorContainerClasses = mode =>
   );
 
 let previewContainerClasses = mode =>
-  switch (mode) {
-  | Windowed(`Editor) => "hidden"
-  | Windowed(`Preview) => ""
-  | Fullscreen(`Editor) => "hidden"
-  | Fullscreen(`Preview) => "w-screen mx-auto"
-  | Fullscreen(`Split) => "w-1/2 relative"
-  };
+  "border-gray-200 "
+  ++ (
+    switch (mode) {
+    | Windowed(`Editor) => "hidden"
+    | Windowed(`Preview) => "border-l border-r border-b rounded-b px-2"
+    | Fullscreen(`Editor) => "hidden"
+    | Fullscreen(`Preview) => "w-screen mx-auto"
+    | Fullscreen(`Split) => "w-1/2 relative"
+    }
+  );
 
 let previewClasses = mode =>
   switch (mode) {
@@ -422,6 +436,15 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
     };
   };
 
+let footerContainerClasses = mode =>
+  "markdown-editor__footer-container border border-gray-200 bg-gray-100 flex justify-between items-center "
+  ++ (
+    switch (mode) {
+    | Windowed(_) => "rounded-b"
+    | Fullscreen(_) => ""
+    }
+  );
+
 let footer = (oldValue, state, send, onChange) => {
   let {id} = state;
   let fileFormId = id ++ "-file-form";
@@ -432,8 +455,7 @@ let footer = (oldValue, state, send, onChange) => {
   | Fullscreen(`Preview) => React.null
   | Windowed(`Editor)
   | Fullscreen(`Editor | `Split) =>
-    <div
-      className="bg-gray-100 border-t border-gray-400 border-dashed flex justify-between items-center">
+    <div className={footerContainerClasses(state.mode)}>
       <form
         className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
         id=fileFormId>
@@ -453,7 +475,7 @@ let footer = (oldValue, state, send, onChange) => {
         {switch (state.uploadState) {
          | ReadyToUpload(error) =>
            <label
-             className="text-xs px-3 py-1 flex-grow cursor-pointer"
+             className="text-xs px-3 py-2 flex-grow cursor-pointer"
              htmlFor=fileInputId>
              {switch (error) {
               | Some(error) =>
@@ -469,7 +491,7 @@ let footer = (oldValue, state, send, onChange) => {
               }}
            </label>
          | Uploading =>
-           <span className="text-xs px-3 py-1 flex-grow cursor-wait">
+           <span className="text-xs px-3 py-2 flex-grow cursor-wait">
              <i className="fas fa-spinner fa-pulse mr-2" />
              {"Please wait for the file to upload..." |> str}
            </span>
@@ -478,7 +500,7 @@ let footer = (oldValue, state, send, onChange) => {
       <a
         href="/help/markdown_editor"
         target="_blank"
-        className="flex items-center px-3 py-1 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
+        className="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
         <span className="text-xs ml-1 font-semibold hidden sm:inline">
           {"Need help?" |> str}

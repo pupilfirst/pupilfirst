@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Target Overlay', js: true do
   include UserSpecHelper
-  include MarkdownEditorHelper
+  include MarkdownEditor2Helper
   include NotificationHelper
 
   let(:course) { create :course }

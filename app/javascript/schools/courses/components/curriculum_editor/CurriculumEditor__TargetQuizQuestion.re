@@ -12,10 +12,7 @@ let make =
       ~questionCanBeRemoved,
     ) => {
   let answerOptionId = (questionId, index) =>
-    "quiz_question_"
-    ++ questionId
-    ++ "_answer_option_"
-    ++ (index + 1 |> string_of_int);
+    questionId ++ "-answer-option-" ++ (index + 1 |> string_of_int);
 
   let updateQuestion = question =>
     updateQuizQuestionCB(
@@ -51,15 +48,15 @@ let make =
     quizQuestion
     |> TargetDetails__QuizQuestion.answerOptions
     |> Array.length > 2;
-  let questionId = questionNumber + 1 |> string_of_int;
+  let questionId = "quiz-question-" ++ questionNumber;
 
   <div
     className="quiz-maker__question-container p-4 bg-gray-100 rounded-lg border mt-4">
     <div className="flex items-center justify-between">
       <label
         className="block tracking-wide uppercase text-gray-800 text-sm font-bold"
-        htmlFor={"quiz_question_" ++ questionId}>
-        {"Question " ++ questionId |> str}
+        htmlFor=questionId>
+        {"Question " ++ questionNumber |> str}
       </label>
       <div className="quiz-maker__question-remove-button invisible">
         {questionCanBeRemoved
@@ -79,13 +76,12 @@ let make =
       </div>
     </div>
     <div className="my-2 bg-white">
-      <MarkdownEditor
-        textareaId={"quiz_question_" ++ questionId}
+      <MarkdownEditor2
+        textareaId=questionId
         placeholder="Type the question here (supports markdown)"
         value={quizQuestion |> TargetDetails__QuizQuestion.question}
-        updateMarkdownCB=updateQuestion
+        onChange=updateQuestion
         profile=Markdown.Permissive
-        defaultView=MarkdownEditor.Edit
       />
     </div>
     <div className="quiz-maker__answers-container relative">

@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Community Show', js: true do
   include UserSpecHelper
   include NotificationHelper
-  include MarkdownEditorHelper
+  include MarkdownEditor2Helper
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }

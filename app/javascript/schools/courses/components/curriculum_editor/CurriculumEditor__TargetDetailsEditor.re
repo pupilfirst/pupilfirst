@@ -560,7 +560,7 @@ let quizEditor = (state, send) => {
         |> Array.mapi((index, quizQuestion) =>
              <CurriculumEditor__TargetQuizQuestion
                key={quizQuestion |> TargetDetails__QuizQuestion.id}
-               questionNumber=index
+               questionNumber={index + 1 |> string_of_int}
                quizQuestion
                updateQuizQuestionCB={updateQuizQuestionCB(send)}
                removeQuizQuestionCB={removeQuizQuestionCB(send)}

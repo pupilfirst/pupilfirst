@@ -1,10 +1,10 @@
 module MarkdownEditor2Helper
-  def replace_markdown(markdown)
-    add_markdown(markdown, replace: true)
+  def replace_markdown(markdown, id: nil)
+    add_markdown(markdown, replace: true, id: id)
   end
 
-  def add_markdown(markdown, replace: false)
-    editor = find("textarea[aria-label='Markdown editor']")
+  def add_markdown(markdown, replace: false, id: nil)
+    editor = id.present? ? find('#' + id) : find("textarea[aria-label='Markdown editor']")
     editor.click
 
     if replace

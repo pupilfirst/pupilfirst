@@ -46,16 +46,18 @@ let make =
     </div>
     <div
       className="flex px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
-      <span className="mr-2 md:mr-3 pt-5">
+      <span className="mr-2 md:mr-3 pt-1">
         <Icon className="if i-comment-alt-regular text-gray-800 text-base" />
       </span>
       <div className="w-full" ariaLabel="feedback">
-        <MarkdownEditor
-          updateMarkdownCB=updateFeedbackCB
+        <label
+          className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2">
+          {label |> str}
+        </label>
+        <MarkdownEditor2
+          onChange=updateFeedbackCB
           value=feedback
-          label
           profile=Markdown.Permissive
-          defaultView=MarkdownEditor.Edit
           maxLength=10000
         />
       </div>

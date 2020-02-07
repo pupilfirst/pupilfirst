@@ -34,7 +34,7 @@ let make =
            ReasonReact.null
          </div>}
     <div
-      id={answerOptionId ++ "_block"}
+      id={answerOptionId ++ "-block"}
       className="quiz-maker__answer-option-answer flex flex-col bg-white border border-gray-400 rounded-lg ml-12">
       <div className="flex">
         <textarea

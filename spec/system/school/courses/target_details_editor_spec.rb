@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Target Details Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
-  include MarkdownEditorHelper
+  include MarkdownEditor2Helper
 
   # Setup a course with few targets target, ...
   let!(:school) { create :school, :current }
@@ -126,22 +126,21 @@ feature 'Target Details Editor', js: true do
     end
 
     # Quiz Question 1
-    replace_markdown(quiz_question_1)
-    click_button 'Preview'
-    fill_in 'quiz_question_1_answer_option_1', with: quiz_question_1_answer_option_1
-    fill_in 'quiz_question_1_answer_option_2', with: quiz_question_1_answer_option_2
+    replace_markdown(quiz_question_1, id: 'quiz-question-1')
+    fill_in 'quiz-question-1-answer-option-1', with: quiz_question_1_answer_option_1
+    fill_in 'quiz-question-1-answer-option-2', with: quiz_question_1_answer_option_2
     find("a", text: "Add another Answer Option").click
-    fill_in 'quiz_question_1_answer_option_3', with: quiz_question_1_answer_option_3
+    fill_in 'quiz-question-1-answer-option-3', with: quiz_question_1_answer_option_3
 
-    within("div#quiz_question_1_answer_option_3_block") do
+    within("div#quiz-question-1-answer-option-3-block") do
       click_button 'Mark as correct'
     end
 
     # Quiz Question 2
     find("a", text: "Add another Question").click
-    replace_markdown(quiz_question_2)
-    fill_in 'quiz_question_2_answer_option_1', with: quiz_question_2_answer_option_1
-    fill_in 'quiz_question_2_answer_option_2', with: quiz_question_2_answer_option_2
+    replace_markdown(quiz_question_2, id: 'quiz-question-2')
+    fill_in 'quiz-question-2-answer-option-1', with: quiz_question_2_answer_option_1
+    fill_in 'quiz-question-2-answer-option-2', with: quiz_question_2_answer_option_2
 
     click_button 'Update Target'
 

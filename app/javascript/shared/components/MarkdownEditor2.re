@@ -1,5 +1,7 @@
 [@bs.config {jsx: 3}];
 
+exception InvalidModeForPreview;
+
 [%bs.raw {|require("./MarkdownEditor2.css")|}];
 
 let str = React.string;
@@ -264,7 +266,7 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 };
 
 let controlsContainerClasses = mode =>
-  "border border-gray-200 bg-gray-100 p-1 flex justify-between "
+  "border border-gray-300 bg-gray-200 p-1 flex justify-between "
   ++ (
     switch (mode) {
     | Windowed(_) => "rounded-t"
@@ -273,7 +275,7 @@ let controlsContainerClasses = mode =>
   );
 
 let controls = (value, state, send, onChange) => {
-  let buttonClasses = "border rounded p-1 hover:bg-gray-300 focus:outline-none ";
+  let buttonClasses = "border rounded p-1 hover:bg-gray-400 focus:outline-none ";
   let {mode} = state;
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange);
 
@@ -330,7 +332,7 @@ let modeClasses = mode =>
   };
 
 let editorContainerClasses = mode =>
-  "border-r border-gray-200 "
+  "border-r border-gray-300 "
   ++ (
     switch (mode) {
     | Windowed(`Editor) => "border-l"
@@ -341,15 +343,22 @@ let editorContainerClasses = mode =>
     }
   );
 
+let previewType = mode =>
+  switch (mode) {
+  | Windowed(`Editor)
+  | Fullscreen(`Editor) => raise(InvalidModeForPreview)
+  | Windowed(`Preview) => `WindowedPreview
+  | Fullscreen(`Split) => `FullscreenSplit
+  | Fullscreen(`Preview) => `FullscreenPreview
+  };
+
 let previewContainerClasses = mode =>
-  "border-gray-200 "
+  "border-gray-300 "
   ++ (
-    switch (mode) {
-    | Windowed(`Editor) => "hidden"
-    | Windowed(`Preview) => "border-l border-r border-b rounded-b px-2"
-    | Fullscreen(`Editor) => "hidden"
-    | Fullscreen(`Preview) => "w-screen mx-auto"
-    | Fullscreen(`Split) => "w-1/2 relative"
+    switch (mode |> previewType) {
+    | `WindowedPreview => "border-l border-r border-b rounded-b px-2"
+    | `FullscreenPreview => "w-screen mx-auto"
+    | `FullscreenSplit => "w-1/2 relative"
     }
   );
 
@@ -437,7 +446,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   };
 
 let footerContainerClasses = mode =>
-  "markdown-editor__footer-container border border-gray-200 bg-gray-100 flex justify-between items-center "
+  "markdown-editor__footer-container border border-gray-300 bg-gray-200 flex justify-between items-center "
   ++ (
     switch (mode) {
     | Windowed(_) => "rounded-b"
@@ -457,7 +466,7 @@ let footer = (oldValue, state, send, onChange) => {
   | Fullscreen(`Editor | `Split) =>
     <div className={footerContainerClasses(state.mode)}>
       <form
-        className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-200 hover:text-primary-500"
+        className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-300 hover:text-primary-500"
         id=fileFormId>
         <input
           name="authenticity_token"
@@ -500,7 +509,7 @@ let footer = (oldValue, state, send, onChange) => {
       <a
         href="/help/markdown_editor"
         target="_blank"
-        className="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-secondary-500 cursor-pointer">
+        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
         <span className="text-xs ml-1 font-semibold hidden sm:inline">
           {"Need help?" |> str}
@@ -597,6 +606,7 @@ let make =
       ~textareaId=?,
       ~maxLength=1000,
       ~defaultMode=Windowed(`Editor),
+      ~placeholder=?,
     ) => {
   let (state, send) =
     React.useReducerWithMapState(
@@ -709,6 +719,7 @@ let make =
           disabled={state.uploadState == Uploading}
           message="Uploading...">
           <textarea
+            ?placeholder
             ariaLabel="Markdown editor"
             rows=4
             maxLength
@@ -720,16 +731,24 @@ let make =
           />
         </DisablingCover>
       </div>
-      <div className={previewContainerClasses(state.mode)}>
-        <div
-          id={state.id ++ "-preview"} className={previewClasses(state.mode)}>
-          <MarkdownBlock
-            markdown=value
-            profile
-            className="max-w-3xl mx-auto"
-          />
-        </div>
-      </div>
+      {switch (state.mode) {
+       | Windowed(`Editor)
+       | Fullscreen(`Editor) => React.null
+       | Windowed(`Preview)
+       | Fullscreen(`Preview)
+       | Fullscreen(`Split) =>
+         <div className={previewContainerClasses(state.mode)}>
+           <div
+             id={state.id ++ "-preview"}
+             className={previewClasses(state.mode)}>
+             <MarkdownBlock
+               markdown=value
+               profile
+               className="max-w-3xl mx-auto"
+             />
+           </div>
+         </div>
+       }}
     </div>
     {footer(value, state, send, onChange)}
   </div>;

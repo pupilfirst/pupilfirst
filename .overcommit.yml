@@ -8,3 +8,8 @@ PreCommit:
     exclude:
       - '**/*.svg'
       - 'app/javascript/**/*.bs.js'
+
+  Stylelint:
+    enabled: true
+    command: ['yarn', 'run', '--silent', 'stylelint']
+    required_executable: './node_modules/stylelint/bin/stylelint.js'

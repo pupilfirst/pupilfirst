@@ -558,6 +558,7 @@ let make =
             : handleLockedLevel(currentLevel)}
        </div>
      }}
-    {quickNavigationLinks(levels, selectedLevel, setState)}
+    {state.showLevelZero
+       ? React.null : quickNavigationLinks(levels, selectedLevel, setState)}
   </div>;
 };

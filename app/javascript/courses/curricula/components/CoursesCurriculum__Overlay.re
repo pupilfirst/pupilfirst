@@ -101,10 +101,11 @@ let scrollCompleteButtonIntoViewEventually = () => {
       | Some(e) =>
         Webapi.Dom.Element.scrollIntoView(e);
         e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected");
-      | None => ()
+      | None =>
+        Rollbar.error("Could not find the 'Complete' button to scroll to.")
       };
     },
-    100,
+    50,
   )
   |> ignore;
 };

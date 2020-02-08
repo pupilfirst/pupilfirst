@@ -27,7 +27,7 @@ let numberedLevelSelector = (selectedLevel, setShowLevelZero) => {
   let additionalClasses =
     switch (setShowLevelZero) {
     | Some(_) => "w-1/2 bg-white px-4 py-2 hover:bg-gray-100 hover:text-primary-500 truncate leading-loose text-sm"
-    | None => "w-full focus:shadow-inner bg-primary-100 border-t border-b px-2 h-10 flex items-center justify-between"
+    | None => "w-full rounded-lg bg-primary-100 border-t border-b px-2 h-10 flex items-center justify-between"
     };
 
   <button

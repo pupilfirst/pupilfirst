@@ -1,6 +1,6 @@
 {
   "name": "@pupilfirst/multiselect-inline",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A multi-select inline dropdown component for ReasonReact projects",
   "keywords": [
     "Reason",

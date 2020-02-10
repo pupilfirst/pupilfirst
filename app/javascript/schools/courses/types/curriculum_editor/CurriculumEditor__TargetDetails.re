@@ -35,7 +35,7 @@ let prerequisiteTargets = t => t.prerequisiteTargets;
 
 let evaluationCriteria = t => t.evaluationCriteria;
 
-let decodeVisibility = visibilityString =>
+let visibilityFromJs = visibilityString =>
   switch (visibilityString) {
   | "draft" => Draft
   | "live" => Live
@@ -56,7 +56,7 @@ let roleAsString = role =>
   | Team => "team"
   };
 
-let decodeRole = roleString =>
+let roleFromJs = roleString =>
   switch (roleString) {
   | "student" => Student
   | "team" => Team
@@ -65,7 +65,7 @@ let decodeRole = roleString =>
 
 let makeFromJs = targetData => {
   title: targetData##title,
-  role: decodeRole(targetData##role),
+  role: roleFromJs(targetData##role),
   targetGroupId: targetData##targetGroupId,
   evaluationCriteria: targetData##evaluationCriteria,
   prerequisiteTargets: targetData##prerequisiteTargets,
@@ -76,5 +76,5 @@ let makeFromJs = targetData => {
        ),
   linkToComplete: targetData##linkToComplete,
   completionInstructions: targetData##completionInstructions,
-  visibility: decodeVisibility(targetData##visibility),
+  visibility: visibilityFromJs(targetData##visibility),
 };

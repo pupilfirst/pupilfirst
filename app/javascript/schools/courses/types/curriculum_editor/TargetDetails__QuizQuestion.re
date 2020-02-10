@@ -92,13 +92,13 @@ let makeFromJs = quizData => {
   };
 };
 
-let quizAsObject = quiz => {
+let quizAsJsObject = quiz => {
   quiz
   |> Array.map(quiz =>
        {
          "question": quiz.question,
          "answerOptions":
-           TargetDetails__AnswerOption.quizAnswersAsObject(
+           TargetDetails__AnswerOption.quizAnswersAsJsObject(
              quiz.answerOptions,
            ),
        }

@@ -616,7 +616,7 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
     |> Js.Array.filter(question =>
          TargetDetails__QuizQuestion.isValidQuizQuestion(question)
        )
-    |> TargetDetails__QuizQuestion.quizAsObject;
+    |> TargetDetails__QuizQuestion.quizAsJsObject;
   let visibility =
     switch (state.visibility) {
     | Live => Target.Live

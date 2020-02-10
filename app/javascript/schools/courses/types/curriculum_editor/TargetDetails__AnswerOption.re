@@ -29,7 +29,7 @@ let makeFromJs = answerData => {
   correctAnswer: answerData##correctAnswer,
 };
 
-let quizAnswersAsObject = quizAnswers => {
+let quizAnswersAsJsObject = quizAnswers => {
   quizAnswers
   |> Array.map(qa => {"answer": qa.answer, "correctAnswer": qa.correctAnswer});
 };

@@ -23,8 +23,6 @@ let sortIndex = t => t.sortIndex;
 
 let visibility = t => t.visibility;
 
-let update = (t, title) => {...t, title};
-
 let decodeVisbility = visibilityString =>
   switch (visibilityString) {
   | "draft" => Draft

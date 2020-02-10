@@ -8,16 +8,33 @@ class UpdateTargetMutator < ApplicationQuery
   property :prerequisite_targets
   property :evaluation_criteria
   property :quiz
-  property :completion_instructions
+  property :completion_instructions, validates: { length: { maximum: 1000 } }
   property :link_to_complete
   property :visibility, validates: { presence: true, inclusion: { in: Target.valid_visibility_types } }
 
   validate :target_group_exists
   validate :target_exists
   validate :only_one_method_of_completion
+  validate :target_and_target_group_in_same_course
+  validate :target_and_evaluation_criteria_have_same_course
+  validate :prerequisite_targets_in_same_level
 
   def target_group_exists
     errors[:base] << 'Target group does not exist' if target_group.blank?
+  end
+
+  def target_and_evaluation_criteria_have_same_course
+    return if course.evaluation_criteria.where(id: evaluation_criteria).count == evaluation_criteria.count
+
+    errors[:base] << 'Evaluation criteria must be from the same course as the target'
+  end
+
+  def prerequisite_targets_in_same_level
+    targets = course.targets.where(id: prerequisite_targets)
+
+    return if (targets.count == prerequisite_targets.count) && targets.all? { |target| target.level.id == level.id }
+
+    errors[:base] << 'Prerequisite targets must be from the same level as the target'
   end
 
   def target_exists
@@ -32,6 +49,12 @@ class UpdateTargetMutator < ApplicationQuery
     errors[:base] << 'More than one method of completion'
   end
 
+  def target_and_target_group_in_same_course
+    return if target.course.id == target_group.course.id
+
+    errors[:base] << 'target and target group not from the same course'
+  end
+
   def update
     ::Targets::UpdateService.new(target).execute(target_params)
   end
@@ -39,7 +62,7 @@ class UpdateTargetMutator < ApplicationQuery
   private
 
   def target_group
-    @target_group ||= target.target_group
+    @target_group ||= current_school.target_groups.where(id: target_group_id).first
   end
 
   def target
@@ -47,7 +70,11 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def course
-    @course ||= target_group.course
+    @course ||= target.course
+  end
+
+  def level
+    @level ||= target.level
   end
 
   def target_params

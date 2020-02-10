@@ -4,14 +4,23 @@
 
 @tailwind utilities;
 
-.multiselect-item .select-icon-selected {
+.multiselect-inline-list {
+  height: 7rem;
+}
+
+.multiselect-inline-list__item
+  .multiselect-inline-list__item-select-icon-selected {
   display: none;
 }
-.multiselect-item:hover .select-icon-unchecked,
-.multiselect-item:active .select-icon-unchecked {
+.multiselect-inline-list__item:hover
+  .multiselect-inline-list__item-select-icon-unselected,
+.multiselect-inline-list__item:active
+  .multiselect-inline-list__item-select-icon-unselected {
   display: none;
 }
-.multiselect-item:hover .select-icon-selected,
-.multiselect-item:active .select-icon-selected {
+.multiselect-inline-list__item:hover
+  .multiselect-inline-list__item-select-icon-selected,
+.multiselect-inline-list__item:active
+  .multiselect-inline-list__item-select-icon-selected {
   display: inline-flex;
 }

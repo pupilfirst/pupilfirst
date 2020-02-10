@@ -138,7 +138,7 @@ module Make = (Selectable: Selectable) => {
                <div
                  className={
                    unselected |> Array.length > 3
-                     ? "h-28 overflow-y-scroll" : ""
+                     ? "multiselect-inline-list overflow-y-scroll" : ""
                  }>
                  {searchResults
                   |> Array.mapi((index, item) =>
@@ -149,12 +149,12 @@ module Make = (Selectable: Selectable) => {
                            onSelect(item);
                          }}
                          title={"Select " ++ (item |> Selectable.value)}
-                         className="flex multiselect-item items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
+                         className="flex multiselect-inline-list__item  items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
                          <i
-                           className="far fa-square select-icon-unchecked text-gray-400 text-xl"
+                           className="far fa-square multiselect-inline-list__item-select-icon-unselected text-gray-400 text-xl"
                          />
                          <i
-                           className="far fa-plus-square select-icon-selected text-xl"
+                           className="far fa-plus-square multiselect-inline-list__item-select-icon-selected text-xl"
                          />
                          <span className="ml-2">
                            {item |> Selectable.value |> str}

@@ -121,7 +121,7 @@ See this code in action here: https://multiselect-inline.pupilfirst.com
 
 ## Usage
 
-`MultiselectInline.Make` is a functor that accepts a module with with `type t` that has functions `label`, `value`, and `searchString`
+`MultiselectInline.Make` is a functor that accepts a module with with `type t` that has functions `value` and `searchString`.
 
 | Function       | Type     | Description                                                                                                                                                                           |
 | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

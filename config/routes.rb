@@ -50,7 +50,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :targets, only: %i[update] do
+    resources :targets, only: [] do
       resource :content_block, only: %i[create]
     end
 

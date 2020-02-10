@@ -16,17 +16,5 @@ module Schools
         render json: { error: form.errors.full_messages.join(', ') }
       end
     end
-
-    protected
-
-    def content_block_data(content_block)
-      content_block_data = { id: content_block.id.to_s, content: content_block.content, error: nil }
-      content_block.file.attached? ? content_block_data.merge!(fileUrl: url_for(content_block.file)) : content_block_data
-      content_block_data.merge(versions: target_versions)
-    end
-
-    def target_versions
-      Target.find(params[:target_id]).content_versions.order('version_on DESC').distinct(:version_on).pluck(:version_on)
-    end
   end
 end

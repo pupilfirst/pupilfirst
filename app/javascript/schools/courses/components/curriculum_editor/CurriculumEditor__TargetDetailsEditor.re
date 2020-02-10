@@ -300,7 +300,8 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
         <div id="prerequisite_targets" className="mb-6 ml-6">
           <MultiSelectForPrerequisiteTargets
             placeholder="Search targets"
-            emptyMessage="No targets selected"
+            emptySelectionMessage="No targets selected"
+             allItemsSelectedMessage="You have selected all targets!"
             selected
             unselected
             onChange={setPrerequisiteSearch(send)}
@@ -397,7 +398,8 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
            </div>}
       <MultiSelectForEvaluationCriteria
         placeholder="Search evaluation criteria"
-        emptyMessage="No criteria selected"
+        emptySelectionMessage="No criteria selected"
+        allItemsSelectedMessage="You have selected all evaluation criteria!"
         selected
         unselected
         onChange={setEvaluationCriteriaSearch(send)}

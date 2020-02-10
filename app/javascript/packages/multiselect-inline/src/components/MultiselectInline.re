@@ -59,7 +59,8 @@ module Make = (Selectable: Selectable) => {
         ~selected,
         ~onSelect,
         ~onDeselect,
-        ~emptyMessage="No items selected",
+        ~emptySelectionMessage="No items selected",
+        ~allItemsSelectedMessage="You have selected all items!",
         ~colorForSelected="orange",
       ) => {
     let (inputId, _setId) =
@@ -110,13 +111,17 @@ module Make = (Selectable: Selectable) => {
            : <div
                className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 rounded px-3 pt-3 ">
                <i className="fas fa-inbox text-3xl" />
-               <h5 className="mt-1 font-semibold"> {emptyMessage |> str} </h5>
+               <h5 className="mt-1 font-semibold">
+                 {emptySelectionMessage |> str}
+               </h5>
              </div>}
-        {unselected |> Array.length > 0
-           ? <div className="text-xs font-semibold mt-2">
-               {"Add more from the list below:" |> str}
-             </div>
-           : React.null}
+        <div className="text-xs font-semibold mt-2">
+          {(
+             unselected |> Array.length > 0
+               ? "Add more from the list below:" : allItemsSelectedMessage
+           )
+           |> str}
+        </div>
       </div>
       {unselected |> Array.length > 0
          ? <div className="flex relative pt-3">

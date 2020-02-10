@@ -76,7 +76,8 @@ module Example = {
       </div>
       <MultiSelect
         placeholder="Search sport"
-        emptyMessage="No sport selected"
+        emptySelectionMessage="No sport selected"
+        allItemsSelectedMessage="You have selected all sports!"
         selected={state.selected}
         unselected={unselected(state.selected)}
         onChange={setSportSearch(setState)}

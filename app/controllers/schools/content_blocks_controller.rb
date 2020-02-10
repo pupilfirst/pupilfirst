@@ -6,7 +6,9 @@ module Schools
     # POST /school/targets/:target_id/content_block
     def create
       target = Target.find(params[:target_id])
-      authorize(target.level, policy_class: Schools::ContentBlockPolicy)
+
+      # Let's authorize against the level, since that's the resource we have with a matching action in the policy.
+      authorize(target.level, policy_class: Schools::LevelPolicy)
 
       form = ::Schools::Targets::CreateContentBlockForm.new(ContentBlock.new)
 

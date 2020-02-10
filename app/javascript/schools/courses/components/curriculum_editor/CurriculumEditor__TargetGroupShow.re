@@ -44,13 +44,7 @@ let archivedClasses = archived =>
   ++ (archived ? "target-group__header--archived" : "");
 
 let updateSortIndex =
-    (
-      targetGroups,
-      targetGroup,
-      up,
-      updateTargetGroupSortIndexCB,
-      authenticityToken,
-    ) => {
+    (targetGroups, targetGroup, up, updateTargetGroupSortIndexCB) => {
   let newTargetGroups = targetGroups |> ListUtils.swap(up, targetGroup);
 
   let targetGroupIds =
@@ -58,7 +52,6 @@ let updateSortIndex =
   targetGroupIds
   |> CurriculumEditor__SortResourcesMutation.sort(
        CurriculumEditor__SortResourcesMutation.TargetGroup,
-       authenticityToken,
      );
   updateTargetGroupSortIndexCB(newTargetGroups);
 };
@@ -76,7 +69,6 @@ let make =
       ~showArchived,
       ~updateTargetSortIndexCB,
       ~updateTargetGroupSortIndexCB,
-      ~authenticityToken,
       ~index,
       ~course,
     ) => {
@@ -111,8 +103,9 @@ let make =
   };
   let handleCreateTarget = (title, targetGroupId) => {
     send(UpdateTargetSaving);
+
     CreateTargetMutation.make(~title, ~targetGroupId, ())
-    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response => {
          switch (response##createTarget##target) {
          | Some(target) => handleResponseCB(target)
@@ -169,7 +162,6 @@ let make =
                    targetGroup,
                    true,
                    updateTargetGroupSortIndexCB,
-                   authenticityToken,
                  )
                }>
                <i className="fas fa-arrow-up text-sm" />
@@ -191,7 +183,6 @@ let make =
                    targetGroup,
                    false,
                    updateTargetGroupSortIndexCB,
-                   authenticityToken,
                  )
                }>
                <i className="fas fa-arrow-down text-sm" />
@@ -205,7 +196,6 @@ let make =
             target
             targets=targetsToDisplay
             updateTargetSortIndexCB
-            authenticityToken
             index
             course
           />

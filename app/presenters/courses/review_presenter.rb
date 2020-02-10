@@ -13,7 +13,6 @@ module Courses
 
     def props
       {
-        authenticity_token: view.form_authenticity_token,
         levels: levels,
         pending_submissions: pending_submissions,
         course_id: @course.id,

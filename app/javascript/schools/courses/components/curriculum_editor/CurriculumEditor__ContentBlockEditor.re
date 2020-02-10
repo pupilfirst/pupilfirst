@@ -115,7 +115,7 @@ let onMove = (contentBlock, cb, direction, _event) => {
     ~direction,
     (),
   )
-  |> GraphqlQuery.sendQuery2
+  |> GraphqlQuery.sendQuery
   |> ignore;
 
   cb(contentBlock);
@@ -127,7 +127,7 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
     let id = contentBlock |> ContentBlock.id;
 
     DeleteContentBlockMutation.make(~id, ())
-    |> GraphqlQuery.sendQuery2
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result => {
          if (result##deleteContentBlock##success) {
            removeContentBlockCB(id);
@@ -171,7 +171,7 @@ let updateContentBlockBlock =
   send(StartSaving("Updating..."));
 
   mutation
-  |> GraphqlQuery.sendQuery2
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        result
        |> contentBlockExtractor

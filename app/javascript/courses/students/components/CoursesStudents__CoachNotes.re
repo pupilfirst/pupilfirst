@@ -30,7 +30,7 @@ module CreateCoachNotesMutation = [%graphql
    |}
 ];
 
-let saveNote = (authenticityToken, studentId, setState, state, addNoteCB) => {
+let saveNote = (studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true});
   CreateCoachNotesMutation.make(
     ~studentId,
@@ -39,7 +39,7 @@ let saveNote = (authenticityToken, studentId, setState, state, addNoteCB) => {
     },
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createCoachNote##coachNote) {
        | Some(note) =>
@@ -84,15 +84,7 @@ let make = (~studentId, ~coachNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
     </DisablingCover>
     <button
       disabled={state.newNote |> String.length < 1 || state.saving}
-      onClick={_ =>
-        saveNote(
-          AuthenticityToken.fromHead(),
-          studentId,
-          setState,
-          state,
-          addNoteCB,
-        )
-      }
+      onClick={_ => saveNote(studentId, setState, state, addNoteCB)}
       className="btn btn-primary mt-2">
       {state.saving
          ? saveNoteButtonText("Saving", "fas fa-spinner")

@@ -58,7 +58,7 @@ module DestroySchoolLinkQuery = [%graphql
   |}
 ];
 
-let handleDelete = (state, send, authenticityToken, removeLinkCB, id, event) => {
+let handleDelete = (state, send, removeLinkCB, id, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (state.deleting |> List.mem(id)) {
@@ -67,7 +67,7 @@ let handleDelete = (state, send, authenticityToken, removeLinkCB, id, event) => 
     send(DisableDelete(id));
 
     DestroySchoolLinkQuery.make(~id, ())
-    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(_response => {
          removeLinkCB(id);
          Js.Promise.resolve();
@@ -79,7 +79,7 @@ let handleDelete = (state, send, authenticityToken, removeLinkCB, id, event) => 
 let deleteIconClasses = deleting =>
   deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt";
 
-let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
+let showLinks = (state, send, removeLinkCB, kind, links) =>
   switch (links) {
   | [] =>
     <div
@@ -110,13 +110,7 @@ let showLinks = (state, send, authenticityToken, removeLinkCB, kind, links) =>
            </div>
            <button
              title={"Delete " ++ url}
-             onClick={handleDelete(
-               state,
-               send,
-               authenticityToken,
-               removeLinkCB,
-               id,
-             )}
+             onClick={handleDelete(state, send, removeLinkCB, id)}
              className="p-3">
              <FaIcon
                classes={deleteIconClasses(state.deleting |> List.mem(id))}
@@ -201,7 +195,7 @@ module CreateLinkError = {
 
 module CreateLinkErrorHandler = GraphqlErrorHandler.Make(CreateLinkError);
 
-let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
+let handleAddLink = (state, send, addLinkCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (addLinkDisabled(state)) {
@@ -228,7 +222,7 @@ let handleAddLink = (state, send, authenticityToken, addLinkCB, event) => {
         CreateSchoolLinkQuery.make(~kind="social", ~url=state.url, ())
       }
     )
-    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response =>
          switch (response##createSchoolLink) {
          | `SchoolLink(schoolLink) =>
@@ -301,8 +295,7 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make =
-    (~kind, ~customizations, ~authenticityToken, ~addLinkCB, ~removeLinkCB) => {
+let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind));
 
   <div className="mt-8 mx-8 pb-6">
@@ -341,7 +334,6 @@ let make =
       {showLinks(
          state,
          send,
-         authenticityToken,
          removeLinkCB,
          state.kind,
          unpackLinks(state.kind, customizations),
@@ -396,7 +388,7 @@ let make =
           <button
             key="sc-links-editor__form-button"
             disabled={addLinkDisabled(state)}
-            onClick={handleAddLink(state, send, authenticityToken, addLinkCB)}
+            onClick={handleAddLink(state, send, addLinkCB)}
             className="btn btn-primary btn-large mt-6">
             {state.adding |> addLinkText |> str}
           </button>

@@ -63,14 +63,7 @@ let updateStudentSubmissions =
 };
 
 let getStudentSubmissions =
-    (
-      authenticityToken,
-      studentId,
-      cursor,
-      setState,
-      submissions,
-      updateSubmissionsCB,
-    ) => {
+    (studentId, cursor, setState, submissions, updateSubmissionsCB) => {
   setState(_ => {loading: true});
   (
     switch (cursor) {
@@ -79,7 +72,7 @@ let getStudentSubmissions =
     | None => StudentSubmissionsQuery.make(~studentId, ())
     }
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##studentSubmissions##nodes
        |> updateStudentSubmissions(
@@ -177,7 +170,6 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
       switch (submissions) {
       | Submissions.Unloaded =>
         getStudentSubmissions(
-          AuthenticityToken.fromHead(),
           studentId,
           None,
           setState,
@@ -207,7 +199,6 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
                 className="btn btn-primary-ghost cursor-pointer w-full mt-8"
                 onClick={_ =>
                   getStudentSubmissions(
-                    AuthenticityToken.fromHead(),
                     studentId,
                     Some(cursor),
                     setState,

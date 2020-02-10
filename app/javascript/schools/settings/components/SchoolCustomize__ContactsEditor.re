@@ -45,14 +45,7 @@ module UpdateSchoolStringErrorHandler =
   GraphqlErrorHandler.Make(SchoolCustomize__UpdateSchoolStringError);
 
 let handleUpdateContactDetails =
-    (
-      state,
-      send,
-      authenticityToken,
-      updateAddressCB,
-      updateEmailAddressCB,
-      event,
-    ) => {
+    (state, send, updateAddressCB, updateEmailAddressCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(BeginUpdate);
 
@@ -61,7 +54,7 @@ let handleUpdateContactDetails =
     ~emailAddress=state.emailAddress,
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result =>
        switch (
          result##updateAddress##errors,
@@ -127,13 +120,7 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make =
-    (
-      ~customizations,
-      ~authenticityToken,
-      ~updateAddressCB,
-      ~updateEmailAddressCB,
-    ) => {
+let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
   let (state, send) =
     React.useReducer(reducer, initialState(customizations));
 
@@ -193,7 +180,6 @@ let make =
         onClick={handleUpdateContactDetails(
           state,
           send,
-          authenticityToken,
           updateAddressCB,
           updateEmailAddressCB,
         )}

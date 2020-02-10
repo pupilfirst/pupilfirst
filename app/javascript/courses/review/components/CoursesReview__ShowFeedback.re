@@ -20,12 +20,11 @@ module CreateFeedbackMutation = [%graphql
   |}
 ];
 
-let createFeedback =
-    (authenticityToken, submissionId, feedback, setState, updateSubmissionCB) => {
+let createFeedback = (submissionId, feedback, setState, updateSubmissionCB) => {
   setState(state => {...state, saving: true});
 
   CreateFeedbackMutation.make(~submissionId, ~feedback, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##createFeedback##success
          ? {
@@ -94,7 +93,6 @@ let updateFeedbackCB = (setState, newFeedback) =>
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~feedback,
       ~reviewed,
       ~submissionId,
@@ -131,7 +129,6 @@ let make =
                       className="btn btn-success border border-green-600 w-full md:w-auto"
                       onClick={_ =>
                         createFeedback(
-                          authenticityToken,
                           submissionId,
                           state.newFeedback,
                           setState,

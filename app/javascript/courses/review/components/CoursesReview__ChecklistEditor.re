@@ -30,7 +30,7 @@ let updateReviewChecklist =
       CoursesReview__ReviewChecklistItem.encodeArray(reviewChecklist),
     (),
   )
-  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        if (response##updateReviewChecklist##success) {
          updateReviewChecklistCB(reviewChecklist);

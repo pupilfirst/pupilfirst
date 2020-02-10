@@ -85,10 +85,8 @@ let reducer = (state, action) =>
   };
 
 let loadContentBlocks = (targetId, send) => {
-  let response =
-    ContentBlock.Query.make(~targetId, ())
-    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead(), ~notify=true);
-  response
+  ContentBlock.Query.make(~targetId, ())
+  |> GraphqlQuery.sendQuery(~notify=true)
   |> Js.Promise.then_(result => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);

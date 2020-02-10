@@ -89,9 +89,8 @@ module TargetDetailsQuery = [%graphql
 ];
 
 let loadTargetDetails = (targetId, send) => {
-  let response =
-    TargetDetailsQuery.make(~targetId, ()) |> GraphqlQuery.sendQuery2;
-  response
+  TargetDetailsQuery.make(~targetId, ())
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        let targetDetails = TargetDetails.makeFromJs(result##targetDetails);
        send(SaveTargetDetails(targetDetails));
@@ -632,22 +631,21 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
       ~sortIndex,
       ~visibility,
     );
-  let updateTargetQuery =
-    UpdateTargetQuery.make(
-      ~id,
-      ~targetGroupId=state.targetGroupId,
-      ~title=state.title,
-      ~role,
-      ~evaluationCriteria=state.evaluationCriteria,
-      ~prerequisiteTargets=state.prerequisiteTargets,
-      ~quiz,
-      ~completionInstructions=state.completionInstructions,
-      ~linkToComplete=state.linkToComplete,
-      ~visibility=visibilityAsString,
-      (),
-    );
-  let response = updateTargetQuery |> GraphqlQuery.sendQuery2;
-  response
+
+  UpdateTargetQuery.make(
+    ~id,
+    ~targetGroupId=state.targetGroupId,
+    ~title=state.title,
+    ~role,
+    ~evaluationCriteria=state.evaluationCriteria,
+    ~prerequisiteTargets=state.prerequisiteTargets,
+    ~quiz,
+    ~completionInstructions=state.completionInstructions,
+    ~linkToComplete=state.linkToComplete,
+    ~visibility=visibilityAsString,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        result##updateTarget##success
          ? {

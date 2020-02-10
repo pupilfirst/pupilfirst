@@ -8,7 +8,6 @@ module Communities
 
     def json_props
       {
-        authenticityToken: view.form_authenticity_token,
         communityId: @community.id.to_s,
         target: @target.present? ? { id: @target.id.to_s, title: @target.title } : nil
       }.to_json

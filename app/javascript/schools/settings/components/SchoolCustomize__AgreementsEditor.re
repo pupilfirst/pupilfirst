@@ -56,15 +56,7 @@ module UpdateSchoolStringErrorHandler =
   GraphqlErrorHandler.Make(SchoolCustomize__UpdateSchoolStringError);
 
 let handleUpdateAgreement =
-    (
-      state,
-      send,
-      kind,
-      authenticityToken,
-      updatePrivacyPolicyCB,
-      updateTermsOfUseCB,
-      event,
-    ) => {
+    (state, send, kind, updatePrivacyPolicyCB, updateTermsOfUseCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(BeginUpdate);
 
@@ -73,7 +65,7 @@ let handleUpdateAgreement =
     ~value=state.agreement,
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result =>
        switch (result##updateSchoolString##errors) {
        | [||] =>
@@ -126,13 +118,7 @@ let reducer = (state, action) =>
 
 [@react.component]
 let make =
-    (
-      ~kind,
-      ~customizations,
-      ~authenticityToken,
-      ~updatePrivacyPolicyCB,
-      ~updateTermsOfUseCB,
-    ) => {
+    (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsOfUseCB) => {
   let (state, send) =
     React.useReducer(reducer, initialState(kind, customizations));
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
@@ -166,7 +152,6 @@ let make =
           state,
           send,
           kind,
-          authenticityToken,
           updatePrivacyPolicyCB,
           updateTermsOfUseCB,
         )}

@@ -441,11 +441,7 @@ let make =
 
      | None => React.null
      }}
-    <CoursesCurriculum__NoticeManager
-      notice={state.notice}
-      course
-      authenticityToken
-    />
+    <CoursesCurriculum__NoticeManager notice={state.notice} course />
     {switch (state.notice) {
      | LevelUp => React.null
      | _anyOtherNotice =>

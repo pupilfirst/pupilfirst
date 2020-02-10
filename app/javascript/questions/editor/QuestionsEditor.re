@@ -90,7 +90,6 @@ let handleCreateOrUpdateQuestion =
       title,
       description,
       communityId,
-      authenticityToken,
       setSaving,
       target,
       question,
@@ -105,7 +104,7 @@ let handleCreateOrUpdateQuestion =
     | Some(question) =>
       let id = question |> Question.id;
       UpdateQuestionQuery.make(~id, ~title, ~description, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##updateQuestion) {
            | `Success(updated) =>
@@ -141,7 +140,7 @@ let handleCreateOrUpdateQuestion =
           CreateQuestionQuery.make(~description, ~title, ~communityId, ())
         }
       )
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createQuestion) {
            | `QuestionId(questionId) =>
@@ -163,7 +162,6 @@ let handleCreateOrUpdateQuestion =
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~communityId,
       ~showBackButton=true,
       ~target,
@@ -268,7 +266,6 @@ let make =
                     title,
                     description,
                     communityId,
-                    authenticityToken,
                     setSaving,
                     target,
                     question,

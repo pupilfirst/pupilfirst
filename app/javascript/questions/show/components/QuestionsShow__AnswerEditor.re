@@ -114,7 +114,6 @@ let handleAnswer =
     (
       description,
       question,
-      authenticityToken,
       setSaving,
       currentUserId,
       setDescription,
@@ -131,7 +130,7 @@ let handleAnswer =
       let answerId = answer |> Answer.id;
 
       UpdateAnswerQuery.make(~description, ~id=answerId, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##updateAnswer) {
            | `Success(answerUpdated) =>
@@ -163,7 +162,7 @@ let handleAnswer =
         ~questionId=question |> Question.id,
         (),
       )
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createAnswer) {
            | `AnswerId(answerId) =>
@@ -191,14 +190,7 @@ let handleAnswer =
 
 [@react.component]
 let make =
-    (
-      ~question,
-      ~authenticityToken,
-      ~currentUserId,
-      ~handleAnswerCB,
-      ~answer=?,
-      ~handleCloseCB=?,
-    ) => {
+    (~question, ~currentUserId, ~handleAnswerCB, ~answer=?, ~handleCloseCB=?) => {
   let (description, setDescription) =
     React.useState(() =>
       switch (answer) {
@@ -242,7 +234,6 @@ let make =
               onClick={handleAnswer(
                 description,
                 question,
-                authenticityToken,
                 setSaving,
                 currentUserId,
                 setDescription,

@@ -117,7 +117,7 @@ let createMarkdownContentBlock =
     aboveContentBlock |> OptionUtils.map(ContentBlock.id);
   let targetId = target |> Target.id;
   CreateMarkdownContentBlock.make(~targetId, ~aboveContentBlockId?, ())
-  |> GraphqlQuery.sendQuery2
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result =>
        handleGraphqlCreateResponse(
          aboveContentBlock,
@@ -367,7 +367,7 @@ let onEmbedFormSave =
     let targetId = target |> Target.id;
 
     CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ())
-    |> GraphqlQuery.sendQuery2
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result =>
          handleGraphqlCreateResponse(
            aboveContentBlock,

@@ -53,7 +53,6 @@ let updateReviewedSubmissions =
 
 let getReviewedSubmissions =
     (
-      authenticityToken,
       courseId,
       cursor,
       setLoading,
@@ -62,7 +61,7 @@ let getReviewedSubmissions =
       updateReviewedSubmissionsCB,
     ) => {
   setLoading(_ => true);
-  Js.log(selectedLevel);
+
   (
     switch (selectedLevel, cursor) {
     | (Some(level), Some(cursor)) =>
@@ -79,7 +78,7 @@ let getReviewedSubmissions =
     | (None, None) => ReviewedSubmissionsQuery.make(~courseId, ())
     }
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##reviewedSubmissions##nodes
        |> updateReviewedSubmissions(
@@ -194,7 +193,6 @@ let showSubmissions = (reviewedSubmissions, levels, openOverlayCB) =>
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~courseId,
       ~selectedLevel,
       ~levels,
@@ -208,7 +206,6 @@ let make =
       switch ((reviewedSubmissions: ReviewedSubmission.t)) {
       | Unloaded =>
         getReviewedSubmissions(
-          authenticityToken,
           courseId,
           None,
           setLoading,
@@ -240,7 +237,6 @@ let make =
                 className="btn btn-primary-ghost cursor-pointer w-full mt-8"
                 onClick={_ =>
                   getReviewedSubmissions(
-                    authenticityToken,
                     courseId,
                     Some(cursor),
                     setLoading,

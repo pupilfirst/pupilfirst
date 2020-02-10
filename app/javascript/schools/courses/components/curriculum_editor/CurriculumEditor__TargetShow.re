@@ -17,14 +17,12 @@ let targetClasses = (target, targets) =>
     }
   );
 
-let updateSortIndex =
-    (targets, target, up, updateTargetSortIndexCB, authenticityToken) => {
+let updateSortIndex = (targets, target, up, updateTargetSortIndexCB) => {
   let newTargets = targets |> ListUtils.swap(up, target);
   let targetIds = newTargets |> List.map(t => t |> Target.id) |> Array.of_list;
   targetIds
   |> CurriculumEditor__SortResourcesMutation.sort(
        CurriculumEditor__SortResourcesMutation.Target,
-       authenticityToken,
      );
   updateTargetSortIndexCB(newTargets);
 };
@@ -47,15 +45,7 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
 };
 
 [@react.component]
-let make =
-    (
-      ~target,
-      ~targets,
-      ~updateTargetSortIndexCB,
-      ~authenticityToken,
-      ~index,
-      ~course,
-    ) => {
+let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
   let linkPrefix =
     "/school/courses/"
     ++ (course |> Course.id)
@@ -77,13 +67,7 @@ let make =
                ++ sortIndexHiddenClass(index == 0)
              }
              onClick={_ =>
-               updateSortIndex(
-                 targets,
-                 target,
-                 true,
-                 updateTargetSortIndexCB,
-                 authenticityToken,
-               )
+               updateSortIndex(targets, target, true, updateTargetSortIndexCB)
              }>
              <i className="fas fa-arrow-up text-sm" />
            </div>
@@ -100,7 +84,6 @@ let make =
                  target,
                  false,
                  updateTargetSortIndexCB,
-                 authenticityToken,
                )
              }>
              <i className="fas fa-arrow-down text-sm" />

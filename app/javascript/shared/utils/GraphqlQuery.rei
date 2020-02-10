@@ -1,18 +1,5 @@
 let sendQuery:
   (
-    string,
-    ~notify: bool=?,
-    {
-      ..
-      "parse": Js.Json.t => 'a,
-      "query": string,
-      "variables": Js.Json.t,
-    }
-  ) =>
-  Js.Promise.t('a);
-
-let sendQuery2:
-  (
     ~notify: bool=?,
     {
       ..

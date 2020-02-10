@@ -286,7 +286,6 @@ let make =
                   state,
                   send,
                 )}
-                authenticityToken
                 index
                 course
               />

@@ -72,24 +72,24 @@ let levelUpBlockedMessage = levelNumber => {
   );
 };
 
-let renderLevelUp = (course, authenticityToken) => {
+let renderLevelUp = course => {
   let title = "Ready to Level Up!";
   let description = "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!";
   <div
     className="max-w-3xl mx-3 lg:mx-auto text-center mt-4 bg-white rounded-lg shadow px-6 pt-4 pb-8">
     {showNotice(~title, ~description, ~notice=Notice.LevelUp, ~classes="", ())}
-    <CoursesCurriculum__LevelUpButton course authenticityToken />
+    <CoursesCurriculum__LevelUpButton course />
   </div>;
 };
 
 [@react.component]
-let make = (~notice, ~course, ~authenticityToken) => {
+let make = (~notice, ~course) => {
   switch (notice) {
   | Notice.Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()
-  | LevelUp => renderLevelUp(course, authenticityToken)
+  | LevelUp => renderLevelUp(course)
   | LevelUpBlocked(levelNumber) => levelUpBlockedMessage(levelNumber)
   | Nothing => React.null
   };

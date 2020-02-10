@@ -43,18 +43,12 @@ let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
 };
 
 let createAutoVerifySubmission =
-    (
-      authenticityToken,
-      target,
-      linkToComplete,
-      setSaving,
-      addSubmissionCB,
-      event,
-    ) => {
+    (target, linkToComplete, setSaving, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
+
   AutoVerifySubmissionQuery.make(~targetId=target |> Target.id, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##autoVerifySubmission##submission) {
        | Some(details) =>
@@ -81,15 +75,7 @@ let previewLinkToComplete = link =>
   </a>;
 
 let autoVerify =
-    (
-      target,
-      linkToComplete,
-      saving,
-      setSaving,
-      authenticityToken,
-      addSubmissionCB,
-      preview,
-    ) =>
+    (target, linkToComplete, saving, setSaving, addSubmissionCB, preview) =>
   /* Handle special case for preview mode with link to complete */
   switch (preview, linkToComplete) {
   | (true, Some(link)) => previewLinkToComplete(link)
@@ -97,27 +83,22 @@ let autoVerify =
     <button
       disabled={saving || preview}
       className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
-      onClick={
-        createAutoVerifySubmission(
-          authenticityToken,
-          target,
-          linkToComplete,
-          setSaving,
-          addSubmissionCB,
-        )
-      }>
-      {
-        switch (saving, linkToComplete) {
-        | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
-        | (false, Some(_)) =>
-          completeButtonText(
-            "Visit Link To Complete",
-            "fas fa-external-link-alt",
-          )
-        | (false, None) =>
-          completeButtonText("Mark As Complete", "fas fa-check-square")
-        }
-      }
+      onClick={createAutoVerifySubmission(
+        target,
+        linkToComplete,
+        setSaving,
+        addSubmissionCB,
+      )}>
+      {switch (saving, linkToComplete) {
+       | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
+       | (false, Some(_)) =>
+         completeButtonText(
+           "Visit Link To Complete",
+           "fas fa-external-link-alt",
+         )
+       | (false, None) =>
+         completeButtonText("Mark As Complete", "fas fa-check-square")
+       }}
     </button>
   };
 
@@ -139,12 +120,10 @@ let statusBar = (string, linkToComplete) => {
 
   <div className=defaultClasses>
     message
-    {
-      switch (linkToComplete) {
-      | Some(link) => visitLink(link)
-      | None => React.null
-      }
-    }
+    {switch (linkToComplete) {
+     | Some(link) => visitLink(link)
+     | None => React.null
+     }}
   </div>;
 };
 
@@ -156,14 +135,7 @@ let completionInstructionText = linkToComplete =>
 
 [@react.component]
 let make =
-    (
-      ~target,
-      ~targetDetails,
-      ~authenticityToken,
-      ~targetStatus,
-      ~addSubmissionCB,
-      ~preview,
-    ) => {
+    (~target, ~targetDetails, ~targetStatus, ~addSubmissionCB, ~preview) => {
   let (saving, setSaving) = React.useState(() => false);
   let linkToComplete = targetDetails |> TargetDetails.linkToComplete;
   [|
@@ -173,22 +145,19 @@ let make =
       title={completionInstructionText(linkToComplete)}
     />,
     <div className="mt-5" id="auto-verify-target" key="completion-button">
-      {
-        switch (targetStatus |> TargetStatus.status) {
-        | Pending =>
-          autoVerify(
-            target,
-            linkToComplete,
-            saving,
-            setSaving,
-            authenticityToken,
-            addSubmissionCB,
-            preview,
-          )
-        | Locked(_) => React.null
-        | _ => statusBar("Completed", linkToComplete)
-        }
-      }
+      {switch (targetStatus |> TargetStatus.status) {
+       | Pending =>
+         autoVerify(
+           target,
+           linkToComplete,
+           saving,
+           setSaving,
+           addSubmissionCB,
+           preview,
+         )
+       | Locked(_) => React.null
+       | _ => statusBar("Completed", linkToComplete)
+       }}
     </div>,
   |]
   |> React.array;

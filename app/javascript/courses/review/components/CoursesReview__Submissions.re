@@ -181,7 +181,6 @@ let updateSubmission =
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~submission,
       ~updateSubmissionCB,
       ~submissionNumber,
@@ -221,7 +220,6 @@ let make =
         {showSubmissions(submission |> Submission.attachments)}
       </div>
       <CoursesReview__GradeCard
-        authenticityToken
         submission
         evaluationCriteria
         targetEvaluationCriteriaIds
@@ -236,7 +234,6 @@ let make =
         targetId
       />
       <CoursesReview__ShowFeedback
-        authenticityToken
         feedback={submission |> Submission.feedback}
         reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
         submissionId={submission |> Submission.id}

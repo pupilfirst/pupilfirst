@@ -18,18 +18,19 @@ let handleSubmitButton = saving => {
   let submitButtonText = (title, iconClasses) =>
     <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
-  saving ?
-    submitButtonText("Saving", "fas fa-spinner fa-spin") :
-    submitButtonText("Level Up", "fas fa-flag");
+  saving
+    ? submitButtonText("Saving", "fas fa-spinner fa-spin")
+    : submitButtonText("Level Up", "fas fa-flag");
 };
 
 let refreshPage = () => Webapi.Dom.(location |> Location.reload);
 
-let createLevelUpQuery = (authenticityToken, course, setSaving, event) => {
+let createLevelUpQuery = (course, setSaving, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
+
   LevelUpQuery.make(~courseId=course |> Course.id, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##levelUp##success ? refreshPage() : setSaving(_ => false);
        Js.Promise.resolve();
@@ -38,11 +39,11 @@ let createLevelUpQuery = (authenticityToken, course, setSaving, event) => {
 };
 
 [@react.component]
-let make = (~course, ~authenticityToken) => {
+let make = (~course) => {
   let (saving, setSaving) = React.useState(() => false);
   <button
     disabled=saving
-    onClick={createLevelUpQuery(authenticityToken, course, setSaving)}
+    onClick={createLevelUpQuery(course, setSaving)}
     className="btn btn-success btn-large w-full md:w-4/6 mt-4">
     {handleSubmitButton(saving)}
   </button>;

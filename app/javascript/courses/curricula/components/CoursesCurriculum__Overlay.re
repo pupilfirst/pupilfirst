@@ -9,28 +9,50 @@ module TargetStatus = CoursesCurriculum__TargetStatus;
 
 let str = React.string;
 
+type tab =
+  | Learn
+  | Discuss
+  | Complete(TargetDetails.completionType);
+
+type state = {
+  targetDetails: option(TargetDetails.t),
+  tab,
+};
+
+type action =
+  | Select(tab)
+  | SetTargetDetails(TargetDetails.t)
+  | ClearTargetDetails;
+
+let initialState = {targetDetails: None, tab: Learn};
+
+let reducer = (state, action) =>
+  switch (action) {
+  | Select(tab) => {...state, tab}
+  | SetTargetDetails(targetDetails) => {
+      ...state,
+      targetDetails: Some(targetDetails),
+    }
+  | ClearTargetDetails => {...state, targetDetails: None}
+  };
+
 let closeOverlay = course =>
   ReasonReactRouter.push(
     "/courses/" ++ (course |> Course.id) ++ "/curriculum",
   );
 
-let loadTargetDetails = (target, setTargetDetails, ()) => {
+let loadTargetDetails = (target, send, ()) => {
   Js.Promise.(
     Fetch.fetch("/targets/" ++ (target |> Target.id) ++ "/details_v2")
     |> then_(Fetch.Response.json)
     |> then_(json =>
-         setTargetDetails(_ => Some(json |> TargetDetails.decode)) |> resolve
+         send(SetTargetDetails(json |> TargetDetails.decode)) |> resolve
        )
   )
   |> ignore;
 
   None;
 };
-
-type overlaySelection =
-  | Learn
-  | Discuss
-  | Complete(TargetDetails.completionType);
 
 let completionTypeToString = (completionType, targetStatus) =>
   switch (
@@ -49,8 +71,8 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
   };
 
-let selectionToString = (targetStatus, overlaySelection) =>
-  switch (overlaySelection) {
+let tabToString = (targetStatus, tab) =>
+  switch (tab) {
   | Learn => "Learn"
   | Discuss => "Discuss"
   | Complete(completionType) =>
@@ -61,137 +83,90 @@ let selectableTabs = targetDetails =>
   targetDetails |> TargetDetails.communities |> ListUtils.isNotEmpty
     ? [Learn, Discuss] : [Learn];
 
-let tabClasses = (selection, overlaySelection) =>
+let tabClasses = (selection, tab) =>
   "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold"
   ++ (
-    overlaySelection == selection
+    tab == selection
       ? " course-overlay__body-tab-item--selected"
       : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
   );
 
-let scrollCompleteButtonIntoView = () => {
-  let element =
-    Webapi.Dom.document
-    |> Webapi.Dom.Document.getElementById("auto-verify-target");
-  (
-    switch (element) {
-    | Some(e) =>
-      Webapi.Dom.Element.scrollIntoView(e);
-      e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected");
-    | None => ()
-    }
+let scrollCompleteButtonIntoViewEventually = () => {
+  Js.Global.setTimeout(
+    () => {
+      let element =
+        Webapi.Dom.document
+        |> Webapi.Dom.Document.getElementById("auto-verify-target");
+      switch (element) {
+      | Some(e) =>
+        Webapi.Dom.Element.scrollIntoView(e);
+        e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected");
+      | None =>
+        Rollbar.error("Could not find the 'Complete' button to scroll to.")
+      };
+    },
+    50,
   )
   |> ignore;
-  None;
 };
 
-let handleTablink = (setOverlaySelection, setScrollToSelection, _event) => {
-  setOverlaySelection(_ => Learn);
-  setScrollToSelection(scrollToSelection => !scrollToSelection);
+let handleTablink = (send, _event) => {
+  send(Select(Learn));
+  scrollCompleteButtonIntoViewEventually();
 };
 
-let tabButton =
-    (selection, overlaySelection, setOverlaySelection, targetStatus) =>
+let tabButton = (tab, state, send, targetStatus) =>
   <span
-    key={"select-" ++ (selection |> selectionToString(targetStatus))}
-    className={tabClasses(selection, overlaySelection)}
-    onClick={_e => setOverlaySelection(_ => selection)}>
-    {selection |> selectionToString(targetStatus) |> str}
+    key={"select-" ++ (tab |> tabToString(targetStatus))}
+    className={tabClasses(tab, state.tab)}
+    onClick={_e => send(Select(tab))}>
+    {tab |> tabToString(targetStatus) |> str}
   </span>;
 
-let tabLink =
-    (
-      selection,
-      overlaySelection,
-      setOverlaySelection,
-      targetStatus,
-      setScrollToSelection,
-    ) =>
-  <span
-    onClick={handleTablink(setOverlaySelection, setScrollToSelection)}
-    className={tabClasses(selection, overlaySelection)}>
-    {selection |> selectionToString(targetStatus) |> str}
+let tabLink = (tab, state, send, targetStatus) =>
+  <span onClick={handleTablink(send)} className={tabClasses(tab, state.tab)}>
+    {tab |> tabToString(targetStatus) |> str}
   </span>;
 
-let overlaySelectionOptions =
-    (
-      overlaySelection,
-      setOverlaySelection,
-      targetDetails,
-      targetStatus,
-      setScrollToSelection,
-    ) => {
+let tabOptions = (state, send, targetDetails, targetStatus) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
 
   <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {selectableTabs(targetDetails)
      |> List.map(selection =>
-          tabButton(
-            selection,
-            overlaySelection,
-            setOverlaySelection,
-            targetStatus,
-          )
+          tabButton(selection, state, send, targetStatus)
         )
      |> Array.of_list
      |> React.array}
     {switch (targetStatus |> TargetStatus.status, completionType) {
      | (Pending | Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
-       tabButton(
-         Complete(completionType),
-         overlaySelection,
-         setOverlaySelection,
-         targetStatus,
-       )
+       tabButton(Complete(completionType), state, send, targetStatus)
      | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
        targetDetails |> TargetDetails.submissions |> ListUtils.isNotEmpty
-         ? tabButton(
-             Complete(completionType),
-             overlaySelection,
-             setOverlaySelection,
-             targetStatus,
-           )
+         ? tabButton(Complete(completionType), state, send, targetStatus)
          : React.null
      | (
          Pending | Submitted | Passed | Failed,
          LinkToComplete | MarkAsComplete,
        ) =>
-       tabLink(
-         Complete(completionType),
-         overlaySelection,
-         setOverlaySelection,
-         targetStatus,
-         setScrollToSelection,
-       )
+       tabLink(Complete(completionType), state, send, targetStatus)
      | (Locked(_), _) => React.null
      }}
   </div>;
 };
 
 let addSubmission =
-    (
-      target,
-      setTargetDetails,
-      addSubmissionCB,
-      submission,
-      submissionAttachments,
-    ) => {
-  setTargetDetails(targetDetails =>
-    switch (targetDetails) {
-    | Some(targetDetails) =>
-      Some({
-        ...targetDetails,
-        TargetDetails.submissions: [
-          submission,
-          ...targetDetails |> TargetDetails.submissions,
-        ],
-        submissionAttachments:
-          submissionAttachments
-          @ (targetDetails |> TargetDetails.submissionAttachments),
-      })
-    | None => None
-    }
-  );
+    (target, state, send, addSubmissionCB, submission, submissionAttachments) => {
+  switch (state.targetDetails) {
+  | Some(targetDetails) =>
+    let newTargetDetails =
+      targetDetails
+      |> TargetDetails.addSubmission(submission)
+      |> TargetDetails.addSubmissionAttachments(submissionAttachments);
+
+    send(SetTargetDetails(newTargetDetails));
+  | None => ()
+  };
 
   switch (submission |> Submission.status) {
   | MarkedAsComplete =>
@@ -217,21 +192,14 @@ let addSubmission =
   };
 };
 
-let addVerifiedSubmission =
-    (target, setTargetDetails, addSubmissionCB, submission) => {
-  setTargetDetails(targetDetails =>
-    switch (targetDetails) {
-    | Some(targetDetails) =>
-      Some({
-        ...targetDetails,
-        TargetDetails.submissions: [
-          submission,
-          ...targetDetails |> TargetDetails.submissions,
-        ],
-      })
-    | None => None
-    }
-  );
+let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) => {
+  switch (state.targetDetails) {
+  | Some(targetDetails) =>
+    let newTargetDetails =
+      targetDetails |> TargetDetails.addSubmission(submission);
+    send(SetTargetDetails(newTargetDetails));
+  | None => ()
+  };
 
   addSubmissionCB(
     LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
@@ -357,13 +325,13 @@ let handleLocked =
 
 let overlayContentClasses = bool => bool ? "" : "hidden";
 
-let learnSection = (targetDetails, overlaySelection) =>
-  <div className={overlayContentClasses(overlaySelection == Learn)}>
+let learnSection = (targetDetails, tab) =>
+  <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails />
   </div>;
 
-let discussSection = (target, targetDetails, overlaySelection) =>
-  <div className={overlayContentClasses(overlaySelection == Discuss)}>
+let discussSection = (target, targetDetails, tab) =>
+  <div className={overlayContentClasses(tab == Discuss)}>
     <CoursesCurriculum__Discuss
       targetId={target |> Target.id}
       communities={targetDetails |> TargetDetails.communities}
@@ -371,8 +339,8 @@ let discussSection = (target, targetDetails, overlaySelection) =>
   </div>;
 
 let completeSectionClasses =
-    (overlaySelection, completionType: TargetDetails.completionType) =>
-  switch (overlaySelection, completionType) {
+    (tab, completionType: TargetDetails.completionType) =>
+  switch (tab, completionType) {
   | (Learn, Evaluated | TakeQuiz)
   | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
   | (Learn, MarkAsComplete | LinkToComplete)
@@ -381,10 +349,10 @@ let completeSectionClasses =
 
 let completeSection =
     (
-      overlaySelection,
+      state,
+      send,
       target,
       targetDetails,
-      setTargetDetails,
       authenticityToken,
       targetStatus,
       addSubmissionCB,
@@ -395,8 +363,8 @@ let completeSection =
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
   let addVerifiedSubmissionCB =
-    addVerifiedSubmission(target, setTargetDetails, addSubmissionCB);
-  <div className={completeSectionClasses(overlaySelection, completionType)}>
+    addVerifiedSubmission(target, state, send, addSubmissionCB);
+  <div className={completeSectionClasses(state.tab, completionType)}>
     {switch (targetStatus |> TargetStatus.status, completionType) {
      | (Pending, Evaluated) =>
        [|
@@ -411,7 +379,8 @@ let completeSection =
            target
            addSubmissionCB={addSubmission(
              target,
-             setTargetDetails,
+             state,
+             send,
              addSubmissionCB,
            )}
            preview
@@ -444,11 +413,7 @@ let completeSection =
          target
          authenticityToken
          evaluationCriteria
-         addSubmissionCB={addSubmission(
-           target,
-           setTargetDetails,
-           addSubmissionCB,
-         )}
+         addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
          targetStatus
          coaches
          users
@@ -507,6 +472,85 @@ let handlePendingStudents = (targetStatus, targetDetails, users) =>
   | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
   };
 
+let performQuickNavigation = (url, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  // Scroll to the top of the overlay before pushing the new URL.
+  Webapi.Dom.(
+    switch (document |> Document.getElementById("target-overlay")) {
+    | Some(element) => Webapi.Dom.Element.setScrollTop(element, 0.0)
+    | None => ()
+    }
+  );
+
+  // Clear loaded target details.
+  send(ClearTargetDetails);
+
+  ReasonReactRouter.push(url);
+};
+
+let navigationLink = (direction, url, send) => {
+  let (leftIcon, text, rightIcon) =
+    switch (direction) {
+    | `Previous => (Some("fa-arrow-left"), "Previous Target", None)
+    | `Next => (None, "Next Target", Some("fa-arrow-right"))
+    };
+
+  let arrow = icon =>
+    icon->Belt.Option.mapWithDefault(React.null, icon =>
+      <FaIcon classes={"fas " ++ icon} />
+    );
+
+  <a
+    href=url
+    onClick={performQuickNavigation(url, send)}
+    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+    {arrow(leftIcon)}
+    <span className="mx-2 hidden md:inline"> {text |> str} </span>
+    {arrow(rightIcon)}
+  </a>;
+};
+
+let scrollOverlayToTop = _event => {
+  let element =
+    Webapi.Dom.(document |> Document.getElementById("target-overlay"));
+  element->Belt.Option.mapWithDefault((), element =>
+    element->Webapi.Dom.Element.setScrollTop(0.0)
+  );
+};
+
+let quickNavigationLinks = (targetDetails, send) => {
+  let (previous, next) = targetDetails |> TargetDetails.navigation;
+
+  <div className="pb-6">
+    <hr className="my-6" />
+    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+      <div className="w-1/3 mr-2">
+        {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
+           navigationLink(`Previous, previousUrl, send)
+         )}
+      </div>
+      <div className="w-1/3 mx-2">
+        <button
+          onClick=scrollOverlayToTop
+          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+          <span className="mx-2 hidden md:inline">
+            {"Scroll to Top" |> str}
+          </span>
+          <span className="mx-2 md:hidden">
+            <i className="fas fa-arrow-up" />
+          </span>
+        </button>
+      </div>
+      <div className="w-1/3 ml-2">
+        {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
+           navigationLink(`Next, nextUrl, send)
+         )}
+      </div>
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make =
     (
@@ -523,14 +567,10 @@ let make =
       ~coaches,
       ~preview,
     ) => {
-  let (targetDetails, setTargetDetails) = React.useState(() => None);
-  let (overlaySelection, setOverlaySelection) = React.useState(() => Learn);
-  let (scrollToSelection, setScrollToSelection) = React.useState(() => false);
-
-  React.useEffect1(scrollCompleteButtonIntoView, [|scrollToSelection|]);
+  let (state, send) = React.useReducer(reducer, initialState);
 
   React.useEffect1(
-    loadTargetDetails(target, setTargetDetails),
+    loadTargetDetails(target, send),
     [|target |> Target.id|],
   );
 
@@ -540,6 +580,7 @@ let make =
   });
 
   <div
+    id="target-overlay"
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
@@ -551,16 +592,10 @@ let make =
            statusOfTargets,
            changeTargetCB,
          )}
-        {handlePendingStudents(targetStatus, targetDetails, users)}
-        {switch (targetDetails) {
+        {handlePendingStudents(targetStatus, state.targetDetails, users)}
+        {switch (state.targetDetails) {
          | Some(targetDetails) =>
-           overlaySelectionOptions(
-             overlaySelection,
-             setOverlaySelection,
-             targetDetails,
-             targetStatus,
-             setScrollToSelection,
-           )
+           tabOptions(state, send, targetDetails, targetStatus)
          | None =>
            <div
              className="course-overlay__skeleton-head-container max-w-3xl w-full mx-auto">
@@ -580,25 +615,32 @@ let make =
          }}
       </div>
     </div>
-    {switch (targetDetails) {
+    {switch (state.targetDetails) {
      | Some(targetDetails) =>
-       <div
-         className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0 pb-8">
-         {learnSection(targetDetails, overlaySelection)}
-         {discussSection(target, targetDetails, overlaySelection)}
-         {completeSection(
-            overlaySelection,
-            target,
-            targetDetails,
-            setTargetDetails,
-            authenticityToken,
-            targetStatus,
-            addSubmissionCB,
-            evaluationCriteria,
-            coaches,
-            users,
-            preview,
-          )}
+       <div>
+         <div
+           className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
+           {learnSection(targetDetails, state.tab)}
+           {discussSection(target, targetDetails, state.tab)}
+           {completeSection(
+              state,
+              send,
+              target,
+              targetDetails,
+              authenticityToken,
+              targetStatus,
+              addSubmissionCB,
+              evaluationCriteria,
+              coaches,
+              users,
+              preview,
+            )}
+         </div>
+         {switch (state.tab) {
+          | Learn => quickNavigationLinks(targetDetails, send)
+          | Discuss
+          | Complete(_) => React.null
+          }}
        </div>
 
      | None =>

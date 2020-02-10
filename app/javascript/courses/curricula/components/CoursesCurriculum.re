@@ -247,6 +247,68 @@ let computeNotice =
     )
   };
 
+let navigationLink = (direction, level, setState) => {
+  let (leftIcon, longText, shortText, rightIcon) =
+    switch (direction) {
+    | `Previous => (
+        Some("fa-arrow-left"),
+        "Previous Level",
+        "Previous",
+        None,
+      )
+    | `Next => (None, "Next Level", "Next", Some("fa-arrow-right"))
+    };
+
+  let arrow = icon =>
+    icon->Belt.Option.mapWithDefault(React.null, icon =>
+      <FaIcon classes={"fas " ++ icon} />
+    );
+
+  <button
+    onClick={_ =>
+      setState(state => {...state, selectedLevelId: level |> Level.id})
+    }
+    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+    {arrow(leftIcon)}
+    <span className="mx-2 hidden md:inline"> {longText |> str} </span>
+    <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
+    {arrow(rightIcon)}
+  </button>;
+};
+
+let quickNavigationLinks = (levels, selectedLevel, setState) => {
+  let previous = selectedLevel |> Level.previous(levels);
+  let next = selectedLevel |> Level.next(levels);
+
+  <div>
+    <hr className="my-6" />
+    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+      {switch (previous, next) {
+       | (Some(previousLevel), Some(nextLevel)) =>
+         [|
+           <div key="previous" className="w-1/2 mr-2">
+             {navigationLink(`Previous, previousLevel, setState)}
+           </div>,
+           <div key="next" className="w-1/2 ml-2">
+             {navigationLink(`Next, nextLevel, setState)}
+           </div>,
+         |]
+         |> React.array
+
+       | (Some(previousUrl), None) =>
+         <div className="w-full">
+           {navigationLink(`Previous, previousUrl, setState)}
+         </div>
+       | (None, Some(nextUrl)) =>
+         <div className="w-full">
+           {navigationLink(`Next, nextUrl, setState)}
+         </div>
+       | (None, None) => React.null
+       }}
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make =
     (
@@ -378,6 +440,13 @@ let make =
          "Could not find currentLevel with id " ++ currentLevelId,
        );
 
+  let selectedLevel =
+    levels
+    |> ListUtils.unsafeFind(
+         l => l |> Level.id == state.selectedLevelId,
+         "Could not find selectedLevel with id " ++ state.selectedLevelId,
+       );
+
   React.useEffect1(
     () => {
       if (initialRender |> React.Ref.current) {
@@ -446,20 +515,19 @@ let make =
      | LevelUp => React.null
      | _anyOtherNotice =>
        <div>
-         <div className="px-3">
-           <CoursesCurriculum__LevelSelector
-             levels
-             selectedLevelId={state.selectedLevelId}
-             setSelectedLevelId={selectedLevelId =>
-               setState(state => {...state, selectedLevelId})
-             }
-             showLevelZero={state.showLevelZero}
-             setShowLevelZero={showLevelZero =>
-               setState(state => {...state, showLevelZero})
-             }
-             levelZero
-           />
-         </div>
+         <CoursesCurriculum__LevelSelector
+           levels
+           teamLevel
+           selectedLevel
+           setSelectedLevelId={selectedLevelId =>
+             setState(state => {...state, selectedLevelId})
+           }
+           showLevelZero={state.showLevelZero}
+           setShowLevelZero={showLevelZero =>
+             setState(state => {...state, showLevelZero})
+           }
+           levelZero
+         />
          {currentLevel |> Level.isLocked && accessLockedLevels
             ? <div
                 className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
@@ -486,5 +554,7 @@ let make =
             : handleLockedLevel(currentLevel)}
        </div>
      }}
+    {state.showLevelZero
+       ? React.null : quickNavigationLinks(levels, selectedLevel, setState)}
   </div>;
 };

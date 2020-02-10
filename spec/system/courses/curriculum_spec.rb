@@ -135,18 +135,17 @@ feature "Student's view of Course Curriculum", js: true do
     # ...and only one of thoese should be a milestone target group.
     expect(page).to have_selector('.curriculum__target-group', text: 'MILESTONE TARGETS', count: 1)
 
-    # The 'current level' should be selected.
-    expect(page).to have_select("selected_level", selected: "L4: #{level_4.name}")
+    # Open the level selector dropdown.
+    click_button "L4: #{level_4.name}"
 
-    level_names = [level_1, level_2, level_3, level_4, level_5, locked_level_6].map do |l|
-      "L#{l.number}: #{l.name}"
+    # All levels should be included in the dropdown.
+    [level_1, level_2, level_3, level_5, locked_level_6].each do |l|
+      expect(page).to have_text("L#{l.number}: #{l.name}")
     end
 
-    # All levels should be included in the select dropdown.
-    expect(page).to have_select("selected_level", options: level_names)
-
     # Select another level and check if the correct data is displayed.
-    select("L2: #{level_2.name}", from: 'selected_level')
+    click_button "L2: #{level_2.name}"
+
     expect(page).to have_content(target_group_l2.name)
     expect(page).to have_content(target_group_l2.description)
     expect(page).to have_content(completed_target_l2.title)
@@ -160,7 +159,9 @@ feature "Student's view of Course Curriculum", js: true do
     # expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')
 
     # Visit the read-only level 5 and ensure that content is in read-only mode.
-    select("L5: #{level_5.name}", from: 'selected_level')
+    click_button "L2: #{level_2.name}"
+    click_button "L5: #{level_5.name}"
+
     expect(page).to have_content(target_group_l5.name)
     expect(page).to have_content(target_group_l5.description)
     expect(page).to have_content(level_5_target_1.title)
@@ -169,12 +170,38 @@ feature "Student's view of Course Curriculum", js: true do
 
     expect(page).to have_content('You must level up to complete this target.')
 
+    click_button 'Close'
+
     # Ensure level 6 is displayed as locked. - the content should not be visible.
-    select("L6: #{locked_level_6.name}", from: 'selected_level')
+    click_button "L5: #{level_5.name}"
+    click_button "L6: #{locked_level_6.name}"
 
     expect(page).not_to have_content(target_group_l6.name)
     expect(page).not_to have_content(target_group_l6.description)
     expect(page).not_to have_content(level_6_target.title)
+  end
+
+  scenario 'student navigates between levels using the quick navigation links' do
+    sign_in_user student.user, referer: curriculum_course_path(course)
+
+    expect(page).to have_button("L4: #{level_4.name}")
+
+    click_button 'Next Level'
+
+    expect(page).to have_button("L5: #{level_5.name}")
+
+    click_button 'Next Level'
+
+    expect(page).to have_button("L6: #{locked_level_6.name}")
+    expect(page).not_to have_button('Next Level')
+
+    click_button 'Previous Level'
+    click_button "L5: #{level_5.name}"
+    click_button "L2: #{level_2.name}"
+    click_button 'Previous Level'
+
+    expect(page).to have_button("L1: #{level_1.name}")
+    expect(page).not_to have_button('Previous Level')
   end
 
   context "when the students's course has a level 0 in it" do
@@ -185,7 +212,6 @@ feature "Student's view of Course Curriculum", js: true do
     scenario 'student visits the dashboard' do
       sign_in_user student.user, referer: curriculum_course_path(course)
 
-      expect(page).to have_select('selected_level', selected: "L4: #{level_4.name}")
       expect(page).to have_button(level_0.name)
 
       # Go to the level 0 Tab
@@ -270,20 +296,16 @@ feature "Student's view of Course Curriculum", js: true do
       # Course name should be displayed.
       expect(page).to have_content(course.name)
 
-      # The first level should be selected.
-      expect(page).to have_select("selected_level", selected: "L1: #{level_1.name}")
+      # The first level should be selected, and all levels should be available.
+      click_button "L1: #{level_1.name}"
 
-      level_names = [level_1, level_2, level_3, level_4, level_5, locked_level_6].map do |l|
-        "L#{l.number}: #{l.name}"
+      [level_2, level_3, level_4, level_5, locked_level_6].each do |l|
+        expect(page).to have_button("L#{l.number}: #{l.name}")
       end
 
-      # All levels should be included in the select dropdown.
-      expect(page).to have_select("selected_level", options: level_names)
+      click_button "L6: #{locked_level_6.name}"
 
-      select("L6: #{locked_level_6.name}", from: 'selected_level')
-
-      # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for
-      # 'regular' students.
+      # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for 'regular' students.
       expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_on.strftime('%b %-d')}")
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)
@@ -293,7 +315,9 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).not_to have_content(level_6_draft_target.title)
 
       # Visit the level 5 and ensure that content is in 'preview mode'.
-      select("L5: #{level_5.name}", from: 'selected_level')
+      click_button "L6: #{locked_level_6.name}"
+      click_button "L5: #{level_5.name}"
+
       expect(page).to have_content(target_group_l5.name)
       expect(page).to have_content(target_group_l5.description)
       expect(page).to have_content(level_5_target_1.title)
@@ -324,10 +348,10 @@ feature "Student's view of Course Curriculum", js: true do
     scenario 'coach accesses content in locked levels' do
       sign_in_user student.user, referer: curriculum_course_path(course)
 
-      select("L6: #{locked_level_6.name}", from: 'selected_level')
+      click_button "L4: #{level_4.name}"
+      click_button "L6: #{locked_level_6.name}"
 
-      # Being a coach, level 6 should be accessible, but there should be a notice saying when the level will open for
-      # 'regular' students.
+      # Being a coach, level 6 should be accessible, but there should be a notice saying when the level will open for 'regular' students.
       expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_on.strftime('%b %-d')}")
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)

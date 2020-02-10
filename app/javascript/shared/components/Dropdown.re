@@ -14,8 +14,12 @@ let toggleDropdown = (setShowDropdown, event) => {
   setShowDropdown(showDropdown => !showDropdown);
 };
 
+let containerClasses = className => {
+  "dropdown inline-block relative text-sm " ++ className;
+};
+
 [@react.component]
-let make = (~selected, ~contents, ~right=false) => {
+let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") => {
   let (showDropdown, setShowDropdown) = React.useState(() => false);
 
   React.useEffect1(
@@ -37,7 +41,7 @@ let make = (~selected, ~contents, ~right=false) => {
   );
 
   <div
-    className="dropdown inline-block relative text-sm w-full md:w-auto"
+    className={containerClasses(className)}
     onClick={toggleDropdown(setShowDropdown)}>
     <div> selected </div>
     {showDropdown

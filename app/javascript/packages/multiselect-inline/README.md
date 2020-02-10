@@ -134,15 +134,16 @@ See this code in action here: https://multiselect-inline.pupilfirst.com
 
 The `MultiselectInline` component accepts the following props:
 
-| Prop               | Type                                     | Description                                                                                |
-| ------------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `id`               | `string` (optional)                      | `id` of the input element; you can use this set unique id to the input text field.         |
-| `placeholder`      | `string` (optional)                      | Placeholder for the input search field.                                                    |
-| `value`            | `string`                                 | Value of input element; this is a controlled component - you hold the state.               |
-| `onChange`         | `string => unit`                         | `onChange` to set value of the input in state.                                             |
-| `unselected`       | `array(MultiselectInline.Selectable.t)`  | The array of unselected options.                                                           |
-| `selected`         | `array(MultiselectInline.Selectable.t)`  | The array of selected options.                                                             |
-| `onSelect`         | `MultiselectInline.Selectable.t => unit` | Callback for when an item is selected.                                                     |
-| `onDeselect`       | `MultiselectInline.Selectable.t => unit` | Callback for when an item is removed.                                                      |
-| `emptyMessage`     | `string` (optional)                      | Empty message shown when the there are no selected items. Defaults to `No items selected`. |
-| `colorForSelected` | `string` (optional)                      | This is the color used to indicate selected items. The default is orange.                  |
+| Prop                      | Type                                     | Description                                                                                                         |
+| ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `id`                      | `string` (optional)                      | `id` of the input element; you can use this set unique id to the input text field.                                  |
+| `placeholder`             | `string` (optional)                      | Placeholder for the input search field.                                                                             |
+| `value`                   | `string`                                 | Value of input element; this is a controlled component - you hold the state.                                        |
+| `onChange`                | `string => unit`                         | `onChange` to set value of the input in state.                                                                      |
+| `unselected`              | `array(MultiselectInline.Selectable.t)`  | The array of unselected options.                                                                                    |
+| `selected`                | `array(MultiselectInline.Selectable.t)`  | The array of selected options.                                                                                      |
+| `onSelect`                | `MultiselectInline.Selectable.t => unit` | Callback for when an item is selected.                                                                              |
+| `onDeselect`              | `MultiselectInline.Selectable.t => unit` | Callback for when an item is removed.                                                                               |
+| `emptySelectionMessage`   | `string` (optional)                      | Empty message shown when the there are no selected items. Defaults to `No items selected`.                          |
+| `allItemsSelectedMessage` | `string` (optional)                      | This message is shown when all the items are selected from the dropdown. Defaults to 'You have selected all items!' |
+| `colorForSelected`        | `string` (optional)                      | This is the color used to indicate selected items. The default is orange.                                           |

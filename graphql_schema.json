@@ -5186,7 +5186,7 @@
             "description": "",
             "args": [
               {
-                "name": "targetId",
+                "name": "targetVersionId",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
@@ -5196,16 +5196,6 @@
                     "name": "ID",
                     "ofType": null
                   }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "targetVersionId",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
                 },
                 "defaultValue": null
               }

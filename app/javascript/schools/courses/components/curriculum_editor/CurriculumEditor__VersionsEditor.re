@@ -24,8 +24,8 @@ let reducer = (_state, action) =>
 
 module CreateTargetVersionMutation = [%graphql
   {|
-   mutation($targetId: ID!, $targetVersionId: ID) {
-    createTargetVersion(targetId: $targetId, targetVersionId: $targetVersionId) {
+   mutation($targetVersionId: ID!) {
+    createTargetVersion(targetVersionId: $targetVersionId) {
        success
      }
    }
@@ -62,7 +62,7 @@ let createTargetVersion = (targetId, targetVersion, send) => {
 
   send(SetLoading);
 
-  CreateTargetVersionMutation.make(~targetId, ~targetVersionId, ())
+  CreateTargetVersionMutation.make(~targetVersionId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(_result => {
        loadContentBlocks(targetId, send, None);

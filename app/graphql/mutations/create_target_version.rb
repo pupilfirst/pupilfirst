@@ -1,7 +1,6 @@
 module Mutations
   class CreateTargetVersion < GraphQL::Schema::Mutation
-    argument :target_id, ID, required: true
-    argument :target_version_id, ID, required: false
+    argument :target_version_id, ID, required: true
 
     description "Update a target"
 

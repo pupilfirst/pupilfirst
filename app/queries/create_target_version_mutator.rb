@@ -1,11 +1,10 @@
 class CreateTargetVersionMutator < ApplicationQuery
-  property :target_id
   property :target_version_id
 
   validate :target_version_must_be_valid
   validate :target_exists
   validate :content_should_change
-  validate :less_than_three_version_per_day
+  validate :less_than_three_versions_per_day
 
   def create_target_version
     ::TargetVersions::CreateService.new(target, target_version).execute
@@ -23,7 +22,7 @@ class CreateTargetVersionMutator < ApplicationQuery
     errors[:base] << 'Target does not exist' if target.blank?
   end
 
-  def less_than_three_version_per_day
+  def less_than_three_versions_per_day
     return if target.target_versions.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day).count < 3
 
     errors[:base] << 'You cannot create more than 3 versions per day'
@@ -40,11 +39,11 @@ class CreateTargetVersionMutator < ApplicationQuery
   end
 
   def target
-    @target ||= current_school.targets.find_by(id: target_id)
+    @target ||= current_school.targets.find_by(id: target_version.target_id)
   end
 
   def target_version
-    @target_version ||= target.target_versions.find_by(id: target_version_id)
+    @target_version ||= TargetVersion.find_by(id: target_version_id)
   end
 
   def authorized?

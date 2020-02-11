@@ -302,6 +302,12 @@ feature 'Target Content Editor', js: true do
 
     expect(page).to have_selector('textarea[aria-label="Markdown editor"]')
     expect(ContentBlock.last.content).to eq('markdown' => '')
+
+    window = window_opened_by { click_link 'View as Student' }
+
+    within_window window do
+      expect(page).to have_content('You are currently looking at a preview of this course')
+    end
   end
 
   scenario 'admin is warned before switching tabs or closing the editor when there are unsaved changes' do

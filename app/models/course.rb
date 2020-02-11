@@ -16,6 +16,7 @@ class Course < ApplicationRecord
   has_many :communities, through: :community_course_connections
   has_many :course_exports, dependent: :destroy
   has_many :content_blocks, through: :targets
+  has_many :course_authors, dependent: :restrict_with_error
 
   has_one_attached :thumbnail
   has_one_attached :cover

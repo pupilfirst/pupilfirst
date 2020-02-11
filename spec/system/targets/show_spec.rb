@@ -17,15 +17,15 @@ feature 'Target Overlay', js: true do
   let!(:target_group_l0) { create :target_group, level: level_0 }
   let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
   let!(:target_group_l2) { create :target_group, level: level_2 }
-  let!(:target_l0) { create :target, target_group: target_group_l0 }
+  let!(:target_l0) { create :target, :with_content, target_group: target_group_l0 }
   let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
-  let!(:target_l2) { create :target, target_group: target_group_l2 }
+  let!(:target_l2) { create :target, :with_content, target_group: target_group_l2 }
   let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, sort_index: 2 }
   let!(:target_draft) { create :target, :draft, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
   let!(:target_archived) { create :target, :archived, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
 
   # Quiz target
-  let!(:quiz_target) { create :target, target_group: target_group_l1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence, sort_index: 3 }
+  let!(:quiz_target) { create :target, :with_content, target_group: target_group_l1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence, sort_index: 3 }
   let!(:quiz) { create :quiz, target: quiz_target }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -219,7 +219,7 @@ feature 'Target Overlay', js: true do
 
     context 'when the target requires student to visit a link to complete it' do
       let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) { create :target, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
+      let!(:target_with_link) { create :target, :with_content, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'student completes a target by visiting a link' do
         sign_in_user student.user, referer: target_path(target_with_link)
@@ -399,7 +399,7 @@ feature 'Target Overlay', js: true do
   end
 
   context "when some team members haven't completed an individual target" do
-    let!(:target_l1) { create :target, target_group: target_group_l1, role: Target::ROLE_STUDENT }
+    let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_STUDENT }
     let!(:timeline_event) { create :timeline_event, target: target_l1, founders: [student], passed_at: 2.days.ago, latest: true }
 
     scenario 'student is shown pending team members on individual targets' do
@@ -639,7 +639,7 @@ feature 'Target Overlay', js: true do
 
     context 'when the target requires user to visit a link to complete it' do
       let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) { create :target, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
+      let!(:target_with_link) { create :target, :with_content, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'link to complete is shown to the user' do
         sign_in_user school_admin.user, referer: target_path(target_with_link)

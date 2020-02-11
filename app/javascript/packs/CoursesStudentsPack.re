@@ -7,13 +7,14 @@ let decodeProps = json =>
     json |> field("levels", array(Level.decode)),
     json |> field("course", Course.decode),
     json |> field("userId", string),
+    json |> field("teamCoaches", array(TeamCoach.decode)),
   );
 
-let (levels, course, userId) =
+let (levels, course, userId, teamCoaches) =
   DomUtils.parseJsonTag(~id="school-course-students__props", ())
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoursesStudents__Root levels course userId />,
+  <CoursesStudents__Root levels course userId teamCoaches />,
   "react-root",
 );

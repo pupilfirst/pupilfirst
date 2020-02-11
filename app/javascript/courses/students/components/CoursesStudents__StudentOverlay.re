@@ -369,7 +369,7 @@ let removeNoteCB = (setState, studentDetails, noteId) => {
 };
 
 [@react.component]
-let make = (~courseId, ~studentId, ~levels, ~userId) => {
+let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
   let (state, setState) =
     React.useState(() =>
       {studentData: Loading, selectedTab: Notes, submissions: Unloaded}

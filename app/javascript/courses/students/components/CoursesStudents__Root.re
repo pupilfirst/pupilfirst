@@ -35,6 +35,7 @@ module TeamsQuery = [%graphql
           title
           avatarUrl
         }
+        coachUserIds
         }
         pageInfo{
           endCursor,hasNextPage
@@ -56,6 +57,7 @@ let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
     |> List.flatten
     |> Array.of_list
     |> Array.append(teams);
+
   setState(state =>
     {
       ...state,
@@ -275,7 +277,7 @@ let applicableLevels = levels => {
 };
 
 [@react.component]
-let make = (~levels, ~course, ~userId) => {
+let make = (~levels, ~course, ~userId, ~teamCoaches) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -313,7 +315,13 @@ let make = (~levels, ~course, ~userId) => {
   <div>
     {switch (url.path) {
      | ["students", studentId, "report"] =>
-       <CoursesStudents__StudentOverlay courseId studentId levels userId />
+       <CoursesStudents__StudentOverlay
+         courseId
+         studentId
+         levels
+         userId
+         teamCoaches
+       />
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
@@ -372,7 +380,12 @@ let make = (~levels, ~course, ~userId) => {
            )
          | PartiallyLoaded(teams, cursor) =>
            <div>
-             <CoursesStudents__TeamsList levels teams openOverlayCB />
+             <CoursesStudents__TeamsList
+               levels
+               teams
+               openOverlayCB
+               teamCoaches
+             />
              {switch (state.loading) {
               | LoadingMore =>
                 SkeletonLoading.multiple(
@@ -400,7 +413,12 @@ let make = (~levels, ~course, ~userId) => {
               }}
            </div>
          | FullyLoaded(teams) =>
-           <CoursesStudents__TeamsList levels teams openOverlayCB />
+           <CoursesStudents__TeamsList
+             levels
+             teams
+             openOverlayCB
+             teamCoaches
+           />
          }}
       </div>
     </div>

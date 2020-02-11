@@ -4,6 +4,7 @@ module Types
     field :name, String, null: false
     field :level_id, ID, null: false
     field :students, [Types::StudentType], null: false
+    field :coach_user_ids, [ID], null: false
 
     def students
       object.founders.map do |student|
@@ -16,6 +17,10 @@ module Types
 
         student_attributes
       end
+    end
+
+    def coach_user_ids
+      object.faculty.map(&:user_id)
     end
   end
 end

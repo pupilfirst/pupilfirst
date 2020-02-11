@@ -39,7 +39,14 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let showStudent = (team, levels, openOverlayCB) => {
+let coachAvatars = coaches =>
+  coaches
+  |> Array.map(coach => {
+       <Avatar name={coach |> TeamCoach.name} className="w-10 h-10" />
+     })
+  |> React.array;
+
+let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
   <a
     href={"/students/" ++ (student |> TeamInfo.studentId) ++ "/report"}
@@ -65,12 +72,13 @@ let showStudent = (team, levels, openOverlayCB) => {
     <div
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
       className="w-2/5 flex items-center justify-end p-3 md:p-4">
+      {coachAvatars(teamCoaches)}
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </a>;
 };
 
-let showTeam = (team, levels, openOverlayCB) => {
+let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
   <div
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
@@ -126,7 +134,7 @@ let showTeam = (team, levels, openOverlayCB) => {
 };
 
 [@react.component]
-let make = (~levels, ~teams, ~openOverlayCB) => {
+let make = (~levels, ~teams, ~openOverlayCB, ~teamCoaches) => {
   <div>
     {teams |> ArrayUtils.isEmpty
        ? <div
@@ -136,11 +144,13 @@ let make = (~levels, ~teams, ~openOverlayCB) => {
            </h5>
          </div>
        : teams
-         |> Array.map(team =>
+         |> Array.map(team => {
+              let coaches = teamCoaches |> TeamCoach.coachesForTeam(team);
+
               Array.length(team |> TeamInfo.students) == 1
-                ? showStudent(team, levels, openOverlayCB)
-                : showTeam(team, levels, openOverlayCB)
-            )
+                ? showStudent(team, levels, openOverlayCB, coaches)
+                : showTeam(team, levels, openOverlayCB, coaches);
+            })
          |> React.array}
   </div>;
 };

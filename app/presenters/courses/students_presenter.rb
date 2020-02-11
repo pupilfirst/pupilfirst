@@ -15,7 +15,8 @@ module Courses
       {
         levels: levels,
         course: course_details,
-        user_id: current_user.id
+        user_id: current_user.id,
+        team_coaches: team_coaches
       }
     end
 
@@ -28,6 +29,27 @@ module Courses
 
     def course_details
       { id: @course.id }
+    end
+
+    def team_coaches
+      school = @course.school
+
+      school.faculty
+        .joins(startups: :course)
+        .where(startups: { courses: { id: @course.id } })
+        .includes(user: { avatar_attachment: :blob })
+        .map do |faculty|
+        user = faculty.user
+
+        user_details = {
+          user_id: user.id,
+          name: user.name,
+          title: user.full_title
+        }
+
+        user_details[:avatar_url] = view.rails_representation_path(user.avatar_variant(:thumb), only_path: true) if user.avatar.attached?
+        user_details
+      end
     end
   end
 end

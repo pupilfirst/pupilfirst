@@ -10,6 +10,7 @@ type t = {
   name: string,
   levelId: string,
   students: array(student),
+  coachUserIds: array(string),
 };
 
 let id = t => t.id;
@@ -20,6 +21,8 @@ let name = t => t.name;
 let title = t => t.title;
 
 let students = t => t.students;
+
+let coachUserIds = t => t.coachUserIds;
 
 let studentId = (student: student) => student.id;
 
@@ -34,11 +37,12 @@ let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
   avatarUrl,
 };
 
-let make = (~id, ~name, ~levelId, ~students) => {
+let make = (~id, ~name, ~levelId, ~students, ~coachUserIds) => {
   id,
   name,
   levelId,
   students,
+  coachUserIds,
 };
 
 let makeFromJS = teamDetails => {
@@ -62,6 +66,7 @@ let makeFromJS = teamDetails => {
              ~name=team##name,
              ~levelId=team##levelId,
              ~students,
+             ~coachUserIds=team##coachUserIds,
            ),
          ];
        | None => []

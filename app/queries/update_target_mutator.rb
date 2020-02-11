@@ -9,7 +9,7 @@ class UpdateTargetMutator < ApplicationQuery
   property :evaluation_criteria
   property :quiz
   property :completion_instructions, validates: { length: { maximum: 1000 } }
-  property :link_to_complete, validates: { url: true }
+  property :link_to_complete, validates: { url: true, allow_blank: true }
   property :visibility, validates: { presence: true, inclusion: { in: Target.valid_visibility_types } }
 
   validate :target_group_exists

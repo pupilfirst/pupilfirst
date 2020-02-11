@@ -2,11 +2,7 @@ class TargetVersionResolver < ApplicationQuery
   property :target_id
 
   def versions
-    if target.target_versions.present?
-      target.target_versions.order('created_at DESC')
-    else
-      TargetVersion.none
-    end
+    target.target_versions.order('created_at DESC')
   end
 
   def target

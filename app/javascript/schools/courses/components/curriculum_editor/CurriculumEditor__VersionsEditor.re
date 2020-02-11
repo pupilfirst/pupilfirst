@@ -43,7 +43,7 @@ let loadContentBlocks = (targetId, send, version) => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
-       let versions = result##versions |> Version.makeFromJs;
+       let versions = result##versions |> Version.makeArrayFromJs;
 
        let selectedVersion =
          switch (version) {
@@ -74,7 +74,7 @@ let createTargetVersion = (targetId, targetVersion, send) => {
 let versionText = version => {
   <div>
     <span className="font-semibold text-lg">
-      {"#" ++ (version |> Version.index |> string_of_int) ++ " " |> str}
+      {"#" ++ (version |> Version.number |> string_of_int) ++ " " |> str}
     </span>
     <span className="text-xs"> {version |> Version.versionAt |> str} </span>
   </div>;

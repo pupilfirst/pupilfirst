@@ -127,9 +127,17 @@ let showContentBlocks =
   <div>
     <div className="flex items-end">
       <div>
-        <label className="text-xs block text-gray-600 mb-1">
-          {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
-        </label>
+        <div>
+          <label className="text-xs inline-block text-gray-600 mb-1">
+            {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
+          </label>
+          <HelpIcon
+            className="ml-1"
+            link="https://docs.pupilfirst.com/#/curriculum_editor?id=target-content-versions">
+            {"Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required."
+             |> str}
+          </HelpIcon>
+        </div>
         {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
       </div>
       <div className="ml-2">

@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 feature "Student's view of Course Curriculum", js: true do
+  include NotificationHelper
   include UserSpecHelper
 
   # The basics.
@@ -38,8 +39,9 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:submitted_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:failed_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_l4_1, prerequisite_targets: [pending_target_g1], role: Target::ROLE_TEAM }
-  let!(:level_5_target_1) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
-  let!(:level_5_target_2) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
+  let!(:l5_reviewed_target) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
+  let!(:l5_non_reviewed_target) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
+  let!(:l5_non_reviewed_target_with_prerequisite) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM, prerequisite_targets: [l5_non_reviewed_target] }
   let!(:level_6_target) { create :target, target_group: target_group_l6, role: Target::ROLE_TEAM }
   let!(:level_6_draft_target) { create :target, :draft, target_group: target_group_l6, role: Target::ROLE_TEAM }
 
@@ -57,18 +59,16 @@ feature "Student's view of Course Curriculum", js: true do
     create(:timeline_event_grade, timeline_event: submission_failed_target, evaluation_criterion: evaluation_criterion, grade: 1)
   end
 
-  context 'when student has exited the programme' do
-    scenario 'ex-student attempts to visit course curriculum' do
-      student.startup.update!(dropped_out_at: 1.day.ago)
-      sign_in_user student.user, referer: curriculum_course_path(course)
-      expect(page).to have_content("The page you were looking for doesn't exist!")
-    end
+  scenario "student who has dropped out attempts to view a course's curriculum" do
+    student.startup.update!(dropped_out_at: 1.day.ago)
+    sign_in_user student.user, referer: curriculum_course_path(course)
+    expect(page).to have_content("The page you were looking for doesn't exist!")
   end
 
   context 'when the course the student belongs has ended' do
     let(:course) { create :course, ends_at: 1.day.ago }
 
-    scenario 'student visits course curriculum' do
+    scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referer: curriculum_course_path(course)
       expect(page).to have_text('The course has ended and submissions are disabled for all targets!')
     end
@@ -77,13 +77,13 @@ feature "Student's view of Course Curriculum", js: true do
   context "when a student's access to a course has ended" do
     let!(:team) { create :startup, level: level_4, access_ends_at: 1.day.ago }
 
-    scenario 'student visits course curriculum' do
+    scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referer: curriculum_course_path(course)
       expect(page).to have_text('Your access to this course has ended.')
     end
   end
 
-  scenario 'student visits course curriculum' do
+  scenario 'student visits the course curriculum page' do
     sign_in_user student.user, referer: curriculum_course_path(course)
 
     # Course name should be displayed.
@@ -153,32 +153,69 @@ feature "Student's view of Course Curriculum", js: true do
     within("a[aria-label='Select Target #{completed_target_l2.id}']") do
       expect(page).to have_content('Passed')
     end
+  end
 
-    # There is no level 0, so the tab to switch  to level 0 should not be visible.
-    # TODO: Implement this.
-    # expect(page).not_to have_selector('.founder-dashboard-togglebar__toggle-btn')
+  scenario 'student browses a level she has not reached' do
+    sign_in_user student.user, referer: curriculum_course_path(course)
 
-    # Visit the read-only level 5 and ensure that content is in read-only mode.
-    click_button "L2: #{level_2.name}"
+    # Switch to Level 5.
+    click_button "L4: #{level_4.name}"
     click_button "L5: #{level_5.name}"
 
-    expect(page).to have_content(target_group_l5.name)
-    expect(page).to have_content(target_group_l5.description)
-    expect(page).to have_content(level_5_target_1.title)
+    expect(page).to have_text(target_group_l5.name)
+    expect(page).to have_text(target_group_l5.description)
 
-    click_link level_5_target_1.title
+    # There should be two locked targets in L5 right now.
+    expect(page).to have_selector('.curriculum__target-status--locked', count: 2)
 
-    expect(page).to have_content('You must level up to complete this target.')
+    # Non-reviewed targets that have prerequisites must be locked.
+    click_link l5_non_reviewed_target_with_prerequisite.title
+
+    expect(page).to have_text('This target has pre-requisites that are incomplete.')
+    expect(page).to have_link(l5_non_reviewed_target.title)
 
     click_button 'Close'
 
-    # Ensure level 6 is displayed as locked. - the content should not be visible.
-    click_button "L5: #{level_5.name}"
+    # Non-reviewed targets that do not have prerequisites should be unlocked for completion.
+    click_link l5_non_reviewed_target.title
+    click_button 'Mark As Complete'
+
+    expect(page).to have_text('Your Submission has been recorded')
+
+    dismiss_notification
+    click_button 'Close'
+
+    # Completing the prerequisite should unlock the previously locked non-reviewed target.
+    expect(page).to have_selector('.curriculum__target-status--locked', count: 1)
+
+    click_link l5_non_reviewed_target_with_prerequisite.title
+
+    expect(page).not_to have_text('This target has pre-requisites that are incomplete.')
+    expect(page).to have_button 'Mark As Complete'
+
+    click_button 'Close'
+
+    # Reviewed targets, even those without prerequisites, must be locked.
+    click_link l5_reviewed_target.title
+
+    expect(page).to have_content('You must level up to complete this target')
+
+    click_button 'Close'
+  end
+
+  scenario 'student opens a locked level' do
+    sign_in_user student.user, referer: curriculum_course_path(course)
+
+    # Switch to the locked Level 6.
+    click_button "L4: #{level_4.name}"
     click_button "L6: #{locked_level_6.name}"
 
-    expect(page).not_to have_content(target_group_l6.name)
-    expect(page).not_to have_content(target_group_l6.description)
-    expect(page).not_to have_content(level_6_target.title)
+    # Ensure level 6 is displayed as locked. - the content should not be visible.
+    expect(page).to have_text('The level is currently locked!')
+    expect(page).to have_text('You can access the content on')
+    expect(page).not_to have_text(target_group_l6.name)
+    expect(page).not_to have_text(target_group_l6.description)
+    expect(page).not_to have_text(level_6_target.title)
   end
 
   scenario 'student navigates between levels using the quick navigation links' do
@@ -320,18 +357,14 @@ feature "Student's view of Course Curriculum", js: true do
 
       expect(page).to have_content(target_group_l5.name)
       expect(page).to have_content(target_group_l5.description)
-      expect(page).to have_content(level_5_target_1.title)
+      expect(page).to have_content(l5_reviewed_target.title)
 
-      # All targets should have the right status written next to their titles.
-      within("a[aria-label='Select Target #{level_5_target_1.id}']") do
+      # Targets should have the right status written next to their titles.
+      within("a[aria-label='Select Target #{l5_reviewed_target.id}']") do
         expect(page).to have_content('Pending')
       end
 
-      within("a[aria-label='Select Target #{level_5_target_2.id}']") do
-        expect(page).to have_content('Pending')
-      end
-
-      click_link level_5_target_1.title
+      click_link l5_reviewed_target.title
 
       expect(page).to have_content('You are currently looking at a preview of this course.')
     end

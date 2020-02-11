@@ -4,23 +4,25 @@
 
 @tailwind utilities;
 
-.multiselect-inline-list {
+.multiselect-inline__list {
   height: 7rem;
 }
 
-.multiselect-inline-list__item
-  .multiselect-inline-list__item-select-icon-selected {
+.multiselect-inline__list-item
+  .multiselect-inline__list-item-select-icon-selected {
   display: none;
 }
-.multiselect-inline-list__item:hover
-  .multiselect-inline-list__item-select-icon-unselected,
-.multiselect-inline-list__item:active
-  .multiselect-inline-list__item-select-icon-unselected {
+
+.multiselect-inline__list-item:hover
+  .multiselect-inline__list-item-select-icon-unselected,
+.multiselect-inline__list-item:active
+  .multiselect-inline__list-item-select-icon-unselected {
   display: none;
 }
-.multiselect-inline-list__item:hover
-  .multiselect-inline-list__item-select-icon-selected,
-.multiselect-inline-list__item:active
-  .multiselect-inline-list__item-select-icon-selected {
+
+.multiselect-inline__list-item:hover
+  .multiselect-inline__list-item-select-icon-selected,
+.multiselect-inline__list-item:active
+  .multiselect-inline__list-item-select-icon-selected {
   display: inline-flex;
 }

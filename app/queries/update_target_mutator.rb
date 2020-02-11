@@ -9,7 +9,7 @@ class UpdateTargetMutator < ApplicationQuery
   property :evaluation_criteria
   property :quiz
   property :completion_instructions, validates: { length: { maximum: 1000 } }
-  property :link_to_complete
+  property :link_to_complete, validates: { url: true }
   property :visibility, validates: { presence: true, inclusion: { in: Target.valid_visibility_types } }
 
   validate :target_group_exists
@@ -30,9 +30,9 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def prerequisite_targets_in_same_level
-    targets = course.targets.where(id: prerequisite_targets)
+    targets = level.targets.where(id: prerequisite_targets)
 
-    return if (targets.count == prerequisite_targets.count) && targets.all? { |target| target.level.id == level.id }
+    return if targets.count == prerequisite_targets.count
 
     errors[:base] << 'Prerequisite targets must be from the same level as the target'
   end

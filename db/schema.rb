@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_23_122954) do
+ActiveRecord::Schema.define(version: 2020_02_12_091203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -212,16 +212,6 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
     t.bigint "target_version_id"
     t.index ["block_type"], name: "index_content_blocks_on_block_type"
     t.index ["target_version_id"], name: "index_content_blocks_on_target_version_id"
-  end
-
-  create_table "content_versions", force: :cascade do |t|
-    t.bigint "target_id"
-    t.bigint "content_block_id"
-    t.date "version_on"
-    t.integer "sort_index"
-    t.index ["content_block_id"], name: "index_content_versions_on_content_block_id"
-    t.index ["target_id"], name: "index_content_versions_on_target_id"
-    t.index ["version_on"], name: "index_content_versions_on_version_on"
   end
 
   create_table "course_authors", force: :cascade do |t|
@@ -842,8 +832,6 @@ ActiveRecord::Schema.define(version: 2020_01_23_122954) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
-  add_foreign_key "content_versions", "content_blocks"
-  add_foreign_key "content_versions", "targets"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"

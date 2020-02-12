@@ -30,6 +30,8 @@ let studentName = (student: student) => student.name;
 
 let studentTitle = (student: student) => student.title;
 
+let studentAvatarUrl = student => student.avatarUrl;
+
 let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
   id,
   name,

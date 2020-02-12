@@ -5,18 +5,12 @@ open CoursesStudents__Types;
 
 let str = React.string;
 
-let studentAvatar = (student: TeamInfo.student) => {
-  switch (student.avatarUrl) {
-  | Some(avatarUrl) =>
-    <img
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-      src=avatarUrl
-    />
-  | None =>
-    <Avatar
-      name={student |> TeamInfo.studentName}
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-    />
+let avatar = (avatarUrl, name) => {
+  let className = "w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 object-cover";
+
+  switch (avatarUrl) {
+  | Some(avatarUrl) => <img className src=avatarUrl />
+  | None => <Avatar name className />
   };
 };
 
@@ -39,12 +33,24 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let coachAvatars = coaches =>
-  coaches
-  |> Array.map(coach => {
-       <Avatar name={coach |> TeamCoach.name} className="w-10 h-10" />
-     })
-  |> React.array;
+let coachAvatars = (~title, ~className="", coaches) =>
+  <div className={"inline-block mr-6 " ++ className}>
+    <div className="text-xs"> {title |> str} </div>
+    <div className="mt-1">
+      {coaches
+       |> Array.map(coach => {
+            let tip = <span> {coach |> TeamCoach.name |> str} </span>;
+
+            <Tooltip
+              tip
+              className="hidden md:inline-block -mr-2"
+              key={coach |> TeamCoach.userId}>
+              {avatar(coach |> TeamCoach.avatarUrl, coach |> TeamCoach.name)}
+            </Tooltip>;
+          })
+       |> React.array}
+    </div>
+  </div>;
 
 let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
@@ -57,8 +63,11 @@ let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div
         className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
-        {studentAvatar(student)}
-        <div className="block text-sm md:pr-2">
+        {avatar(
+           student |> TeamInfo.studentAvatarUrl,
+           student |> TeamInfo.studentName,
+         )}
+        <div className="ml-2 md:ml-3 block text-sm md:pr-2">
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
@@ -71,8 +80,8 @@ let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
     </div>
     <div
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
-      className="w-2/5 flex items-center justify-end p-3 md:p-4">
-      {coachAvatars(teamCoaches)}
+      className="w-2/5 flex items-center justify-between p-3 md:p-4">
+      {coachAvatars(~title="Personal Coaches", teamCoaches)}
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </a>;
@@ -96,8 +105,11 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
               onClick={openOverlayCB(student |> TeamInfo.studentId)}
               className="flex items-center bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100">
               <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
-                {studentAvatar(student)}
-                <div className="text-sm flex flex-col">
+                {avatar(
+                   student |> TeamInfo.studentAvatarUrl,
+                   student |> TeamInfo.studentName,
+                 )}
+                <div className="ml-2 md:ml-3 text-sm flex flex-col">
                   <p className="font-semibold inline-block leading-snug ">
                     {student |> TeamInfo.studentName |> str}
                   </p>
@@ -115,13 +127,13 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
       className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l p-3 md:px-4 md:py-5">
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
-          <p
-            className="text-xs bg-green-200 inline-block leading-tight px-1 py-px rounded">
-            {"Team" |> str}
+          <p className="text-xs inline-block leading-tight">
+            {"Team Name" |> str}
           </p>
           <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
+          {coachAvatars(~title="Team Coaches", ~className="mt-1", teamCoaches)}
         </div>
       </div>
       <div

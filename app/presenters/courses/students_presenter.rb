@@ -38,7 +38,7 @@ module Courses
         .joins(startups: :course)
         .where(startups: { courses: { id: @course.id } })
         .includes(user: { avatar_attachment: :blob })
-        .map do |faculty|
+        .distinct.map do |faculty|
         user = faculty.user
 
         user_details = {

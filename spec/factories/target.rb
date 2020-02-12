@@ -29,6 +29,13 @@ FactoryBot.define do
       role { Target::ROLE_TEAM }
     end
 
+    trait :with_markdown do
+      after(:create) do |target|
+        target_version = create(:target_version, target: target)
+        create(:content_block, :empty_markdown, target_version: target_version)
+      end
+    end
+
     trait :with_content do
       after(:create) do |target|
         target_version = create(:target_version, target: target)

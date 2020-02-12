@@ -398,7 +398,6 @@ let completeSection =
            key="courses-curriculum-quiz"
            target
            targetDetails
-           authenticityToken
            addSubmissionCB=addVerifiedSubmissionCB
            preview
          />,
@@ -427,7 +426,6 @@ let completeSection =
        <CoursesCurriculum__AutoVerify
          target
          targetDetails
-         authenticityToken
          targetStatus
          addSubmissionCB=addVerifiedSubmissionCB
          preview

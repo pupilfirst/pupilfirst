@@ -114,10 +114,9 @@ let createCourse = (state, send, updateCourseCB) => {
       ~featured=state.featured,
       (),
     );
-  let response =
-    createCourseQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
 
-  response
+  createCourseQuery
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        handleResponseCB(
          result##createCourse##course##id,
@@ -147,10 +146,9 @@ let updateCourse = (state, send, updateCourseCB, course) => {
       ~featured=state.featured,
       (),
     );
-  let response =
-    updateCourseQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
 
-  response
+  updateCourseQuery
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        handleResponseCB(
          result##updateCourse##course##id,

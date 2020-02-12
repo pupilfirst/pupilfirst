@@ -4,10 +4,10 @@ module Types
 
     field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true
-      argument :version_on, Types::DateType, required: false
+      argument :target_version_id, ID, required: false
     end
 
-    field :versions, [Types::DateType], null: false do
+    field :versions, [Types::TargetVersionType], null: false do
       argument :target_id, ID, required: true
     end
 
@@ -46,6 +46,10 @@ module Types
       argument :course_id, ID, required: true
     end
 
+    field :target_details, Types::TargetDetailsType, null: false do
+      argument :target_id, ID, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -62,7 +66,7 @@ module Types
     end
 
     def versions(args)
-      resolver = ContentVersionResolver.new(context, args)
+      resolver = TargetVersionResolver.new(context, args)
       resolver.versions
     end
 
@@ -94,6 +98,11 @@ module Types
     def evaluation_criteria(args)
       resolver = EvaluationCriteriaResolver.new(context, args)
       resolver.evaluation_criteria
+    end
+
+    def target_details(args)
+      resolver = TargetDetailsResolver.new(context, args)
+      resolver.target_details
     end
   end
 end

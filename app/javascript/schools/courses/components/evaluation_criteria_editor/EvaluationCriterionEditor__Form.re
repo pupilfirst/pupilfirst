@@ -100,18 +100,13 @@ let updateEvaluationCriterion =
        )
     |> Array.map(gl => gl |> GradeLabel.asJsObject);
 
-  let updateCriterionQuery =
-    UpdateEvaluationCriterionQuery.make(
-      ~id=criterion |> EvaluationCriterion.id,
-      ~name=state.name,
-      ~gradesAndLabels=jsGradeAndLabelArray,
-      (),
-    );
-  let response =
-    updateCriterionQuery
-    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
-
-  response
+  UpdateEvaluationCriterionQuery.make(
+    ~id=criterion |> EvaluationCriterion.id,
+    ~name=state.name,
+    ~gradesAndLabels=jsGradeAndLabelArray,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        switch (result##updateEvaluationCriterion##evaluationCriterion) {
        | Some(criterion) =>
@@ -136,20 +131,15 @@ let createEvaluationCriterion =
        )
     |> Array.map(gl => gl |> GradeLabel.asJsObject);
 
-  let createCriterionQuery =
-    CreateEvaluationCriterionQuery.make(
-      ~name=state.name,
-      ~maxGrade=state.maxGrade,
-      ~passGrade=state.passGrade,
-      ~courseId,
-      ~gradesAndLabels=jsGradeAndLabelArray,
-      (),
-    );
-  let response =
-    createCriterionQuery
-    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
-
-  response
+  CreateEvaluationCriterionQuery.make(
+    ~name=state.name,
+    ~maxGrade=state.maxGrade,
+    ~passGrade=state.passGrade,
+    ~courseId,
+    ~gradesAndLabels=jsGradeAndLabelArray,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        switch (result##createEvaluationCriterion##evaluationCriterion) {
        | Some(criterion) =>

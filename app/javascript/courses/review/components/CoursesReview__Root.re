@@ -151,14 +151,7 @@ let updateReviewedSubmission = (setState, submission) =>
   );
 
 [@react.component]
-let make =
-    (
-      ~authenticityToken,
-      ~levels,
-      ~pendingSubmissions,
-      ~courseId,
-      ~currentCoach,
-    ) => {
+let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -174,7 +167,6 @@ let make =
     {switch (url.path) {
      | ["submissions", submissionId, ..._] =>
        <CoursesReview__SubmissionOverlay
-         authenticityToken
          courseId
          submissionId
          currentCoach
@@ -234,7 +226,6 @@ let make =
            />
          | ReviewedSubmissions =>
            <CoursesReview__ShowReviewedSubmissions
-             authenticityToken
              courseId
              selectedLevel={state.selectedLevel}
              levels

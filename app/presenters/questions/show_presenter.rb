@@ -7,7 +7,6 @@ module Questions
 
     def props
       {
-        authenticity_token: view.form_authenticity_token,
         questions: question_data,
         answers: answer_data,
         comments: comments,

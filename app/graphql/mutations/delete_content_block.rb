@@ -5,17 +5,16 @@ module Mutations
     description "Deletes a target content block."
 
     field :success, Boolean, null: false
-    field :versions, [Types::DateType], null: false
 
     def resolve(params)
       mutator = DeleteContentBlockMutator.new(context, params)
 
       if mutator.valid?
         mutator.delete_content_block
-        { success: true, versions: mutator.target_versions }
+        { success: true }
       else
         mutator.notify_errors
-        { success: false, errors: mutator.error_messages }
+        { success: false }
       end
     end
   end

@@ -85,7 +85,6 @@ let handleUpdateQuestion =
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~question,
       ~answers,
       ~comments,
@@ -155,7 +154,6 @@ let make =
                </a>
              </div>
              <QuestionsEditor
-               authenticityToken
                communityId
                target=None
                showBackButton=false
@@ -229,7 +227,6 @@ let make =
                               <span className="ml-2"> {"Edit" |> str} </span>
                             </a>
                             <QuestionsShow__ArchiveManager
-                              authenticityToken
                               id={question |> Question.id}
                               resourceType="Question"
                               archiveCB
@@ -306,7 +303,6 @@ let make =
              <QuestionsShow__CommentShow
                comments={state.comments |> Comment.commentsForQuestion}
                users
-               authenticityToken
                commentableType="Question"
                commentableId={state.question |> Question.id}
                addCommentCB
@@ -318,12 +314,10 @@ let make =
                className="max-w-3xl w-full justify-center mx-auto pt-8 pb-2 border-b">
                <div className="flex items-end">
                  <span className="text-lg font-semibold">
-                   {
-                     let numberOfAnswers = filteredAnswers |> List.length;
-                     (numberOfAnswers |> string_of_int)
-                     ++ (numberOfAnswers == 1 ? " Answer" : " Answers")
-                     |> str;
-                   }
+                   {let numberOfAnswers = filteredAnswers |> List.length;
+                    (numberOfAnswers |> string_of_int)
+                    ++ (numberOfAnswers == 1 ? " Answer" : " Answers")
+                    |> str}
                  </span>
                </div>
              </div>
@@ -343,7 +337,6 @@ let make =
                 |> List.map(answer =>
                      <QuestionsShow__AnswerShow
                        key={answer |> Answer.id}
-                       authenticityToken
                        answer
                        question={state.question}
                        addCommentCB
@@ -368,7 +361,6 @@ let make =
               )
                 ? <QuestionsShow__AnswerEditor
                     question={state.question}
-                    authenticityToken
                     currentUserId
                     handleAnswerCB
                   />

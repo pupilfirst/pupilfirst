@@ -34,7 +34,7 @@ let updateSchoolQuery = (state, send, updateDetailsCB) => {
   send(UpdateSaving(true));
 
   UpdateSchoolQuery.make(~name=state.name, ~about=state.about, ())
-  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##updateSchool##success
          ? updateDetailsCB(state.name, optionAbout(state.about))

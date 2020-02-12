@@ -23,7 +23,7 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
         window |> Window.confirm("Are you sure you want to delete this note?")
       )) {
     ArchiveCoachNoteMutation.make(~id, ())
-    |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response => {
          if (response##archiveCoachNote##success) {
            removeNoteCB(id);

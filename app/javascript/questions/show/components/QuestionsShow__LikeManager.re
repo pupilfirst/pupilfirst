@@ -64,16 +64,15 @@ let handleAnswerLike =
       answerId,
       currentUserId,
       likes,
-      authenticityToken,
       removeLikeCB,
       handleCreateResponse,
       addLikeCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
-  saving ?
-    () :
-    {
+  saving
+    ? ()
+    : {
       setSaving(_ => true);
       if (liked) {
         let id =
@@ -81,7 +80,7 @@ let handleAnswerLike =
           |> List.hd
           |> Like.id;
         DestroyAnswerLikeQuery.make(~id, ())
-        |> GraphqlQuery.sendQuery(authenticityToken)
+        |> GraphqlQuery.sendQuery
         |> Js.Promise.then_(_response => {
              removeLikeCB(id);
              setSaving(_ => false);
@@ -90,7 +89,7 @@ let handleAnswerLike =
         |> ignore;
       } else {
         CreateAnswerLikeQuery.make(~answerId, ())
-        |> GraphqlQuery.sendQuery(authenticityToken)
+        |> GraphqlQuery.sendQuery
         |> Js.Promise.then_(response =>
              switch (response##createAnswerLike) {
              | `AnswerLikeId(answerLikeId) =>
@@ -113,15 +112,7 @@ let handleAnswerLike =
 };
 
 [@react.component]
-let make =
-    (
-      ~authenticityToken,
-      ~likes,
-      ~answerId,
-      ~currentUserId,
-      ~addLikeCB,
-      ~removeLikeCB,
-    ) => {
+let make = (~likes, ~answerId, ~currentUserId, ~addLikeCB, ~removeLikeCB) => {
   let liked = likes |> Like.currentUserLiked(answerId, currentUserId);
   let (saving, setSaving) = React.useState(() => false);
 
@@ -129,33 +120,28 @@ let make =
     <div
       className="cursor-pointer"
       title={(liked ? "Unlike" : "Like") ++ " Answer"}
-      onClick={
-        handleAnswerLike(
-          saving,
-          liked,
-          setSaving,
-          answerId,
-          currentUserId,
-          likes,
-          authenticityToken,
-          removeLikeCB,
-          handleCreateResponse,
-          addLikeCB,
-        )
-      }>
+      onClick={handleAnswerLike(
+        saving,
+        liked,
+        setSaving,
+        answerId,
+        currentUserId,
+        likes,
+        removeLikeCB,
+        handleCreateResponse,
+        addLikeCB,
+      )}>
       <div
         className="flex items-center justify-center rounded-full hover:bg-gray-100 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2"
         key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>
       <p className="text-xs pb-1">
-        {
-          likes
-          |> Like.likesForAnswer(answerId)
-          |> List.length
-          |> string_of_int
-          |> str
-        }
+        {likes
+         |> Like.likesForAnswer(answerId)
+         |> List.length
+         |> string_of_int
+         |> str}
       </p>
     </div>
   </div>;

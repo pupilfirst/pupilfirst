@@ -50,12 +50,24 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :targets, only: [] do
+      resource :content_block, only: %i[create]
+    end
+
     resources :courses, only: %i[index] do
       member do
         get 'curriculum'
         get 'exports'
         get 'evaluation_criteria'
         post 'attach_images'
+      end
+
+      resources :targets, only: [] do
+        member do
+          get 'content'
+          get 'details'
+          get 'versions'
+        end
       end
 
       resources :levels, only: %i[create]
@@ -85,14 +97,6 @@ Rails.application.routes.draw do
     end
 
     resources :target_groups, only: %i[update]
-
-    resources :targets, only: %i[update] do
-      resource :quiz, only: %i[create]
-      resource :content_block, only: %i[create]
-      member do
-        get 'content'
-      end
-    end
 
     resources :communities, only: %i[index]
   end

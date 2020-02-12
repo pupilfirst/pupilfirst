@@ -66,65 +66,10 @@ module Schools
             id: target.id,
             target_group_id: target.target_group_id,
             title: target.title,
-            evaluationCriteria: evaluation_criteria_for_target(target),
-            prerequisiteTargets: prerequisite_targets(target),
-            quiz: quiz(target),
-            linkToComplete: target.link_to_complete,
-            role: target.role,
-            targetActionType: target.target_action_type,
             sortIndex: target.sort_index,
-            visibility: target.visibility,
-            completionInstructions: target.completion_instructions
+            visibility: target.visibility
           }
         end
-      end
-
-      private
-
-      def evaluation_criteria_for_target(target)
-        target.evaluation_criteria.pluck(:id)
-      end
-
-      def prerequisite_targets(target)
-        target.prerequisite_targets.pluck(:id)
-      end
-
-      def target_resources(target)
-        target.resources.map do |resource|
-          {
-            id: resource.id,
-            title: resource.title
-          }
-        end
-      end
-
-      def quiz(target)
-        if target.quiz.present?
-          target.quiz.quiz_questions.map do |quiz_question|
-            {
-              id: quiz_question.id,
-              question: quiz_question.question,
-              answerOptions: answer_options(quiz_question)
-            }
-          end
-        else
-          []
-        end
-      end
-
-      def answer_options(quiz_question)
-        quiz_question.answer_options.map do |answer_option|
-          {
-            id: answer_option.id,
-            answer: answer_option.value,
-            hint: answer_option.hint,
-            correctAnswer: correct_answer?(quiz_question, answer_option)
-          }
-        end
-      end
-
-      def correct_answer?(quiz_question, answer_option)
-        quiz_question.correct_answer == answer_option
       end
     end
   end

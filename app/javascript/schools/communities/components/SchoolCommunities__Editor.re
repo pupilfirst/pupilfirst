@@ -90,7 +90,6 @@ let handleQuery =
       name,
       targetLinkable,
       courseIds,
-      authenticityToken,
       setSaving,
       community,
       addCommunityCB,
@@ -111,7 +110,7 @@ let handleQuery =
         ~courseIds,
         (),
       )
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##updateCommunity) {
            | `CommunityId(communityId) =>
@@ -133,7 +132,7 @@ let handleQuery =
       |> ignore
     | None =>
       CreateCommunityQuery.make(~name, ~targetLinkable, ~courseIds, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createCommunity) {
            | `CommunityId(communityId) =>
@@ -173,7 +172,6 @@ let communityCourseIds = courseState =>
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~courses,
       ~community,
       ~connections,
@@ -243,12 +241,10 @@ let make =
           <input
             placeholder="This community needs a name!"
             value=name
-            onChange={
-              event => {
-                setName(ReactEvent.Form.target(event)##value);
-                setDirty(_ => true);
-              }
-            }
+            onChange={event => {
+              setName(ReactEvent.Form.target(event)##value);
+              setDirty(_ => true);
+            }}
             id="communities-editor__name"
             className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           />
@@ -261,30 +257,24 @@ let make =
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
-            {
-              "Should students be allowed to discuss targets in this community?"
-              |> str
-            }
+            {"Should students be allowed to discuss targets in this community?"
+             |> str}
           </label>
           <div
             className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
             <button
-              onClick={
-                _ => {
-                  setDirty(_ => true);
-                  setTargetLinkable(_ => true);
-                }
-              }
+              onClick={_ => {
+                setDirty(_ => true);
+                setTargetLinkable(_ => true);
+              }}
               className={booleanButtonClasses(targetLinkable == true)}>
               {"Yes" |> str}
             </button>
             <button
-              onClick={
-                _ => {
-                  setDirty(_ => true);
-                  setTargetLinkable(_ => false);
-                }
-              }
+              onClick={_ => {
+                setDirty(_ => true);
+                setTargetLinkable(_ => false);
+              }}
               className={booleanButtonClasses(targetLinkable == false)}>
               {"No" |> str}
             </button>
@@ -304,30 +294,25 @@ let make =
       </div>
       <button
         disabled=saveDisabled
-        onClick={
-          handleQuery(
-            name,
-            targetLinkable,
-            communityCourseIds(courseState),
-            authenticityToken,
-            setSaving,
-            community,
-            addCommunityCB,
-            updateCommunitiesCB,
-            connections,
-          )
-        }
+        onClick={handleQuery(
+          name,
+          targetLinkable,
+          communityCourseIds(courseState),
+          setSaving,
+          community,
+          addCommunityCB,
+          updateCommunitiesCB,
+          connections,
+        )}
         key="communities-editor__update-button"
         className="w-full btn btn-large btn-primary mt-3">
-        {
-          (
-            switch (community) {
-            | Some(_) => "Update Community"
-            | None => "Create a new community"
-            }
-          )
-          |> str
-        }
+        {(
+           switch (community) {
+           | Some(_) => "Update Community"
+           | None => "Create a new community"
+           }
+         )
+         |> str}
       </button>
     </DisablingCover>
     <div className="mt-3 mb-3 text-xs">

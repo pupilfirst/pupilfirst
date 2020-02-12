@@ -14,28 +14,24 @@ after 'development:targets' do
 
   Course.all.each do |course|
     course.targets.each do |target|
-      content_sort_index = sort_index
+      target_version = target.target_versions.create!
       embed = embed_codes.sample
-      markdown_cb = ContentBlock.create!(block_type: 'markdown', content: { markdown: Faker::Markdown.sandwich(6, 3) })
-      image_cb = ContentBlock.create!(block_type: 'image', content: { caption: Faker::Lorem.sentence(3) })
+      target_version.content_blocks.create!(block_type: 'markdown', content: { markdown: Faker::Markdown.sandwich(6, 3) }, sort_index: 1)
+      image_cb = target_version.content_blocks.create!(block_type: 'image', content: { caption: Faker::Lorem.sentence(3) }, sort_index: 2)
 
       image_cb.file.attach(
         io: File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'jack_sparrow.png')),
         filename: 'jack_sparrow.png'
       )
 
-      file_cb = ContentBlock.create!(block_type: 'file', content: { title: Faker::Lorem.sentence(3) })
+      file_cb = target_version.content_blocks.create!(block_type: 'file', content: { title: Faker::Lorem.sentence(3) }, sort_index: 3)
 
       file_cb.file.attach(
         io: File.open(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')),
         filename: 'pdf-sample.pdf'
       )
 
-      embed_cb = ContentBlock.create!(block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code] })
-      version_date = [1.day.ago, Date.today].sample
-      [markdown_cb, image_cb, file_cb, embed_cb].each_with_index do |cb, index|
-        ContentVersion.create!(target: target, content_block: cb, sort_index: content_sort_index[index], version_on: version_date)
-      end
+      target_version.content_blocks.create!(block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code] }, sort_index: 4)
     end
   end
 end

@@ -34,7 +34,7 @@ let flashNotifications = obj =>
   | None => ()
   };
 
-let sendQuery = (authenticityToken, ~notify=true, q) =>
+let sendQuery = (~notify=true, q) =>
   Bs_fetch.(
     fetchWithInit(
       "/graphql",
@@ -51,7 +51,7 @@ let sendQuery = (authenticityToken, ~notify=true, q) =>
         ~credentials=Include,
         ~headers=
           HeadersInit.makeWithArray([|
-            ("X-CSRF-Token", authenticityToken),
+            ("X-CSRF-Token", AuthenticityToken.fromHead()),
             ("Content-Type", "application/json"),
           |]),
         (),

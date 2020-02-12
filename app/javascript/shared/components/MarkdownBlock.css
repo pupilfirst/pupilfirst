@@ -13,32 +13,32 @@
 
 .markdown-block__h1 {
   font-size: 2rem;
-  @apply mt-6 leading-snug;
+  @apply pt-6 leading-snug;
 }
 
 .markdown-block__h2 {
   font-size: 1.5rem;
-  @apply mt-6 leading-snug;
+  @apply pt-6 leading-snug;
 }
 
 .markdown-block__h3 {
   font-size: 1.17rem;
-  @apply mt-6 leading-snug;
+  @apply pt-6 leading-snug;
 }
 
 .markdown-block__h4 {
   font-size: 1.125rem;
-  @apply mt-6 leading-snug;
+  @apply pt-6 leading-snug;
 }
 
 .markdown-block__h5 {
   font-size: 0.875rem;
-  @apply mt-6 leading-snug;
+  @apply pt-6 leading-snug;
 }
 
 .markdown-block__h6 {
   font-size: 0.75rem;
-  @apply mt-6 leading-snug;
+  @apply pt-6 leading-snug;
 }
 
 .markdown-block__em {
@@ -50,11 +50,11 @@
 }
 
 .markdown-block__ul {
-  @apply ml-7 mt-3 list-disc;
+  @apply ml-7 pt-3 list-disc;
 }
 
 .markdown-block__ol {
-  @apply ml-7 mt-3 list-decimal;
+  @apply ml-7 pt-3 list-decimal;
 }
 
 .markdown-block__li {
@@ -90,7 +90,7 @@
 }
 
 .markdown-block__table {
-  @apply block w-full table-auto overflow-auto;
+  @apply block pt-2 w-full table-auto overflow-auto;
   border-spacing: 0;
 }
 

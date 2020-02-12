@@ -17,8 +17,7 @@ type status =
   | Undoing
   | Errored;
 
-let handleClick =
-    (targetId, setStatus, undoSubmissionCB, authenticityToken, event) => {
+let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (Webapi.Dom.(
@@ -28,7 +27,7 @@ let handleClick =
     setStatus(_ => Undoing);
 
     DeleteSubmissionQuery.make(~targetId, ())
-    |> GraphqlQuery.sendQuery(authenticityToken)
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response => {
          if (response##undoSubmission##success) {
            undoSubmissionCB();
@@ -96,15 +95,13 @@ let buttonClasses = status => {
 };
 
 [@react.component]
-let make = (~authenticityToken, ~undoSubmissionCB, ~targetId) => {
+let make = (~undoSubmissionCB, ~targetId) => {
   let (status, setStatus) = React.useState(() => Pending);
   <button
     title="Delete this submission"
     disabled={status |> isDisabled}
     className={buttonClasses(status)}
-    onClick={
-      handleClick(targetId, setStatus, undoSubmissionCB, authenticityToken)
-    }>
+    onClick={handleClick(targetId, setStatus, undoSubmissionCB)}>
     {buttonContents(status)}
   </button>;
 };

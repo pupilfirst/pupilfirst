@@ -1,6 +1,5 @@
 let sendQuery:
   (
-    string,
     ~notify: bool=?,
     {
       ..

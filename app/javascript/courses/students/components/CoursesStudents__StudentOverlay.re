@@ -61,10 +61,10 @@ let updateStudentDetails = (setState, details) => {
   );
 };
 
-let getStudentDetails = (authenticityToken, studentId, setState, ()) => {
+let getStudentDetails = (studentId, setState, ()) => {
   setState(state => {...state, studentData: Loading});
   StudentDetailsQuery.make(~studentId, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##studentDetails |> updateStudentDetails(setState);
        Js.Promise.resolve();
@@ -378,10 +378,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
   });
-  React.useEffect1(
-    getStudentDetails(AuthenticityToken.fromHead(), studentId, setState),
-    [|studentId|],
-  );
+  React.useEffect1(getStudentDetails(studentId, setState), [|studentId|]);
 
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">

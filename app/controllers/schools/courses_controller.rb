@@ -21,7 +21,7 @@ module Schools
 
     # GET /courses/:id/curriculum
     def curriculum
-      course = scope.where(id: params[:id]).includes([:evaluation_criteria, :levels, :target_groups, targets: [:evaluation_criteria, :prerequisite_targets, :resources, quiz: { quiz_questions: %I[answer_options correct_answer] }]]).first
+      course = scope.where(id: params[:id]).includes(:evaluation_criteria, :levels, :target_groups, :targets).first
       @course = authorize(course, policy_class: Schools::CoursePolicy)
     end
 

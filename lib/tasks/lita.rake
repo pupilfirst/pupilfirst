@@ -13,7 +13,7 @@ namespace :lita do
     # The leaderboard feature is disabled, for the time being.
     # require_relative '../lita/handlers/leaderboard'
 
-    lita_config_path = File.expand_path(Rails.root.join('config', 'lita_config.rb'))
+    lita_config_path = File.expand_path(Rails.root.join('config/lita_config.rb'))
     Lita.run(lita_config_path)
   end
 end

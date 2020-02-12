@@ -51,7 +51,7 @@ let updateList = (targetGroups, targetGroup) => {
 let sort = targetGroups =>
   targetGroups |> List.sort((x, y) => x.sortIndex - y.sortIndex);
 
-let archive = (archived, t) => {...t, archived};
+let unarchive = t => {...t, archived: false};
 
 let find = (id, targetGroups) => targetGroups |> List.find(tg => tg.id == id);
 

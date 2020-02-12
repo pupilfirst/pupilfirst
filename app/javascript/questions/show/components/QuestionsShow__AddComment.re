@@ -45,14 +45,7 @@ module CreateCommentErrorHandler =
   GraphqlErrorHandler.Make(CreateCommentError);
 
 [@react.component]
-let make =
-    (
-      ~authenticityToken,
-      ~commentableType,
-      ~commentableId,
-      ~addCommentCB,
-      ~currentUserId,
-    ) => {
+let make = (~commentableType, ~commentableId, ~addCommentCB, ~currentUserId) => {
   let (value, setValue) = React.useState(() => "");
   let (saving, setSaving) = React.useState(() => false);
   let validComment = value != "";
@@ -77,8 +70,9 @@ let make =
 
     if (validComment) {
       setSaving(_ => true);
+
       CreateCommentQuery.make(~value, ~commentableId, ~commentableType, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createComment) {
            | `CommentId(commentId) =>

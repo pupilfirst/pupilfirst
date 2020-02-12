@@ -22,14 +22,12 @@ module Types
     field :create_submission, mutation: Mutations::CreateSubmission, null: false
     field :delete_content_block, mutation: Mutations::DeleteContentBlock, null: false
     field :level_up, mutation: Mutations::LevelUp, null: false
-    field :sort_content_blocks, mutation: Mutations::SortContentBlocks, null: false
-    field :update_content_block, mutation: Mutations::UpdateContentBlock, null: false
+    field :move_content_block, mutation: Mutations::MoveContentBlock, null: false
     field :create_applicant, mutation: Mutations::CreateApplicant, null: false
     field :create_school_admin, mutation: Mutations::CreateSchoolAdmin, null: false
     field :update_school_admin, mutation: Mutations::UpdateSchoolAdmin, null: false
     field :create_course_export, mutation: Mutations::CreateCourseExport, null: false
     field :sort_curriculum_resources, mutation: Mutations::SortCurriculumResources, null: false
-    field :restore_content_version, mutation: Mutations::RestoreContentVersion, null: false
     field :create_grading, mutation: Mutations::CreateGrading, null: false
     field :undo_grading, mutation: Mutations::UndoGrading, null: false
     field :create_feedback, mutation: Mutations::CreateFeedback, null: false
@@ -41,5 +39,12 @@ module Types
     field :update_evaluation_criterion, mutation: Mutations::UpdateEvaluationCriterion, null: false
     field :update_school, mutation: Mutations::UpdateSchool, null: false
     field :archive_coach_note, mutation: Mutations::ArchiveCoachNote, null: false
+    field :create_markdown_content_block, mutation: Mutations::CreateMarkdownContentBlock, null: false
+    field :create_embed_content_block, mutation: Mutations::CreateEmbedContentBlock, null: false
+    field :update_file_block, mutation: Mutations::UpdateFileContentBlock, null: false
+    field :update_markdown_block, mutation: Mutations::UpdateMarkdownContentBlock, null: false
+    field :update_image_block, mutation: Mutations::UpdateImageContentBlock, null: false
+    field :update_target, mutation: Mutations::UpdateTarget, null: false
+    field :create_target_version, mutation: Mutations::CreateTargetVersion, null: false
   end
 end

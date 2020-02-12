@@ -1,28 +1,18 @@
 module Schools
   class TargetsController < SchoolsController
-    before_action :load_target, only: %w[update]
+    layout 'school'
 
-    # PATCH /school/targets/:id
-    def update
-      form = ::Schools::Targets::UpdateForm.new(@target)
-
-      if form.validate(params[:target])
-        form.save
-        render json: { error: nil }
-      else
-        render json: { error: form.errors.full_messages.join(', ') }
-      end
-    end
-
-    # GET /school/targets/:id/content
+    # GET /school/courses/:course_id/targets/:id/content
     def content
-      render json: camelize_keys(stringify_ids(Targets::FetchContentService.new(@target).details))
+      @course = current_school.courses.find(params[:course_id])
+      authorize(@course.targets.find(params[:id]), policy_class: Schools::TargetPolicy)
+      render 'schools/courses/curriculum'
     end
 
-    protected
+    # GET /school/courses/:course_id/targets/:id/details
+    alias details content
 
-    def load_target
-      @target = authorize(Target.find(params[:id]), policy_class: Schools::TargetPolicy)
-    end
+    # GET /school/courses/:course_id/targets/:id/versions
+    alias versions content
   end
 end

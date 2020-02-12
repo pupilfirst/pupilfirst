@@ -114,7 +114,6 @@ let handleAnswer =
     (
       description,
       question,
-      authenticityToken,
       setSaving,
       currentUserId,
       setDescription,
@@ -131,24 +130,24 @@ let handleAnswer =
       let answerId = answer |> Answer.id;
 
       UpdateAnswerQuery.make(~description, ~id=answerId, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##updateAnswer) {
            | `Success(answerUpdated) =>
-             answerUpdated ?
-               handleAnswerUpdateResponseCB(
-                 answerId,
-                 description,
-                 currentUserId,
-                 setDescription,
-                 setSaving,
-                 handleAnswerCB,
-                 answer,
-               ) :
-               Notification.error(
-                 "Something went wrong",
-                 "Please refresh the page and try again",
-               );
+             answerUpdated
+               ? handleAnswerUpdateResponseCB(
+                   answerId,
+                   description,
+                   currentUserId,
+                   setDescription,
+                   setSaving,
+                   handleAnswerCB,
+                   answer,
+                 )
+               : Notification.error(
+                   "Something went wrong",
+                   "Please refresh the page and try again",
+                 );
              Notification.success("Success", "Answer updated successfully");
              Js.Promise.resolve();
            | `Errors(errors) =>
@@ -163,7 +162,7 @@ let handleAnswer =
         ~questionId=question |> Question.id,
         (),
       )
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createAnswer) {
            | `AnswerId(answerId) =>
@@ -191,14 +190,7 @@ let handleAnswer =
 
 [@react.component]
 let make =
-    (
-      ~question,
-      ~authenticityToken,
-      ~currentUserId,
-      ~handleAnswerCB,
-      ~answer=?,
-      ~handleCloseCB=?,
-    ) => {
+    (~question, ~currentUserId, ~handleAnswerCB, ~answer=?, ~handleCloseCB=?) => {
   let (description, setDescription) =
     React.useState(() =>
       switch (answer) {
@@ -213,51 +205,49 @@ let make =
       className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
       <div className="flex w-full py-4 px-4">
         <div className="w-full flex flex-col">
-          <MarkdownEditor
-            label="Your Answer"
-            updateMarkdownCB
+          <label
+            className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+            htmlFor="new-answer">
+            {"Your Answer" |> str}
+          </label>
+          <MarkdownEditor2
+            placeholder="Type in your answer. You can use Markdown to format your response."
+            textareaId="new-answer"
+            onChange=updateMarkdownCB
             value=description
             profile=Markdown.QuestionAndAnswer
-            defaultView=MarkdownEditor.Edit
             maxLength=10000
           />
           <div className="flex justify-end pt-3 border-t">
-            {
-              switch (handleCloseCB) {
-              | Some(handleCloseCB) =>
-                <button
-                  disabled=saving
-                  onClick=(_ => handleCloseCB())
-                  className="btn btn-default mr-2">
-                  {"Cancel" |> str}
-                </button>
-              | None => React.null
-              }
-            }
+            {switch (handleCloseCB) {
+             | Some(handleCloseCB) =>
+               <button
+                 disabled=saving
+                 onClick={_ => handleCloseCB()}
+                 className="btn btn-default mr-2">
+                 {"Cancel" |> str}
+               </button>
+             | None => React.null
+             }}
             <button
               disabled={saving || description == ""}
-              onClick={
-                handleAnswer(
-                  description,
-                  question,
-                  authenticityToken,
-                  setSaving,
-                  currentUserId,
-                  setDescription,
-                  handleAnswerCB,
-                  answer,
-                )
-              }
+              onClick={handleAnswer(
+                description,
+                question,
+                setSaving,
+                currentUserId,
+                setDescription,
+                handleAnswerCB,
+                answer,
+              )}
               className="btn btn-primary">
-              {
-                (
-                  switch (answer) {
-                  | Some(_) => "Update Your Answer"
-                  | None => "Post Your Answer"
-                  }
-                )
-                |> str
-              }
+              {(
+                 switch (answer) {
+                 | Some(_) => "Update Your Answer"
+                 | None => "Post Your Answer"
+                 }
+               )
+               |> str}
             </button>
           </div>
         </div>

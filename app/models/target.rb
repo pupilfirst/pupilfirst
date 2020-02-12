@@ -34,11 +34,11 @@ class Target < ApplicationRecord
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
-  has_many :content_versions, dependent: :destroy
-  has_many :content_blocks, through: :content_versions
   has_many :target_questions, dependent: :destroy
   has_many :questions, through: :target_questions
   has_many :resource_versions, as: :versionable, dependent: :restrict_with_error
+  has_many :target_versions, dependent: :destroy
+  has_many :content_blocks, through: :target_versions
 
   acts_as_taggable
 
@@ -201,25 +201,15 @@ class Target < ApplicationRecord
     end
   end
 
-  def latest_content_version_date
-    return if content_versions.empty?
+  def live?
+    visibility == VISIBILITY_LIVE
+  end
 
-    content_versions.maximum(:version_on)
+  def current_target_version
+    target_versions.order(created_at: :desc).first
   end
 
   def current_content_blocks
-    return if content_versions.empty?
-
-    ContentBlock.where(id: content_versions.where(version_on: latest_content_version_date).select(:content_block_id))
-  end
-
-  def latest_content_versions
-    return if content_versions.empty?
-
-    content_versions.where(version_on: latest_content_version_date)
-  end
-
-  def live?
-    visibility == VISIBILITY_LIVE
+    current_target_version.content_blocks
   end
 end

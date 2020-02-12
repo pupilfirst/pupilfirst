@@ -53,11 +53,11 @@ module UndoGradingMutation = [%graphql
   |}
 ];
 
-let undoGrading = (authenticityToken, submissionId, setState) => {
+let undoGrading = (submissionId, setState) => {
   setState(state => {...state, saving: true});
 
   UndoGradingMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##undoGrading##success
          ? DomUtils.reload() |> ignore
@@ -68,14 +68,7 @@ let undoGrading = (authenticityToken, submissionId, setState) => {
 };
 
 let gradeSubmissionQuery =
-    (
-      authenticityToken,
-      submissionId,
-      state,
-      setState,
-      evaluationCriteria,
-      updateSubmissionCB,
-    ) => {
+    (submissionId, state, setState, evaluationCriteria, updateSubmissionCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
   setState(state => {...state, saving: true});
@@ -90,7 +83,7 @@ let gradeSubmissionQuery =
           (),
         )
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##createGrading##success
          ? updateSubmissionCB(
@@ -302,7 +295,7 @@ let gradeStatusClasses = (color, status) =>
     }
   );
 
-let submissionStatusIcon = (status, submission, authenticityToken, setState) => {
+let submissionStatusIcon = (status, submission, setState) => {
   let (text, color) =
     switch (status) {
     | Graded(passed) => passed ? ("Passed", "green") : ("Failed", "red")
@@ -380,13 +373,7 @@ let submissionStatusIcon = (status, submission, authenticityToken, setState) => 
      | (Some(_), Graded(_)) =>
        <div className="mt-4 md:pl-6 w-full">
          <button
-           onClick={_ =>
-             undoGrading(
-               authenticityToken,
-               submission |> Submission.id,
-               setState,
-             )
-           }
+           onClick={_ => undoGrading(submission |> Submission.id, setState)}
            className="btn btn-danger btn-small">
            <i className="fas fa-undo" />
            <span className="ml-2"> {"Undo Grading" |> str} </span>
@@ -405,7 +392,6 @@ let updateFeedbackCB = (setState, newFeedback) => {
 
 let gradeSubmission =
     (
-      authenticityToken,
       submissionId,
       state,
       setState,
@@ -418,7 +404,6 @@ let gradeSubmission =
   switch (status) {
   | Graded(_) =>
     gradeSubmissionQuery(
-      authenticityToken,
       submissionId,
       state,
       setState,
@@ -488,7 +473,6 @@ let submitButtonText = (feedback, grades) =>
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~submission,
       ~evaluationCriteria,
       ~reviewChecklist,
@@ -533,12 +517,7 @@ let make =
              | grades => showGrades(grades, evaluationCriteria, state)
              }}
           </div>
-          {submissionStatusIcon(
-             status,
-             submission,
-             authenticityToken,
-             setState,
-           )}
+          {submissionStatusIcon(status, submission, setState)}
         </div>
       </div>
     </div>
@@ -549,7 +528,6 @@ let make =
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"
            onClick={gradeSubmission(
-             authenticityToken,
              submission |> Submission.id,
              state,
              setState,

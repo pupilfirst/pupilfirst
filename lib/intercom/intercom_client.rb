@@ -169,7 +169,7 @@ class IntercomClient
     rescued_call { intercom_client.users.delete(user) }
   end
 
-  # rubocop:disable MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
   def strip_user_ids_from_segment(segment_name)
     users = get_users_by_segment(segment_name)
 
@@ -205,7 +205,7 @@ class IntercomClient
     end
   end
 
-  # rubocop:enable MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
 
   def get_segment_id(segment_name)
     segment_id = nil

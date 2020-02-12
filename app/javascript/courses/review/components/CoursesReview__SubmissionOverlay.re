@@ -48,10 +48,10 @@ module SubmissionDetailsQuery = [%graphql
 let updateSubmissionDetails = (setState, details) =>
   setState(_ => Loaded(details |> SubmissionDetails.decodeJS));
 
-let getSubmissionDetails = (authenticityToken, submissionId, setState, ()) => {
+let getSubmissionDetails = (submissionId, setState, ()) => {
   setState(_ => Loading);
   SubmissionDetailsQuery.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##submissionDetails |> updateSubmissionDetails(setState);
        Js.Promise.resolve();
@@ -166,7 +166,6 @@ let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) => {
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~courseId,
       ~submissionId,
       ~currentCoach,
@@ -181,7 +180,7 @@ let make =
   });
 
   React.useEffect1(
-    getSubmissionDetails(authenticityToken, submissionId, setState),
+    getSubmissionDetails(submissionId, setState),
     [|submissionId|],
   );
   <div
@@ -197,7 +196,6 @@ let make =
             |> Array.mapi((index, submission) =>
                  <CoursesReview__Submissions
                    key={index |> string_of_int}
-                   authenticityToken
                    submission
                    targetEvaluationCriteriaIds={
                      submissionDetails

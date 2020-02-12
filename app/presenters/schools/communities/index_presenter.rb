@@ -9,7 +9,6 @@ module Schools
 
       def react_props
         {
-          authenticityToken: view.form_authenticity_token,
           communities: communities,
           courses: courses,
           connections: connections

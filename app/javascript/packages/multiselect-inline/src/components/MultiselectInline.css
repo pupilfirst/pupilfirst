@@ -1,0 +1,28 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.multiselect-inline__list {
+  height: 7rem;
+}
+
+.multiselect-inline__list-item
+  .multiselect-inline__list-item-select-icon-selected {
+  display: none;
+}
+
+.multiselect-inline__list-item:hover
+  .multiselect-inline__list-item-select-icon-unselected,
+.multiselect-inline__list-item:active
+  .multiselect-inline__list-item-select-icon-unselected {
+  display: none;
+}
+
+.multiselect-inline__list-item:hover
+  .multiselect-inline__list-item-select-icon-selected,
+.multiselect-inline__list-item:active
+  .multiselect-inline__list-item-select-icon-selected {
+  display: inline-flex;
+}

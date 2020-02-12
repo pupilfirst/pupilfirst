@@ -90,10 +90,8 @@ let make = _children => {
       ReasonReact.Update({courses: newCourses, editorAction: Hidden});
     },
   didMount: ({send}) => {
-    let coursesQuery = CoursesQuery.make();
-    let response =
-      coursesQuery |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead());
-    response
+    CoursesQuery.make()
+    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result => {
          let courses =
            result##courses

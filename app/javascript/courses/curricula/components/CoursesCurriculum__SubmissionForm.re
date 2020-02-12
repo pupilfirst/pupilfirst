@@ -165,7 +165,7 @@ let attachmentValues = attachments =>
      )
   |> Array.of_list;
 
-let submit = (state, send, authenticityToken, target, addSubmissionCB, event) => {
+let submit = (state, send, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   send(UpdateFormState(Saving));
@@ -189,7 +189,7 @@ let submit = (state, send, authenticityToken, target, addSubmissionCB, event) =>
     ~links,
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createSubmission##submission) {
        | Some(submission) =>
@@ -268,13 +268,7 @@ let make = (~authenticityToken, ~target, ~addSubmissionCB, ~preview) => {
          />}
     <div className="flex mt-3 justify-end">
       <button
-        onClick={submit(
-          state,
-          send,
-          authenticityToken,
-          target,
-          addSubmissionCB,
-        )}
+        onClick={submit(state, send, target, addSubmissionCB)}
         disabled={isButtonDisabled(state.formState) || preview}
         className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
         {buttonContents(state.formState)}

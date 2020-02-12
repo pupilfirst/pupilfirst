@@ -9,7 +9,6 @@ module Schools
 
       def props
         {
-          authenticity_token: view.form_authenticity_token,
           tags: tag_details,
           course: course_details,
           exports: course_export_details

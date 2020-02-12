@@ -71,16 +71,7 @@ let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
 };
 
 let getTeams =
-    (
-      authenticityToken,
-      courseId,
-      cursor,
-      setState,
-      selectedLevel,
-      search,
-      teams,
-      loading,
-    ) => {
+    (courseId, cursor, setState, selectedLevel, search, teams, loading) => {
   setState(state => {...state, loading});
   (
     switch (selectedLevel, search, cursor) {
@@ -111,7 +102,7 @@ let getTeams =
     | (None, None, None) => TeamsQuery.make(~courseId, ())
     }
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##teams##nodes
        |> updateTeams(
@@ -295,7 +286,6 @@ let make = (~levels, ~course, ~userId) => {
   React.useEffect1(
     () => {
       getTeams(
-        AuthenticityToken.fromHead(),
         courseId,
         None,
         setState,
@@ -384,7 +374,6 @@ let make = (~levels, ~course, ~userId) => {
                   className="btn btn-primary-ghost cursor-pointer w-full mt-8"
                   onClick={_ =>
                     getTeams(
-                      AuthenticityToken.fromHead(),
                       courseId,
                       Some(cursor),
                       setState,

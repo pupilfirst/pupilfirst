@@ -59,9 +59,9 @@ let markAsCorrect = (id, t) => {
   let newAnswerOptions =
     t.answerOptions
     |> List.map(a =>
-         a |> CurriculumEditor__AnswerOption.id == id ?
-           CurriculumEditor__AnswerOption.markAsCorrect(a) :
-           CurriculumEditor__AnswerOption.markAsIncorrect(a)
+         a |> CurriculumEditor__AnswerOption.id == id
+           ? CurriculumEditor__AnswerOption.markAsCorrect(a)
+           : CurriculumEditor__AnswerOption.markAsIncorrect(a)
        );
   {...t, answerOptions: newAnswerOptions};
 };

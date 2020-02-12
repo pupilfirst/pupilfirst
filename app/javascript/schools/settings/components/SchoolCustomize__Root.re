@@ -172,7 +172,6 @@ let editor = (state, send, authenticityToken) =>
            key="sc-drawer__links-editor"
            kind
            customizations={state.customizations}
-           authenticityToken
            addLinkCB={link => send(AddLink(link))}
            removeLinkCB={linkId => send(RemoveLink(linkId))}
          />
@@ -187,7 +186,6 @@ let editor = (state, send, authenticityToken) =>
            updateTermsOfUseCB={agreement =>
              send(UpdateTermsOfUse(agreement))
            }
-           authenticityToken
          />
        | ContactsEditor =>
          <SchoolCustomize__ContactsEditor
@@ -197,7 +195,6 @@ let editor = (state, send, authenticityToken) =>
            updateEmailAddressCB={emailAddress =>
              send(UpdateEmailAddress(emailAddress))
            }
-           authenticityToken
          />
        | ImagesEditor =>
          <SchoolCustomize__ImagesEditor

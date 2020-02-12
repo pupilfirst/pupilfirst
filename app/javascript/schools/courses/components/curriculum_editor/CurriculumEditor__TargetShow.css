@@ -1,0 +1,3 @@
+.target-group__target-container:hover .curriculum-editor__target-show-quick-link {
+  @apply border-gray-300 text-gray-700;
+}

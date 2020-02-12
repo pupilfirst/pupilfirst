@@ -90,7 +90,6 @@ let handleCreateOrUpdateQuestion =
       title,
       description,
       communityId,
-      authenticityToken,
       setSaving,
       target,
       question,
@@ -105,7 +104,7 @@ let handleCreateOrUpdateQuestion =
     | Some(question) =>
       let id = question |> Question.id;
       UpdateQuestionQuery.make(~id, ~title, ~description, ())
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##updateQuestion) {
            | `Success(updated) =>
@@ -141,7 +140,7 @@ let handleCreateOrUpdateQuestion =
           CreateQuestionQuery.make(~description, ~title, ~communityId, ())
         }
       )
-      |> GraphqlQuery.sendQuery(authenticityToken)
+      |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createQuestion) {
            | `QuestionId(questionId) =>
@@ -163,7 +162,6 @@ let handleCreateOrUpdateQuestion =
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~communityId,
       ~showBackButton=true,
       ~target,
@@ -185,59 +183,53 @@ let make =
       | None => ""
       }
     );
-  let updateMarkdownCB = description => setDescription(_ => description);
+  let onChange = description => setDescription(_ => description);
   let saveDisabled = description == "" || title == "";
   <DisablingCover disabled=saving>
     <div className="bg-gray-100">
       <div className="flex-1 flex flex-col px-2">
         <div>
-          {
-            showBackButton ?
-              <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-                <a className="btn btn-default" onClick={_ => handleBack()}>
-                  <i className="fas fa-arrow-left" />
-                  <span className="ml-2"> {"Back" |> str} </span>
-                </a>
-              </div> :
-              React.null
-          }
+          {showBackButton
+             ? <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
+                 <a className="btn btn-default" onClick={_ => handleBack()}>
+                   <i className="fas fa-arrow-left" />
+                   <span className="ml-2"> {"Back" |> str} </span>
+                 </a>
+               </div>
+             : React.null}
         </div>
-        {
-          switch (target) {
-          | Some(target) =>
-            <div className="max-w-3xl w-full mt-5 mx-auto">
-              <div
-                className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
-                <p className="w-3/5 md:w-4/5 text-sm">
-                  <span className="font-semibold block text-xs">
-                    {"Linked Target: " |> str}
-                  </span>
-                  <span>
-                    {target |> QuestionsEditor__Target.title |> str}
-                  </span>
-                </p>
-                <a href="./new_question" className="btn btn-default">
-                  {"Clear" |> str}
-                </a>
-              </div>
-            </div>
-          | None => React.null
-          }
-        }
+        {switch (target) {
+         | Some(target) =>
+           <div className="max-w-3xl w-full mt-5 mx-auto">
+             <div
+               className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
+               <p className="w-3/5 md:w-4/5 text-sm">
+                 <span className="font-semibold block text-xs">
+                   {"Linked Target: " |> str}
+                 </span>
+                 <span>
+                   {target |> QuestionsEditor__Target.title |> str}
+                 </span>
+               </p>
+               <a href="./new_question" className="btn btn-default">
+                 {"Clear" |> str}
+               </a>
+             </div>
+           </div>
+         | None => React.null
+         }}
         <div
           className="mb-8 max-w-3xl w-full mx-auto relative shadow border bg-white rounded-lg">
           <div className="flex w-full flex-col py-4 px-4">
             <h5
               className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-              {
-                (
-                  switch (question) {
-                  | Some(_) => "Edit Question"
-                  | None => "Ask a new Question"
-                  }
-                )
-                |> str
-              }
+              {(
+                 switch (question) {
+                 | Some(_) => "Edit Question"
+                 | None => "Ask a new Question"
+                 }
+               )
+               |> str}
             </h5>
             <label
               className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
@@ -248,46 +240,45 @@ let make =
               id="title"
               value=title
               className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              onChange={
-                event => setTitle(ReactEvent.Form.target(event)##value)
+              onChange={event =>
+                setTitle(ReactEvent.Form.target(event)##value)
               }
               placeholder="Ask your question here briefly."
             />
+            <label
+              className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+              htmlFor="description">
+              {"Description" |> str}
+            </label>
             <div className="w-full flex flex-col">
-              <MarkdownEditor
-                updateMarkdownCB
+              <MarkdownEditor2
+                textareaId="description"
+                onChange
                 value=description
                 placeholder="Your description gives people the information they need to help you answer your question. You can use Markdown to format this text."
-                label="Description"
                 profile=Markdown.QuestionAndAnswer
-                defaultView=MarkdownEditor.Edit
                 maxLength=10000
               />
               <div className="flex justify-end pt-3 border-t">
                 <button
                   disabled=saveDisabled
-                  onClick={
-                    handleCreateOrUpdateQuestion(
-                      title,
-                      description,
-                      communityId,
-                      authenticityToken,
-                      setSaving,
-                      target,
-                      question,
-                      updateQuestionCB,
-                    )
-                  }
+                  onClick={handleCreateOrUpdateQuestion(
+                    title,
+                    description,
+                    communityId,
+                    setSaving,
+                    target,
+                    question,
+                    updateQuestionCB,
+                  )}
                   className="btn btn-primary">
-                  {
-                    (
-                      switch (question) {
-                      | Some(_) => "Update Question"
-                      | None => "Post Your Question"
-                      }
-                    )
-                    |> str
-                  }
+                  {(
+                     switch (question) {
+                     | Some(_) => "Update Question"
+                     | None => "Post Your Question"
+                     }
+                   )
+                   |> str}
                 </button>
               </div>
             </div>

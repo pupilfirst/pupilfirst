@@ -1,6 +1,6 @@
 class CoursePolicy < ApplicationPolicy
   def curriculum?
-    return true if current_school_admin.present?
+    return true if current_school_admin.present? || user.course_authors.where(course: record).present?
 
     return true if user.faculty.present? && review?
 

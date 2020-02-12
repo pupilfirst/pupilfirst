@@ -58,7 +58,7 @@ feature 'Coaches Index', js: true do
 
     fill_in 'LinkedIn', with: 'https://www.linkedin.com/xyz'
     fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
-    attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'human.png')), visible: false
+    attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
     fill_in 'Name', with: updated_coach_name
     expect(page).not_to have_field('Email')
     fill_in 'Title', with: updated_coach_title

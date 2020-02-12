@@ -15,8 +15,9 @@ let createApplicant =
     (courseId, email, name, setSaving, setViewEmailSent, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
+
   CreateApplicantQuery.make(~courseId, ~email, ~name, ())
-  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##createApplicant##success
          ? setViewEmailSent() : setSaving(_ => false);

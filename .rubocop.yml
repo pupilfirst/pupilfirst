@@ -27,9 +27,9 @@ Style/FormatStringToken:
   Enabled: false
 Style/DoubleNegation:
   Enabled: false
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
-Layout/AlignArguments:
+Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
@@ -40,6 +40,8 @@ Layout/CaseIndentation:
   IndentOneStep: true
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
+Layout/LineLength:
+  Enabled: false
 Naming/VariableNumber:
   Enabled: false
 Metrics/BlockLength:
@@ -48,8 +50,6 @@ Metrics/BlockLength:
     - 'spec/**/*_spec.rb'
     - 'config/**/*'
     - 'spec/factories/*'
-Metrics/LineLength:
-  Enabled: false
 Lint/ShadowingOuterLocalVariable: # shadowing is a language feature - we should use it where appropriate.
   Enabled: false
 
@@ -61,10 +61,6 @@ Bundler/OrderedGems:
   Enabled: false # we have a ton of gems, grouped arbitrarily. Could be tackled later.
 Style/FrozenStringLiteralComment:
   Enabled: false # forces addition of frozen string literal directive to all files. WTF.
-StringLiterals:
-  Enabled: false
-Documentation:
-  Enabled: false
 Metrics/MethodLength:
   Max: 20 # default was 10.
 Metrics/ClassLength:
@@ -75,3 +71,9 @@ Style/GuardClause:
   Enabled: false # this thing is annoying, and can lead to not-as-readable code.
 Style/YodaCondition:
   Enabled: false # buggy - sometimes complains about fixed code, and autocorrect doesn't work.
+Style/StringLiterals:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Layout/RescueEnsureAlignment:
+  Enabled: false # buggy

@@ -30,7 +30,7 @@ module CreateCoachNotesMutation = [%graphql
    |}
 ];
 
-let saveNote = (authenticityToken, studentId, setState, state, addNoteCB) => {
+let saveNote = (studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true});
   CreateCoachNotesMutation.make(
     ~studentId,
@@ -39,7 +39,7 @@ let saveNote = (authenticityToken, studentId, setState, state, addNoteCB) => {
     },
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createCoachNote##coachNote) {
        | Some(note) =>
@@ -67,28 +67,24 @@ let saveNoteButtonText = (title, iconClasses) =>
 [@react.component]
 let make = (~studentId, ~coachNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
-  <div>
+  <div className="mt-3">
+    <label
+      htmlFor="course-students__coach-notes-new-note"
+      className="font-semibold text-sm block mb-1">
+      {"Add a New Note" |> str}
+    </label>
     <DisablingCover disabled={state.saving} message="Saving...">
-      <MarkdownEditor
-        updateMarkdownCB={updateCoachNoteCB(setState)}
+      <MarkdownEditor2
+        textareaId="course-students__coach-notes-new-note"
+        onChange={updateCoachNoteCB(setState)}
         value={state.newNote}
-        label="Add new note"
         profile=Markdown.Permissive
         maxLength=10000
-        defaultView=MarkdownEditor.Edit
       />
     </DisablingCover>
     <button
       disabled={state.newNote |> String.length < 1 || state.saving}
-      onClick={_ =>
-        saveNote(
-          AuthenticityToken.fromHead(),
-          studentId,
-          setState,
-          state,
-          addNoteCB,
-        )
-      }
+      onClick={_ => saveNote(studentId, setState, state, addNoteCB)}
       className="btn btn-primary mt-2">
       {state.saving
          ? saveNoteButtonText("Saving", "fas fa-spinner")

@@ -52,4 +52,11 @@ module EventTarget = {
   /* Be careful when using this function. Event targets need not be an 'element'. */
 
   external unsafeToElement: t => Dom.element = "%identity";
+  external unsafeToHtmlInputElement: t => Dom.htmlInputElement = "%identity";
+};
+
+module Element = {
+  type t = Dom.element;
+
+  external unsafeToHtmlInputElement: t => Dom.htmlInputElement = "%identity";
 };

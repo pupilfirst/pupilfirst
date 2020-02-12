@@ -95,22 +95,17 @@ module Courses
 
     def create_content_blocks(targets)
       targets.each do |old_target, new_target|
-        old_target.latest_content_versions&.each do |content_version|
-          old_content_block = content_version.content_block
+        new_version = new_target.target_versions.create!
+        old_target.current_content_blocks&.each do |content_block|
+          old_content_block = content_block
           # create content block
           new_content_block = ContentBlock.create!(
             block_type: old_content_block.block_type,
-            content: old_content_block.content
+            content: old_content_block.content,
+            sort_index: old_content_block.sort_index,
+            target_version: new_version
           )
           new_content_block.file.attach(old_content_block.file.blob) if old_content_block.file.attached?
-
-          # create content version
-          ContentVersion.create!(
-            target_id: new_target.id,
-            content_block_id: new_content_block.id,
-            version_on: content_version.version_on,
-            sort_index: content_version.sort_index
-          )
         end
       end
     end

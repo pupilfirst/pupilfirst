@@ -112,15 +112,7 @@ let handleAddAnotherSubmission = (setShowSubmissionForm, event) => {
 };
 
 let submissions =
-    (
-      target,
-      targetStatus,
-      targetDetails,
-      evaluationCriteria,
-      authenticityToken,
-      coaches,
-      users,
-    ) => {
+    (target, targetStatus, targetDetails, evaluationCriteria, coaches, users) => {
   let curriedGradeBar = gradeBar(evaluationCriteria);
 
   targetDetails
@@ -198,7 +190,6 @@ let submissions =
                 {switch (targetStatus |> TargetStatus.status) {
                  | Submitted =>
                    <CoursesCurriculum__UndoButton
-                     authenticityToken
                      undoSubmissionCB
                      targetId={target |> Target.id}
                    />
@@ -363,7 +354,6 @@ let make =
            targetStatus,
            targetDetails,
            evaluationCriteria,
-           authenticityToken,
            coaches,
            users,
          )}

@@ -1,10 +1,6 @@
 module Oembed
   class Resolver
-    class ResourceNotFound < StandardError
-    end
     class ProviderNotSupported < StandardError
-    end
-    class FailedToResolve < StandardError
     end
 
     def initialize(url)

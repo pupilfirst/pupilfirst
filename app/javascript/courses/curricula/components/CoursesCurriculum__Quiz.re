@@ -20,20 +20,14 @@ module CreateQuizSubmissionQuery = [%graphql
 ];
 
 let createQuizSubmission =
-    (
-      authenticityToken,
-      target,
-      selectedAnswersIds,
-      setSaving,
-      addSubmissionCB,
-    ) => {
+    (target, selectedAnswersIds, setSaving, addSubmissionCB) => {
   setSaving(_ => true);
   CreateQuizSubmissionQuery.make(
     ~targetId=target |> Target.id,
     ~answerIds=selectedAnswersIds |> Array.of_list,
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createQuizSubmission##submission) {
        | Some(submission) =>
@@ -73,31 +67,16 @@ let iconClasses = (answerOption, selectedAnswer) => {
 };
 
 let handleSubmit =
-    (
-      answer,
-      authenticityToken,
-      target,
-      selectedAnswersIds,
-      setSaving,
-      addSubmissionCB,
-      event,
-    ) => {
+    (answer, target, selectedAnswersIds, setSaving, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   let answerIds =
     selectedAnswersIds |> List.append([answer |> QuizQuestion.answerId]);
 
-  createQuizSubmission(
-    authenticityToken,
-    target,
-    answerIds,
-    setSaving,
-    addSubmissionCB,
-  );
+  createQuizSubmission(target, answerIds, setSaving, addSubmissionCB);
 };
 
 [@react.component]
-let make =
-    (~target, ~targetDetails, ~authenticityToken, ~addSubmissionCB, ~preview) => {
+let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
   let quizQuestions = targetDetails |> TargetDetails.quizQuestions;
   let (saving, setSaving) = React.useState(() => false);
   let (selectedQuestion, setSelectedQuestion) =
@@ -117,73 +96,60 @@ let make =
         profile=Markdown.Permissive
       />
       <div className="pt-2">
-        {
-          currentQuestion
-          |> QuizQuestion.answerOptions
-          |> List.map(answerOption =>
-               <div
-                 className={answerOptionClasses(answerOption, selectedAnswer)}
-                 key={answerOption |> QuizQuestion.answerId}
-                 onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
-                 <FaIcon
-                   classes={iconClasses(answerOption, selectedAnswer)}
-                 />
-                 <MarkdownBlock
-                   markdown={answerOption |> QuizQuestion.answerValue}
-                   className="overflow-auto ml-2 w-full"
-                   profile=Markdown.Permissive
-                 />
-               </div>
-             )
-          |> Array.of_list
-          |> React.array
-        }
+        {currentQuestion
+         |> QuizQuestion.answerOptions
+         |> List.map(answerOption =>
+              <div
+                className={answerOptionClasses(answerOption, selectedAnswer)}
+                key={answerOption |> QuizQuestion.answerId}
+                onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
+                <FaIcon classes={iconClasses(answerOption, selectedAnswer)} />
+                <MarkdownBlock
+                  markdown={answerOption |> QuizQuestion.answerValue}
+                  className="overflow-auto ml-2 w-full"
+                  profile=Markdown.Permissive
+                />
+              </div>
+            )
+         |> Array.of_list
+         |> React.array}
       </div>
     </div>
-    {
-      switch (selectedAnswer) {
-      | None => React.null
-      | Some(answer) =>
-        <div
-          className="quiz-root__answer-submit-section text-center py-4 border-t border-gray-400 fixed z-10 left-0 right-0 bottom-0 w-full">
-          {
-            currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions) ?
-              <button
+    {switch (selectedAnswer) {
+     | None => React.null
+     | Some(answer) =>
+       <div
+         className="quiz-root__answer-submit-section text-center py-4 border-t border-gray-400 fixed z-10 left-0 right-0 bottom-0 w-full">
+         {currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions)
+            ? <button
                 disabled={saving || preview}
                 className="btn btn-primary"
-                onClick={
-                  handleSubmit(
-                    answer,
-                    authenticityToken,
-                    target,
-                    selectedAnswersIds,
-                    setSaving,
-                    addSubmissionCB,
-                  )
-                }>
+                onClick={handleSubmit(
+                  answer,
+                  target,
+                  selectedAnswersIds,
+                  setSaving,
+                  addSubmissionCB,
+                )}>
                 {str("Submit Quiz")}
-              </button> :
-              {
-                let nextQuestion =
-                  currentQuestion |> QuizQuestion.nextQuestion(quizQuestions);
-                <button
-                  className="btn btn-primary"
-                  onClick=(
-                    _ => {
-                      setSelectedQuestion(_ => nextQuestion);
-                      setSelectedAnswersIds(_ =>
-                        selectedAnswersIds
-                        |> List.append([answer |> QuizQuestion.answerId])
-                      );
-                      setSelectedAnswer(_ => None);
-                    }
-                  )>
-                  {str("Next Question")}
-                </button>;
-              }
-          }
-        </div>
-      }
-    }
+              </button>
+            : {
+              let nextQuestion =
+                currentQuestion |> QuizQuestion.nextQuestion(quizQuestions);
+              <button
+                className="btn btn-primary"
+                onClick={_ => {
+                  setSelectedQuestion(_ => nextQuestion);
+                  setSelectedAnswersIds(_ =>
+                    selectedAnswersIds
+                    |> List.append([answer |> QuizQuestion.answerId])
+                  );
+                  setSelectedAnswer(_ => None);
+                }}>
+                {str("Next Question")}
+              </button>;
+            }}
+       </div>
+     }}
   </div>;
 };

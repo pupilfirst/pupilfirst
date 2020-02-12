@@ -10,5 +10,9 @@ FactoryBot.define do
       safe_to_archive { true }
       archived { true }
     end
+
+    trait :milestone do
+      milestone { true }
+    end
   end
 end

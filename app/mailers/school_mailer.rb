@@ -1,5 +1,5 @@
 # TODO: The SchoolMailer class should be renamed to ApplicationMailer.
-class SchoolMailer < ActionMailer::Base
+class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
   include Roadie::Rails::Mailer
 
   layout 'mail/school'

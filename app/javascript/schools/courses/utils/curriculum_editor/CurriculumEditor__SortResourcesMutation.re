@@ -18,12 +18,12 @@ let resourceTypeToString = resourceType =>
   | TargetGroup => "TargetGroup"
   };
 
-let sort = (resourceType, authenticityToken, resourceIds) =>
+let sort = (resourceType, resourceIds) =>
   SortResourceMutation.make(
     ~resourceIds,
     ~resourceType=resourceTypeToString(resourceType),
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken, ~notify=false)
+  |> GraphqlQuery.sendQuery(~notify=false)
   |> Js.Promise.then_(_response => Js.Promise.resolve())
   |> ignore;

@@ -32,11 +32,11 @@
                 "defaultValue": null
               },
               {
-                "name": "versionOn",
+                "name": "targetVersionId",
                 "description": "",
                 "type": {
                   "kind": "SCALAR",
-                  "name": "Date",
+                  "name": "ID",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -68,7 +68,7 @@
             "args": [
               {
                 "name": "after",
-                "description": "Returns the elements in the list that come after the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -78,7 +78,7 @@
               },
               {
                 "name": "before",
-                "description": "Returns the elements in the list that come before the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -88,7 +88,7 @@
               },
               {
                 "name": "first",
-                "description": "Returns the first _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -98,7 +98,7 @@
               },
               {
                 "name": "last",
-                "description": "Returns the last _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -254,7 +254,7 @@
             "args": [
               {
                 "name": "after",
-                "description": "Returns the elements in the list that come after the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -264,7 +264,7 @@
               },
               {
                 "name": "before",
-                "description": "Returns the elements in the list that come before the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -274,7 +274,7 @@
               },
               {
                 "name": "first",
-                "description": "Returns the first _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -284,7 +284,7 @@
               },
               {
                 "name": "last",
-                "description": "Returns the last _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -366,7 +366,7 @@
             "args": [
               {
                 "name": "after",
-                "description": "Returns the elements in the list that come after the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -376,7 +376,7 @@
               },
               {
                 "name": "before",
-                "description": "Returns the elements in the list that come before the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -386,7 +386,7 @@
               },
               {
                 "name": "first",
-                "description": "Returns the first _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -396,7 +396,7 @@
               },
               {
                 "name": "last",
-                "description": "Returns the last _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -463,12 +463,43 @@
             "deprecationReason": null
           },
           {
+            "name": "targetDetails",
+            "description": "",
+            "args": [
+              {
+                "name": "targetId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "TargetDetails",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "teams",
             "description": "",
             "args": [
               {
                 "name": "after",
-                "description": "Returns the elements in the list that come after the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -478,7 +509,7 @@
               },
               {
                 "name": "before",
-                "description": "Returns the elements in the list that come before the specified cursor.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -488,7 +519,7 @@
               },
               {
                 "name": "first",
-                "description": "Returns the first _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -498,7 +529,7 @@
               },
               {
                 "name": "last",
-                "description": "Returns the last _n_ elements from the list.",
+                "description": "",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -582,8 +613,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Date",
+                    "kind": "OBJECT",
+                    "name": "TargetVersion",
                     "ofType": null
                   }
                 }
@@ -602,16 +633,6 @@
         "kind": "SCALAR",
         "name": "ID",
         "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Date",
-        "description": "An ISO 8601-encoded date",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -935,11 +956,11 @@
       {
         "kind": "OBJECT",
         "name": "CourseTeamConnection",
-        "description": "The connection type for CourseTeam.",
+        "description": "",
         "fields": [
           {
             "name": "edges",
-            "description": "A list of edges.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -955,7 +976,7 @@
           },
           {
             "name": "nodes",
-            "description": "A list of nodes.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -971,7 +992,7 @@
           },
           {
             "name": "pageInfo",
-            "description": "Information to aid in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -994,11 +1015,11 @@
       {
         "kind": "OBJECT",
         "name": "CourseTeamEdge",
-        "description": "An edge in a connection.",
+        "description": "",
         "fields": [
           {
             "name": "cursor",
-            "description": "A cursor for use in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1014,7 +1035,7 @@
           },
           {
             "name": "node",
-            "description": "The item at the end of the edge.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -1301,11 +1322,11 @@
       {
         "kind": "OBJECT",
         "name": "PageInfo",
-        "description": "Information about pagination in a connection.",
+        "description": "",
         "fields": [
           {
             "name": "endCursor",
-            "description": "When paginating forwards, the cursor to continue.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -1317,7 +1338,7 @@
           },
           {
             "name": "hasNextPage",
-            "description": "When paginating forwards, are there more items?",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1333,7 +1354,7 @@
           },
           {
             "name": "hasPreviousPage",
-            "description": "When paginating backwards, are there more items?",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1349,7 +1370,7 @@
           },
           {
             "name": "startCursor",
-            "description": "When paginating backwards, the cursor to continue.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -1718,11 +1739,11 @@
       {
         "kind": "OBJECT",
         "name": "ReviewedSubmissionConnection",
-        "description": "The connection type for ReviewedSubmission.",
+        "description": "",
         "fields": [
           {
             "name": "edges",
-            "description": "A list of edges.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -1738,7 +1759,7 @@
           },
           {
             "name": "nodes",
-            "description": "A list of nodes.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -1754,7 +1775,7 @@
           },
           {
             "name": "pageInfo",
-            "description": "Information to aid in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1777,11 +1798,11 @@
       {
         "kind": "OBJECT",
         "name": "ReviewedSubmissionEdge",
-        "description": "An edge in a connection.",
+        "description": "",
         "fields": [
           {
             "name": "cursor",
-            "description": "A cursor for use in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1797,7 +1818,7 @@
           },
           {
             "name": "node",
-            "description": "The item at the end of the edge.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -2425,11 +2446,11 @@
       {
         "kind": "OBJECT",
         "name": "StudentSubmissionConnection",
-        "description": "The connection type for StudentSubmission.",
+        "description": "",
         "fields": [
           {
             "name": "edges",
-            "description": "A list of edges.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -2445,7 +2466,7 @@
           },
           {
             "name": "nodes",
-            "description": "A list of nodes.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -2461,7 +2482,7 @@
           },
           {
             "name": "pageInfo",
-            "description": "Information to aid in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -2484,11 +2505,11 @@
       {
         "kind": "OBJECT",
         "name": "StudentSubmissionEdge",
-        "description": "An edge in a connection.",
+        "description": "",
         "fields": [
           {
             "name": "cursor",
-            "description": "A cursor for use in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -2504,7 +2525,7 @@
           },
           {
             "name": "node",
-            "description": "The item at the end of the edge.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -3313,12 +3334,321 @@
       },
       {
         "kind": "OBJECT",
+        "name": "TargetDetails",
+        "description": "",
+        "fields": [
+          {
+            "name": "completionInstructions",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "evaluationCriteria",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "linkToComplete",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "prerequisiteTargets",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "quiz",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "TargetQuiz",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "role",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "targetGroupId",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "visibility",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "TargetQuiz",
+        "description": "",
+        "fields": [
+          {
+            "name": "answerOptions",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "TargetQuizAnswer",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "question",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "TargetQuizAnswer",
+        "description": "",
+        "fields": [
+          {
+            "name": "answer",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "correctAnswer",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hint",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "TeamConnection",
-        "description": "The connection type for Team.",
+        "description": "",
         "fields": [
           {
             "name": "edges",
-            "description": "A list of edges.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3334,7 +3664,7 @@
           },
           {
             "name": "nodes",
-            "description": "A list of nodes.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3350,7 +3680,7 @@
           },
           {
             "name": "pageInfo",
-            "description": "Information to aid in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -3373,11 +3703,11 @@
       {
         "kind": "OBJECT",
         "name": "TeamEdge",
-        "description": "An edge in a connection.",
+        "description": "",
         "fields": [
           {
             "name": "cursor",
-            "description": "A cursor for use in pagination.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -3393,7 +3723,7 @@
           },
           {
             "name": "node",
-            "description": "The item at the end of the edge.",
+            "description": "",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -3565,12 +3895,71 @@
       },
       {
         "kind": "OBJECT",
+        "name": "TargetVersion",
+        "description": "",
+        "fields": [
+          {
+            "name": "createdAt",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updatedAt",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "Mutation",
         "description": "",
         "fields": [
           {
             "name": "archiveCoachNote",
-            "description": "Archives a coach note for student",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -3601,7 +3990,7 @@
           },
           {
             "name": "archiveCommunityResource",
-            "description": "Archive community resources. Value of resourceType can be 'Question', 'Answer', or 'Comment'",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -3646,7 +4035,7 @@
           },
           {
             "name": "autoVerifySubmission",
-            "description": "Auto verify target",
+            "description": "",
             "args": [
               {
                 "name": "targetId",
@@ -3677,7 +4066,7 @@
           },
           {
             "name": "createAnswer",
-            "description": "Create a new answer",
+            "description": "",
             "args": [
               {
                 "name": "description",
@@ -3722,7 +4111,7 @@
           },
           {
             "name": "createAnswerLike",
-            "description": "Add a like for the answer",
+            "description": "",
             "args": [
               {
                 "name": "answerId",
@@ -3753,7 +4142,7 @@
           },
           {
             "name": "createApplicant",
-            "description": "Create a new applicant",
+            "description": "",
             "args": [
               {
                 "name": "courseId",
@@ -3812,7 +4201,7 @@
           },
           {
             "name": "createCoachNote",
-            "description": "Create a coach note.",
+            "description": "",
             "args": [
               {
                 "name": "note",
@@ -3857,7 +4246,7 @@
           },
           {
             "name": "createComment",
-            "description": "Create a comment.",
+            "description": "",
             "args": [
               {
                 "name": "value",
@@ -3916,7 +4305,7 @@
           },
           {
             "name": "createCommunity",
-            "description": "Create a new community",
+            "description": "",
             "args": [
               {
                 "name": "name",
@@ -3979,7 +4368,7 @@
           },
           {
             "name": "createCourse",
-            "description": "Create a new course.",
+            "description": "",
             "args": [
               {
                 "name": "name",
@@ -4076,7 +4465,7 @@
           },
           {
             "name": "createCourseExport",
-            "description": "Request a course export.",
+            "description": "",
             "args": [
               {
                 "name": "courseId",
@@ -4142,8 +4531,63 @@
             "deprecationReason": null
           },
           {
+            "name": "createEmbedContentBlock",
+            "description": "",
+            "args": [
+              {
+                "name": "targetId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "aboveContentBlockId",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "url",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CreateEmbedContentBlockPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createEvaluationCriterion",
-            "description": "Create a new evaluation criterion.",
+            "description": "",
             "args": [
               {
                 "name": "name",
@@ -4238,7 +4682,7 @@
           },
           {
             "name": "createFeedback",
-            "description": "Create feedback for submission",
+            "description": "",
             "args": [
               {
                 "name": "submissionId",
@@ -4283,7 +4727,7 @@
           },
           {
             "name": "createGrading",
-            "description": "Create grading for submission",
+            "description": "",
             "args": [
               {
                 "name": "submissionId",
@@ -4345,8 +4789,49 @@
             "deprecationReason": null
           },
           {
+            "name": "createMarkdownContentBlock",
+            "description": "",
+            "args": [
+              {
+                "name": "targetId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "aboveContentBlockId",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CreateMarkdownContentBlockPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createQuestion",
-            "description": "Create a new question",
+            "description": "",
             "args": [
               {
                 "name": "title",
@@ -4415,7 +4900,7 @@
           },
           {
             "name": "createQuizSubmission",
-            "description": "Create quiz submission",
+            "description": "",
             "args": [
               {
                 "name": "targetId",
@@ -4464,7 +4949,7 @@
           },
           {
             "name": "createSchoolAdmin",
-            "description": "Create a new school admin",
+            "description": "",
             "args": [
               {
                 "name": "name",
@@ -4509,7 +4994,7 @@
           },
           {
             "name": "createSchoolLink",
-            "description": "Create a school link.",
+            "description": "",
             "args": [
               {
                 "name": "kind",
@@ -4564,7 +5049,7 @@
           },
           {
             "name": "createSubmission",
-            "description": "Create a new submission for a target",
+            "description": "",
             "args": [
               {
                 "name": "targetId",
@@ -4653,7 +5138,7 @@
           },
           {
             "name": "createTarget",
-            "description": "Create a new target.",
+            "description": "",
             "args": [
               {
                 "name": "title",
@@ -4697,8 +5182,39 @@
             "deprecationReason": null
           },
           {
+            "name": "createTargetVersion",
+            "description": "",
+            "args": [
+              {
+                "name": "targetVersionId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CreateTargetVersionPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "deleteContentBlock",
-            "description": "Deletes a target content block.",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -4729,7 +5245,7 @@
           },
           {
             "name": "deleteSchoolAdmin",
-            "description": "Delete a school admin",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -4760,7 +5276,7 @@
           },
           {
             "name": "destroyAnswerLike",
-            "description": "Destroy a like for the answer",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -4791,7 +5307,7 @@
           },
           {
             "name": "destroySchoolLink",
-            "description": "Destroy a school link.",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -4822,7 +5338,7 @@
           },
           {
             "name": "dropoutStudent",
-            "description": "Mark student as exited",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -4853,7 +5369,7 @@
           },
           {
             "name": "levelUp",
-            "description": "Level up",
+            "description": "",
             "args": [
               {
                 "name": "courseId",
@@ -4883,11 +5399,11 @@
             "deprecationReason": null
           },
           {
-            "name": "restoreContentVersion",
-            "description": "Restores target content to a selected version",
+            "name": "moveContentBlock",
+            "description": "",
             "args": [
               {
-                "name": "targetId",
+                "name": "id",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
@@ -4901,14 +5417,14 @@
                 "defaultValue": null
               },
               {
-                "name": "versionOn",
+                "name": "direction",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Date",
+                    "kind": "ENUM",
+                    "name": "MoveDirection",
                     "ofType": null
                   }
                 },
@@ -4920,46 +5436,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "RestoreContentVersionPayload",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "sortContentBlocks",
-            "description": "Sort target content blocks",
-            "args": [
-              {
-                "name": "contentBlockIds",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "SCALAR",
-                        "name": "ID",
-                        "ofType": null
-                      }
-                    }
-                  }
-                },
-                "defaultValue": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "SortContentBlocksPayload",
+                "name": "MoveContentBlockPayload",
                 "ofType": null
               }
             },
@@ -4968,7 +5445,7 @@
           },
           {
             "name": "sortCurriculumResources",
-            "description": "Sort targets and target groups",
+            "description": "",
             "args": [
               {
                 "name": "resourceIds",
@@ -5021,7 +5498,7 @@
           },
           {
             "name": "undoGrading",
-            "description": "Delete grading for the submission",
+            "description": "",
             "args": [
               {
                 "name": "submissionId",
@@ -5052,7 +5529,7 @@
           },
           {
             "name": "undoSubmission",
-            "description": "Delete the last submission for a target",
+            "description": "",
             "args": [
               {
                 "name": "targetId",
@@ -5083,7 +5560,7 @@
           },
           {
             "name": "updateAnswer",
-            "description": "Update community answer",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -5128,7 +5605,7 @@
           },
           {
             "name": "updateCommunity",
-            "description": "Update a new community",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -5204,67 +5681,8 @@
             "deprecationReason": null
           },
           {
-            "name": "updateContentBlock",
-            "description": "Updates a target content block.",
-            "args": [
-              {
-                "name": "id",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "blockType",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "text",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UpdateContentBlockPayload",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "updateCourse",
-            "description": "Update a course.",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -5375,7 +5793,7 @@
           },
           {
             "name": "updateEvaluationCriterion",
-            "description": "Update an evaluation criterion.",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -5441,8 +5859,131 @@
             "deprecationReason": null
           },
           {
+            "name": "updateFileBlock",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "title",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UpdateFileContentBlockPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateImageBlock",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "caption",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UpdateImageContentBlockPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateMarkdownBlock",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "markdown",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UpdateMarkdownContentBlockPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "updateQuestion",
-            "description": "Update community question",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -5501,7 +6042,7 @@
           },
           {
             "name": "updateReviewChecklist",
-            "description": "Update review checklist",
+            "description": "",
             "args": [
               {
                 "name": "targetId",
@@ -5546,7 +6087,7 @@
           },
           {
             "name": "updateSchool",
-            "description": "Update a School details",
+            "description": "",
             "args": [
               {
                 "name": "name",
@@ -5591,7 +6132,7 @@
           },
           {
             "name": "updateSchoolAdmin",
-            "description": "Update school admin",
+            "description": "",
             "args": [
               {
                 "name": "id",
@@ -5636,7 +6177,7 @@
           },
           {
             "name": "updateSchoolString",
-            "description": "Update a school string.",
+            "description": "",
             "args": [
               {
                 "name": "key",
@@ -5674,6 +6215,179 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "updateTarget",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "title",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "role",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "targetGroupId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "evaluationCriteria",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "SCALAR",
+                        "name": "ID",
+                        "ofType": null
+                      }
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "prerequisiteTargets",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "SCALAR",
+                        "name": "ID",
+                        "ofType": null
+                      }
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "quiz",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "TargetQuizInput",
+                        "ofType": null
+                      }
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "completionInstructions",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "linkToComplete",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "visibility",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UpdateTargetPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -5684,7 +6398,7 @@
       {
         "kind": "OBJECT",
         "name": "ArchiveCoachNotePayload",
-        "description": "Autogenerated return type of ArchiveCoachNote",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -5711,7 +6425,7 @@
       {
         "kind": "OBJECT",
         "name": "ArchiveCommunityResourcePayload",
-        "description": "Autogenerated return type of ArchiveCommunityResource",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -5738,7 +6452,7 @@
       {
         "kind": "OBJECT",
         "name": "AutoVerifySubmissionPayload",
-        "description": "Autogenerated return type of AutoVerifySubmission",
+        "description": "",
         "fields": [
           {
             "name": "submission",
@@ -5761,7 +6475,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateAnswerPayload",
-        "description": "Autogenerated return type of CreateAnswer",
+        "description": "",
         "fields": [
           {
             "name": "answerId",
@@ -5811,13 +6525,13 @@
         "enumValues": [
           {
             "name": "InvalidLengthDescription",
-            "description": "Supplied description must be greater than 1 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "BlankQuestionId",
-            "description": "Question id is required for creating a Comment",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -5827,7 +6541,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateAnswerLikePayload",
-        "description": "Autogenerated return type of CreateAnswerLike",
+        "description": "",
         "fields": [
           {
             "name": "answerLikeId",
@@ -5877,13 +6591,13 @@
         "enumValues": [
           {
             "name": "LikeExists",
-            "description": "You have already liked the answer!",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "BlankAnswerId",
-            "description": "Answer id is required for adding a like",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -5893,7 +6607,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateApplicantPayload",
-        "description": "Autogenerated return type of CreateApplicant",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -5920,7 +6634,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateCoachNotePayload",
-        "description": "Autogenerated return type of CreateCoachNote",
+        "description": "",
         "fields": [
           {
             "name": "coachNote",
@@ -5943,7 +6657,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateCommentPayload",
-        "description": "Autogenerated return type of CreateComment",
+        "description": "",
         "fields": [
           {
             "name": "commentId",
@@ -5993,19 +6707,19 @@
         "enumValues": [
           {
             "name": "InvalidCommentableType",
-            "description": "Supplied type must be one of \"Question\" or \"Answer\"",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidLengthValue",
-            "description": "Supplied comment must be greater than 1 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "BlankCommentableId",
-            "description": "Commentable id is required for creating a Comment",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6015,7 +6729,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateCommunityPayload",
-        "description": "Autogenerated return type of CreateCommunity",
+        "description": "",
         "fields": [
           {
             "name": "communityId",
@@ -6065,13 +6779,13 @@
         "enumValues": [
           {
             "name": "InvalidLengthName",
-            "description": "Supplied title must be between 1 and 50 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "IncorrectCourseIds",
-            "description": "The list of courses selected are incorrect",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6079,9 +6793,19 @@
         "possibleTypes": null
       },
       {
+        "kind": "SCALAR",
+        "name": "Date",
+        "description": "An ISO 8601-encoded date",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "CreateCoursePayload",
-        "description": "Autogenerated return type of CreateCourse",
+        "description": "",
         "fields": [
           {
             "name": "course",
@@ -6108,7 +6832,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateCourseExportPayload",
-        "description": "Autogenerated return type of CreateCourseExport",
+        "description": "",
         "fields": [
           {
             "name": "courseExport",
@@ -6212,6 +6936,29 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "CreateEmbedContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "contentBlock",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ContentBlock",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "GradeAndLabelInput",
         "description": "",
@@ -6253,7 +7000,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateEvaluationCriterionPayload",
-        "description": "Autogenerated return type of CreateEvaluationCriterion",
+        "description": "",
         "fields": [
           {
             "name": "evaluationCriterion",
@@ -6276,7 +7023,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateFeedbackPayload",
-        "description": "Autogenerated return type of CreateFeedback",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6342,7 +7089,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateGradingPayload",
-        "description": "Autogenerated return type of CreateGrading",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6368,8 +7115,31 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CreateMarkdownContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "contentBlock",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ContentBlock",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CreateQuestionPayload",
-        "description": "Autogenerated return type of CreateQuestion",
+        "description": "",
         "fields": [
           {
             "name": "errors",
@@ -6419,19 +7189,19 @@
         "enumValues": [
           {
             "name": "InvalidLengthTitle",
-            "description": "Supplied title must be between 1 and 250 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidLengthDescription",
-            "description": "Supplied description must be greater than 1 and characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "BlankCommunityID",
-            "description": "Community id is required for creating a Comment",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6441,7 +7211,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateQuizSubmissionPayload",
-        "description": "Autogenerated return type of CreateQuizSubmission",
+        "description": "",
         "fields": [
           {
             "name": "submission",
@@ -6464,7 +7234,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateSchoolAdminPayload",
-        "description": "Autogenerated return type of CreateSchoolAdmin",
+        "description": "",
         "fields": [
           {
             "name": "schoolAdmin",
@@ -6526,7 +7296,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateSchoolLinkPayload",
-        "description": "Autogenerated return type of CreateSchoolLink",
+        "description": "",
         "fields": [
           {
             "name": "errors",
@@ -6576,25 +7346,25 @@
         "enumValues": [
           {
             "name": "InvalidKind",
-            "description": "Supplied kind must be one of \"header\", \"footer\", or \"social\"",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidLengthTitle",
-            "description": "Supplied title must be between 1 and 24 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidUrl",
-            "description": "Supplied URL is not valid",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "BlankTitle",
-            "description": "Title is required for \"header\" and \"footer\" links",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6663,7 +7433,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateSubmissionPayload",
-        "description": "Autogenerated return type of CreateSubmission",
+        "description": "",
         "fields": [
           {
             "name": "submission",
@@ -6686,7 +7456,7 @@
       {
         "kind": "OBJECT",
         "name": "CreateTargetPayload",
-        "description": "Autogenerated return type of CreateTarget",
+        "description": "",
         "fields": [
           {
             "name": "target",
@@ -6767,8 +7537,8 @@
       },
       {
         "kind": "OBJECT",
-        "name": "DeleteContentBlockPayload",
-        "description": "Autogenerated return type of DeleteContentBlock",
+        "name": "CreateTargetVersionPayload",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6785,26 +7555,29 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteContentBlockPayload",
+        "description": "",
+        "fields": [
           {
-            "name": "versions",
+            "name": "success",
             "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Date",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -6819,7 +7592,7 @@
       {
         "kind": "OBJECT",
         "name": "DeleteSchoolAdminPayload",
-        "description": "Autogenerated return type of DeleteSchoolAdmin",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6846,7 +7619,7 @@
       {
         "kind": "OBJECT",
         "name": "DestroyAnswerLikePayload",
-        "description": "Autogenerated return type of DestroyAnswerLike",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6873,7 +7646,7 @@
       {
         "kind": "OBJECT",
         "name": "DestroySchoolLinkPayload",
-        "description": "Autogenerated return type of DestroySchoolLink",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6900,7 +7673,7 @@
       {
         "kind": "OBJECT",
         "name": "DropoutStudentPayload",
-        "description": "Autogenerated return type of DropoutStudent",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6927,7 +7700,7 @@
       {
         "kind": "OBJECT",
         "name": "LevelUpPayload",
-        "description": "Autogenerated return type of LevelUp",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -6952,72 +7725,44 @@
         "possibleTypes": null
       },
       {
-        "kind": "OBJECT",
-        "name": "RestoreContentVersionPayload",
-        "description": "Autogenerated return type of RestoreContentVersion",
-        "fields": [
-          {
-            "name": "success",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
+        "kind": "ENUM",
+        "name": "MoveDirection",
+        "description": "",
+        "fields": null,
         "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "SortContentBlocksPayload",
-        "description": "Autogenerated return type of SortContentBlocks",
-        "fields": [
+        "interfaces": null,
+        "enumValues": [
           {
-            "name": "success",
+            "name": "Up",
             "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "versions",
+            "name": "Down",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "MoveContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "success",
             "description": "",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Date",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -7032,7 +7777,7 @@
       {
         "kind": "OBJECT",
         "name": "SortCurriculumResourcesPayload",
-        "description": "Autogenerated return type of SortCurriculumResources",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -7059,7 +7804,7 @@
       {
         "kind": "OBJECT",
         "name": "UndoGradingPayload",
-        "description": "Autogenerated return type of UndoGrading",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -7086,7 +7831,7 @@
       {
         "kind": "OBJECT",
         "name": "UndoSubmissionPayload",
-        "description": "Autogenerated return type of UndoSubmission",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -7113,7 +7858,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateAnswerPayload",
-        "description": "Autogenerated return type of UpdateAnswer",
+        "description": "",
         "fields": [
           {
             "name": "errors",
@@ -7163,7 +7908,7 @@
         "enumValues": [
           {
             "name": "InvalidLengthDescription",
-            "description": "Supplied description must be greater than 1 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -7173,7 +7918,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateCommunityPayload",
-        "description": "Autogenerated return type of UpdateCommunity",
+        "description": "",
         "fields": [
           {
             "name": "communityId",
@@ -7223,96 +7968,29 @@
         "enumValues": [
           {
             "name": "InvalidLengthName",
-            "description": "Supplied title must be between 1 and 50 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "IncorrectCourseIds",
-            "description": "The list of courses selected are incorrect",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "IncorrectCommunityId",
-            "description": "Community does not exist",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
         ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "UpdateContentBlockPayload",
-        "description": "Autogenerated return type of UpdateContentBlock",
-        "fields": [
-          {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "success",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "versions",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Date",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
         "possibleTypes": null
       },
       {
         "kind": "OBJECT",
         "name": "UpdateCoursePayload",
-        "description": "Autogenerated return type of UpdateCourse",
+        "description": "",
         "fields": [
           {
             "name": "course",
@@ -7339,7 +8017,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateEvaluationCriterionPayload",
-        "description": "Autogenerated return type of UpdateEvaluationCriterion",
+        "description": "",
         "fields": [
           {
             "name": "evaluationCriterion",
@@ -7361,8 +8039,77 @@
       },
       {
         "kind": "OBJECT",
+        "name": "UpdateFileContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "contentBlock",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ContentBlock",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UpdateImageContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "contentBlock",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ContentBlock",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UpdateMarkdownContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "contentBlock",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ContentBlock",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "UpdateQuestionPayload",
-        "description": "Autogenerated return type of UpdateQuestion",
+        "description": "",
         "fields": [
           {
             "name": "errors",
@@ -7412,13 +8159,13 @@
         "enumValues": [
           {
             "name": "InvalidLengthTitle",
-            "description": "Supplied title must be between 1 and 250 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidLengthDescription",
-            "description": "Supplied description must be greater than 1 characters in length",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -7438,7 +8185,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateReviewChecklistPayload",
-        "description": "Autogenerated return type of UpdateReviewChecklist",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -7465,7 +8212,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateSchoolPayload",
-        "description": "Autogenerated return type of UpdateSchool",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -7492,7 +8239,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateSchoolAdminPayload",
-        "description": "Autogenerated return type of UpdateSchoolAdmin",
+        "description": "",
         "fields": [
           {
             "name": "success",
@@ -7519,7 +8266,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateSchoolStringPayload",
-        "description": "Autogenerated return type of UpdateSchoolString",
+        "description": "",
         "fields": [
           {
             "name": "errors",
@@ -7561,23 +8308,136 @@
         "enumValues": [
           {
             "name": "InvalidKey",
-            "description": "Supplied key must be one of coaches_index_subheading,\nlibrary_index_subheading, email_address, address, privacy_policy,\nterms_of_use, description",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidValue",
-            "description": "Supplied value could not be validated against the supplied key",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "InvalidLengthValue",
-            "description": "Supplied value is over the allowed length for supplied key",
+            "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "TargetQuizInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "question",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "answerOptions",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TargetQuizAnswerInput",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "TargetQuizAnswerInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "answer",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "correctAnswer",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UpdateTargetPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "success",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {

@@ -15,8 +15,9 @@ module DropoutStudentQuery = [%graphql
 let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);
+
   DropoutStudentQuery.make(~id, ())
-  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##dropoutStudent##success
          ? reloadTeamsCB() : setSaving(_ => false);

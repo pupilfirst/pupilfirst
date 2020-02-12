@@ -2,7 +2,6 @@
 open QuestionsShow__Types;
 
 type props = {
-  authenticityToken: string,
   question: Question.t,
   answers: list(Answer.t),
   comments: list(Comment.t),
@@ -17,7 +16,6 @@ type props = {
 
 let decodeProps = json =>
   Json.Decode.{
-    authenticityToken: json |> field("authenticityToken", string),
     question: json |> field("questions", Question.decode),
     answers: json |> field("answers", list(Answer.decode)),
     comments: json |> field("comments", list(Comment.decode)),
@@ -35,7 +33,6 @@ let props = DomUtils.parseJsonAttribute() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <QuestionsShow
-    authenticityToken={props.authenticityToken}
     question={props.question}
     answers={props.answers}
     comments={props.comments}

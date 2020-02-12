@@ -61,15 +61,7 @@ let deselectedTags = tags =>
   tags |> Array.map(tag => (tag |> Tag.id, tag |> Tag.name, false));
 
 let createCourseExport =
-    (
-      authenticityToken,
-      course,
-      tags,
-      setCourseExports,
-      state,
-      setState,
-      event,
-    ) => {
+    (course, tags, setCourseExports, state, setState, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setState(state => {...state, saving: true});
 
@@ -86,7 +78,7 @@ let createCourseExport =
     ~reviewedOnly=state.reviewedOnly,
     (),
   )
-  |> GraphqlQuery.sendQuery(authenticityToken)
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createCourseExport##courseExport) {
        | Some(export) =>
@@ -133,7 +125,7 @@ let reviewedOnlyButtonClasses = value => {
 };
 
 [@react.component]
-let make = (~authenticityToken, ~course, ~exports, ~tags) => {
+let make = (~course, ~exports, ~tags) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -207,7 +199,6 @@ let make = (~authenticityToken, ~course, ~exports, ~tags) => {
                  disabled={state.saving}
                  className="w-full btn btn-primary btn-large"
                  onClick={createCourseExport(
-                   authenticityToken,
                    course,
                    tags,
                    setCourseExports,

@@ -36,27 +36,31 @@ To create a target, click the _Create a target_ option inside a target group, en
 
 ## Editing target content
 
-After creating a target, you can click on it in the curriculum to open the target editor. It will open up in the _preview_ mode.
+After creating a target, you can click on it in the curriculum to open the target editor, which has three tabs: _Content_, _Details_ and _Versions_.
 
-![Target editor, in preview mode](https://res.cloudinary.com/sv-co/image/upload/v1579025835/pupilfirst_documentation/curriculum_editor/target_editor_preview_mode_dnvpxt.png)
+Clicking on a target will open the _Content_ tab by default, which allows you to edit the content of the target - this the _body_ of the material that you would like your student to read or watch.
 
-To switch to editing the target, switch to the _Edit_ mode. You can now edit and add new blocks of content. You'll notice that you can add different types of these _content blocks_.
+![Target editor, in preview mode](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_content_editor_feiqdh.png)
 
-![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1574148406/pupilfirst_documentation/curriculum_editor/target_editor_blocks_bi80cn.png)
+You'll notice that the content is made up of different types of _content blocks_. If you hover over the region between any of the existing blocks, you'll find an option to insert a new content block into that space. There will always be a content block picker visible at the bottom of the existing content.
+
+![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_editor_blocks_xnvkky.png)
 
 ### Content block types
 
-At the moment, we support four types of content blocks:
+At the moment, we support four types of content blocks.
 
 **Markdown**\
 The Markdown block allows you to write formatted text in the Markdown format. You can also embed files and images directly into the text using the file upload feature here, but you'll have no control over how they're displayed. Images will be centered, and displayed at actual size, whereas files will be inserted as links. Use the _Image_ and _File_ block types for greater control over these kinds of content.
 
-![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1574148846/pupilfirst_documentation/curriculum_editor/markdown_editor_y8tpqk.png)
+![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png)
 
-To learn more about using the Markdown editor to format text, click on the _Need help?_ link at the bottom right of the editor. It'll take you to documentation served within the platform which details everything you can do with Markdown.
+To see a live preview of the content you're creating in the editor, choose the split-screen option at the top-right of the editor, and it'll switch to a full-screen mode that shows the content you're writing on the left, with its preview on the right.
+
+If you're unfamiliar with the Markdown format, or to brush up on how to use Markdown to quickly and effectively format text, click on the _Need help?_ link at the bottom right of the editor. It'll take you to documentation served within the platform which details everything you can do with Markdown.
 
 **Image**\
-The image block accepts an image file and a caption and displays it, cetner with the other content.
+The image block accepts an image file and a caption and displays it, center with the other content.
 
 ?> We're working on improving this feature to let you to decide sizing of the image.
 
@@ -74,13 +78,17 @@ If there's a specific website you'd like us to include, [please let us know](mai
 **File**\
 The file block accepts the file and a caption and displays it as a distinctly styled block in the content of the target.
 
-## Setting the method of completion
+## Editing a target's other details
 
-Editing the content of a target is the first step in setting it up. You can switch to the second step, _Method of Completion_, using the tab at the top of the target editor, or a link at the bottom.
+The _Details_ tab can be accessed by clicking on the tab once the editor is open, or by clicking the _details icon_ on each of the listed targets.
 
-The method of completion tab lets you decide how your students can complete the target. It asks a few questions:
+This tab contains other basic details and configuration for the target, such as its name, whether it has prerequisites, its completion method, and its visibility to the student and other course authors.
 
-**Any prerequisite target?**\
+### Setting the method of completion
+
+To decide how a student can complete a target, this interface asks you a few questions:
+
+**Are there any prerequisite targets?**\
 You can select other targets from the same level as pre-requisite targets. This will _lock_ the target until the student has completed the prerequisites.
 
 **Will a coach review submissions on this target?**\
@@ -121,3 +129,18 @@ You'll find the _visibility_ setting at the very end of step 2. This setting has
 1. **Live:** Target will be visible to students.
 2. **Draft:** Target will be visible only within the curriculum editor.
 3. **Archived:** Target will be hidden. You can still access it through the _Show Archived_ button at the top-right of the curriculum editor interface. It'll appear only if you have archived targets in the selected level.
+
+## Target content versions
+
+The third tab of the target editor is called _Versions_. Just like the _Details_ tab, _Versions_ can be accessed by clicking on the tab once the editor is open, or by clicking the versions icon on each of the listed targets.
+
+This tab shows you a preview of a target's content as it appears now to the student. But more importantly, it allows you to save the current state of the content as a version, browse previous versions to see how the target's content looked earlier, and restore an old version.
+
+![Browsing previous versions of a target's contents](https://res.cloudinary.com/sv-co/image/upload/v1581452180/pupilfirst_documentation/curriculum_editor/versions_qtt3j8.png)
+
+When a target is first created, you're assumed to be working on its first version. Once you've worked on the target's content for a while, and are happy with it's state, the _Versions_ tab will allow you to _save that version_. Saving a version will create a new version which will hold future changes.
+
+?> **What exactly is a _version_?**\
+A version can be thought of as a _snapshot_ of a target's content as it looked at the time it was taken. However, you're always working on the _current_ version of the target, so that can always be changed an author. You'll need to take a _snapshot_ manually on the versions tab for a new version to be created. As the author of a target, you're the best person to decide when it's appropriate to preserve a version.
+
+This feature allows you to preserve a _known good state_ for a target's content, and since you can browse previous versions of a target, it can help track changes to the content, or even act as a safeguard, by allowing you to _restore a previous version_ if something goes awry during the editing process.

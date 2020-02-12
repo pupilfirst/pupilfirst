@@ -21,3 +21,9 @@ let format = (f, t) => {
 };
 
 let stingToFormatedTime = (f, t) => format(f, parse(t));
+
+let randomId = () => {
+  let number = Js.Math.random() |> Js.Float.toString;
+  let time = Js.Date.now() |> Js.Float.toString;
+  time ++ number |> Js.String.replace(".", "-");
+};

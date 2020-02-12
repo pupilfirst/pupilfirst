@@ -14,10 +14,11 @@ type blockType =
   | Embed(url, embedCode);
 
 type t = {
-  id: string,
+  id,
   blockType,
   sortIndex: int,
-};
+}
+and id = string;
 
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
@@ -58,7 +59,8 @@ let decode = json => {
   };
 };
 
-let sort = blocks => blocks |> List.sort((x, y) => x.sortIndex - y.sortIndex);
+let sort = blocks =>
+  blocks |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex);
 
 let id = t => t.id;
 let blockType = t => t.blockType;
@@ -72,6 +74,20 @@ let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
+let makeFromJs = js => {
+  let id = js##id;
+  let sortIndex = js##sortIndex;
+  let blockType =
+    switch (js##content) {
+    | `MarkdownBlock(content) => Markdown(content##markdown)
+    | `FileBlock(content) =>
+      File(content##url, content##title, content##filename)
+    | `ImageBlock(content) => Image(content##url, content##caption)
+    | `EmbedBlock(content) => Embed(content##url, content##embedCode)
+    };
+
+  make(id, blockType, sortIndex);
+};
 
 let blockTypeAsString = blockType =>
   switch (blockType) {
@@ -80,3 +96,112 @@ let blockTypeAsString = blockType =>
   | Image(_url, _caption) => "image"
   | Embed(_url, _embedCode) => "embed"
   };
+
+let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
+
+let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex});
+
+let moveUp = (t, ts) =>
+  ts
+  |> sort
+  |> Array.to_list
+  |> ListUtils.swapUp(t)
+  |> reindex
+  |> Array.of_list;
+
+let moveDown = (t, ts) =>
+  ts
+  |> sort
+  |> Array.to_list
+  |> ListUtils.swapDown(t)
+  |> reindex
+  |> Array.of_list;
+
+let updateFile = (title, t) =>
+  switch (t.blockType) {
+  | File(url, _, filename) => {...t, blockType: File(url, title, filename)}
+  | Markdown(_)
+  | Image(_)
+  | Embed(_) => t
+  };
+
+let updateImage = (caption, t) =>
+  switch (t.blockType) {
+  | Image(url, _) => {...t, blockType: Image(url, caption)}
+  | Markdown(_)
+  | File(_)
+  | Embed(_) => t
+  };
+
+let updateMarkdown = (markdown, t) =>
+  switch (t.blockType) {
+  | Markdown(_) => {...t, blockType: Markdown(markdown)}
+  | File(_)
+  | Image(_)
+  | Embed(_) => t
+  };
+
+module Fragments = [%graphql
+  {|
+  fragment allFields on ContentBlock {
+    id
+    blockType
+    sortIndex
+    content {
+      ... on ImageBlock {
+        caption
+        url
+        filename
+      }
+      ... on FileBlock {
+        title
+        url
+        filename
+      }
+      ... on MarkdownBlock {
+        markdown
+      }
+      ... on EmbedBlock {
+        url
+        embedCode
+      }
+    }
+  }
+|}
+];
+
+module Query = [%graphql
+  {|
+    query($targetId: ID!, $targetVersionId: ID) {
+      contentBlocks(targetId: $targetId, targetVersionId: $targetVersionId) {
+        id
+        blockType
+        sortIndex
+        content {
+          ... on ImageBlock {
+            caption
+            url
+            filename
+          }
+          ... on FileBlock {
+            title
+            url
+            filename
+          }
+          ... on MarkdownBlock {
+            markdown
+          }
+          ... on EmbedBlock {
+            url
+            embedCode
+          }
+        }
+      }
+      versions(targetId: $targetId){
+        id
+        createdAt
+        updatedAt
+      }
+  }
+|}
+];

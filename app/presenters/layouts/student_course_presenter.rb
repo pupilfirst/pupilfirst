@@ -22,9 +22,10 @@ module Layouts
         current_school.courses
       else
         # Courses as a coach, plus courses as a student.
+        courses_as_course_author = current_user.course_authors.present? ? Course.joins(:course_authors).where(course_authors: current_user.course_authors) : []
         courses_as_coach = current_coach.present? ? current_coach.reviewable_courses : []
         courses_as_student = Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) })
-        (courses_as_coach + courses_as_student).uniq
+        (courses_as_course_author + courses_as_coach + courses_as_student).uniq
       end.map do |course|
         {
           id: course.id,

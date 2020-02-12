@@ -44,26 +44,23 @@ let embedContentBlock = (_url, embedCode) =>
 [@react.component]
 let make = (~contentBlocks) =>
   <div className="text-base" id="learn-component">
-    {
-      contentBlocks
-      |> ContentBlock.sort
-      |> List.map(block => {
-           let renderedBlock =
-             switch (block |> ContentBlock.blockType) {
-             | Markdown(markdown) => markdownContentBlock(markdown)
-             | File(url, title, filename) =>
-               fileContentBlock(url, title, filename)
-             | Image(url, caption) => imageContentBlock(url, caption)
-             | Embed(url, embedCode) => embedContentBlock(url, embedCode)
-             };
+    {contentBlocks
+     |> ContentBlock.sort
+     |> Array.map(block => {
+          let renderedBlock =
+            switch (block |> ContentBlock.blockType) {
+            | Markdown(markdown) => markdownContentBlock(markdown)
+            | File(url, title, filename) =>
+              fileContentBlock(url, title, filename)
+            | Image(url, caption) => imageContentBlock(url, caption)
+            | Embed(url, embedCode) => embedContentBlock(url, embedCode)
+            };
 
-           <div
-             className={renderBlockClasses(block)}
-             key={block |> ContentBlock.id}>
-             renderedBlock
-           </div>;
-         })
-      |> Array.of_list
-      |> React.array
-    }
+          <div
+            className={renderBlockClasses(block)}
+            key={block |> ContentBlock.id}>
+            renderedBlock
+          </div>;
+        })
+     |> React.array}
   </div>;

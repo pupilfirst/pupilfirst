@@ -103,7 +103,7 @@ let getTeams =
       CourseTeamsQuery.make(~courseId, ~tags, ~sortBy, ())
     }
   )
-  |> GraphqlQuery.sendQuery(AuthenticityToken.fromHead())
+  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##courseTeams##nodes
        |> updateTeams(

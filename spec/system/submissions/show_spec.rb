@@ -272,7 +272,7 @@ feature 'Submissions show' do
 
       within("div[aria-label='submissions-overlay-header']") do
         expect(page).to have_content('Level 1')
-        expect(page).to have_content("Submitted by #{team.founders.map(&:name).join(', ')}")
+        expect(page).to have_content("Submitted by")
 
         # Each name should be linked to the report page.
         team.founders.each do |student|

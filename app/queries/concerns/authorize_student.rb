@@ -14,9 +14,9 @@ module AuthorizeStudent
     target_can_be_completed?
   end
 
-  # Students can complete the target if they're non-reviewed, or if they've reached the target's level for reviewed targets.
+  # Students can complete a live target if they're non-reviewed, or if they've reached the target's level for reviewed targets.
   def target_can_be_completed?
-    target.evaluation_criteria.empty? || target.level.number <= startup.level.number
+    target.live? && (target.evaluation_criteria.empty? || target.level.number <= startup.level.number)
   end
 
   def founder

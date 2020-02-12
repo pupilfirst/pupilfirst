@@ -40,8 +40,8 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:failed_target) { create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
   let!(:target_with_prerequisites) { create :target, target_group: target_group_l4_1, prerequisite_targets: [pending_target_g1], role: Target::ROLE_TEAM }
   let!(:l5_reviewed_target) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM, evaluation_criteria: [evaluation_criterion] }
-  let!(:l5_non_reviewed_target) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM }
-  let!(:l5_non_reviewed_target_with_prerequisite) { create :target, target_group: target_group_l5, role: Target::ROLE_TEAM, prerequisite_targets: [l5_non_reviewed_target] }
+  let!(:l5_non_reviewed_target) { create :target, :with_markdown, target_group: target_group_l5, role: Target::ROLE_TEAM }
+  let!(:l5_non_reviewed_target_with_prerequisite) { create :target, :with_markdown, target_group: target_group_l5, role: Target::ROLE_TEAM, prerequisite_targets: [l5_non_reviewed_target] }
   let!(:level_6_target) { create :target, target_group: target_group_l6, role: Target::ROLE_TEAM }
   let!(:level_6_draft_target) { create :target, :draft, target_group: target_group_l6, role: Target::ROLE_TEAM }
 

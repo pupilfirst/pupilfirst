@@ -214,6 +214,16 @@ ActiveRecord::Schema.define(version: 2020_02_13_050552) do
     t.index ["target_version_id"], name: "index_content_blocks_on_target_version_id"
   end
 
+  create_table "content_versions", force: :cascade do |t|
+    t.bigint "target_id"
+    t.bigint "content_block_id"
+    t.date "version_on"
+    t.integer "sort_index"
+    t.index ["content_block_id"], name: "index_content_versions_on_content_block_id"
+    t.index ["target_id"], name: "index_content_versions_on_target_id"
+    t.index ["version_on"], name: "index_content_versions_on_version_on"
+  end
+
   create_table "course_authors", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "course_id"
@@ -731,7 +741,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_050552) do
     t.boolean "latest"
     t.string "quiz_score"
     t.datetime "evaluated_at"
-    t.jsonb "checklist_response", default: []
+    t.jsonb "checklist", default: []
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|
@@ -834,6 +844,8 @@ ActiveRecord::Schema.define(version: 2020_02_13_050552) do
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "content_versions", "content_blocks"
+  add_foreign_key "content_versions", "targets"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"

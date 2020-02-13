@@ -75,10 +75,9 @@ class Target < ApplicationRecord
 
   CHECKLIST_ACTION_SHORT_TEXT = 'short_text'
   CHECKLIST_ACTION_LONG_TEXT = 'long_text'
-  CHECKLIST_ACTION_ATTACH_LINKS = 'attach_links'
-  CHECKLIST_ACTION_ATTACH_FILES = 'attach_files'
+  CHECKLIST_ACTION_ATTACH_LINKS = 'link'
+  CHECKLIST_ACTION_ATTACH_FILES = 'files'
   CHECKLIST_ACTION_MULTI_CHOICE = 'multi_choice'
-  CHECKLIST_ACTION_NONE = 'no_action'
 
   def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
@@ -89,7 +88,7 @@ class Target < ApplicationRecord
   end
 
   def self.valid_checklist_action_types
-    [CHECKLIST_ACTION_ATTACH_FILES, CHECKLIST_ACTION_ATTACH_LINKS, CHECKLIST_ACTION_LONG_TEXT, CHECKLIST_ACTION_MULTI_CHOICE, CHECKLIST_ACTION_NONE, CHECKLIST_ACTION_SHORT_TEXT].freeze
+    [CHECKLIST_ACTION_ATTACH_FILES, CHECKLIST_ACTION_ATTACH_LINKS, CHECKLIST_ACTION_LONG_TEXT, CHECKLIST_ACTION_MULTI_CHOICE, CHECKLIST_ACTION_SHORT_TEXT].freeze
   end
 
   validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true

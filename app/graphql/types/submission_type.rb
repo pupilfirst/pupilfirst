@@ -9,7 +9,7 @@ module Types
     field :grades, [Types::GradeType], null: false
     field :attachments, [Types::SubmissionAttachmentType], null: false
     field :evaluated_at, String, null: true
-    field :checklist_response, [Types::SubmissionChecklistResponseType], null: false
+    field :checklist, [Types::SubmissionChecklistType], null: false
 
     def evaluator_name
       object.evaluator&.name

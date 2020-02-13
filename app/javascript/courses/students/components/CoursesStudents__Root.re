@@ -26,23 +26,23 @@ module TeamsQuery = [%graphql
     query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
       teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
         nodes {
-        id,
-        name,
-        levelId,
-        students {
           id,
-          name
-          title
-          avatarUrl
-        }
-        coachUserIds
+          name,
+          levelId,
+          students {
+            id,
+            name
+            title
+            avatarUrl
+          }
+          coachUserIds
         }
         pageInfo{
           endCursor,hasNextPage
         }
       }
-  }
-|}
+    }
+  |}
 ];
 
 let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
@@ -50,7 +50,7 @@ let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
     (
       switch (nodes) {
       | None => [||]
-      | Some(teamsArray) => teamsArray |> TeamInfo.makeFromJS
+      | Some(teamsArray) => teamsArray |> TeamInfo.makeArrayFromJs
       }
     )
     |> Array.to_list

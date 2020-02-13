@@ -127,7 +127,7 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
        |> React.array}
     </div>
     <div
-      className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l p-3 md:px-4 md:py-5">
+      className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
           <p className="text-xs inline-block leading-tight">

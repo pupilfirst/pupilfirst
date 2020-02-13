@@ -18,6 +18,12 @@ type state = {
   submissions: Submissions.t,
 };
 
+let initialState = {
+  studentData: Loading,
+  selectedTab: Notes,
+  submissions: Unloaded,
+};
+
 let closeOverlay = courseId =>
   ReasonReactRouter.push("/courses/" ++ courseId ++ "/students");
 
@@ -25,39 +31,53 @@ module StudentDetailsQuery = [%graphql
   {|
     query($studentId: ID!) {
       studentDetails(studentId: $studentId) {
-        title, name,email, phone, socialLinks, avatarUrl
-        evaluationCriteria{
+        email, phone, socialLinks,
+        evaluationCriteria {
           id, name, maxGrade, passGrade
         },
-          coachNotes {
-            id
-            note
-            createdAt
-            author {
-              name
-              title
-              avatarUrl
-              userId
-            }
+        coachNotes {
+          id
+          note
+          createdAt
+          author {
+            name
+            title
+            avatarUrl
+            userId
           }
+        },
+        team {
+          id
+          name
           levelId
-          socialLinks
-          totalTargets
-          targetsCompleted
-          completedLevelIds
-          quizScores
-          averageGrades {
-            evaluationCriterionId
-            averageGrade
+          students {
+            id
+            name
+            title
+            avatarUrl
           }
+          coachUserIds
+        }
+        socialLinks
+        totalTargets
+        targetsCompleted
+        completedLevelIds
+        quizScores
+        averageGrades {
+          evaluationCriterionId
+          averageGrade
+        }
       }
     }
   |}
 ];
 
-let updateStudentDetails = (setState, details) => {
+let updateStudentDetails = (setState, studentId, details) => {
   setState(state =>
-    {...state, studentData: Loaded(details |> StudentDetails.makeFromJS)}
+    {
+      ...state,
+      studentData: Loaded(details |> StudentDetails.makeFromJs(studentId)),
+    }
   );
 };
 
@@ -66,7 +86,7 @@ let getStudentDetails = (studentId, setState, ()) => {
   StudentDetailsQuery.make(~studentId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       response##studentDetails |> updateStudentDetails(setState);
+       response##studentDetails |> updateStudentDetails(setState, studentId);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -368,16 +388,88 @@ let removeNoteCB = (setState, studentDetails, noteId) => {
   );
 };
 
+let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
+  <div key className="shadow rounded-lg p-4 flex items-center mt-2">
+    {CoursesStudents__TeamsList.avatar(avatarUrl, name)}
+    <div className="ml-2 md:ml-3">
+      <div className="text-sm font-semibold"> {name |> str} </div>
+      <div className="text-xs"> {title |> str} </div>
+    </div>
+  </div>;
+
+let coachInfo = (teamCoaches, studentDetails) => {
+  let coaches =
+    teamCoaches
+    |> TeamCoach.coachesForTeam(studentDetails |> StudentDetails.team);
+
+  let title =
+    studentDetails |> StudentDetails.teamHasManyStudents
+      ? "Team Coaches" : "Personal Coaches";
+
+  coaches |> ArrayUtils.isNotEmpty
+    ? <div className="mt-8">
+        <h6 className="font-semibold"> {title |> str} </h6>
+        {coaches
+         |> Array.map(coach =>
+              userInfo(
+                ~key=coach |> TeamCoach.userId,
+                ~avatarUrl=coach |> TeamCoach.avatarUrl,
+                ~name=coach |> TeamCoach.name,
+                ~title=coach |> TeamCoach.title,
+              )
+            )
+         |> React.array}
+      </div>
+    : React.null;
+};
+
+let navigateToStudent = (setState, path, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  setState(_ => initialState);
+  ReasonReactRouter.push(path);
+};
+
+let otherTeamMembers = (setState, studentId, studentDetails) =>
+  if (studentDetails |> StudentDetails.teamHasManyStudents) {
+    <div className="block mt-8">
+      <h6 className="font-semibold"> {"Other Team Members" |> str} </h6>
+      {studentDetails
+       |> StudentDetails.team
+       |> TeamInfo.otherStudents(studentId)
+       |> Array.map(student => {
+            let path =
+              "/students/" ++ (student |> TeamInfo.studentId) ++ "/report";
+
+            <a
+              className="block"
+              href=path
+              onClick={navigateToStudent(setState, path)}
+              key={student |> TeamInfo.studentId}>
+              {userInfo(
+                 ~key={
+                   student |> TeamInfo.studentId;
+                 },
+                 ~avatarUrl=student |> TeamInfo.studentAvatarUrl,
+                 ~name=student |> TeamInfo.studentName,
+                 ~title=student |> TeamInfo.studentTitle,
+               )}
+            </a>;
+          })
+       |> React.array}
+    </div>;
+  } else {
+    React.null;
+  };
+
 [@react.component]
 let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
-  let (state, setState) =
-    React.useState(() =>
-      {studentData: Loading, selectedTab: Notes, submissions: Unloaded}
-    );
-  React.useEffect(() => {
+  let (state, setState) = React.useState(() => initialState);
+
+  React.useEffect0(() => {
     ScrollLock.activate();
     Some(() => ScrollLock.deactivate());
   });
+
   React.useEffect1(getStudentDetails(studentId, setState), [|studentId|]);
 
   <div
@@ -446,6 +538,8 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
                   </div>
                 </div>
               : React.null}
+           {coachInfo(teamCoaches, studentDetails)}
+           {otherTeamMembers(setState, studentId, studentDetails)}
          </div>
          <div
            className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">

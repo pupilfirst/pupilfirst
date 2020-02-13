@@ -11,6 +11,7 @@ class UpdateTargetMutator < ApplicationQuery
   property :completion_instructions, validates: { length: { maximum: 1000 } }
   property :link_to_complete, validates: { url: true, allow_blank: true }
   property :visibility, validates: { presence: true, inclusion: { in: Target.valid_visibility_types } }
+  property :checklist
 
   validate :target_group_exists
   validate :target_exists

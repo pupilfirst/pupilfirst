@@ -673,7 +673,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_050552) do
     t.boolean "resubmittable", default: true
     t.string "visibility"
     t.jsonb "review_checklist", default: []
-    t.jsonb "checklist"
+    t.jsonb "checklist", default: []
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
@@ -731,7 +731,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_050552) do
     t.boolean "latest"
     t.string "quiz_score"
     t.datetime "evaluated_at"
-    t.jsonb "checklist_response"
+    t.jsonb "checklist_response", default: []
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|

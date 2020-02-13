@@ -1,8 +1,8 @@
 module Types
   class SubmissionChecklistType < Types::BaseObject
     field :title, String, null: false
-    field :type, String, null: false
-    field :answer, String, null: true
-    field :review, String, null: true
+    field :kind, String, null: false
+    field :result, String, null: true
+    field :status, String, null: true
   end
 end

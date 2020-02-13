@@ -3053,7 +3053,7 @@
             "deprecationReason": null
           },
           {
-            "name": "checklistResponse",
+            "name": "checklist",
             "description": "",
             "args": [],
             "type": {
@@ -3067,7 +3067,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "SubmissionChecklistResponse",
+                    "name": "SubmissionChecklist",
                     "ofType": null
                   }
                 }
@@ -3255,11 +3255,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "SubmissionChecklistResponse",
+        "name": "SubmissionChecklist",
         "description": "",
         "fields": [
           {
-            "name": "action",
+            "name": "kind",
             "description": "",
             "args": [],
             "type": {
@@ -3275,23 +3275,7 @@
             "deprecationReason": null
           },
           {
-            "name": "optional",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "response",
+            "name": "result",
             "description": "",
             "args": [],
             "type": {
@@ -3303,7 +3287,7 @@
             "deprecationReason": null
           },
           {
-            "name": "review",
+            "name": "status",
             "description": "",
             "args": [],
             "type": {

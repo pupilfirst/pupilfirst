@@ -37,7 +37,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
   end
 
   def down
-    remove_column :timeline_events, :checklist_response
+    remove_column :timeline_events, :checklist
   end
 
 
@@ -46,7 +46,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
       title: "Quiz",
       result: submission.description,
       kind: "long_text",
-      status: nil,
+      status: "pending",
 
     }
     [description]
@@ -65,7 +65,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
         title: "Link",
         result: link,
         kind: "link",
-        status: nil,
+        status: "pending",
       }
     end
 
@@ -73,7 +73,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
       title: "File",
       result: "",
       kind: "file",
-      status: nil,
+      status: "pending",
     }
 
     checklist = [description] + links + (submission.timeline_event_files.any? ? [file] : [])

@@ -37,16 +37,16 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
   end
 
   def down
-    remove_column :timeline_events, :checklist
+    remove_column :timeline_events, :checklist_response
   end
 
 
   def quiz_checklist(submission)
     description = {
       title: "Quiz",
-      answer: submission.description,
-      type: "long_text",
-      review: nil,
+      result: submission.description,
+      kind: "long_text",
+      status: nil,
 
     }
     [description]
@@ -55,25 +55,25 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
   def submission_checklist(submission)
     description = {
       title: "Description",
-      answer: submission.description,
-      type: "long_text",
-      review: nil,
+      result: submission.description,
+      kind: "long_text",
+      status: nil,
     }
 
     links = submission.links.map do |link|
       {
         title: "Link",
-        answer: link,
-        type: "link",
-        review: nil,
+        result: link,
+        kind: "link",
+        status: nil,
       }
     end
 
     file = {
       title: "File",
-      answer: "",
-      type: "file",
-      review: nil,
+      result: "",
+      kind: "file",
+      status: nil,
     }
 
     checklist = [description] + links + (submission.timeline_event_files.any? ? [file] : [])

@@ -13,6 +13,7 @@ type t = {
   attachments: array(attachment),
   feedback: array(CoursesReview__Feedback.t),
   grades: array(CoursesReview__Grade.t),
+  checklist: array(CoursesReview__SubmissionChecklist.t),
 };
 let id = t => t.id;
 let createdAt = t => t.createdAt;
@@ -23,6 +24,7 @@ let description = t => t.description;
 let attachments = t => t.attachments;
 let grades = t => t.grades;
 let feedback = t => t.feedback;
+let checklist = t => t.checklist;
 let title = attachment => attachment.title;
 let url = attachment => attachment.url;
 let prettyDate = date => date |> DateFns.format("MMMM D, YYYY");
@@ -38,6 +40,7 @@ let make =
       ~feedback,
       ~grades,
       ~evaluatedAt,
+      ~checklist,
     ) => {
   id,
   description,
@@ -48,6 +51,7 @@ let make =
   feedback,
   grades,
   evaluatedAt,
+  checklist,
 };
 
 let makeAttachment = (~title, ~url) => {title, url};
@@ -84,5 +88,7 @@ let makeFromJs = details =>
                   ~value=g##grade,
                 )
               ),
+         ~checklist=
+           s##checklist |> CoursesReview__SubmissionChecklist.makeArrayFromJs,
        )
      );

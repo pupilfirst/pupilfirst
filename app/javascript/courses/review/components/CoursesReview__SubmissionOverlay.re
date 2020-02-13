@@ -39,6 +39,9 @@ module SubmissionDetailsQuery = [%graphql
           feedback{
             id, coachName, coachAvatarUrl, coachTitle, createdAt,value
           },
+          checklist{
+            title, ,kind, result, status
+          }
         }
       }
     }

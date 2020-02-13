@@ -174,6 +174,7 @@ let updateSubmission =
       ~feedback,
       ~grades=newGrades,
       ~evaluatedAt,
+      ~checklist=submission |> Submission.checklist,
     );
   updateSubmissionCB(feedbackUpdate, newSubmission);
 };

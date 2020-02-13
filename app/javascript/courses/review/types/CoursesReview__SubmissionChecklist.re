@@ -52,7 +52,7 @@ let makeStatus = data => {
   };
 };
 
-let makeFromJs = data => {
+let makeArrayFromJs = data => {
   data
   |> Js.Array.map(r =>
        make(~title=r##title, ~result=makeResult(r), ~status=makeStatus(r))

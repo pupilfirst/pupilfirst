@@ -66,15 +66,19 @@ let stringToInt = name => {
   aux(0.0, name) |> int_of_float;
 };
 
-let colors = name => {
+let computeColors = name => {
   let index = (name |> stringToInt) mod 42;
   let (backgroundColor, blackText) = colors[index];
   (backgroundColor, blackText ? "#000000" : "#FFFFFF");
 };
 
 [@react.component]
-let make = (~name, ~className) => {
-  let (bgColor, fgColor) = colors(name);
+let make = (~colors=?, ~name, ~className) => {
+  let (bgColor, fgColor) =
+    switch (colors) {
+    | Some((bgColor, fgColor)) => (bgColor, fgColor)
+    | None => computeColors(name)
+    };
 
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -97,10 +101,10 @@ let make = (~name, ~className) => {
 };
 
 module Jsx2 = {
-  let make = (~name, ~className, children) =>
+  let make = (~colors=?, ~name, ~className, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~name, ~className, ()),
+      makeProps(~colors?, ~name, ~className, ()),
       children,
     );
 };

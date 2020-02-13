@@ -5,12 +5,23 @@ open CoursesStudents__Types;
 
 let str = React.string;
 
-let avatar = (avatarUrl, name) => {
-  let className = "w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 object-cover";
+let avatarClasses = size => {
+  let (xsSize, mdSize) = size;
+  "w-"
+  ++ xsSize
+  ++ " h-"
+  ++ xsSize
+  ++ " md:w-"
+  ++ mdSize
+  ++ " md:h-"
+  ++ mdSize
+  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 object-cover";
+};
 
+let avatar = (~size=("8", "10"), avatarUrl, name) => {
   switch (avatarUrl) {
-  | Some(avatarUrl) => <img className src=avatarUrl />
-  | None => <Avatar name className />
+  | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
+  | None => <Avatar name className={avatarClasses(size)} />
   };
 };
 
@@ -34,26 +45,59 @@ let levelInfo = (levelId, levels) => {
 };
 
 let coachAvatars = (~title, ~className="", coaches) =>
-  coaches |> ArrayUtils.isNotEmpty
-    ? <div className={"hidden md:inline-block mr-6 " ++ className}>
-        <div className="text-xs"> {title |> str} </div>
-        <div className="mt-1">
-          {coaches
-           |> Array.map(coach => {
-                <Tooltip
-                  tip={coach |> TeamCoach.name |> str}
-                  className="-mr-2"
-                  key={coach |> TeamCoach.userId}>
-                  {avatar(
-                     coach |> TeamCoach.avatarUrl,
-                     coach |> TeamCoach.name,
-                   )}
+  if (coaches |> ArrayUtils.isNotEmpty) {
+    let listedCoaches =
+      coaches |> Array.length <= 4
+        ? coaches : coaches |> Js.Array.slice(~start=0, ~end_=3);
+
+    let otherCoaches =
+      if (coaches |> Array.length > 4) {
+        let names =
+          coaches
+          |> Js.Array.sliceFrom(3)
+          |> Js.Array.map(coach => coach |> TeamCoach.name)
+          |> Js.Array.joinWith(", ");
+        let count = (coaches |> Array.length) - 3;
+        Some((names, count));
+      } else {
+        None;
+      };
+
+    <div className={"hidden md:inline-block mr-6 " ++ className}>
+      <div className="text-xs"> {title |> str} </div>
+      <div className="mt-1">
+        {listedCoaches
+         |> Array.map(coach => {
+              <Tooltip
+                tip={coach |> TeamCoach.name |> str}
+                className="-mr-1"
+                key={coach |> TeamCoach.userId}>
+                {avatar(
+                   ~size=("6", "8"),
+                   coach |> TeamCoach.avatarUrl,
+                   coach |> TeamCoach.name,
+                 )}
+              </Tooltip>
+            })
+         |> React.array}
+        {otherCoaches
+         |> OptionUtils.mapWithDefault(
+              ((names, count)) => {
+                <Tooltip tip={names |> str} className="-mr-1">
+                  <Avatar
+                    name={"+ " ++ (count |> string_of_int)}
+                    className={avatarClasses(("6", "8"))}
+                    colors=("#EEE", "#000")
+                  />
                 </Tooltip>
-              })
-           |> React.array}
-        </div>
+              },
+              React.null,
+            )}
       </div>
-    : <div />;
+    </div>;
+  } else {
+    <div />;
+  };
 
 let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
@@ -131,12 +175,12 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
           <p className="text-xs inline-block leading-tight">
-            {"Team Name" |> str}
+            {"Team" |> str}
           </p>
           <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
-          {coachAvatars(~title="Team Coaches", ~className="mt-1", teamCoaches)}
+          {coachAvatars(~title="Team Coaches", ~className="mt-2", teamCoaches)}
         </div>
       </div>
       <div

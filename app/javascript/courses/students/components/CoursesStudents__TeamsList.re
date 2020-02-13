@@ -34,23 +34,26 @@ let levelInfo = (levelId, levels) => {
 };
 
 let coachAvatars = (~title, ~className="", coaches) =>
-  <div className={"inline-block mr-6 " ++ className}>
-    <div className="text-xs"> {title |> str} </div>
-    <div className="mt-1">
-      {coaches
-       |> Array.map(coach => {
-            let tip = <span> {coach |> TeamCoach.name |> str} </span>;
-
-            <Tooltip
-              tip
-              className="hidden md:inline-block -mr-2"
-              key={coach |> TeamCoach.userId}>
-              {avatar(coach |> TeamCoach.avatarUrl, coach |> TeamCoach.name)}
-            </Tooltip>;
-          })
-       |> React.array}
-    </div>
-  </div>;
+  coaches |> ArrayUtils.isNotEmpty
+    ? <div className={"hidden md:inline-block mr-6 " ++ className}>
+        <div className="text-xs"> {title |> str} </div>
+        <div className="mt-1">
+          {coaches
+           |> Array.map(coach => {
+                <Tooltip
+                  tip={coach |> TeamCoach.name |> str}
+                  className="-mr-2"
+                  key={coach |> TeamCoach.userId}>
+                  {avatar(
+                     coach |> TeamCoach.avatarUrl,
+                     coach |> TeamCoach.name,
+                   )}
+                </Tooltip>
+              })
+           |> React.array}
+        </div>
+      </div>
+    : <div />;
 
 let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
@@ -80,7 +83,7 @@ let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
     </div>
     <div
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
-      className="w-2/5 flex items-center justify-between p-3 md:p-4">
+      className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
       {coachAvatars(~title="Personal Coaches", teamCoaches)}
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>

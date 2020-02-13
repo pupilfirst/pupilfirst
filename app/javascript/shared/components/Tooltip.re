@@ -4,15 +4,25 @@ let str = React.string;
 
 [%bs.raw {|require("./Tooltip.css")|}];
 
-let tipClasses = "overflow-y-auto mt-1 border border-gray-900 z-50 px-2 py-1 shadow-lg leading-snug rounded-lg bg-gray-900 text-white text-center";
-
 let width = testerWidth => {
   let widthInPx = (testerWidth |> string_of_int) ++ "px";
   ReactDOMRe.Style.make(~width=widthInPx, ());
 };
 
+let bubbleClasses = position => {
+  let positionClass =
+    switch (position) {
+    | `Top => "tooltip__bubble--top"
+    | `Right => "tooltip__bubble--right"
+    | `Bottom => "tooltip__bubble--bottom"
+    | `Left => "tooltip__bubble--left"
+    };
+
+  "tooltip__bubble " ++ positionClass;
+};
+
 [@react.component]
-let make = (~tip, ~className="", ~children) => {
+let make = (~tip, ~className="", ~position=`Top, ~children) => {
   let (testerId, _) = React.useState(() => DateTime.randomId());
   let (testerWidth, setTesterWidth) = React.useState(() => 200);
 
@@ -30,15 +40,16 @@ let make = (~tip, ~className="", ~children) => {
     None;
   });
 
-  <div className={"tooltip__container relative " ++ className}>
-    <div id=testerId className={"invisible fixed max-w-xs " ++ tipClasses}>
-      tip
+  <div className={"tooltip " ++ className}>
+    <div id=testerId className="invisible fixed max-w-xs">
+      <div className="text-xs p-2 text-center leading-snug"> tip </div>
     </div>
-    children
-    <div
-      style={width(testerWidth)}
-      className={"tooltip__tip-container absolute " ++ tipClasses}>
-      tip
+    <div className="tooltip__trigger"> children </div>
+    <div style={width(testerWidth)} className={bubbleClasses(position)}>
+      <div
+        className="text-white text-xs p-2 text-center leading-snug rounded bg-gray-900">
+        tip
+      </div>
     </div>
   </div>;
 };

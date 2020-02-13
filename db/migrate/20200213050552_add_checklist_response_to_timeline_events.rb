@@ -57,7 +57,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
       title: "Description",
       result: submission.description,
       kind: "long_text",
-      status: nil,
+      status: "pending",
     }
 
     links = submission.links.map do |link|

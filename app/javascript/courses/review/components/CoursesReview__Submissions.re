@@ -214,12 +214,17 @@ let make =
         </div>
       </div>
       <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
-        <MarkdownBlock
-          profile=Markdown.Permissive
-          markdown={submission |> Submission.description}
+        <CoursesReview__SubmissionChecklistShow
+          checklist={submission |> Submission.checklist}
         />
-        {showSubmissions(submission |> Submission.attachments)}
       </div>
+      // <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
+      //   <MarkdownBlock
+      //     profile=Markdown.Permissive
+      //     markdown={submission |> Submission.description}
+      //   />
+      //   {showSubmissions(submission |> Submission.attachments)}
+      // </div>
       <CoursesReview__GradeCard
         submission
         evaluationCriteria

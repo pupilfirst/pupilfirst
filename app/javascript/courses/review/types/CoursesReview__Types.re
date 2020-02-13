@@ -9,3 +9,4 @@ module ReviewedSubmission = CoursesReview__ReviewedSubmission;
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem;
 module ReviewChecklistResult = CoursesReview__ReviewChecklistResult;
 module Student = CoursesReview__Student;
+module Checklist = CoursesReview__SubmissionChecklist;

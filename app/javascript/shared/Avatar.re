@@ -85,12 +85,13 @@ let make = (~name, ~className) => {
     <circle cx="50" cy="50" r="50" fill=bgColor />
     <text
       fill=fgColor
-      fontSize="50"
+      fontSize="42"
       fontFamily="sans-serif"
       x="50"
-      y="50"
+      y="54"
       textAnchor="middle"
-      alignmentBaseline="central">
+      dominantBaseline="middle"
+      alignmentBaseline="middle">
       {initials(name) |> React.string}
     </text>
   </svg>;

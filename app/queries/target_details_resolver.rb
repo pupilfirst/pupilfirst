@@ -11,7 +11,8 @@ class TargetDetailsResolver < ApplicationQuery
       prerequisite_targets: target.prerequisite_targets.pluck(:id),
       completion_instructions: target.completion_instructions,
       link_to_complete: target.link_to_complete,
-      visibility: target.visibility
+      visibility: target.visibility,
+      checklist: target.checklist
     }
   end
 

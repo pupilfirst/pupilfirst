@@ -300,7 +300,7 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
           <MultiSelectForPrerequisiteTargets
             placeholder="Search targets"
             emptySelectionMessage="No targets selected"
-             allItemsSelectedMessage="You have selected all targets!"
+            allItemsSelectedMessage="You have selected all targets!"
             selected
             unselected
             onChange={setPrerequisiteSearch(send)}
@@ -595,8 +595,8 @@ let saveDisabled = state => {
 
 module UpdateTargetQuery = [%graphql
   {|
-   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String! ) {
-     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility  ) {
+   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: [TargetChecklistInput!]! ) {
+     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
         success
        }
      }
@@ -643,6 +643,7 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
     ~completionInstructions=state.completionInstructions,
     ~linkToComplete=state.linkToComplete,
     ~visibility=visibilityAsString,
+    ~checklist=[||],
     (),
   )
   |> GraphqlQuery.sendQuery

@@ -36,8 +36,8 @@ let passed = (grades, evaluationCriteria) =>
 
 module CreateGradingMutation = [%graphql
   {|
-    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!) {
-      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades){
+    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $checklist: JSON!) {
+      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, checklist: $checklist){
         success
       }
     }
@@ -72,15 +72,23 @@ let gradeSubmissionQuery =
     (submissionId, state, setState, evaluationCriteria, updateSubmissionCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
+  let checklist = state.checklist |> SubmissionChecklistItem.encodeArray;
+
   setState(state => {...state, saving: true});
 
   (
     state.newFeedback == ""
-      ? CreateGradingMutation.make(~submissionId, ~grades=jsGradesArray, ())
+      ? CreateGradingMutation.make(
+          ~submissionId,
+          ~grades=jsGradesArray,
+          ~checklist,
+          (),
+        )
       : CreateGradingMutation.make(
           ~submissionId,
           ~feedback=state.newFeedback,
           ~grades=jsGradesArray,
+          ~checklist,
           (),
         )
   )
@@ -91,6 +99,7 @@ let gradeSubmissionQuery =
              ~grades=state.grades,
              ~passed=Some(passed(state.grades, evaluationCriteria)),
              ~newFeedback=Some(state.newFeedback),
+             ~checklist=state.checklist,
            )
          : ();
        setState(state => {...state, saving: false});

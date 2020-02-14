@@ -59,6 +59,7 @@ let updateSubmission =
       ~submission,
       ~currentCoach,
       ~updateSubmissionCB,
+      ~checklist,
     ) => {
   let feedback =
     switch (newFeedback) {
@@ -108,7 +109,7 @@ let updateSubmission =
       ~feedback,
       ~grades=newGrades,
       ~evaluatedAt,
-      ~checklist=submission |> Submission.checklist,
+      ~checklist,
     );
   updateSubmissionCB(feedbackUpdate, newSubmission);
 };

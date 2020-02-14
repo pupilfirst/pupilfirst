@@ -53,15 +53,15 @@ let showlink = link =>
     </span>
   </a>;
 
-let statusIcon = status => {
-  switch ((status: ChecklistItem.status)) {
-  | Passed => <i className="fas fa-check" />
-  | Failed => <i className="fas fa-check" />
-  | Pending => React.null
+let statusIcon = (updateChecklistCB, status) => {
+  switch (updateChecklistCB, status: ChecklistItem.status) {
+  | (None, Passed) => <FaIcon classes="fas fa-check text-green-500 mr-2" />
+  | (None, Failed) => <FaIcon classes="fas fa-times text-red-500 mr-2" />
+  | (_, _) => React.null
   };
 };
 
-let showStatus = (status, updateChecklistCB) => {
+let showStatus = status => {
   switch ((status: ChecklistItem.status)) {
   | Passed =>
     <div
@@ -73,33 +73,58 @@ let showStatus = (status, updateChecklistCB) => {
       className="bg-white border border-red-500 rounded-lg px-1 py-px inline-block text-red-500 text-xs">
       {"Failed" |> str}
     </div>
-  | Pending =>
-    switch (updateChecklistCB) {
-    | Some(callback) =>
-      <div
-        className="bg-white border border-gray-500 rounded-lg px-1 py-px inline-block text-gray-500 text-xs">
-        {"Review now" |> str}
-      </div>
-    | None => React.null
-    }
+  | Pending => React.null
   };
 };
 
+let statusButtonSelectedClasses = (status, currentStatus) => {
+  "border rounded-lg px-1 py-px inline-block text-xs mr-1 "
+  ++ (
+    switch (currentStatus: ChecklistItem.status, status: ChecklistItem.status) {
+    | (Passed, Passed) => "bg-green-500 text-white border-green-700"
+    | (Failed, Failed) => "bg-red-500 text-white border-red-700"
+    | (_, _) => "bg-white text-gray-500 border-gray-500"
+    }
+  );
+};
+
+let statusButtons = (index, status, callback, checklist) =>
+  <div>
+    <div
+      onClick={_ => callback(checklist |> ChecklistItem.makePassed(index))}
+      className={statusButtonSelectedClasses(ChecklistItem.Passed, status)}>
+      {"Done" |> str}
+    </div>
+    <div
+      onClick={_ => callback(checklist |> ChecklistItem.makeFailed(index))}
+      className={statusButtonSelectedClasses(ChecklistItem.Failed, status)}>
+      {"Not Done" |> str}
+    </div>
+    <div
+      onClick={_ => callback(checklist |> ChecklistItem.makePending(index))}
+      className={statusButtonSelectedClasses(ChecklistItem.Pending, status)}>
+      <i className="fas fa-redo" />
+    </div>
+  </div>;
+
 let computeShowResult = (checklistItem, updateChecklistCB) => {
   switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
-  | (None, Pending | Passed | Failed) => true
-  | (Some(_), Pending | Failed) => true
-  | (Some(_), Passed) => false
+  | (Some(_), Pending | Passed | Failed) => true
+  | (None, Pending | Failed) => true
+  | (None, Passed) => false
   };
 };
 
 [@react.component]
-let make = (~checklistItem, ~updateChecklistCB) => {
+let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let (showResult, setShowResult) =
     React.useState(() => computeShowResult(checklistItem, updateChecklistCB));
+  let status = checklistItem |> ChecklistItem.status;
+
   <div className="mt-2 ">
     <div className="text-sm font-semibold flex justify-between">
       <div>
+        {statusIcon(updateChecklistCB, status)}
         <span>
           <i
             className={kindIconClasses(checklistItem |> ChecklistItem.result)}
@@ -111,11 +136,10 @@ let make = (~checklistItem, ~updateChecklistCB) => {
       </div>
       <div className="inline-block">
         {showResult
-           ? React.null
+           ? showStatus(status)
            : <button onClick={_ => setShowResult(_ => true)}>
                <i className="fas fa-chevron-circle-down" />
              </button>}
-        {statusIcon(checklistItem |> ChecklistItem.status)}
       </div>
     </div>
     {showResult
@@ -131,10 +155,11 @@ let make = (~checklistItem, ~updateChecklistCB) => {
               | None => <div> {"Handle Empty" |> str} </div>
               }}
            </div>
-           {showStatus(
-              checklistItem |> ChecklistItem.status,
-              updateChecklistCB,
-            )}
+           {switch (updateChecklistCB) {
+            | Some(callback) =>
+              statusButtons(index, status, callback, checklist)
+            | None => showStatus(status)
+            }}
          </div>
        : React.null}
   </div>;

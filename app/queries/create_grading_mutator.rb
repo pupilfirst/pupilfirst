@@ -4,6 +4,7 @@ class CreateGradingMutator < ApplicationQuery
   property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
   property :feedback, validates: { length: { maximum: 10_000 } }
   property :grades
+  property :checklist
 
   validate :require_valid_submission
   validate :should_not_be_graded
@@ -23,7 +24,8 @@ class CreateGradingMutator < ApplicationQuery
       submission.update!(
         passed_at: (failed? ? nil : Time.now),
         evaluator: coach,
-        evaluated_at: Time.now
+        evaluated_at: Time.now,
+        checklist: checklist
       )
       send_feedback if feedback.present?
     end

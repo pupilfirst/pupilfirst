@@ -11,8 +11,10 @@ let make = (~checklist, ~updateChecklistCB) => {
      |> Array.mapi((index, checklistItem) => {
           <SubmissionChecklistItemShow
             key={index |> string_of_int}
+            index
             checklistItem
             updateChecklistCB
+            checklist
           />
         })
      |> React.array}

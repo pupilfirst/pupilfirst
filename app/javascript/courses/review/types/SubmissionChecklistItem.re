@@ -75,3 +75,58 @@ let makeArrayFromJs = (attachments, checklist) => {
        )
      );
 };
+
+let updateStatus = (checklist, index, status) =>
+  checklist
+  |> Array.mapi((i, t) => {
+       i == index ? make(~title=t.title, ~result=t.result, ~status) : t
+     });
+
+let makePending = (index, checklist) =>
+  updateStatus(checklist, index, Pending);
+
+let makeFailed = (index, checklist) =>
+  updateStatus(checklist, index, Failed);
+
+let makePassed = (index, checklist) =>
+  updateStatus(checklist, index, Passed);
+
+let encodeKind = t =>
+  switch (t.result) {
+  | ShortText(_) => "short_text"
+  | LongText(_) => "long_text"
+  | Link(_) => "link"
+  | Files(_) => "files"
+  | MultiChoice(_) => "multi_choice"
+  | None => "no_action"
+  };
+
+let encodeResult = t =>
+  switch (t.result) {
+  | ShortText(t)
+  | LongText(t)
+  | Link(t) => t
+  | MultiChoice(_)
+  | Files(_) => "files"
+  | None => ""
+  };
+
+let encodeStatus = t => {
+  switch (t.status) {
+  | Pending => "pending"
+  | Passed => "passed"
+  | Failed => "failed"
+  };
+};
+
+let encode = t =>
+  Json.Encode.(
+    object_([
+      ("title", t.title |> string),
+      ("kind", encodeKind(t) |> string),
+      ("status", encodeStatus(t) |> string),
+      ("result", encodeResult(t) |> string),
+    ])
+  );
+
+let encodeArray = checklist => checklist |> Json.Encode.(array(encode));

@@ -15,6 +15,7 @@ type t = {
   grading: list(CoursesCurriculum__Grade.t),
   completionInstructions: option(string),
   navigation,
+  checklist: array(TargetChecklistItem.t),
 };
 
 let submissions = t => t.submissions;
@@ -22,6 +23,7 @@ let submissions = t => t.submissions;
 let pendingUserIds = t => t.pendingUserIds;
 let feedback = t => t.feedback;
 let navigation = t => (t.navigation.previous, t.navigation.next);
+let checklist = t => t.checklist;
 
 type completionType =
   | Evaluated
@@ -58,6 +60,7 @@ let decode = json =>
       |> field("completionInstructions", nullable(string))
       |> Js.Null.toOption,
     navigation: json |> field("navigation", decodeNavigation),
+    checklist: json |> field("checklist", array(TargetChecklistItem.decode)),
   };
 
 let computeCompletionType = targetDetails => {

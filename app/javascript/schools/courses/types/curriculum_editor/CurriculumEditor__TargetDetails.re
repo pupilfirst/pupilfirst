@@ -17,7 +17,7 @@ type t = {
   prerequisiteTargets: array(string),
   targetGroupId: string,
   quiz: array(CurriculumEditor__QuizQuestion.t),
-  checklist: array(CurriculumEditor__TargetChecklistItem.t),
+  checklist: array(TargetChecklistItem.t),
   linkToComplete: option(string),
   visibility,
   completionInstructions: option(string),
@@ -80,7 +80,7 @@ let makeFromJs = targetData => {
   checklist:
     targetData##checklist
     |> Array.map(checklistItem =>
-         checklistItem |> CurriculumEditor__TargetChecklistItem.makeFromJs
+         checklistItem |> TargetChecklistItem.makeFromJs
        ),
   visibility: visibilityFromJs(targetData##visibility),
 };

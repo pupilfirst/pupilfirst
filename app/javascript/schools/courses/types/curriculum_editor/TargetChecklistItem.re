@@ -11,6 +11,10 @@ type t = {
   optional: bool,
 };
 
+let title = t => t.title;
+let kind = t => t.kind;
+let optional = t => t.optional;
+
 let decodeKindString = string => {
   switch (string) {
   | "files" => Files
@@ -36,4 +40,12 @@ let makeFromJs = data => {
   title: data##title,
   kind: kindFromJs(data##kind),
   optional: data##optional,
+};
+
+let decode = json => {
+  Json.Decode.{
+    kind: kindFromJs(json |> field("kind", optional(string))),
+    optional: json |> field("optional", bool),
+    title: json |> field("title", string),
+  };
 };

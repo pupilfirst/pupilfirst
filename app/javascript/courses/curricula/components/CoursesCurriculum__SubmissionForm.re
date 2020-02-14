@@ -196,39 +196,78 @@ let isDescriptionDisabled = formState =>
   };
 
 [@react.component]
-let make = (~authenticityToken, ~target, ~addSubmissionCB, ~preview) => {
+let make =
+    (~authenticityToken, ~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
-    <label htmlFor="submission-description" className="font-semibold pl-1">
-      {"Work on your submission" |> str}
-    </label>
-    <textarea
-      id="submission-description"
-      maxLength=1000
-      disabled={isDescriptionDisabled(state.formState)}
-      value={state.description}
-      className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
-      placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
-      onChange={updateDescription(send)}
-    />
-    <CoursesCurriculum__Attachments
-      attachments={state.attachments}
-      removeAttachmentCB={
-        Some(attachment => send(RemoveAttachment(attachment)))
-      }
-    />
-    {state.attachments |> List.length >= 3
-       ? React.null
-       : <CoursesCurriculum__NewAttachment
-           authenticityToken
-           attachingCB={() => send(UpdateFormState(Attaching))}
-           typingCB={typing => send(SetTypingLink(typing))}
-           attachFileCB={(id, filename) => send(AttachFile(id, filename))}
-           attachUrlCB={url => send(AttachUrl(url))}
-           disabled={isBusy(state.formState)}
-           preview
-         />}
+    {checklist
+     |> Array.mapi((index, checklistItem) => {
+          let key = index |> string_of_int;
+          <div key>
+            <label
+              htmlFor="submission-description" className="font-semibold pl-1">
+              {(checklistItem |> TargetChecklistItem.title)
+               ++ (
+                 checklistItem |> TargetChecklistItem.optional
+                   ? " (optional)" : ""
+               )
+               |> str}
+            </label>
+            {switch (checklistItem |> TargetChecklistItem.kind) {
+             | Some(kind) =>
+               switch (kind) {
+               | Files =>
+                 state.attachments |> List.length >= 3
+                   ? React.null
+                   : <CoursesCurriculum__NewAttachment
+                       authenticityToken
+                       attachingCB={() => send(UpdateFormState(Attaching))}
+                       typingCB={typing => send(SetTypingLink(typing))}
+                       attachFileCB={(id, filename) =>
+                         send(AttachFile(id, filename))
+                       }
+                       attachUrlCB={url => send(AttachUrl(url))}
+                       disabled={isBusy(state.formState)}
+                       preview
+                     />
+               | Link =>
+                 <input
+                   id="attachment_url"
+                   type_="text"
+                   placeholder="Type full URL starting with https://..."
+                   className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
+                 />
+               | ShortText =>
+                 <input
+                   className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   id={"short-text-" ++ key}
+                   type_="text"
+                   maxLength=250
+                 />
+               | LongText =>
+                 <textarea
+                   id="submission-description"
+                   maxLength=1000
+                   disabled={isDescriptionDisabled(state.formState)}
+                   value={state.description}
+                   className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
+                   placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
+                   onChange={updateDescription(send)}
+                 />
+               | MultiChoice =>
+                 <input
+                   className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   id={"short-text-" ++ key}
+                   type_="text"
+                   maxLength=250
+                 />
+               }
+             | None => React.null
+             }}
+          </div>;
+        })
+     |> React.array}
     <div className="flex mt-3 justify-end">
       <button
         onClick={submit(state, send, target, addSubmissionCB)}

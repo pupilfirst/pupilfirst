@@ -375,6 +375,7 @@ let completeSection =
            key="courses-curriculum-submission-form"
            authenticityToken
            target
+           checklist={targetDetails |> TargetDetails.checklist}
            addSubmissionCB={addSubmission(
              target,
              state,
@@ -416,6 +417,7 @@ let completeSection =
          coaches
          users
          preview
+         checklist={targetDetails |> TargetDetails.checklist}
        />
      | (
          Pending | Submitted | Passed | Failed,

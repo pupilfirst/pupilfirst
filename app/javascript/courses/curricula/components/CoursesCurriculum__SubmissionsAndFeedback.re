@@ -294,6 +294,7 @@ let make =
       ~coaches,
       ~users,
       ~preview,
+      ~checklist,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
@@ -325,6 +326,7 @@ let make =
              setShowSubmissionForm,
              addSubmissionCB,
            )}
+           checklist
            preview
          />
        : submissions(

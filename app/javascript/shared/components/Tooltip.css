@@ -9,8 +9,6 @@
 
 .tooltip__bubble {
   width: 140px;
-  /*   min-width: fit-content; */
-  /*   white-space: nowrap; */
   position: absolute;
   z-index: 10;
   display: none;

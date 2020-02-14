@@ -315,7 +315,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches) => {
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
-      <div className="w-full bg-gray-100 relative md:sticky md:top-0">
+      <div className="w-full bg-gray-100 relative md:sticky md:top-0 z-10">
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
           <form

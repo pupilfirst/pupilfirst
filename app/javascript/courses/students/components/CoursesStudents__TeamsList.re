@@ -180,7 +180,7 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
           <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
-          {coachAvatars(~title="Team Coaches", ~className="mt-2", teamCoaches)}
+          {coachAvatars(~title="Team Coaches", ~className="mt-3", teamCoaches)}
         </div>
       </div>
       <div

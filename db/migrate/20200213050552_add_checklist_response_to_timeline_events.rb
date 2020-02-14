@@ -72,7 +72,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
     file = {
       title: "File",
       result: "",
-      kind: "file",
+      kind: "files",
       status: "pending",
     }
 

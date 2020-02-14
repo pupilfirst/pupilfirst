@@ -160,9 +160,7 @@ let addSubmission =
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
-      targetDetails
-      |> TargetDetails.addSubmission(submission)
-      |> TargetDetails.addSubmissionAttachments(submissionAttachments);
+      targetDetails |> TargetDetails.addSubmission(submission);
 
     send(SetTargetDetails(newTargetDetails));
   | None => ()

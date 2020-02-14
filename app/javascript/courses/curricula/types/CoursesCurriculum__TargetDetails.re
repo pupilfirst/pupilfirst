@@ -6,7 +6,6 @@ type navigation = {
 type t = {
   pendingUserIds: list(string),
   submissions: list(CoursesCurriculum__Submission.t),
-  submissionAttachments: list(CoursesCurriculum__SubmissionAttachment.t),
   feedback: list(CoursesCurriculum__Feedback.t),
   quizQuestions: list(CoursesCurriculum__QuizQuestion.t),
   contentBlocks: list(ContentBlock.t),
@@ -19,7 +18,7 @@ type t = {
 };
 
 let submissions = t => t.submissions;
-let submissionAttachments = t => t.submissionAttachments;
+
 let pendingUserIds = t => t.pendingUserIds;
 let feedback = t => t.feedback;
 let navigation = t => (t.navigation.previous, t.navigation.next);
@@ -42,12 +41,6 @@ let decode = json =>
     submissions:
       json
       |> field("submissions", list(CoursesCurriculum__Submission.decode)),
-    submissionAttachments:
-      json
-      |> field(
-           "submissionAttachments",
-           list(CoursesCurriculum__SubmissionAttachment.decode),
-         ),
     feedback:
       json |> field("feedback", list(CoursesCurriculum__Feedback.decode)),
     quizQuestions:
@@ -99,9 +92,4 @@ let grades = (submissionId, t) =>
 let addSubmission = (submission, t) => {
   ...t,
   submissions: [submission, ...t |> submissions],
-};
-
-let addSubmissionAttachments = (attachments, t) => {
-  ...t,
-  submissionAttachments: attachments @ (t |> submissionAttachments),
 };

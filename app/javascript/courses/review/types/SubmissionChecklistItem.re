@@ -35,15 +35,15 @@ let makeAttachment = (~name, ~url) => {name, url};
 let makeAttachments = data =>
   data |> Js.Array.map(a => makeAttachment(~url=a##url, ~name=a##title));
 
-let makeResult = (data, attachments) => {
-  switch (data##result) {
+let makeResult = (result, kind, attachments) => {
+  switch (result) {
   | Some(result) =>
-    switch (data##kind) {
+    switch (kind) {
     | "short_text" => ShortText(result)
     | "long_text" => LongText(result)
     | "link" => Link(result)
     | "multi_choice" => MultiChoice(result)
-    | "files" => Files(makeAttachments(attachments))
+    | "files" => Files(attachments)
     | _ => None
     }
   | None => None
@@ -51,7 +51,7 @@ let makeResult = (data, attachments) => {
 };
 
 let makeStatus = data => {
-  switch (data##status) {
+  switch (data) {
   | "pending" => Pending
   | "passed" => Passed
   | "failed" => Failed
@@ -70,10 +70,30 @@ let makeArrayFromJs = (attachments, checklist) => {
   |> Js.Array.map(c =>
        make(
          ~title=c##title,
-         ~result=makeResult(c, attachments),
-         ~status=makeStatus(c),
+         ~result=
+           makeResult(c##result, c##kind, makeAttachments(attachments)),
+         ~status=makeStatus(c##status),
        )
      );
+};
+
+let decodeAttachment = json =>
+  Json.Decode.{
+    name: json |> field("name", string),
+    url: json |> field("url", string),
+  };
+
+let decode = (attachments, json) => {
+  Json.Decode.{
+    result:
+      makeResult(
+        json |> field("result", optional(string)),
+        json |> field("kind", string),
+        attachments,
+      ),
+    status: makeStatus(json |> field("status", string)),
+    title: json |> field("title", string),
+  };
 };
 
 let updateStatus = (checklist, index, status) =>

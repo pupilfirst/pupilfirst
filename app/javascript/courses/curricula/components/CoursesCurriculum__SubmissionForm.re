@@ -52,7 +52,7 @@ type url = string;
 type state = {
   formState,
   description: string,
-  attachments: list(SubmissionAttachment.attachment),
+  attachments: list(string),
 };
 
 type action =
@@ -61,7 +61,7 @@ type action =
   | UpdateDescription(string)
   | AttachFile(id, filename)
   | AttachUrl(url)
-  | RemoveAttachment(SubmissionAttachment.attachment);
+  | RemoveAttachment(string);
 
 let initialState = {formState: Incomplete, description: "", attachments: []};
 
@@ -99,34 +99,10 @@ let reducer = (state, action) =>
     }
   | AttachFile(id, filename) => {
       ...state,
-      attachments: [
-        SubmissionAttachment.File(
-          id,
-          filename,
-          "/timeline_event_files/" ++ id ++ "/download",
-        ),
-        ...state.attachments,
-      ],
+      attachments: [id, ...state.attachments],
       formState: descriptionToFormState(state.description),
     }
-  | AttachUrl(url) =>
-    let attachment =
-      state.attachments
-      |> ListUtils.findOpt(attachment =>
-           switch (attachment) {
-           | SubmissionAttachment.File(_, _, _) => false
-           | Link(storedUrl) => url == storedUrl
-           }
-         );
-
-    switch (attachment) {
-    | Some(_attachment) => state
-    | None => {
-        ...state,
-        attachments: [Link(url), ...state.attachments],
-        formState: descriptionToFormState(state.description),
-      }
-    };
+  | AttachUrl(url) => state
   | RemoveAttachment(attachment) => {
       ...state,
       attachments: state.attachments |> List.filter(a => a != attachment),
@@ -155,33 +131,25 @@ module CreateSubmissionQuery = [%graphql
   |}
 ];
 
-let attachmentValues = attachments =>
-  attachments
-  |> List.map(attachment =>
-       switch (attachment) {
-       | SubmissionAttachment.File(id, _, _) => id
-       | Link(url) => url
-       }
-     )
-  |> Array.of_list;
+let attachmentValues = attachments => attachments |> Array.of_list;
 
 let submit = (state, send, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   send(UpdateFormState(Saving));
 
-  let (fileAttachments, linkAttachments) =
-    state.attachments
-    |> List.partition(attachment =>
-         switch (attachment) {
-         | SubmissionAttachment.File(_, _, _) => true
-         | Link(_) => false
-         }
-       );
+  // let (fileAttachments, linkAttachments) =
+  //   state.attachments
+  //   |> List.partition(attachment =>
+  //        switch (attachment) {
+  //        | SubmissionAttachment.File(_, _, _) => true
+  //        | Link(_) => false
+  //        }
+  //      );
 
-  let fileIds = attachmentValues(fileAttachments);
-  let links = attachmentValues(linkAttachments);
-
+  let fileIds = [||];
+  // let links = attachmentValues(linkAttachments);
+  let links = [|"", ""|];
   CreateSubmissionQuery.make(
     ~targetId=target |> Target.id,
     ~description=state.description,
@@ -197,15 +165,10 @@ let submit = (state, send, target, addSubmissionCB, event) => {
          let newSubmission =
            Submission.make(
              ~id=submission##id,
-             ~description=state.description |> String.trim,
              ~createdAt=submission##createdAt,
              ~status=Submission.Pending,
            );
-         let newAttachments =
-           state.attachments
-           |> List.map(attachment =>
-                SubmissionAttachment.make(submission##id, attachment)
-              );
+         let newAttachments = submission##id;
 
          Js.log("Calling addSubmissionCB in SubmissionForm");
          addSubmissionCB(newSubmission, newAttachments);

@@ -34,7 +34,6 @@ let createQuizSubmission =
          addSubmissionCB(
            Submission.make(
              ~id=submission##id,
-             ~description=submission##description,
              ~createdAt=submission##createdAt,
              ~status=Submission.MarkedAsComplete,
            ),

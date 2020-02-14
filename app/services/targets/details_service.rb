@@ -12,7 +12,6 @@ module Targets
         {
           pending_user_ids: pending_user_ids,
           submissions: details_for_submissions,
-          submission_attachments: attachments_for_submissions,
           feedback: feedback_for_submissions,
           grading: grading,
           **default_props
@@ -21,7 +20,6 @@ module Targets
         {
           pending_user_ids: [],
           submissions: [],
-          submission_attachments: [],
           feedback: [],
           grading: [],
           **default_props
@@ -100,9 +98,10 @@ module Targets
       submissions.map do |submission|
         {
           id: submission.id,
-          description: submission.description,
           created_at: submission.created_at,
-          status: submission.status
+          status: submission.status,
+          checklist: submission.checklist,
+          attachments: attachments(submission)
         }
       end
     end
@@ -130,28 +129,13 @@ module Targets
       end
     end
 
-    def attachments_for_submissions
-      submissions.map do |submission|
-        files = submission.timeline_event_files.with_attached_file.map do |file|
-          {
-            id: file.id,
-            submission_id: submission.id,
-            submission_type: "file",
-            title: file.file.filename,
-            url: url_helpers.download_timeline_event_file_path(file)
-          }
-        end
-
-        links = submission.links.map do |link|
-          {
-            submission_id: submission.id,
-            submission_type: "link",
-            url: link
-          }
-        end
-
-        files + links
-      end.flatten
+    def attachments(submission)
+      submission.timeline_event_files.with_attached_file.map do |file|
+        {
+          name: file.file.filename,
+          url: url_helpers.download_timeline_event_file_path(file)
+        }
+      end
     end
 
     def quiz_questions

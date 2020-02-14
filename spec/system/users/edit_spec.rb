@@ -99,7 +99,7 @@ feature 'User Edit' do
 
     click_button 'Save Changes'
 
-    expect(page).to have_text('New password does not match')
+    expect(page).to have_text('New password confirmation does not match')
     expect(user.reload.encrypted_password).to be_blank
 
     # Check basic success.

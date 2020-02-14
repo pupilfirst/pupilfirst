@@ -3628,17 +3628,13 @@
         "description": "",
         "fields": [
           {
-            "name": "action",
+            "name": "kind",
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8634,7 +8630,7 @@
             "defaultValue": null
           },
           {
-            "name": "action",
+            "name": "kind",
             "description": "",
             "type": {
               "kind": "NON_NULL",

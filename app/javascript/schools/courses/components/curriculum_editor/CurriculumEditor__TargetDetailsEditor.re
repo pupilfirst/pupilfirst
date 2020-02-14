@@ -37,6 +37,7 @@ type state = {
   saving: bool,
   loading: bool,
   visibility: TargetDetails.visibility,
+  checklist: array(ChecklistItem.t),
   completionInstructions: string,
 };
 
@@ -80,6 +81,11 @@ module TargetDetailsQuery = [%graphql
         visibility
         linkToComplete
         role
+        checklist {
+          title
+          kind
+          optional
+        }
       }
   }
 |}
@@ -140,6 +146,7 @@ let reducer = (state, action) =>
         | None => ""
         },
       visibility: targetDetails.visibility,
+      checklist: targetDetails.checklist,
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
@@ -676,6 +683,7 @@ let make =
         dirty: false,
         saving: false,
         loading: true,
+        checklist: [||],
         visibility: TargetDetails.Draft,
         completionInstructions: "",
       },

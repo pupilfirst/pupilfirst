@@ -73,11 +73,11 @@ class Target < ApplicationRecord
   VISIBILITY_ARCHIVED = 'archived'
   VISIBILITY_DRAFT = 'draft'
 
-  CHECKLIST_ACTION_SHORT_TEXT = 'short_text'
-  CHECKLIST_ACTION_LONG_TEXT = 'long_text'
-  CHECKLIST_ACTION_ATTACH_LINKS = 'link'
-  CHECKLIST_ACTION_ATTACH_FILES = 'files'
-  CHECKLIST_ACTION_MULTI_CHOICE = 'multi_choice'
+  CHECKLIST_KIND_SHORT_TEXT = 'short_text'
+  CHECKLIST_KIND_LONG_TEXT = 'long_text'
+  CHECKLIST_KIND_ATTACH_LINKS = 'link'
+  CHECKLIST_KIND_ATTACH_FILES = 'files'
+  CHECKLIST_KIND_MULTI_CHOICE = 'multi_choice'
 
   def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
@@ -87,8 +87,8 @@ class Target < ApplicationRecord
     [VISIBILITY_LIVE, VISIBILITY_ARCHIVED, VISIBILITY_DRAFT].freeze
   end
 
-  def self.valid_checklist_action_types
-    [CHECKLIST_ACTION_ATTACH_FILES, CHECKLIST_ACTION_ATTACH_LINKS, CHECKLIST_ACTION_LONG_TEXT, CHECKLIST_ACTION_MULTI_CHOICE, CHECKLIST_ACTION_SHORT_TEXT].freeze
+  def self.valid_checklist_kind_types
+    [CHECKLIST_KIND_ATTACH_FILES, CHECKLIST_KIND_ATTACH_LINKS, CHECKLIST_KIND_LONG_TEXT, CHECKLIST_KIND_MULTI_CHOICE, CHECKLIST_KIND_SHORT_TEXT].freeze
   end
 
   validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true

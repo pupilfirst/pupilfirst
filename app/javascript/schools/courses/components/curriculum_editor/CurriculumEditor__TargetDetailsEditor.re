@@ -31,7 +31,7 @@ type state = {
   prerequisiteSearchInput: string,
   evaluationCriteriaSearchInput: string,
   methodOfCompletion,
-  quiz: array(TargetDetails__QuizQuestion.t),
+  quiz: array(QuizQuestion.t),
   linkToComplete: string,
   dirty: bool,
   saving: bool,
@@ -52,11 +52,8 @@ type action =
   | UpdateCompletionInstructions(string)
   | UpdateTargetRole(TargetDetails.role)
   | AddQuizQuestion
-  | UpdateQuizQuestion(
-      TargetDetails__QuizQuestion.id,
-      TargetDetails__QuizQuestion.t,
-    )
-  | RemoveQuizQuestion(TargetDetails__QuizQuestion.id)
+  | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
+  | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateVisibility(TargetDetails.visibility)
   | UpdateSaving
   | ResetEditor;
@@ -122,7 +119,7 @@ let reducer = (state, action) =>
     let methodOfCompletion = computeMethodOfCompletion(targetDetails);
     let quiz =
       targetDetails.quiz |> ArrayUtils.isNotEmpty
-        ? targetDetails.quiz : [|TargetDetails__QuizQuestion.empty("0")|];
+        ? targetDetails.quiz : [|QuizQuestion.empty("0")|];
     {
       ...state,
       title: targetDetails.title,
@@ -186,24 +183,16 @@ let reducer = (state, action) =>
     let quiz =
       Array.append(
         state.quiz,
-        [|
-          TargetDetails__QuizQuestion.empty(
-            Js.Date.now() |> Js.Float.toString,
-          ),
-        |],
+        [|QuizQuestion.empty(Js.Date.now() |> Js.Float.toString)|],
       );
     {...state, quiz, dirty: true};
   | UpdateQuizQuestion(id, quizQuestion) =>
     let quiz =
       state.quiz
-      |> Array.map(q =>
-           TargetDetails__QuizQuestion.id(q) == id ? quizQuestion : q
-         );
+      |> Array.map(q => QuizQuestion.id(q) == id ? quizQuestion : q);
     {...state, quiz, dirty: true};
   | RemoveQuizQuestion(id) =>
-    let quiz =
-      state.quiz
-      |> Js.Array.filter(q => TargetDetails__QuizQuestion.id(q) != id);
+    let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
   | UpdateSaving => {...state, saving: !state.saving}
@@ -527,7 +516,7 @@ let methodOfCompletionSelector = (state, send) => {
 let isValidQuiz = quiz => {
   quiz
   |> Js.Array.filter(quizQuestion =>
-       quizQuestion |> TargetDetails__QuizQuestion.isValidQuizQuestion != true
+       quizQuestion |> QuizQuestion.isValidQuizQuestion != true
      )
   |> ArrayUtils.isEmpty;
 };
@@ -560,7 +549,7 @@ let quizEditor = (state, send) => {
        {state.quiz
         |> Array.mapi((index, quizQuestion) =>
              <CurriculumEditor__TargetQuizQuestion
-               key={quizQuestion |> TargetDetails__QuizQuestion.id}
+               key={quizQuestion |> QuizQuestion.id}
                questionNumber={index + 1 |> string_of_int}
                quizQuestion
                updateQuizQuestionCB={updateQuizQuestionCB(send)}
@@ -614,9 +603,9 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   let quiz =
     state.quiz
     |> Js.Array.filter(question =>
-         TargetDetails__QuizQuestion.isValidQuizQuestion(question)
+         QuizQuestion.isValidQuizQuestion(question)
        )
-    |> TargetDetails__QuizQuestion.quizAsJsObject;
+    |> QuizQuestion.quizAsJsObject;
   let visibility =
     switch (state.visibility) {
     | Live => Target.Live

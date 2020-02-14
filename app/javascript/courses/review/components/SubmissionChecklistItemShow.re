@@ -121,7 +121,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
     React.useState(() => computeShowResult(checklistItem, updateChecklistCB));
   let status = checklistItem |> ChecklistItem.status;
 
-  <div className="mt-2 ">
+  <div className="mt-2 p-2 bg-white shadow rounded-lg">
     <div className="text-sm font-semibold flex justify-between">
       <div>
         {statusIcon(updateChecklistCB, status)}
@@ -158,7 +158,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
            {switch (updateChecklistCB) {
             | Some(callback) =>
               statusButtons(index, status, callback, checklist)
-            | None => showStatus(status)
+            | None => React.null
             }}
          </div>
        : React.null}

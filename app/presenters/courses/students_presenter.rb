@@ -23,7 +23,7 @@ module Courses
     def levels
       @course.levels.map do |level|
         level_attributes = level.attributes.slice('id', 'name', 'number')
-        level_attributes.merge!(teams_in_level: level.startups.count)
+        level_attributes.merge!(teams_in_level: level.startups.active.count)
       end
     end
 

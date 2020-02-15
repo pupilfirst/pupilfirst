@@ -224,7 +224,7 @@ let make =
     setDirty(_ => true);
   };
 
-  let saveDisabled = name == "" || !dirty;
+  let saveDisabled = name |> String.trim == "" || !dirty;
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
@@ -250,7 +250,7 @@ let make =
           />
           <School__InputGroupError
             message="is not a valid name"
-            active={dirty ? name == "" : false}
+            active={dirty ? name |> String.trim == "" : false}
           />
         </div>
         <div className="flex items-center mt-6">

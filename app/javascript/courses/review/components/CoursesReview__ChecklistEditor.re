@@ -156,6 +156,10 @@ let invalidChecklist = reviewChecklist => {
   |> ArrayUtils.isNotEmpty;
 };
 
+let validTitle = title => {
+  title |> String.trim !== "";
+};
+
 [@react.component]
 let make =
     (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
@@ -193,9 +197,13 @@ let make =
                     }
                   />
                   <School__InputGroupError
-                    message="Title should be greater than 2 characters"
+                    message="Not a valid title"
                     active={
-                      reviewChecklistItem |> ReviewChecklistItem.title == ""
+                      !(
+                        reviewChecklistItem
+                        |> ReviewChecklistItem.title
+                        |> validTitle
+                      )
                     }
                   />
                 </div>
@@ -295,9 +303,13 @@ let make =
                               }
                             />
                             <School__InputGroupError
-                              message="Title should be greater than 2 characters"
+                              message="Not a valid title"
                               active={
-                                resultItem |> ReviewChecklistResult.title == ""
+                                !(
+                                  resultItem
+                                  |> ReviewChecklistResult.title
+                                  |> validTitle
+                                )
                               }
                             />
                           </div>

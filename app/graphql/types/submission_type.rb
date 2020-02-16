@@ -29,21 +29,12 @@ module Types
     end
 
     def attachments
-      files = object.timeline_event_files.with_attached_file.map do |file|
+      object.timeline_event_files.with_attached_file.map do |file|
         {
           title: file.file.filename,
           url: Rails.application.routes.url_helpers.download_timeline_event_file_path(file)
         }
       end
-
-      links = object.links.map do |link|
-        {
-          title: nil,
-          url: link
-        }
-      end
-
-      files + links
     end
   end
 end

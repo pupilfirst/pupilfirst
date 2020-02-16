@@ -3,6 +3,7 @@ module Mutations
     argument :submission_id, ID, required: true
     argument :grades, [Types::GradeInputType], required: true
     argument :feedback, String, required: false
+    argument :checklist, GraphQL::Types::JSON, required: true
 
     description "Create grading for submission"
 

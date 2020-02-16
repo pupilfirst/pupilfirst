@@ -50,3 +50,11 @@ let makeFromJs = data => {
   kind: kindFromJs(data##kind),
   optional: data##optional,
 };
+
+let decode = json => {
+  Json.Decode.{
+    kind: kindFromJs(json |> field("kind", string)),
+    optional: json |> field("optional", bool),
+    title: json |> field("title", string),
+  };
+};

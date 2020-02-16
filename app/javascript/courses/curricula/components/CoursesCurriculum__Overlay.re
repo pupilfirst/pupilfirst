@@ -160,9 +160,7 @@ let addSubmission =
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
-      targetDetails
-      |> TargetDetails.addSubmission(submission)
-      |> TargetDetails.addSubmissionAttachments(submissionAttachments);
+      targetDetails |> TargetDetails.addSubmission(submission);
 
     send(SetTargetDetails(newTargetDetails));
   | None => ()
@@ -377,6 +375,7 @@ let completeSection =
            key="courses-curriculum-submission-form"
            authenticityToken
            target
+           checklist={targetDetails |> TargetDetails.checklist}
            addSubmissionCB={addSubmission(
              target,
              state,
@@ -418,6 +417,7 @@ let completeSection =
          coaches
          users
          preview
+         checklist={targetDetails |> TargetDetails.checklist}
        />
      | (
          Pending | Submitted | Passed | Failed,

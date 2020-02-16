@@ -1,8 +1,3 @@
-type attachment = {
-  title: option(string),
-  url: string,
-};
-
 type t = {
   id: string,
   description: string,
@@ -10,10 +5,9 @@ type t = {
   passedAt: option(Js.Date.t),
   evaluatorName: option(string),
   evaluatedAt: option(Js.Date.t),
-  attachments: array(attachment),
   feedback: array(CoursesReview__Feedback.t),
   grades: array(CoursesReview__Grade.t),
-  checklist: array(CoursesReview__SubmissionChecklist.t),
+  checklist: array(SubmissionChecklistItem.t),
 };
 let id = t => t.id;
 let createdAt = t => t.createdAt;
@@ -21,12 +15,9 @@ let passedAt = t => t.passedAt;
 let evaluatorName = t => t.evaluatorName;
 let evaluatedAt = t => t.evaluatedAt;
 let description = t => t.description;
-let attachments = t => t.attachments;
 let grades = t => t.grades;
 let feedback = t => t.feedback;
 let checklist = t => t.checklist;
-let title = attachment => attachment.title;
-let url = attachment => attachment.url;
 let prettyDate = date => date |> DateFns.format("MMMM D, YYYY");
 
 let make =
@@ -36,7 +27,6 @@ let make =
       ~createdAt,
       ~passedAt,
       ~evaluatorName,
-      ~attachments,
       ~feedback,
       ~grades,
       ~evaluatedAt,
@@ -47,14 +37,11 @@ let make =
   createdAt,
   passedAt,
   evaluatorName,
-  attachments,
   feedback,
   grades,
   evaluatedAt,
   checklist,
 };
-
-let makeAttachment = (~title, ~url) => {title, url};
 
 let makeFromJs = details =>
   details
@@ -66,9 +53,6 @@ let makeFromJs = details =>
          ~passedAt=s##passedAt |> OptionUtils.map(DateFns.parseString),
          ~evaluatorName=s##evaluatorName,
          ~evaluatedAt=s##evaluatedAt |> OptionUtils.map(DateFns.parseString),
-         ~attachments=
-           s##attachments
-           |> Js.Array.map(a => makeAttachment(~url=a##url, ~title=a##title)),
          ~feedback=
            s##feedback
            |> Js.Array.map(f =>
@@ -89,6 +73,7 @@ let makeFromJs = details =>
                 )
               ),
          ~checklist=
-           s##checklist |> CoursesReview__SubmissionChecklist.makeArrayFromJs,
+           s##checklist
+           |> SubmissionChecklistItem.makeArrayFromJs(s##attachments),
        )
      );

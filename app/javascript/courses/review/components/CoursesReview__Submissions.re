@@ -36,71 +36,6 @@ let showFeedbackSent = feedbackSent =>
       </div>
     : React.null;
 
-let iconSpan = (iconClasses, attachment) => {
-  let faClasses =
-    switch (attachment |> Submission.title) {
-    | Some(_) => "far fa-file"
-    | None => "fas fa-link"
-    };
-  <span
-    className={
-      "flex h-full w-8 justify-center items-center p-2 " ++ iconClasses
-    }>
-    <i className=faClasses />
-  </span>;
-};
-let showSubmissions = attachments =>
-  switch (attachments) {
-  | [||] => React.null
-  | attachments =>
-    <div className="mt-3">
-      <h5 className="text-xs font-semibold"> {"Attachments" |> str} </h5>
-      <div className="flex flex-wrap">
-        {attachments
-         |> Array.map(attachment => {
-              let (key, containerClasses, iconClasses, textClasses, text, url) =
-                switch (attachment |> Submission.title) {
-                | Some(title) => (
-                    "file-" ++ (attachment |> Submission.url),
-                    "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
-                    "bg-primary-200",
-                    "bg-primary-100",
-                    title,
-                    attachment |> Submission.url,
-                  )
-                | None => (
-                    attachment |> Submission.url,
-                    "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
-                    "bg-blue-200",
-                    "bg-blue-100",
-                    attachment |> Submission.url,
-                    attachment |> Submission.url,
-                  )
-                };
-
-              <a
-                key
-                href=url
-                target="_blank"
-                className={
-                  "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
-                  ++ containerClasses
-                }>
-                {iconSpan(iconClasses, attachment)}
-                <span
-                  className={
-                    "course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose "
-                    ++ textClasses
-                  }>
-                  {text |> str}
-                </span>
-              </a>;
-            })
-         |> React.array}
-      </div>
-    </div>
-  };
-
 let cardClasses = submission =>
   "mt-6 rounded-b-lg bg-white border-t-3 "
   ++ (
@@ -124,6 +59,7 @@ let updateSubmission =
       ~submission,
       ~currentCoach,
       ~updateSubmissionCB,
+      ~checklist,
     ) => {
   let feedback =
     switch (newFeedback) {
@@ -170,11 +106,10 @@ let updateSubmission =
         } else {
           Some(currentCoach |> Coach.name);
         },
-      ~attachments=submission |> Submission.attachments,
       ~feedback,
       ~grades=newGrades,
       ~evaluatedAt,
-      ~checklist=submission |> Submission.checklist,
+      ~checklist,
     );
   updateSubmissionCB(feedbackUpdate, newSubmission);
 };
@@ -213,18 +148,6 @@ let make =
           {showSubmissionStatus(submission)}
         </div>
       </div>
-      <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
-        <CoursesReview__SubmissionChecklistShow
-          checklist={submission |> Submission.checklist}
-        />
-      </div>
-      // <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
-      //   <MarkdownBlock
-      //     profile=Markdown.Permissive
-      //     markdown={submission |> Submission.description}
-      //   />
-      //   {showSubmissions(submission |> Submission.attachments)}
-      // </div>
       <CoursesReview__GradeCard
         submission
         evaluationCriteria

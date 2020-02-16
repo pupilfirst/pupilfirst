@@ -52,7 +52,7 @@ type url = string;
 type state = {
   formState,
   description: string,
-  attachments: list(SubmissionAttachment.attachment),
+  attachments: list(string),
 };
 
 type action =
@@ -61,7 +61,7 @@ type action =
   | UpdateDescription(string)
   | AttachFile(id, filename)
   | AttachUrl(url)
-  | RemoveAttachment(SubmissionAttachment.attachment);
+  | RemoveAttachment(string);
 
 let initialState = {formState: Incomplete, description: "", attachments: []};
 
@@ -99,34 +99,10 @@ let reducer = (state, action) =>
     }
   | AttachFile(id, filename) => {
       ...state,
-      attachments: [
-        SubmissionAttachment.File(
-          id,
-          filename,
-          "/timeline_event_files/" ++ id ++ "/download",
-        ),
-        ...state.attachments,
-      ],
+      attachments: [id, ...state.attachments],
       formState: descriptionToFormState(state.description),
     }
-  | AttachUrl(url) =>
-    let attachment =
-      state.attachments
-      |> ListUtils.findOpt(attachment =>
-           switch (attachment) {
-           | SubmissionAttachment.File(_, _, _) => false
-           | Link(storedUrl) => url == storedUrl
-           }
-         );
-
-    switch (attachment) {
-    | Some(_attachment) => state
-    | None => {
-        ...state,
-        attachments: [Link(url), ...state.attachments],
-        formState: descriptionToFormState(state.description),
-      }
-    };
+  | AttachUrl(url) => state
   | RemoveAttachment(attachment) => {
       ...state,
       attachments: state.attachments |> List.filter(a => a != attachment),
@@ -155,33 +131,25 @@ module CreateSubmissionQuery = [%graphql
   |}
 ];
 
-let attachmentValues = attachments =>
-  attachments
-  |> List.map(attachment =>
-       switch (attachment) {
-       | SubmissionAttachment.File(id, _, _) => id
-       | Link(url) => url
-       }
-     )
-  |> Array.of_list;
+let attachmentValues = attachments => attachments |> Array.of_list;
 
 let submit = (state, send, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   send(UpdateFormState(Saving));
 
-  let (fileAttachments, linkAttachments) =
-    state.attachments
-    |> List.partition(attachment =>
-         switch (attachment) {
-         | SubmissionAttachment.File(_, _, _) => true
-         | Link(_) => false
-         }
-       );
+  // let (fileAttachments, linkAttachments) =
+  //   state.attachments
+  //   |> List.partition(attachment =>
+  //        switch (attachment) {
+  //        | SubmissionAttachment.File(_, _, _) => true
+  //        | Link(_) => false
+  //        }
+  //      );
 
-  let fileIds = attachmentValues(fileAttachments);
-  let links = attachmentValues(linkAttachments);
-
+  let fileIds = [||];
+  // let links = attachmentValues(linkAttachments);
+  let links = [|"", ""|];
   CreateSubmissionQuery.make(
     ~targetId=target |> Target.id,
     ~description=state.description,
@@ -197,15 +165,10 @@ let submit = (state, send, target, addSubmissionCB, event) => {
          let newSubmission =
            Submission.make(
              ~id=submission##id,
-             ~description=state.description |> String.trim,
              ~createdAt=submission##createdAt,
              ~status=Submission.Pending,
            );
-         let newAttachments =
-           state.attachments
-           |> List.map(attachment =>
-                SubmissionAttachment.make(submission##id, attachment)
-              );
+         let newAttachments = submission##id;
 
          Js.log("Calling addSubmissionCB in SubmissionForm");
          addSubmissionCB(newSubmission, newAttachments);
@@ -233,39 +196,81 @@ let isDescriptionDisabled = formState =>
   };
 
 [@react.component]
-let make = (~authenticityToken, ~target, ~addSubmissionCB, ~preview) => {
+let make =
+    (~authenticityToken, ~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
-    <label htmlFor="submission-description" className="font-semibold pl-1">
-      {"Work on your submission" |> str}
-    </label>
-    <textarea
-      id="submission-description"
-      maxLength=1000
-      disabled={isDescriptionDisabled(state.formState)}
-      value={state.description}
-      className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
-      placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
-      onChange={updateDescription(send)}
-    />
-    <CoursesCurriculum__Attachments
-      attachments={state.attachments}
-      removeAttachmentCB={
-        Some(attachment => send(RemoveAttachment(attachment)))
-      }
-    />
-    {state.attachments |> List.length >= 3
-       ? React.null
-       : <CoursesCurriculum__NewAttachment
-           authenticityToken
-           attachingCB={() => send(UpdateFormState(Attaching))}
-           typingCB={typing => send(SetTypingLink(typing))}
-           attachFileCB={(id, filename) => send(AttachFile(id, filename))}
-           attachUrlCB={url => send(AttachUrl(url))}
-           disabled={isBusy(state.formState)}
-           preview
-         />}
+    {checklist
+     |> Array.mapi((index, checklistItem) => {
+          let key = index |> string_of_int;
+          <div key>
+            <label
+              htmlFor="submission-description" className="font-semibold pl-1">
+              {(checklistItem |> TargetChecklistItem.title)
+               ++ (
+                 checklistItem |> TargetChecklistItem.optional
+                   ? " (optional)" : ""
+               )
+               |> str}
+            </label>
+            {switch (checklistItem |> TargetChecklistItem.kind) {
+             | Files =>
+               state.attachments |> List.length >= 3
+                 ? React.null
+                 : <CoursesCurriculum__NewAttachment
+                     authenticityToken
+                     attachingCB={() => send(UpdateFormState(Attaching))}
+                     typingCB={typing => send(SetTypingLink(typing))}
+                     attachFileCB={(id, filename) =>
+                       send(AttachFile(id, filename))
+                     }
+                     attachUrlCB={url => send(AttachUrl(url))}
+                     disabled={isBusy(state.formState)}
+                     preview
+                   />
+             | Link =>
+               <input
+                 id="attachment_url"
+                 type_="text"
+                 placeholder="Type full URL starting with https://..."
+                 className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
+               />
+             | ShortText =>
+               <input
+                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                 id={"short-text-" ++ key}
+                 type_="text"
+                 maxLength=250
+               />
+             | LongText =>
+               <textarea
+                 id="submission-description"
+                 maxLength=1000
+                 disabled={isDescriptionDisabled(state.formState)}
+                 value={state.description}
+                 className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
+                 placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
+                 onChange={updateDescription(send)}
+               />
+             | MultiChoice =>
+               <input
+                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                 id={"short-text-" ++ key}
+                 type_="text"
+                 maxLength=250
+               />
+             | Statement =>
+               <input
+                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                 id={"statement-" ++ key}
+                 type_="text"
+                 maxLength=250
+               />
+             }}
+          </div>;
+        })
+     |> React.array}
     <div className="flex mt-3 justify-end">
       <button
         onClick={submit(state, send, target, addSubmissionCB)}

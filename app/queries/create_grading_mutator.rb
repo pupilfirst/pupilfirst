@@ -4,11 +4,13 @@ class CreateGradingMutator < ApplicationQuery
   property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
   property :feedback, validates: { length: { maximum: 10_000 } }
   property :grades
+  property :checklist
 
   validate :require_valid_submission
   validate :should_not_be_graded
   validate :valid_evaluation_criteria
   validate :valid_grading
+  validate :valid_checklist
 
   def grade
     TimelineEvent.transaction do
@@ -23,13 +25,22 @@ class CreateGradingMutator < ApplicationQuery
       submission.update!(
         passed_at: (failed? ? nil : Time.now),
         evaluator: coach,
-        evaluated_at: Time.now
+        evaluated_at: Time.now,
+        checklist: checklist
       )
       send_feedback if feedback.present?
     end
   end
 
   private
+
+  def valid_checklist
+    return if checklist.respond_to?(:all?) && checklist.all? do |item|
+      item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) && item['status'].in?(TimelineEvent.valid_checklist_status) && item['result'].is_a?(String)
+    end
+
+    errors[:base] << 'Invalid checklist'
+  end
 
   def send_feedback
     startup_feedback = StartupFeedback.create!(

@@ -124,15 +124,6 @@ let submissions =
        s1CreatedAt |> DateFns.differenceInSeconds(s2CreatedAt) |> int_of_float;
      })
   |> List.map(submission => {
-       let attachments =
-         targetDetails
-         |> TargetDetails.submissionAttachments
-         |> List.filter(a =>
-              a
-              |> SubmissionAttachment.submissionId
-              == (submission |> Submission.id)
-            );
-
        let grades =
          targetDetails |> TargetDetails.grades(submission |> Submission.id);
 
@@ -152,23 +143,10 @@ let submissions =
          <div
            className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
            <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
-             <MarkdownBlock
-               profile=Markdown.Permissive
-               markdown={submission |> Submission.description}
+             <SubmissionChecklistShow
+               checklist={submission |> Submission.checklist}
+               updateChecklistCB=None
              />
-             {attachments |> ListUtils.isEmpty
-                ? React.null
-                : <div className="mt-2">
-                    <div className="text-xs font-semibold">
-                      {"Attachments" |> str}
-                    </div>
-                    <CoursesCurriculum__Attachments
-                      removeAttachmentCB=None
-                      attachments={SubmissionAttachment.onlyAttachments(
-                        attachments,
-                      )}
-                    />
-                  </div>}
            </div>
            {switch (submission |> Submission.status) {
             | MarkedAsComplete =>
@@ -316,6 +294,7 @@ let make =
       ~coaches,
       ~users,
       ~preview,
+      ~checklist,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
@@ -347,6 +326,7 @@ let make =
              setShowSubmissionForm,
              addSubmissionCB,
            )}
+           checklist
            preview
          />
        : submissions(

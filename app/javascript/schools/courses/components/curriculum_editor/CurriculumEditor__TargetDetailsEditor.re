@@ -770,6 +770,27 @@ let make =
                  </button>
                </div>
              </div>
+             <div className="mb-6">
+               <label
+                 className="block tracking-wide text-sm font-semibold mr-6"
+                 htmlFor="evaluated">
+                 <span className="mr-2">
+                   <i className="fas fa-list text-base" />
+                 </span>
+                 {"What steps should the student take to complete this target?"
+                  |> str}
+               </label>
+               <div className="ml-6 mb-6">
+                 {state.checklist
+                  |> Array.mapi((index, checklistItem) =>
+                       <CurriculumEditor__TargetChecklistItemEditor
+                         checklistItem
+                         index
+                       />
+                     )
+                  |> React.array}
+               </div>
+             </div>
              {targetEvaluated(state.methodOfCompletion)
                 ? React.null : methodOfCompletionSelector(state, send)}
              {switch (state.methodOfCompletion) {

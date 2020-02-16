@@ -3,21 +3,38 @@ type kind =
   | Link
   | ShortText
   | LongText
-  | MultiChoice;
+  | MultiChoice
+  | Statement;
 
 type t = {
   title: string,
-  kind: option(kind),
+  kind,
   optional: bool,
 };
 
-let decodeKindString = string => {
-  switch (string) {
+let title = t => t.title;
+let kind = t => t.kind;
+let optional = t => t.optional;
+
+let actionStringForKind = kind => {
+  switch (kind) {
+  | Files => "Upload Files"
+  | Link => "Attach Links"
+  | ShortText => "Write Short Text"
+  | LongText => "Write Long Text"
+  | MultiChoice => "Choose from the list"
+  | Statement => "Read Statement"
+  };
+};
+
+let kindFromJs = data => {
+  switch (data) {
   | "files" => Files
   | "link" => Link
   | "short_text" => ShortText
   | "long_text" => LongText
   | "multi_choice" => MultiChoice
+  | "statement" => Statement
   | kind =>
     Rollbar.error(
       "Unkown kind: "
@@ -26,10 +43,6 @@ let decodeKindString = string => {
     );
     LongText;
   };
-};
-
-let kindFromJs = data => {
-  data |> OptionUtils.map(decodeKindString);
 };
 
 let makeFromJs = data => {

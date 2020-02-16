@@ -2,9 +2,6 @@ ruby '2.6.5'
 
 source 'https://rubygems.org'
 
-# Required to suppress warnings about insecure :github source.
-git_source(:github) { |repository_path| "https://github.com/#{repository_path}.git" }
-
 # Ruby on Rails. http://rubyonrails.org
 gem 'rails', '~> 6.0.1'
 

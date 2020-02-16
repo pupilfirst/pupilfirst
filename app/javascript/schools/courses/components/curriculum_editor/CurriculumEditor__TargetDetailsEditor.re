@@ -56,6 +56,7 @@ type action =
   | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
   | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateVisibility(TargetDetails.visibility)
+  | UpdateChecklist(array(ChecklistItem.t))
   | UpdateSaving
   | ResetEditor;
 
@@ -202,6 +203,7 @@ let reducer = (state, action) =>
     let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateChecklist(checklist) => {...state, checklist, dirty: true}
   | UpdateSaving => {...state, saving: !state.saving}
   | ResetEditor => {...state, saving: false, dirty: false}
   };
@@ -656,6 +658,27 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
+let updateChecklistItemTitle = (state, send, newTitle, indexToChange) => {
+  let newChecklist =
+    state.checklist
+    |> Array.mapi((index, checklistItem) =>
+         index == indexToChange
+           ? ChecklistItem.updateTitle(newTitle, checklistItem)
+           : checklistItem
+       );
+  send(UpdateChecklist(newChecklist));
+};
+
+let updateChecklistItemKind = (state, send, kind, indexToChange) => {
+  let newChecklist =
+    state.checklist
+    |> Array.mapi((index, checklistItem) =>
+         index == indexToChange
+           ? ChecklistItem.updateKind(kind, checklistItem) : checklistItem
+       );
+  send(UpdateChecklist(newChecklist));
+};
+
 [@react.component]
 let make =
     (
@@ -784,8 +807,11 @@ let make =
                  {state.checklist
                   |> Array.mapi((index, checklistItem) =>
                        <CurriculumEditor__TargetChecklistItemEditor
+                         key={index |> string_of_int}
                          checklistItem
                          index
+                         updateTitleCB={updateChecklistItemTitle(state, send)}
+                         updateKindCB={updateChecklistItemKind(state, send)}
                        />
                      )
                   |> React.array}

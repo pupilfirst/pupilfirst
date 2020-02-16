@@ -27,6 +27,14 @@ let actionStringForKind = kind => {
   };
 };
 
+let updateTitle = (title, t) => {
+  {...t, title};
+};
+
+let updateKind = (kind, t) => {
+  {...t, kind};
+};
+
 let kindFromJs = data => {
   switch (data) {
   | "files" => Files

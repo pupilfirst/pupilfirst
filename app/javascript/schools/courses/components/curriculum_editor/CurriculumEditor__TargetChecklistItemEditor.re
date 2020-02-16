@@ -4,7 +4,7 @@ open CurriculumEditor__Types;
 
 let str = React.string;
 
-let checklistDropdown = checklistItem => {
+let checklistDropdown = (checklistItem, indexToChange, updateKindCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
   let selected =
     <button className="border appearance-none inline-flex items-center">
@@ -19,14 +19,23 @@ let checklistDropdown = checklistItem => {
   let contents =
     [|ChecklistItem.LongText, ShortText, Files, Link, MultiChoice, Statement|]
     |> Js.Array.filter(kind => kind != selectedKind)
-    |> Array.map(kind =>
-         <button> {kind |> ChecklistItem.actionStringForKind |> str} </button>
+    |> Array.mapi((index, kind) =>
+         <button
+           key={index |> string_of_int}
+           onClick={_ => updateKindCB(kind, indexToChange)}>
+           {kind |> ChecklistItem.actionStringForKind |> str}
+         </button>
        );
   <Dropdown selected contents />;
 };
 
+let updateTitle = (updateTitleCB, index, event) => {
+  let title = ReactEvent.Form.target(event)##value;
+  updateTitleCB(title, index);
+};
+
 [@react.component]
-let make = (~checklistItem, ~index) => {
+let make = (~checklistItem, ~index, ~updateTitleCB, ~updateKindCB) => {
   <div className="mt-2">
     {<div
        className="flex-col bg-gray-100 mb-2 p-2" key={index |> string_of_int}>
@@ -35,7 +44,7 @@ let make = (~checklistItem, ~index) => {
            <span className="font-semibold text-sm mr-2">
              {(index + 1 |> string_of_int) ++ "." |> str}
            </span>
-           {checklistDropdown(checklistItem)}
+           {checklistDropdown(checklistItem, index, updateKindCB)}
          </div>
          <div className="items-center">
            <input
@@ -54,8 +63,9 @@ let make = (~checklistItem, ~index) => {
        <div
          className="flex items-center ml-3 text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-3 focus:outline-none focus:bg-white focus:border-primary-300">
          <input
-           className="flex-grow appearance-none bg-transparent border-none text-gray-700 leading-snug focus:outline-none"
+           className="flex-grow appearance-none bg-transparent border-none leading-snug focus:outline-none"
            placeholder="Describe this step"
+           onChange={updateTitle(updateTitleCB, index)}
            type_="text"
            value={checklistItem |> ChecklistItem.title}
          />

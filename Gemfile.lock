@@ -703,7 +703,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scarf (0.2.5)
+    scarf (0.2.6)
     scout_apm (2.6.1)
       parser
     seedbank (0.5.0)

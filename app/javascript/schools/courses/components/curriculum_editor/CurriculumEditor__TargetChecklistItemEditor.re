@@ -15,6 +15,13 @@ let updateKind = (checklistItem, updateChecklistItemCB, kind) => {
   updateChecklistItemCB(newChecklistItem);
 };
 
+let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
+  let optional = ReactEvent.Form.target(event)##checked;
+  let newChecklistItem =
+    checklistItem |> ChecklistItem.updateOptional(optional);
+  updateChecklistItemCB(newChecklistItem);
+};
+
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
   let selected =
@@ -58,6 +65,7 @@ let make = (~checklistItem, ~index, ~updateChecklistItemCB) => {
            <input
              className="leading-tight"
              type_="checkbox"
+             onChange={updateOptional(checklistItem, updateChecklistItemCB)}
              id={index |> string_of_int}
              checked={checklistItem |> ChecklistItem.optional}
            />

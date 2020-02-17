@@ -658,7 +658,7 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
-let updateChecklistItem = (state, send,indexToChange, newChecklistItem) => {
+let updateChecklistItem = (state, send, indexToChange, newChecklistItem) => {
   let newChecklist =
     state.checklist
     |> Array.mapi((index, checklistItem) =>

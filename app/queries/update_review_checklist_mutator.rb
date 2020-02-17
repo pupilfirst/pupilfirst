@@ -18,15 +18,18 @@ class UpdateReviewChecklistMutator < ApplicationQuery
   # rubocop: disable Metrics/CyclomaticComplexity
   def review_checklist_shape
     return if review_checklist.respond_to?(:all?) && review_checklist.all? do |item|
-      item['title'].is_a?(String) && item['result'].respond_to?(:all?) && item['result'].all? do |result|
-        result['title'].is_a?(String) && (result['feedback'].nil? || result['feedback'].is_a?(String))
+      valid_title?(item['title']) && item['result'].respond_to?(:all?) && item['result'].all? do |result|
+        valid_title?(result['title']) && (result['feedback'].nil? || result['feedback'].is_a?(String))
       end
     end
 
     errors[:base] << 'Invalid review checklist'
   end
-
   # rubocop: enable  Metrics/CyclomaticComplexity
+
+  def valid_title?(title)
+    title.is_a?(String) && title.length >= 2
+  end
 
   def target
     @target = current_school.targets.find_by(id: target_id)

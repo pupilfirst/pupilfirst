@@ -218,15 +218,12 @@ let make =
              | Files =>
                state.attachments |> List.length >= 3
                  ? React.null
-                 : <CoursesCurriculum__NewAttachment
+                 : <CoursesCurriculum__FileForm
                      authenticityToken
                      attachingCB={() => send(UpdateFormState(Attaching))}
-                     typingCB={typing => send(SetTypingLink(typing))}
                      attachFileCB={(id, filename) =>
                        send(AttachFile(id, filename))
                      }
-                     attachUrlCB={url => send(AttachUrl(url))}
-                     disabled={isBusy(state.formState)}
                      preview
                    />
              | Link =>

@@ -28,7 +28,7 @@ class UpdateReviewChecklistMutator < ApplicationQuery
   # rubocop: enable  Metrics/CyclomaticComplexity
 
   def valid_title?(title)
-    title.is_a?(String) && title.length >= 2
+    title.is_a?(String) && title.length > 2
   end
 
   def target

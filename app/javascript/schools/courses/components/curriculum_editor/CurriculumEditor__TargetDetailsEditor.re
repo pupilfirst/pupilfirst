@@ -658,23 +658,11 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
-let updateChecklistItemTitle = (state, send, newTitle, indexToChange) => {
+let updateChecklistItem = (state, send,indexToChange, newChecklistItem) => {
   let newChecklist =
     state.checklist
     |> Array.mapi((index, checklistItem) =>
-         index == indexToChange
-           ? ChecklistItem.updateTitle(newTitle, checklistItem)
-           : checklistItem
-       );
-  send(UpdateChecklist(newChecklist));
-};
-
-let updateChecklistItemKind = (state, send, kind, indexToChange) => {
-  let newChecklist =
-    state.checklist
-    |> Array.mapi((index, checklistItem) =>
-         index == indexToChange
-           ? ChecklistItem.updateKind(kind, checklistItem) : checklistItem
+         index == indexToChange ? newChecklistItem : checklistItem
        );
   send(UpdateChecklist(newChecklist));
 };
@@ -810,8 +798,11 @@ let make =
                          key={index |> string_of_int}
                          checklistItem
                          index
-                         updateTitleCB={updateChecklistItemTitle(state, send)}
-                         updateKindCB={updateChecklistItemKind(state, send)}
+                         updateChecklistItemCB={updateChecklistItem(
+                           state,
+                           send,
+                           index,
+                         )}
                        />
                      )
                   |> React.array}

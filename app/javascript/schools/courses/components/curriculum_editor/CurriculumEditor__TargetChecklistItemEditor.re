@@ -4,7 +4,18 @@ open CurriculumEditor__Types;
 
 let str = React.string;
 
-let checklistDropdown = (checklistItem, indexToChange, updateKindCB) => {
+let updateTitle = (checklistItem, updateChecklistItemCB, event) => {
+  let title = ReactEvent.Form.target(event)##value;
+  let newChecklistItem = checklistItem |> ChecklistItem.updateTitle(title);
+  updateChecklistItemCB(newChecklistItem);
+};
+
+let updateKind = (checklistItem, updateChecklistItemCB, kind) => {
+  let newChecklistItem = checklistItem |> ChecklistItem.updateKind(kind);
+  updateChecklistItemCB(newChecklistItem);
+};
+
+let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
   let selected =
     <button className="border appearance-none inline-flex items-center">
@@ -22,20 +33,17 @@ let checklistDropdown = (checklistItem, indexToChange, updateKindCB) => {
     |> Array.mapi((index, kind) =>
          <button
            key={index |> string_of_int}
-           onClick={_ => updateKindCB(kind, indexToChange)}>
+           onClick={_ =>
+             updateKind(checklistItem, updateChecklistItemCB, kind)
+           }>
            {kind |> ChecklistItem.actionStringForKind |> str}
          </button>
        );
   <Dropdown selected contents />;
 };
 
-let updateTitle = (updateTitleCB, index, event) => {
-  let title = ReactEvent.Form.target(event)##value;
-  updateTitleCB(title, index);
-};
-
 [@react.component]
-let make = (~checklistItem, ~index, ~updateTitleCB, ~updateKindCB) => {
+let make = (~checklistItem, ~index, ~updateChecklistItemCB) => {
   <div className="mt-2">
     {<div
        className="flex-col bg-gray-100 mb-2 p-2" key={index |> string_of_int}>
@@ -44,7 +52,7 @@ let make = (~checklistItem, ~index, ~updateTitleCB, ~updateKindCB) => {
            <span className="font-semibold text-sm mr-2">
              {(index + 1 |> string_of_int) ++ "." |> str}
            </span>
-           {checklistDropdown(checklistItem, index, updateKindCB)}
+           {checklistDropdown(checklistItem, updateChecklistItemCB)}
          </div>
          <div className="items-center">
            <input
@@ -65,7 +73,7 @@ let make = (~checklistItem, ~index, ~updateTitleCB, ~updateKindCB) => {
          <input
            className="flex-grow appearance-none bg-transparent border-none leading-snug focus:outline-none"
            placeholder="Describe this step"
-           onChange={updateTitle(updateTitleCB, index)}
+           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
            type_="text"
            value={checklistItem |> ChecklistItem.title}
          />

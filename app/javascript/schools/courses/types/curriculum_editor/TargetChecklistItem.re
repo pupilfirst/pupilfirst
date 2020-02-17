@@ -27,12 +27,20 @@ let actionStringForKind = kind => {
   };
 };
 
+let make = (~title, ~kind, ~optional) => {
+  {title, kind, optional};
+};
+
 let updateTitle = (title, t) => {
   {...t, title};
 };
 
 let updateKind = (kind, t) => {
   {...t, kind};
+};
+
+let updateOptional = (optional, t) => {
+  {...t, optional};
 };
 
 let kindFromJs = data => {

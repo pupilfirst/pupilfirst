@@ -176,7 +176,7 @@ feature "Course students list", js: true do
         find('.tooltip__trigger', text: '+2').hover
       end
 
-      find('.tooltip__bubble').text.strip.split(', ').each do |name|
+      find('.tooltip__bubble').text.strip.split("\n").each do |name|
         expect(name).to be_in(possible_names)
       end
     end

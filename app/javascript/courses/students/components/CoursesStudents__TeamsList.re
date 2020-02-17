@@ -55,8 +55,13 @@ let coachAvatars = (~title, ~className="", coaches) =>
         let names =
           coaches
           |> Js.Array.sliceFrom(3)
-          |> Js.Array.map(coach => coach |> TeamCoach.name)
-          |> Js.Array.joinWith(", ");
+          |> Js.Array.map(coach => {
+               <div key={coach |> TeamCoach.userId}>
+                 {coach |> TeamCoach.name |> str}
+               </div>
+             })
+          |> React.array;
+
         let count = (coaches |> Array.length) - 3;
         Some((names, count));
       } else {
@@ -83,7 +88,7 @@ let coachAvatars = (~title, ~className="", coaches) =>
         {otherCoaches
          |> OptionUtils.mapWithDefault(
               ((names, count)) => {
-                <Tooltip tip={names |> str} className="-mr-1">
+                <Tooltip tip=names className="-mr-1">
                   <Avatar
                     name={"+ " ++ (count |> string_of_int)}
                     className={avatarClasses(("6", "8"))}

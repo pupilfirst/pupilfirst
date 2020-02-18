@@ -112,11 +112,25 @@ module CourseExports
       target.timeline_events.pending_review.joins(:founders).where(founders: { id: students.pluck(:id) }).distinct('timeline_events.id').count
     end
 
+    def report_path(student)
+      @report_path_prefix ||= begin
+        school = @course_export.user.school
+        "https://#{school.domains.primary.fqdn}/students"
+      end
+
+      "#{@report_path_prefix}/#{student.id}/report"
+    end
+
+    def student_report_link(student)
+      "oooc:=HYPERLINK(\"#{report_path(student)}\"; \"#{student.id}\")"
+    end
+
     def student_rows
       rows = students.map do |student|
         user = student.user
 
         [
+          { formula: student_report_link(student) },
           user.email,
           user.name,
           user.title,
@@ -125,7 +139,7 @@ module CourseExports
         ] + average_grades_for_student(student)
       end
 
-      [['Email Address', 'Name', 'Title', 'Affiliation', 'Tags'] + evaluation_criteria_names] + rows
+      [['ID', 'Email Address', 'Name', 'Title', 'Affiliation', 'Tags'] + evaluation_criteria_names] + rows
     end
 
     def submission_rows

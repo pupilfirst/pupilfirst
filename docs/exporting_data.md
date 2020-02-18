@@ -26,7 +26,7 @@ This sheet also includes the number of students who have submitted work on each 
 
 ### Students
 
-This is the list of active students requested in the export, and contains their personal details and tags. The first column, `Email Address`, will be used to identify the student in the _Submissions_ sheet.
+This is the list of active students requested in the export, and contains their personal details and tags. The first column, `ID`, is a unique identifier for the student and links to the student's report page. The second column, `Email Address`, will be used to identify the student in the _Submissions_ sheet.
 
 Similar to the _Targets_ sheet, this sheet also includes the average grade received by the student grouped by evaluation criteria.
 

@@ -63,6 +63,19 @@ let removeMultichoiceOption = (choiceIndex, t) => {
   };
 };
 
+let addMultichoiceOption = t => {
+  switch (t.kind) {
+  | MultiChoice(choices) =>
+    let updatedChoices = [|""|] |> Array.append(choices);
+    t |> updateKind(MultiChoice(updatedChoices));
+  | Files
+  | Link
+  | ShortText
+  | LongText
+  | Statement => t
+  };
+};
+
 let kindFromJs = (data, metaData) => {
   switch (data) {
   | "files" => Files

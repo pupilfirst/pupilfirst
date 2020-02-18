@@ -67,7 +67,8 @@ let multiChoiceEditor =
     (choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB) => {
   <div className="ml-3 mt-3">
     <div className="text-xs font-semibold mb-2"> {"Choices:" |> str} </div>
-    {choices
+    {let showRemoveIcon = Array.length(choices) > 2;
+     choices
      |> Array.mapi((index, choice) =>
           <div
             key={index |> string_of_int}
@@ -90,7 +91,8 @@ let multiChoiceEditor =
                     updateChecklistItemCB,
                   )
                 }>
-                <PfIcon className="if i-times-light if-fw" />
+                {showRemoveIcon
+                   ? <PfIcon className="if i-times-light if-fw" /> : React.null}
               </button>
             </div>
           </div>

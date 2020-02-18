@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :target do
-    title { Faker::Lorem.words(6).join ' ' }
+    title { Faker::Lorem.words(number: 6).join ' ' }
     role { Target.valid_roles.sample }
     target_group
     sequence(:sort_index)
@@ -27,6 +27,13 @@ FactoryBot.define do
 
     trait :for_team do
       role { Target::ROLE_TEAM }
+    end
+
+    trait :with_markdown do
+      after(:create) do |target|
+        target_version = create(:target_version, target: target)
+        create(:content_block, :empty_markdown, target_version: target_version)
+      end
     end
 
     trait :with_content do

@@ -1,6 +1,6 @@
 {
   "name": "@pupilfirst/multiselect-inline",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A multi-select inline dropdown component for ReasonReact projects",
   "keywords": [
     "Reason",
@@ -15,7 +15,7 @@
     "Mahesh Krishna Kumar <maheshcet@gmail.com>",
     "Vinu T. V. <vinutv91@gmail.com>"
   ],
-  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/overhaul-target-editor/app/javascript/packages/multiselect-inline",
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-inline",
   "license": "MIT",
   "main": "components/MultiselectInline.re",
   "publishConfig": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SVdotCO/pupilfirst/tree/overhaul-target-editor/app/javascript/packages/multiselect-dropdown"
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-inline"
   },
   "devDependencies": {
     "bs-platform": "7.0.1",

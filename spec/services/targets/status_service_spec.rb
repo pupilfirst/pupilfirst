@@ -39,8 +39,20 @@ describe Targets::StatusService do
       context 'when the target is from a higher level than the startup' do
         let(:startup) { create :startup, level: level_1 }
 
-        it 'returns :level_locked' do
-          expect(subject.status).to eq(Targets::StatusService::STATUS_LEVEL_LOCKED)
+        context 'when the target is reviewed by a coach' do
+          let(:evaluation_criterion) { create :evaluation_criterion, course: course }
+
+          before do
+            founder_target_1.evaluation_criteria << evaluation_criterion
+          end
+
+          it 'returns :level_locked' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_LEVEL_LOCKED)
+          end
+        end
+
+        it 'returns :pending for auto-verified target' do
+          expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
         end
       end
 

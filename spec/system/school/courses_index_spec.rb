@@ -12,7 +12,7 @@ feature 'Courses Index', js: true do
 
   let!(:school_admin) { create :school_admin, school: school }
 
-  let(:course_name) { Faker::Lorem.words(2).join ' ' }
+  let(:course_name) { Faker::Lorem.words(number: 2).join ' ' }
   let(:description) { Faker::Lorem.sentences.join ' ' }
 
   def file_path(filename)
@@ -54,7 +54,7 @@ feature 'Courses Index', js: true do
   end
 
   context 'when a course exists' do
-    let(:new_course_name) { Faker::Lorem.words(2).join ' ' }
+    let(:new_course_name) { Faker::Lorem.words(number: 2).join ' ' }
     let(:new_about) { Faker::Lorem.paragraph }
     let(:new_description) { Faker::Lorem.sentences.join ' ' }
     let(:course_end_date) { Date.today }

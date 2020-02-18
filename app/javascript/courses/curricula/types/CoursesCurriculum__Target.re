@@ -13,6 +13,7 @@ type t = {
   sortIndex: int,
   resubmittable: bool,
   prerequisiteTargetIds: list(string),
+  reviewed: bool,
 };
 
 let decode = json =>
@@ -30,6 +31,7 @@ let decode = json =>
     resubmittable: json |> field("resubmittable", bool),
     prerequisiteTargetIds:
       json |> field("prerequisiteTargetIds", list(string)),
+    reviewed: json |> field("reviewed", bool),
   };
 
 let id = t => t.id;
@@ -38,3 +40,4 @@ let sortIndex = t => t.sortIndex;
 let targetGroupId = t => t.targetGroupId;
 let prerequisiteTargetIds = t => t.prerequisiteTargetIds;
 let resubmittable = t => t.resubmittable;
+let reviewed = t => t.reviewed;

@@ -23,14 +23,14 @@ feature 'School students index', js: true do
   let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: tags }
 
   let(:name_1) { Faker::Name.name }
-  let(:email_1) { Faker::Internet.email(name_1) }
-  let(:title_1) { Faker::Lorem.words(2).join(" ") }
-  let(:affiliation_1) { Faker::Lorem.words(2).join(" ") }
+  let(:email_1) { Faker::Internet.email(name: name_1) }
+  let(:title_1) { Faker::Lorem.words(number: 2).join(" ") }
+  let(:affiliation_1) { Faker::Lorem.words(number: 2).join(" ") }
 
   let(:name_2) { Faker::Name.name }
-  let(:email_2) { Faker::Internet.email(name_2) }
+  let(:email_2) { Faker::Internet.email(name: name_2) }
 
-  let!(:new_team_name) { (Faker::Lorem.words(4).join ' ').titleize }
+  let!(:new_team_name) { (Faker::Lorem.words(number: 4).join ' ').titleize }
 
   let!(:course_coach) { create :faculty, school: school }
   let!(:coach) { create :faculty, school: school }
@@ -174,7 +174,7 @@ feature 'School students index', js: true do
 
         # Then a new student.
         fill_in 'Name', with: name_3
-        fill_in 'Email', with: Faker::Internet.email(name_3)
+        fill_in 'Email', with: Faker::Internet.email(name: name_3)
         click_button 'Add to List'
 
         # Try to save both.

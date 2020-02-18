@@ -26,7 +26,7 @@ class StartupMailerPreview < ActionMailer::Preview
       id: 1,
       connect_slot: connect_slot,
       startup: Startup.last,
-      questions: Faker::Lorem.paragraphs(2).join("\n\n"),
+      questions: Faker::Lorem.paragraphs(number: 2).join("\n\n"),
       status: ConnectRequest::STATUS_CONFIRMED,
       meeting_link: 'https://example.com/meeting_url'
     )

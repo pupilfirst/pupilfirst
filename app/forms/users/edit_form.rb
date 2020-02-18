@@ -67,7 +67,6 @@ module Users
     def new_passwords_should_match
       return if new_password == new_password_confirmation
 
-      errors[:new_password] << 'does not match'
       errors[:new_password_confirmation] << 'does not match'
     end
 

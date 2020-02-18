@@ -11,8 +11,8 @@ feature 'SA Communities Editor', js: true do
   let!(:community_1) { create :community, school: school }
   let!(:community_2) { create :community, school: school }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:new_community_name) { Faker::Lorem.words(2).join ' ' }
-  let!(:new_community_name_for_edit) { Faker::Lorem.words(2).join ' ' }
+  let!(:new_community_name) { Faker::Lorem.words(number: 2).join ' ' }
+  let!(:new_community_name_for_edit) { Faker::Lorem.words(number: 2).join ' ' }
 
   scenario 'school admin visits a community editor' do
     sign_in_user school_admin.user, referer: school_communities_path

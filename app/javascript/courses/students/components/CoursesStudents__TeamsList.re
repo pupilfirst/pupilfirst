@@ -5,18 +5,23 @@ open CoursesStudents__Types;
 
 let str = React.string;
 
-let studentAvatar = (student: TeamInfo.student) => {
-  switch (student.avatarUrl) {
-  | Some(avatarUrl) =>
-    <img
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-      src=avatarUrl
-    />
-  | None =>
-    <Avatar
-      name={student |> TeamInfo.studentName}
-      className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
-    />
+let avatarClasses = size => {
+  let (xsSize, mdSize) = size;
+  "w-"
+  ++ xsSize
+  ++ " h-"
+  ++ xsSize
+  ++ " md:w-"
+  ++ mdSize
+  ++ " md:h-"
+  ++ mdSize
+  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 object-cover";
+};
+
+let avatar = (~size=("8", "10"), avatarUrl, name) => {
+  switch (avatarUrl) {
+  | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
+  | None => <Avatar name className={avatarClasses(size)} />
   };
 };
 
@@ -39,7 +44,67 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let showStudent = (team, levels, openOverlayCB) => {
+let coachAvatars = (~title, ~className="", coaches) =>
+  if (coaches |> ArrayUtils.isNotEmpty) {
+    let listedCoaches =
+      coaches |> Array.length <= 4
+        ? coaches : coaches |> Js.Array.slice(~start=0, ~end_=3);
+
+    let otherCoaches =
+      if (coaches |> Array.length > 4) {
+        let names =
+          coaches
+          |> Js.Array.sliceFrom(3)
+          |> Js.Array.map(coach => {
+               <div key={coach |> TeamCoach.userId}>
+                 {coach |> TeamCoach.name |> str}
+               </div>
+             })
+          |> React.array;
+
+        let count = (coaches |> Array.length) - 3;
+        Some((names, count));
+      } else {
+        None;
+      };
+
+    <div className={"hidden md:inline-block mr-6 " ++ className}>
+      <div className="text-xs"> {title |> str} </div>
+      <div className="mt-1">
+        {listedCoaches
+         |> Array.map(coach => {
+              <Tooltip
+                tip={coach |> TeamCoach.name |> str}
+                className="-mr-1"
+                key={coach |> TeamCoach.userId}>
+                {avatar(
+                   ~size=("6", "8"),
+                   coach |> TeamCoach.avatarUrl,
+                   coach |> TeamCoach.name,
+                 )}
+              </Tooltip>
+            })
+         |> React.array}
+        {otherCoaches
+         |> OptionUtils.mapWithDefault(
+              ((names, count)) => {
+                <Tooltip tip=names className="-mr-1">
+                  <Avatar
+                    name={"+ " ++ (count |> string_of_int)}
+                    className={avatarClasses(("6", "8"))}
+                    colors=("#EEE", "#000")
+                  />
+                </Tooltip>
+              },
+              React.null,
+            )}
+      </div>
+    </div>;
+  } else {
+    <div />;
+  };
+
+let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
   <a
     href={"/students/" ++ (student |> TeamInfo.studentId) ++ "/report"}
@@ -50,8 +115,11 @@ let showStudent = (team, levels, openOverlayCB) => {
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div
         className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
-        {studentAvatar(student)}
-        <div className="block text-sm md:pr-2">
+        {avatar(
+           student |> TeamInfo.studentAvatarUrl,
+           student |> TeamInfo.studentName,
+         )}
+        <div className="ml-2 md:ml-3 block text-sm md:pr-2">
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
@@ -64,13 +132,14 @@ let showStudent = (team, levels, openOverlayCB) => {
     </div>
     <div
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
-      className="w-2/5 flex items-center justify-end p-3 md:p-4">
+      className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
+      {coachAvatars(~title="Personal Coaches", teamCoaches)}
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </a>;
 };
 
-let showTeam = (team, levels, openOverlayCB) => {
+let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
   <div
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
@@ -88,8 +157,11 @@ let showTeam = (team, levels, openOverlayCB) => {
               onClick={openOverlayCB(student |> TeamInfo.studentId)}
               className="flex items-center bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100">
               <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
-                {studentAvatar(student)}
-                <div className="text-sm flex flex-col">
+                {avatar(
+                   student |> TeamInfo.studentAvatarUrl,
+                   student |> TeamInfo.studentName,
+                 )}
+                <div className="ml-2 md:ml-3 text-sm flex flex-col">
                   <p className="font-semibold inline-block leading-snug ">
                     {student |> TeamInfo.studentName |> str}
                   </p>
@@ -104,16 +176,16 @@ let showTeam = (team, levels, openOverlayCB) => {
        |> React.array}
     </div>
     <div
-      className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l p-3 md:px-4 md:py-5">
+      className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
-          <p
-            className="text-xs bg-green-200 inline-block leading-tight px-1 py-px rounded">
+          <p className="text-xs inline-block leading-tight">
             {"Team" |> str}
           </p>
           <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
+          {coachAvatars(~title="Team Coaches", ~className="mt-3", teamCoaches)}
         </div>
       </div>
       <div
@@ -126,7 +198,7 @@ let showTeam = (team, levels, openOverlayCB) => {
 };
 
 [@react.component]
-let make = (~levels, ~teams, ~openOverlayCB) => {
+let make = (~levels, ~teams, ~openOverlayCB, ~teamCoaches) => {
   <div>
     {teams |> ArrayUtils.isEmpty
        ? <div
@@ -136,11 +208,13 @@ let make = (~levels, ~teams, ~openOverlayCB) => {
            </h5>
          </div>
        : teams
-         |> Array.map(team =>
+         |> Array.map(team => {
+              let coaches = teamCoaches |> TeamCoach.coachesForTeam(team);
+
               Array.length(team |> TeamInfo.students) == 1
-                ? showStudent(team, levels, openOverlayCB)
-                : showTeam(team, levels, openOverlayCB)
-            )
+                ? showStudent(team, levels, openOverlayCB, coaches)
+                : showTeam(team, levels, openOverlayCB, coaches);
+            })
          |> React.array}
   </div>;
 };

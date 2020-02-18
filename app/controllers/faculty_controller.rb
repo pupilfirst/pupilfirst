@@ -72,7 +72,7 @@ class FacultyController < ApplicationController
     # Reset next week slots to empty, while preserving slots with connect requests.
     faculty.connect_slots.includes(:connect_request).where(connect_requests: { id: nil }).next_week.destroy_all
 
-    list.keys.each do |day|
+    list.each_key do |day|
       day_number = day.to_i
 
       list[day].each do |slot|

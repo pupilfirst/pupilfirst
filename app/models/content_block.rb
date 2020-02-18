@@ -5,7 +5,6 @@ class ContentBlock < ApplicationRecord
   BLOCK_TYPE_FILE = -'file'
 
   has_one_attached :file
-  has_many :content_versions, dependent: :restrict_with_error
   belongs_to :target_version
 
   def self.valid_block_types

@@ -150,7 +150,7 @@ feature 'Target Content Editor', js: true do
     expect(cb.content).to eq('title' => filename)
 
     # Try changing the caption.
-    new_title = Faker::Lorem.words(3).join(' ')
+    new_title = Faker::Lorem.words(number: 3).join(' ')
 
     within("div[aria-label='Editor for content block #{cb.id}']") do
       fill_in 'Title', with: new_title
@@ -167,7 +167,7 @@ feature 'Target Content Editor', js: true do
       expect(cb.reload.content).to eq('title' => new_title)
 
       # Try the undo button.
-      fill_in 'Title', with: Faker::Lorem.words(3).join(' ')
+      fill_in 'Title', with: Faker::Lorem.words(number: 3).join(' ')
 
       accept_confirm do
         find("button[title='Undo Changes']").click
@@ -285,7 +285,7 @@ feature 'Target Content Editor', js: true do
     first_block = ContentBlock.first
 
     # Try editing the title of the existing file block.
-    new_title = Faker::Lorem.words(3).join(' ')
+    new_title = Faker::Lorem.words(number: 3).join(' ')
 
     within("div[aria-label='Editor for content block #{first_block.id}']") do
       fill_in 'Title', with: new_title
@@ -314,7 +314,7 @@ feature 'Target Content Editor', js: true do
     sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
 
     first_block = ContentBlock.first
-    new_title = Faker::Lorem.words(3).join(' ')
+    new_title = Faker::Lorem.words(number: 3).join(' ')
 
     expect(page).to have_selector("div[aria-label='Editor for content block #{first_block.id}']")
 

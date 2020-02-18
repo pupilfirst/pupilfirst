@@ -94,13 +94,14 @@ module Courses
     def targets
       attributes = %w[id role title target_group_id sort_index resubmittable]
 
-      scope = @course.targets.live.joins(:target_group).includes(:target_prerequisites)
+      scope = @course.targets.live.joins(:target_group).includes(:target_prerequisites, :evaluation_criteria)
         .where(target_groups: { level_id: open_level_ids })
         .where(archived: false)
 
       scope.select(*attributes).map do |target|
         details = target.attributes.slice(*attributes)
         details[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
+        details[:reviewed] = target.evaluation_criteria.present?
         details
       end
     end

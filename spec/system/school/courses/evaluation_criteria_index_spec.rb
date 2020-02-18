@@ -13,7 +13,7 @@ feature 'Evaluation criteria index spec', js: true do
   let!(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
   let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
-  let(:new_ec_name) { Faker::Lorem.words(2).join(" ") }
+  let(:new_ec_name) { Faker::Lorem.words(number: 2).join(" ") }
 
   def label_for_grade(grade_labels, grade)
     grade_label = grade_labels.detect { |grade_label| grade_label['grade'] == grade }

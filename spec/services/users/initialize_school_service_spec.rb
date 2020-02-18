@@ -13,7 +13,7 @@ describe Users::InitializeSchoolService do
   let(:target_group_l1_1) { create :target_group, level: level_one, milestone: true }
   let!(:target_l1_1_1) { create :target, :with_content, :for_team, target_group: target_group_l1_1 }
 
-  let(:new_name) { Faker::Lorem.words(2).join(' ') }
+  let(:new_name) { Faker::Lorem.words(number: 2).join(' ') }
 
   describe '#execute' do
     it 'create initializes a school with a new course, coach, student and community' do

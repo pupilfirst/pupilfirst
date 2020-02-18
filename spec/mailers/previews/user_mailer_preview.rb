@@ -23,7 +23,7 @@ class UserMailerPreview < ActionMailer::Preview
 
   def community_digest(count, starting_id = 1, no_activity = false)
     {
-      community_name: Faker::Lorem.words(2).join(' ').titleize,
+      community_name: Faker::Lorem.words(number: 2).join(' ').titleize,
       questions: (1..count).map do |id|
         {
           id: starting_id + id - 1,

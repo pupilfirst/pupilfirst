@@ -26,22 +26,23 @@ module TeamsQuery = [%graphql
     query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
       teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
         nodes {
-        id,
-        name,
-        levelId,
-        students {
           id,
-          name
-          title
-          avatarUrl
-        }
+          name,
+          levelId,
+          students {
+            id,
+            name
+            title
+            avatarUrl
+          }
+          coachUserIds
         }
         pageInfo{
           endCursor,hasNextPage
         }
       }
-  }
-|}
+    }
+  |}
 ];
 
 let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
@@ -49,13 +50,14 @@ let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
     (
       switch (nodes) {
       | None => [||]
-      | Some(teamsArray) => teamsArray |> TeamInfo.makeFromJS
+      | Some(teamsArray) => teamsArray |> TeamInfo.makeArrayFromJs
       }
     )
     |> Array.to_list
     |> List.flatten
     |> Array.of_list
     |> Array.append(teams);
+
   setState(state =>
     {
       ...state,
@@ -266,7 +268,7 @@ let applicableLevels = levels => {
 };
 
 [@react.component]
-let make = (~levels, ~course, ~userId) => {
+let make = (~levels, ~course, ~userId, ~teamCoaches) => {
   let (state, setState) =
     React.useState(() =>
       {
@@ -303,11 +305,17 @@ let make = (~levels, ~course, ~userId) => {
   <div>
     {switch (url.path) {
      | ["students", studentId, "report"] =>
-       <CoursesStudents__StudentOverlay courseId studentId levels userId />
+       <CoursesStudents__StudentOverlay
+         courseId
+         studentId
+         levels
+         userId
+         teamCoaches
+       />
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
-      <div className="w-full bg-gray-100 relative md:sticky md:top-0">
+      <div className="w-full bg-gray-100 relative md:sticky md:top-0 z-10">
         <div
           className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
           <form
@@ -362,7 +370,12 @@ let make = (~levels, ~course, ~userId) => {
            )
          | PartiallyLoaded(teams, cursor) =>
            <div>
-             <CoursesStudents__TeamsList levels teams openOverlayCB />
+             <CoursesStudents__TeamsList
+               levels
+               teams
+               openOverlayCB
+               teamCoaches
+             />
              {switch (state.loading) {
               | LoadingMore =>
                 SkeletonLoading.multiple(
@@ -389,7 +402,12 @@ let make = (~levels, ~course, ~userId) => {
               }}
            </div>
          | FullyLoaded(teams) =>
-           <CoursesStudents__TeamsList levels teams openOverlayCB />
+           <CoursesStudents__TeamsList
+             levels
+             teams
+             openOverlayCB
+             teamCoaches
+           />
          }}
       </div>
     </div>

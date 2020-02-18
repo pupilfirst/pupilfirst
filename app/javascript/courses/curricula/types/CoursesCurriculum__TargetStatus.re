@@ -41,6 +41,7 @@ type submissionStatus =
 
 type cachedTarget = {
   targetId: string,
+  targetReviewed: bool,
   levelNumber: int,
   milestone: bool,
   submissionStatus,
@@ -127,6 +128,7 @@ let compute =
 
            {
              targetId,
+             targetReviewed: target |> Target.reviewed,
              levelNumber,
              milestone,
              submissionStatus,
@@ -143,7 +145,7 @@ let compute =
            | SubmissionPassed => Passed
            | SubmissionFailed => Failed
            | SubmissionMissing =>
-             if (ct.levelNumber > studentLevelNumber) {
+             if (ct.levelNumber > studentLevelNumber && ct.targetReviewed) {
                Locked(LevelLocked);
              } else if (!(
                           ct.prerequisiteTargetIds

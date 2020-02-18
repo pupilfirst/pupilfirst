@@ -7,7 +7,7 @@ describe MailLoginTokenService do
   let(:user) { create :user, school: school }
   let(:shared_device) { [true, false].sample }
   let(:domain) { school.domains.where(primary: true).first }
-  let(:referer) { Faker::Internet.url(domain.fqdn) }
+  let(:referer) { Faker::Internet.url(host: domain.fqdn) }
 
   context 'When an User is passed on to the service' do
     subject { described_class.new(user, referer, shared_device) }

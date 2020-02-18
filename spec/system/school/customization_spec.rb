@@ -161,7 +161,7 @@ feature 'School Customization', js: true do
     # Edit privacy policy.
     find('div[title="Edit privacy policy"]').click
 
-    privacy_policy = Faker::Lorem.paragraphs(2).join("\n\n")
+    privacy_policy = Faker::Lorem.paragraphs(number: 2).join("\n\n")
 
     fill_in('Body of Agreement', with: privacy_policy)
     click_button 'Update Privacy Policy'
@@ -173,7 +173,7 @@ feature 'School Customization', js: true do
     # Edit terms of use.
     find('div[title="Edit terms of use"]').click
 
-    terms_of_use = Faker::Lorem.paragraphs(2).join("\n\n")
+    terms_of_use = Faker::Lorem.paragraphs(number: 2).join("\n\n")
 
     fill_in('Body of Agreement', with: terms_of_use)
     click_button 'Update Terms of Use'
@@ -192,7 +192,7 @@ feature 'School Customization', js: true do
     # Edit basic contact details.
     find('div[aria-label="Edit school details"]').click
 
-    about = Faker::Lorem.paragraphs(2).join(" ")
+    about = Faker::Lorem.paragraphs(number: 2).join(" ")
     name = Faker::Name.name
 
     fill_in 'School Name', with: name

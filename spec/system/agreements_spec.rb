@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User Agreements' do
   context 'when the school has custom privacy policy' do
-    let(:privacy_policy) { Faker::Lorem.paragraph(10) }
+    let(:privacy_policy) { Faker::Lorem.paragraph(sentence_count: 10) }
 
     before do
       create :school_string, :privacy_policy, value: privacy_policy
@@ -24,7 +24,7 @@ feature 'User Agreements' do
   end
 
   context 'when the school has custom terms of use' do
-    let(:terms_of_use) { Faker::Lorem.paragraph(10) }
+    let(:terms_of_use) { Faker::Lorem.paragraph(sentence_count: 10) }
 
     before do
       create :school_string, :terms_of_use, value: terms_of_use

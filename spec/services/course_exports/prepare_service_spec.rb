@@ -54,6 +54,10 @@ describe CourseExports::PrepareService do
       .pluck(:grade).join(',')
   end
 
+  def report_link_formula(student)
+    { 'formula' => "oooc:=HYPERLINK(\"https://test.host/students/#{student.id}/report\"; \"#{student.id}\")" }
+  end
+
   let(:expected_data) do
     [
       {
@@ -73,9 +77,9 @@ describe CourseExports::PrepareService do
       {
         title: 'Students',
         rows: [
-          ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
-          [student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
-          [student_2.email, student_2.name, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
+          ['ID', 'Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
+          [report_link_formula(student_1), student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
+          [report_link_formula(student_2), student_2.email, student_2.name, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
         ]
       },
       {
@@ -129,8 +133,8 @@ describe CourseExports::PrepareService do
           {
             title: 'Students',
             rows: [
-              ['Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
-              [student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
+              ['ID', 'Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
+              [report_link_formula(student_1), student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
             ]
           },
           {

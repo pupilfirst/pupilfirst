@@ -76,6 +76,21 @@ let addMultichoiceOption = t => {
   };
 };
 
+let updateMultichoiceOption = (choiceIndex, newOption, t) => {
+  switch (t.kind) {
+  | MultiChoice(choices) =>
+    let updatedChoices =
+      choices
+      |> Array.mapi((i, choice) => i == choiceIndex ? newOption : choice);
+    t |> updateKind(MultiChoice(updatedChoices));
+  | Files
+  | Link
+  | ShortText
+  | LongText
+  | Statement => t
+  };
+};
+
 let kindFromJs = (data, metaData) => {
   switch (data) {
   | "files" => Files

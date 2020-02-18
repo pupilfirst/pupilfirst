@@ -25,7 +25,8 @@ let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
   let selected =
-    <button className="border appearance-none inline-flex items-center">
+    <button
+      className="border focus:outline-none appearance-none inline-flex items-center">
       <span className="px-2 py-2">
         {selectedKind |> ChecklistItem.actionStringForKind |> str}
       </span>
@@ -67,6 +68,15 @@ let addMultichoiceOption = (checklistItem, updateChecklistItemCB) => {
   updateChecklistItemCB(newChecklistItem);
 };
 
+let updateChoiceText =
+    (choiceIndex, checklistItem, updateChecklistItemCB, event) => {
+  let choice = ReactEvent.Form.target(event)##value;
+  let newChecklistItem =
+    checklistItem
+    |> ChecklistItem.updateMultichoiceOption(choiceIndex, choice);
+  updateChecklistItemCB(newChecklistItem);
+};
+
 let multiChoiceEditor =
     (choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB) => {
   <div className="ml-3 mt-3">
@@ -84,6 +94,7 @@ let multiChoiceEditor =
               className="flex flex-1 py-2 px-3 ml-6 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
               <input
                 className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
+                onChange={updateChoiceText(index, checklistItem, updateChecklistItemCB)}
                 type_="text"
                 value=choice
               />
@@ -106,7 +117,7 @@ let multiChoiceEditor =
       onClick={_ =>
         addMultichoiceOption(checklistItem, updateChecklistItemCB)
       }
-      className="flex ml-10 p-2 text-sm appearance-none bg-white border items-center justify-between outline-none border border-gray-400 hover:border-gray-100 hover:shadow-lg">
+      className="flex ml-10 p-2 text-sm appearance-none bg-white border items-center justify-between outline-none border border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
       <PfIcon className="if i-plus-circle if-fw" />
       <span className="font-semibold ml-2"> {"Add a choice" |> str} </span>
     </button>

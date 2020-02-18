@@ -116,7 +116,7 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
     );
 
 [@react.component]
-let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
+let make = (~attachFileCB, ~attachingCB, ~preview) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -132,7 +132,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
       <input
         name="authenticity_token"
         type_="hidden"
-        value=authenticityToken
+        value={AuthenticityToken.fromHead()}
       />
       <input
         id="attachment_file"

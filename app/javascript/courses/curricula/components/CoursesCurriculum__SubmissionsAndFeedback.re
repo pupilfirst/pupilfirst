@@ -319,7 +319,7 @@ let make =
          : React.null}
     </div>
     {showSubmissionForm
-       ? <CoursesCurriculum__SubmissionForm
+       ? <CoursesCurriculum__SubmissionBuilder
            authenticityToken
            target
            addSubmissionCB={addSubmission(

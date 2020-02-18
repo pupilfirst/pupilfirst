@@ -371,7 +371,7 @@ let completeSection =
            targetDetails
            title="Instructions"
          />,
-         <CoursesCurriculum__SubmissionForm
+         <CoursesCurriculum__SubmissionBuilder
            key="courses-curriculum-submission-form"
            authenticityToken
            target

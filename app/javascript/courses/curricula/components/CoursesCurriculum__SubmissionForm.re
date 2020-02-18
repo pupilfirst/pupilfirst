@@ -219,7 +219,6 @@ let make =
                state.attachments |> List.length >= 3
                  ? React.null
                  : <CoursesCurriculum__FileForm
-                     authenticityToken
                      attachingCB={() => send(UpdateFormState(Attaching))}
                      attachFileCB={(id, filename) =>
                        send(AttachFile(id, filename))

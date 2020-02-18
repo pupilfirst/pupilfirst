@@ -157,10 +157,10 @@ let isDescriptionDisabled = formState =>
   | Ready => false
   };
 
-let updateResponse = (state, send, index, result) => {
+let updateResponse = (state, send, index, answer) => {
   send(
     UpdateResponse(
-      state.response |> ChecklistResponseItem.updateResult(index, result),
+      state.response |> ChecklistResponseItem.updateResult(index, answer),
     ),
   );
 };
@@ -175,12 +175,10 @@ let make =
      |> Array.mapi((index, responseItem) => {
           let key = index |> string_of_int;
           <CoursesCurriculum__SubmissionItem
-            authenticityToken
             index
-            targetChecklistItem={
-              responseItem |> ChecklistResponseItem.question
-            }
-            response={responseItem |> ChecklistResponseItem.result}
+            response=responseItem
+            updateResponseCB={updateResponse(state, send, index)}
+            preview
           />;
         })
      |> React.array}

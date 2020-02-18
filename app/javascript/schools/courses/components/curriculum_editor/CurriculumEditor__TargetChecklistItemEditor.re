@@ -40,7 +40,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
       ShortText,
       Files,
       Link,
-      MultiChoice([|"choices"|]),
+      MultiChoice([||]),
       Statement,
     |]
     |> Js.Array.filter(kind => kind != selectedKind)
@@ -54,6 +54,30 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
          </button>
        );
   <Dropdown selected contents />;
+};
+
+let multiChoiceEditor = choices => {
+  <div className="ml-3 mt-3">
+    <div className="text-xs font-semibold mb-2"> {"Choices:" |> str} </div>
+    {choices
+     |> Array.map(choice =>
+          <div className="flex items-center text-sm rounded mb-2">
+            <span className="text-gray-400 p-2">
+              <i className="far fa-circle text-base" />
+            </span>
+            <div
+              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
+              <input
+                className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
+                type_="text"
+                value=choice
+              />
+              <PfIcon className="if i-times-light if-fw" />
+            </div>
+          </div>
+        )
+     |> React.array}
+  </div>;
 };
 
 [@react.component]
@@ -93,6 +117,14 @@ let make = (~checklistItem, ~index, ~updateChecklistItemCB) => {
            value={checklistItem |> ChecklistItem.title}
          />
        </div>
+       {switch (checklistItem |> ChecklistItem.kind) {
+        | MultiChoice(choices) => multiChoiceEditor(choices)
+        | ShortText
+        | LongText
+        | Files
+        | Link
+        | Statement => React.null
+        }}
      </div>}
   </div>;
 };

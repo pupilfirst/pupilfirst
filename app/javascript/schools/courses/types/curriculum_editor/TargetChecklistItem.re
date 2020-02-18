@@ -24,7 +24,7 @@ let actionStringForKind = kind => {
   | Link => "Attach Links"
   | ShortText => "Write Short Text"
   | LongText => "Write Long Text"
-  | MultiChoice(_choices) => "Choose from the list"
+  | MultiChoice(_choices) => "Choose from a list"
   | Statement => "Read Statement"
   };
 };

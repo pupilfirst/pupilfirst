@@ -9,6 +9,6 @@ module Types
     field :completion_instructions, String, null: true
     field :link_to_complete, String, null: true
     field :visibility, String, null: false
-    field :checklist, [TargetChecklistType], null: false
+    field :checklist, GraphQL::Types::JSON, null: false
   end
 end

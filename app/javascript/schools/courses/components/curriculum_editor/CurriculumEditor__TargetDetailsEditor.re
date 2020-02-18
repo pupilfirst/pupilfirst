@@ -82,11 +82,7 @@ module TargetDetailsQuery = [%graphql
         visibility
         linkToComplete
         role
-        checklist {
-          title
-          kind
-          optional
-        }
+        checklist
       }
   }
 |}

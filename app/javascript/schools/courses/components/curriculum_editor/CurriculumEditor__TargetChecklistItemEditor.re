@@ -35,7 +35,14 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     </button>;
 
   let contents =
-    [|ChecklistItem.LongText, ShortText, Files, Link, MultiChoice, Statement|]
+    [|
+      ChecklistItem.LongText,
+      ShortText,
+      Files,
+      Link,
+      MultiChoice([|"choices"|]),
+      Statement,
+    |]
     |> Js.Array.filter(kind => kind != selectedKind)
     |> Array.mapi((index, kind) =>
          <button

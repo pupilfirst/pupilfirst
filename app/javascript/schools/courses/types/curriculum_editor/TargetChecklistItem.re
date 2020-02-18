@@ -1,9 +1,11 @@
+type choices = array(string);
+
 type kind =
   | Files
   | Link
   | ShortText
   | LongText
-  | MultiChoice
+  | MultiChoice(choices)
   | Statement;
 
 type t = {
@@ -22,7 +24,7 @@ let actionStringForKind = kind => {
   | Link => "Attach Links"
   | ShortText => "Write Short Text"
   | LongText => "Write Long Text"
-  | MultiChoice => "Choose from the list"
+  | MultiChoice(_choices) => "Choose from the list"
   | Statement => "Read Statement"
   };
 };
@@ -43,13 +45,14 @@ let updateOptional = (optional, t) => {
   {...t, optional};
 };
 
-let kindFromJs = data => {
+let kindFromJs = (data, metaData) => {
+  Js.log(metaData);
   switch (data) {
   | "files" => Files
   | "link" => Link
   | "short_text" => ShortText
   | "long_text" => LongText
-  | "multi_choice" => MultiChoice
+  | "multi_choice" => MultiChoice(OptionUtils.default([||], metaData))
   | "statement" => Statement
   | kind =>
     Rollbar.error(
@@ -61,15 +64,13 @@ let kindFromJs = data => {
   };
 };
 
-let makeFromJs = data => {
-  title: data##title,
-  kind: kindFromJs(data##kind),
-  optional: data##optional,
-};
-
 let decode = json => {
   Json.Decode.{
-    kind: kindFromJs(json |> field("kind", string)),
+    kind:
+      kindFromJs(
+        json |> field("kind", string),
+        json |> optional(field("meta_data", array(string))),
+      ),
     optional: json |> field("optional", bool),
     title: json |> field("title", string),
   };

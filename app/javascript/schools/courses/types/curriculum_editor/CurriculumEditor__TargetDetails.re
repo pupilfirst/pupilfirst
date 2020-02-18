@@ -78,9 +78,6 @@ let makeFromJs = targetData => {
   linkToComplete: targetData##linkToComplete,
   completionInstructions: targetData##completionInstructions,
   checklist:
-    targetData##checklist
-    |> Array.map(checklistItem =>
-         checklistItem |> TargetChecklistItem.makeFromJs
-       ),
+    targetData##checklist |> Json.Decode.array(TargetChecklistItem.decode),
   visibility: visibilityFromJs(targetData##visibility),
 };

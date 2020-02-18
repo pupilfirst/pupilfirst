@@ -1,9 +1,9 @@
-ruby '2.6.5'
+ruby '2.7.0'
 
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.1'
+gem 'rails', '~> 6.0.2.1'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 

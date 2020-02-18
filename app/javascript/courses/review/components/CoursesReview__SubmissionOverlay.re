@@ -31,7 +31,7 @@ module SubmissionDetailsQuery = [%graphql
         submissions{
           id, evaluatorName, passedAt, createdAt, description, evaluatedAt
           attachments{
-            url, title
+            url, title, id
           },
           grades {
             evaluationCriterionId, grade

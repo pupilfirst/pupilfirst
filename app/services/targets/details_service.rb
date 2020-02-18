@@ -133,6 +133,7 @@ module Targets
     def attachments(submission)
       submission.timeline_event_files.with_attached_file.map do |file|
         {
+          id: file.id,
           name: file.file.filename,
           url: url_helpers.download_timeline_event_file_path(file)
         }

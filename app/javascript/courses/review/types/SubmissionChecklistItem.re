@@ -1,4 +1,5 @@
 type attachment = {
+  id: string,
   name: string,
   url: string,
 };
@@ -30,10 +31,11 @@ let attachmentUrl = attachment => attachment.url;
 
 let make = (~title, ~result, ~status) => {title, result, status};
 
-let makeAttachment = (~name, ~url) => {name, url};
+let makeAttachment = (~name, ~url, ~id) => {name, url, id};
 
 let makeAttachments = data =>
-  data |> Js.Array.map(a => makeAttachment(~url=a##url, ~name=a##title));
+  data
+  |> Js.Array.map(a => makeAttachment(~url=a##url, ~name=a##title, ~id=a##id));
 
 let makeResult = (result, kind, attachments) => {
   switch (result) {
@@ -81,6 +83,7 @@ let decodeAttachment = json =>
   Json.Decode.{
     name: json |> field("name", string),
     url: json |> field("url", string),
+    id: json |> field("id", string),
   };
 
 let decode = (attachments, json) => {

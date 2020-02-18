@@ -1,4 +1,5 @@
 module Types
+  # Deprecated! Use gem's GraphQL::Types::ISO8601Date class instead.
   class DateType < GraphQL::Schema::Scalar
     description "An ISO 8601-encoded date"
 

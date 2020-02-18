@@ -24,8 +24,11 @@ describe ConnectRequests::ConfirmationService do
 
       subject.execute
 
-      expect(FacultyConnectSessionRatingJob).to have_been_enqueued.with(connect_request.id).at(connect_request.connect_slot.slot_at + 45.minutes)
-      expect(FacultyConnectSessionReminderJob).to have_been_enqueued.with(connect_request.id).at(connect_request.connect_slot.slot_at - 30.minutes)
+      expect(FacultyConnectSessionRatingJob).to have_been_enqueued.with(connect_request.id)
+        .at(a_value_within(5.seconds).of(connect_request.connect_slot.slot_at + 45.minutes))
+
+      expect(FacultyConnectSessionReminderJob).to have_been_enqueued.with(connect_request.id)
+        .at(a_value_within(5.seconds).of(connect_request.connect_slot.slot_at - 30.minutes))
 
       expect(connect_request.reload.confirmed_at).to_not be_nil
       expect(connect_request).to have_attributes(status: ConnectRequest::STATUS_CONFIRMED, meeting_link: meeting_url)

@@ -9,7 +9,7 @@ gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 2.3.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'active_storage_validations', '~> 0.6.1' # TODO: Condisder removing the gem once updgraded to Rails 6.0
+gem 'active_storage_validations', '~> 0.8' # Better validations for active_storage.
 gem 'fastimage', '~> 2.1'
 gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 
@@ -37,7 +37,7 @@ gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy t
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
 gem 'puma', '~> 4.3' # The Puma ruby web server.
-gem 'rack-timeout', '~> 0.4' # Abort requests that are taking too long - recommended by Heroku to use with Puma
+gem 'rack-timeout', '~> 0.6' # Abort requests that are taking too long - recommended by Heroku to use with Puma
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
@@ -85,7 +85,7 @@ gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstr
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
-gem 'omniauth-facebook', '~> 5.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
+gem 'omniauth-facebook', '~> 6.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
 gem 'pretender', '~> 0.3.4' # Log in as another user in Rails
@@ -94,7 +94,7 @@ gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.3' # Create beautiful charts with one line of JavaScript.
-gem 'graphql', '~> 1.9' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '= 1.9.12' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 
 # Rails assets!
@@ -121,10 +121,8 @@ end
 
 group :development do
   gem 'letter_opener_web', '~> 1.3' # A web interface for browsing Ruby on Rails sent emails.
-  gem 'bullet', '~> 6.0.2' # Detect N+1 queries.
-  # gem 'better_errors' # Better error info on the front-end.
-  # gem 'binding_of_caller' # For advanced better_errors features - REPL, local/instance variable inspection etc.
-  gem 'web-console', '~> 3.4' # TODO: Restored until better_errors speeds up again.
+  gem 'bullet', '~> 6.1' # Detect N+1 queries.
+  gem 'web-console', '~> 4.0' # Rails Console on the Browser.
   gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app
@@ -148,7 +146,7 @@ end
 
 group :development, :test do
   gem 'faker', '~> 1.8' # A library for generating fake data such as names, addresses, and phone numbers.
-  gem 'rspec-rails', '~> 4.0.0.beta3' # Duh.
+  gem 'rspec-rails', '~> 4.0.0.beta4' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.

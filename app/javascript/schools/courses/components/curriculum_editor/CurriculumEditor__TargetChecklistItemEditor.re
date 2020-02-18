@@ -56,13 +56,23 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   <Dropdown selected contents />;
 };
 
-let multiChoiceEditor = choices => {
+let removeMultichoiceOption =
+    (choiceIndex, checklistItem, updateChecklistItemCB) => {
+  let newChecklistItem =
+    checklistItem |> ChecklistItem.removeMultichoiceOption(choiceIndex);
+  updateChecklistItemCB(newChecklistItem);
+};
+
+let multiChoiceEditor =
+    (choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB) => {
   <div className="ml-3 mt-3">
     <div className="text-xs font-semibold mb-2"> {"Choices:" |> str} </div>
     {choices
-     |> Array.map(choice =>
-          <div className="flex items-center text-sm rounded mb-2">
-            <span className="text-gray-400 p-2">
+     |> Array.mapi((index, choice) =>
+          <div
+            key={index |> string_of_int}
+            className="flex items-center text-sm rounded mb-2">
+            <span className="text-gray-400">
               <i className="far fa-circle text-base" />
             </span>
             <div
@@ -72,7 +82,16 @@ let multiChoiceEditor = choices => {
                 type_="text"
                 value=choice
               />
-              <PfIcon className="if i-times-light if-fw" />
+              <button
+                onClick={_ =>
+                  removeMultichoiceOption(
+                    index,
+                    checklistItem,
+                    updateChecklistItemCB,
+                  )
+                }>
+                <PfIcon className="if i-times-light if-fw" />
+              </button>
             </div>
           </div>
         )
@@ -118,7 +137,13 @@ let make = (~checklistItem, ~index, ~updateChecklistItemCB) => {
          />
        </div>
        {switch (checklistItem |> ChecklistItem.kind) {
-        | MultiChoice(choices) => multiChoiceEditor(choices)
+        | MultiChoice(choices) =>
+          multiChoiceEditor(
+            choices,
+            checklistItem,
+            removeMultichoiceOption,
+            updateChecklistItemCB,
+          )
         | ShortText
         | LongText
         | Files

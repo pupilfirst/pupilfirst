@@ -45,8 +45,25 @@ let updateOptional = (optional, t) => {
   {...t, optional};
 };
 
+let removeMultichoiceOption = (choiceIndex, t) => {
+  switch (t.kind) {
+  | MultiChoice(choices) =>
+    let updatedChoices =
+      choices
+      |> Array.mapi((i, choice) => i == choiceIndex ? [] : [choice])
+      |> Array.to_list
+      |> List.flatten
+      |> Array.of_list;
+    t |> updateKind(MultiChoice(updatedChoices));
+  | Files
+  | Link
+  | ShortText
+  | LongText
+  | Statement => t
+  };
+};
+
 let kindFromJs = (data, metaData) => {
-  Js.log(metaData);
   switch (data) {
   | "files" => Files
   | "link" => Link

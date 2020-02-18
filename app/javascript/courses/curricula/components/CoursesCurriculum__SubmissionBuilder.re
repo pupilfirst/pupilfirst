@@ -174,11 +174,13 @@ let make =
     {state.response
      |> Array.mapi((index, responseItem) => {
           let key = index |> string_of_int;
-          let question = responseItem |> ChecklistResponseItem.question;
           <CoursesCurriculum__SubmissionItem
+            authenticityToken
+            index
             targetChecklistItem={
               responseItem |> ChecklistResponseItem.question
             }
+            response={responseItem |> ChecklistResponseItem.result}
           />;
         })
      |> React.array}

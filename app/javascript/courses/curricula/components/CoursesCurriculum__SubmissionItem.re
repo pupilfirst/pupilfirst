@@ -45,7 +45,7 @@ let make = (~authenticityToken, ~index, ~targetChecklistItem, ~response) => {
          className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
          placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
        />
-     | MultiChoice =>
+     | MultiChoice(_) =>
        <input
          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
          id={"short-text-" ++ key}

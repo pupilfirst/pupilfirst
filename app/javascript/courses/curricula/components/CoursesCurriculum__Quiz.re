@@ -36,6 +36,7 @@ let createQuizSubmission =
              ~id=submission##id,
              ~createdAt=submission##createdAt,
              ~status=Submission.MarkedAsComplete,
+             ~checklist=[||],
            ),
          )
        | None => setSaving(_ => false)

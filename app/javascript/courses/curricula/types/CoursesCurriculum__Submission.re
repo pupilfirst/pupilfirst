@@ -50,9 +50,9 @@ let decode = json =>
          ),
   };
 
-let make = (~id, ~createdAt, ~status) => {
+let make = (~id, ~createdAt, ~status, ~checklist) => {
   id,
   createdAt,
   status,
-  checklist: [||],
+  checklist,
 };

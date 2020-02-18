@@ -37,13 +37,9 @@ let isButtonDisabled = formState =>
   switch (formState) {
   | Attaching
   | Saving
-  | Incomplete => true
+  | Incomplete => false
   | Ready => false
   };
-
-type id = string;
-type filename = string;
-type url = string;
 
 type state = {
   formState,
@@ -58,14 +54,6 @@ let initialState = checklist => {
   formState: Incomplete,
   response: ChecklistResponseItem.makeEmpty(checklist),
 };
-
-// let descriptionToFormState = description =>
-//   description |> String.trim == "" ? Incomplete : Ready;
-
-// let updateDescription = (send, event) => {
-//   let value = ReactEvent.Form.target(event)##value;
-//   send(UpdateDescription(value));
-// };
 
 let reducer = (state, action) =>
   switch (action) {
@@ -83,8 +71,8 @@ let isBusy = formState =>
 
 module CreateSubmissionQuery = [%graphql
   {|
-  mutation($targetId: ID!, $description: String!, $fileIds: [ID!]!, $links: [String!]!) {
-    createSubmission(targetId: $targetId, description: $description, fileIds: $fileIds, links: $links) {
+  mutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
+    createSubmission(targetId: $targetId, checklist: $checklist, fileIds: $fileIds) {
       submission {
         id
         createdAt
@@ -94,30 +82,18 @@ module CreateSubmissionQuery = [%graphql
   |}
 ];
 
-let attachmentValues = attachments => attachments |> Array.of_list;
-
 let submit = (state, send, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   send(UpdateFormState(Saving));
 
-  // let (fileAttachments, linkAttachments) =
-  //   state.attachments
-  //   |> List.partition(attachment =>
-  //        switch (attachment) {
-  //        | SubmissionAttachment.File(_, _, _) => true
-  //        | Link(_) => false
-  //        }
-  //      );
+  let fileIds = state.response |> ChecklistResponseItem.fileIds;
+  let checklist = state.response |> ChecklistResponseItem.encodeArray;
 
-  let fileIds = [||];
-  // let links = attachmentValues(linkAttachments);
-  let links = [|"", ""|];
   CreateSubmissionQuery.make(
     ~targetId=target |> Target.id,
-    ~description="",
     ~fileIds,
-    ~links,
+    ~checklist,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -130,6 +106,10 @@ let submit = (state, send, target, addSubmissionCB, event) => {
              ~id=submission##id,
              ~createdAt=submission##createdAt,
              ~status=Submission.Pending,
+             ~checklist={
+               checklist
+               |> Json.Decode.array(SubmissionChecklistItem.decode([||]));
+             },
            );
          let newAttachments = submission##id;
 
@@ -173,13 +153,13 @@ let make =
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
     {state.response
      |> Array.mapi((index, responseItem) => {
-          let key = index |> string_of_int;
           <CoursesCurriculum__SubmissionItem
+            key={index |> string_of_int}
             index
             response=responseItem
             updateResponseCB={updateResponse(state, send, index)}
             preview
-          />;
+          />
         })
      |> React.array}
     <div className="flex mt-3 justify-end">

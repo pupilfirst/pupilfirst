@@ -22,7 +22,7 @@ class TimelineEvent < ApplicationRecord
 
   MAX_DESCRIPTION_CHARACTERS = 500
 
-  validates :description, presence: true
+  # validates :description, presence: true
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }

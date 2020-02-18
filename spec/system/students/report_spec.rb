@@ -18,6 +18,9 @@ feature "Course students report", js: true do
   # Create few teams
   let!(:team) { create :startup, level: level_3 }
 
+  # Shortcut to a student we'll refer to frequently.
+  let(:student) { team.founders.first }
+
   # Create few targets for the student
   let(:target_group_l1) { create :target_group, level: level_1, milestone: true }
   let(:target_group_l2) { create :target_group, level: level_2, milestone: true }
@@ -41,8 +44,8 @@ feature "Course students report", js: true do
   let(:submission_target_l3) { create(:timeline_event, latest: true, target: target_l3, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
   let(:submission_quiz_target_1) { create(:timeline_event, latest: true, target: quiz_target_1, passed_at: 1.day.ago, quiz_score: '1/3') }
   let(:submission_quiz_target_2) { create(:timeline_event, latest: true, target: quiz_target_2, passed_at: 1.day.ago, quiz_score: '3/5') }
-  let!(:coach_note_1) { create :coach_note, author: course_coach.user, student: team.founders.first }
-  let!(:coach_note_2) { create :coach_note, author: team_coach.user, student: team.founders.first }
+  let!(:coach_note_1) { create :coach_note, author: course_coach.user, student: student }
+  let!(:coach_note_2) { create :coach_note, author: team_coach.user, student: student }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
@@ -53,12 +56,12 @@ feature "Course students report", js: true do
     target_l3.evaluation_criteria << evaluation_criterion_2
     target_4.evaluation_criteria << evaluation_criterion_2
 
-    submission_target_l1_1.founders << team.founders.first
-    submission_target_l1_2.founders << team.founders.first
-    submission_target_l2.founders << team.founders.first
-    submission_target_l3.founders << team.founders.first
-    submission_quiz_target_1.founders << team.founders.first
-    submission_quiz_target_2.founders << team.founders.first
+    submission_target_l1_1.founders << student
+    submission_target_l1_2.founders << student
+    submission_target_l2.founders << student
+    submission_target_l3.founders << student
+    submission_quiz_target_1.founders << student
+    submission_quiz_target_2.founders << student
 
     submission_target_l1_2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 1)
     submission_target_l1_1.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 2)
@@ -72,11 +75,10 @@ feature "Course students report", js: true do
     sign_in_user course_coach.user, referer: students_course_path(course)
 
     expect(page).to have_text(team.name)
-    founder = team.founders.first
 
-    click_link founder.name
+    click_link student.name
 
-    expect(page).to have_text(founder.name)
+    expect(page).to have_text(student.name)
     expect(page).to have_text('Level Progress')
     expect(page).to have_selector('.student-overlay__student-level', count: course.levels.where.not(number: 0).count)
 
@@ -126,21 +128,20 @@ feature "Course students report", js: true do
 
   scenario 'coach loads more submissions' do
     # Create over 20 reviewed submissions
-    founder = team.founders.first
     20.times do
       submission = TimelineEvent.create!(description: Faker::Lorem.sentence, latest: true, target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
-      submission.founders << founder
+      submission.founders << student
       submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     end
 
-    sign_in_user course_coach.user, referer: student_report_path(founder)
-    expect(page).to have_text(founder.name)
+    sign_in_user course_coach.user, referer: student_report_path(student)
+    expect(page).to have_text(student.name)
     find('li', text: 'Submissions').click
     expect(page).to have_button('Load More...')
     click_button('Load More...')
 
     within("div[aria-label='student-submissions']") do
-      expect(page).to have_selector('a', count: founder.timeline_events.evaluated_by_faculty.count)
+      expect(page).to have_selector('a', count: student.timeline_events.evaluated_by_faculty.count)
     end
 
     # Switching tabs should preserve already loaded submissions
@@ -148,13 +149,12 @@ feature "Course students report", js: true do
     find('li', text: 'Submissions').click
 
     within("div[aria-label='student-submissions']") do
-      expect(page).to have_selector('a', count: founder.timeline_events.evaluated_by_faculty.count)
+      expect(page).to have_selector('a', count: student.timeline_events.evaluated_by_faculty.count)
     end
   end
 
   scenario 'team coach accesses student report' do
-    founder = team.founders.first
-    sign_in_user team_coach.user, referer: student_report_path(founder)
+    sign_in_user team_coach.user, referer: student_report_path(student)
 
     # Check a student parameter
     within("div[aria-label='target-completion-status']") do
@@ -191,8 +191,7 @@ feature "Course students report", js: true do
   end
 
   scenario 'coach adds few notes for a student' do
-    founder = team.founders.first
-    sign_in_user course_coach.user, referer: student_report_path(founder)
+    sign_in_user course_coach.user, referer: student_report_path(student)
 
     find('li', text: 'Notes').click
     note_1 = Faker::Markdown.sandwich(2)
@@ -202,7 +201,7 @@ feature "Course students report", js: true do
     dismiss_notification
     expect(page).to have_text(course_coach.name)
     expect(page).to have_text(course_coach.title)
-    expect(CoachNote.where(student: founder).last.note).to eq(note_1)
+    expect(CoachNote.where(student: student).last.note).to eq(note_1)
 
     add_markdown(note_2)
     click_button('Save Note')
@@ -210,13 +209,12 @@ feature "Course students report", js: true do
     expect(page).to have_text(course_coach.name, count: 3)
     expect(page).to have_text(course_coach.title, count: 3)
     expect(page).to have_text(Date.today.strftime('%B %-d'), count: 4)
-    expect(CoachNote.where(student: founder).last.note).to eq(note_2)
+    expect(CoachNote.where(student: student).last.note).to eq(note_2)
   end
 
   context 'when a coach sees existing notes on the report page' do
     scenario 'coach can archive her own notes' do
-      founder = team.founders.first
-      sign_in_user team_coach.user, referer: student_report_path(founder)
+      sign_in_user team_coach.user, referer: student_report_path(student)
 
       expect(page).to have_text(coach_note_1.note)
       expect(page).to have_text(coach_note_2.note)
@@ -233,8 +231,7 @@ feature "Course students report", js: true do
     end
 
     scenario "coach cannot archive others' notes" do
-      founder = team.founders.first
-      sign_in_user team_coach.user, referer: student_report_path(founder)
+      sign_in_user team_coach.user, referer: student_report_path(student)
 
       within("div[aria-label='Note #{coach_note_1.id}']") do
         expect(page).not_to have_selector('.fa-trash-alt')
@@ -242,15 +239,37 @@ feature "Course students report", js: true do
     end
 
     scenario 'coach is indicated if there are no notes' do
-      founder = team.founders.last
-      sign_in_user team_coach.user, referer: student_report_path(founder)
+      another_student = team.founders.last
+      sign_in_user team_coach.user, referer: student_report_path(another_student)
       expect(page).to have_text('No notes here!')
     end
   end
 
   scenario 'unauthorized coach attempts to access student report' do
-    founder = team.founders.first
-    sign_in_user coach_without_access.user, referer: student_report_path(founder)
+    sign_in_user coach_without_access.user, referer: student_report_path(student)
     expect(page).to have_content("The page you were looking for doesn't exist")
+  end
+
+  context 'when there are more than one team coaches' do
+    let(:team_coach_2) { create :faculty, school: school }
+
+    before do
+      create :faculty_startup_enrollment, faculty: team_coach_2, startup: team
+    end
+
+    scenario 'coach checks list of directly assigned team coaches' do
+      sign_in_user course_coach.user, referer: student_report_path(student)
+
+      expect(page).to have_text(team_coach.name)
+      expect(page).to have_text(team_coach_2.name)
+    end
+  end
+
+  scenario 'coach can navigate to other team members in the team' do
+    sign_in_user course_coach.user, referer: student_report_path(student)
+
+    team.founders.where.not(id: student).each do |teammate|
+      expect(page).to have_link(teammate.name, href: "/students/#{teammate.id}/report")
+    end
   end
 end

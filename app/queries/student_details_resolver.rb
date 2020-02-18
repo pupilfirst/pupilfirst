@@ -3,10 +3,7 @@ class StudentDetailsResolver < ApplicationQuery
 
   def student_details
     {
-      name: student.name,
-      title: student.title,
       email: student.email,
-      avatar_url: avatar_url,
       phone: student.phone,
       coach_notes: coach_notes,
       targets_completed: targets_completed,
@@ -16,7 +13,8 @@ class StudentDetailsResolver < ApplicationQuery
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
       average_grades: average_grades,
-      completed_level_ids: completed_level_ids
+      completed_level_ids: completed_level_ids,
+      team: team
     }
   end
 
@@ -72,11 +70,8 @@ class StudentDetailsResolver < ApplicationQuery
     @student ||= Founder.where(id: student_id).includes(:user).first
   end
 
-  def avatar_url
-    user = student.user
-    if user.avatar.attached?
-      Rails.application.routes.url_helpers.rails_representation_path(user.avatar_variant(:mid), only_path: true)
-    end
+  def team
+    @team ||= student.startup
   end
 
   def coach_notes

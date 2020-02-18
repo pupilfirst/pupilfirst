@@ -131,4 +131,54 @@ feature "Course students list", js: true do
     expect(page).to have_text(team_6.name)
     expect(page).to_not have_text(team_1.name)
   end
+
+  scenario 'course coach checks list of directly assigned coaches' do
+    sign_in_user course_coach.user, referer: students_course_path(course)
+
+    click_button('Load More...')
+
+    team_6_entry = find("div[aria-label='team-card-#{team_6.id}']")
+
+    expected_initials = team_coach.name.split(' ')[0..1]
+      .map { |name_fragment| name_fragment[0] }
+      .map(&:capitalize).join
+
+    within(team_6_entry) do
+      find('.tooltip__trigger', text: expected_initials).hover
+    end
+
+    expect(page).to have_text(team_coach.name)
+  end
+
+  context 'when there are more than 4 coaches directly assigned to a team' do
+    let(:team_coach_2) { create :faculty, school: school }
+    let(:team_coach_3) { create :faculty, school: school }
+    let(:team_coach_4) { create :faculty, school: school }
+    let(:team_coach_5) { create :faculty, school: school }
+
+    before do
+      create :faculty_startup_enrollment, faculty: team_coach_2, startup: team_6
+      create :faculty_startup_enrollment, faculty: team_coach_3, startup: team_6
+      create :faculty_startup_enrollment, faculty: team_coach_4, startup: team_6
+      create :faculty_startup_enrollment, faculty: team_coach_5, startup: team_6
+    end
+
+    scenario 'course coach checks names of coaches hidden from main list' do
+      possible_names = [team_coach.name, team_coach_2.name, team_coach_3.name, team_coach_4.name, team_coach_5.name]
+
+      sign_in_user course_coach.user, referer: students_course_path(course)
+
+      click_button('Load More...')
+
+      team_6_entry = find("div[aria-label='team-card-#{team_6.id}']")
+
+      within(team_6_entry) do
+        find('.tooltip__trigger', text: '+2').hover
+      end
+
+      find('.tooltip__bubble').text.strip.split("\n").each do |name|
+        expect(name).to be_in(possible_names)
+      end
+    end
+  end
 end

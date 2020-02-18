@@ -4,37 +4,42 @@ type averageGrade = {
 };
 
 type t = {
-  name: string,
-  title: string,
+  id: string,
   email: string,
-  avatarUrl: option(string),
   phone: option(string),
   coachNotes: array(CoursesStudents__CoachNote.t),
   evaluationCriteria: array(CoursesStudents__EvaluationCriterion.t),
-  levelId: string,
   socialLinks: array(string),
   totalTargets: int,
   targetsCompleted: int,
   quizScores: array(string),
   averageGrades: array(averageGrade),
   completedLevelIds: array(string),
+  team: CoursesStudents__TeamInfo.t,
 };
 
-let name = t => t.name;
+let team = t => t.team;
 
-let title = t => t.title;
+let student = t => t.team |> CoursesStudents__TeamInfo.studentWithId(t.id);
+
+let name = t => t |> student |> CoursesStudents__TeamInfo.studentName;
+
+let title = t => t |> student |> CoursesStudents__TeamInfo.studentTitle;
 
 let email = t => t.email;
 
-let levelId = t => t.levelId;
+let levelId = t => t.team |> CoursesStudents__TeamInfo.levelId;
 
 let phone = t => t.phone;
 
 let socialLinks = t => t.socialLinks;
 
-let avatarUrl = t => t.avatarUrl;
+let avatarUrl = t =>
+  t |> student |> CoursesStudents__TeamInfo.studentAvatarUrl;
 
 let coachNotes = t => t.coachNotes;
+
+let teamCoachUserIds = t => t.team |> CoursesStudents__TeamInfo.coachUserIds;
 
 let makeAverageGrade = gradesData => {
   gradesData
@@ -115,11 +120,9 @@ let averageQuizScore = t => {
     ? None : Some(computeAverageQuizScore(t.quizScores));
 };
 
-let makeFromJS = studentDetails => {
-  name: studentDetails##name,
-  title: studentDetails##title,
+let makeFromJs = (id, studentDetails) => {
+  id,
   email: studentDetails##email,
-  avatarUrl: studentDetails##avatarUrl,
   phone: studentDetails##phone,
   coachNotes:
     studentDetails##coachNotes
@@ -127,11 +130,14 @@ let makeFromJS = studentDetails => {
   evaluationCriteria:
     studentDetails##evaluationCriteria
     |> CoursesStudents__EvaluationCriterion.makeFromJs,
-  levelId: studentDetails##levelId,
   socialLinks: studentDetails##socialLinks,
   totalTargets: studentDetails##totalTargets,
   targetsCompleted: studentDetails##targetsCompleted,
   quizScores: studentDetails##quizScores,
   averageGrades: studentDetails##averageGrades |> makeAverageGrade,
   completedLevelIds: studentDetails##completedLevelIds,
+  team: studentDetails##team |> CoursesStudents__TeamInfo.makeFromJS,
 };
+
+let teamHasManyStudents = t =>
+  t.team |> CoursesStudents__TeamInfo.students |> Array.length > 1;

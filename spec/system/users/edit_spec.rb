@@ -12,8 +12,8 @@ feature 'User Edit' do
   let(:communication_address) { Faker::Address.full_address }
   let(:username) { Faker::Internet.user_name(student_name, %w[-]) }
   let(:about) { Faker::Lorem.paragraphs.join(" ") }
-  let(:current_password) { Faker::Internet.password(8, 16) }
-  let(:new_password) { Faker::Internet.password(8, 16) }
+  let(:current_password) { Faker::Internet.password(min_length: 8, max_length: 16) }
+  let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 16) }
 
   def upload_path(file)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', file))

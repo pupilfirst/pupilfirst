@@ -9,7 +9,7 @@ feature 'School admins Editor', js: true do
   let!(:school_admin_1) { create :school_admin, school: school }
   let!(:school_admin_2) { create :school_admin, school: school }
   let(:name) { Faker::Name.name }
-  let(:email) { Faker::Internet.email(name) }
+  let(:email) { Faker::Internet.email(name: name) }
   let(:name_for_edit) { Faker::Name.name }
   let(:user) { create :user }
   let(:name_for_user) { Faker::Name.name }

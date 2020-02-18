@@ -10,7 +10,7 @@ FactoryBot.define do
 
     trait :markdown do
       block_type { ContentBlock::BLOCK_TYPE_MARKDOWN }
-      content { { markdown: Faker::Markdown.sandwich(5) } }
+      content { { markdown: Faker::Markdown.sandwich(sentences: 5) } }
     end
 
     trait :image do
@@ -22,7 +22,7 @@ FactoryBot.define do
     trait :file do
       block_type { ContentBlock::BLOCK_TYPE_FILE }
       file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/resources/pdf-sample.pdf'), 'application/pdf') }
-      content { { title: Faker::Lorem.words(3).join(" ").titleize } }
+      content { { title: Faker::Lorem.words(number: 3).join(" ").titleize } }
     end
 
     trait :embed do

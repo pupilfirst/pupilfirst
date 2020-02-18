@@ -52,6 +52,12 @@ Metrics/BlockLength:
     - 'spec/factories/*'
 Lint/ShadowingOuterLocalVariable: # shadowing is a language feature - we should use it where appropriate.
   Enabled: false
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 
 # Concessions (remove these if possible / appropriate).
 

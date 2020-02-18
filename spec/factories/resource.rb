@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :resource do
     file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/resources/pdf-sample.pdf'), 'application/pdf') }
-    title { Faker::Lorem.words(6).join ' ' }
-    description { Faker::Lorem.words(12).join ' ' }
+    title { Faker::Lorem.words(number: 6).join ' ' }
+    description { Faker::Lorem.words(number: 12).join ' ' }
     school
 
     factory :resource_video_file do

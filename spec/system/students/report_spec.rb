@@ -194,8 +194,8 @@ feature "Course students report", js: true do
     sign_in_user course_coach.user, referer: student_report_path(student)
 
     find('li', text: 'Notes').click
-    note_1 = Faker::Markdown.sandwich(2)
-    note_2 = Faker::Markdown.sandwich(2)
+    note_1 = Faker::Markdown.sandwich(sentences: 2)
+    note_2 = Faker::Markdown.sandwich(sentences: 2)
     add_markdown(note_1)
     click_button('Save Note')
     dismiss_notification

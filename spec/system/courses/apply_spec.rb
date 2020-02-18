@@ -11,9 +11,9 @@ feature "Apply for public courses", js: true do
   let(:private_course) { create :course, school: school }
   let(:public_course_in_school_2) { create :course, school: school_2, public_signup: true }
   let(:name) { Faker::Name.name }
-  let(:email) { Faker::Internet.email(name) }
+  let(:email) { Faker::Internet.email(name: name) }
   let(:name_2) { Faker::Name.name }
-  let(:email_2) { Faker::Internet.email(name_2) }
+  let(:email_2) { Faker::Internet.email(name: name_2) }
   let(:old_applicant) { create :applicant, course: course }
   let(:startup) { create :startup, level: level_one }
   let(:token) { Faker::Crypto.md5 }

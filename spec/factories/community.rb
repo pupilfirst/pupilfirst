@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :community do
-    name { Faker::Lorem.words(2).join(' ') }
+    name { Faker::Lorem.words(number: 2).join(' ') }
     school
 
     trait :target_linkable do

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :college do
-    name { Faker::Lorem.words(3).join(' ') }
+    name { Faker::Lorem.words(number: 3).join(' ') }
     city { Faker::Address.city }
     state
 

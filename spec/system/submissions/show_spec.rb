@@ -57,7 +57,7 @@ feature 'Submissions show' do
     scenario 'coach evaluates a pending submission and gives a feedback', js: true do
       sign_in_user coach.user, referer: timeline_event_path(submission_pending)
 
-      feedback = Faker::Markdown.sandwich(6)
+      feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
       expect(page).to have_content('Grade Card')
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
@@ -109,16 +109,16 @@ feature 'Submissions show' do
       # Checklist item 1
       checklist_title_1 = Faker::Lorem.sentence
       c1_result_0_title = Faker::Lorem.sentence
-      c1_result_0_feedback = Faker::Markdown.sandwich(3)
+      c1_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c1_result_1_title = Faker::Lorem.sentence
-      c1_result_1_feedback = Faker::Markdown.sandwich(3)
+      c1_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
 
       # Checklist item 2
       checklist_title_2 = Faker::Lorem.sentence
       c2_result_0_title = Faker::Lorem.sentence
-      c2_result_0_feedback = Faker::Markdown.sandwich(3)
+      c2_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c2_result_1_title = Faker::Lorem.sentence
-      c2_result_1_feedback = Faker::Markdown.sandwich(3)
+      c2_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
 
       expect(target.review_checklist).to eq([])
 
@@ -318,7 +318,7 @@ feature 'Submissions show' do
       expect(page).not_to have_button("Add feedback")
       expect(page).to have_button("Share Feedback", disabled: true)
 
-      feedback = Faker::Markdown.sandwich(6)
+      feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
       click_button "Share Feedback"
 
@@ -420,7 +420,7 @@ feature 'Submissions show' do
       expect(page).not_to have_button("Add feedback")
       expect(page).to have_button("Share Feedback", disabled: true)
 
-      feedback = Faker::Markdown.sandwich(6)
+      feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
       click_button "Share Feedback"
 

@@ -19,7 +19,7 @@ describe Startups::TeamUpService do
 
   let!(:founders_in_same_level) { Founder.where(id: [founder_1.id, founder_2.id, founder_3.id, founder_4.id]) }
   let!(:founders_in_different_levels) { Founder.where(id: [founder_5.id, founder_2.id]) }
-  let(:team_name) { Faker::Lorem.words(2).join(' ') }
+  let(:team_name) { Faker::Lorem.words(number: 2).join(' ') }
 
   before do
     FacultyStartupEnrollment.create!(faculty: faculty_1, startup: startup_1, safe_to_create: true)

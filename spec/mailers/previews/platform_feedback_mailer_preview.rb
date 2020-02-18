@@ -13,7 +13,7 @@ class PlatformFeedbackMailerPreview < ActionMailer::Preview
     PlatformFeedback.new(
       founder: Founder.last,
       feedback_type: PlatformFeedback.types_of_feedback.sample,
-      description: Faker::Lorem.paragraphs(2).join("\n\n")
+      description: Faker::Lorem.paragraphs(number: 2).join("\n\n")
     )
   end
 end

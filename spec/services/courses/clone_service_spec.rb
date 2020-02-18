@@ -23,7 +23,7 @@ describe Courses::CloneService do
   let(:ec_1) { create :evaluation_criterion, course: course }
   let(:ec_2) { create :evaluation_criterion, course: course }
 
-  let(:new_name) { Faker::Lorem.words(2).join(' ') }
+  let(:new_name) { Faker::Lorem.words(number: 2).join(' ') }
 
   # Quiz target
   let!(:quiz_target) { create :target, :with_content, target_group: target_group_l1_1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence }

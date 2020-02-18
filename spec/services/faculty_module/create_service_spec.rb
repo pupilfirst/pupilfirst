@@ -3,9 +3,9 @@ require 'rails_helper'
 describe FacultyModule::CreateService do
   subject { described_class }
 
-  let(:name) { (Faker::Lorem.words(2).join ' ').titleize }
+  let(:name) { (Faker::Lorem.words(number: 2).join ' ').titleize }
   let(:email) { Faker::Internet.email }
-  let(:title) { (Faker::Lorem.words(2).join ' ').titleize }
+  let(:title) { (Faker::Lorem.words(number: 2).join ' ').titleize }
   let(:school) { create :school }
   let(:course) { create :course, school: school }
   let(:faculty) { create :faculty, school: school }

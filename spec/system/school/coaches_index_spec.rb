@@ -12,12 +12,12 @@ feature 'Coaches Index', js: true do
   let!(:coach_3) { create :faculty, school: school_1 }
 
   let(:new_coach_name) { Faker::Name.name }
-  let(:new_coach_email) { Faker::Internet.email(new_coach_name) }
-  let(:new_coach_title) { Faker::Lorem.words(2).join(' ') }
-  let(:new_coach_affiliation) { Faker::Lorem.words(2).join(" ") }
+  let(:new_coach_email) { Faker::Internet.email(name: new_coach_name) }
+  let(:new_coach_title) { Faker::Lorem.words(number: 2).join(' ') }
+  let(:new_coach_affiliation) { Faker::Lorem.words(number: 2).join(" ") }
 
   let(:updated_coach_name) { Faker::Name.name }
-  let(:updated_coach_title) { Faker::Lorem.words(2).join(' ') }
+  let(:updated_coach_title) { Faker::Lorem.words(number: 2).join(' ') }
 
   let!(:school_admin) { create :school_admin, school: school }
 

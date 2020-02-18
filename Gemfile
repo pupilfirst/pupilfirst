@@ -71,7 +71,7 @@ gem 'reform', '~> 2.2' # Form objects decoupled from models. http://www.trailbla
 gem 'reform-rails', '~> 0.1'
 gem 'virtus', '~> 1.0' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem 'dry-validation', '~> 0.10' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
-gem 'postmark-rails', '~> 0.15' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
+gem 'postmark-rails', '~> 0.19' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 # gem 'intercom-rails', '~> 0.4' # The easiest way to install Intercom in a Rails app.
 gem 'intercom', '~> 3.5' # Ruby bindings for the Intercom API
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
@@ -94,7 +94,7 @@ gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'jwt', '~> 2.1' # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT), used by Zoom API
 gem 'chartkick', '~> 3.3' # Create beautiful charts with one line of JavaScript.
-gem 'graphql', '= 1.9.12' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '~> 1.10' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 
 # Rails assets!
@@ -145,13 +145,14 @@ group :test do
 end
 
 group :development, :test do
-  gem 'faker', '~> 1.8' # A library for generating fake data such as names, addresses, and phone numbers.
+  gem 'faker', '~> 2.10' # A library for generating fake data such as names, addresses, and phone numbers.
   gem 'rspec-rails', '~> 4.0.0.beta4' # Duh.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.
-  gem 'rubocop', '~> 0.79', require: false # Ruby Style Guide.
+  gem 'rubocop', '~> 0.80', require: false # Ruby Style Guide.
   gem 'rubocop-rails', '~> 2.4', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem 'rubocop-faker'
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.

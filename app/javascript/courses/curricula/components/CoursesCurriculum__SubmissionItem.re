@@ -29,7 +29,7 @@ let showError = (message, active) =>
 
 let showLink = (value, index, title, optional, callback) => {
   let id = "link-" ++ index;
-  <div>
+  <div className="mt-2">
     {placeholder(id, title, optional)}
     <input
       id
@@ -47,7 +47,7 @@ let showLink = (value, index, title, optional, callback) => {
 
 let showShortText = (value, index, title, optional, callback) => {
   let id = "short-text-" ++ index;
-  <div>
+  <div className="mt-2">
     {placeholder(id, title, optional)}
     <input
       id
@@ -69,7 +69,7 @@ let showShortText = (value, index, title, optional, callback) => {
 
 let showLongText = (value, index, title, optional, callback) => {
   let id = "long-text-" ++ index;
-  <div>
+  <div className="mt-2">
     {placeholder(id, title, optional)}
     <textarea
       id
@@ -88,13 +88,30 @@ let showLongText = (value, index, title, optional, callback) => {
   </div>;
 };
 
+let checkboxOnChange = (choices, itemIndex, callback, event) => {
+  ReactEvent.Form.target(event)##checked
+    ? callback(ChecklistItem.MultiChoice(choices, Some(itemIndex)))
+    : callback(ChecklistItem.MultiChoice(choices, None));
+};
+
 let showMultiChoice = (choices, choice, index, title, optional, callback) => {
   let id = "multi-choice-" ++ index;
-  <div>
+
+  <div className="mt-2">
     {placeholder(id, title, optional)}
     <div>
       {choices
-       |> Array.mapi((index, c) => {<div> {c |> str} </div>})
+       |> Array.mapi((index, label) => {
+            let checked =
+              choice |> OptionUtils.mapWithDefault(i => i == index, false);
+            <Checkbox
+              key={index |> string_of_int}
+              id={id ++ (index |> string_of_int)}
+              label
+              onChange={checkboxOnChange(choices, index, callback)}
+              checked
+            />;
+          })
        |> React.array}
     </div>
   </div>;
@@ -108,7 +125,7 @@ let showFiles = (files, preview, index, titile, optional, callback) => {
         files |> Array.append([|ChecklistItem.makeFile(id, filename)|]),
       ),
     );
-  <div>
+  <div className="mt-2">
     {placeholder(id, titile, optional)}
     <div className="flex flex-wrap" id>
       {files
@@ -141,7 +158,9 @@ let showFiles = (files, preview, index, titile, optional, callback) => {
 
 let showStatement = (index, title) => {
   let id = "statement-" ++ index;
-  <div id className="text-sm font-semibold"> {title |> str} </div>;
+  <div id className="text-sm font-semibold mt-2 bg-white p-4 border border">
+    {title |> str}
+  </div>;
 };
 
 [@react.component]

@@ -91,6 +91,8 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
   };
 };
 
+let createNew = {title: "", kind: LongText, optional: false};
+
 let kindFromJs = (data, metaData) => {
   switch (data) {
   | "files" => Files

@@ -663,6 +663,12 @@ let updateChecklistItem = (state, send, indexToChange, newChecklistItem) => {
   send(UpdateChecklist(newChecklist));
 };
 
+let addNewChecklistItem = (state, send) => {
+  let newChecklist =
+    Array.append(state.checklist ,[|ChecklistItem.createNew|]);
+  send(UpdateChecklist(newChecklist));
+};
+
 [@react.component]
 let make =
     (
@@ -802,6 +808,14 @@ let make =
                        />
                      )
                   |> React.array}
+                 <button
+                   className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                   onClick={_ => addNewChecklistItem(state, send)}>
+                   <PfIcon className="if i-plus-circle if-fw" />
+                   <span className="font-semibold ml-2">
+                     {"Add Another Step" |> str}
+                   </span>
+                 </button>
                </div>
              </div>
              {targetEvaluated(state.methodOfCompletion)

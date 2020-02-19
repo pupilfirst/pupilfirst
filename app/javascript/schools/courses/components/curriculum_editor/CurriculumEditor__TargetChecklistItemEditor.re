@@ -94,7 +94,11 @@ let multiChoiceEditor =
               className="flex flex-1 py-2 px-3 ml-6 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
               <input
                 className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
-                onChange={updateChoiceText(index, checklistItem, updateChecklistItemCB)}
+                onChange={updateChoiceText(
+                  index,
+                  checklistItem,
+                  updateChecklistItemCB,
+                )}
                 type_="text"
                 value=choice
               />

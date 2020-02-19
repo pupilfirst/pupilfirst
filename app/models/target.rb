@@ -73,11 +73,11 @@ class Target < ApplicationRecord
   VISIBILITY_ARCHIVED = 'archived'
   VISIBILITY_DRAFT = 'draft'
 
-  CHECKLIST_KIND_SHORT_TEXT = 'short_text'
-  CHECKLIST_KIND_LONG_TEXT = 'long_text'
+  CHECKLIST_KIND_SHORT_TEXT = 'shortText'
+  CHECKLIST_KIND_LONG_TEXT = 'longText'
   CHECKLIST_KIND_ATTACH_LINKS = 'link'
   CHECKLIST_KIND_ATTACH_FILES = 'files'
-  CHECKLIST_KIND_MULTI_CHOICE = 'multi_choice'
+  CHECKLIST_KIND_MULTI_CHOICE = 'multiChoice'
   CHECKLIST_KIND_STATEMENT = 'statement'
 
   def self.valid_target_action_types

@@ -45,7 +45,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
     description = {
       title: "Quiz",
       result: submission.description,
-      kind: "long_text",
+      kind: "longText",
       status: "pending",
 
     }
@@ -56,7 +56,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
     description = {
       title: "Description",
       result: submission.description,
-      kind: "long_text",
+      kind: "longText",
       status: "pending",
     }
 

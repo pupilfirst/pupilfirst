@@ -29,6 +29,17 @@ let actionStringForKind = kind => {
   };
 };
 
+let kindAsString = kind => {
+  switch (kind) {
+  | Files => "files"
+  | Link => "link"
+  | ShortText => "short_text"
+  | LongText => "long_text"
+  | MultiChoice(_choices) => "multi_choice"
+  | Statement => "statement"
+  };
+};
+
 let make = (~title, ~kind, ~optional) => {
   {title, kind, optional};
 };
@@ -93,6 +104,17 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
 
 let createNew = {title: "", kind: LongText, optional: false};
 
+let metaData = kind => {
+  switch (kind) {
+  | MultiChoice(choices) => choices
+  | Files
+  | Link
+  | ShortText
+  | LongText
+  | Statement => [||]
+  };
+};
+
 let isValidChecklistItem = t => {
   switch (t.kind) {
   | MultiChoice(choices) =>
@@ -139,3 +161,15 @@ let decode = json => {
     title: json |> field("title", string),
   };
 };
+
+let encode = t =>
+  Json.Encode.(
+    object_([
+      ("kind", t.kind |> kindAsString |> string),
+      ("title", t.title |> string),
+      ("optional", t.optional |> bool),
+      ("meta_data", t.kind |> metaData |> stringArray),
+    ])
+  );
+
+let encodeChecklist = checklist => checklist |> Json.Encode.(array(encode));

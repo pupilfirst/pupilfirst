@@ -19,6 +19,7 @@ class UpdateTargetMutator < ApplicationQuery
   validate :target_and_target_group_in_same_course
   validate :target_and_evaluation_criteria_have_same_course
   validate :prerequisite_targets_in_same_level
+  validate :checklist_has_valid_data
 
   def target_group_exists
     errors[:base] << 'Target group does not exist' if target_group.blank?
@@ -54,6 +55,32 @@ class UpdateTargetMutator < ApplicationQuery
     return if target.course.id == target_group.course.id
 
     errors[:base] << 'target and target group not from the same course'
+  end
+
+  def valid_checklist_title(title)
+    title.is_a?(String) && title.present?
+  end
+
+  def valid_checklist_kind(kind)
+    kind.is_a?(String) && Target.valid_checklist_kind_types.include?(kind)
+  end
+
+  def valid_metadata(item)
+    item['kind'] == Target::CHECKLIST_KIND_MULTI_CHOICE && item['meta_data'].length > 1
+  end
+
+  def validate_checklist(checklist)
+    checklist.respond_to?(:all?) && checklist.all? do |item|
+      valid_checklist_title(item['title']) && valid_checklist_kind(item['kind']) && item['optional'].present? && valid_metadata(item)
+    end
+  end
+
+  def checklist_has_valid_data
+    return if evaluation_criteria.blank? && checklist.blank?
+
+    return if evaluation_criteria.present? && checklist.present? && validate_checklist(checklist)
+
+    errors[:base] << 'not a valid checklist'
   end
 
   def update

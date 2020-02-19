@@ -55,7 +55,7 @@ let fileIds = checklist => {
   |> Array.map(c =>
        switch (c.result) {
        | Files(files) => files |> Array.map(a => a.id) |> Array.to_list
-       | _ => []
+       | _anyOtherResult => []
        }
      )
   |> ArrayUtils.flatten;
@@ -87,10 +87,8 @@ let encodeResult = t => {
   | LongText(t) => t
   | MultiChoice(choices, index) =>
     index
-    |> OptionUtils.mapWithDefault(
-         i => choices |> ArrayUtils.getOpt(i) |> OptionUtils.default(""),
-         "",
-       )
+    |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i))
+    |> OptionUtils.default("")
   | Statement => ""
   };
 };

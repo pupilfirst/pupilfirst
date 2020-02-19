@@ -43,16 +43,16 @@ let isButtonDisabled = formState =>
 
 type state = {
   formState,
-  checklist: array(Checklist.t),
+  checklist: array(ChecklistItem.t),
 };
 
 type action =
   | UpdateFormState(formState)
-  | UpdateResponse(array(Checklist.t));
+  | UpdateResponse(array(ChecklistItem.t));
 
 let initialState = checklist => {
   formState: Incomplete,
-  checklist: Checklist.makeEmpty(checklist),
+  checklist: ChecklistItem.makeEmpty(checklist),
 };
 
 let reducer = (state, action) =>
@@ -87,8 +87,8 @@ let submit = (state, send, target, addSubmissionCB, event) => {
 
   send(UpdateFormState(Saving));
 
-  let fileIds = state.checklist |> Checklist.fileIds;
-  let checklist = state.checklist |> Checklist.encodeArray;
+  let fileIds = state.checklist |> ChecklistItem.fileIds;
+  let checklist = state.checklist |> ChecklistItem.encodeArray;
 
   CreateSubmissionQuery.make(
     ~targetId=target |> Target.id,
@@ -100,7 +100,7 @@ let submit = (state, send, target, addSubmissionCB, event) => {
   |> Js.Promise.then_(response => {
        switch (response##createSubmission##submission) {
        | Some(submission) =>
-         let attachments = state.checklist |> Checklist.makeAttachments;
+         let attachments = state.checklist |> ChecklistItem.makeAttachments;
          let submissionChecklist =
            checklist
            |> Json.Decode.array(SubmissionChecklistItem.decode(attachments));
@@ -137,7 +137,9 @@ let isDescriptionDisabled = formState =>
 
 let updateResult = (state, send, index, result) => {
   send(
-    UpdateResponse(state.checklist |> Checklist.updateResult(index, result)),
+    UpdateResponse(
+      state.checklist |> ChecklistItem.updateResult(index, result),
+    ),
   );
 };
 

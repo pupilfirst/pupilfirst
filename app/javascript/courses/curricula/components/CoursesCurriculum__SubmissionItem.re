@@ -10,7 +10,7 @@ let showLink = (value, callback) => {
     type_="text"
     value
     onChange={e =>
-      callback(Checklist.Link(ReactEvent.Form.target(e)##value))
+      callback(ChecklistItem.Link(ReactEvent.Form.target(e)##value))
     }
     placeholder="Type full URL starting with https://..."
     className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
@@ -23,7 +23,7 @@ let showShortText = (value, callback) => {
     type_="text"
     value
     onChange={e =>
-      callback(Checklist.ShortText(ReactEvent.Form.target(e)##value))
+      callback(ChecklistItem.ShortText(ReactEvent.Form.target(e)##value))
     }
     placeholder="Add a short text"
     className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
@@ -38,7 +38,7 @@ let showLongText = (value, callback) => {
     placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
     value
     onChange={e =>
-      callback(Checklist.LongText(ReactEvent.Form.target(e)##value))
+      callback(ChecklistItem.LongText(ReactEvent.Form.target(e)##value))
     }
   />;
 };
@@ -54,8 +54,8 @@ let showMultiChoice = (choices, choice, callback) => {
 let showFiles = (files, callback, preview) => {
   let attachFileCB = (id, filename) =>
     callback(
-      Checklist.Files(
-        files |> Array.append([|Checklist.makeFile(id, filename)|]),
+      ChecklistItem.Files(
+        files |> Array.append([|ChecklistItem.makeFile(id, filename)|]),
       ),
     );
   <div>
@@ -63,7 +63,7 @@ let showFiles = (files, callback, preview) => {
       {files
        |> Array.map(file => {
             <div
-              key={"file-" ++ (file |> Checklist.fileId)}
+              key={"file-" ++ (file |> ChecklistItem.fileId)}
               target="_blank"
               className="mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700">
               <span
@@ -72,7 +72,7 @@ let showFiles = (files, callback, preview) => {
               </span>
               <span
                 className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose bg-primary-100">
-                {file |> Checklist.filename |> str}
+                {file |> ChecklistItem.filename |> str}
               </span>
             </div>
           })
@@ -86,11 +86,11 @@ let showFiles = (files, callback, preview) => {
 let make = (~checklistItem, ~updateResultCB, ~preview) => {
   <div>
     <label htmlFor="submission-description" className="font-semibold pl-1">
-      {(checklistItem |> Checklist.title)
-       ++ (checklistItem |> Checklist.optional ? " (optional)" : "")
+      {(checklistItem |> ChecklistItem.title)
+       ++ (checklistItem |> ChecklistItem.optional ? " (optional)" : "")
        |> str}
     </label>
-    {switch (checklistItem |> Checklist.result) {
+    {switch (checklistItem |> ChecklistItem.result) {
      | Files(files) => showFiles(files, updateResultCB, preview)
      | Link(link) => showLink(link, updateResultCB)
      | ShortText(shortText) => showShortText(shortText, updateResultCB)

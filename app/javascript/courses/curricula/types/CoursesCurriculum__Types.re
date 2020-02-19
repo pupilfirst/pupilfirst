@@ -15,4 +15,4 @@ module TargetStatus = CoursesCurriculum__TargetStatus;
 module Feedback = CoursesCurriculum__Feedback;
 module Grading = CoursesCurriculum__Grading;
 module Notice = CoursesCurriculum__Notice;
-module Checklist = CoursesCurriculum__Checklist;
+module ChecklistItem = CoursesCurriculum__ChecklistItem;

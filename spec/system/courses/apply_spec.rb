@@ -135,7 +135,7 @@ feature "Apply for public courses", js: true do
     fill_in 'Name', with: user.name
     click_button 'Apply'
 
-    expect(page).to have_text("Already enrolled in #{public_course.name} course")
+    expect(page).to have_text("You are already enrolled in #{public_course.name} course")
   end
 
   scenario 'user tries to access a private course page' do
@@ -149,7 +149,7 @@ feature "Apply for public courses", js: true do
     visit enroll_applicants_path(token)
 
     expect(page).to have_text("Sign in")
-    expect(page).to have_text('User authentication failed. The link you followed appears to be invalid.')
+    expect(page).to have_text('That one-time link has expired, or is invalid')
   end
 
   context 'when school has privacy policy' do

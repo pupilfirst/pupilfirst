@@ -81,7 +81,7 @@ feature 'User signing in by supplying email address', js: true do
 
       scenario 'does not allow to change password without a valid token' do
         visit reset_password_path(token: "myRandomToken")
-        expect(page).to have_content("User authentication failed")
+        expect(page).to have_content("That one-time link has already been used, or is invalid")
       end
     end
   end

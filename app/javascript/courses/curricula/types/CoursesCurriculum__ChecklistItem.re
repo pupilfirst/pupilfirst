@@ -93,21 +93,28 @@ let encodeResult = t => {
   };
 };
 
+let validString = (s, maxLength) => {
+  let length = s |> String.trim |> String.length;
+  length > 1 && length <= maxLength;
+};
+
+let validShortText = s => {
+  validString(s, 250);
+};
+
+let validLongText = s => {
+  validString(s, 1000);
+};
+
 let validResponse = response => {
   switch (response.result) {
-  | Files(files) => files != [||]
-  | Link(t)
-  | ShortText(t)
-  | LongText(t) => t |> String.length > 2
+  | Files(files) => files != [||] && files |> Array.length <= 3
+  | Link(link) => link |> UrlUtils.isValid(response.optional)
+  | ShortText(t) => validShortText(t)
+  | LongText(t) => validLongText(t)
   | MultiChoice(choices, index) =>
     index
-    |> OptionUtils.mapWithDefault(
-         i =>
-           choices
-           |> ArrayUtils.getOpt(i)
-           |> OptionUtils.mapWithDefault(_ => true, false),
-         false,
-       )
+    |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)
   | Statement => true
   };
 };

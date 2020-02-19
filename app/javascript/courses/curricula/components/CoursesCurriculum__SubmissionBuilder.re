@@ -153,6 +153,7 @@ let make =
      |> Array.mapi((index, checklistItem) => {
           <CoursesCurriculum__SubmissionItem
             key={index |> string_of_int}
+            index={index |> string_of_int}
             checklistItem
             updateResultCB={updateResult(state, send, index)}
             preview

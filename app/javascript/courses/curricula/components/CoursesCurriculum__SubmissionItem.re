@@ -4,54 +4,89 @@ open CoursesCurriculum__Types;
 
 let str = React.string;
 
-let showLink = (value, callback) => {
-  <input
-    id="link"
-    type_="text"
-    value
-    onChange={e =>
-      callback(ChecklistItem.Link(ReactEvent.Form.target(e)##value))
-    }
-    placeholder="Type full URL starting with https://..."
-    className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
-  />;
+let placeholder = (id, title, optional) => {
+  <label htmlFor=id className="font-semibold pl-1">
+    {title ++ (optional ? " (optional)" : "") |> str}
+  </label>;
 };
 
-let showShortText = (value, callback) => {
-  <input
-    id="short_text"
-    type_="text"
-    value
-    onChange={e =>
-      callback(ChecklistItem.ShortText(ReactEvent.Form.target(e)##value))
-    }
-    placeholder="Add a short text"
-    className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
-  />;
-};
-
-let showLongText = (value, callback) => {
-  <textarea
-    id="long_text"
-    maxLength=1000
-    className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
-    placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
-    value
-    onChange={e =>
-      callback(ChecklistItem.LongText(ReactEvent.Form.target(e)##value))
-    }
-  />;
-};
-
-let showMultiChoice = (choices, choice, callback) => {
+let showLink = (value, index, title, optional, callback) => {
+  let id = "link-" ++ index;
   <div>
-    {choices
-     |> Array.mapi((index, c) => {<div> {c |> str} </div>})
-     |> React.array}
+    {placeholder(id, title, optional)}
+    <input
+      id
+      type_="text"
+      value
+      onChange={e =>
+        callback(ChecklistItem.Link(ReactEvent.Form.target(e)##value))
+      }
+      placeholder="Type full URL starting with https://..."
+      className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
+    />
+    <School__InputGroupError
+      message="Invalid url"
+      active={UrlUtils.isInvalid(true, value)}
+    />
   </div>;
 };
 
-let showFiles = (files, callback, preview) => {
+let showShortText = (value, index, title, optional, callback) => {
+  let id = "short-text-" ++ index;
+  <div>
+    {placeholder(id, title, optional)}
+    <input
+      id
+      type_="text"
+      value
+      onChange={e =>
+        callback(ChecklistItem.ShortText(ReactEvent.Form.target(e)##value))
+      }
+      placeholder="Add a short text"
+      className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
+    />
+    <School__InputGroupError
+      message="Invalid url"
+      active={!ChecklistItem.validShortText(value)}
+    />
+  </div>;
+};
+
+let showLongText = (value, index, title, optional, callback) => {
+  let id = "long-text-" ++ index;
+  <div>
+    {placeholder(id, title, optional)}
+    <textarea
+      id
+      maxLength=1000
+      className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
+      placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
+      value
+      onChange={e =>
+        callback(ChecklistItem.LongText(ReactEvent.Form.target(e)##value))
+      }
+    />
+    <School__InputGroupError
+      message="Invalid url"
+      active={!ChecklistItem.validLongText(value)}
+    />
+  </div>;
+};
+
+let showMultiChoice = (choices, choice, index, title, optional, callback) => {
+  let id = "multi-choice-" ++ index;
+  <div>
+    {placeholder(id, title, optional)}
+    <div>
+      {choices
+       |> Array.mapi((index, c) => {<div> {c |> str} </div>})
+       |> React.array}
+    </div>
+  </div>;
+};
+
+let showFiles = (files, preview, index, titile, optional, callback) => {
+  let id = "file-" ++ index;
   let attachFileCB = (id, filename) =>
     callback(
       ChecklistItem.Files(
@@ -59,7 +94,8 @@ let showFiles = (files, callback, preview) => {
       ),
     );
   <div>
-    <div className="flex flex-wrap">
+    {placeholder(id, titile, optional)}
+    <div className="flex flex-wrap" id>
       {files
        |> Array.map(file => {
             <div
@@ -82,22 +118,34 @@ let showFiles = (files, callback, preview) => {
   </div>;
 };
 
+let showStatement = (index, title) => {
+  let id = "statement-" ++ index;
+  <div id className="text-sm font-semibold"> {title |> str} </div>;
+};
+
 [@react.component]
-let make = (~checklistItem, ~updateResultCB, ~preview) => {
+let make = (~index, ~checklistItem, ~updateResultCB, ~preview) => {
+  let title = checklistItem |> ChecklistItem.title;
+  let optional = checklistItem |> ChecklistItem.optional;
   <div>
-    <label htmlFor="submission-description" className="font-semibold pl-1">
-      {(checklistItem |> ChecklistItem.title)
-       ++ (checklistItem |> ChecklistItem.optional ? " (optional)" : "")
-       |> str}
-    </label>
     {switch (checklistItem |> ChecklistItem.result) {
-     | Files(files) => showFiles(files, updateResultCB, preview)
-     | Link(link) => showLink(link, updateResultCB)
-     | ShortText(shortText) => showShortText(shortText, updateResultCB)
-     | LongText(longText) => showLongText(longText, updateResultCB)
+     | Files(files) =>
+       showFiles(files, preview, index, title, optional, updateResultCB)
+     | Link(link) => showLink(link, index, title, optional, updateResultCB)
+     | ShortText(shortText) =>
+       showShortText(shortText, index, title, optional, updateResultCB)
+     | LongText(longText) =>
+       showLongText(longText, index, title, optional, updateResultCB)
      | MultiChoice(choices, selected) =>
-       showMultiChoice(choices, selected, updateResultCB)
-     | Statement => React.null
+       showMultiChoice(
+         choices,
+         selected,
+         index,
+         title,
+         optional,
+         updateResultCB,
+       )
+     | Statement => showStatement(index, title)
      }}
   </div>;
 };

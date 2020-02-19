@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Target Content Editor', js: true do
   include UserSpecHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
   include NotificationHelper
 
   # Setup a course with a single founder target, ...

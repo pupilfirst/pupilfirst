@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Markdown editor', js: true do
   include UserSpecHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
   include SampleFilesHelper
 
   # Setup a course with students and target for community.

@@ -74,7 +74,7 @@ let make =
       </div>
     </div>
     <div className="my-2 bg-white">
-      <MarkdownEditor2
+      <MarkdownEditor
         textareaId=questionId
         placeholder="Type the question here (supports markdown)"
         value={quizQuestion |> TargetDetails__QuizQuestion.question}

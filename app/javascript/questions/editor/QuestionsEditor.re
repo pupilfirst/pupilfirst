@@ -249,7 +249,7 @@ let make =
               {"Description" |> str}
             </label>
             <div className="w-full flex flex-col">
-              <MarkdownEditor2
+              <MarkdownEditor
                 textareaId="description"
                 onChange
                 value=description

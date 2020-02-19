@@ -1,20 +1,3 @@
-.markdown-button-group {
-  @apply border rounded;
-}
-
-.markdown-button-group__button {
-  @apply bg-white border-r px-3 flex items-center whitespace-no-wrap text-sm font-semibold;
-}
-
-.markdown-button-group__button:last-child {
-  @apply border-r-0;
-}
-
-.markdown-editor-preview {
-  min-height: 10.5rem;
-}
-
-.markdown-draft-editor__container {
-  min-height: 10.5rem;
-  word-break: break-word;
+.markdown-editor__footer-container {
+  border-style: dashed solid solid solid;
 }

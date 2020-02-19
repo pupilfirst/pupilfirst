@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Courses Index', js: true do
   include UserSpecHelper
   include NotificationHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }

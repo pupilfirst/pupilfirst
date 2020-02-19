@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Target Details Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
 
   # Setup a course with few targets target, ...
   let!(:school) { create :school, :current }

@@ -365,7 +365,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
                 active={state.hasDateError}
               />
               <div id="About" className="mt-5">
-                <MarkdownEditor2
+                <MarkdownEditor
                   onChange={updateAboutCB(send)}
                   value={state.about}
                   placeholder="Add more details about the course."

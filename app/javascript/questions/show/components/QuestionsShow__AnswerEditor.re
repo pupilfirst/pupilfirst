@@ -208,7 +208,7 @@ let make =
             htmlFor="new-answer">
             {"Your Answer" |> str}
           </label>
-          <MarkdownEditor2
+          <MarkdownEditor
             placeholder="Type in your answer. You can use Markdown to format your response."
             textareaId="new-answer"
             onChange=updateMarkdownCB

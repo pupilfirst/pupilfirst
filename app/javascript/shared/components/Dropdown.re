@@ -41,7 +41,7 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
   <div
     className={containerClasses(className)}
     onClick={toggleDropdown(setShowDropdown)}>
-    <div> selected </div>
+    selected
     {showDropdown
        ? <ul
            className={

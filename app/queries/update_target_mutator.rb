@@ -66,12 +66,14 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def valid_metadata(item)
-    item['kind'] == Target::CHECKLIST_KIND_MULTI_CHOICE && item['meta_data'].length > 1
+    return true if item['kind'] != Target::CHECKLIST_KIND_MULTI_CHOICE
+
+    item['meta_data'].length > 1 && item['meta_data'].all? { |choice| choice.is_a?(String) }
   end
 
   def validate_checklist(checklist)
     checklist.respond_to?(:all?) && checklist.all? do |item|
-      valid_checklist_title(item['title']) && valid_checklist_kind(item['kind']) && item['optional'].present? && valid_metadata(item)
+      valid_checklist_title(item['title']) && valid_checklist_kind(item['kind']) && (item['optional'] == !!item['optional']) && valid_metadata(item)
     end
   end
 
@@ -115,7 +117,8 @@ class UpdateTargetMutator < ApplicationQuery
       evaluation_criterion_ids: evaluation_criteria,
       quiz: quiz,
       link_to_complete: link_to_complete,
-      completion_instructions: completion_instructions
+      completion_instructions: completion_instructions,
+      checklist: checklist
     }
   end
 end

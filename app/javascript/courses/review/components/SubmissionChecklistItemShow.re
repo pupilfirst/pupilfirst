@@ -6,12 +6,12 @@ let str = React.string;
 
 let kindIconClasses = result => {
   switch ((result: ChecklistItem.result)) {
-  | ShortText(_text) => "fas fa-font"
-  | LongText(_markdown) => "fas fa-paragraph"
-  | Link(_link) => "fas fa-link"
-  | MultiChoice(_text) => "fas fa-tasks"
-  | Files(_attachments) => "fas fa-file"
-  | None => "fas fa-question"
+  | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800"
+  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800"
+  | Link(_link) => "if i-link-regular md:text-base text-gray-800"
+  | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800"
+  | Files(_attachments) => "if i-file-regular md:text-base text-gray-800"
+  | None => "if i-short-text-regular md:text-base text-gray-800"
   };
 };
 
@@ -121,7 +121,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
     React.useState(() => computeShowResult(checklistItem, updateChecklistCB));
   let status = checklistItem |> ChecklistItem.status;
 
-  <div className="mt-2 p-2 bg-white shadow rounded-lg">
+  <div className="py-4">
     <div className="text-sm font-semibold flex justify-between">
       <div>
         {statusIcon(updateChecklistCB, status)}

@@ -509,7 +509,7 @@ let make =
 
   <DisablingCover disabled={state.saving}>
     <div className=" ">
-      <div className="p-4 md:px-6 md:pt-2 bg-gray-100 border-b">
+      <div className="px-4 md:px-6 md:pt-2 bg-gray-100 border-b">
         <SubmissionChecklistShow
           checklist={state.checklist}
           updateChecklistCB

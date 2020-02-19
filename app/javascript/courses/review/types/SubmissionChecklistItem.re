@@ -41,10 +41,10 @@ let makeResult = (result, kind, attachments) => {
   switch (result) {
   | Some(result) =>
     switch (kind) {
-    | "short_text" => ShortText(result)
-    | "long_text" => LongText(result)
+    | "shortText" => ShortText(result)
+    | "longText" => LongText(result)
     | "link" => Link(result)
-    | "multi_choice" => MultiChoice(result)
+    | "multiChoice" => MultiChoice(result)
     | "files" => Files(attachments)
     | _ => None
     }
@@ -116,12 +116,12 @@ let makePassed = (index, checklist) =>
 
 let encodeKind = t =>
   switch (t.result) {
-  | ShortText(_) => "short_text"
-  | LongText(_) => "long_text"
+  | ShortText(_) => "shortText"
+  | LongText(_) => "longText"
   | Link(_) => "link"
   | Files(_) => "files"
-  | MultiChoice(_) => "multi_choice"
-  | None => "no_action"
+  | MultiChoice(_) => "multiChoice"
+  | None => "noAction"
   };
 
 let encodeResult = t =>

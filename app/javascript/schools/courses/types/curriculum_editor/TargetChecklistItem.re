@@ -33,9 +33,9 @@ let kindAsString = kind => {
   switch (kind) {
   | Files => "files"
   | Link => "link"
-  | ShortText => "short_text"
-  | LongText => "long_text"
-  | MultiChoice(_choices) => "multi_choice"
+  | ShortText => "shortText"
+  | LongText => "longText"
+  | MultiChoice(_choices) => "multiChoice"
   | Statement => "statement"
   };
 };
@@ -136,9 +136,9 @@ let kindFromJs = (data, metaData) => {
   switch (data) {
   | "files" => Files
   | "link" => Link
-  | "short_text" => ShortText
-  | "long_text" => LongText
-  | "multi_choice" => MultiChoice(OptionUtils.default([||], metaData))
+  | "shortText" => ShortText
+  | "longText" => LongText
+  | "multiChoice" => MultiChoice(OptionUtils.default([||], metaData))
   | "statement" => Statement
   | kind =>
     Rollbar.error(
@@ -155,7 +155,7 @@ let decode = json => {
     kind:
       kindFromJs(
         json |> field("kind", string),
-        json |> optional(field("meta_data", array(string))),
+        json |> optional(field("metaData", array(string))),
       ),
     optional: json |> field("optional", bool),
     title: json |> field("title", string),
@@ -168,7 +168,7 @@ let encode = t =>
       ("kind", t.kind |> kindAsString |> string),
       ("title", t.title |> string),
       ("optional", t.optional |> bool),
-      ("meta_data", t.kind |> metaData |> stringArray),
+      ("metaData", t.kind |> metaData |> stringArray),
     ])
   );
 

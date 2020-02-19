@@ -65,9 +65,9 @@ let encodeKind = t => {
   switch (t.result) {
   | Files(_) => "files"
   | Link(_) => "link"
-  | ShortText(_) => "short_text"
-  | LongText(_) => "long_text"
-  | MultiChoice(_, _) => "multi_choice"
+  | ShortText(_) => "shortText"
+  | LongText(_) => "longText"
+  | MultiChoice(_, _) => "multiChoice"
   | Statement => "statement"
   };
 };

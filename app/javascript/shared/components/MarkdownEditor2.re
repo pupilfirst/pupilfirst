@@ -105,7 +105,7 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
 let containerClasses = mode =>
   switch (mode) {
-  | Windowed(_) => ""
+  | Windowed(_) => "relative"
   | Fullscreen(_) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col"
   };
 
@@ -266,11 +266,11 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 };
 
 let controlsContainerClasses = mode =>
-  "border border-gray-300 bg-gray-200 p-1 flex justify-between "
+  "border bg-gray-200 p-1 flex justify-between "
   ++ (
     switch (mode) {
-    | Windowed(_) => "rounded-t"
-    | Fullscreen(_) => ""
+    | Windowed(_) => "rounded-t border-gray-300 sticky top-0 z-20"
+    | Fullscreen(_) => "border-gray-400 "
     }
   );
 
@@ -332,14 +332,14 @@ let modeClasses = mode =>
   };
 
 let editorContainerClasses = mode =>
-  "border-r border-gray-300 "
+  "border-r "
   ++ (
     switch (mode) {
-    | Windowed(`Editor) => "border-l"
+    | Windowed(`Editor) => "border-l border-gray-300"
     | Windowed(`Preview) => "hidden"
-    | Fullscreen(`Editor) => "w-full"
+    | Fullscreen(`Editor) => "w-full  border-gray-400"
     | Fullscreen(`Preview) => "hidden"
-    | Fullscreen(`Split) => "w-1/2"
+    | Fullscreen(`Split) => "w-1/2  border-gray-400"
     }
   );
 
@@ -353,7 +353,7 @@ let previewType = mode =>
   };
 
 let previewContainerClasses = mode =>
-  "border-gray-300 "
+  "border-gray-400 bg-gray-100 "
   ++ (
     switch (mode |> previewType) {
     | `WindowedPreview => "border-l border-r border-b rounded-b px-2"
@@ -446,11 +446,11 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   };
 
 let footerContainerClasses = mode =>
-  "markdown-editor__footer-container border border-gray-300 bg-gray-200 flex justify-between items-center "
+  "markdown-editor__footer-container border bg-gray-200 flex justify-between items-center "
   ++ (
     switch (mode) {
-    | Windowed(_) => "rounded-b"
-    | Fullscreen(_) => ""
+    | Windowed(_) => "rounded-b border-gray-300"
+    | Fullscreen(_) => "border-gray-400"
     }
   );
 

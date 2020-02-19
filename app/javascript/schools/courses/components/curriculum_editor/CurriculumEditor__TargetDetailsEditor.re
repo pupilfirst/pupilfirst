@@ -797,41 +797,47 @@ let make =
                  </button>
                </div>
              </div>
-             <div className="mb-6">
-               <label
-                 className="block tracking-wide text-sm font-semibold mr-6"
-                 htmlFor="evaluated">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"What steps should the student take to complete this target?"
-                  |> str}
-               </label>
-               <div className="ml-6 mb-6">
-                 {state.checklist
-                  |> Array.mapi((index, checklistItem) =>
-                       <CurriculumEditor__TargetChecklistItemEditor
-                         key={index |> string_of_int}
-                         checklistItem
-                         index
-                         updateChecklistItemCB={updateChecklistItem(
-                           state,
-                           send,
-                           index,
-                         )}
-                       />
-                     )
-                  |> React.array}
-                 <button
-                   className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
-                   onClick={_ => addNewChecklistItem(state, send)}>
-                   <PfIcon className="if i-plus-circle if-fw" />
-                   <span className="font-semibold ml-2">
-                     {"Add Another Step" |> str}
-                   </span>
-                 </button>
-               </div>
-             </div>
+             {switch (state.methodOfCompletion) {
+              | Evaluated =>
+                <div className="mb-6">
+                  <label
+                    className="block tracking-wide text-sm font-semibold mr-6"
+                    htmlFor="target_checklist">
+                    <span className="mr-2">
+                      <i className="fas fa-list text-base" />
+                    </span>
+                    {"What steps should the student take to complete this target?"
+                     |> str}
+                  </label>
+                  <div className="ml-6 mb-6">
+                    {state.checklist
+                     |> Array.mapi((index, checklistItem) =>
+                          <CurriculumEditor__TargetChecklistItemEditor
+                            key={index |> string_of_int}
+                            checklistItem
+                            index
+                            updateChecklistItemCB={updateChecklistItem(
+                              state,
+                              send,
+                              index,
+                            )}
+                          />
+                        )
+                     |> React.array}
+                    <button
+                      className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                      onClick={_ => addNewChecklistItem(state, send)}>
+                      <PfIcon className="if i-plus-circle if-fw" />
+                      <span className="font-semibold ml-2">
+                        {"Add Another Step" |> str}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              | VisitLink
+              | TakeQuiz
+              | MarkAsComplete => React.null
+              }}
              {targetEvaluated(state.methodOfCompletion)
                 ? React.null : methodOfCompletionSelector(state, send)}
              {switch (state.methodOfCompletion) {

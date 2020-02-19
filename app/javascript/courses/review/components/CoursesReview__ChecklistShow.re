@@ -80,7 +80,7 @@ let checklistItemCheckedClasses = (itemIndex, selection) => {
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
 
-  <div className="relative bg-gray-100 rounded-lg py-2 md:py-4">
+  <div className="relative border bg-gray-100 rounded-lg py-2 md:py-4">
     <div className="absolute right-0 top-0 -mt-9">
       <button
         className="flex items-center btn btn-small btn-primary-ghost"

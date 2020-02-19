@@ -531,7 +531,7 @@ let make =
           </span>
         </h5>
         <div
-          className="flex md:flex-row flex-col-reverse ml-6 md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+          className="flex md:flex-row flex-col-reverse border ml-6 md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>

@@ -11,7 +11,7 @@ let kindIconClasses = result => {
   | Link(_link) => "if i-link-regular md:text-base text-gray-800"
   | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800"
-  | None => "if i-short-text-regular md:text-base text-gray-800"
+  | None => "if i-question-square-regular md:text-base text-gray-800"
   };
 };
 
@@ -64,13 +64,11 @@ let statusIcon = (updateChecklistCB, status) => {
 let showStatus = status => {
   switch ((status: ChecklistItem.status)) {
   | Passed =>
-    <div
-      className="bg-white border border-green-500 rounded-lg px-1 py-px inline-block text-green-500 text-xs">
+    <div className="bg-green-200 rounded px-1 py-px text-green-800 text-tiny">
       {"Passed" |> str}
     </div>
   | Failed =>
-    <div
-      className="bg-white border border-red-500 rounded-lg px-1 py-px inline-block text-red-500 text-xs">
+    <div className="bg-red-200 rounded px-1 py-px text-red-800 text-tiny">
       {"Failed" |> str}
     </div>
   | Pending => React.null
@@ -78,26 +76,34 @@ let showStatus = status => {
 };
 
 let statusButtonSelectedClasses = (status, currentStatus) => {
-  "border rounded-lg px-1 py-px inline-block text-xs mr-1 "
+  "inline-flex items-center cursor-pointer leading-tight px-3 py-2 font-semibold inline-block text-xs relative hover:bg-gray-100 hover:text-gray-700 "
   ++ (
     switch (currentStatus: ChecklistItem.status, status: ChecklistItem.status) {
-    | (Passed, Passed) => "bg-green-500 text-white border-green-700"
-    | (Failed, Failed) => "bg-red-500 text-white border-red-700"
-    | (_, _) => "bg-white text-gray-500 border-gray-500"
+    | (Passed, Passed) => "bg-green-100 hover:bg-green-100 text-green-800 hover:text-green-800 border-green-500 z-10"
+    | (Failed, Failed) => "bg-red-100 hover:bg-red-100 text-red-800 hover:text-red-800 border-red-500 z-10"
+    | (_, _) => "bg-white"
     }
   );
 };
 
 let statusButtons = (index, status, callback, checklist) =>
-  <div>
+  <div className="mt-2">
     <div
       onClick={_ => callback(checklist |> ChecklistItem.makePassed(index))}
-      className={statusButtonSelectedClasses(ChecklistItem.Passed, status)}>
+      className={
+        "border border-gray-500 rounded-l "
+        ++ statusButtonSelectedClasses(ChecklistItem.Passed, status)
+      }>
+      <i className="far fa-check-circle text-base mr-2" />
       {"Done" |> str}
     </div>
     <div
       onClick={_ => callback(checklist |> ChecklistItem.makeFailed(index))}
-      className={statusButtonSelectedClasses(ChecklistItem.Failed, status)}>
+      className={
+        "border border-gray-500 rounded-r -ml-px "
+        ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
+      }>
+      <i className="far fa-times-circle text-base mr-2" />
       {"Not Done" |> str}
     </div>
     <div
@@ -122,8 +128,8 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let status = checklistItem |> ChecklistItem.status;
 
   <div className="py-4">
-    <div className="text-sm font-semibold flex justify-between">
-      <div>
+    <div className="text-sm font-semibold flex items-center justify-between">
+      <div className="flex">
         {statusIcon(updateChecklistCB, status)}
         <span>
           <i
@@ -143,7 +149,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
       </div>
     </div>
     {showResult
-       ? <div className="ml-6 md:ml-7 ">
+       ? <div className="ml-6 md:ml-7 pt-2 ">
            <div>
              {switch (checklistItem |> ChecklistItem.result) {
               | ShortText(text) => <div> {text |> str} </div>

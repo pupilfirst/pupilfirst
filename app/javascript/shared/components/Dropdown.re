@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Webapi.Dom;
 
 let onWindowClick = (showDropdown, setShowDropdown, _event) =>

@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./SkeletonLoading.css")|}];
 
 let card = () =>

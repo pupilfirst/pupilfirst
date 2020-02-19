@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open SchoolAdminNavbar__Types;
 
 let str = React.string;
@@ -35,12 +33,10 @@ let make = (~courses, ~currentCourseId) => {
           <i className="fas fa-chevron-down text-sm" />
         </span>
       </button>
-      {
-        showDropdown ?
-          <div
-            className="bg-white shadow-lg rounded-b-lg border absolute overflow-hidden min-w-full w-auto z-50">
-            {
-              courses
+      {showDropdown
+         ? <div
+             className="bg-white shadow-lg rounded-b-lg border absolute overflow-hidden min-w-full w-auto z-50">
+             {courses
               |> Course.sort
               |> List.filter(course =>
                    course |> Course.id != (currentCourse |> Course.id)
@@ -58,11 +54,9 @@ let make = (~courses, ~currentCourseId) => {
                    </a>
                  )
               |> Array.of_list
-              |> React.array
-            }
-          </div> :
-          React.null
-      }
+              |> React.array}
+           </div>
+         : React.null}
     </div>
   </div>;
 };

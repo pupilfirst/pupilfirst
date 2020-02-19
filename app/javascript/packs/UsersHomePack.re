@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   currentSchoolAdmin: bool,
   courses: array(UsersHome__Course.t),

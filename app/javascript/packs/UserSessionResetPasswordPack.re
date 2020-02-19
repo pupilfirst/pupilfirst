@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   token: string,
   authenticityToken: string,

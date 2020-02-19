@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let notFoundIcon: string = [%raw "require('./images/no-students-found.svg')"];
 
 let str = React.string;

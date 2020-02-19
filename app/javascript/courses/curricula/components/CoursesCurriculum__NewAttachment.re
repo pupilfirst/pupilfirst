@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 type selection =
@@ -51,18 +49,16 @@ let make =
     </ul>
     <div
       className="bg-white p-4 pt-2 border-l border-r border-b rounded-b border-gray-400">
-      {
-        switch (selection) {
-        | UploadFile =>
-          <CoursesCurriculum__FileForm
-            authenticityToken
-            attachFileCB
-            attachingCB
-            preview
-          />
-        | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB typingCB />
-        }
-      }
+      {switch (selection) {
+       | UploadFile =>
+         <CoursesCurriculum__FileForm
+           authenticityToken
+           attachFileCB
+           attachingCB
+           preview
+         />
+       | AddUrl => <CoursesCurriculum__UrlForm attachUrlCB typingCB />
+       }}
     </div>
   </DisablingCover>;
 };

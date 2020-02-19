@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open CourseEditor__Types;
 
 let str = ReasonReact.string;
@@ -248,13 +246,4 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB) => {
       </DisablingCover>
     </form>
   </SchoolAdmin__EditorDrawer>;
-};
-
-module Jsx2 = {
-  let make = (~course, ~updateCourseCB, ~closeDrawerCB, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~course, ~updateCourseCB, ~closeDrawerCB, ()),
-      children,
-    );
 };

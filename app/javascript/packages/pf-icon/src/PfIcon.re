@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@bs.module "./iconFirst"]
 external transformIcons: unit => unit = "transformIcons";
 

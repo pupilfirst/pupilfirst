@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesCurriculum__Quiz.css")|}];
 
 open CoursesCurriculum__Types;

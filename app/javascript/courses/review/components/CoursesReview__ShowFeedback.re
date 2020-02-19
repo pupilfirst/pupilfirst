@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open CoursesReview__Types;
 
 let str = React.string;

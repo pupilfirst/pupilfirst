@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./MultiselectInline.css")|}];
 
 let str = React.string;

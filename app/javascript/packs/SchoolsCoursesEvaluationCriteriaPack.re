@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   courseId: string,
   evaluationCriteria: array(EvaluationCriterion.t),

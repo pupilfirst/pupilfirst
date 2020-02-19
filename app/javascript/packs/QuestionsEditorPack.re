@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   communityId: string,
   target: option(QuestionsEditor__Target.t),

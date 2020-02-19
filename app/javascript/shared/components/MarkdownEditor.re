@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception FormNotFound(string);
 
 [%bs.raw {|require("./MarkdownEditor.css")|}];
@@ -371,32 +369,4 @@ let make =
        </div>;
      }}
   </div>;
-};
-
-module Jsx2 = {
-  let make =
-      (
-        ~placeholder,
-        ~updateMarkdownCB,
-        ~value,
-        ~label,
-        ~profile,
-        ~maxLength,
-        ~defaultView,
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~placeholder,
-        ~updateMarkdownCB,
-        ~value,
-        ~label,
-        ~profile,
-        ~maxLength,
-        ~defaultView,
-        (),
-      ),
-      children,
-    );
 };

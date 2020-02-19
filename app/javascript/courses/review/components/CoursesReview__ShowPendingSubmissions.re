@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let pendingEmptyImage: string = [%raw
   "require('../images/pending-empty.svg')"
 ];

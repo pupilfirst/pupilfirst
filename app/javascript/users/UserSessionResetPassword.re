@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 let resetPasswordIcon: string = [%raw
   "require('./images/set-new-password-icon.svg')"
 ];
@@ -81,8 +80,8 @@ let renderUpdatePassword =
         type_="password"
         maxLength=128
         placeholder="Enter a strong password"
-        onChange={
-          event => setNewPassword(ReactEvent.Form.target(event)##value)
+        onChange={event =>
+          setNewPassword(ReactEvent.Form.target(event)##value)
         }
       />
     </div>
@@ -97,22 +96,21 @@ let renderUpdatePassword =
         type_="password"
         maxLength=128
         placeholder="Please re-enter your password"
-        onChange={
-          event => setConfirmPassword(ReactEvent.Form.target(event)##value)
+        onChange={event =>
+          setConfirmPassword(ReactEvent.Form.target(event)##value)
         }
       />
     </div>
     <button
       disabled={isDisabled(saving, newPassword, confirmPassword)}
-      onClick={
-        _ =>
-          updatePassword(
-            authenticityToken,
-            token,
-            newPassword,
-            confirmPassword,
-            setSaving,
-          )
+      onClick={_ =>
+        updatePassword(
+          authenticityToken,
+          token,
+          newPassword,
+          confirmPassword,
+          setSaving,
+        )
       }
       className="btn btn-success btn-large text-center w-full mt-4">
       <FaIcon classes={saving ? "fas fa-spinner fa-spin" : "fas fa-lock"} />
@@ -135,18 +133,16 @@ let make = (~token, ~authenticityToken) => {
       <div className="text-lg sm:text-2xl font-bold text-center mt-4">
         {"Set new password" |> str}
       </div>
-      {
-        renderUpdatePassword(
-          authenticityToken,
-          token,
-          newPassword,
-          setNewPassword,
-          confirmPassword,
-          setConfirmPassword,
-          saving,
-          setSaving,
-        )
-      }
+      {renderUpdatePassword(
+         authenticityToken,
+         token,
+         newPassword,
+         setNewPassword,
+         confirmPassword,
+         setConfirmPassword,
+         saving,
+         setSaving,
+       )}
     </div>
   </div>;
 };

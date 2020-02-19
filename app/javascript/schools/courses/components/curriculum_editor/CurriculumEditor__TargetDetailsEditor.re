@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open CurriculumEditor__Types;
 
 let markIcon: string = [%raw
@@ -300,7 +298,7 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
           <MultiSelectForPrerequisiteTargets
             placeholder="Search targets"
             emptySelectionMessage="No targets selected"
-             allItemsSelectedMessage="You have selected all targets!"
+            allItemsSelectedMessage="You have selected all targets!"
             selected
             unselected
             onChange={setPrerequisiteSearch(send)}

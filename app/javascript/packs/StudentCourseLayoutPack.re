@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let decodeProps = json =>
   Json.Decode.(
     json |> field("currentCourseId", string),

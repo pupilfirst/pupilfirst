@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception FormNotFound(string);
 exception UnexpectedResponse(int);
 

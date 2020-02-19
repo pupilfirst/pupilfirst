@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception UnexpectedSubmissionStatus(string);
 
 [%bs.raw {|require("./CoursesCurriculum__Overlay.css")|}];

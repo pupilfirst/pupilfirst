@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./CoursesCurriculum__Attachments.css")|}];
 
 let str = React.string;
@@ -36,49 +34,47 @@ let make = (~attachments, ~removeAttachmentCB) =>
   | [] => React.null
   | attachments =>
     <div className="flex flex-wrap">
-      {
-        attachments
-        |> List.map(attachment => {
-             let (key, containerClasses, iconClasses, textClasses, text, url) =
-               switch (attachment) {
-               | SubmissionAttachment.Link(url) => (
-                   url,
-                   "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
-                   "bg-blue-200",
-                   "bg-blue-100",
-                   url,
-                   url,
-                 )
-               | File(id, title, url) => (
-                   "file-" ++ id,
-                   "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
-                   "bg-primary-200",
-                   "bg-primary-100",
-                   title,
-                   url,
-                 )
-               };
+      {attachments
+       |> List.map(attachment => {
+            let (key, containerClasses, iconClasses, textClasses, text, url) =
+              switch (attachment) {
+              | SubmissionAttachment.Link(url) => (
+                  url,
+                  "border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800",
+                  "bg-blue-200",
+                  "bg-blue-100",
+                  url,
+                  url,
+                )
+              | File(id, title, url) => (
+                  "file-" ++ id,
+                  "border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700",
+                  "bg-primary-200",
+                  "bg-primary-100",
+                  title,
+                  url,
+                )
+              };
 
-             <a
-               href=url
-               target="_blank"
-               key
-               className={
-                 "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
-                 ++ containerClasses
-               }>
-               {iconSpan(removeAttachmentCB, iconClasses, attachment)}
-               <span
-                 className={
-                   "rounded text-xs font-semibold inline-block whitespace-normal truncate w-48 md:w-50 h-full px-3 py-1 leading-loose "
-                   ++ textClasses
-                 }>
-                 {text |> str}
-               </span>
-             </a>;
-           })
-        |> Array.of_list
-        |> React.array
-      }
+            <a
+              href=url
+              target="_blank"
+              key
+              className={
+                "mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md "
+                ++ containerClasses
+              }>
+              {iconSpan(removeAttachmentCB, iconClasses, attachment)}
+              <span
+                className={
+                  "rounded text-xs font-semibold inline-block whitespace-normal truncate w-48 md:w-50 h-full px-3 py-1 leading-loose "
+                  ++ textClasses
+                }>
+                {text |> str}
+              </span>
+            </a>;
+          })
+       |> Array.of_list
+       |> React.array}
     </div>
   };

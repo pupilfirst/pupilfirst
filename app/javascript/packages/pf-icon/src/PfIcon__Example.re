@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./PfIcon__Example.css")|}];
 
 let str = React.string;

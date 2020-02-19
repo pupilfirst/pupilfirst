@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesCurriculum.css")|}];
 
 let levelLockedImage: string = [%raw "require('../images/level-lock.svg')"];

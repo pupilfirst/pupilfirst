@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./StudentTopNav.css")|}];
 
 let str = React.string;

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   communities: list(SchoolCommunities__Community.t),
   courses: list(SchoolCommunities__Course.t),

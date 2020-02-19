@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception InvalidModeForPreview;
 
 [%bs.raw {|require("./MarkdownEditor2.css")|}];

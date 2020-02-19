@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open SchoolCustomize__Types;
 
 [%bs.raw {|require("./SchoolCustomize__LinksEditor.css")|}];

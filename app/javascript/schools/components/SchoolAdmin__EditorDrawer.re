@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type size =
   | Normal
   | Large;
@@ -41,17 +39,3 @@ let make =
       <div className="w-full overflow-y-scroll"> children </div>
     </div>
   </div>;
-
-module Jsx2 = {
-  let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~closeDrawerCB,
-        ~closeButtonTitle,
-        ~children=children |> React.array,
-        (),
-      ),
-      children,
-    );
-};

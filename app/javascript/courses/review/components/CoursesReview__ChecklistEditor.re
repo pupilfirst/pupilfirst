@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesReview__ChecklistEditor.css")|}];
 
 open CoursesReview__Types;

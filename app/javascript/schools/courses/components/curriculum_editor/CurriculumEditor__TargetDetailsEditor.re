@@ -526,6 +526,10 @@ let isValidQuiz = quiz => {
   |> ArrayUtils.isEmpty;
 };
 
+let isValidChecklist = checklist => {
+  checklist |> Js.Array.filter(checklistItem => checklistItem |> ChecklistItem.isValidChecklistItem != true) |> ArrayUtils.isEmpty;
+};
+
 let addQuizQuestion = (send, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(AddQuizQuestion);
@@ -584,7 +588,7 @@ let saveDisabled = state => {
     | Evaluated => state.evaluationCriteria |> ArrayUtils.isNotEmpty
     | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
     };
-  !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
+  !hasValidTitle || !hasValidMethodOfCompletion || !isValidChecklist(state.checklist) || !state.dirty || state.saving;
 };
 
 module UpdateTargetQuery = [%graphql

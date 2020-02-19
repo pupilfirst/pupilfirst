@@ -84,35 +84,44 @@ let multiChoiceEditor =
     {let showRemoveIcon = Array.length(choices) > 2;
      choices
      |> Array.mapi((index, choice) =>
-          <div
-            key={index |> string_of_int}
-            className="flex items-center text-sm rounded mb-2">
-            <span className="text-gray-400">
-              <i className="far fa-circle text-base" />
-            </span>
+          <div>
             <div
-              className="flex flex-1 py-2 px-3 ml-6 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
-              <input
-                className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
-                onChange={updateChoiceText(
-                  index,
-                  checklistItem,
-                  updateChecklistItemCB,
-                )}
-                type_="text"
-                value=choice
-              />
-              <button
-                onClick={_ =>
-                  removeMultichoiceOption(
+              key={index |> string_of_int}
+              className="flex items-center text-sm rounded mt-2">
+              <span className="text-gray-400">
+                <i className="far fa-circle text-base" />
+              </span>
+              <div
+                className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
+                <input
+                  className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
+                  onChange={updateChoiceText(
                     index,
                     checklistItem,
                     updateChecklistItemCB,
-                  )
-                }>
-                {showRemoveIcon
-                   ? <PfIcon className="if i-times-light if-fw" /> : React.null}
-              </button>
+                  )}
+                  type_="text"
+                  value=choice
+                />
+                <button
+                  onClick={_ =>
+                    removeMultichoiceOption(
+                      index,
+                      checklistItem,
+                      updateChecklistItemCB,
+                    )
+                  }>
+                  {showRemoveIcon
+                     ? <PfIcon className="if i-times-light if-fw" />
+                     : React.null}
+                </button>
+              </div>
+            </div>
+            <div className="ml-6">
+              <School__InputGroupError
+                message="Not a valid choice"
+                active={choice |> String.trim == ""}
+              />
             </div>
           </div>
         )
@@ -121,7 +130,7 @@ let multiChoiceEditor =
       onClick={_ =>
         addMultichoiceOption(checklistItem, updateChecklistItemCB)
       }
-      className="flex ml-10 p-2 text-sm appearance-none bg-white border items-center justify-between outline-none border border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
+      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border items-center justify-between outline-none border border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
       <PfIcon className="if i-plus-circle if-fw" />
       <span className="font-semibold ml-2"> {"Add a choice" |> str} </span>
     </button>
@@ -163,6 +172,12 @@ let make = (~checklistItem, ~index, ~updateChecklistItemCB) => {
            onChange={updateTitle(checklistItem, updateChecklistItemCB)}
            type_="text"
            value={checklistItem |> ChecklistItem.title}
+         />
+       </div>
+       <div className="ml-3">
+         <School__InputGroupError
+           message="Not a valid title"
+           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
          />
        </div>
        {switch (checklistItem |> ChecklistItem.kind) {

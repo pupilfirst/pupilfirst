@@ -93,6 +93,23 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
 
 let createNew = {title: "", kind: LongText, optional: false};
 
+let isValidChecklistItem = t => {
+  switch (t.kind) {
+  | MultiChoice(choices) =>
+    choices
+    |> Js.Array.filter(choice => choice |> String.trim |> String.length < 1)
+    |> ArrayUtils.isEmpty
+    && t.title
+    |> String.trim
+    |> String.length >= 1
+  | Files
+  | Link
+  | ShortText
+  | LongText
+  | Statement => t.title |> String.trim |> String.length >= 1
+  };
+};
+
 let kindFromJs = (data, metaData) => {
   switch (data) {
   | "files" => Files

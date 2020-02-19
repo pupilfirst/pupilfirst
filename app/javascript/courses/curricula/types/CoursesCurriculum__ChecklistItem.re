@@ -115,7 +115,7 @@ let validResponse = response => {
   | MultiChoice(choices, index) =>
     index
     |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)
-  | Statement => true
+  | Statement => false
   };
 };
 

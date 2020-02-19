@@ -95,7 +95,7 @@ let encodeResult = t => {
 
 let validString = (s, maxLength) => {
   let length = s |> String.trim |> String.length;
-  length > 1 && length <= maxLength;
+  length >= 1 && length <= maxLength;
 };
 
 let validShortText = s => {
@@ -108,8 +108,8 @@ let validLongText = s => {
 
 let validResponse = response => {
   switch (response.result) {
-  | Files(files) => files != [||] && files |> Array.length <= 3
-  | Link(link) => link |> UrlUtils.isValid(response.optional)
+  | Files(files) => files != [||] && files |> Array.length < 3
+  | Link(link) => link |> UrlUtils.isValid(false)
   | ShortText(t) => validShortText(t)
   | LongText(t) => validLongText(t)
   | MultiChoice(choices, index) =>
@@ -122,6 +122,8 @@ let validResponse = response => {
 let validResonses = responses => {
   responses |> Js.Array.filter(c => {validResponse(c)});
 };
+
+// let haveValidAnswerForAllQ
 
 let encode = t =>
   Json.Encode.(
@@ -145,7 +147,8 @@ let makeAttachments = checklist => {
        }
      )
   |> ArrayUtils.flatten
-  |> Array.map(f =>
-       SubmissionChecklistItem.makeAttachment(~name=f.name, ~id=f.id, ~url="")
-     );
+  |> Array.map(f => {
+       let url = "/timeline_event_files/" ++ f.id ++ "/download";
+       SubmissionChecklistItem.makeAttachment(~name=f.name, ~id=f.id, ~url);
+     });
 };

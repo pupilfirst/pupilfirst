@@ -10,6 +10,23 @@ let placeholder = (id, title, optional) => {
   </label>;
 };
 
+let notBlank = string => {
+  string |> String.trim != "";
+};
+
+let showError = (message, active) =>
+  if (active) {
+    <div
+      className="mt-1 px-1 py-px rounded text-xs font-semibold text-red-600 bg-red-100 inline-flex items-center">
+      <span className="mr-2">
+        <i className="fas fa-exclamation-triangle" />
+      </span>
+      <span> {message |> str} </span>
+    </div>;
+  } else {
+    React.null;
+  };
+
 let showLink = (value, index, title, optional, callback) => {
   let id = "link-" ++ index;
   <div>
@@ -24,10 +41,7 @@ let showLink = (value, index, title, optional, callback) => {
       placeholder="Type full URL starting with https://..."
       className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
-    <School__InputGroupError
-      message="Invalid url"
-      active={UrlUtils.isInvalid(true, value)}
-    />
+    {showError("Invalid url", UrlUtils.isInvalid(true, value))}
   </div>;
 };
 
@@ -39,16 +53,17 @@ let showShortText = (value, index, title, optional, callback) => {
       id
       type_="text"
       value
+      maxLength=250
       onChange={e =>
         callback(ChecklistItem.ShortText(ReactEvent.Form.target(e)##value))
       }
       placeholder="Add a short text"
       className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
-    <School__InputGroupError
-      message="Invalid url"
-      active={!ChecklistItem.validShortText(value)}
-    />
+    {showError(
+       "Answe should be less than 250 characters",
+       !ChecklistItem.validShortText(value) && notBlank(value),
+     )}
   </div>;
 };
 
@@ -66,10 +81,10 @@ let showLongText = (value, index, title, optional, callback) => {
         callback(ChecklistItem.LongText(ReactEvent.Form.target(e)##value))
       }
     />
-    <School__InputGroupError
-      message="Invalid url"
-      active={!ChecklistItem.validLongText(value)}
-    />
+    {showError(
+       "Answe should be less than 1000 characters",
+       !ChecklistItem.validLongText(value) && notBlank(value),
+     )}
   </div>;
 };
 
@@ -114,7 +129,13 @@ let showFiles = (files, preview, index, titile, optional, callback) => {
           })
        |> React.array}
     </div>
-    <CoursesCurriculum__FileForm attachingCB={() => ()} attachFileCB preview />
+    {files |> Array.length < 3
+       ? <CoursesCurriculum__FileForm
+           attachingCB={() => ()}
+           attachFileCB
+           preview
+         />
+       : React.null}
   </div>;
 };
 

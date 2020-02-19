@@ -68,7 +68,7 @@ class UpdateTargetMutator < ApplicationQuery
   def valid_metadata(item)
     return true if item['kind'] != Target::CHECKLIST_KIND_MULTI_CHOICE
 
-    item['meta_data'].length > 1 && item['meta_data'].all? { |choice| choice.is_a?(String) }
+    item['metaData'].length > 1 && item['meta_data'].all? { |choice| choice.is_a?(String) }
   end
 
   def validate_checklist(checklist)

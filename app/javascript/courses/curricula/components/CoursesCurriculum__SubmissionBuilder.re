@@ -43,22 +43,22 @@ let isButtonDisabled = formState =>
 
 type state = {
   formState,
-  response: array(ChecklistResponseItem.t),
+  checklist: array(Checklist.t),
 };
 
 type action =
   | UpdateFormState(formState)
-  | UpdateResponse(array(ChecklistResponseItem.t));
+  | UpdateResponse(array(Checklist.t));
 
 let initialState = checklist => {
   formState: Incomplete,
-  response: ChecklistResponseItem.makeEmpty(checklist),
+  checklist: Checklist.makeEmpty(checklist),
 };
 
 let reducer = (state, action) =>
   switch (action) {
   | UpdateFormState(formState) => {...state, formState}
-  | UpdateResponse(response) => {...state, response}
+  | UpdateResponse(checklist) => {...state, checklist}
   };
 
 let isBusy = formState =>
@@ -87,8 +87,8 @@ let submit = (state, send, target, addSubmissionCB, event) => {
 
   send(UpdateFormState(Saving));
 
-  let fileIds = state.response |> ChecklistResponseItem.fileIds;
-  let checklist = state.response |> ChecklistResponseItem.encodeArray;
+  let fileIds = state.checklist |> Checklist.fileIds;
+  let checklist = state.checklist |> Checklist.encodeArray;
 
   CreateSubmissionQuery.make(
     ~targetId=target |> Target.id,
@@ -100,20 +100,18 @@ let submit = (state, send, target, addSubmissionCB, event) => {
   |> Js.Promise.then_(response => {
        switch (response##createSubmission##submission) {
        | Some(submission) =>
-         Js.log(submission##id);
+         let attachments = state.checklist |> Checklist.makeAttachments;
+         let submissionChecklist =
+           checklist
+           |> Json.Decode.array(SubmissionChecklistItem.decode(attachments));
          let newSubmission =
            Submission.make(
              ~id=submission##id,
              ~createdAt=submission##createdAt,
              ~status=Submission.Pending,
-             ~checklist={
-               checklist
-               |> Json.Decode.array(SubmissionChecklistItem.decode([||]));
-             },
+             ~checklist=submissionChecklist,
            );
          let newAttachments = submission##id;
-
-         Js.log("Calling addSubmissionCB in SubmissionForm");
          addSubmissionCB(newSubmission, newAttachments);
        | None =>
          /* Enable the form again in case of a validation failure. */
@@ -137,11 +135,9 @@ let isDescriptionDisabled = formState =>
   | Ready => false
   };
 
-let updateResponse = (state, send, index, answer) => {
+let updateResult = (state, send, index, result) => {
   send(
-    UpdateResponse(
-      state.response |> ChecklistResponseItem.updateResult(index, answer),
-    ),
+    UpdateResponse(state.checklist |> Checklist.updateResult(index, result)),
   );
 };
 
@@ -151,13 +147,12 @@ let make =
   let (state, send) = React.useReducer(reducer, initialState(checklist));
 
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
-    {state.response
-     |> Array.mapi((index, responseItem) => {
+    {state.checklist
+     |> Array.mapi((index, checklistItem) => {
           <CoursesCurriculum__SubmissionItem
             key={index |> string_of_int}
-            index
-            response=responseItem
-            updateResponseCB={updateResponse(state, send, index)}
+            checklistItem
+            updateResultCB={updateResult(state, send, index)}
             preview
           />
         })

@@ -735,7 +735,7 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
-            "name": "ImageBlock",
+            "name": "EmbedBlock",
             "ofType": null
           },
           {
@@ -745,39 +745,23 @@
           },
           {
             "kind": "OBJECT",
-            "name": "MarkdownBlock",
+            "name": "ImageBlock",
             "ofType": null
           },
           {
             "kind": "OBJECT",
-            "name": "EmbedBlock",
+            "name": "MarkdownBlock",
             "ofType": null
           }
         ]
       },
       {
         "kind": "OBJECT",
-        "name": "ImageBlock",
+        "name": "EmbedBlock",
         "description": "",
         "fields": [
           {
-            "name": "caption",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "filename",
+            "name": "embedCode",
             "description": "",
             "args": [],
             "type": {
@@ -875,11 +859,43 @@
       },
       {
         "kind": "OBJECT",
-        "name": "MarkdownBlock",
+        "name": "ImageBlock",
         "description": "",
         "fields": [
           {
-            "name": "markdown",
+            "name": "caption",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "filename",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "url",
             "description": "",
             "args": [],
             "type": {
@@ -902,27 +918,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "EmbedBlock",
+        "name": "MarkdownBlock",
         "description": "",
         "fields": [
           {
-            "name": "embedCode",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "url",
+            "name": "markdown",
             "description": "",
             "args": [],
             "type": {
@@ -3194,32 +3194,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "SubmissionChecklist",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "createdAt",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "JSON",
                 "ofType": null
               }
             },
@@ -3227,7 +3203,7 @@
             "deprecationReason": null
           },
           {
-            "name": "description",
+            "name": "createdAt",
             "description": "",
             "args": [],
             "type": {
@@ -3408,73 +3384,12 @@
         "possibleTypes": null
       },
       {
-        "kind": "OBJECT",
-        "name": "SubmissionChecklist",
-        "description": "",
-        "fields": [
-          {
-            "name": "kind",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "result",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "status",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "title",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
+        "kind": "SCALAR",
+        "name": "JSON",
+        "description": "Represents untyped JSON",
+        "fields": null,
         "inputFields": null,
-        "interfaces": [],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -3765,16 +3680,6 @@
         ],
         "inputFields": null,
         "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "JSON",
-        "description": "Represents untyped JSON",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },

@@ -371,7 +371,6 @@ let completeSection =
          />,
          <CoursesCurriculum__SubmissionBuilder
            key="courses-curriculum-submission-form"
-           authenticityToken
            target
            checklist={targetDetails |> TargetDetails.checklist}
            addSubmissionCB={addSubmission(
@@ -408,7 +407,6 @@ let completeSection =
        <CoursesCurriculum__SubmissionsAndFeedback
          targetDetails
          target
-         authenticityToken
          evaluationCriteria
          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
          targetStatus

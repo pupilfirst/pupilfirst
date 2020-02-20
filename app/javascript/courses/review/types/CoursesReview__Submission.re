@@ -1,6 +1,5 @@
 type t = {
   id: string,
-  description: string,
   createdAt: Js.Date.t,
   passedAt: option(Js.Date.t),
   evaluatorName: option(string),
@@ -14,7 +13,6 @@ let createdAt = t => t.createdAt;
 let passedAt = t => t.passedAt;
 let evaluatorName = t => t.evaluatorName;
 let evaluatedAt = t => t.evaluatedAt;
-let description = t => t.description;
 let grades = t => t.grades;
 let feedback = t => t.feedback;
 let checklist = t => t.checklist;
@@ -23,7 +21,6 @@ let prettyDate = date => date |> DateFns.format("MMMM D, YYYY");
 let make =
     (
       ~id,
-      ~description,
       ~createdAt,
       ~passedAt,
       ~evaluatorName,
@@ -33,7 +30,6 @@ let make =
       ~checklist,
     ) => {
   id,
-  description,
   createdAt,
   passedAt,
   evaluatorName,
@@ -48,7 +44,6 @@ let makeFromJs = details =>
   |> Js.Array.map(s =>
        make(
          ~id=s##id,
-         ~description=s##description,
          ~createdAt=s##createdAt |> DateFns.parseString,
          ~passedAt=s##passedAt |> OptionUtils.map(DateFns.parseString),
          ~evaluatorName=s##evaluatorName,
@@ -74,6 +69,10 @@ let makeFromJs = details =>
               ),
          ~checklist=
            s##checklist
-           |> SubmissionChecklistItem.makeArrayFromJs(s##attachments),
+           |> Json.Decode.array(
+                SubmissionChecklistItem.decode(
+                  SubmissionChecklistItem.makeAttachments(s##attachments),
+                ),
+              ),
        )
      );

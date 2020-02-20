@@ -28,7 +28,7 @@ module SubmissionDetailsQuery = [%graphql
         },
         targetEvaluationCriteriaIds,
         submissions{
-          id, evaluatorName, passedAt, createdAt, description, evaluatedAt
+          id, evaluatorName, passedAt, createdAt, evaluatedAt
           attachments{
             url, title, id
           },
@@ -38,9 +38,7 @@ module SubmissionDetailsQuery = [%graphql
           feedback{
             id, coachName, coachAvatarUrl, coachTitle, createdAt,value
           },
-          checklist{
-            title, ,kind, result, status
-          }
+          checklist
         }
       }
     }

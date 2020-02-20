@@ -286,7 +286,6 @@ let make =
     (
       ~targetDetails,
       ~target,
-      ~authenticityToken,
       ~evaluationCriteria,
       ~addSubmissionCB,
       ~targetStatus,
@@ -319,7 +318,6 @@ let make =
     </div>
     {showSubmissionForm
        ? <CoursesCurriculum__SubmissionBuilder
-           authenticityToken
            target
            addSubmissionCB={addSubmission(
              setShowSubmissionForm,

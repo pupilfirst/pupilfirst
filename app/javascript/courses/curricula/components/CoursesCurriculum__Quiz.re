@@ -10,7 +10,6 @@ module CreateQuizSubmissionQuery = [%graphql
     createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
       submission{
         id
-        description
         createdAt
       }
      }

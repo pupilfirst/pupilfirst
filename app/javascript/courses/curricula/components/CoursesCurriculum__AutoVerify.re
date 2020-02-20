@@ -9,7 +9,6 @@ module AutoVerifySubmissionQuery = [%graphql
     autoVerifySubmission(targetId: $targetId){
       submission{
         id
-        description
         createdAt
       }
      }

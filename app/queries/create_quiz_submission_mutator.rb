@@ -11,7 +11,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   def create_submission
     target.timeline_events.create!(
       founders: founders,
-      description: result[:description],
+      checklist: checklist,
       quiz_score: result[:score],
       passed_at: Time.zone.now,
       latest: true
@@ -46,6 +46,15 @@ class CreateQuizSubmissionMutator < ApplicationQuery
 
   def quiz
     @quiz ||= target.quiz
+  end
+
+  def checklist
+    [{
+      title: "Quiz Answers",
+      result: result[:description],
+      kind: "longText",
+      status: "pending"
+    }]
   end
 
   def result

@@ -95,7 +95,6 @@ let updateSubmission =
   let newSubmission =
     Submission.make(
       ~id=submission |> Submission.id,
-      ~description=submission |> Submission.description,
       ~createdAt=submission |> Submission.createdAt,
       ~passedAt,
       ~evaluatorName=

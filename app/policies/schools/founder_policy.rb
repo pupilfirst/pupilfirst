@@ -6,8 +6,8 @@ module Schools
     end
 
     def update?
-      # School admins can edit details of students in their open courses.
-      index? && record.present? && !record.course.ended?
+      # School admins can edit details of students.
+      index? && record.present?
     end
 
     # All school admins can team up founders.

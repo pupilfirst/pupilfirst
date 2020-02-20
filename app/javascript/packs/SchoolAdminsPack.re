@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   currentSchoolAdminId: string,
   admins: array(SchoolAdmin.t),

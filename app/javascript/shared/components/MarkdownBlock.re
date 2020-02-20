@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./MarkdownBlock.css")|}];
 
 let randomId = () => {
@@ -40,13 +39,4 @@ let make = (~markdown, ~className=?, ~profile) => {
     id
     dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse(profile)}
   />;
-};
-
-module Jsx2 = {
-  let make = (~markdown, ~profile, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~markdown, ~profile, ()),
-      children,
-    );
 };

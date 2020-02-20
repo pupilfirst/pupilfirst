@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./CurriculumEditor__TargetShow.css")|}];
 
 open CurriculumEditor__Types;

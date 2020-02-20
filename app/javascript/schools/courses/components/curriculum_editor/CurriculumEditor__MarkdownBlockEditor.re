@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 let onChange = (contentBlock, updateContentBlockCB, value) => {
@@ -9,7 +7,7 @@ let onChange = (contentBlock, updateContentBlockCB, value) => {
 
 [@react.component]
 let make = (~markdown, ~contentBlock, ~updateContentBlockCB) => {
-  <MarkdownEditor2
+  <MarkdownEditor
     value=markdown
     profile=Markdown.Permissive
     maxLength=10000

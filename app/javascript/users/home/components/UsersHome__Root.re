@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("courses/shared/background_patterns.css")|}];
 [%bs.raw {|require("./UserHome__Root.css")|}];
 
@@ -16,8 +14,16 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
     className="max-w-4xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
     <div className="flex">
       {switch (avatarUrl) {
-       | Some(src) => <img className="w-16 h-16 rounded-full border object-cover border-gray-400 rounded-full overflow-hidden flex-shrink-0 mr-4" src />
-       | None => <Avatar name=userName className="w-16 h-16 mr-4 border border-gray-400 rounded-full overflow-hidden flex-shrink-0" />
+       | Some(src) =>
+         <img
+           className="w-16 h-16 rounded-full border object-cover border-gray-400 rounded-full overflow-hidden flex-shrink-0 mr-4"
+           src
+         />
+       | None =>
+         <Avatar
+           name=userName
+           className="w-16 h-16 mr-4 border border-gray-400 rounded-full overflow-hidden flex-shrink-0"
+         />
        }}
       <div className="text-sm flex flex-col justify-center">
         <div className="text-black font-bold inline-block">

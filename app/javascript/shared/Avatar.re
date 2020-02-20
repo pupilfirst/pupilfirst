@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let colors = [|
   ("#ff4040", false),
   ("#7f2020", false),
@@ -99,13 +97,4 @@ let make = (~colors=?, ~name, ~className) => {
       {initials(name) |> React.string}
     </text>
   </svg>;
-};
-
-module Jsx2 = {
-  let make = (~colors=?, ~name, ~className, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~colors?, ~name, ~className, ()),
-      children,
-    );
 };

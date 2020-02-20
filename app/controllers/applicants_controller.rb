@@ -9,7 +9,7 @@ class ApplicantsController < ApplicationController
       flash[:success] = "Welcome to #{current_school.name}!"
       redirect_to after_sign_in_path_for(student.user)
     else
-      flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
+      flash[:error] = "That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in."
       redirect_to new_user_session_path
     end
   end

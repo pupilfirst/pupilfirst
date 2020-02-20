@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open StudentsEditor__Types;
 
 type teamCoachlist = (coachId, coachName, selected)
@@ -99,7 +97,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
       ~team=oldTeam,
     );
 
-// Remove inactive teams from the list
+  // Remove inactive teams from the list
   let team = newTeam |> Team.active ? Some(newTeam) : None;
 
   updateFormCB(state.tagsToApply, team);

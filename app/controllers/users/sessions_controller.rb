@@ -50,7 +50,7 @@ module Users
 
         redirect_to after_sign_in_path_for(user)
       else
-        flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
+        flash[:error] = "That one-time link has expired, or is invalid. Please try signing in again."
         redirect_to new_user_session_path
       end
     end
@@ -61,7 +61,7 @@ module Users
       if user.present?
         @token = params[:token]
       else
-        flash[:error] = 'User authentication failed. The link you followed appears to be invalid.'
+        flash[:error] = "That one-time link has already been used, or is invalid. Please try resetting your password again."
         redirect_to new_user_session_path
       end
     end

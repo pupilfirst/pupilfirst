@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 [@react.component]
@@ -15,12 +13,3 @@ let make = (~message, ~active) =>
   } else {
     ReasonReact.null;
   };
-
-module Jsx2 = {
-  let make = (~message, ~active, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~message, ~active, ()),
-      children,
-    );
-};

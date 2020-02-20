@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
 
 let str = React.string;
@@ -54,7 +53,7 @@ let make =
           className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2">
           {label |> str}
         </label>
-        <MarkdownEditor2
+        <MarkdownEditor
           onChange=updateFeedbackCB
           value=feedback
           profile=Markdown.Permissive

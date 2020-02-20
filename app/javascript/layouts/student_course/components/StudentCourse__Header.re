@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 let str = React.string;
 [%bs.raw {|require("./StudentCourse__Header.css")|}];
 [%bs.raw {|require("courses/shared/background_patterns.css")|}];

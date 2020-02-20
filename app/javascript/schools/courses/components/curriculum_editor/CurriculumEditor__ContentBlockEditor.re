@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception InvalidBlockTypeForUpdate;
 
 let str = React.string;

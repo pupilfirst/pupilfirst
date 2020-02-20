@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   courseName: string,
   courseId: string,

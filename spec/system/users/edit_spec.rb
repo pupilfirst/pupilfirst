@@ -10,7 +10,7 @@ feature 'User Edit' do
   let(:student_name) { Faker::Name.name }
   let(:phone) { rand(9_876_543_210..9_876_553_209) }
   let(:communication_address) { Faker::Address.full_address }
-  let(:username) { Faker::Internet.user_name(student_name, %w[-]) }
+  let(:username) { Faker::Internet.username(specifier: student_name, separators: %w[-]) }
   let(:about) { Faker::Lorem.paragraphs.join(" ") }
   let(:current_password) { Faker::Internet.password(min_length: 8, max_length: 16) }
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 16) }

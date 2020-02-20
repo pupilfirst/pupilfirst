@@ -58,6 +58,6 @@ class CreateApplicantMutator < ApplicationQuery
 
     return if course.users.where(email: email).empty?
 
-    errors[:base] << "Already enrolled in #{course.name} course"
+    errors[:base] << "You are already enrolled in #{course.name} course. Try signing in, instead."
   end
 end

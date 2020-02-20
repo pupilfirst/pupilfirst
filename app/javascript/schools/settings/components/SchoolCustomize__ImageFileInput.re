@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = ReasonReact.string;
 
 let imageLabel = (imageName, selectedImageName) =>

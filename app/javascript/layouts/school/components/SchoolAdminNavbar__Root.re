@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception UnknownPathEncountered(list(string));
 
 [%bs.raw {|require("./SchoolAdminNavbar__Root.css")|}];

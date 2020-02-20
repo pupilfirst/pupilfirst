@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type props = {
   authenticityToken: string,
   customizations: SchoolCustomize__Customizations.t,
@@ -16,7 +14,8 @@ let decodeProps = json =>
     schoolAbout: json |> field("schoolAbout", optional(string)),
   };
 
-let props = DomUtils.parseJsonTag(~id="school-customize-data", ()) |> decodeProps;
+let props =
+  DomUtils.parseJsonTag(~id="school-customize-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <SchoolCustomize__Root

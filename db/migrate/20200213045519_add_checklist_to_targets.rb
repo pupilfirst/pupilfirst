@@ -1,11 +1,14 @@
 class AddChecklistToTargets < ActiveRecord::Migration[6.0]
-  class Target < ActiveRecord::Base
+  class TargetEvaluationCriterion < ApplicationRecord
+    belongs_to :target
   end
 
   def up
     add_column :targets, :checklist, :jsonb, default: []
 
-    Target.all.each do |target|
+    Target.reset_column_information
+
+    Target.where(id: TargetEvaluationCriterion.all.pluck(:target_id).uniq).each do |target|
       target.update!(checklist: default_checklist)
     end
   end

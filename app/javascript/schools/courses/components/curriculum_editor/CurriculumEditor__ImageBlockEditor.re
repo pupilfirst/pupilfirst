@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 let onChange = (contentBlock, updateContentBlockCB, event) => {

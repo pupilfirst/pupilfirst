@@ -1,7 +1,7 @@
 module Schools
   class LevelPolicy < ApplicationPolicy
     def create?
-      CoursePolicy.new(@pundit_user, record.course).curriculum? && !record.course.ended?
+      CoursePolicy.new(@pundit_user, record.course).curriculum?
     end
 
     alias update? create?

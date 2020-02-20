@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Webapi.Dom;
 
 let onWindowClick = (showDropdown, setShowDropdown, _event) =>
@@ -43,7 +41,7 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
   <div
     className={containerClasses(className)}
     onClick={toggleDropdown(setShowDropdown)}>
-    <div> selected </div>
+    selected
     {showDropdown
        ? <ul
            className={

@@ -622,12 +622,12 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
        )
     |> QuizQuestion.quizAsJsObject;
 
-  let (quiz, evaluationCriteria, linkToComplete) =
+  let (quiz, evaluationCriteria, linkToComplete, checklist) =
     switch (state.methodOfCompletion) {
-    | Evaluated => ([||], state.evaluationCriteria, "")
-    | VisitLink => ([||], [||], state.linkToComplete)
-    | TakeQuiz => (quizAsJs, [||], "")
-    | MarkAsComplete => ([||], [||], "")
+    | Evaluated => ([||], state.evaluationCriteria, "", state.checklist)
+    | VisitLink => ([||], [||], state.linkToComplete, [||])
+    | TakeQuiz => (quizAsJs, [||], "", [||])
+    | MarkAsComplete => ([||], [||], "", [||])
     };
 
   let visibility =
@@ -658,7 +658,7 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
     ~linkToComplete,
     ~visibility=visibilityAsString,
     ~checklist={
-      state.checklist |> ChecklistItem.encodeChecklist;
+      checklist |> ChecklistItem.encodeChecklist;
     },
     (),
   )

@@ -94,7 +94,7 @@ let statusButtons = (index, status, callback, checklist) =>
         "border border-gray-500 rounded-l "
         ++ statusButtonSelectedClasses(ChecklistItem.Passed, status)
       }>
-      <i className="far fa-check-circle text-base mr-2" />
+      <PfIcon className="if i-check-light if-fw mr-2" />
       {"Done" |> str}
     </div>
     <div
@@ -103,14 +103,24 @@ let statusButtons = (index, status, callback, checklist) =>
         "border border-gray-500 rounded-r -ml-px "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
-      <i className="far fa-times-circle text-base mr-2" />
+      <PfIcon className="if i-times-light if-fw mr-2" />
       {"Not Done" |> str}
     </div>
-    <div
-      onClick={_ => callback(checklist |> ChecklistItem.makePending(index))}
-      className={statusButtonSelectedClasses(ChecklistItem.Pending, status)}>
-      <i className="fas fa-redo" />
-    </div>
+    {switch ((status: ChecklistItem.status)) {
+     | Pending => React.null
+     | Passed
+     | Failed =>
+       <div
+         onClick={_ =>
+           callback(checklist |> ChecklistItem.makePending(index))
+         }
+         className={statusButtonSelectedClasses(
+           ChecklistItem.Pending,
+           status,
+         )}>
+         <i className="fas fa-redo" />
+       </div>
+     }}
   </div>;
 
 let computeShowResult = (checklistItem, updateChecklistCB) => {
@@ -132,7 +142,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
       <div className="flex">
         {statusIcon(updateChecklistCB, status)}
         <span>
-          <i
+          <PfIcon
             className={kindIconClasses(checklistItem |> ChecklistItem.result)}
           />
         </span>

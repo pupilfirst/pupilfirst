@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module JsComponent = {
   [@bs.module "./DatePicker"] [@react.component]
   external make:
@@ -19,13 +17,4 @@ let make = (~onChange, ~selected=?, ~id=?) => {
     onChange={date => onChange(date |> Js.Nullable.toOption)}
     ?selected
   />;
-};
-
-module Jsx2 = {
-  let make = (~onChange, ~selected=?, ~id=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~onChange, ~selected?, ~id?, ()),
-      children,
-    );
 };

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 open CurriculumEditor__Types;
@@ -100,19 +98,19 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   let selected =
     <button
       title={"Select version " ++ (selectedVersion |> Version.id)}
-      className="text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none border-gray-400 hover:bg-gray-100 hover:shadow-lg">
-      <span className="py-2 px-3"> {versionText(selectedVersion)} </span>
-      <span className="text-right px-3 py-2 border-l border-gray-400">
+      className="text-sm appearance-none bg-white inline-flex items-center justify-between focus:outline-none hover:bg-gray-100 hover:shadow-lg px-3 h-full">
+      <span> {versionText(selectedVersion)} </span>
+      <span className="border-l border-gray-400 ml-2 pl-2">
         <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>;
 
   versions |> Array.length == 1
-    ? <div
-        className="text-sm appearance-none bg-white border focus:outline-none font-semibold rounded border-transparent cursor-auto">
+    ? <div className="text-sm appearance-none bg-white px-3">
+        <span className="font-semibold text-lg"> {"#1 " |> str} </span>
         {selectedVersion |> Version.versionAt |> str}
       </div>
-    : <Dropdown selected contents right=true />;
+    : <Dropdown selected contents right=true className="h-full" />;
 };
 
 let showContentBlocks =
@@ -125,19 +123,19 @@ let showContentBlocks =
       send,
     ) => {
   <div>
-    <div className="flex items-end">
-      <div>
-        <div>
-          <label className="text-xs inline-block text-gray-600 mb-1">
-            {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
-          </label>
-          <HelpIcon
-            className="ml-1"
-            link="https://docs.pupilfirst.com/#/curriculum_editor?id=target-content-versions">
-            {"Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required."
-             |> str}
-          </HelpIcon>
-        </div>
+    <div>
+      <label className="text-xs inline-block text-gray-600 mb-1">
+        {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
+      </label>
+      <HelpIcon
+        className="ml-1"
+        link="https://docs.pupilfirst.com/#/curriculum_editor?id=target-content-versions">
+        {"Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required."
+         |> str}
+      </HelpIcon>
+    </div>
+    <div className="flex">
+      <div className="border border-gray-400 flex items-center">
         {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
       </div>
       <div className="ml-2">

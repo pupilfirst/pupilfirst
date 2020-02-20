@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./EvaluationCriterionEditor__Form.css")|}];
 
 let str = React.string;

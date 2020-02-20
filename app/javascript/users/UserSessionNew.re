@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 [%bs.raw {|require("./UserSessionNew.css")|}];
 
 let federatedSignInIcon: string = [%raw

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Submissions show' do
   include UserSpecHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
   include NotificationHelper
 
   let(:school) { create :school, :current }

@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 exception RootAttributeMissing(string);
 exception InvalidProfile(string);
 

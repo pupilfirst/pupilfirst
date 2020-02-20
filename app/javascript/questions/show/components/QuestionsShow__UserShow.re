@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open QuestionsShow__Types;
 
 let str = React.string;
@@ -8,16 +6,14 @@ let str = React.string;
 let make = (~user, ~createdAt, ~textForTimeStamp) =>
   <div>
     <p className="text-xs text-gray-800">
-      {
-        textForTimeStamp
-        ++ " on "
-        ++ (
-          createdAt
-          |> DateFns.parseString
-          |> DateFns.format("Do MMMM, YYYY HH:mm")
-        )
-        |> str
-      }
+      {textForTimeStamp
+       ++ " on "
+       ++ (
+         createdAt
+         |> DateFns.parseString
+         |> DateFns.format("Do MMMM, YYYY HH:mm")
+       )
+       |> str}
     </p>
     <div
       className="p-2 flex flex-row items-center bg-orange-100 text-orange-900 border border-orange-200 rounded-lg mt-1">

@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Target Details Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
 
   # Setup a course with few targets target, ...
   let!(:school) { create :school, :current }
@@ -32,6 +32,10 @@ feature 'Target Details Editor', js: true do
   let(:quiz_question_2) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_1) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
+
+  before do
+    target_2_l2.evaluation_criterion_ids << evaluation_criterion.id
+  end
 
   scenario 'school admin modifies title and adds completion instruction to target' do
     sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
@@ -87,7 +91,7 @@ feature 'Target Details Editor', js: true do
     sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
-    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    find("a[title='Edit details of target #{target_2_l2.title}']").click
 
     expect(page).to have_text('Will a coach review submissions on this target?')
 
@@ -105,16 +109,16 @@ feature 'Target Details Editor', js: true do
     expect(page).to have_text("Target updated successfully")
     dismiss_notification
 
-    expect(target_1_l2.reload.link_to_complete).to eq(link_to_complete)
-    expect(target_1_l2.reload.evaluation_criteria.count).to eq(0)
-    expect(target_1_l2.reload.quiz).to eq(nil)
+    expect(target_2_l2.reload.link_to_complete).to eq(link_to_complete)
+    expect(target_2_l2.evaluation_criteria.count).to eq(0)
+    expect(target_2_l2.quiz).to eq(nil)
   end
 
   scenario 'school admin updates a target to one with quiz' do
     sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
-    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    find("a[title='Edit details of target #{target_2_l2.title}']").click
     expect(page).to have_text('Title')
 
     within("div#evaluated") do
@@ -148,7 +152,7 @@ feature 'Target Details Editor', js: true do
 
     dismiss_notification
 
-    target = target_1_l2.reload
+    target = target_2_l2.reload
 
     expect(target.evaluation_criteria).to eq([])
     expect(target.link_to_complete).to eq(nil)

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 exception FormNotFound(string);
 
 [%bs.raw {|require("./CurriculumEditor__ContentBlockCreator.css")|}];

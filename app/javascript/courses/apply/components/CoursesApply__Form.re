@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 let str = React.string;
 
 module CreateApplicantQuery = [%graphql

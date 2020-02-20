@@ -5,15 +5,15 @@
 %>
 
 <% content_for :title do %>
-  Verify Your Email Address
+  Welcome to <%= course_name %>
 <% end %>
 
 <% content_for :subtitle do %>
-  Let's get you started in the <%= course_name %> course!
+  Use this <strong>one-time link</strong> to verify your email address and sign into <%= school_name %>!
 <% end %>
 
 <% content_for :title_button_text do %>
-  Click to Verify Email
+  Activate your account and sign in
 <% end %>
 
 <% content_for(:title_button_link, login_url) %>
@@ -24,8 +24,9 @@
 
 <% content_for :body do %>
   <p>
-    To activate your  <%= school_name %> Account, and enroll to the <%= course_name %> course, please verify your email
-    address. Your account will not be created until your email address is confirmed.
+    To activate your <%= school_name %> account, and enroll to the <%= course_name %> course, please verify your email
+    address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to
+    create an account at <%= school_name %>.
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

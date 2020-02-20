@@ -10,11 +10,6 @@ module Schools
       user&.school_admin.present?
     end
 
-    def update?
-      # Closed courses shouldn't be updated
-      record.present? && !record.ended? && show?
-    end
-
     def curriculum?
       return false if user.blank?
 
@@ -25,13 +20,16 @@ module Schools
       user.course_authors.where(course: record).present?
     end
 
-    alias attach_images? update?
-    alias delete_coach_enrollment? update?
-    alias update_coach_enrollments? delete_coach_enrollment?
+    def attach_images?
+      show? && record.present?
+    end
+
+    alias delete_coach_enrollment? attach_images?
+    alias update_coach_enrollments? attach_images?
     alias students? show?
     alias inactive_students? show?
-    alias create_students? delete_coach_enrollment?
-    alias mark_teams_active? delete_coach_enrollment?
+    alias create_students? attach_images?
+    alias mark_teams_active? attach_images?
     alias exports? show?
     alias evaluation_criteria? show?
 

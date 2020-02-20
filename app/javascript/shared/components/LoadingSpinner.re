@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./LoadingSpinner.css")|}];
 
 let str = React.string;

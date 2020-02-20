@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 [%bs.raw {|require("./HelpIcon.css")|}];
@@ -107,19 +105,4 @@ let make =
          </div>
        : React.null}
   </div>;
-};
-
-module Jsx2 = {
-  let make = (~className=?, ~link=?, ~responsiveAlignment=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~className?,
-        ~link?,
-        ~responsiveAlignment?,
-        ~children=children |> React.array,
-        (),
-      ),
-      children,
-    );
 };

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature "Course students report", js: true do
   include UserSpecHelper
-  include MarkdownEditor2Helper
+  include MarkdownEditorHelper
   include NotificationHelper
 
   # The basics

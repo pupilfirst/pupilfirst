@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open CoursesStudents__Types;
 
 let decodeProps = json =>

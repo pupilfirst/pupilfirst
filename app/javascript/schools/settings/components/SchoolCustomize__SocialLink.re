@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let test = (value, url) => {
   let tester = Js.Re.fromString(value);
   url |> Js.Re.test_(tester);

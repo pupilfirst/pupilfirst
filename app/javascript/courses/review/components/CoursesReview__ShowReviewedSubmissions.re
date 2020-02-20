@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 let reviewedEmptyImage: string = [%raw
   "require('../../shared/images/reviewed-empty.svg')"
 ];

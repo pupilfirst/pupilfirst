@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 type key = string;
@@ -122,13 +120,4 @@ let make =
          </div>
        : React.null}
   </div>;
-};
-
-module Jsx2 = {
-  let make = (~items, ~selectCB, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~items, ~selectCB, ()),
-      children,
-    );
 };

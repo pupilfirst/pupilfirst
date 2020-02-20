@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open CurriculumEditor__Types;
 
 let markIcon: string = [%raw
@@ -617,18 +615,28 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   let role = state.role |> TargetDetails.roleAsString;
   let visibilityAsString =
     state.visibility |> TargetDetails.visibilityAsString;
-  let quiz =
+  let quizAsJs =
     state.quiz
     |> Js.Array.filter(question =>
          QuizQuestion.isValidQuizQuestion(question)
        )
     |> QuizQuestion.quizAsJsObject;
+
+  let (quiz, evaluationCriteria, linkToComplete) =
+    switch (state.methodOfCompletion) {
+    | Evaluated => ([||], state.evaluationCriteria, "")
+    | VisitLink => ([||], [||], state.linkToComplete)
+    | TakeQuiz => (quizAsJs, [||], "")
+    | MarkAsComplete => ([||], [||], "")
+    };
+
   let visibility =
     switch (state.visibility) {
     | Live => Target.Live
     | Archived => Archived
     | Draft => Draft
     };
+
   let newTarget =
     Target.create(
       ~id,
@@ -643,11 +651,11 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
     ~targetGroupId=state.targetGroupId,
     ~title=state.title,
     ~role,
-    ~evaluationCriteria=state.evaluationCriteria,
+    ~evaluationCriteria,
     ~prerequisiteTargets=state.prerequisiteTargets,
     ~quiz,
     ~completionInstructions=state.completionInstructions,
-    ~linkToComplete=state.linkToComplete,
+    ~linkToComplete,
     ~visibility=visibilityAsString,
     ~checklist={
       state.checklist |> ChecklistItem.encodeChecklist;

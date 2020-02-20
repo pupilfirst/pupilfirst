@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./CoursesCurriculum__Attachments.css")|}];
 
 let str = React.string;

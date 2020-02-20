@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let str = React.string;
 
 [%bs.raw {|require("./Tooltip.css")|}];

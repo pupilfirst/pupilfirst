@@ -25,6 +25,28 @@ type action =
   | UpdatePublicSignup(bool)
   | UpdateFeatured(bool);
 
+let reducer = (state, action) => {
+  switch (action) {
+  | UpdateSaving => {...state, saving: !state.saving}
+  | UpdateName(name, hasNameError) => {
+      ...state,
+      name,
+      hasNameError,
+      dirty: true,
+    }
+  | UpdateDescription(description, hasDescriptionError) => {
+      ...state,
+      description,
+      hasDescriptionError,
+      dirty: true,
+    }
+  | UpdateEndsAt(date) => {...state, endsAt: date, dirty: true}
+  | UpdatePublicSignup(publicSignup) => {...state, publicSignup, dirty: true}
+  | UpdateAbout(about) => {...state, about, dirty: true}
+  | UpdateFeatured(featured) => {...state, featured, dirty: true}
+  };
+};
+
 module CreateCourseQuery = [%graphql
   {|
    mutation($name: String!, $description: String!, $endsAt: Date, $about: String!,$publicSignup: Boolean!,$featured: Boolean!) {
@@ -48,8 +70,6 @@ module UpdateCourseQuery = [%graphql
    }
    |}
 ];
-
-let component = ReasonReact.reducerComponent("CourseEditor__Form");
 
 let updateName = (send, name) => {
   let hasError = name |> String.length < 2;
@@ -220,194 +240,170 @@ let about = course =>
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about));
 
-let make = (~course, ~hideEditorActionCB, ~updateCourseCB, _children) => {
-  ...component,
-  initialState: () =>
-    switch (course) {
-    | Some(course) => {
-        name: course |> Course.name,
-        description: course |> Course.description,
-        endsAt: course |> Course.endsAt,
-        hasNameError: false,
-        hasDateError: false,
-        hasDescriptionError: false,
-        dirty: false,
-        saving: false,
-        about: about(course),
-        publicSignup: course |> Course.publicSignup,
-        featured: course |> Course.featured,
-      }
-    | None => {
-        name: "",
-        description: "",
-        endsAt: None,
-        hasNameError: false,
-        hasDateError: false,
-        hasDescriptionError: false,
-        dirty: false,
-        saving: false,
-        about: "",
-        publicSignup: false,
-        featured: true,
-      }
-    },
-  reducer: (action, state) =>
-    switch (action) {
-    | UpdateSaving => ReasonReact.Update({...state, saving: !state.saving})
-    | UpdateName(name, hasNameError) =>
-      ReasonReact.Update({...state, name, hasNameError, dirty: true})
-    | UpdateDescription(description, hasDescriptionError) =>
-      ReasonReact.Update({
-        ...state,
-        description,
-        hasDescriptionError,
-        dirty: true,
-      })
-    | UpdateEndsAt(date) =>
-      ReasonReact.Update({...state, endsAt: date, dirty: true})
-    | UpdatePublicSignup(publicSignup) =>
-      ReasonReact.Update({...state, publicSignup, dirty: true})
-    | UpdateAbout(about) =>
-      ReasonReact.Update({...state, about, dirty: true})
-    | UpdateFeatured(featured) =>
-      ReasonReact.Update({...state, featured, dirty: true})
-    },
-  render: ({state, send}) => {
-    <div>
-      <div className="blanket" />
-      <div className="drawer-right">
-        <div className="drawer-right__close absolute">
-          <button
-            title="close"
-            onClick={_ => hideEditorActionCB()}
-            className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-            <i className="fas fa-times text-xl" />
-          </button>
-        </div>
-        <div className={formClasses(state.saving)}>
-          <div className="w-full">
-            <div className="mx-auto bg-white">
-              <div className="max-w-2xl p-6 mx-auto">
-                <h5
-                  className="uppercase text-center border-b border-gray-400 pb-2">
-                  {(course == None ? "Add New Course" : "Edit Course Details")
-                   |> str}
-                </h5>
-                <div className="mt-5">
-                  <label
-                    className="inline-block tracking-wide text-xs font-semibold "
-                    htmlFor="name">
-                    {"Course name" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="name"
-                    type_="text"
-                    placeholder="Type course name here"
-                    maxLength=50
-                    value={state.name}
-                    onChange={event =>
-                      updateName(send, ReactEvent.Form.target(event)##value)
-                    }
-                  />
-                  <School__InputGroupError.Jsx2
-                    message="A name is required (2-50 characters)"
-                    active={state.hasNameError}
-                  />
-                </div>
-                <div className="mt-5">
-                  <label
-                    className="inline-block tracking-wide text-xs font-semibold"
-                    htmlFor="description">
-                    {"Course description" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="description"
-                    type_="text"
-                    placeholder="Short description for this course"
-                    value={state.description}
-                    maxLength=150
-                    onChange={event =>
-                      updateDescription(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                    }
-                  />
-                </div>
-                <School__InputGroupError.Jsx2
-                  message="A description is required (2-150 characters)"
-                  active={state.hasDescriptionError}
-                />
-                <div className="mt-5">
-                  <label
-                    className="tracking-wide text-xs font-semibold"
-                    htmlFor="course-ends-at-input">
-                    {"Course end date" |> str}
-                  </label>
-                  <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
-                  <HelpIcon.Jsx2
-                    className="ml-2"
-                    link="https://docs.pupilfirst.com/#/courses">
-                    {"If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions."
-                     |> str}
-                  </HelpIcon.Jsx2>
-                  <DatePicker.Jsx2
-                    onChange={date => send(UpdateEndsAt(date))}
-                    selected=?{state.endsAt}
-                    id="course-ends-at-input"
-                  />
-                </div>
-                <School__InputGroupError.Jsx2
-                  message="Enter a valid date"
-                  active={state.hasDateError}
-                />
-                <div id="About" className="mt-5">
-                  <MarkdownEditor.Jsx2
-                    updateMarkdownCB={updateAboutCB(send)}
-                    value={state.about}
-                    placeholder="Add more details about the course."
-                    label="About"
-                    profile=Markdown.Permissive
-                    maxLength=10000
-                    defaultView=MarkdownEditor.Edit
-                  />
-                </div>
-                {featuredButton(state.featured, send)}
-                {enablePublicSignupButton(state.publicSignup, send)}
-              </div>
-            </div>
-            <div className="mx-auto">
-              <div className="max-w-2xl p-6 mx-auto">
-                <div className="flex">
-                  {switch (course) {
-                   | Some(course) =>
-                     <button
-                       disabled={saveDisabled(state)}
-                       onClick={_ =>
-                         updateCourse(state, send, updateCourseCB, course)
-                       }
-                       className="w-full btn btn-large btn-primary mt-3">
-                       {"Update Course" |> str}
-                     </button>
+let computeInitialState = course =>
+  switch (course) {
+  | Some(course) => {
+      name: course |> Course.name,
+      description: course |> Course.description,
+      endsAt: course |> Course.endsAt,
+      hasNameError: false,
+      hasDateError: false,
+      hasDescriptionError: false,
+      dirty: false,
+      saving: false,
+      about: about(course),
+      publicSignup: course |> Course.publicSignup,
+      featured: course |> Course.featured,
+    }
+  | None => {
+      name: "",
+      description: "",
+      endsAt: None,
+      hasNameError: false,
+      hasDateError: false,
+      hasDescriptionError: false,
+      dirty: false,
+      saving: false,
+      about: "",
+      publicSignup: false,
+      featured: true,
+    }
+  };
 
-                   | None =>
-                     <button
-                       disabled={saveDisabled(state)}
-                       onClick={_ =>
-                         createCourse(state, send, updateCourseCB)
-                       }
-                       className="w-full btn btn-large btn-primary mt-3">
-                       {"Create Course" |> str}
-                     </button>
-                   }}
-                </div>
+[@react.component]
+let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
+  let (state, send) =
+    React.useReducerWithMapState(reducer, course, computeInitialState);
+  <div>
+    <div className="blanket" />
+    <div className="drawer-right">
+      <div className="drawer-right__close absolute">
+        <button
+          title="close"
+          onClick={_ => hideEditorActionCB()}
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+          <i className="fas fa-times text-xl" />
+        </button>
+      </div>
+      <div className={formClasses(state.saving)}>
+        <div className="w-full">
+          <div className="mx-auto bg-white">
+            <div className="max-w-2xl p-6 mx-auto">
+              <h5
+                className="uppercase text-center border-b border-gray-400 pb-2">
+                {(course == None ? "Add New Course" : "Edit Course Details")
+                 |> str}
+              </h5>
+              <div className="mt-5">
+                <label
+                  className="inline-block tracking-wide text-xs font-semibold "
+                  htmlFor="name">
+                  {"Course name" |> str}
+                </label>
+                <input
+                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="name"
+                  type_="text"
+                  placeholder="Type course name here"
+                  maxLength=50
+                  value={state.name}
+                  onChange={event =>
+                    updateName(send, ReactEvent.Form.target(event)##value)
+                  }
+                />
+                <School__InputGroupError
+                  message="A name is required (2-50 characters)"
+                  active={state.hasNameError}
+                />
+              </div>
+              <div className="mt-5">
+                <label
+                  className="inline-block tracking-wide text-xs font-semibold"
+                  htmlFor="description">
+                  {"Course description" |> str}
+                </label>
+                <input
+                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="description"
+                  type_="text"
+                  placeholder="Short description for this course"
+                  value={state.description}
+                  maxLength=150
+                  onChange={event =>
+                    updateDescription(
+                      send,
+                      ReactEvent.Form.target(event)##value,
+                    )
+                  }
+                />
+              </div>
+              <School__InputGroupError
+                message="A description is required (2-150 characters)"
+                active={state.hasDescriptionError}
+              />
+              <div className="mt-5">
+                <label
+                  className="tracking-wide text-xs font-semibold"
+                  htmlFor="course-ends-at-input">
+                  {"Course end date" |> str}
+                </label>
+                <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
+                <HelpIcon
+                  className="ml-2"
+                  link="https://docs.pupilfirst.com/#/courses">
+                  {"If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions."
+                   |> str}
+                </HelpIcon>
+                <DatePicker
+                  onChange={date => send(UpdateEndsAt(date))}
+                  selected=?{state.endsAt}
+                  id="course-ends-at-input"
+                />
+              </div>
+              <School__InputGroupError
+                message="Enter a valid date"
+                active={state.hasDateError}
+              />
+              <div id="About" className="mt-5">
+                <MarkdownEditor
+                  onChange={updateAboutCB(send)}
+                  value={state.about}
+                  placeholder="Add more details about the course."
+                  profile=Markdown.Permissive
+                  maxLength=10000
+                />
+              </div>
+              {featuredButton(state.featured, send)}
+              {enablePublicSignupButton(state.publicSignup, send)}
+            </div>
+          </div>
+          <div className="mx-auto">
+            <div className="max-w-2xl p-6 mx-auto">
+              <div className="flex">
+                {switch (course) {
+                 | Some(course) =>
+                   <button
+                     disabled={saveDisabled(state)}
+                     onClick={_ =>
+                       updateCourse(state, send, updateCourseCB, course)
+                     }
+                     className="w-full btn btn-large btn-primary mt-3">
+                     {"Update Course" |> str}
+                   </button>
+
+                 | None =>
+                   <button
+                     disabled={saveDisabled(state)}
+                     onClick={_ => createCourse(state, send, updateCourseCB)}
+                     className="w-full btn btn-large btn-primary mt-3">
+                     {"Create Course" |> str}
+                   </button>
+                 }}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>;
-  },
+    </div>
+  </div>;
 };

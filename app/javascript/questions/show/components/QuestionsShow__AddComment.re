@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@bs.val] external currentTime: unit => string = "Date.now";
 
 open QuestionsShow__Types;

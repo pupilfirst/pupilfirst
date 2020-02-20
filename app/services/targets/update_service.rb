@@ -4,18 +4,16 @@ module Targets
       @target = target
     end
 
-    # rubocop:disable Metrics/AbcSize
     def execute(target_params)
       Target.transaction do
         @target.role = target_params[:role]
         @target.title = target_params[:title]
         @target.target_action_type = Target::TYPE_TODO
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
-        @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
         @target.link_to_complete = target_params[:link_to_complete]
         @target.resubmittable = target_params[:evaluation_criterion_ids].present?
-        @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids] if target_params[:evaluation_criterion_ids].present?
-        @target.link_to_complete = target_params[:link_to_complete] if target_params[:link_to_complete].present?
+        @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
+        @target.link_to_complete = target_params[:link_to_complete]
         @target.completion_instructions = target_params[:completion_instructions] if target_params[:completion_instructions].present?
         @target.checklist = target_params[:checklist]
 
@@ -30,7 +28,6 @@ module Targets
         @target
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
     private
 

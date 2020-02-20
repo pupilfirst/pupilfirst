@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./DisablingCover.css")|}];
 
 [@react.component]
@@ -34,17 +32,3 @@ let make = (~disabled, ~message="Loading...", ~containerClasses="", ~children) =
      }}
     children
   </div>;
-
-module Jsx2 = {
-  let make = (~disabled, ~containerClasses="", children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~disabled,
-        ~containerClasses,
-        ~children=children |> React.array,
-        (),
-      ),
-      children,
-    );
-};

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [%bs.raw {|require("./CoursesCurriculum__GradeBar.scss")|}];
 
 let str = React.string;
@@ -101,13 +99,4 @@ let make = (~grading, ~gradeSelectCB=?, ~criterion) => {
     {gradeBarHeader(grading, gradeLabels)}
     {gradeBarPanel(grading, gradeLabels, gradeSelectCB, passGrade)}
   </div>;
-};
-
-module Jsx2 = {
-  let make = (~grading, ~gradeSelectCB=?, criterion, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~grading, ~gradeSelectCB?, ~criterion, ()),
-      children,
-    );
 };

@@ -314,7 +314,7 @@ let submissionStatusIcon = (status, submission, setState) => {
 
   <div
     ariaLabel="submission-status"
-    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
+    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
     <div
       className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
       {switch (submission |> Submission.evaluatedAt, status) {
@@ -508,7 +508,7 @@ let make =
 
   <DisablingCover disabled={state.saving}>
     <div className=" ">
-      <div className="px-4 md:px-6 md:pt-2 bg-gray-100 border-b">
+      <div className="pt-2 pb-6 px-4 md:px-6 bg-gray-100 border-b">
         <SubmissionChecklistShow
           checklist={state.checklist}
           updateChecklistCB
@@ -530,7 +530,7 @@ let make =
           </span>
         </h5>
         <div
-          className="flex md:flex-row flex-col-reverse border ml-6 md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+          className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>
@@ -551,7 +551,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white pt-4 mr-3 ml-10 md:mr-6 md:ml-13">
+       <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

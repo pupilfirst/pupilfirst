@@ -55,8 +55,12 @@ let showlink = link =>
 
 let statusIcon = (updateChecklistCB, status) => {
   switch (updateChecklistCB, status: ChecklistItem.status) {
-  | (None, Passed) => <FaIcon classes="fas fa-check text-green-500 mr-2" />
-  | (None, Failed) => <FaIcon classes="fas fa-times text-red-500 mr-2" />
+  | (None, Passed) =>
+    <FaIcon
+      classes="fas fa-check-circle text-green-500 text-base mr-3 -ml-6"
+    />
+  | (None, Failed) =>
+    <FaIcon classes="fas fa-times-circle text-red-500 text-base mr-3 -ml-6" />
   | (_, _) => React.null
   };
 };
@@ -131,35 +135,74 @@ let computeShowResult = (checklistItem, updateChecklistCB) => {
   };
 };
 
+let cardClasses = (checklistItem, updateChecklistCB) => {
+  switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
+  | (None, Passed | Failed) => "rounded shadow mt-4 "
+  | (Some(_), Passed | Pending | Failed)
+  | (None, Pending) => "mt-3"
+  };
+};
+
+let cardHeaderClasses = (checklistItem, updateChecklistCB) => {
+  "text-sm font-semibold flex items-center justify-between "
+  ++ (
+    switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
+    | (None, Passed | Failed) => "p-4 bg-white rounded cursor-pointer"
+    | (Some(_), Passed | Pending | Failed)
+    | (None, Pending) => ""
+    }
+  );
+};
+
+let cardBodyClasses = (checklistItem, updateChecklistCB) => {
+  "pl-5 md:pl-7 p-3 pb-4 "
+  ++ (
+    switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
+    | (None, Passed | Failed) => "border-t bg-gray-200"
+    | (Some(_), Passed | Pending | Failed)
+    | (None, Pending) => ""
+    }
+  );
+};
+
 [@react.component]
 let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let (showResult, setShowResult) =
     React.useState(() => computeShowResult(checklistItem, updateChecklistCB));
+
+  React.useEffect1(
+    () => {
+      let newShowResult = computeShowResult(checklistItem, updateChecklistCB);
+      newShowResult == showResult ? () : setShowResult(_ => newShowResult);
+      None;
+    },
+    [|updateChecklistCB|],
+  );
   let status = checklistItem |> ChecklistItem.status;
 
-  <div className="py-4">
-    <div className="text-sm font-semibold flex items-center justify-between">
+  <div className={cardClasses(checklistItem, updateChecklistCB)}>
+    <div
+      onClick={_ => setShowResult(_ => true)}
+      className={cardHeaderClasses(checklistItem, updateChecklistCB)}>
       <div className="flex">
         {statusIcon(updateChecklistCB, status)}
-        <span>
+        <div className="pt-1">
           <PfIcon
             className={kindIconClasses(checklistItem |> ChecklistItem.result)}
           />
-        </span>
-        <span className="ml-2 md:ml-3 tracking-wide">
+        </div>
+        <p className="ml-2 md:ml-3 tracking-wide pt-px">
           {checklistItem |> ChecklistItem.title |> str}
-        </span>
+        </p>
       </div>
       <div className="inline-block">
         {showResult
-           ? showStatus(status)
-           : <button onClick={_ => setShowResult(_ => true)}>
-               <i className="fas fa-chevron-circle-down" />
-             </button>}
+           ? showStatus(status)}
+           : <button> <i className="fas fa-chevron-down" /> </button>}
       </div>
     </div>
     {showResult
-       ? <div className="ml-6 md:ml-7 pt-2 ">
+       ? <div className={cardBodyClasses(checklistItem, updateChecklistCB)}>
            <div>
              {switch (checklistItem |> ChecklistItem.result) {
               | ShortText(text) => <div> {text |> str} </div>

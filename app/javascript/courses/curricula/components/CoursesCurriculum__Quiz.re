@@ -11,6 +11,7 @@ module CreateQuizSubmissionQuery = [%graphql
       submission{
         id
         createdAt
+        checklist
       }
      }
    }
@@ -29,14 +30,17 @@ let createQuizSubmission =
   |> Js.Promise.then_(response => {
        switch (response##createQuizSubmission##submission) {
        | Some(submission) =>
+         let checklist =
+           submission##checklist
+           |> Json.Decode.array(SubmissionChecklistItem.decode([||]));
          addSubmissionCB(
            Submission.make(
              ~id=submission##id,
              ~createdAt=submission##createdAt,
              ~status=Submission.MarkedAsComplete,
-             ~checklist=[||],
+             ~checklist,
            ),
-         )
+         );
        | None => setSaving(_ => false)
        };
        Js.Promise.resolve();

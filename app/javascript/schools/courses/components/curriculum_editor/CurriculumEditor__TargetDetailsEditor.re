@@ -691,6 +691,22 @@ let addNewChecklistItem = (state, send) => {
   send(UpdateChecklist(newChecklist));
 };
 
+let removeChecklistItem = (state, send, item, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(item)));
+};
+
+let moveChecklistItemUp = (state, send, item, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.moveUp(item)));
+};
+
+let moveChecklistItemDown = (state, send, item, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.moveDown(item)));
+};
+
+let copyChecklistItem = (state, send, item, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.copy(item)));
+};
+
 [@react.component]
 let make =
     (
@@ -819,7 +835,40 @@ let make =
                   </label>
                   <div className="ml-6 mb-6">
                     {state.checklist
-                     |> Array.mapi((index, checklistItem) =>
+                     |> Array.mapi((index, checklistItem) => {
+                          let removeChecklistItemCB =
+                            state.checklist |> Array.length > 1
+                              ? Some(
+                                  removeChecklistItem(
+                                    state,
+                                    send,
+                                    checklistItem,
+                                  ),
+                                )
+                              : None;
+
+                          let moveChecklistItemUpCB =
+                            index > 0
+                              ? Some(
+                                  moveChecklistItemUp(
+                                    state,
+                                    send,
+                                    checklistItem,
+                                  ),
+                                )
+                              : None;
+
+                          let moveChecklistItemDownCB =
+                            index != Array.length(state.checklist) - 1
+                              ? Some(
+                                  moveChecklistItemDown(
+                                    state,
+                                    send,
+                                    checklistItem,
+                                  ),
+                                )
+                              : None;
+
                           <CurriculumEditor__TargetChecklistItemEditor
                             key={index |> string_of_int}
                             checklistItem
@@ -829,8 +878,16 @@ let make =
                               send,
                               index,
                             )}
-                          />
-                        )
+                            ?removeChecklistItemCB
+                            ?moveChecklistItemUpCB
+                            ?moveChecklistItemDownCB
+                            copyChecklistItemCB={copyChecklistItem(
+                              state,
+                              send,
+                              checklistItem,
+                            )}
+                          />;
+                        })
                      |> React.array}
                     <button
                       className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"

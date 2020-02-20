@@ -137,63 +137,124 @@ let multiChoiceEditor =
   </div>;
 };
 
+let controlIcon = (~icon, ~title, ~handler) => {
+  handler == None
+    ? React.null
+    : <button
+        title
+        disabled={handler == None}
+        className="p-2 focus:outline-none"
+        onClick=?handler>
+        <i className={"fas fa-fw " ++ icon} />
+      </button>;
+};
+
+let onDelete = (cb, _event) => {
+  WindowUtils.confirm("Are you sure you want to delete this item?", () => {
+    cb()
+  });
+};
+
+let onMove = (cb, _event) => {
+  cb();
+};
+
+let onCopy = (cb, _event) => {
+  cb();
+};
+
 [@react.component]
-let make = (~checklistItem, ~index, ~updateChecklistItemCB) => {
-  <div className="mt-2">
-    {<div
-       className="flex-col bg-gray-100 mb-2 p-2" key={index |> string_of_int}>
-       <div className="flex justify-between items-center">
-         <div className="ml-2 flex justify-start items-center">
-           <span className="font-semibold text-sm mr-2">
-             {(index + 1 |> string_of_int) ++ "." |> str}
-           </span>
-           {checklistDropdown(checklistItem, updateChecklistItemCB)}
-         </div>
-         <div className="items-center">
-           <input
-             className="leading-tight"
-             type_="checkbox"
-             onChange={updateOptional(checklistItem, updateChecklistItemCB)}
-             id={index |> string_of_int}
-             checked={checklistItem |> ChecklistItem.optional}
-           />
-           <label
-             className="text-xs text-gray-600 ml-2"
-             htmlFor={index |> string_of_int}>
-             {"Optional" |> str}
-           </label>
-         </div>
-       </div>
-       <div
-         className="flex items-center ml-3 text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-3 focus:outline-none focus:bg-white focus:border-primary-300">
-         <input
-           className="flex-grow appearance-none bg-transparent border-none leading-snug focus:outline-none"
-           placeholder="Describe this step"
-           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
-           type_="text"
-           value={checklistItem |> ChecklistItem.title}
-         />
-       </div>
-       <div className="ml-3">
-         <School__InputGroupError
-           message="Not a valid title"
-           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
-         />
-       </div>
-       {switch (checklistItem |> ChecklistItem.kind) {
-        | MultiChoice(choices) =>
-          multiChoiceEditor(
-            choices,
-            checklistItem,
-            removeMultichoiceOption,
-            updateChecklistItemCB,
-          )
-        | ShortText
-        | LongText
-        | Files
-        | Link
-        | Statement => React.null
-        }}
-     </div>}
+let make =
+    (
+      ~checklistItem,
+      ~index,
+      ~updateChecklistItemCB,
+      ~removeChecklistItemCB=?,
+      ~moveChecklistItemUpCB=?,
+      ~moveChecklistItemDownCB=?,
+      ~copyChecklistItemCB,
+    ) => {
+  <div className="flex items-start mt-2">
+    <div
+      className="flex-1 bg-gray-100 mb-2 px-2 py-3"
+      key={index |> string_of_int}>
+      <div className="flex justify-between items-center">
+        <div className="ml-2 flex justify-start items-center">
+          <span className="font-semibold text-sm mr-2">
+            {(index + 1 |> string_of_int) ++ "." |> str}
+          </span>
+          {checklistDropdown(checklistItem, updateChecklistItemCB)}
+        </div>
+        <div className="items-center">
+          <input
+            className="leading-tight"
+            type_="checkbox"
+            onChange={updateOptional(checklistItem, updateChecklistItemCB)}
+            id={index |> string_of_int}
+            checked={checklistItem |> ChecklistItem.optional}
+          />
+          <label
+            className="text-xs text-gray-600 ml-2"
+            htmlFor={index |> string_of_int}>
+            {"Optional" |> str}
+          </label>
+        </div>
+      </div>
+      <div
+        className="flex items-center ml-3 text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-3 focus:outline-none focus:bg-white focus:border-primary-300">
+        <input
+          className="flex-grow appearance-none bg-transparent border-none leading-snug focus:outline-none"
+          placeholder="Describe this step"
+          onChange={updateTitle(checklistItem, updateChecklistItemCB)}
+          type_="text"
+          value={checklistItem |> ChecklistItem.title}
+        />
+      </div>
+      <div className="ml-3">
+        <School__InputGroupError
+          message="Not a valid title"
+          active={checklistItem |> ChecklistItem.title |> String.trim == ""}
+        />
+      </div>
+      {switch (checklistItem |> ChecklistItem.kind) {
+       | MultiChoice(choices) =>
+         multiChoiceEditor(
+           choices,
+           checklistItem,
+           removeMultichoiceOption,
+           updateChecklistItemCB,
+         )
+       | ShortText
+       | LongText
+       | Files
+       | Link
+       | Statement => React.null
+       }}
+    </div>
+    <div
+      className="ml-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs">
+      {controlIcon(
+         ~icon="fa-arrow-up",
+         ~title="Move Up",
+         ~handler=moveChecklistItemUpCB |> OptionUtils.map(cb => onMove(cb)),
+       )}
+      {controlIcon(
+         ~icon="fa-arrow-down",
+         ~title="Move Down",
+         ~handler=
+           moveChecklistItemDownCB |> OptionUtils.map(cb => onMove(cb)),
+       )}
+      {controlIcon(
+         ~icon="fa-copy",
+         ~title="Copy",
+         ~handler=Some(onCopy(copyChecklistItemCB)),
+       )}
+      {controlIcon(
+         ~icon="fa-trash-alt",
+         ~title="Delete",
+         ~handler=
+           removeChecklistItemCB |> OptionUtils.map(cb => onDelete(cb)),
+       )}
+    </div>
   </div>;
 };

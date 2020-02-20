@@ -56,6 +56,26 @@ let updateOptional = (optional, t) => {
   {...t, optional};
 };
 
+let removeItem = (t, list) => {
+  list |> Js.Array.filter(item => item != t);
+};
+
+let moveUp = (t, list) => {
+  list |> Array.to_list |> ListUtils.swapUp(t) |> Array.of_list;
+};
+
+let moveDown = (t, list) => {
+  list |> Array.to_list |> ListUtils.swapDown(t) |> Array.of_list;
+};
+
+let copy = (t, list) => {
+  list
+  |> Array.to_list
+  |> List.map(item => item == t ? [item, item] : [item])
+  |> List.flatten
+  |> Array.of_list;
+};
+
 let removeMultichoiceOption = (choiceIndex, t) => {
   switch (t.kind) {
   | MultiChoice(choices) =>

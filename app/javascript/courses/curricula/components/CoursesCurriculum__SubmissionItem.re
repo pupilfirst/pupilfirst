@@ -20,11 +20,11 @@ let computeId = (index, checklistItem) => {
 let placeholder = (id, checklistItem) => {
   let title = checklistItem |> ChecklistItem.title;
   let optional = checklistItem |> ChecklistItem.optional;
-  <div>
+  <div className="flex items-center">
     <PfIcon
       className={kindIconClasses(checklistItem |> ChecklistItem.result)}
     />
-    <label htmlFor=id className="font-semibold pl-2">
+    <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
       {title ++ (optional ? " (optional)" : "") |> str}
     </label>
   </div>;
@@ -57,7 +57,7 @@ let showLink = (value, id, callback) => {
         callback(ChecklistItem.Link(ReactEvent.Form.target(e)##value))
       }
       placeholder="Type full URL starting with https://..."
-      className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
+      className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError("Invalid url", UrlUtils.isInvalid(true, value))}
   </div>;
@@ -74,7 +74,7 @@ let showShortText = (value, id, callback) => {
         callback(ChecklistItem.ShortText(ReactEvent.Form.target(e)##value))
       }
       placeholder="Add a short text"
-      className="mt-2 cursor-pointer truncate h-10 border border-grey-400  px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
+      className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError(
        "Answe should be less than 250 characters",
@@ -88,7 +88,7 @@ let showLongText = (value, id, callback) => {
     <textarea
       id
       maxLength=1000
-      className="h-40 w-full rounded-lg mt-4 p-4 border border-gray-400 focus:outline-none focus:border-gray-500 rounded-lg"
+      className="h-40 w-full rounded-lg p-4 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner rounded-lg"
       placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
       value
       onChange={e =>
@@ -153,21 +153,27 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
             <div
               key={"file-" ++ (file |> ChecklistItem.fileId)}
               target="_blank"
-              className="mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700">
-              <span
-                className="flex h-full w-8 justify-center items-center p-2 bg-primary-200">
-                <i className="far fa-file" />
-              </span>
-              <span
-                className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose bg-primary-100">
-                {file |> ChecklistItem.filename |> str}
-              </span>
-              <span
-                onClick={_ =>
-                  removeFile(callback, files, file |> ChecklistItem.fileId)
-                }>
-                <i className="fas fa-times px-2 text-gray-900" />
-              </span>
+              className="w-1/3 pr-2 pb-2">
+              <div
+                className="flex justify-between border overflow-hidden rounded border-pink-400 bg-white text-pink-700 hover:text-pink-700">
+                <div className="flex">
+                  <span
+                    className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
+                    <i className="far fa-file" />
+                  </span>
+                  <span
+                    className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-38 pl-3 pr-2 py-2 leading-loose">
+                    {file |> ChecklistItem.filename |> str}
+                  </span>
+                </div>
+                <span
+                  className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-100 border-l text-gray-700 hover:bg-gray-200 hover:text-gray-900"
+                  onClick={_ =>
+                    removeFile(callback, files, file |> ChecklistItem.fileId)
+                  }>
+                  <PfIcon className="if i-times-light text-sm" />
+                </span>
+              </div>
             </div>
           })
        |> React.array}
@@ -187,7 +193,7 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
   let id = computeId(index, checklistItem);
   <div className="mt-4">
     {placeholder(id, checklistItem)}
-    <div className="pl-7">
+    <div className="md:pl-7 pt-2 pr-0 pb-4">
       {switch (checklistItem |> ChecklistItem.result) {
        | Files(files) =>
          showFiles(files, preview, id, attachingCB, updateResultCB)

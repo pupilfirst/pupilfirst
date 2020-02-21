@@ -142,7 +142,7 @@ let make = (~attachFileCB, ~attachingCB, ~preview) => {
         onChange={attachFile(state, send, attachingCB, attachFileCB, preview)}
       />
       <label
-        className="mt-2 text-center cursor-pointer truncate h-10 bg-gray-100 border border-dashed border-gray-400 flex px-4 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
+        className="text-center cursor-pointer truncate bg-gray-200 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
         htmlFor="attachment_file">
         <span className="w-full">
           <i className="fas fa-upload mr-2 text-lg" />

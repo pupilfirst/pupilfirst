@@ -169,7 +169,7 @@ let statusText = formState => {
 [@react.component]
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist));
-  <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
+  <div className="bg-gray-100 p-4 mt-4 border rounded-lg">
     <DisablingCover
       disabled={isBusy(state.formState)}
       message={statusText(state.formState)}>

@@ -6,11 +6,11 @@ let str = React.string;
 
 let kindIconClasses = result => {
   switch ((result: ChecklistItem.result)) {
-  | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800"
-  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800"
-  | Link(_link) => "if i-link-regular md:text-base text-gray-800"
-  | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800"
-  | Files(_attachments) => "if i-file-regular md:text-base text-gray-800"
+  | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800 if-fw"
+  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800 if-fw"
+  | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
+  | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
+  | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
   };
 };
 
@@ -185,14 +185,12 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
     <div
       onClick={_ => setShowResult(_ => true)}
       className={cardHeaderClasses(checklistItem, updateChecklistCB)}>
-      <div className="flex">
+      <div className="inline-flex items-center">
         {statusIcon(updateChecklistCB, status)}
-        <div className="pt-1">
-          <PfIcon
-            className={kindIconClasses(checklistItem |> ChecklistItem.result)}
-          />
-        </div>
-        <p className="ml-2 md:ml-3 tracking-wide pt-px">
+        <PfIcon
+          className={kindIconClasses(checklistItem |> ChecklistItem.result)}
+        />
+        <p className="pl-2 tracking-wide">
           {checklistItem |> ChecklistItem.title |> str}
         </p>
       </div>

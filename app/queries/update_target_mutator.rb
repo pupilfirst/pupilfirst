@@ -80,7 +80,7 @@ class UpdateTargetMutator < ApplicationQuery
   def checklist_has_valid_data
     return if evaluation_criteria.blank? && checklist.blank?
 
-    return if evaluation_criteria.present? && checklist.present? && validate_checklist(checklist)
+    return if evaluation_criteria.present? && validate_checklist(checklist)
 
     errors[:base] << 'not a valid checklist'
   end

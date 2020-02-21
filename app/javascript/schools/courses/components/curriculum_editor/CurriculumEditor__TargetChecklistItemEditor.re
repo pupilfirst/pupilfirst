@@ -82,6 +82,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     |> Array.mapi((index, kind) =>
          <button
            key={index |> string_of_int}
+           className="w-full p-1 focus:outline-none appearance-none"
            onClick={_ =>
              updateKind(checklistItem, updateChecklistItemCB, kind)
            }>

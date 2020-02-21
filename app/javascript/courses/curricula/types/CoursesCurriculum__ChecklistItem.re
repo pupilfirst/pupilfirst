@@ -60,7 +60,7 @@ let fileIds = checklist => {
   |> ArrayUtils.flatten;
 };
 
-let encodeKind = t => {
+let kinsAsString = t => {
   switch (t.result) {
   | Files(_) => "files"
   | Link(_) => "link"
@@ -123,7 +123,7 @@ let encode = t =>
   Json.Encode.(
     object_([
       ("title", t.title |> string),
-      ("kind", encodeKind(t) |> string),
+      ("kind", kinsAsString(t) |> string),
       ("status", "pending" |> string),
       ("result", encodeResult(t) |> string),
     ])

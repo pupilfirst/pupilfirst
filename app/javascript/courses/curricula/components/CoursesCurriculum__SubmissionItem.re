@@ -4,10 +4,30 @@ open CoursesCurriculum__Types;
 
 let str = React.string;
 
-let placeholder = (id, title, optional) => {
-  <label htmlFor=id className="font-semibold pl-1">
-    {title ++ (optional ? " (optional)" : "") |> str}
-  </label>;
+let kindIconClasses = result =>
+  switch ((result: ChecklistItem.result)) {
+  | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800 if-fw"
+  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800 if-fw"
+  | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
+  | MultiChoice(_choices, _selected) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
+  | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  };
+
+let computeId = (index, checklistItem) => {
+  (index |> string_of_int) ++ ChecklistItem.kinsAsString(checklistItem);
+};
+
+let placeholder = (id, checklistItem) => {
+  let title = checklistItem |> ChecklistItem.title;
+  let optional = checklistItem |> ChecklistItem.optional;
+  <div>
+    <PfIcon
+      className={kindIconClasses(checklistItem |> ChecklistItem.result)}
+    />
+    <label htmlFor=id className="font-semibold pl-2">
+      {title ++ (optional ? " (optional)" : "") |> str}
+    </label>
+  </div>;
 };
 
 let notBlank = string => {
@@ -27,10 +47,8 @@ let showError = (message, active) =>
     React.null;
   };
 
-let showLink = (value, index, title, optional, callback) => {
-  let id = "link-" ++ index;
-  <div className="mt-2">
-    {placeholder(id, title, optional)}
+let showLink = (value, id, callback) => {
+  <div>
     <input
       id
       type_="text"
@@ -45,10 +63,8 @@ let showLink = (value, index, title, optional, callback) => {
   </div>;
 };
 
-let showShortText = (value, index, title, optional, callback) => {
-  let id = "short-text-" ++ index;
-  <div className="mt-2">
-    {placeholder(id, title, optional)}
+let showShortText = (value, id, callback) => {
+  <div>
     <input
       id
       type_="text"
@@ -67,10 +83,8 @@ let showShortText = (value, index, title, optional, callback) => {
   </div>;
 };
 
-let showLongText = (value, index, title, optional, callback) => {
-  let id = "long-text-" ++ index;
-  <div className="mt-2">
-    {placeholder(id, title, optional)}
+let showLongText = (value, id, callback) => {
+  <div>
     <textarea
       id
       maxLength=1000
@@ -94,11 +108,8 @@ let checkboxOnChange = (choices, itemIndex, callback, event) => {
     : callback(ChecklistItem.MultiChoice(choices, None));
 };
 
-let showMultiChoice = (choices, choice, index, title, optional, callback) => {
-  let id = "multi-choice-" ++ index;
-
-  <div className="mt-2">
-    {placeholder(id, title, optional)}
+let showMultiChoice = (choices, choice, id, callback) => {
+  <div>
     <div>
       {choices
        |> Array.mapi((index, label) => {
@@ -117,16 +128,17 @@ let showMultiChoice = (choices, choice, index, title, optional, callback) => {
   </div>;
 };
 
-let showFiles = (files, preview, index, titile, optional, callback) => {
-  let id = "file-" ++ index;
-  let attachFileCB = (id, filename) =>
-    callback(
-      ChecklistItem.Files(
-        files |> Array.append([|ChecklistItem.makeFile(id, filename)|]),
-      ),
-    );
-  <div className="mt-2">
-    {placeholder(id, titile, optional)}
+let attachFile = (callback, attachingCB, files, id, filename) => {
+  attachingCB(false);
+  callback(
+    ChecklistItem.Files(
+      files |> Array.append([|ChecklistItem.makeFile(id, filename)|]),
+    ),
+  );
+};
+
+let showFiles = (files, preview, id, attachingCB, callback) => {
+  <div>
     <div className="flex flex-wrap" id>
       {files
        |> Array.map(file => {
@@ -148,8 +160,8 @@ let showFiles = (files, preview, index, titile, optional, callback) => {
     </div>
     {files |> Array.length < 3
        ? <CoursesCurriculum__FileForm
-           attachingCB={() => ()}
-           attachFileCB
+           attachingCB
+           attachFileCB={attachFile(callback, attachingCB, files)}
            preview
          />
        : React.null}
@@ -157,27 +169,20 @@ let showFiles = (files, preview, index, titile, optional, callback) => {
 };
 
 [@react.component]
-let make = (~index, ~checklistItem, ~updateResultCB, ~preview) => {
-  let title = checklistItem |> ChecklistItem.title;
-  let optional = checklistItem |> ChecklistItem.optional;
-  <div>
-    {switch (checklistItem |> ChecklistItem.result) {
-     | Files(files) =>
-       showFiles(files, preview, index, title, optional, updateResultCB)
-     | Link(link) => showLink(link, index, title, optional, updateResultCB)
-     | ShortText(shortText) =>
-       showShortText(shortText, index, title, optional, updateResultCB)
-     | LongText(longText) =>
-       showLongText(longText, index, title, optional, updateResultCB)
-     | MultiChoice(choices, selected) =>
-       showMultiChoice(
-         choices,
-         selected,
-         index,
-         title,
-         optional,
-         updateResultCB,
-       )
-     }}
+let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => {
+  let id = computeId(index, checklistItem);
+  <div className="mt-4">
+    {placeholder(id, checklistItem)}
+    <div className="pl-7">
+      {switch (checklistItem |> ChecklistItem.result) {
+       | Files(files) =>
+         showFiles(files, preview, id, attachingCB, updateResultCB)
+       | Link(link) => showLink(link, id, updateResultCB)
+       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
+       | LongText(longText) => showLongText(longText, id, updateResultCB)
+       | MultiChoice(choices, selected) =>
+         showMultiChoice(choices, selected, id, updateResultCB)
+       }}
+    </div>
   </div>;
 };

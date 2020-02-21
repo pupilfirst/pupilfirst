@@ -153,37 +153,54 @@ let buttonClasses = checklist => {
   );
 };
 
+let attaching = (send, bool) => {
+  send(bool ? UpdateFormState(Attaching) : UpdateFormState(Ready));
+};
+
+let statusText = formState => {
+  switch (formState) {
+  | Attaching => "Attaching..."
+  | Saving => "Submitting..."
+  | Incomplete
+  | Ready => "Submit"
+  };
+};
+
 [@react.component]
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist));
-
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
-    {switch (state.checklist) {
-     | [||] =>
-       <div className="text-center">
-         {"This target has no actions. Click submit to complete the target"
-          |> str}
-       </div>
-     | checklist =>
-       checklist
-       |> Array.mapi((index, checklistItem) => {
-            <CoursesCurriculum__SubmissionItem
-              key={index |> string_of_int}
-              index={index |> string_of_int}
-              checklistItem
-              updateResultCB={updateResult(state, send, index)}
-              preview
-            />
-          })
-       |> React.array
-     }}
-    <div className={buttonClasses(state.checklist)}>
-      <button
-        onClick={submit(state, send, target, addSubmissionCB)}
-        disabled={isButtonDisabled(state.formState) || preview}
-        className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
-        {buttonContents(state.formState)}
-      </button>
-    </div>
+    <DisablingCover
+      disabled={isBusy(state.formState)}
+      message={statusText(state.formState)}>
+      {switch (state.checklist) {
+       | [||] =>
+         <div className="text-center">
+           {"This target has no actions. Click submit to complete the target"
+            |> str}
+         </div>
+       | checklist =>
+         checklist
+         |> Array.mapi((index, checklistItem) => {
+              <CoursesCurriculum__SubmissionItem
+                key={index |> string_of_int}
+                index
+                checklistItem
+                updateResultCB={updateResult(state, send, index)}
+                attachingCB={attaching(send)}
+                preview
+              />
+            })
+         |> React.array
+       }}
+      <div className={buttonClasses(state.checklist)}>
+        <button
+          onClick={submit(state, send, target, addSubmissionCB)}
+          disabled={isButtonDisabled(state.formState) || preview}
+          className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
+          {buttonContents(state.formState)}
+        </button>
+      </div>
+    </DisablingCover>
   </div>;
 };

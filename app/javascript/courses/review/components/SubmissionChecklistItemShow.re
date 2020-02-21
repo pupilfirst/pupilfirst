@@ -22,14 +22,14 @@ let showFiles = attachments => {
             key={"file-" ++ (attachment |> ChecklistItem.attachmentUrl)}
             href={attachment |> ChecklistItem.attachmentUrl}
             target="_blank"
-            className="mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md border-primary-400 bg-primary-200 text-primary-500 hover:border-primary-600 hover:text-primary-700">
+            className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-pink-400 bg-white text-pink-700 hover:border-pink-600 hover:text-pink-700">
             <span
-              className="flex h-full w-8 justify-center items-center p-2 bg-primary-200">
-              <i className="far fa-file" />
+              className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
+              {attachment |> ChecklistItem.attachmentName |> str}
             </span>
             <span
-              className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose bg-primary-100">
-              {attachment |> ChecklistItem.attachmentName |> str}
+              className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
+              <PfIcon className="if i-download-regular" />
             </span>
           </a>
         })

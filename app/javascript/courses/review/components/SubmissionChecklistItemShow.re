@@ -11,7 +11,6 @@ let kindIconClasses = result => {
   | Link(_link) => "if i-link-regular md:text-base text-gray-800"
   | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800"
-  | None => "if i-question-square-regular md:text-base text-gray-800"
   };
 };
 
@@ -213,7 +212,6 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
               | Link(link) => showlink(link)
               | MultiChoice(text) => <div> {text |> str} </div>
               | Files(attachments) => showFiles(attachments)
-              | None => <div> {"Handle Empty" |> str} </div>
               }}
            </div>
            {switch (updateChecklistCB) {

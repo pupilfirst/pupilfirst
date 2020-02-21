@@ -5,8 +5,7 @@ type kind =
   | Link
   | ShortText
   | LongText
-  | MultiChoice(choices)
-  | Statement;
+  | MultiChoice(choices);
 
 type t = {
   title: string,
@@ -25,7 +24,6 @@ let actionStringForKind = kind => {
   | ShortText => "Write Short Text"
   | LongText => "Write Long Text"
   | MultiChoice(_choices) => "Choose from a list"
-  | Statement => "Read Statement"
   };
 };
 
@@ -36,7 +34,6 @@ let kindAsString = kind => {
   | ShortText => "shortText"
   | LongText => "longText"
   | MultiChoice(_choices) => "multiChoice"
-  | Statement => "statement"
   };
 };
 
@@ -85,8 +82,7 @@ let removeMultichoiceOption = (choiceIndex, t) => {
   | Files
   | Link
   | ShortText
-  | LongText
-  | Statement => t
+  | LongText => t
   };
 };
 
@@ -98,8 +94,7 @@ let addMultichoiceOption = t => {
   | Files
   | Link
   | ShortText
-  | LongText
-  | Statement => t
+  | LongText => t
   };
 };
 
@@ -113,8 +108,7 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
   | Files
   | Link
   | ShortText
-  | LongText
-  | Statement => t
+  | LongText => t
   };
 };
 
@@ -126,8 +120,7 @@ let metaData = kind => {
   | Files
   | Link
   | ShortText
-  | LongText
-  | Statement => [||]
+  | LongText => [||]
   };
 };
 
@@ -143,8 +136,7 @@ let isValidChecklistItem = t => {
   | Files
   | Link
   | ShortText
-  | LongText
-  | Statement => t.title |> String.trim |> String.length >= 1
+  | LongText => t.title |> String.trim |> String.length >= 1
   };
 };
 
@@ -155,7 +147,6 @@ let kindFromJs = (data, metaData) => {
   | "shortText" => ShortText
   | "longText" => LongText
   | "multiChoice" => MultiChoice(OptionUtils.default([||], metaData))
-  | "statement" => Statement
   | kind =>
     Rollbar.error(
       "Unkown kind: "

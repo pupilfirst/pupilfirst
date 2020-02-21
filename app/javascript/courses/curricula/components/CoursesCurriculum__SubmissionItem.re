@@ -156,13 +156,6 @@ let showFiles = (files, preview, index, titile, optional, callback) => {
   </div>;
 };
 
-let showStatement = (index, title) => {
-  let id = "statement-" ++ index;
-  <div id className="text-sm font-semibold mt-2 bg-white p-4 border border">
-    {title |> str}
-  </div>;
-};
-
 [@react.component]
 let make = (~index, ~checklistItem, ~updateResultCB, ~preview) => {
   let title = checklistItem |> ChecklistItem.title;
@@ -185,7 +178,6 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~preview) => {
          optional,
          updateResultCB,
        )
-     | Statement => showStatement(index, title)
      }}
   </div>;
 };

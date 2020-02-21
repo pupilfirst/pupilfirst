@@ -33,7 +33,14 @@ let buttonColorClasses = color => {
   ++ color
   ++ "-800";
 };
-
+let selectedButtonIcon = kind =>
+  switch (kind) {
+  | ChecklistItem.LongText => "i-long-text-regular"
+  | ShortText => "i-short-text-regular"
+  | Files => "i-file-regular"
+  | Link => "i-link-regular"
+  | MultiChoice(_choices) => "i-check-circle-alt-regular"
+  };
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
   let selectedButtonColor =
@@ -43,16 +50,6 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     | Files => "green"
     | Link => "purple"
     | MultiChoice(_choices) => "pink"
-    | Statement => "blue"
-    };
-  let selectedButtonIcon =
-    switch (selectedKind) {
-    | LongText => "i-long-text-regular"
-    | ShortText => "i-short-text-regular"
-    | Files => "i-file-regular"
-    | Link => "i-link-regular"
-    | MultiChoice(_choices) => "i-check-circle-alt-regular"
-    | Statement => "i-link-regular"
     };
   let selected =
     <button
@@ -61,7 +58,9 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
         ++ buttonColorClasses(selectedButtonColor)
       }>
       <span className="px-2 py-2">
-        <PfIcon className={"mr-2 if if-fw " ++ selectedButtonIcon} />
+        <PfIcon
+          className={"mr-2 if if-fw " ++ selectedButtonIcon(selectedKind)}
+        />
         {selectedKind |> ChecklistItem.actionStringForKind |> str}
       </span>
       <span className="px-2 py-2">
@@ -70,22 +69,16 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     </button>;
 
   let contents =
-    [|
-      ChecklistItem.LongText,
-      ShortText,
-      Files,
-      Link,
-      MultiChoice([||]),
-      Statement,
-    |]
+    [|ChecklistItem.LongText, ShortText, Files, Link, MultiChoice([||])|]
     |> Js.Array.filter(kind => kind != selectedKind)
     |> Array.mapi((index, kind) =>
          <button
            key={index |> string_of_int}
-           className="w-full p-1 focus:outline-none appearance-none"
+           className="w-full px-2 py-1 focus:outline-none appearance-none text-left"
            onClick={_ =>
              updateKind(checklistItem, updateChecklistItemCB, kind)
            }>
+           <PfIcon className={"mr-2 if if-fw " ++ selectedButtonIcon(kind)} />
            {kind |> ChecklistItem.actionStringForKind |> str}
          </button>
        );
@@ -214,10 +207,7 @@ let make =
       className="flex-1 bg-gray-100 mb-2 px-2 py-3"
       key={index |> string_of_int}>
       <div className="flex justify-between items-center">
-        <div className="ml-2 flex justify-start items-center">
-          <span className="font-semibold text-sm mr-2">
-            {(index + 1 |> string_of_int) ++ "." |> str}
-          </span>
+        <div className="ml-3">
           {checklistDropdown(checklistItem, updateChecklistItemCB)}
         </div>
         <div className="items-center">
@@ -262,8 +252,7 @@ let make =
        | ShortText
        | LongText
        | Files
-       | Link
-       | Statement => React.null
+       | Link => React.null
        }}
     </div>
     <div

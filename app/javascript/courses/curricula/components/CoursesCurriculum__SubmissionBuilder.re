@@ -164,8 +164,8 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
          {"This target has no actions. Click submit to complete the target"
           |> str}
        </div>
-     | c =>
-       c
+     | checklist =>
+       checklist
        |> Array.mapi((index, checklistItem) => {
             <CoursesCurriculum__SubmissionItem
               key={index |> string_of_int}

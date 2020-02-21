@@ -9,7 +9,7 @@ type result =
   | ShortText(string)
   | LongText(string)
   | MultiChoice(choices, option(int))
-  | Statement
+
 and choices = array(string);
 
 type t = {
@@ -35,7 +35,6 @@ let makeEmpty = targetChecklist => {
          | ShortText => ShortText("")
          | LongText => LongText("")
          | MultiChoice(choices) => MultiChoice(choices, None)
-         | Statement => Statement
          };
        make(~title, ~optional, ~result);
      });
@@ -68,7 +67,6 @@ let encodeKind = t => {
   | ShortText(_) => "shortText"
   | LongText(_) => "longText"
   | MultiChoice(_, _) => "multiChoice"
-  | Statement => "statement"
   };
 };
 
@@ -89,7 +87,6 @@ let encodeResult = t => {
     index
     |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i))
     |> OptionUtils.default("")
-  | Statement => ""
   };
 };
 
@@ -115,15 +112,12 @@ let validResponse = response => {
   | MultiChoice(choices, index) =>
     index
     |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)
-  | Statement => false
   };
 };
 
 let validResonses = responses => {
   responses |> Js.Array.filter(c => {validResponse(c)});
 };
-
-// let haveValidAnswerForAllQ
 
 let encode = t =>
   Json.Encode.(

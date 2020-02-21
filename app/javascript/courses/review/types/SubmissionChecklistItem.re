@@ -9,8 +9,7 @@ type result =
   | LongText(string)
   | Link(string)
   | Files(array(attachment))
-  | MultiChoice(string)
-  | None;
+  | MultiChoice(string);
 
 type status =
   | Passed
@@ -38,17 +37,19 @@ let makeAttachments = data =>
   |> Js.Array.map(a => makeAttachment(~url=a##url, ~name=a##title, ~id=a##id));
 
 let makeResult = (result, kind, attachments) => {
-  switch (result) {
-  | Some(result) =>
-    switch (kind) {
-    | "shortText" => ShortText(result)
-    | "longText" => LongText(result)
-    | "link" => Link(result)
-    | "multiChoice" => MultiChoice(result)
-    | "files" => Files(attachments)
-    | _ => None
-    }
-  | None => None
+  switch (kind) {
+  | "shortText" => ShortText(result)
+  | "longText" => LongText(result)
+  | "link" => Link(result)
+  | "multiChoice" => MultiChoice(result)
+  | "files" => Files(attachments)
+  | randomKind =>
+    Rollbar.error(
+      "Unkown kind: "
+      ++ randomKind
+      ++ "recived in CurriculumEditor__TargetChecklistItem",
+    );
+    ShortText("Error");
   };
 };
 
@@ -90,7 +91,7 @@ let decode = (attachments, json) => {
   Json.Decode.{
     result:
       makeResult(
-        json |> field("result", optional(string)),
+        json |> field("result", string),
         json |> field("kind", string),
         attachments,
       ),
@@ -121,7 +122,6 @@ let encodeKind = t =>
   | Link(_) => "link"
   | Files(_) => "files"
   | MultiChoice(_) => "multiChoice"
-  | None => "noAction"
   };
 
 let encodeResult = t =>
@@ -131,7 +131,6 @@ let encodeResult = t =>
   | Link(t) => t
   | MultiChoice(_)
   | Files(_) => "files"
-  | None => ""
   };
 
 let encodeStatus = t => {

@@ -582,7 +582,7 @@ let quizEditor = (state, send) => {
 };
 
 let saveDisabled = state => {
-  let hasValidTitle = state.title |> String.length > 1;
+  let hasValidTitle = state.title |> String.trim |> String.length > 1;
   let hasValidMethodOfCompletion =
     switch (state.methodOfCompletion) {
     | TakeQuiz => isValidQuiz(state.quiz)
@@ -884,7 +884,7 @@ let make =
                      |> React.array}
                     {state.checklist |> ArrayUtils.isEmpty
                        ? <div
-                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded mt-2 text-sm text-center">
+                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                            <i className="fas fa-info-circle mr-2" />
                            {"This target has no steps. Students will be able to submit target without any action!"
                             |> str}

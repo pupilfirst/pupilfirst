@@ -57,10 +57,12 @@ let statusIcon = (updateChecklistCB, status) => {
   switch (updateChecklistCB, status: ChecklistItem.status) {
   | (None, Passed) =>
     <FaIcon
-      classes="fas fa-check-circle text-green-500 text-base mr-3 -ml-6"
+      classes="fas fa-check-circle text-green-500 text-lg mr-3 -ml-6 mt-1"
     />
   | (None, Failed) =>
-    <FaIcon classes="fas fa-times-circle text-red-500 text-base mr-3 -ml-6" />
+    <FaIcon
+      classes="fas fa-times-circle text-red-500 text-lg mr-3 -ml-6 mt-1"
+    />
   | (_, _) => React.null
   };
 };
@@ -158,7 +160,7 @@ let cardBodyClasses = (checklistItem, updateChecklistCB) => {
   "pl-5 md:pl-7 p-3 pb-4 "
   ++ (
     switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
-    | (None, Passed | Failed) => "border-t bg-gray-200"
+    | (None, Passed | Failed) => "border-t bg-gray-200 rounded-b"
     | (Some(_), Passed | Pending | Failed)
     | (None, Pending) => ""
     }
@@ -197,7 +199,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
       </div>
       <div className="inline-block">
         {showResult
-           ? showStatus(status)}
+           ? showStatus(status)
            : <button> <i className="fas fa-chevron-down" /> </button>}
       </div>
     </div>

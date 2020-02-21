@@ -321,7 +321,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
          "Unable to find level with id" ++ levelId ++ "in StudentOverlay",
        )
     |> Level.number;
-  <div>
+  <div className="mb-8">
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
       {courseCompleted
@@ -406,7 +406,7 @@ let coachInfo = (teamCoaches, studentDetails) => {
       ? "Team Coaches" : "Personal Coaches";
 
   coaches |> ArrayUtils.isNotEmpty
-    ? <div className="mt-8">
+    ? <div className="mb-8">
         <h6 className="font-semibold"> {title |> str} </h6>
         {coaches
          |> Array.map(coach =>
@@ -430,7 +430,7 @@ let navigateToStudent = (setState, path, event) => {
 
 let otherTeamMembers = (setState, studentId, studentDetails) =>
   if (studentDetails |> StudentDetails.teamHasManyStudents) {
-    <div className="block mt-8">
+    <div className="block mb-8">
       <h6 className="font-semibold"> {"Other Team Members" |> str} </h6>
       {studentDetails
        |> StudentDetails.team
@@ -509,7 +509,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
               levels,
               studentDetails |> StudentDetails.completedLevelIds,
             )}
-           <div className="mt-8">
+           <div className="mb-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
              <div className="flex -mx-2 flex-wrap mt-2">
                {targetsCompletionStatus(
@@ -525,7 +525,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
            {studentDetails
             |> StudentDetails.averageGrades
             |> ArrayUtils.isNotEmpty
-              ? <div className="mt-8">
+              ? <div className="mb-8">
                   <h6 className="font-semibold">
                     {"Average Grades" |> str}
                   </h6>

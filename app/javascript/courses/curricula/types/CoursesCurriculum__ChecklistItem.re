@@ -123,8 +123,6 @@ let validResonses = responses => {
   responses |> Js.Array.filter(c => {validResponse(c)});
 };
 
-// let haveValidAnswerForAllQ
-
 let encode = t =>
   Json.Encode.(
     object_([

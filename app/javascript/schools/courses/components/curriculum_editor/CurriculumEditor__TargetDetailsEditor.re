@@ -118,6 +118,9 @@ let reducer = (state, action) =>
   switch (action) {
   | SaveTargetDetails(targetDetails) =>
     let methodOfCompletion = computeMethodOfCompletion(targetDetails);
+    let checklist =
+      targetDetails.checklist |> ArrayUtils.isNotEmpty
+        ? targetDetails.checklist : ChecklistItem.createDefaultChecklist;
     let quiz =
       targetDetails.quiz |> ArrayUtils.isNotEmpty
         ? targetDetails.quiz : [|QuizQuestion.empty("0")|];
@@ -141,7 +144,7 @@ let reducer = (state, action) =>
         | None => ""
         },
       visibility: targetDetails.visibility,
-      checklist: targetDetails.checklist,
+      checklist: checklist,
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}

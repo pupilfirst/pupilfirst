@@ -150,6 +150,20 @@ let isValidChecklistItem = t => {
   };
 };
 
+let createDefaultChecklist = [|
+  make(~title="Describe your submission", ~kind=LongText, ~optional=false),
+  make(
+    ~title="Attach a link if any for your submission",
+    ~kind=Link,
+    ~optional=true,
+  ),
+  make(
+    ~title="Attach files if any for your submission",
+    ~kind=Files,
+    ~optional=true,
+  ),
+|];
+
 let kindFromJs = (data, metaData) => {
   switch (data) {
   | "files" => Files

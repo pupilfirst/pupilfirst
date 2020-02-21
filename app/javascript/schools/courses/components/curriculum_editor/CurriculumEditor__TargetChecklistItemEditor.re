@@ -169,7 +169,7 @@ let make =
       ~checklistItem,
       ~index,
       ~updateChecklistItemCB,
-      ~removeChecklistItemCB=?,
+      ~removeChecklistItemCB,
       ~moveChecklistItemUpCB=?,
       ~moveChecklistItemDownCB=?,
       ~copyChecklistItemCB,
@@ -252,8 +252,7 @@ let make =
       {controlIcon(
          ~icon="fa-trash-alt",
          ~title="Delete",
-         ~handler=
-           removeChecklistItemCB |> OptionUtils.map(cb => onDelete(cb)),
+         ~handler=Some(onDelete(removeChecklistItemCB)),
        )}
     </div>
   </div>;

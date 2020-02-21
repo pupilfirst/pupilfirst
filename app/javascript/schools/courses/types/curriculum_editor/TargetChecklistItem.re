@@ -56,8 +56,8 @@ let updateOptional = (optional, t) => {
   {...t, optional};
 };
 
-let removeItem = (t, list) => {
-  list |> Js.Array.filter(item => item != t);
+let removeItem = (index, list) => {
+  list |> Js.Array.filteri((_item, i) => i != index);
 };
 
 let moveUp = (t, list) => {
@@ -70,10 +70,8 @@ let moveDown = (t, list) => {
 
 let copy = (t, list) => {
   list
-  |> Array.to_list
-  |> List.map(item => item == t ? [item, item] : [item])
-  |> List.flatten
-  |> Array.of_list;
+  |> Array.map(item => item == t ? [item, item] : [item])
+  |> ArrayUtils.flatten;
 };
 
 let removeMultichoiceOption = (choiceIndex, t) => {
@@ -82,9 +80,7 @@ let removeMultichoiceOption = (choiceIndex, t) => {
     let updatedChoices =
       choices
       |> Array.mapi((i, choice) => i == choiceIndex ? [] : [choice])
-      |> Array.to_list
-      |> List.flatten
-      |> Array.of_list;
+      |> ArrayUtils.flatten;
     t |> updateKind(MultiChoice(updatedChoices));
   | Files
   | Link
@@ -175,7 +171,7 @@ let decode = json => {
     kind:
       kindFromJs(
         json |> field("kind", string),
-        json |> optional(field("metaData", array(string))),
+        json |> Json.Decode.optional(field("metaData", array(string))),
       ),
     optional: json |> field("optional", bool),
     title: json |> field("title", string),

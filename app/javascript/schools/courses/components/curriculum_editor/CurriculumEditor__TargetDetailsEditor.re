@@ -691,8 +691,8 @@ let addNewChecklistItem = (state, send) => {
   send(UpdateChecklist(newChecklist));
 };
 
-let removeChecklistItem = (state, send, item, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(item)));
+let removeChecklistItem = (state, send, index, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(index)));
 };
 
 let moveChecklistItemUp = (state, send, item, ()) => {
@@ -836,17 +836,6 @@ let make =
                   <div className="ml-6 mb-6">
                     {state.checklist
                      |> Array.mapi((index, checklistItem) => {
-                          let removeChecklistItemCB =
-                            state.checklist |> Array.length > 1
-                              ? Some(
-                                  removeChecklistItem(
-                                    state,
-                                    send,
-                                    checklistItem,
-                                  ),
-                                )
-                              : None;
-
                           let moveChecklistItemUpCB =
                             index > 0
                               ? Some(
@@ -878,7 +867,11 @@ let make =
                               send,
                               index,
                             )}
-                            ?removeChecklistItemCB
+                            removeChecklistItemCB={removeChecklistItem(
+                              state,
+                              send,
+                              index,
+                            )}
                             ?moveChecklistItemUpCB
                             ?moveChecklistItemDownCB
                             copyChecklistItemCB={copyChecklistItem(
@@ -889,12 +882,20 @@ let make =
                           />;
                         })
                      |> React.array}
+                    {state.checklist |> ArrayUtils.isEmpty
+                       ? <div
+                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded mt-2 text-sm text-center">
+                           <i className="fas fa-info-circle mr-2" />
+                           {"This target has no steps. Students will be able to submit target without any action!"
+                            |> str}
+                         </div>
+                       : React.null}
                     <button
                       className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
                       onClick={_ => addNewChecklistItem(state, send)}>
                       <PfIcon className="if i-plus-circle if-fw" />
                       <span className="font-semibold ml-2">
-                        {"Add Another Step" |> str}
+                        {"Add a Step" |> str}
                       </span>
                     </button>
                   </div>

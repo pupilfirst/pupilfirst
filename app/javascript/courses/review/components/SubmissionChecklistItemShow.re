@@ -42,14 +42,14 @@ let showlink = link =>
   <a
     href=link
     target="_blank"
-    className="max-w-fc mt-2 mr-3 flex items-center border overflow-hidden shadow rounded hover:shadow-md border-blue-400 bg-blue-200 text-blue-700 hover:border-blue-600 hover:text-blue-800">
+    className="max-w-fc mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-indigo-400 bg-white text-indigo-700 hover:border-blue-600 hover:text-indigo-800">
     <span
-      className="flex h-full w-8 justify-center items-center p-2 bg-blue-200">
-      <i className="fas fa-link" />
+      className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
+      {link |> str}
     </span>
     <span
-      className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose bg-blue-100">
-      {link |> str}
+      className="flex w-10 justify-center items-center p-2 bg-indigo-700 text-white">
+      <PfIcon className="if i-external-link-regular" />
     </span>
   </a>;
 

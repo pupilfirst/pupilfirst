@@ -11,7 +11,7 @@ module SubmissionDetailsQuery = [%graphql
   {|
     query($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId
+        targetId, targetTitle, levelNumber, levelId, inactiveStudents
         students {
           id
           name
@@ -103,10 +103,9 @@ let headerSection = (submissionDetails, courseId) =>
            |> SubmissionDetails.students
            |> Array.mapi((index, student) => {
                 let commaRequired = index + 1 != studentCount;
-                <span>
+                <span key={student |> Student.id}>
                   <a
                     className="font-semibold underline"
-                    key={student |> Student.id}
                     href={"/students/" ++ (student |> Student.id) ++ "/report"}
                     target="_blank">
                     {student |> Student.name |> str}
@@ -162,6 +161,23 @@ let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) => {
   );
 };
 
+let inactiveWarning = submissionDetails =>
+  if (submissionDetails |> SubmissionDetails.inactiveStudents) {
+    let warning =
+      if (submissionDetails |> SubmissionDetails.students |> Array.length > 1) {
+        "This submission is linked to one or more students whose access to the course has ended, or have dropped out.";
+      } else {
+        "This submission is from a student whose access to the course has ended, or has dropped out.";
+      };
+
+    <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3">
+      <i className="fas fa-exclamation-triangle" />
+      <span className="ml-2"> {warning |> str} </span>
+    </div>;
+  } else {
+    React.null;
+  };
+
 [@react.component]
 let make =
     (
@@ -189,7 +205,11 @@ let make =
        <div>
          {headerSection(submissionDetails, courseId)}
          <div
-           className="review-submission-overlay__submission-container relative container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0 pb-8">
+           className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0">
+           {inactiveWarning(submissionDetails)}
+         </div>
+         <div
+           className="review-submission-overlay__submission-container relative container mx-auto max-w-3xl px-3 lg:px-0 pb-8">
            {submissionDetails
             |> SubmissionDetails.submissions
             |> Array.mapi((index, submission) =>

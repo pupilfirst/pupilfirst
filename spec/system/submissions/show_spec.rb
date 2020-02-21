@@ -257,6 +257,36 @@ feature 'Submissions show' do
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
+
+    scenario 'coach is warned when a student has dropped out', js: true do
+      team.update!(dropped_out_at: 1.day.ago)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      expect(page).to have_text('This submission is from a student whose access to the course has ended, or has dropped out.')
+    end
+
+    scenario "coach is warned when a student's access to course has ended", js: true do
+      team.update!(access_ends_at: 1.day.ago)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      expect(page).to have_text('This submission is from a student whose access to the course has ended, or has dropped out.')
+    end
+
+    context 'when submission is from students who are now in different teams' do
+      let(:another_team) { create :startup, level: level, dropped_out_at: 1.day.ago }
+
+      before do
+        submission_pending.founders << another_team.founders.first
+      end
+
+      scenario 'coach is warned when one student in the submission is inactive', js: true do
+        sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+        expect(page).to have_text('This submission is linked to one or more students whose access to the course has ended, or have dropped out.')
+      end
+    end
   end
 
   context 'with a reviewed submission' do

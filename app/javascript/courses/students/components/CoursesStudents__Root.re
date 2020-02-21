@@ -35,6 +35,8 @@ module TeamsQuery = [%graphql
             avatarUrl
           }
           coachUserIds
+          accessEndsAt
+          droppedOutAt
         }
         pageInfo{
           endCursor,hasNextPage

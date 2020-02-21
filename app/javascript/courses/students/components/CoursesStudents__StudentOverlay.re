@@ -49,6 +49,8 @@ module StudentDetailsQuery = [%graphql
           id
           name
           levelId
+          droppedOutAt
+          accessEndsAt
           students {
             id
             name
@@ -460,6 +462,41 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
     React.null;
   };
 
+let inactiveWarning = teamInfo => {
+  let warning =
+    switch (
+      teamInfo |> TeamInfo.droppedOutAt,
+      teamInfo |> TeamInfo.accessEndsAt,
+    ) {
+    | (Some(droppedOutAt), _) =>
+      Some(
+        "This student dropped out of the course on "
+        ++ (droppedOutAt |> DateTime.format(DateTime.OnlyDate))
+        ++ ".",
+      )
+    | (None, Some(accessEndsAt)) =>
+      accessEndsAt |> DateFns.isPast
+        ? Some(
+            "This student's access to the course ended on "
+            ++ (accessEndsAt |> DateTime.format(DateTime.OnlyDate))
+            ++ ".",
+          )
+        : None
+    | (None, None) => None
+    };
+
+  warning
+  |> OptionUtils.mapWithDefault(
+       warning =>
+         <div
+           className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
+           <i className="fas fa-exclamation-triangle" />
+           <span className="ml-2"> {warning |> str} </span>
+         </div>,
+       React.null,
+     );
+};
+
 [@react.component]
 let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
   let (state, setState) = React.useState(() => initialState);
@@ -503,6 +540,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
                {studentDetails |> StudentDetails.title |> str}
              </p>
              {personalInfo(studentDetails)}
+             {inactiveWarning(studentDetails |> StudentDetails.team)}
            </div>
            {levelProgressBar(
               studentDetails |> StudentDetails.levelId,

@@ -9,5 +9,6 @@ module Types
     field :evaluation_criteria, [Types::EvaluationCriterionType], null: false
     field :review_checklist, [Types::ReviewChecklistType], null: false
     field :target_evaluation_criteria_ids, [ID], null: false
+    field :inactive_students, Boolean, null: false
   end
 end

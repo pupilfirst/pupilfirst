@@ -735,7 +735,7 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
-            "name": "ImageBlock",
+            "name": "EmbedBlock",
             "ofType": null
           },
           {
@@ -745,39 +745,23 @@
           },
           {
             "kind": "OBJECT",
-            "name": "MarkdownBlock",
+            "name": "ImageBlock",
             "ofType": null
           },
           {
             "kind": "OBJECT",
-            "name": "EmbedBlock",
+            "name": "MarkdownBlock",
             "ofType": null
           }
         ]
       },
       {
         "kind": "OBJECT",
-        "name": "ImageBlock",
+        "name": "EmbedBlock",
         "description": "",
         "fields": [
           {
-            "name": "caption",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "filename",
+            "name": "embedCode",
             "description": "",
             "args": [],
             "type": {
@@ -875,11 +859,43 @@
       },
       {
         "kind": "OBJECT",
-        "name": "MarkdownBlock",
+        "name": "ImageBlock",
         "description": "",
         "fields": [
           {
-            "name": "markdown",
+            "name": "caption",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "filename",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "url",
             "description": "",
             "args": [],
             "type": {
@@ -902,27 +918,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "EmbedBlock",
+        "name": "MarkdownBlock",
         "description": "",
         "fields": [
           {
-            "name": "embedCode",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "url",
+            "name": "markdown",
             "description": "",
             "args": [],
             "type": {
@@ -2405,6 +2405,18 @@
         "description": "",
         "fields": [
           {
+            "name": "accessEndsAt",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "coachUserIds",
             "description": "",
             "args": [],
@@ -2424,6 +2436,18 @@
                   }
                 }
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "droppedOutAt",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2853,6 +2877,22 @@
                     "ofType": null
                   }
                 }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "inactiveStudents",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
               }
             },
             "isDeprecated": false,

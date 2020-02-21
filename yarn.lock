@@ -7653,6 +7653,13 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
 
+markdown-it-linkify-images@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-linkify-images/-/markdown-it-linkify-images-1.1.1.tgz#1d98bc8219c61ae2f2bf9d258295e74d8a45864c"
+  integrity sha512-1IEmAaAjIgAwY+tZI0sxDXdy9QKHutj5cN0lH2JBiSZt+2NYKrWRJj0cloQW3OFIfP2MLFA1E+6OLJhXPiLgNw==
+  dependencies:
+    markdown-it "^8.4.2"
+
 markdown-it-multimd-table@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it-multimd-table/-/markdown-it-multimd-table-4.0.0.tgz#76eb4e1fc40726eeca4fd97eef214349bea02e76"

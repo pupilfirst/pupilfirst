@@ -16,10 +16,14 @@ const md = require("markdown-it")({
 const subscriptPlugin = require("markdown-it-sub");
 const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
+const linkifyImagesPlugin = require("markdown-it-linkify-images");
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
-  .use(tablePlugin);
+  .use(tablePlugin)
+  .use(linkifyImagesPlugin, {
+    target: "_blank"
+  });
 
 const parse = markdown => {
   return md.render(markdown);

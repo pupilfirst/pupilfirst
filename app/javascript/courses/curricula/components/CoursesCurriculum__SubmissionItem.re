@@ -137,6 +137,14 @@ let attachFile = (callback, attachingCB, files, id, filename) => {
   );
 };
 
+let removeFile = (callback, files, id) => {
+  callback(
+    ChecklistItem.Files(
+      files |> Js.Array.filter(a => a |> ChecklistItem.fileId != id),
+    ),
+  );
+};
+
 let showFiles = (files, preview, id, attachingCB, callback) => {
   <div>
     <div className="flex flex-wrap" id>
@@ -153,6 +161,12 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
               <span
                 className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-1 leading-loose bg-primary-100">
                 {file |> ChecklistItem.filename |> str}
+              </span>
+              <span
+                onClick={_ =>
+                  removeFile(callback, files, file |> ChecklistItem.fileId)
+                }>
+                <i className="fas fa-times px-2 text-gray-900" />
               </span>
             </div>
           })

@@ -137,7 +137,7 @@ let makeAttachments = checklist => {
   |> Array.map(c =>
        switch (c.result) {
        | Files(files) => files |> Array.to_list
-       | _ => []
+       | _anyOtherResult => []
        }
      )
   |> ArrayUtils.flatten

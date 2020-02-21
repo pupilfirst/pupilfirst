@@ -121,15 +121,14 @@ let submissionCardClasses = status =>
     }
   );
 
-let showSubmission = (submissions, levels, openOverlayCB) =>
+let showSubmission = (submissions, levels) =>
   <div>
     {submissions
      |> SubmissionInfo.sort
      |> Array.map(submission =>
-          <a
+          <Link
             href={"/submissions/" ++ (submission |> SubmissionInfo.id)}
             key={submission |> SubmissionInfo.id}
-            onClick={openOverlayCB(submission |> SubmissionInfo.id)}
             ariaLabel={
               "reviewed-submission-card-" ++ (submission |> SubmissionInfo.id)
             }
@@ -173,12 +172,12 @@ let showSubmission = (submissions, levels, openOverlayCB) =>
                </div>
              | None => React.null
              }}
-          </a>
+          </Link>
         )
      |> React.array}
   </div>;
 
-let showSubmissions = (reviewedSubmissions, levels, openOverlayCB) =>
+let showSubmissions = (reviewedSubmissions, levels) =>
   reviewedSubmissions |> ArrayUtils.isEmpty
     ? <div
         className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
@@ -187,7 +186,7 @@ let showSubmissions = (reviewedSubmissions, levels, openOverlayCB) =>
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
       </div>
-    : showSubmission(reviewedSubmissions, levels, openOverlayCB);
+    : showSubmission(reviewedSubmissions, levels);
 
 [@react.component]
 let make =
@@ -195,7 +194,6 @@ let make =
       ~courseId,
       ~selectedLevel,
       ~levels,
-      ~openOverlayCB,
       ~reviewedSubmissions,
       ~updateReviewedSubmissionsCB,
     ) => {
@@ -226,7 +224,7 @@ let make =
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
      | PartiallyLoaded(reviewedSubmissions, cursor) =>
        <div>
-         {showSubmissions(reviewedSubmissions, levels, openOverlayCB)}
+         {showSubmissions(reviewedSubmissions, levels)}
          {loading
             ? SkeletonLoading.multiple(
                 ~count=3,
@@ -248,7 +246,7 @@ let make =
               </button>}
        </div>
      | FullyLoaded(reviewedSubmissions) =>
-       showSubmissions(reviewedSubmissions, levels, openOverlayCB)
+       showSubmissions(reviewedSubmissions, levels)
      }}
   </div>;
 };

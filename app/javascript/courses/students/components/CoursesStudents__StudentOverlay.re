@@ -424,10 +424,8 @@ let coachInfo = (teamCoaches, studentDetails) => {
     : React.null;
 };
 
-let navigateToStudent = (setState, path, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
+let navigateToStudent = (setState, _event) => {
   setState(_ => initialState);
-  ReasonReactRouter.push(path);
 };
 
 let otherTeamMembers = (setState, studentId, studentDetails) =>
@@ -441,10 +439,10 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
             let path =
               "/students/" ++ (student |> TeamInfo.studentId) ++ "/report";
 
-            <a
+            <Link
               className="block"
               href=path
-              onClick={navigateToStudent(setState, path)}
+              onClick={navigateToStudent(setState)}
               key={student |> TeamInfo.studentId}>
               {userInfo(
                  ~key={
@@ -454,7 +452,7 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
                  ~name=student |> TeamInfo.studentName,
                  ~title=student |> TeamInfo.studentTitle,
                )}
-            </a>;
+            </Link>;
           })
        |> React.array}
     </div>;

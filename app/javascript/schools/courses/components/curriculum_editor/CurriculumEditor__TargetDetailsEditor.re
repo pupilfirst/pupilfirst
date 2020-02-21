@@ -834,7 +834,13 @@ let make =
                      |> str}
                   </label>
                   <div className="ml-6 mb-6">
-                    {state.checklist
+                    {let allowFileKind =
+                       state.checklist
+                       |> Js.Array.filter(item =>
+                            item |> ChecklistItem.isFilesKind
+                          )
+                       |> ArrayUtils.isEmpty;
+                     state.checklist
                      |> Array.mapi((index, checklistItem) => {
                           let moveChecklistItemUpCB =
                             index > 0
@@ -879,6 +885,7 @@ let make =
                               send,
                               checklistItem,
                             )}
+                            allowFileKind
                           />;
                         })
                      |> React.array}

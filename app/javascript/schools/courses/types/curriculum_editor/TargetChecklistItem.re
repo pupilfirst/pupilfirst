@@ -20,7 +20,7 @@ let optional = t => t.optional;
 let actionStringForKind = kind => {
   switch (kind) {
   | Files => "Upload Files"
-  | Link => "Attach Links"
+  | Link => "Attach a Link"
   | ShortText => "Write Short Text"
   | LongText => "Write Long Text"
   | MultiChoice(_choices) => "Choose from a list"
@@ -121,6 +121,16 @@ let metaData = kind => {
   | Link
   | ShortText
   | LongText => [||]
+  };
+};
+
+let isFilesKind = t => {
+  switch (t.kind) {
+  | Files => true
+  | MultiChoice(_choices) => false
+  | Link
+  | ShortText
+  | LongText => false
   };
 };
 

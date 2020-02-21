@@ -41,7 +41,7 @@ let selectedButtonIcon = kind =>
   | Link => "i-link-regular"
   | MultiChoice(_choices) => "i-check-circle-alt-regular"
   };
-let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
+let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
   let selectedButtonColor =
     switch (selectedKind) {
@@ -68,8 +68,20 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
       </span>
     </button>;
 
+  let defaultKindTypes = [|
+    ChecklistItem.LongText,
+    ShortText,
+    Link,
+    MultiChoice([||]),
+  |];
+
+  let allowedKindTypes =
+    allowFileKind
+      ? defaultKindTypes |> Array.append([|ChecklistItem.Files|])
+      : defaultKindTypes;
+
   let contents =
-    [|ChecklistItem.LongText, ShortText, Files, Link, MultiChoice([||])|]
+    allowedKindTypes
     |> Js.Array.filter(kind => kind != selectedKind)
     |> Array.mapi((index, kind) =>
          <button
@@ -201,6 +213,7 @@ let make =
       ~moveChecklistItemUpCB=?,
       ~moveChecklistItemDownCB=?,
       ~copyChecklistItemCB,
+      ~allowFileKind,
     ) => {
   <div className="flex items-start mt-2">
     <div
@@ -208,7 +221,11 @@ let make =
       key={index |> string_of_int}>
       <div className="flex justify-between items-center">
         <div className="ml-3">
-          {checklistDropdown(checklistItem, updateChecklistItemCB)}
+          {checklistDropdown(
+             checklistItem,
+             allowFileKind,
+             updateChecklistItemCB,
+           )}
         </div>
         <div className="items-center">
           <input

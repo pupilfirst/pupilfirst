@@ -44,10 +44,8 @@ describe DailyDigestService do
   let!(:question_c3_3) { create :question, community: community_3, creator: t3_user, created_at: 8.days.ago }
 
   before do
-    # Activate daily digest emails for three of the four users.
-    [t1_user, t2_user_1, t2_user_3, t3_user, t4_user].each do |user|
-      user.update!(preferences: { daily_digest: true })
-    end
+    # Turn off daily digest for the disabled user.
+    t2_user_2.update!(preferences: { daily_digest: false })
 
     # Set email_bounced_at for t2_student_bounced.
     t2_student_bounced.user.update!(email_bounced_at: 1.week.ago)

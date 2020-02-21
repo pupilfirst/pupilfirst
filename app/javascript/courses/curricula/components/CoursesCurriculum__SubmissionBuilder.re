@@ -143,23 +143,41 @@ let updateResult = (state, send, index, result) => {
   );
 };
 
+let buttonClasses = checklist => {
+  "flex mt-3 "
+  ++ (
+    switch (checklist) {
+    | [||] => "justify-center"
+    | _ => " justify-end"
+    }
+  );
+};
+
 [@react.component]
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist));
 
   <div className="bg-gray-100 pt-6 px-4 pb-2 mt-4 border rounded-lg">
-    {state.checklist
-     |> Array.mapi((index, checklistItem) => {
-          <CoursesCurriculum__SubmissionItem
-            key={index |> string_of_int}
-            index={index |> string_of_int}
-            checklistItem
-            updateResultCB={updateResult(state, send, index)}
-            preview
-          />
-        })
-     |> React.array}
-    <div className="flex mt-3 justify-end">
+    {switch (state.checklist) {
+     | [||] =>
+       <div className="text-center">
+         {"This target has no actions. Click submit to complete the target"
+          |> str}
+       </div>
+     | c =>
+       c
+       |> Array.mapi((index, checklistItem) => {
+            <CoursesCurriculum__SubmissionItem
+              key={index |> string_of_int}
+              index={index |> string_of_int}
+              checklistItem
+              updateResultCB={updateResult(state, send, index)}
+              preview
+            />
+          })
+       |> React.array
+     }}
+    <div className={buttonClasses(state.checklist)}>
       <button
         onClick={submit(state, send, target, addSubmissionCB)}
         disabled={isButtonDisabled(state.formState) || preview}

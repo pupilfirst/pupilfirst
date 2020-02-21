@@ -22,15 +22,49 @@ let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
   updateChecklistItemCB(newChecklistItem);
 };
 
+let buttonColorClasses = color => {
+  "border-"
+  ++ color
+  ++ "-500 "
+  ++ "bg-"
+  ++ color
+  ++ "-100 "
+  ++ "text-"
+  ++ color
+  ++ "-800";
+};
+
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind;
+  let selectedButtonColor =
+    switch (selectedKind) {
+    | LongText => "blue"
+    | ShortText => "orange"
+    | Files => "green"
+    | Link => "purple"
+    | MultiChoice(_choices) => "pink"
+    | Statement => "blue"
+    };
+  let selectedButtonIcon =
+    switch (selectedKind) {
+    | LongText => "i-long-text-regular"
+    | ShortText => "i-short-text-regular"
+    | Files => "i-file-regular"
+    | Link => "i-link-regular"
+    | MultiChoice(_choices) => "i-check-circle-alt-regular"
+    | Statement => "i-link-regular"
+    };
   let selected =
     <button
-      className="border focus:outline-none appearance-none inline-flex items-center">
+      className={
+        "border focus:outline-none appearance-none inline-flex items-center rounded "
+        ++ buttonColorClasses(selectedButtonColor)
+      }>
       <span className="px-2 py-2">
+        <PfIcon className={"mr-2 if if-fw " ++ selectedButtonIcon} />
         {selectedKind |> ChecklistItem.actionStringForKind |> str}
       </span>
-      <span className="px-2 py-2 border-l border-gray-400">
+      <span className="px-2 py-2">
         <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>;
@@ -48,6 +82,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     |> Array.mapi((index, kind) =>
          <button
            key={index |> string_of_int}
+           className="w-full p-1 focus:outline-none appearance-none"
            onClick={_ =>
              updateKind(checklistItem, updateChecklistItemCB, kind)
            }>

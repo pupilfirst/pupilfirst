@@ -24,16 +24,18 @@ let updateReviewChecklist =
     (targetId, reviewChecklist, setState, updateReviewChecklistCB) => {
   setState(state => {...state, saving: true});
 
+  let trimmedChecklist =
+    reviewChecklist |> Array.map(ReviewChecklistItem.trim);
+
   UpdateReviewChecklistMutation.make(
     ~targetId,
-    ~reviewChecklist=
-      CoursesReview__ReviewChecklistItem.encodeArray(reviewChecklist),
+    ~reviewChecklist=ReviewChecklistItem.encodeArray(trimmedChecklist),
     (),
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        if (response##updateReviewChecklist##success) {
-         updateReviewChecklistCB(reviewChecklist);
+         updateReviewChecklistCB(trimmedChecklist);
        };
 
        setState(state => {...state, saving: false});
@@ -138,26 +140,25 @@ let initialStateForReviewChecklist = reviewChecklist => {
     ? ReviewChecklistItem.emptyTemplate() : reviewChecklist;
 };
 
+let invalidTitle = title => {
+  title |> String.trim == "";
+};
+
 let invalidChecklist = reviewChecklist => {
   reviewChecklist
   |> Array.map(reviewChecklistItem =>
        reviewChecklistItem
        |> ReviewChecklistItem.title
-       |> String.length < 2
+       |> invalidTitle
        || reviewChecklistItem
        |> ReviewChecklistItem.result
-       |> Array.map(resultItem =>
-            resultItem |> ReviewChecklistResult.title |> String.length < 2
+       |> Js.Array.filter(resultItem =>
+            resultItem |> ReviewChecklistResult.title |> invalidTitle
           )
-       |> Js.Array.filter(valid => valid)
        |> ArrayUtils.isNotEmpty
      )
   |> Js.Array.filter(valid => valid)
   |> ArrayUtils.isNotEmpty;
-};
-
-let validTitle = title => {
-  title |> String.trim !== "";
 };
 
 [@react.component]
@@ -185,7 +186,7 @@ let make =
                     className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
                     id="checklist_title"
                     type_="text"
-                    placeholder="Add title for checklist item"
+                    placeholder="Add an item to the checklist"
                     value={reviewChecklistItem |> ReviewChecklistItem.title}
                     onChange={event =>
                       updateChecklistItemTitle(
@@ -197,13 +198,11 @@ let make =
                     }
                   />
                   <School__InputGroupError
-                    message="Not a valid title"
+                    message="A checklist item cannot be blank"
                     active={
-                      !(
-                        reviewChecklistItem
-                        |> ReviewChecklistItem.title
-                        |> validTitle
-                      )
+                      reviewChecklistItem
+                      |> ReviewChecklistItem.title
+                      |> invalidTitle
                     }
                   />
                 </div>
@@ -247,7 +246,7 @@ let make =
                                   ++ "_title"
                                 }
                                 type_="text"
-                                placeholder="Add title for checklist result item"
+                                placeholder="Add a result for this check"
                                 value={
                                   resultItem |> ReviewChecklistResult.title
                                 }
@@ -303,13 +302,11 @@ let make =
                               }
                             />
                             <School__InputGroupError
-                              message="Not a valid title"
+                              message="A check's result cannot be blank"
                               active={
-                                !(
-                                  resultItem
-                                  |> ReviewChecklistResult.title
-                                  |> validTitle
-                                )
+                                resultItem
+                                |> ReviewChecklistResult.title
+                                |> invalidTitle
                               }
                             />
                           </div>

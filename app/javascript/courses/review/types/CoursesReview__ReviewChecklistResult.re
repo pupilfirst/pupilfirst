@@ -39,6 +39,8 @@ let updateFeedback = (feedback, t, index, checklist) => {
   |> replace(make(~title=t.title, ~feedback=optionalFeedback), index);
 };
 
+let trim = t => {...t, title: t.title |> String.trim};
+
 let encode = t => {
   let title = [("title", t.title |> Json.Encode.string)];
 

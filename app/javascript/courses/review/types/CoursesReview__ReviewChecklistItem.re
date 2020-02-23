@@ -64,6 +64,11 @@ let deleteResultItem = (index, t) => {
   );
 };
 
+let trim = t => {
+  title: t.title |> String.trim,
+  result: t.result |> Array.map(CoursesReview__ReviewChecklistResult.trim),
+};
+
 let encode = t =>
   Json.Encode.(
     object_([

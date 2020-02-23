@@ -72,6 +72,80 @@ module CreateCommunityErrorHandler =
 module UpdateCommunityErrorHandler =
   GraphqlErrorHandler.Make(UpdateCommunityError);
 
+type state = {
+  saving: bool,
+  dirty: bool,
+  name: string,
+  targetLinkable: bool,
+  selectedCourseIds: Belt.Set.String.t,
+  courseSearch: string,
+};
+
+let computeInitialState = ((community, connections)) => {
+  let (name, targetLinkable, selectedCourseIds) =
+    switch (community) {
+    | Some(community) => (
+        community |> Community.name,
+        community |> Community.targetLinkable,
+        connections
+        |> List.filter(connection =>
+             connection
+             |> Connection.communityId == (community |> Community.id)
+           )
+        |> List.map(connection => connection |> Connection.courseId)
+        |> Array.of_list
+        |> Belt.Set.String.fromArray,
+      )
+    | None => ("", false, Belt.Set.String.empty)
+    };
+
+  {
+    saving: false,
+    dirty: false,
+    name,
+    targetLinkable,
+    selectedCourseIds,
+    courseSearch: "",
+  };
+};
+
+type action =
+  | UpdateName(string)
+  | SetTargetLinkable(bool)
+  | SelectCourse(string)
+  | DeselectCourse(string)
+  | BeginSaving
+  | FailSaving
+  | FinishSaving
+  | UpdateCourseSearch(string);
+
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateName(name) => {...state, name, dirty: true}
+  | SetTargetLinkable(targetLinkable) => {
+      ...state,
+      targetLinkable,
+      dirty: true,
+    }
+  | SelectCourse(courseId) => {
+      ...state,
+      dirty: true,
+      selectedCourseIds:
+        state.selectedCourseIds->Belt.Set.String.add(courseId),
+      courseSearch: "",
+    }
+  | DeselectCourse(courseId) => {
+      ...state,
+      dirty: true,
+      selectedCourseIds:
+        state.selectedCourseIds->Belt.Set.String.remove(courseId),
+    }
+  | BeginSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
+  | FinishSaving => {...state, saving: false, dirty: false}
+  | UpdateCourseSearch(courseSearch) => {...state, courseSearch}
+  };
+
 let handleConnections = (communityId, connections, courseIds) => {
   let oldConnections =
     connections
@@ -87,19 +161,21 @@ let handleConnections = (communityId, connections, courseIds) => {
 
 let handleQuery =
     (
-      name,
-      targetLinkable,
-      courseIds,
-      setSaving,
       community,
+      connections,
+      state,
+      send,
       addCommunityCB,
       updateCommunitiesCB,
-      connections,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
+
+  let {name, targetLinkable} = state;
+  let courseIds = state.selectedCourseIds |> Belt.Set.String.toArray;
+
   if (name != "") {
-    setSaving(_ => true);
+    send(BeginSaving);
 
     switch (community) {
     | Some(community) =>
@@ -114,7 +190,7 @@ let handleQuery =
       |> Js.Promise.then_(response =>
            switch (response##updateCommunity) {
            | `CommunityId(communityId) =>
-             setSaving(_ => false);
+             send(FinishSaving);
              updateCommunitiesCB(
                Community.create(communityId, name, targetLinkable),
                handleConnections(communityId, connections, courseIds),
@@ -128,7 +204,7 @@ let handleQuery =
              Js.Promise.reject(UpdateCommunityErrorHandler.Errors(errors))
            }
          )
-      |> UpdateCommunityErrorHandler.catch(() => setSaving(_ => false))
+      |> UpdateCommunityErrorHandler.catch(() => send(FailSaving))
       |> ignore
     | None =>
       CreateCommunityQuery.make(~name, ~targetLinkable, ~courseIds, ())
@@ -136,7 +212,7 @@ let handleQuery =
       |> Js.Promise.then_(response =>
            switch (response##createCommunity) {
            | `CommunityId(communityId) =>
-             setSaving(_ => false);
+             send(FinishSaving);
              addCommunityCB(
                Community.create(communityId, name, targetLinkable),
                handleConnections(communityId, connections, courseIds),
@@ -150,7 +226,7 @@ let handleQuery =
              Js.Promise.reject(CreateCommunityErrorHandler.Errors(errors))
            }
          )
-      |> CreateCommunityErrorHandler.catch(() => setSaving(_ => false))
+      |> CreateCommunityErrorHandler.catch(() => send(FailSaving))
       |> ignore
     };
   } else {
@@ -163,11 +239,34 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " toggle-button__button--active" : "");
 };
 
-let communityCourseIds = courseState =>
-  courseState
-  |> List.filter(((_, _, selected)) => selected)
-  |> List.map(((id, _, _)) => id |> string_of_int)
-  |> Array.of_list;
+module Selectable = {
+  type t = Course.t;
+  let value = t => t |> Course.name;
+  let searchString = value;
+};
+
+module CourseSelector = MultiselectInline.Make(Selectable);
+
+let selectedCourses = (~invert=false, courses, selectedCourseIds) =>
+  courses
+  |> Array.of_list
+  |> Js.Array.filter(course => {
+       let condition =
+         selectedCourseIds->Belt.Set.String.has(course |> Course.id);
+       invert ? !condition : condition;
+     });
+
+let unselectedCourses = (courses, selectedCourseIds) => {
+  selectedCourses(~invert=true, courses, selectedCourseIds);
+};
+
+let onChangeCourseSearch = (send, value) => send(UpdateCourseSearch(value));
+
+let onSelectCourse = (send, course) =>
+  send(SelectCourse(course |> Course.id));
+
+let onDeselectCourse = (send, course) =>
+  send(DeselectCourse(course |> Course.id));
 
 [@react.component]
 let make =
@@ -178,59 +277,20 @@ let make =
       ~addCommunityCB,
       ~updateCommunitiesCB,
     ) => {
-  let (saving, setSaving) = React.useState(() => false);
-  let (dirty, setDirty) = React.useState(() => false);
-  let (name, setName) =
-    React.useState(() =>
-      switch (community) {
-      | Some(community) => community |> Community.name
-      | None => ""
-      }
-    );
-  let (targetLinkable, setTargetLinkable) =
-    React.useState(() =>
-      switch (community) {
-      | Some(community) => community |> Community.targetLinkable
-      | None => false
-      }
-    );
-  let (courseState, setCourseState) =
-    React.useState(() =>
-      courses
-      |> List.map(course =>
-           (
-             course |> Course.id |> int_of_string,
-             (course |> Course.name) ++ " Course",
-             switch (community) {
-             | Some(community) =>
-               connections
-               |> List.filter(connection =>
-                    connection
-                    |> Connection.communityId == (community |> Community.id)
-                    && connection
-                    |> Connection.courseId == (course |> Course.id)
-                  )
-               |> ListUtils.isNotEmpty
-             | None => false
-             },
-           )
-         )
+  let (state, send) =
+    React.useReducerWithMapState(
+      reducer,
+      (community, connections),
+      computeInitialState,
     );
 
-  let selectCB = (id, name, selected) => {
-    let oldCourses =
-      courseState |> List.filter(((courseId, _, _)) => courseId !== id);
-    setCourseState(_ => [(id, name, selected), ...oldCourses]);
-    setDirty(_ => true);
-  };
-
-  let saveDisabled = name |> String.trim == "" || !dirty;
+  let saveDisabled = state.name |> String.trim == "" || !state.dirty;
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
       {"Community Editor" |> str}
     </h5>
-    <DisablingCover disabled=saving>
+    <DisablingCover disabled={state.saving}>
       <div key="communities-editor" className="mt-3">
         <div className="mt-2">
           <label
@@ -240,17 +300,17 @@ let make =
           </label>
           <input
             placeholder="This community needs a name!"
-            value=name
+            value={state.name}
             onChange={event => {
-              setName(ReactEvent.Form.target(event)##value);
-              setDirty(_ => true);
+              let name = ReactEvent.Form.target(event)##value;
+              send(UpdateName(name));
             }}
             id="communities-editor__name"
             className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           />
           <School__InputGroupError
             message="is not a valid name"
-            active={dirty ? name |> String.trim == "" : false}
+            active={state.dirty ? state.name |> String.trim == "" : false}
           />
         </div>
         <div className="flex items-center mt-6">
@@ -263,19 +323,13 @@ let make =
           <div
             className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
             <button
-              onClick={_ => {
-                setDirty(_ => true);
-                setTargetLinkable(_ => true);
-              }}
-              className={booleanButtonClasses(targetLinkable == true)}>
+              onClick={_ => {send(SetTargetLinkable(true))}}
+              className={booleanButtonClasses(state.targetLinkable)}>
               {"Yes" |> str}
             </button>
             <button
-              onClick={_ => {
-                setDirty(_ => true);
-                setTargetLinkable(_ => false);
-              }}
-              className={booleanButtonClasses(targetLinkable == false)}>
+              onClick={_ => {send(SetTargetLinkable(false))}}
+              className={booleanButtonClasses(!state.targetLinkable)}>
               {"No" |> str}
             </button>
           </div>
@@ -286,23 +340,28 @@ let make =
             htmlFor="communities-editor__course-targetLinkable">
             {"Give access to students from:" |> str}
           </label>
-          <School__SelectBox
-            items={courseState |> School__SelectBox.convertOldItems}
-            selectCB={School__SelectBox.convertOldCallback(selectCB)}
+          <CourseSelector
+            placeholder="Search for a course"
+            emptySelectionMessage="No courses selected"
+            allItemsSelectedMessage="You have selected all available courses"
+            selected={selectedCourses(courses, state.selectedCourseIds)}
+            unselected={unselectedCourses(courses, state.selectedCourseIds)}
+            onChange={onChangeCourseSearch(send)}
+            value={state.courseSearch}
+            onSelect={onSelectCourse(send)}
+            onDeselect={onDeselectCourse(send)}
           />
         </div>
       </div>
       <button
         disabled=saveDisabled
         onClick={handleQuery(
-          name,
-          targetLinkable,
-          communityCourseIds(courseState),
-          setSaving,
           community,
+          connections,
+          state,
+          send,
           addCommunityCB,
           updateCommunitiesCB,
-          connections,
         )}
         key="communities-editor__update-button"
         className="w-full btn btn-large btn-primary mt-3">

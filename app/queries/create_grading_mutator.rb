@@ -3,6 +3,7 @@ class CreateGradingMutator < ApplicationQuery
 
   property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
   property :feedback, validates: { length: { maximum: 10_000 } }
+  property :note, validates: { length: { maximum: 10_000 } }
   property :grades
 
   validate :require_valid_submission
@@ -25,6 +26,13 @@ class CreateGradingMutator < ApplicationQuery
         evaluator: coach,
         evaluated_at: Time.now
       )
+
+      if note.present?
+        submission.startup.founders.each do |student|
+          CoachNote.create!(note: note, author_id: current_user.id, student_id: student.id)
+        end
+      end
+
       send_feedback if feedback.present?
     end
   end
@@ -38,6 +46,7 @@ class CreateGradingMutator < ApplicationQuery
       faculty: coach,
       timeline_event: submission
     )
+
     StartupFeedbackModule::EmailService.new(startup_feedback).send
   end
 

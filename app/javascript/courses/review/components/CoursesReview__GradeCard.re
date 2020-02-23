@@ -12,7 +12,24 @@ type state = {
   grades: array(Grade.t),
   newFeedback: string,
   saving: bool,
+  note: option(string),
 };
+
+type action =
+  | BeginSaving
+  | FinishSaving
+  | UpdateFeedback(string)
+  | UpdateGrades(array(Grade.t))
+  | UpdateNote(string);
+
+let reducer = (state, action) =>
+  switch (action) {
+  | BeginSaving => {...state, saving: true}
+  | FinishSaving => {...state, saving: false}
+  | UpdateFeedback(newFeedback) => {...state, newFeedback}
+  | UpdateGrades(grades) => {...state, grades}
+  | UpdateNote(note) => {...state, note: Some(note)}
+  };
 
 let passed = (grades, evaluationCriteria) =>
   grades
@@ -52,25 +69,24 @@ module UndoGradingMutation = [%graphql
   |}
 ];
 
-let undoGrading = (submissionId, setState) => {
-  setState(state => {...state, saving: true});
+let undoGrading = (submissionId, send) => {
+  send(BeginSaving);
 
   UndoGradingMutation.make(~submissionId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##undoGrading##success
-         ? DomUtils.reload() |> ignore
-         : setState(state => {...state, saving: false});
+         ? DomUtils.reload() |> ignore : send(FinishSaving);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
 let gradeSubmissionQuery =
-    (submissionId, state, setState, evaluationCriteria, updateSubmissionCB) => {
+    (submissionId, state, send, evaluationCriteria, updateSubmissionCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
-  setState(state => {...state, saving: true});
+  send(BeginSaving);
 
   (
     state.newFeedback == ""
@@ -91,13 +107,13 @@ let gradeSubmissionQuery =
              ~newFeedback=Some(state.newFeedback),
            )
          : ();
-       setState(state => {...state, saving: false});
+       send(FinishSaving);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let updateGrading = (grade, state, setState) => {
+let updateGrading = (grade, state, send) => {
   let newGrades =
     state.grades
     |> Js.Array.filter(g =>
@@ -107,18 +123,14 @@ let updateGrading = (grade, state, setState) => {
        )
     |> Array.append([|grade|]);
 
-  setState(state => {...state, grades: newGrades});
+  send(UpdateGrades(newGrades));
 };
-let handleGradePillClick =
-    (evaluationCriterionId, value, state, setState, event) => {
+
+let handleGradePillClick = (evaluationCriterionId, value, state, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  switch (setState) {
-  | Some(setState) =>
-    updateGrading(
-      Grade.make(~evaluationCriterionId, ~value),
-      state,
-      setState,
-    )
+  switch (send) {
+  | Some(send) =>
+    updateGrading(Grade.make(~evaluationCriterionId, ~value), state, send)
   | None => ()
   };
 };
@@ -153,11 +165,11 @@ let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
     </p>
   </div>;
 
-let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
+let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   let defaultClasses =
     "course-review-grade-card__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold "
     ++ (
-      switch (setState) {
+      switch (send) {
       | Some(_) =>
         "cursor-pointer hover:shadow-lg focus:outline-none "
         ++ (
@@ -180,7 +192,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, setState) => {
 };
 
 let showGradePill =
-    (key, evaluationCriterion, gradeValue, passGrade, state, setState) =>
+    (key, evaluationCriterion, gradeValue, passGrade, state, send) =>
   <div
     ariaLabel={
       "evaluation-criterion-"
@@ -206,16 +218,16 @@ let showGradePill =
                 evaluationCriterion |> EvaluationCriterion.id,
                 gradeLabelGrade,
                 state,
-                setState,
+                send,
               )}
               title={gradeLabel |> GradeLabel.label}
               className={gradePillClasses(
                 gradeValue,
                 gradeLabelGrade,
                 passGrade,
-                setState,
+                send,
               )}>
-              {switch (setState) {
+              {switch (send) {
                | Some(_) => gradeLabelGrade |> string_of_int |> str
                | None => React.null
                }}
@@ -252,7 +264,7 @@ let showGrades = (grades, evaluationCriteria, state) =>
      |> React.array}
   </div>;
 let renderGradePills =
-    (evaluationCriteria, targetEvaluationCriteriaIds, grades, state, setState) =>
+    (evaluationCriteria, targetEvaluationCriteriaIds, state, send) =>
   targetEvaluationCriteriaIds
   |> Array.mapi((key, evaluationCriterionId) => {
        let ec =
@@ -263,7 +275,7 @@ let renderGradePills =
               ++ evaluationCriterionId,
             );
        let grade =
-         grades
+         state.grades
          |> Js.Array.find(g =>
               g
               |> Grade.evaluationCriterionId == (ec |> EvaluationCriterion.id)
@@ -276,7 +288,7 @@ let renderGradePills =
 
        let passGrade = ec |> EvaluationCriterion.passGrade;
 
-       showGradePill(key, ec, gradeValue, passGrade, state, Some(setState));
+       showGradePill(key, ec, gradeValue, passGrade, state, Some(send));
      })
   |> React.array;
 let gradeStatusClasses = (color, status) =>
@@ -294,7 +306,7 @@ let gradeStatusClasses = (color, status) =>
     }
   );
 
-let submissionStatusIcon = (status, submission, setState) => {
+let submissionStatusIcon = (status, submission, send) => {
   let (text, color) =
     switch (status) {
     | Graded(passed) => passed ? ("Passed", "green") : ("Failed", "red")
@@ -372,7 +384,7 @@ let submissionStatusIcon = (status, submission, setState) => {
      | (Some(_), Graded(_)) =>
        <div className="mt-4 md:pl-6 w-full">
          <button
-           onClick={_ => undoGrading(submission |> Submission.id, setState)}
+           onClick={_ => undoGrading(submission |> Submission.id, send)}
            className="btn btn-danger btn-small">
            <i className="fas fa-undo" />
            <span className="ml-2"> {"Undo Grading" |> str} </span>
@@ -385,15 +397,11 @@ let submissionStatusIcon = (status, submission, setState) => {
   </div>;
 };
 
-let updateFeedbackCB = (setState, newFeedback) => {
-  setState(state => {...state, newFeedback});
-};
-
 let gradeSubmission =
     (
       submissionId,
       state,
-      setState,
+      send,
       evaluationCriteria,
       updateSubmissionCB,
       status,
@@ -405,7 +413,7 @@ let gradeSubmission =
     gradeSubmissionQuery(
       submissionId,
       state,
-      setState,
+      send,
       evaluationCriteria,
       updateSubmissionCB,
     )
@@ -415,20 +423,13 @@ let gradeSubmission =
 };
 
 let showFeedbackForm =
-    (
-      grades,
-      reviewChecklist,
-      updateReviewChecklistCB,
-      state,
-      setState,
-      targetId,
-    ) =>
+    (grades, reviewChecklist, updateReviewChecklistCB, state, send, targetId) =>
   switch (grades) {
   | [||] =>
     <CoursesReview__FeedbackEditor
       feedback={state.newFeedback}
       label="Add Your Feedback"
-      updateFeedbackCB={updateFeedbackCB(setState)}
+      updateFeedbackCB={feedback => send(UpdateFeedback(feedback))}
       reviewChecklist
       updateReviewChecklistCB
       checklistVisible=true
@@ -469,6 +470,47 @@ let submitButtonText = (feedback, grades) =>
   | (true, true) => "Save grades & send feedback"
   };
 
+let noteForm = (grades, students, note, send) =>
+  switch (grades) {
+  | [||] =>
+    <div className="text-sm">
+      <h5 className="font-semibold text-sm flex items-center">
+        <i className="far fa-sticky-note text-gray-800 text-base" />
+        {switch (note) {
+         | Some(_) =>
+           <span className="ml-2 md:ml-3 tracking-wide">
+             {"Write a Note" |> str}
+           </span>
+         | None =>
+           <div
+             className="ml-2 md:ml-3 tracking-wide flex justify-between items-center w-full">
+             <span>
+               {"Would you like to write a note about this student?" |> str}
+             </span>
+             <button
+               className="btn btn-small btn-primary-ghost ml-1"
+               onClick={_ => send(UpdateNote(""))}>
+               {"Write a Note" |> str}
+             </button>
+           </div>
+         }}
+      </h5>
+      {switch (note) {
+       | Some(note) =>
+         <div className="ml-6 md:ml-7 mt-2">
+           <MarkdownEditor
+             value=note
+             onChange={value => send(UpdateNote(value))}
+             profile=Markdown.Permissive
+             placeholder="Notes are not shared with students. They're shown to all coaches on a student's report page."
+           />
+         </div>
+       | None => React.null
+       }}
+    </div>
+  | _someGrades => React.null
+  };
+
 [@react.component]
 let make =
     (
@@ -480,21 +522,27 @@ let make =
       ~targetId,
       ~targetEvaluationCriteriaIds,
     ) => {
-  let (state, setState) =
-    React.useState(() => {grades: [||], newFeedback: "", saving: false});
+  let (state, send) =
+    React.useReducer(
+      reducer,
+      {grades: [||], newFeedback: "", saving: false, note: None},
+    );
+
   let status = computeStatus(submission, state.grades, evaluationCriteria);
+
   <DisablingCover disabled={state.saving}>
-    <div className=" ">
+    <div>
       {showFeedbackForm(
          submission |> Submission.grades,
          reviewChecklist,
          updateReviewChecklistCB,
          state,
-         setState,
+         send,
          targetId,
        )}
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
-        <h5 className="font-semibold text-sm flex items-center">
+        {noteForm(submission |> Submission.grades, [||], state.note, send)}
+        <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
           <Icon className="if i-tachometer-regular text-gray-800 text-base" />
           <span className="ml-2 md:ml-3 tracking-wide">
             {"Grade Card" |> str}
@@ -508,15 +556,14 @@ let make =
                renderGradePills(
                  evaluationCriteria,
                  targetEvaluationCriteriaIds,
-                 state.grades,
                  state,
-                 setState,
+                 send,
                )
 
              | grades => showGrades(grades, evaluationCriteria, state)
              }}
           </div>
-          {submissionStatusIcon(status, submission, setState)}
+          {submissionStatusIcon(status, submission, send)}
         </div>
       </div>
     </div>
@@ -529,7 +576,7 @@ let make =
            onClick={gradeSubmission(
              submission |> Submission.id,
              state,
-             setState,
+             send,
              evaluationCriteria,
              updateSubmissionCB,
              status,

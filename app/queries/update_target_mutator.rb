@@ -20,6 +20,7 @@ class UpdateTargetMutator < ApplicationQuery
   validate :target_and_evaluation_criteria_have_same_course
   validate :prerequisite_targets_in_same_level
   validate :checklist_has_valid_data
+  validate :checklist_within_allowed_length
 
   def target_group_exists
     errors[:base] << 'Target group does not exist' if target_group.blank?
@@ -83,6 +84,12 @@ class UpdateTargetMutator < ApplicationQuery
     return if evaluation_criteria.present? && validate_checklist(checklist)
 
     errors[:base] << 'not a valid checklist'
+  end
+
+  def checklist_within_allowed_length
+    return if checklist.respond_to?(:all?) && checklist.length <= 15
+
+    errors[:base] << 'checklist should have less than 20 items'
   end
 
   def update

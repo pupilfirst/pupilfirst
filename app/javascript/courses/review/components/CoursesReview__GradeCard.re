@@ -505,6 +505,7 @@ let make =
     | [||] => Some(checklist => setState(state => {...state, checklist}))
     | _ => None
     };
+  let pending = submission |> Submission.grades |> ArrayUtils.isEmpty;
 
   <DisablingCover disabled={state.saving}>
     <div className=" ">
@@ -512,6 +513,7 @@ let make =
         <SubmissionChecklistShow
           checklist={state.checklist}
           updateChecklistCB
+          pending
         />
       </div>
       {showFeedbackForm(

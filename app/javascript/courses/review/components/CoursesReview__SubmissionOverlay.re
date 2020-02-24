@@ -104,10 +104,9 @@ let headerSection = (submissionDetails, courseId) =>
            |> SubmissionDetails.students
            |> Array.mapi((index, student) => {
                 let commaRequired = index + 1 != studentCount;
-                <span>
+                <span key={student |> Student.id}>
                   <a
                     className="font-semibold underline"
-                    key={student |> Student.id}
                     href={"/students/" ++ (student |> Student.id) ++ "/report"}
                     target="_blank">
                     {student |> Student.name |> str}

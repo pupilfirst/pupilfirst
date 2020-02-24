@@ -36,12 +36,12 @@ class TimelineEvent < ApplicationRecord
 
   after_initialize :make_links_an_array
 
-  CHECKLIST_PENDING = 'pending'
+  CHECKLIST_NO_ANSWER = 'noAnswer'
   CHECKLIST_PASSED = 'passed'
   CHECKLIST_FAILED = 'failed'
 
   def self.valid_checklist_status
-    [CHECKLIST_PENDING, CHECKLIST_PASSED, CHECKLIST_FAILED].freeze
+    [CHECKLIST_NO_ANSWER, CHECKLIST_PASSED, CHECKLIST_FAILED].freeze
   end
 
   def make_links_an_array

@@ -76,7 +76,7 @@ let showStatus = status => {
     <div className="bg-red-200 rounded px-1 py-px text-red-800 text-tiny">
       {"Failed" |> str}
     </div>
-  | Pending => React.null
+  | NoAnswer => React.null
   };
 };
 
@@ -94,33 +94,24 @@ let statusButtonSelectedClasses = (status, currentStatus) => {
 let statusButtons = (index, status, callback, checklist) =>
   <div className="mt-2">
     <div
-      onClick={_ => callback(checklist |> ChecklistItem.makePassed(index))}
-      className={
-        "border border-gray-500 rounded-l "
-        ++ statusButtonSelectedClasses(ChecklistItem.Passed, status)
-      }>
-      <PfIcon className="if i-check-light if-fw mr-2" />
-      {"Done" |> str}
-    </div>
-    <div
       onClick={_ => callback(checklist |> ChecklistItem.makeFailed(index))}
       className={
-        "border border-gray-500 rounded-r -ml-px "
+        "border border-gray-500 rounded -ml-px "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
       <PfIcon className="if i-times-light if-fw mr-2" />
-      {"Not Done" |> str}
+      {"This has a problem" |> str}
     </div>
     {switch ((status: ChecklistItem.status)) {
-     | Pending => React.null
+     | NoAnswer => React.null
      | Passed
      | Failed =>
        <div
          onClick={_ =>
-           callback(checklist |> ChecklistItem.makePending(index))
+           callback(checklist |> ChecklistItem.makeNoAnswer(index))
          }
          className={statusButtonSelectedClasses(
-           ChecklistItem.Pending,
+           ChecklistItem.NoAnswer,
            status,
          )}>
          <i className="fas fa-redo" />
@@ -128,52 +119,31 @@ let statusButtons = (index, status, callback, checklist) =>
      }}
   </div>;
 
-let computeShowResult = (checklistItem, updateChecklistCB) => {
-  switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
-  | (Some(_), Pending | Passed | Failed) => true
-  | (None, Pending | Failed) => true
-  | (None, Passed) => false
-  };
+let computeShowResult = pending => {
+  pending ? true : false;
 };
 
-let cardClasses = (checklistItem, updateChecklistCB) => {
-  switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
-  | (None, Passed | Failed) => "rounded shadow mt-4 "
-  | (Some(_), Passed | Pending | Failed)
-  | (None, Pending) => "mt-3"
-  };
+let cardClasses = pending => {
+  pending ? "mt-3" : "rounded shadow mt-4 ";
 };
 
-let cardHeaderClasses = (checklistItem, updateChecklistCB) => {
+let cardHeaderClasses = pending => {
   "text-sm font-semibold flex items-center justify-between "
-  ++ (
-    switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
-    | (None, Passed | Failed) => "p-4 bg-white rounded cursor-pointer"
-    | (Some(_), Passed | Pending | Failed)
-    | (None, Pending) => ""
-    }
-  );
+  ++ (pending ? "" : "p-4 bg-white rounded cursor-pointer");
 };
 
-let cardBodyClasses = (checklistItem, updateChecklistCB) => {
-  "pl-5 md:pl-7 p-3 pb-4 "
-  ++ (
-    switch (updateChecklistCB, checklistItem |> ChecklistItem.status) {
-    | (None, Passed | Failed) => "border-t bg-gray-200 rounded-b"
-    | (Some(_), Passed | Pending | Failed)
-    | (None, Pending) => ""
-    }
-  );
+let cardBodyClasses = pending => {
+  "pl-5 md:pl-7 p-3 pb-4 " ++ (pending ? "" : "border-t bg-gray-200 rounded-b");
 };
 
 [@react.component]
-let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
+let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
   let (showResult, setShowResult) =
-    React.useState(() => computeShowResult(checklistItem, updateChecklistCB));
+    React.useState(() => computeShowResult(pending));
 
   React.useEffect1(
     () => {
-      let newShowResult = computeShowResult(checklistItem, updateChecklistCB);
+      let newShowResult = computeShowResult(pending);
       newShowResult == showResult ? () : setShowResult(_ => newShowResult);
       None;
     },
@@ -181,10 +151,10 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   );
   let status = checklistItem |> ChecklistItem.status;
 
-  <div className={cardClasses(checklistItem, updateChecklistCB)}>
+  <div className={cardClasses(pending)}>
     <div
       onClick={_ => setShowResult(_ => true)}
-      className={cardHeaderClasses(checklistItem, updateChecklistCB)}>
+      className={cardHeaderClasses(pending)}>
       <div className="inline-flex items-center">
         {statusIcon(updateChecklistCB, status)}
         <PfIcon
@@ -201,7 +171,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
       </div>
     </div>
     {showResult
-       ? <div className={cardBodyClasses(checklistItem, updateChecklistCB)}>
+       ? <div className={cardBodyClasses(pending)}>
            <div>
              {switch (checklistItem |> ChecklistItem.result) {
               | ShortText(text) => <div> {text |> str} </div>

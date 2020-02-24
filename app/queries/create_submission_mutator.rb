@@ -58,7 +58,7 @@ class CreateSubmissionMutator < ApplicationQuery
   def valid_response
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
       item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) &&
-        item['status'].in?(TimelineEvent::CHECKLIST_PENDING) && item['result'].is_a?(String) &&
+        item['status'].in?(TimelineEvent::CHECKLIST_NO_ANSWER) && item['result'].is_a?(String) &&
         valid_result(item['kind'], item['result'])
     end
 

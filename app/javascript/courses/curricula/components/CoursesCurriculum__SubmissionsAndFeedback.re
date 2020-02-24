@@ -145,6 +145,7 @@ let submissions =
              <SubmissionChecklistShow
                checklist={submission |> Submission.checklist}
                updateChecklistCB=None
+               pending={submission |> Submission.pending}
              />
            </div>
            {switch (submission |> Submission.status) {

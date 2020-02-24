@@ -46,8 +46,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
       title: "Quiz",
       result: submission.description,
       kind: "longText",
-      status: "pending",
-
+      status: "noAnswer"
     }
     [description]
   end
@@ -57,7 +56,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
       title: "Description",
       result: submission.description,
       kind: "longText",
-      status: "pending",
+      status: "noAnswer"
     }
 
     links = submission.links.map do |link|
@@ -65,7 +64,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
         title: "Link",
         result: link,
         kind: "link",
-        status: "pending",
+        status: "noAnswer"
       }
     end
 
@@ -73,7 +72,7 @@ class AddChecklistResponseToTimelineEvents < ActiveRecord::Migration[6.0]
       title: "File",
       result: "",
       kind: "files",
-      status: "pending",
+      status: "noAnswer"
     }
 
     checklist = [description] + links + (submission.timeline_event_files.any? ? [file] : [])

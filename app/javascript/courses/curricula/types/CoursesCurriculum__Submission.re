@@ -19,6 +19,15 @@ let status = t => t.status;
 let checklist = t => t.checklist;
 let createdAtDate = t => t |> createdAt |> DateFns.parseString;
 
+let pending = t => {
+  switch (t.status) {
+  | Pending => true
+  | MarkedAsComplete
+  | Passed
+  | Failed => false
+  };
+};
+
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
 

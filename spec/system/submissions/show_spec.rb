@@ -287,6 +287,56 @@ feature 'Submissions show' do
         expect(page).to have_text('This submission is linked to one or more students whose access to the course has ended, or have dropped out.')
       end
     end
+
+    scenario 'coach leaves a note about a student', js: true do
+      note = Faker::Lorem.sentence
+
+      sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
+
+      click_button 'Write a Note'
+      fill_in 'Write a Note', with: note
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      click_button 'Save grades'
+      dismiss_notification
+      new_notes = CoachNote.where(note: note)
+
+      expect(new_notes.count).to eq(1)
+      expect(new_notes.first.student_id).to eq(student.id)
+    end
+
+    scenario 'coach leaves a note for a team submission', js: true do
+      another_student = team.founders.where.not(id: student).first
+      submission_pending.founders << another_student
+      note = Faker::Lorem.sentence
+
+      sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
+
+      click_button 'Write a Note'
+      fill_in 'Write a Note', with: note
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      click_button 'Save grades'
+      dismiss_notification
+      new_notes = CoachNote.where(note: note)
+
+      expect(new_notes.count).to eq(2)
+      expect(new_notes.pluck(:student_id)).to contain_exactly(student.id, another_student.id)
+    end
   end
 
   context 'with a reviewed submission' do

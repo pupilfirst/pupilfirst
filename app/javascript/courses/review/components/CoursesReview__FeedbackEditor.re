@@ -58,6 +58,7 @@ let make =
           value=feedback
           profile=Markdown.Permissive
           maxLength=10000
+          placeholder="This feedback will be emailed to students when you finish grading."
         />
       </div>
     </div>

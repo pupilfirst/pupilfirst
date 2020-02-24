@@ -144,7 +144,7 @@ let reducer = (state, action) =>
         | None => ""
         },
       visibility: targetDetails.visibility,
-      checklist: checklist,
+      checklist,
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}

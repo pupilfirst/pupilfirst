@@ -14,7 +14,7 @@ type result =
 type status =
   | Passed
   | Failed
-  | Pending;
+  | NoAnswer;
 
 type t = {
   title: string,
@@ -55,7 +55,7 @@ let makeResult = (result, kind, attachments) => {
 
 let makeStatus = data => {
   switch (data) {
-  | "pending" => Pending
+  | "noAnswer" => NoAnswer
   | "passed" => Passed
   | "failed" => Failed
   | unkownStatus =>
@@ -64,7 +64,7 @@ let makeStatus = data => {
       ++ unkownStatus
       ++ "recived in CourseReview__SubmissionChecklist",
     );
-    Pending;
+    NoAnswer;
   };
 };
 
@@ -106,8 +106,8 @@ let updateStatus = (checklist, index, status) =>
        i == index ? make(~title=t.title, ~result=t.result, ~status) : t
      });
 
-let makePending = (index, checklist) =>
-  updateStatus(checklist, index, Pending);
+let makeNoAnswer = (index, checklist) =>
+  updateStatus(checklist, index, NoAnswer);
 
 let makeFailed = (index, checklist) =>
   updateStatus(checklist, index, Failed);
@@ -135,7 +135,7 @@ let encodeResult = t =>
 
 let encodeStatus = t => {
   switch (t.status) {
-  | Pending => "pending"
+  | NoAnswer => "noAnswer"
   | Passed => "passed"
   | Failed => "failed"
   };

@@ -84,7 +84,7 @@ let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) =>
     ChecklistItem.LongText,
     ShortText,
     Link,
-    MultiChoice([||]),
+    MultiChoice([|"Yes", "No"|]),
   |];
 
   let allowedKindTypes =
@@ -136,10 +136,8 @@ let multiChoiceEditor =
     {let showRemoveIcon = Array.length(choices) > 2;
      choices
      |> Array.mapi((index, choice) =>
-          <div>
-            <div
-              key={index |> string_of_int}
-              className="flex items-center text-sm rounded mt-2">
+          <div key={index |> string_of_int}>
+            <div className="flex items-center text-sm rounded mt-2">
               <span className="text-gray-400">
                 <i className="far fa-circle text-base" />
               </span>

@@ -150,7 +150,7 @@ let encode = t =>
     object_([
       ("title", t.title |> string),
       ("kind", kinsAsString(t) |> string),
-      ("status", "pending" |> string),
+      ("status", "noAnswer" |> string),
       ("result", encodeResult(t) |> string),
     ])
   );

@@ -5,7 +5,7 @@ module ChecklistItem = SubmissionChecklistItem;
 let str = React.string;
 
 [@react.component]
-let make = (~checklist, ~updateChecklistCB) => {
+let make = (~checklist, ~updateChecklistCB, ~pending) => {
   <div>
     {switch (checklist) {
      | [||] =>
@@ -19,6 +19,7 @@ let make = (~checklist, ~updateChecklistCB) => {
               checklistItem
               updateChecklistCB
               checklist
+              pending
             />
           })
        |> React.array

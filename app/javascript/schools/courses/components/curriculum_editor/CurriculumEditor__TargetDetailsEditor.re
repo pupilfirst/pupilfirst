@@ -908,10 +908,10 @@ let make =
                          </div>
                        : React.null}
                     <button
-                      className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
                       disabled={state.checklist |> Array.length >= 15}
                       onClick={_ => addNewChecklistItem(state, send)}>
-                      <PfIcon className="if i-plus-circle if-fw" />
+                      <PfIcon className="fas fa-plus-circle text-lg" />
                       <span className="font-semibold ml-2">
                         {"Add a Step" |> str}
                       </span>

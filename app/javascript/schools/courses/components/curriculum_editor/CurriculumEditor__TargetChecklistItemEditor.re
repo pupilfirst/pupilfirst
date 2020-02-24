@@ -182,8 +182,8 @@ let multiChoiceEditor =
       onClick={_ =>
         addMultichoiceOption(checklistItem, updateChecklistItemCB)
       }
-      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border items-center justify-between outline-none border border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
-      <PfIcon className="if i-plus-circle if-fw" />
+      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
+      <PfIcon className="fas fa-plus-circle if-fw" />
       <span className="font-semibold ml-2"> {"Add a choice" |> str} </span>
     </button>
   </div>;
@@ -195,7 +195,7 @@ let controlIcon = (~icon, ~title, ~handler) => {
     : <button
         title
         disabled={handler == None}
-        className="px-3 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
+        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
         onClick=?handler>
         <i className={"fas fa-fw " ++ icon} />
       </button>;
@@ -229,7 +229,7 @@ let make =
     ) => {
   <div className="flex items-start py-2 relative">
     <div
-      className="flex-1 bg-gray-100 border rounded-lg p-5 mr-1"
+      className="w-full bg-gray-100 border rounded-lg p-5 mr-1"
       key={index |> string_of_int}>
       <div className="flex justify-between items-center">
         <div>

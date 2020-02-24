@@ -11,7 +11,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   def create_submission
     target.timeline_events.create!(
       founders: founders,
-      checklist: checklist,
+      checklist: result[:checklist],
       quiz_score: result[:score],
       passed_at: Time.zone.now,
       latest: true
@@ -48,21 +48,19 @@ class CreateQuizSubmissionMutator < ApplicationQuery
     @quiz ||= target.quiz
   end
 
-  def checklist
-    [{
-      title: "Quiz Answers",
-      result: result[:description],
+  def checklist_item(title, result, status)
+    {
+      title: title,
+      result: result,
       kind: "longText",
-      status: "pending"
-    }]
+      status: status
+    }
   end
 
   def result
     @result ||= begin
       score = 0
-      intro = "Target _#{target.title}_ was completed by answering a quiz:"
-
-      body = questions.each_with_index.map do |question, index|
+      checklist = questions.each_with_index.map do |question, index|
         correct_answer = question.correct_answer
         u_answer = answers_from_user.where(quiz_question: question).first
 
@@ -73,12 +71,15 @@ class CreateQuizSubmissionMutator < ApplicationQuery
         stripped_question = question.question.strip
         end_with_lb_or_space = stripped_question.ends_with?('```') ? "\n\n" : "  \n"
 
-        "### Question #{index + 1}\n#{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
-      end.join("\n\n")
+        title = "Question #{index + 1}"
+        result = " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
+        status = correct_answer == u_answer ? TimelineEvent::CHECKLIST_PASSED : TimelineEvent::CHECKLIST_FAILED
+        checklist_item(title, result, status)
+      end
 
       {
         score: "#{score}/#{number_of_questions}",
-        description: "#{intro}\n\n#{body}"
+        checklist: checklist
       }
     end
   end

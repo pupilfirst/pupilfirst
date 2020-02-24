@@ -900,8 +900,16 @@ let make =
                             |> str}
                          </div>
                        : React.null}
+                    {state.checklist |> Array.length >= 15
+                       ? <div
+                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+                           <i className="fas fa-info-circle mr-2" />
+                           {"Maximum allowed checklist items is 15!" |> str}
+                         </div>
+                       : React.null}
                     <button
                       className="flex justify-center items-center w-full border border-4 border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                      disabled={state.checklist |> Array.length >= 15}
                       onClick={_ => addNewChecklistItem(state, send)}>
                       <PfIcon className="if i-plus-circle if-fw" />
                       <span className="font-semibold ml-2">

@@ -115,8 +115,10 @@ let validMultiChoice = (choices, index) => {
   index |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false);
 };
 
-let validResponse = response => {
-  switch (response.result, response.optional) {
+let validResponse = (response, allowBlank) => {
+  let optional = allowBlank ? response.optional : false;
+
+  switch (response.result, optional) {
   | (Files(files), false) => validAttachments(files)
   | (Files(files), true) =>
     files |> ArrayUtils.isEmpty || validAttachments(files)
@@ -134,13 +136,13 @@ let validResponse = response => {
 
 let validChecklist = checklist => {
   checklist
-  |> Array.map(c => {validResponse(c)})
+  |> Array.map(c => {validResponse(c, true)})
   |> Js.Array.filter(c => !c)
   |> ArrayUtils.isEmpty;
 };
 
 let validResonses = responses => {
-  responses |> Js.Array.filter(c => {validResponse(c)});
+  responses |> Js.Array.filter(c => {validResponse(c, false)});
 };
 
 let encode = t =>

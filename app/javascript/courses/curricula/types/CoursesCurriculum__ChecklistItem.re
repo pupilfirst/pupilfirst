@@ -19,8 +19,11 @@ type t = {
 };
 
 let title = t => t.title;
+
 let result = t => t.result;
+
 let optional = t => t.optional;
+
 let make = (~result, ~title, ~optional) => {result, title, optional};
 
 let makeEmpty = targetChecklist => {
@@ -47,6 +50,7 @@ let updateResult = (index, result, checklist) => {
 let makeFile = (id, name) => {id, name};
 
 let filename = file => file.name;
+
 let fileId = file => file.id;
 
 let fileIds = checklist => {
@@ -103,16 +107,36 @@ let validLongText = s => {
   validString(s, 1000);
 };
 
+let validAttachments = files => {
+  files != [||] && files |> Array.length < 3;
+};
+
+let validMultiChoice = (choices, index) => {
+  index |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false);
+};
+
 let validResponse = response => {
-  switch (response.result) {
-  | Files(files) => files != [||] && files |> Array.length < 3
-  | Link(link) => link |> UrlUtils.isValid(false)
-  | ShortText(t) => validShortText(t)
-  | LongText(t) => validLongText(t)
-  | MultiChoice(choices, index) =>
-    index
-    |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)
+  switch (response.result, response.optional) {
+  | (Files(files), false) => validAttachments(files)
+  | (Files(files), true) =>
+    files |> ArrayUtils.isEmpty || validAttachments(files)
+  | (Link(link), false) => link |> UrlUtils.isValid(false)
+  | (Link(link), true) => link |> UrlUtils.isValid(true)
+  | (ShortText(t), false) => validShortText(t)
+  | (ShortText(t), true) => validShortText(t) || t == ""
+  | (LongText(t), false) => validLongText(t)
+  | (LongText(t), true) => validLongText(t) || t == ""
+  | (MultiChoice(choices, index), false) => validMultiChoice(choices, index)
+  | (MultiChoice(choices, index), true) =>
+    validMultiChoice(choices, index) || index == None
   };
+};
+
+let validChecklist = checklist => {
+  checklist
+  |> Array.map(c => {validResponse(c)})
+  |> Js.Array.filter(c => !c)
+  |> ArrayUtils.isEmpty;
 };
 
 let validResonses = responses => {

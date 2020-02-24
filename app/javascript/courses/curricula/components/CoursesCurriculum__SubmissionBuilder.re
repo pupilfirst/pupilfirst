@@ -33,14 +33,6 @@ let buttonContents = formState => {
   <span> icon text </span>;
 };
 
-let isButtonDisabled = formState =>
-  switch (formState) {
-  | Attaching
-  | Saving
-  | Incomplete => false
-  | Ready => false
-  };
-
 type state = {
   formState,
   checklist: array(ChecklistItem.t),
@@ -58,7 +50,7 @@ let initialState = checklist => {
 let reducer = (state, action) =>
   switch (action) {
   | UpdateFormState(formState) => {...state, formState}
-  | UpdateResponse(checklist) => {...state, checklist}
+  | UpdateResponse(checklist) => {checklist, formState: Ready}
   };
 
 let isBusy = formState =>
@@ -81,6 +73,18 @@ module CreateSubmissionQuery = [%graphql
   }
   |}
 ];
+
+let isButtonDisabled = state => {
+  (
+    switch (state.formState) {
+    | Attaching
+    | Saving
+    | Incomplete => true
+    | Ready => false
+    }
+  )
+  || !(state.checklist |> ChecklistItem.validChecklist);
+};
 
 let submit = (state, send, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -196,7 +200,7 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
       <div className={buttonClasses(state.checklist)}>
         <button
           onClick={submit(state, send, target, addSubmissionCB)}
-          disabled={isButtonDisabled(state.formState) || preview}
+          disabled={isButtonDisabled(state) || preview}
           className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
           {buttonContents(state.formState)}
         </button>

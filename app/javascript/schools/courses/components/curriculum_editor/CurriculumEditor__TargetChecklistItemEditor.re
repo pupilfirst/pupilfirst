@@ -33,6 +33,9 @@ let buttonColorClasses = color => {
   ++ color
   ++ "-800";
 };
+let iconColorClasses = color => {
+  "bg-" ++ color ++ "-500 ";
+};
 let selectedButtonIcon = kind =>
   switch (kind) {
   | ChecklistItem.LongText => "i-long-text-regular"
@@ -47,24 +50,33 @@ let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) =>
     switch (selectedKind) {
     | LongText => "blue"
     | ShortText => "orange"
-    | Files => "green"
-    | Link => "purple"
-    | MultiChoice(_choices) => "pink"
+    | Files => "pink"
+    | Link => "indigo"
+    | MultiChoice(_choices) => "teal"
     };
   let selected =
     <button
       className={
-        "border focus:outline-none appearance-none inline-flex items-center rounded "
+        "border focus:outline-none appearance-none flex items-center rounded "
         ++ buttonColorClasses(selectedButtonColor)
       }>
-      <span className="px-2 py-2">
-        <PfIcon
-          className={"mr-2 if if-fw " ++ selectedButtonIcon(selectedKind)}
-        />
-        {selectedKind |> ChecklistItem.actionStringForKind |> str}
-      </span>
-      <span className="px-2 py-2">
-        <i className="fas fa-chevron-down text-sm" />
+      <div className="flex">
+        <span
+          className={
+            "flex items-center justify-center rounded text-white p-1 m-1 "
+            ++ iconColorClasses(selectedButtonColor)
+          }>
+          <PfIcon
+            className={"if if-fw " ++ selectedButtonIcon(selectedKind)}
+          />
+        </span>
+        <span
+          className="inline-flex items-center px-1 py-1 font-semibold text-xs">
+          {selectedKind |> ChecklistItem.actionStringForKind |> str}
+        </span>
+      </div>
+      <span className="px-2 py-1 flex items-center">
+        <i className="fas fa-caret-down text-xs" />
       </span>
     </button>;
 
@@ -183,7 +195,7 @@ let controlIcon = (~icon, ~title, ~handler) => {
     : <button
         title
         disabled={handler == None}
-        className="p-2 focus:outline-none"
+        className="px-3 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
         onClick=?handler>
         <i className={"fas fa-fw " ++ icon} />
       </button>;
@@ -215,12 +227,12 @@ let make =
       ~copyChecklistItemCB,
       ~allowFileKind,
     ) => {
-  <div className="flex items-start mt-2">
+  <div className="flex items-start py-2 relative">
     <div
-      className="flex-1 bg-gray-100 mb-2 px-2 py-3"
+      className="flex-1 bg-gray-100 border rounded-lg p-5 mr-1"
       key={index |> string_of_int}>
       <div className="flex justify-between items-center">
-        <div className="ml-3">
+        <div>
           {checklistDropdown(
              checklistItem,
              allowFileKind,
@@ -243,16 +255,16 @@ let make =
         </div>
       </div>
       <div
-        className="flex items-center ml-3 text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-3 focus:outline-none focus:bg-white focus:border-primary-300">
+        className="flex items-center text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
         <input
-          className="flex-grow appearance-none bg-transparent border-none leading-snug focus:outline-none"
+          className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none"
           placeholder="Describe this step"
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
           type_="text"
           value={checklistItem |> ChecklistItem.title}
         />
       </div>
-      <div className="ml-3">
+      <div>
         <School__InputGroupError
           message="Not a valid title"
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
@@ -273,7 +285,7 @@ let make =
        }}
     </div>
     <div
-      className="ml-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs">
+      className="-mr-10 flex-shrink-0 border bg-gray-100 border rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
          ~icon="fa-arrow-up",
          ~title="Move Up",

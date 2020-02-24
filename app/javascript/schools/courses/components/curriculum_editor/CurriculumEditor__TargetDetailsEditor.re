@@ -144,7 +144,7 @@ let reducer = (state, action) =>
         | None => ""
         },
       visibility: targetDetails.visibility,
-      checklist: checklist,
+      checklist,
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
@@ -438,7 +438,7 @@ let linkEditor = (state, send) => {
     </label>
     <div className="ml-6">
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
         id="link_to_complete"
         type_="text"
         placeholder="Paste link to complete"
@@ -778,7 +778,7 @@ let make =
                </label>
                <div className="ml-6">
                  <input
-                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
                    id="title"
                    type_="text"
                    placeholder="Type target title here"
@@ -1001,7 +1001,7 @@ let make =
                </HelpIcon>
                <div className="ml-6">
                  <input
-                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
                    id="completion-instructions"
                    type_="text"
                    maxLength=255

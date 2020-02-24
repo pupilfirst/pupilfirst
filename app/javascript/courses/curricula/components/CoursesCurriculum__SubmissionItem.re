@@ -115,7 +115,7 @@ let showMultiChoice = (choices, choice, id, callback) => {
        |> Array.mapi((index, label) => {
             let checked =
               choice |> OptionUtils.mapWithDefault(i => i == index, false);
-            <Radio
+            <Checkbox
               key={index |> string_of_int}
               id={id ++ (index |> string_of_int)}
               label

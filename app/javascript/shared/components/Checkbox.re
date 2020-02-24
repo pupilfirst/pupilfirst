@@ -3,9 +3,15 @@
 let str = React.string;
 
 [@react.component]
-let make = (~id, ~label, ~onChange) => {
+let make = (~id, ~label, ~onChange, ~checked=false) => {
   <div>
-    <input className="hidden checkbox-input" id type_="checkbox" onChange />
+    <input
+      className="hidden checkbox-input"
+      id
+      type_="checkbox"
+      onChange
+      checked
+    />
     <label className="checkbox-label flex items-center" htmlFor=id>
       <span>
         <svg width="10px" height="8px" viewBox="0 0 12 10">

@@ -75,6 +75,14 @@ let checklistItemCheckedClasses = (itemIndex, selection) => {
   );
 };
 
+let checklistItemChecked = (itemIndex, resultIndex, selection) => {
+  selection
+  |> List.filter(s =>
+       s.itemIndex == itemIndex && s.resultIndex == resultIndex
+     )
+  |> ListUtils.isNotEmpty;
+};
+
 [@react.component]
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
@@ -122,6 +130,11 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                           itemIndex,
                           resultIndex,
                           setSelecton,
+                        )}
+                        checked={checklistItemChecked(
+                          itemIndex,
+                          resultIndex,
+                          selection,
                         )}
                       />
                       <div className="pl-7">

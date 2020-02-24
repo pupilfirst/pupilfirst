@@ -23,7 +23,7 @@ Because students can make multiple submissions to improve their grade on a targe
 
 Reviewing a submission involves going over the work that the student has submitted and deciding assigning it grades on each of its evaluation criteria.
 
-![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1574335063/pupilfirst_documentation/reviewing_submissions/submission_feedback_and_grading_o4rhqz.png)
+![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1582529474/pupilfirst_documentation/reviewing_submissions/submission_checklist_feedback_notes_and_grading_mgobsx.png)
 
 There's quite a bit to unpack here, so we'll go over each element one by one, starting with the _Grade Card_.
 
@@ -58,4 +58,11 @@ Over the course of reviewing many student submissions, it's very likely that you
 
 You can also revise the template over time, as your understanding of student's issues improves. This can also be really helpful if you're working with other coaches, all of whom can edit the checklist, letting your _collective_ knowledge improve the quality of the feedback.
 
+## Leaving Notes
+
+You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/student_reports?id=keep-notes-on-students), and can be viewed only by you and other coaches.
+
+If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
+
+?> **We'd appreciate any feedback you have about this process!**\
 The greater the difficultly of a course, the greater the importance of a good review process and targeted feedback. As always, if your experience as a teacher has shown you new approaches or techniques, our team at PupilFirst would be more than happy to [have a conversation about it](mailto:support@pupilfirst.com).

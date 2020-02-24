@@ -28,7 +28,7 @@ class CreateGradingMutator < ApplicationQuery
       )
 
       if note.present?
-        submission.startup.founders.each do |student|
+        submission.founders.each do |student|
           CoachNote.create!(note: note, author_id: current_user.id, student_id: student.id)
         end
       end

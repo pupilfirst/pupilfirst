@@ -216,6 +216,11 @@ let make =
                  <CoursesReview__Submissions
                    key={index |> string_of_int}
                    submission
+                   teamSubmission={
+                     submissionDetails
+                     |> SubmissionDetails.students
+                     |> Array.length > 1
+                   }
                    targetEvaluationCriteriaIds={
                      submissionDetails
                      |> SubmissionDetails.targetEvaluationCriteriaIds

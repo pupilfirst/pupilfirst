@@ -51,8 +51,8 @@ let passed = (grades, evaluationCriteria) =>
 
 module CreateGradingMutation = [%graphql
   {|
-    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!) {
-      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades){
+    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String) {
+      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note){
         success
       }
     }
@@ -82,21 +82,27 @@ let undoGrading = (submissionId, send) => {
   |> ignore;
 };
 
+let trimToOption = s =>
+  switch (s |> String.trim) {
+  | "" => None
+  | s => Some(s)
+  };
+
 let gradeSubmissionQuery =
     (submissionId, state, send, evaluationCriteria, updateSubmissionCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
   send(BeginSaving);
 
-  (
-    state.newFeedback == ""
-      ? CreateGradingMutation.make(~submissionId, ~grades=jsGradesArray, ())
-      : CreateGradingMutation.make(
-          ~submissionId,
-          ~feedback=state.newFeedback,
-          ~grades=jsGradesArray,
-          (),
-        )
+  let feedback = state.newFeedback |> trimToOption;
+  let note = state.note |> OptionUtils.flatMap(trimToOption);
+
+  CreateGradingMutation.make(
+    ~submissionId,
+    ~feedback?,
+    ~note?,
+    ~grades=jsGradesArray,
+    (),
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
@@ -470,22 +476,48 @@ let submitButtonText = (feedback, grades) =>
   | (true, true) => "Save grades & send feedback"
   };
 
-let noteForm = (grades, students, note, send) =>
-  switch (grades) {
+let noteForm = (submission, teamSubmission, note, send) =>
+  switch (submission |> Submission.grades) {
   | [||] =>
+    let (noteAbout, additionalHelp) =
+      teamSubmission
+        ? (
+          "team",
+          " This submission is from a team, so a note added here will be posted to the report of all students in the team.",
+        )
+        : ("student", "");
+
+    let help =
+      <HelpIcon className="ml-1">
+        {"Notes can be used to keep track of a "
+         ++ noteAbout
+         ++ "'s progress. These notes are shown only to coaches in a student's report."
+         ++ additionalHelp
+         |> str}
+      </HelpIcon>;
+
+    let textareaId = "note-for-submission-" ++ (submission |> Submission.id);
+
     <div className="text-sm">
       <h5 className="font-semibold text-sm flex items-center">
         <i className="far fa-sticky-note text-gray-800 text-base" />
         {switch (note) {
          | Some(_) =>
            <span className="ml-2 md:ml-3 tracking-wide">
-             {"Write a Note" |> str}
+             <label htmlFor=textareaId> {"Write a Note" |> str} </label>
+             help
            </span>
          | None =>
            <div
              className="ml-2 md:ml-3 tracking-wide flex justify-between items-center w-full">
              <span>
-               {"Would you like to write a note about this student?" |> str}
+               <span>
+                 {"Would you like to write a note about this "
+                  ++ noteAbout
+                  ++ "?"
+                  |> str}
+               </span>
+               help
              </span>
              <button
                className="btn btn-small btn-primary-ghost ml-1"
@@ -499,15 +531,16 @@ let noteForm = (grades, students, note, send) =>
        | Some(note) =>
          <div className="ml-6 md:ml-7 mt-2">
            <MarkdownEditor
+             textareaId
              value=note
              onChange={value => send(UpdateNote(value))}
              profile=Markdown.Permissive
-             placeholder="Notes are not shared with students. They're shown to all coaches on a student's report page."
+             placeholder="Did you notice something while reviewing this submission?"
            />
          </div>
        | None => React.null
        }}
-    </div>
+    </div>;
   | _someGrades => React.null
   };
 
@@ -515,6 +548,7 @@ let noteForm = (grades, students, note, send) =>
 let make =
     (
       ~submission,
+      ~teamSubmission,
       ~evaluationCriteria,
       ~reviewChecklist,
       ~updateSubmissionCB,
@@ -541,7 +575,7 @@ let make =
          targetId,
        )}
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
-        {noteForm(submission |> Submission.grades, [||], state.note, send)}
+        {noteForm(submission, teamSubmission, state.note, send)}
         <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
           <Icon className="if i-tachometer-regular text-gray-800 text-base" />
           <span className="ml-2 md:ml-3 tracking-wide">

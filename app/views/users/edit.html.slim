@@ -28,12 +28,12 @@
         - if current_user.encrypted_password.present?
           h3.mt-4 Change your current password
 
-          = f.password_field :current_password, label_class: 'col-form-label', label: 'Current Password', maxlength: 128, required: false, placeholder: "Your current password."
+          = f.password_field :current_password, label_class: 'col-form-label', label: 'Current Password', maxlength: 128, required: false, autocomplete: false, placeholder: "Your current password."
         - else
           h3.mt-4 Set a password for signing in
 
-        = f.password_field :new_password, label_class: 'col-form-label', label: 'New Password', maxlength: 128, required: false, placeholder: "Your new password."
-        = f.password_field :new_password_confirmation, label_class: 'col-form-label', label: 'Confirm your New Password', maxlength: 128, required: false, placeholder: "Type your new password again."
+        = f.password_field :new_password, label_class: 'col-form-label', label: 'New Password', maxlength: 128, required: false, autocomplete: false, placeholder: "Your new password."
+        = f.password_field :new_password_confirmation, label_class: 'col-form-label', label: 'Confirm your New Password', maxlength: 128, required: false, autocomplete: false, placeholder: "Type your new password again."
 
         h3.mt-4 Control your notifications
 

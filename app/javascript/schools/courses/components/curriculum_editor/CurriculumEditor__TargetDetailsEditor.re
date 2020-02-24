@@ -486,6 +486,13 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
     | _anyOtherCombo => false
     };
 
+  let icon =
+    switch (methodOfCompletion) {
+    | `TakeQuiz => quizIcon
+    | `VisitLink => linkIcon
+    | `MarkAsComplete => markIcon
+    };
+
   <div key={index |> string_of_int} className="w-1/3 px-2">
     <button
       onClick={updateMethodOfCompletion(
@@ -493,7 +500,7 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
         send,
       )}
       className={methodOfCompletionButtonClasses(selected)}>
-      <div className="mb-1"> <img className="w-12 h-12" src=quizIcon /> </div>
+      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div>
       {buttonString |> str}
     </button>
   </div>;

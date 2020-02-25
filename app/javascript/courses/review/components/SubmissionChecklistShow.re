@@ -8,8 +8,7 @@ let str = React.string;
 let make = (~checklist, ~updateChecklistCB, ~pending) => {
   <div>
     {switch (checklist) {
-     | [||] =>
-       <div> {"Target was automatically marked complete." |> str} </div>
+     | [||] => <div> {"Target was marked as complete." |> str} </div>
      | _checlist =>
        checklist
        |> Array.mapi((index, checklistItem) => {

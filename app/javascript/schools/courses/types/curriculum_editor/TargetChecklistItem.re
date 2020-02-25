@@ -122,7 +122,7 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
 
 let createNew = {title: "", kind: LongText, optional: false};
 
-let metaData = kind => {
+let metadata = kind => {
   switch (kind) {
   | MultiChoice(choices) => choices
   | Files
@@ -162,13 +162,13 @@ let createDefaultChecklist = [|
   make(~title="Describe your submission", ~kind=LongText, ~optional=false),
 |];
 
-let kindFromJs = (data, metaData) => {
+let kindFromJs = (data, metadata) => {
   switch (data) {
   | "files" => Files
   | "link" => Link
   | "shortText" => ShortText
   | "longText" => LongText
-  | "multiChoice" => MultiChoice(OptionUtils.default([||], metaData))
+  | "multiChoice" => MultiChoice(OptionUtils.default([||], metadata))
   | kind =>
     Rollbar.error(
       "Unkown kind: "
@@ -184,7 +184,7 @@ let decode = json => {
     kind:
       kindFromJs(
         json |> field("kind", string),
-        json |> Json.Decode.optional(field("metaData", array(string))),
+        json |> Json.Decode.optional(field("metadata", array(string))),
       ),
     optional: json |> field("optional", bool),
     title: json |> field("title", string),
@@ -197,7 +197,7 @@ let encode = t =>
       ("kind", t.kind |> kindAsString |> string),
       ("title", t.title |> string),
       ("optional", t.optional |> bool),
-      ("metaData", t.kind |> metaData |> stringArray),
+      ("metadata", t.kind |> metadata |> stringArray),
     ])
   );
 

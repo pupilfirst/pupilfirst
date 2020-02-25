@@ -58,8 +58,8 @@ class UpdateTargetMutator < ApplicationQuery
     errors[:base] << 'target and target group not from the same course'
   end
 
-  def valid_checklist_title(title)
-    title.is_a?(String) && title.present?
+  def valid_string(string)
+    string.is_a?(String) && string.strip.present?
   end
 
   def valid_checklist_kind(kind)
@@ -67,14 +67,14 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def valid_metadata(item)
-    return true if item['kind'] != Target::CHECKLIST_KIND_MULTI_CHOICE
+    return true if item['kind'] != Target::CHECKLIST_KIND_MULTI_CHOICE && item['metadata'] == []
 
-    item['metaData'].length > 1 && item['metaData'].all? { |choice| choice.is_a?(String) }
+    item['metadata'].respond_to?(:all?) && item['metadata'].length > 1 && item['metadata'].all? { |choice| valid_string(choice) }
   end
 
   def validate_checklist(checklist)
     checklist.respond_to?(:all?) && checklist.all? do |item|
-      valid_checklist_title(item['title']) && valid_checklist_kind(item['kind']) && (item['optional'] == !!item['optional']) && valid_metadata(item)
+      valid_string(item['title']) && valid_checklist_kind(item['kind']) && (item['optional'] == !!item['optional']) && valid_metadata(item)
     end && checklist.select { |item| item['kind'] == Target::CHECKLIST_KIND_ATTACH_FILES }.count <= 1
   end
 
@@ -83,13 +83,13 @@ class UpdateTargetMutator < ApplicationQuery
 
     return if evaluation_criteria.present? && validate_checklist(checklist)
 
-    errors[:base] << 'not a valid checklist'
+    errors[:checklist] << 'not a valid checklist'
   end
 
   def checklist_within_allowed_length
     return if checklist.respond_to?(:all?) && checklist.length <= 15
 
-    errors[:base] << 'checklist should have less than 20 items'
+    errors[:checklist] << 'should have less than 15 items'
   end
 
   def update

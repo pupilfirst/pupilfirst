@@ -199,20 +199,6 @@ let controlIcon = (~icon, ~title, ~handler) => {
       </button>;
 };
 
-let onDelete = (cb, _event) => {
-  WindowUtils.confirm("Are you sure you want to delete this item?", () => {
-    cb()
-  });
-};
-
-let onMove = (cb, _event) => {
-  cb();
-};
-
-let onCopy = (cb, _event) => {
-  cb();
-};
-
 [@react.component]
 let make =
     (
@@ -287,23 +273,22 @@ let make =
       {controlIcon(
          ~icon="fa-arrow-up",
          ~title="Move Up",
-         ~handler=moveChecklistItemUpCB |> OptionUtils.map(cb => onMove(cb)),
+         ~handler=moveChecklistItemUpCB |> OptionUtils.map((cb, _) => cb()),
        )}
       {controlIcon(
          ~icon="fa-arrow-down",
          ~title="Move Down",
-         ~handler=
-           moveChecklistItemDownCB |> OptionUtils.map(cb => onMove(cb)),
+         ~handler=moveChecklistItemDownCB |> OptionUtils.map((cb, _) => cb()),
        )}
       {controlIcon(
          ~icon="fa-copy",
          ~title="Copy",
-         ~handler=Some(onCopy(copyChecklistItemCB)),
+         ~handler=Some(_ => copyChecklistItemCB()),
        )}
       {controlIcon(
          ~icon="fa-trash-alt",
          ~title="Delete",
-         ~handler=Some(onDelete(removeChecklistItemCB)),
+         ~handler=Some(_ => removeChecklistItemCB()),
        )}
     </div>
   </div>;

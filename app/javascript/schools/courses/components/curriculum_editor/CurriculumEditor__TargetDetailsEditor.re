@@ -705,12 +705,16 @@ let removeChecklistItem = (state, send, index, ()) => {
   send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(index)));
 };
 
-let moveChecklistItemUp = (state, send, item, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.moveUp(item)));
+let moveChecklistItemUp = (state, send, index, item, ()) => {
+  send(
+    UpdateChecklist(state.checklist |> ChecklistItem.moveUp(item, index)),
+  );
 };
 
-let moveChecklistItemDown = (state, send, item, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.moveDown(item)));
+let moveChecklistItemDown = (state, send, index, item, ()) => {
+  send(
+    UpdateChecklist(state.checklist |> ChecklistItem.moveDown(item, index)),
+  );
 };
 
 let copyChecklistItem = (state, send, item, ()) => {
@@ -865,6 +869,7 @@ let make =
                                     moveChecklistItemUp(
                                       state,
                                       send,
+                                      index,
                                       checklistItem,
                                     ),
                                   )
@@ -876,6 +881,7 @@ let make =
                                     moveChecklistItemDown(
                                       state,
                                       send,
+                                      index,
                                       checklistItem,
                                     ),
                                   )

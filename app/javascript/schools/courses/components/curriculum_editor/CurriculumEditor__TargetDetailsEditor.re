@@ -438,7 +438,7 @@ let linkEditor = (state, send) => {
     </label>
     <div className="ml-6">
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
         id="link_to_complete"
         type_="text"
         placeholder="Paste link to complete"
@@ -759,268 +759,276 @@ let make =
     [|state.dirty|],
   );
 
-  <div className="max-w-3xl py-6 px-3 mx-auto" id="target-properties">
+  <div className="pt-6" id="target-properties">
     {state.loading
-       ? SkeletonLoading.multiple(
-           ~count=2,
-           ~element=SkeletonLoading.contents(),
-         )
+       ? <div className="max-w-3xl mx-auto px-3">
+           {SkeletonLoading.multiple(
+              ~count=2,
+              ~element=SkeletonLoading.contents(),
+            )}
+         </div>
        : <DisablingCover message="Saving..." disabled={state.saving}>
            <div className="mt-2">
-             <div className="mb-6">
-               <label
-                 className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
-                 htmlFor="title">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"Title" |> str}
-               </label>
-               <div className="ml-6">
-                 <input
-                   className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
-                   id="title"
-                   type_="text"
-                   placeholder="Type target title here"
-                   onChange={updateTitle(send)}
-                   value={state.title}
-                 />
-                 <School__InputGroupError
-                   message="Enter a valid title"
-                   active={state.title |> String.length < 1}
-                 />
+             <div className="max-w-3xl mx-auto px-3">
+               <div className="mb-6">
+                 <label
+                   className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
+                   htmlFor="title">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
+                   </span>
+                   {"Title" |> str}
+                 </label>
+                 <div className="ml-6">
+                   <input
+                     className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                     id="title"
+                     type_="text"
+                     placeholder="Type target title here"
+                     onChange={updateTitle(send)}
+                     value={state.title}
+                   />
+                   <School__InputGroupError
+                     message="Enter a valid title"
+                     active={state.title |> String.length < 1}
+                   />
+                 </div>
                </div>
-             </div>
-             {prerequisiteTargetEditor(
-                send,
-                eligiblePrerequisiteTargets(targetId, targets, targetGroups),
-                state,
-              )}
-             <div className="flex items-center mb-6">
-               <label
-                 className="block tracking-wide text-sm font-semibold mr-6"
-                 htmlFor="evaluated">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"Will a coach review submissions on this target?" |> str}
-               </label>
-               <div
-                 id="evaluated"
-                 className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-                 <button
-                   onClick={updateMethodOfCompletion(Evaluated, send)}
-                   className={booleanButtonClasses(
-                     targetEvaluated(state.methodOfCompletion),
-                   )}>
-                   {"Yes" |> str}
-                 </button>
-                 <button
-                   onClick={updateMethodOfCompletion(MarkAsComplete, send)}
-                   className={booleanButtonClasses(
-                     !targetEvaluated(state.methodOfCompletion),
-                   )}>
-                   {"No" |> str}
-                 </button>
-               </div>
-             </div>
-             {switch (state.methodOfCompletion) {
-              | Evaluated =>
-                <div className="mb-6">
-                  <label
-                    className="block tracking-wide text-sm font-semibold mr-6"
-                    htmlFor="target_checklist">
-                    <span className="mr-2">
-                      <i className="fas fa-list text-base" />
-                    </span>
-                    {"What steps should the student take to complete this target?"
-                     |> str}
-                  </label>
-                  <div className="ml-6 mb-6">
-                    {let allowFileKind =
-                       state.checklist
-                       |> Js.Array.filter(item =>
-                            item |> ChecklistItem.isFilesKind
-                          )
-                       |> ArrayUtils.isEmpty;
-                     state.checklist
-                     |> Array.mapi((index, checklistItem) => {
-                          let moveChecklistItemUpCB =
-                            index > 0
-                              ? Some(
-                                  moveChecklistItemUp(
-                                    state,
-                                    send,
-                                    checklistItem,
-                                  ),
-                                )
-                              : None;
-
-                          let moveChecklistItemDownCB =
-                            index != Array.length(state.checklist) - 1
-                              ? Some(
-                                  moveChecklistItemDown(
-                                    state,
-                                    send,
-                                    checklistItem,
-                                  ),
-                                )
-                              : None;
-
-                          <CurriculumEditor__TargetChecklistItemEditor
-                            key={index |> string_of_int}
-                            checklistItem
-                            index
-                            updateChecklistItemCB={updateChecklistItem(
-                              state,
-                              send,
-                              index,
-                            )}
-                            removeChecklistItemCB={removeChecklistItem(
-                              state,
-                              send,
-                              index,
-                            )}
-                            ?moveChecklistItemUpCB
-                            ?moveChecklistItemDownCB
-                            copyChecklistItemCB={copyChecklistItem(
-                              state,
-                              send,
-                              checklistItem,
-                            )}
-                            allowFileKind
-                          />;
-                        })
-                     |> React.array}
-                    {state.checklist |> ArrayUtils.isEmpty
-                       ? <div
-                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-                           <i className="fas fa-info-circle mr-2" />
-                           {"This target has no steps. Students will be able to submit target without any action!"
-                            |> str}
-                         </div>
-                       : React.null}
-                    {state.checklist |> Array.length >= 15
-                       ? <div
-                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-                           <i className="fas fa-info-circle mr-2" />
-                           {"Maximum allowed checklist items is 15!" |> str}
-                         </div>
-                       : React.null}
-                    <button
-                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
-                      disabled={state.checklist |> Array.length >= 15}
-                      onClick={_ => addNewChecklistItem(state, send)}>
-                      <PfIcon className="fas fa-plus-circle text-lg" />
-                      <span className="font-semibold ml-2">
-                        {"Add a Step" |> str}
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              | VisitLink
-              | TakeQuiz
-              | MarkAsComplete => React.null
-              }}
-             {targetEvaluated(state.methodOfCompletion)
-                ? React.null : methodOfCompletionSelector(state, send)}
-             {switch (state.methodOfCompletion) {
-              | Evaluated =>
-                evaluationCriteriaEditor(
-                  state,
-                  evaluationCriteria |> Array.of_list,
+               {prerequisiteTargetEditor(
                   send,
-                )
-              | MarkAsComplete => React.null
-              | TakeQuiz => quizEditor(state, send)
-              | VisitLink => linkEditor(state, send)
-              }}
-             <div className="mb-6">
-               <label
-                 className="inline-block tracking-wide text-sm font-semibold"
-                 htmlFor="role">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"How should teams tackle this target?" |> str}
-               </label>
-               <HelpIcon
-                 className="ml-1"
-                 link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
-                 {"Should students in a team submit work on a target individually, or together?"
-                  |> str}
-               </HelpIcon>
-               <div id="role" className="flex mt-4 ml-6">
-                 <button
-                   onClick={updateTargetRole(TargetDetails.Student, send)}
-                   className={
-                     "mr-4 "
-                     ++ targetRoleClasses(
-                          switch (state.role) {
-                          | TargetDetails.Student => true
-                          | Team => false
-                          },
-                        )
-                   }>
-                   <span className="mr-4">
-                     <Icon className="if i-users-check-light text-3xl" />
+                  eligiblePrerequisiteTargets(
+                    targetId,
+                    targets,
+                    targetGroups,
+                  ),
+                  state,
+                )}
+               <div className="flex items-center mb-6">
+                 <label
+                   className="block tracking-wide text-sm font-semibold mr-6"
+                   htmlFor="evaluated">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
                    </span>
-                   <span className="text-sm">
-                     {"All students must submit individually." |> str}
+                   {"Will a coach review submissions on this target?" |> str}
+                 </label>
+                 <div
+                   id="evaluated"
+                   className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                   <button
+                     onClick={updateMethodOfCompletion(Evaluated, send)}
+                     className={booleanButtonClasses(
+                       targetEvaluated(state.methodOfCompletion),
+                     )}>
+                     {"Yes" |> str}
+                   </button>
+                   <button
+                     onClick={updateMethodOfCompletion(MarkAsComplete, send)}
+                     className={booleanButtonClasses(
+                       !targetEvaluated(state.methodOfCompletion),
+                     )}>
+                     {"No" |> str}
+                   </button>
+                 </div>
+               </div>
+               {switch (state.methodOfCompletion) {
+                | Evaluated =>
+                  <div className="mb-6">
+                    <label
+                      className="block tracking-wide text-sm font-semibold mr-6"
+                      htmlFor="target_checklist">
+                      <span className="mr-2">
+                        <i className="fas fa-list text-base" />
+                      </span>
+                      {"What steps should the student take to complete this target?"
+                       |> str}
+                    </label>
+                    <div className="ml-6 mb-6">
+                      {let allowFileKind =
+                         state.checklist
+                         |> Js.Array.filter(item =>
+                              item |> ChecklistItem.isFilesKind
+                            )
+                         |> ArrayUtils.isEmpty;
+                       state.checklist
+                       |> Array.mapi((index, checklistItem) => {
+                            let moveChecklistItemUpCB =
+                              index > 0
+                                ? Some(
+                                    moveChecklistItemUp(
+                                      state,
+                                      send,
+                                      checklistItem,
+                                    ),
+                                  )
+                                : None;
+
+                            let moveChecklistItemDownCB =
+                              index != Array.length(state.checklist) - 1
+                                ? Some(
+                                    moveChecklistItemDown(
+                                      state,
+                                      send,
+                                      checklistItem,
+                                    ),
+                                  )
+                                : None;
+
+                            <CurriculumEditor__TargetChecklistItemEditor
+                              key={index |> string_of_int}
+                              checklistItem
+                              index
+                              updateChecklistItemCB={updateChecklistItem(
+                                state,
+                                send,
+                                index,
+                              )}
+                              removeChecklistItemCB={removeChecklistItem(
+                                state,
+                                send,
+                                index,
+                              )}
+                              ?moveChecklistItemUpCB
+                              ?moveChecklistItemDownCB
+                              copyChecklistItemCB={copyChecklistItem(
+                                state,
+                                send,
+                                checklistItem,
+                              )}
+                              allowFileKind
+                            />;
+                          })
+                       |> React.array}
+                      {state.checklist |> ArrayUtils.isEmpty
+                         ? <div
+                             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+                             <i className="fas fa-info-circle mr-2" />
+                             {"This target has no steps. Students will be able to submit target without any action!"
+                              |> str}
+                           </div>
+                         : React.null}
+                      {state.checklist |> Array.length >= 15
+                         ? <div
+                             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+                             <i className="fas fa-info-circle mr-2" />
+                             {"Maximum allowed checklist items is 15!" |> str}
+                           </div>
+                         : React.null}
+                      <button
+                        className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                        disabled={state.checklist |> Array.length >= 15}
+                        onClick={_ => addNewChecklistItem(state, send)}>
+                        <PfIcon className="fas fa-plus-circle text-lg" />
+                        <span className="font-semibold ml-2">
+                          {"Add a Step" |> str}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                | VisitLink
+                | TakeQuiz
+                | MarkAsComplete => React.null
+                }}
+               {targetEvaluated(state.methodOfCompletion)
+                  ? React.null : methodOfCompletionSelector(state, send)}
+               {switch (state.methodOfCompletion) {
+                | Evaluated =>
+                  evaluationCriteriaEditor(
+                    state,
+                    evaluationCriteria |> Array.of_list,
+                    send,
+                  )
+                | MarkAsComplete => React.null
+                | TakeQuiz => quizEditor(state, send)
+                | VisitLink => linkEditor(state, send)
+                }}
+               <div className="mb-6">
+                 <label
+                   className="inline-block tracking-wide text-sm font-semibold"
+                   htmlFor="role">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
                    </span>
-                 </button>
-                 <button
-                   onClick={updateTargetRole(TargetDetails.Team, send)}
-                   className={targetRoleClasses(
-                     switch (state.role) {
-                     | TargetDetails.Team => true
-                     | Student => false
-                     },
-                   )}>
-                   <span className="mr-4">
-                     <Icon className="if i-user-check-light text-2xl" />
+                   {"How should teams tackle this target?" |> str}
+                 </label>
+                 <HelpIcon
+                   className="ml-1"
+                   link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
+                   {"Should students in a team submit work on a target individually, or together?"
+                    |> str}
+                 </HelpIcon>
+                 <div id="role" className="flex mt-4 ml-6">
+                   <button
+                     onClick={updateTargetRole(TargetDetails.Student, send)}
+                     className={
+                       "mr-4 "
+                       ++ targetRoleClasses(
+                            switch (state.role) {
+                            | TargetDetails.Student => true
+                            | Team => false
+                            },
+                          )
+                     }>
+                     <span className="mr-4">
+                       <Icon className="if i-users-check-light text-3xl" />
+                     </span>
+                     <span className="text-sm">
+                       {"All students must submit individually." |> str}
+                     </span>
+                   </button>
+                   <button
+                     onClick={updateTargetRole(TargetDetails.Team, send)}
+                     className={targetRoleClasses(
+                       switch (state.role) {
+                       | TargetDetails.Team => true
+                       | Student => false
+                       },
+                     )}>
+                     <span className="mr-4">
+                       <Icon className="if i-user-check-light text-2xl" />
+                     </span>
+                     <span className="text-sm">
+                       {"Only one student in a team" |> str}
+                       <br />
+                       {" needs to submit." |> str}
+                     </span>
+                   </button>
+                 </div>
+               </div>
+               <div className="mb-6">
+                 <label
+                   className="tracking-wide text-sm font-semibold"
+                   htmlFor="completion-instructions">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
                    </span>
-                   <span className="text-sm">
-                     {"Only one student in a team" |> str}
-                     <br />
-                     {" needs to submit." |> str}
+                   {"Do you have any completion instructions for the student?"
+                    |> str}
+                   <span className="ml-1 text-xs font-normal">
+                     {"(optional)" |> str}
                    </span>
-                 </button>
+                 </label>
+                 <HelpIcon
+                   link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
+                   className="ml-1">
+                   {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
+                    |> str}
+                 </HelpIcon>
+                 <div className="ml-6">
+                   <input
+                     className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                     id="completion-instructions"
+                     type_="text"
+                     maxLength=255
+                     value={state.completionInstructions}
+                     onChange={updateCompletionInstructions(send)}
+                   />
+                 </div>
                </div>
              </div>
-             <div className="mb-6">
-               <label
-                 className="tracking-wide text-sm font-semibold"
-                 htmlFor="completion-instructions">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"Do you have any completion instructions for the student?"
-                  |> str}
-                 <span className="ml-1 text-xs font-normal">
-                   {"(optional)" |> str}
-                 </span>
-               </label>
-               <HelpIcon
-                 link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
-                 className="ml-1">
-                 {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
-                  |> str}
-               </HelpIcon>
-               <div className="ml-6">
-                 <input
-                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
-                   id="completion-instructions"
-                   type_="text"
-                   maxLength=255
-                   value={state.completionInstructions}
-                   onChange={updateCompletionInstructions(send)}
-                 />
-               </div>
-             </div>
-             <div className="bg-white">
+             <div className="bg-white border-t sticky bottom-0 py-5">
                <div
-                 className="flex w-full justify-between items-center mx-auto">
+                 className="flex max-w-3xl mx-auto px-3 justify-between items-center">
                  <div className="flex items-center flex-shrink-0">
                    <label
                      className="block tracking-wide text-sm font-semibold mr-3"

@@ -158,10 +158,6 @@ let isValidChecklistItem = t => {
   };
 };
 
-let createDefaultChecklist = [|
-  make(~title="Describe your submission", ~kind=LongText, ~optional=false),
-|];
-
 let kindFromJs = (data, metadata) => {
   switch (data) {
   | "files" => Files

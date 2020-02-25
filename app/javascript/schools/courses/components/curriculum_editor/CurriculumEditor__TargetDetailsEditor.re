@@ -97,6 +97,14 @@ let loadTargetDetails = (targetId, send) => {
   |> ignore;
 };
 
+let defaultChecklist = [|
+  ChecklistItem.make(
+    ~title="Describe your submission",
+    ~kind=LongText,
+    ~optional=false,
+  ),
+|];
+
 let computeMethodOfCompletion = targetDetails => {
   let hasQuiz = targetDetails |> TargetDetails.quiz |> ArrayUtils.isNotEmpty;
   let hasEvaluationCriteria =
@@ -120,7 +128,7 @@ let reducer = (state, action) =>
     let methodOfCompletion = computeMethodOfCompletion(targetDetails);
     let checklist =
       targetDetails.checklist |> ArrayUtils.isNotEmpty
-        ? targetDetails.checklist : ChecklistItem.createDefaultChecklist;
+        ? targetDetails.checklist : defaultChecklist;
     let quiz =
       targetDetails.quiz |> ArrayUtils.isNotEmpty
         ? targetDetails.quiz : [|QuizQuestion.empty("0")|];

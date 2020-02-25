@@ -23,9 +23,9 @@ class CreateGradingMutator < ApplicationQuery
       end
 
       submission.update!(
-        passed_at: (failed? ? nil : Time.now),
+        passed_at: (failed? ? nil : Time.zone.now),
         evaluator: coach,
-        evaluated_at: Time.now,
+        evaluated_at: Time.zone.now,
         checklist: checklist
       )
       send_feedback if feedback.present?

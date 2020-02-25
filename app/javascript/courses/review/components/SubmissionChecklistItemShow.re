@@ -10,22 +10,22 @@ let kindIconClasses = result => {
   | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800 if-fw"
   | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
   | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
-  | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  | Files(_files) => "if i-file-regular md:text-base text-gray-800 if-fw"
   };
 };
 
-let showFiles = attachments => {
+let showFiles = files => {
   <div className="flex flex-wrap">
-    {attachments
-     |> Array.map(attachment => {
+    {files
+     |> Array.map(file => {
           <a
-            key={"file-" ++ (attachment |> ChecklistItem.attachmentUrl)}
-            href={attachment |> ChecklistItem.attachmentUrl}
+            key={"file-" ++ (file |> ChecklistItem.fileUrl)}
+            href={file |> ChecklistItem.fileUrl}
             target="_blank"
             className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-pink-400 bg-white text-pink-700 hover:border-pink-600 hover:text-pink-700">
             <span
               className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-normal truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
-              {attachment |> ChecklistItem.attachmentName |> str}
+              {file |> ChecklistItem.fileName |> str}
             </span>
             <span
               className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
@@ -182,7 +182,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
                 <MarkdownBlock profile=Markdown.Permissive markdown />
               | Link(link) => showlink(link)
               | MultiChoice(text) => <div> {text |> str} </div>
-              | Files(attachments) => showFiles(attachments)
+              | Files(files) => showFiles(files)
               }}
            </div>
            {switch (updateChecklistCB) {

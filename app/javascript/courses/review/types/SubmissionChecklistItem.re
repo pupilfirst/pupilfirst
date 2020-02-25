@@ -1,4 +1,4 @@
-type attachment = {
+type file = {
   id: string,
   name: string,
   url: string,
@@ -8,7 +8,7 @@ type result =
   | ShortText(string)
   | LongText(string)
   | Link(string)
-  | Files(array(attachment))
+  | Files(array(file))
   | MultiChoice(string);
 
 type status =
@@ -25,24 +25,23 @@ type t = {
 let title = t => t.title;
 let result = t => t.result;
 let status = t => t.status;
-let attachmentName = attachment => attachment.name;
-let attachmentUrl = attachment => attachment.url;
+let fileName = file => file.name;
+let fileUrl = file => file.url;
 
 let make = (~title, ~result, ~status) => {title, result, status};
 
-let makeAttachment = (~name, ~url, ~id) => {name, url, id};
+let makeFile = (~name, ~url, ~id) => {name, url, id};
 
-let makeAttachments = data =>
-  data
-  |> Js.Array.map(a => makeAttachment(~url=a##url, ~name=a##title, ~id=a##id));
+let makeFiles = data =>
+  data |> Js.Array.map(a => makeFile(~url=a##url, ~name=a##title, ~id=a##id));
 
-let makeResult = (result, kind, attachments) => {
+let makeResult = (result, kind, files) => {
   switch (kind) {
   | "shortText" => ShortText(result)
   | "longText" => LongText(result)
   | "link" => Link(result)
   | "multiChoice" => MultiChoice(result)
-  | "files" => Files(attachments)
+  | "files" => Files(files)
   | randomKind =>
     Rollbar.error(
       "Unkown kind: "
@@ -68,32 +67,31 @@ let makeStatus = data => {
   };
 };
 
-let makeArrayFromJs = (attachments, checklist) => {
+let makeArrayFromJs = (files, checklist) => {
   checklist
   |> Js.Array.map(c =>
        make(
          ~title=c##title,
-         ~result=
-           makeResult(c##result, c##kind, makeAttachments(attachments)),
+         ~result=makeResult(c##result, c##kind, makeFiles(files)),
          ~status=makeStatus(c##status),
        )
      );
 };
 
-let decodeAttachment = json =>
+let decodeFile = json =>
   Json.Decode.{
     name: json |> field("name", string),
     url: json |> field("url", string),
     id: json |> field("id", string),
   };
 
-let decode = (attachments, json) => {
+let decode = (files, json) => {
   Json.Decode.{
     result:
       makeResult(
         json |> field("result", string),
         json |> field("kind", string),
-        attachments,
+        files,
       ),
     status: makeStatus(json |> field("status", string)),
     title: json |> field("title", string),

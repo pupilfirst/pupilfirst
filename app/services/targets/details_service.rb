@@ -102,7 +102,7 @@ module Targets
           created_at: submission.created_at,
           status: submission.status,
           checklist: submission.checklist,
-          attachments: attachments(submission)
+          files: files(submission)
         }
       end
     end
@@ -130,7 +130,7 @@ module Targets
       end
     end
 
-    def attachments(submission)
+    def files(submission)
       submission.timeline_event_files.with_attached_file.map do |file|
         {
           id: file.id,

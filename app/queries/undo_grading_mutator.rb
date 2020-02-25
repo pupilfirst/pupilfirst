@@ -24,7 +24,7 @@ class UndoGradingMutator < ApplicationQuery
 
   def checklist
     submission.checklist.map do |c|
-      c['status'] = TimelineEvent::CHECKLIST_NO_ANSWER
+      c['status'] = TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       c
     end
   end

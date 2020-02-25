@@ -64,7 +64,7 @@ let fileIds = checklist => {
   |> ArrayUtils.flatten;
 };
 
-let kinsAsString = t => {
+let kindAsString = t => {
   switch (t.result) {
   | Files(_) => "files"
   | Link(_) => "link"
@@ -107,7 +107,7 @@ let validLongText = s => {
   validString(s, 1000);
 };
 
-let validAttachments = files => {
+let validFiles = files => {
   files != [||] && files |> Array.length < 3;
 };
 
@@ -119,9 +119,8 @@ let validResponse = (response, allowBlank) => {
   let optional = allowBlank ? response.optional : false;
 
   switch (response.result, optional) {
-  | (Files(files), false) => validAttachments(files)
-  | (Files(files), true) =>
-    files |> ArrayUtils.isEmpty || validAttachments(files)
+  | (Files(files), false) => validFiles(files)
+  | (Files(files), true) => files |> ArrayUtils.isEmpty || validFiles(files)
   | (Link(link), false) => link |> UrlUtils.isValid(false)
   | (Link(link), true) => link |> UrlUtils.isValid(true)
   | (ShortText(t), false) => validShortText(t)
@@ -149,7 +148,7 @@ let encode = t =>
   Json.Encode.(
     object_([
       ("title", t.title |> string),
-      ("kind", kinsAsString(t) |> string),
+      ("kind", kindAsString(t) |> string),
       ("status", "noAnswer" |> string),
       ("result", encodeResult(t) |> string),
     ])
@@ -158,7 +157,7 @@ let encode = t =>
 let encodeArray = checklist =>
   validResonses(checklist) |> Json.Encode.(array(encode));
 
-let makeAttachments = checklist => {
+let makeFiles = checklist => {
   checklist
   |> Array.map(c =>
        switch (c.result) {
@@ -169,6 +168,6 @@ let makeAttachments = checklist => {
   |> ArrayUtils.flatten
   |> Array.map(f => {
        let url = "/timeline_event_files/" ++ f.id ++ "/download";
-       SubmissionChecklistItem.makeAttachment(~name=f.name, ~id=f.id, ~url);
+       SubmissionChecklistItem.makeFile(~name=f.name, ~id=f.id, ~url);
      });
 };

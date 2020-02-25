@@ -14,7 +14,7 @@ let kindIconClasses = result =>
   };
 
 let computeId = (index, checklistItem) => {
-  (index |> string_of_int) ++ ChecklistItem.kinsAsString(checklistItem);
+  (index |> string_of_int) ++ ChecklistItem.kindAsString(checklistItem);
 };
 
 let placeholder = (id, checklistItem) => {
@@ -59,7 +59,10 @@ let showLink = (value, id, callback) => {
       placeholder="Type full URL starting with https://..."
       className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
-    {showError("Invalid url", UrlUtils.isInvalid(true, value))}
+    {showError(
+       "This doesn't look like a valid URL.",
+       UrlUtils.isInvalid(true, value),
+     )}
   </div>;
 };
 
@@ -77,7 +80,7 @@ let showShortText = (value, id, callback) => {
       className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError(
-       "Answe should be less than 250 characters",
+       "Answer should be less than 250 characters",
        !ChecklistItem.validShortText(value) && notBlank(value),
      )}
   </div>;
@@ -96,7 +99,7 @@ let showLongText = (value, id, callback) => {
       }
     />
     {showError(
-       "Answe should be less than 1000 characters",
+       "Answer should be less than 1000 characters",
        !ChecklistItem.validLongText(value) && notBlank(value),
      )}
   </div>;

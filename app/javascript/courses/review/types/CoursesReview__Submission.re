@@ -71,7 +71,7 @@ let makeFromJs = details =>
            s##checklist
            |> Json.Decode.array(
                 SubmissionChecklistItem.decode(
-                  SubmissionChecklistItem.makeAttachments(s##files),
+                  SubmissionChecklistItem.makeFiles(s##files),
                 ),
               ),
        )

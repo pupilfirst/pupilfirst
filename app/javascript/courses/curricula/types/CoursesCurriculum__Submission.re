@@ -50,10 +50,7 @@ let decode = json =>
            array(
              SubmissionChecklistItem.decode(
                json
-               |> field(
-                    "attachments",
-                    array(SubmissionChecklistItem.decodeAttachment),
-                  ),
+               |> field("files", array(SubmissionChecklistItem.decodeFile)),
              ),
            ),
          ),

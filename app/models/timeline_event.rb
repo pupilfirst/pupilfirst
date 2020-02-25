@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# JSON fields schema:
+#
+# checklist: {
+#   kind: string - should match the target checklist kind (shortText, longText, link, files, multiChoice)
+#   title: string - title from the target checklist
+#   result: string - answer for the question taken from the user
+#   status: string - should be on of noAnswer, Passed, Failed. Passed can only be set by the server.
+# }
+
 class TimelineEvent < ApplicationRecord
   belongs_to :target
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
@@ -36,12 +45,12 @@ class TimelineEvent < ApplicationRecord
 
   after_initialize :make_links_an_array
 
-  CHECKLIST_NO_ANSWER = 'noAnswer'
-  CHECKLIST_PASSED = 'passed'
-  CHECKLIST_FAILED = 'failed'
+  CHECKLIST_STATUS_NO_ANSWER = 'noAnswer'
+  CHECKLIST_STATUS_PASSED = 'passed'
+  CHECKLIST_STATUS_FAILED = 'failed'
 
   def self.valid_checklist_status
-    [CHECKLIST_NO_ANSWER, CHECKLIST_PASSED, CHECKLIST_FAILED].freeze
+    [CHECKLIST_STATUS_NO_ANSWER, CHECKLIST_STATUS_PASSED, CHECKLIST_STATUS_FAILED].freeze
   end
 
   def make_links_an_array

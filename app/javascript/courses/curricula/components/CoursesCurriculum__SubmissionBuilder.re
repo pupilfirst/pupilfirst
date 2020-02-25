@@ -104,10 +104,10 @@ let submit = (state, send, target, addSubmissionCB, event) => {
   |> Js.Promise.then_(response => {
        switch (response##createSubmission##submission) {
        | Some(submission) =>
-         let attachments = state.checklist |> ChecklistItem.makeAttachments;
+         let files = state.checklist |> ChecklistItem.makeFiles;
          let submissionChecklist =
            checklist
-           |> Json.Decode.array(SubmissionChecklistItem.decode(attachments));
+           |> Json.Decode.array(SubmissionChecklistItem.decode(files));
          let newSubmission =
            Submission.make(
              ~id=submission##id,
@@ -115,8 +115,8 @@ let submit = (state, send, target, addSubmissionCB, event) => {
              ~status=Submission.Pending,
              ~checklist=submissionChecklist,
            );
-         let newAttachments = submission##id;
-         addSubmissionCB(newSubmission, newAttachments);
+         let newFiles = submission##id;
+         addSubmissionCB(newSubmission, newFiles);
        | None =>
          /* Enable the form again in case of a validation failure. */
          send(UpdateFormState(Ready))

@@ -119,9 +119,12 @@ let statusButtons = (index, status, callback, checklist) =>
      }}
   </div>;
 
-let computeShowResult = pending => {
-  pending ? true : false;
-};
+let computeShowResult = (pending, checklistItem) =>
+  switch (pending, checklistItem |> ChecklistItem.status) {
+  | (true, NoAnswer | Passed | Failed) => true
+  | (false, Failed) => true
+  | (false, NoAnswer | Passed) => false
+  };
 
 let cardClasses = pending => {
   pending ? "mt-3" : "rounded shadow mt-4 ";
@@ -139,11 +142,11 @@ let cardBodyClasses = pending => {
 [@react.component]
 let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
   let (showResult, setShowResult) =
-    React.useState(() => computeShowResult(pending));
+    React.useState(() => computeShowResult(pending, checklistItem));
 
   React.useEffect1(
     () => {
-      let newShowResult = computeShowResult(pending);
+      let newShowResult = computeShowResult(pending, checklistItem);
       newShowResult == showResult ? () : setShowResult(_ => newShowResult);
       None;
     },

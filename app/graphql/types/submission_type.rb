@@ -6,7 +6,7 @@ module Types
     field :evaluator_name, String, null: true
     field :feedback, [Types::SubmissionFeedbackType], null: false
     field :grades, [Types::GradeType], null: false
-    field :attachments, [Types::SubmissionAttachmentType], null: false
+    field :files, [Types::SubmissionFileType], null: false
     field :evaluated_at, String, null: true
     field :checklist, GraphQL::Types::JSON, null: false
 
@@ -27,7 +27,7 @@ module Types
       object.startup_feedback
     end
 
-    def attachments
+    def files
       object.timeline_event_files.with_attached_file.map do |file|
         {
           id: file.id,

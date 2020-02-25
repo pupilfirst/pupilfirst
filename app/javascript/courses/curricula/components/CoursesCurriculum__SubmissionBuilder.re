@@ -43,7 +43,7 @@ type action =
   | UpdateResponse(array(ChecklistItem.t));
 
 let initialState = checklist => {
-  formState: Incomplete,
+  formState: Ready,
   checklist: ChecklistItem.makeEmpty(checklist),
 };
 

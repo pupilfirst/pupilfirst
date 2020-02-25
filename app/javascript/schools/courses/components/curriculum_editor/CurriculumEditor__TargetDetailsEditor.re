@@ -713,16 +713,12 @@ let removeChecklistItem = (state, send, index, ()) => {
   send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(index)));
 };
 
-let moveChecklistItemUp = (state, send, index, item, ()) => {
-  send(
-    UpdateChecklist(state.checklist |> ChecklistItem.moveUp(item, index)),
-  );
+let moveChecklistItemUp = (state, send, index, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.moveUp(index)));
 };
 
-let moveChecklistItemDown = (state, send, index, item, ()) => {
-  send(
-    UpdateChecklist(state.checklist |> ChecklistItem.moveDown(item, index)),
-  );
+let moveChecklistItemDown = (state, send, index, ()) => {
+  send(UpdateChecklist(state.checklist |> ChecklistItem.moveDown(index)));
 };
 
 let copyChecklistItem = (state, send, item, ()) => {
@@ -874,24 +870,14 @@ let make =
                             let moveChecklistItemUpCB =
                               index > 0
                                 ? Some(
-                                    moveChecklistItemUp(
-                                      state,
-                                      send,
-                                      index,
-                                      checklistItem,
-                                    ),
+                                    moveChecklistItemUp(state, send, index),
                                   )
                                 : None;
 
                             let moveChecklistItemDownCB =
                               index != Array.length(state.checklist) - 1
                                 ? Some(
-                                    moveChecklistItemDown(
-                                      state,
-                                      send,
-                                      index,
-                                      checklistItem,
-                                    ),
+                                    moveChecklistItemDown(state, send, index),
                                   )
                                 : None;
 

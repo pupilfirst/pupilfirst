@@ -41,3 +41,16 @@ let getOpt = (a, i) =>
   try(Some(a |> Array.get(i))) {
   | Not_found => None
   };
+
+let swapUp = (i, t) =>
+  if (i <= 0 || i >= (t |> Array.length)) {
+    Rollbar.warning("Index to swap out of bounds in array!");
+    t;
+  } else {
+    let copy = t |> Array.copy;
+    copy[i] = t[i - 1];
+    copy[i - 1] = t[i];
+    copy;
+  };
+
+let swapDown = (i, t) => swapUp(i + 1, t);

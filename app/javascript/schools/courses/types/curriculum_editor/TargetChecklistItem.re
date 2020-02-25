@@ -57,20 +57,12 @@ let removeItem = (index, list) => {
   list |> Js.Array.filteri((_item, i) => i != index);
 };
 
-let swap = (f, list) => {
-  list
-  |> Js.Array.mapi((l, i) => (i, l))
-  |> Array.to_list
-  |> f
-  |> Array.of_list
-  |> Array.map(((_i, a)) => a);
-};
-let moveUp = (t, index, list) => {
-  list |> swap(ListUtils.swapUp((index, t)));
+let moveUp = (index, list) => {
+  list |> ArrayUtils.swapUp(index);
 };
 
-let moveDown = (t, index, list) => {
-  list |> swap(ListUtils.swapDown((index, t)));
+let moveDown = (index, list) => {
+  list |> ArrayUtils.swapDown(index);
 };
 
 let copy = (t, list) => {

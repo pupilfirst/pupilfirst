@@ -6,6 +6,12 @@ let copyAndSort = (f, t) => {
   cp;
 };
 
+let copyAndUnshift = (e, t) => {
+  let copy = t |> Array.copy;
+  copy |> Js.Array.unshift(e) |> ignore;
+  copy;
+};
+
 let isEmpty = a =>
   switch (a) {
   | [||] => true

@@ -697,7 +697,7 @@ let updateChecklistItem = (state, send, indexToChange, newChecklistItem) => {
 
 let addNewChecklistItem = (state, send) => {
   let newChecklist =
-    Array.append(state.checklist, [|ChecklistItem.createNew|]);
+    Array.append(state.checklist, [|ChecklistItem.longText|]);
   send(UpdateChecklist(newChecklist));
 };
 

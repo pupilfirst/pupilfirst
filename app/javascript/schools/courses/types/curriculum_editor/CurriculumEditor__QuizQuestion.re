@@ -26,12 +26,7 @@ let updateQuestion = (question, t) => {...t, question};
 let newAnswerOption = (id, t) => {
   let answerOption = CurriculumEditor__AnswerOption.empty(id, false);
   let newAnswerOptions =
-    t.answerOptions
-    |> Array.to_list
-    |> List.rev
-    |> List.append([answerOption])
-    |> List.rev
-    |> Array.of_list;
+    t.answerOptions |> ArrayUtils.copyAndUnshift(answerOption);
   {...t, answerOptions: newAnswerOptions};
 };
 

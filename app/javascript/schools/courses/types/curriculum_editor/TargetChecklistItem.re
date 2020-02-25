@@ -120,7 +120,7 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
   };
 };
 
-let createNew = {title: "", kind: LongText, optional: false};
+let longText = {title: "", kind: LongText, optional: false};
 
 let metadata = kind => {
   switch (kind) {
@@ -146,7 +146,7 @@ let isValidChecklistItem = t => {
   switch (t.kind) {
   | MultiChoice(choices) =>
     choices
-    |> Js.Array.filter(choice => choice |> String.trim |> String.length < 1)
+    |> Js.Array.filter(choice => choice |> String.trim == "")
     |> ArrayUtils.isEmpty
     && t.title
     |> String.trim

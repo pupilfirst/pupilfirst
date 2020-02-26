@@ -84,7 +84,7 @@ feature 'Target Overlay', js: true do
     find('.course-overlay__body-tab-item', text: 'Complete').click
     # completion instructions should be show on complete section for evaluated targets
     expect(page).to have_text(target_l1.completion_instructions)
-    long_answer = 'Sum deskripshun. Oops. Typoos aplenty.'
+    long_answer = Faker::Lorem.sentence
 
     fill_in 'Describe your submission', with: long_answer
 
@@ -242,7 +242,7 @@ feature 'Target Overlay', js: true do
 
       # The quiz result should be visible.
       within("div[aria-label='Question 1") do
-        expect(page).to have_content("Failed")
+        expect(page).to have_content("Incorrect")
       end
 
       expect(page).to have_content("Your Answer: #{q1_answer_1.value}")
@@ -251,7 +251,7 @@ feature 'Target Overlay', js: true do
       find("div[aria-label='Question 2']").click
 
       within("div[aria-label='Question 2") do
-        expect(page).to have_content("Passed")
+        expect(page).to have_content("Correct")
       end
 
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")

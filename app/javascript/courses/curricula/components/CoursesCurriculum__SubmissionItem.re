@@ -155,6 +155,7 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
        |> Array.map(file => {
             <div
               key={"file-" ++ (file |> ChecklistItem.fileId)}
+              ariaLabel={"file-" ++ (file |> ChecklistItem.filename)}
               target="_blank"
               className="w-1/3 pr-2 pb-2">
               <div
@@ -169,13 +170,14 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
                     {file |> ChecklistItem.filename |> str}
                   </span>
                 </div>
-                <span
+                <button
+                  title={"Remove " ++ (file |> ChecklistItem.filename)}
                   className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-100 border-l text-gray-700 hover:bg-gray-200 hover:text-gray-900"
                   onClick={_ =>
                     removeFile(callback, files, file |> ChecklistItem.fileId)
                   }>
                   <PfIcon className="if i-times-light text-sm" />
-                </span>
+                </button>
               </div>
             </div>
           })

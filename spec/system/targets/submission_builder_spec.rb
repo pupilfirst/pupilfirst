@@ -14,7 +14,7 @@ feature 'Submission Builder', js: true do
   let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1] }
 
-  scenario 'student visits a target with no checklist' do
+  scenario 'student submits a target with no checklist' do
     sign_in_user student.user, referer: target_path(target)
 
     # This target should have a 'Complete' section.
@@ -33,7 +33,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content("Target was marked as complete.")
   end
 
-  scenario 'student visits a target with a checklist kind long text' do
+  scenario 'student submits a target with long text' do
     question = Faker::Lorem.sentence
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }])
     long_answer = Faker::Lorem.sentence
@@ -70,7 +70,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_text(long_answer)
   end
 
-  scenario 'student visits a target with a checklist kind short text' do
+  scenario 'student submits a target with short text' do
     question = Faker::Lorem.sentence
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_SHORT_TEXT, optional: false }])
     short_answer = Faker::Lorem.words.join(' ')
@@ -107,7 +107,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_text(short_answer)
   end
 
-  scenario 'student visits a target with a checklist kind link' do
+  scenario 'student submits a target with a link' do
     question = Faker::Lorem.sentence
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_ATTACH_LINKS, optional: false }])
     link = 'https://example.com?q=1'
@@ -147,7 +147,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_text(link)
   end
 
-  scenario 'student visits a target with a checklist kind files' do
+  scenario 'student submits a target with files' do
     question = Faker::Lorem.sentence
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_ATTACH_FILES, optional: false }])
 
@@ -193,6 +193,38 @@ feature 'Submission Builder', js: true do
     expect(page).to have_text('mickey_mouse')
   end
 
+  scenario 'student submits a target with a choice' do
+    question = Faker::Lorem.sentence
+    choices = Faker::Lorem.words
+    target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_MULTI_CHOICE, optional: false, metadata: choices }])
+    answer = choices.last
+
+    sign_in_user student.user, referer: target_path(target)
+
+    # This target should have a 'Complete' section.
+    find('.course-overlay__body-tab-item', text: 'Complete').click
+
+    within("div[aria-label='0-multiChoice'") do
+      expect(page).to have_content(question)
+    end
+
+    # The submit button should be disabled at this point.
+    expect(page).to have_button('Submit', disabled: true)
+
+    find("label", text: answer).click
+
+    click_button 'Submit'
+
+    expect(page).to have_content('Your submission has been queued for review')
+
+    last_submission = TimelineEvent.last
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question, "result" => answer, "status" => "noAnswer" }])
+
+    expect(page).to have_text('Your Submissions')
+    expect(page).to have_text(question)
+    expect(page).to have_text(answer)
+  end
+
   scenario 'student visits a target with a checklist kind multi choice' do
     question = Faker::Lorem.sentence
     choices = Faker::Lorem.words
@@ -223,5 +255,60 @@ feature 'Submission Builder', js: true do
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
     expect(page).to have_text(answer)
+  end
+
+  scenario 'student submits a target with long text and skips a link' do
+    question_1 = Faker::Lorem.sentence
+    question_2 = Faker::Lorem.sentence
+    target.update!(checklist: [{ title: question_1, kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: question_2, kind: Target::CHECKLIST_KIND_ATTACH_LINKS, optional: true }])
+    long_answer = Faker::Lorem.sentence
+
+    sign_in_user student.user, referer: target_path(target)
+
+    # This target should have a 'Complete' section.
+    find('.course-overlay__body-tab-item', text: 'Complete').click
+
+    within("div[aria-label='0-longText'") do
+      expect(page).to have_content(question_1)
+    end
+
+    within("div[aria-label='1-link'") do
+      expect(page).to have_content(question_2)
+    end
+
+    # The submit button should be disabled at this point.
+    expect(page).to have_button('Submit', disabled: true)
+
+    # The user should be able to write text as description
+    fill_in question_1, with: long_answer
+
+    # The submit button should be enabled at this point.
+    expect(page).to have_button('Submit', disabled: false)
+
+    fill_in question_2, with: 'foobar'
+
+    expect(page).to have_content("This doesn't look like a valid URL.")
+
+    # The submit button should be disabled at this point.
+    expect(page).to have_button('Submit', disabled: true)
+
+    fill_in question_2, with: 'https://example.com?q=1'
+
+    # The submit button should be enabled at this point.
+    expect(page).to have_button('Submit', disabled: false)
+
+    fill_in question_2, with: ''
+
+    click_button 'Submit'
+
+    expect(page).to have_content('Your submission has been queued for review')
+
+    last_submission = TimelineEvent.last
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => long_answer, "status" => "noAnswer" }])
+
+    expect(page).to have_text('Your Submissions')
+    expect(page).to have_text(question_1)
+    expect(page).to have_text(long_answer)
+    expect(page).not_to have_text(question_2)
   end
 end

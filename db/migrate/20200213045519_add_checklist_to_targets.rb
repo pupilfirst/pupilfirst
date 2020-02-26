@@ -19,7 +19,7 @@ class AddChecklistToTargets < ActiveRecord::Migration[6.0]
 
   def default_checklist
     description = {
-      title: "Work on your submission",
+      title: "Describe your submission",
       kind: "longText",
       optional: false,
     }

@@ -4,6 +4,7 @@ module Mutations
     argument :grades, [Types::GradeInputType], required: true
     argument :feedback, String, required: false
     argument :checklist, GraphQL::Types::JSON, required: true
+    argument :note, String, required: false
 
     description "Create grading for submission"
 

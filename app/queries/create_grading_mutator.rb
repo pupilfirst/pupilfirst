@@ -3,6 +3,7 @@ class CreateGradingMutator < ApplicationQuery
 
   property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
   property :feedback, validates: { length: { maximum: 10_000 } }
+  property :note, validates: { length: { maximum: 10_000 } }
   property :grades
   property :checklist
 
@@ -28,11 +29,19 @@ class CreateGradingMutator < ApplicationQuery
         evaluated_at: Time.zone.now,
         checklist: checklist
       )
+
+      update_coach_note if note.present?
       send_feedback if feedback.present?
     end
   end
 
   private
+
+  def update_coach_note
+    submission.founders.each do |student|
+      CoachNote.create!(note: note, author_id: current_user.id, student_id: student.id)
+    end
+  end
 
   def valid_checklist
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
@@ -49,6 +58,7 @@ class CreateGradingMutator < ApplicationQuery
       faculty: coach,
       timeline_event: submission
     )
+
     StartupFeedbackModule::EmailService.new(startup_feedback).send
   end
 

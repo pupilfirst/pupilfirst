@@ -100,7 +100,7 @@ Here's an example interface, to select few sports.
       </div>
       <MultiSelect
         placeholder="Search sport"
-        emptyMessage="No sport selected"
+        emptySelectionMessage="No sport selected"
         selected={state.selected}
         unselected={unselected(state.selected)}
         onChange={setSportSearch(setState)}

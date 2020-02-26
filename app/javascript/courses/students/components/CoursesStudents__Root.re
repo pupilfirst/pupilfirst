@@ -35,6 +35,8 @@ module TeamsQuery = [%graphql
             avatarUrl
           }
           coachUserIds
+          accessEndsAt
+          droppedOutAt
         }
         pageInfo{
           endCursor,hasNextPage
@@ -243,11 +245,6 @@ let updateSearchInputString = (setState, event) => {
   setState(state => {...state, searchInputString});
 };
 
-let openOverlayCB = (studentId, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  ReasonReactRouter.push("/students/" ++ studentId ++ "/report");
-};
-
 let disableSearchButton = state => {
   switch (state.searchInputString) {
   | None => true
@@ -369,12 +366,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches) => {
            )
          | PartiallyLoaded(teams, cursor) =>
            <div>
-             <CoursesStudents__TeamsList
-               levels
-               teams
-               openOverlayCB
-               teamCoaches
-             />
+             <CoursesStudents__TeamsList levels teams teamCoaches />
              {switch (state.loading) {
               | LoadingMore =>
                 SkeletonLoading.multiple(
@@ -401,12 +393,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches) => {
               }}
            </div>
          | FullyLoaded(teams) =>
-           <CoursesStudents__TeamsList
-             levels
-             teams
-             openOverlayCB
-             teamCoaches
-           />
+           <CoursesStudents__TeamsList levels teams teamCoaches />
          }}
       </div>
     </div>

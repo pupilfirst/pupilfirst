@@ -30,14 +30,16 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   # @param email_address [String] email address to send email to
   # @param subject [String] subject of the email
   def simple_roadie_mail(email_address, subject, enable_reply: true)
-    roadie_mail(
-      {
-        to: email_address,
-        subject: subject,
-        **from_options(enable_reply)
-      },
-      roadie_options_for_school
-    )
+    options = { to: email_address, subject: subject, **from_options(enable_reply) }
+
+    if Rails.env.test?
+      mail(options)
+    else
+      roadie_mail(
+        options,
+        roadie_options_for_school
+      )
+    end
   end
 
   private

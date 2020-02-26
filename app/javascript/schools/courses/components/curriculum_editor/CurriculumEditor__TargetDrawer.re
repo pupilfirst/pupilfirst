@@ -37,22 +37,18 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
       ? defaultClasses ++ " curriculum-editor__target-drawer-tab--selected"
       : defaultClasses;
 
-  <a
-    href=path
-    onClick={e => {
-      e |> ReactEvent.Mouse.preventDefault;
-      confirmDirtyAction(
-        dirty,
-        () => {
-          setDirty(_ => false);
-          ReasonReactRouter.push(path);
-        },
-      );
-    }}
-    className=classes>
+  let confirm =
+    dirty
+      ? Some(
+          "There are unsaved changes. Are you sure you want to discard them?",
+        )
+      : None;
+
+  <Link
+    href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
     <i className={"fas " ++ iconClass} />
     <span className="ml-2"> {title |> str} </span>
-  </a>;
+  </Link>;
 };
 
 let closeDrawer = course =>

@@ -4,6 +4,6 @@ after 'development:schools', 'development:founders', 'development:faculty', 'dev
   school = School.first
   course = Course.first
 
-  community = school.communities.create!(name: Faker::Lorem.words(2).join(' ').titleize, target_linkable: true)
+  community = school.communities.create!(name: Faker::Lorem.words(number: 2).join(' ').titleize, target_linkable: true)
   CommunityCourseConnection.create!(course: course, community: community)
 end

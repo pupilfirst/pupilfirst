@@ -235,6 +235,12 @@ application to defer them instead, you can execute the jobs with:
 
 ## Documentation
 
+First, install the docsify CLI globally:
+
+    $ npm i docsify-cli -g
+
+Then serve the `docs` folder on the desired port.
+
     $ docsify serve docs -p 3010
 
 The `-p` option sets the port. Visit `localhost:PORT` to view docs locally.

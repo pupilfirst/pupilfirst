@@ -272,4 +272,21 @@ feature "Course students report", js: true do
       expect(page).to have_link(teammate.name, href: "/students/#{teammate.id}/report")
     end
   end
+
+  scenario 'coach is shown a warning about a student being dropped out' do
+    time = 1.day.ago
+    team.update!(dropped_out_at: time)
+
+    sign_in_user course_coach.user, referer: student_report_path(student)
+
+    expect(page).to have_text("This student dropped out of the course on #{time.strftime('%b %-d, %Y')}.")
+  end
+
+  scenario "coach is shown a warning about a student's access to a course having ended" do
+    time = 1.day.ago
+    team.update!(access_ends_at: time)
+    sign_in_user course_coach.user, referer: student_report_path(student)
+
+    expect(page).to have_text("This student's access to the course ended on #{time.strftime('%b %-d, %Y')}.")
+  end
 end

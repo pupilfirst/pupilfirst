@@ -14,11 +14,6 @@ type state = {
   selectedLevel: option(Level.t),
 };
 
-let openOverlay = (submissionId, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  ReasonReactRouter.push("/submissions/" ++ submissionId);
-};
-
 let updateLevel = (level, setState) => {
   setState(state =>
     {...state, selectedLevel: level, reviewedSubmissions: Unloaded}
@@ -221,14 +216,12 @@ let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
              submissions={state.pendingSubmissions}
              levels
              selectedLevel={state.selectedLevel}
-             openOverlayCB=openOverlay
            />
          | ReviewedSubmissions =>
            <CoursesReview__ShowReviewedSubmissions
              courseId
              selectedLevel={state.selectedLevel}
              levels
-             openOverlayCB=openOverlay
              reviewedSubmissions={state.reviewedSubmissions}
              updateReviewedSubmissionsCB={updateReviewedSubmissions(
                ~setState,

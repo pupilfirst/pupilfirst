@@ -2,10 +2,10 @@ puts 'Seeding school_strings'
 
 def agreement_text
   <<~AGREEMENT
-    #{Faker::Lorem.paragraph(30)}
+    #{Faker::Lorem.paragraph(sentence_count: 30)}
 
     #{Faker::Markdown.ordered_list}
-    #{Faker::Lorem.paragraph(20)}
+    #{Faker::Lorem.paragraph(sentence_count: 20)}
 
     #{Faker::Markdown.unordered_list}
   AGREEMENT

@@ -5,7 +5,7 @@ open CoursesReview__Types;
 let str = React.string;
 
 [@react.component]
-let make = (~submissions, ~levels, ~selectedLevel, ~openOverlayCB) => {
+let make = (~submissions, ~levels, ~selectedLevel) => {
   let submissionToShow =
     (
       switch (selectedLevel) {
@@ -31,13 +31,12 @@ let make = (~submissions, ~levels, ~selectedLevel, ~openOverlayCB) => {
      | _ =>
        submissionToShow
        |> Array.map(submission =>
-            <a
+            <Link
               href={"/submissions/" ++ (submission |> SubmissionInfo.id)}
               key={submission |> SubmissionInfo.id}
               ariaLabel={
                 "pending-submission-card-" ++ (submission |> SubmissionInfo.id)
               }
-              onClick={openOverlayCB(submission |> SubmissionInfo.id)}
               className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 border-orange-400 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
               <div className="w-full md:w-3/4">
                 <div className="block text-sm md:pr-2">
@@ -73,7 +72,7 @@ let make = (~submissions, ~levels, ~selectedLevel, ~openOverlayCB) => {
                   {submission |> SubmissionInfo.timeDistance |> str}
                 </div>
               </div>
-            </a>
+            </Link>
           )
        |> React.array
      }}

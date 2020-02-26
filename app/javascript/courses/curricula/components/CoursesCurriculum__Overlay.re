@@ -256,8 +256,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
 let renderLockReason = reason =>
   renderLocked(reason |> TargetStatus.lockReasonToString);
 
-let prerequisitesIncomplete =
-    (reason, target, targets, statusOfTargets, changeTargetCB) => {
+let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
   let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds;
   let prerequisiteTargets =
     targets
@@ -276,19 +275,18 @@ let prerequisitesIncomplete =
                    ts |> TargetStatus.targetId == (target |> Target.id)
                  );
 
-            <a
+            <Link
               href={"/targets/" ++ (target |> Target.id)}
               ariaLabel={"Select Target " ++ (target |> Target.id)}
               key={target |> Target.id}
-              className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-              onClick={changeTargetCB(target)}>
+              className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
               <span className="font-semibold text-left leading-snug">
                 {target |> Target.title |> str}
               </span>
               <span className={targetStatusClasses(targetStatus)}>
                 {targetStatus |> TargetStatus.statusToString |> str}
               </span>
-            </a>;
+            </Link>;
           })
        |> Array.of_list
        |> React.array}
@@ -296,19 +294,12 @@ let prerequisitesIncomplete =
   </div>;
 };
 
-let handleLocked =
-    (target, targets, targetStatus, statusOfTargets, changeTargetCB) =>
+let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
   switch (targetStatus |> TargetStatus.status) {
   | Locked(reason) =>
     switch (reason) {
     | PrerequisitesIncomplete =>
-      prerequisitesIncomplete(
-        reason,
-        target,
-        targets,
-        statusOfTargets,
-        changeTargetCB,
-      )
+      prerequisitesIncomplete(reason, target, targets, statusOfTargets)
     | CourseLocked
     | AccessLocked
     | LevelLocked => renderLockReason(reason)
@@ -468,9 +459,7 @@ let handlePendingStudents = (targetStatus, targetDetails, users) =>
   | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
   };
 
-let performQuickNavigation = (url, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-
+let performQuickNavigation = (send, _event) => {
   // Scroll to the top of the overlay before pushing the new URL.
   Webapi.Dom.(
     switch (document |> Document.getElementById("target-overlay")) {
@@ -481,8 +470,6 @@ let performQuickNavigation = (url, send, event) => {
 
   // Clear loaded target details.
   send(ClearTargetDetails);
-
-  ReasonReactRouter.push(url);
 };
 
 let navigationLink = (direction, url, send) => {
@@ -497,14 +484,14 @@ let navigationLink = (direction, url, send) => {
       <FaIcon classes={"fas " ++ icon} />
     );
 
-  <a
+  <Link
     href=url
-    onClick={performQuickNavigation(url, send)}
+    onClick={performQuickNavigation(send)}
     className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {text |> str} </span>
     {arrow(rightIcon)}
-  </a>;
+  </Link>;
 };
 
 let scrollOverlayToTop = _event => {
@@ -557,7 +544,6 @@ let make =
       ~addSubmissionCB,
       ~targets,
       ~statusOfTargets,
-      ~changeTargetCB,
       ~users,
       ~evaluationCriteria,
       ~coaches,
@@ -581,13 +567,7 @@ let make =
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
-        {handleLocked(
-           target,
-           targets,
-           targetStatus,
-           statusOfTargets,
-           changeTargetCB,
-         )}
+        {handleLocked(target, targets, targetStatus, statusOfTargets)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}
         {switch (state.targetDetails) {
          | Some(targetDetails) =>

@@ -115,6 +115,7 @@ let updateSubmission =
 let make =
     (
       ~submission,
+      ~teamSubmission,
       ~updateSubmissionCB,
       ~submissionNumber,
       ~currentCoach,
@@ -147,6 +148,7 @@ let make =
       </div>
       <CoursesReview__GradeCard
         submission
+        teamSubmission
         evaluationCriteria
         targetEvaluationCriteriaIds
         reviewChecklist

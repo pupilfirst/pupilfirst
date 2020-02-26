@@ -14,7 +14,7 @@ type format =
 let format = (f, t) => {
   let formatString =
     switch (f) {
-    | OnlyDate => "Do MMM YYYY"
+    | OnlyDate => "MMM D, YYYY"
     | DateWithYearAndTime => "Do MMM YYYY HH:mm"
     };
   dateFormat(t, formatString);
@@ -27,3 +27,5 @@ let randomId = () => {
   let time = Js.Date.now() |> Js.Float.toString;
   "I" ++ time ++ number |> Js.String.replace(".", "-");
 };
+
+let decode = json => json |> Json.Decode.string |> DateFns.parseString;

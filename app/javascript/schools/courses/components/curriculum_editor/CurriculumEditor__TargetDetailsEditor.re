@@ -605,14 +605,13 @@ let saveDisabled = state => {
     switch (state.methodOfCompletion) {
     | TakeQuiz => isValidQuiz(state.quiz)
     | MarkAsComplete => true
-    | Evaluated => state.evaluationCriteria |> ArrayUtils.isNotEmpty
+    | Evaluated =>
+      state.evaluationCriteria
+      |> ArrayUtils.isNotEmpty
+      && isValidChecklist(state.checklist)
     | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
     };
-  !hasValidTitle
-  || !hasValidMethodOfCompletion
-  || !isValidChecklist(state.checklist)
-  || !state.dirty
-  || state.saving;
+  !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
 };
 
 module UpdateTargetQuery = [%graphql

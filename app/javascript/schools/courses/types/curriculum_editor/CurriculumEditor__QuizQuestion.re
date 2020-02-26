@@ -26,7 +26,7 @@ let updateQuestion = (question, t) => {...t, question};
 let newAnswerOption = (id, t) => {
   let answerOption = CurriculumEditor__AnswerOption.empty(id, false);
   let newAnswerOptions =
-    t.answerOptions |> ArrayUtils.copyAndUnshift(answerOption);
+    t.answerOptions |> ArrayUtils.copyAndPush(answerOption);
   {...t, answerOptions: newAnswerOptions};
 };
 

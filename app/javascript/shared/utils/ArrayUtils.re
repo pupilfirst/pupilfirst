@@ -6,9 +6,9 @@ let copyAndSort = (f, t) => {
   cp;
 };
 
-let copyAndUnshift = (e, t) => {
+let copyAndPush = (e, t) => {
   let copy = t |> Array.copy;
-  copy |> Js.Array.unshift(e) |> ignore;
+  copy |> Js.Array.push(e) |> ignore;
   copy;
 };
 

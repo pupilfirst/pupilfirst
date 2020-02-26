@@ -70,11 +70,11 @@ let showStatus = status => {
   switch ((status: ChecklistItem.status)) {
   | Passed =>
     <div className="bg-green-200 rounded px-1 py-px text-green-800 text-tiny">
-      {"Passed" |> str}
+      {"Correct" |> str}
     </div>
   | Failed =>
     <div className="bg-red-200 rounded px-1 py-px text-red-800 text-tiny">
-      {"Failed" |> str}
+      {"Incorrect" |> str}
     </div>
   | NoAnswer => React.null
   };
@@ -96,11 +96,11 @@ let statusButtons = (index, status, callback, checklist) =>
     <div
       onClick={_ => callback(checklist |> ChecklistItem.makeFailed(index))}
       className={
-        "border border-gray-500 rounded -ml-px "
+        "border border-gray-500 rounded "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
       <PfIcon className="if i-times-light if-fw mr-2" />
-      {"This has a problem" |> str}
+      {"Mark as incorrect" |> str}
     </div>
     {switch ((status: ChecklistItem.status)) {
      | NoAnswer => React.null

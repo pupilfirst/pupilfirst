@@ -121,7 +121,8 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                       }>
                       <Checkbox
                         id={
-                          "review-checkbox-"
+                          DateTime.randomId()
+                          ++ "-review-checkbox-"
                           ++ (itemIndex |> string_of_int)
                           ++ (resultIndex |> string_of_int)
                         }

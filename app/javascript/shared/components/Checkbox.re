@@ -14,7 +14,7 @@ let make = (~id, ~label, ~onChange, ~checked=false) => {
     />
     <label className="checkbox-label flex items-center" htmlFor=id>
       <span>
-        <svg width="10px" height="8px" viewBox="0 0 12 10">
+        <svg width="11px" height="11px" viewBox="0 0 13 13">
           <polyline points="1.5 6 4.5 9 10.5 1" />
         </svg>
       </span>

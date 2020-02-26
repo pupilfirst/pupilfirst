@@ -91,32 +91,34 @@ let statusButtonSelectedClasses = (status, currentStatus) => {
   );
 };
 
+let statusButtonIcon = bool => {
+  bool
+    ? "if i-times-circle-solid text-lg if-fw mr-2"
+    : "if i-circle-regular text-lg if-fw mr-2";
+};
+
+let statusButtonOnClick = (bool, callback, checklist, index, _event) => {
+  bool
+    ? callback(checklist |> ChecklistItem.makeNoAnswer(index))
+    : callback(checklist |> ChecklistItem.makeFailed(index));
+};
+
 let statusButtons = (index, status, callback, checklist) =>
   <div className="mt-2">
-    <div
-      onClick={_ => callback(checklist |> ChecklistItem.makeFailed(index))}
+    <button
+      onClick={statusButtonOnClick(
+        status == ChecklistItem.Failed,
+        callback,
+        checklist,
+        index,
+      )}
       className={
         "border border-gray-500 rounded "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
-      <PfIcon className="if i-circle-regular text-lg if-fw mr-2" />
+      <PfIcon className={statusButtonIcon(status == ChecklistItem.Failed)} />
       {"Mark as incorrect" |> str}
-    </div>
-    {switch ((status: ChecklistItem.status)) {
-     | NoAnswer => React.null
-     | Passed
-     | Failed =>
-       <div
-         onClick={_ =>
-           callback(checklist |> ChecklistItem.makeNoAnswer(index))
-         }
-         className={statusButtonSelectedClasses(
-           ChecklistItem.NoAnswer,
-           status,
-         )}>
-         <i className="fas fa-redo" />
-       </div>
-     }}
+    </button>
   </div>;
 
 let computeShowResult = (pending, checklistItem) =>

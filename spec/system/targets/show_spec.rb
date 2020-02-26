@@ -108,7 +108,7 @@ feature 'Target Overlay', js: true do
 
     # Let's check the database to make sure the submission was created correctly
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Describe your submission", "result" => long_answer, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Describe your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     # The status should also be updated on the home page.
     click_button 'Close'

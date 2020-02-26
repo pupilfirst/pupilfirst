@@ -65,7 +65,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question, "result" => long_answer, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question, "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
@@ -102,7 +102,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_SHORT_TEXT, "title" => question, "result" => short_answer, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_SHORT_TEXT, "title" => question, "result" => short_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
@@ -142,7 +142,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_ATTACH_LINKS, "title" => question, "result" => link, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_ATTACH_LINKS, "title" => question, "result" => link, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
@@ -186,7 +186,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_ATTACH_FILES, "title" => question, "result" => "files", "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_ATTACH_FILES, "title" => question, "result" => "files", "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
@@ -220,7 +220,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question, "result" => answer, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question, "result" => answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
@@ -252,7 +252,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question, "result" => answer, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question, "result" => answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)
@@ -306,7 +306,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => long_answer, "status" => "noAnswer" }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question_1)

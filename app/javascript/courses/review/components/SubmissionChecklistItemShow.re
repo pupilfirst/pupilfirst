@@ -156,11 +156,11 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
   );
   let status = checklistItem |> ChecklistItem.status;
 
-  <div className={cardClasses(pending)}>
-    <div
-      ariaLabel={checklistItem |> ChecklistItem.title}
-      onClick={_ => setShowResult(_ => true)}
-      className={cardHeaderClasses(pending)}>
+  <div
+    className={cardClasses(pending)}
+    onClick={_ => setShowResult(_ => true)}
+    ariaLabel={checklistItem |> ChecklistItem.title}>
+    <div className={cardHeaderClasses(pending)}>
       <div className="inline-flex items-center">
         {statusIcon(updateChecklistCB, status)}
         <PfIcon

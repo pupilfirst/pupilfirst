@@ -211,6 +211,64 @@ feature 'Submissions show' do
     end
 
     scenario 'coach evaluates a pending submission without giving a feedback', js: true do
+      question_1 = Faker::Lorem.sentence
+      question_2 = Faker::Lorem.sentence
+      answer_1 = Faker::Lorem.sentence
+      answer_2 = "https://example.org/invalidLink"
+      checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_ATTACH_LINKS, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
+      submission_pending.update!(checklist: checklist)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      within("div[aria-label='#{submission_pending.checklist.first['title']}']") do
+        expect(page).to have_content(question_1)
+        expect(page).to have_content(answer_1)
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        expect(page).to have_content(question_2)
+        expect(page).to have_content(answer_2)
+        click_button 'Mark as incorrect'
+        expect(page).to have_content('Incorrect')
+      end
+
+      expect(page).to have_content('Grade Card')
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      # status should be reviewing as the target is not graded completely
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Reviewing')
+      end
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      # the status should be failed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Passed')
+      end
+
+      click_button 'Save grades'
+
+      dismiss_notification
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        expect(page).to have_content('Incorrect')
+      end
+
+      expect(submission_pending.reload.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_ATTACH_LINKS, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED }])
+
+      click_button('Undo Grading')
+
+      expect(page).to have_text("Add Your Feedback")
+
+      expect(submission_pending.reload.checklist).to eq(checklist)
+    end
+
+    scenario 'coach evaluates a pending submission without giving a feedback', js: true do
       sign_in_user coach.user, referer: timeline_event_path(submission_pending)
 
       expect(page).to have_content('Grade Card')

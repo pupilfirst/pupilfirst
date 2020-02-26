@@ -73,7 +73,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
 
         title = "Question #{index + 1}"
         result = " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
-        status = correct_answer == u_answer ? TimelineEvent::CHECKLIST_PASSED : TimelineEvent::CHECKLIST_FAILED
+        status = correct_answer == u_answer ? TimelineEvent::CHECKLIST_STATUS_PASSED : TimelineEvent::CHECKLIST_STATUS_FAILED
         checklist_item(title, result, status)
       end
 

@@ -156,6 +156,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
 
   <div className={cardClasses(pending)}>
     <div
+      ariaLabel={checklistItem |> ChecklistItem.title}
       onClick={_ => setShowResult(_ => true)}
       className={cardHeaderClasses(pending)}>
       <div className="inline-flex items-center">

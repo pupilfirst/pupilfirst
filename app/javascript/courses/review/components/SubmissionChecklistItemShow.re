@@ -55,12 +55,12 @@ let showlink = link =>
 let statusIcon = (updateChecklistCB, status) => {
   switch (updateChecklistCB, status: ChecklistItem.status) {
   | (None, Passed) =>
-    <FaIcon
-      classes="fas fa-check-circle text-green-500 text-lg mr-3 -ml-6 mt-1"
+    <PfIcon
+      className="if i-check-square-solid text-green-500 text-lg mr-3 -ml-6 mt-1 bg-white"
     />
   | (None, Failed) =>
-    <FaIcon
-      classes="fas fa-times-circle text-red-500 text-lg mr-3 -ml-6 mt-1"
+    <PfIcon
+      className="if i-times-square-solid text-red-500 text-lg mr-3 -ml-6 mt-1 bg-white"
     />
   | (_, _) => React.null
   };
@@ -99,7 +99,7 @@ let statusButtons = (index, status, callback, checklist) =>
         "border border-gray-500 rounded "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
-      <PfIcon className="if i-times-circle-regular text-lg if-fw mr-2" />
+      <PfIcon className="if i-circle-regular text-lg if-fw mr-2" />
       {"Mark as incorrect" |> str}
     </div>
     {switch ((status: ChecklistItem.status)) {

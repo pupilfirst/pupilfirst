@@ -86,7 +86,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_l1.completion_instructions)
     long_answer = Faker::Lorem.sentence
 
-    fill_in 'Describe your submission', with: long_answer
+    fill_in target_l1.checklist.first['title'], with: long_answer
 
     click_button 'Submit'
 
@@ -294,7 +294,8 @@ feature 'Target Overlay', js: true do
       # Both submissions should be visible, along with grading and all feedback from coaches.
 
       within("div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']") do
-        expect(page).to have_content(submission_1.checklist.first[:result])
+        find("div[aria-label='#{submission_1.checklist.first['title']}']").click
+        expect(page).to have_content(submission_1.checklist.first['result'])
 
         expect(page).to have_content("#{criterion_1.name}: Good")
         expect(page).to have_content("#{criterion_2.name}: Bad")
@@ -310,7 +311,8 @@ feature 'Target Overlay', js: true do
       end
 
       within("div[aria-label='Details about your submission on #{submission_2.created_at.strftime('%B %-d, %Y')}']") do
-        expect(page).to have_content(submission_2.checklist.first[:result])
+        find("div[aria-label='#{submission_2.checklist.first['title']}']").click
+        expect(page).to have_content(submission_2.checklist.first['result'])
 
         submission_grades = submission_2.timeline_event_grades
         expect(page).to have_content("#{criterion_1.name}: Wow")
@@ -330,7 +332,7 @@ feature 'Target Overlay', js: true do
 
       # There should be a cancel button to go back to viewing submissions.
       click_button 'Cancel'
-      expect(page).to have_content(submission_1.checklist.first[:result])
+      expect(page).to have_content(submission_1.checklist.first['title'])
     end
 
     context 'when the target is non-resubmittable' do
@@ -567,7 +569,7 @@ feature 'Target Overlay', js: true do
 
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
-        fill_in 'Describe your submission', with: Faker::Lorem.sentence
+        fill_in target_l1.checklist.first['title'], with: Faker::Lorem.sentence
 
         expect(page).to have_button('Submit', disabled: true)
 

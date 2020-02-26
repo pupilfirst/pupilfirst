@@ -34,7 +34,7 @@ feature 'Target Details Editor', js: true do
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
 
   before do
-    target_2_l2.evaluation_criterion_ids << evaluation_criterion.id
+    target_2_l2.evaluation_criteria << [evaluation_criterion]
   end
 
   scenario 'school admin modifies title and adds completion instruction to target' do
@@ -186,5 +186,56 @@ feature 'Target Details Editor', js: true do
     expect(target.role).to eq(Target::ROLE_TEAM)
     expect(target.prerequisite_targets.count).to eq(1)
     expect(target.prerequisite_targets.first).to eq(target_2_l2)
+  end
+
+  context 'admin adds checklist to a target' do
+    before do
+      sample_checklist = [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false }]
+      target_2_l2.update!(checklist: sample_checklist)
+    end
+
+    scenario 'admin modifies existing checklist in an evaluated target' do
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+      # Open the details editor for the target.
+      find("a[title='Edit details of target #{target_2_l2.title}']").click
+      expect(page).to have_text('What steps should the student take to complete this target?')
+
+      # Change the existing item
+      within("div[aria-label='checklist-item-1'") do
+        expect(page).to have_text('Write Long Text')
+        click_on 'Write Long Text'
+        expect(page).to have_text('Write Short Text')
+        expect(page).to have_text('Attach a Link')
+        expect(page).to have_text('Choose from a list')
+
+        click_on 'Write Short Text'
+        fill_in 'checklist-item-1-title', with: 'New title for long text item', fill_options: { clear: :backspace }
+      end
+
+      # Add few more checklist items of different kind
+      click_button 'Add a Step'
+
+      within("div[aria-label='checklist-item-2'") do
+        expect(page).to have_text('Write Long Text')
+        click_on 'Write Long Text'
+        click_on 'Upload Files'
+        fill_in 'checklist-item-2-title', with: 'Add a file for the submission', fill_options: { clear: :backspace }
+      end
+
+      click_button 'Add a Step'
+
+      within("div[aria-label='checklist-item-3'") do
+        expect(page).to have_text('Write Long Text')
+        click_on 'Write Long Text'
+        # Only 1 upload file item in a checklist should be allowed
+        expect(page).to_not have_text('Upload Files')
+        click_on 'Choose from a list'
+        expect(page).to have_text('Choices:')
+      end
+    end
+
+    scenario 'admin changes target from auto-verified to evaluated and adds a new checklist' do
+    end
   end
 end

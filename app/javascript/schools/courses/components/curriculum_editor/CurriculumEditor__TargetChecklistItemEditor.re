@@ -144,6 +144,7 @@ let multiChoiceEditor =
               <div
                 className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
                 <input
+                  name={"multichoice-input-" ++ (index + 1 |> string_of_int)}
                   className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
                   onChange={updateChoiceText(
                     index,
@@ -211,10 +212,11 @@ let make =
       ~copyChecklistItemCB,
       ~allowFileKind,
     ) => {
-  <div className="flex items-start py-2 relative">
-    <div
-      className="w-full bg-gray-100 border rounded-lg p-5 mr-1"
-      key={index |> string_of_int}>
+  <div
+    key={index |> string_of_int}
+    ariaLabel={"checklist-item-" ++ (index + 1 |> string_of_int)}
+    className="flex items-start py-2 relative">
+    <div className="w-full bg-gray-100 border rounded-lg p-5 mr-1">
       <div className="flex justify-between items-center">
         <div>
           {checklistDropdown(
@@ -241,6 +243,7 @@ let make =
       <div
         className="flex items-center text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
         <input
+          name={"checklist-item-" ++ (index + 1 |> string_of_int) ++ "-title"}
           className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none"
           placeholder="Describe this step"
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}

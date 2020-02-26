@@ -498,20 +498,20 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed_1)
 
       # submission 1
-      expect(page).to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).not_to have_text(submission_reviewed_2.description)
-      expect(page).not_to have_text(submission_reviewed_3.description)
+      expect(page).not_to have_text(submission_reviewed_2.checklist.first['title'])
+      expect(page).not_to have_text(submission_reviewed_3.checklist.first['title'])
 
       # submission 2 and 3
       visit timeline_event_path(submission_reviewed_3)
 
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).to have_text(submission_reviewed_3.description)
-      expect(page).to have_text(submission_reviewed_2.description)
-      expect(page).not_to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(submission_reviewed_3.checklist.first['title'])
+      expect(page).to have_text(submission_reviewed_2.checklist.first['title'])
+      expect(page).not_to have_text(submission_reviewed_1.checklist.first['title'])
     end
   end
 end

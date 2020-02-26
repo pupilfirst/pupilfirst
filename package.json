@@ -1,6 +1,9 @@
 {
   "name": "pupil-first",
   "private": true,
+  "workspaces": [
+    "app/javascript/packages/*"
+  ],
   "dependencies": {
     "@babel/preset-react": "^7.7.4",
     "@fortawesome/fontawesome-free": "^5.10.1",
@@ -27,7 +30,7 @@
     "markdown-it-sup": "^1.0.0",
     "pnotify": "^4.0.0",
     "postcss-scss": "^2.0.0",
-    "prismjs": "harigopal/prism#patch-1",
+    "prismjs": "^1.19.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-datepicker": "^2.9.6",
@@ -37,9 +40,12 @@
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
     "@baransu/graphql_ppx_re": "^0.4.9",
     "@graphql-codegen/cli": "^1.11.2",
     "@graphql-codegen/introspection": "^1.11.2",
+    "babel-loader": "^8.0.6",
     "bs-platform": "7.0.1",
     "graphql": "^14.5.8",
     "lerna": "^3.20.2",

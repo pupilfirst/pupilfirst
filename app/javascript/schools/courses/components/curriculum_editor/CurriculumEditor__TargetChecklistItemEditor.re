@@ -162,7 +162,7 @@ let multiChoiceEditor =
                     )
                   }>
                   {showRemoveIcon
-                     ? <PfIcon className="if i-times-light if-fw" />
+                     ? <PfIcon className="if i-times-regular if-fw" />
                      : React.null}
                 </button>
               </div>

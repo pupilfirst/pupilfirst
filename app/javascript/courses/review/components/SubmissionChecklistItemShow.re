@@ -99,7 +99,7 @@ let statusButtons = (index, status, callback, checklist) =>
         "border border-gray-500 rounded "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
-      <PfIcon className="if i-times-light if-fw mr-2" />
+      <PfIcon className="if i-times-circle-regular text-lg if-fw mr-2" />
       {"Mark as incorrect" |> str}
     </div>
     {switch ((status: ChecklistItem.status)) {

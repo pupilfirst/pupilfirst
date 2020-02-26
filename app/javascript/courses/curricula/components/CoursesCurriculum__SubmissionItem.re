@@ -176,7 +176,7 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
                   onClick={_ =>
                     removeFile(callback, files, file |> ChecklistItem.fileId)
                   }>
-                  <PfIcon className="if i-times-light text-sm" />
+                  <PfIcon className="if i-times-regular text-sm" />
                 </button>
               </div>
             </div>

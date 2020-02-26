@@ -266,7 +266,7 @@ let make =
                                       setState,
                                     )
                                   }>
-                                  <Icon className="if i-times-light" />
+                                  <Icon className="if i-times-regular" />
                                 </button>
                               </div>
                             </div>

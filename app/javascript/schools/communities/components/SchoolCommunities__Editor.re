@@ -130,7 +130,6 @@ let reducer = (state, action) =>
       dirty: true,
       selectedCourseIds:
         state.selectedCourseIds->Belt.Set.String.add(courseId),
-      courseSearch: "",
     }
   | DeselectCourse(courseId) => {
       ...state,

@@ -46,6 +46,10 @@ module Make = (Selectable: Selectable) => {
     "bg-" ++ colorForSelected ++ "-200 " ++ borderColor(colorForSelected);
   };
 
+  let searchVisible = (unselected, value) => {
+    value != "" || unselected |> Array.length > 3;
+  };
+
   [@react.component]
   let make =
       (
@@ -74,6 +78,7 @@ module Make = (Selectable: Selectable) => {
       );
 
     let searchResults = searchUnselected(value, unselected);
+    let showSearchForm = searchVisible(unselected, value);
 
     <div className="p-6 border rounded bg-gray-100">
       <div>
@@ -123,8 +128,12 @@ module Make = (Selectable: Selectable) => {
       </div>
       {unselected |> Array.length > 0
          ? <div className="flex relative pt-3">
-             <div className="text-sm bg-white rounded shadow pb-2 w-full">
-               {unselected |> Array.length > 3
+             <div
+               className={
+                 "text-sm bg-white rounded shadow w-full"
+                 ++ (showSearchForm ? " pb-2" : "")
+               }>
+               {showSearchForm
                   ? <div className="px-3 pt-3 pb-2">
                       <input
                         id=inputId
@@ -140,7 +149,7 @@ module Make = (Selectable: Selectable) => {
                   : React.null}
                <div
                  className={
-                   unselected |> Array.length > 3
+                   showSearchForm
                      ? "multiselect-inline__list overflow-y-scroll" : ""
                  }>
                  {searchResults

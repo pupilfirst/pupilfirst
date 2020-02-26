@@ -14,7 +14,7 @@ let kindIconClasses = result =>
   };
 
 let computeId = (index, checklistItem) => {
-  (index |> string_of_int) ++ ChecklistItem.kindAsString(checklistItem);
+  (index |> string_of_int) ++ "-" ++ ChecklistItem.kindAsString(checklistItem);
 };
 
 let placeholder = (id, checklistItem) => {
@@ -194,7 +194,7 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
 [@react.component]
 let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => {
   let id = computeId(index, checklistItem);
-  <div className="mt-4">
+  <div className="mt-4" ariaLabel=id>
     {placeholder(id, checklistItem)}
     <div className="md:pl-7 pt-2 pr-0 pb-4">
       {switch (checklistItem |> ChecklistItem.result) {

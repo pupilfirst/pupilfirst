@@ -177,26 +177,23 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
     <DisablingCover
       disabled={isBusy(state.formState)}
       message={statusText(state.formState)}>
-      {switch (state.checklist) {
-       | [||] =>
-         <div className="text-center">
-           {"This target has no actions. Click submit to complete the target"
-            |> str}
-         </div>
-       | checklist =>
-         checklist
-         |> Array.mapi((index, checklistItem) => {
-              <CoursesCurriculum__SubmissionItem
-                key={index |> string_of_int}
-                index
-                checklistItem
-                updateResultCB={updateResult(state, send, index)}
-                attachingCB={attaching(send)}
-                preview
-              />
-            })
-         |> React.array
-       }}
+      {state.checklist |> ArrayUtils.isEmpty
+         ? <div className="text-center">
+             {"This target has no actions. Click submit to complete the target"
+              |> str}
+           </div>
+         : state.checklist
+           |> Array.mapi((index, checklistItem) => {
+                <CoursesCurriculum__SubmissionItem
+                  key={index |> string_of_int}
+                  index
+                  checklistItem
+                  updateResultCB={updateResult(state, send, index)}
+                  attachingCB={attaching(send)}
+                  preview
+                />
+              })
+           |> React.array}
       <div className={buttonClasses(state.checklist)}>
         <button
           onClick={submit(state, send, target, addSubmissionCB)}

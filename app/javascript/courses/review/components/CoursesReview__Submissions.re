@@ -169,6 +169,7 @@ let make =
           ~submission,
           ~currentCoach,
           ~updateSubmissionCB,
+          ~checklist={submission |> Submission.checklist},
         )}
         updateReviewChecklistCB
         targetId

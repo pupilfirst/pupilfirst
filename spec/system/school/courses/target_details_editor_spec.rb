@@ -17,7 +17,7 @@ feature 'Target Details Editor', js: true do
   let!(:target_group_2) { create :target_group, level: level_2 }
   let!(:target_1_l1) { create :target, target_group: target_group_1 }
   let!(:target_1_l2) { create :target, target_group: target_group_2 }
-  let!(:target_2_l2) { create :target, target_group: target_group_2 }
+  let!(:target_2_l2) { create :target, target_group: target_group_2, evaluation_criteria: [evaluation_criterion] }
   let!(:target_3_l2) { create :target, target_group: target_group_2 }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
@@ -33,10 +33,6 @@ feature 'Target Details Editor', js: true do
   let(:quiz_question_2) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_1) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
-
-  before do
-    target_2_l2.evaluation_criteria << [evaluation_criterion]
-  end
 
   scenario 'school admin modifies title and adds completion instruction to target' do
     sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
@@ -189,25 +185,16 @@ feature 'Target Details Editor', js: true do
     expect(target.prerequisite_targets.first).to eq(target_2_l2)
   end
 
-  context 'admin adds checklist to a target' do
-    before do
-      basic_checklist = [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false }]
-      target_2_l2.update!(checklist: basic_checklist)
-
-      checklist_with_multiple_items = [
-        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false },
-        { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "Write something short about your submission", 'optional' => true },
-        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach link for your submission", 'optional' => true }
-      ]
-      target_3_l2.update!(checklist: checklist_with_multiple_items)
-      target_3_l2.evaluation_criteria << [evaluation_criterion]
-    end
+  context 'when targets have an existing checklist' do
+    let!(:target_2_l2) { create :target, :with_default_checklist, target_group: target_group_2, evaluation_criteria: [evaluation_criterion] }
+    let(:checklist_with_multiple_items) { [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false }, { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "Write something short about your submission", 'optional' => true }, { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach link for your submission", 'optional' => true }] }
+    let!(:target_3_l2) { create :target, target_group: target_group_2, checklist: checklist_with_multiple_items, evaluation_criteria: [evaluation_criterion] }
+    let!(:quiz_target) { create :target, target_group: target_group_2 }
+    let(:quiz) { create :quiz, target: quiz_target }
+    let(:quiz_question) { create :quiz_question, :with_answers, quiz: quiz }
 
     scenario 'admin expands the existing checklist in an evaluated target' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
-
-      # Open the details editor for the target.
-      find("a[title='Edit details of target #{target_2_l2.title}']").click
+      sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_2_l2.id)
       expect(page).to have_text('What steps should the student take to complete this target?')
 
       # Change the existing item
@@ -226,7 +213,6 @@ feature 'Target Details Editor', js: true do
       click_button 'Add a Step'
 
       within("div[aria-label='Editor for checklist item 2'") do
-        expect(page).to have_text('Write Long Text')
         click_on 'Write Long Text'
         click_on 'Upload Files'
         fill_in 'checklist-item-2-title', with: 'Add a file for the submission', fill_options: { clear: :backspace }
@@ -236,7 +222,6 @@ feature 'Target Details Editor', js: true do
       click_button 'Add a Step'
 
       within("div[aria-label='Editor for checklist item 3'") do
-        expect(page).to have_text('Write Long Text')
         click_on 'Write Long Text'
         # Only 1 upload file item in a checklist should be allowed
         expect(page).to_not have_text('Upload Files')
@@ -278,10 +263,8 @@ feature 'Target Details Editor', js: true do
     end
 
     scenario 'admin uses controls in checklist to remove, copy and move checklist items' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+      sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_3_l2.id)
 
-      # Open the details editor for the target.
-      find("a[title='Edit details of target #{target_3_l2.title}']").click
       expect(page).to have_text('What steps should the student take to complete this target?')
 
       # Move checklist item 1 down
@@ -329,35 +312,8 @@ feature 'Target Details Editor', js: true do
     end
 
     scenario 'admin changes target from quiz target to evaluated and adds a new checklist' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
-
-      # Open the details editor for the target.
-      find("a[title='Edit details of target #{target_1_l2.title}']").click
+      sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: quiz_target.id)
       expect(page).to_not have_text('What steps should the student take to complete this target?')
-
-      # Change it into a quiz target
-      within("div#method_of_completion") do
-        click_button 'Take a quiz to complete the target.'
-      end
-
-      replace_markdown(quiz_question_1, id: 'quiz-question-1')
-      fill_in 'quiz-question-1-answer-option-1', with: quiz_question_1_answer_option_1
-      fill_in 'quiz-question-1-answer-option-2', with: quiz_question_1_answer_option_2
-      find("a", text: "Add another Answer Option").click
-      fill_in 'quiz-question-1-answer-option-3', with: quiz_question_1_answer_option_3
-
-      within("div#quiz-question-1-answer-option-3-block") do
-        click_button 'Mark as correct'
-      end
-
-      click_button 'Update Target'
-      expect(page).to have_text("Target updated successfully")
-      dismiss_notification
-
-      target = target_1_l2.reload
-      expect(target.evaluation_criteria).to eq([])
-      expect(target.link_to_complete).to eq(nil)
-      expect(target.quiz.quiz_questions.count).to eq(1)
 
       # Change target into an evaluated target with checklist
       within("div#evaluated") do
@@ -373,22 +329,14 @@ feature 'Target Details Editor', js: true do
 
       expect(page).to have_text('This target has no steps. Students will be able to submit target without any action!')
 
-      # Add a new checklist item
-      click_button 'Add a Step'
-
-      within("div[aria-label='Editor for checklist item 1'") do
-        expect(page).to have_text('Write Long Text')
-        fill_in 'checklist-item-1-title', with: 'Write something about the submission', fill_options: { clear: :backspace }
-      end
-
       find("div[title='Select #{evaluation_criterion.display_name}']").click
 
       click_button 'Update Target'
       expect(page).to have_text("Target updated successfully")
       dismiss_notification
 
-      target = target_1_l2.reload
-      expected_checklist = [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about the submission", 'metadata' => [], 'optional' => false }]
+      target = quiz_target.reload
+      expected_checklist = []
       expect(target.checklist).to eq(expected_checklist)
       expect(target.quiz).to eq(nil)
       expect(target.evaluation_criteria.first).to eq(evaluation_criterion)

@@ -5,7 +5,6 @@ FactoryBot.define do
     target_group
     sequence(:sort_index)
     visibility { Target::VISIBILITY_LIVE }
-    checklist { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }] }
 
     trait :archived do
       safe_to_change_visibility { true }
@@ -31,7 +30,8 @@ FactoryBot.define do
     end
 
     trait :with_default_checklist do
-      checklist { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
+      checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: "Write something about your submission", optional: false }] }
+      # checklist { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
     end
 
     trait :with_markdown do

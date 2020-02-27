@@ -54,7 +54,12 @@ type action =
   | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
   | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateVisibility(TargetDetails.visibility)
-  | UpdateChecklist(array(ChecklistItem.t))
+  | UpdateChecklistItem(int, ChecklistItem.t)
+  | AddNewChecklistItem
+  | RemoveChecklistItem(int)
+  | MoveChecklistItemUp(int)
+  | MoveChecklistItemDown(int)
+  | CopyChecklistItem(int)
   | UpdateSaving
   | ResetEditor;
 
@@ -208,7 +213,40 @@ let reducer = (state, action) =>
     let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
-  | UpdateChecklist(checklist) => {...state, checklist, dirty: true}
+  | UpdateChecklistItem(indexToChange, newItem) => {
+      ...state,
+      checklist:
+        state.checklist
+        |> Array.mapi((index, checklistItem) =>
+             index == indexToChange ? newItem : checklistItem
+           ),
+      dirty: true,
+    }
+  | AddNewChecklistItem => {
+      ...state,
+      checklist: Array.append(state.checklist, [|ChecklistItem.longText|]),
+      dirty: true,
+    }
+  | RemoveChecklistItem(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.removeItem(index),
+      dirty: true,
+    }
+  | MoveChecklistItemUp(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.moveUp(index),
+      dirty: true,
+    }
+  | MoveChecklistItemDown(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.moveDown(index),
+      dirty: true,
+    }
+  | CopyChecklistItem(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.copy(index),
+      dirty: true,
+    }
   | UpdateSaving => {...state, saving: !state.saving}
   | ResetEditor => {...state, saving: false, dirty: false}
   };
@@ -693,35 +731,28 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
-let updateChecklistItem = (state, send, indexToChange, newChecklistItem) => {
-  let newChecklist =
-    state.checklist
-    |> Array.mapi((index, checklistItem) =>
-         index == indexToChange ? newChecklistItem : checklistItem
-       );
-  send(UpdateChecklist(newChecklist));
+let updateChecklistItem = (send, indexToChange, newChecklistItem) => {
+  send(UpdateChecklistItem(indexToChange, newChecklistItem));
 };
 
-let addNewChecklistItem = (state, send) => {
-  let newChecklist =
-    Array.append(state.checklist, [|ChecklistItem.longText|]);
-  send(UpdateChecklist(newChecklist));
+let addNewChecklistItem = send => {
+  send(AddNewChecklistItem);
 };
 
-let removeChecklistItem = (state, send, index, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(index)));
+let removeChecklistItem = (send, index, ()) => {
+  send(RemoveChecklistItem(index));
 };
 
-let moveChecklistItemUp = (state, send, index, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.moveUp(index)));
+let moveChecklistItemUp = (send, index, ()) => {
+  send(MoveChecklistItemUp(index));
 };
 
-let moveChecklistItemDown = (state, send, index, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.moveDown(index)));
+let moveChecklistItemDown = (send, index, ()) => {
+  send(MoveChecklistItemDown(index));
 };
 
-let copyChecklistItem = (state, send, item, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.copy(item)));
+let copyChecklistItem = (send, index, ()) => {
+  send(CopyChecklistItem(index));
 };
 
 [@react.component]
@@ -868,16 +899,12 @@ let make =
                        |> Array.mapi((index, checklistItem) => {
                             let moveChecklistItemUpCB =
                               index > 0
-                                ? Some(
-                                    moveChecklistItemUp(state, send, index),
-                                  )
+                                ? Some(moveChecklistItemUp(send, index))
                                 : None;
 
                             let moveChecklistItemDownCB =
                               index != Array.length(state.checklist) - 1
-                                ? Some(
-                                    moveChecklistItemDown(state, send, index),
-                                  )
+                                ? Some(moveChecklistItemDown(send, index))
                                 : None;
 
                             <CurriculumEditor__TargetChecklistItemEditor
@@ -885,21 +912,18 @@ let make =
                               checklistItem
                               index
                               updateChecklistItemCB={updateChecklistItem(
-                                state,
                                 send,
                                 index,
                               )}
                               removeChecklistItemCB={removeChecklistItem(
-                                state,
                                 send,
                                 index,
                               )}
                               ?moveChecklistItemUpCB
                               ?moveChecklistItemDownCB
                               copyChecklistItemCB={copyChecklistItem(
-                                state,
                                 send,
-                                checklistItem,
+                                index,
                               )}
                               allowFileKind
                             />;
@@ -923,7 +947,7 @@ let make =
                       <button
                         className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
                         disabled={state.checklist |> Array.length >= 15}
-                        onClick={_ => addNewChecklistItem(state, send)}>
+                        onClick={_ => addNewChecklistItem(send)}>
                         <PfIcon className="fas fa-plus-circle text-lg" />
                         <span className="font-semibold ml-2">
                           {"Add a Step" |> str}

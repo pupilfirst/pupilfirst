@@ -199,7 +199,6 @@ feature 'Target Details Editor', js: true do
 
       # Change the existing item
       within("div[aria-label='Editor for checklist item 1'") do
-        expect(page).to have_text('Write Long Text')
         click_on 'Write Long Text'
         expect(page).to have_text('Write Short Text')
         expect(page).to have_text('Attach a Link')
@@ -269,7 +268,6 @@ feature 'Target Details Editor', js: true do
 
       # Move checklist item 1 down
       within("div[aria-label='Controls for checklist item 1'") do
-        expect(page).to have_button('Move Down')
         expect(page).to have_button('Copy')
         expect(page).to have_button('Delete')
         expect(page).to_not have_button('Move Up')
@@ -278,7 +276,6 @@ feature 'Target Details Editor', js: true do
 
       # Move checklist item 3 up
       within("div[aria-label='Controls for checklist item 3'") do
-        expect(page).to have_button('Move Up')
         expect(page).to_not have_button('Move Down')
         click_button 'Move Up'
       end

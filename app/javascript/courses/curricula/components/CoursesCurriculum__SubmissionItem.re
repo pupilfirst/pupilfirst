@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open CoursesCurriculum__Types;
 
 let str = React.string;
@@ -28,10 +26,6 @@ let placeholder = (id, checklistItem) => {
       {title ++ (optional ? " (optional)" : "") |> str}
     </label>
   </div>;
-};
-
-let notBlank = string => {
-  string |> String.trim != "";
 };
 
 let showError = (message, active) =>
@@ -81,7 +75,7 @@ let showShortText = (value, id, callback) => {
     />
     {showError(
        "Answer should be less than 250 characters",
-       !ChecklistItem.validShortText(value) && notBlank(value),
+       !ChecklistItem.validShortText(value),
      )}
   </div>;
 };
@@ -100,7 +94,7 @@ let showLongText = (value, id, callback) => {
     />
     {showError(
        "Answer should be less than 1000 characters",
-       !ChecklistItem.validLongText(value) && notBlank(value),
+       !ChecklistItem.validLongText(value),
      )}
   </div>;
 };

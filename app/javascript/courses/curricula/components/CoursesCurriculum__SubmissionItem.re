@@ -15,6 +15,10 @@ let computeId = (index, checklistItem) => {
   (index |> string_of_int) ++ "-" ++ ChecklistItem.kindAsString(checklistItem);
 };
 
+let notBlank = string => {
+  string |> String.trim != "";
+};
+
 let placeholder = (id, checklistItem) => {
   let title = checklistItem |> ChecklistItem.title;
   let optional = checklistItem |> ChecklistItem.optional;
@@ -77,7 +81,7 @@ let showShortText = (value, id, updateResultCB) => {
     />
     {showError(
        "Answer should be less than 250 characters",
-       !ChecklistItem.validShortText(value),
+       !ChecklistItem.validShortText(value) && notBlank(value),
      )}
   </div>;
 };
@@ -98,7 +102,7 @@ let showLongText = (value, id, updateResultCB) => {
     />
     {showError(
        "Answer should be less than 1000 characters",
-       !ChecklistItem.validLongText(value),
+       !ChecklistItem.validLongText(value) && notBlank(value),
      )}
   </div>;
 };

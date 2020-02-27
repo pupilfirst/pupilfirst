@@ -15,8 +15,6 @@ feature 'Submission Builder', js: true do
   let!(:target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1] }
 
   scenario 'student submits a target with no checklist' do
-    target.update!(checklist: [])
-
     sign_in_user student.user, referer: target_path(target)
 
     # This target should have a 'Complete' section.
@@ -24,7 +22,7 @@ feature 'Submission Builder', js: true do
 
     expect(page).to have_text("This target has no actions. Click submit to complete the target")
 
-    click_button 'Submit'
+    click_button 'Complete'
 
     expect(page).to have_content('Your submission has been queued for review')
 

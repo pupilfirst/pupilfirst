@@ -154,13 +154,19 @@ let statusText = formState => {
   };
 };
 
-let tooltipText = (disabled, preview) =>
+let tooltipText = preview =>
   if (preview) {
-    "You are accessing the preview mode for this course";
-  } else if (disabled) {
-    "Please complete all the required steps to submit this target";
+    <span>
+      {"You are accessing the preview mode" |> str}
+      <br />
+      {"for this course" |> str}
+    </span>;
   } else {
-    "Submit for review";
+    <span>
+      {"Please complete all the required" |> str}
+      <br />
+      {"steps to submit this target" |> str}
+    </span>;
   };
 
 [@react.component]
@@ -188,7 +194,10 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
               })
            |> React.array}
       <div className={buttonClasses(state.checklist)}>
-        <Tooltip tip={tooltipText(isButtonDisabled(state), preview) |> str}>
+        <Tooltip
+          tip={tooltipText(preview)}
+          position=`Left
+          disabled={!isButtonDisabled(state)}>
           <button
             onClick={submit(state, send, target, addSubmissionCB)}
             disabled={isButtonDisabled(state) || preview}

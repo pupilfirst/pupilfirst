@@ -58,7 +58,7 @@ class CreateSubmissionMutator < ApplicationQuery
   def valid_response
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
       item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) &&
-        item['status'].in?(TimelineEvent::CHECKLIST_STATUS_NO_ANSWER) && item['result'].is_a?(String) &&
+        item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER && item['result'].is_a?(String) &&
         valid_result(item['kind'], item['result'])
     end
 
@@ -85,7 +85,7 @@ class CreateSubmissionMutator < ApplicationQuery
   # rubocop: enable Metrics/CyclomaticComplexity
 
   def attempted_minimum_questions
-    target_checklist.each do |c|
+    target.checklist.each do |c|
       next if c['optional'] == true
 
       item = checklist.select { |i| i["title"] == c['title'] }
@@ -94,10 +94,6 @@ class CreateSubmissionMutator < ApplicationQuery
 
       errors[:base] << "Missing answer for question: #{c['title']}"
     end
-  end
-
-  def target_checklist
-    @target_checklist ||= target.checklist
   end
 
   def timeline_event_files

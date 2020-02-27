@@ -11,7 +11,7 @@ class CreateGradingMutator < ApplicationQuery
   validate :should_not_be_graded
   validate :valid_evaluation_criteria
   validate :valid_grading
-  validate :valid_checklist
+  validate :right_shape_for_checklist
 
   def grade
     TimelineEvent.transaction do
@@ -43,9 +43,9 @@ class CreateGradingMutator < ApplicationQuery
     end
   end
 
-  def valid_checklist
+  def right_shape_for_checklist
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
-      item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) && item['status'].in?(TimelineEvent.valid_checklist_status) && item['result'].is_a?(String)
+      item['title'].is_a?(String) && item['kind'].in?([Target.valid_checklist_kind_types]) && item['status'].in?([TimelineEvent::CHECKLIST_STATUS_FAILED, TimelineEvent::CHECKLIST_STATUS_NO_ANSWER]) && item['result'].is_a?(String)
     end
 
     errors[:base] << 'Invalid checklist'

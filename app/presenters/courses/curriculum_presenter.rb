@@ -40,7 +40,6 @@ module Courses
 
     def default_props
       {
-        authenticity_token: view.form_authenticity_token,
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,

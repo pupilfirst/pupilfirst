@@ -45,10 +45,6 @@ feature 'Submission Builder', js: true do
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
 
-    within("div[aria-label='0-longText'") do
-      expect(page).to have_content(question)
-    end
-
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
 
@@ -82,10 +78,6 @@ feature 'Submission Builder', js: true do
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
 
-    within("div[aria-label='0-shortText'") do
-      expect(page).to have_content(question)
-    end
-
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
 
@@ -118,10 +110,6 @@ feature 'Submission Builder', js: true do
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
-
-    within("div[aria-label='0-link'") do
-      expect(page).to have_content(question)
-    end
 
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
@@ -192,42 +180,9 @@ feature 'Submission Builder', js: true do
     expect(page).to have_text(question)
     expect(page).to have_link('mickey_mouse.jpg', href: "/timeline_event_files/#{TimelineEventFile.last.id}/download")
     expect(page).to have_text('minnie_mouse')
-    expect(page).to have_text('mickey_mouse')
   end
 
-  scenario 'student submits a target with a choice' do
-    question = Faker::Lorem.sentence
-    choices = Faker::Lorem.words
-    target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_MULTI_CHOICE, optional: false, metadata: choices }])
-    answer = choices.last
-
-    sign_in_user student.user, referer: target_path(target)
-
-    # This target should have a 'Complete' section.
-    find('.course-overlay__body-tab-item', text: 'Complete').click
-
-    within("div[aria-label='0-multiChoice'") do
-      expect(page).to have_content(question)
-    end
-
-    # The submit button should be disabled at this point.
-    expect(page).to have_button('Submit', disabled: true)
-
-    find("label", text: answer).click
-
-    click_button 'Submit'
-
-    expect(page).to have_content('Your submission has been queued for review')
-
-    last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question, "result" => answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
-
-    expect(page).to have_text('Your Submissions')
-    expect(page).to have_text(question)
-    expect(page).to have_text(answer)
-  end
-
-  scenario 'student visits a target with a checklist kind multi choice' do
+  scenario 'student submits a target with an MCQ' do
     question = Faker::Lorem.sentence
     choices = Faker::Lorem.words
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_MULTI_CHOICE, optional: false, metadata: choices }])

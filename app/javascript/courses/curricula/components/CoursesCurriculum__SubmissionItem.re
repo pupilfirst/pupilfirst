@@ -41,14 +41,14 @@ let showError = (message, active) =>
     React.null;
   };
 
-let showLink = (value, id, callback) => {
+let showLink = (value, id, updateResultCB) => {
   <div>
     <input
       id
       type_="text"
       value
       onChange={e =>
-        callback(ChecklistItem.Link(ReactEvent.Form.target(e)##value))
+        updateResultCB(ChecklistItem.Link(ReactEvent.Form.target(e)##value))
       }
       placeholder="Type full URL starting with https://..."
       className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
@@ -60,7 +60,7 @@ let showLink = (value, id, callback) => {
   </div>;
 };
 
-let showShortText = (value, id, callback) => {
+let showShortText = (value, id, updateResultCB) => {
   <div>
     <input
       id
@@ -68,7 +68,9 @@ let showShortText = (value, id, callback) => {
       value
       maxLength=250
       onChange={e =>
-        callback(ChecklistItem.ShortText(ReactEvent.Form.target(e)##value))
+        updateResultCB(
+          ChecklistItem.ShortText(ReactEvent.Form.target(e)##value),
+        )
       }
       placeholder="Add a short text"
       className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
@@ -80,7 +82,7 @@ let showShortText = (value, id, callback) => {
   </div>;
 };
 
-let showLongText = (value, id, callback) => {
+let showLongText = (value, id, updateResultCB) => {
   <div>
     <textarea
       id
@@ -89,7 +91,9 @@ let showLongText = (value, id, callback) => {
       placeholder="Describe your work, or leave notes to the reviewer here. If you are submitting a URL, or need to attach a file, use the controls below to add them."
       value
       onChange={e =>
-        callback(ChecklistItem.LongText(ReactEvent.Form.target(e)##value))
+        updateResultCB(
+          ChecklistItem.LongText(ReactEvent.Form.target(e)##value),
+        )
       }
     />
     {showError(
@@ -99,13 +103,13 @@ let showLongText = (value, id, callback) => {
   </div>;
 };
 
-let checkboxOnChange = (choices, itemIndex, callback, event) => {
+let checkboxOnChange = (choices, itemIndex, updateResultCB, event) => {
   ReactEvent.Form.target(event)##checked
-    ? callback(ChecklistItem.MultiChoice(choices, Some(itemIndex)))
-    : callback(ChecklistItem.MultiChoice(choices, None));
+    ? updateResultCB(ChecklistItem.MultiChoice(choices, Some(itemIndex)))
+    : updateResultCB(ChecklistItem.MultiChoice(choices, None));
 };
 
-let showMultiChoice = (choices, choice, id, callback) => {
+let showMultiChoice = (choices, choice, id, updateResultCB) => {
   <div>
     <div>
       {choices
@@ -116,7 +120,7 @@ let showMultiChoice = (choices, choice, id, callback) => {
               key={index |> string_of_int}
               id={id ++ (index |> string_of_int)}
               label
-              onChange={checkboxOnChange(choices, index, callback)}
+              onChange={checkboxOnChange(choices, index, updateResultCB)}
               checked
             />;
           })
@@ -125,24 +129,24 @@ let showMultiChoice = (choices, choice, id, callback) => {
   </div>;
 };
 
-let attachFile = (callback, attachingCB, files, id, filename) => {
+let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false);
-  callback(
+  updateResultCB(
     ChecklistItem.Files(
       files |> Array.append([|ChecklistItem.makeFile(id, filename)|]),
     ),
   );
 };
 
-let removeFile = (callback, files, id) => {
-  callback(
+let removeFile = (updateResultCB, files, id) => {
+  updateResultCB(
     ChecklistItem.Files(
       files |> Js.Array.filter(a => a |> ChecklistItem.fileId != id),
     ),
   );
 };
 
-let showFiles = (files, preview, id, attachingCB, callback) => {
+let showFiles = (files, preview, id, attachingCB, updateResultCB) => {
   <div>
     <div className="flex flex-wrap" id>
       {files
@@ -168,7 +172,11 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
                   title={"Remove " ++ (file |> ChecklistItem.filename)}
                   className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-100 border-l text-gray-700 hover:bg-gray-200 hover:text-gray-900"
                   onClick={_ =>
-                    removeFile(callback, files, file |> ChecklistItem.fileId)
+                    removeFile(
+                      updateResultCB,
+                      files,
+                      file |> ChecklistItem.fileId,
+                    )
                   }>
                   <PfIcon className="if i-times-regular text-sm" />
                 </button>
@@ -180,7 +188,7 @@ let showFiles = (files, preview, id, attachingCB, callback) => {
     {files |> Array.length < 3
        ? <CoursesCurriculum__FileForm
            attachingCB
-           attachFileCB={attachFile(callback, attachingCB, files)}
+           attachFileCB={attachFile(updateResultCB, attachingCB, files)}
            preview
          />
        : React.null}

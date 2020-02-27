@@ -9,11 +9,11 @@ type formState =
   | Saving
   | Ready;
 
-let buttonContents = formState => {
+let buttonContents = (formState, checklist) => {
   let icon =
     switch (formState) {
     | Attaching
-    | Saving => <FaIcon classes="fas fa-spinner fa-spin mr-2" />
+    | Saving => <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
     | Ready => <FaIcon classes="fas fa-cloud-upload-alt mr-2" />
     };
 
@@ -22,7 +22,7 @@ let buttonContents = formState => {
       switch (formState) {
       | Attaching => "Attaching..."
       | Saving => "Submitting..."
-      | Ready => "Submit"
+      | Ready => checklist |> ArrayUtils.isEmpty ? "Complete" : "Submit"
       }
     )
     |> str;
@@ -154,6 +154,15 @@ let statusText = formState => {
   };
 };
 
+let tooltipText = (disabled, preview) =>
+  if (preview) {
+    "You are accessing the preview mode for this course";
+  } else if (disabled) {
+    "Please complete all the required steps to submit this target";
+  } else {
+    "Submit for review";
+  };
+
 [@react.component]
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist));
@@ -179,12 +188,14 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
               })
            |> React.array}
       <div className={buttonClasses(state.checklist)}>
-        <button
-          onClick={submit(state, send, target, addSubmissionCB)}
-          disabled={isButtonDisabled(state) || preview}
-          className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
-          {buttonContents(state.formState)}
-        </button>
+        <Tooltip tip={tooltipText(isButtonDisabled(state), preview) |> str}>
+          <button
+            onClick={submit(state, send, target, addSubmissionCB)}
+            disabled={isButtonDisabled(state) || preview}
+            className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
+            {buttonContents(state.formState, checklist)}
+          </button>
+        </Tooltip>
       </div>
     </DisablingCover>
   </div>;

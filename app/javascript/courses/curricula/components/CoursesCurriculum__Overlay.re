@@ -229,7 +229,9 @@ let overlayStatus = (course, target, targetStatus, preview) =>
           ++ targetStatusClass("course-overlay__close--", targetStatus)
         }
         onClick={_e => closeOverlay(course)}>
-        <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
+        <Icon
+          className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0"
+        />
         <span className="text-xs hidden lg:inline-block mt-px">
           {"Close" |> str}
         </span>
@@ -340,7 +342,6 @@ let completeSection =
       send,
       target,
       targetDetails,
-      authenticityToken,
       targetStatus,
       addSubmissionCB,
       evaluationCriteria,
@@ -540,7 +541,6 @@ let make =
       ~target,
       ~course,
       ~targetStatus,
-      ~authenticityToken,
       ~addSubmissionCB,
       ~targets,
       ~statusOfTargets,
@@ -603,7 +603,6 @@ let make =
               send,
               target,
               targetDetails,
-              authenticityToken,
               targetStatus,
               addSubmissionCB,
               evaluationCriteria,

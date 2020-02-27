@@ -550,19 +550,16 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_group_l2.name)
   end
 
-  context 'when accessing preview mode of curriculum' do
+  context 'when the user is a school admin' do
     let(:school_admin) { create :school_admin }
 
     context 'when the target is auto-verified' do
       let!(:target_l1) { create :target, :with_content, :with_default_checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
 
-      scenario "target show page should render in preview mode" do
+      scenario 'admin views the target in preview mode' do
         sign_in_user school_admin.user, referer: target_path(target_l1)
-        expect(page).to have_content('You are currently looking at a preview of this course.')
-      end
 
-      scenario 'tries to submit work on a target' do
-        sign_in_user school_admin.user, referer: target_path(target_l1)
+        expect(page).to have_content('You are currently looking at a preview of this course.')
 
         # This target should have a 'Complete' section.
         find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -587,7 +584,7 @@ feature 'Target Overlay', js: true do
       end
     end
 
-    context 'when the target is auto-verified' do
+    context 'when the target has a checklist' do
       let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'tries to completes an auto-verified target' do

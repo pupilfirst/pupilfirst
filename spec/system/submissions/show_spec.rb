@@ -210,7 +210,7 @@ feature 'Submissions show' do
       expect(target.reload.review_checklist).to eq([])
     end
 
-    scenario 'coach evaluates a pending submission without giving a feedback', js: true do
+    scenario 'coach evaluates a pending submission and mark a checklist as incorrect', js: true do
       question_1 = Faker::Lorem.sentence
       question_2 = Faker::Lorem.sentence
       answer_1 = Faker::Lorem.sentence

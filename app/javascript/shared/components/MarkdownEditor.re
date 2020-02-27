@@ -264,7 +264,7 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 };
 
 let controlsContainerClasses = mode =>
-  "border bg-gray-100 px-2 flex justify-between items-end "
+  "border bg-gray-100 text-sm px-2 flex justify-between items-end "
   ++ (
     switch (mode) {
     | Windowed(_) => "rounded-t border-gray-400 sticky top-0 z-20"
@@ -307,12 +307,12 @@ let controls = (value, state, send, onChange) => {
         {modeIcon(`Preview, mode)}
       </button>
       <button
-        className={buttonClasses ++ "rounded ml-2 hidden md:inline"}
+        className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(`Split, mode)}
       </button>
       <button
-        className={buttonClasses ++ "rounded  ml-2 hidden md:inline"}
+        className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(`Fullscreen, mode)}
         {switch (mode) {
@@ -358,7 +358,7 @@ let previewContainerClasses = mode =>
   "border-gray-400 bg-gray-100 "
   ++ (
     switch (mode |> previewType) {
-    | `WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-4"
+    | `WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-3"
     | `FullscreenPreview => "w-screen mx-auto"
     | `FullscreenSplit => "w-1/2 relative"
     }
@@ -525,8 +525,8 @@ let textareaClasses = mode => {
   "w-full outline-none font-mono "
   ++ (
     switch (mode) {
-    | Windowed(_) => "p-2"
-    | Fullscreen(_) => "px-2 pt-4 pb-8 h-full resize-none"
+    | Windowed(_) => "p-3"
+    | Fullscreen(_) => "px-3 pt-4 pb-8 h-full resize-none"
     }
   );
 };

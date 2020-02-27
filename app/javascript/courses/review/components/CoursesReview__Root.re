@@ -185,7 +185,7 @@ let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
               }>
               {"Pending" |> str}
               <span
-                className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
+                className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
                 {state.pendingSubmissions
                  |> Array.length
                  |> string_of_int

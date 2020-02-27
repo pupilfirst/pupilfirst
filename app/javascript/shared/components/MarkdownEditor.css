@@ -1,3 +1,7 @@
 .markdown-editor__footer-container {
   border-style: dashed solid solid solid;
 }
+
+.markdown-editor__windowed-preview-container {
+  min-height: 8.75rem;
+}

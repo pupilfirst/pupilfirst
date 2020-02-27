@@ -531,6 +531,7 @@ let noteForm = (submission, teamSubmission, note, send) =>
        | Some(note) =>
          <div className="ml-6 md:ml-7 mt-2">
            <MarkdownEditor
+             maxLength=10000
              textareaId
              value=note
              onChange={value => send(UpdateNote(value))}

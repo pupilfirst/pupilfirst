@@ -81,11 +81,11 @@ let showStatus = status => {
 };
 
 let statusButtonSelectedClasses = (status, currentStatus) => {
-  "inline-flex items-center cursor-pointer leading-tight px-3 py-2 font-semibold inline-block text-xs relative hover:bg-gray-100 hover:text-gray-700 "
+  "inline-flex items-center cursor-pointer leading-tight font-semibold inline-block text-xs relative hover:bg-gray-100 hover:text-gray-700 "
   ++ (
     switch (currentStatus: ChecklistItem.status, status: ChecklistItem.status) {
     | (Passed, Passed) => "bg-green-100 hover:bg-green-100 text-green-800 hover:text-green-800 border-green-500 z-10"
-    | (Failed, Failed) => "bg-red-100 hover:bg-red-100 text-red-800 hover:text-red-800 border-red-500 z-10"
+    | (Failed, Failed) => "bg-red-100 hover:bg-red-100 text-red-700 hover:text-red-700 border-red-500 z-10"
     | (_, _) => "bg-white"
     }
   );
@@ -93,8 +93,8 @@ let statusButtonSelectedClasses = (status, currentStatus) => {
 
 let statusButtonIcon = bool => {
   bool
-    ? "if i-times-circle-solid text-lg if-fw mr-2"
-    : "if i-circle-regular text-lg if-fw mr-2";
+    ? "if i-times-square-solid text-base if-fw"
+    : "if i-square-regular text-base if-fw text-gray-500";
 };
 
 let statusButtonOnClick = (bool, callback, checklist, index, _event) => {
@@ -103,7 +103,7 @@ let statusButtonOnClick = (bool, callback, checklist, index, _event) => {
     : callback(checklist |> ChecklistItem.makeFailed(index));
 };
 
-let statusButtons = (index, status, callback, checklist) =>
+let statusButton = (index, status, callback, checklist) =>
   <div className="mt-2">
     <button
       onClick={statusButtonOnClick(
@@ -116,8 +116,13 @@ let statusButtons = (index, status, callback, checklist) =>
         "border border-gray-500 rounded "
         ++ statusButtonSelectedClasses(ChecklistItem.Failed, status)
       }>
-      <PfIcon className={statusButtonIcon(status == ChecklistItem.Failed)} />
-      {"Mark as incorrect" |> str}
+      <span
+        className="w-8 p-2 border-r border-gray-500 flex items-center justify-center">
+        <PfIcon
+          className={statusButtonIcon(status == ChecklistItem.Failed)}
+        />
+      </span>
+      <span className="p-2"> {"Mark as incorrect" |> str} </span>
     </button>
   </div>;
 
@@ -156,11 +161,11 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
   );
   let status = checklistItem |> ChecklistItem.status;
 
-  <div
-    className={cardClasses(pending)}
-    onClick={_ => setShowResult(_ => true)}
-    ariaLabel={checklistItem |> ChecklistItem.title}>
-    <div className={cardHeaderClasses(pending)}>
+  <div className={cardClasses(pending)}>
+    <div
+      ariaLabel={checklistItem |> ChecklistItem.title}
+      onClick={_ => setShowResult(_ => true)}
+      className={cardHeaderClasses(pending)}>
       <div className="inline-flex items-center">
         {statusIcon(updateChecklistCB, status)}
         <PfIcon
@@ -190,7 +195,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
            </div>
            {switch (updateChecklistCB) {
             | Some(callback) =>
-              statusButtons(index, status, callback, checklist)
+              statusButton(index, status, callback, checklist)
             | None => React.null
             }}
          </div>

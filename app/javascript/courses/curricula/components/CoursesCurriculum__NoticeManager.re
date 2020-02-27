@@ -7,7 +7,7 @@ let showNotice =
       ~title,
       ~description,
       ~notice,
-      ~classes="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-lg px-6 pt-6 pb-8",
+      ~classes="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8",
       (),
     ) =>
   <div className=classes>

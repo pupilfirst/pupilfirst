@@ -504,7 +504,7 @@ let make =
     {switch (state.notice) {
      | LevelUp => React.null
      | _anyOtherNotice =>
-       <div>
+       <div className="relative">
          <CoursesCurriculum__LevelSelector
            levels
            teamLevel

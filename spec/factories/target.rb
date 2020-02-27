@@ -31,7 +31,6 @@ FactoryBot.define do
 
     trait :with_default_checklist do
       checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: "Write something about your submission", optional: false }] }
-      # checklist { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
     end
 
     trait :with_markdown do

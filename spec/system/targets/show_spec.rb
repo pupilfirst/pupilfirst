@@ -18,7 +18,7 @@ feature 'Target Overlay', js: true do
   let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_l0) { create :target, :with_content, target_group: target_group_l0 }
-  let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
+  let!(:target_l1) { create :target, :with_content, :with_default_checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
   let!(:target_l2) { create :target, :with_content, target_group: target_group_l2 }
   let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, sort_index: 2 }
   let!(:target_draft) { create :target, :draft, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
@@ -108,7 +108,7 @@ feature 'Target Overlay', js: true do
 
     # Let's check the database to make sure the submission was created correctly
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Describe your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Write something about your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     # The status should also be updated on the home page.
     click_button 'Close'
@@ -328,7 +328,7 @@ feature 'Target Overlay', js: true do
       # Adding another submissions should be possible.
       find('button', text: 'Add another submission').click
 
-      expect(page).to have_content('Describe your submission')
+      expect(page).to have_content('Write something about your submission')
 
       # There should be a cancel button to go back to viewing submissions.
       click_button 'Cancel'
@@ -554,7 +554,8 @@ feature 'Target Overlay', js: true do
     let(:school_admin) { create :school_admin }
 
     context 'when the target is auto-verified' do
-      let!(:target_l1) { create :target, :with_content, :with_default_checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
+      let(:checklist) { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
+      let!(:target_l1) { create :target, :with_content, checklist: checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
 
       scenario 'admin views the target in preview mode' do
         sign_in_user school_admin.user, referer: target_path(target_l1)

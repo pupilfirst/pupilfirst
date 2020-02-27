@@ -45,7 +45,7 @@ class CreateGradingMutator < ApplicationQuery
 
   def right_shape_for_checklist
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
-      item['title'].is_a?(String) && item['kind'].in?([Target.valid_checklist_kind_types]) && item['status'].in?([TimelineEvent::CHECKLIST_STATUS_FAILED, TimelineEvent::CHECKLIST_STATUS_NO_ANSWER]) && item['result'].is_a?(String)
+      item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) && item['status'].in?([TimelineEvent::CHECKLIST_STATUS_FAILED, TimelineEvent::CHECKLIST_STATUS_NO_ANSWER]) && item['result'].is_a?(String)
     end
 
     errors[:base] << 'Invalid checklist'

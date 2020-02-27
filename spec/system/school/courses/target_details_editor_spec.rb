@@ -36,7 +36,6 @@ feature 'Target Details Editor', js: true do
 
   before do
     target_2_l2.evaluation_criteria << [evaluation_criterion]
-    target_3_l2.evaluation_criteria << [evaluation_criterion]
   end
 
   scenario 'school admin modifies title and adds completion instruction to target' do
@@ -201,6 +200,7 @@ feature 'Target Details Editor', js: true do
         { 'kind' => Target::CHECKLIST_KIND_ATTACH_LINKS, 'title' => "Attach link for your submission", 'optional' => true }
       ]
       target_3_l2.update!(checklist: checklist_with_multiple_items)
+      target_3_l2.evaluation_criteria << [evaluation_criterion]
     end
 
     scenario 'admin expands the existing checklist in an evaluated target' do
@@ -247,6 +247,7 @@ feature 'Target Details Editor', js: true do
         fill_in 'multichoice-input-1', with: 'First Choice', fill_options: { clear: :backspace }
         fill_in 'multichoice-input-2', with: 'Second Choice', fill_options: { clear: :backspace }
         click_button 'Add a choice'
+        expect(page).to have_text('Not a valid choice')
         expect(page).to have_selector('.i-times-regular')
         fill_in 'multichoice-input-3', with: 'Another Choice', fill_options: { clear: :backspace }
         click_button 'Remove Choice 2'
@@ -255,7 +256,7 @@ feature 'Target Details Editor', js: true do
       click_button 'Add a Step'
 
       within("div[aria-label='Editor for checklist item 4'") do
-        expect(page).to have_text('Write Long Text')
+        expect(page).to have_text('Not a valid title')
         click_on 'Write Long Text'
         click_on 'Attach a Link'
         fill_in 'checklist-item-4-title', with: 'Attach a link for the submission', fill_options: { clear: :backspace }

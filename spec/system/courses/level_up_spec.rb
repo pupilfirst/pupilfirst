@@ -44,8 +44,7 @@ feature "Student levelling up", js: true do
 
     expect(page).to have_text(target_l1.completion_instructions)
 
-    fill_in 'Work on your submission', with: Faker::Lorem.sentence
-    click_button 'Submit'
+    click_button 'Complete'
 
     expect(page).to have_content('Your submission has been queued for review')
 

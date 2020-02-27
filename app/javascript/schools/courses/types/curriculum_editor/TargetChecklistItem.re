@@ -65,9 +65,9 @@ let moveDown = (index, list) => {
   list |> ArrayUtils.swapDown(index);
 };
 
-let copy = (t, list) => {
+let copy = (i, list) => {
   list
-  |> Array.map(item => item == t ? [item, item] : [item])
+  |> Array.mapi((index, item) => i == index ? [item, item] : [item])
   |> ArrayUtils.flatten;
 };
 

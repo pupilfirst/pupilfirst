@@ -54,7 +54,12 @@ type action =
   | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
   | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateVisibility(TargetDetails.visibility)
-  | UpdateChecklist(array(ChecklistItem.t))
+  | UpdateChecklistItem(int, ChecklistItem.t)
+  | AddNewChecklistItem
+  | RemoveChecklistItem(int)
+  | MoveChecklistItemUp(int)
+  | MoveChecklistItemDown(int)
+  | CopyChecklistItem(int)
   | UpdateSaving
   | ResetEditor;
 
@@ -208,7 +213,40 @@ let reducer = (state, action) =>
     let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
-  | UpdateChecklist(checklist) => {...state, checklist, dirty: true}
+  | UpdateChecklistItem(indexToChange, newItem) => {
+      ...state,
+      checklist:
+        state.checklist
+        |> Array.mapi((index, checklistItem) =>
+             index == indexToChange ? newItem : checklistItem
+           ),
+      dirty: true,
+    }
+  | AddNewChecklistItem => {
+      ...state,
+      checklist: Array.append(state.checklist, [|ChecklistItem.longText|]),
+      dirty: true,
+    }
+  | RemoveChecklistItem(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.removeItem(index),
+      dirty: true,
+    }
+  | MoveChecklistItemUp(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.moveUp(index),
+      dirty: true,
+    }
+  | MoveChecklistItemDown(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.moveDown(index),
+      dirty: true,
+    }
+  | CopyChecklistItem(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.copy(index),
+      dirty: true,
+    }
   | UpdateSaving => {...state, saving: !state.saving}
   | ResetEditor => {...state, saving: false, dirty: false}
   };
@@ -694,34 +732,27 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
 };
 
 let updateChecklistItem = (state, send, indexToChange, newChecklistItem) => {
-  let newChecklist =
-    state.checklist
-    |> Array.mapi((index, checklistItem) =>
-         index == indexToChange ? newChecklistItem : checklistItem
-       );
-  send(UpdateChecklist(newChecklist));
+  send(UpdateChecklistItem(indexToChange, newChecklistItem));
 };
 
 let addNewChecklistItem = (state, send) => {
-  let newChecklist =
-    Array.append(state.checklist, [|ChecklistItem.longText|]);
-  send(UpdateChecklist(newChecklist));
+  send(AddNewChecklistItem);
 };
 
 let removeChecklistItem = (state, send, index, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.removeItem(index)));
+  send(RemoveChecklistItem(index));
 };
 
 let moveChecklistItemUp = (state, send, index, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.moveUp(index)));
+  send(MoveChecklistItemUp(index));
 };
 
 let moveChecklistItemDown = (state, send, index, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.moveDown(index)));
+  send(MoveChecklistItemDown(index));
 };
 
-let copyChecklistItem = (state, send, item, ()) => {
-  send(UpdateChecklist(state.checklist |> ChecklistItem.copy(item)));
+let copyChecklistItem = (state, send, index, ()) => {
+  send(CopyChecklistItem(index));
 };
 
 [@react.component]
@@ -899,7 +930,7 @@ let make =
                               copyChecklistItemCB={copyChecklistItem(
                                 state,
                                 send,
-                                checklistItem,
+                                index,
                               )}
                               allowFileKind
                             />;

@@ -317,7 +317,9 @@ let controls = (value, state, send, onChange) => {
         {modeIcon(`Fullscreen, mode)}
         {switch (mode) {
          | Fullscreen(_) =>
-           <span className="ml-2"> {"Exit full-screen" |> str} </span>
+           <span className="ml-2 text-xs font-semibold">
+             {"Exit full-screen" |> str}
+           </span>
          | Windowed(_) => React.null
          }}
       </button>

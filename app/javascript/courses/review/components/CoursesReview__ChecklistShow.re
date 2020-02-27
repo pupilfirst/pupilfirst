@@ -1,5 +1,3 @@
-[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
-
 open CoursesReview__Types;
 
 type selectionItem = {

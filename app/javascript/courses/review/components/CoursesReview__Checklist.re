@@ -1,5 +1,3 @@
-[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
-
 type state =
   | Edit
   | Show;

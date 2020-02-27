@@ -67,9 +67,9 @@ class CreateSubmissionMutator < ApplicationQuery
 
   def valid_result(kind, result)
     case kind
-      when Target::CHECKLIST_KIND_ATTACH_FILES
+      when Target::CHECKLIST_KIND_FILES
         timeline_event_files.present?
-      when Target::CHECKLIST_KIND_ATTACH_LINKS
+      when Target::CHECKLIST_KIND_LINK
         result.length >= 3 && result.length <= 2048
       when Target::CHECKLIST_KIND_LONG_TEXT
         result.length >= 1

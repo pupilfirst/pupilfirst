@@ -215,7 +215,7 @@ feature 'Submissions show' do
       question_2 = Faker::Lorem.sentence
       answer_1 = Faker::Lorem.sentence
       answer_2 = "https://example.org/invalidLink"
-      checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_ATTACH_LINKS, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
+      checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
       submission_pending.update!(checklist: checklist)
 
       sign_in_user coach.user, referer: timeline_event_path(submission_pending)
@@ -259,7 +259,7 @@ feature 'Submissions show' do
         expect(page).to have_content('Incorrect')
       end
 
-      expect(submission_pending.reload.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_ATTACH_LINKS, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED }])
+      expect(submission_pending.reload.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED }])
 
       click_button('Undo Grading')
 

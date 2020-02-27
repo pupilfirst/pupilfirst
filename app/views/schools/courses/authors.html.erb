@@ -1,0 +1,13 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | Authors</title>
+<% end %>
+
+<%= content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolsCoursesAuthorsPack', nonce: true %>
+<% end %>
+
+<script id="schools-courses-authors__props" type="application/json">
+  <%= Schools::Courses::AuthorsPresenter.new(self, @course).props_to_json.html_safe %>
+</script>
+
+<div id="schools-courses-authors__root" class="flex flex-1 h-screen"></div>

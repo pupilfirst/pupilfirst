@@ -46,5 +46,8 @@ module Types
     field :update_image_block, mutation: Mutations::UpdateImageContentBlock, null: false
     field :update_target, mutation: Mutations::UpdateTarget, null: false
     field :create_target_version, mutation: Mutations::CreateTargetVersion, null: false
+    field :delete_course_author, mutation: Mutations::DeleteCourseAuthor, null: false
+    field :create_course_author, mutation: Mutations::CreateCourseAuthor, null: false
+    field :update_course_author, mutation: Mutations::UpdateCourseAuthor, null: false
   end
 end

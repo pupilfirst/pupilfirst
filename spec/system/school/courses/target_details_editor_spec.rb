@@ -18,6 +18,7 @@ feature 'Target Details Editor', js: true do
   let!(:target_1_l1) { create :target, target_group: target_group_1 }
   let!(:target_1_l2) { create :target, target_group: target_group_2 }
   let!(:target_2_l2) { create :target, target_group: target_group_2 }
+  let!(:target_3_l2) { create :target, target_group: target_group_2 }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:link_to_complete) { Faker::Internet.url }
@@ -190,11 +191,19 @@ feature 'Target Details Editor', js: true do
 
   context 'admin adds checklist to a target' do
     before do
-      sample_checklist = [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false }]
-      target_2_l2.update!(checklist: sample_checklist)
+      basic_checklist = [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false }]
+      target_2_l2.update!(checklist: basic_checklist)
+
+      checklist_with_multiple_items = [
+        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "Write something short about your submission", 'optional' => true },
+        { 'kind' => Target::CHECKLIST_KIND_ATTACH_LINKS, 'title' => "Attach link for your submission", 'optional' => true }
+      ]
+      target_3_l2.update!(checklist: checklist_with_multiple_items)
+      target_3_l2.evaluation_criteria << [evaluation_criterion]
     end
 
-    scenario 'admin modifies existing checklist in an evaluated target' do
+    scenario 'admin expands the existing checklist in an evaluated target' do
       sign_in_user course_author.user, referer: curriculum_school_course_path(course)
 
       # Open the details editor for the target.
@@ -202,7 +211,7 @@ feature 'Target Details Editor', js: true do
       expect(page).to have_text('What steps should the student take to complete this target?')
 
       # Change the existing item
-      within("div[aria-label='checklist-item-1'") do
+      within("div[aria-label='Editor for checklist item 1'") do
         expect(page).to have_text('Write Long Text')
         click_on 'Write Long Text'
         expect(page).to have_text('Write Short Text')
@@ -210,32 +219,179 @@ feature 'Target Details Editor', js: true do
         expect(page).to have_text('Choose from a list')
 
         click_on 'Write Short Text'
-        fill_in 'checklist-item-1-title', with: 'New title for long text item', fill_options: { clear: :backspace }
+        fill_in 'checklist-item-1-title', with: 'New title for short text item', fill_options: { clear: :backspace }
       end
 
       # Add few more checklist items of different kind
       click_button 'Add a Step'
 
-      within("div[aria-label='checklist-item-2'") do
+      within("div[aria-label='Editor for checklist item 2'") do
         expect(page).to have_text('Write Long Text')
         click_on 'Write Long Text'
         click_on 'Upload Files'
         fill_in 'checklist-item-2-title', with: 'Add a file for the submission', fill_options: { clear: :backspace }
+        check 'Optional'
       end
 
       click_button 'Add a Step'
 
-      within("div[aria-label='checklist-item-3'") do
+      within("div[aria-label='Editor for checklist item 3'") do
         expect(page).to have_text('Write Long Text')
         click_on 'Write Long Text'
         # Only 1 upload file item in a checklist should be allowed
         expect(page).to_not have_text('Upload Files')
         click_on 'Choose from a list'
         expect(page).to have_text('Choices:')
+        fill_in 'checklist-item-3-title', with: 'Choose one item', fill_options: { clear: :backspace }
+        expect(page).to_not have_selector('.i-times-regular')
+        fill_in 'multichoice-input-1', with: 'First Choice', fill_options: { clear: :backspace }
+        fill_in 'multichoice-input-2', with: 'Second Choice', fill_options: { clear: :backspace }
+        click_button 'Add a choice'
+        expect(page).to have_text('Not a valid choice')
+        expect(page).to have_selector('.i-times-regular')
+        fill_in 'multichoice-input-3', with: 'Another Choice', fill_options: { clear: :backspace }
+        click_button 'Remove Choice 2'
       end
+
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 4'") do
+        expect(page).to have_text('Not a valid title')
+        click_on 'Write Long Text'
+        click_on 'Attach a Link'
+        fill_in 'checklist-item-4-title', with: 'Attach a link for the submission', fill_options: { clear: :backspace }
+        check 'Optional'
+      end
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      expected_checklist = [
+        { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "New title for short text item", 'metadata' => [], 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_ATTACH_FILES, 'title' => "Add a file for the submission", 'metadata' => [], 'optional' => true },
+        { 'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE, 'title' => "Choose one item", 'metadata' => ["First Choice", "Another Choice"], 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_ATTACH_LINKS, 'title' => "Attach a link for the submission", 'metadata' => [], 'optional' => true }
+      ]
+
+      expect(target_2_l2.reload.checklist).to eq(expected_checklist)
     end
 
-    scenario 'admin changes target from auto-verified to evaluated and adds a new checklist' do
+    scenario 'admin uses controls in checklist to remove, copy and move checklist items' do
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+      # Open the details editor for the target.
+      find("a[title='Edit details of target #{target_3_l2.title}']").click
+      expect(page).to have_text('What steps should the student take to complete this target?')
+
+      # Move checklist item 1 down
+      within("div[aria-label='Controls for checklist item 1'") do
+        expect(page).to have_button('Move Down')
+        expect(page).to have_button('Copy')
+        expect(page).to have_button('Delete')
+        expect(page).to_not have_button('Move Up')
+        click_button 'Move Down'
+      end
+
+      # Move checklist item 3 up
+      within("div[aria-label='Controls for checklist item 3'") do
+        expect(page).to have_button('Move Up')
+        expect(page).to_not have_button('Move Down')
+        click_button 'Move Up'
+      end
+
+      # Delete checklist item 1
+      within("div[aria-label='Controls for checklist item 1'") do
+        click_button 'Delete'
+      end
+
+      # Copy checklist item 2 and change it's title
+      within("div[aria-label='Controls for checklist item 2'") do
+        click_button 'Copy'
+      end
+
+      within("div[aria-label='Editor for checklist item 3'") do
+        fill_in 'checklist-item-3-title', with: 'Changed title after copy', fill_options: { clear: :backspace }
+        check 'Optional'
+      end
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      expected_checklist = [
+        { 'kind' => Target::CHECKLIST_KIND_ATTACH_LINKS, 'title' => "Attach link for your submission", 'metadata' => [], 'optional' => true },
+        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'metadata' => [], 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Changed title after copy", 'metadata' => [], 'optional' => true }
+      ]
+
+      expect(target_3_l2.reload.checklist).to eq(expected_checklist)
+    end
+
+    scenario 'admin changes target from quiz target to evaluated and adds a new checklist' do
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+      # Open the details editor for the target.
+      find("a[title='Edit details of target #{target_1_l2.title}']").click
+      expect(page).to_not have_text('What steps should the student take to complete this target?')
+
+      # Change it into a quiz target
+      within("div#method_of_completion") do
+        click_button 'Take a quiz to complete the target.'
+      end
+
+      replace_markdown(quiz_question_1, id: 'quiz-question-1')
+      fill_in 'quiz-question-1-answer-option-1', with: quiz_question_1_answer_option_1
+      fill_in 'quiz-question-1-answer-option-2', with: quiz_question_1_answer_option_2
+      find("a", text: "Add another Answer Option").click
+      fill_in 'quiz-question-1-answer-option-3', with: quiz_question_1_answer_option_3
+
+      within("div#quiz-question-1-answer-option-3-block") do
+        click_button 'Mark as correct'
+      end
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      target = target_1_l2.reload
+      expect(target.evaluation_criteria).to eq([])
+      expect(target.link_to_complete).to eq(nil)
+      expect(target.quiz.quiz_questions.count).to eq(1)
+
+      # Change target into an evaluated target with checklist
+      within("div#evaluated") do
+        click_button 'Yes'
+      end
+
+      expect(page).to have_text('What steps should the student take to complete this target?')
+
+      # Remove the default checklist item
+      within("div[aria-label='Controls for checklist item 1'") do
+        click_button 'Delete'
+      end
+
+      expect(page).to have_text('This target has no steps. Students will be able to submit target without any action!')
+
+      # Add a new checklist item
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 1'") do
+        expect(page).to have_text('Write Long Text')
+        fill_in 'checklist-item-1-title', with: 'Write something about the submission', fill_options: { clear: :backspace }
+      end
+
+      find("div[title='Select #{evaluation_criterion.display_name}']").click
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      target = target_1_l2.reload
+      expected_checklist = [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about the submission", 'metadata' => [], 'optional' => false }]
+      expect(target.checklist).to eq(expected_checklist)
+      expect(target.quiz).to eq(nil)
+      expect(target.evaluation_criteria.first).to eq(evaluation_criterion)
     end
   end
 end

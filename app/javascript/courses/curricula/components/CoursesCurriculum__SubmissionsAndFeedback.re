@@ -128,7 +128,7 @@ let submissions =
 
        <div
          key={submission |> Submission.id}
-         className="mt-4 relative curriculum__submission-feedback-container"
+         className="mt-4 pb-4 relative curriculum__submission-feedback-container"
          ariaLabel={
            "Details about your submission on "
            ++ (submission |> Submission.createdAtPretty)
@@ -300,21 +300,28 @@ let make =
 
   <div>
     <div className="flex justify-between items-end border-b pb-2">
-      <h4> {"Your Submissions" |> str} </h4>
+      <h4 className="text-base md:text-xl"> {"Your Submissions" |> str} </h4>
       {targetStatus
        |> TargetStatus.canSubmit(
             ~resubmittable=target |> Target.resubmittable,
           )
-         ? <button
-             className="btn btn-primary"
-             onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
-             <span className="hidden md:inline">
-               <i className="fas fa-plus mr-2" />
-               {(showSubmissionForm ? "Cancel" : "Add another submission")
-                |> str}
-             </span>
-             <span className="md:hidden"> {"Add another" |> str} </span>
-           </button>
+         ? showSubmissionForm
+             ? <button
+                 className="btn btn-subtle"
+                 onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
+                 <PfIcon className="if i-times-regular text-lg mr-2" />
+                 <span className="hidden md:inline"> {"Cancel" |> str} </span>
+                 <span className="md:hidden"> {"Cancel" |> str} </span>
+               </button>
+             : <button
+                 className="btn btn-primary"
+                 onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
+                 <PfIcon className="if i-plus-regular text-lg mr-2" />
+                 <span className="hidden md:inline">
+                   {"Add another submission" |> str}
+                 </span>
+                 <span className="md:hidden"> {"Add another" |> str} </span>
+               </button>
          : React.null}
     </div>
     {showSubmissionForm

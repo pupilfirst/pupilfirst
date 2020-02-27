@@ -155,6 +155,7 @@ let multiChoiceEditor =
                   value=choice
                 />
                 <button
+                  title={"Remove Choice " ++ (index + 1 |> string_of_int)}
                   onClick={_ =>
                     removeMultichoiceOption(
                       index,
@@ -214,7 +215,7 @@ let make =
     ) => {
   <div
     key={index |> string_of_int}
-    ariaLabel={"checklist-item-" ++ (index + 1 |> string_of_int)}
+    ariaLabel={"Editor for checklist item " ++ (index + 1 |> string_of_int)}
     className="flex items-start py-2 relative">
     <div className="w-full bg-gray-100 border rounded-lg p-5 mr-1">
       <div className="flex justify-between items-center">
@@ -272,6 +273,9 @@ let make =
        }}
     </div>
     <div
+      ariaLabel={
+        "Controls for checklist item " ++ (index + 1 |> string_of_int)
+      }
       className="-mr-10 flex-shrink-0 border bg-gray-100 border rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
          ~icon="fa-arrow-up",

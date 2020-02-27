@@ -6,7 +6,7 @@
 #   kind: string - should match the target checklist kind (shortText, longText, link, files, multiChoice)
 #   title: string - title from the target checklist
 #   result: string - answer for the question taken from the user
-#   status: string - should be on of noAnswer, Passed, Failed. Passed can only be set by the server.
+#   status: string - should be one of noAnswer, Passed, Failed.
 # }
 
 class TimelineEvent < ApplicationRecord

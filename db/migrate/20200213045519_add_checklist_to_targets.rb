@@ -26,7 +26,7 @@ class AddChecklistToTargets < ActiveRecord::Migration[6.0]
 
     link =
       {
-        title: "Attach link",
+        title: "Attach a link",
         optional: true,
         kind: "link",
 

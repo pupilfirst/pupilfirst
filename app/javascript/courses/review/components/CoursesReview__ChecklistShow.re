@@ -84,6 +84,8 @@ let checklistItemChecked = (itemIndex, resultIndex, selection) => {
 [@react.component]
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
+  let (id, _setId) =
+    React.useState(() => DateTime.randomId() ++ "-review-checkbox-");
 
   <div className="relative border bg-gray-100 rounded-lg py-2 md:py-4">
     <div className="absolute right-0 top-0 -mt-9">
@@ -119,8 +121,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                       }>
                       <Checkbox
                         id={
-                          DateTime.randomId()
-                          ++ "-review-checkbox-"
+                          id
                           ++ (itemIndex |> string_of_int)
                           ++ (resultIndex |> string_of_int)
                         }

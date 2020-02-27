@@ -731,29 +731,6 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
-let updateChecklistItem = (send, indexToChange, newChecklistItem) => {
-  send(UpdateChecklistItem(indexToChange, newChecklistItem));
-};
-
-let addNewChecklistItem = send => {
-  send(AddNewChecklistItem);
-};
-
-let removeChecklistItem = (send, index, ()) => {
-  send(RemoveChecklistItem(index));
-};
-
-let moveChecklistItemUp = (send, index, ()) => {
-  send(MoveChecklistItemUp(index));
-};
-
-let moveChecklistItemDown = (send, index, ()) => {
-  send(MoveChecklistItemDown(index));
-};
-
-let copyChecklistItem = (send, index, ()) => {
-  send(CopyChecklistItem(index));
-};
 
 [@react.component]
 let make =
@@ -899,32 +876,38 @@ let make =
                        |> Array.mapi((index, checklistItem) => {
                             let moveChecklistItemUpCB =
                               index > 0
-                                ? Some(moveChecklistItemUp(send, index))
+                                ? Some(
+                                    () => send(MoveChecklistItemUp(index)),
+                                  )
                                 : None;
 
                             let moveChecklistItemDownCB =
                               index != Array.length(state.checklist) - 1
-                                ? Some(moveChecklistItemDown(send, index))
+                                ? Some(
+                                    () => send(MoveChecklistItemDown(index)),
+                                  )
                                 : None;
 
                             <CurriculumEditor__TargetChecklistItemEditor
                               key={index |> string_of_int}
                               checklistItem
                               index
-                              updateChecklistItemCB={updateChecklistItem(
-                                send,
-                                index,
-                              )}
-                              removeChecklistItemCB={removeChecklistItem(
-                                send,
-                                index,
-                              )}
+                              updateChecklistItemCB={newChecklistItem =>
+                                send(
+                                  UpdateChecklistItem(
+                                    index,
+                                    newChecklistItem,
+                                  ),
+                                )
+                              }
+                              removeChecklistItemCB={() =>
+                                send(RemoveChecklistItem(index))
+                              }
                               ?moveChecklistItemUpCB
                               ?moveChecklistItemDownCB
-                              copyChecklistItemCB={copyChecklistItem(
-                                send,
-                                index,
-                              )}
+                              copyChecklistItemCB={() =>
+                                send(CopyChecklistItem(index))
+                              }
                               allowFileKind
                             />;
                           })
@@ -947,7 +930,7 @@ let make =
                       <button
                         className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
                         disabled={state.checklist |> Array.length >= 15}
-                        onClick={_ => addNewChecklistItem(send)}>
+                        onClick={_ => send(AddNewChecklistItem)}>
                         <PfIcon className="fas fa-plus-circle text-lg" />
                         <span className="font-semibold ml-2">
                           {"Add a Step" |> str}

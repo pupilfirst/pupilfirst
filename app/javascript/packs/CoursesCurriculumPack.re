@@ -2,7 +2,6 @@ open CoursesCurriculum__Types;
 
 let decodeProps = json =>
   Json.Decode.(
-    json |> field("authenticityToken", string),
     json |> field("course", Course.decode),
     json |> field("levels", list(Level.decode)),
     json |> field("targetGroups", list(TargetGroup.decode)),
@@ -17,7 +16,6 @@ let decodeProps = json =>
   );
 
 let (
-  authenticityToken,
   course,
   levels,
   targetGroups,
@@ -34,7 +32,6 @@ let (
 
 ReactDOMRe.renderToElementWithId(
   <CoursesCurriculum
-    authenticityToken
     course
     levels
     targetGroups

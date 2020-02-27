@@ -26,7 +26,7 @@ let optional = t => t.optional;
 
 let make = (~result, ~title, ~optional) => {result, title, optional};
 
-let makeEmpty = targetChecklist => {
+let fromTargetChecklistItem = targetChecklist => {
   targetChecklist
   |> Array.map(tc => {
        let title = tc |> TargetChecklistItem.title;
@@ -43,7 +43,7 @@ let makeEmpty = targetChecklist => {
      });
 };
 
-let updateResult = (index, result, checklist) => {
+let updateResultAtIndex = (index, result, checklist) => {
   checklist |> Array.mapi((i, c) => {i == index ? {...c, result} : c});
 };
 
@@ -74,14 +74,7 @@ let kindAsString = t => {
   };
 };
 
-let encodeMultiChoice = (choices, index) => {
-  switch (index) {
-  | Some(i) => choices[i]
-  | None => ""
-  };
-};
-
-let encodeResult = t => {
+let resultAsString = t => {
   switch (t.result) {
   | Files(_) => "files"
   | Link(t)
@@ -150,7 +143,7 @@ let encode = t =>
       ("title", t.title |> string),
       ("kind", kindAsString(t) |> string),
       ("status", "noAnswer" |> string),
-      ("result", encodeResult(t) |> string),
+      ("result", resultAsString(t) |> string),
     ])
   );
 
@@ -159,13 +152,20 @@ let encodeArray = checklist =>
 
 let makeFiles = checklist => {
   checklist
-  |> Array.map(c =>
+  |> Js.Array.find(c =>
        switch (c.result) {
-       | Files(files) => files |> Array.to_list
-       | _anyOtherResult => []
+       | Files(_files) => true
+       | _anyOtherResult => false
        }
      )
-  |> ArrayUtils.flatten
+  |> OptionUtils.mapWithDefault(
+       c =>
+         switch (c.result) {
+         | Files(files) => files
+         | _anyOtherResult => [||]
+         },
+       [||],
+     )
   |> Array.map(f => {
        let url = "/timeline_event_files/" ++ f.id ++ "/download";
        SubmissionChecklistItem.makeFile(~name=f.name, ~id=f.id, ~url);

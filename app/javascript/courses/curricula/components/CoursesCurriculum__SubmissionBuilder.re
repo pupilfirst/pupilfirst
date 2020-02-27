@@ -7,15 +7,13 @@ let str = React.string;
 type formState =
   | Attaching
   | Saving
-  | Incomplete
   | Ready;
 
-let buttonContents = formState => {
+let buttonContents = (formState, checklist) => {
   let icon =
     switch (formState) {
     | Attaching
-    | Saving => <FaIcon classes="fas fa-spinner fa-spin mr-2" />
-    | Incomplete
+    | Saving => <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
     | Ready => <FaIcon classes="fas fa-cloud-upload-alt mr-2" />
     };
 
@@ -24,8 +22,7 @@ let buttonContents = formState => {
       switch (formState) {
       | Attaching => "Attaching..."
       | Saving => "Submitting..."
-      | Incomplete
-      | Ready => "Submit"
+      | Ready => checklist |> ArrayUtils.isEmpty ? "Complete" : "Submit"
       }
     )
     |> str;
@@ -39,17 +36,21 @@ type state = {
 };
 
 type action =
-  | UpdateFormState(formState)
+  | SetAttaching
+  | SetSaving
+  | SetReady
   | UpdateResponse(array(ChecklistItem.t));
 
 let initialState = checklist => {
   formState: Ready,
-  checklist: ChecklistItem.makeEmpty(checklist),
+  checklist: ChecklistItem.fromTargetChecklistItem(checklist),
 };
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateFormState(formState) => {...state, formState}
+  | SetAttaching => {...state, formState: Attaching}
+  | SetSaving => {...state, formState: Saving}
+  | SetReady => {...state, formState: Ready}
   | UpdateResponse(checklist) => {checklist, formState: Ready}
   };
 
@@ -57,7 +58,6 @@ let isBusy = formState =>
   switch (formState) {
   | Attaching
   | Saving => true
-  | Incomplete
   | Ready => false
   };
 
@@ -78,8 +78,7 @@ let isButtonDisabled = state => {
   (
     switch (state.formState) {
     | Attaching
-    | Saving
-    | Incomplete => true
+    | Saving => true
     | Ready => false
     }
   )
@@ -89,7 +88,7 @@ let isButtonDisabled = state => {
 let submit = (state, send, target, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
-  send(UpdateFormState(Saving));
+  send(SetSaving);
 
   let fileIds = state.checklist |> ChecklistItem.fileIds;
   let checklist = state.checklist |> ChecklistItem.encodeArray;
@@ -119,56 +118,50 @@ let submit = (state, send, target, addSubmissionCB, event) => {
          addSubmissionCB(newSubmission, newFiles);
        | None =>
          /* Enable the form again in case of a validation failure. */
-         send(UpdateFormState(Ready))
+         send(SetReady)
        };
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_error => {
        /* Enable the form again in case of server crash. */
-       send(UpdateFormState(Ready));
+       send(SetReady);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let isDescriptionDisabled = formState =>
-  switch (formState) {
-  | Saving => true
-  | Attaching
-  | Incomplete
-  | Ready => false
-  };
-
 let updateResult = (state, send, index, result) => {
   send(
     UpdateResponse(
-      state.checklist |> ChecklistItem.updateResult(index, result),
+      state.checklist |> ChecklistItem.updateResultAtIndex(index, result),
     ),
   );
 };
 
-let buttonClasses = checklist => {
+let buttonClasses = checklist =>
   "flex mt-3 "
-  ++ (
-    switch (checklist) {
-    | [||] => "justify-center"
-    | _ => " justify-end"
-    }
-  );
-};
+  ++ (checklist |> ArrayUtils.isEmpty ? "justify-center" : "justify-end");
 
-let attaching = (send, bool) => {
-  send(bool ? UpdateFormState(Attaching) : UpdateFormState(Ready));
+let setAttaching = (send, bool) => {
+  send(bool ? SetAttaching : SetReady);
 };
 
 let statusText = formState => {
   switch (formState) {
   | Attaching => "Attaching..."
   | Saving => "Submitting..."
-  | Incomplete
   | Ready => "Submit"
   };
 };
+
+let tooltipText = (disabled, preview) =>
+  if (preview) {
+    "You are accessing the preview mode for this course";
+  } else if (disabled) {
+    "Please complete all the required steps to submit this target";
+  } else {
+    "Submit for review";
+  };
 
 [@react.component]
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
@@ -189,18 +182,20 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
                   index
                   checklistItem
                   updateResultCB={updateResult(state, send, index)}
-                  attachingCB={attaching(send)}
+                  attachingCB={setAttaching(send)}
                   preview
                 />
               })
            |> React.array}
       <div className={buttonClasses(state.checklist)}>
-        <button
-          onClick={submit(state, send, target, addSubmissionCB)}
-          disabled={isButtonDisabled(state) || preview}
-          className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
-          {buttonContents(state.formState)}
-        </button>
+        <Tooltip tip={tooltipText(isButtonDisabled(state), preview) |> str}>
+          <button
+            onClick={submit(state, send, target, addSubmissionCB)}
+            disabled={isButtonDisabled(state) || preview}
+            className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
+            {buttonContents(state.formState, checklist)}
+          </button>
+        </Tooltip>
       </div>
     </DisablingCover>
   </div>;

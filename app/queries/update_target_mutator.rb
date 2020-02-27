@@ -75,7 +75,7 @@ class UpdateTargetMutator < ApplicationQuery
   def validate_checklist(checklist)
     checklist.respond_to?(:all?) && checklist.all? do |item|
       valid_string(item['title']) && valid_checklist_kind(item['kind']) && (item['optional'] == !!item['optional']) && valid_metadata(item)
-    end && checklist.select { |item| item['kind'] == Target::CHECKLIST_KIND_ATTACH_FILES }.count <= 1
+    end && checklist.select { |item| item['kind'] == Target::CHECKLIST_KIND_FILES }.count <= 1
   end
 
   def checklist_has_valid_data

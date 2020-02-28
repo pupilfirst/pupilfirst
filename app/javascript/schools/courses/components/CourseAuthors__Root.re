@@ -85,7 +85,7 @@ let renderAuthor = (rootPath, author, send) => {
     <div
       className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
       <a
-        className="w-full cursor-pointer p-4"
+        className="w-full cursor-pointer p-4 overflow-hidden"
         href=authorPath
         onClick={event => {
           ReactEvent.Mouse.preventDefault(event);

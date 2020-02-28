@@ -7,6 +7,7 @@ class CreateCourseAuthorMutator < ApplicationQuery
 
   validate :course_must_be_present
   validate :not_a_course_author
+  validate :not_be_an_admin
 
   def create_course_author
     CourseAuthor.transaction do
@@ -34,6 +35,12 @@ class CreateCourseAuthorMutator < ApplicationQuery
     return unless course.course_authors.joins(:user).pluck('users.email').include?(email)
 
     errors[:base] << "Already enrolled as author"
+  end
+
+  def not_be_an_admin
+    return if persisted_user&.school_admin.blank?
+
+    errors[:base] << "This user is already a school admin"
   end
 
   def persisted_user

@@ -87,6 +87,17 @@ feature 'Course authors editor', js: true do
     expect(CourseAuthor.count).to eq(0)
   end
 
+  scenario 'school admin attempts to add an admin as an author' do
+    sign_in_user school_admin.user, referer: new_school_course_author_path(course)
+
+    fill_in 'email', with: school_admin.user.email
+    fill_in 'name', with: name_for_user
+    click_button 'Create Author'
+
+    expect(page).to have_text('This user is already a school admin')
+    expect(CourseAuthor.joins(:user).where(users: { email: school_admin.user.email })).to be_blank
+  end
+
   scenario 'user who is not logged in tries to access course author editor interface' do
     visit authors_school_course_path(course)
     expect(page).to have_text("Please sign in to continue.")

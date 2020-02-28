@@ -12,6 +12,7 @@
   - [Exporting data](/exporting_data.md)
   - [School Customization](/school_customization.md)
   - [School Admins](/school_admins.md)
+  - [Course Authors](/course_authors.md)
 - **Coaching**
   - [Reviewing Submissions](/reviewing_submissions.md)
   - [Student Reports](/student_reports.md)

@@ -32,7 +32,7 @@ module Users
         if current_school_admin.present?
           current_school.courses
         else
-          current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access).uniq)
+          current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access + courses_with_author_access).uniq)
         end.with_attached_thumbnail
       end
     end
@@ -52,6 +52,10 @@ module Users
       @courses_with_review_access ||= begin
         current_user.faculty.present? ? current_user.faculty.reviewable_courses.pluck(:id) : []
       end
+    end
+
+    def courses_with_author_access
+      @courses_with_author_access ||= current_user.course_authors.pluck(:course_id)
     end
 
     def communities
@@ -85,6 +89,7 @@ module Users
           id: course.id,
           name: course.name,
           review: course.id.in?(courses_with_review_access),
+          author: course.id.in?(courses_with_author_access),
           enable_leaderboard: course.enable_leaderboard?,
           description: course.description,
           exited: student_dropped_out(course.id),

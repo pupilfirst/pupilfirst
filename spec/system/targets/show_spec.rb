@@ -553,7 +553,7 @@ feature 'Target Overlay', js: true do
   context 'when the user is a school admin' do
     let(:school_admin) { create :school_admin }
 
-    context 'when the target is auto-verified' do
+    context 'when the target has a checklist' do
       let(:checklist) { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
       let!(:target_l1) { create :target, :with_content, checklist: checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
 
@@ -585,7 +585,7 @@ feature 'Target Overlay', js: true do
       end
     end
 
-    context 'when the target has a checklist' do
+    context 'when the target is auto-verified' do
       let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'tries to completes an auto-verified target' do

@@ -114,16 +114,6 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) => {
 
 let longText = {title: "", kind: LongText, optional: false};
 
-let metadata = kind => {
-  switch (kind) {
-  | MultiChoice(choices) => choices
-  | Files
-  | Link
-  | ShortText
-  | LongText => [||]
-  };
-};
-
 let isFilesKind = t => {
   switch (t.kind) {
   | Files => true
@@ -150,32 +140,43 @@ let isValidChecklistItem = t => {
   };
 };
 
-let kindFromJs = (data, metadata) => {
-  switch (data) {
-  | "files" => Files
-  | "link" => Link
-  | "shortText" => ShortText
-  | "longText" => LongText
-  | "multiChoice" => MultiChoice(OptionUtils.default([||], metadata))
-  | kind =>
-    Rollbar.error(
-      "Unkown kind: "
-      ++ kind
-      ++ "recived in CurriculumEditor__TargetChecklistItem",
-    );
-    LongText;
+let decodeMetadata = (kind, json) => {
+  switch (kind) {
+  | `MultiChoice => json |> Json.Decode.(field("choices", array(string)))
   };
 };
 
 let decode = json => {
   Json.Decode.{
     kind:
-      kindFromJs(
-        json |> field("kind", string),
-        json |> Json.Decode.optional(field("metadata", array(string))),
-      ),
+      switch (json |> field("kind", string)) {
+      | "files" => Files
+      | "link" => Link
+      | "shortText" => ShortText
+      | "longText" => LongText
+      | "multiChoice" =>
+        MultiChoice(json |> field("metadata", decodeMetadata(`MultiChoice)))
+      | otherKind =>
+        Rollbar.error(
+          "Unkown kind: "
+          ++ otherKind
+          ++ "received in CurriculumEditor__TargetChecklistItem",
+        );
+        LongText;
+      },
     optional: json |> field("optional", bool),
     title: json |> field("title", string),
+  };
+};
+
+let encodeMetadata = kind => {
+  switch (kind) {
+  | MultiChoice(choices) =>
+    Json.Encode.(object_([("choices", choices |> stringArray)]))
+  | Files
+  | Link
+  | ShortText
+  | LongText => Json.Encode.(object_([]))
   };
 };
 
@@ -185,7 +186,7 @@ let encode = t =>
       ("kind", t.kind |> kindAsString |> string),
       ("title", t.title |> string),
       ("optional", t.optional |> bool),
-      ("metadata", t.kind |> metadata |> stringArray),
+      ("metadata", t.kind |> encodeMetadata),
     ])
   );
 

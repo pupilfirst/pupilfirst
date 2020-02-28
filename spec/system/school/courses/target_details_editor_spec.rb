@@ -252,10 +252,10 @@ feature 'Target Details Editor', js: true do
       dismiss_notification
 
       expected_checklist = [
-        { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "New title for short text item", 'metadata' => [], 'optional' => false },
-        { 'kind' => Target::CHECKLIST_KIND_FILES, 'title' => "Add a file for the submission", 'metadata' => [], 'optional' => true },
-        { 'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE, 'title' => "Choose one item", 'metadata' => ["First Choice", "Another Choice"], 'optional' => false },
-        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach a link for the submission", 'metadata' => [], 'optional' => true }
+        { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "New title for short text item", 'metadata' => {}, 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_FILES, 'title' => "Add a file for the submission", 'metadata' => {}, 'optional' => true },
+        { 'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE, 'title' => "Choose one item", 'metadata' => { 'choices' => ["First Choice", "Another Choice"] }, 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach a link for the submission", 'metadata' => {}, 'optional' => true }
       ]
 
       expect(target_2_l2.reload.checklist).to eq(expected_checklist)
@@ -300,9 +300,9 @@ feature 'Target Details Editor', js: true do
       dismiss_notification
 
       expected_checklist = [
-        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach link for your submission", 'metadata' => [], 'optional' => true },
-        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'metadata' => [], 'optional' => false },
-        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Changed title after copy", 'metadata' => [], 'optional' => true }
+        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach link for your submission", 'metadata' => {}, 'optional' => true },
+        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'metadata' => {}, 'optional' => false },
+        { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Changed title after copy", 'metadata' => {}, 'optional' => true }
       ]
 
       expect(target_3_l2.reload.checklist).to eq(expected_checklist)

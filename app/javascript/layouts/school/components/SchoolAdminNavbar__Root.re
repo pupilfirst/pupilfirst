@@ -225,6 +225,10 @@ let make =
         SelectedCourse(courseId, Authors),
         true,
       )
+    | ["school", "courses", courseId, "authors", _authorId] => (
+        SelectedCourse(courseId, Authors),
+        true,
+      )
     | ["school", "courses", courseId, "evaluation_criteria"] => (
         SelectedCourse(courseId, EvaluationCriteria),
         true,

@@ -63,6 +63,8 @@ Rails.application.routes.draw do
         post 'attach_images'
       end
 
+      resources :authors, only: %w[show new]
+
       resources :targets, only: [] do
         member do
           get 'content'

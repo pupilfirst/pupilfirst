@@ -25,7 +25,8 @@ module UpdateCourseAuthorQuery = [%graphql
 |}
 ];
 
-let createCourseAuthorQuery = (courseId, email, name, setSaving, addAuthorCB) => {
+let createCourseAuthorQuery =
+    (courseId, rootPath, email, name, setSaving, addAuthorCB) => {
   setSaving(_ => true);
   CreateCourseAuthorQuery.make(~courseId, ~email, ~name, ())
   |> GraphqlQuery.sendQuery
@@ -39,7 +40,9 @@ let createCourseAuthorQuery = (courseId, email, name, setSaving, addAuthorCB) =>
              ~email,
              ~avatarUrl=courseAuthor##avatarUrl,
            ),
-         )
+         );
+
+         ReasonReactRouter.push(rootPath);
        | None => setSaving(_ => false)
        };
        Js.Promise.resolve();
@@ -51,15 +54,20 @@ let createCourseAuthorQuery = (courseId, email, name, setSaving, addAuthorCB) =>
   |> ignore;
 };
 
-let updateCourseAuthorQuery = (author, name, setSaving, updateAuthorCB) => {
+let updateCourseAuthorQuery =
+    (rootPath, author, name, setSaving, updateAuthorCB) => {
   setSaving(_ => true);
   let id = author |> Author.id;
   UpdateCourseAuthorQuery.make(~id, ~name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       response##updateCourseAuthor##success
-         ? updateAuthorCB(author |> Author.updateName(name))
-         : setSaving(_ => false);
+       if (response##updateCourseAuthor##success) {
+         updateAuthorCB(author |> Author.updateName(name));
+         ReasonReactRouter.push(rootPath);
+       } else {
+         setSaving(_ => false);
+       };
+
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {
@@ -72,6 +80,7 @@ let updateCourseAuthorQuery = (author, name, setSaving, updateAuthorCB) => {
 let handleButtonClick =
     (
       courseId,
+      rootPath,
       author,
       setSaving,
       name,
@@ -83,9 +92,16 @@ let handleButtonClick =
   event |> ReactEvent.Mouse.preventDefault;
   switch (author) {
   | Some(author) =>
-    updateCourseAuthorQuery(author, name, setSaving, updateAuthorCB)
+    updateCourseAuthorQuery(rootPath, author, name, setSaving, updateAuthorCB)
   | None =>
-    createCourseAuthorQuery(courseId, email, name, setSaving, addAuthorCB)
+    createCourseAuthorQuery(
+      courseId,
+      rootPath,
+      email,
+      name,
+      setSaving,
+      addAuthorCB,
+    )
   };
 };
 
@@ -128,7 +144,7 @@ let emailInputDisabled = author =>
   };
 
 [@react.component]
-let make = (~courseId, ~author, ~addAuthorCB, ~updateAuthorCB) => {
+let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
   let (saving, setSaving) = React.useState(() => false);
 
   let (name, setName) =
@@ -209,6 +225,7 @@ let make = (~courseId, ~author, ~addAuthorCB, ~updateAuthorCB) => {
               disabled={saveDisabled(email, name, saving, author)}
               onClick={handleButtonClick(
                 courseId,
+                rootPath,
                 author,
                 setSaving,
                 name,

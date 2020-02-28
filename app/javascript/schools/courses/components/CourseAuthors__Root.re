@@ -1,13 +1,10 @@
+exception UnexpectedPathOnAuthorsInterface(list(string));
+
 let str = React.string;
 
 open CourseAuthors__Types;
 
-type editor =
-  | EditorOpen(option(Author.t))
-  | EditorHidden;
-
 type state = {
-  editor,
   authors: array(Author.t),
   deleting: bool,
 };
@@ -16,38 +13,29 @@ type action =
   | BeginDeleting
   | FailToDelete
   | FinishDeleting(Author.t)
-  | ShowEditor(Author.t)
   | AddAuthor(Author.t)
-  | UpdateAuthor(Author.t)
-  | CloseEditor
-  | AddNewAuthor;
+  | UpdateAuthor(Author.t);
 
 let reducer = (state, action) =>
   switch (action) {
   | BeginDeleting => {...state, deleting: true}
   | FailToDelete => {...state, deleting: false}
   | FinishDeleting(author) => {
-      ...state,
       deleting: false,
       authors:
         state.authors
         |> Js.Array.filter(a => a |> Author.id != (author |> Author.id)),
     }
-  | ShowEditor(author) => {...state, editor: EditorOpen(Some(author))}
   | AddAuthor(author) => {
       ...state,
       authors: state.authors |> Js.Array.concat([|author|]),
-      editor: EditorHidden,
     }
   | UpdateAuthor(author) => {
       ...state,
       authors:
         state.authors
         |> Array.map(a => a |> Author.id == (author |> Author.id) ? author : a),
-      editor: EditorHidden,
     }
-  | CloseEditor => {...state, editor: EditorHidden}
-  | AddNewAuthor => {...state, editor: EditorOpen(None)}
   };
 
 module DeleteCourseAuthorQuery = [%graphql
@@ -90,16 +78,18 @@ let removeCourseAuthor = (send, author, event) => {
   );
 };
 
-let renderAuthor = (author, send) =>
+let renderAuthor = (rootPath, author, send) => {
+  let authorPath = rootPath ++ "/" ++ (author |> Author.id);
   <div
     key={author |> Author.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
     <div
       className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
       <a
         className="w-full cursor-pointer p-4"
-        onClick={_event => {
-          ReactEvent.Mouse.preventDefault(_event);
-          send(ShowEditor(author));
+        href=authorPath
+        onClick={event => {
+          ReactEvent.Mouse.preventDefault(event);
+          ReasonReactRouter.push(authorPath);
         }}>
         <div className="flex">
           <span className="mr-4 flex-shrink-0">
@@ -134,33 +124,51 @@ let renderAuthor = (author, send) =>
       </div>
     </div>
   </div>;
+};
 
 [@react.component]
 let make = (~courseId, ~authors) => {
-  let (state, send) =
-    React.useReducer(
-      reducer,
-      {editor: EditorHidden, authors, deleting: false},
-    );
+  let (state, send) = React.useReducer(reducer, {authors, deleting: false});
+  let rootPath = "/school/courses/" ++ courseId ++ "/authors";
 
   <div className="flex flex-1 h-full overflow-y-scroll bg-gray-100">
     <div className="flex-1 flex flex-col">
-      {switch (state.editor) {
-       | EditorHidden => React.null
-       | EditorOpen(author) =>
-         <SchoolAdmin__EditorDrawer closeDrawerCB={_ => send(CloseEditor)}>
+      {let url = ReasonReactRouter.useUrl();
+       switch (url.path) {
+       | ["school", "courses", _courseId, "authors"] => React.null
+       | ["school", "courses", _courseId, "authors", authorId] =>
+         let author =
+           if (authorId == "new") {
+             None;
+           } else {
+             Some(
+               state.authors
+               |> ArrayUtils.unsafeFind(
+                    author => author |> Author.id == authorId,
+                    "Could not find author with ID "
+                    ++ authorId
+                    ++ " in the list of known authors for course with ID "
+                    ++ courseId,
+                  ),
+             );
+           };
+
+         <SchoolAdmin__EditorDrawer
+           closeDrawerCB={_ => ReasonReactRouter.push(rootPath)}>
            <CourseAuthors__Form
              courseId
+             rootPath
              author
              addAuthorCB={author => send(AddAuthor(author))}
              updateAuthorCB={author => send(UpdateAuthor(author))}
            />
-         </SchoolAdmin__EditorDrawer>
+         </SchoolAdmin__EditorDrawer>;
+       | otherPath => raise(UnexpectedPathOnAuthorsInterface(otherPath))
        }}
       <DisablingCover disabled={state.deleting} message="Deleting...">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
-            onClick={_ => send(AddNewAuthor)}
+            onClick={_ => ReasonReactRouter.push(rootPath ++ "/new")}
             className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {"Add New Author" |> str} </h5>
@@ -171,7 +179,7 @@ let make = (~courseId, ~authors) => {
             <div className="flex -mx-3 flex-wrap">
               {state.authors
                |> Author.sort
-               |> Array.map(author => renderAuthor(author, send))
+               |> Array.map(author => renderAuthor(rootPath, author, send))
                |> ReasonReact.array}
             </div>
           </div>

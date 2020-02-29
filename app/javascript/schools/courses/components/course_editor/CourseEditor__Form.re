@@ -72,12 +72,12 @@ module UpdateCourseQuery = [%graphql
 ];
 
 let updateName = (send, name) => {
-  let hasError = name |> String.length < 2;
+  let hasError = name |> String.trim |>String.length < 2;
   send(UpdateName(name, hasError));
 };
 
 let updateDescription = (send, description) => {
-  let lengthOfDescription = description |> String.length;
+  let lengthOfDescription = description |> String.trim |> String.length;
   let hasError = lengthOfDescription < 2 || lengthOfDescription >= 150;
   send(UpdateDescription(description, hasError));
 };

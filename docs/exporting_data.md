@@ -1,6 +1,6 @@
 # Exporting Data
 
-PupilFirst has a robust data export feature that'll let you pull data out of the PupilFirst platform, and into a spreadsheet. This allows you to come up with your own analysis of the student data from a course.
+Pupilfirst has a robust data export feature that'll let you pull data out of the Pupilfirst platform, and into a spreadsheet. This allows you to come up with your own analysis of the student data from a course.
 
 ![Course exports interface](https://res.cloudinary.com/sv-co/image/upload/v1574318122/pupilfirst_documentation/exporting_data/exports_page_aamvez.png)
 
@@ -46,7 +46,7 @@ If a student has submitted work on a target more than once, then the cell will i
 
 ## How to use exports
 
-While working with PupilFirst as school admins, we've realized that it's quite difficult (if not impossible) to predict the kind of analyses you'll want to perform ahead of time. On the other hand, if you can access the data on your students as a spreadsheets, it's often trivial to come up with new analyses by creating new formalae within a spreadsheet application.
+While working with Pupilfirst as school admins, we've realized that it's quite difficult (if not impossible) to predict the kind of analyses you'll want to perform ahead of time. On the other hand, if you can access the data on your students as a spreadsheets, it's often trivial to come up with new analyses by creating new formalae within a spreadsheet application.
 
 You can use the data in the spreadsheet to generate all kinds of reports. For example:
 
@@ -58,6 +58,6 @@ These are just a few tasks that we've used the exported data for. We're sure tha
 
 ## Moving common analyses into the platform
 
-As an admin, if you notice that you're repeatedly performing the same kind of analysis using exported spreadsheets, then it may be a candidate for inclusion as a feature within the platform. [We'd love to talk](mailto:support@pupilfirst.com) about improving the anayltics features of PupilFirst.
+As an admin, if you notice that you're repeatedly performing the same kind of analysis using exported spreadsheets, then it may be a candidate for inclusion as a feature within the platform. [We'd love to talk](mailto:support@pupilfirst.com) about improving the anayltics features of Pupilfirst.
 
 An example of a metric we've included using a similar process is the _average grade_ displayed within the student's report page. This is a number that is easy to calculate from the grades present in the spreadsheet, but was included in the report page because of its obvious utility and the ease with which it could be implemented within the platform.

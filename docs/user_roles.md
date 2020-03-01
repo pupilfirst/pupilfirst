@@ -1,6 +1,6 @@
 # User Roles
 
-There are three kinds of users within PupilFirst:
+There are three kinds of users within Pupilfirst:
 
 1. **School Admins:** They manage the school, and have full access to the school administration interface.
 2. **Coaches:** They can review submissions from students or teams that they are assigned to, monitor their progress, and have access to all communities in the school.

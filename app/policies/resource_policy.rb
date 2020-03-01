@@ -12,7 +12,7 @@ class ResourcePolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      # Return nothing if visiting a PupilFirst page.
+      # Return nothing if visiting a Pupilfirst page.
       return scope.none if current_school.blank?
 
       resources = scope.live.joins(:school).left_joins(:targets)

@@ -6,7 +6,7 @@ class DestroyAnswerLikeMutator < ApplicationQuery
   end
 
   def authorized?
-    # Can't unlike at PupilFirst, current user must exist, Can only unlike on answers in the same school.
+    # Can't unlike at Pupilfirst, current user must exist, Can only unlike on answers in the same school.
     return false unless current_school.present? && current_user.present? && (answer_like&.answer&.school == current_school)
 
     # Only a the liked user can can unlike.

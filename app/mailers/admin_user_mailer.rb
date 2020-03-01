@@ -1,7 +1,7 @@
-# Mails sent out to PupilFirst super-admin users.
+# Mails sent out to Pupilfirst super-admin users.
 #
 # TODO: The AdminUserMailer class should be removed.
-class AdminUserMailer < PupilFirstMailer
+class AdminUserMailer < PupilfirstMailer
   def vocalist_ping_results(message, recipient, admin_user, errors)
     @message = message
     @recipient = recipient

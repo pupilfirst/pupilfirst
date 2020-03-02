@@ -1,5 +1,5 @@
 module Users
-  # Send a single-use URL to a user that allows them to log into any PupilFirst-hosted domain.
+  # Send a single-use URL to a user that allows them to log into any Pupilfirst-hosted domain.
   class MailResetPasswordTokenService
     include RoutesResolvable
 

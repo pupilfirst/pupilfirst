@@ -58,9 +58,12 @@ Rails.application.routes.draw do
       member do
         get 'curriculum'
         get 'exports'
+        get 'authors'
         get 'evaluation_criteria'
         post 'attach_images'
       end
+
+      resources :authors, only: %w[show new]
 
       resources :targets, only: [] do
         member do

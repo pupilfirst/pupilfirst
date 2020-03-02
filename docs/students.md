@@ -57,7 +57,7 @@ Students whose access to a course has ended, or who were marked as dropped out w
 
 ## Teaming up students
 
-Students don't have to go through a course alone. PupilFirst allows you to create teams of students who progress through a course _together_.
+Students don't have to go through a course alone. Pupilfirst allows you to create teams of students who progress through a course _together_.
 
 1. Teams have a _name_ that identifies the group.
 2. Students in a team level up together.

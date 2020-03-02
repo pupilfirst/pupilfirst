@@ -1,7 +1,7 @@
-class PupilFirstMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
+class PupilfirstMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
   include Roadie::Rails::Mailer
 
-  default from: "PupilFirst <noreply@pupilfirst.com>"
+  default from: "Pupilfirst <noreply@pupilfirst.com>"
 
   layout 'mail/pupil_first'
 

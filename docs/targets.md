@@ -12,7 +12,7 @@ In the curriculum editor, you can mark your choice of target _groups_ as milesto
 
 **What happens if I don't mark any target group as milestone?**
 
-If a level doesn't contain at least one milestone target group, students will not be shown the option to level up. PupilFirst checks for the submission of milestone targets to determine whether a student can level up.
+If a level doesn't contain at least one milestone target group, students will not be shown the option to level up. Pupilfirst checks for the submission of milestone targets to determine whether a student can level up.
 
 **What if I want my students to complete every target? Do I have to mark all target as milestones?**
 

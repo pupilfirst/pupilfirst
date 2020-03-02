@@ -46,7 +46,7 @@ For students, a lot of the value of a difficult course comes from the in-depth a
 
 It's a _Markdown_ field where you can type your feedback for a student, and it'll be emailed along with the grade report. You can also send feedback _after_ grading a submission.
 
-Over the course of using PupilFirst ourselves, we've learned that reviewing submissions can be time-consuming, and that a lot of the work can be repetitive. If you notice this happening to you, then we'd suggest that you use the _Review Checklist_ feature that was built to speed up the review process.
+Over the course of using Pupilfirst ourselves, we've learned that reviewing submissions can be time-consuming, and that a lot of the work can be repetitive. If you notice this happening to you, then we'd suggest that you use the _Review Checklist_ feature that was built to speed up the review process.
 
 ### Review Checklist
 
@@ -65,4 +65,4 @@ You can write down notes about a student while you're reviewing a submission. Th
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 
 ?> **We'd appreciate any feedback you have about this process!**\
-The greater the difficultly of a course, the greater the importance of a good review process and targeted feedback. As always, if your experience as a teacher has shown you new approaches or techniques, our team at PupilFirst would be more than happy to [have a conversation about it](mailto:support@pupilfirst.com).
+The greater the difficultly of a course, the greater the importance of a good review process and targeted feedback. As always, if your experience as a teacher has shown you new approaches or techniques, our team at Pupilfirst would be more than happy to [have a conversation about it](mailto:support@pupilfirst.com).

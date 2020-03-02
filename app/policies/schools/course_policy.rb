@@ -31,6 +31,7 @@ module Schools
     alias create_students? attach_images?
     alias mark_teams_active? attach_images?
     alias exports? show?
+    alias authors? show?
     alias evaluation_criteria? show?
 
     class Scope < ::CoursePolicy::Scope

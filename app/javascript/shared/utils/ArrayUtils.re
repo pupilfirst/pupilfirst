@@ -25,6 +25,10 @@ let unsafeFind = (p, message, l) =>
   | Some(e) => e
   | None =>
     Rollbar.error(message);
+    Notification.error(
+      "An unexpected error occurred",
+      "Our team has been notified about this error. Please try reloading this page.",
+    );
     raise(UnsafeFindFailed(message));
   };
 

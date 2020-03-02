@@ -4,7 +4,7 @@ Coaches have access to a _Students_ tab that lists the students that they are [a
 
 ![Coach's list of students](https://res.cloudinary.com/sv-co/image/upload/v1574585484/pupilfirst_documentation/student_reports/students_page_wes4vn.png)
 
-If you have more than a handful of students, keeping track of them - how far they've progressed in the course, how well they're doing, and what issues they've had during their time - can be daunting. PupilFirst sets up a few simple interfaces to make these checks easier.
+If you have more than a handful of students, keeping track of them - how far they've progressed in the course, how well they're doing, and what issues they've had during their time - can be daunting. Pupilfirst sets up a few simple interfaces to make these checks easier.
 
 In the students list, coaches can search for a student by their name, or their team's name, and filter by the course level.
 

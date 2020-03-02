@@ -4530,6 +4530,65 @@
             "deprecationReason": null
           },
           {
+            "name": "createCourseAuthor",
+            "description": "",
+            "args": [
+              {
+                "name": "courseId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "name",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "email",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CreateCourseAuthorPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createCourseExport",
             "description": "",
             "args": [
@@ -5312,6 +5371,37 @@
             "deprecationReason": null
           },
           {
+            "name": "deleteCourseAuthor",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "DeleteCourseAuthorPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "deleteSchoolAdmin",
             "description": "",
             "args": [
@@ -5853,6 +5943,51 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "UpdateCoursePayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateCourseAuthor",
+            "description": "",
+            "args": [
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "name",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UpdateCourseAuthorPayload",
                 "ofType": null
               }
             },
@@ -6913,6 +7048,84 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CreateCourseAuthorPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "courseAuthor",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UserWithNameAndAvatar",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UserWithNameAndAvatar",
+        "description": "",
+        "fields": [
+          {
+            "name": "avatarUrl",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CreateCourseExportPayload",
         "description": "",
         "fields": [
@@ -7324,47 +7537,8 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "CreateSchoolAdmin",
+              "name": "UserWithNameAndAvatar",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "CreateSchoolAdmin",
-        "description": "",
-        "fields": [
-          {
-            "name": "avatarUrl",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -7647,6 +7821,33 @@
       {
         "kind": "OBJECT",
         "name": "DeleteContentBlockPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "success",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteCourseAuthorPayload",
         "description": "",
         "fields": [
           {
@@ -8084,6 +8285,33 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Course",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UpdateCourseAuthorPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "success",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },

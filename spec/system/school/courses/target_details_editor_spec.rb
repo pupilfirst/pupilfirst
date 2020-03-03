@@ -192,6 +192,9 @@ feature 'Target Details Editor', js: true do
     let!(:quiz_target) { create :target, target_group: target_group_2 }
     let(:quiz) { create :quiz, target: quiz_target }
     let(:quiz_question) { create :quiz_question, :with_answers, quiz: quiz }
+    let!(:submission_for_quiz_target_with_grades) { create(:timeline_event, latest: true, target: quiz_target, evaluated_at: 1.day.ago, passed_at: nil) }
+    let!(:timeline_event_grade) { create(:timeline_event_grade, timeline_event: submission_for_quiz_target_with_grades, evaluation_criterion: evaluation_criterion, grade: 2) }
+    let!(:submission_for_quiz_target_without_grades) { create(:timeline_event, latest: true, target: quiz_target, evaluated_at: nil, passed_at: 1.day.ago) }
 
     scenario 'admin expands the existing checklist in an evaluated target' do
       sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_2_l2.id)
@@ -337,6 +340,11 @@ feature 'Target Details Editor', js: true do
       expect(target.checklist).to eq(expected_checklist)
       expect(target.quiz).to eq(nil)
       expect(target.evaluation_criteria.first).to eq(evaluation_criterion)
+
+      # Check only the graded submissions are preserved on switching to an evaluated target
+      expect(target.timeline_events.count).to eq(1)
+      expect(target.timeline_events.first).to eq(submission_for_quiz_target_with_grades)
+      expect(target.timeline_events.where(id: submission_for_quiz_target_without_grades.id)).to eq([])
     end
   end
 end

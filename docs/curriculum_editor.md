@@ -121,7 +121,7 @@ Each step needs to have a title and an action type which together gives informat
 2. **Write Short Text:** Student needs to give a short write up based on the inputs in title
 3. **Attach a Link:** Student needs to attach a valid link to complete the step.
 4. **Upload Files:** Student needs to attach files to complete the step. Multiple files can be attached to a single step of this type.
-5. **Choose from a list:** This is kind of a multiple choice question where a student needs to respond by choosing on of the available options. You can list the choices using the editor and the number of choices should of course be greater that one.
+5. **Choose from a list:** This is kind of a multiple choice question where a student needs to respond by choosing one of the available options. You can list the choices using the editor and the number of choices should of course be greater that one.
 
 Here's an example target consisting, of four steps to complete the target:
 ![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png)

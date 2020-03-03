@@ -134,7 +134,7 @@ Few important information and restrictions while creating a target checklist:
 
 1. Only a maximum of 15 steps are allowed in a particular target
 2. Only one step of type _Upload Files_ is allowed in a target. Other action types can be used in multiple steps.
-3. It is allowed to create an evaluated target, without any steps. But this would mean a student can submit a target by just clicking the submit button without any action.
+3. It is allowed to create an evaluated target, without any steps. But this would mean a student can submit a target by just clicking the _Complete_ button without any action.
 
 Once steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students for each step. Here's a sample on how steps created for a target reflects in student submission interface and in coach review interface.
 

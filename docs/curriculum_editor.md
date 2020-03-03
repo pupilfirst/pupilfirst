@@ -136,7 +136,9 @@ Few important information and restrictions while creating a target checklist:
 2. Only one step of type _Upload Files_ is allowed in a target. Other action types can be used in multiple steps.
 3. It is allowed to create an evaluated target, without any steps. But this would mean a student can submit a target by just clicking the submit button without any action.
 
-Once steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students against each step.
+Once steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students for each step. Here's a sample on how steps created for a target reflects in student submission interface and in coach review interface.
+
+![Target checklist lifecycle](https://res.cloudinary.com/sv-co/image/upload/v1583213540/pupilfirst_documentation/curriculum_editor/target_checklist_steps_flwajd.jpg)
 
 ### Preparing a quiz
 

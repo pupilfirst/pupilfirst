@@ -10,7 +10,7 @@ This page has two tabs: _Pending_ and _Reviewed_, with submissions that are pend
 
 Clicking on a submission opens up the submission for review.
 
-![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1574335062/pupilfirst_documentation/reviewing_submissions/submission_in_overlay_ewxggk.png)
+![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1583215353/pupilfirst_documentation/reviewing_submissions/submission_in_overlay_icrse4.png)
 
 ## Submission Details
 
@@ -23,7 +23,7 @@ Because students can make multiple submissions to improve their grade on a targe
 
 Reviewing a submission involves going over the work that the student has submitted and deciding assigning it grades on each of its evaluation criteria.
 
-![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1582529474/pupilfirst_documentation/reviewing_submissions/submission_checklist_feedback_notes_and_grading_mgobsx.png)
+![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1583215466/pupilfirst_documentation/reviewing_submissions/submission_checklist_feedback_notes_and_grading_ez97b1.png)
 
 There's quite a bit to unpack here, so we'll go over each element one by one, starting with the _Grade Card_.
 
@@ -39,6 +39,10 @@ When you have more than one evaluation criteria, as in the example above, if the
 Once a grade has been assigned for all evaluation criteria, a coach can save the grading. The submission will then be removed from the _Pending_ list in the previous page.
 
 However, there is more that a coach can do besides assigning grades.
+
+### Marking Submission Items as Incorrect
+
+This is an optional step, where a coach can mark any particular submission items from a student as incorrect. A student submits a target by executing a series of [steps defined for the particular target](/curriculum_editor?id=defining-steps-to-complete-a-target). A coach can mark a particular item as incorrect using the _Mark as incorrect_ checkbox beside each item. Along with the feedback, this gives an opportunity for the coach to clearly indicate where the student needs to improve upon.
 
 ### Adding Feedback
 

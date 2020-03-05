@@ -159,17 +159,9 @@ let boolBtnClasses = selected => {
   classes ++ (selected ? " toggle-button__button--active" : "");
 };
 
-let handleEligibleTeamCoachList = (schoolCoaches, courseCoachIds, team) => {
+let handleTeamCoachList = (schoolCoaches, courseCoachIds, team) => {
   let selectedTeamCoachIds = team |> Team.coachIds;
-  let allowedTeamCoaches =
-    schoolCoaches
-    |> Js.Array.filter(coach =>
-         !(
-           courseCoachIds
-           |> Array.exists(courseCoachId => courseCoachId == Coach.id(coach))
-         )
-       );
-  allowedTeamCoaches
+  schoolCoaches
   |> Array.map(coach => {
        let coachId = coach |> Coach.id;
        let selected =
@@ -186,8 +178,7 @@ let initialState = (student, team, schoolCoaches, courseCoachIds) => {
     name: student |> Student.name,
     teamName: team |> Team.name,
     tagsToApply: student |> Student.tags,
-    teamCoaches:
-      handleEligibleTeamCoachList(schoolCoaches, courseCoachIds, team),
+    teamCoaches: handleTeamCoachList(schoolCoaches, courseCoachIds, team),
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
     title: student |> Student.title,
     affiliation: student |> Student.affiliation |> OptionUtils.toString,

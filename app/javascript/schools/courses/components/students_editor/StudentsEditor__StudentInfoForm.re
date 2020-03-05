@@ -46,7 +46,7 @@ let formInvalid = (state, emailsToAdd) =>
   || hasEmailDuplication(state.email, emailsToAdd);
 
 let handleAdd = (state, send, emailsToAdd, addToListCB) => {
-  let teamName = state.teamName == "" ? state.name : state.teamName;
+  let teamName = state.teamName == "" ? None : Some(state.teamName);
 
   if (!formInvalid(state, emailsToAdd)) {
     addToListCB(

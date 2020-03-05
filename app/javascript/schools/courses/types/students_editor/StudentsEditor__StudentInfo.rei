@@ -10,8 +10,9 @@ let title: t => string;
 
 let affiliation: t => string;
 
-let teamName: t => string;
+let teamName: t => option(string);
 
 let encode: t => Js.Json.t;
 
-let make: (string, string, string, string, array(string), string) => t;
+let make:
+  (string, string, string, string, array(string), option(string)) => t;

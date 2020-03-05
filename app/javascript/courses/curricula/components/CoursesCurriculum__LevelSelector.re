@@ -84,9 +84,9 @@ let make =
   let orderedLevels =
     levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
 
-  <div className="px-3 md:px-0">
+  <div className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
     <div
-      className="flex justify-center max-w-sm md:max-w-xl mx-auto mt-4 rounded-lg bg-primary-100 border border-gray-400 h-11">
+      className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg 1g-primary-100 border border-gray-400 h-11">
       {showLevelZero
          ? numberedLevelSelector(selectedLevel, Some(setShowLevelZero))
          : <Dropdown

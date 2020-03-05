@@ -29,6 +29,10 @@ FactoryBot.define do
       role { Target::ROLE_TEAM }
     end
 
+    trait :with_default_checklist do
+      checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: "Write something about your submission", optional: false }] }
+    end
+
     trait :with_markdown do
       after(:create) do |target|
         target_version = create(:target_version, target: target)

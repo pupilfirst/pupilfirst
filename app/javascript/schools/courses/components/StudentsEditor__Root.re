@@ -299,7 +299,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
                                      selectedStudent |> SelectedStudent.id,
                                    )
                                  }>
-                                 <Icon className="if i-times-light" />
+                                 <Icon className="if i-times-regular" />
                                </button>
                              </div>
                            </div>

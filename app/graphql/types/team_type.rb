@@ -5,6 +5,8 @@ module Types
     field :level_id, ID, null: false
     field :students, [Types::StudentType], null: false
     field :coach_user_ids, [ID], null: false
+    field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def students
       object.founders.map do |student|

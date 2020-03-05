@@ -74,6 +74,10 @@ input:disabled, .disabled {
 
 /* Button */
 
+button:focus {
+  outline: none;
+}
+
 .btn {
   @apply inline-flex items-center justify-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded cursor-pointer;
 }
@@ -97,7 +101,7 @@ input:disabled, .disabled {
 }
 
 .btn-subtle {
-  @apply bg-transparent text-gray-800;
+  @apply bg-gray-200 text-gray-800;
 }
 
 .btn-subtle:hover {

@@ -16,7 +16,8 @@ type t = {
   evaluationCriteria: array(string),
   prerequisiteTargets: array(string),
   targetGroupId: string,
-  quiz: array(TargetDetails__QuizQuestion.t),
+  quiz: array(CurriculumEditor__QuizQuestion.t),
+  checklist: array(TargetChecklistItem.t),
   linkToComplete: option(string),
   visibility,
   completionInstructions: option(string),
@@ -72,9 +73,11 @@ let makeFromJs = targetData => {
   quiz:
     targetData##quiz
     |> Array.map(quizQuestion =>
-         quizQuestion |> TargetDetails__QuizQuestion.makeFromJs
+         quizQuestion |> CurriculumEditor__QuizQuestion.makeFromJs
        ),
   linkToComplete: targetData##linkToComplete,
   completionInstructions: targetData##completionInstructions,
+  checklist:
+    targetData##checklist |> Json.Decode.array(TargetChecklistItem.decode),
   visibility: visibilityFromJs(targetData##visibility),
 };

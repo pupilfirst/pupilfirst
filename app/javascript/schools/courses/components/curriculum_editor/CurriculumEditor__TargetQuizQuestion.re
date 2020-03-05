@@ -14,37 +14,37 @@ let make =
 
   let updateQuestion = question =>
     updateQuizQuestionCB(
-      quizQuestion |> TargetDetails__QuizQuestion.id,
-      quizQuestion |> TargetDetails__QuizQuestion.updateQuestion(question),
+      quizQuestion |> CurriculumEditor__QuizQuestion.id,
+      quizQuestion |> CurriculumEditor__QuizQuestion.updateQuestion(question),
     );
 
   let updateAnswerOptionCB = (id, answer) =>
     updateQuizQuestionCB(
-      quizQuestion |> TargetDetails__QuizQuestion.id,
-      quizQuestion |> TargetDetails__QuizQuestion.replace(id, answer),
+      quizQuestion |> CurriculumEditor__QuizQuestion.id,
+      quizQuestion |> CurriculumEditor__QuizQuestion.replace(id, answer),
     );
   let removeAnswerOptionCB = id =>
     updateQuizQuestionCB(
-      quizQuestion |> TargetDetails__QuizQuestion.id,
-      quizQuestion |> TargetDetails__QuizQuestion.removeAnswerOption(id),
+      quizQuestion |> CurriculumEditor__QuizQuestion.id,
+      quizQuestion |> CurriculumEditor__QuizQuestion.removeAnswerOption(id),
     );
   let markAsCorrectCB = id =>
     updateQuizQuestionCB(
-      quizQuestion |> TargetDetails__QuizQuestion.id,
-      quizQuestion |> TargetDetails__QuizQuestion.markAsCorrect(id),
+      quizQuestion |> CurriculumEditor__QuizQuestion.id,
+      quizQuestion |> CurriculumEditor__QuizQuestion.markAsCorrect(id),
     );
 
   let addAnswerOption = () =>
     updateQuizQuestionCB(
-      quizQuestion |> TargetDetails__QuizQuestion.id,
+      quizQuestion |> CurriculumEditor__QuizQuestion.id,
       quizQuestion
-      |> TargetDetails__QuizQuestion.newAnswerOption(
+      |> CurriculumEditor__QuizQuestion.newAnswerOption(
            Js.Date.now() |> Js.Float.toString,
          ),
     );
   let canBeDeleted =
     quizQuestion
-    |> TargetDetails__QuizQuestion.answerOptions
+    |> CurriculumEditor__QuizQuestion.answerOptions
     |> Array.length > 2;
   let questionId = "quiz-question-" ++ questionNumber;
 
@@ -65,7 +65,7 @@ let make =
                onClick={event => {
                  ReactEvent.Mouse.preventDefault(event);
                  removeQuizQuestionCB(
-                   quizQuestion |> TargetDetails__QuizQuestion.id,
+                   quizQuestion |> CurriculumEditor__QuizQuestion.id,
                  );
                }}>
                <i className="fas fa-trash-alt text-lg" />
@@ -77,17 +77,17 @@ let make =
       <MarkdownEditor
         textareaId=questionId
         placeholder="Type the question here (supports markdown)"
-        value={quizQuestion |> TargetDetails__QuizQuestion.question}
+        value={quizQuestion |> CurriculumEditor__QuizQuestion.question}
         onChange=updateQuestion
         profile=Markdown.Permissive
       />
     </div>
     <div className="quiz-maker__answers-container relative">
       {quizQuestion
-       |> TargetDetails__QuizQuestion.answerOptions
+       |> CurriculumEditor__QuizQuestion.answerOptions
        |> Array.mapi((index, answerOption) =>
             <CurriculumEditor__TargetQuizAnswer
-              key={answerOption |> TargetDetails__AnswerOption.id}
+              key={answerOption |> CurriculumEditor__AnswerOption.id}
               answerOption
               updateAnswerOptionCB
               removeAnswerOptionCB

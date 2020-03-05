@@ -103,7 +103,7 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
 let containerClasses = mode =>
   switch (mode) {
-  | Windowed(_) => ""
+  | Windowed(_) => "relative"
   | Fullscreen(_) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col"
   };
 
@@ -264,16 +264,16 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 };
 
 let controlsContainerClasses = mode =>
-  "border border-gray-300 bg-gray-200 p-1 flex justify-between "
+  "border bg-gray-100 text-sm px-2 flex justify-between items-end "
   ++ (
     switch (mode) {
-    | Windowed(_) => "rounded-t"
-    | Fullscreen(_) => ""
+    | Windowed(_) => "rounded-t border-gray-400 sticky top-0 z-20"
+    | Fullscreen(_) => "border-gray-400 "
     }
   );
 
 let controls = (value, state, send, onChange) => {
-  let buttonClasses = "border rounded p-1 hover:bg-gray-400 focus:outline-none ";
+  let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none ";
   let {mode} = state;
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange);
 
@@ -283,39 +283,43 @@ let controls = (value, state, send, onChange) => {
      | Fullscreen(`Preview) => <div />
      | Windowed(`Editor)
      | Fullscreen(`Editor | `Split) =>
-       <div>
+       <div className="bg-white border border-gray-400 rounded-t border-b-0">
          <button
            className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
            <i className="fas fa-bold fa-fw" />
          </button>
          <button
-           className={buttonClasses ++ "ml-2"}
+           className={buttonClasses ++ "border-l border-gray-400"}
            onClick={_ => curriedModifyPhrase(Italic)}>
            <i className="fas fa-italic fa-fw" />
          </button>
          <button
-           className={buttonClasses ++ "ml-2"}
+           className={buttonClasses ++ "border-l border-gray-400"}
            onClick={_ => curriedModifyPhrase(Strikethrough)}>
            <i className="fas fa-strikethrough fa-fw" />
          </button>
        </div>
      }}
-    <div>
-      <button className=buttonClasses onClick={onClickPreview(state, send)}>
+    <div className="py-1">
+      <button
+        className={"rounded " ++ buttonClasses}
+        onClick={onClickPreview(state, send)}>
         {modeIcon(`Preview, mode)}
       </button>
       <button
-        className={buttonClasses ++ "ml-2 hidden md:inline"}
+        className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(`Split, mode)}
       </button>
       <button
-        className={buttonClasses ++ "ml-2 hidden md:inline"}
+        className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(`Fullscreen, mode)}
         {switch (mode) {
          | Fullscreen(_) =>
-           <span className="ml-2"> {"Exit full-screen" |> str} </span>
+           <span className="ml-2 text-xs font-semibold">
+             {"Exit full-screen" |> str}
+           </span>
          | Windowed(_) => React.null
          }}
       </button>
@@ -330,7 +334,7 @@ let modeClasses = mode =>
   };
 
 let editorContainerClasses = mode =>
-  "border-r border-gray-300 "
+  "border-r border-gray-400 "
   ++ (
     switch (mode) {
     | Windowed(`Editor) => "border-l"
@@ -351,10 +355,10 @@ let previewType = mode =>
   };
 
 let previewContainerClasses = mode =>
-  "border-gray-300 "
+  "border-gray-400 bg-gray-100 "
   ++ (
     switch (mode |> previewType) {
-    | `WindowedPreview => "border-l border-r border-b rounded-b px-2"
+    | `WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-3"
     | `FullscreenPreview => "w-screen mx-auto"
     | `FullscreenSplit => "w-1/2 relative"
     }
@@ -362,7 +366,7 @@ let previewContainerClasses = mode =>
 
 let previewClasses = mode =>
   switch (mode) {
-  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto w-full px-2 pb-8"
+  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto w-full px-4 pb-8"
   | Fullscreen(`Editor)
   | Windowed(_) => ""
   };
@@ -444,11 +448,11 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   };
 
 let footerContainerClasses = mode =>
-  "markdown-editor__footer-container border border-gray-300 bg-gray-200 flex justify-between items-center "
+  "markdown-editor__footer-container border bg-gray-100 flex justify-between items-center "
   ++ (
     switch (mode) {
-    | Windowed(_) => "rounded-b"
-    | Fullscreen(_) => ""
+    | Windowed(_) => "rounded-b border-gray-400"
+    | Fullscreen(_) => "border-gray-400"
     }
   );
 
@@ -521,8 +525,8 @@ let textareaClasses = mode => {
   "w-full outline-none font-mono "
   ++ (
     switch (mode) {
-    | Windowed(_) => "p-2"
-    | Fullscreen(_) => "px-2 pt-4 pb-8 h-full resize-none"
+    | Windowed(_) => "p-3"
+    | Fullscreen(_) => "px-3 pt-4 pb-8 h-full resize-none"
     }
   );
 };

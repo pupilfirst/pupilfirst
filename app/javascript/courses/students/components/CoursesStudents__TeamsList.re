@@ -103,12 +103,11 @@ let coachAvatars = (~title, ~className="", coaches) =>
     <div />;
   };
 
-let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
+let showStudent = (team, levels, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
-  <a
+  <Link
     href={"/students/" ++ (student |> TeamInfo.studentId) ++ "/report"}
     key={student |> TeamInfo.studentId}
-    onClick={openOverlayCB(student |> TeamInfo.studentId)}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
     className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
@@ -135,10 +134,10 @@ let showStudent = (team, levels, openOverlayCB, teamCoaches) => {
       {coachAvatars(~title="Personal Coaches", teamCoaches)}
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
-  </a>;
+  </Link>;
 };
 
-let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
+let showTeam = (team, levels, teamCoaches) => {
   <div
     key={team |> TeamInfo.id}
     ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
@@ -147,13 +146,12 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
       {team
        |> TeamInfo.students
        |> Array.map(student =>
-            <a
+            <Link
               href={
                 "/students/" ++ (student |> TeamInfo.studentId) ++ "/report"
               }
               key={student |> TeamInfo.studentId}
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-              onClick={openOverlayCB(student |> TeamInfo.studentId)}
               className="flex items-center bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100">
               <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
                 {avatar(
@@ -170,7 +168,7 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
                   </p>
                 </div>
               </div>
-            </a>
+            </Link>
           )
        |> React.array}
     </div>
@@ -197,7 +195,7 @@ let showTeam = (team, levels, openOverlayCB, teamCoaches) => {
 };
 
 [@react.component]
-let make = (~levels, ~teams, ~openOverlayCB, ~teamCoaches) => {
+let make = (~levels, ~teams, ~teamCoaches) => {
   <div>
     {teams |> ArrayUtils.isEmpty
        ? <div
@@ -211,8 +209,8 @@ let make = (~levels, ~teams, ~openOverlayCB, ~teamCoaches) => {
               let coaches = teamCoaches |> TeamCoach.coachesForTeam(team);
 
               Array.length(team |> TeamInfo.students) == 1
-                ? showStudent(team, levels, openOverlayCB, coaches)
-                : showTeam(team, levels, openOverlayCB, coaches);
+                ? showStudent(team, levels, coaches)
+                : showTeam(team, levels, coaches);
             })
          |> React.array}
   </div>;

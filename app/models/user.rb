@@ -1,3 +1,8 @@
+# JSON fields schema:
+#
+# preferences: {
+#   daily_digest: bool - default true. There may be users without this key.
+# }
 class User < ApplicationRecord
   belongs_to :school
   has_many :founders, dependent: :restrict_with_error

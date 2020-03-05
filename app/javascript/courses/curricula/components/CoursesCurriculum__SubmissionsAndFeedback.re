@@ -123,21 +123,12 @@ let submissions =
        s1CreatedAt |> DateFns.differenceInSeconds(s2CreatedAt) |> int_of_float;
      })
   |> List.map(submission => {
-       let attachments =
-         targetDetails
-         |> TargetDetails.submissionAttachments
-         |> List.filter(a =>
-              a
-              |> SubmissionAttachment.submissionId
-              == (submission |> Submission.id)
-            );
-
        let grades =
          targetDetails |> TargetDetails.grades(submission |> Submission.id);
 
        <div
          key={submission |> Submission.id}
-         className="mt-4 relative curriculum__submission-feedback-container"
+         className="mt-4 pb-4 relative curriculum__submission-feedback-container"
          ariaLabel={
            "Details about your submission on "
            ++ (submission |> Submission.createdAtPretty)
@@ -151,23 +142,11 @@ let submissions =
          <div
            className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
            <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
-             <MarkdownBlock
-               profile=Markdown.Permissive
-               markdown={submission |> Submission.description}
+             <SubmissionChecklistShow
+               checklist={submission |> Submission.checklist}
+               updateChecklistCB=None
+               pending={submission |> Submission.pending}
              />
-             {attachments |> ListUtils.isEmpty
-                ? React.null
-                : <div className="mt-2">
-                    <div className="text-xs font-semibold">
-                      {"Attachments" |> str}
-                    </div>
-                    <CoursesCurriculum__Attachments
-                      removeAttachmentCB=None
-                      attachments={SubmissionAttachment.onlyAttachments(
-                        attachments,
-                      )}
-                    />
-                  </div>}
            </div>
            {switch (submission |> Submission.status) {
             | MarkedAsComplete =>
@@ -308,44 +287,51 @@ let make =
     (
       ~targetDetails,
       ~target,
-      ~authenticityToken,
       ~evaluationCriteria,
       ~addSubmissionCB,
       ~targetStatus,
       ~coaches,
       ~users,
       ~preview,
+      ~checklist,
     ) => {
   let (showSubmissionForm, setShowSubmissionForm) =
     React.useState(() => false);
 
   <div>
     <div className="flex justify-between items-end border-b pb-2">
-      <h4> {"Your Submissions" |> str} </h4>
+      <h4 className="text-base md:text-xl"> {"Your Submissions" |> str} </h4>
       {targetStatus
        |> TargetStatus.canSubmit(
             ~resubmittable=target |> Target.resubmittable,
           )
-         ? <button
-             className="btn btn-primary"
-             onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
-             <span className="hidden md:inline">
-               <i className="fas fa-plus mr-2" />
-               {(showSubmissionForm ? "Cancel" : "Add another submission")
-                |> str}
-             </span>
-             <span className="md:hidden"> {"Add another" |> str} </span>
-           </button>
+         ? showSubmissionForm
+             ? <button
+                 className="btn btn-subtle"
+                 onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
+                 <PfIcon className="if i-times-regular text-lg mr-2" />
+                 <span className="hidden md:inline"> {"Cancel" |> str} </span>
+                 <span className="md:hidden"> {"Cancel" |> str} </span>
+               </button>
+             : <button
+                 className="btn btn-primary"
+                 onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
+                 <PfIcon className="if i-plus-regular text-lg mr-2" />
+                 <span className="hidden md:inline">
+                   {"Add another submission" |> str}
+                 </span>
+                 <span className="md:hidden"> {"Add another" |> str} </span>
+               </button>
          : React.null}
     </div>
     {showSubmissionForm
-       ? <CoursesCurriculum__SubmissionForm
-           authenticityToken
+       ? <CoursesCurriculum__SubmissionBuilder
            target
            addSubmissionCB={addSubmission(
              setShowSubmissionForm,
              addSubmissionCB,
            )}
+           checklist
            preview
          />
        : submissions(

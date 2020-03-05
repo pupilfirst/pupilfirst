@@ -99,7 +99,7 @@ feature 'Submissions show' do
       expect(submission.passed_at).to eq(nil)
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
-      expect(submission.startup_feedback.last.feedback).to eq(feedback)
+      expect(submission.startup_feedback.last.feedback).to eq(feedback.strip)
       expect(submission.timeline_event_grades.pluck(:grade)).to eq([1, 2])
     end
 
@@ -210,6 +210,64 @@ feature 'Submissions show' do
       expect(target.reload.review_checklist).to eq([])
     end
 
+    scenario 'coach evaluates a pending submission and mark a checklist as incorrect', js: true do
+      question_1 = Faker::Lorem.sentence
+      question_2 = Faker::Lorem.sentence
+      answer_1 = Faker::Lorem.sentence
+      answer_2 = "https://example.org/invalidLink"
+      checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
+      submission_pending.update!(checklist: checklist)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      within("div[aria-label='#{submission_pending.checklist.first['title']}']") do
+        expect(page).to have_content(question_1)
+        expect(page).to have_content(answer_1)
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        expect(page).to have_content(question_2)
+        expect(page).to have_content(answer_2)
+        click_button 'Mark as incorrect'
+        expect(page).to have_content('Incorrect')
+      end
+
+      expect(page).to have_content('Grade Card')
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      # status should be reviewing as the target is not graded completely
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Reviewing')
+      end
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      # the status should be failed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Passed')
+      end
+
+      click_button 'Save grades'
+
+      dismiss_notification
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        expect(page).to have_content('Incorrect')
+      end
+
+      expect(submission_pending.reload.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED }])
+
+      click_button('Undo Grading')
+
+      expect(page).to have_text("Add Your Feedback")
+
+      expect(submission_pending.reload.checklist).to eq(checklist)
+    end
+
     scenario 'coach evaluates a pending submission without giving a feedback', js: true do
       sign_in_user coach.user, referer: timeline_event_path(submission_pending)
 
@@ -256,6 +314,86 @@ feature 'Submissions show' do
       sign_in_user school_admin.user, referer: timeline_event_path(submission_pending)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
+    end
+
+    scenario 'coach is warned when a student has dropped out', js: true do
+      team.update!(dropped_out_at: 1.day.ago)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      expect(page).to have_text('This submission is from a student whose access to the course has ended, or has dropped out.')
+    end
+
+    scenario "coach is warned when a student's access to course has ended", js: true do
+      team.update!(access_ends_at: 1.day.ago)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      expect(page).to have_text('This submission is from a student whose access to the course has ended, or has dropped out.')
+    end
+
+    context 'when submission is from students who are now in different teams' do
+      let(:another_team) { create :startup, level: level, dropped_out_at: 1.day.ago }
+
+      before do
+        submission_pending.founders << another_team.founders.first
+      end
+
+      scenario 'coach is warned when one student in the submission is inactive', js: true do
+        sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+        expect(page).to have_text('This submission is linked to one or more students whose access to the course has ended, or have dropped out.')
+      end
+    end
+
+    scenario 'coach leaves a note about a student', js: true do
+      note = Faker::Lorem.sentence
+
+      sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
+
+      click_button 'Write a Note'
+      fill_in 'Write a Note', with: note
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      click_button 'Save grades'
+      dismiss_notification
+      new_notes = CoachNote.where(note: note)
+
+      expect(new_notes.count).to eq(1)
+      expect(new_notes.first.student_id).to eq(student.id)
+    end
+
+    scenario 'coach leaves a note for a team submission', js: true do
+      another_student = team.founders.where.not(id: student).first
+      submission_pending.founders << another_student
+      note = Faker::Lorem.sentence
+
+      sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
+
+      click_button 'Write a Note'
+      fill_in 'Write a Note', with: note
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      click_button 'Save grades'
+      dismiss_notification
+      new_notes = CoachNote.where(note: note)
+
+      expect(new_notes.count).to eq(2)
+      expect(new_notes.pluck(:student_id)).to contain_exactly(student.id, another_student.id)
     end
   end
 
@@ -498,20 +636,20 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed_1)
 
       # submission 1
-      expect(page).to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).not_to have_text(submission_reviewed_2.description)
-      expect(page).not_to have_text(submission_reviewed_3.description)
+      expect(page).not_to have_text(submission_reviewed_2.checklist.first['title'])
+      expect(page).not_to have_text(submission_reviewed_3.checklist.first['title'])
 
       # submission 2 and 3
       visit timeline_event_path(submission_reviewed_3)
 
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).to have_text(submission_reviewed_3.description)
-      expect(page).to have_text(submission_reviewed_2.description)
-      expect(page).not_to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(submission_reviewed_3.checklist.first['title'])
+      expect(page).to have_text(submission_reviewed_2.checklist.first['title'])
+      expect(page).not_to have_text(submission_reviewed_1.checklist.first['title'])
     end
   end
 end

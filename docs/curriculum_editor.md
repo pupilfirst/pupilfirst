@@ -1,6 +1,6 @@
 # Curriculum Editor
 
-At PupilFirst, we believe that actions speak louder than words, and that (when possible) it's always better to give your students things to _do_, rather than information to simply _consume_.
+At Pupilfirst, we believe that actions speak louder than words, and that (when possible) it's always better to give your students things to _do_, rather than information to simply _consume_.
 
 However, your students will always need instruction before they can effectively take any action. These instructions will need to be laid out in a path whose route is clear, and with a visible end-point. The curriculum editor is designed to make this possible.
 
@@ -111,6 +111,34 @@ For those targets where you expect students to work together and submit as a _un
 
 **Do you have any completion instructions for the student?**\
 Text entered here will be displayed right next to where the students take action on a target. For targets that are simply marked as complete or completed by visiting a link, this will be at the end of the main content, next to the button that completes the target. For quizzes and reviewed submissions, this will be at the top of the page that displays the quiz, or the submission form.
+
+### Defining steps to complete a target
+
+If the method of completion for a target is set to one that is reviewed by a coach, you can define a series of steps a student needs to do to complete and submit the target.
+Each step needs to have a title and an action type which together gives information on how to complete the step. The title is generally used to give a short description of what's expected from the student to complete the step. The complete list of different action types for a step:
+
+1. **Write Long Text:** Student needs to give a long write up based on the inputs in title
+2. **Write Short Text:** Student needs to give a short write up based on the inputs in title
+3. **Attach a Link:** Student needs to attach a valid link to complete the step.
+4. **Upload Files:** Student needs to attach files to complete the step. Multiple files can be attached to a single step of this type.
+5. **Choose from a list:** This is kind of a multiple choice question where a student needs to respond by choosing one of the available options. You can list the choices using the editor and the number of choices should of course be greater that one.
+
+Here's an example target consisting, of four steps to complete the target:
+![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png)
+
+Apart from title and action type, you can also set a particular step as _Optional_ using the checkbox. This would mean it is not mandatory for a student to do this step to submit this target. In the example above step two of type _Attach a Link_ is an optional one.
+
+You can also change the order of steps, remove a particular step or even copy one existing step using the control icons towards the right of each step.
+
+Few important information and restrictions while creating a target checklist:
+
+1. Only a maximum of 15 steps are allowed in a particular target
+2. Only one step of type _Upload Files_ is allowed in a target. Other action types can be used in multiple steps.
+3. It is allowed to create an evaluated target, without any steps. But this would mean a student can submit a target by just clicking the _Complete_ button without any action.
+
+Once steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students for each step. Here's a sample on how steps created for a target reflects in student submission interface and in coach review interface.
+
+![Target checklist lifecycle](https://res.cloudinary.com/sv-co/image/upload/v1583213540/pupilfirst_documentation/curriculum_editor/target_checklist_steps_flwajd.jpg)
 
 ### Preparing a quiz
 

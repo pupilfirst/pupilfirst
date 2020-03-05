@@ -158,9 +158,7 @@ let addSubmission =
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
-      targetDetails
-      |> TargetDetails.addSubmission(submission)
-      |> TargetDetails.addSubmissionAttachments(submissionAttachments);
+      targetDetails |> TargetDetails.addSubmission(submission);
 
     send(SetTargetDetails(newTargetDetails));
   | None => ()
@@ -231,7 +229,9 @@ let overlayStatus = (course, target, targetStatus, preview) =>
           ++ targetStatusClass("course-overlay__close--", targetStatus)
         }
         onClick={_e => closeOverlay(course)}>
-        <Icon className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0" />
+        <Icon
+          className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0"
+        />
         <span className="text-xs hidden lg:inline-block mt-px">
           {"Close" |> str}
         </span>
@@ -258,8 +258,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
 let renderLockReason = reason =>
   renderLocked(reason |> TargetStatus.lockReasonToString);
 
-let prerequisitesIncomplete =
-    (reason, target, targets, statusOfTargets, changeTargetCB) => {
+let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
   let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds;
   let prerequisiteTargets =
     targets
@@ -278,19 +277,18 @@ let prerequisitesIncomplete =
                    ts |> TargetStatus.targetId == (target |> Target.id)
                  );
 
-            <a
+            <Link
               href={"/targets/" ++ (target |> Target.id)}
               ariaLabel={"Select Target " ++ (target |> Target.id)}
               key={target |> Target.id}
-              className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-              onClick={changeTargetCB(target)}>
+              className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
               <span className="font-semibold text-left leading-snug">
                 {target |> Target.title |> str}
               </span>
               <span className={targetStatusClasses(targetStatus)}>
                 {targetStatus |> TargetStatus.statusToString |> str}
               </span>
-            </a>;
+            </Link>;
           })
        |> Array.of_list
        |> React.array}
@@ -298,19 +296,12 @@ let prerequisitesIncomplete =
   </div>;
 };
 
-let handleLocked =
-    (target, targets, targetStatus, statusOfTargets, changeTargetCB) =>
+let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
   switch (targetStatus |> TargetStatus.status) {
   | Locked(reason) =>
     switch (reason) {
     | PrerequisitesIncomplete =>
-      prerequisitesIncomplete(
-        reason,
-        target,
-        targets,
-        statusOfTargets,
-        changeTargetCB,
-      )
+      prerequisitesIncomplete(reason, target, targets, statusOfTargets)
     | CourseLocked
     | AccessLocked
     | LevelLocked => renderLockReason(reason)
@@ -351,7 +342,6 @@ let completeSection =
       send,
       target,
       targetDetails,
-      authenticityToken,
       targetStatus,
       addSubmissionCB,
       evaluationCriteria,
@@ -371,10 +361,10 @@ let completeSection =
            targetDetails
            title="Instructions"
          />,
-         <CoursesCurriculum__SubmissionForm
+         <CoursesCurriculum__SubmissionBuilder
            key="courses-curriculum-submission-form"
-           authenticityToken
            target
+           checklist={targetDetails |> TargetDetails.checklist}
            addSubmissionCB={addSubmission(
              target,
              state,
@@ -409,13 +399,13 @@ let completeSection =
        <CoursesCurriculum__SubmissionsAndFeedback
          targetDetails
          target
-         authenticityToken
          evaluationCriteria
          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
          targetStatus
          coaches
          users
          preview
+         checklist={targetDetails |> TargetDetails.checklist}
        />
      | (
          Pending | Submitted | Passed | Failed,
@@ -470,9 +460,7 @@ let handlePendingStudents = (targetStatus, targetDetails, users) =>
   | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
   };
 
-let performQuickNavigation = (url, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-
+let performQuickNavigation = (send, _event) => {
   // Scroll to the top of the overlay before pushing the new URL.
   Webapi.Dom.(
     switch (document |> Document.getElementById("target-overlay")) {
@@ -483,8 +471,6 @@ let performQuickNavigation = (url, send, event) => {
 
   // Clear loaded target details.
   send(ClearTargetDetails);
-
-  ReasonReactRouter.push(url);
 };
 
 let navigationLink = (direction, url, send) => {
@@ -499,14 +485,14 @@ let navigationLink = (direction, url, send) => {
       <FaIcon classes={"fas " ++ icon} />
     );
 
-  <a
+  <Link
     href=url
-    onClick={performQuickNavigation(url, send)}
+    onClick={performQuickNavigation(send)}
     className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {text |> str} </span>
     {arrow(rightIcon)}
-  </a>;
+  </Link>;
 };
 
 let scrollOverlayToTop = _event => {
@@ -555,11 +541,9 @@ let make =
       ~target,
       ~course,
       ~targetStatus,
-      ~authenticityToken,
       ~addSubmissionCB,
       ~targets,
       ~statusOfTargets,
-      ~changeTargetCB,
       ~users,
       ~evaluationCriteria,
       ~coaches,
@@ -583,13 +567,7 @@ let make =
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
-        {handleLocked(
-           target,
-           targets,
-           targetStatus,
-           statusOfTargets,
-           changeTargetCB,
-         )}
+        {handleLocked(target, targets, targetStatus, statusOfTargets)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}
         {switch (state.targetDetails) {
          | Some(targetDetails) =>
@@ -625,7 +603,6 @@ let make =
               send,
               target,
               targetDetails,
-              authenticityToken,
               targetStatus,
               addSubmissionCB,
               evaluationCriteria,

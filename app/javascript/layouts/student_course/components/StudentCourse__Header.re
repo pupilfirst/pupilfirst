@@ -15,11 +15,9 @@ let courseOptions = courses =>
          <span> {course |> Course.name |> str} </span>
        </a>;
      })
-  |> Array.of_list
-  |> React.array;
+  |> Array.of_list;
 
-let courseDropdown =
-    (currentCourse, otherCourses, showCourses, setShowCourses) => {
+let courseDropdown = (currentCourse, otherCourses) => {
   <div>
     {switch (otherCourses) {
      | [] =>
@@ -30,10 +28,8 @@ let courseDropdown =
          </span>
        </div>
      | otherCourses =>
-       <div className="student-course__dropdown relative mx-auto">
+       let selected =
          <button
-           key={"dropdown-course" ++ (currentCourse |> Course.id)}
-           onClick={_ => setShowCourses(showCourses => !showCourses)}
            className="dropdown__btn max-w-xs md:max-w-lg mx-auto text-white appearance-none flex items-center relative justify-between focus:outline-none font-semibold w-full text-lg md:text-2xl leading-tight">
            <span className="sm:truncate w-full text-left">
              {currentCourse |> Course.name |> str}
@@ -42,15 +38,13 @@ let courseDropdown =
              className="student-course__dropdown-btn ml-3 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-between px-3 py-2 rounded">
              <i className="fas fa-chevron-down text-xs font-semibold" />
            </div>
-         </button>
-         {showCourses
-            ? <ul
-                key="dropdown-course-list"
-                className="dropdown__list bg-white shadow-lg rounded mt-1 border absolute overflow-hidden min-w-full w-auto z-20">
-                {courseOptions(otherCourses)}
-              </ul>
-            : React.null}
-       </div>
+         </button>;
+
+       <Dropdown
+         selected
+         contents={courseOptions(otherCourses)}
+         className="student-course__dropdown relative mx-auto"
+       />;
      }}
   </div>;
 };
@@ -64,14 +58,7 @@ let courseNameContainerClasses = additionalLinks => {
 };
 
 let renderCourseSelector =
-    (
-      currentCourseId,
-      courses,
-      showCourses,
-      setShowCourses,
-      coverImage,
-      additionalLinks,
-    ) => {
+    (currentCourseId, courses, coverImage, additionalLinks) => {
   let currentCourse =
     courses
     |> ListUtils.unsafeFind(
@@ -96,12 +83,7 @@ let renderCourseSelector =
     <div className={courseNameContainerClasses(additionalLinks)}>
       <div
         className="student-course__name relative px-4 lg:px-0 flex h-full mx-auto lg:max-w-3xl">
-        {courseDropdown(
-           currentCourse,
-           otherCourses,
-           showCourses,
-           setShowCourses,
-         )}
+        {courseDropdown(currentCourse, otherCourses)}
       </div>
     </div>
   </div>;
@@ -118,15 +100,12 @@ let tabClasses = (url: ReasonReactRouter.url, linkTitle) => {
 
 [@react.component]
 let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
-  let (showCourses, setShowCourses) = React.useState(() => false);
   let url = ReasonReactRouter.useUrl();
 
   <div>
     {renderCourseSelector(
        currentCourseId,
        courses,
-       showCourses,
-       setShowCourses,
        coverImage,
        additionalLinks,
      )}

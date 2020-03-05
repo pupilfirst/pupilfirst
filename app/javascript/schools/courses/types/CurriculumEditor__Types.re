@@ -7,3 +7,4 @@ module AnswerOption = CurriculumEditor__AnswerOption;
 module QuizQuestion = CurriculumEditor__QuizQuestion;
 module TargetDetails = CurriculumEditor__TargetDetails;
 module Version = CurriculumEditor__Version;
+module ChecklistItem = TargetChecklistItem;

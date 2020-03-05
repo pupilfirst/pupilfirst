@@ -6,7 +6,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
   validate :not_a_school_admin
 
-  def save
+  def create_school_admin
     SchoolAdmin.transaction do
       user = persisted_user || User.create!(email: email, school: current_school, title: 'School Admin')
       user.update!(name: name)

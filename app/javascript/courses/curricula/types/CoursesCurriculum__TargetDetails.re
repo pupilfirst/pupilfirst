@@ -6,7 +6,6 @@ type navigation = {
 type t = {
   pendingUserIds: list(string),
   submissions: list(CoursesCurriculum__Submission.t),
-  submissionAttachments: list(CoursesCurriculum__SubmissionAttachment.t),
   feedback: list(CoursesCurriculum__Feedback.t),
   quizQuestions: list(CoursesCurriculum__QuizQuestion.t),
   contentBlocks: list(ContentBlock.t),
@@ -16,13 +15,15 @@ type t = {
   grading: list(CoursesCurriculum__Grade.t),
   completionInstructions: option(string),
   navigation,
+  checklist: array(TargetChecklistItem.t),
 };
 
 let submissions = t => t.submissions;
-let submissionAttachments = t => t.submissionAttachments;
+
 let pendingUserIds = t => t.pendingUserIds;
 let feedback = t => t.feedback;
 let navigation = t => (t.navigation.previous, t.navigation.next);
+let checklist = t => t.checklist;
 
 type completionType =
   | Evaluated
@@ -42,12 +43,6 @@ let decode = json =>
     submissions:
       json
       |> field("submissions", list(CoursesCurriculum__Submission.decode)),
-    submissionAttachments:
-      json
-      |> field(
-           "submissionAttachments",
-           list(CoursesCurriculum__SubmissionAttachment.decode),
-         ),
     feedback:
       json |> field("feedback", list(CoursesCurriculum__Feedback.decode)),
     quizQuestions:
@@ -65,6 +60,7 @@ let decode = json =>
       |> field("completionInstructions", nullable(string))
       |> Js.Null.toOption,
     navigation: json |> field("navigation", decodeNavigation),
+    checklist: json |> field("checklist", array(TargetChecklistItem.decode)),
   };
 
 let computeCompletionType = targetDetails => {
@@ -99,9 +95,4 @@ let grades = (submissionId, t) =>
 let addSubmission = (submission, t) => {
   ...t,
   submissions: [submission, ...t |> submissions],
-};
-
-let addSubmissionAttachments = (attachments, t) => {
-  ...t,
-  submissionAttachments: attachments @ (t |> submissionAttachments),
 };

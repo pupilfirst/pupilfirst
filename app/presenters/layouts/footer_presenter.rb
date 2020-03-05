@@ -25,7 +25,7 @@ module Layouts
     end
 
     def school_name
-      @school_name ||= current_school.present? ? current_school.name : 'PupilFirst'
+      @school_name ||= current_school.present? ? current_school.name : 'Pupilfirst'
     end
 
     def logo?

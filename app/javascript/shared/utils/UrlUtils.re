@@ -33,3 +33,7 @@ let isInvalid = (allowBlank, url) =>
   } else {
     !allowBlank;
   };
+
+let isValid = (allowBlank, url) => {
+  !isInvalid(allowBlank, url);
+};

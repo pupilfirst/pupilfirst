@@ -18,7 +18,7 @@ feature 'Target Overlay', js: true do
   let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_l0) { create :target, :with_content, target_group: target_group_l0 }
-  let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
+  let!(:target_l1) { create :target, :with_content, :with_default_checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
   let!(:target_l2) { create :target, :with_content, target_group: target_group_l2 }
   let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, sort_index: 2 }
   let!(:target_draft) { create :target, :draft, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
@@ -84,52 +84,11 @@ feature 'Target Overlay', js: true do
     find('.course-overlay__body-tab-item', text: 'Complete').click
     # completion instructions should be show on complete section for evaluated targets
     expect(page).to have_text(target_l1.completion_instructions)
-    bad_description = 'Sum deskripshun. Oops. Typoos aplenty.'
-    link_1 = 'https://example.com?q=1'
-    link_2 = 'https://example.com?q=2'
+    long_answer = Faker::Lorem.sentence
 
-    # The submit button should be disabled at this point.
-    expect(page).to have_button('Submit', disabled: true)
+    fill_in target_l1.checklist.first['title'], with: long_answer
 
-    # Filling in with a bunch of spaces should not work.
-    fill_in 'Work on your submission', with: '   '
-    expect(page).to have_button('Submit', disabled: true)
-
-    # The user should be able to write text as description and attach upto three links and / or files.
-    fill_in 'Work on your submission', with: bad_description
-
-    # The submit button should be enabled now.
-    expect(page).to have_button('Submit')
-
-    find('a', text: 'Add URL').click
-    fill_in 'attachment_url', with: 'foobar'
-    expect(page).to have_content('does not look like a valid URL')
-    fill_in 'attachment_url', with: 'https://example.com?q=1'
-
-    # The submit button should be disabled when the link is being typed in.
-    expect(page).not_to have_button('Submit')
-    expect(page).to have_button('Finish adding link...', disabled: true)
-
-    click_button 'Attach link'
-
-    # The submit button should be enabled again now.
-    expect(page).to have_button('Submit')
-
-    find('a', text: 'Upload File').click
-    attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
-    find('a', text: 'Add URL').click
-    fill_in 'attachment_url', with: 'https://example.com?q=2'
-    click_button 'Attach link'
-
-    expect(page).to have_link('human.png', href: "/timeline_event_files/#{TimelineEventFile.last.id}/download")
-    expect(page).to have_link(link_1, href: link_1)
-    expect(page).to have_link(link_2, href: link_2)
-
-    # The attachment forms should have disappeared now.
-    expect(page).not_to have_selector('a', text: 'Add URL')
-    expect(page).not_to have_selector('a', text: 'Upload File')
-
-    find('button', text: 'Submit').click
+    click_button 'Submit'
 
     expect(page).to have_content('Your submission has been queued for review')
 
@@ -149,9 +108,7 @@ feature 'Target Overlay', js: true do
 
     # Let's check the database to make sure the submission was created correctly
     last_submission = TimelineEvent.last
-    expect(last_submission.description).to eq(bad_description)
-    expect(last_submission.links).to contain_exactly(link_1, link_2)
-    expect(last_submission.timeline_event_files.first.file.filename).to eq('human.png')
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Write something about your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     # The status should also be updated on the home page.
     click_button 'Close'
@@ -165,10 +122,7 @@ feature 'Target Overlay', js: true do
     find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
     # The submission contents should be on the page.
-    expect(page).to have_content(bad_description)
-    expect(page).to have_link('human.png', href: "/timeline_event_files/#{TimelineEventFile.last.id}/download")
-    expect(page).to have_link(link_1, href: link_1)
-    expect(page).to have_link(link_2, href: link_2)
+    expect(page).to have_content(long_answer)
 
     # User should be able to undo the submission.
     accept_confirm do
@@ -287,9 +241,19 @@ feature 'Target Overlay', js: true do
       end
 
       # The quiz result should be visible.
-      expect(page).to have_content("Target #{quiz_target.title} was completed by answering a quiz")
+      within("div[aria-label='Question 1") do
+        expect(page).to have_content("Incorrect")
+      end
+
       expect(page).to have_content("Your Answer: #{q1_answer_1.value}")
       expect(page).to have_content("Correct Answer: #{q1_answer_2.value}")
+
+      find("div[aria-label='Question 2']").click
+
+      within("div[aria-label='Question 2") do
+        expect(page).to have_content("Correct")
+      end
+
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
 
       # The score should have stored on the submission.
@@ -301,8 +265,8 @@ feature 'Target Overlay', js: true do
     let(:coach_1) { create :faculty, school: course.school }
     let(:coach_2) { create :faculty, school: course.school } # The 'unknown', un-enrolled coach.
     let(:coach_3) { create :faculty, school: course.school }
-    let(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, links: ['https://www.example.com/broken_link'], created_at: 7.days.ago }
-    let(:submission_2) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_3, passed_at: 2.days.ago, links: ['https://www.example.com/proper_link'], latest: true, created_at: 3.days.ago }
+    let(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, created_at: 7.days.ago }
+    let(:submission_2) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_3, passed_at: 2.days.ago, latest: true, created_at: 3.days.ago }
     let!(:attached_file) { create :timeline_event_file, timeline_event: submission_2 }
     let!(:feedback_1) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_1 }
     let!(:feedback_2) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_2 }
@@ -330,8 +294,8 @@ feature 'Target Overlay', js: true do
       # Both submissions should be visible, along with grading and all feedback from coaches.
 
       within("div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']") do
-        expect(page).to have_content(submission_1.description)
-        expect(page).to have_link('https://www.example.com/broken_link')
+        find("div[aria-label='#{submission_1.checklist.first['title']}']").click
+        expect(page).to have_content(submission_1.checklist.first['result'])
 
         expect(page).to have_content("#{criterion_1.name}: Good")
         expect(page).to have_content("#{criterion_2.name}: Bad")
@@ -347,8 +311,8 @@ feature 'Target Overlay', js: true do
       end
 
       within("div[aria-label='Details about your submission on #{submission_2.created_at.strftime('%B %-d, %Y')}']") do
-        expect(page).to have_content(submission_2.description)
-        expect(page).to have_link('https://www.example.com/proper_link')
+        find("div[aria-label='#{submission_2.checklist.first['title']}']").click
+        expect(page).to have_content(submission_2.checklist.first['result'])
 
         submission_grades = submission_2.timeline_event_grades
         expect(page).to have_content("#{criterion_1.name}: Wow")
@@ -364,11 +328,11 @@ feature 'Target Overlay', js: true do
       # Adding another submissions should be possible.
       find('button', text: 'Add another submission').click
 
-      expect(page).to have_content('Work on your submission')
+      expect(page).to have_content('Write something about your submission')
 
       # There should be a cancel button to go back to viewing submissions.
       click_button 'Cancel'
-      expect(page).to have_content(submission_1.description)
+      expect(page).to have_content(submission_1.checklist.first['title'])
     end
 
     context 'when the target is non-resubmittable' do
@@ -586,44 +550,39 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_group_l2.name)
   end
 
-  context 'when accessing preview mode of curriculum' do
+  context 'when the user is a school admin' do
     let(:school_admin) { create :school_admin }
 
-    scenario "target show page should render in preview mode" do
-      sign_in_user school_admin.user, referer: target_path(target_l1)
-      expect(page).to have_content('You are currently looking at a preview of this course.')
-    end
+    context 'when the target has a checklist' do
+      let(:checklist) { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
+      let!(:target_l1) { create :target, :with_content, checklist: checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
 
-    scenario 'tries to submit work on a target' do
-      sign_in_user school_admin.user, referer: target_path(target_l1)
+      scenario 'admin views the target in preview mode' do
+        sign_in_user school_admin.user, referer: target_path(target_l1)
 
-      # This target should have a 'Complete' section.
-      find('.course-overlay__body-tab-item', text: 'Complete').click
+        expect(page).to have_content('You are currently looking at a preview of this course.')
 
-      # The submit button should be disabled.
-      expect(page).to have_button('Submit', disabled: true)
-      fill_in 'Work on your submission', with: Faker::Lorem.sentence
+        # This target should have a 'Complete' section.
+        find('.course-overlay__body-tab-item', text: 'Complete').click
 
-      expect(page).to have_button('Submit', disabled: true)
+        # The submit button should be disabled.
+        expect(page).to have_button('Submit', disabled: true)
+        fill_in target_l1.checklist.first['title'], with: Faker::Lorem.sentence
 
-      find('a', text: 'Add URL').click
-      fill_in 'attachment_url', with: 'foobar'
-      expect(page).to have_content('does not look like a valid URL')
-      fill_in 'attachment_url', with: 'https://example.com?q=1'
-      click_button 'Attach link'
+        expect(page).to have_button('Submit', disabled: true)
 
-      # The submit button should be disabled.
-      expect(page).to have_button('Submit', disabled: true)
+        fill_in 'Attach link', with: 'https://example.com?q=1'
 
-      find('a', text: 'Upload File').click
-      attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
-      find('a', text: 'Add URL').click
-      fill_in 'attachment_url', with: 'https://example.com?q=2'
-      click_button 'Attach link'
-      dismiss_notification
+        # The submit button should be disabled.
+        expect(page).to have_button('Submit', disabled: true)
 
-      # The submit button should be disabled.
-      expect(page).to have_button('Submit', disabled: true)
+        attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
+
+        dismiss_notification
+
+        # The submit button should be disabled.
+        expect(page).to have_button('Submit', disabled: true)
+      end
     end
 
     context 'when the target is auto-verified' do

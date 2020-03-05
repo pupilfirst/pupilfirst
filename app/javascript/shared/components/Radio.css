@@ -1,0 +1,58 @@
+/* Radio */
+
+.radio-label {
+  @apply select-none .cursor-pointer;
+}
+
+.radio-label span {
+  @apply inline-block align-middle;
+  transform: translate3d(0, 0, 0);
+}
+
+.radio-label span:first-child {
+  @apply relative rounded-full align-middle border border-gray-500 bg-white mr-3;
+  width: 1.125rem;
+  height: 1.125rem;
+  transform: scale(1);
+  transition: all 0.2s ease;
+}
+
+.radio-label span:first-child svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: all 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.radio-label span:first-child:before {
+  content: "";
+  @apply bg-primary-500 w-full h-full block opacity-100 rounded-full;
+  transform: scale(0);
+}
+
+.radio-label:hover span:first-child {
+  @apply bg-primary-100 border-primary-500;
+}
+
+.radio-input:checked+.radio-label span:first-child {
+  @apply bg-primary-500 border-primary-500;
+  animation: wave 0.4s ease;
+}
+
+.radio-input:checked+.radio-label span:first-child:before {
+  transform: scale(3.5);
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+@keyframes wave {
+  50% {
+    transform: scale(0.9);
+  }
+}

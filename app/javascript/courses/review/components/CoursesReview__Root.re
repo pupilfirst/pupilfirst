@@ -256,7 +256,7 @@ let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
               onClick={_ => send(SelectPendingTab)}>
               {"Pending" |> str}
               <span
-                className="ml-2 text-white text-xs bg-red-500 w-5 h-5 inline-flex items-center justify-center rounded-full">
+                className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
                 {state.pendingSubmissions
                  |> Array.length
                  |> string_of_int
@@ -290,14 +290,12 @@ let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
              submissions={state.pendingSubmissions}
              levels
              selectedLevel={state.selectedLevel}
-             openOverlayCB=openOverlay
            />
          | ReviewedSubmissions =>
            <CoursesReview__ShowReviewedSubmissions
              courseId
              selectedLevel={state.selectedLevel}
              levels
-             openOverlayCB=openOverlay
              reviewedSubmissions={state.reviewedSubmissions}
              updateReviewedSubmissionsCB={(
                ~reviewedSubmissions,

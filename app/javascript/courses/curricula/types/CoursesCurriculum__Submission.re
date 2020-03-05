@@ -8,17 +8,25 @@ type status =
 
 type t = {
   id: string,
-  description: string,
   createdAt: string,
   status,
+  checklist: array(SubmissionChecklistItem.t),
 };
 
 let id = t => t.id;
-let description = t => t.description;
 let createdAt = t => t.createdAt;
 let status = t => t.status;
-
+let checklist = t => t.checklist;
 let createdAtDate = t => t |> createdAt |> DateFns.parseString;
+
+let pending = t => {
+  switch (t.status) {
+  | Pending => true
+  | MarkedAsComplete
+  | Passed
+  | Failed => false
+  };
+};
 
 let createdAtPretty = t =>
   t |> createdAtDate |> DateFns.format("MMMM D, YYYY");
@@ -26,7 +34,6 @@ let createdAtPretty = t =>
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    description: json |> field("description", string),
     createdAt: json |> field("createdAt", string),
     status:
       switch (json |> field("status", string)) {
@@ -36,11 +43,22 @@ let decode = json =>
       | "failed" => Failed
       | unknownValue => raise(UnexpectedStatusValue(unknownValue))
       },
+    checklist:
+      json
+      |> field(
+           "checklist",
+           array(
+             SubmissionChecklistItem.decode(
+               json
+               |> field("files", array(SubmissionChecklistItem.decodeFile)),
+             ),
+           ),
+         ),
   };
 
-let make = (~id, ~description, ~createdAt, ~status) => {
+let make = (~id, ~createdAt, ~status, ~checklist) => {
   id,
-  description,
   createdAt,
   status,
+  checklist,
 };

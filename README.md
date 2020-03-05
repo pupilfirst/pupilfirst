@@ -1,4 +1,4 @@
-![PupilFirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
+![Pupilfirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
 ---
 [![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/SVdotCO/pupilfirst/blob/master/LICENSE)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/maintainability)](https://codeclimate.com/github/SVdotCO/pupilfirst/maintainability)
@@ -11,6 +11,12 @@
 ## Changelog
 
 Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view the full changelog.
+
+## Features
+
+Visit [docs.pupilfirst.com](https://docs.pupilfirst.com) for a detailed explanation of Pupilfirst's features.
+
+The rest of this README file discusses how to set up this repository for development.
 
 ## Setup for development
 
@@ -216,14 +222,14 @@ This will generate coverage report as HTML within the `/coverage` directory.
 If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an
 introspection query.
 
-With the PupilFirst server running, run the `graphql-codegen` script.
+With the Pupilfirst server running, run the `graphql-codegen` script.
 
     $ yarn run graphql-codegen
 
 It'll visit the local GraphQL end-point which is configured in the `codegen.yml` file, fetch the schema and store it in
 the `graphql_schema.json` file.
 
-## Services
+## Running Background Jobs
 
 Background jobs are written using [Rails ActiveJob](https://guides.rubyonrails.org/active_job_basics.html), and deferred
 using [delayed_job](https://github.com/collectiveidea/delayed_job) in the production environment.
@@ -233,10 +239,17 @@ application to defer them instead, you can execute the jobs with:
 
     $ rake jobs:workoff
 
-## Documentation
+## Editing Documentation
+
+The source of [docs.pupilfirst.com](https://docs.pupilfirst.com) is stored in the `/docs` folder in this repo, and is
+managed using [docsify](https://docsify.js.org/).
+
+First, install the docsify CLI globally:
+
+    $ npm i docsify-cli -g
+
+Then serve the `docs` folder on the desired port.
 
     $ docsify serve docs -p 3010
 
 The `-p` option sets the port. Visit `localhost:PORT` to view docs locally.
-
-

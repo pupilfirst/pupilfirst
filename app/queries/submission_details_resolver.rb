@@ -11,7 +11,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       level_id: level.id,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
-      review_checklist: review_checklist
+      review_checklist: review_checklist,
+      inactive_students: inactive_students
     }
   end
 
@@ -75,5 +76,9 @@ class SubmissionDetailsResolver < ApplicationQuery
     return false if current_user.faculty.blank?
 
     current_user.faculty.reviewable_courses.where(id: target.course).exists?
+  end
+
+  def inactive_students
+    submission.founders.count != submission.founders.active.count
   end
 end

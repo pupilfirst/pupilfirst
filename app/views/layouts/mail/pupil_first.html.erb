@@ -14,7 +14,7 @@
           <tbody>
           <tr>
             <td class="mailer-head__data">
-              <a class="mailer-head__logo" href="https://www.pupilfirst.com" title="PupilFirst" target="_blank" rel='noopener'>
+              <a class="mailer-head__logo" href="https://www.pupilfirst.com" title="Pupilfirst" target="_blank" rel='noopener'>
                 <%= image_tag('mailer/pupilfirst-logo.png', class: 'mailer-head__logo-img') %>
               </a>
             </td>
@@ -36,7 +36,7 @@
                 <% end %>
 
                 <% if content_for?(:title_button_text) %>
-                  <a class="mailer-button" href="<%= yield(:title_button_link) %>" title="PupilFirst" target="_blank" rel='noopener'>
+                  <a class="mailer-button" href="<%= yield(:title_button_link) %>" title="Pupilfirst" target="_blank" rel='noopener'>
                     <%= yield :title_button_text %>
                   </a>
                 <% end %>
@@ -50,7 +50,7 @@
 
               <%= yield :body %>
 
-              <p class="mailer-body__signature">The PupilFirst Team</p>
+              <p class="mailer-body__signature">The Pupilfirst Team</p>
             </td>
           </tr>
 
@@ -79,7 +79,7 @@
           <tbody>
           <tr>
             <td>
-              <p>This email has been sent to you by <%= link_to 'PupilFirst', "https://www.pupilfirst.com" %></p>
+              <p>This email has been sent to you by <%= link_to 'Pupilfirst', "https://www.pupilfirst.com" %></p>
             </td>
           </tr>
           </tbody>

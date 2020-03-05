@@ -40,6 +40,7 @@ feature 'User Home', js: true do
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin, school: school }
+  let(:course_author) { create :course_author, course: course_1 }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course_1
@@ -50,14 +51,14 @@ feature 'User Home', js: true do
     create :community_course_connection, course: course_4, community: community_4
   end
 
-  scenario 'When an active user visits he access courses and community' do
+  scenario 'student visits the home page' do
     sign_in_user(founder.user, referer: home_path)
 
     # A new course.
     within("div[aria-label=\"#{course_1.name}\"]") do
       expect(page).to have_text(course_1.name)
       expect(page).to have_text(course_1.description)
-      expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
+      expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_1))
       expect(page).to have_link("Continue Course", href: curriculum_course_path(course_1))
     end
 
@@ -72,7 +73,7 @@ feature 'User Home', js: true do
     within("div[aria-label=\"#{course_3.name}\"]") do
       expect(page).to have_text(course_3.name)
       expect(page).to have_text(course_3.description)
-      expect(page).to have_link("Curriculum", href: curriculum_course_path(course_3))
+      expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_3))
       expect(page).to have_text("Course Ended")
     end
 
@@ -82,7 +83,7 @@ feature 'User Home', js: true do
       expect(page).to have_text(course_4.description)
       expect(page).to have_text("Dropped out")
 
-      expect(page).not_to have_link("Curriculum", href: curriculum_course_path(course_4))
+      expect(page).not_to have_link("View Curriculum", href: curriculum_course_path(course_4))
     end
 
     click_button 'Communities'
@@ -97,15 +98,14 @@ feature 'User Home', js: true do
     expect(page).not_to have_text(community_4.name)
   end
 
-  scenario 'When a course coach visits he access courses and community' do
+  scenario 'course coach visits home page' do
     sign_in_user(course_coach.user, referer: home_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_1.description)
-    expect(page).to have_link("Curriculum", href: curriculum_course_path(course_1))
-    expect(page).to have_link("Review", href: review_course_path(course_1))
-    expect(page).to have_link("Review Submissions", href: review_course_path(course_1))
-    expect(page).to have_link("Students", href: students_course_path(course_1))
+    expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_1))
+    expect(page).to have_link("Review Submissions", href: review_course_path(course_1), count: 2)
+    expect(page).to have_link("My Students", href: students_course_path(course_1))
 
     expect(page).not_to have_text(course_2.name)
     expect(page).not_to have_text(course_3.name)
@@ -120,15 +120,14 @@ feature 'User Home', js: true do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'When a student coach visits he access courses and community' do
+  scenario 'student coach visits home page' do
     sign_in_user(team_coach.user, referer: home_path)
 
     expect(page).to have_text(course_2.name)
     expect(page).to have_text(course_2.description)
-    expect(page).to have_link("Curriculum", href: curriculum_course_path(course_2))
-    expect(page).to have_link("Review", href: review_course_path(course_2))
-    expect(page).to have_link("Review Submissions", href: review_course_path(course_2))
-    expect(page).to have_link("Students", href: students_course_path(course_2))
+    expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_2))
+    expect(page).to have_link("Review Submissions", href: review_course_path(course_2), count: 2)
+    expect(page).to have_link("My Students", href: students_course_path(course_2))
 
     expect(page).not_to have_text(course_1.name)
     expect(page).not_to have_text(course_3.name)
@@ -143,7 +142,7 @@ feature 'User Home', js: true do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'When a school admin visits home' do
+  scenario 'school admin visits home page' do
     sign_in_user(school_admin.user, referer: home_path)
 
     expect(page).to have_text(course_1.name)
@@ -163,5 +162,17 @@ feature 'User Home', js: true do
     expect(page).to have_text(community_2.name)
     expect(page).to have_text(community_3.name)
     expect(page).to have_text(community_4.name)
+  end
+
+  scenario 'course author visits the home page' do
+    sign_in_user(course_author.user, referer: home_path)
+
+    expect(page).to have_text(course_1.name)
+    expect(page).not_to have_text(course_2.name)
+    expect(page).not_to have_text(course_3.name)
+    expect(page).not_to have_text(course_4.name)
+
+    expect(page).to have_link("Edit Curriculum", href: curriculum_school_course_path(course_1))
+    expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_1))
   end
 end

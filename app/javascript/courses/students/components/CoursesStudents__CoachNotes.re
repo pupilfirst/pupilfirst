@@ -66,7 +66,7 @@ let saveNoteButtonText = (title, iconClasses) =>
 [@react.component]
 let make = (~studentId, ~coachNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
-  <div className="mt-3">
+  <div className="mt-3 text-sm">
     <label
       htmlFor="course-students__coach-notes-new-note"
       className="font-semibold text-sm block mb-1">

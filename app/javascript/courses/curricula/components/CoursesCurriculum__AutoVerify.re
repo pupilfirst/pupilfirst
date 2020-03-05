@@ -9,7 +9,6 @@ module AutoVerifySubmissionQuery = [%graphql
     autoVerifySubmission(targetId: $targetId){
       submission{
         id
-        description
         createdAt
       }
      }
@@ -29,9 +28,9 @@ let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
   addSubmissionCB(
     Submission.make(
       ~id=submission##id,
-      ~description=submission##description,
       ~createdAt=submission##createdAt,
       ~status=Submission.MarkedAsComplete,
+      ~checklist=[||],
     ),
   );
   switch (linkToComplete) {

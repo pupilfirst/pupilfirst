@@ -3,12 +3,18 @@
 let str = React.string;
 
 [@react.component]
-let make = (~id, ~label, ~onChange) => {
+let make = (~id, ~label, ~onChange, ~checked=false) => {
   <div>
-    <input className="hidden checkbox-input" id type_="checkbox" onChange />
-    <label className="checkbox-label flex items-center" htmlFor=id>
+    <input
+      className="hidden checkbox__input"
+      id
+      type_="checkbox"
+      onChange
+      checked
+    />
+    <label className="checkbox__label flex items-center" htmlFor=id>
       <span>
-        <svg width="10px" height="8px" viewBox="0 0 12 10">
+        <svg width="11px" height="11px" viewBox="0 0 13 13">
           <polyline points="1.5 6 4.5 9 10.5 1" />
         </svg>
       </span>

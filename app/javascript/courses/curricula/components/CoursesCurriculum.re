@@ -14,11 +14,6 @@ type state = {
   notice: Notice.t,
 };
 
-let selectTarget = (target, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  ReasonReactRouter.push("/targets/" ++ (target |> Target.id));
-};
-
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--"
@@ -35,19 +30,18 @@ let rendertarget = (target, statusOfTargets) => {
          "Could not find targetStatus for listed target with ID " ++ targetId,
        );
 
-  <a
+  <Link
     href={"/targets/" ++ targetId}
     key={"target-" ++ targetId}
     className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-    ariaLabel={"Select Target " ++ targetId}
-    onClick={selectTarget(target)}>
+    ariaLabel={"Select Target " ++ targetId}>
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
     <span className={targetStatusClasses(targetStatus)}>
       {targetStatus |> TargetStatus.statusToString |> str}
     </span>
-  </a>;
+  </Link>;
 };
 
 let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
@@ -311,7 +305,6 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~course,
       ~levels,
       ~targetGroups,
@@ -496,11 +489,9 @@ let make =
          target
          course
          targetStatus
-         authenticityToken
          addSubmissionCB={addSubmission(setState)}
          targets
          statusOfTargets={state.statusOfTargets}
-         changeTargetCB=selectTarget
          users
          evaluationCriteria
          coaches
@@ -513,7 +504,7 @@ let make =
     {switch (state.notice) {
      | LevelUp => React.null
      | _anyOtherNotice =>
-       <div>
+       <div className="relative">
          <CoursesCurriculum__LevelSelector
            levels
            teamLevel

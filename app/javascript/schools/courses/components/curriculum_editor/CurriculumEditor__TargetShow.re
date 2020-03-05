@@ -29,17 +29,13 @@ let sortIndexHiddenClass = bool => bool ? " invisible" : "";
 
 let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
   let link = linkPrefix ++ linkSuffix;
-  <a
+
+  <Link
     title={"Edit " ++ linkSuffix ++ " of target " ++ (target |> Target.title)}
-    onClick={event => {
-      event |> ReactEvent.Mouse.preventDefault;
-      event |> ReactEvent.Mouse.stopPropagation;
-      ReasonReactRouter.push(link);
-    }}
     href=link
     className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
     <i className={"fas fa-fw " ++ iconClass} />
-  </a>;
+  </Link>;
 };
 
 [@react.component]
@@ -87,14 +83,11 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
              <i className="fas fa-arrow-down text-sm" />
            </div>
          </div>}
-    <a
+    <Link
       id={"target-show-" ++ (target |> Target.id)}
       title={"Edit content of target " ++ (target |> Target.title)}
       className={targetClasses(target, targets)}
-      onClick={event => {
-        event |> ReactEvent.Mouse.preventDefault;
-        ReasonReactRouter.push(linkPrefix ++ "content");
-      }}>
+      href={linkPrefix ++ "content"}>
       <p className="font-semibold text-sm">
         {target |> Target.title |> str}
       </p>
@@ -102,14 +95,14 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
         {switch (target |> Target.visibility) {
          | Draft =>
            <span
-             className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 mr-2">
+             className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 mr-2 whitespace-no-wrap">
              <i className="fas fa-file-signature text-sm" />
              <span className="ml-1"> {"Draft" |> str} </span>
            </span>
          | _ => React.null
          }}
       </div>
-    </a>
+    </Link>
     {editorLink(linkPrefix, "details", target, "fa-list-alt")}
     {editorLink(linkPrefix, "versions", target, "fa-code-branch")}
   </div>;

@@ -12,9 +12,11 @@ module Targets
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.link_to_complete = target_params[:link_to_complete]
         @target.resubmittable = target_params[:evaluation_criterion_ids].present?
-        @target.evaluation_criterion_ids = target_params[:evaluation_criterion_ids]
         @target.link_to_complete = target_params[:link_to_complete]
         @target.completion_instructions = target_params[:completion_instructions] if target_params[:completion_instructions].present?
+        @target.checklist = target_params[:checklist]
+
+        handle_change_of_evaluation_criteria(target_params[:evaluation_criterion_ids])
 
         @target.save!
 
@@ -29,6 +31,16 @@ module Targets
     end
 
     private
+
+    def handle_change_of_evaluation_criteria(evaluation_criteria_ids)
+      if @target.evaluation_criterion_ids.blank?
+        # Clear submissions without grades when target changes from auto-verified to evaluated.
+        TimelineEvent.left_joins(:timeline_event_grades)
+          .where(target: @target, timeline_event_grades: { id: nil })
+          .destroy_all
+      end
+      @target.evaluation_criterion_ids = evaluation_criteria_ids
+    end
 
     def recreate_quiz(quiz)
       new_quiz = Quiz.create!(target_id: @target.id, title: @target.title)

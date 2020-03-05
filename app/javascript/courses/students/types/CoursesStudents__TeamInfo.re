@@ -11,6 +11,8 @@ type t = {
   levelId: string,
   students: array(student),
   coachUserIds: array(string),
+  droppedOutAt: option(Js.Date.t),
+  accessEndsAt: option(Js.Date.t),
 };
 
 let id = t => t.id;
@@ -32,6 +34,10 @@ let studentTitle = (student: student) => student.title;
 
 let studentAvatarUrl = student => student.avatarUrl;
 
+let droppedOutAt = t => t.droppedOutAt;
+
+let accessEndsAt = t => t.accessEndsAt;
+
 let studentWithId = (studentId, t) =>
   t.students
   |> ArrayUtils.unsafeFind(
@@ -49,12 +55,23 @@ let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
   avatarUrl,
 };
 
-let make = (~id, ~name, ~levelId, ~students, ~coachUserIds) => {
+let make =
+    (
+      ~id,
+      ~name,
+      ~levelId,
+      ~students,
+      ~coachUserIds,
+      ~droppedOutAt,
+      ~accessEndsAt,
+    ) => {
   id,
   name,
   levelId,
   students,
   coachUserIds,
+  droppedOutAt,
+  accessEndsAt,
 };
 
 let makeFromJS = teamDetails => {
@@ -75,6 +92,10 @@ let makeFromJS = teamDetails => {
     ~levelId=teamDetails##levelId,
     ~students,
     ~coachUserIds=teamDetails##coachUserIds,
+    ~droppedOutAt=
+      teamDetails##droppedOutAt |> OptionUtils.map(DateTime.decode),
+    ~accessEndsAt=
+      teamDetails##accessEndsAt |> OptionUtils.map(DateTime.decode),
   );
 };
 

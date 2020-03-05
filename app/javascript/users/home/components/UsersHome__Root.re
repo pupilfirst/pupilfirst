@@ -67,19 +67,19 @@ let navSection = (view, setView, communities) => {
   </div>;
 };
 
-let courseLink = (courseId, title, suffix, icon) => {
+let courseLink = (href, title, icon) => {
   <a
-    key=suffix
-    href={"/courses/" ++ courseId ++ "/" ++ suffix}
+    key=href
+    href
     className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
     <i className=icon />
     <span className="font-semibold ml-2"> {title |> str} </span>
   </a>;
 };
 
-let ctaButton = (title, suffix, courseId) => {
+let ctaButton = (title, href) => {
   <a
-    href={"/courses/" ++ courseId ++ "/" ++ suffix}
+    href
     className="w-full bg-gray-200 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-gray-300">
     <span>
       <i className="fas fa-book" />
@@ -99,24 +99,28 @@ let ctaText = (message, icon) => {
   </div>;
 };
 
+let studentLink = (courseId, suffix) =>
+  "/courses/" ++ courseId ++ "/" ++ suffix;
+
 let callToAction = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
 
   <div>
-    {switch (
-       currentSchoolAdmin,
-       course |> Course.review,
-       course |> Course.exited,
-       course |> Course.ended,
-     ) {
-     | (true, _, _, _) => ctaButton("View Course", "curriculum", courseId)
-     | (false, true, _, _) =>
-       ctaButton("Review Submissions", "review", courseId)
-     | (false, false, true, _) => ctaText("Dropped out", "fas fa-user-slash")
-     | (false, false, false, true) =>
-       ctaText("Course Ended", "fas fa-history")
-     | (false, false, false, false) =>
-       ctaButton("Continue Course", "curriculum", courseId)
+    {if (currentSchoolAdmin) {
+       ctaButton("View Course", studentLink(courseId, "curriculum"));
+     } else if (course |> Course.author) {
+       ctaButton(
+         "Edit Curriculum",
+         "/school/courses/" ++ courseId ++ "/curriculum",
+       );
+     } else if (course |> Course.review) {
+       ctaButton("Review Submissions", studentLink(courseId, "review"));
+     } else if (course |> Course.exited) {
+       ctaText("Dropped out", "fas fa-user-slash");
+     } else if (course |> Course.ended) {
+       ctaText("Course Ended", "fas fa-history");
+     } else {
+       ctaButton("Continue Course", studentLink(courseId, "curriculum"));
      }}
   </div>;
 };
@@ -146,20 +150,38 @@ let communityLinks = (communityIds, communities) => {
 let courseLinks = (course, communities) => {
   let courseId = course |> Course.id;
   <div className="flex flex-wrap px-4 mt-2">
-    {courseLink(courseId, "Curriculum", "curriculum", "fas fa-book")}
+    {course |> Course.author
+       ? courseLink(
+           "/school/courses/" ++ courseId ++ "/curriculum",
+           "Edit Curriculum",
+           "fas fa-check-square",
+         )
+       : React.null}
+    {courseLink(
+       studentLink(courseId, "curriculum"),
+       "View Curriculum",
+       "fas fa-book",
+     )}
     {course |> Course.enableLeaderboard
        ? courseLink(
-           courseId,
+           studentLink(courseId, "leaderboard"),
            "Leaderboard",
-           "leaderboard",
            "fas fa-calendar-alt",
          )
        : React.null}
     {course |> Course.review
-       ? courseLink(courseId, "Review", "review", "fas fa-check-square")
+       ? courseLink(
+           studentLink(courseId, "review"),
+           "Review Submissions",
+           "fas fa-check-square",
+         )
        : React.null}
     {course |> Course.review
-       ? courseLink(courseId, "Students", "students", "fas fa-user-friends")
+       ? courseLink(
+           studentLink(courseId, "students"),
+           "My Students",
+           "fas fa-user-friends",
+         )
        : React.null}
     {communityLinks(course |> Course.linkedCommunities, communities)}
   </div>;

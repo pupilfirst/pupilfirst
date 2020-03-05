@@ -10,7 +10,7 @@ after 'development:communities', 'development:users' do
       question = Question.create!(
         title: Faker::Lorem.sentence,
         community: community,
-        description: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5),
+        description: Faker::Lorem.paragraph(sentence_count: 10, supplemental: false, random_sentences_to_add: 5),
         creator: question_author
       )
 
@@ -20,7 +20,7 @@ after 'development:communities', 'development:users' do
         answer = Answer.create!(
           question: question,
           creator: answer_author,
-          description: Faker::Lorem.paragraph(sentence_count = 10, supplemental = false, random_sentences_to_add = 5)
+          description: Faker::Lorem.paragraph(sentence_count: 10, supplemental: false, random_sentences_to_add: 5)
         )
 
         AnswerLike.create!(
@@ -30,7 +30,7 @@ after 'development:communities', 'development:users' do
 
         answer.comments.create!(
           creator: community_users.sample,
-          value: Faker::Lorem.paragraph(sentence_count = 4, supplemental = false, random_sentences_to_add = 5)
+          value: Faker::Lorem.paragraph(sentence_count: 4, supplemental: false, random_sentences_to_add: 5)
         )
 
         question.touch(:last_activity_at)
@@ -39,7 +39,7 @@ after 'development:communities', 'development:users' do
       community_users.each do |comment_author|
         question.comments.create!(
           creator: comment_author,
-          value: Faker::Lorem.paragraph(sentence_count = 4, supplemental = false, random_sentences_to_add = 5)
+          value: Faker::Lorem.paragraph(sentence_count: 4, supplemental: false, random_sentences_to_add: 5)
         )
       end
     end

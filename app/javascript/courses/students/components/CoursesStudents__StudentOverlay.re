@@ -39,10 +39,10 @@ module StudentDetailsQuery = [%graphql
           note
           createdAt
           author {
+            id
             name
             title
             avatarUrl
-            userId
           }
         },
         team {

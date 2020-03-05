@@ -2,8 +2,8 @@ type t = {
   createdAt: Js.Date.t,
   value: string,
   coachName: string,
-  coachAvatarUrl: string,
-  coachTitle: option(string),
+  coachAvatarUrl: option(string),
+  coachTitle: string,
 };
 let value = t => t.value;
 let coachName = t => t.coachName;

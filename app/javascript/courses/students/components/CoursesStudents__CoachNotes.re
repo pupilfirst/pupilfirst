@@ -11,22 +11,22 @@ let str = React.string;
 
 module CreateCoachNotesMutation = [%graphql
   {|
-   mutation($studentId: ID!, $note: String!) {
-    createCoachNote(studentId: $studentId, note: $note ) {
-       coachNote {
-         id
-         note
-         createdAt
-         author {
-          avatarUrl
-          name
-          title
-          userId
-         }
-       }
+    mutation($studentId: ID!, $note: String!) {
+      createCoachNote(studentId: $studentId, note: $note ) {
+        coachNote {
+          id
+          note
+          createdAt
+          author {
+            id
+            avatarUrl
+            name
+            title
+          }
+        }
       }
     }
-   |}
+  |}
 ];
 
 let saveNote = (studentId, setState, state, addNoteCB) => {

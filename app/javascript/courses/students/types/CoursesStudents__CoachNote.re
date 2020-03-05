@@ -1,6 +1,6 @@
 type t = {
   id: string,
-  author: option(CoursesStudents__Coach.t),
+  author: option(User.t),
   note: string,
   createdAt: Js.Date.t,
 };
@@ -33,7 +33,6 @@ let makeFromJs = note => {
     ~id=note##id,
     ~note=note##note,
     ~createdAt=note##createdAt |> DateFns.parseString,
-    ~author=
-      note##author |> OptionUtils.map(CoursesStudents__Coach.makeFromJs),
+    ~author=note##author |> OptionUtils.map(User.makeFromJs),
   );
 };

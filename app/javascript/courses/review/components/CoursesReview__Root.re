@@ -12,7 +12,7 @@ type state = {
   reviewedSubmissions: ReviewedSubmission.t,
   visibleList,
   selectedLevel: option(Level.t),
-  showOnlyAssignedToMe: bool,
+  selectedCoach: option(Coach.t),
   filterString: string,
 };
 
@@ -24,8 +24,8 @@ type action =
   | UpdateReviewedSubmission(SubmissionInfo.t)
   | SelectPendingTab
   | SelectReviewedTab
-  | SelectAssignedToMe
-  | DeselectAssignedToMe
+  | SelectCoach(Coach.t)
+  | DeselectCoach
   | UpdateFilterString(string);
 
 let reducer = (state, action) =>
@@ -76,21 +76,23 @@ let reducer = (state, action) =>
     }
   | SelectPendingTab => {...state, visibleList: PendingSubmissions}
   | SelectReviewedTab => {...state, visibleList: ReviewedSubmissions}
-  | SelectAssignedToMe => {
+  | SelectCoach(coach) => {
       ...state,
-      showOnlyAssignedToMe: true,
+      selectedCoach: Some(coach),
       filterString: "",
     }
-  | DeselectAssignedToMe => {...state, showOnlyAssignedToMe: false}
+  | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
   };
 
-let computeInitialState = pendingSubmissions => {
+let computeInitialState =
+    ((pendingSubmissions, teamCoaches, currentTeamCoach)) => {
   pendingSubmissions,
   reviewedSubmissions: Unloaded,
   visibleList: PendingSubmissions,
   selectedLevel: None,
-  showOnlyAssignedToMe: true,
+  selectedCoach: currentTeamCoach,
+
   filterString: "",
 };
 
@@ -121,19 +123,22 @@ let buttonClasses = selected =>
 module Selectable = {
   type t =
     | Level(Level.t)
-    | AssignedToMe;
+    | AssignedToCoach(Coach.t, string);
 
   let label = t =>
     switch (t) {
     | Level(level) =>
       Some("Level " ++ (level |> Level.number |> string_of_int))
-    | AssignedToMe => Some("From students")
+    | AssignedToCoach(_) => Some("From students")
     };
 
   let value = t =>
     switch (t) {
     | Level(level) => level |> Level.name
-    | AssignedToMe => "Assigned to me"
+    | AssignedToCoach(coach, currentCoachId) =>
+      let name =
+        coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name;
+      "Assigned to " ++ name;
     };
 
   let searchString = t =>
@@ -143,17 +148,20 @@ module Selectable = {
       ++ (level |> Level.number |> string_of_int)
       ++ " "
       ++ (level |> Level.name)
-    | AssignedToMe => "from students assigned to me"
+    | AssignedToCoach(coach, currentCoachId) =>
+      let addMe = coach |> Coach.id == currentCoachId ? "me" : "";
+      addMe ++ " from students assigned to " ++ (coach |> Coach.name);
     };
 
   let color = _t => "gray";
   let level = level => Level(level);
-  let assignedToMe = () => AssignedToMe;
+  let assignedToCoach = (coach, currentCoachId) =>
+    AssignedToCoach(coach, currentCoachId);
 };
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
 
-let unselected = (levels, state) => {
+let unselected = (levels, coaches, currentCoachId, state) => {
   let unselectedLevels =
     levels
     |> Js.Array.filter(level =>
@@ -166,12 +174,21 @@ let unselected = (levels, state) => {
        )
     |> Array.map(Selectable.level);
 
-  state.showOnlyAssignedToMe
-    ? unselectedLevels
-    : unselectedLevels |> Array.append([|Selectable.assignedToMe()|]);
+  let unselectedCoaches =
+    coaches
+    |> Js.Array.filter(coach =>
+         state.selectedCoach
+         |> OptionUtils.mapWithDefault(
+              selectedCoach => coach |> Coach.id != Coach.id(selectedCoach),
+              true,
+            )
+       )
+    |> Array.map(coach => Selectable.assignedToCoach(coach, currentCoachId));
+
+  unselectedLevels |> Array.append(unselectedCoaches);
 };
 
-let selected = state => {
+let selected = (state, currentCoachId) => {
   let selectedLevel =
     state.selectedLevel
     |> OptionUtils.mapWithDefault(
@@ -179,53 +196,84 @@ let selected = state => {
          [||],
        );
 
-  state.showOnlyAssignedToMe
-    ? selectedLevel |> Array.append([|Selectable.assignedToMe()|])
-    : selectedLevel;
+  let selectedCoach =
+    state.selectedCoach
+    |> OptionUtils.mapWithDefault(
+         selectedCoach => {
+           [|Selectable.assignedToCoach(selectedCoach, currentCoachId)|]
+         },
+         [||],
+       );
+
+  selectedLevel |> Array.append(selectedCoach);
 };
 
 let onSelectFilter = (send, selectable) =>
   switch (selectable) {
-  | Selectable.AssignedToMe => send(SelectAssignedToMe)
+  | Selectable.AssignedToCoach(coach, _currentCoachId) =>
+    send(SelectCoach(coach))
   | Level(level) => send(SelectLevel(level))
   };
 
 let onDeselectFilter = (send, selectable) =>
   switch (selectable) {
-  | Selectable.AssignedToMe => send(DeselectAssignedToMe)
+  | Selectable.AssignedToCoach(_) => send(DeselectCoach)
   | Level(_) => send(DeselectLevel)
   };
 
 let filterPlaceholder = state => {
-  switch (state.selectedLevel, state.showOnlyAssignedToMe) {
-  | (None, true) => "Filter by level"
-  | (None, false) => "Filter by level, or only show submissions assigned to you"
-  | (Some(_), true) => "Filter by another level"
-  | (Some(_), false) => "Filter by another level, or only show submissions assigned to you"
+  switch (state.selectedLevel, state.selectedCoach) {
+  | (None, Some(_)) => "Filter by level"
+  | (None, None) => "Filter by level, or only show submissions assigned to a coach"
+  | (Some(_), Some(_)) => "Filter by another level"
+  | (Some(_), None) => "Filter by another level, or only show submissions assigned to a coach"
   };
 };
 
-let restoreAssignedToMeFilter = (state, send) =>
-  state.showOnlyAssignedToMe
-    ? React.null
-    : <div className="mt-2 text-xs italic">
-        {"Now showing submissions from all students in this course. " |> str}
-        <span
-          className="underline cursor-pointer"
-          onClick={_ => send(SelectAssignedToMe)}>
-          {"Click here to only see submissions assigned to you." |> str}
-        </span>
-      </div>;
+let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
+  switch (state.selectedCoach, currentTeamCoach) {
+  | (None, Some(currentCoach)) =>
+    <div className="mt-2 text-xs italic">
+      {"Now showing submissions from all students in this course. " |> str}
+      <span
+        className="underline cursor-pointer"
+        onClick={_ => send(SelectCoach(currentCoach))}>
+        {"Click here to only see submissions assigned to you." |> str}
+      </span>
+    </div>
+  | (Some(selectedCoach), Some(currentCoach))
+      when selectedCoach |> Coach.id != (currentCoach |> Coach.id) =>
+    <div className="mt-2 text-xs italic">
+      {"Now showing submissions assigned to "
+       ++ (selectedCoach |> Coach.name)
+       ++ ". "
+       |> str}
+      <span
+        className="underline cursor-pointer"
+        onClick={_ => send(SelectCoach(currentCoach))}>
+        {"Click here to only see submissions assigned to you." |> str}
+      </span>
+    </div>
+  | (Some(_), Some(_))
+  | (_, None) => React.null
+  };
 
 [@react.component]
-let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
+let make =
+    (~levels, ~pendingSubmissions, ~courseId, ~teamCoaches, ~currentCoach) => {
+  let currentTeamCoach =
+    teamCoaches->Belt.Array.some(coach =>
+      coach |> Coach.id == (currentCoach |> Coach.id)
+    )
+      ? Some(currentCoach) : None;
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      pendingSubmissions,
+      (pendingSubmissions, teamCoaches, currentTeamCoach),
       computeInitialState,
     );
   let url = ReasonReactRouter.useUrl();
+
   <div>
     {switch (url.path) {
      | ["submissions", submissionId, ..._] =>
@@ -273,15 +321,20 @@ let make = (~levels, ~pendingSubmissions, ~courseId, ~currentCoach) => {
           </div>
         </div>
         <Multiselect
-          unselected={unselected(levels, state)}
-          selected={selected(state)}
+          unselected={unselected(
+            levels,
+            teamCoaches,
+            currentCoach |> Coach.id,
+            state,
+          )}
+          selected={selected(state, currentCoach |> Coach.id)}
           onSelect={onSelectFilter(send)}
           onDeselect={onDeselectFilter(send)}
           value={state.filterString}
           onChange={filterString => send(UpdateFilterString(filterString))}
           placeholder={filterPlaceholder(state)}
         />
-        {restoreAssignedToMeFilter(state, send)}
+        {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
       <div className="max-w-3xl mx-auto">
         {switch (state.visibleList) {

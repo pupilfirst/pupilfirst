@@ -48,7 +48,11 @@ let showFeedback = feedback =>
          <div className="flex items-center">
            <div
              className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
-             <img src={f |> Feedback.coachAvatarUrl} />
+             {switch (f |> Feedback.coachAvatarUrl) {
+              | Some(avatarUrl) => <img src=avatarUrl />
+              | None =>
+                <Avatar name={f |> Feedback.coachName}/>
+              }}
            </div>
            <div>
              <p className="text-xs leading-tight">
@@ -59,14 +63,10 @@ let showFeedback = feedback =>
                  className="font-semibold text-base leading-tight block md:inline-flex self-end">
                  {f |> Feedback.coachName |> str}
                </h4>
-               {switch (f |> Feedback.coachTitle) {
-                | Some(title) =>
-                  <span
-                    className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
-                    {"(" ++ title ++ ")" |> str}
-                  </span>
-                | None => React.null
-                }}
+               <span
+                 className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
+                 {"(" ++ (f |> Feedback.coachTitle) ++ ")" |> str}
+               </span>
              </div>
            </div>
          </div>

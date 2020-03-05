@@ -4,8 +4,8 @@ module Types
     field :value, String, null: false
     field :created_at, String, null: false
     field :coach_name, String, null: false
-    field :coach_avatar_url, String, null: false
-    field :coach_title, String, null: true
+    field :coach_avatar_url, String, null: true
+    field :coach_title, String, null: false
 
     def coach_name
       object.faculty.user.name
@@ -16,7 +16,7 @@ module Types
     end
 
     def coach_avatar_url
-      object.faculty.user.image_or_avatar_url
+      object.faculty.user.avatar_url(variant: :thumb)
     end
 
     def value

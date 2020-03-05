@@ -16,16 +16,23 @@ module Courses
         levels: levels,
         pending_submissions: pending_submissions,
         course_id: @course.id,
-        current_coach: current_coach_details
+        current_coach: current_coach_details,
+        team_coaches: StudentsPresenter.new(view, @course).team_coaches
       }
     end
 
     def current_coach_details
-      {
+      coach = current_user.faculty
+
+      details = {
+        id: coach.id,
+        user_id: current_user.id,
         name: current_user.name,
-        avatar_url: current_user.image_or_avatar_url,
-        title: current_user.title
+        title: current_user.full_title
       }
+
+      details[:avatar_url] = view.rails_representation_path(current_user.avatar_variant(:thumb), only_path: true) if current_user.avatar.attached?
+      details
     end
 
     def levels

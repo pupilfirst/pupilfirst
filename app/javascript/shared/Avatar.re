@@ -71,7 +71,7 @@ let computeColors = name => {
 };
 
 [@react.component]
-let make = (~colors=?, ~name, ~className) => {
+let make = (~colors=?, ~name, ~className=?) => {
   let (bgColor, fgColor) =
     switch (colors) {
     | Some((bgColor, fgColor)) => (bgColor, fgColor)
@@ -83,7 +83,7 @@ let make = (~colors=?, ~name, ~className) => {
     version="1.1"
     viewBox="0 0 100 100"
     title=name
-    className>
+    ?className>
     <circle cx="50" cy="50" r="50" fill=bgColor />
     <text
       fill=fgColor

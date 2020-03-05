@@ -3,6 +3,7 @@ module Courses
   class AddStudentsService
     def initialize(course)
       @course = course
+      @startup_name_translation = {}
     end
 
     # Accepts a list of students to add to a course. Ignores students who are already present.
@@ -41,7 +42,7 @@ module Courses
         affiliation: user.affiliation.presence || student.affiliation
       )
 
-      startup = Startup.create!(name: student.name, level: first_level)
+      startup = find_or_create_startup(student)
 
       # Finally, create a student profile for the user and tag it.
       founder = Founder.create!(user: user, startup: startup)
@@ -55,6 +56,18 @@ module Courses
 
       students.reject do |student|
         student.email.in?(enrolled_student_emails)
+      end
+    end
+
+    def find_or_create_startup(student)
+      startup_id = @startup_name_translation[student.team_name]
+
+      if startup_id.present?
+        Startup.find(startup_id)
+      else
+        startup = Startup.create!(name: student.team_name.presence || student.name, level: first_level)
+        @startup_name_translation[startup.name] = startup.id
+        startup
       end
     end
 

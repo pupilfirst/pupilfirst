@@ -3,20 +3,19 @@ require 'open-uri'
 
 module Courses
   class OnboardService
-    def initialize(course, file_link)
+    def initialize(course, csv)
       @course = course
-      @file_link = file_link
+      @rows = CSV.parse(csv, headers: true)
     end
 
     def execute
-      csv_text = URI.open(@file_link)
-      csv = CSV.parse(csv_text, headers: true)
+      Course.transaction do
+        students = @rows.map do |row|
+          OpenStruct.new(name: row['name'], email: row['email'], title: row['title'], affiliation: row['affiliation'], tags: row['tags'], team_name: row['team_name'])
+        end
 
-      students = csv.map do |row|
-        OpenStruct.new(name: row['Name'], email: row['Email'], title: row['Title'], affiliation: row['Affiliation'], tags: row['Tags'], team_name: row['TeamName'])
+        Courses::AddStudentsService.new(@course).execute(students)
       end
-
-      Courses::AddStudentsService.new(@course).execute(students)
     end
   end
 end

@@ -9,6 +9,7 @@ module Schools
         property :title
         property :affiliation
         property :tags
+        property :team_name
       end
 
       validate :students_must_have_unique_email

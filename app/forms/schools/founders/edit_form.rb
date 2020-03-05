@@ -2,7 +2,7 @@ module Schools
   module Founders
     class EditForm < Reform::Form
       property :name, validates: { presence: true }
-      property :team_name, virtual: true, validates: { presence: true }
+      property :team_name, virtual: true, validates: { presence: true, length: { maximum: 50 } }
       property :excluded_from_leaderboard, validates: { inclusion: { in: [true, false] } }
       property :tags
       property :coach_ids, virtual: true

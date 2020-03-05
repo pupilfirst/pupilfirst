@@ -72,6 +72,15 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
   Api.create(url, payload, responseCB, handleErrorCB(send));
 };
 
+let showTeamName = (teamName, bool) => {
+  bool
+    ? <div>
+        <span> {"Team: " |> str} </span>
+        <span> {teamName |> str} </span>
+      </div>
+    : React.null;
+};
+
 let renderTitleAndAffiliation = (title, affiliation) => {
   let text =
     switch (title == "", affiliation == "") {
@@ -109,9 +118,20 @@ let reducer = (state, action) =>
   | SetSaving(saving) => {...state, saving}
   };
 
+let teamNames = studentsToAdd => {
+  studentsToAdd
+  |> Array.map(student => {student |> StudentInfo.teamName})
+  |> ArrayUtils.distinct;
+};
+
+let findStudentsInTeam = (teamName, studentsToAdd) => {
+  studentsToAdd |> Js.Array.filter(s => s |> StudentInfo.teamName == teamName);
+};
+
 [@react.component]
 let make = (~courseId, ~submitFormCB, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState());
+
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
@@ -141,49 +161,63 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
                 |> str}
              </div>
            | studentInfos =>
-             studentInfos
-             |> Array.map(studentInfo =>
-                  <div
-                    key={studentInfo |> StudentInfo.email}
-                    className="flex justify-between bg-white-100 border shadow rounded-lg mt-2">
-                    <div className="flex flex-col flex-1 flex-wrap p-3">
-                      <div className="flex items-center">
-                        <div className="mr-1 font-semibold">
-                          {studentInfo |> StudentInfo.name |> str}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {" ("
-                           ++ (studentInfo |> StudentInfo.email)
-                           ++ ")"
-                           |> str}
-                        </div>
-                      </div>
-                      {renderTitleAndAffiliation(
-                         studentInfo |> StudentInfo.title,
-                         studentInfo |> StudentInfo.affiliation,
-                       )}
-                      <div className="flex flex-wrap">
-                        {studentInfo
-                         |> StudentInfo.tags
-                         |> Array.map(tag =>
+             teamNames(studentInfos)
+             |> Array.map(teamName => {
+                  let studentsInTeam =
+                    findStudentsInTeam(teamName, studentInfos);
+                  <div className="mt-2 px-2">
+                    {studentsInTeam
+                     |> Array.length > 1
+                     |> showTeamName(teamName)}
+                    <div className="bg-white-100 border shadow rounded-lg">
+                      {studentsInTeam
+                       |> Array.map(studentInfo =>
+                            <div
+                              key={studentInfo |> StudentInfo.email}
+                              className="flex justify-between">
                               <div
-                                key=tag
-                                className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-                                {tag |> str}
+                                className="flex flex-col flex-1 flex-wrap p-3">
+                                <div className="flex items-center">
+                                  <div className="mr-1 font-semibold">
+                                    {studentInfo |> StudentInfo.name |> str}
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    {" ("
+                                     ++ (studentInfo |> StudentInfo.email)
+                                     ++ ")"
+                                     |> str}
+                                  </div>
+                                </div>
+                                {renderTitleAndAffiliation(
+                                   studentInfo |> StudentInfo.title,
+                                   studentInfo |> StudentInfo.affiliation,
+                                 )}
+                                <div className="flex flex-wrap">
+                                  {studentInfo
+                                   |> StudentInfo.tags
+                                   |> Array.map(tag =>
+                                        <div
+                                          key=tag
+                                          className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+                                          {tag |> str}
+                                        </div>
+                                      )
+                                   |> React.array}
+                                </div>
                               </div>
-                            )
-                         |> React.array}
-                      </div>
+                              <button
+                                className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                                onClick={_event =>
+                                  send(RemoveStudentInfo(studentInfo))
+                                }>
+                                <i className="fas fa-trash-alt" />
+                              </button>
+                            </div>
+                          )
+                       |> React.array}
                     </div>
-                    <button
-                      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                      onClick={_event =>
-                        send(RemoveStudentInfo(studentInfo))
-                      }>
-                      <i className="fas fa-trash-alt" />
-                    </button>
-                  </div>
-                )
+                  </div>;
+                })
              |> React.array
            }}
         </div>

@@ -8,12 +8,14 @@ type state = {
   hasNameError: bool,
   hasEmailError: bool,
   tagsToApply: array(string),
+  teamName: string,
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateEmail(string, bool)
   | UpdateTitle(string)
+  | UpdateTeamName(string)
   | UpdateAffiliation(string)
   | ResetForm
   | AddTag(string)
@@ -43,7 +45,9 @@ let formInvalid = (state, emailsToAdd) =>
   || state.hasEmailError
   || hasEmailDuplication(state.email, emailsToAdd);
 
-let handleAdd = (state, send, emailsToAdd, addToListCB) =>
+let handleAdd = (state, send, emailsToAdd, addToListCB) => {
+  let teamName = state.teamName == "" ? state.name : state.teamName;
+
   if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
       StudentInfo.make(
@@ -52,10 +56,12 @@ let handleAdd = (state, send, emailsToAdd, addToListCB) =>
         state.title,
         state.affiliation,
         state.tagsToApply,
+        teamName,
       ),
     );
     send(ResetForm);
   };
+};
 
 let initialState = () => {
   name: "",
@@ -65,13 +71,15 @@ let initialState = () => {
   hasNameError: false,
   hasEmailError: false,
   tagsToApply: [||],
+  teamName: "",
 };
 
 let reducer = (state, action) =>
   switch (action) {
   | UpdateName(name, hasNameError) => {...state, name, hasNameError}
   | UpdateEmail(email, hasEmailError) => {...state, email, hasEmailError}
-  | UpdateTitle(title) => {...state, title}
+  | UpdateTitle(title) => {...state, title: title |> String.trim}
+  | UpdateTeamName(teamName) => {...state, teamName}
   | UpdateAffiliation(affiliation) => {...state, affiliation}
   | ResetForm => {
       name: "",
@@ -81,6 +89,7 @@ let reducer = (state, action) =>
       hasNameError: false,
       hasEmailError: false,
       tagsToApply: state.tagsToApply,
+      teamName: "",
     }
   | AddTag(tag) => {
       ...state,
@@ -179,6 +188,29 @@ let make = (~addToListCB, ~studentTags, ~emailsToAdd) => {
         id="affiliation"
         type_="text"
         placeholder="Acme Inc., Acme University, etc."
+      />
+    </div>
+    <div className="mt-5">
+      <label
+        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+        htmlFor="team_name">
+        {"Team Name" |> str}
+      </label>
+      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      <HelpIcon className="ml-1">
+        {"Students with same team name will be group together. This will now after existing students in the course"
+         |> str}
+      </HelpIcon>
+      <input
+        value={state.teamName}
+        onChange={event =>
+          send(UpdateTeamName(ReactEvent.Form.target(event)##value))
+        }
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        id="team_name"
+        maxLength=50
+        type_="text"
+        placeholder="Avengers, Fantastic Four, etc."
       />
     </div>
     <div className="mt-5">

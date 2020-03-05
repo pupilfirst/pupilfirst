@@ -9,7 +9,7 @@ module Schools
         property :title
         property :affiliation
         property :tags
-        property :team_name
+        property :team_name, validates: { length: { maximum: 50 } }
       end
 
       validate :students_must_have_unique_email

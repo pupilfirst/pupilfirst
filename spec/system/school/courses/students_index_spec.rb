@@ -49,7 +49,7 @@ feature 'School students index', js: true do
     # Add few students
     click_button 'Add New Students'
 
-    # Team 1
+    # Student, alone in a team.
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
     fill_in 'Title', with: title_1
@@ -60,7 +60,7 @@ feature 'School students index', js: true do
     find('span[title="Add new tag Def"]').click
     click_button 'Add to List'
 
-    # Team 2
+    # Student, alone, but with a team name.
     fill_in 'Name', with: name_2
     fill_in 'Email', with: email_2
     fill_in 'Team Name', with: 'some team name'
@@ -96,7 +96,7 @@ feature 'School students index', js: true do
     expect(page).to have_text("(#{email_2})")
     expect(page).to have_text('Add more team members!')
 
-    # Team 3
+    # An actual team with two students.
     name_3 = Faker::Name.name
     email_3 = Faker::Internet.email(name: name_3)
     name_4 = Faker::Name.name

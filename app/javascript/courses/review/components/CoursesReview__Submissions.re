@@ -1,11 +1,11 @@
 open CoursesReview__Types;
 let str = React.string;
 
-let showSubmissionStatus = submission => {
+let showSubmissionStatus = overlaySubmission => {
   let (text, classes) =
     switch (
-      submission |> Submission.passedAt,
-      submission |> Submission.evaluatorName,
+      overlaySubmission |> OverlaySubmission.passedAt,
+      overlaySubmission |> OverlaySubmission.evaluatorName,
     ) {
     | (None, None) => (
         "Pending",
@@ -34,12 +34,12 @@ let showFeedbackSent = feedbackSent =>
       </div>
     : React.null;
 
-let cardClasses = submission =>
+let cardClasses = overlaySubmission =>
   "mt-6 rounded-b-lg bg-white border-t-3 "
   ++ (
     switch (
-      submission |> Submission.passedAt,
-      submission |> Submission.evaluatorName,
+      overlaySubmission |> OverlaySubmission.passedAt,
+      overlaySubmission |> OverlaySubmission.evaluatorName,
     ) {
     | (None, None) => "border-orange-300"
     | (None, Some(_)) => "border-red-500"
@@ -54,18 +54,18 @@ let updateSubmission =
       ~grades,
       ~passed,
       ~newFeedback,
-      ~submission,
+      ~overlaySubmission,
       ~currentCoach,
-      ~updateSubmissionCB,
+      ~addGradingCB,
       ~checklist,
     ) => {
   let feedback =
     switch (newFeedback) {
     | Some(f) =>
-      f == ""
-        ? submission |> Submission.feedback
-        : submission
-          |> Submission.feedback
+      f |> String.trim == ""
+        ? overlaySubmission |> OverlaySubmission.feedback
+        : overlaySubmission
+          |> OverlaySubmission.feedback
           |> Array.append([|
                Feedback.make(
                  ~coachName=currentCoach |> Coach.name,
@@ -75,7 +75,7 @@ let updateSubmission =
                  ~value=f,
                ),
              |])
-    | None => submission |> Submission.feedback
+    | None => overlaySubmission |> OverlaySubmission.feedback
     };
 
   let (passedAt, evaluatedAt, newGrades) =
@@ -86,20 +86,20 @@ let updateSubmission =
         grades,
       )
     | None => (
-        submission |> Submission.passedAt,
-        submission |> Submission.evaluatedAt,
-        submission |> Submission.grades,
+        overlaySubmission |> OverlaySubmission.passedAt,
+        overlaySubmission |> OverlaySubmission.evaluatedAt,
+        overlaySubmission |> OverlaySubmission.grades,
       )
     };
 
   let newSubmission =
-    Submission.make(
-      ~id=submission |> Submission.id,
-      ~createdAt=submission |> Submission.createdAt,
+    OverlaySubmission.make(
+      ~id=overlaySubmission |> OverlaySubmission.id,
+      ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
       ~passedAt,
       ~evaluatorName=
         if (feedbackUpdate) {
-          submission |> Submission.evaluatorName;
+          overlaySubmission |> OverlaySubmission.evaluatorName;
         } else {
           Some(currentCoach |> Coach.name);
         },
@@ -108,15 +108,72 @@ let updateSubmission =
       ~evaluatedAt,
       ~checklist,
     );
-  updateSubmissionCB(feedbackUpdate, newSubmission);
+
+  addGradingCB(newSubmission);
+};
+
+let updateFeedbackArray = (currentCoach, overlaySubmission, newFeedback) => {
+  newFeedback |> String.trim == ""
+    ? overlaySubmission |> OverlaySubmission.feedback
+    : overlaySubmission
+      |> OverlaySubmission.feedback
+      |> Array.append([|
+           Feedback.make(
+             ~coachName=currentCoach |> Coach.name,
+             ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
+             ~coachTitle=currentCoach |> Coach.title,
+             ~createdAt=Js.Date.make(),
+             ~value=newFeedback,
+           ),
+         |]);
+};
+
+let addGrading =
+    (
+      ~addGradingCB,
+      ~currentCoach,
+      ~overlaySubmission,
+      ~newFeedback,
+      ~passed,
+      ~grades,
+      ~checklist,
+    ) => {
+  let feedback =
+    updateFeedbackArray(currentCoach, overlaySubmission, newFeedback);
+
+  let passedAt = passed ? Some(Js.Date.make()) : None;
+  let evaluatedAt = Some(Js.Date.make());
+
+  OverlaySubmission.make(
+    ~id=overlaySubmission |> OverlaySubmission.id,
+    ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
+    ~passedAt,
+    ~evaluatorName=Some(currentCoach |> Coach.name),
+    ~feedback,
+    ~grades,
+    ~evaluatedAt,
+    ~checklist,
+  )
+  |> addGradingCB;
+};
+
+let addFeedback =
+    (addFeedbackCB, currentCoach, overlaySubmission, newFeedback) => {
+  let feedback =
+    updateFeedbackArray(currentCoach, overlaySubmission, newFeedback);
+
+  overlaySubmission
+  |> OverlaySubmission.updateFeedback(feedback)
+  |> addFeedbackCB;
 };
 
 [@react.component]
 let make =
     (
-      ~submission,
+      ~overlaySubmission,
       ~teamSubmission,
-      ~updateSubmissionCB,
+      ~addGradingCB,
+      ~addFeedbackCB,
       ~submissionNumber,
       ~currentCoach,
       ~evaluationCriteria,
@@ -126,8 +183,11 @@ let make =
       ~targetEvaluationCriteriaIds,
     ) =>
   <div
-    ariaLabel={"submissions-overlay-card-" ++ (submission |> Submission.id)}
-    className={cardClasses(submission)}>
+    ariaLabel={
+      "submissions-overlay-card-"
+      ++ (overlaySubmission |> OverlaySubmission.id)
+    }
+    className={cardClasses(overlaySubmission)}>
     <div className="rounded-b-lg shadow">
       <div
         className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
@@ -136,42 +196,48 @@ let make =
             {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
           </h2>
           <span className="text-xs text-gray-800 pt-px">
-            {submission |> Submission.createdAt |> Submission.prettyDate |> str}
+            {overlaySubmission
+             |> OverlaySubmission.createdAt
+             |> DateFns.format("MMMM D, YYYY")
+             |> str}
           </span>
         </div>
         <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
           {showFeedbackSent(
-             submission |> Submission.feedback |> ArrayUtils.isNotEmpty,
+             overlaySubmission
+             |> OverlaySubmission.feedback
+             |> ArrayUtils.isNotEmpty,
            )}
-          {showSubmissionStatus(submission)}
+          {showSubmissionStatus(overlaySubmission)}
         </div>
       </div>
       <CoursesReview__GradeCard
-        submission
+        overlaySubmission
         teamSubmission
         evaluationCriteria
         targetEvaluationCriteriaIds
         reviewChecklist
-        updateSubmissionCB={updateSubmission(
-          ~feedbackUpdate=false,
-          ~submission,
+        addGradingCB={addGrading(
+          ~addGradingCB,
           ~currentCoach,
-          ~updateSubmissionCB,
+          ~overlaySubmission,
         )}
         updateReviewChecklistCB
         targetId
       />
       <CoursesReview__ShowFeedback
-        feedback={submission |> Submission.feedback}
-        reviewed={submission |> Submission.grades |> ArrayUtils.isNotEmpty}
-        submissionId={submission |> Submission.id}
+        feedback={overlaySubmission |> OverlaySubmission.feedback}
+        reviewed={
+          overlaySubmission
+          |> OverlaySubmission.grades
+          |> ArrayUtils.isNotEmpty
+        }
+        submissionId={overlaySubmission |> OverlaySubmission.id}
         reviewChecklist
-        updateSubmissionCB={updateSubmission(
-          ~feedbackUpdate=true,
-          ~submission,
-          ~currentCoach,
-          ~updateSubmissionCB,
-          ~checklist={submission |> Submission.checklist},
+        addFeedbackCB={addFeedback(
+          addFeedbackCB,
+          currentCoach,
+          overlaySubmission,
         )}
         updateReviewChecklistCB
         targetId

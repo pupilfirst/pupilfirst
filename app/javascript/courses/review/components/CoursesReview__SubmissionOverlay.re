@@ -46,7 +46,7 @@ module SubmissionDetailsQuery = [%graphql
 ];
 
 let updateSubmissionDetails = (setState, details) =>
-  setState(_ => Loaded(details |> SubmissionDetails.decodeJS));
+  setState(_ => Loaded(details |> SubmissionDetails.decodeJs));
 
 let getSubmissionDetails = (submissionId, setState, ()) => {
   setState(_ => Loading);
@@ -134,26 +134,40 @@ let headerSection = (submissionDetails, courseId) =>
     </div>
   </div>;
 
-let updateSubmission =
+let updateSubmissionDetails = (setState, submissionDetails, overlaySubmission) => {
+  // Create new details for overlay with updated overlaySubmission.
+  let newSubmissionDetails =
+    submissionDetails |> SubmissionDetails.updateSubmission(overlaySubmission);
+
+  // Re-render the overlay with the updated submission details.
+  setState(_ => Loaded(newSubmissionDetails));
+
+  newSubmissionDetails;
+};
+
+let addGrading =
     (
-      submissionDetails,
       setState,
       removePendingSubmissionCB,
-      updateReviewedSubmissionCB,
-      feedbackUpdate,
-      submission,
+      submissionDetails,
+      overlaySubmission,
     ) => {
-  let newSubmissionDetails =
-    SubmissionDetails.updateSubmission(submissionDetails, submission);
-  setState(_ => Loaded(newSubmissionDetails));
-  feedbackUpdate
-    ? updateReviewedSubmissionCB(
-        SubmissionDetails.makeSubmissionInfo(
-          newSubmissionDetails,
-          submission,
-        ),
-      )
-    : removePendingSubmissionCB(submission |> Submission.id);
+  updateSubmissionDetails(setState, submissionDetails, overlaySubmission)
+  |> ignore;
+
+  overlaySubmission |> OverlaySubmission.id |> removePendingSubmissionCB;
+};
+
+let addFeedbackToReviewedSubmission =
+    (
+      setState,
+      updateReviewedSubmissionCB,
+      submissionDetails,
+      overlaySubmission,
+    ) => {
+  updateSubmissionDetails(setState, submissionDetails, overlaySubmission)
+  |> SubmissionDetails.makeIndexSubmission(overlaySubmission)
+  |> updateReviewedSubmissionCB;
 };
 
 let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) => {
@@ -216,10 +230,10 @@ let make =
            className="review-submission-overlay__submission-container relative container mx-auto max-w-3xl px-3 lg:px-0 pb-8">
            {submissionDetails
             |> SubmissionDetails.submissions
-            |> Array.mapi((index, submission) =>
+            |> Array.mapi((index, overlaySubmission) =>
                  <CoursesReview__Submissions
                    key={index |> string_of_int}
-                   submission
+                   overlaySubmission
                    teamSubmission={
                      submissionDetails
                      |> SubmissionDetails.students
@@ -229,11 +243,15 @@ let make =
                      submissionDetails
                      |> SubmissionDetails.targetEvaluationCriteriaIds
                    }
-                   updateSubmissionCB={updateSubmission(
-                     submissionDetails,
+                   addGradingCB={addGrading(
                      setState,
                      removePendingSubmissionCB,
+                     submissionDetails,
+                   )}
+                   addFeedbackCB={addFeedbackToReviewedSubmission(
+                     setState,
                      updateReviewedSubmissionCB,
+                     submissionDetails,
                    )}
                    submissionNumber={
                      (

@@ -8,7 +8,7 @@ type visibleList =
   | ReviewedSubmissions;
 
 type state = {
-  pendingSubmissions: array(SubmissionInfo.t),
+  pendingSubmissions: array(IndexSubmission.t),
   reviewedSubmissions: ReviewedSubmission.t,
   visibleList,
   selectedLevel: option(Level.t),
@@ -20,8 +20,8 @@ type action =
   | SelectLevel(Level.t)
   | DeselectLevel
   | RemovePendingSubmission(string)
-  | SetReviewedSubmissions(array(SubmissionInfo.t), bool, option(string))
-  | UpdateReviewedSubmission(SubmissionInfo.t)
+  | SetReviewedSubmissions(array(IndexSubmission.t), bool, option(string))
+  | UpdateReviewedSubmission(IndexSubmission.t)
   | SelectPendingTab
   | SelectReviewedTab
   | SelectCoach(Coach.t)
@@ -45,7 +45,7 @@ let reducer = (state, action) =>
       ...state,
       pendingSubmissions:
         state.pendingSubmissions
-        |> Js.Array.filter(s => s |> SubmissionInfo.id != submissionId),
+        |> Js.Array.filter(s => s |> IndexSubmission.id != submissionId),
       reviewedSubmissions: Unloaded,
     }
   | SetReviewedSubmissions(reviewedSubmissions, hasNextPage, endCursor) => {
@@ -65,12 +65,12 @@ let reducer = (state, action) =>
         | Unloaded => Unloaded
         | PartiallyLoaded(reviewedSubmissions, cursor) =>
           PartiallyLoaded(
-            reviewedSubmissions |> SubmissionInfo.replace(submission),
+            reviewedSubmissions |> IndexSubmission.replace(submission),
             cursor,
           )
         | FullyLoaded(reviewedSubmissions) =>
           FullyLoaded(
-            reviewedSubmissions |> SubmissionInfo.replace(submission),
+            reviewedSubmissions |> IndexSubmission.replace(submission),
           )
         },
     }
@@ -149,8 +149,8 @@ module Selectable = {
       ++ " "
       ++ (level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
-      let addMe = coach |> Coach.id == currentCoachId ? "me" : "";
-      addMe ++ " from students assigned to " ++ (coach |> Coach.name);
+      let addMe = coach |> Coach.id == currentCoachId ? " me" : "";
+      (coach |> Coach.name) ++ " from students assigned to" ++ addMe;
     };
 
   let color = _t => "gray";
@@ -343,6 +343,7 @@ let make =
              submissions={state.pendingSubmissions}
              levels
              selectedLevel={state.selectedLevel}
+             selectedCoach={state.selectedCoach}
            />
          | ReviewedSubmissions =>
            <CoursesReview__ShowReviewedSubmissions

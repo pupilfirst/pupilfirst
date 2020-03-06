@@ -3,7 +3,7 @@ open CoursesReview__Types;
 let decodeProps = json =>
   Json.Decode.(
     json |> field("levels", array(Level.decode)),
-    json |> field("pendingSubmissions", array(SubmissionInfo.decode)),
+    json |> field("pendingSubmissions", array(IndexSubmission.decode)),
     json |> field("courseId", string),
     json |> field("teamCoaches", array(Coach.decode)),
     json |> field("currentCoach", Coach.decode),

@@ -18,7 +18,7 @@ module CreateFeedbackMutation = [%graphql
   |}
 ];
 
-let createFeedback = (submissionId, feedback, setState, updateSubmissionCB) => {
+let createFeedback = (submissionId, feedback, setState, addFeedbackCB) => {
   setState(state => {...state, saving: true});
 
   CreateFeedbackMutation.make(~submissionId, ~feedback, ())
@@ -26,11 +26,7 @@ let createFeedback = (submissionId, feedback, setState, updateSubmissionCB) => {
   |> Js.Promise.then_(response => {
        response##createFeedback##success
          ? {
-           updateSubmissionCB(
-             ~grades=[||],
-             ~passed=None,
-             ~newFeedback=Some(feedback),
-           );
+           addFeedbackCB(feedback);
            setState(_ =>
              {saving: false, newFeedback: "", showFeedbackEditor: false}
            );
@@ -50,8 +46,7 @@ let showFeedback = feedback =>
              className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
              {switch (f |> Feedback.coachAvatarUrl) {
               | Some(avatarUrl) => <img src=avatarUrl />
-              | None =>
-                <Avatar name={f |> Feedback.coachName}/>
+              | None => <Avatar name={f |> Feedback.coachName} />
               }}
            </div>
            <div>
@@ -95,7 +90,7 @@ let make =
       ~reviewed,
       ~submissionId,
       ~reviewChecklist,
-      ~updateSubmissionCB,
+      ~addFeedbackCB,
       ~updateReviewChecklistCB,
       ~targetId,
     ) => {
@@ -130,7 +125,7 @@ let make =
                           submissionId,
                           state.newFeedback,
                           setState,
-                          updateSubmissionCB,
+                          addFeedbackCB,
                         )
                       }>
                       {"Share Feedback" |> str}

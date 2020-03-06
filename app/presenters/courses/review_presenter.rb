@@ -47,10 +47,17 @@ module Courses
 
     def pending_submissions
       @pending_submissions ||= TimelineEvent.pending_review.from_founders(students).includes(founders: :user, target: :target_group).map do |timeline_event|
+        team_ids = timeline_event.founders.map(&:startup_id).uniq
+        coach_ids = FacultyStartupEnrollment.where(startup_id: team_ids).pluck(:faculty_id)
+
         timeline_event.attributes.slice('id', 'target_id', 'created_at')
-          .merge(title: timeline_event.target.title)
           .merge(timeline_event.target.target_group.slice('level_id'))
-          .merge(user_names: user_names(timeline_event)).merge(status: nil)
+          .merge(
+            user_names: user_names(timeline_event),
+            title: timeline_event.target.title,
+            status: nil,
+            coach_ids: coach_ids
+          )
       end
     end
 

@@ -10,7 +10,15 @@ module ReviewedSubmissionsQuery = [%graphql
     query($courseId: ID!, $levelId: ID, $after: String) {
       reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20, after: $after) {
         nodes {
-        id,title,userNames,failed,feedbackSent,levelId,createdAt,targetId
+          id,
+          title,
+          userNames,
+          failed,
+          feedbackSent,
+          levelId,
+          createdAt,
+          targetId,
+          coachIds
         }
         pageInfo{
           endCursor,hasNextPage
@@ -37,7 +45,7 @@ let updateReviewedSubmissions =
              switch (nodes) {
              | None => [||]
              | Some(submissionsArray) =>
-               submissionsArray |> SubmissionInfo.decodeJS
+               submissionsArray |> IndexSubmission.decodeJs
              }
            )
            |> Array.to_list
@@ -92,7 +100,7 @@ let getReviewedSubmissions =
   |> ignore;
 };
 
-let showSubmissionStatus = failed =>
+let submissionStatus = failed =>
   failed
     ? <div
         className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
@@ -103,7 +111,7 @@ let showSubmissionStatus = failed =>
         {"Passed" |> str}
       </div>;
 
-let showFeedbackSent = feedbackSent =>
+let feedbackSentNotice = feedbackSent =>
   feedbackSent
     ? <div
         className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-3 py-px rounded mr-3">
@@ -116,7 +124,7 @@ let submissionCardClasses = status =>
   ++ (
     switch (status) {
     | Some(s) =>
-      s |> SubmissionInfo.failed ? "border-red-500" : "border-green-500"
+      s |> IndexSubmission.failed ? "border-red-500" : "border-green-500"
     | None => "border-gray-600"
     }
   );
@@ -124,23 +132,23 @@ let submissionCardClasses = status =>
 let showSubmission = (submissions, levels) =>
   <div>
     {submissions
-     |> SubmissionInfo.sort
+     |> IndexSubmission.sort
      |> Array.map(submission =>
           <Link
-            href={"/submissions/" ++ (submission |> SubmissionInfo.id)}
-            key={submission |> SubmissionInfo.id}
+            href={"/submissions/" ++ (submission |> IndexSubmission.id)}
+            key={submission |> IndexSubmission.id}
             ariaLabel={
-              "reviewed-submission-card-" ++ (submission |> SubmissionInfo.id)
+              "reviewed-submission-card-" ++ (submission |> IndexSubmission.id)
             }
             className={submissionCardClasses(
-              submission |> SubmissionInfo.status,
+              submission |> IndexSubmission.status,
             )}>
             <div className="w-full md:w-3/4">
               <div className="block text-sm md:pr-2">
                 <span
                   className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                   {submission
-                   |> SubmissionInfo.levelId
+                   |> IndexSubmission.levelId
                    |> Level.unsafeLevelNumber(
                         levels,
                         "ShowReviewedSubmission",
@@ -148,27 +156,27 @@ let showSubmission = (submissions, levels) =>
                    |> str}
                 </span>
                 <span className="ml-2 font-semibold text-base">
-                  {submission |> SubmissionInfo.title |> str}
+                  {submission |> IndexSubmission.title |> str}
                 </span>
               </div>
               <div className="mt-1 ml-px text-xs text-gray-900">
                 <span> {"Submitted by " |> str} </span>
                 <span className="font-semibold">
-                  {submission |> SubmissionInfo.userNames |> str}
+                  {submission |> IndexSubmission.userNames |> str}
                 </span>
                 <span className="ml-1">
                   {"on "
-                   ++ (submission |> SubmissionInfo.createdAtPretty)
+                   ++ (submission |> IndexSubmission.createdAtPretty)
                    |> str}
                 </span>
               </div>
             </div>
-            {switch (submission |> SubmissionInfo.status) {
+            {switch (submission |> IndexSubmission.status) {
              | Some(status) =>
                <div
                  className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                 {showFeedbackSent(status |> SubmissionInfo.feedbackSent)}
-                 {showSubmissionStatus(status |> SubmissionInfo.failed)}
+                 {feedbackSentNotice(status |> IndexSubmission.feedbackSent)}
+                 {submissionStatus(status |> IndexSubmission.failed)}
                </div>
              | None => React.null
              }}

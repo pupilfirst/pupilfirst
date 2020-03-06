@@ -1,4 +1,4 @@
 type t =
   | Unloaded
-  | PartiallyLoaded(array(CoursesReview__SubmissionInfo.t), string)
-  | FullyLoaded(array(CoursesReview__SubmissionInfo.t));
+  | PartiallyLoaded(array(CoursesReview__IndexSubmission.t), string)
+  | FullyLoaded(array(CoursesReview__IndexSubmission.t));

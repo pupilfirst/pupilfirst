@@ -23,8 +23,7 @@ let make =
       ~student,
       ~team,
       ~studentTags,
-      ~courseCoachIds,
-      ~schoolCoaches,
+      ~courseCoaches,
       ~updateFormCB,
       ~reloadTeamsCB,
     ) => {
@@ -76,8 +75,7 @@ let make =
           student
           team
           studentTags
-          courseCoachIds
-          schoolCoaches
+          courseCoaches
           updateFormCB
         />
       </div>

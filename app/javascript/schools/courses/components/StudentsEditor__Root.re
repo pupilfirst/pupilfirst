@@ -194,14 +194,18 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
      | UpdateForm(student, teamId) =>
        let team =
          teamId |> Team.unsafeFind(state.pagedTeams |> Page.teams, "Root");
+       let courseCoaches =
+         schoolCoaches
+         |> Js.Array.filter(coach =>
+              courseCoachIds |> Array.mem(Coach.id(coach))
+            );
        <SchoolAdmin__EditorDrawer
          closeDrawerCB={() => send(UpdateFormVisible(None))}>
          <StudentsEditor__UpdateForm
            student
            team
            studentTags={state.tags}
-           courseCoachIds
-           schoolCoaches
+           courseCoaches
            updateFormCB={updateForm(send)}
            reloadTeamsCB={reloadTeams(send)}
          />

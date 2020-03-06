@@ -204,16 +204,16 @@ let deSelectTeamCoach = (send, state, coach) => {
 module MultiselectForTeamCoaches =
   MultiselectInline.Make(SelectablePrerequisiteTargets);
 
-let teamCoachesEditor = (schoolCoaches, state, send) => {
+let teamCoachesEditor = (courseCoaches, state, send) => {
   let selected =
-    schoolCoaches
+    courseCoaches
     |> Js.Array.filter(coach =>
          state.teamCoaches |> Array.mem(Coach.id(coach))
        )
     |> Array.map(coach => SelectablePrerequisiteTargets.make(coach));
 
   let unselected =
-    schoolCoaches
+    courseCoaches
     |> Js.Array.filter(coach =>
          !(state.teamCoaches |> Array.mem(Coach.id(coach)))
        )
@@ -276,15 +276,7 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make =
-    (
-      ~student,
-      ~team,
-      ~studentTags,
-      ~courseCoachIds,
-      ~schoolCoaches,
-      ~updateFormCB,
-    ) => {
+let make = (~student, ~team, ~studentTags, ~courseCoaches, ~updateFormCB) => {
   let (state, send) =
     React.useReducer(reducer, initialState(student, team));
 
@@ -380,7 +372,7 @@ let make =
           <span className="inline-block mr-1 text-xs font-semibold">
             {(isSingleStudent ? "Personal Coaches" : "Team Coaches") |> str}
           </span>
-          {teamCoachesEditor(schoolCoaches, state, send)}
+          {teamCoachesEditor(courseCoaches, state, send)}
         </div>
       </div>
       <div className="mt-5">

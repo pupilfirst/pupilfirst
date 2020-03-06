@@ -9,7 +9,6 @@ class AutoVerifySubmissionMutator < ApplicationQuery
   def create_submission
     target.timeline_events.create!(
       founders: founders,
-      description: description,
       passed_at: Time.zone.now,
       latest: true
     )

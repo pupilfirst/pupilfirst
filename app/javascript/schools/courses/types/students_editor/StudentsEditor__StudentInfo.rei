@@ -10,6 +10,17 @@ let title: t => string;
 
 let affiliation: t => string;
 
+let teamName: t => option(string);
+
 let encode: t => Js.Json.t;
 
-let make: (string, string, string, string, array(string)) => t;
+let make:
+  (
+    ~name: string,
+    ~email: string,
+    ~title: string,
+    ~affiliation: string,
+    ~tags: array(string),
+    ~teamName: option(string)
+  ) =>
+  t;

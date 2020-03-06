@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_21_075009) do
+ActiveRecord::Schema.define(version: 2020_03_05_061900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -718,9 +718,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
   end
 
   create_table "timeline_events", id: :serial, force: :cascade do |t|
-    t.text "description"
     t.string "image"
-    t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "improved_timeline_event_id"

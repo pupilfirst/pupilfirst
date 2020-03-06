@@ -318,6 +318,7 @@ let make = (~student, ~team, ~studentTags, ~courseCoaches, ~updateFormCB) => {
                onChange={event =>
                  updateTeamName(send, ReactEvent.Form.target(event)##value)
                }
+               maxLength=50
                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
                id="team_name"
                type_="text"

@@ -4,32 +4,47 @@ let pendingEmptyImage: string = [%raw
 open CoursesReview__Types;
 let str = React.string;
 
+let filterSubmissions = (selectedLevel, selectedCoach, submissions) => {
+  let levelFiltered =
+    selectedLevel
+    |> OptionUtils.mapWithDefault(
+         level =>
+           submissions
+           |> Js.Array.filter(l =>
+                l |> IndexSubmission.levelId == (level |> Level.id)
+              ),
+         submissions,
+       );
+
+  selectedCoach
+  |> OptionUtils.mapWithDefault(
+       coach =>
+         levelFiltered
+         |> Js.Array.filter(l =>
+              l |> IndexSubmission.coachIds |> Array.mem(coach |> Coach.id)
+            ),
+       levelFiltered,
+     );
+};
+
 [@react.component]
 let make = (~submissions, ~levels, ~selectedLevel, ~selectedCoach) => {
-  let submissionToShow =
-    (
-      switch (selectedLevel) {
-      | None => submissions
-      | Some(level) =>
-        submissions
-        |> Js.Array.filter(l =>
-             l |> IndexSubmission.levelId == (level |> Level.id)
-           )
-      }
-    )
+  let filteredSubmissions =
+    submissions
+    |> filterSubmissions(selectedLevel, selectedCoach)
     |> IndexSubmission.sort;
+
   <div>
-    {switch (submissionToShow) {
-     | [||] =>
+    {if (filteredSubmissions |> ArrayUtils.isEmpty) {
        <div
          className="course-review__pending-empty text-lg font-semibold text-center py-4">
          <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
            {"No pending submissions to review" |> str}
          </h5>
          <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=pendingEmptyImage />
-       </div>
-     | _ =>
-       submissionToShow
+       </div>;
+     } else {
+       filteredSubmissions
        |> Array.map(indexSubmission =>
             <Link
               href={"/submissions/" ++ (indexSubmission |> IndexSubmission.id)}
@@ -75,7 +90,7 @@ let make = (~submissions, ~levels, ~selectedLevel, ~selectedCoach) => {
               </div>
             </Link>
           )
-       |> React.array
+       |> React.array;
      }}
   </div>;
 };

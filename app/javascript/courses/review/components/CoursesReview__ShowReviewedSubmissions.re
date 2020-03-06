@@ -7,8 +7,8 @@ let str = React.string;
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID, $after: String) {
-      reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20, after: $after) {
+    query($courseId: ID!, $levelId: ID, $coachId: ID, $after: String) {
+      reviewedSubmissions(courseId: $courseId, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
         nodes {
           id,
           title,
@@ -64,26 +64,21 @@ let getReviewedSubmissions =
       cursor,
       setLoading,
       selectedLevel,
+      selectedCoach,
       reviewedSubmissions,
       updateReviewedSubmissionsCB,
     ) => {
   setLoading(_ => true);
 
-  (
-    switch (selectedLevel, cursor) {
-    | (Some(level), Some(cursor)) =>
-      ReviewedSubmissionsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~after=cursor,
-        (),
-      )
-    | (Some(level), None) =>
-      ReviewedSubmissionsQuery.make(~courseId, ~levelId=level |> Level.id, ())
-    | (None, Some(cursor)) =>
-      ReviewedSubmissionsQuery.make(~courseId, ~after=cursor, ())
-    | (None, None) => ReviewedSubmissionsQuery.make(~courseId, ())
-    }
+  let levelId = selectedLevel |> OptionUtils.map(level => level |> Level.id);
+  let coachId = selectedCoach |> OptionUtils.map(coach => coach |> Coach.id);
+
+  ReviewedSubmissionsQuery.make(
+    ~courseId,
+    ~levelId?,
+    ~coachId?,
+    ~after=?cursor,
+    (),
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
@@ -201,12 +196,13 @@ let make =
     (
       ~courseId,
       ~selectedLevel,
+      ~selectedCoach,
       ~levels,
       ~reviewedSubmissions,
       ~updateReviewedSubmissionsCB,
     ) => {
   let (loading, setLoading) = React.useState(() => false);
-  React.useEffect1(
+  React.useEffect2(
     () => {
       switch ((reviewedSubmissions: ReviewedSubmission.t)) {
       | Unloaded =>
@@ -215,6 +211,7 @@ let make =
           None,
           setLoading,
           selectedLevel,
+          selectedCoach,
           [||],
           updateReviewedSubmissionsCB,
         )
@@ -223,7 +220,7 @@ let make =
       };
       None;
     },
-    [|selectedLevel|],
+    (selectedLevel, selectedCoach),
   );
 
   <div>
@@ -246,6 +243,7 @@ let make =
                     Some(cursor),
                     setLoading,
                     selectedLevel,
+                    selectedCoach,
                     reviewedSubmissions,
                     updateReviewedSubmissionsCB,
                   )

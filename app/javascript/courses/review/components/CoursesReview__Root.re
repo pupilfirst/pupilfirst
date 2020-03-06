@@ -80,19 +80,22 @@ let reducer = (state, action) =>
       ...state,
       selectedCoach: Some(coach),
       filterString: "",
+      reviewedSubmissions: Unloaded,
     }
-  | DeselectCoach => {...state, selectedCoach: None}
+  | DeselectCoach => {
+      ...state,
+      selectedCoach: None,
+      reviewedSubmissions: Unloaded,
+    }
   | UpdateFilterString(filterString) => {...state, filterString}
   };
 
-let computeInitialState =
-    ((pendingSubmissions, teamCoaches, currentTeamCoach)) => {
+let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
   pendingSubmissions,
   reviewedSubmissions: Unloaded,
   visibleList: PendingSubmissions,
   selectedLevel: None,
   selectedCoach: currentTeamCoach,
-
   filterString: "",
 };
 
@@ -129,16 +132,14 @@ module Selectable = {
     switch (t) {
     | Level(level) =>
       Some("Level " ++ (level |> Level.number |> string_of_int))
-    | AssignedToCoach(_) => Some("From students")
+    | AssignedToCoach(_) => Some("Assigned to")
     };
 
   let value = t =>
     switch (t) {
     | Level(level) => level |> Level.name
     | AssignedToCoach(coach, currentCoachId) =>
-      let name =
-        coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name;
-      "Assigned to " ++ name;
+      coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
     };
 
   let searchString = t =>
@@ -149,8 +150,11 @@ module Selectable = {
       ++ " "
       ++ (level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
-      let addMe = coach |> Coach.id == currentCoachId ? " me" : "";
-      (coach |> Coach.name) ++ " from students assigned to" ++ addMe;
+      if (coach |> Coach.id == currentCoachId) {
+        (coach |> Coach.name) ++ " assigned to me";
+      } else {
+        "assigned to " ++ (coach |> Coach.name);
+      }
     };
 
   let color = _t => "gray";
@@ -230,46 +234,59 @@ let filterPlaceholder = state => {
   };
 };
 
+let restoreFilterNotice = (send, currentCoach, message) =>
+  <div
+    className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
+    <span> {message |> str} </span>
+    <button
+      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
+      onClick={_ => send(SelectCoach(currentCoach))}>
+      {"Assigned to: Me" |> str}
+      <i className="fas fa-level-up-alt ml-2" />
+    </button>
+  </div>;
+
 let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
-  switch (state.selectedCoach, currentTeamCoach) {
-  | (None, Some(currentCoach)) =>
-    <div className="mt-2 text-xs italic">
-      {"Now showing submissions from all students in this course. " |> str}
-      <span
-        className="underline cursor-pointer"
-        onClick={_ => send(SelectCoach(currentCoach))}>
-        {"Click here to only see submissions assigned to you." |> str}
-      </span>
-    </div>
-  | (Some(selectedCoach), Some(currentCoach))
-      when selectedCoach |> Coach.id != (currentCoach |> Coach.id) =>
-    <div className="mt-2 text-xs italic">
-      {"Now showing submissions assigned to "
-       ++ (selectedCoach |> Coach.name)
-       ++ ". "
-       |> str}
-      <span
-        className="underline cursor-pointer"
-        onClick={_ => send(SelectCoach(currentCoach))}>
-        {"Click here to only see submissions assigned to you." |> str}
-      </span>
-    </div>
-  | (Some(_), Some(_))
-  | (_, None) => React.null
-  };
+  currentTeamCoach
+  |> OptionUtils.mapWithDefault(
+       currentCoach => {
+         switch (state.selectedCoach) {
+         | None =>
+           restoreFilterNotice(
+             send,
+             currentCoach,
+             "Now showing submissions from all students in this course.",
+           )
+         | Some(selectedCoach)
+             when selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
+         | Some(selectedCoach) =>
+           restoreFilterNotice(
+             send,
+             currentCoach,
+             "Now showing submissions assigned to "
+             ++ (selectedCoach |> Coach.name)
+             ++ ".",
+           )
+         }
+       },
+       React.null,
+     );
 
 [@react.component]
 let make =
     (~levels, ~pendingSubmissions, ~courseId, ~teamCoaches, ~currentCoach) => {
-  let currentTeamCoach =
-    teamCoaches->Belt.Array.some(coach =>
-      coach |> Coach.id == (currentCoach |> Coach.id)
-    )
-      ? Some(currentCoach) : None;
+  let (currentTeamCoach, _) =
+    React.useState(() =>
+      teamCoaches->Belt.Array.some(coach =>
+        coach |> Coach.id == (currentCoach |> Coach.id)
+      )
+        ? Some(currentCoach) : None
+    );
+
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      (pendingSubmissions, teamCoaches, currentTeamCoach),
+      (pendingSubmissions, currentTeamCoach),
       computeInitialState,
     );
   let url = ReasonReactRouter.useUrl();
@@ -349,6 +366,7 @@ let make =
            <CoursesReview__ShowReviewedSubmissions
              courseId
              selectedLevel={state.selectedLevel}
+             selectedCoach={state.selectedCoach}
              levels
              reviewedSubmissions={state.reviewedSubmissions}
              updateReviewedSubmissionsCB={(

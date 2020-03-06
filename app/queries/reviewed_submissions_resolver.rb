@@ -1,9 +1,13 @@
 class ReviewedSubmissionsResolver < ApplicationQuery
   property :course_id
   property :level_id
+  property :coach_id
 
   def reviewed_submissions
-    submissions.evaluated_by_faculty.includes(:startup_feedback, founders: :user, target: :target_group).distinct.order("created_at DESC")
+    submissions.evaluated_by_faculty
+      .includes(:startup_feedback, founders: :user, target: :target_group)
+      .distinct
+      .order("created_at DESC")
   end
 
   def authorized?
@@ -17,11 +21,19 @@ class ReviewedSubmissionsResolver < ApplicationQuery
   end
 
   def submissions
-    if level_id.present?
+    filtered_by_level = if level_id.present?
       course.levels.where(id: level_id).first.timeline_events
     else
       course.timeline_events
-    end.from_founders(students)
+    end
+
+    filtered_by_level_and_coach = if coach_id.present?
+      filtered_by_level.joins(founders: { startup: :faculty_startup_enrollments }).where(faculty_startup_enrollments: { faculty_id: coach_id })
+    else
+      filtered_by_level
+    end
+
+    filtered_by_level_and_coach.from_founders(students)
   end
 
   def students

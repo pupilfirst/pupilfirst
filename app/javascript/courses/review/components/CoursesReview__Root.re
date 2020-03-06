@@ -307,10 +307,10 @@ let make =
        />
      | _ => React.null
      }}
-    <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
+    <div className="bg-gray-100 pt-9 pb-8 px-3 -mt-7">
       <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
         <div
-          className="flex flex-col md:flex-row items-end lg:items-center justify-center pt-4 pb-4">
+          className="flex flex-col md:flex-row items-end lg:items-center py-4">
           <div
             ariaLabel="status-tab"
             className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">

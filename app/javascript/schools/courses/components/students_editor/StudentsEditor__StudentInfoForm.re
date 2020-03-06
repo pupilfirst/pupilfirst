@@ -46,7 +46,8 @@ let formInvalid = (state, emailsToAdd) =>
   || hasEmailDuplication(state.email, emailsToAdd);
 
 let handleAdd = (state, send, emailsToAdd, addToListCB) => {
-  let teamName = state.teamName == "" ? None : Some(state.teamName);
+  let teamName =
+    state.teamName |> String.trim == "" ? None : Some(state.teamName);
 
   if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
@@ -78,7 +79,7 @@ let reducer = (state, action) =>
   switch (action) {
   | UpdateName(name, hasNameError) => {...state, name, hasNameError}
   | UpdateEmail(email, hasEmailError) => {...state, email, hasEmailError}
-  | UpdateTitle(title) => {...state, title: title |> String.trim}
+  | UpdateTitle(title) => {...state, title}
   | UpdateTeamName(teamName) => {...state, teamName}
   | UpdateAffiliation(affiliation) => {...state, affiliation}
   | ResetForm => {
@@ -89,7 +90,7 @@ let reducer = (state, action) =>
       hasNameError: false,
       hasEmailError: false,
       tagsToApply: state.tagsToApply,
-      teamName: "",
+      teamName: state.teamName,
     }
   | AddTag(tag) => {
       ...state,

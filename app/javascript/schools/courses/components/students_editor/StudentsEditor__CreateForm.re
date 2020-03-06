@@ -72,16 +72,22 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
   Api.create(url, payload, responseCB, handleErrorCB(send));
 };
 
-let showTeamName = teamName => {
-  teamName
-  |> OptionUtils.mapWithDefault(
-       teamName =>
-         <div>
-           <span> {"Team: " |> str} </span>
-           <span> {teamName |> str} </span>
-         </div>,
-       React.null,
-     );
+let teamHeader = (teamName, studentsCount) => {
+  <div className="flex justify-between mb-1">
+    <span className="text-tiny font-semibold">
+      {teamName
+       |> OptionUtils.mapWithDefault(
+            teamName => <span> {"TEAM: " ++ teamName |> str} </span>,
+            React.null,
+          )}
+    </span>
+    {studentsCount > 1
+       ? React.null
+       : <span className="text-tiny">
+           <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
+           {"Add more team members!" |> str}
+         </span>}
+  </div>;
 };
 
 let renderTitleAndAffiliation = (title, affiliation) => {
@@ -228,8 +234,8 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
              |> Array.map(teamName => {
                   let studentsInTeam =
                     findStudentsInTeam(teamName, studentInfos);
-                  <div className="mt-2 px-2">
-                    {showTeamName(teamName)}
+                  <div className="mt-3">
+                    {teamHeader(teamName, studentsInTeam |> Array.length)}
                     <div className="bg-white-100 border shadow rounded-lg">
                       {studentsInTeam
                        |> Array.map(studentInfo =>

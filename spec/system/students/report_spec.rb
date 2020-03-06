@@ -129,7 +129,7 @@ feature "Course students report", js: true do
   scenario 'coach loads more submissions' do
     # Create over 20 reviewed submissions
     20.times do
-      submission = TimelineEvent.create!(description: Faker::Lorem.sentence, latest: true, target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
+      submission = TimelineEvent.create!(latest: true, target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
       submission.founders << student
       submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     end

@@ -6,7 +6,7 @@ module Founders
     end
 
     def detailed_description
-      "After #{target_prefix(@event.target)} <em>#{@event.target.title}:</em>\n #{@event.description}"
+      "After #{target_prefix(@event.target)} <em>#{@event.target.title}:</em>"
     end
 
     def review_pending?

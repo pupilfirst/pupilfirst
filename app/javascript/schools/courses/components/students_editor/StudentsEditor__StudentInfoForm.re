@@ -52,12 +52,12 @@ let handleAdd = (state, send, emailsToAdd, addToListCB) => {
   if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
       StudentInfo.make(
-        state.name,
-        state.email,
-        state.title,
-        state.affiliation,
-        state.tagsToApply,
-        teamName,
+        ~name=state.name,
+        ~email=state.email,
+        ~title=state.title,
+        ~affiliation=state.affiliation,
+        ~tags=state.tagsToApply,
+        ~teamName,
       ),
     );
     send(ResetForm);
@@ -83,14 +83,11 @@ let reducer = (state, action) =>
   | UpdateTeamName(teamName) => {...state, teamName}
   | UpdateAffiliation(affiliation) => {...state, affiliation}
   | ResetForm => {
+      ...state,
       name: "",
       email: "",
-      title: state.title,
-      affiliation: state.affiliation,
       hasNameError: false,
       hasEmailError: false,
-      tagsToApply: state.tagsToApply,
-      teamName: state.teamName,
     }
   | AddTag(tag) => {
       ...state,
@@ -199,7 +196,7 @@ let make = (~addToListCB, ~studentTags, ~emailsToAdd) => {
       </label>
       <span className="text-xs ml-1"> {"(optional)" |> str} </span>
       <HelpIcon className="ml-1">
-        {"Students with same team name will be group together. This will now after existing students in the course"
+        {"Students with same team name will be grouped together; this will not affect existing teams in the course."
          |> str}
       </HelpIcon>
       <input

@@ -31,7 +31,7 @@ let encode = t =>
     ])
   );
 
-let make = (name, email, title, affiliation, tags, teamName) => {
+let make = (~name, ~email, ~title, ~affiliation, ~tags, ~teamName) => {
   name,
   email,
   title,

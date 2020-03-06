@@ -15,4 +15,12 @@ let teamName: t => option(string);
 let encode: t => Js.Json.t;
 
 let make:
-  (string, string, string, string, array(string), option(string)) => t;
+  (
+    ~name: string,
+    ~email: string,
+    ~title: string,
+    ~affiliation: string,
+    ~tags: array(string),
+    ~teamName: option(string)
+  ) =>
+  t;

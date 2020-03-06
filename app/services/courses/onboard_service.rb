@@ -1,5 +1,4 @@
 require 'csv'
-require 'open-uri'
 
 module Courses
   class OnboardService

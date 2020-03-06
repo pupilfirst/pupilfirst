@@ -72,6 +72,24 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
   Api.create(url, payload, responseCB, handleErrorCB(send));
 };
 
+let teamHeader = (teamName, studentsCount) => {
+  <div className="flex justify-between mb-1">
+    <span className="text-tiny font-semibold">
+      {teamName
+       |> OptionUtils.mapWithDefault(
+            teamName => <span> {"TEAM: " ++ teamName |> str} </span>,
+            React.null,
+          )}
+    </span>
+    {studentsCount > 1
+       ? React.null
+       : <span className="text-tiny">
+           <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
+           {"Add more team members!" |> str}
+         </span>}
+  </div>;
+};
+
 let renderTitleAndAffiliation = (title, affiliation) => {
   let text =
     switch (title == "", affiliation == "") {
@@ -109,9 +127,80 @@ let reducer = (state, action) =>
   | SetSaving(saving) => {...state, saving}
   };
 
+let studentCard = (studentInfo, send) => {
+  <div key={studentInfo |> StudentInfo.email} className="flex justify-between">
+    <div className="flex flex-col flex-1 flex-wrap p-3">
+      <div className="flex items-center">
+        <div className="mr-1 font-semibold">
+          {studentInfo |> StudentInfo.name |> str}
+        </div>
+        <div className="text-xs text-gray-600">
+          {" (" ++ (studentInfo |> StudentInfo.email) ++ ")" |> str}
+        </div>
+      </div>
+      {renderTitleAndAffiliation(
+         studentInfo |> StudentInfo.title,
+         studentInfo |> StudentInfo.affiliation,
+       )}
+      <div className="flex flex-wrap">
+        {studentInfo
+         |> StudentInfo.tags
+         |> Array.map(tag =>
+              <div
+                key=tag
+                className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+                {tag |> str}
+              </div>
+            )
+         |> React.array}
+      </div>
+    </div>
+    <button
+      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      onClick={_event => send(RemoveStudentInfo(studentInfo))}>
+      <i className="fas fa-trash-alt" />
+    </button>
+  </div>;
+};
+
+let teamNames = studentsToAdd => {
+  studentsToAdd
+  |> Array.map(student => {student |> StudentInfo.teamName})
+  |> Js.Array.filter(teamName =>
+       teamName |> OptionUtils.mapWithDefault(_ => true, false)
+     )
+  |> ArrayUtils.distinct;
+};
+
+let findStudentsInTeam = (teamName, studentsToAdd) => {
+  studentsToAdd |> Js.Array.filter(s => s |> StudentInfo.teamName == teamName);
+};
+
+let loneStudents = (studentsToAdd, send) => {
+  let students =
+    studentsToAdd
+    |> Js.Array.filter(s =>
+         s
+         |> StudentInfo.teamName
+         |> OptionUtils.mapWithDefault(_ => false, true)
+       );
+  students |> ArrayUtils.isNotEmpty
+    ? <div>
+        {students
+         |> Array.map(studentInfo =>
+              <div className="bg-white-100 border shadow rounded-lg mt-2 px-2">
+                {studentCard(studentInfo, send)}
+              </div>
+            )
+         |> React.array}
+      </div>
+    : React.null;
+};
+
 [@react.component]
 let make = (~courseId, ~submitFormCB, ~studentTags) => {
   let (state, send) = React.useReducer(reducer, initialState());
+
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
@@ -141,49 +230,22 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
                 |> str}
              </div>
            | studentInfos =>
-             studentInfos
-             |> Array.map(studentInfo =>
-                  <div
-                    key={studentInfo |> StudentInfo.email}
-                    className="flex justify-between bg-white-100 border shadow rounded-lg mt-2">
-                    <div className="flex flex-col flex-1 flex-wrap p-3">
-                      <div className="flex items-center">
-                        <div className="mr-1 font-semibold">
-                          {studentInfo |> StudentInfo.name |> str}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {" ("
-                           ++ (studentInfo |> StudentInfo.email)
-                           ++ ")"
-                           |> str}
-                        </div>
-                      </div>
-                      {renderTitleAndAffiliation(
-                         studentInfo |> StudentInfo.title,
-                         studentInfo |> StudentInfo.affiliation,
-                       )}
-                      <div className="flex flex-wrap">
-                        {studentInfo
-                         |> StudentInfo.tags
-                         |> Array.map(tag =>
-                              <div
-                                key=tag
-                                className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-                                {tag |> str}
-                              </div>
-                            )
-                         |> React.array}
-                      </div>
+             teamNames(studentInfos)
+             |> Array.map(teamName => {
+                  let studentsInTeam =
+                    findStudentsInTeam(teamName, studentInfos);
+                  <div className="mt-3">
+                    {teamHeader(teamName, studentsInTeam |> Array.length)}
+                    <div className="bg-white-100 border shadow rounded-lg">
+                      {studentsInTeam
+                       |> Array.map(studentInfo =>
+                            studentCard(studentInfo, send)
+                          )
+                       |> React.array}
                     </div>
-                    <button
-                      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                      onClick={_event =>
-                        send(RemoveStudentInfo(studentInfo))
-                      }>
-                      <i className="fas fa-trash-alt" />
-                    </button>
-                  </div>
-                )
+                  </div>;
+                })
+             |> Array.append([|loneStudents(studentInfos, send)|])
              |> React.array
            }}
         </div>

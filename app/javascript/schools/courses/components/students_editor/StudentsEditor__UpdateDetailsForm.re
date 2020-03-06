@@ -9,7 +9,8 @@ type state = {
   name: string,
   teamName: string,
   tagsToApply: array(string),
-  teamCoaches: array(teamCoachlist),
+  teamCoaches: array(string),
+  teamCoachSearchInput: string,
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: string,
@@ -22,7 +23,8 @@ type action =
   | UpdateTeamName(string)
   | AddTag(string)
   | RemoveTag(string)
-  | UpdateCoachesList(string, string, bool)
+  | UpdateCoachesList(array(string))
+  | UpdateCoachSearchInput(string)
   | UpdateExcludedFromLeaderboard(bool)
   | UpdateTitle(string)
   | UpdateAffiliation(string)
@@ -92,7 +94,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
     Team.update(
       ~name=state.teamName,
       ~student=newStudent,
-      ~coachIds=enrolledCoachIds(state.teamCoaches),
+      ~coachIds=state.teamCoaches,
       ~accessEndsAt=state.accessEndsAt,
       ~team=oldTeam,
     );
@@ -138,7 +140,7 @@ let updateStudent = (student, state, send, responseCB) => {
   Js.Dict.set(
     payload,
     "coach_ids",
-    enrolledCoachIds(state.teamCoaches) |> Json.Encode.(array(string)),
+    state.teamCoaches |> Json.Encode.(array(string)),
   );
 
   Js.Dict.set(
@@ -159,7 +161,7 @@ let boolBtnClasses = selected => {
   classes ++ (selected ? " toggle-button__button--active" : "");
 };
 
-let handleTeamCoachList = (schoolCoaches, courseCoachIds, team) => {
+let handleTeamCoachList = (schoolCoaches, team) => {
   let selectedTeamCoachIds = team |> Team.coachIds;
   schoolCoaches
   |> Array.map(coach => {
@@ -173,12 +175,71 @@ let handleTeamCoachList = (schoolCoaches, courseCoachIds, team) => {
      });
 };
 
-let initialState = (student, team, schoolCoaches, courseCoachIds) => {
+module SelectablePrerequisiteTargets = {
+  type t = Coach.t;
+
+  let value = t => t |> Coach.name;
+  let searchString = value;
+
+  let make = (coach): t => coach;
+};
+
+let setTeamCoachSearch = (send, value) => {
+  send(UpdateCoachSearchInput(value));
+};
+
+let selectTeamCoach = (send, state, coach) => {
+  let updatedTeamCoaches =
+    state.teamCoaches |> Js.Array.concat([|coach |> Coach.id|]);
+  send(UpdateCoachesList(updatedTeamCoaches));
+};
+
+let deSelectTeamCoach = (send, state, coach) => {
+  let updatedTeamCoaches =
+    state.teamCoaches
+    |> Js.Array.filter(coachId => coachId != Coach.id(coach));
+  send(UpdateCoachesList(updatedTeamCoaches));
+};
+
+module MultiselectForTeamCoaches =
+  MultiselectInline.Make(SelectablePrerequisiteTargets);
+
+let teamCoachesEditor = (schoolCoaches, state, send) => {
+  let selected =
+    schoolCoaches
+    |> Js.Array.filter(coach =>
+         state.teamCoaches |> Array.mem(Coach.id(coach))
+       )
+    |> Array.map(coach => SelectablePrerequisiteTargets.make(coach));
+
+  let unselected =
+    schoolCoaches
+    |> Js.Array.filter(coach =>
+         !(state.teamCoaches |> Array.mem(Coach.id(coach)))
+       )
+    |> Array.map(coach => SelectablePrerequisiteTargets.make(coach));
+  <div className="mt-2">
+    <MultiselectForTeamCoaches
+      placeholder="Search coaches"
+      emptySelectionMessage="No coaches selected"
+      allItemsSelectedMessage="You have selected all available coaches!"
+      selected
+      unselected
+      onChange={setTeamCoachSearch(send)}
+      value={state.teamCoachSearchInput}
+      onSelect={selectTeamCoach(send, state)}
+      onDeselect={deSelectTeamCoach(send, state)}
+    />
+  </div>;
+};
+
+let initialState = (student, team) => {
   {
     name: student |> Student.name,
     teamName: team |> Team.name,
     tagsToApply: student |> Student.tags,
-    teamCoaches: handleTeamCoachList(schoolCoaches, courseCoachIds, team),
+    teamCoaches: team |> Team.coachIds,
+    teamCoachSearchInput: "",
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
     title: student |> Student.title,
     affiliation: student |> Student.affiliation |> OptionUtils.toString,
@@ -199,13 +260,11 @@ let reducer = (state, action) =>
       ...state,
       tagsToApply: state.tagsToApply |> Js.Array.filter(t => t !== tag),
     }
-  | UpdateCoachesList(key, value, selected) =>
-    let oldCoach =
-      state.teamCoaches |> Js.Array.filter(((item, _, _)) => item != key);
-    {
+  | UpdateCoachesList(teamCoaches) => {...state, teamCoaches}
+  | UpdateCoachSearchInput(teamCoachSearchInput) => {
       ...state,
-      teamCoaches: oldCoach |> Array.append([|(key, value, selected)|]),
-    };
+      teamCoachSearchInput,
+    }
   | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) => {
       ...state,
       excludedFromLeaderboard,
@@ -227,13 +286,7 @@ let make =
       ~updateFormCB,
     ) => {
   let (state, send) =
-    React.useReducer(
-      reducer,
-      initialState(student, team, schoolCoaches, courseCoachIds),
-    );
-
-  let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
-    send(UpdateCoachesList(key, value, selected));
+    React.useReducer(reducer, initialState(student, team));
 
   let isSingleStudent = team |> Team.isSingleStudent;
 
@@ -327,12 +380,7 @@ let make =
           <span className="inline-block mr-1 text-xs font-semibold">
             {(isSingleStudent ? "Personal Coaches" : "Team Coaches") |> str}
           </span>
-          <div className="mt-2">
-            <School__SelectBox
-              items={state.teamCoaches |> Array.to_list}
-              selectCB=multiSelectCoachEnrollmentsCB
-            />
-          </div>
+          {teamCoachesEditor(schoolCoaches, state, send)}
         </div>
       </div>
       <div className="mt-5">

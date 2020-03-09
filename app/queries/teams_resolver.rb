@@ -32,11 +32,11 @@ class TeamsResolver < ApplicationQuery
   end
 
   def course
-    @course ||= Course.find(course_id)
+    @course ||= current_school.courses.find(course_id)
   end
 
   def reviewable_teams
-    faculty.courses.where(id: course_id).exists? ? course.startups : faculty.startups
+    course.startups
   end
 
   def teams_in_course

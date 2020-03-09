@@ -36,8 +36,6 @@ module Layouts
         if faculty.present?
           if faculty.courses.exists?
             view.review_course_path(faculty.courses.first)
-          elsif faculty.startups.exists?
-            view.review_course_path(faculty.startups.first.course)
           end
         end
       end

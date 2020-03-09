@@ -400,8 +400,7 @@ let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
 
 let coachInfo = (teamCoaches, studentDetails) => {
   let coaches =
-    teamCoaches
-    |> TeamCoach.coachesForTeam(studentDetails |> StudentDetails.team);
+    studentDetails |> StudentDetails.team |> TeamInfo.coaches(teamCoaches);
 
   let title =
     studentDetails |> StudentDetails.teamHasManyStudents
@@ -413,10 +412,10 @@ let coachInfo = (teamCoaches, studentDetails) => {
         {coaches
          |> Array.map(coach =>
               userInfo(
-                ~key=coach |> TeamCoach.userId,
-                ~avatarUrl=coach |> TeamCoach.avatarUrl,
-                ~name=coach |> TeamCoach.name,
-                ~title=coach |> TeamCoach.title,
+                ~key=coach |> Coach.userId,
+                ~avatarUrl=coach |> Coach.avatarUrl,
+                ~name=coach |> Coach.name,
+                ~title=coach |> Coach.title,
               )
             )
          |> React.array}

@@ -55,8 +55,8 @@ let coachAvatars = (~title, ~className="", coaches) =>
           coaches
           |> Js.Array.sliceFrom(3)
           |> Js.Array.map(coach => {
-               <div key={coach |> TeamCoach.userId}>
-                 {coach |> TeamCoach.name |> str}
+               <div key={coach |> Coach.userId}>
+                 {coach |> Coach.name |> str}
                </div>
              })
           |> React.array;
@@ -73,13 +73,13 @@ let coachAvatars = (~title, ~className="", coaches) =>
         {listedCoaches
          |> Array.map(coach => {
               <Tooltip
-                tip={coach |> TeamCoach.name |> str}
+                tip={coach |> Coach.name |> str}
                 className="-mr-1"
-                key={coach |> TeamCoach.userId}>
+                key={coach |> Coach.userId}>
                 {avatar(
                    ~size=("6", "8"),
-                   coach |> TeamCoach.avatarUrl,
-                   coach |> TeamCoach.name,
+                   coach |> Coach.avatarUrl,
+                   coach |> Coach.name,
                  )}
               </Tooltip>
             })
@@ -206,7 +206,7 @@ let make = (~levels, ~teams, ~teamCoaches) => {
          </div>
        : teams
          |> Array.map(team => {
-              let coaches = teamCoaches |> TeamCoach.coachesForTeam(team);
+              let coaches = team |> TeamInfo.coaches(teamCoaches);
 
               Array.length(team |> TeamInfo.students) == 1
                 ? showStudent(team, levels, coaches)

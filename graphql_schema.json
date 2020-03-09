@@ -572,6 +572,16 @@
                 "defaultValue": null
               },
               {
+                "name": "coachId",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "search",
                 "description": "",
                 "type": {

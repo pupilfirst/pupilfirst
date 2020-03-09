@@ -100,14 +100,17 @@ let makeFromJS = teamDetails => {
 };
 
 let makeArrayFromJs = detailsOfTeams => {
-  detailsOfTeams
-  |> Js.Array.map(team =>
-       switch (team) {
-       | Some(team) => [makeFromJS(team)]
-       | None => []
-       }
-     );
+  detailsOfTeams->Belt.Array.keepMap(OptionUtils.map(makeFromJS));
 };
 
 let otherStudents = (studentId, t) =>
   t.students |> Js.Array.filter((student: student) => student.id != studentId);
+
+let coaches = (allTeamCoaches, t) => {
+  allTeamCoaches
+  |> Js.Array.filter(teamCoach =>
+       t
+       |> coachUserIds
+       |> Array.mem(teamCoach |> UserProxy.userId)
+     );
+};

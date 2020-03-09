@@ -24,6 +24,7 @@ module Types
     field :teams, Types::TeamType.connection_type, null: false do
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false
+      argument :coach_id, ID, required: false
       argument :search, String, required: false
     end
 

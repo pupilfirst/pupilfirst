@@ -31,6 +31,20 @@ module Courses
       end
     end
 
+    def current_coach_details
+      coach = current_user.faculty
+
+      details = {
+        id: coach.id,
+        user_id: current_user.id,
+        name: current_user.name,
+        title: current_user.full_title
+      }
+
+      details[:avatar_url] = view.rails_representation_path(current_user.avatar_variant(:thumb), only_path: true) if current_user.avatar.attached?
+      details
+    end
+
     private
 
     def props
@@ -38,7 +52,8 @@ module Courses
         levels: levels,
         course: course_details,
         user_id: current_user.id,
-        team_coaches: team_coaches
+        team_coaches: team_coaches,
+        current_coach: current_coach_details
       }
     end
 

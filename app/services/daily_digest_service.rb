@@ -14,9 +14,7 @@ class DailyDigestService
       .where('preferences @> ?', { daily_digest: true }.to_json)
       .where(startups: { dropped_out_at: nil })
       .where(email_bounced_at: nil).each do |user|
-      updates_for_user = user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
-        updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
-      end
+      updates_for_user = create_updates(updates, user)
 
       next if updates_for_user.blank?
 
@@ -31,6 +29,35 @@ class DailyDigestService
   end
 
   private
+
+  def create_updates(updates, user)
+    community_updates = user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
+      updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
+    end
+
+    {
+      community_updates: community_updates,
+      updates_for_coach: add_updates_for_coach(user)
+
+    }
+  end
+
+  def add_updates_for_coach(user)
+    coach = user.faculty
+
+    return [] if coach.blank?
+
+    coach.courses.map do |course|
+      students = Founder.joins(startup: %i[faculty course]).where(faculty: coach, course: course)
+      submissions = course.timeline_events.from_founders(students)
+      {
+        course_id: course.id,
+        course_name: course.name,
+        pending_submissions: course.timeline_events.pending_review.count,
+        pending_submissions_for_faculty: submissions.pending_review.count
+      }
+    end
+  end
 
   # Returns the new questions asked today.
   def questions_from_today

@@ -10,10 +10,15 @@ class UserMailerPreview < ActionMailer::Preview
   def daily_digest
     user = Founder.last.user
 
-    updates = {
+    community_updates = {
       1 => community_digest(2),
       2 => community_digest(1, 3),
       3 => community_digest(3, 4, true)
+    }
+
+    updates = {
+      community_updates: community_updates,
+      updates_for_coach: updates_for_coach
     }
 
     UserMailer.daily_digest(user, updates)
@@ -34,5 +39,16 @@ class UserMailerPreview < ActionMailer::Preview
         }
       end
     }
+  end
+
+  def updates_for_coach
+    (1..3).map do |_id|
+      {
+        course_id: rand(1..9),
+        course_name: Faker::Name.name,
+        pending_submissions: rand(1..9),
+        pending_submissions_for_faculty: rand(1..9)
+      }
+    end
   end
 end

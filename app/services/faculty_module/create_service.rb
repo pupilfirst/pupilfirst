@@ -19,8 +19,7 @@ module FacultyModule
           category: Faculty::CATEGORY_VISITING_COACHES,
           school: school,
           connect_link: @faculty_params[:connect_link],
-          public: @faculty_params[:public],
-          notify_for_submission: @faculty_params[:notify_for_submission]
+          public: @faculty_params[:public]
         )
         faculty
       end

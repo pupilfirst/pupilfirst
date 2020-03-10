@@ -766,7 +766,7 @@ GEM
     uniform_notifier (1.13.0)
     url_mount (0.2.1)
       rack
-    user_agent_parser (2.5.3)
+    user_agent_parser (2.6.0)
     uuidtools (2.1.5)
     videojs_rails (4.12.15)
     virtus (1.0.5)

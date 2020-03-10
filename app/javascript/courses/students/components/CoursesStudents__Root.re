@@ -41,7 +41,6 @@ let reducer = (state, action) =>
         ...state.filter,
         level: Some(level),
       },
-      teams: Unloaded,
       filterString: "",
     }
   | DeselectLevel => {
@@ -50,9 +49,7 @@ let reducer = (state, action) =>
         ...state.filter,
         level: None,
       },
-      teams: Unloaded,
     }
-
   | SelectCoach(coach) => {
       ...state,
       filter: {
@@ -60,7 +57,6 @@ let reducer = (state, action) =>
         coach: Some(coach),
       },
       filterString: "",
-      teams: Unloaded,
     }
   | DeselectCoach => {
       ...state,
@@ -68,7 +64,6 @@ let reducer = (state, action) =>
         ...state.filter,
         coach: None,
       },
-      teams: Unloaded,
     }
   | SetNameOrEmail(search) => {
       ...state,
@@ -77,7 +72,6 @@ let reducer = (state, action) =>
         nameOrEmail: Some(search),
       },
       filterString: "",
-      teams: Unloaded,
     }
   | UnsetNameOrEmail => {
       ...state,
@@ -85,11 +79,15 @@ let reducer = (state, action) =>
         ...state.filter,
         nameOrEmail: None,
       },
-      teams: Unloaded,
     }
   | UpdateFilterString(filterString) => {...state, filterString}
   | LoadTeams(endCursor, hasNextPage, newTeams) =>
-    let updatedTeams = newTeams |> Array.append(state.teams |> Teams.toArray);
+    let updatedTeams =
+      switch (state.loading) {
+      | LoadingMore => newTeams |> Array.append(state.teams |> Teams.toArray)
+      | Reloading => newTeams
+      | NotLoading => newTeams
+      };
 
     {
       ...state,
@@ -101,8 +99,8 @@ let reducer = (state, action) =>
         },
       loading: NotLoading,
     };
-  | BeginLoadingMore => {...state, loading: Reloading}
-  | BeginReloading => {...state, loading: LoadingMore}
+  | BeginLoadingMore => {...state, loading: LoadingMore}
+  | BeginReloading => {...state, loading: Reloading}
   };
 
 module TeamsQuery = [%graphql

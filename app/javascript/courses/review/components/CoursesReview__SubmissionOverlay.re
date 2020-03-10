@@ -40,6 +40,7 @@ module SubmissionDetailsQuery = [%graphql
           },
           checklist
         }
+        coachIds
       }
     }
   |}
@@ -64,12 +65,12 @@ let getSubmissionDetails = (submissionId, setState, ()) => {
 let closeOverlay = courseId =>
   ReasonReactRouter.push("/courses/" ++ courseId ++ "/review");
 
-let headerSection = (submissionDetails, courseId) =>
+let headerSection = (submissionDetails, courseId, assignedCoaches) =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-100 border-b border-gray-300 px-3 pt-12 xl:pt-10 flex justify-center">
     <div
-      className="relative bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
+      className="relative bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex flex-wrap items-center justify-between rounded-lg shadow container max-w-3xl -mb-12">
       <div
         onClick={_ => closeOverlay(courseId)}
         className="review-submission-overlay__close flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
@@ -80,7 +81,7 @@ let headerSection = (submissionDetails, courseId) =>
           {"close" |> str}
         </span>
       </div>
-      <div className="w-full md:w-5/6">
+      <div>
         <div className="block text-sm md:pr-2">
           <span
             className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
@@ -119,18 +120,14 @@ let headerSection = (submissionDetails, courseId) =>
            |> React.array}
         </div>
       </div>
-      <div
-        className="hidden md:flex w-auto md:w-1/6 text-xs justify-end mt-2 md:mt-0">
-        <a
-          href={
-            "/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)
-          }
-          target="_blank"
-          className="btn btn-primary-ghost btn-small hidden md:inline-flex">
-          <Icon className="if i-external-link-solid" />
-          <span className="ml-2"> {"View Target " |> str} </span>
-        </a>
-      </div>
+      <CoursesStudents__TeamCoaches
+        tooltipPosition=`Bottom
+        defaultAvatarSize="8"
+        mdAvatarSize="8"
+        title={<span className="mr-2"> {"Assigned Coaches" |> str} </span>}
+        className="mt-2 flex w-full md:w-auto items-center flex-shrink-0"
+        coaches=assignedCoaches
+      />
     </div>
   </div>;
 
@@ -201,6 +198,7 @@ let make =
     (
       ~courseId,
       ~submissionId,
+      ~teamCoaches,
       ~currentCoach,
       ~removePendingSubmissionCB,
       ~updateReviewedSubmissionCB,
@@ -220,8 +218,16 @@ let make =
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     {switch (state) {
      | Loaded(submissionDetails) =>
+       let assignedCoaches =
+         teamCoaches
+         |> Js.Array.filter(coach =>
+              submissionDetails
+              |> SubmissionDetails.coachIds
+              |> Array.mem(coach |> Coach.id)
+            );
+
        <div>
-         {headerSection(submissionDetails, courseId)}
+         {headerSection(submissionDetails, courseId, assignedCoaches)}
          <div
            className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0">
            {inactiveWarning(submissionDetails)}
@@ -277,7 +283,7 @@ let make =
                )
             |> React.array}
          </div>
-       </div>
+       </div>;
 
      | Loading =>
        <div>

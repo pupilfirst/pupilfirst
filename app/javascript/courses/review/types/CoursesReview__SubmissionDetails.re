@@ -25,6 +25,7 @@ let evaluationCriteria = t => t.evaluationCriteria;
 let reviewChecklist = t => t.reviewChecklist;
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds;
 let inactiveStudents = t => t.inactiveStudents;
+let coachIds = t => t.coachIds;
 
 let make =
     (
@@ -81,7 +82,7 @@ let decodeJs = details =>
          ),
     ~reviewChecklist=
       details##reviewChecklist |> ReviewChecklistItem.makeFromJs,
-    ~coachIds=[||],
+    ~coachIds=details##coachIds,
   );
 
 let updateSubmission = (submission, t) => {

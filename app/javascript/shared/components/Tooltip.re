@@ -19,7 +19,7 @@ let make = (~tip, ~className="", ~position=`Top, ~disabled=false, ~children) => 
   disabled
     ? children
     : <div className={"tooltip " ++ className}>
-        <div className="tooltip__trigger"> children </div>
+        <span className="tooltip__trigger"> children </span>
         <div className={bubbleClasses(position)}>
           <div
             className="text-white text-xs p-2 text-center leading-snug rounded bg-gray-900 whitespace-no-wrap">

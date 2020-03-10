@@ -391,7 +391,7 @@ let removeNoteCB = (setState, studentDetails, noteId) => {
 
 let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
-    {CoursesStudents__TeamsList.avatar(avatarUrl, name)}
+    {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {title |> str} </div>

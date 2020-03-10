@@ -304,6 +304,7 @@ let make =
          courseId
          submissionId
          currentCoach
+         teamCoaches
          removePendingSubmissionCB={submissionId =>
            send(RemovePendingSubmission(submissionId))
          }

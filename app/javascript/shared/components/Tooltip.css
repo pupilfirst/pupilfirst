@@ -1,10 +1,6 @@
 .tooltip {
   position: relative;
-  display: inline-block;
-}
-
-.tooltip__trigger {
-  display: inline-block;
+  display: inline-flex;
 }
 
 .tooltip__bubble {

@@ -5,8 +5,47 @@ let str = React.string;
 let deleteIconClasses = deleting =>
   deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt";
 
+module DeleteCoachTeamEnrollmentQuery = [%graphql
+  {|
+  mutation($teamId: ID!, $coachId: ID!) {
+    deleteCoachTeamEnrollment(teamId: $teamId, coachId: $coachId) {
+      success
+    }
+  }
+|}
+];
+
+let deleteTeamEnrollment = (team, coach, removeTeamEnrollmentCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+
+  if (Webapi.Dom.(
+        window
+        |> Window.confirm(
+             "Are you sure you want to remove "
+             ++ (team |> CoachesCourseIndex__Team.name)
+             ++ " from the list of assigned teams?",
+           )
+      )) {
+    DeleteCoachTeamEnrollmentQuery.make(
+      ~teamId=CoachesCourseIndex__Team.id(team),
+      ~coachId=Coach.id(coach),
+      (),
+    )
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
+         if (response##deleteCoachTeamEnrollment##success) {
+           removeTeamEnrollmentCB(CoachesCourseIndex__Team.id(team));
+         } else {
+           ();
+         };
+         response |> Js.Promise.resolve;
+       })
+    |> ignore;
+  };
+};
+
 [@react.component]
-let make = (~coach) => {
+let make = (~coach, ~removeTeamEnrollmentCB) => {
   <div className="mx-auto">
     <div className="py-6 border-b border-gray-400 bg-gray-100">
       <div className="max-w-2xl mx-auto">
@@ -48,7 +87,11 @@ let make = (~coach) => {
                 <span> {team |> Team.name |> str} </span>
                 <button
                   title={"Delete " ++ Team.name(team)}
-                  // onClick={handleDelete(state, send, removeLinkCB, id)}
+                  onClick={deleteTeamEnrollment(
+                    team,
+                    coach,
+                    removeTeamEnrollmentCB,
+                  )}
                   className="p-3">
                   <FaIcon classes={deleteIconClasses(false)} />
                 </button>

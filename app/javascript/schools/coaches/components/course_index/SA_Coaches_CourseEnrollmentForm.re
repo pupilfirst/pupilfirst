@@ -62,14 +62,14 @@ let deSelectCoach = (send, state, coach) => {
 module MultiselectForCourseCoaches =
   MultiselectInline.Make(SelectableCourseCoaches);
 
-let courseCoachEditor = (schoolCoaches, state, send) => {
+let courseCoachEditor = (coaches, state, send) => {
   let selected =
-    schoolCoaches
+    coaches
     |> Js.Array.filter(coach =>
          state.courseCoaches |> Array.mem(Coach.id(coach))
        );
   let unselected =
-    schoolCoaches
+    coaches
     |> Js.Array.filter(coach =>
          !(state.courseCoaches |> Array.mem(Coach.id(coach)))
        );
@@ -89,8 +89,7 @@ let courseCoachEditor = (schoolCoaches, state, send) => {
 [@react.component]
 let make =
     (
-      ~courseCoachIds,
-      ~schoolCoaches,
+      ~coaches,
       ~courseId,
       ~authenticityToken,
       ~updateCoachesCB,
@@ -98,9 +97,9 @@ let make =
   let (state, send) =
     React.useReducer(
       reducer,
-      {courseCoaches: courseCoachIds, coachSearchInput: "", saving: false},
+      {courseCoaches: [||], coachSearchInput: "", saving: false},
     );
-  let showCoachesList = schoolCoaches |> Array.length > 0;
+  let showCoachesList = coaches |> Array.length > 0;
   let handleErrorCB = () => send(UpdateSaving);
   let handleResponseCB = json => {
     let coachIds = json |> Json.Decode.(field("coach_ids", array(string)));
@@ -129,9 +128,9 @@ let make =
                  <div id="course_coaches">
                    <span
                      className="inline-block mr-1 mb-2 text-xs font-semibold">
-                     {"Assign or remove coaches from the course:" |> str}
+                     {"Select coaches:" |> str}
                    </span>
-                   {courseCoachEditor(schoolCoaches, state, send)}
+                   {courseCoachEditor(coaches, state, send)}
                  </div>
                </div>
              : React.null}

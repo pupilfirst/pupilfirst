@@ -8,27 +8,36 @@ type formVisible =
   | CoachInfoForm(Coach.t);
 
 type state = {
-  courseCoaches: array(string),
+  courseCoaches: array(Coach.t),
   formVisible,
   saving: bool,
 };
 
 type action =
   | UpdateFormVisible(formVisible)
-  | UpdateCoaches(array(string))
+  | UpdateCoachEnrollment(array(Coach.t))
+  | RemoveCoachTeamEnrollment(string, Coach.t)
   | RemoveCoach(string)
   | UpdateSaving;
 
 let reducer = (state, action) =>
   switch (action) {
   | UpdateFormVisible(formVisible) => {...state, formVisible}
-  | UpdateCoaches(coachIds) => {...state, courseCoaches: coachIds}
-
+  | UpdateCoachEnrollment(courseCoaches) => {...state, courseCoaches}
+  | RemoveCoachTeamEnrollment(teamId, coach) => {
+      ...state,
+      courseCoaches:
+        state.courseCoaches
+        |> Array.map(courseCoach =>
+             courseCoach == coach
+               ? Coach.removeTeam(coach, teamId) : courseCoach
+           ),
+    }
   | RemoveCoach(coachId) => {
       ...state,
       courseCoaches:
         state.courseCoaches
-        |> Js.Array.filter(courseCoachId => courseCoachId !== coachId),
+        |> Js.Array.filter(courseCoach => Coach.id(courseCoach) !== coachId),
     }
   | UpdateSaving => {...state, saving: !state.saving}
   };
@@ -74,18 +83,33 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
   };
 };
 
+let removeTeamEnrollmentCB = (coach, send, teamId) => {
+  send(RemoveCoachTeamEnrollment(teamId, coach));
+};
+
 [@react.component]
 let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {courseCoaches: courseCoachIds, formVisible: None, saving: false},
+      {
+        courseCoaches:
+          schoolCoaches
+          |> Js.Array.filter(coach =>
+               courseCoachIds |> Array.mem(Coach.id(coach))
+             ),
+        formVisible: None,
+        saving: false,
+      },
     );
 
   let closeFormCB = () => send(UpdateFormVisible(None));
 
   let updateCoachesCB = coachIds => {
-    send(UpdateCoaches(coachIds));
+    let courseCoaches =
+      schoolCoaches
+      |> Js.Array.filter(coach => coachIds |> Array.mem(Coach.id(coach)));
+    send(UpdateCoachEnrollment(courseCoaches));
     send(UpdateFormVisible(None));
   };
 
@@ -99,15 +123,22 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
            <SA_Coaches_CourseEnrollmentForm
              courseId
-             courseCoachIds={state.courseCoaches}
-             schoolCoaches
+             coaches={
+               schoolCoaches
+               |> Js.Array.filter(coach =>
+                    !(state.courseCoaches |> Array.mem(coach))
+                  )
+             }
              updateCoachesCB
              authenticityToken
            />
          </SchoolAdmin__EditorDrawer>
        | CoachInfoForm(coach) =>
          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
-           <SA_Coaches_CoachInfoForm coach />
+           <SA_Coaches_CoachInfoForm
+             coach
+             removeTeamEnrollmentCB={removeTeamEnrollmentCB(coach, send)}
+           />
          </SchoolAdmin__EditorDrawer>
        }}
       <div className="flex-1 flex flex-col">
@@ -140,7 +171,7 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
               ariaLabel="List of course coaches">
               {schoolCoaches
                |> Js.Array.filter(coach =>
-                    state.courseCoaches |> Array.mem(Coach.id(coach))
+                    state.courseCoaches |> Array.mem(coach)
                   )
                |> ArrayUtils.copyAndSort((x, y) =>
                     (x |> Coach.id |> int_of_string)

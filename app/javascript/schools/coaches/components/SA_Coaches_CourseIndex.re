@@ -5,7 +5,7 @@ let str = React.string;
 type formVisible =
   | None
   | CoachEnrollmentForm
-  | CoachInfoForm(string);
+  | CoachInfoForm(Coach.t);
 
 type state = {
   courseCoaches: array(string),
@@ -105,9 +105,9 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
              authenticityToken
            />
          </SchoolAdmin__EditorDrawer>
-       | CoachInfoForm(coachId) =>
+       | CoachInfoForm(coach) =>
          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
-           React.null
+           <SA_Coaches_CoachInfoForm coach />
          </SchoolAdmin__EditorDrawer>
        }}
       <div className="flex-1 flex flex-col">
@@ -156,11 +156,7 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                         <div className="flex flex-1 justify-between">
                           <div
                             onClick={_ =>
-                              send(
-                                UpdateFormVisible(
-                                  CoachInfoForm(coach |> Coach.id),
-                                ),
-                              )
+                              send(UpdateFormVisible(CoachInfoForm(coach)))
                             }
                             className="flex flex-1 py-4 px-4 items-center">
                             <span className="mr-4 flex-shrink-0">

@@ -101,8 +101,6 @@ let make =
       {courseCoaches: courseCoachIds, coachSearchInput: "", saving: false},
     );
   let showCoachesList = schoolCoaches |> Array.length > 0;
-  // let multiSelectCoachEnrollmentsCB = (key, value, selected) =>
-  //   send(UpdateCoachesList(key, value, selected));
   let handleErrorCB = () => send(UpdateSaving);
   let handleResponseCB = json => {
     let coachIds = json |> Json.Decode.(field("coach_ids", array(string)));

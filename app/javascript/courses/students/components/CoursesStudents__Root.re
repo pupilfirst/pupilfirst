@@ -179,7 +179,7 @@ module Selectable = {
     | Level(level) =>
       Some("Level " ++ (level |> Level.number |> string_of_int))
     | AssignedToCoach(_) => Some("Assigned to")
-    | NameOrEmail(_) => Some("Name or Email contains")
+    | NameOrEmail(_) => Some("Name or Email")
     };
 
   let value = t =>

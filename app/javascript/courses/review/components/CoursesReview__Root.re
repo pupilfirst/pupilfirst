@@ -9,7 +9,7 @@ type visibleList =
 
 type state = {
   pendingSubmissions: array(IndexSubmission.t),
-  reviewedSubmissions: ReviewedSubmission.t,
+  reviewedSubmissions: ReviewedSubmissions.t,
   visibleList,
   selectedLevel: option(Level.t),
   selectedCoach: option(Coach.t),
@@ -33,14 +33,9 @@ let reducer = (state, action) =>
   | SelectLevel(level) => {
       ...state,
       selectedLevel: Some(level),
-      reviewedSubmissions: Unloaded,
       filterString: "",
     }
-  | DeselectLevel => {
-      ...state,
-      selectedLevel: None,
-      reviewedSubmissions: Unloaded,
-    }
+  | DeselectLevel => {...state, selectedLevel: None}
   | RemovePendingSubmission(submissionId) => {
       ...state,
       pendingSubmissions:
@@ -48,45 +43,56 @@ let reducer = (state, action) =>
         |> Js.Array.filter(s => s |> IndexSubmission.id != submissionId),
       reviewedSubmissions: Unloaded,
     }
-  | SetReviewedSubmissions(reviewedSubmissions, hasNextPage, endCursor) => {
+  | SetReviewedSubmissions(reviewedSubmissions, hasNextPage, endCursor) =>
+    let filter =
+      ReviewedSubmissions.makeFilter(
+        state.selectedLevel,
+        state.selectedCoach,
+      );
+
+    {
       ...state,
       reviewedSubmissions:
         switch (hasNextPage, endCursor) {
         | (_, None)
-        | (false, Some(_)) => FullyLoaded(reviewedSubmissions)
+        | (false, Some(_)) => FullyLoaded(reviewedSubmissions, filter)
         | (true, Some(cursor)) =>
-          PartiallyLoaded(reviewedSubmissions, cursor)
+          PartiallyLoaded(reviewedSubmissions, filter, cursor)
         },
-    }
-  | UpdateReviewedSubmission(submission) => {
+    };
+  | UpdateReviewedSubmission(submission) =>
+    let filter =
+      ReviewedSubmissions.makeFilter(
+        state.selectedLevel,
+        state.selectedCoach,
+      );
+
+    {
       ...state,
       reviewedSubmissions:
         switch (state.reviewedSubmissions) {
         | Unloaded => Unloaded
-        | PartiallyLoaded(reviewedSubmissions, cursor) =>
+        | PartiallyLoaded(reviewedSubmissions, _filter, cursor) =>
           PartiallyLoaded(
             reviewedSubmissions |> IndexSubmission.replace(submission),
+            filter,
             cursor,
           )
-        | FullyLoaded(reviewedSubmissions) =>
+        | FullyLoaded(reviewedSubmissions, _filter) =>
           FullyLoaded(
             reviewedSubmissions |> IndexSubmission.replace(submission),
+            filter,
           )
         },
-    }
+    };
   | SelectPendingTab => {...state, visibleList: PendingSubmissions}
   | SelectReviewedTab => {...state, visibleList: ReviewedSubmissions}
   | SelectCoach(coach) => {
       ...state,
       selectedCoach: Some(coach),
       filterString: "",
-      reviewedSubmissions: Unloaded,
     }
-  | DeselectCoach => {
-      ...state,
-      selectedCoach: None,
-      reviewedSubmissions: Unloaded,
-    }
+  | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
   };
 

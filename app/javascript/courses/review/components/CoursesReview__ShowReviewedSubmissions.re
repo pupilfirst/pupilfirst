@@ -3,7 +3,13 @@ let reviewedEmptyImage: string = [%raw
 ];
 
 open CoursesReview__Types;
+
 let str = React.string;
+
+type state =
+  | Loading
+  | Reloading
+  | Loaded;
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
@@ -24,13 +30,13 @@ module ReviewedSubmissionsQuery = [%graphql
           endCursor,hasNextPage
         }
       }
-  }
-|}
+    }
+  |}
 ];
 
 let updateReviewedSubmissions =
     (
-      setLoading,
+      setState,
       endCursor,
       hasNextPage,
       reviewedSubmissions,
@@ -55,20 +61,26 @@ let updateReviewedSubmissions =
     ~hasNextPage,
     ~endCursor,
   );
-  setLoading(_ => false);
+  setState(_ => Loaded);
 };
 
 let getReviewedSubmissions =
     (
       courseId,
       cursor,
-      setLoading,
+      setState,
       selectedLevel,
       selectedCoach,
       reviewedSubmissions,
       updateReviewedSubmissionsCB,
     ) => {
-  setLoading(_ => true);
+  setState(state =>
+    switch (state) {
+    | Loaded
+    | Reloading => Reloading
+    | Loading => Loading
+    }
+  );
 
   let levelId = selectedLevel |> OptionUtils.map(level => level |> Level.id);
   let coachId = selectedCoach |> OptionUtils.map(coach => coach |> Coach.id);
@@ -84,7 +96,7 @@ let getReviewedSubmissions =
   |> Js.Promise.then_(response => {
        response##reviewedSubmissions##nodes
        |> updateReviewedSubmissions(
-            setLoading,
+            setState,
             response##reviewedSubmissions##pageInfo##endCursor,
             response##reviewedSubmissions##pageInfo##hasNextPage,
             reviewedSubmissions,
@@ -201,36 +213,49 @@ let make =
       ~reviewedSubmissions,
       ~updateReviewedSubmissionsCB,
     ) => {
-  let (loading, setLoading) = React.useState(() => false);
+  let (state, setState) = React.useState(() => Loading);
   React.useEffect2(
     () => {
-      switch ((reviewedSubmissions: ReviewedSubmission.t)) {
-      | Unloaded =>
-        getReviewedSubmissions(
-          courseId,
-          None,
-          setLoading,
-          selectedLevel,
-          selectedCoach,
-          [||],
-          updateReviewedSubmissionsCB,
-        )
-      | FullyLoaded(_)
-      | PartiallyLoaded(_, _) => ()
-      };
+      let shouldLoad =
+        switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
+        | Unloaded => true
+        | FullyLoaded(_, filter)
+        | PartiallyLoaded(_, filter, _) =>
+          if (filter
+              |> ReviewedSubmissions.filterEq(selectedLevel, selectedCoach)) {
+            false;
+          } else {
+            setState(_ => Reloading);
+            true;
+          }
+        };
+
+      shouldLoad
+        ? getReviewedSubmissions(
+            courseId,
+            None,
+            setState,
+            selectedLevel,
+            selectedCoach,
+            [||],
+            updateReviewedSubmissionsCB,
+          )
+        : ();
+
       None;
     },
     (selectedLevel, selectedCoach),
   );
 
   <div>
-    {switch ((reviewedSubmissions: ReviewedSubmission.t)) {
+    <LoadingSpinner loading={state == Reloading} />
+    {switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
-     | PartiallyLoaded(reviewedSubmissions, cursor) =>
+     | PartiallyLoaded(reviewedSubmissions, _filter, cursor) =>
        <div>
          {showSubmissions(reviewedSubmissions, levels)}
-         {loading
+         {state == Loading
             ? SkeletonLoading.multiple(
                 ~count=3,
                 ~element=SkeletonLoading.card(),
@@ -241,7 +266,7 @@ let make =
                   getReviewedSubmissions(
                     courseId,
                     Some(cursor),
-                    setLoading,
+                    setState,
                     selectedLevel,
                     selectedCoach,
                     reviewedSubmissions,
@@ -251,7 +276,7 @@ let make =
                 {"Load More..." |> str}
               </button>}
        </div>
-     | FullyLoaded(reviewedSubmissions) =>
+     | FullyLoaded(reviewedSubmissions, _filter) =>
        showSubmissions(reviewedSubmissions, levels)
      }}
   </div>;

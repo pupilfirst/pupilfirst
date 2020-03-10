@@ -10,9 +10,8 @@ class DailyDigestService
     updates = questions_from_today
     updates = add_questions_with_no_activity(updates)
 
-    User.joins(:communities).includes(:communities, :school).joins(:startups)
+    User.where.not(communities: nil).or(User.where.not(faculty: nil))
       .where('preferences @> ?', { daily_digest: true }.to_json)
-      .where(startups: { dropped_out_at: nil })
       .where(email_bounced_at: nil).each do |user|
       updates_for_user = create_updates(updates, user)
 
@@ -31,15 +30,19 @@ class DailyDigestService
   private
 
   def create_updates(updates, user)
-    community_updates = user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
-      updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
-    end
-
     {
-      community_updates: community_updates,
+      community_updates: add_community_updates(user, updates),
       updates_for_coach: add_updates_for_coach(user)
 
     }
+  end
+
+  def add_community_updates(user, updates)
+    return [] if user.communities.blank?
+
+    user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
+      updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
+    end
   end
 
   def add_updates_for_coach(user)
@@ -48,13 +51,17 @@ class DailyDigestService
     return [] if coach.blank?
 
     coach.courses.map do |course|
-      students = Founder.joins(startup: %i[faculty course]).where(faculty: coach, course: course)
-      submissions = course.timeline_events.from_founders(students)
+      pending_submissions = course.timeline_events.pending_review
+      pending_submissions_in_course = pending_submissions.count
+
+      next if pending_submissions_in_course.zero?
+
+      students = Founder.joins(startup: %i[faculty course]).where(faculty: { id: coach }, course: course)
       {
         course_id: course.id,
         course_name: course.name,
-        pending_submissions: course.timeline_events.pending_review.count,
-        pending_submissions_for_faculty: submissions.pending_review.count
+        pending_submissions: pending_submissions_in_course,
+        pending_submissions_for_faculty: pending_submissions.from_founders(students).count
       }
     end
   end

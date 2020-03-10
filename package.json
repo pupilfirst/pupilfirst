@@ -46,7 +46,7 @@
     "@graphql-codegen/cli": "^1.11.2",
     "@graphql-codegen/introspection": "^1.11.2",
     "babel-loader": "^8.0.6",
-    "bs-platform": "7.0.1",
+    "bs-platform": "7.2.1",
     "graphql": "^14.5.8",
     "lerna": "^3.20.2",
     "node-sass": "^4.12.0",

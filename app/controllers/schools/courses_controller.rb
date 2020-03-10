@@ -32,7 +32,7 @@ module Schools
 
       ::Courses::UnassignReviewerService.new(course).unassign(coach)
 
-      render json: { coach_id: coach.id, error: nil }
+      render json: { coach_id: coach.id.to_s, error: nil }
     end
 
     def update_coach_enrollments
@@ -43,7 +43,7 @@ module Schools
         ::Courses::AssignReviewerService.new(course).assign(coach)
       end
 
-      render json: { coach_ids: course.faculty.pluck(:id), error: nil }
+      render json: { coach_ids: course.faculty.pluck(:id).map(&:to_s), error: nil }
     end
 
     # GET /school/courses/:course_id/students

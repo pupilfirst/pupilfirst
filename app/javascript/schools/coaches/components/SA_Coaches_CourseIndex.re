@@ -4,45 +4,31 @@ let str = React.string;
 
 type formVisible =
   | None
-  | CoachEnrollmentForm;
+  | CoachEnrollmentForm
+  | CoachInfoForm(string);
 
 type state = {
-  courseCoaches: list(Coach.t),
-  teamCoaches: list(Coach.t),
+  courseCoaches: array(string),
   formVisible,
   saving: bool,
 };
 
 type action =
   | UpdateFormVisible(formVisible)
-  | UpdateCoaches(list(int), list(Coach.t))
-  | RemoveCoach(int)
+  | UpdateCoaches(array(string))
+  | RemoveCoach(string)
   | UpdateSaving;
 
 let reducer = (state, action) =>
   switch (action) {
   | UpdateFormVisible(formVisible) => {...state, formVisible}
-  | UpdateCoaches(coachIds, schoolCoaches) =>
-    let newCoachesList =
-      schoolCoaches
-      |> List.filter(schoolCoach =>
-           coachIds
-           |> List.exists(coachId => coachId == Coach.id(schoolCoach))
-         );
-    let newTeamCoaches =
-      state.teamCoaches
-      |> List.filter(teamCoach =>
-           !(newCoachesList |> List.exists(newCoach => newCoach == teamCoach))
-         );
-    {...state, courseCoaches: newCoachesList, teamCoaches: newTeamCoaches};
+  | UpdateCoaches(coachIds) => {...state, courseCoaches: coachIds}
+
   | RemoveCoach(coachId) => {
       ...state,
       courseCoaches:
         state.courseCoaches
-        |> List.filter(courseCoach => Coach.id(courseCoach) !== coachId),
-      teamCoaches:
-        state.teamCoaches
-        |> List.filter(teamCoach => Coach.id(teamCoach) !== coachId),
+        |> Js.Array.filter(courseCoachId => courseCoachId !== coachId),
     }
   | UpdateSaving => {...state, saving: !state.saving}
   };
@@ -57,7 +43,7 @@ let handleErrorCB = (send, ()) => {
 
 let handleResponseCB = (send, json) => {
   send(UpdateSaving);
-  let coachId = json |> Json.Decode.(field("coach_id", int));
+  let coachId = json |> Json.Decode.(field("coach_id", string));
   send(RemoveCoach(coachId));
   Notification.success("Success", "Coach enrollment deleted successfully");
 };
@@ -74,64 +60,32 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
            )
       )) {
     send(UpdateSaving);
-    let url =
-      "/school/courses/"
-      ++ (courseId |> string_of_int)
-      ++ "/delete_coach_enrollment";
+    let url = "/school/courses/" ++ courseId ++ "/delete_coach_enrollment";
     let payload = Js.Dict.empty();
     Js.Dict.set(
       payload,
       "authenticity_token",
       authenticityToken |> Js.Json.string,
     );
-    Js.Dict.set(
-      payload,
-      "coach_id",
-      coach |> Coach.id |> string_of_int |> Js.Json.string,
-    );
+    Js.Dict.set(payload, "coach_id", coach |> Coach.id |> Js.Json.string);
     Api.create(url, payload, handleResponseCB(send), handleErrorCB(send));
   } else {
     ();
   };
 };
 
-let computeInitialState = ((schoolCoaches, courseCoachIds, startupCoachIds)) => {
-  courseCoaches:
-    schoolCoaches
-    |> List.filter(schoolCoach =>
-         courseCoachIds
-         |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
-       ),
-  teamCoaches:
-    schoolCoaches
-    |> List.filter(schoolCoach =>
-         startupCoachIds
-         |> List.exists(facultyId => facultyId == Coach.id(schoolCoach))
-       ),
-  formVisible: None,
-  saving: false,
-};
-
 [@react.component]
-let make =
-    (
-      ~courseCoachIds,
-      ~startupCoachIds,
-      ~schoolCoaches,
-      ~courseId,
-      ~authenticityToken,
-    ) => {
+let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
   let (state, send) =
-    React.useReducerWithMapState(
+    React.useReducer(
       reducer,
-      (schoolCoaches, courseCoachIds, startupCoachIds),
-      computeInitialState,
+      {courseCoaches: courseCoachIds, formVisible: None, saving: false},
     );
 
   let closeFormCB = () => send(UpdateFormVisible(None));
 
   let updateCoachesCB = coachIds => {
-    send(UpdateCoaches(coachIds, schoolCoaches));
+    send(UpdateCoaches(coachIds));
     send(UpdateFormVisible(None));
   };
 
@@ -142,20 +96,23 @@ let make =
       {switch (state.formVisible) {
        | None => React.null
        | CoachEnrollmentForm =>
-         let courseCoachIds =
-           state.courseCoaches |> List.map(coach => coach |> Coach.id);
-         <SA_Coaches_CourseEnrollmentForm
-           courseId
-           courseCoachIds
-           schoolCoaches
-           updateCoachesCB
-           closeFormCB
-           authenticityToken
-         />;
+         <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
+           <SA_Coaches_CourseEnrollmentForm
+             courseId
+             courseCoachIds={state.courseCoaches}
+             schoolCoaches
+             updateCoachesCB
+             authenticityToken
+           />
+         </SchoolAdmin__EditorDrawer>
+       | CoachInfoForm(coachId) =>
+         <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
+           React.null
+         </SchoolAdmin__EditorDrawer>
        }}
       <div className="flex-1 flex flex-col">
-        {List.length(schoolCoaches) == List.length(state.courseCoaches)
-         || ListUtils.isEmpty(schoolCoaches)
+        {Array.length(schoolCoaches) == Array.length(state.courseCoaches)
+         || ArrayUtils.isEmpty(schoolCoaches)
            ? React.null
            : <div className="flex px-6 py-2 items-center justify-between">
                <button
@@ -170,10 +127,7 @@ let make =
                  </h5>
                </button>
              </div>}
-        {state.teamCoaches
-         |> ListUtils.isEmpty
-         && state.courseCoaches
-         |> ListUtils.isEmpty
+        {state.courseCoaches |> ArrayUtils.isEmpty
            ? <div
                className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full mt-8">
                {"The course has no coaches assigned!" |> str}
@@ -181,28 +135,48 @@ let make =
            : React.null}
         <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-2xl w-full mx-auto relative">
-            {state.courseCoaches |> ListUtils.isEmpty
-               ? React.null
-               : <h4 className="w-full"> {"Course Coaches:" |> str} </h4>}
             <div
               className="flex mt-4 -mx-3 flex-wrap"
               ariaLabel="List of course coaches">
-              {state.courseCoaches
-               |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
-               |> List.map(coach =>
+              {schoolCoaches
+               |> Js.Array.filter(coach =>
+                    state.courseCoaches |> Array.mem(Coach.id(coach))
+                  )
+               |> ArrayUtils.copyAndSort((x, y) =>
+                    (x |> Coach.id |> int_of_string)
+                    - (y |> Coach.id |> int_of_string)
+                  )
+               |> Array.map(coach =>
                     <div
-                      key={coach |> Coach.id |> string_of_int}
+                      key={coach |> Coach.id}
                       className="flex w-1/2 flex-shrink-0 mb-5 px-3">
                       <div
                         id={coach |> Coach.name}
-                        className="course-faculty__list-item shadow bg-white rounded-lg flex w-full">
+                        className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
                         <div className="flex flex-1 justify-between">
-                          <div className="flex py-4 px-4">
-                            <img
-                              className="w-10 h-10 rounded-full mr-4 object-cover"
-                              src={coach |> Coach.imageUrl}
-                              alt={"Avatar of " ++ (coach |> Coach.name)}
-                            />
+                          <div
+                            onClick={_ =>
+                              send(
+                                UpdateFormVisible(
+                                  CoachInfoForm(coach |> Coach.id),
+                                ),
+                              )
+                            }
+                            className="flex flex-1 py-4 px-4 items-center">
+                            <span className="mr-4 flex-shrink-0">
+                              {switch (coach |> Coach.avatarUrl) {
+                               | Some(avatarUrl) =>
+                                 <img
+                                   className="w-10 h-10 rounded-full object-cover"
+                                   src=avatarUrl
+                                 />
+                               | None =>
+                                 <Avatar
+                                   name={coach |> Coach.name}
+                                   className="w-10 h-10 rounded-full"
+                                 />
+                               }}
+                            </span>
                             <div className="text-sm">
                               <p className="text-black font-semibold mt-1">
                                 {coach |> Coach.name |> str}
@@ -228,7 +202,6 @@ let make =
                       </div>
                     </div>
                   )
-               |> Array.of_list
                |> React.array}
             </div>
           </div>

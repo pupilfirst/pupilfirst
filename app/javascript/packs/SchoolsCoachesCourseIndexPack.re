@@ -1,19 +1,17 @@
 open CoachesCourseIndex__Types;
 
 type props = {
-  courseCoachIds: list(int),
-  startupCoachIds: list(int),
-  schoolCoaches: list(Coach.t),
+  courseCoachIds: array(string),
+  schoolCoaches: array(Coach.t),
   authenticityToken: string,
-  courseId: int,
+  courseId: string,
 };
 
 let decodeProps = json =>
   Json.Decode.{
-    courseCoachIds: json |> field("courseCoachIds", list(int)),
-    startupCoachIds: json |> field("startupCoachIds", list(int)),
-    schoolCoaches: json |> field("schoolCoaches", list(Coach.decode)),
-    courseId: json |> field("courseId", int),
+    courseCoachIds: json |> field("courseCoachIds", array(string)),
+    schoolCoaches: json |> field("schoolCoaches", array(Coach.decode)),
+    courseId: json |> field("courseId", string),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
@@ -28,7 +26,6 @@ let props =
 ReactDOMRe.renderToElementWithId(
   <SA_Coaches_CourseIndex
     courseCoachIds={props.courseCoachIds}
-    startupCoachIds={props.startupCoachIds}
     schoolCoaches={props.schoolCoaches}
     courseId={props.courseId}
     authenticityToken={props.authenticityToken}

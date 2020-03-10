@@ -109,8 +109,6 @@ let otherStudents = (studentId, t) =>
 let coaches = (allTeamCoaches, t) => {
   allTeamCoaches
   |> Js.Array.filter(teamCoach =>
-       t
-       |> coachUserIds
-       |> Array.mem(teamCoach |> UserProxy.userId)
+       t |> coachUserIds |> Array.mem(teamCoach |> UserProxy.userId)
      );
 };

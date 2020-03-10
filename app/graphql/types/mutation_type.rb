@@ -49,5 +49,6 @@ module Types
     field :delete_course_author, mutation: Mutations::DeleteCourseAuthor, null: false
     field :create_course_author, mutation: Mutations::CreateCourseAuthor, null: false
     field :update_course_author, mutation: Mutations::UpdateCourseAuthor, null: false
+    field :delete_coach_team_enrollment, mutation: Mutations::DeleteCoachTeamEnrollment, null: false
   end
 end

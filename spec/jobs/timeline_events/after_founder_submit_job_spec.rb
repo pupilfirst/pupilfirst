@@ -20,8 +20,8 @@ describe TimelineEvents::AfterFounderSubmitJob do
 
     context 'when the startup has a coach' do
       before do
-        create :faculty_startup_enrollment, startup: startup, faculty: faculty_with_notifications
-        create :faculty_startup_enrollment, startup: startup, faculty: another_faculty
+        create :faculty_startup_enrollment, :with_course_enrollment, startup: startup, faculty: faculty_with_notifications
+        create :faculty_startup_enrollment, :with_course_enrollment, startup: startup, faculty: another_faculty
       end
 
       it 'sends a notification email to the coach' do

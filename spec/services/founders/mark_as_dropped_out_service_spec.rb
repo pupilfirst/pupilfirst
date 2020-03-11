@@ -21,7 +21,7 @@ describe Founders::MarkAsDroppedOutService do
     let(:coach) { create :faculty, school: team.school }
 
     before do
-      create :faculty_startup_enrollment, faculty: coach, startup: team
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team
     end
 
     it 'marks the student as exited and removes all direct coach enrollments to the team' do

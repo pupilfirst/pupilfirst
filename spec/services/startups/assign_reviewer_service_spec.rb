@@ -1,52 +1,47 @@
 require 'rails_helper'
 
 describe Startups::AssignReviewerService do
-  subject { described_class.new(startup) }
+  subject { described_class.new(team) }
 
-  let(:startup) { create :startup }
-  let(:faculty) { create :faculty, school: startup.school }
+  let(:team) { create :team }
+  let(:coach) { create :faculty }
+
+  before do
+    create :faculty_course_enrollment, faculty: coach, course: team.course
+  end
 
   describe '#assign' do
-    context 'if the faculty is in a different school' do
-      let(:new_school) { create :school }
-      let(:faculty_user_in_new_school) { create :user, school_id: new_school.id }
-      let(:faculty) { create :faculty, user: faculty_user_in_new_school }
+    it 'links coach to the team' do
+      expect { subject.assign([coach.id]) }.to(change { FacultyStartupEnrollment.count }.from(0).to(1))
+
+      team_enrollment = FacultyStartupEnrollment.first
+
+      expect(team_enrollment.faculty).to eq(coach)
+      expect(team_enrollment.startup).to eq(team)
+    end
+
+    context "if a coach isn't assigned to the course" do
+      let(:another_team) { create :team }
+      let(:another_coach) { create :faculty }
+
+      before do
+        create :faculty_course_enrollment, faculty: another_coach, course: another_team.course
+      end
 
       it 'raises exception' do
-        expect { subject.assign(faculty) }.to raise_exception('Faculty must in same school as team')
+        expect { subject.assign([coach.id, another_coach.id]) }.to(
+          raise_exception("All coaches must be assigned to the team's course")
+        )
       end
     end
 
-    context 'if the direct enrollment already exists' do
+    context 'if the enrollment already exists' do
       before do
-        create :faculty_startup_enrollment, faculty: faculty, startup: startup
+        create :faculty_startup_enrollment, faculty: coach, startup: team
       end
 
       it 'does nothing' do
-        expect { subject.assign(faculty) }.not_to(change { FacultyStartupEnrollment.count })
-      end
-    end
-
-    context 'if the direct enrollment does not exist' do
-      context "'if the startup's course has enrolled the faculty" do
-        before do
-          create :faculty_course_enrollment, faculty: faculty, course: startup.level.course
-        end
-
-        it 'does nothing' do
-          expect { subject.assign(faculty) }.not_to(change { FacultyStartupEnrollment.count })
-        end
-      end
-
-      context "if the startup's course has not enrolled the faculty" do
-        it 'links startup to faculty' do
-          expect { subject.assign(faculty) }.to(change { FacultyStartupEnrollment.count }.from(0).to(1))
-
-          enrollment = FacultyStartupEnrollment.first
-
-          expect(enrollment.faculty).to eq(faculty)
-          expect(enrollment.startup).to eq(startup)
-        end
+        expect { subject.assign([coach.id]) }.not_to(change { FacultyStartupEnrollment.count })
       end
     end
   end

@@ -24,7 +24,7 @@ feature 'Submissions show' do
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :faculty_course_enrollment, faculty: team_coach, course: course
-    create :faculty_startup_enrollment, faculty: team_coach, startup: team
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]

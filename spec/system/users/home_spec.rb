@@ -44,7 +44,7 @@ feature 'User Home', js: true do
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course_1
-    create :faculty_startup_enrollment, faculty: team_coach, startup: course_2_founder_1.startup
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: course_2_founder_1.startup
     create :community_course_connection, course: course_1, community: community_1
     create :community_course_connection, course: course_2, community: community_2
     create :community_course_connection, course: course_3, community: community_3

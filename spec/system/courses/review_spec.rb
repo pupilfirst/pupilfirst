@@ -30,8 +30,7 @@ feature 'Course review' do
     create :faculty_course_enrollment, faculty: course_coach, course: course
 
     # ...and another as a directly-assigned "team" coach.
-    create :faculty_course_enrollment, faculty: team_coach, course: course
-    create :faculty_startup_enrollment, faculty: team_coach, startup: team_l3
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team_l3
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target_l1.evaluation_criteria << evaluation_criterion
@@ -254,8 +253,7 @@ feature 'Course review' do
       let(:team_coach_2) { create :faculty, school: school }
 
       before do
-        create :faculty_course_enrollment, faculty: team_coach_2, course: course
-        create :faculty_startup_enrollment, faculty: team_coach_2, startup: team_l2
+        create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_2, startup: team_l2
       end
 
       scenario 'one team coach uses filter to see submissions assigned to another coach', js: true do

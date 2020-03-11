@@ -9,8 +9,8 @@ describe FacultyPolicy do
     let!(:connect_slot) { create :connect_slot, faculty: faculty_1, slot_at: 6.days.from_now }
     let(:startup) { create :startup }
     let(:current_founder) { startup.founders.first }
-    let!(:enrollment_1) { create :faculty_startup_enrollment, faculty: faculty_1, startup: startup }
-    let!(:enrollment_2) { create :faculty_startup_enrollment, faculty: faculty_2, startup: startup }
+    let!(:enrollment_1) { create :faculty_startup_enrollment, :with_course_enrollment, faculty: faculty_1, startup: startup }
+    let!(:enrollment_2) { create :faculty_startup_enrollment, :with_course_enrollment, faculty: faculty_2, startup: startup }
 
     let(:pundit_user) do
       OpenStruct.new(

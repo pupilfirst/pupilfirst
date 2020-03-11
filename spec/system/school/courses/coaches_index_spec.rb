@@ -25,7 +25,7 @@ feature 'Course Coaches Index', js: true do
   before do
     create :faculty_course_enrollment, faculty: coach_1, course: course_1
     create :faculty_course_enrollment, faculty: coach_2, course: course_1
-    create :faculty_startup_enrollment, faculty: coach_3, startup: startup
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach_3, startup: startup
   end
 
   scenario 'school admin assigns faculty to a course' do
@@ -121,7 +121,7 @@ feature 'Course Coaches Index', js: true do
     let!(:startup_2) { create :startup, level: c1_level }
 
     before do
-      create :faculty_startup_enrollment, faculty: coach_3, startup: startup_2
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach_3, startup: startup_2
     end
 
     scenario 'user sees team assignments for coaches in the list' do

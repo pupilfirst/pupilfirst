@@ -395,6 +395,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
         <div
           className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
           <Multiselect
+            id="filter"
             unselected={unselected(
               levels,
               teamCoaches,

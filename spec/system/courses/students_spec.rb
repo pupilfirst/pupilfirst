@@ -27,13 +27,11 @@ feature "Course students list", js: true do
       create :startup, level: level_3, name: "C #{Faker::Lorem.word} #{rand(10)}" # These will be in the middle of the list.
     end
 
-    create :faculty_startup_enrollment, faculty: team_coach, startup: team_6
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team_6
   end
 
   scenario 'coach checks the complete list of students' do
     sign_in_user course_coach.user, referer: students_course_path(course)
-
-    expect(page).to have_button('All Levels')
 
     teams_sorted_by_name = course.startups.order(:name).to_a
 
@@ -76,14 +74,14 @@ feature "Course students list", js: true do
     expect(page).to have_text(course.startups.order('name').first.name)
 
     # Filter by level
-    click_button 'All Levels'
-    click_button "Level 1 | #{level_1.name}"
+    fill_in 'filter', with: 'level'
+    click_button "Level 1: #{level_1.name}"
 
     expect(page).not_to have_text(team_5.name)
     expect(page).to have_text(team_1.name)
 
-    click_button "Level 1 | #{level_1.name}"
-    click_button "Level 2 | #{level_2.name}"
+    fill_in 'filter', with: 'level'
+    click_button "Level 2: #{level_2.name}"
 
     expect(page).not_to have_text("Level 1 | #{level_1.name}")
 
@@ -92,29 +90,30 @@ feature "Course students list", js: true do
 
     # Search for a student in the filtered level
     student_name = team_3.founders.first.name
-    fill_in 'student_search', with: student_name
-    click_button 'Search'
+    fill_in 'filter', with: student_name
+    click_button "Name or Email: #{student_name}"
 
     expect(page).to have_text(student_name)
     expect(page).to_not have_text(team_2.name)
 
-    # Clear the search
-    click_button 'clear-student-search'
+    # Clear the filter
+    find("button[title='Remove selection: #{student_name}']").click
 
     expect(page).to have_text(team_2.name)
     expect(page).to have_text(team_3.name)
 
     # Switch to level which will have pagination
-    click_button "Level 2 | #{level_2.name}"
-    click_button "Level 3 | #{level_3.name}"
+    fill_in 'filter', with: 'level'
+    click_button "Level 3: #{level_3.name}"
+
     expect(page).to_not have_text(team_2.name)
 
     click_button('Load More...')
+
     expect(page).to have_text(team_6.name)
 
     # Clear the level filter
-    click_button "Level 3 | #{level_3.name}"
-    click_button 'All Levels'
+    find("button[title='Remove selection: #{level_3.name}']").click
 
     expect(page).to have_text(team_2.name)
 
@@ -129,7 +128,37 @@ feature "Course students list", js: true do
     sign_in_user team_coach.user, referer: students_course_path(course)
 
     expect(page).to have_text(team_6.name)
-    expect(page).to_not have_text(team_1.name)
+    expect(page).to_not have_text(team_3.name)
+
+    # Team coach can remove the default filter to see all students.
+    find('button[title="Remove selection: Me"').click
+
+    expect(page).to have_text(team_2.name)
+
+    click_button('Load More...')
+
+    expect(page).to have_text(team_3.name)
+  end
+
+  context 'when there are more than one team coaches' do
+    let(:another_team_coach) { create :faculty, school: school }
+
+    before do
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: another_team_coach, startup: team_2
+    end
+
+    scenario "one team coach can use the filter to see another coach's students" do
+      sign_in_user team_coach.user, referer: students_course_path(course)
+
+      expect(page).to have_text(team_6.name)
+      expect(page).to_not have_text(team_2.name)
+
+      fill_in 'filter', with: another_team_coach.name
+      click_button "Assigned to: #{another_team_coach.name}"
+
+      expect(page).not_to have_text(team_6.name)
+      expect(page).to have_text(team_2.name)
+    end
   end
 
   scenario 'course coach checks list of directly assigned coaches' do
@@ -157,10 +186,10 @@ feature "Course students list", js: true do
     let(:team_coach_5) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment, faculty: team_coach_2, startup: team_6
-      create :faculty_startup_enrollment, faculty: team_coach_3, startup: team_6
-      create :faculty_startup_enrollment, faculty: team_coach_4, startup: team_6
-      create :faculty_startup_enrollment, faculty: team_coach_5, startup: team_6
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_2, startup: team_6
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_3, startup: team_6
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_4, startup: team_6
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_5, startup: team_6
     end
 
     scenario 'course coach checks names of coaches hidden from main list' do

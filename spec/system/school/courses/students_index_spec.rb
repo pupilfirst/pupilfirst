@@ -358,9 +358,9 @@ feature 'School students index', js: true do
 
   scenario 'school admin marks students as dropped out' do
     # Enroll the coach as a team coach in all three teams.
-    create :faculty_startup_enrollment, faculty: coach, startup: startup_1
-    create :faculty_startup_enrollment, faculty: coach, startup: startup_2
-    create :faculty_startup_enrollment, faculty: coach, startup: team_with_lone_student
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: startup_1
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: startup_2
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team_with_lone_student
 
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 

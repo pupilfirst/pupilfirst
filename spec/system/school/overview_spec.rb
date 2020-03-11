@@ -37,7 +37,7 @@ feature 'School Overview', js: true do
   let!(:c2_startup_1) { create :startup, level: c2_level_1 }
   let!(:c2_startup_2) { create :startup, level: c2_level_1 }
   let!(:c2_startup_3) { create :startup, level: c2_level_1 }
-  let!(:c2_faculty_startup_enrollment) { create :faculty_startup_enrollment, faculty: c2_coach_2, startup: c2_startup_1 }
+  let!(:c2_faculty_startup_enrollment) { create :faculty_startup_enrollment, :with_course_enrollment, faculty: c2_coach_2, startup: c2_startup_1 }
   let!(:c2_timeline_event_1) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_1.founders, target: c2_target_1 }
   let!(:c2_timeline_event_2) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_1.founders, target: c2_target_2 }
   let!(:c2_timeline_event_3) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, founders: c2_startup_2.founders, target: c2_target_1 }

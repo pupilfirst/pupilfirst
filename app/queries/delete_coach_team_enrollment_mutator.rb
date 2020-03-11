@@ -8,11 +8,11 @@ class DeleteCoachTeamEnrollmentMutator < ApplicationQuery
     coach_team_enrollment.destroy!
   end
 
-  validate :faculty_coach_assignment_must_exist
+  validate :coach_team_enrollment_must_exist
 
   private
 
-  def faculty_coach_assignment_must_exist
+  def coach_team_enrollment_must_exist
     return if coach_team_enrollment.present?
 
     errors[:base] << 'Team assignment for the coach does not exist'

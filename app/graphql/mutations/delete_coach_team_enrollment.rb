@@ -14,6 +14,7 @@ module Mutations
         mutator.delete_coach_team_enrollment
         { success: true }
       else
+        mutator.notify_errors
         { success: false }
       end
     end

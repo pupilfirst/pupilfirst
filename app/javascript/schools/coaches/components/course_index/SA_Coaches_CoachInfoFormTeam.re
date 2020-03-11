@@ -36,11 +36,11 @@ let deleteTeamEnrollment =
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response => {
          if (response##deleteCoachTeamEnrollment##success) {
-           setDeleting(_ => false);
            removeTeamEnrollmentCB(CoachesCourseIndex__Team.id(team));
          } else {
-           setDeleting(_ => false);
+           ();
          };
+         setDeleting(_ => false);
          response |> Js.Promise.resolve;
        })
     |> ignore;

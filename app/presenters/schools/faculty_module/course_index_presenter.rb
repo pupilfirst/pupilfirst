@@ -19,7 +19,7 @@ module Schools
       private
 
       def school_faculty
-        @course.school.faculty.where.not(exited: true).includes(:startups, user: { avatar_attachment: :blob })
+        @course.school.faculty.where.not(exited: true).includes(startups: :founders, user: { avatar_attachment: :blob })
       end
 
       def school_faculty_details
@@ -37,7 +37,7 @@ module Schools
 
       def faculty_team_details(faculty)
         if faculty.startups.present?
-          faculty.startups.joins(:course).where(courses: { id: @course }).map { |startup| { id: startup.id, name: startup.name } }
+          faculty.startups.joins(:course).where(courses: { id: @course }).map { |startup| { id: startup.id, name: startup.name, students: startup.founders.map(&:name) } }
         else
           []
         end

@@ -53,17 +53,37 @@ let make = (~team, ~coach, ~removeTeamEnrollmentCB) => {
   <div
     className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
     key={team |> Team.id}>
-    <span> {team |> Team.name |> str} </span>
-    <button
-      title={"Delete " ++ Team.name(team)}
-      onClick={deleteTeamEnrollment(
-        team,
-        coach,
-        setDeleting,
-        removeTeamEnrollmentCB,
-      )}
-      className="p-3">
-      <FaIcon classes={deleteIconClasses(deleting)} />
-    </button>
+    <div className="flex flex-1 justify-between items-center">
+      <div className="font-semibold w-1/2">
+        {team
+         |> Team.students
+         |> Js.Array.mapi((student, index) =>
+              <div className="p-1" key={index |> string_of_int}>
+                {student |> str}
+              </div>
+            )
+         |> React.array}
+      </div>
+      {team |> Team.students |> Array.length > 1
+         ? <div className="w-1/2">
+             <p className="text-tiny"> {"Team" |> str} </p>
+             <p className="font-semibold"> {team |> Team.name |> str} </p>
+           </div>
+         : React.null}
+    </div>
+    <div
+      className="w-10 text-center flex-shrink-0 hover:text-gray-900 hover:bg-gray-200">
+      <button
+        title={"Delete " ++ Team.name(team)}
+        onClick={deleteTeamEnrollment(
+          team,
+          coach,
+          setDeleting,
+          removeTeamEnrollmentCB,
+        )}
+        className="p-3">
+        <FaIcon classes={deleteIconClasses(deleting)} />
+      </button>
+    </div>
   </div>;
 };

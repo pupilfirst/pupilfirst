@@ -17,11 +17,13 @@ feature 'Submissions show' do
 
   let(:team) { create :startup, level: level }
   let(:coach) { create :faculty, school: school }
-  let(:team_coach) { create :faculty, school: school }
+  let(:team_coach_user) { create :user, name: 'John Doe' }
+  let(:team_coach) { create :faculty, school: school, user: team_coach_user }
   let(:school_admin) { create :school_admin }
 
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
+    create :faculty_course_enrollment, faculty: team_coach, course: course
     create :faculty_startup_enrollment, faculty: team_coach, startup: team
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
@@ -43,8 +45,13 @@ feature 'Submissions show' do
         expect(page).to have_content('Level 1')
         expect(page).to have_content("Submitted by #{student.name}")
         expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
-        expect(page).to have_link("View Target", href: "/targets/#{target.id}")
+        expect(page).to have_link(target.title, href: "/targets/#{target.id}")
         expect(page).to have_content(target.title)
+        expect(page).to have_text 'Assigned Coaches'
+
+        # Hovering over the avatar should reveal the name of the assigned coach.
+        page.find('svg', text: 'JD').hover
+        expect(page).to have_text('John Doe')
       end
 
       expect(page).to have_content('Add Your Feedback')
@@ -417,8 +424,7 @@ feature 'Submissions show' do
           expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
         end
 
-        expect(page).to have_link("View Target", href: "/targets/#{target.id}")
-        expect(page).to have_content(target.title)
+        expect(page).to have_link(target.title, href: "/targets/#{target.id}")
       end
 
       expect(page).to have_content('Submission #1')

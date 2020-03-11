@@ -4,38 +4,10 @@ let pendingEmptyImage: string = [%raw
 open CoursesReview__Types;
 let str = React.string;
 
-let filterSubmissions = (selectedLevel, selectedCoach, submissions) => {
-  let levelFiltered =
-    selectedLevel
-    |> OptionUtils.mapWithDefault(
-         level =>
-           submissions
-           |> Js.Array.filter(l =>
-                l |> IndexSubmission.levelId == (level |> Level.id)
-              ),
-         submissions,
-       );
-
-  selectedCoach
-  |> OptionUtils.mapWithDefault(
-       coach =>
-         levelFiltered
-         |> Js.Array.filter(l =>
-              l |> IndexSubmission.coachIds |> Array.mem(coach |> Coach.id)
-            ),
-       levelFiltered,
-     );
-};
-
 [@react.component]
-let make = (~submissions, ~levels, ~selectedLevel, ~selectedCoach) => {
-  let filteredSubmissions =
-    submissions
-    |> filterSubmissions(selectedLevel, selectedCoach)
-    |> IndexSubmission.sort;
-
+let make = (~submissions, ~levels) => {
   <div>
-    {if (filteredSubmissions |> ArrayUtils.isEmpty) {
+    {if (submissions |> ArrayUtils.isEmpty) {
        <div
          className="course-review__pending-empty text-lg font-semibold text-center py-4">
          <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
@@ -44,7 +16,7 @@ let make = (~submissions, ~levels, ~selectedLevel, ~selectedCoach) => {
          <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=pendingEmptyImage />
        </div>;
      } else {
-       filteredSubmissions
+       submissions
        |> Array.map(indexSubmission =>
             <Link
               href={"/submissions/" ++ (indexSubmission |> IndexSubmission.id)}

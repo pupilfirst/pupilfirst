@@ -278,6 +278,29 @@ let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
        React.null,
      );
 
+let filterSubmissions = (selectedLevel, selectedCoach, submissions) => {
+  let levelFiltered =
+    selectedLevel
+    |> OptionUtils.mapWithDefault(
+         level =>
+           submissions
+           |> Js.Array.filter(l =>
+                l |> IndexSubmission.levelId == (level |> Level.id)
+              ),
+         submissions,
+       );
+
+  selectedCoach
+  |> OptionUtils.mapWithDefault(
+       coach =>
+         levelFiltered
+         |> Js.Array.filter(l =>
+              l |> IndexSubmission.coachIds |> Array.mem(coach |> Coach.id)
+            ),
+       levelFiltered,
+     );
+};
+
 [@react.component]
 let make =
     (~levels, ~pendingSubmissions, ~courseId, ~teamCoaches, ~currentCoach) => {
@@ -295,7 +318,13 @@ let make =
       (pendingSubmissions, currentTeamCoach),
       computeInitialState,
     );
+
   let url = ReasonReactRouter.useUrl();
+
+  let filteredPendingSubmissions =
+    pendingSubmissions
+    |> filterSubmissions(state.selectedLevel, state.selectedCoach)
+    |> IndexSubmission.sort;
 
   <div>
     {switch (url.path) {
@@ -329,7 +358,7 @@ let make =
               {"Pending" |> str}
               <span
                 className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
-                {state.pendingSubmissions
+                {filteredPendingSubmissions
                  |> Array.length
                  |> string_of_int
                  |> str}
@@ -345,6 +374,7 @@ let make =
           </div>
         </div>
         <Multiselect
+          id="filter"
           unselected={unselected(
             levels,
             teamCoaches,
@@ -364,10 +394,8 @@ let make =
         {switch (state.visibleList) {
          | PendingSubmissions =>
            <CoursesReview__ShowPendingSubmissions
-             submissions={state.pendingSubmissions}
+             submissions=filteredPendingSubmissions
              levels
-             selectedLevel={state.selectedLevel}
-             selectedCoach={state.selectedCoach}
            />
          | ReviewedSubmissions =>
            <CoursesReview__ShowReviewedSubmissions

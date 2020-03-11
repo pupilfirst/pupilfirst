@@ -26,7 +26,7 @@ let make = (~coach, ~removeTeamEnrollmentCB) => {
       </div>
     </div>
     <div className="max-w-2xl mx-auto">
-      <span className="inline-block mr-1 mb-2 text-xs font-semibold">
+      <span className="inline-block mr-1 mb-2 text-sm font-semibold pt-5">
         {"Teams assigned to coach:" |> str}
       </span>
       {switch (coach |> Coach.teams) {

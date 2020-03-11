@@ -87,13 +87,7 @@ let courseCoachEditor = (coaches, state, send) => {
 };
 
 [@react.component]
-let make =
-    (
-      ~coaches,
-      ~courseId,
-      ~authenticityToken,
-      ~updateCoachesCB,
-    ) => {
+let make = (~coaches, ~courseId, ~authenticityToken, ~updateCoachesCB) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -140,7 +134,7 @@ let make =
             disabled=saveDisabled
             onClick={_e => updateCourseCoaches(courseId, state)}
             className="w-full btn btn-primary btn-large">
-            {"Update Course Coaches" |> str}
+            {"Add Course Coaches" |> str}
           </button>
         </div>
       </div>

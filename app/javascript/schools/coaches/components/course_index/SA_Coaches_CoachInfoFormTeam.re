@@ -51,6 +51,7 @@ let deleteTeamEnrollment =
 let make = (~team, ~coach, ~removeTeamEnrollmentCB) => {
   let (deleting, setDeleting) = React.useState(() => false);
   <div
+    ariaLabel={"Team " ++ (team |> Team.name)}
     className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
     key={team |> Team.id}>
     <div className="flex flex-1 justify-between items-center">

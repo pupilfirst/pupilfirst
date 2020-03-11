@@ -186,6 +186,7 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                         className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
                         <div className="flex flex-1 justify-between">
                           <div
+                            ariaLabel={"coach-card-" ++ Coach.id(coach)}
                             onClick={_ =>
                               send(UpdateFormVisible(CoachInfoForm(coach)))
                             }

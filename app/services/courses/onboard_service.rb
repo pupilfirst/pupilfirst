@@ -10,7 +10,8 @@ module Courses
     def execute
       Course.transaction do
         students = @rows.map do |row|
-          OpenStruct.new(name: row['name'], email: row['email'], title: row['title'], affiliation: row['affiliation'], tags: row['tags'], team_name: row['team_name'])
+          tags = (row['tags'].presence || "").strip.split(',')
+          OpenStruct.new(name: row['name'], email: row['email'], title: row['title'], affiliation: row['affiliation'], tags: tags, team_name: row['team_name'])
         end
 
         Courses::AddStudentsService.new(@course).add(students)

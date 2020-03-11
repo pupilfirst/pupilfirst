@@ -24,15 +24,18 @@ let reducer = (state, action) =>
   switch (action) {
   | UpdateFormVisible(formVisible) => {...state, formVisible}
   | UpdateCoachEnrollment(courseCoaches) => {...state, courseCoaches}
-  | RemoveCoachTeamEnrollment(teamId, coach) => {
+  | RemoveCoachTeamEnrollment(teamId, coach) =>
+    let updatedCoach = Coach.removeTeam(coach, teamId);
+    {
       ...state,
       courseCoaches:
         state.courseCoaches
         |> Array.map(courseCoach =>
-             courseCoach == coach
-               ? Coach.removeTeam(coach, teamId) : courseCoach
+             Coach.id(courseCoach) == Coach.id(coach)
+               ? updatedCoach : courseCoach
            ),
-    }
+      formVisible: CoachInfoForm(updatedCoach),
+    };
   | RemoveCoach(coachId) => {
       ...state,
       courseCoaches:
@@ -169,10 +172,7 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
             <div
               className="flex mt-4 -mx-3 flex-wrap"
               ariaLabel="List of course coaches">
-              {schoolCoaches
-               |> Js.Array.filter(coach =>
-                    state.courseCoaches |> Array.mem(coach)
-                  )
+              {state.courseCoaches
                |> ArrayUtils.copyAndSort((x, y) =>
                     (x |> Coach.id |> int_of_string)
                     - (y |> Coach.id |> int_of_string)

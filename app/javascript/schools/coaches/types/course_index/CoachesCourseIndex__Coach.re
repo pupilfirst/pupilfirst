@@ -20,7 +20,9 @@ let title = t => t.title;
 let teams = t => t.teams;
 
 let removeTeam = (t, teamId) => {
-  let updatedTeams = t.teams |> Js.Array.filter(team => teamId != CoachesCourseIndex__Team.id(team));
+  let updatedTeams =
+    t.teams
+    |> Js.Array.filter(team => teamId != CoachesCourseIndex__Team.id(team));
   {...t, teams: updatedTeams};
 };
 

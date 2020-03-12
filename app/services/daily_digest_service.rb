@@ -58,7 +58,7 @@ class DailyDigestService
       if pending_submissions_in_course.zero?
         []
       else
-        students = Founder.joins(startup: %i[faculty course]).where(faculty: { id: coach }, course: course)
+        students = Founder.joins(startup: %i[faculty course]).where(faculty: { id: coach }, courses: { id: course })
         {
           course_id: course.id,
           course_name: course.name,

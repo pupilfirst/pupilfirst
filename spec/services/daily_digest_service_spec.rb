@@ -184,6 +184,8 @@ describe DailyDigestService do
       before do
         create :faculty_course_enrollment, faculty: coach, course: course_1
         create :faculty_course_enrollment, faculty: coach, course: course_2
+        create :faculty_course_enrollment, faculty: team_coach, course: course_1
+        create :faculty_course_enrollment, faculty: team_coach, course: course_2
         create :faculty_startup_enrollment, faculty: team_coach, startup: team_2
 
         submission_pending_1.founders << team_1.founders
@@ -202,20 +204,20 @@ describe DailyDigestService do
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
         expect(b).to include("There are 3")
-        expect(b).to include("new submissions to review in 2 courses")
+        expect(b).to include("new submissions to review")
+        expect(b).to include("in 2 courses")
       end
 
       it 'When the user is a team coach' do
-        # TODO: Update spec after  #203
-        # subject.execute
-        #
-        # open_email(team_coach.user.email)
-        #
-        #
-        # b = sanitize_html(current_email.body)
-        # expect(b).to include(course_1.name)
-        # expect(b).to include(course_2.name)
-        # expect(b).to include("There are 3")
+        subject.execute
+
+        open_email(team_coach.user.email)
+
+        b = sanitize_html(current_email.body)
+
+        expect(b).to include(course_1.name)
+        expect(b).to include(course_2.name)
+        expect(b).to include("(2 assigned to you)")
       end
     end
   end

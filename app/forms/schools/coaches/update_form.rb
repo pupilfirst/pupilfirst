@@ -49,7 +49,7 @@ module Schools
       end
 
       def faculty
-        @faculty ||= Faculty.find_by(id: id)
+        @faculty ||= school.faculty.find_by(id: id)
       end
 
       def clear_faculty_enrollments

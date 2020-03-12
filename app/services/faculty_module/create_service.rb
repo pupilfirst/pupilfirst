@@ -17,7 +17,6 @@ module FacultyModule
         faculty = Faculty.create!(
           user: user,
           category: Faculty::CATEGORY_VISITING_COACHES,
-          school: school,
           connect_link: @faculty_params[:connect_link],
           public: @faculty_params[:public]
         )

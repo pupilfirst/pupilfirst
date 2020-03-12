@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_11_100615) do
+ActiveRecord::Schema.define(version: 2020_03_12_113621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -303,13 +303,11 @@ ActiveRecord::Schema.define(version: 2020_03_11_100615) do
     t.string "slack_username"
     t.string "slack_user_id"
     t.bigint "user_id"
-    t.bigint "school_id"
     t.boolean "public", default: false
     t.string "connect_link"
     t.boolean "notify_for_submission", default: false
     t.boolean "exited", default: false
     t.index ["category"], name: "index_faculty_on_category"
-    t.index ["school_id", "user_id"], name: "index_faculty_on_school_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
 
@@ -838,7 +836,6 @@ ActiveRecord::Schema.define(version: 2020_03_11_100615) do
   add_foreign_key "course_exports", "users"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
-  add_foreign_key "faculty", "schools"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "faculty"

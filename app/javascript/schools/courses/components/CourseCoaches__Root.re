@@ -114,7 +114,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
          </SchoolAdmin__EditorDrawer>
        | CoachInfoForm(coach) =>
          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
-           <CourseCoaches__InfoForm coach />
+           <CourseCoaches__InfoForm courseId coach />
          </SchoolAdmin__EditorDrawer>
        }}
       <div className="flex-1 flex flex-col">

@@ -83,13 +83,13 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text('Students assigned to coach')
     expect(page).to have_text(coach_3.email)
 
-    within("div[aria-label='Team #{startup.name}'") do
+    within("div[aria-label='Team #{startup.name}']") do
       expect(page).to have_text(startup.founders.first.name)
       expect(page).to have_text(startup.founders.last.name)
       expect(page).to have_text(startup.name)
     end
 
-    within("div[aria-label='Team #{team_with_one_student.name}'") do
+    within("div[aria-label='Team #{team_with_one_student.name}']") do
       expect(page).to have_text(lone_student.name)
       expect(page).to_not have_text(team_with_one_student.name)
     end
@@ -104,7 +104,7 @@ feature 'Course Coaches Index', js: true do
       click_button "Delete #{team_with_one_student.name}"
     end
 
-    expect(page).to have_text('There are no teams assigned to this coach.')
+    expect(page).to have_text('There are no students assigned to this coach.')
     expect(coach_3.startups.count).to eq(0)
     expect(coach_3.courses.count).to eq(1)
     expect(course_2.faculty.count).to eq(2)

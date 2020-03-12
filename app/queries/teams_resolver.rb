@@ -30,6 +30,8 @@ class TeamsResolver < ApplicationQuery
   end
 
   def authorized?
+    return true if current_user.school_admin.present?
+
     return false if current_user.faculty.blank?
 
     faculty.reviewable_courses.where(id: course).exists?

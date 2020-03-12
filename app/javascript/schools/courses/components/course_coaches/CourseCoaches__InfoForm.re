@@ -107,7 +107,7 @@ let make = (~courseId, ~coach) => {
            state.teams |> ArrayUtils.isEmpty
              ? <div
                  className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
-                 {"There are no teams assigned to this coach. Assign them from the students editor."
+                 {"There are no students assigned to this coach. You can assign coaches directly while editing the student details."
                   |> str}
                </div>
              : state.teams

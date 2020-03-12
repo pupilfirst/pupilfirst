@@ -21,6 +21,9 @@ feature 'Course Coaches Index', js: true do
   let!(:startup) { create :startup, level: c2_level }
   let!(:startup_2) { create :startup, level: c1_level }
 
+  let(:team_with_one_student) { create :team, level: c2_level }
+  let!(:lone_student) { create :founder, startup: team_with_one_student }
+
   let!(:school_admin) { create :school_admin, school: school }
 
   before do
@@ -28,6 +31,7 @@ feature 'Course Coaches Index', js: true do
     create :faculty_course_enrollment, faculty: coach_2, course: course_1
     create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach_2, startup: startup_2
     create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach_3, startup: startup
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach_3, startup: team_with_one_student
     create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach_4, startup: startup
   end
 
@@ -85,12 +89,24 @@ feature 'Course Coaches Index', js: true do
       expect(page).to have_text(startup.name)
     end
 
+    within("div[aria-label='Team #{team_with_one_student.name}'") do
+      expect(page).to have_text(lone_student.name)
+      expect(page).to_not have_text(team_with_one_student.name)
+    end
+
     accept_confirm do
       click_button "Delete #{startup.name}"
     end
 
+    expect(page).to_not have_text(startup.name)
+
+    accept_confirm do
+      click_button "Delete #{team_with_one_student.name}"
+    end
+
     expect(page).to have_text('There are no teams assigned to this coach.')
     expect(coach_3.startups.count).to eq(0)
+    expect(coach_3.courses.count).to eq(1)
     expect(course_2.faculty.count).to eq(2)
   end
 

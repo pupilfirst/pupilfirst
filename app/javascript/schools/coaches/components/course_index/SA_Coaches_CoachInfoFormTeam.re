@@ -38,9 +38,8 @@ let deleteTeamEnrollment =
          if (response##deleteCoachTeamEnrollment##success) {
            removeTeamEnrollmentCB(CoachesCourseIndex__Team.id(team));
          } else {
-           ();
+           setDeleting(_ => false);
          };
-         setDeleting(_ => false);
          response |> Js.Promise.resolve;
        })
     |> ignore;

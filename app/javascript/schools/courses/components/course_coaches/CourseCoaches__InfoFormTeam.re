@@ -1,4 +1,4 @@
-open CoachesCourseIndex__Types;
+open CourseCoaches__Types;
 
 let str = React.string;
 
@@ -23,20 +23,20 @@ let deleteTeamEnrollment =
         window
         |> Window.confirm(
              "Are you sure you want to remove "
-             ++ (team |> CoachesCourseIndex__Team.name)
+             ++ (team |> Team.name)
              ++ " from the list of assigned teams?",
            )
       )) {
     setDeleting(_ => true);
     DeleteCoachTeamEnrollmentQuery.make(
-      ~teamId=CoachesCourseIndex__Team.id(team),
-      ~coachId=Coach.id(coach),
+      ~teamId=Team.id(team),
+      ~coachId=CourseCoach.id(coach),
       (),
     )
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response => {
          if (response##deleteCoachTeamEnrollment##success) {
-           removeTeamEnrollmentCB(CoachesCourseIndex__Team.id(team));
+           removeTeamEnrollmentCB(Team.id(team));
          } else {
            setDeleting(_ => false);
          };

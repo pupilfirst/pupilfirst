@@ -1,11 +1,11 @@
-open CoachesCourseIndex__Types;
+open CourseCoaches__Types;
 
 let str = React.string;
 
 type action =
   | UpdateCoachesList(array(string))
   | UpdateCoachSearchInput(string)
-  | UpdateSaving;
+  | ToggleSaving;
 
 type state = {
   courseCoaches: array(string),
@@ -16,29 +16,32 @@ type state = {
 let reducer = (state, action) =>
   switch (action) {
   | UpdateCoachesList(courseCoaches) => {...state, courseCoaches}
-  | UpdateSaving => {...state, saving: !state.saving}
+  | ToggleSaving => {...state, saving: !state.saving}
   | UpdateCoachSearchInput(coachSearchInput) => {...state, coachSearchInput}
   };
 
-let setPayload = (state, authenticityToken) => {
+let makePayload = state => {
   let payload = Js.Dict.empty();
+
   Js.Dict.set(
     payload,
     "authenticity_token",
-    authenticityToken |> Js.Json.string,
+    AuthenticityToken.fromHead() |> Js.Json.string,
   );
+
   Js.Dict.set(
     payload,
     "coach_ids",
     state.courseCoaches |> Json.Encode.(array(string)),
   );
+
   payload;
 };
 
 module SelectableCourseCoaches = {
-  type t = Coach.t;
+  type t = SchoolCoach.t;
 
-  let value = t => t |> Coach.name;
+  let value = t => t |> SchoolCoach.name;
   let searchString = value;
 };
 
@@ -48,14 +51,14 @@ let setCoachSearchInput = (send, value) => {
 
 let selectCoach = (send, state, coach) => {
   let updatedCoaches =
-    state.courseCoaches |> Js.Array.concat([|coach |> Coach.id|]);
+    state.courseCoaches |> Js.Array.concat([|coach |> SchoolCoach.id|]);
   send(UpdateCoachesList(updatedCoaches));
 };
 
 let deSelectCoach = (send, state, coach) => {
   let updatedCoaches =
     state.courseCoaches
-    |> Js.Array.filter(coachId => coachId != Coach.id(coach));
+    |> Js.Array.filter(coachId => coachId != SchoolCoach.id(coach));
   send(UpdateCoachesList(updatedCoaches));
 };
 
@@ -66,12 +69,12 @@ let courseCoachEditor = (coaches, state, send) => {
   let selected =
     coaches
     |> Js.Array.filter(coach =>
-         state.courseCoaches |> Array.mem(Coach.id(coach))
+         state.courseCoaches |> Array.mem(SchoolCoach.id(coach))
        );
   let unselected =
     coaches
     |> Js.Array.filter(coach =>
-         !(state.courseCoaches |> Array.mem(Coach.id(coach)))
+         !(state.courseCoaches |> Array.mem(SchoolCoach.id(coach)))
        );
   <MultiselectForCourseCoaches
     placeholder="Search coaches"
@@ -86,26 +89,41 @@ let courseCoachEditor = (coaches, state, send) => {
   />;
 };
 
+let handleResponseCB = (updateCoachesCB, json) => {
+  let courseCoaches =
+    json |> Json.Decode.(field("course_coaches", array(CourseCoach.decode)));
+  updateCoachesCB(courseCoaches);
+  Notification.success("Success", "Coach enrollments updated successfully");
+};
+
+let updateCourseCoaches = (state, send, courseId, updateCoachesCB) => {
+  send(ToggleSaving);
+
+  let payload = makePayload(state);
+  let url = "/school/courses/" ++ courseId ++ "/update_coach_enrollments";
+
+  Api.create(url, payload, handleResponseCB(updateCoachesCB), () =>
+    send(ToggleSaving)
+  );
+};
+
+let computeAvailableCoaches = (schoolCoaches, courseCoaches) => {
+  let courseCoachIds = courseCoaches |> Array.map(CourseCoach.id);
+  schoolCoaches
+  |> Js.Array.filter(coach =>
+       !(courseCoachIds |> Array.mem(coach |> SchoolCoach.id))
+     );
+};
+
 [@react.component]
-let make = (~coaches, ~courseId, ~authenticityToken, ~updateCoachesCB) => {
+let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
   let (state, send) =
     React.useReducer(
       reducer,
       {courseCoaches: [||], coachSearchInput: "", saving: false},
     );
-  let showCoachesList = coaches |> Array.length > 0;
-  let handleErrorCB = () => send(UpdateSaving);
-  let handleResponseCB = json => {
-    let coachIds = json |> Json.Decode.(field("coach_ids", array(string)));
-    Notification.success("Success", "Coach enrollments updated successfully");
-    updateCoachesCB(coachIds);
-  };
-  let updateCourseCoaches = (courseId, state) => {
-    send(UpdateSaving);
-    let payload = setPayload(state, authenticityToken);
-    let url = "/school/courses/" ++ courseId ++ "/update_coach_enrollments";
-    Api.create(url, payload, handleResponseCB, handleErrorCB);
-  };
+
+  let coaches = computeAvailableCoaches(schoolCoaches, courseCoaches);
 
   let saveDisabled = state.courseCoaches |> ArrayUtils.isEmpty || state.saving;
 
@@ -117,7 +135,7 @@ let make = (~coaches, ~courseId, ~authenticityToken, ~updateCoachesCB) => {
             className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
             {"ASSIGN COACHES TO THE COURSE" |> str}
           </h5>
-          {showCoachesList
+          {coaches |> Array.length > 0
              ? <div>
                  <div id="course_coaches">
                    <span
@@ -132,7 +150,9 @@ let make = (~coaches, ~courseId, ~authenticityToken, ~updateCoachesCB) => {
         <div className="flex max-w-2xl w-full mt-5 px-6 pb-5 mx-auto">
           <button
             disabled=saveDisabled
-            onClick={_e => updateCourseCoaches(courseId, state)}
+            onClick={_e =>
+              updateCourseCoaches(state, send, courseId, updateCoachesCB)
+            }
             className="w-full btn btn-primary btn-large">
             {"Add Course Coaches" |> str}
           </button>

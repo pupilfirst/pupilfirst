@@ -1,31 +1,26 @@
-open CoachesCourseIndex__Types;
+open CourseCoaches__Types;
 
 type props = {
-  courseCoachIds: array(string),
-  schoolCoaches: array(Coach.t),
+  courseCoaches: array(CourseCoach.t),
+  schoolCoaches: array(SchoolCoach.t),
   authenticityToken: string,
   courseId: string,
 };
 
 let decodeProps = json =>
   Json.Decode.{
-    courseCoachIds: json |> field("courseCoachIds", array(string)),
-    schoolCoaches: json |> field("schoolCoaches", array(Coach.decode)),
+    courseCoaches: json |> field("courseCoaches", array(CourseCoach.decode)),
+    schoolCoaches: json |> field("schoolCoaches", array(SchoolCoach.decode)),
     courseId: json |> field("courseId", string),
     authenticityToken: json |> field("authenticityToken", string),
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
-    ~id="sa-coaches-enrollment-panel",
-    ~attribute="data-props",
-    (),
-  )
-  |> decodeProps;
+  DomUtils.parseJsonTag(~id="course-coaches__props", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <SA_Coaches_CourseIndex
-    courseCoachIds={props.courseCoachIds}
+  <CourseCoaches__Root
+    courseCoaches={props.courseCoaches}
     schoolCoaches={props.schoolCoaches}
     courseId={props.courseId}
     authenticityToken={props.authenticityToken}

@@ -43,7 +43,17 @@ module Schools
         ::Courses::AssignReviewerService.new(course).assign(coach)
       end
 
-      render json: { coach_ids: course.faculty.pluck(:id).map(&:to_s), error: nil }
+      course_coaches = coaches.map do |coach|
+        {
+          id: coach.id.to_s,
+          name: coach.name,
+          title: coach.title,
+          email: coach.email,
+          avatarUrl: coach.user.avatar_url(variant: :thumb)
+        }
+      end
+
+      render json: { course_coaches: course_coaches, error: nil }
     end
 
     # GET /school/courses/:course_id/students

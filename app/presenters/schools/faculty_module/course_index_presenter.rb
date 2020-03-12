@@ -9,8 +9,8 @@ module Schools
 
       def props
         {
-          course_coach_ids: course_coach_ids,
-          school_coaches: school_faculty_details,
+          course_coaches: course_coaches,
+          school_coaches: school_coaches,
           course_id: @course.id,
           authenticity_token: view.form_authenticity_token
         }
@@ -18,33 +18,30 @@ module Schools
 
       private
 
-      def school_faculty
-        @course.school.faculty.where.not(exited: true).includes(startups: :founders, user: { avatar_attachment: :blob })
-      end
-
-      def school_faculty_details
-        school_faculty.map do |faculty|
+      def course_coaches
+        @course.faculty
+          .includes(user: { avatar_attachment: :blob })
+          .map do |coach|
           {
-            id: faculty.id,
-            name: faculty.user.name,
-            email: faculty.user.email,
-            title: faculty.user.title,
-            image_url: faculty.user.avatar_url,
-            teams: faculty_team_details(faculty)
+            id: coach.id,
+            name: coach.user.name,
+            email: coach.user.email,
+            title: coach.user.title,
+            image_url: coach.user.avatar_url(variant: :thumb)
           }
         end
       end
 
-      def faculty_team_details(faculty)
-        if faculty.startups.present?
-          faculty.startups.joins(:course).where(courses: { id: @course }).map { |startup| { id: startup.id, name: startup.name, students: startup.founders.map(&:name) } }
-        else
-          []
+      def school_coaches
+        @course.school.faculty
+          .where.not(exited: true)
+          .includes(:user)
+          .map do |coach|
+          {
+            id: coach.id,
+            name: coach.user.name
+          }
         end
-      end
-
-      def course_coach_ids
-        Faculty.left_joins(:courses).where(courses: { id: @course }).pluck(:id)
       end
     end
   end

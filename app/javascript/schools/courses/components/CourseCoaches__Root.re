@@ -1,46 +1,38 @@
-open CoachesCourseIndex__Types;
+open CourseCoaches__Types;
 
 let str = React.string;
 
 type formVisible =
   | None
   | CoachEnrollmentForm
-  | CoachInfoForm(Coach.t);
+  | CoachInfoForm(CourseCoach.t);
 
 type state = {
-  courseCoaches: array(Coach.t),
+  courseCoaches: array(CourseCoach.t),
   formVisible,
   saving: bool,
 };
 
 type action =
   | UpdateFormVisible(formVisible)
-  | UpdateCoachEnrollment(array(Coach.t))
-  | RemoveCoachTeamEnrollment(string, Coach.t)
+  | AddCourseCoaches(array(CourseCoach.t))
   | RemoveCoach(string)
   | UpdateSaving;
 
 let reducer = (state, action) =>
   switch (action) {
   | UpdateFormVisible(formVisible) => {...state, formVisible}
-  | UpdateCoachEnrollment(courseCoaches) => {...state, courseCoaches}
-  | RemoveCoachTeamEnrollment(teamId, coach) =>
-    let updatedCoach = Coach.removeTeam(coach, teamId);
-    {
+  | AddCourseCoaches(courseCoaches) => {
       ...state,
-      courseCoaches:
-        state.courseCoaches
-        |> Array.map(courseCoach =>
-             Coach.id(courseCoach) == Coach.id(coach)
-               ? updatedCoach : courseCoach
-           ),
-      formVisible: CoachInfoForm(updatedCoach),
-    };
+      courseCoaches: state.courseCoaches |> Array.append(courseCoaches),
+    }
   | RemoveCoach(coachId) => {
       ...state,
       courseCoaches:
         state.courseCoaches
-        |> Js.Array.filter(courseCoach => Coach.id(courseCoach) !== coachId),
+        |> Js.Array.filter(courseCoach =>
+             CourseCoach.id(courseCoach) !== coachId
+           ),
     }
   | UpdateSaving => {...state, saving: !state.saving}
   };
@@ -67,7 +59,7 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
         window
         |> Window.confirm(
              "Are you sure you want to remove "
-             ++ (coach |> Coach.name)
+             ++ (coach |> CourseCoach.name)
              ++ " from this course?",
            )
       )) {
@@ -79,40 +71,29 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
       "authenticity_token",
       authenticityToken |> Js.Json.string,
     );
-    Js.Dict.set(payload, "coach_id", coach |> Coach.id |> Js.Json.string);
+    Js.Dict.set(
+      payload,
+      "coach_id",
+      coach |> CourseCoach.id |> Js.Json.string,
+    );
     Api.create(url, payload, handleResponseCB(send), handleErrorCB(send));
   } else {
     ();
   };
 };
 
-let removeTeamEnrollmentCB = (coach, send, teamId) => {
-  send(RemoveCoachTeamEnrollment(teamId, coach));
-};
-
 [@react.component]
-let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
+let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {
-        courseCoaches:
-          schoolCoaches
-          |> Js.Array.filter(coach =>
-               courseCoachIds |> Array.mem(Coach.id(coach))
-             ),
-        formVisible: None,
-        saving: false,
-      },
+      {courseCoaches, formVisible: None, saving: false},
     );
 
   let closeFormCB = () => send(UpdateFormVisible(None));
 
-  let updateCoachesCB = coachIds => {
-    let courseCoaches =
-      schoolCoaches
-      |> Js.Array.filter(coach => coachIds |> Array.mem(Coach.id(coach)));
-    send(UpdateCoachEnrollment(courseCoaches));
+  let updateCoachesCB = courseCoaches => {
+    send(AddCourseCoaches(courseCoaches));
     send(UpdateFormVisible(None));
   };
 
@@ -124,24 +105,16 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
        | None => React.null
        | CoachEnrollmentForm =>
          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
-           <SA_Coaches_CourseEnrollmentForm
+           <CourseCoaches__EnrollmentForm
              courseId
-             coaches={
-               schoolCoaches
-               |> Js.Array.filter(coach =>
-                    !(state.courseCoaches |> Array.mem(coach))
-                  )
-             }
+             schoolCoaches
+             courseCoaches={state.courseCoaches}
              updateCoachesCB
-             authenticityToken
            />
          </SchoolAdmin__EditorDrawer>
        | CoachInfoForm(coach) =>
          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => closeFormCB()}>
-           <SA_Coaches_CoachInfoForm
-             coach
-             removeTeamEnrollmentCB={removeTeamEnrollmentCB(coach, send)}
-           />
+           <CourseCoaches__InfoForm coach />
          </SchoolAdmin__EditorDrawer>
        }}
       <div className="flex-1 flex flex-col">
@@ -173,26 +146,28 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
               className="flex mt-4 -mx-3 flex-wrap"
               ariaLabel="List of course coaches">
               {state.courseCoaches
-               |> ArrayUtils.copyAndSort((x, y) =>
-                    (x |> Coach.id |> int_of_string)
-                    - (y |> Coach.id |> int_of_string)
-                  )
+               ->Belt.SortArray.stableSortBy((a, b) =>
+                   String.compare(
+                     a |> CourseCoach.name,
+                     b |> CourseCoach.name,
+                   )
+                 )
                |> Array.map(coach =>
                     <div
-                      key={coach |> Coach.id}
+                      key={coach |> CourseCoach.id}
                       className="flex w-1/2 flex-shrink-0 mb-5 px-3">
                       <div
-                        id={coach |> Coach.name}
-                        className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
+                        id={coach |> CourseCoach.name}
+                        className="shadow bg-whzite cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
                         <div className="flex flex-1 justify-between">
                           <div
-                            ariaLabel={"coach-card-" ++ Coach.id(coach)}
+                            ariaLabel={"coach-card-" ++ CourseCoach.id(coach)}
                             onClick={_ =>
                               send(UpdateFormVisible(CoachInfoForm(coach)))
                             }
                             className="flex flex-1 py-4 px-4 items-center">
                             <span className="mr-4 flex-shrink-0">
-                              {switch (coach |> Coach.avatarUrl) {
+                              {switch (coach |> CourseCoach.avatarUrl) {
                                | Some(avatarUrl) =>
                                  <img
                                    className="w-10 h-10 rounded-full object-cover"
@@ -200,24 +175,26 @@ let make = (~courseCoachIds, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                                  />
                                | None =>
                                  <Avatar
-                                   name={coach |> Coach.name}
+                                   name={coach |> CourseCoach.name}
                                    className="w-10 h-10 rounded-full"
                                  />
                                }}
                             </span>
                             <div className="text-sm">
                               <p className="text-black font-semibold mt-1">
-                                {coach |> Coach.name |> str}
+                                {coach |> CourseCoach.name |> str}
                               </p>
                               <p
                                 className="text-gray-600 font-semibold text-xs mt-px">
-                                {coach |> Coach.title |> str}
+                                {coach |> CourseCoach.title |> str}
                               </p>
                             </div>
                           </div>
                           <div
                             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
-                            ariaLabel={"Delete " ++ (coach |> Coach.name)}
+                            ariaLabel={
+                              "Delete " ++ (coach |> CourseCoach.name)
+                            }
                             onClick={removeCoach(
                               send,
                               courseId,

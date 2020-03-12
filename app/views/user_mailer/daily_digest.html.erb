@@ -10,10 +10,6 @@
   Daily digest from <%= school_name %>
 <% end %>
 
-<% content_for :subtitle do %>
-  Since your last visit
-<% end %>
-
 <% content_for :title_button_text do %>
   Visit <%= school_name %> homepage
 <% end %>
@@ -30,11 +26,10 @@
     <p style="margin-top: 10px;">
 
       There <%= article(pending_submissions_count) %> <strong><%= pending_submissions_count %></strong>
-      new <%= 'submission'.pluralize(pending_submissions_count) %> to review in <%= pluralize(@updates[:updates_for_coach].length, 'course') %>
-      .
+      new <%= 'submission'.pluralize(pending_submissions_count) %> to review
+      in <%= pluralize(@updates[:updates_for_coach].length, 'course') %>
+      that you are a coach in:
     </p>
-
-    <p>Pending Submissions</p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
       <% @updates[:updates_for_coach].each do |stats| %>
@@ -52,7 +47,8 @@
     <% question_count = @updates[:community_updates].values.map { |v| v[:questions].length }.sum %>
     <p style="margin-top: 10px;">
       There <%= article(question_count) %> <strong><%= question_count %></strong> new
-      <%= 'question'.pluralize(question_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %> that you are a
+      <%= 'question'.pluralize(question_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
+      that you are a
       part of.
     </p>
 

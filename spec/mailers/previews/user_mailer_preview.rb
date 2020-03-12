@@ -47,7 +47,7 @@ class UserMailerPreview < ActionMailer::Preview
         course_id: rand(1..9),
         course_name: Faker::Name.name,
         pending_submissions: rand(1..9),
-        pending_submissions_for_faculty: rand(1..9)
+        pending_submissions_for_coach: rand(0..3)
       }
     end
   end

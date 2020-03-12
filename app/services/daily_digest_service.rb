@@ -10,7 +10,9 @@ class DailyDigestService
     updates = questions_from_today
     updates = add_questions_with_no_activity(updates)
 
-    User.where.not(communities: nil).or(User.where.not(faculty: nil))
+    students = User.joins(:communities).distinct.select(:id)
+    coaches = User.joins(:faculty).select(:id)
+    User.where(id: coaches).or(User.where(id: students))
       .where('preferences @> ?', { daily_digest: true }.to_json)
       .where(email_bounced_at: nil).each do |user|
       updates_for_user = create_updates(updates, user)
@@ -33,7 +35,6 @@ class DailyDigestService
     {
       community_updates: add_community_updates(user, updates),
       updates_for_coach: add_updates_for_coach(user)
-
     }
   end
 
@@ -54,16 +55,18 @@ class DailyDigestService
       pending_submissions = course.timeline_events.pending_review
       pending_submissions_in_course = pending_submissions.count
 
-      next if pending_submissions_in_course.zero?
-
-      students = Founder.joins(startup: %i[faculty course]).where(faculty: { id: coach }, course: course)
-      {
-        course_id: course.id,
-        course_name: course.name,
-        pending_submissions: pending_submissions_in_course,
-        pending_submissions_for_coach: pending_submissions.from_founders(students).count
-      }
-    end
+      if pending_submissions_in_course.zero?
+        []
+      else
+        students = Founder.joins(startup: %i[faculty course]).where(faculty: { id: coach }, course: course)
+        {
+          course_id: course.id,
+          course_name: course.name,
+          pending_submissions: pending_submissions_in_course,
+          pending_submissions_for_coach: pending_submissions.from_founders(students).count
+        }
+      end
+    end.flatten
   end
 
   # Returns the new questions asked today.

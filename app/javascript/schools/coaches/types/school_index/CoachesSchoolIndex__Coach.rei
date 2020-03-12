@@ -18,8 +18,6 @@ let public: t => bool;
 
 let connectLink: t => option(string);
 
-let notifyForSubmission: t => bool;
-
 let exited: t => bool;
 
 let updateList: (list(t), t) => list(t);
@@ -38,7 +36,6 @@ let make:
     ~linkedinUrl: option(string),
     ~public: bool,
     ~connectLink: option(string),
-    ~notifyForSubmission: bool,
     ~exited: bool,
     ~imageFileName: option(string),
     ~affiliation: option(string)

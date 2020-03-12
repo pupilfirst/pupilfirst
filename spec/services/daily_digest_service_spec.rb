@@ -155,5 +155,68 @@ describe DailyDigestService do
         expect(b).not_to include(question_c3_8.title)
       end
     end
+
+    context 'when the user is a faculty' do
+      let(:course_1) { create :course, school: school }
+      let(:level_1) { create :level, :one, course: course_1 }
+      let(:target_group_1) { create :target_group, level: level_1 }
+      let!(:target_1) { create :target, :for_founders, target_group: target_group_1 }
+      let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+      let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
+
+      let(:team_1) { create :startup, level: level_1 }
+      let(:submission_pending_1) { create(:timeline_event, latest: true, target: target_1) }
+
+      let(:course_2) { create :course, school: school }
+      let(:level_2) { create :level, :one, course: course_2 }
+      let(:target_group_2) { create :target_group, level: level_2 }
+      let!(:target_2) { create :target, :for_founders, target_group: target_group_2 }
+      let(:grade_labels_for_2) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+      let(:evaluation_criterion_2) { create :evaluation_criterion, course: course_2, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_2 }
+
+      let(:team_2) { create :startup, level: level_2 }
+      let(:submission_pending_2) { create(:timeline_event, latest: true, target: target_2) }
+      let(:submission_pending_3) { create(:timeline_event, latest: true, target: target_2) }
+
+      let(:coach) { create :faculty, school: school }
+      let(:team_coach) { create :faculty, school: school }
+
+      before do
+        create :faculty_course_enrollment, faculty: coach, course: course_1
+        create :faculty_course_enrollment, faculty: coach, course: course_2
+        create :faculty_startup_enrollment, faculty: team_coach, startup: team_2
+
+        submission_pending_1.founders << team_1.founders
+        submission_pending_2.founders << team_2.founders
+        submission_pending_3.founders << team_2.founders
+        target_1.evaluation_criteria << evaluation_criterion_1
+        target_2.evaluation_criteria << evaluation_criterion_2
+      end
+
+      it 'When the user is a course coach' do
+        subject.execute
+
+        open_email(coach.user.email)
+
+        b = sanitize_html(current_email.body)
+        expect(b).to include(course_1.name)
+        expect(b).to include(course_2.name)
+        expect(b).to include("There are 3")
+        expect(b).to include("new submissions to review in 2 courses")
+      end
+
+      it 'When the user is a team coach' do
+        # TODO: Update spec after  #203
+        # subject.execute
+        #
+        # open_email(team_coach.user.email)
+        #
+        #
+        # b = sanitize_html(current_email.body)
+        # expect(b).to include(course_1.name)
+        # expect(b).to include(course_2.name)
+        # expect(b).to include("There are 3")
+      end
+    end
   end
 end

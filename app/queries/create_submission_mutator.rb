@@ -81,7 +81,6 @@ class CreateSubmissionMutator < ApplicationQuery
         false
     end
   end
-
   # rubocop: enable Metrics/CyclomaticComplexity
 
   def attempted_minimum_questions

@@ -709,8 +709,6 @@ GEM
       sprockets-rails
       tilt
     scarf (0.2.6)
-    scout_apm (2.6.6)
-      parser
     seedbank (0.5.0)
       rake (>= 10.0)
     select2-rails (4.0.3)
@@ -730,6 +728,10 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.0)
+    skylight (4.2.3)
+      skylight-core (= 4.2.3)
+    skylight-core (4.2.3)
+      activesupport (>= 4.2.0)
     slim (4.0.1)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -912,11 +914,11 @@ DEPENDENCIES
   rubocop-rails (~> 2.4)
   sass-rails (>= 6)
   scarf (~> 0.2)
-  scout_apm (~> 2.6)
   seedbank (~> 0.4)
   select2-rails (~> 4.0)
   sendinblue (~> 2.4)
   simplecov (~> 0.17)
+  skylight (~> 4.2)
   slim (~> 4.0)
   stackprof (~> 0.2)
   titleize (~> 1.4)

@@ -731,7 +731,6 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
-
 [@react.component]
 let make =
     (
@@ -857,7 +856,7 @@ let make =
                 | Evaluated =>
                   <div className="mb-6">
                     <label
-                      className="block tracking-wide text-sm font-semibold mr-6"
+                      className="tracking-wide text-sm font-semibold"
                       htmlFor="target_checklist">
                       <span className="mr-2">
                         <i className="fas fa-list text-base" />
@@ -865,6 +864,12 @@ let make =
                       {"What steps should the student take to complete this target?"
                        |> str}
                     </label>
+                    <HelpIcon
+                      className="ml-1"
+                      link="https://docs.pupilfirst.com/#/curriculum_editor?id=defining-steps-to-complete-a-target">
+                      {"These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review."
+                       |> str}
+                    </HelpIcon>
                     <div className="ml-6 mb-6">
                       {let allowFileKind =
                          state.checklist

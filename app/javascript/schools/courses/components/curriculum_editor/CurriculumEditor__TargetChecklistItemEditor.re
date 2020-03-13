@@ -201,6 +201,14 @@ let controlIcon = (~icon, ~title, ~handler) => {
       </button>;
 };
 
+let filesNotice =
+  <div className="mt-2 text-sm">
+    <strong> {"Note:" |> str} </strong>
+    <span className="ml-1">
+      {"Students can submit up to 3 files, limited to 5 MB each." |> str}
+    </span>
+  </div>;
+
 [@react.component]
 let make =
     (
@@ -266,9 +274,9 @@ let make =
            removeMultichoiceOption,
            updateChecklistItemCB,
          )
+       | Files => filesNotice
        | ShortText
        | LongText
-       | Files
        | Link => React.null
        }}
     </div>

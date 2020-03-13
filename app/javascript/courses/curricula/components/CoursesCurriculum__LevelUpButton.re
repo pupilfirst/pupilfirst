@@ -4,7 +4,7 @@ let str = React.string;
 
 module LevelUpQuery = [%graphql
   {|
-   mutation($courseId: ID!) {
+   mutation LevelUpMutation($courseId: ID!) {
     levelUp(courseId: $courseId){
       success
       }

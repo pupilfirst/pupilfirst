@@ -6,7 +6,7 @@ open StudentsEditor__Types;
 
 module CourseTeamsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!) {
+    query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!) {
       courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy) {
         nodes {
         id,

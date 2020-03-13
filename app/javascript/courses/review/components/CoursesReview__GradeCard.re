@@ -54,7 +54,7 @@ let passed = (grades, evaluationCriteria) =>
 
 module CreateGradingMutation = [%graphql
   {|
-    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
+    mutation CreateGradingMutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
       createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note, checklist: $checklist){
         success
       }
@@ -64,7 +64,7 @@ module CreateGradingMutation = [%graphql
 
 module UndoGradingMutation = [%graphql
   {|
-    mutation($submissionId: ID!) {
+    mutation UndoGradingMutation($submissionId: ID!) {
       undoGrading(submissionId: $submissionId){
         success
       }

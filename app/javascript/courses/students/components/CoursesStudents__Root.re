@@ -22,7 +22,7 @@ type state = {
 
 module TeamsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID, $search: String, $after: String) {
+    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $levelId: ID, $search: String, $after: String) {
       teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
         nodes {
           id,

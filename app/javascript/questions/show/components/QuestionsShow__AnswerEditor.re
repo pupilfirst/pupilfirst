@@ -6,7 +6,7 @@ let str = React.string;
 
 module CreateAnswerQuery = [%graphql
   {|
-  mutation($description: String!, $questionId: ID!) {
+  mutation CreateAnswerMutation($description: String!, $questionId: ID!) {
     createAnswer(description: $description, questionId: $questionId) @bsVariant {
       answerId
       errors
@@ -17,7 +17,7 @@ module CreateAnswerQuery = [%graphql
 
 module UpdateAnswerQuery = [%graphql
   {|
-  mutation($id: ID!, $description: String!) {
+  mutation UpdateAnswerMutation($id: ID!, $description: String!) {
     updateAnswer(id: $id, description: $description) @bsVariant {
       success
       errors

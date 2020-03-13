@@ -40,7 +40,7 @@ let reducer = (state, action) =>
 
 module DeleteCourseAuthorQuery = [%graphql
   {|
-  mutation($id: ID!) {
+  mutation DeleteCourseAuthorMutation($id: ID!) {
     deleteCourseAuthor(id: $id) {
       success
     }

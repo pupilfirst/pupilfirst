@@ -10,7 +10,7 @@ type state = {
 
 module CreateFeedbackMutation = [%graphql
   {|
-    mutation($submissionId: ID!, $feedback: String!) {
+    mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
       createFeedback(submissionId: $submissionId, feedback: $feedback){
         success
       }

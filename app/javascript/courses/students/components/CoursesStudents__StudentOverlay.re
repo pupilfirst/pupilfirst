@@ -28,7 +28,7 @@ let closeOverlay = courseId =>
 
 module StudentDetailsQuery = [%graphql
   {|
-    query($studentId: ID!) {
+    query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         email, phone, socialLinks,
         evaluationCriteria {

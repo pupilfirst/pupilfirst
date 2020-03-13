@@ -6,7 +6,7 @@ let str = React.string;
 
 module CreateQuizSubmissionQuery = [%graphql
   {|
-   mutation($targetId: ID!, $answerIds: [ID!]!) {
+   mutation CreateQuizSubmissionMutation($targetId: ID!, $answerIds: [ID!]!) {
     createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
       submission{
         id

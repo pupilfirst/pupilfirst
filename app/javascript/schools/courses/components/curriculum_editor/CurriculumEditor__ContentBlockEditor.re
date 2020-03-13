@@ -34,7 +34,7 @@ let reducer = (state, action) =>
 
 module DeleteContentBlockMutation = [%graphql
   {|
-    mutation($id: ID!) {
+    mutation DeleteContentBlockMutation($id: ID!) {
       deleteContentBlock(id: $id) {
         success
       }
@@ -44,7 +44,7 @@ module DeleteContentBlockMutation = [%graphql
 
 module MoveContentBlockMutation = [%graphql
   {|
-    mutation($id: ID!, $direction: MoveDirection!) {
+    mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
       moveContentBlock(id: $id, direction: $direction) {
         success
       }
@@ -54,7 +54,7 @@ module MoveContentBlockMutation = [%graphql
 
 module UpdateFileBlockMutation = [%graphql
   {|
-    mutation($id: ID!, $title: String!) {
+    mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
       updateFileBlock(id: $id, title: $title) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
@@ -66,7 +66,7 @@ module UpdateFileBlockMutation = [%graphql
 
 module UpdateMarkdownBlockMutation = [%graphql
   {|
-    mutation($id: ID!, $markdown: String!) {
+    mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
       updateMarkdownBlock(id: $id, markdown: $markdown) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
@@ -78,7 +78,7 @@ module UpdateMarkdownBlockMutation = [%graphql
 
 module UpdateImageBlockMutation = [%graphql
   {|
-    mutation($id: ID!, $caption: String!) {
+    mutation UpdateImageBlockMutation($id: ID!, $caption: String!) {
       updateImageBlock(id: $id, caption: $caption) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields

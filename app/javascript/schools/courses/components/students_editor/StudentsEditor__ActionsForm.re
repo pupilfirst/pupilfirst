@@ -2,7 +2,7 @@ open StudentsEditor__Types;
 
 module DropoutStudentQuery = [%graphql
   {|
-   mutation($id: ID!) {
+   mutation DropoutStudentMutation($id: ID!) {
     dropoutStudent(id: $id){
       success
      }

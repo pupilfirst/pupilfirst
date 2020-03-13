@@ -4,7 +4,7 @@ type resourceType =
 
 module SortResourceMutation = [%graphql
   {|
-   mutation($resourceIds: [ID!]!, $resourceType: String!) {
+   mutation SortCurriculumResourcesMutation($resourceIds: [ID!]!, $resourceType: String!) {
     sortCurriculumResources(resourceIds: $resourceIds, resourceType: $resourceType){
       success
     }

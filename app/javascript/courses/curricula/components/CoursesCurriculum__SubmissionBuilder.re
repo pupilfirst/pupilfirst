@@ -63,7 +63,7 @@ let isBusy = formState =>
 
 module CreateSubmissionQuery = [%graphql
   {|
-  mutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
+  mutation CreateSubmissionMutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
     createSubmission(targetId: $targetId, checklist: $checklist, fileIds: $fileIds) {
       submission {
         id

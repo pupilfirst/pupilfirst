@@ -2,7 +2,7 @@ let str = React.string;
 
 module DeleteSubmissionQuery = [%graphql
   {|
-  mutation($targetId: ID!) {
+  mutation UndoSubmissionMutation($targetId: ID!) {
     undoSubmission(targetId: $targetId) {
       success
     }

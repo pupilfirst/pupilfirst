@@ -2,7 +2,7 @@ let str = React.string;
 
 module ArchiveQuery = [%graphql
   {|
-   mutation($id: ID!, $resourceType: String!) {
+   mutation ArchiveCommunityResourceMutation($id: ID!, $resourceType: String!) {
     archiveCommunityResource(id: $id, resourceType: $resourceType){
        success
      }

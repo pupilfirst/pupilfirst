@@ -65,7 +65,7 @@ type action =
 
 module TargetDetailsQuery = [%graphql
   {|
-    query($targetId: ID!) {
+    query TargetDetailsQuery($targetId: ID!) {
       targetDetails(targetId: $targetId) {
         title
         targetGroupId
@@ -654,7 +654,7 @@ let saveDisabled = state => {
 
 module UpdateTargetQuery = [%graphql
   {|
-   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
+   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
         success
        }

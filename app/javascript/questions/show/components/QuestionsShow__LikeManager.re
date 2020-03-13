@@ -4,7 +4,7 @@ let str = React.string;
 
 module CreateAnswerLikeQuery = [%graphql
   {|
-  mutation($answerId: ID!) {
+  mutation CreateAnswerLikeMutation($answerId: ID!) {
     createAnswerLike(answerId: $answerId) @bsVariant {
       answerLikeId
       errors
@@ -15,7 +15,7 @@ module CreateAnswerLikeQuery = [%graphql
 
 module DestroyAnswerLikeQuery = [%graphql
   {|
-  mutation($id: ID!) {
+  mutation DestroyAnswerLikeMutation($id: ID!) {
     destroyAnswerLike(id: $id) {
       success
     }

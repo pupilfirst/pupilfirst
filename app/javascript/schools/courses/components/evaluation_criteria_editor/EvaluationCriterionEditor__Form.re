@@ -13,7 +13,7 @@ type state = {
 
 module CreateEvaluationCriterionQuery = [%graphql
   {|
-   mutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+   mutation CreateEvaluationCriterionMutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
      createEvaluationCriterion(courseId: $courseId, name: $name, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
        evaluationCriterion {
         id
@@ -32,7 +32,7 @@ module CreateEvaluationCriterionQuery = [%graphql
 
 module UpdateEvaluationCriterionQuery = [%graphql
   {|
-   mutation($id: ID!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+   mutation UpdateEvaluationCriterionMutation($id: ID!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
     updateEvaluationCriterion(id: $id, name: $name, gradesAndLabels: $gradesAndLabels){
        evaluationCriterion {
         id

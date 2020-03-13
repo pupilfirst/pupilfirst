@@ -10,7 +10,7 @@ type state = {
 
 module CreateTargetMutation = [%graphql
   {|
-   mutation($title: String!, $targetGroupId: String!) {
+   mutation CreateTargetMutation($title: String!, $targetGroupId: String!) {
      createTarget(title: $title, targetGroupId: $targetGroupId ) {
        target {
          id

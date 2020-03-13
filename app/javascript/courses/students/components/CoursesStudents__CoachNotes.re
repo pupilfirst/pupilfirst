@@ -11,7 +11,7 @@ let str = React.string;
 
 module CreateCoachNotesMutation = [%graphql
   {|
-   mutation($studentId: ID!, $note: String!) {
+   mutation CreateCoachNoteMutation($studentId: ID!, $note: String!) {
     createCoachNote(studentId: $studentId, note: $note ) {
        coachNote {
          id

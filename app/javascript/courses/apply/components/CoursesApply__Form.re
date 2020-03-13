@@ -2,7 +2,7 @@ let str = React.string;
 
 module CreateApplicantQuery = [%graphql
   {|
-   mutation($courseId: ID!, $email: String!, $name: String!) {
+   mutation CreateApplicantMutation($courseId: ID!, $email: String!, $name: String!) {
     createApplicant(courseId: $courseId, email: $email, name: $name){
       success
      }

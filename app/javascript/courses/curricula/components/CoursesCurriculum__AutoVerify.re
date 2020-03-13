@@ -5,7 +5,7 @@ module TargetStatus = CoursesCurriculum__TargetStatus;
 
 module AutoVerifySubmissionQuery = [%graphql
   {|
-   mutation($targetId: ID!) {
+   mutation AutoVerifySubmissionMutation($targetId: ID!) {
     autoVerifySubmission(targetId: $targetId){
       submission{
         id

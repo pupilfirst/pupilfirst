@@ -100,7 +100,7 @@ feature 'Submissions show' do
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback.strip)
-      expect(submission.timeline_event_grades.pluck(:grade)).to eq([1, 2])
+      expect(submission.timeline_event_grades.pluck(:grade)).to contain_exactly(1, 2)
     end
 
     scenario 'coach generates feedback from review checklist', js: true do

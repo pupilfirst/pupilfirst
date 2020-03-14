@@ -209,9 +209,25 @@ let filesNotice =
     </span>
   </div>;
 
+let isRequiredStepTitleDuplicated = (checklist, item) => {
+  let trimmedTitle = item |> ChecklistItem.title |> String.trim;
+
+  if (trimmedTitle == "") {
+    false;
+  } else {
+    checklist
+    |> Js.Array.filter(item => !ChecklistItem.optional(item))
+    |> Js.Array.filter(checklistItem =>
+         checklistItem |> ChecklistItem.title |> String.trim == trimmedTitle
+       )
+    |> Array.length > 1;
+  };
+};
+
 [@react.component]
 let make =
     (
+      ~checklist,
       ~checklistItem,
       ~index,
       ~updateChecklistItemCB,
@@ -262,8 +278,12 @@ let make =
       </div>
       <div>
         <School__InputGroupError
-          message="Not a valid title"
+          message="Step cannot be empty"
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
+        />
+        <School__InputGroupError
+          message="Not a unique step; required steps must be unique"
+          active={isRequiredStepTitleDuplicated(checklist, checklistItem)}
         />
       </div>
       {switch (checklistItem |> ChecklistItem.kind) {

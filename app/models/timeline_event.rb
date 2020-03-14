@@ -2,12 +2,15 @@
 
 # JSON fields schema:
 #
-# checklist: {
-#   kind: string - should match the target checklist kind (shortText, longText, link, files, multiChoice)
-#   title: string - title from the target checklist
-#   result: string - answer for the question taken from the user
-#   status: string - should be one of noAnswer, Passed, Failed.
-# }
+# checklist: [
+#   {
+#     kind: string - should match the target checklist kind (shortText, longText, link, files, multiChoice)
+#     title: string - title from the target checklist
+#     result: string - answer for the question taken from the user
+#     status: string - should be one of noAnswer, Passed, Failed.
+#   },
+#   ...
+# ]
 
 class TimelineEvent < ApplicationRecord
   belongs_to :target

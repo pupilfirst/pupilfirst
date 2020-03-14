@@ -637,19 +637,43 @@ let quizEditor = (state, send) => {
   </div>;
 };
 
-let saveDisabled = state => {
-  let hasValidTitle = state.title |> String.trim |> String.length > 1;
-  let hasValidMethodOfCompletion =
-    switch (state.methodOfCompletion) {
-    | TakeQuiz => isValidQuiz(state.quiz)
-    | MarkAsComplete => true
-    | Evaluated =>
-      state.evaluationCriteria
-      |> ArrayUtils.isNotEmpty
-      && isValidChecklist(state.checklist)
-    | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
-    };
-  !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
+let doRequiredStepsHaveUniqueTitles = checklist => {
+  let requiredSteps =
+    checklist |> Js.Array.filter(item => !(item |> ChecklistItem.optional));
+
+  requiredSteps
+  |> Array.map(ChecklistItem.title)
+  |> Array.map(String.trim)
+  |> ArrayUtils.distinct
+  |> Array.length == Array.length(requiredSteps);
+};
+
+let isValidTitle = title => title |> String.trim |> String.length > 0;
+
+let isValidMethodOfCompletion = state =>
+  switch (state.methodOfCompletion) {
+  | TakeQuiz => isValidQuiz(state.quiz)
+  | MarkAsComplete => true
+  | Evaluated =>
+    state.evaluationCriteria
+    |> ArrayUtils.isNotEmpty
+    && isValidChecklist(state.checklist)
+  | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
+  };
+
+let saveDisabled =
+    (
+      ~hasValidTitle,
+      ~hasValidMethodOfCompletion,
+      ~requiredStepsHaveUniqueTitles,
+      ~dirty,
+      ~saving,
+    ) => {
+  !requiredStepsHaveUniqueTitles
+  || !hasValidTitle
+  || !hasValidMethodOfCompletion
+  || !dirty
+  || saving;
 };
 
 module UpdateTargetQuery = [%graphql
@@ -780,6 +804,11 @@ let make =
     [|state.dirty|],
   );
 
+  let requiredStepsHaveUniqueTitles =
+    doRequiredStepsHaveUniqueTitles(state.checklist);
+  let hasValidTitle = isValidTitle(state.title);
+  let hasValidMethodOfCompletion = isValidMethodOfCompletion(state);
+
   <div className="pt-6" id="target-properties">
     {state.loading
        ? <div className="max-w-3xl mx-auto px-3">
@@ -811,7 +840,7 @@ let make =
                    />
                    <School__InputGroupError
                      message="Enter a valid title"
-                     active={state.title |> String.length < 1}
+                     active={!hasValidTitle}
                    />
                  </div>
                </div>
@@ -894,6 +923,7 @@ let make =
                                 : None;
 
                             <CurriculumEditor__TargetChecklistItemEditor
+                              checklist={state.checklist}
                               key={index |> string_of_int}
                               checklistItem
                               index
@@ -1088,7 +1118,13 @@ let make =
                  <div className="w-auto">
                    <button
                      key="target-actions-step"
-                     disabled={saveDisabled(state)}
+                     disabled={saveDisabled(
+                       ~hasValidTitle,
+                       ~hasValidMethodOfCompletion,
+                       ~requiredStepsHaveUniqueTitles,
+                       ~dirty=state.dirty,
+                       ~saving=state.saving,
+                     )}
                      onClick={updateTarget(
                        target,
                        state,

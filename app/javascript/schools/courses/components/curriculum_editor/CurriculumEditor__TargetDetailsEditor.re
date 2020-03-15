@@ -580,7 +580,7 @@ let quizEditor = (state, send) => {
 };
 
 let saveDisabled = state => {
-  let hasValidTitle = state.title |> String.trim |> String.length > 1;
+  let hasValidTitle = state.title |> String.trim |> String.length > 0;
   let hasValidMethodOfCompletion =
     switch (state.methodOfCompletion) {
     | TakeQuiz => isValidQuiz(state.quiz)
@@ -743,7 +743,7 @@ let make =
                  />
                  <School__InputGroupError
                    message="Enter a valid title"
-                   active={state.title |> String.length < 1}
+                   active={state.title |> String.trim |> String.length < 1}
                  />
                </div>
              </div>

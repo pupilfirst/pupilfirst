@@ -156,7 +156,7 @@ let updateName = (setState, value) => {
 };
 
 let saveDisabled = state => {
-  let hasValidName = String.length(state.name) > 1;
+  let hasValidName = state.name |> String.trim |> String.length > 0;
   !state.dirty || state.saving || !hasValidName;
 };
 

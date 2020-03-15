@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_21_075009) do
+ActiveRecord::Schema.define(version: 2020_03_05_061900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -673,6 +673,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.boolean "resubmittable", default: true
     t.string "visibility"
     t.jsonb "review_checklist", default: []
+    t.jsonb "checklist", default: []
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
@@ -717,9 +718,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
   end
 
   create_table "timeline_events", id: :serial, force: :cascade do |t|
-    t.text "description"
     t.string "image"
-    t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "improved_timeline_event_id"
@@ -730,6 +729,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.boolean "latest"
     t.string "quiz_score"
     t.datetime "evaluated_at"
+    t.jsonb "checklist", default: []
   end
 
   create_table "universities", id: :serial, force: :cascade do |t|

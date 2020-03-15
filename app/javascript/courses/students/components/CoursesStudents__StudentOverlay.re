@@ -28,7 +28,7 @@ let closeOverlay = courseId =>
 
 module StudentDetailsQuery = [%graphql
   {|
-    query($studentId: ID!) {
+    query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         email, phone, socialLinks,
         evaluationCriteria {
@@ -323,7 +323,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
          "Unable to find level with id" ++ levelId ++ "in StudentOverlay",
        )
     |> Level.number;
-  <div>
+  <div className="mb-8">
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
       {courseCompleted
@@ -408,7 +408,7 @@ let coachInfo = (teamCoaches, studentDetails) => {
       ? "Team Coaches" : "Personal Coaches";
 
   coaches |> ArrayUtils.isNotEmpty
-    ? <div className="mt-8">
+    ? <div className="mb-8">
         <h6 className="font-semibold"> {title |> str} </h6>
         {coaches
          |> Array.map(coach =>
@@ -430,7 +430,7 @@ let navigateToStudent = (setState, _event) => {
 
 let otherTeamMembers = (setState, studentId, studentDetails) =>
   if (studentDetails |> StudentDetails.teamHasManyStudents) {
-    <div className="block mt-8">
+    <div className="block mb-8">
       <h6 className="font-semibold"> {"Other Team Members" |> str} </h6>
       {studentDetails
        |> StudentDetails.team
@@ -517,7 +517,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
              <div
                onClick={_ => closeOverlay(courseId)}
                className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
-               <Icon className="if i-times-light text-xl lg:text-2xl" />
+               <Icon className="if i-times-regular text-xl lg:text-2xl" />
              </div>
              <div
                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
@@ -545,7 +545,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
               levels,
               studentDetails |> StudentDetails.completedLevelIds,
             )}
-           <div className="mt-8">
+           <div className="mb-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
              <div className="flex -mx-2 flex-wrap mt-2">
                {targetsCompletionStatus(
@@ -561,7 +561,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
            {studentDetails
             |> StudentDetails.averageGrades
             |> ArrayUtils.isNotEmpty
-              ? <div className="mt-8">
+              ? <div className="mb-8">
                   <h6 className="font-semibold">
                     {"Average Grades" |> str}
                   </h6>

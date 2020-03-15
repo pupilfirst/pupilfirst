@@ -158,9 +158,7 @@ let addSubmission =
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
-      targetDetails
-      |> TargetDetails.addSubmission(submission)
-      |> TargetDetails.addSubmissionAttachments(submissionAttachments);
+      targetDetails |> TargetDetails.addSubmission(submission);
 
     send(SetTargetDetails(newTargetDetails));
   | None => ()
@@ -231,7 +229,9 @@ let overlayStatus = (course, target, targetStatus, preview) =>
           ++ targetStatusClass("course-overlay__close--", targetStatus)
         }
         onClick={_e => closeOverlay(course)}>
-        <Icon className="if i-times-light text-xl lg:text-2xl mt-1 lg:mt-0" />
+        <Icon
+          className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0"
+        />
         <span className="text-xs hidden lg:inline-block mt-px">
           {"Close" |> str}
         </span>
@@ -342,7 +342,6 @@ let completeSection =
       send,
       target,
       targetDetails,
-      authenticityToken,
       targetStatus,
       addSubmissionCB,
       evaluationCriteria,
@@ -362,10 +361,10 @@ let completeSection =
            targetDetails
            title="Instructions"
          />,
-         <CoursesCurriculum__SubmissionForm
+         <CoursesCurriculum__SubmissionBuilder
            key="courses-curriculum-submission-form"
-           authenticityToken
            target
+           checklist={targetDetails |> TargetDetails.checklist}
            addSubmissionCB={addSubmission(
              target,
              state,
@@ -400,13 +399,13 @@ let completeSection =
        <CoursesCurriculum__SubmissionsAndFeedback
          targetDetails
          target
-         authenticityToken
          evaluationCriteria
          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
          targetStatus
          coaches
          users
          preview
+         checklist={targetDetails |> TargetDetails.checklist}
        />
      | (
          Pending | Submitted | Passed | Failed,
@@ -542,7 +541,6 @@ let make =
       ~target,
       ~course,
       ~targetStatus,
-      ~authenticityToken,
       ~addSubmissionCB,
       ~targets,
       ~statusOfTargets,
@@ -605,7 +603,6 @@ let make =
               send,
               target,
               targetDetails,
-              authenticityToken,
               targetStatus,
               addSubmissionCB,
               evaluationCriteria,

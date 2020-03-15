@@ -6,7 +6,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
   # Random targets and sessions for every level.
   TargetGroup.all.each do |target_group|
     # Create a regular submittable target.
-    submittable_target = target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, resubmittable: true, visibility: 'live', sort_index: 0)
+    submittable_target = target_group.targets.create!(title: Faker::Lorem.sentence, role: Target.valid_roles.sample, resubmittable: true, visibility: 'live', sort_index: 0, checklist: [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: "Write something about your submission", optional: false }])
     submittable_target.target_evaluation_criteria.create!(evaluation_criterion: submittable_target.course.evaluation_criteria.first)
 
     # Add a target with a link to complete.

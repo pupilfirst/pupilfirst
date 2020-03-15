@@ -4,7 +4,7 @@ open QuestionsShow__Types;
 
 module CreateQuestionQuery = [%graphql
   {|
-  mutation($title: String!, $description: String!, $communityId: ID!, $targetId: ID) {
+  mutation CreateQuestionQuery($title: String!, $description: String!, $communityId: ID!, $targetId: ID) {
     createQuestion(description: $description, title: $title, communityId: $communityId, targetId: $targetId) @bsVariant {
       questionId
       errors
@@ -15,7 +15,7 @@ module CreateQuestionQuery = [%graphql
 
 module UpdateQuestionQuery = [%graphql
   {|
-  mutation($id: ID!, $title: String!, $description: String!) {
+  mutation UpdateQuestionQuery($id: ID!, $title: String!, $description: String!) {
     updateQuestion(id: $id, title: $title, description: $description) @bsVariant {
       success
       errors

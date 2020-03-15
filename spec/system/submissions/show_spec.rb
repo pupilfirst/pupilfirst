@@ -100,7 +100,7 @@ feature 'Submissions show' do
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback.strip)
-      expect(submission.timeline_event_grades.pluck(:grade)).to eq([1, 2])
+      expect(submission.timeline_event_grades.pluck(:grade)).to contain_exactly(1, 2)
     end
 
     scenario 'coach generates feedback from review checklist', js: true do
@@ -208,6 +208,64 @@ feature 'Submissions show' do
 
       click_button 'Create a review checklist'
       expect(target.reload.review_checklist).to eq([])
+    end
+
+    scenario 'coach evaluates a pending submission and mark a checklist as incorrect', js: true do
+      question_1 = Faker::Lorem.sentence
+      question_2 = Faker::Lorem.sentence
+      answer_1 = Faker::Lorem.sentence
+      answer_2 = "https://example.org/invalidLink"
+      checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
+      submission_pending.update!(checklist: checklist)
+
+      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+
+      within("div[aria-label='#{submission_pending.checklist.first['title']}']") do
+        expect(page).to have_content(question_1)
+        expect(page).to have_content(answer_1)
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        expect(page).to have_content(question_2)
+        expect(page).to have_content(answer_2)
+        click_button 'Mark as incorrect'
+        expect(page).to have_content('Incorrect')
+      end
+
+      expect(page).to have_content('Grade Card')
+
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+        find("div[title='Good']").click
+      end
+
+      # status should be reviewing as the target is not graded completely
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Reviewing')
+      end
+      within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
+        find("div[title='Good']").click
+      end
+
+      # the status should be failed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Passed')
+      end
+
+      click_button 'Save grades'
+
+      dismiss_notification
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        expect(page).to have_content('Incorrect')
+      end
+
+      expect(submission_pending.reload.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED }])
+
+      click_button('Undo Grading')
+
+      expect(page).to have_text("Add Your Feedback")
+
+      expect(submission_pending.reload.checklist).to eq(checklist)
     end
 
     scenario 'coach evaluates a pending submission without giving a feedback', js: true do
@@ -578,20 +636,20 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed_1)
 
       # submission 1
-      expect(page).to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).not_to have_text(submission_reviewed_2.description)
-      expect(page).not_to have_text(submission_reviewed_3.description)
+      expect(page).not_to have_text(submission_reviewed_2.checklist.first['title'])
+      expect(page).not_to have_text(submission_reviewed_3.checklist.first['title'])
 
       # submission 2 and 3
       visit timeline_event_path(submission_reviewed_3)
 
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).to have_text(submission_reviewed_3.description)
-      expect(page).to have_text(submission_reviewed_2.description)
-      expect(page).not_to have_text(submission_reviewed_1.description)
+      expect(page).to have_text(submission_reviewed_3.checklist.first['title'])
+      expect(page).to have_text(submission_reviewed_2.checklist.first['title'])
+      expect(page).not_to have_text(submission_reviewed_1.checklist.first['title'])
     end
   end
 end

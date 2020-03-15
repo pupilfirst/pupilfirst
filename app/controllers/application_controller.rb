@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
     @current_domain ||= Domain.find_by(fqdn: current_host)
   end
 
-  # Returns nil, if on a PupilFirst page, or a School, if on a school domain. Raises an error if request is from an
+  # Returns nil, if on a Pupilfirst page, or a School, if on a school domain. Raises an error if request is from an
   # unknown domain.
   def current_school
     @current_school ||= begin

@@ -42,7 +42,7 @@ let updateTagSelection = (setState, key, _value, selected) =>
 
 module CreateCourseExportQuery = [%graphql
   {|
- mutation($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!) {
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!) {
   createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly){
     courseExport {
       id

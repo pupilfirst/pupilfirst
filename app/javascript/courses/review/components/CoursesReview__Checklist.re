@@ -1,5 +1,3 @@
-[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
-
 type state =
   | Edit
   | Show;
@@ -55,7 +53,7 @@ let make =
   <div className="px-4 pt-4 md:px-6 md:pt-6">
     <div className="flex h-7 items-end">
       <h5 className="font-semibold text-sm flex items-center">
-        <Icon
+        <PfIcon
           className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
         />
         <span className="ml-2 md:ml-3 tracking-wide">
@@ -63,7 +61,7 @@ let make =
         </span>
       </h5>
     </div>
-    <div className="mt-2 ml-6 md:ml-7">
+    <div className="mt-2 md:ml-7">
       {switch (state) {
        | Edit =>
          <CoursesReview__ChecklistEditor

@@ -8,7 +8,7 @@ let str = React.string;
 
 module CreateMarkdownContentBlock = [%graphql
   {|
-    mutation($targetId: ID!, $aboveContentBlockId: ID) {
+    mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
@@ -20,7 +20,7 @@ module CreateMarkdownContentBlock = [%graphql
 
 module CreateEmbedContentBlock = [%graphql
   {|
-    mutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!) {
+    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!) {
       createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields

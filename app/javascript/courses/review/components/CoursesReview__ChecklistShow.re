@@ -1,5 +1,3 @@
-[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
-
 open CoursesReview__Types;
 
 type selectionItem = {
@@ -75,11 +73,21 @@ let checklistItemCheckedClasses = (itemIndex, selection) => {
   );
 };
 
+let checklistItemChecked = (itemIndex, resultIndex, selection) => {
+  selection
+  |> List.filter(s =>
+       s.itemIndex == itemIndex && s.resultIndex == resultIndex
+     )
+  |> ListUtils.isNotEmpty;
+};
+
 [@react.component]
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => []);
+  let (id, _setId) =
+    React.useState(() => DateTime.randomId() ++ "-review-checkbox-");
 
-  <div className="relative bg-gray-100 rounded-lg py-2 md:py-4">
+  <div className="relative border bg-gray-100 rounded-lg py-2 md:py-4">
     <div className="absolute right-0 top-0 -mt-9">
       <button
         className="flex items-center btn btn-small btn-primary-ghost"
@@ -113,7 +121,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                       }>
                       <Checkbox
                         id={
-                          "review-checkbox-"
+                          id
                           ++ (itemIndex |> string_of_int)
                           ++ (resultIndex |> string_of_int)
                         }
@@ -122,6 +130,11 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                           itemIndex,
                           resultIndex,
                           setSelecton,
+                        )}
+                        checked={checklistItemChecked(
+                          itemIndex,
+                          resultIndex,
+                          selection,
                         )}
                       />
                       <div className="pl-7">

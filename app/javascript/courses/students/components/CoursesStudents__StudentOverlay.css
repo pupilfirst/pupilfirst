@@ -59,7 +59,7 @@
 }
 
 .student-overlay__doughnut-chart-container {
-  @apply shadow rounded-lg p-4 h-full;
+  @apply shadow rounded-lg p-4 h-full flex flex-col;
 }
 
 .student-overlay__pie-chart-container {

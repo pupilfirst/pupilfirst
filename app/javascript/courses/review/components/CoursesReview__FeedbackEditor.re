@@ -1,5 +1,3 @@
-[%bs.raw {|require("./CoursesReview__FeedbackEditor.css")|}];
-
 let str = React.string;
 
 [@react.component]
@@ -44,15 +42,14 @@ let make =
        }}
     </div>
     <div
-      className="flex px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
-      <span className="mr-2 md:mr-3 pt-1">
-        <Icon className="if i-comment-alt-regular text-gray-800 text-base" />
-      </span>
-      <div className="w-full" ariaLabel="feedback">
-        <label
-          className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2">
-          {label |> str}
-        </label>
+      className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
+      <h5 className="font-semibold text-sm flex items-center">
+        <PfIcon
+          className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+        />
+        <span className="ml-2 md:ml-3 tracking-wide"> {label |> str} </span>
+      </h5>
+      <div className="mt-2 md:ml-7" ariaLabel="feedback">
         <MarkdownEditor
           onChange=updateFeedbackCB
           value=feedback

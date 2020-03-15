@@ -12,6 +12,7 @@ type state = {
   grades: array(Grade.t),
   newFeedback: string,
   saving: bool,
+  checklist: array(SubmissionChecklistItem.t),
   note: option(string),
 };
 
@@ -20,6 +21,7 @@ type action =
   | FinishSaving
   | UpdateFeedback(string)
   | UpdateGrades(array(Grade.t))
+  | UpdateChecklist(array(SubmissionChecklistItem.t))
   | UpdateNote(string);
 
 let reducer = (state, action) =>
@@ -28,6 +30,7 @@ let reducer = (state, action) =>
   | FinishSaving => {...state, saving: false}
   | UpdateFeedback(newFeedback) => {...state, newFeedback}
   | UpdateGrades(grades) => {...state, grades}
+  | UpdateChecklist(checklist) => {...state, checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   };
 
@@ -51,8 +54,8 @@ let passed = (grades, evaluationCriteria) =>
 
 module CreateGradingMutation = [%graphql
   {|
-    mutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String) {
-      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note){
+    mutation CreateGradingMutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
+      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note, checklist: $checklist){
         success
       }
     }
@@ -61,7 +64,7 @@ module CreateGradingMutation = [%graphql
 
 module UndoGradingMutation = [%graphql
   {|
-    mutation($submissionId: ID!) {
+    mutation UndoGradingMutation($submissionId: ID!) {
       undoGrading(submissionId: $submissionId){
         success
       }
@@ -92,6 +95,7 @@ let gradeSubmissionQuery =
     (submissionId, state, send, evaluationCriteria, updateSubmissionCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
+  let checklist = state.checklist |> SubmissionChecklistItem.encodeArray;
   send(BeginSaving);
 
   let feedback = state.newFeedback |> trimToOption;
@@ -102,6 +106,7 @@ let gradeSubmissionQuery =
     ~feedback?,
     ~note?,
     ~grades=jsGradesArray,
+    ~checklist,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -111,6 +116,7 @@ let gradeSubmissionQuery =
              ~grades=state.grades,
              ~passed=Some(passed(state.grades, evaluationCriteria)),
              ~newFeedback=Some(state.newFeedback),
+             ~checklist=state.checklist,
            )
          : ();
        send(FinishSaving);
@@ -322,7 +328,7 @@ let submissionStatusIcon = (status, submission, send) => {
 
   <div
     ariaLabel="submission-status"
-    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l">
+    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
     <div
       className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
       {switch (submission |> Submission.evaluatedAt, status) {
@@ -560,13 +566,33 @@ let make =
   let (state, send) =
     React.useReducer(
       reducer,
-      {grades: [||], newFeedback: "", saving: false, note: None},
+      {
+        grades: [||],
+        newFeedback: "",
+        saving: false,
+        note: None,
+        checklist: submission |> Submission.checklist,
+      },
     );
 
   let status = computeStatus(submission, state.grades, evaluationCriteria);
 
+  let updateChecklistCB =
+    switch (submission |> Submission.grades) {
+    | [||] => Some(checklist => send(UpdateChecklist(checklist)))
+    | _ => None
+    };
+  let pending = submission |> Submission.grades |> ArrayUtils.isEmpty;
+
   <DisablingCover disabled={state.saving}>
     <div>
+      <div className="pt-2 pb-6 px-4 md:px-6 bg-gray-100 border-b">
+        <SubmissionChecklistShow
+          checklist={state.checklist}
+          updateChecklistCB
+          pending
+        />
+      </div>
       {showFeedbackForm(
          submission |> Submission.grades,
          reviewChecklist,
@@ -584,7 +610,7 @@ let make =
           </span>
         </h5>
         <div
-          className="flex md:flex-row flex-col-reverse ml-6 md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+          className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
             {switch (submission |> Submission.grades) {
              | [||] =>
@@ -604,7 +630,7 @@ let make =
     </div>
     {switch (submission |> Submission.grades) {
      | [||] =>
-       <div className="bg-white pt-4 mr-3 ml-10 md:mr-6 md:ml-13">
+       <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"

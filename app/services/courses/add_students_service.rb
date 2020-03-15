@@ -3,6 +3,7 @@ module Courses
   class AddStudentsService
     def initialize(course)
       @course = course
+      @team_name_translation = {}
     end
 
     # Accepts a list of students to add to a course. Ignores students who are already present.
@@ -10,10 +11,10 @@ module Courses
     # @param student_list [Array] list of students to be added. Each entry should contain email, name, and tags.
     # @return [Array] the number of students who were just added to the database, and the number that was supplied for addition.
     def add(student_list)
-      new_students = unpersisted_students(student_list)
+      new_students = sanitize_students(unpersisted_students(student_list))
 
       Course.transaction do
-        new_students.each do |student|
+        new_students.map do |student|
           create_new_student(student)
         end
 
@@ -28,6 +29,31 @@ module Courses
 
     private
 
+    def sanitize_students(students)
+      team_sizes = {}
+
+      students.select do |student|
+        if student.team_name.present?
+          team_sizes[student.team_name] ||= 0
+          team_sizes[student.team_name] += 1
+        end
+      end
+
+      students.map do |student|
+        if student.team_name.present?
+          if team_sizes[student.team_name] > 1
+            student
+          else
+            new_student = student.dup
+            new_student.team_name = nil
+            new_student
+          end
+        else
+          student
+        end
+      end
+    end
+
     def create_new_student(student)
       # Create a user and generate a login token.
       user = User.where(email: student.email, school: school).first_or_create!
@@ -41,10 +67,10 @@ module Courses
         affiliation: user.affiliation.presence || student.affiliation
       )
 
-      startup = Startup.create!(name: student.name, level: first_level)
+      team = find_or_create_team(student)
 
       # Finally, create a student profile for the user and tag it.
-      founder = Founder.create!(user: user, startup: startup)
+      founder = Founder.create!(user: user, startup: team)
       founder.tag_list << student.tags
       founder.save!
     end
@@ -55,6 +81,18 @@ module Courses
 
       students.reject do |student|
         student.email.in?(enrolled_student_emails)
+      end
+    end
+
+    def find_or_create_team(student)
+      team_id = @team_name_translation[student.team_name]
+
+      if team_id.present?
+        Startup.find(team_id)
+      else
+        startup = Startup.create!(name: student.team_name.presence || student.name, level: first_level)
+        @team_name_translation[startup.name] = startup.id
+        startup
       end
     end
 

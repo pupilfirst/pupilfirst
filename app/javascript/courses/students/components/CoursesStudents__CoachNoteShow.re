@@ -6,7 +6,7 @@ type state = {archiving: bool};
 
 module ArchiveCoachNoteMutation = [%graphql
   {|
-   mutation($id: ID!) {
+   mutation ArchiveCoachNoteMutation($id: ID!) {
     archiveCoachNote(id: $id) {
        success
       }

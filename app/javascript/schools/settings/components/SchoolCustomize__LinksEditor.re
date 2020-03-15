@@ -48,7 +48,7 @@ let handleUrlChange = (send, event) => {
 
 module DestroySchoolLinkQuery = [%graphql
   {|
-  mutation($id: ID!) {
+  mutation DestroySchoolLinkMutation($id: ID!) {
     destroySchoolLink(id: $id) {
       success
     }
@@ -155,7 +155,7 @@ let addLinkDisabled = state =>
 
 module CreateSchoolLinkQuery = [%graphql
   {|
-  mutation($kind: String!, $title: String, $url: String!) {
+  mutation CreateSchoolLinkMutation($kind: String!, $title: String, $url: String!) {
     createSchoolLink(kind: $kind, title: $title, url: $url) @bsVariant {
       schoolLink {
         id

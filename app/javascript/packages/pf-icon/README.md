@@ -55,5 +55,5 @@ You can add an icon easily by adding the `pf-icon` class on an `<i>` tag.
 Example
 
 ```html
-<i class="if i-plus-circle"></i>
+<i class="if i-plus-circle-regular"></i>
 ```

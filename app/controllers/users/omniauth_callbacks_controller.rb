@@ -109,7 +109,7 @@ module Users
         when 'Github'
           'Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.'
         when 'Facebook'
-          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'PupilFirst\' from your authorized apps list</a> and try signing in again.'
+          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.'
         else
           'Please sign in using another method.'
       end

@@ -162,7 +162,7 @@ end
 group :production do
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
-  gem 'scout_apm', '~> 2.6' # detailed Rails application performance analysis.
+  gem 'skylight', '~> 4.2' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
   gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
   gem 'aws-sdk-s3', '~> 1.35 ', require: false
 end

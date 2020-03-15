@@ -4,6 +4,7 @@ type t = {
   tags: array(string),
   title: string,
   affiliation: string,
+  teamName: option(string),
 };
 
 let name = t => t.name;
@@ -13,6 +14,8 @@ let email = t => t.email;
 let tags = t => t.tags;
 
 let title = t => t.title;
+
+let teamName = t => t.teamName;
 
 let affiliation = t => t.affiliation;
 
@@ -24,13 +27,15 @@ let encode = t =>
       ("title", t.title |> string),
       ("affiliation", t.affiliation |> string),
       ("tags", t.tags |> array(string)),
+      ("team_name", t.teamName |> nullable(string)),
     ])
   );
 
-let make = (name, email, title, affiliation, tags) => {
+let make = (~name, ~email, ~title, ~affiliation, ~tags, ~teamName) => {
   name,
   email,
   title,
   affiliation,
   tags,
+  teamName,
 };

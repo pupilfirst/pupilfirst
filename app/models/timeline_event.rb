@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# JSON fields schema:
+#
+# checklist: [
+#   {
+#     kind: string - should match the target checklist kind (shortText, longText, link, files, multiChoice)
+#     title: string - title from the target checklist
+#     result: string - answer for the question taken from the user
+#     status: string - should be one of noAnswer, Passed, Failed.
+#   },
+#   ...
+# ]
+
 class TimelineEvent < ApplicationRecord
   belongs_to :target
   belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
@@ -15,14 +27,8 @@ class TimelineEvent < ApplicationRecord
   has_many :founders, through: :timeline_event_owners
   has_one :course, through: :target
 
-  serialize :links
-
   delegate :founder_event?, to: :target
   delegate :title, to: :target
-
-  MAX_DESCRIPTION_CHARACTERS = 500
-
-  validates :description, presence: true
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }
@@ -34,16 +40,12 @@ class TimelineEvent < ApplicationRecord
   scope :evaluated_by_faculty, -> { where.not(evaluator_id: nil) }
   scope :from_founders, ->(founders) { joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders }) }
 
-  after_initialize :make_links_an_array
+  CHECKLIST_STATUS_NO_ANSWER = 'noAnswer'
+  CHECKLIST_STATUS_PASSED = 'passed'
+  CHECKLIST_STATUS_FAILED = 'failed'
 
-  def make_links_an_array
-    self.links ||= []
-  end
-
-  before_save :ensure_links_is_an_array
-
-  def ensure_links_is_an_array
-    self.links = [] if links.nil?
+  def self.valid_checklist_status
+    [CHECKLIST_STATUS_NO_ANSWER, CHECKLIST_STATUS_PASSED, CHECKLIST_STATUS_FAILED].freeze
   end
 
   # Accessors used by timeline builder form to create TimelineEventFile entries.
@@ -52,10 +54,6 @@ class TimelineEvent < ApplicationRecord
 
   def reviewed?
     timeline_event_grades.present?
-  end
-
-  def public_link?
-    links.reject { |l| l[:private] }.present?
   end
 
   def founder_or_startup

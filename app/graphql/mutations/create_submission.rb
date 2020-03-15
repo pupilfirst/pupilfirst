@@ -1,8 +1,7 @@
 module Mutations
   class CreateSubmission < GraphQL::Schema::Mutation
     argument :target_id, ID, required: true
-    argument :description, String, required: true
-    argument :links, [String], required: true
+    argument :checklist, GraphQL::Types::JSON, required: true
     argument :file_ids, [ID], required: true
 
     description "Create a new submission for a target"

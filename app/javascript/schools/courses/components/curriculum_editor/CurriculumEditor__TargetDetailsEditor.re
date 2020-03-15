@@ -29,12 +29,13 @@ type state = {
   prerequisiteSearchInput: string,
   evaluationCriteriaSearchInput: string,
   methodOfCompletion,
-  quiz: array(TargetDetails__QuizQuestion.t),
+  quiz: array(QuizQuestion.t),
   linkToComplete: string,
   dirty: bool,
   saving: bool,
   loading: bool,
   visibility: TargetDetails.visibility,
+  checklist: array(ChecklistItem.t),
   completionInstructions: string,
 };
 
@@ -50,18 +51,21 @@ type action =
   | UpdateCompletionInstructions(string)
   | UpdateTargetRole(TargetDetails.role)
   | AddQuizQuestion
-  | UpdateQuizQuestion(
-      TargetDetails__QuizQuestion.id,
-      TargetDetails__QuizQuestion.t,
-    )
-  | RemoveQuizQuestion(TargetDetails__QuizQuestion.id)
+  | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
+  | RemoveQuizQuestion(QuizQuestion.id)
   | UpdateVisibility(TargetDetails.visibility)
+  | UpdateChecklistItem(int, ChecklistItem.t)
+  | AddNewChecklistItem
+  | RemoveChecklistItem(int)
+  | MoveChecklistItemUp(int)
+  | MoveChecklistItemDown(int)
+  | CopyChecklistItem(int)
   | UpdateSaving
   | ResetEditor;
 
 module TargetDetailsQuery = [%graphql
   {|
-    query($targetId: ID!) {
+    query TargetDetailsQuery($targetId: ID!) {
       targetDetails(targetId: $targetId) {
         title
         targetGroupId
@@ -81,6 +85,7 @@ module TargetDetailsQuery = [%graphql
         visibility
         linkToComplete
         role
+        checklist
       }
   }
 |}
@@ -96,6 +101,14 @@ let loadTargetDetails = (targetId, send) => {
      })
   |> ignore;
 };
+
+let defaultChecklist = [|
+  ChecklistItem.make(
+    ~title="Describe your submission",
+    ~kind=LongText,
+    ~optional=false,
+  ),
+|];
 
 let computeMethodOfCompletion = targetDetails => {
   let hasQuiz = targetDetails |> TargetDetails.quiz |> ArrayUtils.isNotEmpty;
@@ -118,9 +131,12 @@ let reducer = (state, action) =>
   switch (action) {
   | SaveTargetDetails(targetDetails) =>
     let methodOfCompletion = computeMethodOfCompletion(targetDetails);
+    let checklist =
+      targetDetails.checklist |> ArrayUtils.isNotEmpty
+        ? targetDetails.checklist : defaultChecklist;
     let quiz =
       targetDetails.quiz |> ArrayUtils.isNotEmpty
-        ? targetDetails.quiz : [|TargetDetails__QuizQuestion.empty("0")|];
+        ? targetDetails.quiz : [|QuizQuestion.empty("0")|];
     {
       ...state,
       title: targetDetails.title,
@@ -141,6 +157,7 @@ let reducer = (state, action) =>
         | None => ""
         },
       visibility: targetDetails.visibility,
+      checklist,
       loading: false,
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
@@ -184,26 +201,52 @@ let reducer = (state, action) =>
     let quiz =
       Array.append(
         state.quiz,
-        [|
-          TargetDetails__QuizQuestion.empty(
-            Js.Date.now() |> Js.Float.toString,
-          ),
-        |],
+        [|QuizQuestion.empty(Js.Date.now() |> Js.Float.toString)|],
       );
     {...state, quiz, dirty: true};
   | UpdateQuizQuestion(id, quizQuestion) =>
     let quiz =
       state.quiz
-      |> Array.map(q =>
-           TargetDetails__QuizQuestion.id(q) == id ? quizQuestion : q
-         );
+      |> Array.map(q => QuizQuestion.id(q) == id ? quizQuestion : q);
     {...state, quiz, dirty: true};
   | RemoveQuizQuestion(id) =>
-    let quiz =
-      state.quiz
-      |> Js.Array.filter(q => TargetDetails__QuizQuestion.id(q) != id);
+    let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id);
     {...state, quiz, dirty: true};
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
+  | UpdateChecklistItem(indexToChange, newItem) => {
+      ...state,
+      checklist:
+        state.checklist
+        |> Array.mapi((index, checklistItem) =>
+             index == indexToChange ? newItem : checklistItem
+           ),
+      dirty: true,
+    }
+  | AddNewChecklistItem => {
+      ...state,
+      checklist: Array.append(state.checklist, [|ChecklistItem.longText|]),
+      dirty: true,
+    }
+  | RemoveChecklistItem(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.removeItem(index),
+      dirty: true,
+    }
+  | MoveChecklistItemUp(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.moveUp(index),
+      dirty: true,
+    }
+  | MoveChecklistItemDown(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.moveDown(index),
+      dirty: true,
+    }
+  | CopyChecklistItem(index) => {
+      ...state,
+      checklist: state.checklist |> ChecklistItem.copy(index),
+      dirty: true,
+    }
   | UpdateSaving => {...state, saving: !state.saving}
   | ResetEditor => {...state, saving: false, dirty: false}
   };
@@ -441,7 +484,7 @@ let linkEditor = (state, send) => {
     </label>
     <div className="ml-6">
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
         id="link_to_complete"
         type_="text"
         placeholder="Paste link to complete"
@@ -489,6 +532,13 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
     | _anyOtherCombo => false
     };
 
+  let icon =
+    switch (methodOfCompletion) {
+    | `TakeQuiz => quizIcon
+    | `VisitLink => linkIcon
+    | `MarkAsComplete => markIcon
+    };
+
   <div key={index |> string_of_int} className="w-1/3 px-2">
     <button
       onClick={updateMethodOfCompletion(
@@ -496,7 +546,7 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
         send,
       )}
       className={methodOfCompletionButtonClasses(selected)}>
-      <div className="mb-1"> <img className="w-12 h-12" src=quizIcon /> </div>
+      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div>
       {buttonString |> str}
     </button>
   </div>;
@@ -525,7 +575,15 @@ let methodOfCompletionSelector = (state, send) => {
 let isValidQuiz = quiz => {
   quiz
   |> Js.Array.filter(quizQuestion =>
-       quizQuestion |> TargetDetails__QuizQuestion.isValidQuizQuestion != true
+       quizQuestion |> QuizQuestion.isValidQuizQuestion != true
+     )
+  |> ArrayUtils.isEmpty;
+};
+
+let isValidChecklist = checklist => {
+  checklist
+  |> Js.Array.filter(checklistItem =>
+       checklistItem |> ChecklistItem.isValidChecklistItem != true
      )
   |> ArrayUtils.isEmpty;
 };
@@ -558,7 +616,7 @@ let quizEditor = (state, send) => {
        {state.quiz
         |> Array.mapi((index, quizQuestion) =>
              <CurriculumEditor__TargetQuizQuestion
-               key={quizQuestion |> TargetDetails__QuizQuestion.id}
+               key={quizQuestion |> QuizQuestion.id}
                questionNumber={index + 1 |> string_of_int}
                quizQuestion
                updateQuizQuestionCB={updateQuizQuestionCB(send)}
@@ -579,22 +637,49 @@ let quizEditor = (state, send) => {
   </div>;
 };
 
-let saveDisabled = state => {
-  let hasValidTitle = state.title |> String.trim |> String.length > 0;
-  let hasValidMethodOfCompletion =
-    switch (state.methodOfCompletion) {
-    | TakeQuiz => isValidQuiz(state.quiz)
-    | MarkAsComplete => true
-    | Evaluated => state.evaluationCriteria |> ArrayUtils.isNotEmpty
-    | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
-    };
-  !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
+let doRequiredStepsHaveUniqueTitles = checklist => {
+  let requiredSteps =
+    checklist |> Js.Array.filter(item => !(item |> ChecklistItem.optional));
+
+  requiredSteps
+  |> Array.map(ChecklistItem.title)
+  |> Array.map(String.trim)
+  |> ArrayUtils.distinct
+  |> Array.length == Array.length(requiredSteps);
+};
+
+let isValidTitle = title => title |> String.trim |> String.length > 0;
+
+let isValidMethodOfCompletion = state =>
+  switch (state.methodOfCompletion) {
+  | TakeQuiz => isValidQuiz(state.quiz)
+  | MarkAsComplete => true
+  | Evaluated =>
+    state.evaluationCriteria
+    |> ArrayUtils.isNotEmpty
+    && isValidChecklist(state.checklist)
+  | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
+  };
+
+let saveDisabled =
+    (
+      ~hasValidTitle,
+      ~hasValidMethodOfCompletion,
+      ~requiredStepsHaveUniqueTitles,
+      ~dirty,
+      ~saving,
+    ) => {
+  !requiredStepsHaveUniqueTitles
+  || !hasValidTitle
+  || !hasValidMethodOfCompletion
+  || !dirty
+  || saving;
 };
 
 module UpdateTargetQuery = [%graphql
   {|
-   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String! ) {
-     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility  ) {
+   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
+     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
         success
        }
      }
@@ -612,16 +697,16 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   let quizAsJs =
     state.quiz
     |> Js.Array.filter(question =>
-         TargetDetails__QuizQuestion.isValidQuizQuestion(question)
+         QuizQuestion.isValidQuizQuestion(question)
        )
-    |> TargetDetails__QuizQuestion.quizAsJsObject;
+    |> QuizQuestion.quizAsJsObject;
 
-  let (quiz, evaluationCriteria, linkToComplete) =
+  let (quiz, evaluationCriteria, linkToComplete, checklist) =
     switch (state.methodOfCompletion) {
-    | Evaluated => ([||], state.evaluationCriteria, "")
-    | VisitLink => ([||], [||], state.linkToComplete)
-    | TakeQuiz => (quizAsJs, [||], "")
-    | MarkAsComplete => ([||], [||], "")
+    | Evaluated => ([||], state.evaluationCriteria, "", state.checklist)
+    | VisitLink => ([||], [||], state.linkToComplete, [||])
+    | TakeQuiz => (quizAsJs, [||], "", [||])
+    | MarkAsComplete => ([||], [||], "", [||])
     };
 
   let visibility =
@@ -651,6 +736,9 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
     ~completionInstructions=state.completionInstructions,
     ~linkToComplete,
     ~visibility=visibilityAsString,
+    ~checklist={
+      checklist |> ChecklistItem.encodeChecklist;
+    },
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -694,6 +782,7 @@ let make =
         dirty: false,
         saving: false,
         loading: true,
+        checklist: [||],
         visibility: TargetDetails.Draft,
         completionInstructions: "",
       },
@@ -715,170 +804,279 @@ let make =
     [|state.dirty|],
   );
 
-  <div className="max-w-3xl py-6 px-3 mx-auto" id="target-properties">
+  let requiredStepsHaveUniqueTitles =
+    doRequiredStepsHaveUniqueTitles(state.checklist);
+  let hasValidTitle = isValidTitle(state.title);
+  let hasValidMethodOfCompletion = isValidMethodOfCompletion(state);
+
+  <div className="pt-6" id="target-properties">
     {state.loading
-       ? SkeletonLoading.multiple(
-           ~count=2,
-           ~element=SkeletonLoading.contents(),
-         )
+       ? <div className="max-w-3xl mx-auto px-3">
+           {SkeletonLoading.multiple(
+              ~count=2,
+              ~element=SkeletonLoading.contents(),
+            )}
+         </div>
        : <DisablingCover message="Saving..." disabled={state.saving}>
            <div className="mt-2">
-             <div className="mb-6">
-               <label
-                 className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
-                 htmlFor="title">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"Title" |> str}
-               </label>
-               <div className="ml-6">
-                 <input
-                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                   id="title"
-                   type_="text"
-                   placeholder="Type target title here"
-                   onChange={updateTitle(send)}
-                   value={state.title}
-                 />
-                 <School__InputGroupError
-                   message="Enter a valid title"
-                   active={state.title |> String.trim |> String.length < 1}
-                 />
+             <div className="max-w-3xl mx-auto px-3">
+               <div className="mb-6">
+                 <label
+                   className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
+                   htmlFor="title">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
+                   </span>
+                   {"Title" |> str}
+                 </label>
+                 <div className="ml-6">
+                   <input
+                     className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                     id="title"
+                     type_="text"
+                     placeholder="Type target title here"
+                     onChange={updateTitle(send)}
+                     value={state.title}
+                   />
+                   <School__InputGroupError
+                     message="Enter a valid title"
+                     active={!hasValidTitle}
+                   />
+                 </div>
                </div>
-             </div>
-             {prerequisiteTargetEditor(
-                send,
-                eligiblePrerequisiteTargets(targetId, targets, targetGroups),
-                state,
-              )}
-             <div className="flex items-center mb-6">
-               <label
-                 className="block tracking-wide text-sm font-semibold mr-6"
-                 htmlFor="evaluated">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"Will a coach review submissions on this target?" |> str}
-               </label>
-               <div
-                 id="evaluated"
-                 className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
-                 <button
-                   onClick={updateMethodOfCompletion(Evaluated, send)}
-                   className={booleanButtonClasses(
-                     targetEvaluated(state.methodOfCompletion),
-                   )}>
-                   {"Yes" |> str}
-                 </button>
-                 <button
-                   onClick={updateMethodOfCompletion(MarkAsComplete, send)}
-                   className={booleanButtonClasses(
-                     !targetEvaluated(state.methodOfCompletion),
-                   )}>
-                   {"No" |> str}
-                 </button>
-               </div>
-             </div>
-             {targetEvaluated(state.methodOfCompletion)
-                ? React.null : methodOfCompletionSelector(state, send)}
-             {switch (state.methodOfCompletion) {
-              | Evaluated =>
-                evaluationCriteriaEditor(
-                  state,
-                  evaluationCriteria |> Array.of_list,
+               {prerequisiteTargetEditor(
                   send,
-                )
-              | MarkAsComplete => React.null
-              | TakeQuiz => quizEditor(state, send)
-              | VisitLink => linkEditor(state, send)
-              }}
-             <div className="mb-6">
-               <label
-                 className="inline-block tracking-wide text-sm font-semibold"
-                 htmlFor="role">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"How should teams tackle this target?" |> str}
-               </label>
-               <HelpIcon
-                 className="ml-1"
-                 link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
-                 {"Should students in a team submit work on a target individually, or together?"
-                  |> str}
-               </HelpIcon>
-               <div id="role" className="flex mt-4 ml-6">
-                 <button
-                   onClick={updateTargetRole(TargetDetails.Student, send)}
-                   className={
-                     "mr-4 "
-                     ++ targetRoleClasses(
-                          switch (state.role) {
-                          | TargetDetails.Student => true
-                          | Team => false
-                          },
-                        )
-                   }>
-                   <span className="mr-4">
-                     <Icon className="if i-users-check-light text-3xl" />
+                  eligiblePrerequisiteTargets(
+                    targetId,
+                    targets,
+                    targetGroups,
+                  ),
+                  state,
+                )}
+               <div className="flex items-center mb-6">
+                 <label
+                   className="block tracking-wide text-sm font-semibold mr-6"
+                   htmlFor="evaluated">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
                    </span>
-                   <span className="text-sm">
-                     {"All students must submit individually." |> str}
+                   {"Will a coach review submissions on this target?" |> str}
+                 </label>
+                 <div
+                   id="evaluated"
+                   className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                   <button
+                     onClick={updateMethodOfCompletion(Evaluated, send)}
+                     className={booleanButtonClasses(
+                       targetEvaluated(state.methodOfCompletion),
+                     )}>
+                     {"Yes" |> str}
+                   </button>
+                   <button
+                     onClick={updateMethodOfCompletion(MarkAsComplete, send)}
+                     className={booleanButtonClasses(
+                       !targetEvaluated(state.methodOfCompletion),
+                     )}>
+                     {"No" |> str}
+                   </button>
+                 </div>
+               </div>
+               {switch (state.methodOfCompletion) {
+                | Evaluated =>
+                  <div className="mb-6">
+                    <label
+                      className="tracking-wide text-sm font-semibold"
+                      htmlFor="target_checklist">
+                      <span className="mr-2">
+                        <i className="fas fa-list text-base" />
+                      </span>
+                      {"What steps should the student take to complete this target?"
+                       |> str}
+                    </label>
+                    <HelpIcon
+                      className="ml-1"
+                      link="https://docs.pupilfirst.com/#/curriculum_editor?id=defining-steps-to-complete-a-target">
+                      {"These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review."
+                       |> str}
+                    </HelpIcon>
+                    <div className="ml-6 mb-6">
+                      {let allowFileKind =
+                         state.checklist
+                         |> Js.Array.filter(item =>
+                              item |> ChecklistItem.isFilesKind
+                            )
+                         |> ArrayUtils.isEmpty;
+                       state.checklist
+                       |> Array.mapi((index, checklistItem) => {
+                            let moveChecklistItemUpCB =
+                              index > 0
+                                ? Some(
+                                    () => send(MoveChecklistItemUp(index)),
+                                  )
+                                : None;
+
+                            let moveChecklistItemDownCB =
+                              index != Array.length(state.checklist) - 1
+                                ? Some(
+                                    () => send(MoveChecklistItemDown(index)),
+                                  )
+                                : None;
+
+                            <CurriculumEditor__TargetChecklistItemEditor
+                              checklist={state.checklist}
+                              key={index |> string_of_int}
+                              checklistItem
+                              index
+                              updateChecklistItemCB={newChecklistItem =>
+                                send(
+                                  UpdateChecklistItem(
+                                    index,
+                                    newChecklistItem,
+                                  ),
+                                )
+                              }
+                              removeChecklistItemCB={() =>
+                                send(RemoveChecklistItem(index))
+                              }
+                              ?moveChecklistItemUpCB
+                              ?moveChecklistItemDownCB
+                              copyChecklistItemCB={() =>
+                                send(CopyChecklistItem(index))
+                              }
+                              allowFileKind
+                            />;
+                          })
+                       |> React.array}
+                      {state.checklist |> ArrayUtils.isEmpty
+                         ? <div
+                             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+                             <i className="fas fa-info-circle mr-2" />
+                             {"This target has no steps. Students will be able to submit target without any action!"
+                              |> str}
+                           </div>
+                         : React.null}
+                      {state.checklist |> Array.length >= 15
+                         ? <div
+                             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+                             <i className="fas fa-info-circle mr-2" />
+                             {"Maximum allowed checklist items is 15!" |> str}
+                           </div>
+                         : React.null}
+                      <button
+                        className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                        disabled={state.checklist |> Array.length >= 15}
+                        onClick={_ => send(AddNewChecklistItem)}>
+                        <PfIcon className="fas fa-plus-circle text-lg" />
+                        <span className="font-semibold ml-2">
+                          {"Add a Step" |> str}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                | VisitLink
+                | TakeQuiz
+                | MarkAsComplete => React.null
+                }}
+               {targetEvaluated(state.methodOfCompletion)
+                  ? React.null : methodOfCompletionSelector(state, send)}
+               {switch (state.methodOfCompletion) {
+                | Evaluated =>
+                  evaluationCriteriaEditor(
+                    state,
+                    evaluationCriteria |> Array.of_list,
+                    send,
+                  )
+                | MarkAsComplete => React.null
+                | TakeQuiz => quizEditor(state, send)
+                | VisitLink => linkEditor(state, send)
+                }}
+               <div className="mb-6">
+                 <label
+                   className="inline-block tracking-wide text-sm font-semibold"
+                   htmlFor="role">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
                    </span>
-                 </button>
-                 <button
-                   onClick={updateTargetRole(TargetDetails.Team, send)}
-                   className={targetRoleClasses(
-                     switch (state.role) {
-                     | TargetDetails.Team => true
-                     | Student => false
-                     },
-                   )}>
-                   <span className="mr-4">
-                     <Icon className="if i-user-check-light text-2xl" />
+                   {"How should teams tackle this target?" |> str}
+                 </label>
+                 <HelpIcon
+                   className="ml-1"
+                   link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
+                   {"Should students in a team submit work on a target individually, or together?"
+                    |> str}
+                 </HelpIcon>
+                 <div id="role" className="flex mt-4 ml-6">
+                   <button
+                     onClick={updateTargetRole(TargetDetails.Student, send)}
+                     className={
+                       "mr-4 "
+                       ++ targetRoleClasses(
+                            switch (state.role) {
+                            | TargetDetails.Student => true
+                            | Team => false
+                            },
+                          )
+                     }>
+                     <span className="mr-4">
+                       <Icon className="if i-users-check-light text-3xl" />
+                     </span>
+                     <span className="text-sm">
+                       {"All students must submit individually." |> str}
+                     </span>
+                   </button>
+                   <button
+                     onClick={updateTargetRole(TargetDetails.Team, send)}
+                     className={targetRoleClasses(
+                       switch (state.role) {
+                       | TargetDetails.Team => true
+                       | Student => false
+                       },
+                     )}>
+                     <span className="mr-4">
+                       <Icon className="if i-user-check-light text-2xl" />
+                     </span>
+                     <span className="text-sm">
+                       {"Only one student in a team" |> str}
+                       <br />
+                       {" needs to submit." |> str}
+                     </span>
+                   </button>
+                 </div>
+               </div>
+               <div className="mb-6">
+                 <label
+                   className="tracking-wide text-sm font-semibold"
+                   htmlFor="completion-instructions">
+                   <span className="mr-2">
+                     <i className="fas fa-list text-base" />
                    </span>
-                   <span className="text-sm">
-                     {"Only one student in a team" |> str}
-                     <br />
-                     {" needs to submit." |> str}
+                   {"Do you have any completion instructions for the student?"
+                    |> str}
+                   <span className="ml-1 text-xs font-normal">
+                     {"(optional)" |> str}
                    </span>
-                 </button>
+                 </label>
+                 <HelpIcon
+                   link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
+                   className="ml-1">
+                   {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
+                    |> str}
+                 </HelpIcon>
+                 <div className="ml-6">
+                   <input
+                     className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                     id="completion-instructions"
+                     type_="text"
+                     maxLength=255
+                     value={state.completionInstructions}
+                     onChange={updateCompletionInstructions(send)}
+                   />
+                 </div>
                </div>
              </div>
-             <div className="mb-6">
-               <label
-                 className="tracking-wide text-sm font-semibold"
-                 htmlFor="completion-instructions">
-                 <span className="mr-2">
-                   <i className="fas fa-list text-base" />
-                 </span>
-                 {"Do you have any completion instructions for the student?"
-                  |> str}
-                 <span className="ml-1 text-xs font-normal">
-                   {"(optional)" |> str}
-                 </span>
-               </label>
-               <HelpIcon
-                 link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
-                 className="ml-1">
-                 {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target."
-                  |> str}
-               </HelpIcon>
-               <div className="ml-6">
-                 <input
-                   className="appearance-none block w-full bg-white border border-gray-400 rounded px-4 py-3 my-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                   id="completion-instructions"
-                   type_="text"
-                   maxLength=255
-                   value={state.completionInstructions}
-                   onChange={updateCompletionInstructions(send)}
-                 />
-               </div>
-             </div>
-             <div className="bg-white">
+             <div className="bg-white border-t sticky bottom-0 py-5">
                <div
-                 className="flex w-full justify-between items-center mx-auto">
+                 className="flex max-w-3xl mx-auto px-3 justify-between items-center">
                  <div className="flex items-center flex-shrink-0">
                    <label
                      className="block tracking-wide text-sm font-semibold mr-3"
@@ -920,7 +1118,13 @@ let make =
                  <div className="w-auto">
                    <button
                      key="target-actions-step"
-                     disabled={saveDisabled(state)}
+                     disabled={saveDisabled(
+                       ~hasValidTitle,
+                       ~hasValidMethodOfCompletion,
+                       ~requiredStepsHaveUniqueTitles,
+                       ~dirty=state.dirty,
+                       ~saving=state.saving,
+                     )}
                      onClick={updateTarget(
                        target,
                        state,

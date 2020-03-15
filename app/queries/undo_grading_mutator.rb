@@ -10,7 +10,7 @@ class UndoGradingMutator < ApplicationQuery
       # Clear existing grades
       TimelineEventGrade.where(timeline_event: submission).destroy_all
       # Clear evaluation info
-      submission.update!(passed_at: nil, evaluator_id: nil, evaluated_at: nil)
+      submission.update!(passed_at: nil, evaluator_id: nil, evaluated_at: nil, checklist: checklist)
     end
   end
 
@@ -20,6 +20,13 @@ class UndoGradingMutator < ApplicationQuery
     return if submission&.evaluator_id?
 
     errors[:base] << 'Could not find a graded submission with the given ID'
+  end
+
+  def checklist
+    submission.checklist.map do |c|
+      c['status'] = TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+      c
+    end
   end
 
   def submission

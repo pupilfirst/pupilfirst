@@ -1,6 +1,6 @@
 # Coaches
 
-PupilFirst enables quick and efficient review of task submissions by students, and to share feedback and create a conversation around what students have learned from a course. Coaches are users who make this possible.
+Pupilfirst enables quick and efficient review of task submissions by students, and to share feedback and create a conversation around what students have learned from a course. Coaches are users who make this possible.
 
 1. Coaches are users who can review submissions from students.
 2. Coaches also have access to all communities in a school.

@@ -11,7 +11,7 @@ let str = React.string;
 
 module UpdateReviewChecklistMutation = [%graphql
   {|
-    mutation($targetId: ID!, $reviewChecklist: JSON!) {
+    mutation UpdateReviewChecklistMutation($targetId: ID!, $reviewChecklist: JSON!) {
       updateReviewChecklist(targetId: $targetId, reviewChecklist: $reviewChecklist){
         success
       }
@@ -273,7 +273,7 @@ let make =
                                       setState,
                                     )
                                   }>
-                                  <Icon className="if i-times-light" />
+                                  <Icon className="if i-times-regular" />
                                 </button>
                               </div>
                             </div>

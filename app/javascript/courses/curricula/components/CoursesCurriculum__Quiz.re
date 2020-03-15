@@ -6,12 +6,12 @@ let str = React.string;
 
 module CreateQuizSubmissionQuery = [%graphql
   {|
-   mutation($targetId: ID!, $answerIds: [ID!]!) {
+   mutation CreateQuizSubmissionMutation($targetId: ID!, $answerIds: [ID!]!) {
     createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
       submission{
         id
-        description
         createdAt
+        checklist
       }
      }
    }
@@ -30,14 +30,17 @@ let createQuizSubmission =
   |> Js.Promise.then_(response => {
        switch (response##createQuizSubmission##submission) {
        | Some(submission) =>
+         let checklist =
+           submission##checklist
+           |> Json.Decode.array(SubmissionChecklistItem.decode([||]));
          addSubmissionCB(
            Submission.make(
              ~id=submission##id,
-             ~description=submission##description,
              ~createdAt=submission##createdAt,
              ~status=Submission.MarkedAsComplete,
+             ~checklist,
            ),
-         )
+         );
        | None => setSaving(_ => false)
        };
        Js.Promise.resolve();

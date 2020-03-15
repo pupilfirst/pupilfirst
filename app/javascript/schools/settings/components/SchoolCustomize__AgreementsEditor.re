@@ -42,7 +42,7 @@ let updateAgreementText = (updating, kind) =>
 
 module UpdateSchoolStringQuery = [%graphql
   {|
-   mutation($key: String!, $value: String!) {
+   mutation UpdateSchoolStringMutation($key: String!, $value: String!) {
      updateSchoolString(key: $key, value: $value) {
        errors
      }

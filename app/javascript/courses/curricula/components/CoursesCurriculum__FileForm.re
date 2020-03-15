@@ -104,7 +104,7 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
 
         if (errors |> ListUtils.isEmpty) {
           let filename = file##name;
-          attachingCB();
+          attachingCB(true);
           send(AttachFile(filename));
           submitForm(filename, state.formId, send, attachFileCB);
         } else {
@@ -114,7 +114,7 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
     );
 
 [@react.component]
-let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
+let make = (~attachFileCB, ~attachingCB, ~preview) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -130,7 +130,7 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
       <input
         name="authenticity_token"
         type_="hidden"
-        value=authenticityToken
+        value={AuthenticityToken.fromHead()}
       />
       <input
         id="attachment_file"
@@ -142,9 +142,9 @@ let make = (~authenticityToken, ~attachFileCB, ~attachingCB, ~preview) => {
         onChange={attachFile(state, send, attachingCB, attachFileCB, preview)}
       />
       <label
-        className="mt-2 cursor-pointer truncate h-10 bg-gray-100 border border-dashed border-gray-400 flex px-4 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
+        className="text-center cursor-pointer truncate bg-gray-200 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
         htmlFor="attachment_file">
-        <span>
+        <span className="w-full">
           <i className="fas fa-upload mr-2 text-lg" />
           <span className="truncate"> {state.filename |> str} </span>
         </span>

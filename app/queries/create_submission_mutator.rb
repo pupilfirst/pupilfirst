@@ -2,13 +2,14 @@ class CreateSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
 
   property :target_id, validates: { presence: { message: 'BlankTargetId' } }
-  property :description, validates: { presence: { message: 'BlankDescription' }, length: { maximum: 1500, minimum: 1, message: 'InvalidDescriptionLength' } }
-  property :links, validates: { urls: true }
+  property :checklist
   property :file_ids
 
   validate :all_files_should_be_new
   validate :maximum_three_attachments
   validate :ensure_submittability
+  validate :attempted_minimum_questions
+  validate :valid_response
 
   def all_files_should_be_new
     return if timeline_event_files.where.not(timeline_event_id: nil).empty?
@@ -17,9 +18,9 @@ class CreateSubmissionMutator < ApplicationQuery
   end
 
   def maximum_three_attachments
-    return if (file_ids.count + links.count) <= 3
+    return if file_ids.count <= 3
 
-    errors[:base] << 'TooManyAttachments'
+    errors[:base] << 'No more than three files can be attached to a submission'
   end
 
   def ensure_submittability
@@ -36,8 +37,7 @@ class CreateSubmissionMutator < ApplicationQuery
     TimelineEvent.transaction do
       params = {
         target: target,
-        description: description.strip,
-        links: links
+        checklist: checklist
       }
 
       timeline_event = TimelineEvents::CreateService.new(params, founder).execute
@@ -53,6 +53,48 @@ class CreateSubmissionMutator < ApplicationQuery
   end
 
   private
+
+  # rubocop: disable Metrics/CyclomaticComplexity
+  def valid_response
+    return if checklist.respond_to?(:all?) && checklist.all? do |item|
+      item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) &&
+        item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER && item['result'].is_a?(String) &&
+        valid_result(item['kind'], item['result'])
+    end
+
+    errors[:base] << 'Submission checklist is not valid.'
+  end
+
+  def valid_result(kind, result)
+    case kind
+      when Target::CHECKLIST_KIND_FILES
+        timeline_event_files.present?
+      when Target::CHECKLIST_KIND_LINK
+        result.length >= 3 && result.length <= 2048
+      when Target::CHECKLIST_KIND_LONG_TEXT
+        result.length >= 1
+      when Target::CHECKLIST_KIND_MULTI_CHOICE
+        result.length >= 1
+      when Target::CHECKLIST_KIND_SHORT_TEXT
+        result.length >= 1
+      else
+        false
+    end
+  end
+
+  # rubocop: enable Metrics/CyclomaticComplexity
+
+  def attempted_minimum_questions
+    target.checklist.each do |c|
+      next if c['optional'] == true
+
+      item = checklist.select { |i| i["title"] == c['title'] }
+
+      next if item.present? && item.count == 1 && item.first['result'].is_a?(String)
+
+      errors[:base] << "Missing answer for question: #{c['title']}"
+    end
+  end
 
   def timeline_event_files
     TimelineEventFile.where(id: file_ids)

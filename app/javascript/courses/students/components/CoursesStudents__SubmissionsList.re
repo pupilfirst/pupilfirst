@@ -11,7 +11,7 @@ let str = React.string;
 
 module StudentSubmissionsQuery = [%graphql
   {|
-   query($studentId: ID!, $after: String) {
+   query StudentSubmissionsQuery($studentId: ID!, $after: String) {
     studentSubmissions(studentId: $studentId, after: $after, first: 20 ) {
        nodes {
          id

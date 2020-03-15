@@ -4,7 +4,7 @@ open CourseAuthors__Types;
 
 module CreateCourseAuthorQuery = [%graphql
   {|
-  mutation($courseId: ID!, $name: String!, $email: String!) {
+  mutation CreateCourseAuthorMutation($courseId: ID!, $name: String!, $email: String!) {
     createCourseAuthor(courseId: $courseId, name: $name, email: $email){
       courseAuthor{
         id,
@@ -17,7 +17,7 @@ module CreateCourseAuthorQuery = [%graphql
 
 module UpdateCourseAuthorQuery = [%graphql
   {|
-  mutation($id: ID!, $name: String!) {
+  mutation UpdateCourseAuthorMutation($id: ID!, $name: String!) {
     updateCourseAuthor(id: $id, name: $name) {
       success
     }

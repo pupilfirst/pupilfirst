@@ -40,7 +40,7 @@ feature 'School students index', js: true do
     FacultyCourseEnrollment.create(faculty: course_coach, course: course)
   end
 
-  scenario 'School admin adds new students' do
+  scenario 'School admin adds new students and a team' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     expect(page).to have_text(startup_1.founders.first.name)
@@ -49,6 +49,7 @@ feature 'School students index', js: true do
     # Add few students
     click_button 'Add New Students'
 
+    # Student, alone in a team.
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
     fill_in 'Title', with: title_1
@@ -59,8 +60,10 @@ feature 'School students index', js: true do
     find('span[title="Add new tag Def"]').click
     click_button 'Add to List'
 
+    # Student, alone, but with a team name.
     fill_in 'Name', with: name_2
     fill_in 'Email', with: email_2
+    fill_in 'Team Name', with: 'some team name'
 
     # title and affiliation should have persisted values
     expect(page.find_field("title").value).to eq(title_1)
@@ -91,6 +94,25 @@ feature 'School students index', js: true do
     expect(page).to have_text("#{title_1}, #{affiliation_1}")
     expect(page).to have_text(name_2.to_s)
     expect(page).to have_text("(#{email_2})")
+    expect(page).to have_text('Add more team members!')
+
+    # An actual team with two students.
+    name_3 = Faker::Name.name
+    email_3 = Faker::Internet.email(name: name_3)
+    name_4 = Faker::Name.name
+    email_4 = Faker::Internet.email(name: name_4)
+
+    fill_in 'Name', with: name_3
+    fill_in 'Email', with: email_3
+    fill_in 'Team Name', with: new_team_name
+
+    click_button 'Add to List'
+
+    fill_in 'Name', with: name_4
+    fill_in 'Email', with: email_4
+    fill_in 'Team Name', with: new_team_name
+
+    click_button 'Add to List'
 
     click_button 'Save List'
 
@@ -100,19 +122,38 @@ feature 'School students index', js: true do
     expect(page).to have_text(name_1)
     expect(page).to have_text(name_2)
 
-    founder_1_user = User.find_by(email: email_1)
-    founder_1 = founder_1_user.founders.first
-    founder_2_user = User.find_by(email: email_2)
-    founder_2 = founder_2_user.founders.first
+    student_1_user = User.find_by(email: email_1)
+    student_1 = student_1_user.founders.first
+    student_2_user = User.find_by(email: email_2)
+    student_2 = student_2_user.founders.first
+    student_3_user = User.find_by(email: email_3)
+    student_3 = student_3_user.founders.first
+    student_4_user = User.find_by(email: email_4)
+    student_4 = student_4_user.founders.first
 
-    expect(founder_1_user.name).to eq(name_1)
-    expect(founder_2_user.name).to eq(name_2)
-    expect(founder_1_user.title).to eq(title_1)
-    expect(founder_2_user.title).to eq('Student') # the default should have been set.
-    expect(founder_1_user.affiliation).to eq(affiliation_1)
-    expect(founder_2_user.affiliation).to eq(nil)
-    expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
-    expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
+    expect(student_1_user.name).to eq(name_1)
+    expect(student_2_user.name).to eq(name_2)
+    expect(student_3_user.name).to eq(name_3)
+    expect(student_4_user.name).to eq(name_4)
+
+    expect(student_1_user.title).to eq(title_1)
+    expect(student_2_user.title).to eq('Student') # the default should have been set.
+    expect(student_3_user.title).to eq('Student')
+    expect(student_4_user.title).to eq('Student')
+
+    expect(student_1_user.affiliation).to eq(affiliation_1)
+    expect(student_2_user.affiliation).to eq(nil)
+    expect(student_3_user.affiliation).to eq(nil)
+    expect(student_4_user.affiliation).to eq(nil)
+
+    expect(student_1.startup.name).to eq(name_1)
+    expect(student_2.startup.name).to eq(name_2)
+    expect(student_3.startup.name).to eq(new_team_name)
+    expect(student_4.startup.name).to eq(new_team_name)
+    expect(student_3.startup.id).to eq(student_4.startup.id)
+
+    expect(student_1.tag_list).to contain_exactly('Abc', 'Def')
+    expect(student_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
   end
 
   context 'when adding a student who is already a user of another type' do

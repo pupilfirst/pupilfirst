@@ -9,6 +9,7 @@ module Mutations
     argument :quiz, [Types::TargetQuizInputType], required: true
     argument :completion_instructions, String, required: false
     argument :link_to_complete, String, required: false
+    argument :checklist, GraphQL::Types::JSON, required: true
     argument :visibility, String, required: true
 
     description "Update a target"

@@ -7,7 +7,7 @@ let str = React.string;
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query($courseId: ID!, $levelId: ID, $after: String) {
+    query ReviewedSubmissionsQuery($courseId: ID!, $levelId: ID, $after: String) {
       reviewedSubmissions(courseId: $courseId, levelId: $levelId, first: 20, after: $after) {
         nodes {
         id,title,userNames,failed,feedbackSent,levelId,createdAt,targetId

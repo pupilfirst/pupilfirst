@@ -305,7 +305,6 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
 [@react.component]
 let make =
     (
-      ~authenticityToken,
       ~course,
       ~levels,
       ~targetGroups,
@@ -490,7 +489,6 @@ let make =
          target
          course
          targetStatus
-         authenticityToken
          addSubmissionCB={addSubmission(setState)}
          targets
          statusOfTargets={state.statusOfTargets}
@@ -506,7 +504,7 @@ let make =
     {switch (state.notice) {
      | LevelUp => React.null
      | _anyOtherNotice =>
-       <div>
+       <div className="relative">
          <CoursesCurriculum__LevelSelector
            levels
            teamLevel

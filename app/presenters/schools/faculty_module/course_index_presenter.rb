@@ -27,7 +27,7 @@ module Schools
             name: coach.user.name,
             email: coach.user.email,
             title: coach.user.title,
-            image_url: coach.user.avatar_url(variant: :thumb)
+            avatar_url: coach.user.avatar_url(variant: :thumb)
           }
         end
       end

@@ -18,15 +18,15 @@ module CreateCoachNotesMutation = [%graphql
          note
          createdAt
          author {
-          avatarUrl
-          name
-          title
-          userId
+            id
+            avatarUrl
+            name
+            title
          }
        }
       }
     }
-   |}
+  |}
 ];
 
 let saveNote = (studentId, setState, state, addNoteCB) => {

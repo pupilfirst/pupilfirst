@@ -17,7 +17,6 @@ type state = {
   public: bool,
   exited: bool,
   connectLink: string,
-  notifyForSubmission: bool,
   imageFileName: string,
   dirty: bool,
   saving: bool,
@@ -36,7 +35,6 @@ type action =
   | UpdateLinkedInUrl(string, bool)
   | UpdateConnectLink(string, bool)
   | UpdatePublic(bool)
-  | UpdateNotifyForSubmission(bool)
   | UpdateImageFileName(string)
   | UpdateExited(bool)
   | UpdateAffiliation(string)
@@ -75,11 +73,6 @@ let reducer = (state, action) =>
       dirty: true,
     }
   | UpdatePublic(public) => {...state, public, dirty: true}
-  | UpdateNotifyForSubmission(notifyForSubmission) => {
-      ...state,
-      notifyForSubmission,
-      dirty: true,
-    }
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateImageFileName(imageFileName) => {
       ...state,
@@ -152,7 +145,6 @@ let computeInitialState = coach =>
       linkedinUrl: "",
       public: false,
       connectLink: "",
-      notifyForSubmission: false,
       exited: false,
       dirty: false,
       saving: false,
@@ -179,7 +171,6 @@ let computeInitialState = coach =>
         | Some(connectLink) => connectLink
         | None => ""
         },
-      notifyForSubmission: coach |> Coach.notifyForSubmission,
       exited: coach |> Coach.exited,
       dirty: false,
       saving: false,
@@ -216,7 +207,6 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
         ~linkedinUrl=Some(state.linkedinUrl),
         ~public=state.public,
         ~connectLink=Some(state.connectLink),
-        ~notifyForSubmission=state.notifyForSubmission,
         ~exited=state.exited,
         ~imageFileName=Some(state.imageFileName),
         ~affiliation=Some(state.affiliation),
@@ -519,46 +509,6 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         type_="hidden"
                         name="faculty[public]"
                         value={state.public |> string_of_bool}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-5">
-                  <div className="flex items-center flex-shrink-0">
-                    <label
-                      className="block tracking-wide text-xs font-semibold mr-3"
-                      htmlFor="evaluated">
-                      {"Should the coach be notified of student submissions?"
-                       |> str}
-                    </label>
-                    <div
-                      id="notification"
-                      className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                      <button
-                        onClick={_event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdateNotifyForSubmission(true));
-                        }}
-                        name="faculty[notify_for_submission]"
-                        className={booleanButtonClasses(
-                          state.notifyForSubmission,
-                        )}>
-                        {"Yes" |> str}
-                      </button>
-                      <button
-                        onClick={_event => {
-                          ReactEvent.Mouse.preventDefault(_event);
-                          send(UpdateNotifyForSubmission(false));
-                        }}
-                        className={booleanButtonClasses(
-                          !state.notifyForSubmission,
-                        )}>
-                        {"No" |> str}
-                      </button>
-                      <input
-                        type_="hidden"
-                        name="faculty[notify_for_submission]"
-                        value={state.notifyForSubmission |> string_of_bool}
                       />
                     </div>
                   </div>

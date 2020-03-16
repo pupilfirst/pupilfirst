@@ -4,26 +4,6 @@ open CoursesStudents__Types;
 
 let str = React.string;
 
-let avatarClasses = size => {
-  let (xsSize, mdSize) = size;
-  "w-"
-  ++ xsSize
-  ++ " h-"
-  ++ xsSize
-  ++ " md:w-"
-  ++ mdSize
-  ++ " md:h-"
-  ++ mdSize
-  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 object-cover";
-};
-
-let avatar = (~size=("8", "10"), avatarUrl, name) => {
-  switch (avatarUrl) {
-  | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
-  | None => <Avatar name className={avatarClasses(size)} />
-  };
-};
-
 let levelInfo = (levelId, levels) => {
   <span
     className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
@@ -43,66 +23,6 @@ let levelInfo = (levelId, levels) => {
   </span>;
 };
 
-let coachAvatars = (~title, ~className="", coaches) =>
-  if (coaches |> ArrayUtils.isNotEmpty) {
-    let listedCoaches =
-      coaches |> Array.length <= 4
-        ? coaches : coaches |> Js.Array.slice(~start=0, ~end_=3);
-
-    let otherCoaches =
-      if (coaches |> Array.length > 4) {
-        let names =
-          coaches
-          |> Js.Array.sliceFrom(3)
-          |> Js.Array.map(coach => {
-               <div key={coach |> TeamCoach.userId}>
-                 {coach |> TeamCoach.name |> str}
-               </div>
-             })
-          |> React.array;
-
-        let count = (coaches |> Array.length) - 3;
-        Some((names, count));
-      } else {
-        None;
-      };
-
-    <div className={"hidden md:inline-block mr-6 " ++ className}>
-      <div className="text-xs"> {title |> str} </div>
-      <div className="mt-1">
-        {listedCoaches
-         |> Array.map(coach => {
-              <Tooltip
-                tip={coach |> TeamCoach.name |> str}
-                className="-mr-1"
-                key={coach |> TeamCoach.userId}>
-                {avatar(
-                   ~size=("6", "8"),
-                   coach |> TeamCoach.avatarUrl,
-                   coach |> TeamCoach.name,
-                 )}
-              </Tooltip>
-            })
-         |> React.array}
-        {otherCoaches
-         |> OptionUtils.mapWithDefault(
-              ((names, count)) => {
-                <Tooltip tip=names className="-mr-1">
-                  <Avatar
-                    name={"+ " ++ (count |> string_of_int)}
-                    className={avatarClasses(("6", "8"))}
-                    colors=("#EEE", "#000")
-                  />
-                </Tooltip>
-              },
-              React.null,
-            )}
-      </div>
-    </div>;
-  } else {
-    <div />;
-  };
-
 let showStudent = (team, levels, teamCoaches) => {
   let student = TeamInfo.students(team)[0];
   <Link
@@ -113,7 +33,7 @@ let showStudent = (team, levels, teamCoaches) => {
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div
         className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
-        {avatar(
+        {CoursesStudents__TeamCoaches.avatar(
            student |> TeamInfo.studentAvatarUrl,
            student |> TeamInfo.studentName,
          )}
@@ -131,7 +51,11 @@ let showStudent = (team, levels, teamCoaches) => {
     <div
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
       className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
-      {coachAvatars(~title="Personal Coaches", teamCoaches)}
+      <CoursesStudents__TeamCoaches
+        title={<div className="mb-1"> {"Personal Coaches" |> str} </div>}
+        className="hidden md:inline-block"
+        coaches=teamCoaches
+      />
       {levelInfo(team |> TeamInfo.levelId, levels)}
     </div>
   </Link>;
@@ -154,7 +78,7 @@ let showTeam = (team, levels, teamCoaches) => {
               ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
               className="flex items-center bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100">
               <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
-                {avatar(
+                {CoursesStudents__TeamCoaches.avatar(
                    student |> TeamInfo.studentAvatarUrl,
                    student |> TeamInfo.studentName,
                  )}
@@ -182,7 +106,11 @@ let showTeam = (team, levels, teamCoaches) => {
           <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
-          {coachAvatars(~title="Team Coaches", ~className="mt-3", teamCoaches)}
+          <CoursesStudents__TeamCoaches
+            title={<div className="mb-1"> {"Team Coaches" |> str} </div>}
+            className="hidden md:inline-block mt-3"
+            coaches=teamCoaches
+          />
         </div>
       </div>
       <div
@@ -206,7 +134,7 @@ let make = (~levels, ~teams, ~teamCoaches) => {
          </div>
        : teams
          |> Array.map(team => {
-              let coaches = teamCoaches |> TeamCoach.coachesForTeam(team);
+              let coaches = team |> TeamInfo.coaches(teamCoaches);
 
               Array.length(team |> TeamInfo.students) == 1
                 ? showStudent(team, levels, coaches)

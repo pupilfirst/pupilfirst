@@ -63,7 +63,7 @@ feature 'School Admin Navbar', js: true do
 
     let!(:student) { create :founder, startup: team, user: school_admin.user }
     let(:coach) { create :faculty, school: school_1, user: school_admin.user }
-    let!(:coach_enrollment) { create :faculty_startup_enrollment, faculty: coach, startup: team }
+    let!(:coach_enrollment) { create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team }
 
     scenario 'school admin visits the admin interface' do
       sign_in_user school_admin.user, referer: school_path

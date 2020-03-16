@@ -5,14 +5,15 @@ let decodeProps = json =>
     json |> field("levels", array(Level.decode)),
     json |> field("course", Course.decode),
     json |> field("userId", string),
-    json |> field("teamCoaches", array(TeamCoach.decode)),
+    json |> field("teamCoaches", array(Coach.decode)),
+    json |> field("currentCoach", Coach.decode),
   );
 
-let (levels, course, userId, teamCoaches) =
+let (levels, course, userId, teamCoaches, currentCoach) =
   DomUtils.parseJsonTag(~id="school-course-students__props", ())
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoursesStudents__Root levels course userId teamCoaches />,
+  <CoursesStudents__Root levels course userId teamCoaches currentCoach />,
   "react-root",
 );

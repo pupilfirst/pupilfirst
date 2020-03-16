@@ -136,7 +136,7 @@ feature "Student levelling up", js: true do
       let(:coach) { create :faculty, user: student.user }
 
       before do
-        create :faculty_startup_enrollment, faculty: coach, startup: team
+        create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team
       end
 
       scenario 'coach levels up to locked level' do

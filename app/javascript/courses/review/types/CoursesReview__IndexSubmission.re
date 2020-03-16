@@ -10,12 +10,16 @@ type t = {
   levelId: string,
   userNames: string,
   status: option(status),
+  coachIds: array(string),
 };
+
 let id = t => t.id;
 let title = t => t.title;
 let levelId = t => t.levelId;
 let userNames = t => t.userNames;
 let status = t => t.status;
+let coachIds = t => t.coachIds;
+
 let failed = status => status.failed;
 let feedbackSent = status => status.feedbackSent;
 
@@ -45,20 +49,22 @@ let decode = json =>
     userNames: json |> field("userNames", string),
     status:
       json |> field("status", nullable(statusDecode)) |> Js.Null.toOption,
+    coachIds: json |> field("coachIds", array(string)),
   };
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status) => {
+let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds) => {
   id,
   title,
   createdAt,
   levelId,
   userNames,
   status,
+  coachIds,
 };
 
 let makeStatus = (~failed, ~feedbackSent) => {failed, feedbackSent};
 
-let decodeJS = details =>
+let decodeJs = details =>
   details
   |> Js.Array.map(s =>
        switch (s) {
@@ -76,6 +82,7 @@ let decodeJS = details =>
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
              ~status=Some(status),
+             ~coachIds=submission##coachIds,
            ),
          ];
        | None => []

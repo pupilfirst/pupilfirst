@@ -92,7 +92,7 @@ let trimToOption = s =>
   };
 
 let gradeSubmissionQuery =
-    (submissionId, state, send, evaluationCriteria, updateSubmissionCB) => {
+    (submissionId, state, send, evaluationCriteria, addGradingCB) => {
   let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType);
 
   let checklist = state.checklist |> SubmissionChecklistItem.encodeArray;
@@ -112,10 +112,10 @@ let gradeSubmissionQuery =
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##createGrading##success
-         ? updateSubmissionCB(
+         ? addGradingCB(
+             ~newFeedback=state.newFeedback,
+             ~passed=passed(state.grades, evaluationCriteria),
              ~grades=state.grades,
-             ~passed=Some(passed(state.grades, evaluationCriteria)),
-             ~newFeedback=Some(state.newFeedback),
              ~checklist=state.checklist,
            )
          : ();
@@ -318,7 +318,7 @@ let gradeStatusClasses = (color, status) =>
     }
   );
 
-let submissionStatusIcon = (status, submission, send) => {
+let submissionStatusIcon = (status, overlaySubmission, send) => {
   let (text, color) =
     switch (status) {
     | Graded(passed) => passed ? ("Passed", "green") : ("Failed", "red")
@@ -331,14 +331,14 @@ let submissionStatusIcon = (status, submission, send) => {
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
     <div
       className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
-      {switch (submission |> Submission.evaluatedAt, status) {
+      {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
        | (Some(date), Graded(_)) =>
          <div
            className="bg-gray-200 block md:flex flex-col w-full justify-between rounded-lg pt-3 mr-2 mt-4 md:mt-0">
            <div>
              <p className="text-xs px-3"> {"Evaluated By" |> str} </p>
              <p className="text-sm font-semibold px-3 pb-3">
-               {switch (submission |> Submission.evaluatorName) {
+               {switch (overlaySubmission |> OverlaySubmission.evaluatorName) {
                 | Some(name) => name |> str
                 | None => <em> {"Deleted Coach" |> str} </em>
                 }}
@@ -346,7 +346,7 @@ let submissionStatusIcon = (status, submission, send) => {
            </div>
            <div
              className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
-             {"on " ++ (date |> Submission.prettyDate) |> str}
+             {"on " ++ (date |> DateFns.format("MMMM D, YYYY")) |> str}
            </div>
          </div>
        | (None, Graded(_))
@@ -392,11 +392,13 @@ let submissionStatusIcon = (status, submission, send) => {
         </p>
       </div>
     </div>
-    {switch (submission |> Submission.evaluatedAt, status) {
+    {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
      | (Some(_), Graded(_)) =>
        <div className="mt-4 md:pl-6 w-full">
          <button
-           onClick={_ => undoGrading(submission |> Submission.id, send)}
+           onClick={_ =>
+             undoGrading(overlaySubmission |> OverlaySubmission.id, send)
+           }
            className="btn btn-danger btn-small">
            <i className="fas fa-undo" />
            <span className="ml-2"> {"Undo Grading" |> str} </span>
@@ -415,7 +417,7 @@ let gradeSubmission =
       state,
       send,
       evaluationCriteria,
-      updateSubmissionCB,
+      addGradingCB,
       status,
       event,
     ) => {
@@ -427,7 +429,7 @@ let gradeSubmission =
       state,
       send,
       evaluationCriteria,
-      updateSubmissionCB,
+      addGradingCB,
     )
   | Grading
   | Ungraded => ()
@@ -456,10 +458,10 @@ let reviewButtonDisabled = status =>
   | Ungraded => true
   };
 
-let computeStatus = (submission, selectedGrades, evaluationCriteria) =>
+let computeStatus = (overlaySubmission, selectedGrades, evaluationCriteria) =>
   switch (
-    submission |> Submission.passedAt,
-    submission |> Submission.grades |> ArrayUtils.isNotEmpty,
+    overlaySubmission |> OverlaySubmission.passedAt,
+    overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isNotEmpty,
   ) {
   | (Some(_), _) => Graded(true)
   | (None, true) => Graded(false)
@@ -482,8 +484,8 @@ let submitButtonText = (feedback, grades) =>
   | (true, true) => "Save grades & send feedback"
   };
 
-let noteForm = (submission, teamSubmission, note, send) =>
-  switch (submission |> Submission.grades) {
+let noteForm = (overlaySubmission, teamSubmission, note, send) =>
+  switch (overlaySubmission |> OverlaySubmission.grades) {
   | [||] =>
     let (noteAbout, additionalHelp) =
       teamSubmission
@@ -502,7 +504,8 @@ let noteForm = (submission, teamSubmission, note, send) =>
          |> str}
       </HelpIcon>;
 
-    let textareaId = "note-for-submission-" ++ (submission |> Submission.id);
+    let textareaId =
+      "note-for-submission-" ++ (overlaySubmission |> OverlaySubmission.id);
 
     <div className="text-sm">
       <h5 className="font-semibold text-sm flex items-center">
@@ -554,11 +557,11 @@ let noteForm = (submission, teamSubmission, note, send) =>
 [@react.component]
 let make =
     (
-      ~submission,
+      ~overlaySubmission,
       ~teamSubmission,
       ~evaluationCriteria,
       ~reviewChecklist,
-      ~updateSubmissionCB,
+      ~addGradingCB,
       ~updateReviewChecklistCB,
       ~targetId,
       ~targetEvaluationCriteriaIds,
@@ -571,18 +574,20 @@ let make =
         newFeedback: "",
         saving: false,
         note: None,
-        checklist: submission |> Submission.checklist,
+        checklist: overlaySubmission |> OverlaySubmission.checklist,
       },
     );
 
-  let status = computeStatus(submission, state.grades, evaluationCriteria);
+  let status =
+    computeStatus(overlaySubmission, state.grades, evaluationCriteria);
 
   let updateChecklistCB =
-    switch (submission |> Submission.grades) {
+    switch (overlaySubmission |> OverlaySubmission.grades) {
     | [||] => Some(checklist => send(UpdateChecklist(checklist)))
     | _ => None
     };
-  let pending = submission |> Submission.grades |> ArrayUtils.isEmpty;
+  let pending =
+    overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isEmpty;
 
   <DisablingCover disabled={state.saving}>
     <div>
@@ -594,7 +599,7 @@ let make =
         />
       </div>
       {showFeedbackForm(
-         submission |> Submission.grades,
+         overlaySubmission |> OverlaySubmission.grades,
          reviewChecklist,
          updateReviewChecklistCB,
          state,
@@ -602,7 +607,7 @@ let make =
          targetId,
        )}
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
-        {noteForm(submission, teamSubmission, state.note, send)}
+        {noteForm(overlaySubmission, teamSubmission, state.note, send)}
         <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
           <Icon className="if i-tachometer-regular text-gray-800 text-base" />
           <span className="ml-2 md:ml-3 tracking-wide">
@@ -612,7 +617,7 @@ let make =
         <div
           className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
-            {switch (submission |> Submission.grades) {
+            {switch (overlaySubmission |> OverlaySubmission.grades) {
              | [||] =>
                renderGradePills(
                  evaluationCriteria,
@@ -624,22 +629,22 @@ let make =
              | grades => showGrades(grades, evaluationCriteria, state)
              }}
           </div>
-          {submissionStatusIcon(status, submission, send)}
+          {submissionStatusIcon(status, overlaySubmission, send)}
         </div>
       </div>
     </div>
-    {switch (submission |> Submission.grades) {
+    {switch (overlaySubmission |> OverlaySubmission.grades) {
      | [||] =>
        <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
          <button
            disabled={reviewButtonDisabled(status)}
            className="btn btn-success btn-large w-full border border-green-600"
            onClick={gradeSubmission(
-             submission |> Submission.id,
+             overlaySubmission |> OverlaySubmission.id,
              state,
              send,
              evaluationCriteria,
-             updateSubmissionCB,
+             addGradingCB,
              status,
            )}>
            {submitButtonText(state.newFeedback, state.grades) |> str}

@@ -27,25 +27,4 @@ class FacultyMailer < SchoolMailer
 
     simple_roadie_mail(@faculty.email, "Feedback for your recent office hour with team members of #{@startup.display_name}")
   end
-
-  # Mail sent after a student submits a timeline event.
-  #
-  # @param timeline_event [TimelineEvent] Timeline event that was created just now.
-  # @param faculty [Faculty] Coach who needs to be notified about the submission.
-  def student_submission_notification(timeline_event, faculty)
-    @faculty = faculty
-    @submission = timeline_event
-
-    @submission_from = if timeline_event.founders.count == 1
-      timeline_event.founders.joins(:user).pick(:name)
-    else
-      "team #{timeline_event.founders.first.startup.name}"
-    end
-
-    @startup = timeline_event.startup
-    @target = timeline_event.target
-    @school = faculty.school
-
-    simple_roadie_mail(faculty.email, "There is a new submission from #{@startup.name}")
-  end
 end

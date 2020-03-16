@@ -28,7 +28,6 @@ module Schools
             linkedinUrl: faculty.linkedin_url,
             public: faculty.public,
             connectLink: faculty.connect_link,
-            notifyForSubmission: faculty.notify_for_submission,
             exited: faculty.exited,
             imageFileName: faculty.image_filename,
             affiliation: faculty.user.affiliation

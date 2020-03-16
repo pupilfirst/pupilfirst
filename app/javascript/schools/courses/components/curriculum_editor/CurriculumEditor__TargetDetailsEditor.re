@@ -308,7 +308,6 @@ module SelectablePrerequisiteTargets = {
   let value = t => t |> Target.title;
   let searchString = value;
 
-  let make = (target): t => target;
 };
 
 module MultiSelectForPrerequisiteTargets =
@@ -319,14 +318,12 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
     eligiblePrerequisiteTargets
     |> Js.Array.filter(target =>
          state.prerequisiteTargets |> Array.mem(Target.id(target))
-       )
-    |> Array.map(target => SelectablePrerequisiteTargets.make(target));
+       );
   let unselected =
     eligiblePrerequisiteTargets
     |> Js.Array.filter(target =>
          !(state.prerequisiteTargets |> Array.mem(Target.id(target)))
-       )
-    |> Array.map(target => SelectablePrerequisiteTargets.make(target));
+       );
   eligiblePrerequisiteTargets |> ArrayUtils.isNotEmpty
     ? <div className="mb-6">
         <label

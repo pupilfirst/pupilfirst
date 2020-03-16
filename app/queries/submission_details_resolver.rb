@@ -12,7 +12,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,
-      inactive_students: inactive_students
+      inactive_students: inactive_students,
+      coach_ids: assigned_coach_ids
     }
   end
 
@@ -80,5 +81,12 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def inactive_students
     submission.founders.count != submission.founders.active.count
+  end
+
+  def assigned_coach_ids
+    Founder.where(id: submission.founders)
+      .joins(startup: :faculty_startup_enrollments)
+      .distinct(:faculty_id)
+      .pluck(:faculty_id)
   end
 end

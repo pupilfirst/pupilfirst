@@ -1,14 +1,20 @@
+module OverlaySubmission = CoursesReview__OverlaySubmission;
+module IndexSubmission = CoursesReview__IndexSubmission;
+module Student = CoursesReview__Student;
+module ReviewChecklistItem = CoursesReview__ReviewChecklistItem;
+
 type t = {
-  submissions: array(CoursesReview__Submission.t),
+  submissions: array(OverlaySubmission.t),
   targetId: string,
   targetTitle: string,
-  students: array(CoursesReview__Student.t),
+  students: array(Student.t),
   levelNumber: string,
   levelId: string,
   evaluationCriteria: array(EvaluationCriterion.t),
-  reviewChecklist: array(CoursesReview__ReviewChecklistItem.t),
+  reviewChecklist: array(ReviewChecklistItem.t),
   targetEvaluationCriteriaIds: array(string),
   inactiveStudents: bool,
+  coachIds: array(string),
 };
 let submissions = t => t.submissions;
 let targetId = t => t.targetId;
@@ -19,6 +25,7 @@ let evaluationCriteria = t => t.evaluationCriteria;
 let reviewChecklist = t => t.reviewChecklist;
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds;
 let inactiveStudents = t => t.inactiveStudents;
+let coachIds = t => t.coachIds;
 
 let make =
     (
@@ -32,6 +39,7 @@ let make =
       ~reviewChecklist,
       ~targetEvaluationCriteriaIds,
       ~inactiveStudents,
+      ~coachIds,
     ) => {
   submissions,
   targetId,
@@ -43,15 +51,15 @@ let make =
   reviewChecklist,
   targetEvaluationCriteriaIds,
   inactiveStudents,
+  coachIds,
 };
 
-let decodeJS = details =>
+let decodeJs = details =>
   make(
-    ~submissions=details##submissions |> CoursesReview__Submission.makeFromJs,
+    ~submissions=details##submissions |> OverlaySubmission.makeFromJs,
     ~targetId=details##targetId,
     ~targetTitle=details##targetTitle,
-    ~students=
-      details##students |> Array.map(CoursesReview__Student.makeFromJs),
+    ~students=details##students |> Array.map(Student.makeFromJs),
     ~levelNumber=details##levelNumber,
     ~levelId=details##levelId,
     ~targetEvaluationCriteriaIds=details##targetEvaluationCriteriaIds,
@@ -73,48 +81,25 @@ let decodeJS = details =>
            )
          ),
     ~reviewChecklist=
-      details##reviewChecklist |> CoursesReview__ReviewChecklistItem.makeFromJs,
+      details##reviewChecklist |> ReviewChecklistItem.makeFromJs,
+    ~coachIds=details##coachIds,
   );
 
-let updateSubmission = (t, submission) =>
-  make(
-    ~submissions=
-      t.submissions
-      |> Js.Array.filter(s =>
-           s
-           |> CoursesReview__Submission.id
-           != (submission |> CoursesReview__Submission.id)
-         )
-      |> Array.append([|submission|]),
-    ~targetId=t.targetId,
-    ~targetTitle=t.targetTitle,
-    ~students=t.students,
-    ~levelNumber=t.levelNumber,
-    ~levelId=t.levelId,
-    ~evaluationCriteria=t.evaluationCriteria,
-    ~reviewChecklist=t.reviewChecklist,
-    ~targetEvaluationCriteriaIds=t.targetEvaluationCriteriaIds,
-    ~inactiveStudents=t.inactiveStudents,
-  );
-let failed = submission =>
-  switch (
-    submission |> CoursesReview__Submission.evaluatedAt,
-    submission |> CoursesReview__Submission.passedAt,
-  ) {
-  | (Some(_), Some(_)) => false
-  | (Some(_), None)
-  | (None, Some(_))
-  | (None, None) => true
-  };
+let updateSubmission = (submission, t) => {
+  ...t,
+  submissions:
+    t.submissions
+    |> Js.Array.filter(s =>
+         s |> OverlaySubmission.id != (submission |> OverlaySubmission.id)
+       )
+    |> Array.append([|submission|]),
+};
 
-let feedbackSent = submission =>
-  submission |> CoursesReview__Submission.feedback |> ArrayUtils.isNotEmpty;
-
-let makeSubmissionInfo = (t, submission) =>
-  CoursesReview__SubmissionInfo.make(
-    ~id=submission |> CoursesReview__Submission.id,
+let makeIndexSubmission = (overlaySubmission, t) =>
+  IndexSubmission.make(
+    ~id=overlaySubmission |> OverlaySubmission.id,
     ~title=t.targetTitle,
-    ~createdAt=submission |> CoursesReview__Submission.createdAt,
+    ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
     ~levelId=t.levelId,
     ~userNames=
       t.students
@@ -122,24 +107,12 @@ let makeSubmissionInfo = (t, submission) =>
       |> Js.Array.joinWith(", "),
     ~status=
       Some(
-        CoursesReview__SubmissionInfo.makeStatus(
-          ~failed=failed(submission),
-          ~feedbackSent=feedbackSent(submission),
+        IndexSubmission.makeStatus(
+          ~failed=overlaySubmission |> OverlaySubmission.failed,
+          ~feedbackSent=overlaySubmission |> OverlaySubmission.feedbackSent,
         ),
       ),
+    ~coachIds=t.coachIds,
   );
 
-let updateReviewChecklist = (reviewChecklist, t) => {
-  make(
-    ~submissions=t.submissions,
-    ~targetId=t.targetId,
-    ~targetTitle=t.targetTitle,
-    ~students=t.students,
-    ~levelNumber=t.levelNumber,
-    ~levelId=t.levelId,
-    ~evaluationCriteria=t.evaluationCriteria,
-    ~targetEvaluationCriteriaIds=t.targetEvaluationCriteriaIds,
-    ~inactiveStudents=t.inactiveStudents,
-    ~reviewChecklist,
-  );
-};
+let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist};

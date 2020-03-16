@@ -14,7 +14,7 @@ type t = {
 };
 
 let id = t => t.id;
-let createdAt = t => t.createdAt;
+let createdAt = (t: t) => t.createdAt;
 let file = t => t.file;
 let tags = t => t.tags;
 let reviewedOnly = t => t.reviewedOnly;

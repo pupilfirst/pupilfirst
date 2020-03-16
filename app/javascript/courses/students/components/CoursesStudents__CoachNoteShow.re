@@ -63,8 +63,8 @@ let make = (~note, ~userId, ~removeNoteCB) => {
     <div className="flex justify-between">
       <div className="flex">
         {switch (note |> CoachNote.author) {
-         | Some(coach) =>
-           switch (coach |> Coach.avatarUrl) {
+         | Some(user) =>
+           switch (user |> User.avatarUrl) {
            | Some(avatarUrl) =>
              <img
                className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
@@ -72,7 +72,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
              />
            | None =>
              <Avatar
-               name={coach |> Coach.name}
+               name={user |> User.name}
                className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
              />
            }
@@ -87,7 +87,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
           <p className="text-sm font-semibold inline-block leading-snug">
             {(
                switch (note |> CoachNote.author) {
-               | Some(coach) => coach |> Coach.name
+               | Some(user) => user |> User.name
                | None => "Deleted Coach"
                }
              )
@@ -97,7 +97,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
             className="text-gray-600 font-semibold text-xs mt-px leading-snug">
             {(
                switch (note |> CoachNote.author) {
-               | Some(coach) => coach |> Coach.title
+               | Some(user) => user |> User.title
                | None => "Unknown"
                }
              )
@@ -108,7 +108,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
       {let showDeleteIcon =
          switch (note |> CoachNote.author) {
          | None => false
-         | Some(coach) => Coach.userId(coach) == userId
+         | Some(user) => User.id(user) == userId
          };
        showDeleteIcon
          ? deleteIcon(

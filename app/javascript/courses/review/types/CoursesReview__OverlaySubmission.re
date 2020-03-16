@@ -16,7 +16,6 @@ let evaluatedAt = t => t.evaluatedAt;
 let grades = t => t.grades;
 let feedback = t => t.feedback;
 let checklist = t => t.checklist;
-let prettyDate = date => date |> DateFns.format("MMMM D, YYYY");
 
 let make =
     (
@@ -76,3 +75,15 @@ let makeFromJs = details =>
               ),
        )
      );
+
+let failed = t =>
+  switch (t.evaluatedAt, t.passedAt) {
+  | (Some(_), Some(_)) => false
+  | (Some(_), None)
+  | (None, Some(_))
+  | (None, None) => true
+  };
+
+let feedbackSent = t => t.feedback |> ArrayUtils.isNotEmpty;
+
+let updateFeedback = (feedback, t) => {...t, feedback};

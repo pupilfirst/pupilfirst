@@ -4,8 +4,9 @@ open CoursesStudents__Types;
 let str = React.string;
 
 type filter = {
-  search: option(string),
+  nameOrEmail: option(string),
   level: option(Level.t),
+  coach: option(Coach.t),
 };
 
 type loading =
@@ -16,14 +17,96 @@ type loading =
 type state = {
   loading,
   teams: Teams.t,
-  searchInputString: option(string),
+  filterString: string,
   filter,
 };
 
+type action =
+  | SelectLevel(Level.t)
+  | DeselectLevel
+  | SelectCoach(Coach.t)
+  | DeselectCoach
+  | SetNameOrEmail(string)
+  | UnsetNameOrEmail
+  | UpdateFilterString(string)
+  | LoadTeams(option(string), bool, array(TeamInfo.t))
+  | BeginLoadingMore
+  | BeginReloading;
+
+let reducer = (state, action) =>
+  switch (action) {
+  | SelectLevel(level) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        level: Some(level),
+      },
+      filterString: "",
+    }
+  | DeselectLevel => {
+      ...state,
+      filter: {
+        ...state.filter,
+        level: None,
+      },
+    }
+  | SelectCoach(coach) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        coach: Some(coach),
+      },
+      filterString: "",
+    }
+  | DeselectCoach => {
+      ...state,
+      filter: {
+        ...state.filter,
+        coach: None,
+      },
+    }
+  | SetNameOrEmail(search) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        nameOrEmail: Some(search),
+      },
+      filterString: "",
+    }
+  | UnsetNameOrEmail => {
+      ...state,
+      filter: {
+        ...state.filter,
+        nameOrEmail: None,
+      },
+    }
+  | UpdateFilterString(filterString) => {...state, filterString}
+  | LoadTeams(endCursor, hasNextPage, newTeams) =>
+    let updatedTeams =
+      switch (state.loading) {
+      | LoadingMore => newTeams |> Array.append(state.teams |> Teams.toArray)
+      | Reloading => newTeams
+      | NotLoading => newTeams
+      };
+
+    {
+      ...state,
+      teams:
+        switch (hasNextPage, endCursor) {
+        | (_, None)
+        | (false, Some(_)) => FullyLoaded(updatedTeams)
+        | (true, Some(cursor)) => PartiallyLoaded(updatedTeams, cursor)
+        },
+      loading: NotLoading,
+    };
+  | BeginLoadingMore => {...state, loading: LoadingMore}
+  | BeginReloading => {...state, loading: Reloading}
+  };
+
 module TeamsQuery = [%graphql
   {|
-    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $levelId: ID, $search: String, $after: String) {
-      teams(courseId: $courseId, levelId: $levelId, search: $search, first: 10, after: $after) {
+    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $levelId: ID, $coachId: ID, $search: String, $after: String) {
+      teams(courseId: $courseId, levelId: $levelId,coachId: $coachId, search: $search, first: 10, after: $after) {
         nodes {
           id,
           name,
@@ -46,252 +129,249 @@ module TeamsQuery = [%graphql
   |}
 ];
 
-let updateTeams = (setState, endCursor, hasNextPage, teams, nodes) => {
-  let updatedTeams =
-    (
-      switch (nodes) {
-      | None => [||]
-      | Some(teamsArray) => teamsArray |> TeamInfo.makeArrayFromJs
-      }
-    )
-    |> Array.to_list
-    |> List.flatten
-    |> Array.of_list
-    |> Array.append(teams);
+let getTeams = (send, courseId, cursor, filter) => {
+  let levelId = filter.level |> OptionUtils.map(Level.id);
+  let coachId = filter.coach |> OptionUtils.map(Coach.id);
 
-  setState(state =>
-    {
-      ...state,
-      teams:
-        switch (hasNextPage, endCursor) {
-        | (_, None)
-        | (false, Some(_)) => FullyLoaded(updatedTeams)
-        | (true, Some(cursor)) => PartiallyLoaded(updatedTeams, cursor)
-        },
-      loading: NotLoading,
-    }
-  );
-};
-
-let getTeams =
-    (courseId, cursor, setState, selectedLevel, search, teams, loading) => {
-  setState(state => {...state, loading});
-  (
-    switch (selectedLevel, search, cursor) {
-    | (Some(level), Some(search), Some(cursor)) =>
-      TeamsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~search,
-        ~after=cursor,
-        (),
-      )
-    | (Some(level), Some(search), None) =>
-      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ~search, ())
-    | (None, Some(search), Some(cursor)) =>
-      TeamsQuery.make(~courseId, ~search, ~after=cursor, ())
-    | (Some(level), None, Some(cursor)) =>
-      TeamsQuery.make(
-        ~courseId,
-        ~levelId=level |> Level.id,
-        ~after=cursor,
-        (),
-      )
-    | (Some(level), None, None) =>
-      TeamsQuery.make(~courseId, ~levelId=level |> Level.id, ())
-    | (None, Some(search), None) => TeamsQuery.make(~courseId, ~search, ())
-    | (None, None, Some(cursor)) =>
-      TeamsQuery.make(~courseId, ~after=cursor, ())
-    | (None, None, None) => TeamsQuery.make(~courseId, ())
-    }
+  TeamsQuery.make(
+    ~courseId,
+    ~after=?cursor,
+    ~levelId?,
+    ~coachId?,
+    ~search=?filter.nameOrEmail,
+    (),
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       response##teams##nodes
-       |> updateTeams(
-            setState,
-            response##teams##pageInfo##endCursor,
-            response##teams##pageInfo##hasNextPage,
-            teams,
-          );
+       let newTeams =
+         switch (response##teams##nodes) {
+         | None => [||]
+         | Some(teamsArray) => teamsArray |> TeamInfo.makeArrayFromJs
+         };
+
+       send(
+         LoadTeams(
+           response##teams##pageInfo##endCursor,
+           response##teams##pageInfo##hasNextPage,
+           newTeams,
+         ),
+       );
+
        Js.Promise.resolve();
      })
   |> ignore;
-};
-
-let dropdownElementClasses = (level, selectedLevel) => {
-  "p-3 w-full flex justify-between md:items-center text-left font-semibold focus:outline-none "
-  ++ (
-    switch (selectedLevel, level) {
-    | (Some(sl), Some(l)) when l |> Level.id == (sl |> Level.id) => "bg-gray-200 text-primary-500"
-    | (None, None) => "bg-gray-200 text-primary-500"
-    | _ => ""
-    }
-  );
-};
-
-let updateLevel = (level, setState) => {
-  setState(state =>
-    {
-      ...state,
-      filter: {
-        level,
-        search: state.filter.search,
-      },
-    }
-  );
-};
-
-let onClickForLevelSelector = (level, selectedLevel, setState, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-
-  switch (selectedLevel, level) {
-  | (Some(sl), Some(l)) when l |> Level.id == (sl |> Level.id) => ()
-  | _ => updateLevel(level, setState)
-  };
-};
-
-let onSubmitSearch = (setState, event) => {
-  ReactEvent.Form.preventDefault(event);
-  let search = ReactEvent.Form.target(event)##student_search##value;
-  let isValidString = search |> Js.String.trim |> Js.String.length > 0;
-  isValidString
-    ? setState(state =>
-        {
-          ...state,
-          filter: {
-            search,
-            level: state.filter.level,
-          },
-        }
-      )
-    : ();
-};
-
-let onClearSearch = (setState, event) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  setState(state =>
-    {
-      ...state,
-      searchInputString: None,
-      filter: {
-        search: None,
-        level: state.filter.level,
-      },
-    }
-  );
-};
-
-let dropDownButtonText = level =>
-  "Level "
-  ++ (level |> Level.number |> string_of_int)
-  ++ " | "
-  ++ (level |> Level.name);
-
-let showDropdown = (levels, selectedLevel, setState) => {
-  let contents =
-    [|
-      <button
-        className={dropdownElementClasses(None, selectedLevel)}
-        onClick={onClickForLevelSelector(None, selectedLevel, setState)}>
-        {"All Levels" |> str}
-      </button>,
-    |]
-    ->Array.append(
-        levels
-        |> Level.sort
-        |> Array.map(level =>
-             <button
-               className={dropdownElementClasses(Some(level), selectedLevel)}
-               onClick={onClickForLevelSelector(
-                 Some(level),
-                 selectedLevel,
-                 setState,
-               )}>
-               <span className="pr-2">
-                 {dropDownButtonText(level) |> str}
-               </span>
-               <span
-                 className="flex-shrink-0 bg-secondary-500 rounded px-1 pb-px text-white leading-tight">
-                 <Icon className="if i-users-regular text-xs" />
-                 <span className="text-xs ml-1">
-                   {level |> Level.teamsInLevel |> string_of_int |> str}
-                 </span>
-               </span>
-             </button>
-           ),
-      );
-
-  let selected =
-    <button
-      className="bg-white px-4 py-2 border font-semibold rounded-lg focus:outline-none w-full md:w-auto flex justify-between">
-      {(
-         switch (selectedLevel) {
-         | None => "All Levels"
-         | Some(level) => dropDownButtonText(level)
-         }
-       )
-       |> str}
-      <span className="pl-2 ml-2 border-l">
-        <i className="fas fa-chevron-down text-sm" />
-      </span>
-    </button>;
-
-  <Dropdown selected contents right=true />;
-};
-
-let updateSearchInputString = (setState, event) => {
-  let searchInputString = ReactEvent.Form.target(event)##value;
-  setState(state => {...state, searchInputString});
-};
-
-let disableSearchButton = state => {
-  switch (state.searchInputString) {
-  | None => true
-  | Some(string) =>
-    !(string |> String.trim |> String.length > 0)
-    || (
-      switch (state.filter.search) {
-      | None => false
-      | Some(searchString) => string == searchString
-      }
-    )
-  };
 };
 
 let applicableLevels = levels => {
   levels |> Js.Array.filter(level => Level.number(level) != 0);
 };
 
-[@react.component]
-let make = (~levels, ~course, ~userId, ~teamCoaches) => {
-  let (state, setState) =
-    React.useState(() =>
-      {
-        loading: NotLoading,
-        teams: Unloaded,
-        searchInputString: None,
-        filter: {
-          search: None,
-          level: None,
-        },
+module Selectable = {
+  type t =
+    | Level(Level.t)
+    | AssignedToCoach(Coach.t, string)
+    | NameOrEmail(string);
+
+  let label = t =>
+    switch (t) {
+    | Level(level) =>
+      Some("Level " ++ (level |> Level.number |> string_of_int))
+    | AssignedToCoach(_) => Some("Assigned to")
+    | NameOrEmail(_) => Some("Name or Email")
+    };
+
+  let value = t =>
+    switch (t) {
+    | Level(level) => level |> Level.name
+    | AssignedToCoach(coach, currentCoachId) =>
+      coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
+    | NameOrEmail(search) => search
+    };
+
+  let searchString = t =>
+    switch (t) {
+    | Level(level) =>
+      "level "
+      ++ (level |> Level.number |> string_of_int)
+      ++ " "
+      ++ (level |> Level.name)
+    | AssignedToCoach(coach, currentCoachId) =>
+      if (coach |> Coach.id == currentCoachId) {
+        (coach |> Coach.name) ++ " assigned to me";
+      } else {
+        "assigned to " ++ (coach |> Coach.name);
       }
+    | NameOrEmail(search) => search
+    };
+
+  let color = _t => "gray";
+  let level = level => Level(level);
+  let assignedToCoach = (coach, currentCoachId) =>
+    AssignedToCoach(coach, currentCoachId);
+  let nameOrEmail = search => NameOrEmail(search);
+};
+
+module Multiselect = MultiselectDropdown.Make(Selectable);
+
+let unselected = (levels, coaches, currentCoachId, state) => {
+  let unselectedLevels =
+    levels
+    |> Js.Array.filter(level =>
+         state.filter.level
+         |> OptionUtils.mapWithDefault(
+              selectedLevel =>
+                level |> Level.id != (selectedLevel |> Level.id),
+              true,
+            )
+       )
+    |> Array.map(Selectable.level);
+
+  let unselectedCoaches =
+    coaches
+    |> Js.Array.filter(coach =>
+         state.filter.coach
+         |> OptionUtils.mapWithDefault(
+              selectedCoach => coach |> Coach.id != Coach.id(selectedCoach),
+              true,
+            )
+       )
+    |> Array.map(coach => Selectable.assignedToCoach(coach, currentCoachId));
+
+  let trimmedFilterString = state.filterString |> String.trim;
+  let nameOrEmail =
+    trimmedFilterString == ""
+      ? [||] : [|Selectable.nameOrEmail(trimmedFilterString)|];
+
+  unselectedLevels
+  |> Array.append(unselectedCoaches)
+  |> Array.append(nameOrEmail);
+};
+
+let selected = (state, currentCoachId) => {
+  let selectedLevel =
+    state.filter.level
+    |> OptionUtils.mapWithDefault(
+         selectedLevel => [|Selectable.level(selectedLevel)|],
+         [||],
+       );
+
+  let selectedCoach =
+    state.filter.coach
+    |> OptionUtils.mapWithDefault(
+         selectedCoach => {
+           [|Selectable.assignedToCoach(selectedCoach, currentCoachId)|]
+         },
+         [||],
+       );
+
+  let selectedSearchString =
+    state.filter.nameOrEmail
+    |> OptionUtils.mapWithDefault(
+         nameOrEmail => {[|Selectable.nameOrEmail(nameOrEmail)|]},
+         [||],
+       );
+
+  selectedLevel
+  |> Array.append(selectedCoach)
+  |> Array.append(selectedSearchString);
+};
+
+let onSelectFilter = (send, selectable) =>
+  switch (selectable) {
+  | Selectable.AssignedToCoach(coach, _currentCoachId) =>
+    send(SelectCoach(coach))
+  | Level(level) => send(SelectLevel(level))
+  | NameOrEmail(nameOrEmail) => send(SetNameOrEmail(nameOrEmail))
+  };
+
+let onDeselectFilter = (send, selectable) =>
+  switch (selectable) {
+  | Selectable.AssignedToCoach(_) => send(DeselectCoach)
+  | Level(_) => send(DeselectLevel)
+  | NameOrEmail(_) => send(UnsetNameOrEmail)
+  };
+
+let filterPlaceholder = state => {
+  switch (state.filter.level, state.filter.coach, state.filter.nameOrEmail) {
+  | (None, None, None) => "Filter by level, assigned coach, or search by name or email address"
+  | _ => ""
+  };
+};
+
+let restoreFilterNotice = (send, currentCoach, message) =>
+  <div
+    className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
+    <span> {message |> str} </span>
+    <button
+      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
+      onClick={_ => send(SelectCoach(currentCoach))}>
+      {"Assigned to: Me" |> str}
+      <i className="fas fa-level-up-alt ml-2" />
+    </button>
+  </div>;
+
+let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
+  currentTeamCoach
+  |> OptionUtils.mapWithDefault(
+       currentCoach => {
+         switch (state.filter.coach) {
+         | None =>
+           restoreFilterNotice(
+             send,
+             currentCoach,
+             "Now showing all students in this course.",
+           )
+         | Some(selectedCoach)
+             when selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
+         | Some(selectedCoach) =>
+           restoreFilterNotice(
+             send,
+             currentCoach,
+             "Now showing students assigned to "
+             ++ (selectedCoach |> Coach.name)
+             ++ ".",
+           )
+         }
+       },
+       React.null,
+     );
+
+let computeInitialState = currentTeamCoach => {
+  loading: NotLoading,
+  teams: Unloaded,
+  filterString: "",
+  filter: {
+    nameOrEmail: None,
+    level: None,
+    coach: currentTeamCoach,
+  },
+};
+
+[@react.component]
+let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
+  let (currentTeamCoach, _) =
+    React.useState(() =>
+      teamCoaches->Belt.Array.some(coach =>
+        coach |> Coach.id == (currentCoach |> Coach.id)
+      )
+        ? Some(currentCoach) : None
     );
+
+  let (state, send) =
+    React.useReducerWithMapState(
+      reducer,
+      currentTeamCoach,
+      computeInitialState,
+    );
+
   let courseId = course |> Course.id;
 
   let url = ReasonReactRouter.useUrl();
 
   React.useEffect1(
     () => {
-      getTeams(
-        courseId,
-        None,
-        setState,
-        state.filter.level,
-        state.filter.search,
-        [||],
-        Reloading,
-      );
+      send(BeginReloading);
+      getTeams(send, courseId, None, state.filter);
 
       None;
     },
@@ -313,48 +393,23 @@ let make = (~levels, ~course, ~userId, ~teamCoaches) => {
     <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
       <div className="w-full bg-gray-100 relative md:sticky md:top-0 z-10">
         <div
-          className="max-w-3xl mx-auto flex flex-col md:flex-row items-end lg:items-center justify-between pt-4 pb-4">
-          <form
-            className="flex items-center justify-between w-full md:w-auto"
-            onSubmit={event => onSubmitSearch(setState, event)}>
-            <div className="relative w-full md:w-auto mr-2">
-              <input
-                name="student_search"
-                value={
-                  switch (state.searchInputString) {
-                  | None => ""
-                  | Some(string) => string
-                  }
-                }
-                onChange={event => updateSearchInputString(setState, event)}
-                className="course-students__student-search-input appearance-none bg-white border rounded block text-sm appearance-none leading-normal px-3 py-2 pr-8 focus:outline-none focus:border-primary-400"
-                placeholder="Search by student or team name..."
-              />
-              {switch (state.filter.search) {
-               | Some(_text) =>
-                 <button
-                   onClick={event => onClearSearch(setState, event)}
-                   name="clear-student-search"
-                   type_="button"
-                   className="course-students__student-search-input-cancel-button absolute right-0 top-0 text-gray-700 cursor-pointer hover:text-gray-900 text-lg px-1 py-px z-10 mr-2 flex items-center h-full focus:outline-none">
-                   <i className="fas fa-times-circle" />
-                 </button>
-               | None => React.null
-               }}
-            </div>
-            <button
-              disabled={disableSearchButton(state)}
-              className="btn btn-default">
-              {"Search" |> str}
-            </button>
-          </form>
-          <div className="flex-shrink-0 pt-4 md:pt-0 w-full md:w-auto">
-            {showDropdown(
-               applicableLevels(levels),
-               state.filter.level,
-               setState,
-             )}
-          </div>
+          className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
+          <Multiselect
+            id="filter"
+            unselected={unselected(
+              levels,
+              teamCoaches,
+              currentCoach |> Coach.id,
+              state,
+            )}
+            selected={selected(state, currentCoach |> Coach.id)}
+            onSelect={onSelectFilter(send)}
+            onDeselect={onDeselectFilter(send)}
+            value={state.filterString}
+            onChange={filterString => send(UpdateFilterString(filterString))}
+            placeholder={filterPlaceholder(state)}
+          />
+          {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
         </div>
       </div>
       <div className=" max-w-3xl mx-auto">
@@ -376,17 +431,10 @@ let make = (~levels, ~course, ~userId, ~teamCoaches) => {
               | NotLoading =>
                 <button
                   className="btn btn-primary-ghost cursor-pointer w-full mt-8"
-                  onClick={_ =>
-                    getTeams(
-                      courseId,
-                      Some(cursor),
-                      setState,
-                      state.filter.level,
-                      state.filter.search,
-                      teams,
-                      LoadingMore,
-                    )
-                  }>
+                  onClick={_ => {
+                    send(BeginLoadingMore);
+                    getTeams(send, courseId, Some(cursor), state.filter);
+                  }}>
                   {"Load More..." |> str}
                 </button>
               | Reloading => React.null

@@ -8,6 +8,7 @@ module Types
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :failed, Boolean, null: false
+    field :coach_ids, [String], null: false
 
     def title
       object.target.title
@@ -29,6 +30,11 @@ module Types
 
     def failed
       object.passed_at.nil?
+    end
+
+    def coach_ids
+      team_ids = object.founders.map(&:startup_id).uniq
+      FacultyStartupEnrollment.where(startup_id: team_ids).pluck(:faculty_id)
     end
   end
 end

@@ -14,13 +14,24 @@ Given that courses are intended to contain many _levels_ of content, with studen
 
 However, some levels may be more difficult or time-consuming than others, so you'll need to account for the different _weightage_, depending on the nature and content of your course.
 
+## Detailed report
+
 To get a detailed look at a student's progress, you can click on an entry to open up a report for that student.
 
 ![A student's report](https://res.cloudinary.com/sv-co/image/upload/v1582530863/pupilfirst_documentation/student_reports/student_report_sv4bhj.png)
 
-## Grading should be objective
+The left sidebar shows all available details about the student. Top to bottom, these are:
 
-If you select any student from the students list, you'll be shown the total targets they've completed, their average score in your quizzes, and most importantly, the average grade that they received for reviewed submissions, grouped by each of the evaluation criteria that you've set up.
+1. Personal details, supplied by the student.
+2. Their progress in the course's levels. A **green** bar indicates that the student has passed all milestone targets in that level.
+3. The total targets they've completed, and their average score in your quizzes.
+4. The average grades that they received for reviewed submissions, grouped by each of the evaluation criteria that you've set up.
+5. Their team members, if any.
+6. Coaches assigned to them, if any.
+
+The right-side of the report contains two tabs: the coach's notes about the student, and a list of their reviewed submissions.
+
+## Grading should be objective
 
 Assuming that your grading scale, and your review process is objective, you can use these average grades as an indicator of how well they're performing in your course.
 

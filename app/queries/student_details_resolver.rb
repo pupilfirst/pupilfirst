@@ -19,7 +19,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def completed_level_ids
-    required_targets_by_level = Target.joins(:target_group).where(target_groups: { milestone: true, level_id: course.levels.select(:id) }).distinct(:id)
+    required_targets_by_level = Target.live.joins(:target_group).where(target_groups: { milestone: true, level_id: course.levels.select(:id) }).distinct(:id)
       .pluck(:id, 'target_groups.level_id').each_with_object({}) do |(target_id, level_id), required_targets_by_level|
       required_targets_by_level[level_id] ||= []
       required_targets_by_level[level_id] << target_id

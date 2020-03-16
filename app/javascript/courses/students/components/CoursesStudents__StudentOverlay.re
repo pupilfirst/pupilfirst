@@ -299,19 +299,24 @@ let setSelectedTab = (selectedTab, setState) => {
 };
 
 let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
-  let classes =
+  let reached =
     levelNumber <= currentLevelNumber
       ? "student-overlay__student-level--reached" : "";
-  let classes =
+
+  let current =
     levelNumber == currentLevelNumber
-      ? classes ++ " student-overlay__student-level--current" : classes;
-  levelCompleted
-    ? classes ++ " student-overlay__student-level--completed" : classes;
+      ? " student-overlay__student-level--current" : "";
+
+  let completed =
+    levelCompleted ? " student-overlay__student-level--completed" : "";
+
+  reached ++ current ++ completed;
 };
 
 let levelProgressBar = (levelId, levels, levelsCompleted) => {
   let applicableLevels =
     levels |> Js.Array.filter(level => Level.number(level) != 0);
+
   let courseCompleted =
     applicableLevels
     |> Array.for_all(level => levelsCompleted |> Array.mem(level |> Level.id));
@@ -323,6 +328,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
          "Unable to find level with id" ++ levelId ++ "in StudentOverlay",
        )
     |> Level.number;
+
   <div className="mb-8">
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
@@ -371,6 +377,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
     </div>
   </div>;
 };
+
 let addNoteCB = (setState, studentDetails, note) => {
   setState(state =>
     {

@@ -42,10 +42,8 @@ let loadCoachTeams = (courseId, coachId, send) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        let coachTeams =
-         switch (result##teams##nodes) {
-         | None => [||]
-         | Some(teams) => teams |> Team.makeArrayFromJs
-         };
+         result##teams##nodes
+         |> OptionUtils.mapWithDefault(Team.makeArrayFromJs, [||]);
        send(SaveTeamsData(coachTeams));
        Js.Promise.resolve();
      })

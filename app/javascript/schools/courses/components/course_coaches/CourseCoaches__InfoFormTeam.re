@@ -19,31 +19,29 @@ let deleteTeamEnrollment =
     (team, coach, setDeleting, removeTeamEnrollmentCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
-  if (Webapi.Dom.(
-        window
-        |> Window.confirm(
-             "Are you sure you want to remove "
-             ++ (team |> Team.name)
-             ++ " from the list of assigned teams?",
-           )
-      )) {
-    setDeleting(_ => true);
-    DeleteCoachTeamEnrollmentQuery.make(
-      ~teamId=Team.id(team),
-      ~coachId=CourseCoach.id(coach),
-      (),
-    )
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-         if (response##deleteCoachTeamEnrollment##success) {
-           removeTeamEnrollmentCB(Team.id(team));
-         } else {
-           setDeleting(_ => false);
-         };
-         response |> Js.Promise.resolve;
-       })
-    |> ignore;
-  };
+  WindowUtils.confirm(
+    "Are you sure you want to remove "
+    ++ (team |> Team.name)
+    ++ " from the list of assigned teams?",
+    () => {
+      setDeleting(_ => true);
+      DeleteCoachTeamEnrollmentQuery.make(
+        ~teamId=Team.id(team),
+        ~coachId=CourseCoach.id(coach),
+        (),
+      )
+      |> GraphqlQuery.sendQuery
+      |> Js.Promise.then_(response => {
+           if (response##deleteCoachTeamEnrollment##success) {
+             removeTeamEnrollmentCB(Team.id(team));
+           } else {
+             setDeleting(_ => false);
+           };
+           response |> Js.Promise.resolve;
+         })
+      |> ignore;
+    },
+  );
 };
 
 [@react.component]

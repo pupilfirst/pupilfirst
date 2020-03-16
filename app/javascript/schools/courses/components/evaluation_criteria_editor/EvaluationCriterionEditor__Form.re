@@ -156,7 +156,7 @@ let updateName = (setState, value) => {
 };
 
 let saveDisabled = state => {
-  let hasValidName = String.length(state.name) > 1;
+  let hasValidName = state.name |> String.trim |> String.length > 0;
   !state.dirty || state.saving || !hasValidName;
 };
 
@@ -268,7 +268,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             />
             <School__InputGroupError
               message="Enter a valid name"
-              active={state.dirty && state.name |> String.length < 1}
+              active={state.dirty && state.name |> String.trim |> String.length < 1}
             />
           </div>
         </div>

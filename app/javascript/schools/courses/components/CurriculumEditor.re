@@ -109,15 +109,14 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
      );
 };
 
-let computeIntialState =
-    ((levels, targetGroups, targets, url: ReasonReactRouter.url)) => {
+let computeIntialState = ((levels, targetGroups, targets, path)) => {
   let maxLevel =
     levels
     |> List.sort((l1, l2) => (l2 |> Level.number) - (l1 |> Level.number))
     |> List.hd;
 
   let selectedLevel =
-    switch (url.path) {
+    switch (path) {
     | ["school", "courses", _courseId, "curriculum"] => maxLevel
     | ["school", "courses", _courseId, "targets", targetId, ..._] =>
       levelOfTarget(targetId, targets, levels, targetGroups)
@@ -144,11 +143,11 @@ let make =
       ~targets,
       ~authenticityToken,
     ) => {
-  let url = ReasonReactRouter.useUrl();
+  let path = ReasonReactRouter.useUrl().path;
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      (levels, targetGroups, targets, url),
+      (levels, targetGroups, targets, path),
       computeIntialState,
     );
 

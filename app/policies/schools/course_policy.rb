@@ -32,7 +32,7 @@ module Schools
     alias mark_teams_active? attach_images?
     alias exports? show?
     alias authors? show?
-    alias evaluation_criteria? show?
+    alias evaluation_criteria? curriculum?
 
     class Scope < ::CoursePolicy::Scope
     end

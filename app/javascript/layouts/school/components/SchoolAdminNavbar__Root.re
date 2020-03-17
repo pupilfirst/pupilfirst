@@ -147,12 +147,6 @@ let secondaryNav = (courses, userRole, selectedOption) =>
                "Coaches",
              ),
              secondaryNavOption(
-               "/school/courses/" ++ courseId ++ "/evaluation_criteria",
-               courseSelection,
-               EvaluationCriteria,
-               "Evaluation Criteria",
-             ),
-             secondaryNavOption(
                "/school/courses/" ++ courseId ++ "/exports",
                courseSelection,
                CourseExports,
@@ -168,6 +162,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
            |> React.array
          | CourseAuthor => React.null
          }}
+        {secondaryNavOption(
+           "/school/courses/" ++ courseId ++ "/evaluation_criteria",
+           courseSelection,
+           EvaluationCriteria,
+           "Evaluation Criteria",
+         )}
       </ul>
     </div>
   | _ => React.null

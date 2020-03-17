@@ -1,5 +1,5 @@
 class CreateEvaluationCriterionMutator < ApplicationQuery
-  include AuthorizeSchoolAdmin
+  include AuthorizeAuthor
 
   property :name, validates: { presence: true, length: { minimum: 2, maximum: 50 } }
   property :max_grade, validates: { presence: true }
@@ -21,7 +21,7 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
   def course_must_be_present
     return if course.present?
 
-    errors[:base] << "Course with ID: #{course_id} does not exist"
+    errors[:base] << "Course with ID #{course_id} does not exist"
   end
 
   def create_evaluation_criterion

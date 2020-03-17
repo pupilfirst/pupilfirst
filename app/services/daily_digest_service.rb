@@ -39,12 +39,20 @@ class DailyDigestService
   end
 
   def add_community_updates(user, updates)
-    communities = user.faculty.present? ? user.school.communities : user.communities
+    communities = communities_for_user(user)
 
     return [] if communities.blank?
 
     communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
       updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
+    end
+  end
+
+  def communities_for_user(user)
+    if user.faculty.present?
+      Community.joins(:courses).where(courses: { id: user.faculty.courses })
+    else
+      user.communities
     end
   end
 

@@ -231,7 +231,7 @@ describe DailyDigestService do
     end
   end
 
-  context 'when their is no updates' do
+  context 'when there are no updates' do
     let(:school_2) { create :school }
     let(:course_1) { create :course, school: school_2 }
     let(:level_1) { create :level, :one, course: course_1 }

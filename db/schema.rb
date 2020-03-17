@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_113621) do
+ActiveRecord::Schema.define(version: 2020_03_17_100229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -119,6 +119,31 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
   end
 
+  create_table "billing_accounts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_billing_accounts_on_user_id"
+  end
+
+  create_table "billing_beneficiary", force: :cascade do |t|
+    t.bigint "founder_id", null: false
+    t.bigint "billing_account_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["billing_account_id"], name: "index_billing_beneficiary_on_billing_account_id"
+    t.index ["founder_id"], name: "index_billing_beneficiary_on_founder_id"
+  end
+
+  create_table "billing_plans", force: :cascade do |t|
+    t.bigint "payment_plan_id", null: false
+    t.bigint "billing_account_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["billing_account_id"], name: "index_billing_plans_on_billing_account_id"
+    t.index ["payment_plan_id"], name: "index_billing_plans_on_payment_plan_id"
+  end
+
   create_table "coach_notes", force: :cascade do |t|
     t.bigint "author_id"
     t.bigint "student_id"
@@ -212,6 +237,28 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
     t.bigint "target_version_id"
     t.index ["block_type"], name: "index_content_blocks_on_block_type"
     t.index ["target_version_id"], name: "index_content_blocks_on_target_version_id"
+  end
+
+  create_table "coupon_usages", force: :cascade do |t|
+    t.bigint "coupon_id", null: false
+    t.bigint "billing_plan_id", null: false
+    t.string "suffix"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["billing_plan_id"], name: "index_coupon_usages_on_billing_plan_id"
+    t.index ["coupon_id"], name: "index_coupon_usages_on_coupon_id"
+  end
+
+  create_table "coupons", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.text "description"
+    t.string "prefix", null: false
+    t.jsonb "suffixes", null: false
+    t.integer "discount", null: false
+    t.integer "limit", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_coupons_on_course_id"
   end
 
   create_table "course_authors", force: :cascade do |t|
@@ -357,6 +404,12 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
+  create_table "free_plans", force: :cascade do |t|
+    t.integer "duration", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "leaderboard_entries", force: :cascade do |t|
     t.bigint "founder_id"
     t.datetime "period_from", null: false
@@ -387,6 +440,34 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
+  end
+
+  create_table "one_time_purchase_plans", force: :cascade do |t|
+    t.integer "amount", null: false
+    t.integer "duration", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "payment_plans", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.bigint "course_id", null: false
+    t.boolean "showcase", null: false
+    t.string "plan_type", null: false
+    t.bigint "plan_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_payment_plans_on_course_id"
+    t.index ["plan_type", "plan_id"], name: "index_payment_plans_on_plan_type_and_plan_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "billing_plan_id", null: false
+    t.integer "amount", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["billing_plan_id"], name: "index_payments_on_billing_plan_id"
   end
 
   create_table "platform_feedback", id: :serial, force: :cascade do |t|
@@ -566,6 +647,13 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "subscription_plans", force: :cascade do |t|
+    t.integer "amount", null: false
+    t.integer "period", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -824,12 +912,20 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "applicants", "courses"
+  add_foreign_key "billing_accounts", "users"
+  add_foreign_key "billing_beneficiary", "billing_accounts"
+  add_foreign_key "billing_beneficiary", "founders"
+  add_foreign_key "billing_plans", "billing_accounts"
+  add_foreign_key "billing_plans", "payment_plans"
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"
+  add_foreign_key "coupon_usages", "billing_plans"
+  add_foreign_key "coupon_usages", "coupons"
+  add_foreign_key "coupons", "courses"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"
@@ -845,6 +941,8 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"
+  add_foreign_key "payment_plans", "courses"
+  add_foreign_key "payments", "billing_plans"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"

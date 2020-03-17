@@ -17,7 +17,7 @@ class DailyDigestService
       .where(email_bounced_at: nil).each do |user|
       updates_for_user = create_updates(updates, user)
 
-      next if updates_for_user.blank?
+      next if updates_for_user[:community_updates].blank? && updates_for_user[:updates_for_coach].blank?
 
       if @debug
         debug_value[user.id] = updates_for_user
@@ -39,9 +39,11 @@ class DailyDigestService
   end
 
   def add_community_updates(user, updates)
-    return [] if user.communities.blank?
+    communities = user.faculty.present? ? user.school.communities : user.communities
 
-    user.communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
+    return [] if communities.blank?
+
+    communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
       updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
     end
   end
@@ -52,7 +54,7 @@ class DailyDigestService
     return [] if coach.blank?
 
     coach.courses.map do |course|
-      pending_submissions = course.timeline_events.pending_review
+      pending_submissions = course.timeline_events.where('timeline_events.created_at > ?', 1.week.ago).pending_review
       pending_submissions_in_course = pending_submissions.count
 
       if pending_submissions_in_course.zero?

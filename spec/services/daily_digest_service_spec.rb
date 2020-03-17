@@ -177,9 +177,15 @@ describe DailyDigestService do
       let(:team_2) { create :startup, level: level_2 }
       let(:submission_pending_2) { create(:timeline_event, latest: true, target: target_2) }
       let(:submission_pending_3) { create(:timeline_event, latest: true, target: target_2) }
+      let(:submission_pending_4) { create(:timeline_event, latest: true, target: target_1, created_at: 2.weeks.ago) }
 
       let(:coach) { create :faculty, school: school }
       let(:team_coach) { create :faculty, school: school }
+
+      let(:community_1) { create :community, school: school, courses: [course_1] }
+      let(:t1_user) { team_1.founders.first.user }
+
+      let!(:question_c1) { create :question, community: community_1, creator: t1_user }
 
       before do
         create :faculty_course_enrollment, faculty: coach, course: course_1
@@ -206,6 +212,8 @@ describe DailyDigestService do
         expect(b).to include("There are 3")
         expect(b).to include("new submissions to review")
         expect(b).to include("in 2 courses")
+        # The email should include community updates
+        expect(b).to include(community_1.name)
       end
 
       it 'When the user is a team coach' do
@@ -218,7 +226,33 @@ describe DailyDigestService do
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
         expect(b).to include("(2 assigned to you)")
+        expect(b).to include("(none of which are assigned to you)")
       end
+    end
+  end
+
+  context 'when their is no updates' do
+    let(:school_2) { create :school }
+    let(:course_1) { create :course, school: school_2 }
+    let(:level_1) { create :level, :one, course: course_1 }
+    let(:target_group_1) { create :target_group, level: level_1 }
+    let!(:target_1) { create :target, :for_founders, target_group: target_group_1 }
+    let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+    let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
+
+    let(:team_1) { create :startup, level: level_1 }
+    let(:coach) { create :faculty, school: school_2 }
+    let(:team_coach) { create :faculty, school: school_2 }
+
+    before do
+      create :faculty_course_enrollment, faculty: coach, course: course_1
+    end
+
+    it 'should not trigger email' do
+      subject.execute
+
+      open_email(coach.user.email)
+      expect(current_email).to eq(nil)
     end
   end
 end

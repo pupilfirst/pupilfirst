@@ -6,7 +6,6 @@ module Layouts
         school_logo_path: school_logo_path,
         school_icon_path: school_icon_path,
         courses: courses,
-        review_path: coach_dashboard_path,
         is_course_author: current_user_is_a_course_author?
       }
     end
@@ -26,18 +25,6 @@ module Layouts
         view.rails_blob_path(current_school.icon_variant("thumb"), only_path: true)
       else
         '/favicon.png'
-      end
-    end
-
-    def coach_dashboard_path
-      @coach_dashboard_path ||= begin
-        faculty = current_user.faculty
-
-        if faculty.present?
-          if faculty.courses.exists?
-            view.review_course_path(faculty.courses.first)
-          end
-        end
       end
     end
 

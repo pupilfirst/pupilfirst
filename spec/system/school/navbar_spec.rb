@@ -56,24 +56,4 @@ feature 'School Admin Navbar', js: true do
     # Navbar should also include links to home page
     expect(page).to have_link('Home', href: "/home")
   end
-
-  context 'when the user is also a student and a coach' do
-    let(:level) { create :level, course: course_1 }
-    let(:team) { create :startup, level: level }
-
-    let!(:student) { create :founder, startup: team, user: school_admin.user }
-    let(:coach) { create :faculty, school: school_1, user: school_admin.user }
-    let!(:coach_enrollment) { create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team }
-
-    scenario 'school admin visits the admin interface' do
-      sign_in_user school_admin.user, referer: school_path
-
-      # User should be on the school admin overview page.
-      expect(current_path).to eq('/school')
-
-      # Navbar should also include links to home page and the coach's review dashboard.
-      expect(page).to have_link('Home', href: "/home")
-      expect(page).to have_link('Review Submissions', href: "/courses/#{course_1.id}/review")
-    end
-  end
 end

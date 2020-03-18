@@ -92,13 +92,13 @@ let longTextWarning = value => {
 
   let colors =
     currentLength < 4900
-      ? "text-orange-700 bg-orange-200" : "text-red-600 bg-red-100";
+      ? "text-orange-700 bg-orange-100" : "text-red-600 bg-red-100";
 
   showWarning
     ? <div className="flex justify-between items-center">
         <div
           className={
-            "hidden md:inline px-1 py-px rounded text-xs font-semibold inline-flex items-center "
+            "hidden md:inline px-2 py-px rounded text-xs font-semibold inline-flex items-center "
             ++ colors
           }>
           <span className="mr-2">
@@ -111,7 +111,7 @@ let longTextWarning = value => {
         </div>
         <div
           className={
-            "flex-shrink-1 text-xs px-2 py-1 border border-transparent rounded-full "
+            "flex-shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded "
             ++ colors
           }>
           {currentLength |> string_of_int |> str}

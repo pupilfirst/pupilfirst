@@ -36,6 +36,7 @@ class TimelineEvent < ApplicationRecord
   scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
+  scope :failed, -> { where(passed_at: nil).where.not(evaluator_id: nil) }
   scope :pending_review, -> { not_auto_verified.where(evaluator_id: nil) }
   scope :evaluated_by_faculty, -> { where.not(evaluator_id: nil) }
   scope :from_founders, ->(founders) { joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders }) }

@@ -20,6 +20,7 @@ type state = {
 type action =
   | Select(tab)
   | SetTargetDetails(TargetDetails.t)
+  | AddSubmission(Target.role)
   | ClearTargetDetails;
 
 let initialState = {targetDetails: None, tab: Learn};
@@ -32,6 +33,16 @@ let reducer = (state, action) =>
       targetDetails: Some(targetDetails),
     }
   | ClearTargetDetails => {...state, targetDetails: None}
+  | AddSubmission(role) =>
+    switch (role) {
+    | Target.Student => state
+    | Team => {
+        ...state,
+        targetDetails:
+          state.targetDetails
+          |> OptionUtils.map(TargetDetails.clearPendingUserIds),
+      }
+    }
   };
 
 let closeOverlay = course =>
@@ -153,8 +164,7 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
   </div>;
 };
 
-let addSubmission =
-    (target, state, send, addSubmissionCB, submission, submissionAttachments) => {
+let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
@@ -350,8 +360,10 @@ let completeSection =
       preview,
     ) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType;
+
   let addVerifiedSubmissionCB =
     addVerifiedSubmission(target, state, send, addSubmissionCB);
+
   <div className={completeSectionClasses(state.tab, completionType)}>
     {switch (targetStatus |> TargetStatus.status, completionType) {
      | (Pending, Evaluated) =>
@@ -535,6 +547,11 @@ let quickNavigationLinks = (targetDetails, send) => {
   </div>;
 };
 
+let updatePendingUserIdsWhenAddingSubmission = (send, target, addSubmissionCB, submission) => {
+  send(AddSubmission(target |> Target.role));
+  addSubmissionCB(submission)
+};
+
 [@react.component]
 let make =
     (
@@ -604,7 +621,7 @@ let make =
               target,
               targetDetails,
               targetStatus,
-              addSubmissionCB,
+              updatePendingUserIdsWhenAddingSubmission(send, target, addSubmissionCB),
               evaluationCriteria,
               coaches,
               users,

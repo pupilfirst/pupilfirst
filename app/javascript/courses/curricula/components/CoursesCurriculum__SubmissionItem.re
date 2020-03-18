@@ -86,11 +86,46 @@ let showShortText = (value, id, updateResultCB) => {
   </div>;
 };
 
+let longTextWarning = value => {
+  let currentLength = value |> String.length;
+  let showWarning = notBlank(value) && currentLength > 4500;
+
+  let colors =
+    currentLength < 4900
+      ? "text-orange-700 bg-orange-200" : "text-red-600 bg-red-100";
+
+  showWarning
+    ? <div className="flex justify-between items-center">
+        <div
+          className={
+            "hidden md:inline px-1 py-px rounded text-xs font-semibold inline-flex items-center "
+            ++ colors
+          }>
+          <span className="mr-2">
+            <i className="fas fa-exclamation-triangle" />
+          </span>
+          <span>
+            {"Please keep your answer to less than 5000 characters in length."
+             |> str}
+          </span>
+        </div>
+        <div
+          className={
+            "flex-shrink-1 text-xs px-2 py-1 border border-transparent rounded-full "
+            ++ colors
+          }>
+          {currentLength |> string_of_int |> str}
+          {" / 5000" |> str}
+        </div>
+      </div>
+    : React.null;
+};
+
 let showLongText = (value, id, updateResultCB) => {
   <div>
     <textarea
       id
-      maxLength=1000
+      maxLength=5000
       className="h-40 w-full rounded-lg p-4 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner rounded-lg"
       value
       onChange={e =>
@@ -99,10 +134,7 @@ let showLongText = (value, id, updateResultCB) => {
         )
       }
     />
-    {showError(
-       "Answer should be less than 1000 characters",
-       !ChecklistItem.validLongText(value) && notBlank(value),
-     )}
+    {longTextWarning(value)}
   </div>;
 };
 

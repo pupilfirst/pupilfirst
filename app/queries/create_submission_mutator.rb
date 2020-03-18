@@ -30,7 +30,7 @@ class CreateSubmissionMutator < ApplicationQuery
 
     return if submittable && (submission_required || submitted_but_resubmittable)
 
-    errors[:base] << "NotSubmittable(#{target_status})"
+    errors[:base] << "The status of this target is '#{target_status}', so you cannot add a new submission; please reload the page"
   end
 
   def create_submission

@@ -72,11 +72,11 @@ class CreateSubmissionMutator < ApplicationQuery
       when Target::CHECKLIST_KIND_LINK
         result.length >= 3 && result.length <= 2048
       when Target::CHECKLIST_KIND_LONG_TEXT
-        result.length >= 1
+        result.length >= 1 && result.length <= 10_000
       when Target::CHECKLIST_KIND_MULTI_CHOICE
-        result.length >= 1
+        result.length >= 1 && result.length <= 500
       when Target::CHECKLIST_KIND_SHORT_TEXT
-        result.length >= 1
+        result.length >= 1 && result.length <= 500
       else
         false
     end

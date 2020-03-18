@@ -2,6 +2,40 @@ let str = React.string;
 
 open QuestionsShow__Types;
 
+type state = {
+  title: string,
+  titleTimer: option(string),
+  description: string,
+  saving: bool,
+};
+
+let computeInitialState = question => {
+  let (title, description) =
+    switch (question) {
+    | Some(question) => (
+        question |> Question.title,
+        question |> Question.description,
+      )
+    | None => ("", "")
+    };
+
+  {title, description, titleTimer: None, saving: false};
+};
+
+type action =
+  | UpdateTitle(string)
+  | UpdateDescription(string)
+  | BeginSaving
+  | FailSaving;
+
+let reducer = (state, action) =>
+  switch (action) {
+  | UpdateTitle(title) => {...state, title}
+  | UpdateDescription(description) => {...state, description}
+  | BeginSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
+  };
+
 module CreateQuestionQuery = [%graphql
   {|
   mutation CreateQuestionQuery($title: String!, $description: String!, $communityId: ID!, $targetId: ID) {
@@ -83,32 +117,34 @@ module CreateQuestionErrorHandler =
 module UpdateQuestionErrorHandler =
   GraphqlErrorHandler.Make(UpdateQuestionError);
 
+let isInvalidString = s => s |> String.trim == "";
+
+let saveDisabled = state =>
+  state.description |> isInvalidString || state.title |> isInvalidString;
+
 let handleCreateOrUpdateQuestion =
-    (
-      title,
-      description,
-      communityId,
-      setSaving,
-      target,
-      question,
-      updateQuestionCB,
-      event,
-    ) => {
+    (state, send, communityId, target, question, updateQuestionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
-  if (description != "") {
-    setSaving(_ => true);
+  if (saveDisabled(state)) {
+    send(BeginSaving);
+
     switch (question) {
     | Some(question) =>
       let id = question |> Question.id;
-      UpdateQuestionQuery.make(~id, ~title, ~description, ())
+      UpdateQuestionQuery.make(
+        ~id,
+        ~title=state.title,
+        ~description=state.description,
+        (),
+      )
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##updateQuestion) {
            | `Success(updated) =>
              switch (updated, updateQuestionCB) {
              | (true, Some(questionCB)) =>
-               questionCB(title, description);
+               questionCB(state.title, state.description);
                Notification.success("Done!", "Question Updated sucessfully");
              | (_, _) =>
                Notification.error(
@@ -121,39 +157,37 @@ let handleCreateOrUpdateQuestion =
              Js.Promise.reject(UpdateQuestionErrorHandler.Errors(errors))
            }
          )
-      |> UpdateQuestionErrorHandler.catch(() => setSaving(_ => false))
+      |> UpdateQuestionErrorHandler.catch(() => send(FailSaving))
       |> ignore;
     | None =>
-      (
-        switch (target) {
-        | Some(target) =>
-          CreateQuestionQuery.make(
-            ~description,
-            ~title,
-            ~communityId,
-            ~targetId=target |> QuestionsEditor__Target.id,
-            (),
-          )
-        | None =>
-          CreateQuestionQuery.make(~description, ~title, ~communityId, ())
-        }
+      let targetId = target |> OptionUtils.map(QuestionsEditor__Target.id);
+
+      CreateQuestionQuery.make(
+        ~description=state.description,
+        ~title=state.title,
+        ~communityId,
+        ~targetId?,
+        (),
       )
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response =>
            switch (response##createQuestion) {
            | `QuestionId(questionId) =>
-             handleResponseCB(questionId, title);
+             handleResponseCB(questionId, state.title);
              Notification.success("Done!", "Question has been saved.");
              Js.Promise.resolve();
            | `Errors(errors) =>
              Js.Promise.reject(CreateQuestionErrorHandler.Errors(errors))
            }
          )
-      |> CreateQuestionErrorHandler.catch(() => setSaving(_ => false))
-      |> ignore
+      |> CreateQuestionErrorHandler.catch(() => send(FailSaving))
+      |> ignore;
     };
   } else {
-    Notification.error("Empty", "Answer cant be blank");
+    Notification.error(
+      "Error!",
+      "Question title and description must be present.",
+    );
   };
 };
 
@@ -166,24 +200,9 @@ let make =
       ~question=?,
       ~updateQuestionCB=?,
     ) => {
-  let (saving, setSaving) = React.useState(() => false);
-  let (description, setDescription) =
-    React.useState(() =>
-      switch (question) {
-      | Some(q) => q |> Question.description
-      | None => ""
-      }
-    );
-  let (title, setTitle) =
-    React.useState(() =>
-      switch (question) {
-      | Some(q) => q |> Question.title
-      | None => ""
-      }
-    );
-  let onChange = description => setDescription(_ => description);
-  let saveDisabled = description == "" || title == "";
-  <DisablingCover disabled=saving>
+  let (state, send) =
+    React.useReducerWithMapState(reducer, question, computeInitialState);
+  <DisablingCover disabled={state.saving}>
     <div className="bg-gray-100">
       <div className="flex-1 flex flex-col px-2">
         <div>
@@ -236,10 +255,10 @@ let make =
             </label>
             <input
               id="title"
-              value=title
+              value={state.title}
               className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               onChange={event =>
-                setTitle(ReactEvent.Form.target(event)##value)
+                send(UpdateTitle(ReactEvent.Form.target(event)##value))
               }
               placeholder="Ask your question here briefly."
             />
@@ -251,20 +270,19 @@ let make =
             <div className="w-full flex flex-col">
               <MarkdownEditor
                 textareaId="description"
-                onChange
-                value=description
+                onChange={markdown => send(UpdateDescription(markdown))}
+                value={state.description}
                 placeholder="Your description gives people the information they need to help you answer your question. You can use Markdown to format this text."
                 profile=Markdown.QuestionAndAnswer
                 maxLength=10000
               />
               <div className="flex justify-end pt-3 border-t">
                 <button
-                  disabled=saveDisabled
+                  disabled={saveDisabled(state)}
                   onClick={handleCreateOrUpdateQuestion(
-                    title,
-                    description,
+                    state,
+                    send,
                     communityId,
-                    setSaving,
                     target,
                     question,
                     updateQuestionCB,

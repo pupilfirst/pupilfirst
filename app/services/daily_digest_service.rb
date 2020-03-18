@@ -73,7 +73,8 @@ class DailyDigestService
           course_id: course.id,
           course_name: course.name,
           pending_submissions: pending_submissions_in_course,
-          pending_submissions_for_coach: pending_submissions.from_founders(students).count
+          pending_submissions_for_coach: pending_submissions.from_founders(students).count,
+          is_team_coach: students.any?
         }
       end
     end.flatten

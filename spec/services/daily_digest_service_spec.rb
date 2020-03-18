@@ -238,6 +238,7 @@ describe DailyDigestService do
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
         expect(b).to include("(2 assigned to you)")
+        expect(b).not_to include("(none of which are assigned to you)")
       end
 
       it "when the coach doesn't have review access to all courses" do

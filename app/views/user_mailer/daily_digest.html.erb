@@ -36,7 +36,9 @@
         <li style="padding: 2px 0px;">
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
           <span><strong><%= stats[:pending_submissions] %></strong>
-            <%= stats[:pending_submissions_for_coach] == 0 ? '' : "(#{stats[:pending_submissions_for_coach]} assigned to you)" %>
+            <% if stats[:is_team_coach] %>
+              <%= stats[:pending_submissions_for_coach] == 0 ? '(none of which are assigned to you)' : "(#{stats[:pending_submissions_for_coach]} assigned to you)" %>
+            <% end %>
           </span>
         </li>
       <% end %>

@@ -167,6 +167,9 @@ feature 'Target Overlay', js: true do
       # The target should be marked as passed.
       expect(page).to have_selector('.course-overlay__header-title-card', text: 'Passed')
 
+      # Since this is a team target, other students shouldn't be listed as pending.
+      expect(page).not_to have_content('You have team members who are yet to complete this target:')
+
       # Target should have been marked as passed in the database.
       expect(target_l1.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
     end

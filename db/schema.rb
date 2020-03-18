@@ -651,7 +651,8 @@ ActiveRecord::Schema.define(version: 2020_03_17_100229) do
 
   create_table "subscription_plans", force: :cascade do |t|
     t.integer "amount", null: false
-    t.integer "period", null: false
+    t.integer "interval_count", null: false
+    t.string "interval", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

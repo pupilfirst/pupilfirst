@@ -16,7 +16,8 @@ class AddPaymentTables < ActiveRecord::Migration[6.0]
 
     create_table :subscription_plans do |t|
       t.integer :amount, null: false
-      t.integer :period, null: false
+      t.integer :interval_count, null: false
+      t.string :interval, null: false
       t.timestamps
     end
 

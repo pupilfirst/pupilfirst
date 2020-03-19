@@ -4,7 +4,10 @@ open QuestionsShow__Types;
 
 type state = {
   title: string,
-  titleTimer: option(string),
+  titleTimeoutId: option(Js.Global.timeoutId),
+  suggestions: array(QuestionSuggestion.t),
+  searching: bool,
+  showSuggestions: bool,
   description: string,
   saving: bool,
 };
@@ -19,22 +22,107 @@ let computeInitialState = question => {
     | None => ("", "")
     };
 
-  {title, description, titleTimer: None, saving: false};
+  {
+    title,
+    description,
+    titleTimeoutId: None,
+    suggestions: [||],
+    searching: false,
+    showSuggestions: false,
+    saving: false,
+  };
 };
 
 type action =
-  | UpdateTitle(string)
+  | UpdateTitle(string, option(Js.Global.timeoutId))
   | UpdateDescription(string)
   | BeginSaving
-  | FailSaving;
+  | FailSaving
+  | BeginSearching
+  | FinishSearching(array(QuestionSuggestion.t))
+  | FailSearching
+  | ShowSuggestions;
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateTitle(title) => {...state, title}
+  | UpdateTitle(title, titleTimeoutId) =>
+    let (suggestions, showSuggestions) =
+      switch (titleTimeoutId) {
+      | Some(_) => (state.suggestions, state.showSuggestions)
+      | None => ([||], false)
+      };
+
+    {...state, title, titleTimeoutId, suggestions, showSuggestions};
   | UpdateDescription(description) => {...state, description}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
+  | BeginSearching => {...state, searching: true}
+  | FinishSearching(suggestions) =>
+    let showSuggestions =
+      suggestions |> ArrayUtils.isEmpty ? false : state.showSuggestions;
+
+    {...state, searching: false, suggestions, showSuggestions};
+  | FailSearching => {...state, searching: false}
+  | ShowSuggestions => {...state, showSuggestions: true}
   };
+
+module SimilarQuestionsQuery = [%graphql
+  {|
+    query SimilarQuestionsQuery($communityId: ID!, $title: String!) {
+      similarQuestions(communityId: $communityId, title: $title) {
+        id
+        title
+        createdAt
+        answersCount
+      }
+    }
+  |}
+];
+
+let searchForSimilarQuestions = (send, title, communityId, ()) => {
+  send(BeginSearching);
+
+  let trimmedTitle = title |> String.trim;
+
+  SimilarQuestionsQuery.make(~communityId, ~title=trimmedTitle, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+       let suggestions =
+         result##similarQuestions |> Array.map(QuestionSuggestion.makeFromJs);
+       send(FinishSearching(suggestions));
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(e => {
+       Js.log(e);
+       Notification.warn(
+         "Oops!",
+         "We failed to fetch similar questions from the server! Our team has been notified about this error.",
+       );
+       send(FailSaving);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let isInvalidString = s => s |> String.trim == "";
+
+let updateTitle = (state, send, communityId, title) => {
+  state.titleTimeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
+
+  let timeoutId =
+    if (title |> isInvalidString) {
+      None;
+    } else {
+      let timeoutId =
+        Js.Global.setTimeout(
+          searchForSimilarQuestions(send, state.title, communityId),
+          1500,
+        );
+      Some(timeoutId);
+    };
+
+  send(UpdateTitle(title, timeoutId));
+};
 
 module CreateQuestionQuery = [%graphql
   {|
@@ -117,8 +205,6 @@ module CreateQuestionErrorHandler =
 module UpdateQuestionErrorHandler =
   GraphqlErrorHandler.Make(UpdateQuestionError);
 
-let isInvalidString = s => s |> String.trim == "";
-
 let saveDisabled = state =>
   state.description |> isInvalidString || state.title |> isInvalidString;
 
@@ -160,7 +246,7 @@ let handleCreateOrUpdateQuestion =
       |> UpdateQuestionErrorHandler.catch(() => send(FailSaving))
       |> ignore;
     | None =>
-      let targetId = target |> OptionUtils.map(QuestionsEditor__Target.id);
+      let targetId = target |> OptionUtils.map(LinkedTarget.id);
 
       CreateQuestionQuery.make(
         ~description=state.description,
@@ -188,6 +274,63 @@ let handleCreateOrUpdateQuestion =
       "Error!",
       "Question title and description must be present.",
     );
+  };
+};
+
+let suggestions = state =>
+  state.suggestions |> ArrayUtils.isNotEmpty && state.showSuggestions
+    ? <div className="mt-3">
+        <span className="tracking-wide text-gray-900 text-xs font-semibold">
+          {"Similar Questions" |> str}
+        </span>
+        {state.suggestions
+         |> Array.map(suggestion => {
+              let askedOn =
+                suggestion
+                |> QuestionSuggestion.createdAt
+                |> DateTime.format(DateTime.OnlyDate);
+              let answers = suggestion |> QuestionSuggestion.answersCount;
+              let answersCountPrefix = answers == 1 ? " answer" : " answers";
+
+              <div
+                key={suggestion |> QuestionSuggestion.id}
+                className="mt-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg cursor-pointer">
+                <div className="font-semibold">
+                  {suggestion |> QuestionSuggestion.title |> str}
+                </div>
+                <div className="flex mt-1 items-center">
+                  <div className="text-xs">
+                    {"Asked on " ++ askedOn |> str}
+                  </div>
+                  <div
+                    className="text-xs px-1 py-px border border-transparent rounded bg-green-200 font-semibold ml-2">
+                    {(answers |> string_of_int) ++ answersCountPrefix |> str}
+                  </div>
+                </div>
+              </div>;
+            })
+         |> React.array}
+      </div>
+    : React.null;
+
+let suggestionsButton = (state, send) => {
+  let suggestionsCount = state.suggestions |> Array.length;
+
+  if (state.searching) {
+    <div className="mr-2"> <FaIcon classes="fas fa-spinner fa-pulse" /> </div>;
+  } else if (suggestionsCount > 0 && !state.showSuggestions) {
+    let questionsPrefix = suggestionsCount > 1 ? "questions" : "question";
+    <button
+      className="mr-2 btn btn-primary-ghost"
+      onClick={_ => send(ShowSuggestions)}>
+      {"Show "
+       ++ (suggestionsCount |> string_of_int)
+       ++ " similar "
+       ++ questionsPrefix
+       |> str}
+    </button>;
+  } else {
+    React.null;
   };
 };
 
@@ -224,9 +367,7 @@ let make =
                  <span className="font-semibold block text-xs">
                    {"Linked Target: " |> str}
                  </span>
-                 <span>
-                   {target |> QuestionsEditor__Target.title |> str}
-                 </span>
+                 <span> {target |> LinkedTarget.title |> str} </span>
                </p>
                <a href="./new_question" className="btn btn-default">
                  {"Clear" |> str}
@@ -258,7 +399,8 @@ let make =
               value={state.title}
               className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               onChange={event =>
-                send(UpdateTitle(ReactEvent.Form.target(event)##value))
+                ReactEvent.Form.target(event)##value
+                |> updateTitle(state, send, communityId)
               }
               placeholder="Ask your question here briefly."
             />
@@ -276,26 +418,30 @@ let make =
                 profile=Markdown.QuestionAndAnswer
                 maxLength=10000
               />
-              <div className="flex justify-end pt-3 border-t">
-                <button
-                  disabled={saveDisabled(state)}
-                  onClick={handleCreateOrUpdateQuestion(
-                    state,
-                    send,
-                    communityId,
-                    target,
-                    question,
-                    updateQuestionCB,
-                  )}
-                  className="btn btn-primary">
-                  {(
-                     switch (question) {
-                     | Some(_) => "Update Question"
-                     | None => "Post Your Question"
-                     }
-                   )
-                   |> str}
-                </button>
+              <div className="border-t">
+                {suggestions(state)}
+                <div className="flex justify-end mt-3 items-center">
+                  {suggestionsButton(state, send)}
+                  <button
+                    disabled={saveDisabled(state)}
+                    onClick={handleCreateOrUpdateQuestion(
+                      state,
+                      send,
+                      communityId,
+                      target,
+                      question,
+                      updateQuestionCB,
+                    )}
+                    className="btn btn-primary border border-transparent">
+                    {(
+                       switch (question) {
+                       | Some(_) => "Update Question"
+                       | None => "Post Your Question"
+                       }
+                     )
+                     |> str}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

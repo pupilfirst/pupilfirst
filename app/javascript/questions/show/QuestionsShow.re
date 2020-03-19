@@ -152,7 +152,7 @@ let make =
                  <span className="ml-2"> {"Close" |> str} </span>
                </a>
              </div>
-             <QuestionsEditor
+             <QuestionsShow__QuestionEditor
                communityId
                target=None
                showBackButton=false

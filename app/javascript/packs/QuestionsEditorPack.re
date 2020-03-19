@@ -1,6 +1,8 @@
+open QuestionsShow__Types;
+
 type props = {
   communityId: string,
-  target: option(QuestionsEditor__Target.t),
+  target: option(LinkedTarget.t),
 };
 
 let decodeProps = json =>
@@ -8,7 +10,7 @@ let decodeProps = json =>
     communityId: json |> field("communityId", string),
     target:
       json
-      |> field("target", nullable(QuestionsEditor__Target.decode))
+      |> field("target", nullable(LinkedTarget.decode))
       |> Js.Null.toOption,
   };
 
@@ -21,6 +23,9 @@ let props =
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <QuestionsEditor communityId={props.communityId} target={props.target} />,
+  <QuestionsShow__QuestionEditor
+    communityId={props.communityId}
+    target={props.target}
+  />,
   "questions-editor",
 );

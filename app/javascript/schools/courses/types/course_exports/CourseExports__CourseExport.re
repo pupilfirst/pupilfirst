@@ -1,3 +1,5 @@
+exception UnexpectedExportType(string);
+
 type id = string;
 
 type file = {
@@ -5,21 +7,28 @@ type file = {
   createdAt: string,
 };
 
+type exportType =
+  | Teams
+  | Students(tags)
+and tags = array(string);
+
 type t = {
   id,
   createdAt: string,
   file: option(file),
-  tags: array(string),
   reviewedOnly: bool,
+  exportType,
 };
 
 let id = t => t.id;
 let createdAt = (t: t) => t.createdAt;
 let file = t => t.file;
-let tags = t => t.tags;
+let exportType = t => t.exportType;
 let reviewedOnly = t => t.reviewedOnly;
 let fileCreatedAt = (file: file) => file.createdAt;
 let filePath = file => file.path;
+
+let studentsWithoutTags = Students([||]);
 
 let decodeFile = json =>
   Json.Decode.{
@@ -32,14 +41,31 @@ let decode = json =>
     id: json |> field("id", string),
     createdAt: json |> field("createdAt", string),
     file: json |> field("file", nullable(decodeFile)) |> Js.Null.toOption,
-    tags: json |> field("tags", array(string)),
+    exportType:
+      switch (json |> field("exportType", string)) {
+      | "students" => Students(json |> field("tags", array(string)))
+      | "teams" => Teams
+      | otherExportType =>
+        Rollbar.error(
+          "Unexpected exportType encountered: " ++ otherExportType,
+        );
+        raise(UnexpectedExportType(otherExportType));
+      },
     reviewedOnly: json |> field("reviewedOnly", bool),
   };
 
-let make = (~id, ~createdAt, ~tags, ~reviewedOnly) => {
+let makeStudentsExport = (~id, ~createdAt, ~tags, ~reviewedOnly) => {
   id,
   createdAt,
-  tags,
+  exportType: Students(tags),
   reviewedOnly,
   file: None,
+};
+
+let makeTeamsExport = (~id, ~createdAt, ~reviewedOnly) => {
+  id,
+  createdAt,
+  reviewedOnly,
+  file: None,
+  exportType: Teams,
 };

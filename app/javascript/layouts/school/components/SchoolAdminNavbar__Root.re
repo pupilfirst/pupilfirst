@@ -13,8 +13,9 @@ type courseSelection =
   | Authors;
 
 type settingsSelection =
+  | Admins
   | Customization
-  | Admins;
+  | Payments;
 
 type userRole =
   | SchoolAdmin
@@ -112,6 +113,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
            Admins,
            "Admins",
          )}
+        {secondaryNavOption(
+           "/school/payments",
+           settingsSelection,
+           Payments,
+           "Payments",
+         )}
       </ul>
     </div>
   | SelectedCourse(courseId, courseSelection) =>
@@ -185,6 +192,7 @@ let make =
     | ["school"] => (Overview, false)
     | ["school", "coaches"] => (SchoolCoaches, false)
     | ["school", "customize"] => (Settings(Customization), true)
+    | ["school", "payments"] => (Settings(Payments), true)
     | ["school", "courses"] => (Courses, false)
     | ["school", "courses", courseId, "students"]
     | ["school", "courses", courseId, "inactive_students"] => (

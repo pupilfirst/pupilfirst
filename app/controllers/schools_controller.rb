@@ -15,6 +15,11 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
+  # GET /school/customize
+  def payments
+    authorize current_school
+  end
+
   # POST /school/images
   def images
     authorize current_school

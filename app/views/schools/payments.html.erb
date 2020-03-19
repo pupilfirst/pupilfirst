@@ -1,0 +1,14 @@
+<% content_for(:head) do %>
+  <title><%= current_school.name %> | Payments</title>
+  <%#= stylesheet_pack_tag 'SchoolPaymentsPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolPaymentsPack', nonce: true %>
+<% end %>
+
+<script type="application/json" id="school-payments-data">
+  <%= { schoolId: current_school.id.to_s }.to_json.html_safe %>
+</script>
+
+<div id="school-payments" class="w-full overflow-y-auto"></div>

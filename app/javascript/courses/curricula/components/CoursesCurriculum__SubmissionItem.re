@@ -121,18 +121,18 @@ let longTextWarning = value => {
     : React.null;
 };
 
+let updateLongText = (updateResultCB, value) => {
+  updateResultCB(ChecklistItem.LongText(value));
+};
+
 let showLongText = (value, id, updateResultCB) => {
   <div>
-    <textarea
-      id
-      maxLength=5000
-      className="h-40 w-full rounded-lg p-4 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner rounded-lg"
+    <MarkdownEditor
+      textareaId=id
+      onChange={updateLongText(updateResultCB)}
       value
-      onChange={e =>
-        updateResultCB(
-          ChecklistItem.LongText(ReactEvent.Form.target(e)##value),
-        )
-      }
+      profile=Markdown.AreaOfText
+      maxLength=5000
     />
     {longTextWarning(value)}
   </div>;

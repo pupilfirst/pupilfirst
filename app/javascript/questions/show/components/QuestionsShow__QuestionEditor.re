@@ -353,7 +353,7 @@ let make =
   <DisablingCover disabled={state.saving}>
     <div className="bg-gray-100">
       <div className="flex-1 flex flex-col">
-        <div className="px-3 md:px-0">
+        <div className="px-3 lg:px-0">
           {showBackButton
              ? <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
                  <a className="btn btn-subtle" onClick={_ => handleBack()}>
@@ -365,7 +365,7 @@ let make =
         </div>
         {switch (target) {
          | Some(target) =>
-           <div className="max-w-3xl w-full mt-5 mx-auto px-3 md:px-0">
+           <div className="max-w-3xl w-full mt-5 mx-auto px-3 lg:px-0">
              <div
                className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
                <p className="w-3/5 md:w-4/5 text-sm">
@@ -381,7 +381,7 @@ let make =
            </div>
          | None => React.null
          }}
-        <h4 className="max-w-3xl w-full mx-auto pb-2 mt-2 px-3 md:px-0">
+        <h4 className="max-w-3xl w-full mx-auto pb-2 mt-2 px-3 lg:px-0">
           {(
              switch (question) {
              | Some(_) => "Edit Question"
@@ -390,62 +390,64 @@ let make =
            )
            |> str}
         </h4>
-        <div
-          className="mb-8 max-w-3xl w-full mx-auto relative border-t border-b md:border-0 bg-white lg:shadow lg:rounded-lg">
-          <div className="flex w-full flex-col p-3 md:p-6">
-            <label
-              className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
-              htmlFor="title">
-              {"Question" |> str}
-            </label>
-            <input
-              id="title"
-              value={state.title}
-              className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              onChange={event =>
-                ReactEvent.Form.target(event)##value
-                |> updateTitle(state, send, communityId)
-              }
-              placeholder="Ask your question here briefly."
-            />
-            <label
-              className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
-              htmlFor="description">
-              {"Description" |> str}
-            </label>
-            <div className="w-full flex flex-col">
-              <MarkdownEditor
-                textareaId="description"
-                onChange={markdown => send(UpdateDescription(markdown))}
-                value={state.description}
-                placeholder="Your description gives people the information they need to help you answer your question. You can use Markdown to format this text."
-                profile=Markdown.QuestionAndAnswer
-                maxLength=10000
+        <div className="md:px-3">
+          <div
+            className="mb-8 max-w-3xl w-full mx-auto relative border-t border-b md:border-0 bg-white md:shadow md:rounded-lg">
+            <div className="flex w-full flex-col p-3 md:p-6">
+              <label
+                className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+                htmlFor="title">
+                {"Question" |> str}
+              </label>
+              <input
+                id="title"
+                value={state.title}
+                className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                onChange={event =>
+                  ReactEvent.Form.target(event)##value
+                  |> updateTitle(state, send, communityId)
+                }
+                placeholder="Ask your question here briefly."
               />
-              <div>
-                {suggestions(state)}
-                <div
-                  className="flex flex-col md:flex-row justify-end mt-3 items-center md:items-start">
-                  {suggestionsButton(state, send)}
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick={handleCreateOrUpdateQuestion(
-                      state,
-                      send,
-                      communityId,
-                      target,
-                      question,
-                      updateQuestionCB,
-                    )}
-                    className="btn btn-primary border border-transparent w-full md:w-auto">
-                    {(
-                       switch (question) {
-                       | Some(_) => "Update Question"
-                       | None => "Post Your Question"
-                       }
-                     )
-                     |> str}
-                  </button>
+              <label
+                className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+                htmlFor="description">
+                {"Description" |> str}
+              </label>
+              <div className="w-full flex flex-col">
+                <MarkdownEditor
+                  textareaId="description"
+                  onChange={markdown => send(UpdateDescription(markdown))}
+                  value={state.description}
+                  placeholder="Your description gives people the information they need to help you answer your question. You can use Markdown to format this text."
+                  profile=Markdown.QuestionAndAnswer
+                  maxLength=10000
+                />
+                <div>
+                  {suggestions(state)}
+                  <div
+                    className="flex flex-col md:flex-row justify-end mt-3 items-center md:items-start">
+                    {suggestionsButton(state, send)}
+                    <button
+                      disabled={saveDisabled(state)}
+                      onClick={handleCreateOrUpdateQuestion(
+                        state,
+                        send,
+                        communityId,
+                        target,
+                        question,
+                        updateQuestionCB,
+                      )}
+                      className="btn btn-primary border border-transparent w-full md:w-auto">
+                      {(
+                         switch (question) {
+                         | Some(_) => "Update Question"
+                         | None => "Post Your Question"
+                         }
+                       )
+                       |> str}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

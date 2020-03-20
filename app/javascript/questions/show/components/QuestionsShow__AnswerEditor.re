@@ -200,8 +200,8 @@ let make =
   let updateMarkdownCB = description => setDescription(_ => description);
   <DisablingCover disabled=saving>
     <div
-      className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative">
-      <div className="flex w-full py-4">
+      className="py-2 max-w-3xl w-full flex mx-auto items-center justify-center relative">
+      <div className="flex w-full pb-4">
         <div className="w-full flex flex-col">
           <label
             className="inline-block tracking-wide text-gray-900 text-lg font-semibold mb-2"

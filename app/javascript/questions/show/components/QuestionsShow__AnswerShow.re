@@ -43,7 +43,7 @@ let make =
          </div>
        : <div title={"Answer " ++ (answer |> Answer.id)}>
            <div
-             className="max-w-3xl w-full flex mx-auto items-center justify-center relative border shadow bg-white rounded-lg mt-2 z-10">
+             className="max-w-3xl w-full flex mx-auto items-center justify-center relative border-t border-b md:border-0 bg-white rounded md:rounded-lg shadow mt-2 z-10">
              <div className="flex w-full">
                <div className="flex flex-col w-full relative">
                  <div

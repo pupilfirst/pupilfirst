@@ -137,10 +137,10 @@ let make =
     state.answers |> List.filter(answer => !(answer |> Answer.archived));
 
   <div className="bg-gray-100">
-    <div className="flex-col px-2 md:px-6 py-2 items-center justify-between">
+    <div className="flex-col items-center justify-between">
       {state.showQuestionEdit
          ? <div>
-             <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
+             <div className="max-w-3xl w-full mx-auto mt-5 pb-2 px-3 lg:px-0">
                <a
                  id="close-button"
                  className="btn btn-subtle cursor-default"
@@ -160,7 +160,7 @@ let make =
                updateQuestionCB
              />
            </div>
-         : <div className="flex flex-col">
+         : <div className="flex flex-col px-3 lg:px-0">
              <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
                <a className="btn btn-subtle" href=communityPath>
                  <i className="fas fa-arrow-left" />
@@ -171,7 +171,7 @@ let make =
               | Some(target) =>
                 <div className="max-w-3xl w-full mt-5 mx-auto">
                   <div
-                    className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
+                    className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center mb-2">
                     <p className="w-3/5 md:w-4/5 text-sm">
                       <span className="font-semibold block text-xs">
                         {"Linked Target: " |> str}
@@ -190,7 +190,7 @@ let make =
               | None => React.null
               }}
              <div
-               className="max-w-3xl w-full flex mx-auto items-center justify-center relative shadow bg-white border rounded-lg overflow-hidden z-10">
+               className="max-w-3xl w-full flex mx-auto items-center justify-center relative border-t border-b md:border-0 bg-white rounded md:rounded-lg shadow overflow-hidden z-10">
                <div className="flex w-full">
                  <div
                    title="Question block"

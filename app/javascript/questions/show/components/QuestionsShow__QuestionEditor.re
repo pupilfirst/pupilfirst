@@ -279,7 +279,7 @@ let handleCreateOrUpdateQuestion =
 
 let suggestions = state =>
   state.suggestions |> ArrayUtils.isNotEmpty && state.showSuggestions
-    ? <div className="mt-3">
+    ? <div className="pt-3">
         <span className="tracking-wide text-gray-900 text-xs font-semibold">
           {"Similar Questions" |> str}
         </span>
@@ -294,18 +294,19 @@ let suggestions = state =>
 
               <div
                 key={suggestion |> QuestionSuggestion.id}
-                className="mt-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg cursor-pointer">
-                <div className="font-semibold">
-                  {suggestion |> QuestionSuggestion.title |> str}
-                </div>
-                <div className="flex mt-1 items-center">
-                  <div className="text-xs">
+                className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-200">
+                <div>
+                  <h5
+                    className="font-semibold text-sm leading-snug md:text-base">
+                    {suggestion |> QuestionSuggestion.title |> str}
+                  </h5>
+                  <p className="text-xs mt-1 leading-tight text-gray-800">
                     {"Asked on " ++ askedOn |> str}
-                  </div>
-                  <div
-                    className="text-xs px-1 py-px border border-transparent rounded bg-green-200 font-semibold ml-2">
-                    {(answers |> string_of_int) ++ answersCountPrefix |> str}
-                  </div>
+                  </p>
+                </div>
+                <div
+                  className="text-xs px-1 py-px ml-2 rounded text-white bg-green-500 font-semibold flex-shrink-0">
+                  {(answers |> string_of_int) ++ answersCountPrefix |> str}
                 </div>
               </div>;
             })
@@ -317,18 +318,22 @@ let suggestionsButton = (state, send) => {
   let suggestionsCount = state.suggestions |> Array.length;
 
   if (state.searching) {
-    <div className="mr-2"> <FaIcon classes="fas fa-spinner fa-pulse" /> </div>;
+    <div className="md:flex-1 pl-1 pb-3 md:p-0">
+      <FaIcon classes="fas fa-spinner fa-pulse" />
+    </div>;
   } else if (suggestionsCount > 0 && !state.showSuggestions) {
     let questionsPrefix = suggestionsCount > 1 ? "questions" : "question";
-    <button
-      className="mr-2 btn btn-primary-ghost"
-      onClick={_ => send(ShowSuggestions)}>
-      {"Show "
-       ++ (suggestionsCount |> string_of_int)
-       ++ " similar "
-       ++ questionsPrefix
-       |> str}
-    </button>;
+    <div className="w-full md:flex-1 pb-3 md:pb-0">
+      <button
+        className="w-full md:w-auto btn btn-small btn-primary-ghost md:mr-2"
+        onClick={_ => send(ShowSuggestions)}>
+        {"Show "
+         ++ (suggestionsCount |> string_of_int)
+         ++ " similar "
+         ++ questionsPrefix
+         |> str}
+      </button>
+    </div>;
   } else {
     React.null;
   };
@@ -347,11 +352,11 @@ let make =
     React.useReducerWithMapState(reducer, question, computeInitialState);
   <DisablingCover disabled={state.saving}>
     <div className="bg-gray-100">
-      <div className="flex-1 flex flex-col px-2">
-        <div>
+      <div className="flex-1 flex flex-col">
+        <div className="px-3 md:px-0">
           {showBackButton
              ? <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-                 <a className="btn btn-default" onClick={_ => handleBack()}>
+                 <a className="btn btn-subtle" onClick={_ => handleBack()}>
                    <i className="fas fa-arrow-left" />
                    <span className="ml-2"> {"Back" |> str} </span>
                  </a>
@@ -360,7 +365,7 @@ let make =
         </div>
         {switch (target) {
          | Some(target) =>
-           <div className="max-w-3xl w-full mt-5 mx-auto">
+           <div className="max-w-3xl w-full mt-5 mx-auto px-3 md:px-0">
              <div
                className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
                <p className="w-3/5 md:w-4/5 text-sm">
@@ -376,19 +381,18 @@ let make =
            </div>
          | None => React.null
          }}
+        <h4 className="max-w-3xl w-full mx-auto pb-2 mt-2 px-3 md:px-0">
+          {(
+             switch (question) {
+             | Some(_) => "Edit Question"
+             | None => "Ask a new Question"
+             }
+           )
+           |> str}
+        </h4>
         <div
-          className="mb-8 max-w-3xl w-full mx-auto relative shadow border bg-white rounded-lg">
-          <div className="flex w-full flex-col py-4 px-4">
-            <h5
-              className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-              {(
-                 switch (question) {
-                 | Some(_) => "Edit Question"
-                 | None => "Ask a new Question"
-                 }
-               )
-               |> str}
-            </h5>
+          className="mb-8 max-w-3xl w-full mx-auto relative border-t border-b md:border-0 bg-white lg:shadow lg:rounded-lg">
+          <div className="flex w-full flex-col p-3 md:p-6">
             <label
               className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
               htmlFor="title">
@@ -418,9 +422,10 @@ let make =
                 profile=Markdown.QuestionAndAnswer
                 maxLength=10000
               />
-              <div className="border-t">
+              <div>
                 {suggestions(state)}
-                <div className="flex justify-end mt-3 items-center">
+                <div
+                  className="flex flex-col md:flex-row justify-end mt-3 items-center md:items-start">
                   {suggestionsButton(state, send)}
                   <button
                     disabled={saveDisabled(state)}
@@ -432,7 +437,7 @@ let make =
                       question,
                       updateQuestionCB,
                     )}
-                    className="btn btn-primary border border-transparent">
+                    className="btn btn-primary border border-transparent w-full md:w-auto">
                     {(
                        switch (question) {
                        | Some(_) => "Update Question"

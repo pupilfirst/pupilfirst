@@ -143,7 +143,7 @@ let make =
              <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
                <a
                  id="close-button"
-                 className="btn btn-default cursor-default"
+                 className="btn btn-subtle cursor-default"
                  onClick={event => {
                    event |> ReactEvent.Mouse.preventDefault;
                    dispatch(UpdateShowQuestionEdit(false));
@@ -162,7 +162,7 @@ let make =
            </div>
          : <div className="flex flex-col">
              <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-               <a className="btn btn-default" href=communityPath>
+               <a className="btn btn-subtle" href=communityPath>
                  <i className="fas fa-arrow-left" />
                  <span className="ml-2"> {"Back" |> str} </span>
                </a>

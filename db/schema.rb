@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_113621) do
+ActiveRecord::Schema.define(version: 2020_03_20_084128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_113621) do
     t.datetime "updated_at", null: false
     t.boolean "reviewed_only", default: false
     t.text "json_data"
+    t.string "export_type"
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end

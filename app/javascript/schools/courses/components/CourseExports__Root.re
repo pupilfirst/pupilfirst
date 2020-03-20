@@ -93,8 +93,8 @@ let unselected = (allTags, selectedTags) => {
 
 module CreateCourseExportQuery = [%graphql
   {|
- mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!) {
-  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly){
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $exportType: String!) {
+  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, exportType: $exportType){
     courseExport {
       id
       createdAt
@@ -114,6 +114,7 @@ let createCourseExport = (state, send, course, tags, event) => {
     ~courseId=course |> Course.id,
     ~tagIds=state.selectedTags |> Array.map(Tag.id),
     ~reviewedOnly=state.reviewedOnly,
+    ~exportType="Students",
     (),
   )
   |> GraphqlQuery.sendQuery

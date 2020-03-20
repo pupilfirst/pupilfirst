@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CourseExports::PrepareService do
+describe CourseExports::PrepareStudentsExportService do
   include SubmissionsHelper
 
   subject { described_class.new(course_export) }

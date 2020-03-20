@@ -87,6 +87,7 @@ gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstr
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 6.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
+gem 'omniauth-stripe-connect', '~> 2.10' # Stripe Connect OAuth2 Strategy for OmniAuth 1.0
 
 gem 'pretender', '~> 0.3.4' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.

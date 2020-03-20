@@ -24,6 +24,10 @@ module Users
     alias github oauth_callback
     alias developer oauth_callback
 
+    def stripe_connect
+      render json: { email: email_from_auth_hash, stripe_user_id: auth_hash.dig(:uid), default_currency: auth_hash.dig(:extra, :extra_info, :default_currency) }
+    end
+
     def failure
       if oauth_origin.present?
         message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."

@@ -95,7 +95,7 @@ let longTextWarning = value => {
       ? "text-orange-700 bg-orange-100" : "text-red-600 bg-red-100";
 
   showWarning
-    ? <div className="flex justify-between items-center">
+    ? <div className="flex justify-between items-center mt-1">
         <div
           className={
             "hidden md:inline px-2 py-px rounded text-xs font-semibold inline-flex items-center "

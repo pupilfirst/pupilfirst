@@ -40,7 +40,7 @@ module Schools
             id: export.id,
             created_at: export.created_at,
             file: file,
-            export_type: "students",
+            export_type: export.export_type,
             tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only
           }

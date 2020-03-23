@@ -7,9 +7,9 @@ module CourseExports
     def perform(course_export)
       # Prepare the export.
       case course_export.export_type
-        when CourseExports::EXPORT_TYPE_STUDENTS
+        when CourseExport::EXPORT_TYPE_STUDENTS
           CourseExports::PrepareStudentsExportService.new(course_export).execute
-        when CourseExports::EXPORT_TYPE_TEAMS
+        when CourseExport::EXPORT_TYPE_TEAMS
           CourseExports::PrepareTeamsExportService.new(course_export).execute
         else
           raise "Unexpected export_type '#{course_export.export_type}' encountered!"

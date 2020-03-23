@@ -19,7 +19,7 @@ let computeInitialState = exports => {
   reviewedOnly: false,
   tagSearch: "",
   courseExports: exports,
-  exportType: CourseExport.studentsWithoutTags,
+  exportType: CourseExport.Students,
 };
 
 type action =
@@ -93,7 +93,7 @@ let unselected = (allTags, selectedTags) => {
 
 module CreateCourseExportQuery = [%graphql
   {|
- mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $exportType: String!) {
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $exportType: Export!) {
   createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, exportType: $exportType){
     courseExport {
       id
@@ -106,15 +106,24 @@ module CreateCourseExportQuery = [%graphql
 |}
 ];
 
-let createCourseExport = (state, send, course, tags, event) => {
+let createCourseExport = (state, send, course, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(BeginSaving);
 
+  let (tagIds, exportType) =
+    switch (state.exportType) {
+    | CourseExport.Students => (
+        state.selectedTags |> Array.map(Tag.id),
+        `Students,
+      )
+    | Teams => ([||], `Teams)
+    };
+
   CreateCourseExportQuery.make(
     ~courseId=course |> Course.id,
-    ~tagIds=state.selectedTags |> Array.map(Tag.id),
+    ~tagIds,
     ~reviewedOnly=state.reviewedOnly,
-    ~exportType="Students",
+    ~exportType,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -123,8 +132,9 @@ let createCourseExport = (state, send, course, tags, event) => {
        | Some(export) =>
          /* Add the new course export to the list of exports known by this component. */
          let courseExport =
-           CourseExport.makeStudentsExport(
+           CourseExport.make(
              ~id=export##id,
+             ~exportType=state.exportType,
              ~createdAt=export##createdAt,
              ~tags=export##tags,
              ~reviewedOnly=export##reviewedOnly,
@@ -144,11 +154,10 @@ let createCourseExport = (state, send, course, tags, event) => {
   |> ignore;
 };
 
-let reviewedOnlyButtonClasses = value => {
-  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4 w-full";
+let toggleChoiceClasses = value => {
+  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4 w-full";
   value
-    ? defaultClasses
-      ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
+    ? defaultClasses ++ " bg-gray-200 text-primary-500 border-primary-500"
     : defaultClasses ++ " opacity-75 text-gray-900";
 };
 
@@ -167,26 +176,66 @@ let make = (~course, ~exports, ~tags) => {
            <div className="mx-auto bg-white">
              <div className="max-w-2xl pt-6 px-6 mx-auto">
                <h5
-                 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+                 className="uppercase text-center border-b border-gray-400 pb-2">
                  {"Export course data" |> str}
                </h5>
-               <label
-                 className="block tracking-wide text-xs font-semibold mb-2">
-                 {"Export only students with the following tags:" |> str}
-               </label>
-               <TagsSelector
-                 placeholder="Search for a tag"
-                 emptySelectionMessage="No tags selected"
-                 selected={state.selectedTags}
-                 unselected={unselected(tags, state.selectedTags)}
-                 onChange={tagSearch => send(UpdateTagSearch(tagSearch))}
-                 value={state.tagSearch}
-                 onSelect={tag => send(SelectTag(tag))}
-                 onDeselect={tag => send(DeselectTag(tag))}
-               />
+               <div className="mt-4">
+                 <label
+                   className="block tracking-wide text-xs font-semibold mr-6 mb-2">
+                   {"Please select the kind of export you need:" |> str}
+                 </label>
+                 <div className="flex -mx-2">
+                   <div className="w-1/2 px-2">
+                     <button
+                       onClick={_ => {
+                         send(SelectExportType(CourseExport.Students))
+                       }}
+                       className={toggleChoiceClasses(
+                         state.exportType == CourseExport.Students,
+                       )}>
+                       <i className="fas fa-user" />
+                       <div className="mt-1"> {"Students" |> str} </div>
+                     </button>
+                   </div>
+                   <div className="w-1/2 px-2">
+                     <button
+                       onClick={_ =>
+                         send(SelectExportType(CourseExport.Teams))
+                       }
+                       className={toggleChoiceClasses(
+                         state.exportType == CourseExport.Teams,
+                       )}>
+                       <i className="fas fa-user-friends" />
+                       <div className="mt-1"> {"Teams" |> str} </div>
+                     </button>
+                   </div>
+                 </div>
+               </div>
+               {switch (state.exportType) {
+                | CourseExport.Students =>
+                  <div className="mt-4">
+                    <label
+                      className="block tracking-wide text-xs font-semibold mb-2">
+                      {"Export only students with the following tags:" |> str}
+                    </label>
+                    <TagsSelector
+                      placeholder="Search for a tag"
+                      emptySelectionMessage="No tags selected"
+                      selected={state.selectedTags}
+                      unselected={unselected(tags, state.selectedTags)}
+                      onChange={tagSearch =>
+                        send(UpdateTagSearch(tagSearch))
+                      }
+                      value={state.tagSearch}
+                      onSelect={tag => send(SelectTag(tag))}
+                      onDeselect={tag => send(DeselectTag(tag))}
+                    />
+                  </div>
+                | Teams => React.null
+                }}
                <div className="mt-5">
                  <label
-                   className="block tracking-wide text-xs font-semibold mr-6 mb-3"
+                   className="block tracking-wide text-xs font-semibold mr-6 mb-2"
                    htmlFor="targets_filter">
                    {"Which targets should the export include?" |> str}
                  </label>
@@ -194,19 +243,19 @@ let make = (~course, ~exports, ~tags) => {
                    <div className="w-1/2 px-2">
                      <button
                        onClick={_ => {send(SetReviewedOnly(false))}}
-                       className={reviewedOnlyButtonClasses(
-                         !state.reviewedOnly,
-                       )}>
-                       {"All targets" |> str}
+                       className={toggleChoiceClasses(!state.reviewedOnly)}>
+                       <i className="fas fa-list" />
+                       <div className="mt-1"> {"All targets" |> str} </div>
                      </button>
                    </div>
                    <div className="w-1/2 px-2">
                      <button
                        onClick={_event => {send(SetReviewedOnly(true))}}
-                       className={reviewedOnlyButtonClasses(
-                         state.reviewedOnly,
-                       )}>
-                       {"Only targets with reviewed submissions" |> str}
+                       className={toggleChoiceClasses(state.reviewedOnly)}>
+                       <i className="fas fa-tasks" />
+                       <div className="mt-1">
+                         {"Only targets with reviewed submissions" |> str}
+                       </div>
                      </button>
                    </div>
                  </div>
@@ -215,7 +264,7 @@ let make = (~course, ~exports, ~tags) => {
                  <button
                    disabled={state.saving}
                    className="w-full btn btn-primary btn-large"
-                   onClick={createCourseExport(state, send, course, tags)}>
+                   onClick={createCourseExport(state, send, course)}>
                    {if (state.saving) {
                       <span>
                         <FaIcon classes="fas fa-spinner fa-pulse" />
@@ -270,7 +319,9 @@ let make = (~course, ~exports, ~tags) => {
                              <div className="pt-4 pb-3 px-4">
                                <div className="text-sm">
                                  <p className="text-black font-semibold">
-                                   {"Submissions" |> str}
+                                   {courseExport
+                                    |> CourseExport.exportTypeToString
+                                    |> str}
                                  </p>
                                  <p
                                    className="text-gray-600 font-semibold text-xs mt-px">
@@ -289,8 +340,9 @@ let make = (~course, ~exports, ~tags) => {
                                     courseExport |> CourseExport.exportType
                                   ) {
                                   | Teams => ReasonReact.null
-                                  | Students(tags) =>
-                                    tags
+                                  | Students =>
+                                    courseExport
+                                    |> CourseExport.tags
                                     |> Array.map(tag =>
                                          <span
                                            key=tag

@@ -312,6 +312,9 @@ let make = (~course, ~exports, ~tags) => {
                   |> Array.map(courseExport =>
                        <div
                          key={courseExport |> CourseExport.id}
+                         ariaLabel={
+                           "Export " ++ (courseExport |> CourseExport.id)
+                         }
                          className="flex w-1/2 items-center mb-4 px-3">
                          <div
                            className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">

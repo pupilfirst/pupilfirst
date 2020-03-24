@@ -8,17 +8,16 @@ class FacultyPolicy < ApplicationPolicy
   end
 
   def connect?
-    # Cannot connect if user doesn't have a student profile.
-    return false if current_founder.blank?
+    # Cannot connect if connect link is blank.
+    return false if record.connect_link.blank?
 
-    # Cannot connect if connect link is blank or doesn't have appropriate slots available.
-    return false unless record.connect_slots.available_for_founder.exists? || record.connect_link.present?
+    if current_founder.present?
+      # It should be possible to connect to course-enrolled coaches.
+      return true if current_founder.startup.course.faculty.where(id: record.id).exists?
+    end
 
-    # It should be possible to connect to course-enrolled coaches.
-    return true if record.courses.where(id: current_founder.startup.course).exists?
-
-    # It should be possible to connect to coaches enrolled directly to current team.
-    return true if record.startups.where(id: current_founder.startup).exists?
+    # Coaches and admins can view all connect links.
+    return true if current_coach.present? || current_school_admin.present?
 
     false
   end

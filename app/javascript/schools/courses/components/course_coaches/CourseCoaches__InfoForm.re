@@ -109,18 +109,33 @@ let make = (~courseId, ~coach) => {
       </div>
     </div>
     <div className="max-w-2xl mx-auto">
-      <div className="py-3 flex">
-        <div className="bg-gray-300 rounded-lg p-2 mr-1">
-          {"Reviewed submissions: "
-           ++ (state.stats.reviewedSubmissions |> string_of_int)
-           |> str}
-        </div>
-        <div className="bg-gray-300 rounded-lg p-2 ml-1">
-          {"Pending submissions: "
-           ++ (state.stats.pendingSubmissions |> string_of_int)
-           |> str}
-        </div>
-      </div>
+      {state.loading
+         ? <div className="py-3 flex">
+             {SkeletonLoading.card(~className="w-full mr-2", ())}
+             {SkeletonLoading.card(~className="w-full ml-2", ())}
+           </div>
+         : <div className="py-3 flex mt-4">
+             <div
+               className="w-full mr-2 rounded-lg shadow px-5 py-6"
+               ariaLabel="Reviewed Submissions">
+               <div className="flex justify-between items-center">
+                 <span> {"Reviewed submissions" |> str} </span>
+                 <span className="text-2xl font-semibold">
+                   {state.stats.reviewedSubmissions |> string_of_int |> str}
+                 </span>
+               </div>
+             </div>
+             <div
+               className="w-full ml-2 rounded-lg shadow px-5 py-6"
+               ariaLabel="Pending Submissions">
+               <div className="flex justify-between items-center">
+                 <span> {"Pending submissions" |> str} </span>
+                 <span className="text-2xl font-semibold">
+                   {state.stats.pendingSubmissions |> string_of_int |> str}
+                 </span>
+               </div>
+             </div>
+           </div>}
       <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
         {"Students assigned to coach:" |> str}
       </span>

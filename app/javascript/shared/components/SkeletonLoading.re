@@ -1,7 +1,7 @@
 [%bs.raw {|require("./SkeletonLoading.css")|}];
 
-let card = () =>
-  <div className="skeleton-body-container pt-4 w-full mx-auto">
+let card = (~className="", ()) =>
+  <div className={"skeleton-body-container pt-4 w-full mx-auto" ++ className}>
     <div className="skeleton-body-wrapper px-3 lg:px-0">
       <div
         className="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">

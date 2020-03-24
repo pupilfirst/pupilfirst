@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Course Coaches Index', js: true do
   include UserSpecHelper
+  include SubmissionsHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -129,6 +130,70 @@ feature 'Course Coaches Index', js: true do
       find("div[aria-label='coach-card-#{coach_3.id}']").click
       expect(page).to have_text(startup.name)
       expect(page).not_to have_text(startup_3.name)
+    end
+  end
+
+  context 'when a coach has reviewed and pending submissions' do
+    let(:startup_3) { create :startup, level: c1_level }
+
+    let(:target_group_c1) { create :target_group, level: c1_level }
+    let(:target_group_c2) { create :target_group, level: c2_level }
+
+    let(:evaluation_criteria_c1) { create :evaluation_criterion, course: course_1 }
+    let(:evaluation_criteria_c2) { create :evaluation_criterion, course: course_2 }
+
+    let(:target_c1_1) { create :target, :for_founders, target_group: target_group_c1 }
+    let(:target_c1_2) { create :target, :for_team, target_group: target_group_c1 }
+    let(:target_c1_3) { create :target, :for_founders, target_group: target_group_c1 }
+    let(:target_c2) { create :target, :for_founders, target_group: target_group_c2 }
+
+    before do
+      # Make all of these targets evaluated.
+      target_c1_1.evaluation_criteria << evaluation_criteria_c1
+      target_c1_2.evaluation_criteria << evaluation_criteria_c1
+      target_c1_3.evaluation_criteria << evaluation_criteria_c1
+      target_c2.evaluation_criteria << evaluation_criteria_c2
+
+      # Enroll coach_1 in both courses.
+      create :faculty_course_enrollment, faculty: coach_1, course: course_2
+
+      # Enroll the coach directly onto one startup
+      create :faculty_startup_enrollment, faculty: coach_1, startup: startup_2
+
+      # Put a few submissions in the two targets in course 1.
+      first_student = startup_2.founders.first
+      second_student = startup_2.founders.last
+
+      complete_target(target_c1_1, first_student, evaluator: coach_1)
+      complete_target(target_c1_3, first_student, evaluator: coach_1)
+      submit_target(target_c1_1, second_student, evaluator: coach_1)
+      complete_target(target_c1_3, second_student, evaluator: coach_1)
+
+      # Submission graded by another coach in the same course shouldn't be counted.
+      complete_target(target_c2, first_student, evaluator: coach_2)
+
+      # Pending submission from another team without direct enrollment shouldn't be counted.
+      submit_target(target_c1_2, startup_3.founders.first, evaluator: coach_2)
+
+      # Put another in the submission in course 2. This should not be counted.
+      submit_target(target_c2, startup.founders.first, evaluator: coach_1)
+    end
+
+    scenario 'admin checks the counts of pending and reviewed submissions on an assigned coach' do
+      sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
+
+      # Check teams assigned to coach_3 in course 2
+      find("div[aria-label='coach-card-#{coach_1.id}']").click
+
+      # binding.pry
+
+      within('div[aria-label="Reviewed Submissions"') do
+        expect(page).to have_text('3')
+      end
+
+      within('div[aria-label="Pending Submissions"') do
+        expect(page).to have_text('1')
+      end
     end
   end
 end

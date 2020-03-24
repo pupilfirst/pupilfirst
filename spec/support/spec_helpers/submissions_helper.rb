@@ -3,17 +3,17 @@ module SubmissionsHelper
   GRADE_FAIL = :fail
   GRADE_NONE = :none
 
-  def complete_target(target, student)
-    submit_target(target, student, grade: GRADE_PASS)
+  def complete_target(target, student, evaluator: nil)
+    submit_target(target, student, grade: GRADE_PASS, evaluator: evaluator)
   end
 
-  def fail_target(target, student)
-    submit_target(target, student, grade: GRADE_FAIL)
+  def fail_target(target, student, evaluator: nil)
+    submit_target(target, student, grade: GRADE_FAIL, evaluator: evaluator)
   end
 
   # rubocop:disable Metrics/MethodLength
-  def submit_target(target, student, grade: GRADE_NONE)
-    options = submission_options(target, student, grade)
+  def submit_target(target, student, grade: GRADE_NONE, evaluator: nil)
+    options = submission_options(target, student, grade, evaluator)
 
     FactoryBot.create(:timeline_event, options).tap do |submission|
       if target.evaluation_criteria.present? && grade != GRADE_NONE
@@ -43,7 +43,7 @@ module SubmissionsHelper
   private
 
   # This is a hack to avoid having to pass an evaluator ID.
-  def evaluator(students)
+  def get_evaluator(students)
     school = students.first.school
 
     school.faculty.first || begin
@@ -52,7 +52,7 @@ module SubmissionsHelper
     end
   end
 
-  def submission_options(target, student, grade) # rubocop:disable Metrics/MethodLength
+  def submission_options(target, student, grade, evaluator) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     students = if target.team_target?
       student.startup.founders
     else
@@ -78,7 +78,7 @@ module SubmissionsHelper
       latest: true,
       passed_at: passed_at,
       evaluated_at: evaluated_at,
-      evaluator: evaluated_at.present? ? evaluator(students) : nil
+      evaluator: evaluated_at.present? ? (evaluator || get_evaluator(students)) : nil
     }
   end
 end

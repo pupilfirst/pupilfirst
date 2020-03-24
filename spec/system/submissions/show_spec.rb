@@ -10,6 +10,7 @@ feature 'Submissions show' do
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_founders, target_group: target_group }
+  let(:target_2) { create :target, :for_founders, target_group: target_group }
   let(:auto_verify_target) { create :target, :for_founders, target_group: target_group }
   let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
   let(:evaluation_criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
@@ -28,14 +29,17 @@ feature 'Submissions show' do
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
+    target_2.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
   end
 
   context 'with a pending submission' do
     let(:submission_pending) { create(:timeline_event, latest: true, target: target) }
+    let(:submission_pending_2) { create(:timeline_event, latest: true, target: target_2) }
     let(:student) { team.founders.first }
 
     before do
       submission_pending.founders << student
+      submission_pending_2.founders << student
     end
 
     scenario 'coach visits submission show', js: true do
@@ -62,11 +66,15 @@ feature 'Submissions show' do
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_course_path(course)
 
+      expect(page).to have_content(target.title)
+      expect(page).to have_content(target_2.title)
+
+      find("a[aria-label='pending-submission-card-#{submission_pending.id}']").click
+      expect(page).to have_content('Grade Card')
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
-      expect(page).to have_content('Grade Card')
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         expect(page).to have_selector('.course-review-grade-card__grade-pill', count: 4)
         find("div[title='Bad']").click
@@ -108,6 +116,12 @@ feature 'Submissions show' do
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback.strip)
       expect(submission.timeline_event_grades.pluck(:grade)).to contain_exactly(1, 2)
+
+      # the submission must be removed from the pending list
+
+      find("div[aria-label='submissions-overlay-close']").click
+      expect(page).to have_text(submission_pending_2.target.title)
+      expect(page).to_not have_text(submission.target.title)
     end
 
     scenario 'coach generates feedback from review checklist', js: true do

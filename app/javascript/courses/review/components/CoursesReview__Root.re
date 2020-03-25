@@ -7,6 +7,11 @@ type visibleList =
   | PendingSubmissions
   | ReviewedSubmissions;
 
+type sortBy = {
+  criterion: string,
+  criterionType: [ | `String | `Number],
+};
+
 type state = {
   pendingSubmissions: array(IndexSubmission.t),
   reviewedSubmissions: ReviewedSubmissions.t,
@@ -14,6 +19,8 @@ type state = {
   selectedLevel: option(Level.t),
   selectedCoach: option(Coach.t),
   filterString: string,
+  sortBy,
+  sortDirection: [ | `Up | `Down],
 };
 
 type action =
@@ -26,7 +33,8 @@ type action =
   | SelectReviewedTab
   | SelectCoach(Coach.t)
   | DeselectCoach
-  | UpdateFilterString(string);
+  | UpdateFilterString(string)
+  | UpdateSortDirection([ | `Up | `Down]);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -94,6 +102,7 @@ let reducer = (state, action) =>
     }
   | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   };
 
 let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
@@ -103,6 +112,11 @@ let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
   selectedLevel: None,
   selectedCoach: currentTeamCoach,
   filterString: "",
+  sortBy: {
+    criterion: "Submitted At",
+    criterionType: `Number,
+  },
+  sortDirection: `Down,
 };
 
 let openOverlay = (submissionId, event) => {
@@ -301,6 +315,31 @@ let filterSubmissions = (selectedLevel, selectedCoach, submissions) => {
      );
 };
 
+module Sortable = {
+  type t = sortBy;
+
+  let criterion = t => t.criterion;
+  let criterionType = t => t.criterionType;
+};
+
+module SubmissionsSorter = Sorter.Make(Sortable);
+
+let submissionsSorter = (state, send) => {
+  let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
+  <div className="flex-shrink-0 ml-2">
+    <p className="text-xs font-semibold"> {"Sort by:" |> str} </p>
+    <SubmissionsSorter
+      criteria
+      selectedCriterion={state.sortBy}
+      direction={state.sortDirection}
+      onDirectionChange={sortDirection => {
+        send(UpdateSortDirection(sortDirection))
+      }}
+      onCriterionChange={_ => ()}
+    />
+  </div>;
+};
+
 [@react.component]
 let make =
     (~levels, ~pendingSubmissions, ~courseId, ~teamCoaches, ~currentCoach) => {
@@ -321,11 +360,17 @@ let make =
 
   let url = ReasonReactRouter.useUrl();
 
-  let filteredPendingSubmissions =
-    state.pendingSubmissions
-    |> filterSubmissions(state.selectedLevel, state.selectedCoach)
-    |> IndexSubmission.sort;
-
+  let filteredPendingSubmissions = {
+    let filteredSubmissions =
+      state.pendingSubmissions
+      |> filterSubmissions(state.selectedLevel, state.selectedCoach);
+    let sortedSubmissions =
+      switch (state.sortDirection) {
+      | `Up => filteredSubmissions |> IndexSubmission.sortUp
+      | `Down => filteredSubmissions |> IndexSubmission.sortDown
+      };
+    sortedSubmissions;
+  };
   <div>
     {switch (url.path) {
      | ["submissions", submissionId, ..._] =>
@@ -373,21 +418,29 @@ let make =
             </button>
           </div>
         </div>
-        <Multiselect
-          id="filter"
-          unselected={unselected(
-            levels,
-            teamCoaches,
-            currentCoach |> Coach.id,
-            state,
-          )}
-          selected={selected(state, currentCoach |> Coach.id)}
-          onSelect={onSelectFilter(send)}
-          onDeselect={onDeselectFilter(send)}
-          value={state.filterString}
-          onChange={filterString => send(UpdateFilterString(filterString))}
-          placeholder={filterPlaceholder(state)}
-        />
+        {<div className="flex items-center">
+           <div className="flex-1">
+             <p className="text-xs font-semibold"> {"Filter by:" |> str} </p>
+             <Multiselect
+               id="filter"
+               unselected={unselected(
+                 levels,
+                 teamCoaches,
+                 currentCoach |> Coach.id,
+                 state,
+               )}
+               selected={selected(state, currentCoach |> Coach.id)}
+               onSelect={onSelectFilter(send)}
+               onDeselect={onDeselectFilter(send)}
+               value={state.filterString}
+               onChange={filterString =>
+                 send(UpdateFilterString(filterString))
+               }
+               placeholder={filterPlaceholder(state)}
+             />
+           </div>
+           {submissionsSorter(state, send)}
+         </div>}
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
       <div className="max-w-3xl mx-auto">

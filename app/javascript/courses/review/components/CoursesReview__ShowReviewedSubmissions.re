@@ -139,7 +139,6 @@ let submissionCardClasses = status =>
 let showSubmission = (submissions, levels) =>
   <div>
     {submissions
-     |> IndexSubmission.sort
      |> Array.map(submission =>
           <Link
             href={"/submissions/" ++ (submission |> IndexSubmission.id)}

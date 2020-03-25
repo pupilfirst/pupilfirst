@@ -42,7 +42,8 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:school_admin) { create :school_admin, school: school }
   let(:course_export) { create :course_export, :teams, course: course, user: school_admin.user }
 
-  let!(:team_1_reviewed_submission) { complete_target target_l1_evaluated, student_1 }
+  let!(:team_1_reviewed_submission_1) { complete_target target_l1_evaluated, student_1 }
+  let!(:team_1_reviewed_submission_2) { complete_target target_l1_evaluated, student_1 }
   let!(:team_2_reviewed_submission) { fail_target target_l1_evaluated, student_2 }
 
   before do
@@ -103,7 +104,7 @@ describe CourseExports::PrepareTeamsExportService do
         title: 'Submissions',
         rows: [
           ['Team ID', 'Team Name', "L1T#{target_l1_mark_as_complete.id}", "L1T#{target_l1_quiz.id}", "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
-          [team_1.id, team_1.name, '✓', '2/2', { 'value' => submission_grading(team_1_reviewed_submission), 'style' => 'passing-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
+          [team_1.id, team_1.name, '✓', '2/2', { 'value' => "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)}", 'style' => 'passing-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
           [team_2.id, team_2.name, nil, '1/2', { 'value' => submission_grading(team_2_reviewed_submission), 'style' => 'failing-grade' }, nil]
         ]
       }
@@ -156,7 +157,7 @@ describe CourseExports::PrepareTeamsExportService do
             title: 'Submissions',
             rows: [
               ['Team ID', 'Team Name', "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
-              [team_1.id, team_1.name, { 'value' => "#{submission_grading(team_1_reviewed_submission)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
+              [team_1.id, team_1.name, { 'value' => "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
               [team_2.id, team_2.name, { 'value' => submission_grading(team_2_reviewed_submission), 'style' => 'failing-grade' }, nil]
             ]
           }

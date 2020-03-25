@@ -2,12 +2,16 @@ let str = React.string;
 
 open QuestionsShow__Types;
 
+type similar = {
+  search: string,
+  suggestions: array(QuestionSuggestion.t),
+};
+
 type state = {
   title: string,
   titleTimeoutId: option(Js.Global.timeoutId),
-  suggestions: array(QuestionSuggestion.t),
+  similar,
   searching: bool,
-  showSuggestions: bool,
   description: string,
   saving: bool,
 };
@@ -26,44 +30,51 @@ let computeInitialState = question => {
     title,
     description,
     titleTimeoutId: None,
-    suggestions: [||],
+    similar: {
+      search: "",
+      suggestions: [||],
+    },
     searching: false,
-    showSuggestions: false,
     saving: false,
   };
 };
 
 type action =
-  | UpdateTitle(string, option(Js.Global.timeoutId))
+  | UpdateTitle(string)
+  | UpdateTitleAndTimeout(string, Js.Global.timeoutId)
   | UpdateDescription(string)
   | BeginSaving
   | FailSaving
   | BeginSearching
-  | FinishSearching(array(QuestionSuggestion.t))
-  | FailSearching
-  | ShowSuggestions;
+  | FinishSearching(string, array(QuestionSuggestion.t))
+  | FailSearching;
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateTitle(title, titleTimeoutId) =>
-    let (suggestions, showSuggestions) =
-      switch (titleTimeoutId) {
-      | Some(_) => (state.suggestions, state.showSuggestions)
-      | None => ([||], false)
-      };
+  | UpdateTitle(title) =>
+    let similar =
+      title |> String.trim == ""
+        ? {search: "", suggestions: [||]} : state.similar;
 
-    {...state, title, titleTimeoutId, suggestions, showSuggestions};
+    {...state, title, similar};
+  | UpdateTitleAndTimeout(title, timeoutId) => {
+      ...state,
+      title,
+      titleTimeoutId: Some(timeoutId),
+    }
   | UpdateDescription(description) => {...state, description}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | BeginSearching => {...state, searching: true}
-  | FinishSearching(suggestions) =>
-    let showSuggestions =
-      suggestions |> ArrayUtils.isEmpty ? false : state.showSuggestions;
-
-    {...state, searching: false, suggestions, showSuggestions};
+  | FinishSearching(search, suggestions) => {
+      ...state,
+      searching: false,
+      similar: {
+        search,
+        suggestions,
+      },
+    }
   | FailSearching => {...state, searching: false}
-  | ShowSuggestions => {...state, showSuggestions: true}
   };
 
 module SimilarQuestionsQuery = [%graphql
@@ -89,7 +100,7 @@ let searchForSimilarQuestions = (send, title, communityId, ()) => {
   |> Js.Promise.then_(result => {
        let suggestions =
          result##similarQuestions |> Array.map(QuestionSuggestion.makeFromJs);
-       send(FinishSearching(suggestions));
+       send(FinishSearching(trimmedTitle, suggestions));
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(e => {
@@ -109,19 +120,19 @@ let isInvalidString = s => s |> String.trim == "";
 let updateTitle = (state, send, communityId, title) => {
   state.titleTimeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
 
-  let timeoutId =
-    if (title |> isInvalidString) {
-      None;
-    } else {
-      let timeoutId =
-        Js.Global.setTimeout(
-          searchForSimilarQuestions(send, state.title, communityId),
-          1500,
-        );
-      Some(timeoutId);
-    };
+  let trimmedTitle = title |> String.trim;
 
-  send(UpdateTitle(title, timeoutId));
+  if (title |> isInvalidString || trimmedTitle == state.similar.search) {
+    send(UpdateTitle(title));
+  } else {
+    let timeoutId =
+      Js.Global.setTimeout(
+        searchForSimilarQuestions(send, trimmedTitle, communityId),
+        1500,
+      );
+
+    send(UpdateTitleAndTimeout(title, timeoutId));
+  };
 };
 
 module CreateQuestionQuery = [%graphql
@@ -277,13 +288,20 @@ let handleCreateOrUpdateQuestion =
   };
 };
 
-let suggestions = state =>
-  state.suggestions |> ArrayUtils.isNotEmpty && state.showSuggestions
+let suggestions = state => {
+  let suggestions = state.similar.suggestions;
+
+  suggestions |> ArrayUtils.isNotEmpty
     ? <div className="pt-3">
         <span className="tracking-wide text-gray-900 text-xs font-semibold">
           {"Similar Questions" |> str}
         </span>
-        {state.suggestions
+        {state.searching
+           ? <span className="ml-2">
+               <FaIcon classes="fa fa-spinner fa-pulse" />
+             </span>
+           : React.null}
+        {suggestions
          |> Array.map(suggestion => {
               let askedOn =
                 suggestion
@@ -292,7 +310,14 @@ let suggestions = state =>
               let answers = suggestion |> QuestionSuggestion.answersCount;
               let answersCountPrefix = answers == 1 ? " answer" : " answers";
 
-              <div
+              <a
+                href={
+                  "/questions/"
+                  ++ {
+                    suggestion |> QuestionSuggestion.id;
+                  }
+                }
+                target="_blank"
                 key={suggestion |> QuestionSuggestion.id}
                 className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-200">
                 <div>
@@ -308,36 +333,19 @@ let suggestions = state =>
                   className="text-xs px-1 py-px ml-2 rounded text-white bg-green-500 font-semibold flex-shrink-0">
                   {(answers |> string_of_int) ++ answersCountPrefix |> str}
                 </div>
-              </div>;
+              </a>;
             })
          |> React.array}
       </div>
     : React.null;
-
-let suggestionsButton = (state, send) => {
-  let suggestionsCount = state.suggestions |> Array.length;
-
-  if (state.searching) {
-    <div className="md:flex-1 pl-1 pb-3 md:p-0">
-      <FaIcon classes="fas fa-spinner fa-pulse" />
-    </div>;
-  } else if (suggestionsCount > 0 && !state.showSuggestions) {
-    let questionsPrefix = suggestionsCount > 1 ? "questions" : "question";
-    <div className="w-full md:flex-1 pb-3 md:pb-0">
-      <button
-        className="w-full md:w-auto btn btn-small btn-primary-ghost md:mr-2"
-        onClick={_ => send(ShowSuggestions)}>
-        {"Show "
-         ++ (suggestionsCount |> string_of_int)
-         ++ " similar "
-         ++ questionsPrefix
-         |> str}
-      </button>
-    </div>;
-  } else {
-    React.null;
-  };
 };
+
+let searchingIndicator = state =>
+  state.similar.suggestions |> ArrayUtils.isEmpty && state.searching
+    ? <div className="md:flex-1 pl-1 pb-3 md:p-0">
+        <FaIcon classes="fas fa-spinner fa-pulse" />
+      </div>
+    : React.null;
 
 [@react.component]
 let make =
@@ -427,7 +435,7 @@ let make =
                   {suggestions(state)}
                   <div
                     className="flex flex-col md:flex-row justify-end mt-3 items-center md:items-start">
-                    {suggestionsButton(state, send)}
+                    {searchingIndicator(state)}
                     <button
                       disabled={saveDisabled(state)}
                       onClick={handleCreateOrUpdateQuestion(

@@ -75,6 +75,8 @@ describe CourseExports::PrepareTeamsExportService do
     { 'formula' => "oooc:=HYPERLINK(\"https://test.host/students/#{student.id}/report\"; \"#{student.id}\")" }
   end
 
+  let(:sorted_coach_names) { [coach_1.name, coach_2.name].sort.join(', ') }
+
   let(:expected_data) do
     [
       {
@@ -93,7 +95,7 @@ describe CourseExports::PrepareTeamsExportService do
         title: 'Teams',
         rows: [
           ['ID', 'Team Name', 'Students', 'Coaches'],
-          [team_1.id, team_1.name, team_1.founders.joins(:user).pluck('users.name').join(', '), "#{coach_1.name}, #{coach_2.name}"],
+          [team_1.id, team_1.name, team_1.founders.joins(:user).pluck('users.name').join(', '), sorted_coach_names],
           [team_2.id, team_2.name, team_2.founders.joins(:user).pluck('users.name').join(', '), '']
         ]
       },
@@ -146,7 +148,7 @@ describe CourseExports::PrepareTeamsExportService do
             title: 'Teams',
             rows: [
               ['ID', 'Team Name', 'Students', 'Coaches'],
-              [team_1.id, team_1.name, team_1.founders.joins(:user).pluck('users.name').join(', '), "#{coach_1.name}, #{coach_2.name}"],
+              [team_1.id, team_1.name, team_1.founders.joins(:user).pluck('users.name').join(', '), sorted_coach_names],
               [team_2.id, team_2.name, team_2.founders.joins(:user).pluck('users.name').join(', '), '']
             ]
           },

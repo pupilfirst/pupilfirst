@@ -40,7 +40,7 @@ module CourseExports
           team.id,
           team.name,
           team.founders.map(&:name).join(', '),
-          team.faculty.map(&:name).join(', ')
+          team.faculty.map(&:name).sort.join(', ')
         ]
       end
 

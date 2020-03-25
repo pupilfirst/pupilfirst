@@ -3,19 +3,28 @@ class CoachStatsResolver < ApplicationQuery
   property :course_id
 
   def coach_stats
-    pending_submissions = TimelineEvent.pending_review
-      .joins(founders: :startup)
-      .where(startups: { id: assigned_team_ids })
-      .distinct.count
-
     {
-      reviewed_submissions: TimelineEvent.where(evaluator_id: coach_id).count,
+      reviewed_submissions: reviewed_submissions,
       pending_submissions: pending_submissions
     }
   end
 
+  def reviewed_submissions
+    TimelineEvent.joins(:course)
+      .where(courses: { id: course.id })
+      .where(evaluator_id: coach.id)
+      .count
+  end
+
+  def pending_submissions
+    TimelineEvent.pending_review
+      .joins(founders: :startup)
+      .where(startups: { id: assigned_team_ids })
+      .distinct.count
+  end
+
   def assigned_team_ids
-    @assigned_team_ids ||= coach.startups.pluck(:id)
+    @assigned_team_ids ||= coach.startups.joins(:course).where(courses: { id: course.id }).pluck(:id)
   end
 
   def authorized?
@@ -23,10 +32,10 @@ class CoachStatsResolver < ApplicationQuery
   end
 
   def course
-    current_school.courses.find_by(id: course_id)
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 
   def coach
-    course.faculty.find_by(id: coach_id)
+    @coach ||= course.faculty.find_by(id: coach_id)
   end
 end

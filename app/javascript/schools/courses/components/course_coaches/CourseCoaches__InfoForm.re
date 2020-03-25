@@ -5,15 +5,23 @@ let str = React.string;
 type state = {
   teams: array(Team.t),
   loading: bool,
+  stats,
+}
+and stats = {
+  reviewedSubmissions: int,
+  pendingSubmissions: int,
 };
 
+let initialStats = {reviewedSubmissions: 0, pendingSubmissions: 0};
+let initialState = {teams: [||], loading: true, stats: initialStats};
+
 type action =
-  | SaveTeamsData(array(Team.t))
+  | LoadCoachInfo(array(Team.t), stats)
   | RemoveTeam(string);
 
 let reducer = (state, action) => {
   switch (action) {
-  | SaveTeamsData(teams) => {teams, loading: false}
+  | LoadCoachInfo(teams, stats) => {teams, stats, loading: false}
   | RemoveTeam(id) => {
       ...state,
       teams: state.teams |> Js.Array.filter(team => Team.id(team) != id),
@@ -21,9 +29,9 @@ let reducer = (state, action) => {
   };
 };
 
-module CoachTeamsQuery = [%graphql
+module CoachInfoQuery = [%graphql
   {|
-    query($courseId: ID!, $coachId: ID) {
+    query CoachInfoQuery($courseId: ID!, $coachId: ID!) {
       teams(courseId: $courseId, coachId: $coachId, first: 100) {
         nodes {
           id,
@@ -33,18 +41,29 @@ module CoachTeamsQuery = [%graphql
           }
         }
       }
+
+      coachStats(courseId: $courseId, coachId: $coachId) {
+        reviewedSubmissions
+        pendingSubmissions
+      }
     }
   |}
 ];
 
 let loadCoachTeams = (courseId, coachId, send) => {
-  CoachTeamsQuery.make(~courseId, ~coachId, ())
+  CoachInfoQuery.make(~courseId, ~coachId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        let coachTeams =
          result##teams##nodes
          |> OptionUtils.mapWithDefault(Team.makeArrayFromJs, [||]);
-       send(SaveTeamsData(coachTeams));
+
+       let stats = {
+         reviewedSubmissions: result##coachStats##reviewedSubmissions,
+         pendingSubmissions: result##coachStats##pendingSubmissions,
+       };
+
+       send(LoadCoachInfo(coachTeams, stats));
        Js.Promise.resolve();
      })
   |> ignore;
@@ -56,8 +75,7 @@ let removeTeamEnrollment = (send, teamId) => {
 
 [@react.component]
 let make = (~courseId, ~coach) => {
-  let (state, send) =
-    React.useReducer(reducer, {teams: [||], loading: true});
+  let (state, send) = React.useReducer(reducer, initialState);
 
   React.useEffect1(
     () => {
@@ -91,7 +109,34 @@ let make = (~courseId, ~coach) => {
       </div>
     </div>
     <div className="max-w-2xl mx-auto">
-      <span className="inline-block mr-1 mb-2 text-sm font-semibold pt-5">
+      {state.loading
+         ? <div className="py-3 flex">
+             {SkeletonLoading.card(~className="w-full mr-2", ())}
+             {SkeletonLoading.card(~className="w-full ml-2", ())}
+           </div>
+         : <div className="py-3 flex mt-4">
+             <div
+               className="w-full mr-2 rounded-lg shadow px-5 py-6"
+               ariaLabel="Reviewed Submissions">
+               <div className="flex justify-between items-center">
+                 <span> {"Reviewed submissions" |> str} </span>
+                 <span className="text-2xl font-semibold">
+                   {state.stats.reviewedSubmissions |> string_of_int |> str}
+                 </span>
+               </div>
+             </div>
+             <div
+               className="w-full ml-2 rounded-lg shadow px-5 py-6"
+               ariaLabel="Pending Submissions">
+               <div className="flex justify-between items-center">
+                 <span> {"Pending submissions" |> str} </span>
+                 <span className="text-2xl font-semibold">
+                   {state.stats.pendingSubmissions |> string_of_int |> str}
+                 </span>
+               </div>
+             </div>
+           </div>}
+      <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
         {"Students assigned to coach:" |> str}
       </span>
       {state.loading
@@ -101,24 +146,24 @@ let make = (~courseId, ~coach) => {
                 ~element=SkeletonLoading.paragraph(),
               )}
            </div>
-         : {
-           state.teams |> ArrayUtils.isEmpty
-             ? <div
-                 className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
-                 {"There are no students assigned to this coach. You can assign coaches directly while editing the student details."
-                  |> str}
-               </div>
-             : state.teams
-               |> Array.map(team =>
-                    <CourseCoaches__InfoFormTeam
-                      key={Team.id(team)}
-                      team
-                      coach
-                      removeTeamEnrollmentCB={removeTeamEnrollment(send)}
-                    />
-                  )
-               |> React.array;
-         }}
+         : <div>
+             {state.teams |> ArrayUtils.isEmpty
+                ? <div
+                    className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
+                    {"There are no students assigned to this coach. You can assign coaches directly while editing the student details."
+                     |> str}
+                  </div>
+                : state.teams
+                  |> Array.map(team =>
+                       <CourseCoaches__InfoFormTeam
+                         key={Team.id(team)}
+                         team
+                         coach
+                         removeTeamEnrollmentCB={removeTeamEnrollment(send)}
+                       />
+                     )
+                  |> React.array}
+           </div>}
     </div>
   </div>;
 };

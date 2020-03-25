@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CourseExports::PrepareService do
+describe CourseExports::PrepareStudentsExportService do
   include SubmissionsHelper
 
   subject { described_class.new(course_export) }
@@ -26,7 +26,7 @@ describe CourseExports::PrepareService do
   let(:school) { student_1.school }
   let(:course) { student_1.course }
   let!(:school_admin) { create :school_admin, school: school }
-  let(:course_export) { create :course_export, course: course, user: school_admin.user }
+  let(:course_export) { create :course_export, :students, course: course, user: school_admin.user }
 
   let!(:student_1_reviewed_submission) { complete_target target_l1_evaluated, student_1 }
   let!(:student_2_reviewed_submission) { fail_target target_l1_evaluated, student_2 }
@@ -106,7 +106,7 @@ describe CourseExports::PrepareService do
     end
 
     context 'when course export data is restricted using options' do
-      let(:course_export) { create :course_export, course: course, user: school_admin.user, reviewed_only: true }
+      let(:course_export) { create :course_export, :students, course: course, user: school_admin.user, reviewed_only: true }
 
       before do
         submit_target target_l1_evaluated, student_1

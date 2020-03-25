@@ -90,8 +90,9 @@ module Targets
     end
 
     def pending_user_ids
-      @founder.startup.founders.where.not(id: @founder).reject do |founder|
-        founder.timeline_events.where(target: @target).passed.exists?
+      @founder.startup.founders.where.not(id: @founder).select do |founder|
+        team_member_submissions = founder.timeline_events.where(target: @target)
+        team_member_submissions.failed.count == team_member_submissions.count
       end.map(&:user_id)
     end
 

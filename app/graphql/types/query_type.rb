@@ -52,6 +52,11 @@ module Types
       argument :target_id, ID, required: true
     end
 
+    field :coach_stats, Types::CoachStatsType, null: false do
+      argument :coach_id, ID, required: true
+      argument :course_id, ID, required: true
+    end
+
     field :similar_questions, [Types::QuestionType], null: false do
       argument :community_id, ID, required: true
       argument :title, String, required: true
@@ -110,6 +115,11 @@ module Types
     def target_details(args)
       resolver = TargetDetailsResolver.new(context, args)
       resolver.target_details
+    end
+
+    def coach_stats(args)
+      resolver = CoachStatsResolver.new(context, args)
+      resolver.coach_stats
     end
 
     def similar_questions(args)

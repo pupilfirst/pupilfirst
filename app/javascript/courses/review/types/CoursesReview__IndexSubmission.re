@@ -28,13 +28,13 @@ let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
 let timeDistance = t =>
   t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);
 
-let sortUp = submissions =>
+let sortDown = submissions =>
   submissions
   |> ArrayUtils.copyAndSort((x, y) =>
        DateFns.differenceInSeconds(y.createdAt, x.createdAt) |> int_of_float
      );
 
-let sortDown = submissions => submissions |> sortUp |> Js.Array.reverseInPlace;
+let sortUp = submissions => submissions |> sortDown |> Js.Array.reverseInPlace;
 
 let statusDecode = json =>
   Json.Decode.{

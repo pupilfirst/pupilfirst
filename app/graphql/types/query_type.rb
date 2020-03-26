@@ -15,6 +15,7 @@ module Types
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
+      argument :sort_direction, String, required: true
     end
 
     field :submission_details, Types::SubmissionDetailsType, null: false do

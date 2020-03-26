@@ -63,9 +63,15 @@ let reducer = (state, action) =>
       reviewedSubmissions:
         switch (hasNextPage, endCursor) {
         | (_, None)
-        | (false, Some(_)) => FullyLoaded(reviewedSubmissions, filter)
+        | (false, Some(_)) =>
+          FullyLoaded(reviewedSubmissions, filter, state.sortDirection)
         | (true, Some(cursor)) =>
-          PartiallyLoaded(reviewedSubmissions, filter, cursor)
+          PartiallyLoaded(
+            reviewedSubmissions,
+            filter,
+            state.sortDirection,
+            cursor,
+          )
         },
     };
   | UpdateReviewedSubmission(submission) =>
@@ -80,16 +86,23 @@ let reducer = (state, action) =>
       reviewedSubmissions:
         switch (state.reviewedSubmissions) {
         | Unloaded => Unloaded
-        | PartiallyLoaded(reviewedSubmissions, _filter, cursor) =>
+        | PartiallyLoaded(
+            reviewedSubmissions,
+            _filter,
+            _sortDirection,
+            cursor,
+          ) =>
           PartiallyLoaded(
             reviewedSubmissions |> IndexSubmission.replace(submission),
             filter,
+            state.sortDirection,
             cursor,
           )
-        | FullyLoaded(reviewedSubmissions, _filter) =>
+        | FullyLoaded(reviewedSubmissions, _filter, _sortDirection) =>
           FullyLoaded(
             reviewedSubmissions |> IndexSubmission.replace(submission),
             filter,
+            state.sortDirection,
           )
         },
     };
@@ -461,6 +474,7 @@ let make =
              courseId
              selectedLevel={state.selectedLevel}
              selectedCoach={state.selectedCoach}
+             sortDirection={state.sortDirection}
              levels
              reviewedSubmissions={state.reviewedSubmissions}
              updateReviewedSubmissionsCB={(

@@ -15,6 +15,7 @@ module Types
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
+      argument :sort_direction, String, required: true
     end
 
     field :submission_details, Types::SubmissionDetailsType, null: false do
@@ -50,6 +51,11 @@ module Types
 
     field :target_details, Types::TargetDetailsType, null: false do
       argument :target_id, ID, required: true
+    end
+
+    field :coach_stats, Types::CoachStatsType, null: false do
+      argument :coach_id, ID, required: true
+      argument :course_id, ID, required: true
     end
 
     def courses
@@ -105,6 +111,11 @@ module Types
     def target_details(args)
       resolver = TargetDetailsResolver.new(context, args)
       resolver.target_details
+    end
+
+    def coach_stats(args)
+      resolver = CoachStatsResolver.new(context, args)
+      resolver.coach_stats
     end
   end
 end

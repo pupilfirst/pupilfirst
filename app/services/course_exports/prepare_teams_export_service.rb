@@ -40,7 +40,7 @@ module CourseExports
           team.id,
           team.name,
           team.founders.map(&:name).join(', '),
-          team.faculty.map(&:name).join(', ')
+          team.faculty.map(&:name).sort.join(', ')
         ]
       end
 
@@ -62,10 +62,10 @@ module CourseExports
     end
 
     def compute_grading_for_submissions(target, team_ids)
-      target.timeline_events.order(:created_at).distinct.each_with_object(Array.new(team_ids.length)) do |submission, grading|
+      submissions(target).order(:created_at).distinct.each_with_object(Array.new(team_ids.length)) do |submission, grading|
         team = submission.founders.first.startup
 
-        next unless submission.founder_ids == team.founder_ids
+        next unless submission.founder_ids.sort == team.founder_ids.sort
 
         grade_index = team_ids.index(team.id)
 
@@ -80,10 +80,14 @@ module CourseExports
       targets(role: Target::ROLE_TEAM)
     end
 
-    def teams_with_submissions(target)
+    def submissions(target)
       target.timeline_events
         .joins(:founders)
         .where(founders: { id: student_ids })
+    end
+
+    def teams_with_submissions(target)
+      submissions(target)
         .distinct('founders.startup_id')
         .count('founders.startup_id')
     end
@@ -98,13 +102,16 @@ module CourseExports
     end
 
     def teams
-      @teams ||= Startup.includes(faculty: :user).joins(:founders).where(founders: { id: student_ids }).order(:id).distinct.select do |team|
+      @teams ||= Startup.includes(:founders, faculty: :user)
+        .joins(:course)
+        .where(courses: { id: course.id }).active
+        .order(:id).distinct.select do |team|
         team.founders.count > 1
       end
     end
 
     def student_ids
-      @student_ids ||= course.founders.active.pluck(:id)
+      @student_ids ||= Founder.where(startup_id: teams.pluck(:id))
     end
   end
 end

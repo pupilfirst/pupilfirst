@@ -2,12 +2,13 @@ class ReviewedSubmissionsResolver < ApplicationQuery
   property :course_id
   property :level_id
   property :coach_id
+  property :sort_direction
 
   def reviewed_submissions
     submissions.evaluated_by_faculty
       .includes(:startup_feedback, founders: :user, target: :target_group)
       .distinct
-      .order("created_at DESC")
+      .order("created_at #{sort_direction}")
   end
 
   def authorized?

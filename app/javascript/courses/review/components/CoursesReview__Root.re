@@ -269,7 +269,7 @@ let filterPlaceholder = state => {
 
 let restoreFilterNotice = (send, currentCoach, message) =>
   <div
-    className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
+    className="mb-4 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
     <span> {message |> str} </span>
     <button
       className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
@@ -460,6 +460,9 @@ let make =
              {submissionsSorter(state, send)}
            </div>}
         </div>
+
+      </div>
+      <div className="max-w-3xl mx-auto">
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
       <div className="max-w-3xl mx-auto">

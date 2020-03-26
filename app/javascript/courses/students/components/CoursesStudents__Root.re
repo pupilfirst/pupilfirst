@@ -390,8 +390,9 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
        />
      | _ => React.null
      }}
-    <div className="bg-gray-100 pt-12 pb-8 px-3 -mt-7">
-      <div className="w-full bg-gray-100 relative md:sticky md:top-0 z-10">
+    <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
+      <div
+        className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">
         <div
           className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
           <Multiselect
@@ -430,7 +431,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
                 )
               | NotLoading =>
                 <button
-                  className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                  className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                   onClick={_ => {
                     send(BeginLoadingMore);
                     getTeams(send, courseId, Some(cursor), state.filter);

@@ -278,7 +278,7 @@ let make =
                 ~element=SkeletonLoading.card(),
               )
             : <button
-                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                 onClick={_ =>
                   getReviewedSubmissions(
                     courseId,

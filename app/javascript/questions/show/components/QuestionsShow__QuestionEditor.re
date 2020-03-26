@@ -320,9 +320,10 @@ let suggestions = state => {
                 target="_blank"
                 key={suggestion |> QuestionSuggestion.id}
                 className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-200">
-                <div>
+                <div className="flex flex-col min-w-0">
                   <h5
-                    className="font-semibold text-sm leading-snug md:text-base">
+                    title={suggestion |> QuestionSuggestion.title}
+                    className="font-semibold text-sm leading-snug md:text-base pr-1 truncate flex-1">
                     {suggestion |> QuestionSuggestion.title |> str}
                   </h5>
                   <p className="text-xs mt-1 leading-tight text-gray-800">

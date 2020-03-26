@@ -41,17 +41,17 @@ feature 'Course review' do
   context 'with multiple submissions' do
     # Create a couple of passed submissions for the team 3.
     let!(:submission_l1_t3) { create(:timeline_event, founders: [team_l3.founders.first], latest: true, target: target_l1, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-    let!(:submission_l2_t3) { create(:timeline_event, founders: [team_l3.founders.first], latest: true, target: target_l2, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: nil) }
-    let!(:team_submission) { create(:timeline_event, founders: team_l3.founders, latest: true, target: team_target, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: nil) }
+    let!(:submission_l2_t3) { create(:timeline_event, founders: [team_l3.founders.first], latest: true, target: target_l2, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: nil, created_at: 1.day.ago) }
+    let!(:team_submission) { create(:timeline_event, founders: team_l3.founders, latest: true, target: team_target, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: nil, created_at: 2.days.ago) }
     let!(:auto_verified_submission) { create(:timeline_event, founders: team_l3.founders, latest: true, target: auto_verify_target, passed_at: 1.day.ago) }
 
     # And one passed submission for team 2.
-    let!(:submission_l1_t2) { create(:timeline_event, founders: [team_l2.founders.first], latest: true, target: target_l1, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_l1_t2) { create(:timeline_event, founders: [team_l2.founders.first], latest: true, target: target_l1, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago, created_at: 4.days.ago) }
 
     # Create a couple of pending submissions for the teams.
     let!(:submission_l1_t1) { create(:timeline_event, latest: true, target: target_l1, founders: [team_l1.founders.first]) }
-    let!(:submission_l2_t2) { create(:timeline_event, latest: true, target: target_l2, founders: [team_l2.founders.first]) }
-    let!(:submission_l3_t3) { create(:timeline_event, latest: true, target: target_l3, founders: [team_l3.founders.first]) }
+    let!(:submission_l2_t2) { create(:timeline_event, latest: true, target: target_l2, founders: [team_l2.founders.first], created_at: 1.day.ago) }
+    let!(:submission_l3_t3) { create(:timeline_event, latest: true, target: target_l3, founders: [team_l3.founders.first], created_at: 2.days.ago) }
 
     let(:feedback) { create(:startup_feedback, startup_id: team_l2.id, faculty_id: course_coach.id) }
 
@@ -234,6 +234,37 @@ feature 'Course review' do
       within("div[aria-label='status-tab']") do
         expect(page).to have_content('1')
       end
+    end
+
+    scenario 'coach changes the sort order of submissions', js: true do
+      sign_in_user course_coach.user, referer: review_course_path(course)
+
+      within("div[aria-label='change-submissions-sorting']") do
+        expect(page).to have_content("Submitted At")
+      end
+
+      # Check current ordering of pending items
+      find("div#pending-submissions a:nth-child(1)").should have_content(submission_l1_t1.title)
+      find("div#pending-submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
+      find("div#pending-submissions a:nth-child(3)").should have_content(submission_l3_t3.title)
+
+      # Swap the ordering of pending items
+      click_button('toggle-sort-order')
+
+      find("div#pending-submissions a:nth-child(3)").should have_content(submission_l1_t1.title)
+      find("div#pending-submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
+      find("div#pending-submissions a:nth-child(1)").should have_content(submission_l3_t3.title)
+
+      # Switch to reviewed tab and check sorting
+      click_button 'Reviewed'
+
+      find("div#reviewed-submissions a:nth-child(1)").should have_content(submission_l1_t2.title)
+      find("div#reviewed-submissions a:nth-child(2)").should have_content(team_submission.title)
+
+      click_button('toggle-sort-order')
+
+      find("div#reviewed-submissions a:nth-child(1)").should have_content(submission_l1_t3.title)
+      find("div#reviewed-submissions a:nth-child(2)").should have_content(submission_l2_t3.title)
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do

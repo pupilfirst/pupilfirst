@@ -152,7 +152,7 @@ let sortedSubmissions = (submissions, sortDirection) => {
 };
 
 let showSubmission = (submissions, levels, sortDirection) =>
-  <div>
+  <div id="reviewed-submissions">
     {sortedSubmissions(submissions, sortDirection)
      |> Array.map(submission =>
           <Link

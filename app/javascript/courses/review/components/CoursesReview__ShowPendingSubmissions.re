@@ -6,7 +6,7 @@ let str = React.string;
 
 [@react.component]
 let make = (~submissions, ~levels) => {
-  <div>
+  <div id="pending-submissions">
     {if (submissions |> ArrayUtils.isEmpty) {
        <div
          className="course-review__pending-empty text-lg font-semibold text-center py-4">

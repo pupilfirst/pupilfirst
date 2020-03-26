@@ -66,30 +66,35 @@ module Make = (Sortable: Sortable) => {
              <span> {selectedCriterion |> Sortable.criterion |> str} </span>
            </div>}
       {<span className="flex ml-1">
-         {switch (direction) {
-          | `Up =>
-            <button
-              className="bg-white px-3 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 text-sm"
-              onClick={_ => onDirectionChange(`Down)}>
+         <button
+           title="toggle-sort-order"
+           className="bg-white px-3 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 text-sm"
+           onClick={_ => {
+             let swappedDirection =
+               switch (direction) {
+               | `Up => `Down
+               | `Down => `Up
+               };
+             onDirectionChange(swappedDirection);
+           }}>
+           {switch (direction) {
+            | `Up =>
               <FaIcon
                 classes={directionIconClasses(
                   Sortable.criterionType(selectedCriterion),
                   `Up,
                 )}
               />
-            </button>
-          | `Down =>
-            <button
-              className="bg-white px-3 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 text-sm"
-              onClick={_ => onDirectionChange(`Up)}>
+
+            | `Down =>
               <FaIcon
                 classes={directionIconClasses(
                   Sortable.criterionType(selectedCriterion),
                   `Down,
                 )}
               />
-            </button>
-          }}
+            }}
+         </button>
        </span>}
     </div>;
   };

@@ -339,7 +339,9 @@ module SubmissionsSorter = Sorter.Make(Sortable);
 
 let submissionsSorter = (state, send) => {
   let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
-  <div className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+  <div
+    ariaLabel="change-submissions-sorting"
+    className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
     <label className="block text-tiny font-semibold uppercase">
       {"Sort by:" |> str}
     </label>
@@ -460,7 +462,6 @@ let make =
              {submissionsSorter(state, send)}
            </div>}
         </div>
-
       </div>
       <div className="max-w-3xl mx-auto">
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}

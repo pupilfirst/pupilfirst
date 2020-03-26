@@ -25,7 +25,17 @@ module Users
     alias developer oauth_callback
 
     def stripe_connect
-      render json: { email: email_from_auth_hash, stripe_user_id: auth_hash.dig(:uid), default_currency: auth_hash.dig(:extra, :extra_info, :default_currency) }
+      if oauth_origin.present?
+        redirect_to payments_school_url(host: oauth_origin[:fqdn])
+        if current_user.present? && current_user.school == school
+          flash[:error] = 'Eureka.'
+          render json: { email: email_from_auth_hash, stripe_user_id: auth_hash.dig(:uid), default_currency: auth_hash.dig(:extra, :extra_info, :default_currency) }
+        else
+          flash[:error] = 'Authentication was denied. Please try again.'
+        end
+      else
+        render 'oauth_origin_missing', layout: 'error'
+      end
     end
 
     def failure
@@ -74,10 +84,11 @@ module Users
     end
 
     def user
-      @user ||= begin
-        school = School.joins(:domains).where(domains: { fqdn: oauth_origin[:fqdn] }).first
-        school.users.with_email(@email).first
-      end
+      @user ||= school.users.with_email(@email).first
+    end
+
+    def school
+      @school ||= School.joins(:domains).where(domains: { fqdn: oauth_origin[:fqdn] }).first
     end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.

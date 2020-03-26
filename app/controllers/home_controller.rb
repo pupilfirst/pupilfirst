@@ -41,7 +41,7 @@ class HomeController < ApplicationController
       referer: params[:referer]
     }.to_json)
 
-    redirect_to OmniauthProviderUrlService.new(params[:provider], current_host).oauth_url
+    redirect_to OmniauthProviderUrlService.new(params[:provider], current_host, params[:fqdn]).oauth_url
   end
 
   # GET /oauth_error?error=

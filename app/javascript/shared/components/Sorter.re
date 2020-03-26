@@ -10,7 +10,7 @@ module Make = (Sortable: Sortable) => {
     let selectedForDropdown =
       <button
         title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-        className="inline-flex items-center bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-3 py-2 text-xs ">
+        className="inline-flex flex-1 md:flex-auto items-center bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-3 py-2 text-xs ">
         <span className="ml-2">
           {selectedCriterion |> Sortable.criterion |> str}
         </span>
@@ -57,20 +57,20 @@ module Make = (Sortable: Sortable) => {
         ~onDirectionChange,
         ~onCriterionChange,
       ) => {
-    <div className="flex items-center">
+    <div className="flex mt-1">
       {criteria |> Array.length > 1
          ? dropdown(criteria, selectedCriterion, onCriterionChange)
          : <div
              title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-             className="inline-flex items-center bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-3 py-2 text-xs ">
-             <span className="ml-2">
-               {selectedCriterion |> Sortable.criterion |> str}
-             </span>
+             className="inline-flex flex-1 md:flex-auto items-center bg-gray-100 leading-relaxed font-semibold text-gray-700 border border-gray-400 rounded focus:outline-none px-3 py-2 text-xs ">
+             <span> {selectedCriterion |> Sortable.criterion |> str} </span>
            </div>}
-      {<span className="bg-white p-1 border border-gray-400 ml-1 rounded">
+      {<span className="flex ml-1">
          {switch (direction) {
           | `Up =>
-            <button onClick={_ => onDirectionChange(`Down)}>
+            <button
+              className="bg-white px-3 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 text-sm"
+              onClick={_ => onDirectionChange(`Down)}>
               <FaIcon
                 classes={directionIconClasses(
                   Sortable.criterionType(selectedCriterion),
@@ -79,7 +79,9 @@ module Make = (Sortable: Sortable) => {
               />
             </button>
           | `Down =>
-            <button onClick={_ => onDirectionChange(`Up)}>
+            <button
+              className="bg-white px-3 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 text-sm"
+              onClick={_ => onDirectionChange(`Up)}>
               <FaIcon
                 classes={directionIconClasses(
                   Sortable.criterionType(selectedCriterion),

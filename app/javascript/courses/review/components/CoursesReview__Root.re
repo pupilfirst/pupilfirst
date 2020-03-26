@@ -326,8 +326,10 @@ module SubmissionsSorter = Sorter.Make(Sortable);
 
 let submissionsSorter = (state, send) => {
   let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
-  <div className="flex-shrink-0 ml-2">
-    <p className="text-xs font-semibold"> {"Sort by:" |> str} </p>
+  <div className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+    <label className="block text-tiny font-semibold uppercase">
+      {"Sort by:" |> str}
+    </label>
     <SubmissionsSorter
       criteria
       selectedCriterion={state.sortBy}
@@ -389,58 +391,62 @@ let make =
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-9 pb-8 px-3 -mt-7">
-      <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
-        <div
-          className="flex flex-col md:flex-row items-end lg:items-center py-4">
+      <div className="bg-gray-100 static md:sticky md:top-0">
+        <div className="max-w-3xl mx-auto">
           <div
-            ariaLabel="status-tab"
-            className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
-            <button
-              className={buttonClasses(
-                state.visibleList == PendingSubmissions,
-              )}
-              onClick={_ => send(SelectPendingTab)}>
-              {"Pending" |> str}
-              <span
-                className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
-                {filteredPendingSubmissions
-                 |> Array.length
-                 |> string_of_int
-                 |> str}
-              </span>
-            </button>
-            <button
-              className={buttonClasses(
-                state.visibleList == ReviewedSubmissions,
-              )}
-              onClick={_ => send(SelectReviewedTab)}>
-              {"Reviewed" |> str}
-            </button>
+            className="flex flex-col md:flex-row items-end lg:items-center py-4">
+            <div
+              ariaLabel="status-tab"
+              className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
+              <button
+                className={buttonClasses(
+                  state.visibleList == PendingSubmissions,
+                )}
+                onClick={_ => send(SelectPendingTab)}>
+                {"Pending" |> str}
+                <span
+                  className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
+                  {filteredPendingSubmissions
+                   |> Array.length
+                   |> string_of_int
+                   |> str}
+                </span>
+              </button>
+              <button
+                className={buttonClasses(
+                  state.visibleList == ReviewedSubmissions,
+                )}
+                onClick={_ => send(SelectReviewedTab)}>
+                {"Reviewed" |> str}
+              </button>
+            </div>
           </div>
+          {<div className="md:flex w-full items-start pb-4">
+             <div className="flex-1">
+               <label className="block text-tiny font-semibold uppercase">
+                 {"Filter by:" |> str}
+               </label>
+               <Multiselect
+                 id="filter"
+                 unselected={unselected(
+                   levels,
+                   teamCoaches,
+                   currentCoach |> Coach.id,
+                   state,
+                 )}
+                 selected={selected(state, currentCoach |> Coach.id)}
+                 onSelect={onSelectFilter(send)}
+                 onDeselect={onDeselectFilter(send)}
+                 value={state.filterString}
+                 onChange={filterString =>
+                   send(UpdateFilterString(filterString))
+                 }
+                 placeholder={filterPlaceholder(state)}
+               />
+             </div>
+             {submissionsSorter(state, send)}
+           </div>}
         </div>
-        {<div className="flex items-center">
-           <div className="flex-1">
-             <p className="text-xs font-semibold"> {"Filter by:" |> str} </p>
-             <Multiselect
-               id="filter"
-               unselected={unselected(
-                 levels,
-                 teamCoaches,
-                 currentCoach |> Coach.id,
-                 state,
-               )}
-               selected={selected(state, currentCoach |> Coach.id)}
-               onSelect={onSelectFilter(send)}
-               onDeselect={onDeselectFilter(send)}
-               value={state.filterString}
-               onChange={filterString =>
-                 send(UpdateFilterString(filterString))
-               }
-               placeholder={filterPlaceholder(state)}
-             />
-           </div>
-           {submissionsSorter(state, send)}
-         </div>}
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
       <div className="max-w-3xl mx-auto">

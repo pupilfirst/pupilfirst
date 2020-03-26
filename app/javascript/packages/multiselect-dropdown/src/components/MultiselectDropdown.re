@@ -179,13 +179,13 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
+          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)##value)}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 mr-3 leading-snug focus:outline-none"
+            className="flex-grow appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
             id=inputId
             type_="text"
             placeholder

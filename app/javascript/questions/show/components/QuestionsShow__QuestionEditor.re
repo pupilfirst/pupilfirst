@@ -117,7 +117,7 @@ let searchForSimilarQuestions = (send, title, communityId, ()) => {
 
 let isInvalidString = s => s |> String.trim == "";
 
-let updateTitle = (state, send, communityId, title) => {
+let updateTitleAndSearch = (state, send, communityId, title) => {
   state.titleTimeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
 
   let trimmedTitle = title |> String.trim;
@@ -223,7 +223,7 @@ let handleCreateOrUpdateQuestion =
     (state, send, communityId, target, question, updateQuestionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
-  if (saveDisabled(state)) {
+  if (!saveDisabled(state)) {
     send(BeginSaving);
 
     switch (question) {
@@ -307,8 +307,15 @@ let suggestions = state => {
                 suggestion
                 |> QuestionSuggestion.createdAt
                 |> DateTime.format(DateTime.OnlyDate);
-              let answers = suggestion |> QuestionSuggestion.answersCount;
-              let answersCountPrefix = answers == 1 ? " answer" : " answers";
+              let (answersText, answersClasses) =
+                switch (suggestion |> QuestionSuggestion.answersCount) {
+                | 0 => ("No answers", "bg-gray-300 text-gray-700")
+                | 1 => ("1 answer", "bg-green-500 text-white")
+                | n => (
+                    (n |> string_of_int) ++ " answers",
+                    "bg-green-500 text-white",
+                  )
+                };
 
               <a
                 href={
@@ -331,8 +338,11 @@ let suggestions = state => {
                   </p>
                 </div>
                 <div
-                  className="text-xs px-1 py-px ml-2 rounded text-white bg-green-500 font-semibold flex-shrink-0">
-                  {(answers |> string_of_int) ++ answersCountPrefix |> str}
+                  className={
+                    "text-xs px-1 py-px ml-2 rounded font-semibold flex-shrink-0 "
+                    ++ answersClasses
+                  }>
+                  {answersText |> str}
                 </div>
               </a>;
             })
@@ -393,8 +403,8 @@ let make =
         <h4 className="max-w-3xl w-full mx-auto pb-2 mt-2 px-3 lg:px-0">
           {(
              switch (question) {
-             | Some(_) => "Edit Question"
-             | None => "Ask a new Question"
+             | Some(_) => "Edit question"
+             | None => "Ask a new question"
              }
            )
            |> str}
@@ -412,10 +422,15 @@ let make =
                 id="title"
                 value={state.title}
                 className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                onChange={event =>
-                  ReactEvent.Form.target(event)##value
-                  |> updateTitle(state, send, communityId)
-                }
+                onChange={event => {
+                  let newTitle = ReactEvent.Form.target(event)##value;
+
+                  switch (question) {
+                  | Some(_) => send(UpdateTitle(newTitle))
+                  | None =>
+                    updateTitleAndSearch(state, send, communityId, newTitle)
+                  };
+                }}
                 placeholder="Ask your question here briefly."
               />
               <label

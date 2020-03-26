@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Community Show', js: true do
+feature 'Community', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
@@ -60,14 +60,14 @@ feature 'Community Show', js: true do
     expect(page).to have_text(community.name)
 
     click_link 'Ask a question'
-    expect(page).to have_text("ASK A NEW QUESTION")
+    expect(page).to have_text("Ask a new question")
     fill_in 'Question', with: question_title
     replace_markdown question_description
     click_button 'Post Your Question'
 
     expect(page).to have_text(question_title)
     expect(page).to have_text(question_description)
-    expect(page).not_to have_text("ASK A NEW QUESTION")
+    expect(page).not_to have_text("Ask a new question")
   end
 
   scenario 'an active student participates in a question thread' do

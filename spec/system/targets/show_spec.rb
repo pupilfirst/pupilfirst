@@ -494,13 +494,13 @@ feature 'Target Overlay', js: true do
       find("a[title='Ask a question in the #{community_1.name} community'").click
 
       expect(page).to have_text(target_l1.title)
-      expect(page).to have_text("ASK A NEW QUESTION")
+      expect(page).to have_text("Ask a new question")
 
       # Try clearing the linking.
       click_link 'Clear'
 
       expect(page).not_to have_text(target_l1.title)
-      expect(page).to have_text("ASK A NEW QUESTION")
+      expect(page).to have_text("Ask a new question")
 
       # Let's go back to linked state and try creating a linked question.
       visit(new_question_community_path(community_1, target_id: target_l1.id))
@@ -511,7 +511,7 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_text(question_title)
       expect(page).to have_text(question_description)
-      expect(page).not_to have_text("ASK A NEW QUESTION")
+      expect(page).not_to have_text("Ask a new question")
 
       # The question should have been linked to the target.
       expect(Question.where(title: question_title).first.targets.first).to eq(target_l1)

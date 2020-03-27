@@ -41,10 +41,10 @@ module Make = (Sortable: Sortable) => {
 
   let directionIconClasses = (criterionType, direction) => {
     switch (criterionType, direction) {
-    | (`String, `Up) => "fas fa-sort-alpha-down"
-    | (`String, `Down) => "fas fa-sort-alpha-down-alt"
-    | (`Number, `Up) => "fas fa-sort-amount-up-alt"
-    | (`Number, `Down) => "fas fa-sort-amount-down-alt"
+    | (`String, `Ascending) => "fas fa-sort-alpha-down"
+    | (`String, `Descending) => "fas fa-sort-alpha-down-alt"
+    | (`Number, `Ascending) => "fas fa-sort-amount-up-alt"
+    | (`Number, `Descending) => "fas fa-sort-amount-down-alt"
     };
   };
 
@@ -72,8 +72,8 @@ module Make = (Sortable: Sortable) => {
            onClick={_ => {
              let swappedDirection =
                switch (direction) {
-               | `Up => `Down
-               | `Down => `Up
+               | `Ascending => `Descending
+               | `Descending => `Ascending
                };
              onDirectionChange(swappedDirection);
            }}>

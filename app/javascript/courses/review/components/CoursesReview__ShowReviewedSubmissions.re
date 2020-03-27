@@ -13,7 +13,7 @@ type state =
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query ReviewedSubmissionsQuery($courseId: ID!, $levelId: ID, $coachId: ID, $after: String, $sortDirection: String!) {
+    query ReviewedSubmissionsQuery($courseId: ID!, $levelId: ID, $coachId: ID, $after: String, $sortDirection: SortDirection!) {
       reviewedSubmissions(courseId: $courseId, levelId: $levelId, coachId: $coachId, first: 20, after: $after, sortDirection: $sortDirection) {
         nodes {
           id,
@@ -64,12 +64,6 @@ let updateReviewedSubmissions =
   setState(_ => Loaded);
 };
 
-let sortDirectionAsString = sortDirection =>
-  switch (sortDirection) {
-  | `Up => "ASC"
-  | `Down => "DESC"
-  };
-
 let getReviewedSubmissions =
     (
       courseId,
@@ -96,7 +90,7 @@ let getReviewedSubmissions =
     ~courseId,
     ~levelId?,
     ~coachId?,
-    ~sortDirection=sortDirectionAsString(sortDirection),
+    ~sortDirection,
     ~after=?cursor,
     (),
   )
@@ -144,16 +138,10 @@ let submissionCardClasses = status =>
     }
   );
 
-let sortedSubmissions = (submissions, sortDirection) => {
-  switch (sortDirection) {
-  | `Up => submissions |> IndexSubmission.sortUp
-  | `Down => submissions |> IndexSubmission.sortDown
-  };
-};
-
 let showSubmission = (submissions, levels, sortDirection) =>
   <div id="reviewed-submissions">
-    {sortedSubmissions(submissions, sortDirection)
+    {submissions
+     |> IndexSubmission.sortArray(sortDirection)
      |> Array.map(submission =>
           <Link
             href={"/submissions/" ++ (submission |> IndexSubmission.id)}

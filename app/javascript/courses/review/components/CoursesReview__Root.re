@@ -20,7 +20,7 @@ type state = {
   selectedCoach: option(Coach.t),
   filterString: string,
   sortBy,
-  sortDirection: [ | `Up | `Down],
+  sortDirection: [ | `Ascending | `Descending],
 };
 
 type action =
@@ -34,7 +34,7 @@ type action =
   | SelectCoach(Coach.t)
   | DeselectCoach
   | UpdateFilterString(string)
-  | UpdateSortDirection([ | `Up | `Down]);
+  | UpdateSortDirection([ | `Ascending | `Descending]);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -129,7 +129,7 @@ let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
     criterion: "Submitted At",
     criterionType: `Number,
   },
-  sortDirection: `Down,
+  sortDirection: `Descending,
 };
 
 let openOverlay = (submissionId, event) => {
@@ -340,7 +340,7 @@ module SubmissionsSorter = Sorter.Make(Sortable);
 let submissionsSorter = (state, send) => {
   let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
   <div
-    ariaLabel="change-submissions-sorting"
+    ariaLabel="Change submissions sorting"
     className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
     <label className="block text-tiny font-semibold uppercase">
       {"Sort by:" |> str}
@@ -381,12 +381,7 @@ let make =
     let filteredSubmissions =
       state.pendingSubmissions
       |> filterSubmissions(state.selectedLevel, state.selectedCoach);
-    let sortedSubmissions =
-      switch (state.sortDirection) {
-      | `Up => filteredSubmissions |> IndexSubmission.sortUp
-      | `Down => filteredSubmissions |> IndexSubmission.sortDown
-      };
-    sortedSubmissions;
+    filteredSubmissions |> IndexSubmission.sortArray(state.sortDirection);
   };
   <div>
     {switch (url.path) {

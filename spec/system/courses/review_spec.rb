@@ -239,7 +239,7 @@ feature 'Course review' do
     scenario 'coach changes the sort order of submissions', js: true do
       sign_in_user course_coach.user, referer: review_course_path(course)
 
-      within("div[aria-label='change-submissions-sorting']") do
+      within("div[aria-label='Change submissions sorting']") do
         expect(page).to have_content("Submitted At")
       end
 

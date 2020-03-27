@@ -18,7 +18,7 @@ let filterEq = (level, coach, filter) =>
   && filter.coach
   |> filterCoachId == filterCoachId(coach);
 
-type sortDirection = [ | `Up | `Down];
+type sortDirection = [ | `Ascending | `Descending];
 
 type t =
   | Unloaded

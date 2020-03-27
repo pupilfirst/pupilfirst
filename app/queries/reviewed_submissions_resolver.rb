@@ -8,13 +8,24 @@ class ReviewedSubmissionsResolver < ApplicationQuery
     submissions.evaluated_by_faculty
       .includes(:startup_feedback, founders: :user, target: :target_group)
       .distinct
-      .order("created_at #{sort_direction}")
+      .order("created_at #{sort_direction_string}")
   end
 
   def authorized?
     return false if current_user.faculty.blank?
 
     current_user.faculty.reviewable_courses.where(id: course).exists?
+  end
+
+  def sort_direction_string
+    case sort_direction
+      when 'Ascending'
+        'ASC'
+      when 'Descending'
+        'DESC'
+      else
+        raise 'Not a valid sort direction'
+    end
   end
 
   def course

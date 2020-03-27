@@ -77,23 +77,12 @@ module Make = (Sortable: Sortable) => {
                };
              onDirectionChange(swappedDirection);
            }}>
-           {switch (direction) {
-            | `Up =>
-              <FaIcon
-                classes={directionIconClasses(
-                  Sortable.criterionType(selectedCriterion),
-                  `Up,
-                )}
-              />
-
-            | `Down =>
-              <FaIcon
-                classes={directionIconClasses(
-                  Sortable.criterionType(selectedCriterion),
-                  `Down,
-                )}
-              />
-            }}
+           {<FaIcon
+              classes={directionIconClasses(
+                Sortable.criterionType(selectedCriterion),
+                direction,
+              )}
+            />}
          </button>
        </span>}
     </div>;

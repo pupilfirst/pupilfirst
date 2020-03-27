@@ -58,6 +58,11 @@ module Types
       argument :course_id, ID, required: true
     end
 
+    field :similar_questions, [Types::QuestionType], null: false do
+      argument :community_id, ID, required: true
+      argument :title, String, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -116,6 +121,11 @@ module Types
     def coach_stats(args)
       resolver = CoachStatsResolver.new(context, args)
       resolver.coach_stats
+    end
+
+    def similar_questions(args)
+      resolver = SimilarQuestionsResolver.new(context, args)
+      resolver.similar_questions
     end
   end
 end

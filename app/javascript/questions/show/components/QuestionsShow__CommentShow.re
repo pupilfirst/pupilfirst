@@ -24,7 +24,7 @@ let make =
     };
 
   <ul
-    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-2 md:px-3 md:px-8">
+    className="list-reset max-w-3xl w-full flex flex-col mx-auto items-center justify-center px-3 lg:px-6">
     {commentsToShow
      |> List.sort((commentA, commentB) =>
           DateFns.differenceInSeconds(

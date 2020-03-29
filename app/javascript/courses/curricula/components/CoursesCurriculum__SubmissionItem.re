@@ -131,7 +131,7 @@ let showLongText = (value, id, updateResultCB) => {
       textareaId=id
       onChange={updateLongText(updateResultCB)}
       value
-      profile=Markdown.AreaOfText
+      profile=Markdown.QuestionAndAnswer
       maxLength=5000
     />
     {longTextWarning(value)}

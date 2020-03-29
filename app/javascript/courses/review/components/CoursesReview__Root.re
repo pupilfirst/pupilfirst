@@ -378,10 +378,9 @@ let make =
   let url = ReasonReactRouter.useUrl();
 
   let filteredPendingSubmissions = {
-    let filteredSubmissions =
-      state.pendingSubmissions
-      |> filterSubmissions(state.selectedLevel, state.selectedCoach);
-    filteredSubmissions |> IndexSubmission.sortArray(state.sortDirection);
+    state.pendingSubmissions
+    |> filterSubmissions(state.selectedLevel, state.selectedCoach)
+    |> IndexSubmission.sortArray(state.sortDirection);
   };
   <div>
     {switch (url.path) {

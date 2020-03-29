@@ -24,7 +24,7 @@ class ReviewedSubmissionsResolver < ApplicationQuery
       when 'Descending'
         'DESC'
       else
-        raise 'Not a valid sort direction'
+        raise "#{sort_direction} is not a valid sort direction"
     end
   end
 

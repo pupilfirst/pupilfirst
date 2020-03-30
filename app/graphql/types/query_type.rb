@@ -21,6 +21,7 @@ module Types
     field :submissions, Types::SubmissionType.connection_type, null: false do
       argument :course_id, ID, required: true
       argument :status, Types::SubmissionStatusType, required: true
+      argument :sort_direction, Types::SortDirectionType, required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
     end

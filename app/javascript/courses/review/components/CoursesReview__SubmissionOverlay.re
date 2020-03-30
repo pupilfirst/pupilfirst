@@ -153,7 +153,7 @@ let addGrading =
   updateSubmissionDetails(setState, submissionDetails, overlaySubmission)
   |> ignore;
 
-  overlaySubmission |> OverlaySubmission.id |> removePendingSubmissionCB;
+  removePendingSubmissionCB();
 };
 
 let addFeedbackToReviewedSubmission =
@@ -238,7 +238,7 @@ let make =
            {submissionDetails
             |> SubmissionDetails.submissions
             |> Array.mapi((index, overlaySubmission) =>
-                 <CoursesReview__Submissions
+                 <CoursesReview__SubmissionsList
                    key={index |> string_of_int}
                    overlaySubmission
                    teamSubmission={

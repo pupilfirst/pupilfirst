@@ -1,6 +1,7 @@
 class SubmissionsResolver < ApplicationQuery
   property :course_id
   property :status
+  property :sort_direction
   property :level_id
   property :coach_id
 
@@ -8,13 +9,24 @@ class SubmissionsResolver < ApplicationQuery
     applicable_submissions
       .includes(:startup_feedback, founders: :user, target: :target_group)
       .distinct
-      .order("created_at DESC")
+      .order("created_at #{sort_direction_string}")
   end
 
   def authorized?
     return false if current_user.faculty.blank?
 
     current_user.faculty.courses.where(id: course).exists?
+  end
+
+  def sort_direction_string
+    case sort_direction
+      when 'Ascending'
+        'ASC'
+      when 'Descending'
+        'DESC'
+      else
+        raise "#{sort_direction} is not a valid sort direction"
+    end
   end
 
   def course

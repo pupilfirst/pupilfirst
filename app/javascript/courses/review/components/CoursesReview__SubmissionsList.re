@@ -1,281 +1,246 @@
-let reviewedEmptyImage: string = [%raw
-  "require('../../shared/images/reviewed-empty.svg')"
-];
-
-let pendingEmptyImage: string = [%raw
-  "require('../images/pending-empty.svg')"
-];
-
 open CoursesReview__Types;
-
 let str = React.string;
 
-type state =
-  | Loading
-  | Reloading
-  | Loaded;
-
-module SubmissionsQuery = [%graphql
-  {|
-    query SubmissionsQuery($courseId: ID!, $status: SubmissionStatus!, $levelId: ID, $coachId: ID, $after: String) {
-      submissions(courseId: $courseId, status: $status, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
-        nodes {
-          id,
-          title,
-          userNames,
-          passedAt,
-          feedbackSent,
-          levelId,
-          createdAt,
-          targetId,
-          coachIds
-        }
-        pageInfo{
-          endCursor,hasNextPage
-        }
-      }
-    }
-  |}
-];
-
-let updateReviewedSubmissions =
-    (
-      setState,
-      endCursor,
-      hasNextPage,
-      reviewedSubmissions,
-      updateReviewedSubmissionsCB,
-      nodes,
-    ) => {
-  updateReviewedSubmissionsCB(
-    ~reviewedSubmissions=
-      reviewedSubmissions
-      |> Array.append(
-           (
-             switch (nodes) {
-             | None => [||]
-             | Some(submissionsArray) =>
-               submissionsArray |> IndexSubmission.decodeJs
-             }
-           )
-           |> Array.to_list
-           |> List.flatten
-           |> Array.of_list,
-         ),
-    ~hasNextPage,
-    ~endCursor,
-  );
-  setState(_ => Loaded);
+let showSubmissionStatus = overlaySubmission => {
+  let (text, classes) =
+    switch (
+      overlaySubmission |> OverlaySubmission.passedAt,
+      overlaySubmission |> OverlaySubmission.evaluatorName,
+    ) {
+    | (None, None) => (
+        "Pending",
+        "bg-orange-100 border border-orange-500 text-orange-800 ",
+      )
+    | (None, Some(_)) => (
+        "Failed",
+        "bg-red-100 border border-red-500 text-red-700",
+      )
+    | (Some(_), None)
+    | (Some(_), Some(_)) => (
+        "Passed",
+        "bg-green-100 border border-green-500 text-green-800",
+      )
+    };
+  <div className={"font-semibold px-3 py-px rounded " ++ classes}>
+    {text |> str}
+  </div>;
 };
 
-let getReviewedSubmissions =
-    (
-      courseId,
-      cursor,
-      setState,
-      selectedLevel,
-      selectedCoach,
-      reviewedSubmissions,
-      updateReviewedSubmissionsCB,
-    ) => {
-  setState(state =>
-    switch (state) {
-    | Loaded
-    | Reloading => Reloading
-    | Loading => Loading
-    }
-  );
-
-  let levelId = selectedLevel |> OptionUtils.map(level => level |> Level.id);
-  let coachId = selectedCoach |> OptionUtils.map(coach => coach |> Coach.id);
-
-  SubmissionsQuery.make(~courseId, ~levelId?, ~coachId?, ~after=?cursor, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-       response##reviewedSubmissions##nodes
-       |> updateReviewedSubmissions(
-            setState,
-            response##reviewedSubmissions##pageInfo##endCursor,
-            response##reviewedSubmissions##pageInfo##hasNextPage,
-            reviewedSubmissions,
-            updateReviewedSubmissionsCB,
-          );
-       Js.Promise.resolve();
-     })
-  |> ignore;
-};
-
-let submissionStatus = failed =>
-  failed
-    ? <div
-        className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-        {"Failed" |> str}
-      </div>
-    : <div
-        className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-        {"Passed" |> str}
-      </div>;
-
-let feedbackSentNotice = feedbackSent =>
+let showFeedbackSent = feedbackSent =>
   feedbackSent
     ? <div
-        className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-3 py-px rounded mr-3">
+        className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
         {"Feedback Sent" |> str}
       </div>
     : React.null;
 
-let submissionCardClasses = status =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
+let cardClasses = overlaySubmission =>
+  "mt-6 rounded-b-lg bg-white border-t-3 "
   ++ (
-    switch (status) {
-    | Some(s) =>
-      s |> IndexSubmission.failed ? "border-red-500" : "border-green-500"
-    | None => "border-gray-600"
+    switch (
+      overlaySubmission |> OverlaySubmission.passedAt,
+      overlaySubmission |> OverlaySubmission.evaluatorName,
+    ) {
+    | (None, None) => "border-orange-300"
+    | (None, Some(_)) => "border-red-500"
+    | (Some(_), None)
+    | (Some(_), Some(_)) => "border-green-500"
     }
   );
 
-let showSubmission = (submissions, levels) =>
-  <div>
-    {submissions
-     |> IndexSubmission.sort
-     |> Array.map(submission =>
-          <Link
-            href={"/submissions/" ++ (submission |> IndexSubmission.id)}
-            key={submission |> IndexSubmission.id}
-            ariaLabel={
-              "reviewed-submission-card-" ++ (submission |> IndexSubmission.id)
-            }
-            className={submissionCardClasses(
-              submission |> IndexSubmission.status,
-            )}>
-            <div className="w-full md:w-3/4">
-              <div className="block text-sm md:pr-2">
-                <span
-                  className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                  {submission
-                   |> IndexSubmission.levelId
-                   |> Level.unsafeLevelNumber(
-                        levels,
-                        "ShowReviewedSubmission",
-                      )
-                   |> str}
-                </span>
-                <span className="ml-2 font-semibold text-base">
-                  {submission |> IndexSubmission.title |> str}
-                </span>
-              </div>
-              <div className="mt-1 ml-px text-xs text-gray-900">
-                <span> {"Submitted by " |> str} </span>
-                <span className="font-semibold">
-                  {submission |> IndexSubmission.userNames |> str}
-                </span>
-                <span className="ml-1">
-                  {"on "
-                   ++ (submission |> IndexSubmission.createdAtPretty)
-                   |> str}
-                </span>
-              </div>
-            </div>
-            {switch (submission |> IndexSubmission.status) {
-             | Some(status) =>
-               <div
-                 className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                 {feedbackSentNotice(status |> IndexSubmission.feedbackSent)}
-                 {submissionStatus(status |> IndexSubmission.failed)}
-               </div>
-             | None => React.null
-             }}
-          </Link>
-        )
-     |> React.array}
-  </div>;
+let updateSubmission =
+    (
+      ~feedbackUpdate,
+      ~grades,
+      ~passed,
+      ~newFeedback,
+      ~overlaySubmission,
+      ~currentCoach,
+      ~addGradingCB,
+      ~checklist,
+    ) => {
+  let feedback =
+    switch (newFeedback) {
+    | Some(f) =>
+      f |> String.trim == ""
+        ? overlaySubmission |> OverlaySubmission.feedback
+        : overlaySubmission
+          |> OverlaySubmission.feedback
+          |> Array.append([|
+               Feedback.make(
+                 ~coachName=currentCoach |> Coach.name,
+                 ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
+                 ~coachTitle=currentCoach |> Coach.title,
+                 ~createdAt=Js.Date.make(),
+                 ~value=f,
+               ),
+             |])
+    | None => overlaySubmission |> OverlaySubmission.feedback
+    };
 
-let showSubmissions = (reviewedSubmissions, levels) =>
-  reviewedSubmissions |> ArrayUtils.isEmpty
-    ? <div
-        className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {"No Reviewed Submission" |> str}
-        </h5>
-        <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
-      </div>
-    : showSubmission(reviewedSubmissions, levels);
+  let (passedAt, evaluatedAt, newGrades) =
+    switch (passed) {
+    | Some(p) => (
+        p ? Some(Js.Date.make()) : None,
+        Some(Js.Date.make()),
+        grades,
+      )
+    | None => (
+        overlaySubmission |> OverlaySubmission.passedAt,
+        overlaySubmission |> OverlaySubmission.evaluatedAt,
+        overlaySubmission |> OverlaySubmission.grades,
+      )
+    };
+
+  let newSubmission =
+    OverlaySubmission.make(
+      ~id=overlaySubmission |> OverlaySubmission.id,
+      ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
+      ~passedAt,
+      ~evaluatorName=
+        if (feedbackUpdate) {
+          overlaySubmission |> OverlaySubmission.evaluatorName;
+        } else {
+          Some(currentCoach |> Coach.name);
+        },
+      ~feedback,
+      ~grades=newGrades,
+      ~evaluatedAt,
+      ~checklist,
+    );
+
+  addGradingCB(newSubmission);
+};
+
+let updateFeedbackArray = (currentCoach, overlaySubmission, newFeedback) => {
+  newFeedback |> String.trim == ""
+    ? overlaySubmission |> OverlaySubmission.feedback
+    : overlaySubmission
+      |> OverlaySubmission.feedback
+      |> Array.append([|
+           Feedback.make(
+             ~coachName=currentCoach |> Coach.name,
+             ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
+             ~coachTitle=currentCoach |> Coach.title,
+             ~createdAt=Js.Date.make(),
+             ~value=newFeedback,
+           ),
+         |]);
+};
+
+let addGrading =
+    (
+      ~addGradingCB,
+      ~currentCoach,
+      ~overlaySubmission,
+      ~newFeedback,
+      ~passed,
+      ~grades,
+      ~checklist,
+    ) => {
+  let feedback =
+    updateFeedbackArray(currentCoach, overlaySubmission, newFeedback);
+
+  let passedAt = passed ? Some(Js.Date.make()) : None;
+  let evaluatedAt = Some(Js.Date.make());
+
+  OverlaySubmission.make(
+    ~id=overlaySubmission |> OverlaySubmission.id,
+    ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
+    ~passedAt,
+    ~evaluatorName=Some(currentCoach |> Coach.name),
+    ~feedback,
+    ~grades,
+    ~evaluatedAt,
+    ~checklist,
+  )
+  |> addGradingCB;
+};
+
+let addFeedback =
+    (addFeedbackCB, currentCoach, overlaySubmission, newFeedback) => {
+  let feedback =
+    updateFeedbackArray(currentCoach, overlaySubmission, newFeedback);
+
+  overlaySubmission
+  |> OverlaySubmission.updateFeedback(feedback)
+  |> addFeedbackCB;
+};
 
 [@react.component]
 let make =
     (
-      ~courseId,
-      ~selectedLevel,
-      ~selectedCoach,
-      ~levels,
-      ~reviewedSubmissions,
-      ~updateReviewedSubmissionsCB,
-    ) => {
-  let (state, setState) = React.useState(() => Loading);
-  React.useEffect2(
-    () => {
-      let shouldLoad =
-        switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
-        | Unloaded => true
-        | FullyLoaded(_, filter)
-        | PartiallyLoaded(_, filter, _) =>
-          if (filter
-              |> ReviewedSubmissions.filterEq(selectedLevel, selectedCoach)) {
-            false;
-          } else {
-            setState(_ => Reloading);
-            true;
-          }
-        };
-
-      shouldLoad
-        ? getReviewedSubmissions(
-            courseId,
-            None,
-            setState,
-            selectedLevel,
-            selectedCoach,
-            [||],
-            updateReviewedSubmissionsCB,
-          )
-        : ();
-
-      None;
-    },
-    (selectedLevel, selectedCoach),
-  );
-
-  <div>
-    <LoadingSpinner loading={state == Reloading} />
-    {switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
-     | Unloaded =>
-       SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
-     | PartiallyLoaded(reviewedSubmissions, _filter, cursor) =>
-       <div>
-         {showSubmissions(reviewedSubmissions, levels)}
-         {state == Loading
-            ? SkeletonLoading.multiple(
-                ~count=3,
-                ~element=SkeletonLoading.card(),
-              )
-            : <button
-                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
-                onClick={_ =>
-                  getReviewedSubmissions(
-                    courseId,
-                    Some(cursor),
-                    setState,
-                    selectedLevel,
-                    selectedCoach,
-                    reviewedSubmissions,
-                    updateReviewedSubmissionsCB,
-                  )
-                }>
-                {"Load More..." |> str}
-              </button>}
-       </div>
-     | FullyLoaded(reviewedSubmissions, _filter) =>
-       showSubmissions(reviewedSubmissions, levels)
-     }}
+      ~overlaySubmission,
+      ~teamSubmission,
+      ~addGradingCB,
+      ~addFeedbackCB,
+      ~submissionNumber,
+      ~currentCoach,
+      ~evaluationCriteria,
+      ~reviewChecklist,
+      ~updateReviewChecklistCB,
+      ~targetId,
+      ~targetEvaluationCriteriaIds,
+    ) =>
+  <div
+    ariaLabel={
+      "submissions-overlay-card-"
+      ++ (overlaySubmission |> OverlaySubmission.id)
+    }
+    className={cardClasses(overlaySubmission)}>
+    <div className="rounded-b-lg shadow">
+      <div
+        className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
+        <div className="flex flex-col w-full sm:w-auto">
+          <h2 className="font-semibold text-sm lg:text-base leading-tight">
+            {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
+          </h2>
+          <span className="text-xs text-gray-800 pt-px">
+            {overlaySubmission
+             |> OverlaySubmission.createdAt
+             |> DateFns.format("MMMM D, YYYY")
+             |> str}
+          </span>
+        </div>
+        <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
+          {showFeedbackSent(
+             overlaySubmission
+             |> OverlaySubmission.feedback
+             |> ArrayUtils.isNotEmpty,
+           )}
+          {showSubmissionStatus(overlaySubmission)}
+        </div>
+      </div>
+      <CoursesReview__GradeCard
+        overlaySubmission
+        teamSubmission
+        evaluationCriteria
+        targetEvaluationCriteriaIds
+        reviewChecklist
+        addGradingCB={addGrading(
+          ~addGradingCB,
+          ~currentCoach,
+          ~overlaySubmission,
+        )}
+        updateReviewChecklistCB
+        targetId
+      />
+      <CoursesReview__ShowFeedback
+        feedback={overlaySubmission |> OverlaySubmission.feedback}
+        reviewed={
+          overlaySubmission
+          |> OverlaySubmission.grades
+          |> ArrayUtils.isNotEmpty
+        }
+        submissionId={overlaySubmission |> OverlaySubmission.id}
+        reviewChecklist
+        addFeedbackCB={addFeedback(
+          addFeedbackCB,
+          currentCoach,
+          overlaySubmission,
+        )}
+        updateReviewChecklistCB
+        targetId
+      />
+    </div>
   </div>;
-};

@@ -71,19 +71,19 @@ feature 'Course review' do
       # All pending submissions should be listed (excluding the auto-verified one)
       expect(page).not_to have_text(auto_verify_target.title)
 
-      within("a[aria-label='pending-submission-card-#{submission_l1_t1.id}']") do
+      within("a[aria-label='Submission #{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l1.founders.first.user.name)
       end
 
-      within("a[aria-label='pending-submission-card-#{submission_l2_t2.id}']") do
+      within("a[aria-label='Submission #{submission_l2_t2.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l2.founders.first.user.name)
       end
 
-      within("a[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text("Level 3")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -92,14 +92,14 @@ feature 'Course review' do
       # The 'reviewed' tab should show reviewed submissions
       click_button 'Reviewed'
 
-      within("a[aria-label='reviewed-submission-card-#{submission_l1_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l3.founders.first.user.name)
         expect(page).to have_text("Passed")
       end
 
-      within("a[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -152,7 +152,7 @@ feature 'Course review' do
       fill_in 'filter', with: 'level'
       click_button "Level 3: #{level_3.name}"
 
-      expect(page).to have_text("No Reviewed Submission")
+      expect(page).to have_text("No submissions found")
 
       fill_in 'filter', with: 'level'
       click_button "Level 1: #{level_1.name}"
@@ -182,7 +182,7 @@ feature 'Course review' do
         expect(page).to have_content('1')
       end
 
-      within("a[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text("Level 3")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -198,13 +198,13 @@ feature 'Course review' do
       # Target in L1 should be listed only once.
       expect(page).to have_text(target_l1.title, count: 1)
 
-      within("a[aria-label='reviewed-submission-card-#{submission_l1_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
 
-      within("a[aria-label='reviewed-submission-card-#{submission_l2_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -218,7 +218,9 @@ feature 'Course review' do
       # Target in L1 should now be listed twice, for the submission from a non-assigned team.
       expect(page).to have_text(target_l1.title, count: 2)
 
-      # The 'pending' count should update.
+      click_button 'Pending'
+
+      # The 'pending' count should update once we switch to the pending tab.
       within("div[aria-label='status-tab']") do
         expect(page).to have_content('3')
       end
@@ -244,33 +246,33 @@ feature 'Course review' do
       end
 
       # Check current ordering of pending items
-      find("div#pending-submissions a:nth-child(1)").should have_content(submission_l1_t1.title)
-      find("div#pending-submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
-      find("div#pending-submissions a:nth-child(3)").should have_content(submission_l3_t3.title)
+      find("#submissions a:nth-child(1)").should have_content(submission_l1_t1.title)
+      find("#submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
+      find("#submissions a:nth-child(3)").should have_content(submission_l3_t3.title)
 
       # Swap the ordering of pending items
       click_button('toggle-sort-order')
 
-      find("div#pending-submissions a:nth-child(3)").should have_content(submission_l1_t1.title)
-      find("div#pending-submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
-      find("div#pending-submissions a:nth-child(1)").should have_content(submission_l3_t3.title)
+      find("#submissions a:nth-child(3)").should have_content(submission_l1_t1.title)
+      find("#submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
+      find("#submissions a:nth-child(1)").should have_content(submission_l3_t3.title)
 
       # Switch to reviewed tab and check sorting
       click_button 'Reviewed'
 
-      find("div#reviewed-submissions a:nth-child(1)").should have_content(submission_l1_t2.title)
-      find("div#reviewed-submissions a:nth-child(2)").should have_content(team_submission.title)
+      find("#submissions a:nth-child(1)").should have_content(submission_l1_t2.title)
+      find("#submissions a:nth-child(2)").should have_content(team_submission.title)
 
       click_button('toggle-sort-order')
 
-      find("div#reviewed-submissions a:nth-child(1)").should have_content(submission_l1_t3.title)
-      find("div#reviewed-submissions a:nth-child(2)").should have_content(submission_l2_t3.title)
+      find("#submissions a:nth-child(1)").should have_content(submission_l1_t3.title)
+      find("#submissions a:nth-child(2)").should have_content(submission_l2_t3.title)
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do
       sign_in_user course_coach.user, referer: review_course_path(course)
 
-      within("a[aria-label='pending-submission-card-#{submission_l3_t3.id}']") do
+      within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
       end
 
@@ -321,6 +323,44 @@ feature 'Course review' do
     end
   end
 
+  context 'when there are over 25 submissions' do
+    before do
+      (1..30).each do |n|
+        # Passed submissions
+        create(:timeline_event, founders: [team_l3.founders.first], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
+
+        # Pending submissions
+        create(:timeline_event, latest: true, target: target_l1, founders: [team_l1.founders.first], created_at: n.days.ago)
+      end
+    end
+
+    scenario 'coach browses paginated pending and reviewed submissions list', js: true do
+      sign_in_user course_coach.user, referer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      within("div[aria-label='status-tab']") do
+        expect(page).to have_content('Pending')
+        expect(page).to have_content('30')
+      end
+
+      expect(page).to have_text(target_l1.title, count: 20)
+
+      click_button 'Load More...'
+
+      expect(page).to have_text(target_l1.title, count: 30)
+      expect(page).not_to have_button('Load more...')
+
+      click_button 'Reviewed'
+
+      expect(page).to have_text(target_l1.title, count: 20)
+
+      click_button 'Load More...'
+
+      expect(page).to have_text(target_l1.title, count: 30)
+      expect(page).not_to have_button('Load more...')
+    end
+  end
+
   scenario 'coach visits completely empty review dashboard', js: true do
     sign_in_user course_coach.user, referer: review_course_path(course)
 
@@ -331,12 +371,12 @@ feature 'Course review' do
     end
 
     # no pending submission message should shown
-    expect(page).to have_text('No pending submissions to review')
+    expect(page).to have_text('No submissions found')
 
     click_button 'Reviewed'
 
     # no reviewed submission message should shown
-    expect(page).to have_text("No Reviewed Submission")
+    expect(page).to have_text('No submissions found')
   end
 
   scenario 'student tries to access the review dashboard' do

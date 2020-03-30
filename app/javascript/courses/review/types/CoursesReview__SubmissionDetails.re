@@ -108,7 +108,7 @@ let makeIndexSubmission = (overlaySubmission, t) =>
     ~status=
       Some(
         IndexSubmission.makeStatus(
-          ~failed=overlaySubmission |> OverlaySubmission.failed,
+          ~passedAt=overlaySubmission |> OverlaySubmission.passedAt,
           ~feedbackSent=overlaySubmission |> OverlaySubmission.feedbackSent,
         ),
       ),

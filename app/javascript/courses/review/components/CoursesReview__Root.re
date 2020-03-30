@@ -3,31 +3,36 @@
 open CoursesReview__Types;
 let str = React.string;
 
-type visibleList =
-  | PendingSubmissions
-  | ReviewedSubmissions;
-
 type sortBy = {
   criterion: string,
   criterionType: [ | `String | `Number],
 };
 
+type selectedTab = [ | `Reviewed | `Pending];
+
 type state = {
-  pendingSubmissions: array(IndexSubmission.t),
-  reviewedSubmissions: ReviewedSubmissions.t,
-  visibleList,
+  pendingSubmissions: Submissions.t,
+  reviewedSubmissions: Submissions.t,
+  selectedTab,
   selectedLevel: option(Level.t),
   selectedCoach: option(Coach.t),
   filterString: string,
   sortBy,
   sortDirection: [ | `Ascending | `Descending],
+  reloadAt: Js.Date.t,
 };
 
 type action =
   | SelectLevel(Level.t)
   | DeselectLevel
-  | RemovePendingSubmission(string)
-  | SetReviewedSubmissions(array(IndexSubmission.t), bool, option(string))
+  | ReloadSubmissions
+  | SetSubmissions(
+      array(IndexSubmission.t),
+      selectedTab,
+      bool,
+      option(string),
+      int,
+    )
   | UpdateReviewedSubmission(IndexSubmission.t)
   | SelectPendingTab
   | SelectReviewedTab
@@ -44,70 +49,74 @@ let reducer = (state, action) =>
       filterString: "",
     }
   | DeselectLevel => {...state, selectedLevel: None}
-  | RemovePendingSubmission(submissionId) => {
+  | ReloadSubmissions => {
       ...state,
-      pendingSubmissions:
-        state.pendingSubmissions
-        |> Js.Array.filter(s => s |> IndexSubmission.id != submissionId),
+      pendingSubmissions: Unloaded,
       reviewedSubmissions: Unloaded,
+      reloadAt: Js.Date.make(),
     }
-  | SetReviewedSubmissions(reviewedSubmissions, hasNextPage, endCursor) =>
+  | SetSubmissions(
+      submissions,
+      selectedTab,
+      hasNextPage,
+      endCursor,
+      totalCount,
+    ) =>
     let filter =
-      ReviewedSubmissions.makeFilter(
-        state.selectedLevel,
-        state.selectedCoach,
-      );
+      Submissions.makeFilter(state.selectedLevel, state.selectedCoach);
 
-    {
-      ...state,
-      reviewedSubmissions:
-        switch (hasNextPage, endCursor) {
-        | (_, None)
-        | (false, Some(_)) =>
-          FullyLoaded(reviewedSubmissions, filter, state.sortDirection)
-        | (true, Some(cursor)) =>
-          PartiallyLoaded(
-            reviewedSubmissions,
-            filter,
-            state.sortDirection,
-            cursor,
-          )
-        },
+    let updatedSubmissions =
+      switch (hasNextPage, endCursor) {
+      | (_, None)
+      | (false, Some(_)) =>
+        Submissions.fullyLoaded(
+          ~submissions,
+          ~filter,
+          ~sortDirection=state.sortDirection,
+          ~totalCount,
+        )
+      | (true, Some(cursor)) =>
+        Submissions.partiallyLoaded(
+          ~submissions,
+          ~filter,
+          ~sortDirection=state.sortDirection,
+          ~totalCount,
+          ~cursor,
+        )
+      };
+
+    switch (selectedTab) {
+    | `Pending => {...state, pendingSubmissions: updatedSubmissions}
+    | `Reviewed => {...state, reviewedSubmissions: updatedSubmissions}
     };
   | UpdateReviewedSubmission(submission) =>
     let filter =
-      ReviewedSubmissions.makeFilter(
-        state.selectedLevel,
-        state.selectedCoach,
-      );
+      Submissions.makeFilter(state.selectedLevel, state.selectedCoach);
 
     {
       ...state,
       reviewedSubmissions:
         switch (state.reviewedSubmissions) {
         | Unloaded => Unloaded
-        | PartiallyLoaded(
-            reviewedSubmissions,
-            _filter,
-            _sortDirection,
-            cursor,
-          ) =>
-          PartiallyLoaded(
-            reviewedSubmissions |> IndexSubmission.replace(submission),
-            filter,
-            state.sortDirection,
-            cursor,
+        | PartiallyLoaded({submissions, totalCount}, cursor) =>
+          Submissions.partiallyLoaded(
+            ~submissions=submissions |> IndexSubmission.replace(submission),
+            ~filter,
+            ~sortDirection=state.sortDirection,
+            ~totalCount,
+            ~cursor,
           )
-        | FullyLoaded(reviewedSubmissions, _filter, _sortDirection) =>
-          FullyLoaded(
-            reviewedSubmissions |> IndexSubmission.replace(submission),
-            filter,
-            state.sortDirection,
+        | FullyLoaded({submissions, totalCount}) =>
+          Submissions.fullyLoaded(
+            ~submissions=submissions |> IndexSubmission.replace(submission),
+            ~filter,
+            ~totalCount,
+            ~sortDirection=state.sortDirection,
           )
         },
     };
-  | SelectPendingTab => {...state, visibleList: PendingSubmissions}
-  | SelectReviewedTab => {...state, visibleList: ReviewedSubmissions}
+  | SelectPendingTab => {...state, selectedTab: `Pending}
+  | SelectReviewedTab => {...state, selectedTab: `Reviewed}
   | SelectCoach(coach) => {
       ...state,
       selectedCoach: Some(coach),
@@ -118,10 +127,10 @@ let reducer = (state, action) =>
   | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   };
 
-let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
-  pendingSubmissions,
+let computeInitialState = currentTeamCoach => {
+  pendingSubmissions: Unloaded,
   reviewedSubmissions: Unloaded,
-  visibleList: PendingSubmissions,
+  selectedTab: `Pending,
   selectedLevel: None,
   selectedCoach: currentTeamCoach,
   filterString: "",
@@ -130,6 +139,7 @@ let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
     criterionType: `Number,
   },
   sortDirection: `Descending,
+  reloadAt: Js.Date.make(),
 };
 
 let openOverlay = (submissionId, event) => {
@@ -357,9 +367,26 @@ let submissionsSorter = (state, send) => {
   </div>;
 };
 
+let displayedSubmissions = state =>
+  switch (state.selectedTab) {
+  | `Pending => state.pendingSubmissions
+  | `Reviewed => state.reviewedSubmissions
+  };
+
+let submissionsCount = submissions =>
+  submissions
+  |> Submissions.totalCount
+  |> OptionUtils.mapWithDefault(
+       count =>
+         <span
+           className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
+           {count |> string_of_int |> str}
+         </span>,
+       React.null,
+     );
+
 [@react.component]
-let make =
-    (~levels, ~pendingSubmissions, ~courseId, ~teamCoaches, ~currentCoach) => {
+let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
   let (currentTeamCoach, _) =
     React.useState(() =>
       teamCoaches->Belt.Array.some(coach =>
@@ -371,17 +398,12 @@ let make =
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      (pendingSubmissions, currentTeamCoach),
+      currentTeamCoach,
       computeInitialState,
     );
 
   let url = ReasonReactRouter.useUrl();
 
-  let filteredPendingSubmissions = {
-    state.pendingSubmissions
-    |> filterSubmissions(state.selectedLevel, state.selectedCoach)
-    |> IndexSubmission.sortArray(state.sortDirection);
-  };
   <div>
     {switch (url.path) {
      | ["submissions", submissionId, ..._] =>
@@ -390,9 +412,7 @@ let make =
          submissionId
          currentCoach
          teamCoaches
-         removePendingSubmissionCB={submissionId =>
-           send(RemovePendingSubmission(submissionId))
-         }
+         removePendingSubmissionCB={() => send(ReloadSubmissions)}
          updateReviewedSubmissionCB={submission =>
            send(UpdateReviewedSubmission(submission))
          }
@@ -408,23 +428,13 @@ let make =
               ariaLabel="status-tab"
               className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
               <button
-                className={buttonClasses(
-                  state.visibleList == PendingSubmissions,
-                )}
+                className={buttonClasses(state.selectedTab == `Pending)}
                 onClick={_ => send(SelectPendingTab)}>
                 {"Pending" |> str}
-                <span
-                  className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
-                  {filteredPendingSubmissions
-                   |> Array.length
-                   |> string_of_int
-                   |> str}
-                </span>
+                {submissionsCount(state.pendingSubmissions)}
               </button>
               <button
-                className={buttonClasses(
-                  state.visibleList == ReviewedSubmissions,
-                )}
+                className={buttonClasses(state.selectedTab == `Reviewed)}
                 onClick={_ => send(SelectReviewedTab)}>
                 {"Reviewed" |> str}
               </button>
@@ -461,35 +471,33 @@ let make =
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
       <div className="max-w-3xl mx-auto">
-        {switch (state.visibleList) {
-         | PendingSubmissions =>
-           <CoursesReview__ShowPendingSubmissions
-             submissions=filteredPendingSubmissions
-             levels
-           />
-         | ReviewedSubmissions =>
-           <CoursesReview__ShowReviewedSubmissions
-             courseId
-             selectedLevel={state.selectedLevel}
-             selectedCoach={state.selectedCoach}
-             sortDirection={state.sortDirection}
-             levels
-             reviewedSubmissions={state.reviewedSubmissions}
-             updateReviewedSubmissionsCB={(
-               ~reviewedSubmissions,
-               ~hasNextPage,
-               ~endCursor,
-             ) =>
-               send(
-                 SetReviewedSubmissions(
-                   reviewedSubmissions,
-                   hasNextPage,
-                   endCursor,
-                 ),
-               )
-             }
-           />
-         }}
+        <CoursesReview__SubmissionsTab
+          courseId
+          selectedTab={state.selectedTab}
+          selectedLevel={state.selectedLevel}
+          selectedCoach={state.selectedCoach}
+          sortDirection={state.sortDirection}
+          levels
+          submissions={displayedSubmissions(state)}
+          reloadAt={state.reloadAt}
+          updateSubmissionsCB={(
+            ~submissions,
+            ~selectedTab,
+            ~hasNextPage,
+            ~totalCount,
+            ~endCursor,
+          ) =>
+            send(
+              SetSubmissions(
+                submissions,
+                selectedTab,
+                hasNextPage,
+                endCursor,
+                totalCount,
+              ),
+            )
+          }
+        />
       </div>
     </div>
   </div>;

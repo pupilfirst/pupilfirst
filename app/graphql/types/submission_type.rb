@@ -2,6 +2,7 @@ module Types
   class SubmissionType < Types::BaseObject
     field :id, ID, null: false
     field :created_at, String, null: false
+    field :evaluated_at, String, null: true
     field :passed_at, String, null: true
     field :evaluator_name, String, null: true
     field :feedback, [Types::SubmissionFeedbackType], null: false

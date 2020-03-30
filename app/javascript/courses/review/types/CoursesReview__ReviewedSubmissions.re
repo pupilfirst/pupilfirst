@@ -18,7 +18,18 @@ let filterEq = (level, coach, filter) =>
   && filter.coach
   |> filterCoachId == filterCoachId(coach);
 
+type sortDirection = [ | `Ascending | `Descending];
+
 type t =
   | Unloaded
-  | PartiallyLoaded(array(CoursesReview__IndexSubmission.t), filter, string)
-  | FullyLoaded(array(CoursesReview__IndexSubmission.t), filter);
+  | PartiallyLoaded(
+      array(CoursesReview__IndexSubmission.t),
+      filter,
+      sortDirection,
+      string,
+    )
+  | FullyLoaded(
+      array(CoursesReview__IndexSubmission.t),
+      filter,
+      sortDirection,
+    );

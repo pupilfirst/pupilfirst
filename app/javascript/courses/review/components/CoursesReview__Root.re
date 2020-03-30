@@ -7,6 +7,11 @@ type visibleList =
   | PendingSubmissions
   | ReviewedSubmissions;
 
+type sortBy = {
+  criterion: string,
+  criterionType: [ | `String | `Number],
+};
+
 type state = {
   pendingSubmissions: array(IndexSubmission.t),
   reviewedSubmissions: ReviewedSubmissions.t,
@@ -14,6 +19,8 @@ type state = {
   selectedLevel: option(Level.t),
   selectedCoach: option(Coach.t),
   filterString: string,
+  sortBy,
+  sortDirection: [ | `Ascending | `Descending],
 };
 
 type action =
@@ -26,7 +33,8 @@ type action =
   | SelectReviewedTab
   | SelectCoach(Coach.t)
   | DeselectCoach
-  | UpdateFilterString(string);
+  | UpdateFilterString(string)
+  | UpdateSortDirection([ | `Ascending | `Descending]);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -55,9 +63,15 @@ let reducer = (state, action) =>
       reviewedSubmissions:
         switch (hasNextPage, endCursor) {
         | (_, None)
-        | (false, Some(_)) => FullyLoaded(reviewedSubmissions, filter)
+        | (false, Some(_)) =>
+          FullyLoaded(reviewedSubmissions, filter, state.sortDirection)
         | (true, Some(cursor)) =>
-          PartiallyLoaded(reviewedSubmissions, filter, cursor)
+          PartiallyLoaded(
+            reviewedSubmissions,
+            filter,
+            state.sortDirection,
+            cursor,
+          )
         },
     };
   | UpdateReviewedSubmission(submission) =>
@@ -72,16 +86,23 @@ let reducer = (state, action) =>
       reviewedSubmissions:
         switch (state.reviewedSubmissions) {
         | Unloaded => Unloaded
-        | PartiallyLoaded(reviewedSubmissions, _filter, cursor) =>
+        | PartiallyLoaded(
+            reviewedSubmissions,
+            _filter,
+            _sortDirection,
+            cursor,
+          ) =>
           PartiallyLoaded(
             reviewedSubmissions |> IndexSubmission.replace(submission),
             filter,
+            state.sortDirection,
             cursor,
           )
-        | FullyLoaded(reviewedSubmissions, _filter) =>
+        | FullyLoaded(reviewedSubmissions, _filter, _sortDirection) =>
           FullyLoaded(
             reviewedSubmissions |> IndexSubmission.replace(submission),
             filter,
+            state.sortDirection,
           )
         },
     };
@@ -94,6 +115,7 @@ let reducer = (state, action) =>
     }
   | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   };
 
 let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
@@ -103,6 +125,11 @@ let computeInitialState = ((pendingSubmissions, currentTeamCoach)) => {
   selectedLevel: None,
   selectedCoach: currentTeamCoach,
   filterString: "",
+  sortBy: {
+    criterion: "Submitted At",
+    criterionType: `Number,
+  },
+  sortDirection: `Descending,
 };
 
 let openOverlay = (submissionId, event) => {
@@ -242,7 +269,7 @@ let filterPlaceholder = state => {
 
 let restoreFilterNotice = (send, currentCoach, message) =>
   <div
-    className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
+    className="mb-4 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
     <span> {message |> str} </span>
     <button
       className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
@@ -301,6 +328,35 @@ let filterSubmissions = (selectedLevel, selectedCoach, submissions) => {
      );
 };
 
+module Sortable = {
+  type t = sortBy;
+
+  let criterion = t => t.criterion;
+  let criterionType = t => t.criterionType;
+};
+
+module SubmissionsSorter = Sorter.Make(Sortable);
+
+let submissionsSorter = (state, send) => {
+  let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
+  <div
+    ariaLabel="Change submissions sorting"
+    className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+    <label className="block text-tiny font-semibold uppercase">
+      {"Sort by:" |> str}
+    </label>
+    <SubmissionsSorter
+      criteria
+      selectedCriterion={state.sortBy}
+      direction={state.sortDirection}
+      onDirectionChange={sortDirection => {
+        send(UpdateSortDirection(sortDirection))
+      }}
+      onCriterionChange={_ => ()}
+    />
+  </div>;
+};
+
 [@react.component]
 let make =
     (~levels, ~pendingSubmissions, ~courseId, ~teamCoaches, ~currentCoach) => {
@@ -321,11 +377,11 @@ let make =
 
   let url = ReasonReactRouter.useUrl();
 
-  let filteredPendingSubmissions =
+  let filteredPendingSubmissions = {
     state.pendingSubmissions
     |> filterSubmissions(state.selectedLevel, state.selectedCoach)
-    |> IndexSubmission.sort;
-
+    |> IndexSubmission.sortArray(state.sortDirection);
+  };
   <div>
     {switch (url.path) {
      | ["submissions", submissionId, ..._] =>
@@ -344,50 +400,64 @@ let make =
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-9 pb-8 px-3 -mt-7">
-      <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
-        <div
-          className="flex flex-col md:flex-row items-end lg:items-center py-4">
+      <div className="bg-gray-100 static md:sticky md:top-0">
+        <div className="max-w-3xl mx-auto">
           <div
-            ariaLabel="status-tab"
-            className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
-            <button
-              className={buttonClasses(
-                state.visibleList == PendingSubmissions,
-              )}
-              onClick={_ => send(SelectPendingTab)}>
-              {"Pending" |> str}
-              <span
-                className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
-                {filteredPendingSubmissions
-                 |> Array.length
-                 |> string_of_int
-                 |> str}
-              </span>
-            </button>
-            <button
-              className={buttonClasses(
-                state.visibleList == ReviewedSubmissions,
-              )}
-              onClick={_ => send(SelectReviewedTab)}>
-              {"Reviewed" |> str}
-            </button>
+            className="flex flex-col md:flex-row items-end lg:items-center py-4">
+            <div
+              ariaLabel="status-tab"
+              className="course-review__status-tab w-full md:w-auto flex rounded-lg border border-gray-400">
+              <button
+                className={buttonClasses(
+                  state.visibleList == PendingSubmissions,
+                )}
+                onClick={_ => send(SelectPendingTab)}>
+                {"Pending" |> str}
+                <span
+                  className="course-review__status-tab-badge ml-2 text-white text-xs bg-red-500 w-auto h-5 px-1 inline-flex items-center justify-center rounded-full">
+                  {filteredPendingSubmissions
+                   |> Array.length
+                   |> string_of_int
+                   |> str}
+                </span>
+              </button>
+              <button
+                className={buttonClasses(
+                  state.visibleList == ReviewedSubmissions,
+                )}
+                onClick={_ => send(SelectReviewedTab)}>
+                {"Reviewed" |> str}
+              </button>
+            </div>
           </div>
+          {<div className="md:flex w-full items-start pb-4">
+             <div className="flex-1">
+               <label className="block text-tiny font-semibold uppercase">
+                 {"Filter by:" |> str}
+               </label>
+               <Multiselect
+                 id="filter"
+                 unselected={unselected(
+                   levels,
+                   teamCoaches,
+                   currentCoach |> Coach.id,
+                   state,
+                 )}
+                 selected={selected(state, currentCoach |> Coach.id)}
+                 onSelect={onSelectFilter(send)}
+                 onDeselect={onDeselectFilter(send)}
+                 value={state.filterString}
+                 onChange={filterString =>
+                   send(UpdateFilterString(filterString))
+                 }
+                 placeholder={filterPlaceholder(state)}
+               />
+             </div>
+             {submissionsSorter(state, send)}
+           </div>}
         </div>
-        <Multiselect
-          id="filter"
-          unselected={unselected(
-            levels,
-            teamCoaches,
-            currentCoach |> Coach.id,
-            state,
-          )}
-          selected={selected(state, currentCoach |> Coach.id)}
-          onSelect={onSelectFilter(send)}
-          onDeselect={onDeselectFilter(send)}
-          value={state.filterString}
-          onChange={filterString => send(UpdateFilterString(filterString))}
-          placeholder={filterPlaceholder(state)}
-        />
+      </div>
+      <div className="max-w-3xl mx-auto">
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
       <div className="max-w-3xl mx-auto">
@@ -402,6 +472,7 @@ let make =
              courseId
              selectedLevel={state.selectedLevel}
              selectedCoach={state.selectedCoach}
+             sortDirection={state.sortDirection}
              levels
              reviewedSubmissions={state.reviewedSubmissions}
              updateReviewedSubmissionsCB={(

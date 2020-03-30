@@ -13,8 +13,8 @@ type state =
 
 module ReviewedSubmissionsQuery = [%graphql
   {|
-    query ReviewedSubmissionsQuery($courseId: ID!, $levelId: ID, $coachId: ID, $after: String) {
-      reviewedSubmissions(courseId: $courseId, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
+    query ReviewedSubmissionsQuery($courseId: ID!, $levelId: ID, $coachId: ID, $after: String, $sortDirection: SortDirection!) {
+      reviewedSubmissions(courseId: $courseId, levelId: $levelId, coachId: $coachId, first: 20, after: $after, sortDirection: $sortDirection) {
         nodes {
           id,
           title,
@@ -71,6 +71,7 @@ let getReviewedSubmissions =
       setState,
       selectedLevel,
       selectedCoach,
+      sortDirection,
       reviewedSubmissions,
       updateReviewedSubmissionsCB,
     ) => {
@@ -89,6 +90,7 @@ let getReviewedSubmissions =
     ~courseId,
     ~levelId?,
     ~coachId?,
+    ~sortDirection,
     ~after=?cursor,
     (),
   )
@@ -127,7 +129,7 @@ let feedbackSentNotice = feedbackSent =>
     : React.null;
 
 let submissionCardClasses = status =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
+  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
   ++ (
     switch (status) {
     | Some(s) =>
@@ -136,10 +138,10 @@ let submissionCardClasses = status =>
     }
   );
 
-let showSubmission = (submissions, levels) =>
-  <div>
+let showSubmission = (submissions, levels, sortDirection) =>
+  <div id="reviewed-submissions">
     {submissions
-     |> IndexSubmission.sort
+     |> IndexSubmission.sortArray(sortDirection)
      |> Array.map(submission =>
           <Link
             href={"/submissions/" ++ (submission |> IndexSubmission.id)}
@@ -192,7 +194,7 @@ let showSubmission = (submissions, levels) =>
      |> React.array}
   </div>;
 
-let showSubmissions = (reviewedSubmissions, levels) =>
+let showSubmissions = (reviewedSubmissions, levels, sortDirection) =>
   reviewedSubmissions |> ArrayUtils.isEmpty
     ? <div
         className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
@@ -201,7 +203,7 @@ let showSubmissions = (reviewedSubmissions, levels) =>
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
       </div>
-    : showSubmission(reviewedSubmissions, levels);
+    : showSubmission(reviewedSubmissions, levels, sortDirection);
 
 [@react.component]
 let make =
@@ -209,20 +211,22 @@ let make =
       ~courseId,
       ~selectedLevel,
       ~selectedCoach,
+      ~sortDirection,
       ~levels,
       ~reviewedSubmissions,
       ~updateReviewedSubmissionsCB,
     ) => {
   let (state, setState) = React.useState(() => Loading);
-  React.useEffect2(
+  React.useEffect3(
     () => {
       let shouldLoad =
         switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
         | Unloaded => true
-        | FullyLoaded(_, filter)
-        | PartiallyLoaded(_, filter, _) =>
+        | FullyLoaded(_, filter, sortDirectionCached)
+        | PartiallyLoaded(_, filter, sortDirectionCached, _) =>
           if (filter
-              |> ReviewedSubmissions.filterEq(selectedLevel, selectedCoach)) {
+              |> ReviewedSubmissions.filterEq(selectedLevel, selectedCoach)
+              && sortDirectionCached == sortDirection) {
             false;
           } else {
             setState(_ => Reloading);
@@ -237,6 +241,7 @@ let make =
             setState,
             selectedLevel,
             selectedCoach,
+            sortDirection,
             [||],
             updateReviewedSubmissionsCB,
           )
@@ -244,7 +249,7 @@ let make =
 
       None;
     },
-    (selectedLevel, selectedCoach),
+    (selectedLevel, selectedCoach, sortDirection),
   );
 
   <div>
@@ -252,16 +257,16 @@ let make =
     {switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
-     | PartiallyLoaded(reviewedSubmissions, _filter, cursor) =>
+     | PartiallyLoaded(reviewedSubmissions, _filter, _sortDirection, cursor) =>
        <div>
-         {showSubmissions(reviewedSubmissions, levels)}
+         {showSubmissions(reviewedSubmissions, levels, sortDirection)}
          {state == Loading
             ? SkeletonLoading.multiple(
                 ~count=3,
                 ~element=SkeletonLoading.card(),
               )
             : <button
-                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                 onClick={_ =>
                   getReviewedSubmissions(
                     courseId,
@@ -269,6 +274,7 @@ let make =
                     setState,
                     selectedLevel,
                     selectedCoach,
+                    sortDirection,
                     reviewedSubmissions,
                     updateReviewedSubmissionsCB,
                   )
@@ -276,8 +282,8 @@ let make =
                 {"Load More..." |> str}
               </button>}
        </div>
-     | FullyLoaded(reviewedSubmissions, _filter) =>
-       showSubmissions(reviewedSubmissions, levels)
+     | FullyLoaded(reviewedSubmissions, _filter, _sortDirection) =>
+       showSubmissions(reviewedSubmissions, levels, sortDirection)
      }}
   </div>;
 };

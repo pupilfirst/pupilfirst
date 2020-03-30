@@ -29,7 +29,7 @@ let showStudent = (team, levels, teamCoaches) => {
     href={"/students/" ++ (student |> TeamInfo.studentId) ++ "/report"}
     key={student |> TeamInfo.studentId}
     ariaLabel={"student-card-" ++ (student |> TeamInfo.studentId)}
-    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
+    className="flex md:flex-row justify-between bg-white mb-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md">
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div
         className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">

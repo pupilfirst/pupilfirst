@@ -18,6 +18,14 @@ module Types
       argument :sort_direction, Types::SortDirectionType, required: true
     end
 
+    field :submissions, Types::SubmissionType.connection_type, null: false do
+      argument :course_id, ID, required: true
+      argument :status, Types::SubmissionStatusType, required: true
+      argument :sort_direction, Types::SortDirectionType, required: true
+      argument :level_id, ID, required: false
+      argument :coach_id, ID, required: false
+    end
+
     field :submission_details, Types::SubmissionDetailsType, null: false do
       argument :submission_id, ID, required: true
     end
@@ -81,6 +89,11 @@ module Types
     def versions(args)
       resolver = TargetVersionResolver.new(context, args)
       resolver.versions
+    end
+
+    def submissions(args)
+      resolver = SubmissionsResolver.new(context, args)
+      resolver.submissions
     end
 
     def reviewed_submissions(args)

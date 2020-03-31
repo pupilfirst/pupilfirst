@@ -1,5 +1,5 @@
 type status = {
-  failed: bool,
+  passedAt: option(Js.Date.t),
   feedbackSent: bool,
 };
 
@@ -17,11 +17,20 @@ let id = t => t.id;
 let title = t => t.title;
 let levelId = t => t.levelId;
 let userNames = t => t.userNames;
-let status = t => t.status;
 let coachIds = t => t.coachIds;
 
-let failed = status => status.failed;
-let feedbackSent = status => status.feedbackSent;
+let failed = t =>
+  switch (t.status) {
+  | None => false
+  | Some(status) =>
+    status.passedAt |> OptionUtils.mapWithDefault(_ => false, true)
+  };
+
+let pendingReview = t =>
+  t.status |> OptionUtils.mapWithDefault(_ => false, true);
+
+let feedbackSent = t =>
+  t.status |> OptionUtils.mapWithDefault(status => status.feedbackSent, false);
 
 let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
 
@@ -40,24 +49,6 @@ let sortArray = (sortDirection, submissions) => {
   };
 };
 
-let statusDecode = json =>
-  Json.Decode.{
-    failed: json |> field("failed", bool),
-    feedbackSent: json |> field("feedbackSent", bool),
-  };
-
-let decode = json =>
-  Json.Decode.{
-    id: json |> field("id", string),
-    title: json |> field("title", string),
-    levelId: json |> field("levelId", string),
-    createdAt: json |> field("createdAt", string) |> DateFns.parseString,
-    userNames: json |> field("userNames", string),
-    status:
-      json |> field("status", nullable(statusDecode)) |> Js.Null.toOption,
-    coachIds: json |> field("coachIds", array(string)),
-  };
-
 let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds) => {
   id,
   title,
@@ -68,7 +59,7 @@ let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds) =
   coachIds,
 };
 
-let makeStatus = (~failed, ~feedbackSent) => {failed, feedbackSent};
+let makeStatus = (~passedAt, ~feedbackSent) => {passedAt, feedbackSent};
 
 let decodeJs = details =>
   details
@@ -76,10 +67,16 @@ let decodeJs = details =>
        switch (s) {
        | Some(submission) =>
          let status =
-           makeStatus(
-             ~failed=submission##failed,
-             ~feedbackSent=submission##feedbackSent,
-           );
+           submission##evaluatedAt
+           |> OptionUtils.map(_ =>
+                makeStatus(
+                  ~passedAt=
+                    submission##passedAt
+                    |> OptionUtils.map(DateFns.parseString),
+                  ~feedbackSent=submission##feedbackSent,
+                )
+              );
+
          [
            make(
              ~id=submission##id,
@@ -87,7 +84,7 @@ let decodeJs = details =>
              ~createdAt=submission##createdAt |> DateFns.parseString,
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
-             ~status=Some(status),
+             ~status,
              ~coachIds=submission##coachIds,
            ),
          ];

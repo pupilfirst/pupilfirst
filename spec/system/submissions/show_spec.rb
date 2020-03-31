@@ -71,7 +71,8 @@ feature 'Submissions show' do
       expect(page).to have_content(target.title)
       expect(page).to have_content(target_2.title)
 
-      find("a[aria-label='pending-submission-card-#{submission_pending.id}']").click
+      find("a[aria-label='Submission #{submission_pending.id}']").click
+
       expect(page).to have_content('Grade Card')
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)

@@ -2,6 +2,10 @@ let reviewedEmptyImage: string = [%raw
   "require('../../shared/images/reviewed-empty.svg')"
 ];
 
+let pendingEmptyImage: string = [%raw
+  "require('../images/pending-empty.svg')"
+];
+
 open CoursesReview__Types;
 
 let str = React.string;
@@ -11,41 +15,46 @@ type state =
   | Reloading
   | Loaded;
 
-module ReviewedSubmissionsQuery = [%graphql
+module SubmissionsQuery = [%graphql
   {|
-    query ReviewedSubmissionsQuery($courseId: ID!, $levelId: ID, $coachId: ID, $after: String, $sortDirection: SortDirection!) {
-      reviewedSubmissions(courseId: $courseId, levelId: $levelId, coachId: $coachId, first: 20, after: $after, sortDirection: $sortDirection) {
+    query SubmissionsQuery($courseId: ID!, $status: SubmissionStatus!, $sortDirection: SortDirection!, $levelId: ID, $coachId: ID, $after: String) {
+      submissions(courseId: $courseId, status: $status, sortDirection: $sortDirection, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
         nodes {
           id,
           title,
           userNames,
-          failed,
+          evaluatedAt,
+          passedAt,
           feedbackSent,
           levelId,
           createdAt,
           targetId,
           coachIds
         }
-        pageInfo{
-          endCursor,hasNextPage
+        pageInfo {
+          endCursor,
+          hasNextPage
         }
+        totalCount
       }
     }
   |}
 ];
 
-let updateReviewedSubmissions =
+let updateSubmissions =
     (
       setState,
       endCursor,
       hasNextPage,
-      reviewedSubmissions,
-      updateReviewedSubmissionsCB,
+      totalCount,
+      submissions,
+      selectedTab,
+      updateSubmissionsCB,
       nodes,
     ) => {
-  updateReviewedSubmissionsCB(
-    ~reviewedSubmissions=
-      reviewedSubmissions
+  updateSubmissionsCB(
+    ~submissions=
+      submissions
       |> Array.append(
            (
              switch (nodes) {
@@ -58,13 +67,16 @@ let updateReviewedSubmissions =
            |> List.flatten
            |> Array.of_list,
          ),
+    ~selectedTab,
     ~hasNextPage,
+    ~totalCount,
     ~endCursor,
   );
+
   setState(_ => Loaded);
 };
 
-let getReviewedSubmissions =
+let getSubmissions =
     (
       courseId,
       cursor,
@@ -72,8 +84,9 @@ let getReviewedSubmissions =
       selectedLevel,
       selectedCoach,
       sortDirection,
-      reviewedSubmissions,
-      updateReviewedSubmissionsCB,
+      selectedTab,
+      submissions,
+      updateSubmissionsCB,
     ) => {
   setState(state =>
     switch (state) {
@@ -86,39 +99,49 @@ let getReviewedSubmissions =
   let levelId = selectedLevel |> OptionUtils.map(level => level |> Level.id);
   let coachId = selectedCoach |> OptionUtils.map(coach => coach |> Coach.id);
 
-  ReviewedSubmissionsQuery.make(
+  SubmissionsQuery.make(
     ~courseId,
+    ~status=selectedTab,
+    ~sortDirection,
     ~levelId?,
     ~coachId?,
-    ~sortDirection,
     ~after=?cursor,
     (),
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       response##reviewedSubmissions##nodes
-       |> updateReviewedSubmissions(
+       response##submissions##nodes
+       |> updateSubmissions(
             setState,
-            response##reviewedSubmissions##pageInfo##endCursor,
-            response##reviewedSubmissions##pageInfo##hasNextPage,
-            reviewedSubmissions,
-            updateReviewedSubmissionsCB,
+            response##submissions##pageInfo##endCursor,
+            response##submissions##pageInfo##hasNextPage,
+            response##submissions##totalCount,
+            submissions,
+            selectedTab,
+            updateSubmissionsCB,
           );
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
-let submissionStatus = failed =>
-  failed
-    ? <div
-        className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-        {"Failed" |> str}
-      </div>
-    : <div
-        className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-        {"Passed" |> str}
-      </div>;
+let submissionStatus = submission => {
+  let classes = "border flex-shrink-0 leading-normal font-semibold px-3 py-px rounded ";
+
+  let (className, text) =
+    if (submission |> IndexSubmission.pendingReview) {
+      (
+        classes ++ "bg-orange-100 text-orange-600",
+        submission |> IndexSubmission.timeDistance,
+      );
+    } else if (submission |> IndexSubmission.failed) {
+      (classes ++ "bg-red-100 border-red-500 text-red-800", "Failed");
+    } else {
+      ("bg-green-100 border-green-500 text-green-800", "Passed");
+    };
+
+  <div className> {text |> str} </div>;
+};
 
 let feedbackSentNotice = feedbackSent =>
   feedbackSent
@@ -128,40 +151,35 @@ let feedbackSentNotice = feedbackSent =>
       </div>
     : React.null;
 
-let submissionCardClasses = status =>
+let submissionCardClasses = submission =>
   "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
   ++ (
-    switch (status) {
-    | Some(s) =>
-      s |> IndexSubmission.failed ? "border-red-500" : "border-green-500"
-    | None => "border-gray-600"
+    if (submission |> IndexSubmission.pendingReview) {
+      "border-orange-400";
+    } else if (submission |> IndexSubmission.failed) {
+      "border-red-500";
+    } else {
+      "border-green-500";
     }
   );
 
 let showSubmission = (submissions, levels, sortDirection) =>
-  <div id="reviewed-submissions">
+  <div id="submissions">
     {submissions
      |> IndexSubmission.sortArray(sortDirection)
      |> Array.map(submission =>
           <Link
             href={"/submissions/" ++ (submission |> IndexSubmission.id)}
             key={submission |> IndexSubmission.id}
-            ariaLabel={
-              "reviewed-submission-card-" ++ (submission |> IndexSubmission.id)
-            }
-            className={submissionCardClasses(
-              submission |> IndexSubmission.status,
-            )}>
+            ariaLabel={"Submission " ++ (submission |> IndexSubmission.id)}
+            className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
               <div className="block text-sm md:pr-2">
                 <span
                   className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                   {submission
                    |> IndexSubmission.levelId
-                   |> Level.unsafeLevelNumber(
-                        levels,
-                        "ShowReviewedSubmission",
-                      )
+                   |> Level.unsafeLevelNumber(levels, "SubmissionsTab")
                    |> str}
                 </span>
                 <span className="ml-2 font-semibold text-base">
@@ -180,86 +198,84 @@ let showSubmission = (submissions, levels, sortDirection) =>
                 </span>
               </div>
             </div>
-            {switch (submission |> IndexSubmission.status) {
-             | Some(status) =>
-               <div
-                 className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                 {feedbackSentNotice(status |> IndexSubmission.feedbackSent)}
-                 {submissionStatus(status |> IndexSubmission.failed)}
-               </div>
-             | None => React.null
-             }}
+            <div
+              className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
+              {feedbackSentNotice(submission |> IndexSubmission.feedbackSent)}
+              {submissionStatus(submission)}
+            </div>
           </Link>
         )
      |> React.array}
   </div>;
 
-let showSubmissions = (reviewedSubmissions, levels, sortDirection) =>
-  reviewedSubmissions |> ArrayUtils.isEmpty
+let showSubmissions = (submissions, selectedTab, levels, sortDirection) => {
+  let imageSrc =
+    switch (selectedTab) {
+    | `Pending => pendingEmptyImage
+    | `Reviewed => reviewedEmptyImage
+    };
+
+  submissions |> ArrayUtils.isEmpty
     ? <div
-        className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
+        className="course-review__submissions-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {"No Reviewed Submission" |> str}
+          {"No submissions found" |> str}
         </h5>
-        <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
+        <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />
       </div>
-    : showSubmission(reviewedSubmissions, levels, sortDirection);
+    : showSubmission(submissions, levels, sortDirection);
+};
 
 [@react.component]
 let make =
     (
       ~courseId,
+      ~selectedTab,
       ~selectedLevel,
       ~selectedCoach,
       ~sortDirection,
       ~levels,
-      ~reviewedSubmissions,
-      ~updateReviewedSubmissionsCB,
+      ~submissions,
+      ~updateSubmissionsCB,
+      ~reloadAt,
     ) => {
   let (state, setState) = React.useState(() => Loading);
-  React.useEffect3(
+  React.useEffect5(
     () => {
-      let shouldLoad =
-        switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
-        | Unloaded => true
-        | FullyLoaded(_, filter, sortDirectionCached)
-        | PartiallyLoaded(_, filter, sortDirectionCached, _) =>
-          if (filter
-              |> ReviewedSubmissions.filterEq(selectedLevel, selectedCoach)
-              && sortDirectionCached == sortDirection) {
-            false;
-          } else {
-            setState(_ => Reloading);
-            true;
-          }
-        };
+      if (submissions
+          |> Submissions.needsReloading(
+               selectedLevel,
+               selectedCoach,
+               sortDirection,
+             )) {
+        setState(_ => Reloading);
 
-      shouldLoad
-        ? getReviewedSubmissions(
-            courseId,
-            None,
-            setState,
-            selectedLevel,
-            selectedCoach,
-            sortDirection,
-            [||],
-            updateReviewedSubmissionsCB,
-          )
-        : ();
+        getSubmissions(
+          courseId,
+          None,
+          setState,
+          selectedLevel,
+          selectedCoach,
+          sortDirection,
+          selectedTab,
+          [||],
+          updateSubmissionsCB,
+        );
+      };
 
       None;
     },
-    (selectedLevel, selectedCoach, sortDirection),
+    (selectedLevel, selectedCoach, sortDirection, selectedTab, reloadAt),
   );
 
   <div>
     <LoadingSpinner loading={state == Reloading} />
-    {switch ((reviewedSubmissions: ReviewedSubmissions.t)) {
+    {switch ((submissions: Submissions.t)) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
-     | PartiallyLoaded(reviewedSubmissions, _filter, _sortDirection, cursor) =>
+     | PartiallyLoaded({submissions}, cursor) =>
        <div>
-         {showSubmissions(reviewedSubmissions, levels, sortDirection)}
+         {showSubmissions(submissions, selectedTab, levels, sortDirection)}
          {state == Loading
             ? SkeletonLoading.multiple(
                 ~count=3,
@@ -268,22 +284,23 @@ let make =
             : <button
                 className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                 onClick={_ =>
-                  getReviewedSubmissions(
+                  getSubmissions(
                     courseId,
                     Some(cursor),
                     setState,
                     selectedLevel,
                     selectedCoach,
                     sortDirection,
-                    reviewedSubmissions,
-                    updateReviewedSubmissionsCB,
+                    selectedTab,
+                    submissions,
+                    updateSubmissionsCB,
                   )
                 }>
                 {"Load More..." |> str}
               </button>}
        </div>
-     | FullyLoaded(reviewedSubmissions, _filter, _sortDirection) =>
-       showSubmissions(reviewedSubmissions, levels, sortDirection)
+     | FullyLoaded({submissions}) =>
+       showSubmissions(submissions, selectedTab, levels, sortDirection)
      }}
   </div>;
 };

@@ -4,6 +4,7 @@ feature 'Submissions show' do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
+  include SubmissionsHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
@@ -416,6 +417,54 @@ feature 'Submissions show' do
 
       expect(new_notes.count).to eq(2)
       expect(new_notes.pluck(:student_id)).to contain_exactly(student.id, another_student.id)
+    end
+
+    scenario 'coach opens the overlay for a submission after its status has changed in the DB', js: true do
+      # Opening the overlay should reload data on index if it's different.
+      sign_in_user coach.user, referer: review_course_path(course)
+
+      expect(page).to have_text(target.title)
+      expect(page).to have_text(target_2.title)
+
+      # Review the submission from the backend.
+      submission_pending.update(passed_at: Time.zone.now, evaluated_at: Time.zone.now, evaluator: coach)
+      grade_submission(submission_pending, SubmissionsHelper::GRADE_PASS, target)
+
+      # Open the overlay.
+      find("a[aria-label='Submission #{submission_pending.id}']").click
+
+      # It should show passed.
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Passed')
+      end
+
+      find("div[aria-label='submissions-overlay-close']").click
+
+      # Closing the overlay should show that the item has been removed from the pending list.
+      expect(page).not_to have_text(target.title)
+      expect(page).to have_text(target_2.title) # The second submission should still be there.
+
+      # The submission should be visible in the Pending list.
+      click_button 'Reviewed'
+
+      # The submission should show up in the Reviewed list.
+      expect(page).to have_text(target.title)
+
+      # Undo the grading of the submission from the backend.
+      submission_pending.timeline_event_grades.destroy_all
+      submission_pending.update(passed_at: nil, evaluated_at: nil, evaluator: nil)
+
+      find("a[aria-label='Submission #{submission_pending.id}']").click
+
+      # The overlay should show pending review status.
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Not Reviewed')
+      end
+
+      find("div[aria-label='submissions-overlay-close']").click
+
+      # Closing the overlay should show that the item has been removed from the reviewed list.
+      expect(page).not_to have_text(target.title)
     end
   end
 

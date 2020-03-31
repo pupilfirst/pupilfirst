@@ -93,3 +93,15 @@ let decodeJs = details =>
      );
 
 let replace = (e, l) => l |> Array.map(s => s.id == e.id ? e : s);
+
+let statusEq = (overlaySubmission, t) =>
+  switch (
+    t.status,
+    overlaySubmission |> CoursesReview__OverlaySubmission.evaluatedAt,
+  ) {
+  | (None, None) => true
+  | (Some({passedAt}), Some(_)) =>
+    passedAt == CoursesReview__OverlaySubmission.passedAt(overlaySubmission)
+  | (Some(_), None)
+  | (None, Some(_)) => false
+  };

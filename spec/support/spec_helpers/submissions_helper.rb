@@ -11,34 +11,35 @@ module SubmissionsHelper
     submit_target(target, student, grade: GRADE_FAIL, evaluator: evaluator)
   end
 
-  # rubocop:disable Metrics/MethodLength
   def submit_target(target, student, grade: GRADE_NONE, evaluator: nil)
     options = submission_options(target, student, grade, evaluator)
 
     FactoryBot.create(:timeline_event, options).tap do |submission|
-      if target.evaluation_criteria.present? && grade != GRADE_NONE
-        target.evaluation_criteria.each do |ec|
-          computed_grade = case grade
-            when GRADE_PASS
-              rand(ec.pass_grade..ec.max_grade)
-            else
-              (ec.pass_grade - 1).tap do |failing_grade|
-                raise "Spec asked for failed status on a target with non-failing criteria" if failing_grade.zero?
-              end
-          end
-
-          create(
-            :timeline_event_grade,
-            timeline_event: submission,
-            grade: computed_grade,
-            evaluation_criterion: ec
-          )
-        end
-      end
+      grade_submission(submission, grade, target)
     end
   end
 
-  # rubocop:enable Metrics/MethodLength
+  def grade_submission(submission, grade, target)
+    if target.evaluation_criteria.present? && grade != GRADE_NONE
+      target.evaluation_criteria.each do |ec|
+        computed_grade = case grade
+          when GRADE_PASS
+            rand(ec.pass_grade..ec.max_grade)
+          else
+            (ec.pass_grade - 1).tap do |failing_grade|
+              raise "Spec asked for failed status on a target with non-failing criteria" if failing_grade.zero?
+            end
+        end
+
+        create(
+          :timeline_event_grade,
+          timeline_event: submission,
+          grade: computed_grade,
+          evaluation_criterion: ec
+        )
+      end
+    end
+  end
 
   private
 

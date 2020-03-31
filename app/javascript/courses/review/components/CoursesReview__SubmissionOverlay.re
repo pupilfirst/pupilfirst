@@ -46,15 +46,36 @@ module SubmissionDetailsQuery = [%graphql
   |}
 ];
 
-let updateSubmissionDetails = (setState, details) =>
-  setState(_ => Loaded(details |> SubmissionDetails.decodeJs));
+/*
+ * Use the sync submission callback to allow the index to reload its data if
+ * state of this submission is different from the one on the index.
+ *
+ * Then, set the state of this component to Loaded.
+ */
+let updateSubmissionDetails =
+    (setState, submissionId, syncSubmissionCB, details) => {
+  let submissionDetails = details |> SubmissionDetails.decodeJs;
 
-let getSubmissionDetails = (submissionId, setState, ()) => {
+  submissionDetails
+  |> SubmissionDetails.submissions
+  |> ArrayUtils.unsafeFind(
+       submission => submission |> OverlaySubmission.id == submissionId,
+       "Could not find overlaySubmission with ID "
+       ++ submissionId
+       ++ " in loaded submissions",
+     )
+  |> syncSubmissionCB;
+
+  setState(_ => Loaded(submissionDetails));
+};
+
+let getSubmissionDetails = (submissionId, setState, syncSubmissionCB, ()) => {
   setState(_ => Loading);
   SubmissionDetailsQuery.make(~submissionId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       response##submissionDetails |> updateSubmissionDetails(setState);
+       response##submissionDetails
+       |> updateSubmissionDetails(setState, submissionId, syncSubmissionCB);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -201,6 +222,7 @@ let make =
       ~submissionId,
       ~teamCoaches,
       ~currentCoach,
+      ~syncSubmissionCB,
       ~removePendingSubmissionCB,
       ~updateReviewedSubmissionCB,
     ) => {
@@ -212,7 +234,7 @@ let make =
   });
 
   React.useEffect1(
-    getSubmissionDetails(submissionId, setState),
+    getSubmissionDetails(submissionId, setState, syncSubmissionCB),
     [|submissionId|],
   );
   <div

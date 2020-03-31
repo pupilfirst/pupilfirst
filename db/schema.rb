@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_084128) do
+ActiveRecord::Schema.define(version: 2020_03_31_122823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -117,6 +117,14 @@ ActiveRecord::Schema.define(version: 2020_03_20_084128) do
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_applicants_on_course_id"
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+  end
+
+  create_table "bounce_reports", force: :cascade do |t|
+    t.string "email"
+    t.string "bounce_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_bounce_reports_on_email"
   end
 
   create_table "coach_notes", force: :cascade do |t|

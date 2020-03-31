@@ -6,6 +6,7 @@ class CreateApplicantMutator < ApplicationQuery
   validate :course_must_exist
   validate :ensure_time_between_requests
   validate :not_a_student
+  validate :email_should_not_have_bounced
 
   def create_applicant
     Applicant.transaction do
@@ -16,7 +17,10 @@ class CreateApplicantMutator < ApplicationQuery
         applicant.save!
       end
 
-      MailLoginTokenService.new(applicant).execute
+      # Generate token and send course enrollment email
+      applicant.regenerate_login_token
+      applicant.update!(login_mail_sent_at: Time.zone.now)
+      ApplicantMailer.send_course_enrollment(applicant).deliver_now
     end
 
     true
@@ -59,5 +63,11 @@ class CreateApplicantMutator < ApplicationQuery
     return if course.users.where(email: email).empty?
 
     errors[:base] << "You are already enrolled in #{course.name} course. Try signing in, instead."
+  end
+
+  def email_should_not_have_bounced
+    return if BounceReport.where(email: email).blank?
+
+    errors[:email] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
   end
 end

@@ -11,13 +11,6 @@ module Types
       argument :target_id, ID, required: true
     end
 
-    field :reviewed_submissions, Types::ReviewedSubmissionType.connection_type, null: false do
-      argument :course_id, ID, required: true
-      argument :level_id, ID, required: false
-      argument :coach_id, ID, required: false
-      argument :sort_direction, Types::SortDirectionType, required: true
-    end
-
     field :submissions, Types::SubmissionType.connection_type, null: false do
       argument :course_id, ID, required: true
       argument :status, Types::SubmissionStatusType, required: true
@@ -94,11 +87,6 @@ module Types
     def submissions(args)
       resolver = SubmissionsResolver.new(context, args)
       resolver.submissions
-    end
-
-    def reviewed_submissions(args)
-      resolver = ReviewedSubmissionsResolver.new(context, args)
-      resolver.reviewed_submissions
     end
 
     def submission_details(args)

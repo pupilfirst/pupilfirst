@@ -13,8 +13,9 @@ class DailyDigestService
     students = User.joins(:communities).distinct.select(:id)
     coaches = User.joins(:faculty).select(:id)
     User.where(id: coaches).or(User.where(id: students))
-      .where('preferences @> ?', { daily_digest: true }.to_json)
-      .where(email_bounced_at: nil).each do |user|
+      .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
+      next if BounceReport.where(email: user.email).present?
+
       updates_for_user = create_updates(updates, user)
 
       next if updates_for_user[:community_updates].blank? && updates_for_user[:updates_for_coach].blank?

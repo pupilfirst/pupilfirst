@@ -49,8 +49,8 @@ describe DailyDigestService do
         # Turn off daily digest for the disabled user.
         t2_user_2.update!(preferences: { daily_digest: false })
 
-        # Set email_bounced_at for t2_student_bounced.
-        t2_student_bounced.user.update!(email_bounced_at: 1.week.ago)
+        # Create bounce report for t2_student_bounced.
+        BounceReport.create!(email: t2_student_bounced.email)
       end
 
       it 'sends digest emails containing details about new and unanswered questions' do

@@ -6,7 +6,6 @@ describe 'Postmark webhook bounce reports' do
   let(:user_1) { create :user }
   let!(:user_2) { create :user }
   let(:another_school) { create :school }
-  let!(:user_1_s2) { create :user, email: user_1.email, school: another_school }
 
   before(:all) do
     ENV['POSTMARK_HOOK_ID'] = 'hook_id_for_test'
@@ -14,40 +13,26 @@ describe 'Postmark webhook bounce reports' do
     @headers = request_spec_headers('hook_id_for_test', 'hook_secret_for_test')
   end
 
-  context 'when postmark reports hard-bounce for a user in multiple schools' do
-    it 'marks all matching users in all schools as hard-bounced' do
+  context 'when postmark reports hard-bounce for a user' do
+    it 'creates a bounce report of type hard-bounced' do
       expect do
         post '/users/email_bounce', params: { Email: user_1.email, Type: 'HardBounce' }, headers: @headers
-      end.to change { user_1.reload.email_bounced_at }.from(nil)
+      end.to change { BounceReport.where(email: user_1.email).count }.from(0).to(1)
 
+      bounce_report = BounceReport.where(email: user_1.email).first
+      expect(bounce_report.bounce_type).to eq('HardBounce')
       expect(response.code).to eq("200")
-
-      # Both users in different schools with the reported email should be marked bounced.
-      expect(user_1.email_bounce_type).to eq('HardBounce')
-      expect(user_1_s2.reload.email_bounced_at).not_to eq(nil)
-      expect(user_1_s2.email_bounce_type).to eq('HardBounce')
-
-      # User with different email should have been left alone.
-      expect(user_2.reload.email_bounced_at).to eq(nil)
-      expect(user_2.email_bounce_type).to eq(nil)
     end
   end
 
-  context 'when postmark reports spam-complaint from a user in multiple schools' do
-    it 'marks all matching users in all schools as bounced with appropriate bounce type' do
+  context 'when postmark reports spam-complaint from a user' do
+    it 'marks email as bounced with appropriate bounce type' do
       post '/users/email_bounce', params: { Email: user_1.email, Type: 'SpamComplaint' }, headers: @headers
 
       expect(response.code).to eq("200")
 
-      # Both users in different schools with the reported email should be marked bounced with the correct bounce type.
-      expect(user_1.reload.email_bounced_at).not_to eq(nil)
-      expect(user_1.email_bounce_type).to eq('SpamComplaint')
-      expect(user_1_s2.reload.email_bounced_at).not_to eq(nil)
-      expect(user_1_s2.email_bounce_type).to eq('SpamComplaint')
-
-      # User with different email should have been left alone.
-      expect(user_2.reload.email_bounced_at).to eq(nil)
-      expect(user_2.email_bounce_type).to eq(nil)
+      bounce_report = BounceReport.where(email: user_1.email).first
+      expect(bounce_report.bounce_type).to eq('SpamComplaint')
     end
   end
 
@@ -56,10 +41,12 @@ describe 'Postmark webhook bounce reports' do
       post '/users/email_bounce', params: { Email: "missinguser@example.com", Type: 'HardBounce' }, headers: @headers
       expect(response.code).to eq("200")
 
+      # No bounce report created for the unknown email
+      expect(BounceReport.where(email: "missinguser@example.com").count).to eq(0)
+
       # None of the users should have been marked bounced.
-      expect(user_1.reload.email_bounced_at).to eq(nil)
-      expect(user_1_s2.reload.email_bounced_at).to eq(nil)
-      expect(user_2.reload.email_bounced_at).to eq(nil)
+      expect(BounceReport.where(email: user_1.email).count).to eq(0)
+      expect(BounceReport.where(email: user_2.email).count).to eq(0)
     end
   end
 
@@ -69,10 +56,9 @@ describe 'Postmark webhook bounce reports' do
 
       expect(response.code).to eq("200")
 
-      # None of the users should have been marked bounced.
-      expect(user_1.reload.email_bounced_at).to eq(nil)
-      expect(user_1_s2.reload.email_bounced_at).to eq(nil)
-      expect(user_2.reload.email_bounced_at).to eq(nil)
+      # None of the emails should have been marked bounced.
+      expect(BounceReport.where(email: user_1.email).count).to eq(0)
+      expect(BounceReport.where(email: user_2.email).count).to eq(0)
     end
   end
 
@@ -82,9 +68,8 @@ describe 'Postmark webhook bounce reports' do
       expect(response.code).to eq("401")
 
       # None of the users should have been marked bounced.
-      expect(user_1.reload.email_bounced_at).to eq(nil)
-      expect(user_1_s2.reload.email_bounced_at).to eq(nil)
-      expect(user_2.reload.email_bounced_at).to eq(nil)
+      expect(BounceReport.where(email: user_1.email).count).to eq(0)
+      expect(BounceReport.where(email: user_2.email).count).to eq(0)
     end
   end
 end

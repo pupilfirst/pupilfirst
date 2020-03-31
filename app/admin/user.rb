@@ -58,8 +58,6 @@ ActiveAdmin.register User do
       attributes_table_for user do
         row :id
         row :login_token
-        row :email_bounced_at
-        row :email_bounce_type
       end
     end
   end

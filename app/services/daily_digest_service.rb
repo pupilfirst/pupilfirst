@@ -14,7 +14,7 @@ class DailyDigestService
     coaches = User.joins(:faculty).select(:id)
     User.where(id: coaches).or(User.where(id: students))
       .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
-      next if BounceReport.where(email: user.email).present?
+      next if user.email_bounced?
 
       updates_for_user = create_updates(updates, user)
 

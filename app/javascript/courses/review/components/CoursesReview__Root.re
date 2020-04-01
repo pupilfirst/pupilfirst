@@ -39,7 +39,8 @@ type action =
   | SelectCoach(Coach.t)
   | DeselectCoach
   | UpdateFilterString(string)
-  | UpdateSortDirection([ | `Ascending | `Descending]);
+  | UpdateSortDirection([ | `Ascending | `Descending])
+  | SyncSubmissionStatus(OverlaySubmission.t);
 
 let reducer = (state, action) =>
   switch (action) {
@@ -125,6 +126,29 @@ let reducer = (state, action) =>
   | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
   | UpdateSortDirection(sortDirection) => {...state, sortDirection}
+  | SyncSubmissionStatus(overlaySubmission) =>
+    let skipReload =
+      state.pendingSubmissions
+      |> Submissions.toArray
+      |> Array.append(state.reviewedSubmissions |> Submissions.toArray)
+      |> Js.Array.find(indexSubmission =>
+           indexSubmission
+           |> IndexSubmission.id == OverlaySubmission.id(overlaySubmission)
+         )
+      |> OptionUtils.mapWithDefault(
+           indexSubmission =>
+             indexSubmission |> IndexSubmission.statusEq(overlaySubmission),
+           true,
+         );
+
+    skipReload
+      ? state
+      : {
+        ...state,
+        pendingSubmissions: Unloaded,
+        reviewedSubmissions: Unloaded,
+        reloadAt: Js.Date.make(),
+      };
   };
 
 let computeInitialState = currentTeamCoach => {
@@ -412,6 +436,9 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
          submissionId
          currentCoach
          teamCoaches
+         syncSubmissionCB={submission =>
+           send(SyncSubmissionStatus(submission))
+         }
          removePendingSubmissionCB={() => send(ReloadSubmissions)}
          updateReviewedSubmissionCB={submission =>
            send(UpdateReviewedSubmission(submission))

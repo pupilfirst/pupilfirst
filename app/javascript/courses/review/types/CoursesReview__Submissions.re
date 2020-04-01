@@ -61,3 +61,10 @@ let needsReloading = (selectedLevel, selectedCoach, sortDirection, t) =>
       && data.sortDirection == sortDirection
     )
   };
+
+let toArray = t =>
+  switch (t) {
+  | Unloaded => [||]
+  | PartiallyLoaded(data, _cursor) => data.submissions
+  | FullyLoaded(data) => data.submissions
+  };

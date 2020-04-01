@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_31_122823) do
+ActiveRecord::Schema.define(version: 2020_04_01_164040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -769,8 +769,6 @@ ActiveRecord::Schema.define(version: 2020_03_31_122823) do
     t.string "encrypted_password", default: "", null: false
     t.string "remember_token"
     t.boolean "sign_out_at_next_request"
-    t.datetime "email_bounced_at"
-    t.string "email_bounce_type"
     t.datetime "confirmed_at"
     t.datetime "login_mail_sent_at"
     t.string "name"

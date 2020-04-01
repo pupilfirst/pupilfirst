@@ -50,7 +50,7 @@ describe DailyDigestService do
         t2_user_2.update!(preferences: { daily_digest: false })
 
         # Create bounce report for t2_student_bounced.
-        BounceReport.create!(email: t2_student_bounced.email)
+        BounceReport.create!(email: t2_student_bounced.email, bounce_type: 'HardBounce')
       end
 
       it 'sends digest emails containing details about new and unanswered questions' do

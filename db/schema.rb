@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_084128) do
+ActiveRecord::Schema.define(version: 2020_04_01_083104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -401,6 +401,35 @@ ActiveRecord::Schema.define(version: 2020_03_20_084128) do
     t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
   end
 
+  create_table "post_likes", force: :cascade do |t|
+    t.bigint "post_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id", "user_id"], name: "index_post_likes_on_post_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_post_likes_on_user_id"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.bigint "topic_id"
+    t.bigint "creator_id"
+    t.bigint "editor_id"
+    t.bigint "archiver_id"
+    t.datetime "archived_at"
+    t.bigint "reply_to_post_id"
+    t.integer "post_number", default: 1, null: false
+    t.text "body"
+    t.boolean "solution"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["archiver_id"], name: "index_posts_on_archiver_id"
+    t.index ["creator_id"], name: "index_posts_on_creator_id"
+    t.index ["editor_id"], name: "index_posts_on_editor_id"
+    t.index ["post_number", "topic_id"], name: "index_posts_on_post_number_and_topic_id", unique: true
+    t.index ["reply_to_post_id"], name: "index_posts_on_reply_to_post_id"
+    t.index ["topic_id"], name: "index_posts_on_topic_id"
+  end
+
   create_table "prospective_applicants", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -731,6 +760,18 @@ ActiveRecord::Schema.define(version: 2020_03_20_084128) do
     t.jsonb "checklist", default: []
   end
 
+  create_table "topics", force: :cascade do |t|
+    t.bigint "community_id"
+    t.bigint "target_id"
+    t.datetime "last_activity_at"
+    t.boolean "archived"
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["community_id"], name: "index_topics_on_community_id"
+    t.index ["target_id"], name: "index_topics_on_target_id"
+  end
+
   create_table "universities", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "state_id"
@@ -846,6 +887,8 @@ ActiveRecord::Schema.define(version: 2020_03_20_084128) do
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"
+  add_foreign_key "posts", "posts", column: "reply_to_post_id"
+  add_foreign_key "posts", "topics"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
@@ -866,6 +909,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_084128) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
+  add_foreign_key "topics", "communities"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
 end

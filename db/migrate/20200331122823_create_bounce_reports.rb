@@ -6,19 +6,20 @@ class CreateBounceReports < ActiveRecord::Migration[6.0]
   end
 
   def up
+    enable_extension 'citext'
     create_table :bounce_reports do |t|
-      t.string :email, index: true
-      t.string :bounce_type
+      t.citext :email, null: false
+      t.string :bounce_type, null: false
 
       t.timestamps
     end
 
+    add_index :bounce_reports, :email, unique: true
+
     BounceReport.reset_column_information
 
-    User.all.each do |user|
-      next if user.email_bounced_at.blank?
-
-      BounceReport.where(email: user.email).first_or_create!(bounce_type: user.email_bounce_type)
+    User.where.not(email_bounced_at: nil).find_each do |user|
+      BounceReport.where(email: user.email).first_or_create!(bounce_type: user.email_bounce_type || 'HardBounce')
     end
   end
 

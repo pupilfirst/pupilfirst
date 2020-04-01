@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_03_31_122823) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -120,11 +121,11 @@ ActiveRecord::Schema.define(version: 2020_03_31_122823) do
   end
 
   create_table "bounce_reports", force: :cascade do |t|
-    t.string "email"
-    t.string "bounce_type"
+    t.citext "email", null: false
+    t.string "bounce_type", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_bounce_reports_on_email"
+    t.index ["email"], name: "index_bounce_reports_on_email", unique: true
   end
 
   create_table "coach_notes", force: :cascade do |t|

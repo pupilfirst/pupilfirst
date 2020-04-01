@@ -20,7 +20,7 @@ class CreateApplicantMutator < ApplicationQuery
       # Generate token and send course enrollment email
       applicant.regenerate_login_token
       applicant.update!(login_mail_sent_at: Time.zone.now)
-      ApplicantMailer.send_course_enrollment(applicant).deliver_now
+      ApplicantMailer.enrollment_verification(applicant).deliver_now
     end
 
     true
@@ -68,6 +68,6 @@ class CreateApplicantMutator < ApplicationQuery
   def email_should_not_have_bounced
     return if BounceReport.where(email: email).blank?
 
-    errors[:email] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+    errors[:base] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
   end
 end

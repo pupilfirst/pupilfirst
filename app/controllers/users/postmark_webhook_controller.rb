@@ -5,7 +5,7 @@ module Users
 
     # POST /users/email_bounce
     def email_bounce
-      mark_email_bounced if users.exists? && params[:Type].in?(accepted_webhook_types)
+      mark_email_bounced if params[:Email].present? && params[:Type].in?(accepted_webhook_types)
       head :ok
     end
 
@@ -17,10 +17,6 @@ module Users
 
     def mark_email_bounced
       BounceReport.where(email: params[:Email]).first_or_create!(bounce_type: params[:Type])
-    end
-
-    def users
-      @users ||= User.with_email(params[:Email])
     end
   end
 end

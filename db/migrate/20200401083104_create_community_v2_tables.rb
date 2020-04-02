@@ -1,31 +1,53 @@
 class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
-  class Topic < ActiveRecord::Base
+  class Topic < ApplicationRecord
     has_many :posts
   end
 
-  class Post < ActiveRecord::Base
+  class Post < ApplicationRecord
     has_many :post_likes
     belongs_to :reply_to_post, class_name: 'Post', optional: true
   end
 
-  class PostLike < ActiveRecord::Base
+  class PostLike < ApplicationRecord
   end
 
-  class Question < ActiveRecord::Base
+  class Comment < ApplicationRecord
+    belongs_to :commentable, polymorphic: true
+  end
+
+  class AnswerLikes < ApplicationRecord
+  end
+
+  class TextVersions < ApplicationRecord
+  end
+
+  class Target < ApplicationRecord
+  end
+
+  class TargetQuestions < ApplicationRecord
+    belongs_to :target
+  end
+
+  class Answer < ApplicationRecord
+    has_many :answer_likes
+    has_many :comments, as: :commentable
+    has_many :text_versions, as: :versionable
+
+    def self.name
+      'Answer'
+    end
+  end
+
+  class Question < ApplicationRecord
     has_many :answers
     has_many :comments, as: :commentable
     has_many :target_questions
     has_many :targets, through: :target_questions
     has_many :text_versions, as: :versionable
-  end
 
-  class Answer < ActiveRecord::Base
-    has_many :answer_likes
-    has_many :comments, as: :commentable
-    has_many :text_versions, as: :versionable
-  end
-
-  class Comment < ActiveRecord::Base
+    def self.name
+      'Question'
+    end
   end
 
   def up
@@ -64,11 +86,9 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
 
     Topic.reset_column_information
     Post.reset_column_information
-    Question.reset_column_information
-    Answer.reset_column_information
-    Comment.reset_column_information
+    PostLike.reset_column_information
 
-    Question.all.includes(:targets, :answers, :text_versions, :comments).find_each do |question|
+    Question.all.includes(:targets, :text_versions, :comments, answers: %i[text_versions comments]).find_each do |question|
       # Let's use a hash to store likes count. We'll use this at the end to mark a post as a 'solution'.
       likes = {}
 
@@ -125,21 +145,28 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
       end
     end
 
+    # Add unique index to posts table now that they've all been numbered.
     add_index :posts, %i[post_number topic_id], unique: true
 
-    # TODO: Clean up old tables and columns.
+    # Clean up old tables.
+    # drop_table :comments
+    # drop_table :answer_likes
+    # drop_table :answers
+    # drop_table :target_questions
+    # drop_table :questions
   end
 
   def down
-    drop_table :topics
-    drop_table :posts
-    drop_table :post_likes
+    raise ActiveRecord::IrreversibleMigration
   end
 
   def post_attributes(record, reply_to: nil)
+    body = record.class.name.in?(%w[Question Answer]) ? record.description : record.value
+
     record.attributes.slice('creator_id', 'editor_id', 'archiver_id', 'created_at', 'updated_at').merge(
       archived_at: record.archived ? migration_time : nil,
-      reply_to_post: reply_to
+      reply_to_post: reply_to,
+      body: body
     )
   end
 

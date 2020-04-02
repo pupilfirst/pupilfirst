@@ -44,7 +44,7 @@ class User < ApplicationRecord
   end
 
   def email_bounced?
-    email_bounced_at.present?
+    BounceReport.where(email: email).exists?
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

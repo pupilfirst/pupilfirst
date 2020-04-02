@@ -31,27 +31,4 @@ describe MailLoginTokenService do
       end
     end
   end
-
-  context 'When an Applicant is passed on to the service' do
-    let(:course) { create :course, school: school }
-    let(:applicant) { create :applicant, course: course }
-    subject { described_class.new(applicant) }
-
-    describe '#execute' do
-      it 'generates new login token for applicant' do
-        expect do
-          subject.execute
-        end.to(change { applicant.reload.login_token })
-      end
-
-      it 'emails login link to applicant' do
-        subject.execute
-
-        open_email(applicant.email)
-
-        expect(current_email.subject).to eq("Verify Your Email Address")
-        expect(current_email.body).to include("http://#{domain.fqdn}/applicants/#{applicant.reload.login_token}")
-      end
-    end
-  end
 end

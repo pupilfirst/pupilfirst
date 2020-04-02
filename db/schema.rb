@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_083104) do
+ActiveRecord::Schema.define(version: 2020_04_01_164040) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -117,6 +118,14 @@ ActiveRecord::Schema.define(version: 2020_04_01_083104) do
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_applicants_on_course_id"
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+  end
+
+  create_table "bounce_reports", force: :cascade do |t|
+    t.citext "email", null: false
+    t.string "bounce_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_bounce_reports_on_email", unique: true
   end
 
   create_table "coach_notes", force: :cascade do |t|
@@ -801,8 +810,6 @@ ActiveRecord::Schema.define(version: 2020_04_01_083104) do
     t.string "encrypted_password", default: "", null: false
     t.string "remember_token"
     t.boolean "sign_out_at_next_request"
-    t.datetime "email_bounced_at"
-    t.string "email_bounce_type"
     t.datetime "confirmed_at"
     t.datetime "login_mail_sent_at"
     t.string "name"

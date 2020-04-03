@@ -53,9 +53,9 @@ module Types
     field :create_topic, mutation: Mutations::CreateTopic, null: false
     field :update_topic, mutation: Mutations::UpdateTopic, null: false
     field :create_post, mutation: Mutations::CreatePost, null: false
-    field :update_post, mutation::UpdatePost, null: false
-    field :like_post, mutation: Mutations::LikePost, null: false
-    field :unlike_post, mutation: Mutations::UnlikePost, null: false
+    field :update_post, mutation: Mutations::UpdatePost, null: false
+    field :create_post_like, mutation: Mutations::CreatePostLike, null: false
+    field :delete_post_like, mutation: Mutations::DeletePostLike, null: false
     field :mark_post_as_solution, mutation: Mutations::MarkPostAsSolution, null: false
     field :archive_post, mutation: Mutations::ArchivePost, null: false
   end

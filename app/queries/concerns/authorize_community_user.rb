@@ -2,8 +2,8 @@ module AuthorizeCommunityUser
   include ActiveSupport::Concern
 
   def authorized_create?
-    # Can't like at Pupilfirst, current user must exist, Can only like answers in the same school.
-    return false unless current_school.present? && current_user.present? && (community&.school == current_school)
+    # Current user must exist, and the community in question must be in the 'current' school.
+    return false unless current_user.present? && (community&.school == current_school)
 
     # Coach has access to all communities
     return true if current_coach.present?

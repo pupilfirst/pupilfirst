@@ -507,30 +507,28 @@ feature 'School students index', js: true do
     click_button "Order by Name"
     click_button "Order by Last Created"
 
-    expect(page).to have_text(teams_order_by_created_at.last.name)
-    expect(page).not_to have_text(teams_order_by_created_at.first.name)
+    expect(find(".student-team-container:first-child")).to have_text(teams_order_by_created_at.last.name)
+
     click_button('Load More')
 
-    expect(page).to have_text(teams_order_by_created_at.first.name)
+    expect(find(".student-team-container:last-child")).to have_text(teams_order_by_created_at.first.name)
 
     click_button "Order by Last Created"
     click_button "Order by Last Updated"
 
-    expect(page).not_to have_text(team_order_by_updated_at.first.name)
-    expect(page).to have_text(team_order_by_updated_at.last.name)
+    expect(find(".student-team-container:first-child")).to have_text(team_order_by_updated_at.last.name)
 
     click_button('Load More')
 
-    expect(page).to have_text(team_order_by_updated_at.first.name)
+    expect(find(".student-team-container:last-child")).to have_text(team_order_by_updated_at.first.name)
 
     click_button "Order by Last Updated"
     click_button "Order by Name"
 
-    expect(page).not_to have_text(teams_order_by_name.last.name)
-    expect(page).to have_text(teams_order_by_name.first.name)
+    expect(find(".student-team-container:first-child")).to have_text(teams_order_by_name.first.name)
 
     click_button('Load More')
 
-    expect(page).to have_text(teams_order_by_name.last.name)
+    expect(find(".student-team-container:last-child")).to have_text(teams_order_by_name.last.name)
   end
 end

@@ -246,27 +246,27 @@ feature 'Course review' do
       end
 
       # Check current ordering of pending items
-      find("#submissions a:nth-child(1)").should have_content(submission_l1_t1.title)
-      find("#submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
-      find("#submissions a:nth-child(3)").should have_content(submission_l3_t3.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t1.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t2.title)
+      expect(find("#submissions a:nth-child(3)")).to have_content(submission_l3_t3.title)
 
       # Swap the ordering of pending items
       click_button('toggle-sort-order')
 
-      find("#submissions a:nth-child(3)").should have_content(submission_l1_t1.title)
-      find("#submissions a:nth-child(2)").should have_content(submission_l2_t2.title)
-      find("#submissions a:nth-child(1)").should have_content(submission_l3_t3.title)
+      expect(find("#submissions a:nth-child(3)")).to have_content(submission_l1_t1.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t2.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l3_t3.title)
 
       # Switch to reviewed tab and check sorting
       click_button 'Reviewed'
 
-      find("#submissions a:nth-child(1)").should have_content(submission_l1_t2.title)
-      find("#submissions a:nth-child(2)").should have_content(team_submission.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t2.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(team_submission.title)
 
       click_button('toggle-sort-order')
 
-      find("#submissions a:nth-child(1)").should have_content(submission_l1_t3.title)
-      find("#submissions a:nth-child(2)").should have_content(submission_l2_t3.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do

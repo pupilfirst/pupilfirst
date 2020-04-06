@@ -20,6 +20,14 @@ let decode = json =>
     studentsInLevel: json |> field("studentsInLevel", int),
   };
 
+let percentageStudents = (t, totalStudents) => {
+  float_of_int(t.studentsInLevel) /. float_of_int(totalStudents) *. 100.0;
+};
+
+let shortName = t => {
+  "L" ++ (t.number |> string_of_int);
+};
+
 let sort = levels =>
   levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number);
 

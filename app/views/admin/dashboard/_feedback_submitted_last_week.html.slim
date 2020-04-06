@@ -10,10 +10,5 @@
 
   .footer-spacer
 
-  - trend = StartupFeedback.group_by_week('startup_feedback.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
-
-  .left-of-button
-    span.sparkline-tag #{trend.join(', ')}
-
   a.button.view-all href=admin_startup_feedback_index_path(q: { created_at_gteq: 1.week.ago.strftime('%Y-%m-%d') })
     | View All (#{startup_feedback_from_last_week.count})

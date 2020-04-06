@@ -47,12 +47,12 @@ feature 'Submission Builder', js: true do
     expect(page).to have_button('Submit', disabled: true)
 
     # Filling in with a bunch of spaces should not work.
-    fill_in question, with: '   '
+    add_markdown '   '
 
     expect(page).to have_button('Submit', disabled: true)
 
     # The user should be able to write text as description
-    fill_in question, with: long_answer
+    replace_markdown long_answer
 
     click_button 'Submit'
 
@@ -241,7 +241,7 @@ feature 'Submission Builder', js: true do
     expect(page).to have_button('Submit', disabled: true)
 
     # The user should be able to write text as description
-    fill_in question_1, with: long_answer
+    add_markdown long_answer
 
     # The submit button should be enabled at this point.
     expect(page).to have_button('Submit', disabled: false)

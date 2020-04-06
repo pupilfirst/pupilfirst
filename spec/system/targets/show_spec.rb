@@ -86,7 +86,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_l1.completion_instructions)
     long_answer = Faker::Lorem.sentence
 
-    fill_in target_l1.checklist.first['title'], with: long_answer
+    replace_markdown long_answer
 
     click_button 'Submit'
 
@@ -570,7 +570,8 @@ feature 'Target Overlay', js: true do
 
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
-        fill_in target_l1.checklist.first['title'], with: Faker::Lorem.sentence
+
+        replace_markdown Faker::Lorem.sentence
 
         expect(page).to have_button('Submit', disabled: true)
 

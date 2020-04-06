@@ -24,7 +24,7 @@ class ConnectRequest < ApplicationRecord
     [STATUS_REQUESTED, STATUS_CONFIRMED, STATUS_CANCELLED]
   end
 
-  validates :connect_slot_id, presence: true, uniqueness: true
+  validates :connect_slot_id, presence: true, uniqueness: true # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :startup_id, presence: true
   validates :questions, presence: true, length: { maximum: MAX_QUESTIONS_LENGTH }
   validates :status, presence: true, inclusion: { in: valid_statuses }

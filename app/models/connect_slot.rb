@@ -12,7 +12,7 @@ class ConnectSlot < ApplicationRecord
   scope :available_for_founder, -> { available.where(slot_at: (1.day.from_now.beginning_of_day..11.days.from_now.end_of_day)) }
 
   validates :faculty_id, presence: true
-  validates :slot_at, presence: true, uniqueness: { scope: [:faculty_id] }
+  validates :slot_at, presence: true, uniqueness: { scope: [:faculty_id] } # rubocop:disable Rails/UniqueValidationWithoutIndex
 
   # Used by AA to form label.
   def display_name

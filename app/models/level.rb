@@ -1,5 +1,5 @@
 class Level < ApplicationRecord
-  validates :number, uniqueness: { scope: :course }, presence: true
+  validates :number, uniqueness: { scope: :course_id }, presence: true
   validates :name, presence: true
 
   has_many :target_groups, dependent: :restrict_with_error

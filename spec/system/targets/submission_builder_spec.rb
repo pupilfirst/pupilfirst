@@ -154,8 +154,14 @@ feature 'Submission Builder', js: true do
 
     attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
     expect(page).to have_text('human')
+
+    sleep 0.1
+
     attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg')), visible: false
     expect(page).to have_text('minnie_mouse')
+
+    sleep 0.1
+
     attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg')), visible: false
     expect(page).to have_text('mickey_mouse')
 

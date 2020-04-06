@@ -143,6 +143,7 @@ group :test do
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
+  gem 'diffy', '~> 3.3' # Easy Diffing in Ruby. https://github.com/samg/diffy
 end
 
 group :development, :test do

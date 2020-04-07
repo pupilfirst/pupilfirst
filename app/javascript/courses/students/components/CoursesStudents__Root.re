@@ -362,36 +362,39 @@ let stylingForLevelDistribution = percentageStudents => {
   };
 };
 
-let studentDistribution = levels => {
+let studentDistribution = (send, levels) => {
   let totalStudentsInCourse =
     levels |> Array.fold_left((x, y) => x + Level.studentsInLevel(y), 0);
-  <div className="w-full m-6 max-w-3xl mx-auto">
-    <div className="flex w-full border bg-gray-100 rounded font-semibold">
-      {levels
-       |> Js.Array.filter(level => Level.number(level) != 0)
-       |> Level.sort
-       |> Array.map(level => {
-            let (pillClass, style, pillColor) =
-              stylingForLevelDistribution(
-                Level.percentageStudents(level, totalStudentsInCourse),
-              );
-            <div className={"text-center relative " ++ pillClass} style>
-              <label
-                className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center ">
-                {level |> Level.shortName |> str}
-              </label>
-              <div
-                className={
-                  "border-r rounded-l border-white text-xs leading-none py-2 text-center text-green-900 "
-                  ++ pillColor
-                }>
-                {level |> Level.studentsInLevel |> string_of_int |> str}
-              </div>
-            </div>;
-          })
-       |> React.array}
-    </div>
-  </div>;
+  totalStudentsInCourse > 0
+    ? <div className="w-full m-6 max-w-3xl mx-auto">
+        <div className="flex w-full border bg-gray-100 rounded font-semibold">
+          {levels
+           |> Js.Array.filter(level => Level.number(level) != 0)
+           |> Level.sort
+           |> Array.map(level => {
+                let (pillClass, style, pillColor) =
+                  stylingForLevelDistribution(
+                    Level.percentageStudents(level, totalStudentsInCourse),
+                  );
+                <div className={"text-center relative " ++ pillClass} style>
+                  <label
+                    className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center ">
+                    {level |> Level.shortName |> str}
+                  </label>
+                  <div
+                    onClick={_ => send(SelectLevel(level))}
+                    className={
+                      "cursor-pointer border-r rounded-l border-white text-xs leading-none py-2 text-center text-green-900 "
+                      ++ pillColor
+                    }>
+                    {level |> Level.studentsInLevel |> string_of_int |> str}
+                  </div>
+                </div>;
+              })
+           |> React.array}
+        </div>
+      </div>
+    : React.null;
 };
 
 let computeInitialState = currentTeamCoach => {
@@ -449,7 +452,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
-      {studentDistribution(levels)}
+      {studentDistribution(send, levels)}
       <div
         className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">
         <div

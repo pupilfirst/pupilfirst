@@ -1,6 +1,9 @@
 [%bs.raw {|require("../shared/background_patterns.css")|}];
 [%bs.raw {|require("./CoursesApply__Root.css")|}];
-let emailSentIcon: string = [%raw "require('./images/email-sent-icon.svg')"];
+
+[@bs.module "./images/email-sent-icon.svg"]
+external emailSentIcon: string = "default";
+
 let str = React.string;
 
 type views =

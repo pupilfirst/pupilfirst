@@ -1,10 +1,8 @@
-let reviewedEmptyImage: string = [%raw
-  "require('../../shared/images/reviewed-empty.svg')"
-];
+[@bs.module "../../shared/images/reviewed-empty.svg"]
+external reviewedEmptyImage: string = "default";
 
-let pendingEmptyImage: string = [%raw
-  "require('../images/pending-empty.svg')"
-];
+[@bs.module "../images/pending-empty.svg"]
+external pendingEmptyImage: string = "default";
 
 open CoursesReview__Types;
 

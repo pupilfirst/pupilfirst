@@ -51,7 +51,6 @@ let unsafeLevelNumber = (levels, componentName, levelId) =>
   );
 
 let highestLevelWithStudents = levels => {
-  let sortedLevels = levels |> sort;
   let sortedLevelsWithStudents =
     levels
     |> sort
@@ -59,8 +58,7 @@ let highestLevelWithStudents = levels => {
     |> Js.Array.filter(level => level.studentsInLevel != 0)
     |> Js.Array.reverseInPlace;
 
-  sortedLevelsWithStudents |> ArrayUtils.isEmpty
-    ? sortedLevels[0] : sortedLevelsWithStudents[0];
+  sortedLevelsWithStudents[0];
 };
 
 let levelsCompletedByAllStudents = levels => {
@@ -68,14 +66,15 @@ let levelsCompletedByAllStudents = levels => {
     levels
     |> Js.Array.filter(level =>
          level.number < highestLevelWithStudents(levels).number
-       );
-  applicableLevels
-  |> Js.Array.filter(level =>
-       level.studentsInLevel == 0
-       && applicableLevels
-       |> Js.Array.filter(l => l.number < level.number)
-       |> Array.map(l => l.studentsInLevel == 0)
-       |> Js.Array.filter(emptyStudents => !emptyStudents)
-       |> ArrayUtils.isEmpty
-     );
+       )
+    |> sort
+    |> Array.to_list;
+  let rec aux = (completedLevels, levels) =>
+    switch (levels) {
+    | [] => completedLevels
+    | [head, ..._tail] when head.studentsInLevel != 0 => completedLevels
+    | [head, ...tail] => aux(Array.append(completedLevels, [|head|]), tail)
+    };
+
+  aux([||], applicableLevels);
 };

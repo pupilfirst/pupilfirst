@@ -375,7 +375,7 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
 
       click_button 'Write a Note'
-      fill_in 'Write a Note', with: note
+      add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         find("div[title='Good']").click
@@ -401,7 +401,7 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
 
       click_button 'Write a Note'
-      fill_in 'Write a Note', with: note
+      add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         find("div[title='Good']").click

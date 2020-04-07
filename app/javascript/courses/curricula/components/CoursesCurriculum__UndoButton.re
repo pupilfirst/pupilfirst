@@ -62,7 +62,7 @@ let buttonContents = status =>
   | Pending =>
     <span>
       <FaIcon classes="fas fa-undo mr-2" />
-      <span className="hidden md:inline"> {"Undo sumission" |> str} </span>
+      <span className="hidden md:inline"> {"Undo submission" |> str} </span>
       <span className="md:hidden"> {"Undo" |> str} </span>
     </span>
   | Errored =>

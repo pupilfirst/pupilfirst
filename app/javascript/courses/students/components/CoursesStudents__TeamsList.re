@@ -64,7 +64,7 @@ let showStudent = (team, levels, teamCoaches) => {
 let showTeam = (team, levels, teamCoaches) => {
   <div
     key={team |> TeamInfo.id}
-    ariaLabel={"team-card-" ++ (team |> TeamInfo.id)}
+    ariaLabel={"Info of team " ++ (team |> TeamInfo.id)}
     className="flex shadow bg-white rounded-lg mt-4 overflow-hidden flex-col-reverse md:flex-row">
     <div className="flex flex-col flex-1 w-full md:w-3/5">
       {team

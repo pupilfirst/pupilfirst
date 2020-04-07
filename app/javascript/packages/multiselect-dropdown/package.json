@@ -27,7 +27,7 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-dropdown"
   },
   "devDependencies": {
-    "bs-platform": "7.2.1",
+    "bs-platform": "7.2.2",
     "bsb-js": "^1.1.7",
     "parcel-bundler": "^1.12.4",
     "tailwindcss": "^1.1.4"

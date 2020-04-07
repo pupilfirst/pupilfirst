@@ -166,13 +166,11 @@ feature "Course students list", js: true do
 
     click_button('Load More...')
 
-    team_6_entry = find("div[aria-label='team-card-#{team_6.id}']")
-
     expected_initials = team_coach.name.split(' ')[0..1]
       .map { |name_fragment| name_fragment[0] }
       .map(&:capitalize).join
 
-    within(team_6_entry) do
+    within("div[aria-label='Info of team #{team_6.id}']") do
       find('.tooltip__trigger', text: expected_initials).hover
     end
 
@@ -199,9 +197,7 @@ feature "Course students list", js: true do
 
       click_button('Load More...')
 
-      team_6_entry = find("div[aria-label='team-card-#{team_6.id}']")
-
-      within(team_6_entry) do
+      within("div[aria-label='Info of team #{team_6.id}']") do
         find('.tooltip__trigger', text: '+2').hover
       end
 

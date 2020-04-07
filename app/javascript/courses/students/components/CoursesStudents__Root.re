@@ -345,9 +345,7 @@ let stylingForLevelDistribution = percentageStudents => {
       },
       (),
     );
-  if (percentageStudents == 0.0) {
-    ("w-8 flex-shrink-0", emptyStyle, "bg-gray-300");
-  } else if (0.0 < percentageStudents && percentageStudents <= 4.0) {
+  if (0.0 <= percentageStudents && percentageStudents <= 4.0) {
     ("w-8 flex-shrink-0", emptyStyle, "bg-green-100 text-green-800");
   } else if (4.0 < percentageStudents && percentageStudents <= 20.0) {
     ("", styleWithWidth, "bg-green-200 text-green-800");
@@ -365,9 +363,10 @@ let stylingForLevelDistribution = percentageStudents => {
 let studentDistribution = (send, levels) => {
   let totalStudentsInCourse =
     levels |> Array.fold_left((x, y) => x + Level.studentsInLevel(y), 0);
+  let completedLevels = Level.levelsCompletedByAllStudents(levels);
   totalStudentsInCourse > 0
-    ? <div className="w-full m-6 max-w-3xl mx-auto">
-        <div className="flex w-full border bg-gray-100 rounded font-semibold">
+    ? <div className="w-full m-6 max-w-3xl mx-auto hidden md:block">
+        <div className="flex w-full border bg-gray-100 rounded font-semibold ">
           {levels
            |> Js.Array.filter(level => Level.number(level) != 0)
            |> Level.sort
@@ -383,16 +382,23 @@ let studentDistribution = (send, levels) => {
                   }
                   style>
                   <label
-                    className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center ">
+                    className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
                     {level |> Level.shortName |> str}
                   </label>
                   <div
                     onClick={_ => send(SelectLevel(level))}
                     className={
                       "course-students-root__student-distribution-level-pill cursor-pointer border-r border-white text-xs leading-none py-2 text-center "
-                      ++ pillColor
+                      ++ (
+                        completedLevels |> Array.mem(level)
+                          ? "bg-yellow-300 text-yellow-900"
+                          : Level.unlocked(level)
+                              ? pillColor : "bg-gray-200" ++ " text-green-900"
+                      )
                     }>
-                    {level |> Level.studentsInLevel |> string_of_int |> str}
+                    {completedLevels |> Array.mem(level)
+                       ? <PfIcon className="if i-check-light if-fw" />
+                       : level |> Level.studentsInLevel |> string_of_int |> str}
                   </div>
                 </div>;
               })

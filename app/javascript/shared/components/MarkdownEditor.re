@@ -609,6 +609,7 @@ let make =
       ~maxLength=1000,
       ~defaultMode=Windowed(`Editor),
       ~placeholder=?,
+      ~tabIndex=?,
     ) => {
   let (state, send) =
     React.useReducerWithMapState(
@@ -721,6 +722,7 @@ let make =
           disabled={state.uploadState == Uploading}
           message="Uploading...">
           <textarea
+            ?tabIndex
             ?placeholder
             ariaLabel="Markdown editor"
             rows=4

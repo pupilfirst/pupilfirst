@@ -310,6 +310,7 @@ let make = (~communityId, ~showBackButton=true, ~target) => {
               </label>
               <input
                 id="title"
+                tabIndex=1
                 value={state.title}
                 className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 onChange={event => {
@@ -325,6 +326,7 @@ let make = (~communityId, ~showBackButton=true, ~target) => {
               </label>
               <div className="w-full flex flex-col">
                 <MarkdownEditor
+                  tabIndex=2
                   textareaId="body"
                   onChange={markdown => send(UpdateBody(markdown))}
                   value={state.body}
@@ -338,6 +340,7 @@ let make = (~communityId, ~showBackButton=true, ~target) => {
                     className="flex flex-col md:flex-row justify-end mt-3 items-center md:items-start">
                     {searchingIndicator(state)}
                     <button
+                      tabIndex=3
                       disabled={saveDisabled(state)}
                       onClick={handleCreateTopic(
                         state,

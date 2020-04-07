@@ -1,17 +1,16 @@
 [%bs.raw {|require("./UserSessionNew.css")|}];
 
-let federatedSignInIcon: string = [%raw
-  "require('./images/federated-sign-in-icon.svg')"
-];
-let signInWithPasswordIcon: string = [%raw
-  "require('./images/continue-with-email-icon.svg')"
-];
-let signInEmailSentIcon: string = [%raw
-  "require('./images/email-sent-icon.svg')"
-];
-let forgotPasswordIcon: string = [%raw
-  "require('./images/reset-password-icon.svg')"
-];
+[@bs.module "./images/federated-sign-in-icon.svg"]
+external federatedSignInIcon: string = "default";
+
+[@bs.module "./images/continue-with-email-icon.svg"]
+external signInWithPasswordIcon: string = "default";
+
+[@bs.module "./images/email-sent-icon.svg"]
+external signInEmailSentIcon: string = "default";
+
+[@bs.module "./images/reset-password-icon.svg"]
+external forgotPasswordIcon: string = "default";
 
 let str = React.string;
 

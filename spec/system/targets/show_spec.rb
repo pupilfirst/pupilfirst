@@ -86,11 +86,13 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_l1.completion_instructions)
     long_answer = Faker::Lorem.sentence
 
-    fill_in target_l1.checklist.first['title'], with: long_answer
+    replace_markdown long_answer
 
     click_button 'Submit'
 
     expect(page).to have_content('Your submission has been queued for review')
+
+    dismiss_notification
 
     # The state of the target should change.
     within('.course-overlay__header-title-card') do
@@ -101,7 +103,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_content('Review pending')
 
     # The student should be able to undo the submission at this point.
-    expect(page).to have_button('Undo sumission')
+    expect(page).to have_button('Undo submission')
 
     # User should be looking at their submission now.
     expect(page).to have_content('Your Submissions')
@@ -126,7 +128,7 @@ feature 'Target Overlay', js: true do
 
     # User should be able to undo the submission.
     accept_confirm do
-      click_button('Undo sumission')
+      click_button('Undo submission')
     end
 
     # This action should reload the page and return the user to the content of the target.
@@ -449,7 +451,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('Review pending')
 
       # The student should NOT be able to undo the submission at this point.
-      expect(page).not_to have_button('Undo sumission')
+      expect(page).not_to have_button('Undo submission')
     end
   end
 
@@ -570,7 +572,8 @@ feature 'Target Overlay', js: true do
 
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
-        fill_in target_l1.checklist.first['title'], with: Faker::Lorem.sentence
+
+        replace_markdown Faker::Lorem.sentence
 
         expect(page).to have_button('Submit', disabled: true)
 

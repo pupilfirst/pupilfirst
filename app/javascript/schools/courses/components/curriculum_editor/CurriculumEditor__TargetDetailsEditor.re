@@ -1,14 +1,11 @@
 open CurriculumEditor__Types;
 
-let markIcon: string = [%raw
-  "require('./images/target-complete-mark-icon.svg')"
-];
-let linkIcon: string = [%raw
-  "require('./images/target-complete-link-icon.svg')"
-];
-let quizIcon: string = [%raw
-  "require('./images/target-complete-quiz-icon.svg')"
-];
+[@bs.module "./images/target-complete-mark-icon.svg"]
+external markIcon: string = "default";
+[@bs.module "./images/target-complete-link-icon.svg"]
+external linkIcon: string = "default";
+[@bs.module "./images/target-complete-quiz-icon.svg"]
+external quizIcon: string = "default";
 
 let str = React.string;
 
@@ -307,7 +304,6 @@ module SelectablePrerequisiteTargets = {
 
   let value = t => t |> Target.title;
   let searchString = value;
-
 };
 
 module MultiSelectForPrerequisiteTargets =

@@ -1,4 +1,5 @@
-let notFoundIcon: string = [%raw "require('./images/no-students-found.svg')"];
+[@bs.module "./images/no-students-found.svg"]
+external notFoundIcon: string = "default";
 
 let str = React.string;
 

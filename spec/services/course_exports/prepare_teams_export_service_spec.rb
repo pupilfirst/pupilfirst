@@ -65,6 +65,10 @@ describe CourseExports::PrepareTeamsExportService do
     submission.update!(quiz_score: '1/2')
   end
 
+  def sorted_student_names(team)
+    team.founders.joins(:user).pluck('users.name').sort.join(', ')
+  end
+
   def submission_grading(submission)
     submission.timeline_event_grades
       .joins(:evaluation_criterion)
@@ -96,8 +100,8 @@ describe CourseExports::PrepareTeamsExportService do
         title: 'Teams',
         rows: [
           ['ID', 'Team Name', 'Students', 'Coaches'],
-          [team_1.id, team_1.name, team_1.founders.joins(:user).pluck('users.name').join(', '), sorted_coach_names],
-          [team_2.id, team_2.name, team_2.founders.joins(:user).pluck('users.name').join(', '), '']
+          [team_1.id, team_1.name, sorted_student_names(team_1), sorted_coach_names],
+          [team_2.id, team_2.name, sorted_student_names(team_2), '']
         ]
       },
       {
@@ -149,8 +153,8 @@ describe CourseExports::PrepareTeamsExportService do
             title: 'Teams',
             rows: [
               ['ID', 'Team Name', 'Students', 'Coaches'],
-              [team_1.id, team_1.name, team_1.founders.joins(:user).pluck('users.name').join(', '), sorted_coach_names],
-              [team_2.id, team_2.name, team_2.founders.joins(:user).pluck('users.name').join(', '), '']
+              [team_1.id, team_1.name, sorted_student_names(team_1), sorted_coach_names],
+              [team_2.id, team_2.name, sorted_student_names(team_2), '']
             ]
           },
           {

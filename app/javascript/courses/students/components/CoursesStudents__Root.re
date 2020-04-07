@@ -371,10 +371,29 @@ let studentDistribution = (send, levels) => {
            |> Js.Array.filter(level => Level.number(level) != 0)
            |> Level.sort
            |> Array.map(level => {
+                let percentageStudents =
+                  Level.percentageStudents(level, totalStudentsInCourse);
                 let (pillClass, style, pillColor) =
-                  stylingForLevelDistribution(
-                    Level.percentageStudents(level, totalStudentsInCourse),
-                  );
+                  stylingForLevelDistribution(percentageStudents);
+                let tip =
+                  <div>
+                    <p>
+                      {"Level: " ++ string_of_int(Level.number(level)) |> str}
+                    </p>
+                    <p>
+                      {"Students: "
+                       ++ string_of_int(Level.studentsInLevel(level))
+                       |> str}
+                    </p>
+                    <p>
+                      {"Percentage: "
+                       ++ Js.Float.toFixedWithPrecision(
+                            percentageStudents,
+                            ~digits=1,
+                          )
+                       |> str}
+                    </p>
+                  </div>;
                 <div
                   className={
                     "course-students-root__student-distribution-level-container text-center relative "
@@ -385,21 +404,27 @@ let studentDistribution = (send, levels) => {
                     className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
                     {level |> Level.shortName |> str}
                   </label>
-                  <div
-                    onClick={_ => send(SelectLevel(level))}
-                    className={
-                      "course-students-root__student-distribution-level-pill cursor-pointer border-r border-white text-xs leading-none py-2 text-center "
-                      ++ (
-                        completedLevels |> Array.mem(level)
-                          ? "bg-yellow-300 text-yellow-900"
-                          : Level.unlocked(level)
-                              ? pillColor : "bg-gray-200" ++ " text-green-900"
-                      )
-                    }>
-                    {completedLevels |> Array.mem(level)
-                       ? <PfIcon className="if i-check-light if-fw" />
-                       : level |> Level.studentsInLevel |> string_of_int |> str}
-                  </div>
+                  <Tooltip tip>
+                    <div
+                      onClick={_ => send(SelectLevel(level))}
+                      className={
+                        "course-students-root__student-distribution-level-pill cursor-pointer border-r border-white text-xs leading-none py-2 text-center "
+                        ++ (
+                          completedLevels |> Array.mem(level)
+                            ? "bg-yellow-300 text-yellow-900"
+                            : Level.unlocked(level)
+                                ? pillColor
+                                : "bg-gray-200" ++ " text-green-900"
+                        )
+                      }>
+                      {completedLevels |> Array.mem(level)
+                         ? <PfIcon className="if i-check-light if-fw" />
+                         : level
+                           |> Level.studentsInLevel
+                           |> string_of_int
+                           |> str}
+                    </div>
+                  </Tooltip>
                 </div>;
               })
            |> React.array}

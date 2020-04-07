@@ -346,17 +346,17 @@ let stylingForLevelDistribution = percentageStudents => {
       (),
     );
   if (0.0 <= percentageStudents && percentageStudents <= 4.0) {
-    ("w-8 flex-shrink-0", emptyStyle, "bg-green-100 text-green-800");
+    ("w-8 flex-shrink-0", emptyStyle, "bg-green-200 text-green-800");
   } else if (4.0 < percentageStudents && percentageStudents <= 20.0) {
-    ("", styleWithWidth, "bg-green-200 text-green-800");
-  } else if (20.0 < percentageStudents && percentageStudents <= 40.0) {
     ("", styleWithWidth, "bg-green-300 text-green-800");
+  } else if (20.0 < percentageStudents && percentageStudents <= 40.0) {
+    ("", styleWithWidth, "bg-green-400 text-green-900");
   } else if (40.0 < percentageStudents && percentageStudents <= 60.0) {
-    ("", styleWithWidth, "bg-green-400 text-green-800");
-  } else if (60.0 < percentageStudents && percentageStudents <= 80.0) {
     ("", styleWithWidth, "bg-green-500 text-white");
-  } else {
+  } else if (60.0 < percentageStudents && percentageStudents <= 80.0) {
     ("", styleWithWidth, "bg-green-600 text-white");
+  } else {
+    ("", styleWithWidth, "bg-green-700 text-white");
   };
 };
 
@@ -365,7 +365,7 @@ let studentDistribution = (send, levels) => {
     levels |> Array.fold_left((x, y) => x + Level.studentsInLevel(y), 0);
   let completedLevels = Level.levelsCompletedByAllStudents(levels);
   totalStudentsInCourse > 0
-    ? <div className="w-full m-6 max-w-3xl mx-auto hidden md:block">
+    ? <div className="w-full pt-10 max-w-3xl mx-auto hidden md:block">
         <div className="flex w-full border bg-gray-100 rounded font-semibold ">
           {levels
            |> Js.Array.filter(level => Level.number(level) != 0)
@@ -376,7 +376,7 @@ let studentDistribution = (send, levels) => {
                 let (pillClass, style, pillColor) =
                   stylingForLevelDistribution(percentageStudents);
                 let tip =
-                  <div>
+                  <div className="text-left">
                     <p>
                       {"Level: " ++ string_of_int(Level.number(level)) |> str}
                     </p>
@@ -408,13 +408,14 @@ let studentDistribution = (send, levels) => {
                     <div
                       onClick={_ => send(SelectLevel(level))}
                       className={
-                        "course-students-root__student-distribution-level-pill cursor-pointer border-r border-white text-xs leading-none py-2 text-center "
+                        "course-students-root__student-distribution-level-pill relative cursor-pointer border-r border-white text-xs leading-none text-center "
                         ++ (
                           completedLevels |> Array.mem(level)
                             ? "bg-yellow-300 text-yellow-900"
                             : Level.unlocked(level)
                                 ? pillColor
-                                : "bg-gray-200" ++ " text-green-900"
+                                : "course-students-root__student-distribution-level-pill--locked cursor-default bg-gray-300"
+                                  ++ " text-gray-700"
                         )
                       }>
                       {completedLevels |> Array.mem(level)

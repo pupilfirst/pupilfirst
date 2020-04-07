@@ -8,10 +8,29 @@
   }
 }
 
+.course-students-root__student-distribution-level-pill {
+  padding: 6px 0;
+}
+
 .course-students-root__student-distribution-level-container:first-child .course-students-root__student-distribution-level-pill {
   @apply rounded-l;
 }
 
 .course-students-root__student-distribution-level-container:last-child .course-students-root__student-distribution-level-pill {
   @apply rounded-r;
+}
+
+.course-students-root__student-distribution-level-pill--locked {
+  z-index: 0;
+}
+
+.course-students-root__student-distribution-level-pill--locked:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: repeating-linear-gradient( -45deg, #F1EDF7, #F1EDF7 8px, #DFDAE8 8px, #DFDAE8 16px);
 }

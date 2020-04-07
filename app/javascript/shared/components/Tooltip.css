@@ -1,6 +1,5 @@
 .tooltip {
   position: relative;
-  display: inline-flex;
 }
 
 .tooltip__bubble {

@@ -404,7 +404,7 @@ let studentDistribution = (send, levels) => {
                     className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
                     {level |> Level.shortName |> str}
                   </label>
-                  <Tooltip tip>
+                  <Tooltip className="w-full" tip position=`Bottom>
                     <div
                       onClick={_ => send(SelectLevel(level))}
                       className={

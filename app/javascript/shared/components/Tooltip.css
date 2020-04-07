@@ -5,7 +5,7 @@
 
 .tooltip__bubble {
   position: absolute;
-  z-index: 10;
+  z-index: 9999;
   display: none;
 }
 
@@ -78,6 +78,10 @@
   transform: translateY(-50%);
 }
 
-.tooltip__trigger:hover + .tooltip__bubble {
+.tooltip__trigger {
+  width: 100%;
+}
+
+.tooltip__trigger:hover+.tooltip__bubble {
   display: block;
 }

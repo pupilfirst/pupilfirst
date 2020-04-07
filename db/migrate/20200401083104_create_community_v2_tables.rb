@@ -55,7 +55,7 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
       t.references :community, foreign_key: true
       t.references :target
       t.datetime :last_activity_at
-      t.boolean :archived # Denormalized version of first_post.archived_at.
+      t.boolean :archived, null: false, default: false # Denormalized version of first_post.archived_at.
       t.string :title
 
       t.timestamps
@@ -157,7 +157,11 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
   end
 
   def down
-    raise ActiveRecord::IrreversibleMigration
+    # raise ActiveRecord::IrreversibleMigration
+
+    drop_table :post_likes
+    drop_table :posts
+    drop_table :topics
   end
 
   def post_attributes(record, reply_to: nil)

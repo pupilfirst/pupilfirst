@@ -774,7 +774,7 @@ ActiveRecord::Schema.define(version: 2020_04_06_131136) do
     t.bigint "community_id"
     t.bigint "target_id"
     t.datetime "last_activity_at"
-    t.boolean "archived"
+    t.boolean "archived", default: false, null: false
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

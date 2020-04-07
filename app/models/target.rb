@@ -36,6 +36,7 @@ class Target < ApplicationRecord
   has_one :quiz, dependent: :restrict_with_error
   has_many :target_questions, dependent: :destroy
   has_many :questions, through: :target_questions
+  has_many :topics, dependent: :restrict_with_error
   has_many :resource_versions, as: :versionable, dependent: :restrict_with_error
   has_many :target_versions, dependent: :destroy
   has_many :content_blocks, through: :target_versions

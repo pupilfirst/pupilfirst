@@ -346,17 +346,17 @@ let stylingForLevelDistribution = percentageStudents => {
       (),
     );
   if (0.0 <= percentageStudents && percentageStudents <= 4.0) {
-    ("w-8 flex-shrink-0", emptyStyle, "bg-green-100 text-green-800");
+    ("w-8 flex-shrink-0", emptyStyle, "bg-green-200 text-green-800");
   } else if (4.0 < percentageStudents && percentageStudents <= 20.0) {
-    ("", styleWithWidth, "bg-green-200 text-green-800");
-  } else if (20.0 < percentageStudents && percentageStudents <= 40.0) {
     ("", styleWithWidth, "bg-green-300 text-green-800");
-  } else if (40.0 < percentageStudents && percentageStudents <= 60.0) {
+  } else if (20.0 < percentageStudents && percentageStudents <= 40.0) {
     ("", styleWithWidth, "bg-green-400 text-green-800");
+  } else if (40.0 < percentageStudents && percentageStudents <= 60.0) {
+    ("", styleWithWidth, "bg-green-500 text-green-800");
   } else if (60.0 < percentageStudents && percentageStudents <= 80.0) {
-    ("", styleWithWidth, "bg-green-500 text-white");
-  } else {
     ("", styleWithWidth, "bg-green-600 text-white");
+  } else {
+    ("", styleWithWidth, "bg-green-700 text-white");
   };
 };
 

@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   resources :communities, only: %i[show] do
     member do
       get 'show_v2'
+      get 'new_topic'
       get 'new_question'
     end
   end

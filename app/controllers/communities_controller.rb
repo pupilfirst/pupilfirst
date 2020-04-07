@@ -24,7 +24,11 @@ class CommunitiesController < ApplicationController
   # GET /community/:community_id/questions/new
   def new_question
     @community = authorize(Community.find(params[:id]))
-    target
+  end
+
+  # GET /community/:community_id/new_topic
+  def new_topic
+    @community = authorize(Community.find(params[:id]), 'new_question?')
   end
 
   private

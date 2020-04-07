@@ -348,17 +348,17 @@ let stylingForLevelDistribution = percentageStudents => {
   if (percentageStudents == 0.0) {
     ("w-8 flex-shrink-0", emptyStyle, "bg-gray-300");
   } else if (0.0 < percentageStudents && percentageStudents <= 4.0) {
-    ("w-8 flex-shrink-0", emptyStyle, "bg-green-100");
+    ("w-8 flex-shrink-0", emptyStyle, "bg-green-100 text-green-800");
   } else if (4.0 < percentageStudents && percentageStudents <= 20.0) {
-    ("", styleWithWidth, "bg-green-200");
+    ("", styleWithWidth, "bg-green-200 text-green-800");
   } else if (20.0 < percentageStudents && percentageStudents <= 40.0) {
-    ("", styleWithWidth, "bg-green-300");
+    ("", styleWithWidth, "bg-green-300 text-green-800");
   } else if (40.0 < percentageStudents && percentageStudents <= 60.0) {
-    ("", styleWithWidth, "bg-green-400");
+    ("", styleWithWidth, "bg-green-400 text-green-800");
   } else if (60.0 < percentageStudents && percentageStudents <= 80.0) {
-    ("", styleWithWidth, "bg-green-500");
+    ("", styleWithWidth, "bg-green-500 text-white");
   } else {
-    ("", styleWithWidth, "bg-green-600");
+    ("", styleWithWidth, "bg-green-600 text-white");
   };
 };
 
@@ -376,7 +376,12 @@ let studentDistribution = (send, levels) => {
                   stylingForLevelDistribution(
                     Level.percentageStudents(level, totalStudentsInCourse),
                   );
-                <div className={"text-center relative " ++ pillClass} style>
+                <div
+                  className={
+                    "course-students-root__student-distribution-level-container text-center relative "
+                    ++ pillClass
+                  }
+                  style>
                   <label
                     className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center ">
                     {level |> Level.shortName |> str}
@@ -384,7 +389,7 @@ let studentDistribution = (send, levels) => {
                   <div
                     onClick={_ => send(SelectLevel(level))}
                     className={
-                      "cursor-pointer border-r rounded-l border-white text-xs leading-none py-2 text-center text-green-900 "
+                      "course-students-root__student-distribution-level-pill cursor-pointer border-r border-white text-xs leading-none py-2 text-center "
                       ++ pillColor
                     }>
                     {level |> Level.studentsInLevel |> string_of_int |> str}

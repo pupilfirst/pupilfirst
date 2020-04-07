@@ -7,3 +7,11 @@
     width: 17rem;
   }
 }
+
+.course-students-root__student-distribution-level-container:first-child .course-students-root__student-distribution-level-pill {
+  @apply rounded-l;
+}
+
+.course-students-root__student-distribution-level-container:last-child .course-students-root__student-distribution-level-pill {
+  @apply rounded-r;
+}

@@ -82,7 +82,7 @@ let make = (~levels, ~selectLevelCB) => {
                     <div
                       onClick={_ => selectLevelCB(level)}
                       className={
-                        "course-students-root__student-distribution-level-pill relative cursor-pointer border-white text-xs leading-none text-center "
+                        "course-students-root__student-distribution-level-pill hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center "
                         ++ (
                           completedLevels |> Array.mem(level)
                             ? "bg-yellow-300 text-yellow-900"

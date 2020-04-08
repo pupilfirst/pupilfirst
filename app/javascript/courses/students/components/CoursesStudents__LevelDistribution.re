@@ -33,7 +33,9 @@ let make = (~levels, ~selectLevelCB) => {
     levels |> Array.fold_left((x, y) => x + Level.studentsInLevel(y), 0);
   let completedLevels = Level.levelsCompletedByAllStudents(levels);
   totalStudentsInCourse > 0
-    ? <div className="w-full pt-10 max-w-3xl mx-auto hidden md:block">
+    ? <div
+        ariaLabel="Students level-wise distribution"
+        className="w-full pt-10 max-w-3xl mx-auto hidden md:block">
         <div className="flex w-full border bg-gray-100 rounded font-semibold ">
           {levels
            |> Js.Array.filter(level => Level.number(level) != 0)
@@ -63,6 +65,10 @@ let make = (~levels, ~selectLevelCB) => {
                     </p>
                   </div>;
                 <div
+                  ariaLabel={
+                    "Students in level "
+                    ++ (Level.number(level) |> string_of_int)
+                  }
                   className={
                     "course-students-root__student-distribution-level-container text-center relative "
                     ++ pillClass

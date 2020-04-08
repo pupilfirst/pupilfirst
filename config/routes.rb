@@ -117,6 +117,11 @@ Rails.application.routes.draw do
   get 'questions/:id(/:title)/versions', controller: "questions", action: "versions"
   get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
+  scope 'topics', controller: 'topics' do
+    get '/:id(/:title)/versions', action: 'versions'
+    get '/:id(/:title)', action: "show", as: 'topic'
+  end
+
   get 'home', controller: "users", action: "home", as: "home"
 
   resource :user, only: %i[edit update]

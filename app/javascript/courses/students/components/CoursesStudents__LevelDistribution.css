@@ -1,0 +1,53 @@
+.course-students-root__student-distribution-level-pill {
+  padding: 6px 0;
+}
+
+.course-students-root__student-distribution-level-container:first-child
+  .course-students-root__student-distribution-level-pill {
+  @apply rounded-l;
+}
+
+.course-students-root__student-distribution-level-container:last-child
+  .course-students-root__student-distribution-level-pill {
+  @apply rounded-r;
+}
+
+.course-students-root__student-distribution-level-pill--locked {
+  z-index: 0;
+}
+
+.course-students-root__student-distribution-level-pill--locked:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    -45deg,
+    #f1edf7,
+    #f1edf7 8px,
+    #dfdae8 8px,
+    #dfdae8 16px
+  );
+}
+
+.course-students-root__student-distribution-level-pill
+  .course-students-root__student-distribution-locked-icon {
+  display: none;
+}
+
+.course-students-root__student-distribution-level-pill:hover
+  .course-students-root__student-distribution-level-count-value,
+.course-students-root__student-distribution-level-pill:active
+  .course-students-root__student-distribution-level-count-value {
+  display: none;
+}
+
+.course-students-root__student-distribution-level-pill:hover
+  .multiselect-inline__list-item-select-icon-selected,
+.course-students-root__student-distribution-level-pill:active
+  .multiselect-inline__list-item-select-icon-selected {
+  display: inline-flex;
+}

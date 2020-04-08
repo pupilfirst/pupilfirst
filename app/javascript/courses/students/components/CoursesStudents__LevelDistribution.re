@@ -1,3 +1,5 @@
+[%bs.raw {|require("./CoursesStudents__LevelDistribution.css")|}];
+
 open CoursesStudents__Types;
 let str = React.string;
 
@@ -86,10 +88,26 @@ let make = (~levels, ~selectLevelCB) => {
                       }>
                       {completedLevels |> Array.mem(level)
                          ? <PfIcon className="if i-check-light if-fw" />
-                         : level
-                           |> Level.studentsInLevel
-                           |> string_of_int
-                           |> str}
+                         : <div
+                             className="course-students-root__student-distribution-level-count">
+                             <span
+                               className={
+                                 level |> Level.unlocked
+                                   ? ""
+                                   : "course-students-root__student-distribution-level-count-value"
+                               }>
+                               {level
+                                |> Level.studentsInLevel
+                                |> string_of_int
+                                |> str}
+                             </span>
+                             {level |> Level.unlocked
+                                ? React.null
+                                : <span
+                                    className="course-students-root__student-distribution-locked-icon">
+                                    <i className="fas fa-lock text-xs" />
+                                  </span>}
+                           </div>}
                     </div>
                   </Tooltip>
                 </div>;

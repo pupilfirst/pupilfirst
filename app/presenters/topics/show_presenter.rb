@@ -6,8 +6,8 @@ module Topics
     end
 
     POST_FIELDS = {
-      only: %i[id body creator_id editor_id created_at updated_at],
-      include: { post_likes: { only: %i[id user_id] } }
+      only: %i[id body creator_id editor_id created_at updated_at post_number],
+      include: { post_likes: { only: %i[id user_id] }, replies: { only: :id } }
     }.freeze
 
     def props

@@ -56,7 +56,7 @@
             <div class="flex items-center border-b">
               <div class="flex w-full">
                 <a class="cursor-pointer no-underline flex flex-1 justify-between items-center p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
-                   href=<%= question_path(topic.id, topic.title.parameterize) %>>
+                   href=<%= topic_path(id: topic.id, title: topic.title.parameterize) %>>
                   <span class="block">
                     <span class="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
                       <%= topic.title %>

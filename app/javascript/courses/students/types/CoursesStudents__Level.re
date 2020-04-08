@@ -62,11 +62,6 @@ let levelsCompletedByAllStudents = levels => {
       }
     };
 
-  let ls =
-    levels
-    |> sort
-    |> Js.Array.filter(level => level.unlocked)
-    |> Array.to_list
-    |> aux([||]);
+  let ls = levels |> sort |> Array.to_list |> aux([||]);
   ls |> Array.length == (levels |> Array.length) ? [||] : ls;
 };

@@ -1,0 +1,101 @@
+open CoursesStudents__Types;
+let str = React.string;
+
+let stylingForLevelPills = percentageStudents => {
+  let emptyStyle = ReactDOMRe.Style.make();
+  let styleWithWidth =
+    ReactDOMRe.Style.make(
+      ~width={
+        (percentageStudents |> Js.Float.toString) ++ "%";
+      },
+      (),
+    );
+  if (0.0 <= percentageStudents && percentageStudents <= 4.0) {
+    ("w-8 flex-shrink-0", emptyStyle, "bg-green-200 text-green-800");
+  } else if (4.0 < percentageStudents && percentageStudents <= 20.0) {
+    ("", styleWithWidth, "bg-green-300 text-green-800");
+  } else if (20.0 < percentageStudents && percentageStudents <= 40.0) {
+    ("", styleWithWidth, "bg-green-400 text-green-900");
+  } else if (40.0 < percentageStudents && percentageStudents <= 60.0) {
+    ("", styleWithWidth, "bg-green-500 text-white");
+  } else if (60.0 < percentageStudents && percentageStudents <= 80.0) {
+    ("", styleWithWidth, "bg-green-600 text-white");
+  } else {
+    ("", styleWithWidth, "bg-green-700 text-white");
+  };
+};
+
+[@react.component]
+let make = (~levels, ~selectLevelCB) => {
+  let totalStudentsInCourse =
+    levels |> Array.fold_left((x, y) => x + Level.studentsInLevel(y), 0);
+  let completedLevels = Level.levelsCompletedByAllStudents(levels);
+  totalStudentsInCourse > 0
+    ? <div className="w-full pt-10 max-w-3xl mx-auto hidden md:block">
+        <div className="flex w-full border bg-gray-100 rounded font-semibold ">
+          {levels
+           |> Js.Array.filter(level => Level.number(level) != 0)
+           |> Level.sort
+           |> Array.map(level => {
+                let percentageStudents =
+                  Level.percentageStudents(level, totalStudentsInCourse);
+                let (pillClass, style, pillColor) =
+                  stylingForLevelPills(percentageStudents);
+                let tip =
+                  <div className="text-left">
+                    <p>
+                      {"Level: " ++ string_of_int(Level.number(level)) |> str}
+                    </p>
+                    <p>
+                      {"Students: "
+                       ++ string_of_int(Level.studentsInLevel(level))
+                       |> str}
+                    </p>
+                    <p>
+                      {"Percentage: "
+                       ++ Js.Float.toFixedWithPrecision(
+                            percentageStudents,
+                            ~digits=1,
+                          )
+                       |> str}
+                    </p>
+                  </div>;
+                <div
+                  className={
+                    "course-students-root__student-distribution-level-container text-center relative "
+                    ++ pillClass
+                  }
+                  style>
+                  <label
+                    className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
+                    {level |> Level.shortName |> str}
+                  </label>
+                  <Tooltip className="w-full" tip position=`Bottom>
+                    <div
+                      onClick={_ => selectLevelCB(level)}
+                      className={
+                        "course-students-root__student-distribution-level-pill relative cursor-pointer border-r border-white text-xs leading-none text-center "
+                        ++ (
+                          completedLevels |> Array.mem(level)
+                            ? "bg-yellow-300 text-yellow-900"
+                            : Level.unlocked(level)
+                                ? pillColor
+                                : "course-students-root__student-distribution-level-pill--locked cursor-default bg-gray-300"
+                                  ++ " text-gray-700"
+                        )
+                      }>
+                      {completedLevels |> Array.mem(level)
+                         ? <PfIcon className="if i-check-light if-fw" />
+                         : level
+                           |> Level.studentsInLevel
+                           |> string_of_int
+                           |> str}
+                    </div>
+                  </Tooltip>
+                </div>;
+              })
+           |> React.array}
+        </div>
+      </div>
+    : React.null;
+};

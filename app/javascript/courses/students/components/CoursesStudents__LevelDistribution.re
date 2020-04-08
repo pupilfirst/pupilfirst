@@ -76,21 +76,21 @@ let make = (~levels, ~selectLevelCB) => {
                     <div
                       onClick={_ => selectLevelCB(level)}
                       className={
-                        "course-students-root__student-distribution-level-pill relative cursor-pointer border-r border-white text-xs leading-none text-center "
+                        "course-students-root__student-distribution-level-pill relative cursor-pointer border-white text-xs leading-none text-center "
                         ++ (
                           completedLevels |> Array.mem(level)
                             ? "bg-yellow-300 text-yellow-900"
                             : Level.unlocked(level)
                                 ? pillColor
                                 : "course-students-root__student-distribution-level-pill--locked cursor-default bg-gray-300"
-                                  ++ " text-gray-700"
+                                  ++ " text-gray-800"
                         )
                       }>
                       {completedLevels |> Array.mem(level)
-                         ? <PfIcon className="if i-check-light if-fw" />
+                         ? <PfIcon className="if i-check-solid text-tiny" />
                          : <div
                              className="course-students-root__student-distribution-level-count">
-                             <span
+                             <div
                                className={
                                  level |> Level.unlocked
                                    ? ""
@@ -100,13 +100,13 @@ let make = (~levels, ~selectLevelCB) => {
                                 |> Level.studentsInLevel
                                 |> string_of_int
                                 |> str}
-                             </span>
+                             </div>
                              {level |> Level.unlocked
                                 ? React.null
-                                : <span
+                                : <div
                                     className="course-students-root__student-distribution-locked-icon">
-                                    <i className="fas fa-lock text-xs" />
-                                  </span>}
+                                    <i className="fas fa-lock text-tiny" />
+                                  </div>}
                            </div>}
                     </div>
                   </Tooltip>

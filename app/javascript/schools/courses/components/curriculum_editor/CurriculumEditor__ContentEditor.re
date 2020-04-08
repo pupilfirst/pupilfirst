@@ -89,7 +89,7 @@ let loadContentBlocks = (targetId, send) => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
-       let versions = Version.makeArrayFromJs(result##versions);
+       let versions = Version.makeArrayFromJs(result##targetVersions);
 
        send(LoadContent(contentBlocks, versions));
 

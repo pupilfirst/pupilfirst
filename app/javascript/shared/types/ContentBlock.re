@@ -197,7 +197,7 @@ module Query = [%graphql
           }
         }
       }
-      versions(targetId: $targetId){
+      targetVersions(targetId: $targetId){
         id
         createdAt
         updatedAt

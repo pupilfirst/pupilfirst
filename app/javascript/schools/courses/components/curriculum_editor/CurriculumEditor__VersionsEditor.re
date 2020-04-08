@@ -41,7 +41,7 @@ let loadContentBlocks = (targetId, send, version) => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
-       let versions = result##versions |> Version.makeArrayFromJs;
+       let versions = result##targetVersions |> Version.makeArrayFromJs;
 
        let selectedVersion =
          switch (version) {

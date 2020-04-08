@@ -1,7 +1,7 @@
-class TargetVersionResolver < ApplicationQuery
+class TargetVersionsResolver < ApplicationQuery
   property :target_id
 
-  def versions
+  def target_versions
     target.target_versions.order('created_at DESC')
   end
 

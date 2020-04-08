@@ -1,4 +1,4 @@
-class ContentBlockResolver < ApplicationQuery
+class ContentBlocksResolver < ApplicationQuery
   property :target_id
   property :target_version_id
 

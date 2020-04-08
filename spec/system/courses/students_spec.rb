@@ -265,7 +265,7 @@ feature "Course students list", js: true do
 
       within("div[aria-label='Students in level 1']") do
         expect(page).to_not have_text('0')
-        expect(page).to have_selector('.i-check-light')
+        expect(page).to have_selector('.i-check-solid')
       end
 
       within("div[aria-label='Students in level 4']") do

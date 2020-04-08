@@ -224,6 +224,12 @@ let suggestions = state => {
                   ++ {
                     suggestion |> TopicSuggestion.id;
                   }
+                  ++ "/"
+                  ++ (
+                    suggestion
+                    |> TopicSuggestion.title
+                    |> StringUtils.parameterize
+                  )
                 }
                 target="_blank"
                 key={suggestion |> TopicSuggestion.id}

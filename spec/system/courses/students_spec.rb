@@ -66,6 +66,23 @@ feature "Course students list", js: true do
     within("div[aria-label='team-level-info-#{team_5.id}']") do
       expect(page).to have_text('3')
     end
+
+    # Check number of students in levels
+    within("div[aria-label='Students level-wise distribution']") do
+      expect(page).to have_selector('.course-students-root__student-distribution-level-pill', count: 3)
+    end
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_text('2')
+    end
+
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_text('4')
+    end
+
+    within("div[aria-label='Students in level 3']") do
+      expect(page).to have_text('26')
+    end
   end
 
   scenario 'coach searches for and filters students by level' do
@@ -122,6 +139,12 @@ feature "Course students list", js: true do
     expect(page).to have_text(team_1.name)
     expect(page).to have_text(team_5.name)
     expect(page).to have_text(team_6.name)
+
+    # Filter by level using student distribution
+    find("div[aria-label='Students in level 1']").click
+
+    expect(page).to_not have_text('Elderberry')
+    expect(page).to have_text('Zucchini')
   end
 
   scenario 'team coach only has assigned teams in the students list' do
@@ -138,6 +161,12 @@ feature "Course students list", js: true do
     click_button('Load More...')
 
     expect(page).to have_text(team_3.name)
+  end
+
+  scenario 'coach checks the distribution of students by level' do
+    sign_in_user team_coach.user, referer: students_course_path(course)
+
+    expect(page).to have_text('L1')
   end
 
   context 'when there are more than one team coaches' do
@@ -203,6 +232,52 @@ feature "Course students list", js: true do
 
       find('.tooltip__bubble').text.strip.split("\n").each do |name|
         expect(name).to be_in(possible_names)
+      end
+    end
+  end
+
+  context 'when all students have completed a level' do
+    # Create new levels with no students
+    let!(:level_4) { create :level, :four, course: course }
+    let!(:level_5) { create :level, :five, course: course }
+
+    before do
+      level_1.startups.each { |s| s.update!(level_id: level_2.id) }
+    end
+
+    scenario 'level shows completed icon instead of number of students' do
+      sign_in_user course_coach.user, referer: students_course_path(course)
+
+      within("div[aria-label='Students in level 1']") do
+        expect(page).to_not have_text('0')
+        expect(page).to have_selector('.i-check-light')
+      end
+
+      within("div[aria-label='Students in level 4']") do
+        expect(page).to have_text('0')
+      end
+    end
+  end
+
+  context 'when there are locked levels in course' do
+    let!(:locked_level_4) { create :level, :four, course: course, unlock_on: 5.days.from_now }
+    let!(:locked_level_5) { create :level, :five, course: course, unlock_on: 5.days.from_now }
+
+    scenario 'it is shown as locked in student level wise distribution' do
+      sign_in_user course_coach.user, referer: students_course_path(course)
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to_not have_selector('.course-students-root__student-distribution-level-pill--locked')
+      end
+
+      within("div[aria-label='Students in level 4']") do
+        expect(page).to have_text('0')
+        expect(page).to have_selector('.course-students-root__student-distribution-level-pill--locked')
+      end
+
+      within("div[aria-label='Students in level 5']") do
+        expect(page).to have_text('0')
+        expect(page).to have_selector('.course-students-root__student-distribution-level-pill--locked')
       end
     end
   end

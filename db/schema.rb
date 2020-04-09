@@ -132,9 +132,10 @@ ActiveRecord::Schema.define(version: 2020_04_09_101805) do
   create_table "certificates", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.string "qr_corner"
-    t.integer "name_offset_top"
-    t.integer "margin"
-    t.boolean "active", default: false
+    t.integer "name_offset_top", null: false
+    t.integer "font_size", null: false
+    t.integer "margin", null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["course_id"], name: "index_certificates_on_course_id"
@@ -382,8 +383,8 @@ ActiveRecord::Schema.define(version: 2020_04_09_101805) do
   create_table "issued_certificates", force: :cascade do |t|
     t.bigint "certificate_id", null: false
     t.bigint "user_id", null: false
-    t.string "name"
-    t.citext "serial_number"
+    t.string "name", null: false
+    t.citext "serial_number", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["certificate_id"], name: "index_issued_certificates_on_certificate_id"

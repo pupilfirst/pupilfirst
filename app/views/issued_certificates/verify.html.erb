@@ -2,9 +2,13 @@
 
 <% content_for(:head) do %>
   <title>Certificate <%= presenter.serial_number %></title>
+  <%= javascript_tag nil, src: "https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js", nonce: true %>
 <% end %>
 
-<h1>Certificate <%= presenter.serial_number %></h1>
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'IssuedCertificatesVerifyPack', nonce: true %>
+<% end %>
 
-This certificate was issued to <strong><%= presenter.issued_to %></strong> on
-<strong><%= presenter.issued_on %></strong> for completing the course <strong>&ldquo;<%= presenter.course_name %>&rdquo;</strong>.
+<script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>
+
+<div id="react-root"></div>

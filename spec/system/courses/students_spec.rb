@@ -20,8 +20,8 @@ feature "Course students list", js: true do
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
   let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
 
-  def students_in_level(level)
-    Founder.where(startup: level.startups.active)
+  def teams_in_level(level)
+    level.startups.active
   end
 
   before do
@@ -77,27 +77,30 @@ feature "Course students list", js: true do
     end
 
     within("div[aria-label='Students in level 1']") do
-      expect(page).to have_text(students_in_level(level_1).count)
+      expect(page).to have_text(teams_in_level(level_1).count)
     end
 
     within("div[aria-label='Students in level 2']") do
-      expect(page).to have_text(students_in_level(level_2).count)
+      expect(page).to have_text(teams_in_level(level_2).count)
     end
 
     within("div[aria-label='Students in level 3']") do
-      expect(page).to have_text(students_in_level(level_3).count)
+      expect(page).to have_text(teams_in_level(level_3).count)
     end
 
     # Hover over a level to get percentage data
 
     students_in_course = Founder.where(startup: course.startups).count
-    percentage_students_in_l2 = (students_in_level(level_2).count / students_in_course.to_f) * 100
+    students_in_l2 = Founder.where(startup: teams_in_level(level_2)).count
+    percentage_students_in_l2 = students_in_l2 / students_in_course.to_f * 100
 
     within("div[aria-label='Students in level 2']") do
       find('.tooltip__trigger').hover
     end
 
     expect(page).to have_text("Percentage: #{percentage_students_in_l2}")
+    expect(page).to have_text("Teams: #{teams_in_level(level_2).count}")
+    expect(page).to have_text("Students: #{students_in_l2}")
   end
 
   scenario 'coach searches for and filters students by level' do

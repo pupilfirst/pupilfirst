@@ -73,7 +73,7 @@ feature "Course students list", js: true do
 
     # Check number of students in levels
     within("div[aria-label='Students level-wise distribution']") do
-      expect(page).to have_selector('.course-students-root__student-distribution-level-pill', count: 3)
+      expect(page).to have_selector('.level-distribution__pill', count: 3)
     end
 
     within("div[aria-label='Students in level 1']") do
@@ -178,12 +178,6 @@ feature "Course students list", js: true do
     expect(page).to have_text(team_3.name)
   end
 
-  scenario 'coach checks the distribution of students by level' do
-    sign_in_user team_coach.user, referer: students_course_path(course)
-
-    expect(page).to have_text('L1')
-  end
-
   context 'when there are more than one team coaches' do
     let(:another_team_coach) { create :faculty, school: school }
 
@@ -282,17 +276,12 @@ feature "Course students list", js: true do
       sign_in_user course_coach.user, referer: students_course_path(course)
 
       within("div[aria-label='Students in level 2']") do
-        expect(page).to_not have_selector('.course-students-root__student-distribution-level-pill--locked')
+        expect(page).to_not have_selector('.level-distribution__pill--locked')
       end
 
       within("div[aria-label='Students in level 4']") do
         expect(page).to have_text('0')
-        expect(page).to have_selector('.course-students-root__student-distribution-level-pill--locked')
-      end
-
-      within("div[aria-label='Students in level 5']") do
-        expect(page).to have_text('0')
-        expect(page).to have_selector('.course-students-root__student-distribution-level-pill--locked')
+        expect(page).to have_selector('.level-distribution__pill--locked')
       end
     end
   end

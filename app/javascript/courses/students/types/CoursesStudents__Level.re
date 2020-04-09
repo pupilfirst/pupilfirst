@@ -3,6 +3,7 @@ type t = {
   name: string,
   number: int,
   studentsInLevel: int,
+  teamsInLevel: int,
   unlocked: bool,
 };
 
@@ -15,12 +16,15 @@ let unlocked = t => t.unlocked;
 
 let studentsInLevel = t => t.studentsInLevel;
 
+let teamsInLevel = t => t.teamsInLevel;
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
     number: json |> field("number", int),
     studentsInLevel: json |> field("studentsInLevel", int),
+    teamsInLevel: json |> field("teamsInLevel", int),
     unlocked: json |> field("unlocked", bool),
   };
 

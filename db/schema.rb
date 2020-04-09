@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 2020_04_09_101805) do
     t.bigint "course_id", null: false
     t.string "qr_corner"
     t.integer "name_offset_top"
+    t.integer "margin"
     t.boolean "active", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -382,7 +383,9 @@ ActiveRecord::Schema.define(version: 2020_04_09_101805) do
     t.bigint "certificate_id", null: false
     t.bigint "user_id", null: false
     t.string "name"
-    t.string "serial_number"
+    t.citext "serial_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["certificate_id"], name: "index_issued_certificates_on_certificate_id"
     t.index ["serial_number"], name: "index_issued_certificates_on_serial_number", unique: true
     t.index ["user_id"], name: "index_issued_certificates_on_user_id"

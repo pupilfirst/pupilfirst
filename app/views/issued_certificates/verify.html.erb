@@ -1,0 +1,10 @@
+<% presenter = IssuedCertificates::VerifyPresenter.new(self, @issued_certificate) %>
+
+<% content_for(:head) do %>
+  <title>Certificate <%= presenter.serial_number %></title>
+<% end %>
+
+<h1>Certificate <%= presenter.serial_number %></h1>
+
+This certificate was issued to <strong><%= presenter.issued_to %></strong> on
+<strong><%= presenter.issued_on %></strong> for completing the course <strong>&ldquo;<%= presenter.course_name %>&rdquo;</strong>.

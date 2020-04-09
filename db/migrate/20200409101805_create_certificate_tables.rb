@@ -4,6 +4,7 @@ class CreateCertificateTables < ActiveRecord::Migration[6.0]
       t.references :course, foreign_key: true, null: false
       t.string :qr_corner
       t.integer :name_offset_top
+      t.integer :margin
       t.boolean :active, default: false
 
       t.timestamps
@@ -13,7 +14,9 @@ class CreateCertificateTables < ActiveRecord::Migration[6.0]
       t.references :certificate, foreign_key: true, null: false
       t.references :user, foreign_key: true, null: false
       t.string :name
-      t.string :serial_number
+      t.citext :serial_number
+
+      t.timestamps
     end
 
     add_index :issued_certificates, :serial_number, unique: true

@@ -5,7 +5,8 @@ after 'development:courses' do
 
   certificate = course.certificates.create!(
     qr_corner: 'TopRight',
-    name_offset_top: 45,
+    qr_scale: 100,
+    name_offset_top: 57,
     font_size: 140,
     margin: 8,
     active: true

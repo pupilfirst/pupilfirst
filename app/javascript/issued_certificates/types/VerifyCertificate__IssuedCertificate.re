@@ -15,6 +15,7 @@ type t = {
   fontSize: int,
   nameOffsetTop: int,
   qrCorner,
+  qrScale: int,
 };
 
 let serialNumber = t => t.serialNumber;
@@ -26,6 +27,7 @@ let margin = t => t.margin;
 let nameOffsetTop = t => t.nameOffsetTop;
 let fontSize = t => t.fontSize;
 let qrCorner = t => t.qrCorner;
+let qrScale = t => t.qrScale;
 
 let decode = json =>
   Json.Decode.{
@@ -47,6 +49,7 @@ let decode = json =>
              | "TopRight" => TopRight
              | "BottomRight" => BottomRight
              | "BottomLeft" => BottomLeft
+             | "Hidden" => Hidden
              | somethingElse =>
                Rollbar.warning(
                  "Encountered unknown value for qrCorder: "
@@ -57,4 +60,5 @@ let decode = json =>
              },
            Hidden,
          ),
+    qrScale: json |> field("qrScale", int),
   };

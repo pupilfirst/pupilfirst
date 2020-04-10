@@ -2,7 +2,7 @@
 
 <% content_for(:head) do %>
   <title>Certificate <%= presenter.serial_number %></title>
-  <%= javascript_tag nil, src: "https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js", nonce: true %>
+  <%= stylesheet_pack_tag 'IssuedCertificatesVerifyPack', media: nil %>
 <% end %>
 
 <% content_for(:tail) do %>

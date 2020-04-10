@@ -131,7 +131,8 @@ ActiveRecord::Schema.define(version: 2020_04_09_101805) do
 
   create_table "certificates", force: :cascade do |t|
     t.bigint "course_id", null: false
-    t.string "qr_corner"
+    t.string "qr_corner", null: false
+    t.integer "qr_scale", null: false
     t.integer "name_offset_top", null: false
     t.integer "font_size", null: false
     t.integer "margin", null: false

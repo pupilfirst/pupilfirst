@@ -391,6 +391,10 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
+      <CoursesStudents__LevelDistribution
+        levels
+        selectLevelCB={level => send(SelectLevel(level))}
+      />
       <div
         className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">
         <div

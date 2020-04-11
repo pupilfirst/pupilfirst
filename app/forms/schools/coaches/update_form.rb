@@ -5,7 +5,6 @@ module Schools
       property :title, validates: { presence: true, length: { maximum: 250 } }
       property :linkedin_url, virtual: true
       property :connect_link
-      property :notify_for_submission
       property :exited
       property :public
       property :image, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes }, allow_blank: true }
@@ -45,13 +44,12 @@ module Schools
         {
           connect_link: connect_link,
           public: public,
-          notify_for_submission: notify_for_submission,
           exited: exited
         }
       end
 
       def faculty
-        @faculty ||= Faculty.find_by(id: id)
+        @faculty ||= school.faculty.find_by(id: id)
       end
 
       def clear_faculty_enrollments

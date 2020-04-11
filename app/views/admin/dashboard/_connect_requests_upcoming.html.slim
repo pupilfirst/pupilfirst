@@ -13,10 +13,5 @@
 
   .footer-spacer
 
-  - trend = ConnectRequest.confirmed.group_by_week('connect_requests.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
-
-  .left-of-button
-    span.sparkline-tag #{trend.join(', ')}
-
   a.button.view-all href=admin_connect_requests_path(scope: 'confirmed')
     | View All (#{connect_requests_confirmed.count})

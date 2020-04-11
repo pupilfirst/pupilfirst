@@ -201,9 +201,33 @@ let controlIcon = (~icon, ~title, ~handler) => {
       </button>;
 };
 
+let filesNotice =
+  <div className="mt-2 text-sm">
+    <strong> {"Note:" |> str} </strong>
+    <span className="ml-1">
+      {"Students can submit up to 3 files, limited to 5 MB each." |> str}
+    </span>
+  </div>;
+
+let isRequiredStepTitleDuplicated = (checklist, item) => {
+  let trimmedTitle = item |> ChecklistItem.title |> String.trim;
+
+  if (trimmedTitle == "") {
+    false;
+  } else {
+    checklist
+    |> Js.Array.filter(item => !ChecklistItem.optional(item))
+    |> Js.Array.filter(checklistItem =>
+         checklistItem |> ChecklistItem.title |> String.trim == trimmedTitle
+       )
+    |> Array.length > 1;
+  };
+};
+
 [@react.component]
 let make =
     (
+      ~checklist,
       ~checklistItem,
       ~index,
       ~updateChecklistItemCB,
@@ -254,8 +278,12 @@ let make =
       </div>
       <div>
         <School__InputGroupError
-          message="Not a valid title"
+          message="Step cannot be empty"
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
+        />
+        <School__InputGroupError
+          message="Not a unique step; required steps must be unique"
+          active={isRequiredStepTitleDuplicated(checklist, checklistItem)}
         />
       </div>
       {switch (checklistItem |> ChecklistItem.kind) {
@@ -266,9 +294,9 @@ let make =
            removeMultichoiceOption,
            updateChecklistItemCB,
          )
+       | Files => filesNotice
        | ShortText
        | LongText
-       | Files
        | Link => React.null
        }}
     </div>

@@ -43,6 +43,7 @@ let handleResponse = (responseCB, errorCB, promise) =>
        )
     |> catch(error => {
          errorCB();
+         Js.log(error);
          handleResponseError(error |> handleApiError) |> resolve;
        })
     |> ignore

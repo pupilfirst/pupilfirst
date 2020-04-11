@@ -26,7 +26,7 @@ feature 'Course Exports', js: true do
     school.save!
   end
 
-  scenario 'school admin creates a full export' do
+  scenario 'school admin creates a students export' do
     sign_in_user school_admin.user, referer: exports_school_course_path(course)
 
     expect(page).to have_text("You haven't exported anything yet!")
@@ -65,7 +65,33 @@ feature 'Course Exports', js: true do
     expect(page).to have_link(nil, href: Rails.application.routes.url_helpers.rails_blob_path(export.file, only_path: true))
   end
 
-  scenario 'school admin creates an export for specific tags' do
+  scenario 'school admin creates a teams export' do
+    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+
+    expect(page).to have_text("You haven't exported anything yet!")
+
+    find('h5', text: 'Create a new export').click
+
+    click_button('Teams')
+
+    # Tags shouldn't be visible now.
+    expect(page).not_to have_selector('div[title="Select tag 1"]')
+
+    # It should still be possible to switch between "All targets" and "Reviewed targets"
+    click_button('Only targets with reviewed submissions')
+    click_button('Create Export')
+
+    expect(page).to have_text('Your export is being processed')
+
+    export = CourseExport.last
+
+    within("div[aria-label='Export #{export.id}'") do
+      expect(page).to have_text('Teams')
+      expect(page).to have_text('Reviewed Submissions Only')
+    end
+  end
+
+  scenario 'school admin creates a students export for specific tags' do
     sign_in_user school_admin.user, referer: exports_school_course_path(course)
 
     find('h5', text: 'Create a new export').click
@@ -87,7 +113,7 @@ feature 'Course Exports', js: true do
     expect(page).to have_text('tag 2')
   end
 
-  scenario 'school admin creates an export with only reviewed submissions' do
+  scenario 'school admin creates a student export with only reviewed submissions' do
     sign_in_user school_admin.user, referer: exports_school_course_path(course)
 
     find('h5', text: 'Create a new export').click

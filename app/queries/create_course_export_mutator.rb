@@ -1,6 +1,7 @@
 class CreateCourseExportMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
+  property :export_type, validates: { inclusion: CourseExport.valid_export_types }
   property :course_id, validates: { presence: { message: 'CourseIdBlank' } }
   property :tag_ids
   property :reviewed_only
@@ -22,9 +23,13 @@ class CreateCourseExportMutator < ApplicationQuery
 
   def create_course_export
     CourseExport.transaction do
-      export = CourseExport.new(course: course, user: current_user, reviewed_only: !!reviewed_only)
-      tag_names = tags.pluck(:name)
-      export.tag_list.add(*tag_names)
+      export = CourseExport.new(export_type: export_type, course: course, user: current_user, reviewed_only: !!reviewed_only)
+
+      if tags.present?
+        tag_names = tags.pluck(:name)
+        export.tag_list.add(*tag_names)
+      end
+
       export.save!
 
       # Queue a job to prepare the report.
@@ -38,7 +43,7 @@ class CreateCourseExportMutator < ApplicationQuery
   private
 
   def tags
-    @tags ||= current_school.founder_tags.where(id: tag_ids)
+    @tags ||= export_type == CourseExport::EXPORT_TYPE_STUDENTS ? current_school.founder_tags.where(id: tag_ids) : []
   end
 
   def course

@@ -147,12 +147,6 @@ let secondaryNav = (courses, userRole, selectedOption) =>
                "Coaches",
              ),
              secondaryNavOption(
-               "/school/courses/" ++ courseId ++ "/evaluation_criteria",
-               courseSelection,
-               EvaluationCriteria,
-               "Evaluation Criteria",
-             ),
-             secondaryNavOption(
                "/school/courses/" ++ courseId ++ "/exports",
                courseSelection,
                CourseExports,
@@ -168,6 +162,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
            |> React.array
          | CourseAuthor => React.null
          }}
+        {secondaryNavOption(
+           "/school/courses/" ++ courseId ++ "/evaluation_criteria",
+           courseSelection,
+           EvaluationCriteria,
+           "Evaluation Criteria",
+         )}
       </ul>
     </div>
   | _ => React.null
@@ -175,14 +175,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
 
 [@react.component]
 let make =
-    (
-      ~schoolName,
-      ~schoolLogoPath,
-      ~schoolIconPath,
-      ~courses,
-      ~isCourseAuthor,
-      ~reviewPath,
-    ) => {
+    (~schoolName, ~schoolLogoPath, ~schoolIconPath, ~courses, ~isCourseAuthor) => {
   let url = ReasonReactRouter.useUrl();
 
   let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin;
@@ -350,16 +343,6 @@ let make =
       </div>
       <ul>
         {bottomLink("/home", shrunk, "fas fa-home", "Home")}
-        {switch (reviewPath) {
-         | Some(path) =>
-           bottomLink(
-             path,
-             shrunk,
-             "fas fa-clipboard-check",
-             "Review Submissions",
-           )
-         | None => React.null
-         }}
         <li>
           <a
             title=?{shrunk ? Some("Sign Out") : None}

@@ -23,7 +23,7 @@ feature 'Markdown editor', js: true do
   scenario 'user uploads an image and a PDF' do
     sign_in_user(student.user, referer: new_question_community_path(community))
 
-    expect(page).to have_text('ASK A NEW QUESTION')
+    expect(page).to have_text('Ask a new question')
 
     fill_in 'Question', with: 'This is a title.'
     add_markdown(intro_sentence)

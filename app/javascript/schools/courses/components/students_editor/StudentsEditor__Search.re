@@ -127,7 +127,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
   let (searchInput, setSearchInput) = React.useState(() => "");
   let id = "search";
   <div className="inline-block w-full">
-    <label className="block text-tiny font-semibold" htmlFor=id>
+    <label className="block text-tiny font-semibold uppercase" htmlFor=id>
       {"Filter by:" |> str}
     </label>
     <MultiselectDropdown

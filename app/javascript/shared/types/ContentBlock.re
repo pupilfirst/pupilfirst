@@ -172,7 +172,7 @@ module Fragments = [%graphql
 
 module Query = [%graphql
   {|
-    query($targetId: ID!, $targetVersionId: ID) {
+    query ContentBlocksWithVersionsQuery($targetId: ID!, $targetVersionId: ID) {
       contentBlocks(targetId: $targetId, targetVersionId: $targetVersionId) {
         id
         blockType

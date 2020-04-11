@@ -44,7 +44,7 @@ class User < ApplicationRecord
   end
 
   def email_bounced?
-    email_bounced_at.present?
+    BounceReport.where(email: email).exists?
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.
@@ -96,6 +96,8 @@ class User < ApplicationRecord
 
   # TODO: Remove User#image_or_avatar_url when all of its usages are gone. Use the avatar_url method instead, and generate initial avatars client-side.
   def image_or_avatar_url(variant: nil, background_shape: nil)
+    ActiveSupport::Deprecation.warn('Use `avatar_url` instead')
+
     if avatar.attached?
       if variant.blank?
         Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true)

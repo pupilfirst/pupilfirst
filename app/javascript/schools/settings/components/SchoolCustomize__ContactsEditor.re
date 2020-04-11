@@ -27,7 +27,7 @@ let updateContactDetailsButtonText = updating =>
 
 module UpdateContactDetailsQuery = [%graphql
   {|
-   mutation($address: String!, $emailAddress: String!) {
+   mutation UpdateAddressAndEmailMutation($address: String!, $emailAddress: String!) {
      updateAddress: updateSchoolString(key: "address", value: $address) {
        errors
      }

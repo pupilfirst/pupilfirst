@@ -6,7 +6,7 @@ let str = React.string;
 
 module CreateAnswerQuery = [%graphql
   {|
-  mutation($description: String!, $questionId: ID!) {
+  mutation CreateAnswerMutation($description: String!, $questionId: ID!) {
     createAnswer(description: $description, questionId: $questionId) @bsVariant {
       answerId
       errors
@@ -17,7 +17,7 @@ module CreateAnswerQuery = [%graphql
 
 module UpdateAnswerQuery = [%graphql
   {|
-  mutation($id: ID!, $description: String!) {
+  mutation UpdateAnswerMutation($id: ID!, $description: String!) {
     updateAnswer(id: $id, description: $description) @bsVariant {
       success
       errors
@@ -200,11 +200,11 @@ let make =
   let updateMarkdownCB = description => setDescription(_ => description);
   <DisablingCover disabled=saving>
     <div
-      className="mt-4 my-8 max-w-3xl w-full flex mx-auto items-center justify-center relative shadow border bg-white rounded-lg">
-      <div className="flex w-full py-4 px-4">
+      className="py-2 max-w-3xl w-full flex mx-auto items-center justify-center relative">
+      <div className="flex w-full pb-4">
         <div className="w-full flex flex-col">
           <label
-            className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+            className="inline-block tracking-wide text-gray-900 text-lg font-semibold mb-2"
             htmlFor="new-answer">
             {"Your Answer" |> str}
           </label>

@@ -6,7 +6,7 @@ let str = React.string;
 
 module CoursesQuery = [%graphql
   {|
-  query {
+  query CoursesQuery {
     courses{
       id
       name

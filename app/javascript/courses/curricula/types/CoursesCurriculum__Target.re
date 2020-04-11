@@ -6,7 +6,6 @@ type role =
 
 type t = {
   id: string,
-  [@live]
   role,
   title: string,
   targetGroupId: string,
@@ -35,6 +34,7 @@ let decode = json =>
   };
 
 let id = t => t.id;
+let role = t => t.role;
 let title = t => t.title;
 let sortIndex = t => t.sortIndex;
 let targetGroupId = t => t.targetGroupId;

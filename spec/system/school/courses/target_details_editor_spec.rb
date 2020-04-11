@@ -227,15 +227,22 @@ feature 'Target Details Editor', js: true do
         click_on 'Write Long Text'
         # Only 1 upload file item in a checklist should be allowed
         expect(page).to_not have_text('Upload Files')
+
         click_on 'Choose from a list'
+
         expect(page).to have_text('Choices:')
+
         fill_in 'checklist-item-3-title', with: 'Choose one item', fill_options: { clear: :backspace }
+
         expect(page).to_not have_selector('.i-times-regular')
+
         fill_in 'multichoice-input-1', with: 'First Choice', fill_options: { clear: :backspace }
         fill_in 'multichoice-input-2', with: 'Second Choice', fill_options: { clear: :backspace }
         click_button 'Add a choice'
+
         expect(page).to have_text('Not a valid choice')
         expect(page).to have_selector('.i-times-regular')
+
         fill_in 'multichoice-input-3', with: 'Another Choice', fill_options: { clear: :backspace }
         click_button 'Remove Choice 2'
       end
@@ -243,15 +250,31 @@ feature 'Target Details Editor', js: true do
       click_button 'Add a Step'
 
       within("div[aria-label='Editor for checklist item 4'") do
-        expect(page).to have_text('Not a valid title')
+        expect(page).to have_text('Step cannot be empty')
+
         click_on 'Write Long Text'
         click_on 'Attach a Link'
-        fill_in 'checklist-item-4-title', with: 'Attach a link for the submission', fill_options: { clear: :backspace }
+        fill_in 'checklist-item-4-title', with: 'New title for short text item', fill_options: { clear: :backspace }
+
+        # The user should be blocked from saving the checklist with duplicate required steps.
+        expect(page).to have_text('required steps must be unique')
+      end
+
+      expect(page).to have_button('Update Target', disabled: true)
+
+      # The warning should disappear when we make the step optional.
+      within("div[aria-label='Editor for checklist item 4'") do
         check 'Optional'
+
+        expect(page).not_to have_text('required steps must be unique')
+
+        fill_in 'checklist-item-4-title', with: 'Attach a link for the submission', fill_options: { clear: :backspace }
       end
 
       click_button 'Update Target'
+
       expect(page).to have_text("Target updated successfully")
+
       dismiss_notification
 
       expected_checklist = [

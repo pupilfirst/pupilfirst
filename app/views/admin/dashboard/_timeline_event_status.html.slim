@@ -12,11 +12,6 @@
 
     .footer-spacer
 
-    - trend = TimelineEvent.where(status: status).group_by_week('timeline_events.created_at', range: 3.weeks.ago..Time.now).count.map { |c| c[1] }
-
-    .left-of-button
-      span.sparkline-tag #{trend.join(', ')}
-
     - params = { q: { status_equals: status } }
     - params = params.merge(scope: 'not_improved') if status == TimelineEvent::STATUS_NEEDS_IMPROVEMENT
     a.button.view-all href=admin_timeline_events_path(params)

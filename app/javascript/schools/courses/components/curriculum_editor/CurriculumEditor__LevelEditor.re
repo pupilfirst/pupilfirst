@@ -29,7 +29,7 @@ let reducer = (state, action) => {
 };
 
 let updateName = (send, name) => {
-  let hasError = name |> String.length < 2;
+  let hasError = name |> String.trim |> String.length < 2;
   send(UpdateName(name, hasError));
 };
 

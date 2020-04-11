@@ -60,7 +60,7 @@ ActiveAdmin.register Startup do
   csv do
     column :name
     column(:level) { |startup| startup.level.number }
-    column(:founders) { |startup| startup.founders.pluck(:name).join ', ' }
+    column(:founders) { |startup| startup.founders.joins(:user).pluck(:name).join(',') }
   end
 
   action_item :view_feedback, only: :show do

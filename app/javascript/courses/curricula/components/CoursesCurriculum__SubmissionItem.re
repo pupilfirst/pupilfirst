@@ -86,23 +86,55 @@ let showShortText = (value, id, updateResultCB) => {
   </div>;
 };
 
+let longTextWarning = value => {
+  let currentLength = value |> String.length;
+  let showWarning = notBlank(value) && currentLength > 4500;
+
+  let colors =
+    currentLength < 4900
+      ? "text-orange-700 bg-orange-100" : "text-red-600 bg-red-100";
+
+  showWarning
+    ? <div className="flex justify-between items-center mt-1">
+        <div
+          className={
+            "hidden md:inline px-2 py-px rounded text-xs font-semibold inline-flex items-center "
+            ++ colors
+          }>
+          <span className="mr-2">
+            <i className="fas fa-exclamation-triangle" />
+          </span>
+          <span>
+            {"Please keep your answer to less than 5000 characters in length."
+             |> str}
+          </span>
+        </div>
+        <div
+          className={
+            "flex-shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded "
+            ++ colors
+          }>
+          {currentLength |> string_of_int |> str}
+          {" / 5000" |> str}
+        </div>
+      </div>
+    : React.null;
+};
+
+let updateLongText = (updateResultCB, value) => {
+  updateResultCB(ChecklistItem.LongText(value));
+};
+
 let showLongText = (value, id, updateResultCB) => {
   <div>
-    <textarea
-      id
-      maxLength=1000
-      className="h-40 w-full rounded-lg p-4 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner rounded-lg"
+    <MarkdownEditor
+      textareaId=id
+      onChange={updateLongText(updateResultCB)}
       value
-      onChange={e =>
-        updateResultCB(
-          ChecklistItem.LongText(ReactEvent.Form.target(e)##value),
-        )
-      }
+      profile=Markdown.QuestionAndAnswer
+      maxLength=5000
     />
-    {showError(
-       "Answer should be less than 1000 characters",
-       !ChecklistItem.validLongText(value) && notBlank(value),
-     )}
+    {longTextWarning(value)}
   </div>;
 };
 

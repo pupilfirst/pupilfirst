@@ -1,14 +1,16 @@
 class UpdateEvaluationCriterionMutator < ApplicationQuery
+  include AuthorizeAuthor
+
   property :id
   property :name, validates: { presence: true, length: { minimum: 1, maximum: 50 } }
   property :grades_and_labels, validates: { presence: true }
 
-  validate :valid_ec_id
+  validate :evaluation_criterion_must_be_present
 
-  def valid_ec_id
+  def evaluation_criterion_must_be_present
     return if evaluation_criterion.present?
 
-    raise "UpdateEvaluationCriterionMutator received non-existent evaluation criterion ID #{id}"
+    errors[:base] << "Could not find evaluation criterion with ID #{id}"
   end
 
   def update_evaluation_criterion
@@ -16,6 +18,7 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
       name: name,
       grade_labels: grade_labels
     )
+
     evaluation_criterion
   end
 
@@ -31,10 +34,10 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   end
 
   def evaluation_criterion
-    EvaluationCriterion.find_by(course: current_school.courses, id: id)
+    @evaluation_criterion ||= EvaluationCriterion.find_by(course: current_school.courses, id: id)
   end
 
-  def authorized?
-    current_school_admin.present?
+  def course
+    evaluation_criterion.course
   end
 end

@@ -17,7 +17,7 @@ let updateButtonText = saving => {
 
 module UpdateSchoolQuery = [%graphql
   {|
-  mutation($name: String!, $about: String!) {
+  mutation UpdateSchoolMutation($name: String!, $about: String!) {
     updateSchool(about: $about, name: $name) {
       success
     }

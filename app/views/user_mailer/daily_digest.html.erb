@@ -1,17 +1,13 @@
 <%
   school_name = @user.school.name
-  community_count = @updates.length
-  question_count = @updates.values.map { |v| v[:questions].length }.sum
-  questions_article = question_count > 1 ? 'are' : 'is'
   recipient_name = @user.name
+  def article(count)
+    count > 1 ? 'are' : 'is'
+  end
 %>
 
 <% content_for :title do %>
-  Daily community digest from <%= school_name %>
-<% end %>
-
-<% content_for :subtitle do %>
-  There are new questions in <%= community_count.humanize %> <%= 'community'.pluralize(community_count) %>.
+  Daily digest from <%= school_name %>
 <% end %>
 
 <% content_for :title_button_text do %>
@@ -25,31 +21,54 @@
 <% end %>
 
 <% content_for :body do %>
-  <p>
-    This daily update contains new questions that were asked today and a selection of unanswered questions from the
-    past week.
-  </p>
+  <% if @updates[:updates_for_coach].present? %>
+    <% pending_submissions_count = @updates[:updates_for_coach].map { |s| s[:pending_submissions] }.sum %>
+    <p style="margin-top: 10px;">
 
-  <p>
-    There <%= questions_article %> <strong><%= question_count %></strong> new
-    <%= 'question'.pluralize(question_count) %> in <%= pluralize(community_count, 'community') %> that you are a
-    part of.
-  </p>
-
-  <% @updates.each do |community_id, community_updates| %>
-    <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 120%; color: #6025C0; border-radius: 8px; padding: 0px 4px;' %>
+      There <%= article(pending_submissions_count) %> <strong><%= pending_submissions_count %></strong>
+      new <%= 'submission'.pluralize(pending_submissions_count) %> to review
+      in <%= pluralize(@updates[:updates_for_coach].length, 'course') %>
+      that you are a coach in:
+    </p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
-      <% community_updates[:questions].each do |question| %>
+      <% @updates[:updates_for_coach].each do |stats| %>
         <li style="padding: 2px 0px;">
-          <%= link_to question[:title], question_url(question[:id]) %>
-          <span style="font-size: 75%;">
-            &mdash; <strong><%= question[:author] %></strong>
-            <%= question[:type] == 'new' ? '' : "(no activity, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
+          <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
+          <span><strong><%= stats[:pending_submissions] %></strong>
+            <% if stats[:is_team_coach] %>
+              <%= stats[:pending_submissions_for_coach] == 0 ? '(none of which are assigned to you)' : "(#{stats[:pending_submissions_for_coach]} assigned to you)" %>
+            <% end %>
           </span>
         </li>
       <% end %>
     </ul>
+  <% end %>
+
+  <% if @updates[:community_updates].present? %>
+    <% question_count = @updates[:community_updates].values.map { |v| v[:questions].length }.sum %>
+    <p style="margin-top: 10px;">
+      There <%= article(question_count) %> <strong><%= question_count %></strong> new
+      <%= 'question'.pluralize(question_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
+      that you are a
+      part of.
+    </p>
+
+    <% @updates[:community_updates].each do |community_id, community_updates| %>
+      <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 120%; color: #6025C0; border-radius: 8px; padding: 0px 4px;' %>
+
+      <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
+        <% community_updates[:questions].each do |question| %>
+          <li style="padding: 2px 0px;">
+            <%= link_to question[:title], question_url(question[:id]) %>
+            <span style="font-size: 75%;">
+            &mdash; <strong><%= question[:author] %></strong>
+              <%= question[:type] == 'new' ? '' : "(no activity, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
+          </span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
 
   <p style="font-size: 75%;">

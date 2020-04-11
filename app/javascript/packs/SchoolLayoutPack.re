@@ -5,17 +5,9 @@ let decodeProps = json =>
     json |> field("schoolIconPath", string),
     json |> field("courses", list(SchoolAdminNavbar__Course.decode)),
     json |> field("isCourseAuthor", bool),
-    json |> field("reviewPath", nullable(string)) |> Js.Null.toOption,
   );
 
-let (
-  schoolName,
-  schoolLogoPath,
-  schoolIconPath,
-  courses,
-  isCourseAuthor,
-  reviewPath,
-) =
+let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor) =
   DomUtils.parseJsonAttribute(~id="school-admin-navbar__root", ())
   |> decodeProps;
 
@@ -26,7 +18,6 @@ ReactDOMRe.renderToElementWithId(
     schoolIconPath
     courses
     isCourseAuthor
-    reviewPath
   />,
   "school-admin-navbar__root",
 );

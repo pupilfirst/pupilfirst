@@ -1,0 +1,50 @@
+.level-distribution__pill {
+  padding: 6px 0;
+}
+
+.level-distribution__container:first-child .level-distribution__pill {
+  @apply rounded-l;
+}
+
+.level-distribution__container:last-child .level-distribution__pill {
+  @apply rounded-r;
+}
+
+.level-distribution__container:not(:last-child) .level-distribution__pill {
+  @apply border-r;
+}
+
+.level-distribution__pill--locked {
+  z-index: 0;
+}
+
+.level-distribution__pill--locked:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    -45deg,
+    #f1edf7,
+    #f1edf7 8px,
+    #dfdae8 8px,
+    #dfdae8 16px
+  );
+}
+
+.level-distribution__pill .level-distribution__locked-icon {
+  display: none;
+}
+
+.level-distribution__pill:hover .level-distribution__team-count-value,
+.level-distribution__pill:active .level-distribution__team-count-value {
+  display: none;
+}
+
+.level-distribution__pill:hover .level-distribution__locked-icon,
+.level-distribution__pill:active .level-distribution__locked-icon {
+  display: inline-block;
+}

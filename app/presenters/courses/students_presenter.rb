@@ -9,28 +9,6 @@ module Courses
       "Students In Course | #{@course.name} | #{current_school.name}"
     end
 
-    private
-
-    def props
-      {
-        levels: levels,
-        course: course_details,
-        user_id: current_user.id,
-        team_coaches: team_coaches
-      }
-    end
-
-    def levels
-      @course.levels.map do |level|
-        level_attributes = level.attributes.slice('id', 'name', 'number')
-        level_attributes.merge!(teams_in_level: level.startups.active.count)
-      end
-    end
-
-    def course_details
-      { id: @course.id }
-    end
-
     def team_coaches
       school = @course.school
 
@@ -38,18 +16,58 @@ module Courses
         .joins(startups: :course)
         .where(startups: { courses: { id: @course.id } })
         .includes(user: { avatar_attachment: :blob })
-        .distinct.map do |faculty|
-        user = faculty.user
+        .distinct.map do |coach|
+        user = coach.user
 
-        user_details = {
+        coach_details = {
+          id: coach.id,
           user_id: user.id,
           name: user.name,
           title: user.full_title
         }
 
-        user_details[:avatar_url] = view.rails_representation_path(user.avatar_variant(:thumb), only_path: true) if user.avatar.attached?
-        user_details
+        coach_details[:avatar_url] = view.rails_representation_path(user.avatar_variant(:thumb), only_path: true) if user.avatar.attached?
+        coach_details
       end
+    end
+
+    def current_coach_details
+      coach = current_user.faculty
+
+      details = {
+        id: coach.id,
+        user_id: current_user.id,
+        name: current_user.name,
+        title: current_user.full_title
+      }
+
+      details[:avatar_url] = view.rails_representation_path(current_user.avatar_variant(:thumb), only_path: true) if current_user.avatar.attached?
+      details
+    end
+
+    private
+
+    def props
+      {
+        levels: levels,
+        course: course_details,
+        user_id: current_user.id,
+        team_coaches: team_coaches,
+        current_coach: current_coach_details
+      }
+    end
+
+    def levels
+      @course.levels.map do |level|
+        level_attributes = level.attributes.slice('id', 'name', 'number')
+        teams_in_level = level.startups.active
+        students_in_level = Founder.where(startup: teams_in_level)
+        level_attributes.merge!(students_in_level: students_in_level.count, teams_in_level: teams_in_level.count, unlocked: level.unlocked?)
+      end
+    end
+
+    def course_details
+      { id: @course.id }
     end
   end
 end

@@ -72,16 +72,22 @@ class UpdateTargetMutator < ApplicationQuery
     item['metadata']['choices'].length > 1 && item['metadata']['choices'].all? { |choice| valid_string(choice) }
   end
 
-  def validate_checklist(checklist)
+  def validate_checklist
     checklist.respond_to?(:all?) && checklist.all? do |item|
       valid_string(item['title']) && valid_checklist_kind(item['kind']) && (item['optional'] == !!item['optional']) && valid_metadata(item)
     end && checklist.select { |item| item['kind'] == Target::CHECKLIST_KIND_FILES }.count <= 1
   end
 
+  def required_items_have_unique_titles
+    required_items = checklist.reject { |item| item['optional'] }
+
+    required_items.map { |item| item['title'].strip }.uniq.count == required_items.count
+  end
+
   def checklist_has_valid_data
     return if evaluation_criteria.blank? && checklist.blank?
 
-    return if evaluation_criteria.present? && validate_checklist(checklist)
+    return if evaluation_criteria.present? && validate_checklist && required_items_have_unique_titles
 
     errors[:checklist] << 'not a valid checklist'
   end

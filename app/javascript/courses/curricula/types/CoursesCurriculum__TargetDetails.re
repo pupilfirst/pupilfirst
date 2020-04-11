@@ -96,3 +96,5 @@ let addSubmission = (submission, t) => {
   ...t,
   submissions: [submission, ...t |> submissions],
 };
+
+let clearPendingUserIds = t => {...t, pendingUserIds: []};

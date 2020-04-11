@@ -86,11 +86,13 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_l1.completion_instructions)
     long_answer = Faker::Lorem.sentence
 
-    fill_in target_l1.checklist.first['title'], with: long_answer
+    replace_markdown long_answer
 
     click_button 'Submit'
 
     expect(page).to have_content('Your submission has been queued for review')
+
+    dismiss_notification
 
     # The state of the target should change.
     within('.course-overlay__header-title-card') do
@@ -101,7 +103,7 @@ feature 'Target Overlay', js: true do
     expect(page).to have_content('Review pending')
 
     # The student should be able to undo the submission at this point.
-    expect(page).to have_button('Undo sumission')
+    expect(page).to have_button('Undo submission')
 
     # User should be looking at their submission now.
     expect(page).to have_content('Your Submissions')
@@ -126,7 +128,7 @@ feature 'Target Overlay', js: true do
 
     # User should be able to undo the submission.
     accept_confirm do
-      click_button('Undo sumission')
+      click_button('Undo submission')
     end
 
     # This action should reload the page and return the user to the content of the target.
@@ -166,6 +168,9 @@ feature 'Target Overlay', js: true do
 
       # The target should be marked as passed.
       expect(page).to have_selector('.course-overlay__header-title-card', text: 'Passed')
+
+      # Since this is a team target, other students shouldn't be listed as pending.
+      expect(page).not_to have_content('You have team members who are yet to complete this target')
 
       # Target should have been marked as passed in the database.
       expect(target_l1.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
@@ -446,7 +451,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('Review pending')
 
       # The student should NOT be able to undo the submission at this point.
-      expect(page).not_to have_button('Undo sumission')
+      expect(page).not_to have_button('Undo submission')
     end
   end
 
@@ -491,13 +496,13 @@ feature 'Target Overlay', js: true do
       find("a[title='Ask a question in the #{community_1.name} community'").click
 
       expect(page).to have_text(target_l1.title)
-      expect(page).to have_text("ASK A NEW QUESTION")
+      expect(page).to have_text("Ask a new question")
 
       # Try clearing the linking.
       click_link 'Clear'
 
       expect(page).not_to have_text(target_l1.title)
-      expect(page).to have_text("ASK A NEW QUESTION")
+      expect(page).to have_text("Ask a new question")
 
       # Let's go back to linked state and try creating a linked question.
       visit(new_question_community_path(community_1, target_id: target_l1.id))
@@ -508,7 +513,7 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_text(question_title)
       expect(page).to have_text(question_description)
-      expect(page).not_to have_text("ASK A NEW QUESTION")
+      expect(page).not_to have_text("Ask a new question")
 
       # The question should have been linked to the target.
       expect(Question.where(title: question_title).first.targets.first).to eq(target_l1)
@@ -567,7 +572,8 @@ feature 'Target Overlay', js: true do
 
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
-        fill_in target_l1.checklist.first['title'], with: Faker::Lorem.sentence
+
+        replace_markdown Faker::Lorem.sentence
 
         expect(page).to have_button('Submit', disabled: true)
 

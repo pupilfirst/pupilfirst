@@ -7,16 +7,18 @@ type t =
   | LevelUpBlocked(int)
   | Nothing;
 
-let courseEndedImage: string = [%raw "require('../images/course-ended.svg')"];
-let courseCompleteImage: string = [%raw
-  "require('../images/course-complete.svg')"
-];
-let accessEndedImage: string = [%raw "require('../images/access-ended.svg')"];
-let levelUpImage: string = [%raw "require('../images/level-up.svg')"];
-let previewModeImage: string = [%raw "require('../images/preview-mode.svg')"];
-let levelUpBlockedImage: string = [%raw
-  "require('../images/level-up-blocked.svg')"
-];
+[@bs.module "../images/course-ended.svg"]
+external courseEndedImage: string = "default";
+[@bs.module "../images/course-complete.svg"]
+external courseCompleteImage: string = "default";
+[@bs.module "../images/access-ended.svg"]
+external accessEndedImage: string = "default";
+[@bs.module "../images/level-up.svg"]
+external levelUpImage: string = "default";
+[@bs.module "../images/preview-mode.svg"]
+external previewModeImage: string = "default";
+[@bs.module "../images/level-up-blocked.svg"]
+external levelUpBlockedImage: string = "default";
 
 let icon = t =>
   switch (t) {

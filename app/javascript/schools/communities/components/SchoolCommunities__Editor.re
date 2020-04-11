@@ -4,7 +4,7 @@ open SchoolCommunities__IndexTypes;
 
 module CreateCommunityQuery = [%graphql
   {|
-  mutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
+  mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
     createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds) @bsVariant {
       communityId
       errors
@@ -15,7 +15,7 @@ module CreateCommunityQuery = [%graphql
 
 module UpdateCommunityQuery = [%graphql
   {|
-  mutation($id: ID!, $name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
+  mutation UpdateCommunityMutation($id: ID!, $name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
     updateCommunity(id: $id, name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds) @bsVariant {
       communityId
       errors

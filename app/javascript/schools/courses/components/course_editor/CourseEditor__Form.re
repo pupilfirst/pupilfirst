@@ -49,7 +49,7 @@ let reducer = (state, action) => {
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation($name: String!, $description: String!, $endsAt: Date, $about: String!,$publicSignup: Boolean!,$featured: Boolean!) {
+   mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: Date, $about: String!,$publicSignup: Boolean!,$featured: Boolean!) {
      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about,publicSignup: $publicSignup,featured: $featured) {
        course {
          id
@@ -61,7 +61,7 @@ module CreateCourseQuery = [%graphql
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!) {
+   mutation UpdateCourseMutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!) {
     updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured){
        course {
          id
@@ -72,12 +72,12 @@ module UpdateCourseQuery = [%graphql
 ];
 
 let updateName = (send, name) => {
-  let hasError = name |> String.length < 2;
+  let hasError = name |> String.trim |> String.length < 2;
   send(UpdateName(name, hasError));
 };
 
 let updateDescription = (send, description) => {
-  let lengthOfDescription = description |> String.length;
+  let lengthOfDescription = description |> String.trim |> String.length;
   let hasError = lengthOfDescription < 2 || lengthOfDescription >= 150;
   send(UpdateDescription(description, hasError));
 };

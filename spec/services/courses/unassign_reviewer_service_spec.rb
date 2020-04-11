@@ -30,9 +30,9 @@ describe Courses::UnassignReviewerService do
       let(:startup_l2_2) { create :startup, level: level_2 }
 
       before do
-        create :faculty_startup_enrollment, faculty: faculty, startup: startup_l1
-        create :faculty_startup_enrollment, faculty: faculty, startup: startup_l2_1
-        create :faculty_startup_enrollment, faculty: another_faculty, startup: startup_l2_2
+        create :faculty_startup_enrollment, :with_course_enrollment, faculty: faculty, startup: startup_l1
+        create :faculty_startup_enrollment, :with_course_enrollment, faculty: faculty, startup: startup_l2_1
+        create :faculty_startup_enrollment, :with_course_enrollment, faculty: another_faculty, startup: startup_l2_2
       end
 
       it 'removes faculty enrollment from all teams in the course' do

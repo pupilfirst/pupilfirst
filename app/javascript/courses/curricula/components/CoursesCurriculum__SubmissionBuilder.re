@@ -63,7 +63,7 @@ let isBusy = formState =>
 
 module CreateSubmissionQuery = [%graphql
   {|
-  mutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
+  mutation CreateSubmissionMutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
     createSubmission(targetId: $targetId, checklist: $checklist, fileIds: $fileIds) {
       submission {
         id
@@ -114,8 +114,7 @@ let submit = (state, send, target, addSubmissionCB, event) => {
              ~status=Submission.Pending,
              ~checklist=submissionChecklist,
            );
-         let newFiles = submission##id;
-         addSubmissionCB(newSubmission, newFiles);
+         addSubmissionCB(newSubmission);
        | None =>
          /* Enable the form again in case of a validation failure. */
          send(SetReady)

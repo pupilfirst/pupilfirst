@@ -375,7 +375,7 @@ feature "Student's view of Course Curriculum", js: true do
 
     before do
       # Enroll the student as a coach who can review her own submissions.
-      create :faculty_startup_enrollment, faculty: coach, startup: team
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team
     end
 
     scenario 'coach accesses content in locked levels' do

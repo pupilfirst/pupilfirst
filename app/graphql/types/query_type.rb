@@ -11,9 +11,12 @@ module Types
       argument :target_id, ID, required: true
     end
 
-    field :reviewed_submissions, Types::ReviewedSubmissionType.connection_type, null: false do
+    field :submissions, Types::SubmissionType.connection_type, null: false do
       argument :course_id, ID, required: true
+      argument :status, Types::SubmissionStatusType, required: true
+      argument :sort_direction, Types::SortDirectionType, required: true
       argument :level_id, ID, required: false
+      argument :coach_id, ID, required: false
     end
 
     field :submission_details, Types::SubmissionDetailsType, null: false do
@@ -23,6 +26,7 @@ module Types
     field :teams, Types::TeamType.connection_type, null: false do
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false
+      argument :coach_id, ID, required: false
       argument :search, String, required: false
     end
 
@@ -50,6 +54,16 @@ module Types
       argument :target_id, ID, required: true
     end
 
+    field :coach_stats, Types::CoachStatsType, null: false do
+      argument :coach_id, ID, required: true
+      argument :course_id, ID, required: true
+    end
+
+    field :similar_questions, [Types::QuestionType], null: false do
+      argument :community_id, ID, required: true
+      argument :title, String, required: true
+    end
+
     def courses
       resolver = CoursesResolver.new(context)
       resolver.courses
@@ -70,9 +84,9 @@ module Types
       resolver.versions
     end
 
-    def reviewed_submissions(args)
-      resolver = ReviewedSubmissionsResolver.new(context, args)
-      resolver.reviewed_submissions
+    def submissions(args)
+      resolver = SubmissionsResolver.new(context, args)
+      resolver.submissions
     end
 
     def submission_details(args)
@@ -103,6 +117,16 @@ module Types
     def target_details(args)
       resolver = TargetDetailsResolver.new(context, args)
       resolver.target_details
+    end
+
+    def coach_stats(args)
+      resolver = CoachStatsResolver.new(context, args)
+      resolver.coach_stats
+    end
+
+    def similar_questions(args)
+      resolver = SimilarQuestionsResolver.new(context, args)
+      resolver.similar_questions
     end
   end
 end

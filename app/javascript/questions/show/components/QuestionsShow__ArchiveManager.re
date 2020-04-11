@@ -2,7 +2,7 @@ let str = React.string;
 
 module ArchiveQuery = [%graphql
   {|
-   mutation($id: ID!, $resourceType: String!) {
+   mutation ArchiveCommunityResourceMutation($id: ID!, $resourceType: String!) {
     archiveCommunityResource(id: $id, resourceType: $resourceType){
        success
      }
@@ -47,7 +47,7 @@ let make = (~id, ~resourceType, ~archiveCB) => {
   <a
     title={"Archive " ++ resourceType}
     onClick={archive(id, resourceType, archiveCB, setSaving)}
-    className="flex items-center justify-center whitespace-no-wrap text-xs font-semibold py-1 px-3 flex-shrink-0 bg-transparent text-red-700 hover:bg-red-100 hover:text-red-900 cursor-pointer">
+    className="flex items-center justify-center whitespace-no-wrap text-xs font-semibold py-1 px-3 flex-shrink-0 bg-transparent text-gray-700 hover:bg-red-100 hover:text-red-700 cursor-pointer">
     {saving
        ? <FaIcon classes="fas fa-spinner fa-spin" />
        : <FaIcon classes="fas fa-trash-alt" />}

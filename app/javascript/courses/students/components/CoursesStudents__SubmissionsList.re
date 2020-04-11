@@ -1,7 +1,7 @@
 [%bs.raw {|require("./CoursesStudents__StudentOverlay.css")|}];
-let reviewedEmptyImage: string = [%raw
-  "require('../../shared/images/reviewed-empty.svg')"
-];
+
+[@bs.module "../../shared/images/reviewed-empty.svg"]
+external reviewedEmptyImage: string = "default";
 
 open CoursesStudents__Types;
 
@@ -11,7 +11,7 @@ let str = React.string;
 
 module StudentSubmissionsQuery = [%graphql
   {|
-   query($studentId: ID!, $after: String) {
+   query StudentSubmissionsQuery($studentId: ID!, $after: String) {
     studentSubmissions(studentId: $studentId, after: $after, first: 20 ) {
        nodes {
          id
@@ -195,7 +195,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
                 ~element=SkeletonLoading.card(),
               )
             : <button
-                className="btn btn-primary-ghost cursor-pointer w-full mt-8"
+                className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                 onClick={_ =>
                   getStudentSubmissions(
                     studentId,

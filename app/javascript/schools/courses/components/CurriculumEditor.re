@@ -85,16 +85,52 @@ let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
   );
 };
 
-let computeIntialState = ((levels, targetGroups, targets)) => {
-  selectedLevel:
+let levelOfTarget = (targetId, targets, levels, targetGroups) => {
+  let target =
+    targets
+    |> ListUtils.unsafeFind(
+         target => Target.id(target) == targetId,
+         "Unable to find target with ID:" ++ targetId ++ " in CurriculumEditor",
+       );
+  let targetGroup =
+    targetGroups
+    |> ListUtils.unsafeFind(
+         tg => TargetGroup.id(tg) == Target.targetGroupId(target),
+         "Unable to find target group with ID:"
+         ++ Target.targetGroupId(target)
+         ++ " in CurriculumEditor",
+       );
+  levels
+  |> ListUtils.unsafeFind(
+       level => Level.id(level) == TargetGroup.levelId(targetGroup),
+       "Unable to find level with ID:"
+       ++ TargetGroup.levelId(targetGroup)
+       ++ " in CurriculumEditor",
+     );
+};
+
+let computeIntialState = ((levels, targetGroups, targets, path)) => {
+  let maxLevel =
     levels
     |> List.sort((l1, l2) => (l2 |> Level.number) - (l1 |> Level.number))
-    |> List.hd,
-  editorAction: Hidden,
-  targetGroups,
-  levels,
-  targets,
-  showArchived: false,
+    |> List.hd;
+
+  let selectedLevel =
+    switch (path) {
+    | ["school", "courses", _courseId, "curriculum"] => maxLevel
+    | ["school", "courses", _courseId, "targets", targetId, ..._] =>
+      levelOfTarget(targetId, targets, levels, targetGroups)
+    | _ => maxLevel
+    };
+
+  {
+    selectedLevel,
+    editorAction: Hidden,
+    targetGroups,
+    levels,
+    targets,
+    showArchived: false,
+  };
 };
 
 [@react.component]
@@ -107,10 +143,11 @@ let make =
       ~targets,
       ~authenticityToken,
     ) => {
+  let path = ReasonReactRouter.useUrl().path;
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      (levels, targetGroups, targets),
+      (levels, targetGroups, targets, path),
       computeIntialState,
     );
 

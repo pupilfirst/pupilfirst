@@ -9,12 +9,17 @@ describe TimelineEvents::CreateService do
   let(:target) { create :target, role: Target::ROLE_STUDENT, target_group: target_group }
   let(:links) { [Faker::Internet.url, Faker::Internet.url] }
   let(:description) { Faker::Lorem.sentence }
+  let(:checklist) do
+    [
+      { 'title' => "File", 'result' => "", 'kind' => "files", 'status' => "noAnswer" },
+      { 'title' => "Description", 'result' => description, 'kind' => "longText", 'status' => "noAnswer" }
+    ]
+  end
 
   let(:params) do
     {
       target: target,
-      description: description,
-      links: links
+      checklist: checklist
     }
   end
 
@@ -25,8 +30,8 @@ describe TimelineEvents::CreateService do
       last_submission = TimelineEvent.last
 
       expect(last_submission.target).to eq(target)
-      expect(last_submission.description).to eq(description)
       expect(last_submission.founders.pluck(:id)).to eq([student.id])
+      expect(last_submission.checklist).to eq(checklist)
       expect(last_submission.latest).to eq(true)
     end
 
@@ -39,7 +44,6 @@ describe TimelineEvents::CreateService do
 
         last_submission = TimelineEvent.last
 
-        expect(last_submission.description).to eq(description)
         expect(last_submission.founders.count).to eq(3)
         expect(last_submission.founders.pluck(:id)).to match_array(student.startup.founders.pluck(:id))
       end

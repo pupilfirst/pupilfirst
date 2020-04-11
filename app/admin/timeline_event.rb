@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   actions :index, :show
-  permit_params :description, :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file _destroy]
+  permit_params :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file _destroy]
 
   filter :founders_user_name, as: :string
   filter :evaluated
@@ -61,10 +61,6 @@ ActiveAdmin.register TimelineEvent do
       end
 
       row('Founder') { timeline_event.founder }
-      row :description do
-        simple_format(timeline_event.description)
-      end
-
       row :evaluated
 
       row('Linked Target') do

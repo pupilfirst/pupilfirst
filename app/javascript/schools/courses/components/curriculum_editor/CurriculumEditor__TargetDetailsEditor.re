@@ -1,14 +1,11 @@
 open CurriculumEditor__Types;
 
-let markIcon: string = [%raw
-  "require('./images/target-complete-mark-icon.svg')"
-];
-let linkIcon: string = [%raw
-  "require('./images/target-complete-link-icon.svg')"
-];
-let quizIcon: string = [%raw
-  "require('./images/target-complete-quiz-icon.svg')"
-];
+[@bs.module "./images/target-complete-mark-icon.svg"]
+external markIcon: string = "default";
+[@bs.module "./images/target-complete-link-icon.svg"]
+external linkIcon: string = "default";
+[@bs.module "./images/target-complete-quiz-icon.svg"]
+external quizIcon: string = "default";
 
 let str = React.string;
 
@@ -65,7 +62,7 @@ type action =
 
 module TargetDetailsQuery = [%graphql
   {|
-    query($targetId: ID!) {
+    query TargetDetailsQuery($targetId: ID!) {
       targetDetails(targetId: $targetId) {
         title
         targetGroupId
@@ -307,8 +304,6 @@ module SelectablePrerequisiteTargets = {
 
   let value = t => t |> Target.title;
   let searchString = value;
-
-  let make = (target): t => target;
 };
 
 module MultiSelectForPrerequisiteTargets =
@@ -319,14 +314,12 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
     eligiblePrerequisiteTargets
     |> Js.Array.filter(target =>
          state.prerequisiteTargets |> Array.mem(Target.id(target))
-       )
-    |> Array.map(target => SelectablePrerequisiteTargets.make(target));
+       );
   let unselected =
     eligiblePrerequisiteTargets
     |> Js.Array.filter(target =>
          !(state.prerequisiteTargets |> Array.mem(Target.id(target)))
-       )
-    |> Array.map(target => SelectablePrerequisiteTargets.make(target));
+       );
   eligiblePrerequisiteTargets |> ArrayUtils.isNotEmpty
     ? <div className="mb-6">
         <label
@@ -637,24 +630,48 @@ let quizEditor = (state, send) => {
   </div>;
 };
 
-let saveDisabled = state => {
-  let hasValidTitle = state.title |> String.trim |> String.length > 1;
-  let hasValidMethodOfCompletion =
-    switch (state.methodOfCompletion) {
-    | TakeQuiz => isValidQuiz(state.quiz)
-    | MarkAsComplete => true
-    | Evaluated =>
-      state.evaluationCriteria
-      |> ArrayUtils.isNotEmpty
-      && isValidChecklist(state.checklist)
-    | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
-    };
-  !hasValidTitle || !hasValidMethodOfCompletion || !state.dirty || state.saving;
+let doRequiredStepsHaveUniqueTitles = checklist => {
+  let requiredSteps =
+    checklist |> Js.Array.filter(item => !(item |> ChecklistItem.optional));
+
+  requiredSteps
+  |> Array.map(ChecklistItem.title)
+  |> Array.map(String.trim)
+  |> ArrayUtils.distinct
+  |> Array.length == Array.length(requiredSteps);
+};
+
+let isValidTitle = title => title |> String.trim |> String.length > 0;
+
+let isValidMethodOfCompletion = state =>
+  switch (state.methodOfCompletion) {
+  | TakeQuiz => isValidQuiz(state.quiz)
+  | MarkAsComplete => true
+  | Evaluated =>
+    state.evaluationCriteria
+    |> ArrayUtils.isNotEmpty
+    && isValidChecklist(state.checklist)
+  | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
+  };
+
+let saveDisabled =
+    (
+      ~hasValidTitle,
+      ~hasValidMethodOfCompletion,
+      ~requiredStepsHaveUniqueTitles,
+      ~dirty,
+      ~saving,
+    ) => {
+  !requiredStepsHaveUniqueTitles
+  || !hasValidTitle
+  || !hasValidMethodOfCompletion
+  || !dirty
+  || saving;
 };
 
 module UpdateTargetQuery = [%graphql
   {|
-   mutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
+   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
         success
        }
@@ -731,7 +748,6 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   ();
 };
 
-
 [@react.component]
 let make =
     (
@@ -781,6 +797,11 @@ let make =
     [|state.dirty|],
   );
 
+  let requiredStepsHaveUniqueTitles =
+    doRequiredStepsHaveUniqueTitles(state.checklist);
+  let hasValidTitle = isValidTitle(state.title);
+  let hasValidMethodOfCompletion = isValidMethodOfCompletion(state);
+
   <div className="pt-6" id="target-properties">
     {state.loading
        ? <div className="max-w-3xl mx-auto px-3">
@@ -812,7 +833,7 @@ let make =
                    />
                    <School__InputGroupError
                      message="Enter a valid title"
-                     active={state.title |> String.length < 1}
+                     active={!hasValidTitle}
                    />
                  </div>
                </div>
@@ -857,7 +878,7 @@ let make =
                 | Evaluated =>
                   <div className="mb-6">
                     <label
-                      className="block tracking-wide text-sm font-semibold mr-6"
+                      className="tracking-wide text-sm font-semibold"
                       htmlFor="target_checklist">
                       <span className="mr-2">
                         <i className="fas fa-list text-base" />
@@ -865,6 +886,12 @@ let make =
                       {"What steps should the student take to complete this target?"
                        |> str}
                     </label>
+                    <HelpIcon
+                      className="ml-1"
+                      link="https://docs.pupilfirst.com/#/curriculum_editor?id=defining-steps-to-complete-a-target">
+                      {"These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review."
+                       |> str}
+                    </HelpIcon>
                     <div className="ml-6 mb-6">
                       {let allowFileKind =
                          state.checklist
@@ -889,6 +916,7 @@ let make =
                                 : None;
 
                             <CurriculumEditor__TargetChecklistItemEditor
+                              checklist={state.checklist}
                               key={index |> string_of_int}
                               checklistItem
                               index
@@ -1083,7 +1111,13 @@ let make =
                  <div className="w-auto">
                    <button
                      key="target-actions-step"
-                     disabled={saveDisabled(state)}
+                     disabled={saveDisabled(
+                       ~hasValidTitle,
+                       ~hasValidMethodOfCompletion,
+                       ~requiredStepsHaveUniqueTitles,
+                       ~dirty=state.dirty,
+                       ~saving=state.saving,
+                     )}
                      onClick={updateTarget(
                        target,
                        state,

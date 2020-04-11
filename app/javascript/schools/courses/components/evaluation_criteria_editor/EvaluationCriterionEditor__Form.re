@@ -13,7 +13,7 @@ type state = {
 
 module CreateEvaluationCriterionQuery = [%graphql
   {|
-   mutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+   mutation CreateEvaluationCriterionMutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
      createEvaluationCriterion(courseId: $courseId, name: $name, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
        evaluationCriterion {
         id
@@ -32,7 +32,7 @@ module CreateEvaluationCriterionQuery = [%graphql
 
 module UpdateEvaluationCriterionQuery = [%graphql
   {|
-   mutation($id: ID!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+   mutation UpdateEvaluationCriterionMutation($id: ID!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
     updateEvaluationCriterion(id: $id, name: $name, gradesAndLabels: $gradesAndLabels){
        evaluationCriterion {
         id
@@ -156,7 +156,7 @@ let updateName = (setState, value) => {
 };
 
 let saveDisabled = state => {
-  let hasValidName = String.length(state.name) > 1;
+  let hasValidName = state.name |> String.trim |> String.length > 0;
   !state.dirty || state.saving || !hasValidName;
 };
 
@@ -268,7 +268,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             />
             <School__InputGroupError
               message="Enter a valid name"
-              active={state.dirty && state.name |> String.length < 1}
+              active={state.dirty && state.name |> String.trim |> String.length < 1}
             />
           </div>
         </div>

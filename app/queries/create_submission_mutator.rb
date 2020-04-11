@@ -30,7 +30,7 @@ class CreateSubmissionMutator < ApplicationQuery
 
     return if submittable && (submission_required || submitted_but_resubmittable)
 
-    errors[:base] << "NotSubmittable(#{target_status})"
+    errors[:base] << "The status of this target is '#{target_status}', so you cannot add a new submission; please reload the page"
   end
 
   def create_submission
@@ -72,16 +72,15 @@ class CreateSubmissionMutator < ApplicationQuery
       when Target::CHECKLIST_KIND_LINK
         result.length >= 3 && result.length <= 2048
       when Target::CHECKLIST_KIND_LONG_TEXT
-        result.length >= 1
+        result.length >= 1 && result.length <= 10_000
       when Target::CHECKLIST_KIND_MULTI_CHOICE
-        result.length >= 1
+        result.length >= 1 && result.length <= 500
       when Target::CHECKLIST_KIND_SHORT_TEXT
-        result.length >= 1
+        result.length >= 1 && result.length <= 500
       else
         false
     end
   end
-
   # rubocop: enable Metrics/CyclomaticComplexity
 
   def attempted_minimum_questions

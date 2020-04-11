@@ -135,13 +135,11 @@ class Faculty < ApplicationRecord
   end
 
   def reviewable_startups(course)
-    course.in?(courses) ? course.startups.admitted : course.startups.admitted.merge(startups)
+    course.startups.admitted
   end
 
   def reviewable_courses
-    startup_levels = Level.where(id: startups.select(:level_id))
-    startup_courses = Course.where(id: startup_levels.select(:course_id))
-    Course.where(id: courses).or(Course.where(id: startup_courses))
+    Course.where(id: courses)
   end
 
   def connect_link?

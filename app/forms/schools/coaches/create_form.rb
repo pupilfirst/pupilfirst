@@ -6,7 +6,6 @@ module Schools
       property :title, validates: { presence: true, length: { maximum: 250 } }, virtual: true
       property :linkedin_url, virtual: true
       property :connect_link
-      property :notify_for_submission
       property :public
       property :image, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes }, allow_blank: true }
       property :school_id, virtual: true, validates: { presence: true }
@@ -34,7 +33,6 @@ module Schools
           connect_link: connect_link,
           public: public,
           image: image,
-          notify_for_submission: notify_for_submission,
           affiliation: affiliation
         }
       end

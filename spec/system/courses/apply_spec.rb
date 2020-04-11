@@ -18,6 +18,8 @@ feature "Apply for public courses", js: true do
   let(:startup) { create :startup, level: level_one }
   let(:token) { Faker::Crypto.md5 }
   let(:saved_tag) { Faker::Lorem.word }
+  let(:bounced_email) { Faker::Internet.email }
+  let!(:bounce_report) { create :bounce_report, email: bounced_email }
 
   before do
     school.founder_tag_list.add(saved_tag)
@@ -150,6 +152,18 @@ feature "Apply for public courses", js: true do
 
     expect(page).to have_text("Sign in")
     expect(page).to have_text('That one-time link has expired, or is invalid')
+  end
+
+  scenario 'applicant with bounced email attempts enrollment in a public course' do
+    visit apply_course_path(public_course)
+
+    expect(page).to have_content(public_course.name)
+
+    fill_in 'Email', with: bounced_email
+    fill_in 'Name', with: name_2
+    click_button 'Apply'
+
+    expect(page).to have_text("The email address you supplied cannot be used because an email we'd sent earlier bounced")
   end
 
   context 'when school has privacy policy' do

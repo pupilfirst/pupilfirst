@@ -38,10 +38,5 @@ feature 'Founder Show' do
     expect(page).to have_text(course.name)
     # ensure level name displayed is correct
     expect(page).to have_text(level_1.name)
-
-    # All events should be visible.
-    expect(page).to have_text(timeline_event_1.description)
-    expect(page).to have_text(timeline_event_2.description)
-    expect(page).to have_text(timeline_event_3.description)
   end
 end

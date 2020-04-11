@@ -22,7 +22,7 @@ let reducer = (_state, action) =>
 
 module CreateTargetVersionMutation = [%graphql
   {|
-   mutation($targetVersionId: ID!) {
+   mutation CreateTargetVersionMutation($targetVersionId: ID!) {
     createTargetVersion(targetVersionId: $targetVersionId) {
        success
      }

@@ -4,12 +4,14 @@ feature 'Submissions show' do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
+  include SubmissionsHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_founders, target_group: target_group }
+  let(:target_2) { create :target, :for_founders, target_group: target_group }
   let(:auto_verify_target) { create :target, :for_founders, target_group: target_group }
   let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
   let(:evaluation_criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
@@ -17,23 +19,28 @@ feature 'Submissions show' do
 
   let(:team) { create :startup, level: level }
   let(:coach) { create :faculty, school: school }
-  let(:team_coach) { create :faculty, school: school }
+  let(:team_coach_user) { create :user, name: 'John Doe' }
+  let(:team_coach) { create :faculty, school: school, user: team_coach_user }
   let(:school_admin) { create :school_admin }
 
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
-    create :faculty_startup_enrollment, faculty: team_coach, startup: team
+    create :faculty_course_enrollment, faculty: team_coach, course: course
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
+    target_2.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
   end
 
   context 'with a pending submission' do
     let(:submission_pending) { create(:timeline_event, latest: true, target: target) }
+    let(:submission_pending_2) { create(:timeline_event, latest: true, target: target_2) }
     let(:student) { team.founders.first }
 
     before do
       submission_pending.founders << student
+      submission_pending_2.founders << student
     end
 
     scenario 'coach visits submission show', js: true do
@@ -43,8 +50,13 @@ feature 'Submissions show' do
         expect(page).to have_content('Level 1')
         expect(page).to have_content("Submitted by #{student.name}")
         expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
-        expect(page).to have_link("View Target", href: "/targets/#{target.id}")
+        expect(page).to have_link(target.title, href: "/targets/#{target.id}")
         expect(page).to have_content(target.title)
+        expect(page).to have_text 'Assigned Coaches'
+
+        # Hovering over the avatar should reveal the name of the assigned coach.
+        page.find('svg', text: 'JD').hover
+        expect(page).to have_text('John Doe')
       end
 
       expect(page).to have_content('Add Your Feedback')
@@ -55,11 +67,16 @@ feature 'Submissions show' do
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_course_path(course)
 
+      expect(page).to have_content(target.title)
+      expect(page).to have_content(target_2.title)
+
+      find("a[aria-label='Submission #{submission_pending.id}']").click
+
+      expect(page).to have_content('Grade Card')
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
-      expect(page).to have_content('Grade Card')
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         expect(page).to have_selector('.course-review-grade-card__grade-pill', count: 4)
         find("div[title='Bad']").click
@@ -100,7 +117,13 @@ feature 'Submissions show' do
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback.strip)
-      expect(submission.timeline_event_grades.pluck(:grade)).to eq([1, 2])
+      expect(submission.timeline_event_grades.pluck(:grade)).to contain_exactly(1, 2)
+
+      # the submission must be removed from the pending list
+
+      find("div[aria-label='submissions-overlay-close']").click
+      expect(page).to have_text(submission_pending_2.target.title)
+      expect(page).to_not have_text(submission.target.title)
     end
 
     scenario 'coach generates feedback from review checklist', js: true do
@@ -352,7 +375,7 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
 
       click_button 'Write a Note'
-      fill_in 'Write a Note', with: note
+      add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         find("div[title='Good']").click
@@ -378,7 +401,7 @@ feature 'Submissions show' do
       sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
 
       click_button 'Write a Note'
-      fill_in 'Write a Note', with: note
+      add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         find("div[title='Good']").click
@@ -394,6 +417,54 @@ feature 'Submissions show' do
 
       expect(new_notes.count).to eq(2)
       expect(new_notes.pluck(:student_id)).to contain_exactly(student.id, another_student.id)
+    end
+
+    scenario 'coach opens the overlay for a submission after its status has changed in the DB', js: true do
+      # Opening the overlay should reload data on index if it's different.
+      sign_in_user coach.user, referer: review_course_path(course)
+
+      expect(page).to have_text(target.title)
+      expect(page).to have_text(target_2.title)
+
+      # Review the submission from the backend.
+      submission_pending.update(passed_at: Time.zone.now, evaluated_at: Time.zone.now, evaluator: coach)
+      grade_submission(submission_pending, SubmissionsHelper::GRADE_PASS, target)
+
+      # Open the overlay.
+      find("a[aria-label='Submission #{submission_pending.id}']").click
+
+      # It should show passed.
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Passed')
+      end
+
+      find("div[aria-label='submissions-overlay-close']").click
+
+      # Closing the overlay should show that the item has been removed from the pending list.
+      expect(page).not_to have_text(target.title)
+      expect(page).to have_text(target_2.title) # The second submission should still be there.
+
+      # The submission should be visible in the Pending list.
+      click_button 'Reviewed'
+
+      # The submission should show up in the Reviewed list.
+      expect(page).to have_text(target.title)
+
+      # Undo the grading of the submission from the backend.
+      submission_pending.timeline_event_grades.destroy_all
+      submission_pending.update(passed_at: nil, evaluated_at: nil, evaluator: nil)
+
+      find("a[aria-label='Submission #{submission_pending.id}']").click
+
+      # The overlay should show pending review status.
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text('Not Reviewed')
+      end
+
+      find("div[aria-label='submissions-overlay-close']").click
+
+      # Closing the overlay should show that the item has been removed from the reviewed list.
+      expect(page).not_to have_text(target.title)
     end
   end
 
@@ -417,8 +488,7 @@ feature 'Submissions show' do
           expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
         end
 
-        expect(page).to have_link("View Target", href: "/targets/#{target.id}")
-        expect(page).to have_content(target.title)
+        expect(page).to have_link(target.title, href: "/targets/#{target.id}")
       end
 
       expect(page).to have_content('Submission #1')

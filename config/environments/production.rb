@@ -128,4 +128,7 @@ Rails.application.configure do
       resource '/assets/**/*', methods: :get, headers: :any
     end
   end
+
+  # Add the GraphQL probe for Skylight.
+  config.skylight.probes << "graphql"
 end

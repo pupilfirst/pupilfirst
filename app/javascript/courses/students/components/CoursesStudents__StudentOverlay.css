@@ -26,6 +26,11 @@
 }
 
 :not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current.student-overlay__student-level--completed:after {
+  @apply bg-green-400;
+}
+
+:not(.student-overlay__student-level-progress--completed)
   > .student-overlay__student-level--current:before {
   position: absolute;
   content: "";
@@ -36,6 +41,11 @@
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%23d69e2e'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: -2px bottom;
+}
+
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current.student-overlay__student-level--completed:before {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
 }
 
 .student-overlay__student-level--completed {

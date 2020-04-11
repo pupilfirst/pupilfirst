@@ -25,6 +25,7 @@
   "refmt": 3,
   "ppx-flags": ["@baransu/graphql_ppx_re/ppx6"],
   "warnings": {
+    "number": "-48",
     "error": "+8"
   }
 }

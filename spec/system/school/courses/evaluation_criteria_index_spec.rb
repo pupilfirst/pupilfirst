@@ -10,6 +10,8 @@ feature 'Evaluation criteria index spec', js: true do
 
   let!(:school_admin) { create :school_admin, school: school }
 
+  let(:author) { create :course_author, course: course }
+
   let!(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
   let!(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
@@ -122,6 +124,37 @@ feature 'Evaluation criteria index spec', js: true do
 
     click_button 'Create Criterion'
     expect(page).to have_text("Criterion already exists with same name, max grade and pass grade")
+  end
+
+  scenario 'course author creates and edits a criterion' do
+    sign_in_user author.user, referer: evaluation_criteria_school_course_path(course)
+    find('h5', text: 'Add New Evaluation Criterion').click
+    fill_in 'Name', with: new_ec_name
+    click_button 'Create Criterion'
+
+    expect(page).to have_text("Evaluation criterion created successfully")
+
+    dismiss_notification
+    evaluation_criterion = course.evaluation_criteria.last
+
+    expect(evaluation_criterion.name).to eq(new_ec_name)
+
+    find("a[title='Edit #{evaluation_criterion.name}']").click
+    another_name = Faker::Lorem.words(number: 2).join(" ")
+    fill_in 'Name', with: another_name
+    click_button 'Update Criterion'
+
+    expect(page).to have_text("Evaluation criterion updated successfully")
+
+    dismiss_notification
+
+    expect(evaluation_criterion.reload.name).to eq(another_name)
+  end
+
+  scenario 'user who is an author in another course will see a 404' do
+    author_in_another_course = create :course_author
+    sign_in_user author_in_another_course.user, referer: evaluation_criteria_school_course_path(course)
+    expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

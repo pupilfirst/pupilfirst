@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_21_075009) do
+ActiveRecord::Schema.define(version: 2020_04_06_131136) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -116,7 +117,16 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_applicants_on_course_id"
+    t.index ["email", "course_id"], name: "index_applicants_on_email_and_course_id", unique: true
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+  end
+
+  create_table "bounce_reports", force: :cascade do |t|
+    t.citext "email", null: false
+    t.string "bounce_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_bounce_reports_on_email", unique: true
   end
 
   create_table "coach_notes", force: :cascade do |t|
@@ -231,6 +241,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.datetime "updated_at", null: false
     t.boolean "reviewed_only", default: false
     t.text "json_data"
+    t.string "export_type"
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end
@@ -303,13 +314,11 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.string "slack_username"
     t.string "slack_user_id"
     t.bigint "user_id"
-    t.bigint "school_id"
     t.boolean "public", default: false
     t.string "connect_link"
     t.boolean "notify_for_submission", default: false
     t.boolean "exited", default: false
     t.index ["category"], name: "index_faculty_on_category"
-    t.index ["school_id", "user_id"], name: "index_faculty_on_school_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
 
@@ -379,7 +388,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.date "unlock_on"
     t.bigint "course_id"
     t.index ["course_id"], name: "index_levels_on_course_id"
-    t.index ["number"], name: "index_levels_on_number"
+    t.index ["number", "course_id"], name: "index_levels_on_number_and_course_id", unique: true
   end
 
   create_table "markdown_attachments", force: :cascade do |t|
@@ -718,9 +727,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
   end
 
   create_table "timeline_events", id: :serial, force: :cascade do |t|
-    t.text "description"
     t.string "image"
-    t.text "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "improved_timeline_event_id"
@@ -763,8 +770,6 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.string "encrypted_password", default: "", null: false
     t.string "remember_token"
     t.boolean "sign_out_at_next_request"
-    t.datetime "email_bounced_at"
-    t.string "email_bounce_type"
     t.datetime "confirmed_at"
     t.datetime "login_mail_sent_at"
     t.string "name"
@@ -790,6 +795,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
     t.string "affiliation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
@@ -840,7 +846,6 @@ ActiveRecord::Schema.define(version: 2020_02_21_075009) do
   add_foreign_key "course_exports", "users"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
-  add_foreign_key "faculty", "schools"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "faculty"

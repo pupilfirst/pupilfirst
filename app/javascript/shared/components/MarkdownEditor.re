@@ -103,7 +103,7 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
 let containerClasses = mode =>
   switch (mode) {
-  | Windowed(_) => "relative"
+  | Windowed(_) => "relative bg-white"
   | Fullscreen(_) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col"
   };
 

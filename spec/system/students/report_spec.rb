@@ -49,7 +49,7 @@ feature "Course students report", js: true do
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
-    create :faculty_startup_enrollment, faculty: team_coach, startup: team
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team
 
     target_l1.evaluation_criteria << evaluation_criterion_1
     target_l2.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
@@ -129,7 +129,7 @@ feature "Course students report", js: true do
   scenario 'coach loads more submissions' do
     # Create over 20 reviewed submissions
     20.times do
-      submission = TimelineEvent.create!(description: Faker::Lorem.sentence, latest: true, target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
+      submission = TimelineEvent.create!(latest: true, target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
       submission.founders << student
       submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     end
@@ -254,7 +254,7 @@ feature "Course students report", js: true do
     let(:team_coach_2) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment, faculty: team_coach_2, startup: team
+      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_2, startup: team
     end
 
     scenario 'coach checks list of directly assigned team coaches' do

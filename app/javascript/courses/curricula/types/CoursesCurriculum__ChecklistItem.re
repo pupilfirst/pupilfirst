@@ -97,7 +97,7 @@ let validShortText = s => {
 };
 
 let validLongText = s => {
-  validString(s, 1000);
+  validString(s, 5000);
 };
 
 let validFiles = files => {

@@ -1,5 +1,5 @@
 class ApplicantMailer < SchoolMailer
-  def send_login_token(applicant)
+  def enrollment_verification(applicant)
     @applicant = applicant
     @school = applicant.course.school
 

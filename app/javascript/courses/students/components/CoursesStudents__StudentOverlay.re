@@ -28,7 +28,7 @@ let closeOverlay = courseId =>
 
 module StudentDetailsQuery = [%graphql
   {|
-    query($studentId: ID!) {
+    query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         email, phone, socialLinks,
         evaluationCriteria {
@@ -39,10 +39,10 @@ module StudentDetailsQuery = [%graphql
           note
           createdAt
           author {
+            id
             name
             title
             avatarUrl
-            userId
           }
         },
         team {
@@ -299,19 +299,24 @@ let setSelectedTab = (selectedTab, setState) => {
 };
 
 let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
-  let classes =
+  let reached =
     levelNumber <= currentLevelNumber
       ? "student-overlay__student-level--reached" : "";
-  let classes =
+
+  let current =
     levelNumber == currentLevelNumber
-      ? classes ++ " student-overlay__student-level--current" : classes;
-  levelCompleted
-    ? classes ++ " student-overlay__student-level--completed" : classes;
+      ? " student-overlay__student-level--current" : "";
+
+  let completed =
+    levelCompleted ? " student-overlay__student-level--completed" : "";
+
+  reached ++ current ++ completed;
 };
 
 let levelProgressBar = (levelId, levels, levelsCompleted) => {
   let applicableLevels =
     levels |> Js.Array.filter(level => Level.number(level) != 0);
+
   let courseCompleted =
     applicableLevels
     |> Array.for_all(level => levelsCompleted |> Array.mem(level |> Level.id));
@@ -323,6 +328,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
          "Unable to find level with id" ++ levelId ++ "in StudentOverlay",
        )
     |> Level.number;
+
   <div className="mb-8">
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
@@ -371,6 +377,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
     </div>
   </div>;
 };
+
 let addNoteCB = (setState, studentDetails, note) => {
   setState(state =>
     {
@@ -391,7 +398,7 @@ let removeNoteCB = (setState, studentDetails, noteId) => {
 
 let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
-    {CoursesStudents__TeamsList.avatar(avatarUrl, name)}
+    {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {title |> str} </div>
@@ -400,8 +407,7 @@ let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
 
 let coachInfo = (teamCoaches, studentDetails) => {
   let coaches =
-    teamCoaches
-    |> TeamCoach.coachesForTeam(studentDetails |> StudentDetails.team);
+    studentDetails |> StudentDetails.team |> TeamInfo.coaches(teamCoaches);
 
   let title =
     studentDetails |> StudentDetails.teamHasManyStudents
@@ -413,10 +419,10 @@ let coachInfo = (teamCoaches, studentDetails) => {
         {coaches
          |> Array.map(coach =>
               userInfo(
-                ~key=coach |> TeamCoach.userId,
-                ~avatarUrl=coach |> TeamCoach.avatarUrl,
-                ~name=coach |> TeamCoach.name,
-                ~title=coach |> TeamCoach.title,
+                ~key=coach |> Coach.userId,
+                ~avatarUrl=coach |> Coach.avatarUrl,
+                ~name=coach |> Coach.name,
+                ~title=coach |> Coach.title,
               )
             )
          |> React.array}

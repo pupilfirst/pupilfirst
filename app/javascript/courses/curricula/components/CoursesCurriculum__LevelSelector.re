@@ -1,15 +1,13 @@
-[%bs.raw {|require("./CoursesCurriculum__LevelSelector.css")|}];
-
 open CoursesCurriculum__Types;
 
 let str = React.string;
 
-let levelSelectorClasses = isSelected => {
+let levelZeroSelectorClasses = isSelected => {
   let defaultClasses = "w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold ";
   defaultClasses
   ++ (
     isSelected
-      ? "course-level-tab__selected bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500"
+      ? "bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500"
       : ""
   );
 };
@@ -19,28 +17,6 @@ let levelName = level =>
   ++ (level |> Level.number |> string_of_int)
   ++ ": "
   ++ (level |> Level.name);
-
-let numberedLevelSelector = (selectedLevel, setShowLevelZero) => {
-  let defaultClasses = "rounded-l-lg font-semibold focus:outline-none cursor-pointer ";
-
-  let additionalClasses =
-    switch (setShowLevelZero) {
-    | Some(_) => "w-1/2 bg-white px-4 py-2 hover:bg-gray-100 hover:text-primary-500 truncate leading-loose text-sm"
-    | None => "w-full rounded-lg bg-primary-100 border-t border-b px-2 h-10 flex items-center justify-between"
-    };
-
-  <button
-    onClick={_ =>
-      Belt.Option.mapWithDefault(setShowLevelZero, (), f => f(false))
-    }
-    className={defaultClasses ++ additionalClasses}>
-    <span className="flex-grow text-center truncate w-0">
-      {selectedLevel |> levelName |> str}
-    </span>
-    {setShowLevelZero == None
-       ? <FaIcon classes="fas fa-caret-down ml-1" /> : React.null}
-  </button>;
-};
 
 let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
   let teamLevelNumber = teamLevel |> Level.number;
@@ -70,6 +46,78 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
   |> Array.of_list;
 };
 
+let untabbedLevelSelector =
+    (selectedLevel, orderedLevels, teamLevel, setSelectedLevelId) => {
+  let selected =
+    <button
+      className="font-semibold w-full px-2 h-10 flex items-center justify-between">
+      <span className="flex-grow text-center truncate w-0">
+        {selectedLevel |> levelName |> str}
+      </span>
+      <FaIcon classes="fas fa-caret-down ml-1" />
+    </button>;
+
+  <Dropdown
+    selected
+    contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId)}
+    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
+  />;
+};
+
+let tabbedLevelSelector =
+    (
+      orderedLevels,
+      teamLevel,
+      selectedLevel,
+      setSelectedLevelId,
+      showLevelZero,
+      setShowLevelZero,
+      levelZero,
+    ) => {
+  let selected = hideCaret =>
+    <button
+      className="rounded-l-lg font-semibold w-full px-2 h-10 flex items-center justify-between">
+      <span className="flex-grow text-center truncate w-0">
+        {selectedLevel |> levelName |> str}
+      </span>
+      <FaIcon
+        classes={"fas fa-caret-down ml-1" ++ (hideCaret ? " invisible" : "")}
+      />
+    </button>;
+
+  let numberedLevelSelector =
+    showLevelZero
+      ? <div
+          className="cursor-pointer text-sm flex-grow rounded-l-lg hover:bg-gray-200 hover:text-primary-500"
+          onClick={_ => setShowLevelZero(false)}>
+          {selected(true)}
+        </div>
+      : <Dropdown
+          key="numbered-level-selector"
+          selected={selected(false)}
+          contents={selectableLevels(
+            orderedLevels,
+            teamLevel,
+            setSelectedLevelId,
+          )}
+          className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
+        />;
+
+  [|
+    numberedLevelSelector,
+    <button
+      key="level-zero-selector"
+      className={
+        "border-l rounded-r-lg bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
+        ++ levelZeroSelectorClasses(showLevelZero)
+      }
+      onClick={_e => setShowLevelZero(true)}>
+      {levelZero |> Level.name |> str}
+    </button>,
+  |]
+  |> React.array;
+};
+
 [@react.component]
 let make =
     (
@@ -86,29 +134,25 @@ let make =
 
   <div className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
     <div
-      className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg 1g-primary-100 border border-gray-400 h-11">
-      {showLevelZero
-         ? numberedLevelSelector(selectedLevel, Some(setShowLevelZero))
-         : <Dropdown
-             selected={numberedLevelSelector(selectedLevel, None)}
-             contents={selectableLevels(
-               orderedLevels,
-               teamLevel,
-               setSelectedLevelId,
-             )}
-             className="flex-grow"
-           />}
+      className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg border border-gray-400 h-11">
       {switch (levelZero) {
-       | Some(level) =>
-         <button
-           className={
-             "border-l rounded-r-lg bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 "
-             ++ levelSelectorClasses(showLevelZero)
-           }
-           onClick={_e => setShowLevelZero(true)}>
-           {level |> Level.name |> str}
-         </button>
-       | None => React.null
+       | Some(levelZero) =>
+         tabbedLevelSelector(
+           orderedLevels,
+           teamLevel,
+           selectedLevel,
+           setSelectedLevelId,
+           showLevelZero,
+           setShowLevelZero,
+           levelZero,
+         )
+       | None =>
+         untabbedLevelSelector(
+           selectedLevel,
+           orderedLevels,
+           teamLevel,
+           setSelectedLevelId,
+         )
        }}
     </div>
   </div>;

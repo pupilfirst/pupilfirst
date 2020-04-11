@@ -1,6 +1,5 @@
-let resetPasswordIcon: string = [%raw
-  "require('./images/set-new-password-icon.svg')"
-];
+[@bs.module "./images/set-new-password-icon.svg"]
+external resetPasswordIcon: string = "default";
 
 let str = React.string;
 

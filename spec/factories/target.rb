@@ -29,6 +29,14 @@ FactoryBot.define do
       role { Target::ROLE_TEAM }
     end
 
+    trait :team do
+      role { Target::ROLE_TEAM }
+    end
+
+    trait :student do
+      role { Target::ROLE_STUDENT }
+    end
+
     trait :with_default_checklist do
       checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: "Write something about your submission", optional: false }] }
     end

@@ -6,7 +6,7 @@ let str = React.string;
 
 module CreateCommentQuery = [%graphql
   {|
-  mutation($value: String!, $commentableId: ID!, $commentableType: String!) {
+  mutation CreateCommentMutation($value: String!, $commentableId: ID!, $commentableType: String!) {
     createComment(value: $value, commentableId: $commentableId, commentableType: $commentableType) @bsVariant {
       commentId
       errors

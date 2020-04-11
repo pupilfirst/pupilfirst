@@ -18,6 +18,7 @@ feature 'School students index', js: true do
 
   let!(:startup_1) { create :startup, level: level_1 }
   let!(:startup_2) { create :startup, level: level_2 }
+  let(:team_in_different_course) { create :team }
 
   let(:team_with_lone_student) { create :team, level: level_2 }
   let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: tags }
@@ -33,14 +34,14 @@ feature 'School students index', js: true do
   let!(:new_team_name) { (Faker::Lorem.words(number: 4).join ' ').titleize }
 
   let!(:course_coach) { create :faculty, school: school }
-  let!(:coach) { create :faculty, school: school }
-  let!(:exited_coach) { create :faculty, school: school, exited: true }
+  let!(:coach_in_different_course) { create :faculty, school: school }
 
   before do
-    FacultyCourseEnrollment.create(faculty: course_coach, course: course)
+    create :faculty_course_enrollment, faculty: course_coach, course: course
+    create :faculty_course_enrollment, faculty: coach_in_different_course, course: team_in_different_course.course
   end
 
-  scenario 'School admin adds new students' do
+  scenario 'School admin adds new students and a team' do
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
     expect(page).to have_text(startup_1.founders.first.name)
@@ -49,6 +50,7 @@ feature 'School students index', js: true do
     # Add few students
     click_button 'Add New Students'
 
+    # Student, alone in a team.
     fill_in 'Name', with: name_1
     fill_in 'Email', with: email_1
     fill_in 'Title', with: title_1
@@ -59,8 +61,10 @@ feature 'School students index', js: true do
     find('span[title="Add new tag Def"]').click
     click_button 'Add to List'
 
+    # Student, alone, but with a team name.
     fill_in 'Name', with: name_2
     fill_in 'Email', with: email_2
+    fill_in 'Team Name', with: 'some team name'
 
     # title and affiliation should have persisted values
     expect(page.find_field("title").value).to eq(title_1)
@@ -91,6 +95,25 @@ feature 'School students index', js: true do
     expect(page).to have_text("#{title_1}, #{affiliation_1}")
     expect(page).to have_text(name_2.to_s)
     expect(page).to have_text("(#{email_2})")
+    expect(page).to have_text('Add more team members!')
+
+    # An actual team with two students.
+    name_3 = Faker::Name.name
+    email_3 = Faker::Internet.email(name: name_3)
+    name_4 = Faker::Name.name
+    email_4 = Faker::Internet.email(name: name_4)
+
+    fill_in 'Name', with: name_3
+    fill_in 'Email', with: email_3
+    fill_in 'Team Name', with: new_team_name
+
+    click_button 'Add to List'
+
+    fill_in 'Name', with: name_4
+    fill_in 'Email', with: email_4
+    fill_in 'Team Name', with: new_team_name
+
+    click_button 'Add to List'
 
     click_button 'Save List'
 
@@ -100,19 +123,38 @@ feature 'School students index', js: true do
     expect(page).to have_text(name_1)
     expect(page).to have_text(name_2)
 
-    founder_1_user = User.find_by(email: email_1)
-    founder_1 = founder_1_user.founders.first
-    founder_2_user = User.find_by(email: email_2)
-    founder_2 = founder_2_user.founders.first
+    student_1_user = User.find_by(email: email_1)
+    student_1 = student_1_user.founders.first
+    student_2_user = User.find_by(email: email_2)
+    student_2 = student_2_user.founders.first
+    student_3_user = User.find_by(email: email_3)
+    student_3 = student_3_user.founders.first
+    student_4_user = User.find_by(email: email_4)
+    student_4 = student_4_user.founders.first
 
-    expect(founder_1_user.name).to eq(name_1)
-    expect(founder_2_user.name).to eq(name_2)
-    expect(founder_1_user.title).to eq(title_1)
-    expect(founder_2_user.title).to eq('Student') # the default should have been set.
-    expect(founder_1_user.affiliation).to eq(affiliation_1)
-    expect(founder_2_user.affiliation).to eq(nil)
-    expect(founder_1.tag_list).to contain_exactly('Abc', 'Def')
-    expect(founder_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
+    expect(student_1_user.name).to eq(name_1)
+    expect(student_2_user.name).to eq(name_2)
+    expect(student_3_user.name).to eq(name_3)
+    expect(student_4_user.name).to eq(name_4)
+
+    expect(student_1_user.title).to eq(title_1)
+    expect(student_2_user.title).to eq('Student') # the default should have been set.
+    expect(student_3_user.title).to eq('Student')
+    expect(student_4_user.title).to eq('Student')
+
+    expect(student_1_user.affiliation).to eq(affiliation_1)
+    expect(student_2_user.affiliation).to eq(nil)
+    expect(student_3_user.affiliation).to eq(nil)
+    expect(student_4_user.affiliation).to eq(nil)
+
+    expect(student_1.startup.name).to eq(name_1)
+    expect(student_2.startup.name).to eq(name_2)
+    expect(student_3.startup.name).to eq(new_team_name)
+    expect(student_4.startup.name).to eq(new_team_name)
+    expect(student_3.startup.id).to eq(student_4.startup.id)
+
+    expect(student_1.tag_list).to contain_exactly('Abc', 'Def')
+    expect(student_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
   end
 
   context 'when adding a student who is already a user of another type' do
@@ -265,18 +307,21 @@ feature 'School students index', js: true do
       # Assign a coach to a team
       founder = startup_2.founders.last
       find("a", text: founder.user.name).click
-      expect(page).to have_text('Team Coaches')
 
-      within '.select-list__group' do
-        expect(page).to_not have_text(exited_coach.name)
-        find('.px-3', text: coach.name).click
-      end
+      # Coach in a different course must not be listed.
+      expect(page).to have_text('Team Coaches')
+      expect(page).not_to have_text(coach_in_different_course.name)
+
+      # But it should be possible to assign a coach in 'this' course.
+      find("div[title='Select #{course_coach.name}']").click
 
       click_button 'Update Student'
+
       expect(page).to have_text("Student updated successfully")
+
       dismiss_notification
-      founder.reload
-      expect(founder.startup.faculty.last).to eq(coach)
+
+      expect(founder.reload.startup.faculty.find_by(id: course_coach)).to be_present
     end
   end
 
@@ -317,9 +362,9 @@ feature 'School students index', js: true do
 
   scenario 'school admin marks students as dropped out' do
     # Enroll the coach as a team coach in all three teams.
-    create :faculty_startup_enrollment, faculty: coach, startup: startup_1
-    create :faculty_startup_enrollment, faculty: coach, startup: startup_2
-    create :faculty_startup_enrollment, faculty: coach, startup: team_with_lone_student
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: startup_1
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: startup_2
+    create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: team_with_lone_student
 
     sign_in_user school_admin.user, referer: school_course_students_path(course)
 
@@ -331,7 +376,7 @@ feature 'School students index', js: true do
 
     expect(page).to have_text(founder_user.name)
     expect(page).to have_text(founder.startup.name)
-    expect(coach.startups.count).to eq(3)
+    expect(course_coach.startups.count).to eq(3)
 
     click_button 'Actions'
     click_button 'Dropout Student'
@@ -350,7 +395,7 @@ feature 'School students index', js: true do
     expect(founder.startup.faculty.count).to eq(0)
 
     # However the coach should still be linked to the same number of teams.
-    expect(coach.startups.count).to eq(3)
+    expect(course_coach.startups.count).to eq(3)
 
     # Mark a student who is alone in a team as dropped out.
     expect(team_with_lone_student.faculty.count).to eq(1)
@@ -369,7 +414,7 @@ feature 'School students index', js: true do
 
     # All coaches should have been removed from the team.
     expect(lone_user_team.faculty.count).to eq(0)
-    expect(coach.startups.count).to eq(2)
+    expect(course_coach.startups.count).to eq(2)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do
@@ -462,30 +507,28 @@ feature 'School students index', js: true do
     click_button "Order by Name"
     click_button "Order by Last Created"
 
-    expect(page).to have_text(teams_order_by_created_at.last.name)
-    expect(page).not_to have_text(teams_order_by_created_at.first.name)
+    expect(find(".student-team-container:first-child")).to have_text(teams_order_by_created_at.last.name)
+
     click_button('Load More')
 
-    expect(page).to have_text(teams_order_by_created_at.first.name)
+    expect(find(".student-team-container:last-child")).to have_text(teams_order_by_created_at.first.name)
 
     click_button "Order by Last Created"
     click_button "Order by Last Updated"
 
-    expect(page).not_to have_text(team_order_by_updated_at.first.name)
-    expect(page).to have_text(team_order_by_updated_at.last.name)
+    expect(find(".student-team-container:first-child")).to have_text(team_order_by_updated_at.last.name)
 
     click_button('Load More')
 
-    expect(page).to have_text(team_order_by_updated_at.first.name)
+    expect(find(".student-team-container:last-child")).to have_text(team_order_by_updated_at.first.name)
 
     click_button "Order by Last Updated"
     click_button "Order by Name"
 
-    expect(page).not_to have_text(teams_order_by_name.last.name)
-    expect(page).to have_text(teams_order_by_name.first.name)
+    expect(find(".student-team-container:first-child")).to have_text(teams_order_by_name.first.name)
 
     click_button('Load More')
 
-    expect(page).to have_text(teams_order_by_name.last.name)
+    expect(find(".student-team-container:last-child")).to have_text(teams_order_by_name.last.name)
   end
 end

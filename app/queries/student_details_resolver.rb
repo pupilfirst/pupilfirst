@@ -19,7 +19,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def completed_level_ids
-    required_targets_by_level = Target.joins(:target_group).where(target_groups: { milestone: true, level_id: course.levels.select(:id) }).distinct(:id)
+    required_targets_by_level = Target.live.joins(:target_group).where(target_groups: { milestone: true, level_id: levels.select(:id) }).distinct(:id)
       .pluck(:id, 'target_groups.level_id').each_with_object({}) do |(target_id, level_id), required_targets_by_level|
       required_targets_by_level[level_id] ||= []
       required_targets_by_level[level_id] << target_id
@@ -27,7 +27,7 @@ class StudentDetailsResolver < ApplicationQuery
 
     passed_target_ids = TimelineEvent.joins(:founders).where(founders: { id: student.id }).where.not(passed_at: nil).distinct(:target_id).pluck(:target_id)
 
-    course.levels.pluck(:id).select do |level_id|
+    levels.pluck(:id).select do |level_id|
       ((required_targets_by_level[level_id] || []) - passed_target_ids).empty?
     end
   end
@@ -60,6 +60,10 @@ class StudentDetailsResolver < ApplicationQuery
     return false if student.blank?
 
     current_user.faculty.reviewable_courses.where(id: student.course).exists?
+  end
+
+  def levels
+    @levels ||= course.levels.unlocked
   end
 
   def level

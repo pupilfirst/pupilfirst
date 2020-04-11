@@ -44,7 +44,9 @@ class Target < ApplicationRecord
 
   scope :live, -> { where(visibility: VISIBILITY_LIVE) }
   scope :founder, -> { where(role: ROLE_STUDENT) }
+  scope :student, -> { where(role: ROLE_STUDENT) }
   scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
+  scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
   scope :not_auto_verifiable, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verifiable, -> { where.not(id: not_auto_verifiable) }

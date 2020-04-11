@@ -3,7 +3,7 @@ ruby '2.7.0'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.2.1'
+gem 'rails', '~> 6.0.2.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -14,13 +14,15 @@ gem 'fastimage', '~> 2.1'
 gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '~> 5.0'
 
 gem 'coffee-rails', '~> 5.0.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'pg', '~> 1.0' # PostgreSQL support.
+gem 'pg_search', '~> 2.3' # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
+gem 'activerecord-precounter', '~> 0.3' # N+1 count query optimizer for ActiveRecord.
 gem 'sass-rails', '>= 6'
 gem 'slim', '~> 4.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
@@ -55,7 +57,6 @@ gem 'google_calendar', '= 0.6.4', github: 'northworld/google_calendar' # Thin wr
 # This is a dependency of google_calendar. Lock the version to 0.4.0 to prevent introduction of sqlite3 into production dependencies.
 gem 'TimezoneParser', '= 0.4.0'
 
-gem 'groupdate', '~> 4.0' # The simplest way to group temporal data. https://github.com/ankane/groupdate
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
 
@@ -142,17 +143,17 @@ group :test do
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
+  gem 'diffy', '~> 3.3' # Easy Diffing in Ruby. https://github.com/samg/diffy
 end
 
 group :development, :test do
   gem 'faker', '~> 2.10' # A library for generating fake data such as names, addresses, and phone numbers.
-  gem 'rspec-rails', '~> 4.0.0.beta4' # Duh.
+  gem 'rspec-rails', '~> 4.0' # RSpec for Rails 5+.
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.
   gem 'rubocop', '~> 0.80', require: false # Ruby Style Guide.
   gem 'rubocop-rails', '~> 2.4', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
-  gem 'rubocop-faker'
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
@@ -162,7 +163,7 @@ end
 group :production do
   gem 'rails_12factor', '~> 0.0' # Makes running your Rails app easier. Based on the ideas behind 12factor.net.
   gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
-  gem 'scout_apm', '~> 2.6' # detailed Rails application performance analysis.
+  gem 'skylight', '~> 4.2' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
   gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
   gem 'aws-sdk-s3', '~> 1.35 ', require: false
 end

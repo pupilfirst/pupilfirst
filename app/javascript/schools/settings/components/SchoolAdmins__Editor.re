@@ -12,7 +12,7 @@ type state = {
 
 module DeleteSchoolAdminQuery = [%graphql
   {|
-  mutation($id: ID!) {
+  mutation DeleteSchoolAdminMutation($id: ID!) {
     deleteSchoolAdmin(id: $id) {
       success
     }

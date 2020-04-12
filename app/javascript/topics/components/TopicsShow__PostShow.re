@@ -15,6 +15,30 @@ let findUser = (users, userId) => {
   users |> Array.to_list |> User.findById(userId);
 };
 
+let optionsDropdown = {
+  let selected = <PfIcon className="if i-ellipsis-h-light if-fw" />;
+  let editPostButton =
+    <button className="flex p-2 items-center text-gray-700">
+      <FaIcon classes="fas fa-edit mr-2" />
+      {"Edit Reply" |> str}
+    </button>;
+  let markAsSolutionButton =
+    <button className="flex p-2 items-center text-gray-700">
+      <PfIcon className="if i-check-circle-alt-regular if-fw" />
+      {"Mark as solution" |> str}
+    </button>;
+  let deletePostButton =
+    <button className="flex p-2 items-center text-gray-700">
+      <FaIcon classes="fas fa-trash-alt mr-2" />
+      {"Delete Reply" |> str}
+    </button>;
+  <Dropdown
+    selected
+    contents=[|editPostButton, markAsSolutionButton, deletePostButton|]
+    right=true
+  />;
+};
+
 [@react.component]
 let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
   let user = findUser(users);
@@ -39,7 +63,7 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
       <div id="body" className="flex">
         <div className="w-7/8"> {post |> Post.body |> str} </div>
         <div className="w-1/8 cursor-pointer hover:bg-gray-400 bg-gray-200">
-          <PfIcon className="if i-ellipsis-h-light if-fw" />
+          optionsDropdown
         </div>
       </div>
       <div id="user-data" className="flex justify-between">

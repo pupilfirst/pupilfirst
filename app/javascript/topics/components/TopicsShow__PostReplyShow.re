@@ -22,6 +22,25 @@ let avatar = (~size=("6", "8"), avatarUrl, name) => {
   };
 };
 
+let optionsDropdown = {
+  let selected = <PfIcon className="if i-ellipsis-h-light if-fw" />;
+  let editPostButton =
+    <button className="flex p-2 items-center text-gray-700">
+      <FaIcon classes="fas fa-edit mr-2" />
+      {"Edit Reply" |> str}
+    </button>;
+  let deletePostButton =
+    <button className="flex p-2 items-center text-gray-700">
+      <FaIcon classes="fas fa-trash-alt mr-2" />
+      {"Delete Reply" |> str}
+    </button>;
+  <Dropdown
+    selected
+    contents=[|editPostButton, deletePostButton|]
+    right=true
+  />;
+};
+
 [@react.component]
 let make = (~post, ~currentUserId, ~users) => {
   let user =
@@ -40,6 +59,11 @@ let make = (~post, ~currentUserId, ~users) => {
         {user |> User.name |> str}
       </span>
     </div>
-    <div className="text-sm"> {post |> Post.body |> str} </div>
+    <div className="flex justify-between">
+      <div className="text-sm w-7/8"> {post |> Post.body |> str} </div>
+      <div className="w-1/8 bg-gray-400 hover:bg-gray-500">
+        optionsDropdown
+      </div>
+    </div>
   </div>;
 };

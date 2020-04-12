@@ -429,7 +429,7 @@ ActiveRecord::Schema.define(version: 2020_04_06_131136) do
     t.bigint "reply_to_post_id"
     t.integer "post_number", default: 1, null: false
     t.text "body"
-    t.boolean "solution"
+    t.boolean "solution", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["archiver_id"], name: "index_posts_on_archiver_id"

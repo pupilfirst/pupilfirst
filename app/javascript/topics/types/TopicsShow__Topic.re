@@ -4,6 +4,10 @@ type t = {
 }
 and id = string;
 
+let title = t => t.title;
+
+let id = t => t.id;
+
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),

@@ -5,7 +5,7 @@ class CreatePostMutator < ApplicationQuery
   property :topic_id, validates: { presence: true }
   property :reply_to_post_id
 
-  def create_answer
+  def create_post
     Post.transaction do
       post = Post.create!(
         creator: current_user,

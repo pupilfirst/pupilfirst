@@ -1,8 +1,3 @@
-type postLike = {
-  id: string,
-  userId: string,
-};
-
 type t = {
   id,
   body: string,
@@ -11,16 +6,54 @@ type t = {
   postNumber: int,
   createdAt: Js.Date.t,
   updatedAt: Js.Date.t,
-  postLikes: array(postLike),
+  postLikes: array(TopicsShow__Like.t),
   replies: array(string),
+  solution: bool,
 }
 and id = string;
 
-let decodePostLike = json =>
-  Json.Decode.{
-    id: json |> field("id", string),
-    userId: json |> field("userId", string),
-  };
+let body = t => t.body;
+
+let replies = t => t.replies;
+
+let createdAt = t => t.createdAt;
+
+let postLikes = t => t.postLikes;
+
+let solution = t => t.solution;
+
+let user = (users, t) => {
+  users
+  |> ArrayUtils.unsafeFind(
+       user => User.id(user) == t.creatorId,
+       "Unable to user with id: " ++ t.creatorId ++ " in TopicsShow__Post",
+     );
+};
+
+let sort = posts => {
+  posts |> ArrayUtils.copyAndSort((x, y) => x.postNumber - y.postNumber);
+};
+
+let repliesToPost = (posts, post) => {
+  posts |> Js.Array.filter(p => post.replies |> Array.mem(p.id)) |> sort;
+};
+
+let mainThread = posts => {
+  let replyPostIds =
+    posts
+    |> Array.map(post => post.replies |> Array.to_list)
+    |> Js.Array.filter(reply => reply |> ListUtils.isNotEmpty)
+    |> Array.to_list
+    |> List.flatten
+    |> Array.of_list;
+  posts
+  |> Js.Array.filter(post => !(replyPostIds |> Array.mem(post.id)))
+  |> sort;
+};
+
+let id = t => t.id;
+
+let creatorId = t => t.creatorId;
 
 let decodeReplyId = json =>
   json |> Json.Decode.field("id", Json.Decode.string);
@@ -34,6 +67,7 @@ let decode = json =>
     postNumber: json |> field("postNumber", int),
     createdAt: json |> field("createdAt", string) |> DateFns.parseString,
     updatedAt: json |> field("updatedAt", string) |> DateFns.parseString,
-    postLikes: json |> field("postLikes", array(decodePostLike)),
+    postLikes: json |> field("postLikes", array(TopicsShow__Like.decode)),
     replies: json |> field("replies", array(decodeReplyId)),
+    solution: json |> field("solution", bool),
   };

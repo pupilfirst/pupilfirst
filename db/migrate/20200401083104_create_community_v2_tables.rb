@@ -70,7 +70,7 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
       t.references :reply_to_post, foreign_key: { to_table: :posts }
       t.integer :post_number, null: false, default: 1 # We'll properly index this and re-number all posts at the end.
       t.text :body
-      t.boolean :solution
+      t.boolean :solution, default: false
 
       t.timestamps
     end

@@ -20,6 +20,10 @@ feature "Course students list", js: true do
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
   let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
 
+  def teams_in_level(level)
+    level.startups.active
+  end
+
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
 
@@ -66,6 +70,37 @@ feature "Course students list", js: true do
     within("div[aria-label='team-level-info-#{team_5.id}']") do
       expect(page).to have_text('3')
     end
+
+    # Check number of students in levels
+    within("div[aria-label='Students level-wise distribution']") do
+      expect(page).to have_selector('.level-distribution__pill', count: 3)
+    end
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_text(teams_in_level(level_1).count)
+    end
+
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_text(teams_in_level(level_2).count)
+    end
+
+    within("div[aria-label='Students in level 3']") do
+      expect(page).to have_text(teams_in_level(level_3).count)
+    end
+
+    # Hover over a level to get percentage data
+
+    students_in_course = Founder.where(startup: course.startups).count
+    students_in_l2 = Founder.where(startup: teams_in_level(level_2)).count
+    percentage_students_in_l2 = students_in_l2 / students_in_course.to_f * 100
+
+    within("div[aria-label='Students in level 2']") do
+      find('.tooltip__trigger').hover
+    end
+
+    expect(page).to have_text("Percentage: #{percentage_students_in_l2}")
+    expect(page).to have_text("Teams: #{teams_in_level(level_2).count}")
+    expect(page).to have_text("Students: #{students_in_l2}")
   end
 
   scenario 'coach searches for and filters students by level' do
@@ -122,6 +157,12 @@ feature "Course students list", js: true do
     expect(page).to have_text(team_1.name)
     expect(page).to have_text(team_5.name)
     expect(page).to have_text(team_6.name)
+
+    # Filter by level using student distribution
+    find("div[aria-label='Students in level 1']").click
+
+    expect(page).to_not have_text('Elderberry')
+    expect(page).to have_text('Zucchini')
   end
 
   scenario 'team coach only has assigned teams in the students list' do
@@ -203,6 +244,47 @@ feature "Course students list", js: true do
 
       find('.tooltip__bubble').text.strip.split("\n").each do |name|
         expect(name).to be_in(possible_names)
+      end
+    end
+  end
+
+  context 'when all students have completed a level' do
+    # Create new levels with no students
+    let!(:level_4) { create :level, :four, course: course }
+    let!(:level_5) { create :level, :five, course: course }
+
+    before do
+      level_1.startups.each { |s| s.update!(level_id: level_2.id) }
+    end
+
+    scenario 'level shows completed icon instead of number of students' do
+      sign_in_user course_coach.user, referer: students_course_path(course)
+
+      within("div[aria-label='Students in level 1']") do
+        expect(page).to_not have_text('0')
+        expect(page).to have_selector('.i-check-solid')
+      end
+
+      within("div[aria-label='Students in level 4']") do
+        expect(page).to have_text('0')
+      end
+    end
+  end
+
+  context 'when there are locked levels in course' do
+    let!(:locked_level_4) { create :level, :four, course: course, unlock_on: 5.days.from_now }
+    let!(:locked_level_5) { create :level, :five, course: course, unlock_on: 5.days.from_now }
+
+    scenario 'it is shown as locked in student level wise distribution' do
+      sign_in_user course_coach.user, referer: students_course_path(course)
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to_not have_selector('.level-distribution__pill--locked')
+      end
+
+      within("div[aria-label='Students in level 4']") do
+        expect(page).to have_text('0')
+        expect(page).to have_selector('.level-distribution__pill--locked')
       end
     end
   end

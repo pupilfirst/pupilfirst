@@ -15,7 +15,7 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   end
 
   def from_options(enable_reply)
-    options = { from: "#{school_name} <noreply@pupilfirst.com>" }
+    options = { from: "#{school_name} <noreply@#{school.domains.primary.fqdn}>" }
     reply_to = SchoolString::EmailAddress.for(@school)
     options[:reply_to] = reply_to if reply_to.present? && enable_reply
     options

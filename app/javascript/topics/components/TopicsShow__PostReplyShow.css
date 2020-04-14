@@ -1,0 +1,14 @@
+.topics-post-reply-show__replies {
+  @apply relative;
+}
+
+.topics-post-reply-show__replies:before {
+  position: absolute;
+  content: '';
+  width: 16px;
+  height: 1px;
+  @apply bg-gray-300;
+  left: -16px;
+  bottom: 50%;
+  transform: translateY(-50%);
+}

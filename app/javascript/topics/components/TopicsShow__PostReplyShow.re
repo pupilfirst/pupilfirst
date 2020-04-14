@@ -1,6 +1,7 @@
 open TopicsShow__Types;
 
 let str = React.string;
+[%bs.raw {|require("./TopicsShow__PostReplyShow.css")|}];
 
 let avatarClasses = size => {
   let (defaultSize, mdSize) = size;
@@ -58,10 +59,11 @@ let make = (~topic, ~post, ~currentUserId, ~users) => {
          ++ Post.creatorId(post)
          ++ " in TopicsShow__PostReplyShow",
        );
-  <div className="flex flex-col border bg-gray-100 rounded-lg mt-2 p-4">
+  <div
+    className="topics-post-reply-show__replies flex flex-col border bg-gray-100 rounded-lg mb-2 p-4">
     <div className="flex justify-between">
       <div className="flex items-center">
-        {avatar(~size=("6", "8"), user |> User.avatarUrl, user |> User.name)}
+        {avatar(~size=("6", "7"), user |> User.avatarUrl, user |> User.name)}
         <span className="text-xs font-semibold ml-2">
           {user |> User.name |> str}
         </span>
@@ -77,6 +79,6 @@ let make = (~topic, ~post, ~currentUserId, ~users) => {
            post
            handleCloseCB={() => toggleShowReplyEdit(_ => false)}
          />
-       : <div className="text-sm ml-10"> {post |> Post.body |> str} </div>}
+       : <div className="text-sm ml-9"> {post |> Post.body |> str} </div>}
   </div>;
 };

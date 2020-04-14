@@ -1,6 +1,7 @@
 open TopicsShow__Types;
 
 let str = React.string;
+[%bs.raw {|require("./TopicsShow__PostShow.css")|}];
 
 let solutionIcon = {
   <div className="flex flex-col items-center">
@@ -114,14 +115,16 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
           </div>
         </div>
         {showNewReply
-           ? <TopicsShow__PostEditor
-               topic
-               currentUserId
-               handleCloseCB={() => toggleshowNewReply(_ => false)}
-             />
+           ? <div className="pl-10 topics-post-show__new-reply-container">
+               <TopicsShow__PostEditor
+                 topic
+                 currentUserId
+                 handleCloseCB={() => toggleshowNewReply(_ => false)}
+               />
+             </div>
            : React.null}
         {showReplies
-           ? <div className="ml-10">
+           ? <div className="pl-10 pt-2 topics-post-show__replies-container">
                {repliesToPost
                 |> Array.map(post =>
                      <TopicsShow__PostReplyShow

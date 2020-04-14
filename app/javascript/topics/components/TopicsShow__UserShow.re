@@ -10,10 +10,10 @@ let avatarClasses = size => {
   ++ mdSize
   ++ " md:h-"
   ++ mdSize
-  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
+  ++ " text-xs rounded-full overflow-hidden flex-shrink-0 object-cover";
 };
 
-let avatar = (~size=("8", "10"), avatarUrl, name) => {
+let avatar = (~size=("9", "9"), avatarUrl, name) => {
   switch (avatarUrl) {
   | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
   | None => <Avatar name className={avatarClasses(size)} />
@@ -27,10 +27,10 @@ let make = (~user, ~createdAt) =>
       {createdAt |> DateFns.format("Do MMMM, YYYY HH:mm") |> str}
     </p>
     <div
-      className="p-2 flex flex-row items-center bg-gray-200 text-gray-900 border border-gray-400 rounded-lg mt-1">
+      className="p-2 flex flex-row items-center bg-gray-100 text-gray-900 border rounded-lg mt-1">
       <div
-        className="w-10 h-10 rounded-full bg-gray-500 text-white border border-gray-400 flex items-center justify-center flex-shrink-0 overflow-hidden">
-        {avatar(~size=("8", "10"), user |> User.avatarUrl, user |> User.name)}
+        className="w-9 h-9 rounded-full bg-gray-500 text-white border border-gray-400 flex items-center justify-center flex-shrink-0 overflow-hidden">
+        {avatar(~size=("9", "9"), user |> User.avatarUrl, user |> User.name)}
       </div>
       <div className="pl-2">
         <p className="font-semibold text-xs"> {user |> User.name |> str} </p>

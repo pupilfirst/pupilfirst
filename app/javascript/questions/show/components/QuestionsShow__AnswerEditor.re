@@ -200,7 +200,7 @@ let make =
   let updateMarkdownCB = description => setDescription(_ => description);
   <DisablingCover disabled=saving>
     <div
-      className="py-2 max-w-3xl w-full flex mx-auto items-center justify-center relative">
+      className="py-2 max-w-4xl w-full flex mx-auto items-center justify-center relative">
       <div className="flex w-full pb-4">
         <div className="w-full flex flex-col">
           <label

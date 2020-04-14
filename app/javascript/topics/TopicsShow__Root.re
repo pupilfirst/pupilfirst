@@ -52,9 +52,9 @@ let make =
   <div className="bg-gray-100">
     <div className="flex-col items-center justify-between">
       <div
-        className="max-w-3xl w-full mx-auto items-center justify-center bg-white p-4 my-4 border-t border-b md:border-0 rounded md:rounded-lg shadow">
+        className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-8 my-4 border-t border-b md:border-0 rounded md:rounded-lg shadow">
         {<div>
-           <h3> {topic |> Topic.title |> str} </h3>
+           <h3 className="ml-14"> {topic |> Topic.title |> str} </h3>
            <TopicsShow__PostShow
              post=firstPost
              topic

@@ -16,7 +16,11 @@ let findUser = (users, userId) => {
 };
 
 let optionsDropdown = {
-  let selected = <PfIcon className="if i-ellipsis-h-light if-fw" />;
+  let selected =
+    <div
+      className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
+      <PfIcon className="if i-ellipsis-h-regular text-base" />
+    </div>;
   let editPostButton =
     <button className="flex p-2 items-center text-gray-700">
       <FaIcon classes="fas fa-edit mr-2" />
@@ -51,55 +55,58 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
       => false);
       // handlePostCB(post, bool);
   };
-  <div className="flex pt-2" key={post |> Post.id}>
-    <div id="likes-and-solution" className="flex flex-col w-1/8">
-      {post |> Post.solution ? solutionIcon : React.null}
-      {<TopicsShow__LikeManager
-         postLikes={post |> Post.postLikes}
-         currentUserId
-       />}
-    </div>
-    <div id="body-and-user-data" className="w-7/8 ml-2">
-      <div id="body" className="flex">
-        <div className="w-7/8"> {post |> Post.body |> str} </div>
-        <div className="w-1/8 cursor-pointer hover:bg-gray-400 bg-gray-200">
-          optionsDropdown
-        </div>
+  <div>
+    <h5 className="border-b pb-2 pt-8 ml-14"> {"4 Replies" |> str} </h5>
+    <div className="flex pt-4" key={post |> Post.id}>
+      <div id="likes-and-solution" className="flex flex-col w-1/8">
+        {post |> Post.solution ? solutionIcon : React.null}
+        {<TopicsShow__LikeManager
+           postLikes={post |> Post.postLikes}
+           currentUserId
+         />}
       </div>
-      <div id="user-data" className="flex justify-between">
-        <TopicsShow__UserShow
-          user={user(post |> Post.creatorId)}
-          createdAt={post |> Post.createdAt}
-        />
-        <div className="flex items-center text-sm font-semibold">
-          {repliesToPost |> ArrayUtils.isNotEmpty
-             ? <button
-                 id="show-replies-button"
-                 onClick={_ => toggleShowReplies(showReplies => !showReplies)}
-                 className="border border-gray-300 bg-white mr-3 p-2 rounded-lg">
-                 {(post |> Post.replies |> Array.length |> string_of_int)
-                  ++ " Replies"
-                  |> str}
-                 <FaIcon classes="fas fa-chevron-down ml-2" />
-               </button>
-             : React.null}
-          <button
-            id="reply button"
-            className=" border border-gray-300 bg-gray-200 p-2 rounded-lg">
-            <FaIcon classes="fas fa-reply mr-2" />
-            {"Reply" |> str}
-          </button>
+      <div id="body-and-user-data" className="w-7/8">
+        <div id="body" className="flex items-start">
+          <div className="text-sm"> {post |> Post.body |> str} </div>
+          <div className="flex-shrink-0"> optionsDropdown </div>
         </div>
+        <div id="user-data" className="flex justify-between pt-4">
+          <TopicsShow__UserShow
+            user={user(post |> Post.creatorId)}
+            createdAt={post |> Post.createdAt}
+          />
+          <div className="flex items-center text-sm font-semibold">
+            {repliesToPost |> ArrayUtils.isNotEmpty
+               ? <button
+                   id="show-replies-button"
+                   onClick={_ =>
+                     toggleShowReplies(showReplies => !showReplies)
+                   }
+                   className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
+                   {(post |> Post.replies |> Array.length |> string_of_int)
+                    ++ " Replies"
+                    |> str}
+                   <FaIcon classes="fas fa-chevron-down ml-2" />
+                 </button>
+               : React.null}
+            <button
+              id="reply button"
+              className="border bg-gray-200 p-2 rounded text-xs font-semibold">
+              <FaIcon classes="fas fa-reply mr-2" />
+              {"Reply" |> str}
+            </button>
+          </div>
+        </div>
+        {showReplies
+           ? <div>
+               {repliesToPost
+                |> Array.map(post =>
+                     <TopicsShow__PostReplyShow post currentUserId users />
+                   )
+                |> React.array}
+             </div>
+           : React.null}
       </div>
-      {showReplies
-         ? <div>
-             {repliesToPost
-              |> Array.map(post =>
-                   <TopicsShow__PostReplyShow post currentUserId users />
-                 )
-              |> React.array}
-           </div>
-         : React.null}
     </div>
   </div>;
 };

@@ -21,7 +21,7 @@ let make = (~postLikes, ~currentUserId) => {
   let liked = currentUserId |> Like.currentUserLiked(postLikes);
   let (saving, setSaving) = React.useState(() => false);
 
-  <div className="text-center mr-1 md:mr-2">
+  <div className="text-center pr-1 md:pr-4">
     <div
       className="cursor-pointer"
       title={(liked ? "Unlike" : "Like") ++ " Answer"}

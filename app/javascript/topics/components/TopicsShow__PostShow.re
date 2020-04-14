@@ -23,7 +23,7 @@ let optionsDropdown = toggleShowPostEdit => {
     </div>;
   let editPostButton =
     <button
-      onClick={_ => toggleShowPostEdit(showPostEdit => !showPostEdit)}
+      onClick={_ => toggleShowPostEdit(_ => true)}
       className="flex p-2 items-center text-gray-700">
       <FaIcon classes="fas fa-edit mr-2" />
       {"Edit Reply" |> str}
@@ -51,6 +51,7 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
   let repliesToPost = post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
   let (showReplies, toggleShowReplies) = React.useState(() => false);
+  let (showNewReply, toggleshowNewReply) = React.useState(() => false);
   let handleCloseCB = () => toggleShowPostEdit(_ => false);
   let handlePostEditCB = (post, bool) => {
     toggleShowPostEdit(_
@@ -70,7 +71,12 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
         <div id="body" className="flex items-start">
           {showPostEdit
              ? <div className="flex-1">
-                 <TopicsShow__PostEditor topic currentUserId post />
+                 <TopicsShow__PostEditor
+                   topic
+                   currentUserId
+                   post
+                   handleCloseCB={() => toggleShowPostEdit(_ => false)}
+                 />
                </div>
              : <div className="flex items-start">
                  <div className="text-sm"> {post |> Post.body |> str} </div>
@@ -99,6 +105,7 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
                  </button>
                : React.null}
             <button
+              onClick={_ => toggleshowNewReply(showNewReply => !showNewReply)}
               id="reply button"
               className="border bg-gray-200 p-2 rounded text-xs font-semibold">
               <FaIcon classes="fas fa-reply mr-2" />
@@ -106,6 +113,13 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
             </button>
           </div>
         </div>
+        {showNewReply
+           ? <TopicsShow__PostEditor
+               topic
+               currentUserId
+               handleCloseCB={() => toggleshowNewReply(_ => false)}
+             />
+           : React.null}
         {showReplies
            ? <div>
                {repliesToPost

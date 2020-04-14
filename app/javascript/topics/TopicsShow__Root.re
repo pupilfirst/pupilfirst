@@ -54,7 +54,9 @@ let make =
       <div
         className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-8 my-4 border-t border-b md:border-0 rounded md:rounded-lg shadow">
         {<div>
-           <h3 className="ml-14"> {topic |> Topic.title |> str} </h3>
+           <h3 className="leading-snug ml-14">
+             {topic |> Topic.title |> str}
+           </h3>
            <TopicsShow__PostShow
              post=firstPost
              topic
@@ -63,8 +65,10 @@ let make =
              currentUserId
            />
          </div>}
-        {<h5 className="border-b pb-2 pt-8 ml-14">
-           {replies |> Post.mainThread |> Array.length |> string_of_int |> str}
+        {<h5 className="pt-4 pb-2 ml-14 border-b mb-4">
+           {(replies |> Post.mainThread |> Array.length |> string_of_int)
+            ++ " Replies"
+            |> str}
          </h5>}
         {replies
          |> Post.mainThread

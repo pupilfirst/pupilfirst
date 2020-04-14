@@ -59,7 +59,7 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
       // handlePostCB(post, bool);
   };
   <div>
-    <div className="flex pt-4" key={post |> Post.id}>
+    <div className="flex pb-4" key={post |> Post.id}>
       <div id="likes-and-solution" className="flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
         {<TopicsShow__LikeManager
@@ -67,8 +67,8 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
            currentUserId
          />}
       </div>
-      <div id="body-and-user-data" className="w-7/8">
-        <div id="body" className="flex items-start">
+      <div id="body-and-user-data" className="flex-1 border-b pb-8">
+        <div className="pt-2" id="body">
           {showPostEdit
              ? <div className="flex-1">
                  <TopicsShow__PostEditor
@@ -78,7 +78,7 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
                    handleCloseCB={() => toggleShowPostEdit(_ => false)}
                  />
                </div>
-             : <div className="flex items-start">
+             : <div className="flex items-start justify-between">
                  <div className="text-sm"> {post |> Post.body |> str} </div>
                  <div className="flex-shrink-0">
                    {optionsDropdown(toggleShowPostEdit)}
@@ -121,7 +121,7 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
              />
            : React.null}
         {showReplies
-           ? <div>
+           ? <div className="ml-10">
                {repliesToPost
                 |> Array.map(post =>
                      <TopicsShow__PostReplyShow

@@ -23,7 +23,11 @@ let avatar = (~size=("6", "8"), avatarUrl, name) => {
 };
 
 let optionsDropdown = toggleShowReplyEdit => {
-  let selected = <PfIcon className="if i-ellipsis-h-light if-fw" />;
+  let selected =
+    <div
+      className="flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-300">
+      <PfIcon className="if i-ellipsis-h-regular text-base" />
+    </div>;
   let editPostButton =
     <button
       onClick={_ => toggleShowReplyEdit(_ => true)}
@@ -54,13 +58,17 @@ let make = (~topic, ~post, ~currentUserId, ~users) => {
          ++ Post.creatorId(post)
          ++ " in TopicsShow__PostReplyShow",
        );
-  <div
-    className="flex flex-col border border-gray-200 bg-gray-300 rounded-lg my-2 mx-2 px-2 py-2">
-    <div className="flex items-center">
-      {avatar(~size=("6", "8"), user |> User.avatarUrl, user |> User.name)}
-      <span className="text-xs font-semibold ml-2">
-        {user |> User.name |> str}
-      </span>
+  <div className="flex flex-col border bg-gray-100 rounded-lg mt-2 p-4">
+    <div className="flex justify-between">
+      <div className="flex items-center">
+        {avatar(~size=("6", "8"), user |> User.avatarUrl, user |> User.name)}
+        <span className="text-xs font-semibold ml-2">
+          {user |> User.name |> str}
+        </span>
+      </div>
+      <div className="flex-shrink-0">
+        {optionsDropdown(toggleShowReplyEdit)}
+      </div>
     </div>
     {showReplyEdit
        ? <TopicsShow__PostEditor
@@ -69,11 +77,6 @@ let make = (~topic, ~post, ~currentUserId, ~users) => {
            post
            handleCloseCB={() => toggleShowReplyEdit(_ => false)}
          />
-       : <div className="flex justify-between">
-           <div className="text-sm w-7/8"> {post |> Post.body |> str} </div>
-           <div className="w-1/8 bg-gray-400 hover:bg-gray-500">
-             {optionsDropdown(toggleShowReplyEdit)}
-           </div>
-         </div>}
+       : <div className="text-sm ml-10"> {post |> Post.body |> str} </div>}
   </div>;
 };

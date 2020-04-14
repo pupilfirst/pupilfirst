@@ -4,6 +4,7 @@ feature "Automatic issuance of certificates", js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
+  include SubmissionsHelper
 
   # The basics
   let!(:school) { create :school, :current }
@@ -71,6 +72,15 @@ feature "Automatic issuance of certificates", js: true do
       expect(issued_certificate.certificate).to eq(certificate)
       expect(issued_certificate.name).to eq(student_1.name)
       expect(issued_certificate.serial_number).to match(/^\d{6}-[A-Z0-9]{6}$/)
+
+      # Two emails should also have been sent out.
+      open_email(student_1.email)
+
+      expect(current_email.body).to include("http://test.host/c/#{issued_certificate.serial_number}")
+
+      open_email(student_2.email)
+
+      expect(current_email.body).to include("http://test.host/c/#{student_2.user.issued_certificates.first.serial_number}")
     end
 
     context 'when there are multiple milestone targets' do
@@ -194,8 +204,14 @@ feature "Automatic issuance of certificates", js: true do
       let!(:certificate) { create :certificate, course: course }
 
       scenario 'students never receive certificates upon completion' do
-        pending 'An active certificate is necessary for the automatic issuance of certificates.'
-        expect(1).to eq(2)
+        sign_in_user student_1.user, referer: target_path(target_l2)
+
+        click_button 'Mark As Complete'
+
+        expect(page).to have_text('Target has been marked as complete')
+
+        # An active certificate is necessary for the automatic issuance of certificates.
+        expect(IssuedCertificate.count).to eq(0)
       end
     end
 
@@ -203,15 +219,48 @@ feature "Automatic issuance of certificates", js: true do
       let(:target_group_l2) { create :target_group, level: level_2 }
 
       scenario 'students never receive certificates' do
-        pending 'At least one milestone is required in the final level for the issuance of certificates.'
-        expect(1).to eq(2)
+        sign_in_user student_1.user, referer: target_path(target_l2)
+
+        click_button 'Mark As Complete'
+
+        expect(page).to have_text('Target has been marked as complete')
+
+        # At least one milestone is required in the final level for the issuance of certificates.
+        expect(IssuedCertificate.count).to eq(0)
       end
     end
 
-    context 'when a certificate has already been issued do' do
+    context 'when a certificate has already been issued' do
+      let(:evaluation_criterion) { create :evaluation_criterion, course: course }
+      let!(:target_l2) { create :target, :with_markdown, :with_default_checklist, :team, target_group: target_group_l2, evaluation_criteria: [evaluation_criterion] }
+      let(:coach) { create :faculty }
+
+      before do
+        create :faculty_course_enrollment, faculty: coach, course: course
+
+        # Student 1 completes the target.
+        complete_target target_l2, student_1
+
+        # Both students get issued certificates.
+        create :issued_certificate, user: student_1.user, certificate: certificate
+        create :issued_certificate, user: student_2.user, certificate: certificate
+
+        # Student 2 resubmits the target.
+        @resubmission = submit_target target_l2, student_2
+      end
+
       scenario 'student resubmits the final target' do
-        pending "It doesn't issue a duplicate certificate."
-        expect(1).to eq(2)
+        sign_in_user coach.user, referer: timeline_event_path(@resubmission)
+
+        within("div[aria-label='submissions-overlay-card-#{@resubmission.id}']") do
+          find("div[title='Good']").click
+        end
+
+        click_button 'Save grades'
+
+        # It doesn't issue duplicate certificates.
+        expect(page).to have_text('The submission has been marked as reviewed')
+        expect(IssuedCertificate.count).to eq(2)
       end
     end
   end

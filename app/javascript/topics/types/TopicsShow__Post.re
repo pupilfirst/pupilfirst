@@ -20,6 +20,8 @@ let createdAt = t => t.createdAt;
 
 let postLikes = t => t.postLikes;
 
+let postNumber = t => t.postNumber;
+
 let solution = t => t.solution;
 
 let user = (users, t) => {
@@ -36,6 +38,48 @@ let sort = posts => {
 
 let repliesToPost = (posts, post) => {
   posts |> Js.Array.filter(p => post.replies |> Array.mem(p.id)) |> sort;
+};
+
+let addReply = (newReplyId, t) => {
+  {...t, replies: t.replies |> Array.append([|newReplyId|])};
+};
+
+let find = (postId, posts) => {
+  posts
+  |> ArrayUtils.unsafeFind(
+       post => post.id == postId,
+       "Unable for find post with ID: " ++ postId ++ " in TopicShow__Post",
+     );
+};
+
+let highestPostNumber = posts => {
+  posts |> ArrayUtils.isEmpty
+    ? 0 : (posts |> sort |> Array.to_list |> List.rev |> List.hd).postNumber;
+};
+
+let make =
+    (
+      id,
+      body,
+      creatorId,
+      editorId,
+      postNumber,
+      createdAt,
+      updatedAt,
+      postLikes,
+      replies,
+      solution,
+    ) => {
+  id,
+  body,
+  creatorId,
+  editorId,
+  postNumber,
+  createdAt,
+  updatedAt,
+  postLikes,
+  replies,
+  solution,
 };
 
 let mainThread = posts => {

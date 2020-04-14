@@ -1,8 +1,8 @@
 <%
   topic = @post.topic
   addressee_name = @addressee.name
-  author_name = @answer.creator&.name || "A user"
-  community_name = question.community.name
+  author_name = @post.creator&.name || "A user"
+  community_name = @post.topic.community.name
 %>
 
 <% content_for :title do %>

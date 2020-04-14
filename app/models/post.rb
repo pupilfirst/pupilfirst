@@ -7,6 +7,9 @@ class Post < ApplicationRecord
 
   has_many :replies, class_name: 'Post', foreign_key: 'reply_to_post_id', dependent: :restrict_with_error, inverse_of: :reply_to_post
   has_many :post_likes, dependent: :restrict_with_error
+  has_many :text_versions, as: :versionable, dependent: :restrict_with_error
 
   scope :live, -> { where(archived_at: nil) }
+
+  delegate :community, to: :topic
 end

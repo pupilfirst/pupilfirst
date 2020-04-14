@@ -38,7 +38,7 @@ class CreatePostMutator < ApplicationQuery
   end
 
   def topic
-    @topic ||= Topic.find_by(id: topic)
+    @topic ||= Topic.find_by(id: topic_id)
   end
 
   def reply_to_post

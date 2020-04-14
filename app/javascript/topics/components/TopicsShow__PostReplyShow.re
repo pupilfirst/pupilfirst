@@ -48,7 +48,7 @@ let optionsDropdown = toggleShowReplyEdit => {
 };
 
 [@react.component]
-let make = (~topic, ~post, ~currentUserId, ~users) => {
+let make = (~topic, ~post, ~currentUserId, ~users, ~handlePostCB) => {
   let (showReplyEdit, toggleShowReplyEdit) = React.useState(() => false);
   let user =
     users
@@ -73,8 +73,10 @@ let make = (~topic, ~post, ~currentUserId, ~users) => {
     {showReplyEdit
        ? <TopicsShow__PostEditor
            topic
-           currentUserId
            post
+           currentUserId
+           postNumber={post |> Post.postNumber}
+           handlePostCB
            handleCloseCB={() => toggleShowReplyEdit(_ => false)}
          />
        : <div className="text-sm ml-10"> {post |> Post.body |> str} </div>}

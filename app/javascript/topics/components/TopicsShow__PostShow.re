@@ -110,7 +110,12 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
            ? <div>
                {repliesToPost
                 |> Array.map(post =>
-                     <TopicsShow__PostReplyShow post currentUserId users />
+                     <TopicsShow__PostReplyShow
+                       topic
+                       post
+                       currentUserId
+                       users
+                     />
                    )
                 |> React.array}
              </div>

@@ -22,10 +22,12 @@ let avatar = (~size=("6", "8"), avatarUrl, name) => {
   };
 };
 
-let optionsDropdown = {
+let optionsDropdown = toggleShowReplyEdit => {
   let selected = <PfIcon className="if i-ellipsis-h-light if-fw" />;
   let editPostButton =
-    <button className="flex p-2 items-center text-gray-700">
+    <button
+      onClick={_ => toggleShowReplyEdit(_ => true)}
+      className="flex p-2 items-center text-gray-700">
       <FaIcon classes="fas fa-edit mr-2" />
       {"Edit Reply" |> str}
     </button>;
@@ -42,7 +44,8 @@ let optionsDropdown = {
 };
 
 [@react.component]
-let make = (~post, ~currentUserId, ~users) => {
+let make = (~topic, ~post, ~currentUserId, ~users) => {
+  let (showReplyEdit, toggleShowReplyEdit) = React.useState(() => false);
   let user =
     users
     |> ArrayUtils.unsafeFind(
@@ -59,11 +62,18 @@ let make = (~post, ~currentUserId, ~users) => {
         {user |> User.name |> str}
       </span>
     </div>
-    <div className="flex justify-between">
-      <div className="text-sm w-7/8"> {post |> Post.body |> str} </div>
-      <div className="w-1/8 bg-gray-400 hover:bg-gray-500">
-        optionsDropdown
-      </div>
-    </div>
+    {showReplyEdit
+       ? <TopicsShow__PostEditor
+           topic
+           currentUserId
+           post
+           handleCloseCB={() => toggleShowReplyEdit(_ => false)}
+         />
+       : <div className="flex justify-between">
+           <div className="text-sm w-7/8"> {post |> Post.body |> str} </div>
+           <div className="w-1/8 bg-gray-400 hover:bg-gray-500">
+             {optionsDropdown(toggleShowReplyEdit)}
+           </div>
+         </div>}
   </div>;
 };

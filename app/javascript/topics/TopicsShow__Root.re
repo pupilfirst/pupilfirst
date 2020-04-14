@@ -63,10 +63,14 @@ let make =
              currentUserId
            />
          </div>}
+        {<h5 className="border-b pb-2 pt-8 ml-14">
+           {replies |> Post.mainThread |> Array.length |> string_of_int |> str}
+         </h5>}
         {replies
          |> Post.mainThread
          |> Array.map(reply =>
               <TopicsShow__PostShow
+                key={Post.id(reply)}
                 post=reply
                 topic
                 users

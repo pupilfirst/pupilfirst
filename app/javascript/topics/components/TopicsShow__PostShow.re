@@ -15,14 +15,16 @@ let findUser = (users, userId) => {
   users |> Array.to_list |> User.findById(userId);
 };
 
-let optionsDropdown = {
+let optionsDropdown = toggleShowPostEdit => {
   let selected =
     <div
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>;
   let editPostButton =
-    <button className="flex p-2 items-center text-gray-700">
+    <button
+      onClick={_ => toggleShowPostEdit(showPostEdit => !showPostEdit)}
+      className="flex p-2 items-center text-gray-700">
       <FaIcon classes="fas fa-edit mr-2" />
       {"Edit Reply" |> str}
     </button>;
@@ -56,7 +58,6 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
       // handlePostCB(post, bool);
   };
   <div>
-    <h5 className="border-b pb-2 pt-8 ml-14"> {"4 Replies" |> str} </h5>
     <div className="flex pt-4" key={post |> Post.id}>
       <div id="likes-and-solution" className="flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
@@ -67,8 +68,16 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
       </div>
       <div id="body-and-user-data" className="w-7/8">
         <div id="body" className="flex items-start">
-          <div className="text-sm"> {post |> Post.body |> str} </div>
-          <div className="flex-shrink-0"> optionsDropdown </div>
+          {showPostEdit
+             ? <div className="flex-1">
+                 <TopicsShow__PostEditor topic currentUserId post />
+               </div>
+             : <div className="flex items-start">
+                 <div className="text-sm"> {post |> Post.body |> str} </div>
+                 <div className="flex-shrink-0">
+                   {optionsDropdown(toggleShowPostEdit)}
+                 </div>
+               </div>}
         </div>
         <div id="user-data" className="flex justify-between pt-4">
           <TopicsShow__UserShow

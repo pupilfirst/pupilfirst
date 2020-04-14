@@ -11,7 +11,8 @@ class CreatePostMutator < ApplicationQuery
         creator: current_user,
         topic: topic,
         body: body,
-        reply_to_post: reply_to_post
+        reply_to_post: reply_to_post,
+        post_number: post_number
       )
 
       # Send a notification mail to addressee only if she isn't replying to herself.
@@ -42,5 +43,9 @@ class CreatePostMutator < ApplicationQuery
 
   def reply_to_post
     community.posts.find_by(id: reply_to_post_id)
+  end
+
+  def post_number
+    topic.posts.maximum(:post_number) + 1
   end
 end

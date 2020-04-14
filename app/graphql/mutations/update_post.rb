@@ -5,7 +5,7 @@ module Mutations
 
     description "Update community post"
 
-    field :success, Boolean, null: true
+    field :success, Boolean, null: false
 
     def resolve(params)
       mutator = UpdatePostMutator.new(context, params)

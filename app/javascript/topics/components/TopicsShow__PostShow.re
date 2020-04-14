@@ -47,7 +47,16 @@ let optionsDropdown = toggleShowPostEdit => {
 };
 
 [@react.component]
-let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
+let make =
+    (
+      ~post,
+      ~topic,
+      ~users,
+      ~posts,
+      ~currentUserId,
+      ~updatePostCB,
+      ~addNewReplyCB,
+    ) => {
   let user = findUser(users);
   let repliesToPost = post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
@@ -76,6 +85,8 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
                    topic
                    currentUserId
                    post
+                   handlePostCB=updatePostCB
+                   postNumber={post |> Post.postNumber}
                    handleCloseCB={() => toggleShowPostEdit(_ => false)}
                  />
                </div>
@@ -106,7 +117,10 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
                  </button>
                : React.null}
             <button
-              onClick={_ => toggleshowNewReply(showNewReply => !showNewReply)}
+              onClick={_ => {
+                toggleshowNewReply(showNewReply => !showNewReply);
+                toggleShowReplies(_showReplies => true);
+              }}
               id="reply button"
               className="border bg-gray-200 p-2 rounded text-xs font-semibold">
               <FaIcon classes="fas fa-reply mr-2" />
@@ -119,7 +133,10 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
                <TopicsShow__PostEditor
                  topic
                  currentUserId
+                 replyToPostId={post |> Post.id}
+                 postNumber={(repliesToPost |> Post.highestPostNumber) + 1}
                  handleCloseCB={() => toggleshowNewReply(_ => false)}
+                 handlePostCB=addNewReplyCB
                />
              </div>
            : React.null}
@@ -128,10 +145,12 @@ let make = (~post, ~topic, ~users, ~posts, ~currentUserId) => {
                {repliesToPost
                 |> Array.map(post =>
                      <TopicsShow__PostReplyShow
+                       key={post |> Post.id}
                        topic
                        post
                        currentUserId
                        users
+                       handlePostCB=updatePostCB
                      />
                    )
                 |> React.array}

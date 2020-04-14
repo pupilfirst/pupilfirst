@@ -11,7 +11,8 @@ type state = {
 };
 
 type action =
-  | AddReply(Post.t)
+  | AddReply(Post.t, option(string))
+  | AddReplyToFirstPost(Post.t)
   | LikeReply(Post.id)
   | RemoveLikeFromReply(Post.id)
   | LikeTopic
@@ -23,16 +24,56 @@ type action =
 
 let reducer = (state, action) => {
   switch (action) {
-  | AddReply(post) => state
+  | AddReply(newPost, replyToPostId) =>
+    switch (replyToPostId) {
+    | Some(id) =>
+      let updatedParentPost =
+        state.replies |> Post.find(id) |> Post.addReply(newPost |> Post.id);
+      {
+        ...state,
+        replies:
+          state.replies
+          |> Js.Array.filter(r => Post.id(r) != id)
+          |> Array.append([|newPost, updatedParentPost|]),
+      };
+    | None => {...state, replies: state.replies |> Array.append([|newPost|])}
+    }
+  | AddReplyToFirstPost(post) => {
+      ...state,
+      replies: state.replies |> Array.append([|post|]),
+      firstPost: state.firstPost |> Post.addReply(post |> Post.id),
+    }
   | LikeReply(postId) => state
   | RemoveLikeFromReply(postId) => state
   | LikeTopic => state
   | RemoveLikeFromTopic => state
   | UpdateTopicTitle(title) => state
-  | UpdateFirstPost(post) => state
-  | UpdateReply(post) => state
+  | UpdateFirstPost(post) => {...state, firstPost: post}
+  | UpdateReply(post) => {
+      ...state,
+      replies:
+        state.replies
+        |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
+        |> Array.append([|post|]),
+    }
   | ArchivePost(postId) => state
   };
+};
+
+let addNewReply = (send, replyToPostId, post) => {
+  send(AddReply(post, replyToPostId));
+};
+
+let addNewReplyToFirstPost = (send, replyToPostId, post) => {
+  send(AddReplyToFirstPost(post));
+};
+
+let updateReply = (send, post) => {
+  send(UpdateReply(post));
+};
+
+let updateFirstPost = (send, post) => {
+  send(UpdateFirstPost(post));
 };
 
 [@react.component]
@@ -58,11 +99,14 @@ let make =
              {topic |> Topic.title |> str}
            </h3>
            <TopicsShow__PostShow
-             post=firstPost
+             key={Post.id(state.firstPost)}
+             post={state.firstPost}
              topic
              users
-             posts=replies
+             posts={state.replies}
              currentUserId
+             updatePostCB={updateFirstPost(send)}
+             addNewReplyCB={addNewReplyToFirstPost(send, Post.id(firstPost))}
            />
          </div>}
         {<h5 className="pt-4 pb-2 ml-14 border-b mb-4">
@@ -70,7 +114,7 @@ let make =
             ++ " Replies"
             |> str}
          </h5>}
-        {replies
+        {state.replies
          |> Post.mainThread
          |> Array.map(reply =>
               <TopicsShow__PostShow
@@ -78,14 +122,21 @@ let make =
                 post=reply
                 topic
                 users
-                posts=replies
+                posts={state.replies}
                 currentUserId
+                updatePostCB={updateReply(send)}
+                addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
               />
             )
          |> React.array}
       </div>
       <div className="mt-4">
-        <TopicsShow__PostEditor topic currentUserId />
+        <TopicsShow__PostEditor
+          topic
+          currentUserId
+          postNumber={(state.replies |> Post.highestPostNumber) + 1}
+          handlePostCB={addNewReply(send, None)}
+        />
       </div>
     </div>
   </div>;

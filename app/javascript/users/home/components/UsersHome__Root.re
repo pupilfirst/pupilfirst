@@ -102,27 +102,37 @@ let ctaText = (message, icon) => {
 let studentLink = (courseId, suffix) =>
   "/courses/" ++ courseId ++ "/" ++ suffix;
 
-let callToAction = (course, currentSchoolAdmin) => {
+let callToAction = (course, currentSchoolAdmin) =>
+  if (currentSchoolAdmin) {
+    `ViewCourse;
+  } else if (course |> Course.author) {
+    `EditCourse;
+  } else if (course |> Course.review) {
+    `ReviewSubmissions;
+  } else if (course |> Course.exited) {
+    `DroppedOut;
+  } else if (course |> Course.ended) {
+    `CourseEnded;
+  } else {
+    `ViewCourse;
+  };
+
+let ctaFooter = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
 
-  <div>
-    {if (currentSchoolAdmin) {
-       ctaButton("View Course", studentLink(courseId, "curriculum"));
-     } else if (course |> Course.author) {
-       ctaButton(
-         "Edit Curriculum",
-         "/school/courses/" ++ courseId ++ "/curriculum",
-       );
-     } else if (course |> Course.review) {
-       ctaButton("Review Submissions", studentLink(courseId, "review"));
-     } else if (course |> Course.exited) {
-       ctaText("Dropped out", "fas fa-user-slash");
-     } else if (course |> Course.ended) {
-       ctaText("Course Ended", "fas fa-history");
-     } else {
-       ctaButton("Continue Course", studentLink(courseId, "curriculum"));
-     }}
-  </div>;
+  switch (callToAction(course, currentSchoolAdmin)) {
+  | `ViewCourse =>
+    ctaButton("View Course", studentLink(courseId, "curriculum"))
+  | `EditCourse =>
+    ctaButton(
+      "Edit Curriculum",
+      "/school/courses/" ++ courseId ++ "/curriculum",
+    )
+  | `ReviewSubmissions =>
+    ctaButton("Review Submissions", studentLink(courseId, "review"))
+  | `DroppedOut => ctaText("Dropped out", "fas fa-user-slash")
+  | `CourseEnded => ctaText("Course Ended", "fas fa-history")
+  };
 };
 
 let communityLinks = (communityIds, communities) => {
@@ -147,21 +157,25 @@ let communityLinks = (communityIds, communities) => {
   |> React.array;
 };
 
-let courseLinks = (course, communities) => {
+let courseLinks = (course, currentSchoolAdmin, communities) => {
   let courseId = course |> Course.id;
+  let cta = callToAction(course, currentSchoolAdmin);
+
   <div className="flex flex-wrap px-4 mt-2">
-    {course |> Course.author
+    {course |> Course.author && cta != `EditCourse
        ? courseLink(
            "/school/courses/" ++ courseId ++ "/curriculum",
            "Edit Curriculum",
            "fas fa-check-square",
          )
        : React.null}
-    {courseLink(
-       studentLink(courseId, "curriculum"),
-       "View Curriculum",
-       "fas fa-book",
-     )}
+    {cta != `ViewCourse
+       ? courseLink(
+           studentLink(courseId, "curriculum"),
+           "View Curriculum",
+           "fas fa-book",
+         )
+       : React.null}
     {course |> Course.enableLeaderboard
        ? courseLink(
            studentLink(courseId, "leaderboard"),
@@ -169,7 +183,7 @@ let courseLinks = (course, communities) => {
            "fas fa-calendar-alt",
          )
        : React.null}
-    {course |> Course.review
+    {course |> Course.review && cta != `ReviewSubmissions
        ? courseLink(
            studentLink(courseId, "review"),
            "Review Submissions",
@@ -234,10 +248,12 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                         |> str}
                      </div>;
                    } else {
-                     <div> {courseLinks(course, communities)} </div>;
+                     <div>
+                       {courseLinks(course, currentSchoolAdmin, communities)}
+                     </div>;
                    }}
                 </div>
-                <div> {callToAction(course, currentSchoolAdmin)} </div>
+                <div> {ctaFooter(course, currentSchoolAdmin)} </div>
               </div>
             </div>
           )

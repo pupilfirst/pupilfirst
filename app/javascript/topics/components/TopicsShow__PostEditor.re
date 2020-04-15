@@ -27,7 +27,16 @@ module UpdatePostQuery = [%graphql
 let dateTime = currentTime() |> DateFns.parseString;
 
 let handlePostCreateCB =
-    (id, body, postNumber, currentUserId, setBody, setSaving, handlePostCB) => {
+    (
+      id,
+      body,
+      postNumber,
+      currentUserId,
+      setBody,
+      setSaving,
+      handleCloseCB,
+      handlePostCB,
+    ) => {
   let post =
     Post.make(
       id,
@@ -43,11 +52,21 @@ let handlePostCreateCB =
     );
   setBody(_ => "");
   setSaving(_ => false);
+  handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(post);
 };
 
 let handlePostUpdateResponseCB =
-    (id, body, currentUserId, setBody, setSaving, handlePostCB, post) => {
+    (
+      id,
+      body,
+      currentUserId,
+      setBody,
+      setSaving,
+      handleCloseCB,
+      handlePostCB,
+      post,
+    ) => {
   let updatedPost =
     Post.make(
       id,
@@ -63,6 +82,7 @@ let handlePostUpdateResponseCB =
     );
   setBody(_ => "");
   setSaving(_ => false);
+  handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(updatedPost);
 };
 
@@ -98,6 +118,7 @@ let savePost =
                  currentUserId,
                  setBody,
                  setSaving,
+                 handleCloseCB,
                  handlePostCB,
                  post,
                )
@@ -127,9 +148,9 @@ let savePost =
                currentUserId,
                setBody,
                setSaving,
+               handleCloseCB,
                handlePostCB,
-             );
-             setSaving(_ => false);
+             )
            | None => setSaving(_ => false)
            };
            Js.Promise.resolve();
@@ -142,10 +163,6 @@ let savePost =
     };
   } else {
     Notification.error("Empty", "Answer cant be blank");
-  };
-  switch (handleCloseCB) {
-  | Some(cb) => cb()
-  | None => ()
   };
 };
 

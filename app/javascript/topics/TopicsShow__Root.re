@@ -64,7 +64,7 @@ let addNewReply = (send, replyToPostId, post) => {
   send(AddReply(post, replyToPostId));
 };
 
-let addNewReplyToFirstPost = (send, replyToPostId, post) => {
+let addNewReplyToFirstPost = (send, _, post) => {
   send(AddReplyToFirstPost(post));
 };
 
@@ -90,6 +90,8 @@ let make =
     ) => {
   let (state, send) =
     React.useReducer(reducer, {topic, firstPost, replies});
+
+  let mainThread = state.replies |> Post.mainThread(state.firstPost);
   <div className="bg-gray-100">
     <div className="flex-col items-center justify-between">
       <div
@@ -110,12 +112,9 @@ let make =
            />
          </div>}
         {<h5 className="pt-4 pb-2 ml-14 border-b mb-4">
-           {(replies |> Post.mainThread |> Array.length |> string_of_int)
-            ++ " Replies"
-            |> str}
+           {(mainThread |> Array.length |> string_of_int) ++ " Replies" |> str}
          </h5>}
-        {state.replies
-         |> Post.mainThread
+        {mainThread
          |> Array.map(reply =>
               <TopicsShow__PostShow
                 key={Post.id(reply)}

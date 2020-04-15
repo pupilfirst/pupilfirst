@@ -82,15 +82,15 @@ let make =
   solution,
 };
 
-let mainThread = posts => {
+let mainThread = (firstPost, replies) => {
   let replyPostIds =
-    posts
+    Array.append(replies, [|firstPost|])
     |> Array.map(post => post.replies |> Array.to_list)
     |> Js.Array.filter(reply => reply |> ListUtils.isNotEmpty)
     |> Array.to_list
     |> List.flatten
     |> Array.of_list;
-  posts
+  replies
   |> Js.Array.filter(post => !(replyPostIds |> Array.mem(post.id)))
   |> sort;
 };

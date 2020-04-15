@@ -44,6 +44,17 @@ let addReply = (newReplyId, t) => {
   {...t, replies: t.replies |> Array.append([|newReplyId|])};
 };
 
+let addLike = (like, t) => {
+  {...t, postLikes: t.postLikes |> Array.append([|like|])};
+};
+
+let removeLike = (likeId, t) => {
+  let postLikes =
+    t.postLikes
+    |> Js.Array.filter(like => TopicsShow__Like.id(like) != likeId);
+  {...t, postLikes};
+};
+
 let find = (postId, posts) => {
   posts
   |> ArrayUtils.unsafeFind(

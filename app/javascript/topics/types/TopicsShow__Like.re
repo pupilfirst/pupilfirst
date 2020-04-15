@@ -16,7 +16,19 @@ let addLike = (like, likes) => likes |> List.append([like]);
 let removeLike = (id, likes) => likes |> List.filter(like => like.id != id);
 
 let currentUserLiked = (likes, currentUserId) => {
-  likes |> Js.Array.filter(like => like.userId == currentUserId) |> ArrayUtils.isNotEmpty;
+  likes
+  |> Js.Array.filter(like => like.userId == currentUserId)
+  |> ArrayUtils.isNotEmpty;
+};
+
+let findUserLike = (likes, currentUserId) => {
+  likes
+  |> ArrayUtils.unsafeFind(
+       like => like.userId == currentUserId,
+       "Failed to find like with userId: "
+       ++ currentUserId
+       ++ " in TopicsShow__Like",
+     );
 };
 
 let create = (id, userId) => {id, userId};

@@ -59,6 +59,8 @@ let make =
       ~currentUserId,
       ~updatePostCB,
       ~addNewReplyCB,
+      ~addPostLikeCB,
+      ~removePostLikeCB,
     ) => {
   let user = findUser(users);
   let repliesToPost = post |> Post.repliesToPost(posts);
@@ -76,8 +78,11 @@ let make =
       <div id="likes-and-solution" className="flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
         {<TopicsShow__LikeManager
+           postId={post |> Post.id}
            postLikes={post |> Post.postLikes}
            currentUserId
+           addPostLikeCB
+           removePostLikeCB
          />}
       </div>
       <div id="body-and-user-data" className="flex-1 border-b pb-8">

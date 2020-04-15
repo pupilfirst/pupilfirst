@@ -13,10 +13,10 @@ type state = {
 type action =
   | AddReply(Post.t, option(string))
   | AddReplyToFirstPost(Post.t)
-  | LikeReply(Post.id)
-  | RemoveLikeFromReply(Post.id)
-  | LikeTopic
-  | RemoveLikeFromTopic
+  | LikeFirstPost(Like.t)
+  | RemoveLikeFromFirstPost(string)
+  | LikeReply(Post.t, Like.t)
+  | RemoveLikeFromReply(Post.t, string)
   | UpdateTopicTitle(string)
   | UpdateReply(Post.t)
   | ArchivePost(Post.id);
@@ -45,10 +45,32 @@ let reducer = (state, action) => {
       replies: state.replies |> Array.append([|post|]),
       firstPost: state.firstPost |> Post.addReply(post |> Post.id),
     }
-  | LikeReply(postId) => state
-  | RemoveLikeFromReply(postId) => state
-  | LikeTopic => state
-  | RemoveLikeFromTopic => state
+  | LikeFirstPost(like) => {
+      ...state,
+      firstPost: state.firstPost |> Post.addLike(like),
+    }
+  | RemoveLikeFromFirstPost(likeId) => {
+      ...state,
+      firstPost: state.firstPost |> Post.removeLike(likeId),
+    }
+  | LikeReply(post, like) =>
+    let updatedPost = post |> Post.addLike(like);
+    {
+      ...state,
+      replies:
+        state.replies
+        |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
+        |> Array.append([|updatedPost|]),
+    };
+  | RemoveLikeFromReply(post, likeId) =>
+    let updatedPost = post |> Post.removeLike(likeId);
+    {
+      ...state,
+      replies:
+        state.replies
+        |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
+        |> Array.append([|updatedPost|]),
+    };
   | UpdateTopicTitle(title) => state
   | UpdateReply(post) => {
       ...state,
@@ -71,6 +93,22 @@ let addNewReplyToFirstPost = (send, post) => {
 
 let updatePost = (send, post) => {
   send(UpdateReply(post));
+};
+
+let addReplyLike = (send, post, like) => {
+  send(LikeReply(post, like));
+};
+
+let removeReplyLike = (send, post, likeId) => {
+  send(RemoveLikeFromReply(post, likeId));
+};
+
+let addFirstPostLike = (send, like) => {
+  send(LikeFirstPost(like));
+};
+
+let removeFirstPostLike = (send, likeId) => {
+  send(RemoveLikeFromFirstPost(likeId));
 };
 
 [@react.component]
@@ -106,6 +144,8 @@ let make =
              currentUserId
              updatePostCB={updatePost(send)}
              addNewReplyCB={addNewReplyToFirstPost(send)}
+             addPostLikeCB={addFirstPostLike(send)}
+             removePostLikeCB={removeFirstPostLike(send)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 ml-14 border-b mb-4">
@@ -122,6 +162,8 @@ let make =
                 currentUserId
                 updatePostCB={updatePost(send)}
                 addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
+                addPostLikeCB={addReplyLike(send, reply)}
+                removePostLikeCB={removeReplyLike(send, reply)}
               />
             )
          |> React.array}

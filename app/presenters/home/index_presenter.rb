@@ -32,5 +32,15 @@ module Home
       classes = "relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10"
       @school.about.present? ? "#{classes} text-left" : "#{classes} text-center"
     end
+
+    def courses_as_student
+      @courses_as_student ||= begin
+        if current_user.present?
+          current_user.founders.joins(:course).pluck('courses.id')
+        else
+          []
+        end
+      end
+    end
   end
 end

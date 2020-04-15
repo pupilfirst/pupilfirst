@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_101805) do
+ActiveRecord::Schema.define(version: 2020_04_13_113804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -270,6 +270,7 @@ ActiveRecord::Schema.define(version: 2020_04_09_101805) do
     t.boolean "public_signup", default: false
     t.text "about"
     t.boolean "featured", default: true
+    t.boolean "can_connect", default: true
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 

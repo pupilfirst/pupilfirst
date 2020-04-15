@@ -1,11 +1,16 @@
 <% presenter = IssuedCertificates::VerifyPresenter.new(self, @issued_certificate) %>
 
+<% content_for(:viewport) do %>
+  <meta name="viewport"/>
+  <%= stylesheet_pack_tag 'IssuedCertificatesPrintPack' %>
+<% end %>
+
 <% content_for(:head) do %>
-  <title>Certificate <%= presenter.serial_number %></title>
+  <title>Certificate <%= presenter.serial_number %> | Print</title>
 <% end %>
 
 <% content_for(:tail) do %>
-  <%= javascript_pack_tag 'IssuedCertificatesVerifyPack', nonce: true %>
+  <%= javascript_pack_tag 'IssuedCertificatesPrintPack', nonce: true %>
 <% end %>
 
 <script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>

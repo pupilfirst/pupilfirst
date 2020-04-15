@@ -8,6 +8,6 @@ let (issuedCertificate, verifyImageUrl) =
   DomUtils.parseJsonTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <VerifyCertificate__Root issuedCertificate verifyImageUrl />,
+  <PrintCertificate__Root issuedCertificate verifyImageUrl />,
   "react-root",
 );

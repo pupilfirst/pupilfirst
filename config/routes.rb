@@ -222,6 +222,7 @@ Rails.application.routes.draw do
   end
 
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
+  get '/c/:serial_number/print', to: 'issued_certificates#print', as: :print_issued_certificate
 
   get '/help/:document', to: 'help#show'
 

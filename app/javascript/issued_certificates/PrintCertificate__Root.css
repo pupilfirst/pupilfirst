@@ -1,0 +1,9 @@
+body {
+  width: 1600px !important;
+  background-color: white;
+}
+
+@page {
+  size: A4 landscape;
+  margin: 0;
+}

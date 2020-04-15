@@ -18,25 +18,27 @@ type action =
   | LikeTopic
   | RemoveLikeFromTopic
   | UpdateTopicTitle(string)
-  | UpdateFirstPost(Post.t)
   | UpdateReply(Post.t)
   | ArchivePost(Post.id);
 
 let reducer = (state, action) => {
   switch (action) {
-  | AddReply(newPost, replyToPostId) =>
+  | AddReply(newReply, replyToPostId) =>
     switch (replyToPostId) {
     | Some(id) =>
       let updatedParentPost =
-        state.replies |> Post.find(id) |> Post.addReply(newPost |> Post.id);
+        state.replies |> Post.find(id) |> Post.addReply(newReply |> Post.id);
       {
         ...state,
         replies:
           state.replies
           |> Js.Array.filter(r => Post.id(r) != id)
-          |> Array.append([|newPost, updatedParentPost|]),
+          |> Array.append([|newReply, updatedParentPost|]),
       };
-    | None => {...state, replies: state.replies |> Array.append([|newPost|])}
+    | None => {
+        ...state,
+        replies: state.replies |> Array.append([|newReply|]),
+      }
     }
   | AddReplyToFirstPost(post) => {
       ...state,
@@ -48,7 +50,6 @@ let reducer = (state, action) => {
   | LikeTopic => state
   | RemoveLikeFromTopic => state
   | UpdateTopicTitle(title) => state
-  | UpdateFirstPost(post) => {...state, firstPost: post}
   | UpdateReply(post) => {
       ...state,
       replies:
@@ -64,16 +65,12 @@ let addNewReply = (send, replyToPostId, post) => {
   send(AddReply(post, replyToPostId));
 };
 
-let addNewReplyToFirstPost = (send, _, post) => {
+let addNewReplyToFirstPost = (send, post) => {
   send(AddReplyToFirstPost(post));
 };
 
-let updateReply = (send, post) => {
+let updatePost = (send, post) => {
   send(UpdateReply(post));
-};
-
-let updateFirstPost = (send, post) => {
-  send(UpdateFirstPost(post));
 };
 
 [@react.component]
@@ -107,8 +104,8 @@ let make =
              users
              posts={state.replies}
              currentUserId
-             updatePostCB={updateFirstPost(send)}
-             addNewReplyCB={addNewReplyToFirstPost(send, Post.id(firstPost))}
+             updatePostCB={updatePost(send)}
+             addNewReplyCB={addNewReplyToFirstPost(send)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 ml-14 border-b mb-4">
@@ -123,7 +120,7 @@ let make =
                 users
                 posts={state.replies}
                 currentUserId
-                updatePostCB={updateReply(send)}
+                updatePostCB={updatePost(send)}
                 addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
               />
             )

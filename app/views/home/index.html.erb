@@ -71,15 +71,22 @@
                       <%= course.description %>
                     </div>
                     <div class="flex w-full p-6 justify-center">
-                      <a class="w-full btn <%= course.public_signup? ? 'btn-primary' : 'btn-default' %>" href="/courses/<%= course.id %>">
-                        <% if course.public_signup? %>
-                          <i class="fas fa-feather-alt mr-2"></i>
-                          Get started
-                        <% else %>
-                          <i class="fas fa-info-circle mr-2"></i>
-                          Learn more
-                        <% end %>
-                      </a>
+                      <% if presenter.courses_as_student.include?(course.id) %>
+                        <a class="w-full btn btn-secondary" href="/courses/<%= course.id %>/curriculum">
+                          <i class="fas fa-book mr-2"></i>
+                          View Course
+                        </a>
+                      <% else %>
+                        <a class="w-full btn <%= course.public_signup? ? 'btn-primary' : 'btn-default' %>" href="/courses/<%= course.id %>">
+                          <% if course.public_signup? %>
+                            <i class="fas fa-feather-alt mr-2"></i>
+                            Get started
+                          <% else %>
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Learn more
+                          <% end %>
+                        </a>
+                      <% end %>
                     </div>
                   </div>
                 </div>

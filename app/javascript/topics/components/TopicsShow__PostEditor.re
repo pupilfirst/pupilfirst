@@ -192,7 +192,7 @@ let make =
       <div className="flex w-full">
         <div className="w-full flex flex-col">
           <label
-            className="inline-block tracking-wide text-gray-900 text-sm font-bold mb-2"
+            className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
             htmlFor="new-answer">
             {"Your Reply" |> str}
           </label>
@@ -204,13 +204,13 @@ let make =
             profile=Markdown.QuestionAndAnswer
             maxLength=10000
           />
-          <div className="flex justify-end pt-3 border-t">
+          <div className="flex justify-end pt-3">
             {switch (handleCloseCB) {
              | Some(handleCloseCB) =>
                <button
                  disabled=saving
                  onClick={_ => handleCloseCB()}
-                 className="btn btn-default mr-2">
+                 className="btn btn-subtle mr-2">
                  {"Cancel" |> str}
                </button>
              | None => React.null

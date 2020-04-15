@@ -4,11 +4,14 @@ let str = React.string;
 [%bs.raw {|require("./TopicsShow__PostShow.css")|}];
 
 let solutionIcon = {
-  <div className="flex flex-col items-center">
-    <div className="bg-green-300 text-green-700 w-5 text-center">
-      <PfIcon className="if i-check-square-solid if-fw" />
+  <div className="flex flex-col items-center pr-1 md:pr-4 pb-4 pt-2">
+    <div
+      className="flex items-center justify-center w-8 h-8 bg-green-200 text-green-800 rounded-full">
+      <PfIcon className="if i-check-solid" />
     </div>
-    <div className="text-xs text-green-700"> {"Solution" |> str} </div>
+    <div className="text-tiny font-semibold text-green-800 pt-1">
+      {"Solution" |> str}
+    </div>
   </div>;
 };
 

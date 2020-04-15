@@ -67,11 +67,12 @@ let qrCode = (issuedCertificate, verifyImageUrl) =>
       className={"absolute " ++ qrPositionClasses(issuedCertificate)}
       style={qrContainerStyle(issuedCertificate)}>
       <QrCode
+        style={ReactDOMRe.Style.make(~width="100%", ~height="100%", ())}
         value={certificateUrl(issuedCertificate)}
         className="w-full h-full"
-        renderAs="svg"
         size=256
         level="Q"
+        bgColor="transparent"
         imageSettings={QrCode.imageSettings(
           ~src=verifyImageUrl,
           ~width=133,

@@ -17,6 +17,7 @@ type imageSettings = {
 external make:
   (
     ~value: string,
+    ~style: ReactDOMRe.style=?,
     ~className: string=?,
     ~renderAs: string=?,
     ~size: int=?,

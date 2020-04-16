@@ -1,18 +1,8 @@
 @media print {
   header,
   footer,
-  .verify-certificate__header {
+  button.verify-certificate__cancel-button {
     display: none;
-  }
-
-  .verify-certificate__certificate-container {
-    display: block;
-  }
-}
-
-@media screen {
-  .verify-certificate__certificate-container {
-    @apply mt-4 max-w-2xl mx-auto;
   }
 }
 

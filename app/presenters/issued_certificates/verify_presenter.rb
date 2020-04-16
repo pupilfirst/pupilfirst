@@ -8,7 +8,8 @@ module IssuedCertificates
     def props
       {
         issued_certificate: issued_certificate_details,
-        verify_image_url: view.image_path('issued_certificates/verify.png')
+        verify_image_url: view.image_path('issued_certificates/verify.png'),
+        current_user: @issued_certificate.user == current_user
       }
     end
 

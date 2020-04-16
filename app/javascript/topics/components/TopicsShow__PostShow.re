@@ -19,34 +19,51 @@ let findUser = (users, userId) => {
   users |> Array.to_list |> User.findById(userId);
 };
 
-let optionsDropdown = toggleShowPostEdit => {
+let optionsDropdown =
+    (isPostCreator, isTopicCreator, isCoach, isFirstPost, toggleShowPostEdit) => {
   let selected =
     <div
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>;
+  let postTypeString = isFirstPost ? "Post" : "Reply";
   let editPostButton =
     <button
       onClick={_ => toggleShowPostEdit(_ => true)}
       className="flex p-2 items-center text-gray-700">
       <FaIcon classes="fas fa-edit mr-2" />
-      {"Edit Reply" |> str}
+      {"Edit " ++ postTypeString |> str}
     </button>;
   let markAsSolutionButton =
-    <button className="flex p-2 items-center text-gray-700">
-      <PfIcon className="if i-check-circle-alt-regular if-fw" />
-      {"Mark as solution" |> str}
-    </button>;
+    isFirstPost
+      ? React.null
+      : <button className="flex p-2 items-center text-gray-700">
+          <PfIcon className="if i-check-circle-alt-regular if-fw" />
+          {"Mark as solution" |> str}
+        </button>;
   let deletePostButton =
     <button className="flex p-2 items-center text-gray-700">
       <FaIcon classes="fas fa-trash-alt mr-2" />
-      {"Delete Reply" |> str}
+      {"Delete " ++ postTypeString |> str}
     </button>;
-  <Dropdown
-    selected
-    contents=[|editPostButton, markAsSolutionButton, deletePostButton|]
-    right=true
-  />;
+
+  let contents =
+    switch (isCoach, isTopicCreator, isPostCreator) {
+    | (true, _, _) => [|
+        editPostButton,
+        markAsSolutionButton,
+        deletePostButton,
+      |]
+    | (false, true, false) => [|markAsSolutionButton|]
+    | (false, true, true) => [|
+        editPostButton,
+        markAsSolutionButton,
+        deletePostButton,
+      |]
+    | (false, false, true) => [|editPostButton, deletePostButton|]
+    | _ => [||]
+    };
+  <Dropdown selected contents right=true />;
 };
 
 let onBorderAnimationEnd = event => {
@@ -84,6 +101,8 @@ let make =
       ~users,
       ~posts,
       ~currentUserId,
+      ~isCoach,
+      ~isTopicCreator,
       ~updatePostCB,
       ~addNewReplyCB,
       ~addPostLikeCB,
@@ -91,14 +110,11 @@ let make =
     ) => {
   let user = findUser(users);
   let repliesToPost = post |> Post.repliesToPost(posts);
+  let isPostCreator = currentUserId == Post.creatorId(post);
+  let isFirstPost = Post.postNumber(post) == 1;
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
   let (showReplies, toggleShowReplies) = React.useState(() => false);
-  let handleCloseCB = () => toggleShowPostEdit(_ => false);
-  let handlePostEditCB = (post, bool) => {
-    toggleShowPostEdit(_
-      => false);
-      // handlePostCB(post, bool);
-  };
+
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pb-4" key={post |> Post.id}>
       <div id="likes-and-solution" className="flex flex-col w-1/8">
@@ -128,7 +144,15 @@ let make =
              : <div className="flex items-start justify-between">
                  <div className="text-sm"> {post |> Post.body |> str} </div>
                  <div className="flex-shrink-0">
-                   {optionsDropdown(toggleShowPostEdit)}
+                   {isPostCreator || isCoach || isTopicCreator
+                      ? optionsDropdown(
+                          isPostCreator,
+                          isTopicCreator,
+                          isCoach,
+                          isFirstPost,
+                          toggleShowPostEdit,
+                        )
+                      : React.null}
                  </div>
                </div>}
         </div>

@@ -114,6 +114,10 @@ let removeFirstPostLike = (send, likeId) => {
   send(RemoveLikeFromFirstPost(likeId));
 };
 
+let isTopicCreator = (firstPost, currentUserId) => {
+  Post.creatorId(firstPost) == currentUserId;
+};
+
 [@react.component]
 let make =
     (
@@ -147,6 +151,8 @@ let make =
              users
              posts=[||]
              currentUserId
+             isCoach
+             isTopicCreator={isTopicCreator(firstPost, currentUserId)}
              updatePostCB={updateFirstPost(send)}
              addNewReplyCB={addNewReply(send, None)}
              addPostLikeCB={addFirstPostLike(send)}
@@ -168,6 +174,8 @@ let make =
                 users
                 posts={state.replies}
                 currentUserId
+                isCoach
+                isTopicCreator={isTopicCreator(firstPost, currentUserId)}
                 updatePostCB={updateReply(send)}
                 addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
                 addPostLikeCB={addReplyLike(send, reply)}

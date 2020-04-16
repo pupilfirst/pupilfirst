@@ -23,34 +23,29 @@ let avatar = (~size=("6", "8"), avatarUrl, name) => {
   };
 };
 
-let optionsDropdown = toggleShowReplyEdit => {
-  let selected =
-    <div
-      className="flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-300">
-      <PfIcon className="if i-ellipsis-h-regular text-base" />
-    </div>;
-  let editPostButton =
-    <button
-      onClick={_ => toggleShowReplyEdit(_ => true)}
-      className="flex p-2 items-center text-gray-700">
-      <FaIcon classes="fas fa-edit mr-2" />
-      {"Edit Reply" |> str}
-    </button>;
-  let deletePostButton =
-    <button className="flex p-2 items-center text-gray-700">
-      <FaIcon classes="fas fa-trash-alt mr-2" />
-      {"Delete Reply" |> str}
-    </button>;
-  <Dropdown
-    selected
-    contents=[|editPostButton, deletePostButton|]
-    right=true
-  />;
+let navigateToPost = postId => {
+  let elementId = "post-show-" ++ postId;
+  let element =
+    Webapi.Dom.document |> Webapi.Dom.Document.getElementById(elementId);
+  Js.Global.setTimeout(
+    () => {
+      switch (element) {
+      | Some(e) =>
+        {
+          Webapi.Dom.Element.scrollIntoView(e);
+          e->Webapi.Dom.Element.setClassName("topics-show__highlighted-item");
+        }
+        |> ignore
+      | None => Rollbar.error("Could not find the post to scroll to.")
+      }
+    },
+    50,
+  )
+  |> ignore;
 };
 
 [@react.component]
-let make = (~topic, ~post, ~currentUserId, ~users, ~handlePostCB) => {
-  let (showReplyEdit, toggleShowReplyEdit) = React.useState(() => false);
+let make = (~post, ~users) => {
   let user =
     users
     |> ArrayUtils.unsafeFind(
@@ -68,19 +63,12 @@ let make = (~topic, ~post, ~currentUserId, ~users, ~handlePostCB) => {
           {user |> User.name |> str}
         </span>
       </div>
-      <div className="flex-shrink-0">
-        {optionsDropdown(toggleShowReplyEdit)}
+      <div
+        onClick={_ => navigateToPost(post |> Post.id)}
+        className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-300">
+        <i className="fas fa-angle-double-down" />
       </div>
     </div>
-    {showReplyEdit
-       ? <TopicsShow__PostEditor
-           topic
-           post
-           currentUserId
-           postNumber={post |> Post.postNumber}
-           handlePostCB
-           handleCloseCB={() => toggleShowReplyEdit(_ => false)}
-         />
-       : <div className="text-sm ml-9"> {post |> Post.body |> str} </div>}
+    <div className="text-sm ml-9"> {post |> Post.body |> str} </div>
   </div>;
 };

@@ -49,6 +49,33 @@ let optionsDropdown = toggleShowPostEdit => {
   />;
 };
 
+let onBorderAnimationEnd = event => {
+  let element =
+    ReactEvent.Animation.target(event) |> DomUtils.EventTarget.unsafeToElement;
+  element->Webapi.Dom.Element.setClassName("");
+};
+
+let navigateToEditor = () => {
+  let elementId = "add-reply-to-topic";
+  let element =
+    Webapi.Dom.document |> Webapi.Dom.Document.getElementById(elementId);
+  Js.Global.setTimeout(
+    () => {
+      switch (element) {
+      | Some(e) =>
+        {
+          Webapi.Dom.Element.scrollIntoView(e);
+          e->Webapi.Dom.Element.setClassName("topics-show__highlighted-item");
+        }
+        |> ignore
+      | None => Rollbar.error("Could not find the post to scroll to.")
+      }
+    },
+    50,
+  )
+  |> ignore;
+};
+
 [@react.component]
 let make =
     (
@@ -66,14 +93,13 @@ let make =
   let repliesToPost = post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
   let (showReplies, toggleShowReplies) = React.useState(() => false);
-  let (showNewReply, toggleshowNewReply) = React.useState(() => false);
   let handleCloseCB = () => toggleShowPostEdit(_ => false);
   let handlePostEditCB = (post, bool) => {
     toggleShowPostEdit(_
       => false);
       // handlePostCB(post, bool);
   };
-  <div>
+  <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pb-4" key={post |> Post.id}>
       <div id="likes-and-solution" className="flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
@@ -90,6 +116,7 @@ let make =
           {showPostEdit
              ? <div className="flex-1">
                  <TopicsShow__PostEditor
+                   id={"edit-post-" ++ Post.id(post)}
                    topic
                    currentUserId
                    post
@@ -126,8 +153,8 @@ let make =
                : React.null}
             <button
               onClick={_ => {
-                toggleshowNewReply(showNewReply => !showNewReply);
-                toggleShowReplies(_showReplies => true);
+                addNewReplyCB();
+                navigateToEditor();
               }}
               id="reply button"
               className="border bg-gray-200 p-2 rounded text-xs font-semibold">
@@ -136,29 +163,14 @@ let make =
             </button>
           </div>
         </div>
-        {showNewReply
-           ? <div className="pl-10 topics-post-show__new-reply-container">
-               <TopicsShow__PostEditor
-                 topic
-                 currentUserId
-                 replyToPostId={post |> Post.id}
-                 postNumber={(repliesToPost |> Post.highestPostNumber) + 1}
-                 handleCloseCB={() => toggleshowNewReply(_ => false)}
-                 handlePostCB=addNewReplyCB
-               />
-             </div>
-           : React.null}
         {showReplies
            ? <div className="pl-10 pt-2 topics-post-show__replies-container">
                {repliesToPost
                 |> Array.map(post =>
                      <TopicsShow__PostReplyShow
                        key={post |> Post.id}
-                       topic
                        post
-                       currentUserId
                        users
-                       handlePostCB=updatePostCB
                      />
                    )
                 |> React.array}

@@ -1,3 +1,20 @@
 .placeholder {
   display: none;
 }
+
+.topics-show__highlighted-item {
+  animation: topicPostGlowing 500ms ease-in;
+  @apply .border-indigo-400;
+}
+
+@keyframes topicPostGlowing {
+  0% {
+    box-shadow: 0 0 20px #7886d7;
+  }
+  50% {
+    box-shadow: 0 0 10px #7886d7;
+  }
+  100% {
+    box-shadow: 0 0 0 #7886d7;
+  }
+}

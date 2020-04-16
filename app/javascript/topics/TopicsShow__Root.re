@@ -8,22 +8,24 @@ type state = {
   topic: Topic.t,
   firstPost: Post.t,
   replies: array(Post.t),
+  replyToPostId: option(string),
 };
 
 type action =
-  | AddReply(Post.t, option(string))
-  | AddReplyToFirstPost(Post.t)
+  | SaveReply(Post.t, option(string))
+  | AddNewReply(option(string))
   | LikeFirstPost(Like.t)
   | RemoveLikeFromFirstPost(string)
   | LikeReply(Post.t, Like.t)
   | RemoveLikeFromReply(Post.t, string)
   | UpdateTopicTitle(string)
+  | UpdateFirstPost(Post.t)
   | UpdateReply(Post.t)
   | ArchivePost(Post.id);
 
 let reducer = (state, action) => {
   switch (action) {
-  | AddReply(newReply, replyToPostId) =>
+  | SaveReply(newReply, replyToPostId) =>
     switch (replyToPostId) {
     | Some(id) =>
       let updatedParentPost =
@@ -40,11 +42,7 @@ let reducer = (state, action) => {
         replies: state.replies |> Array.append([|newReply|]),
       }
     }
-  | AddReplyToFirstPost(post) => {
-      ...state,
-      replies: state.replies |> Array.append([|post|]),
-      firstPost: state.firstPost |> Post.addReply(post |> Post.id),
-    }
+  | AddNewReply(replyToPostId) => {...state, replyToPostId}
   | LikeFirstPost(like) => {
       ...state,
       firstPost: state.firstPost |> Post.addLike(like),
@@ -72,27 +70,32 @@ let reducer = (state, action) => {
         |> Array.append([|updatedPost|]),
     };
   | UpdateTopicTitle(title) => state
-  | UpdateReply(post) => {
+  | UpdateFirstPost(firstPost) => {...state, firstPost}
+  | UpdateReply(reply) => {
       ...state,
       replies:
         state.replies
-        |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
-        |> Array.append([|post|]),
+        |> Js.Array.filter(r => Post.id(r) != Post.id(reply))
+        |> Array.append([|reply|]),
     }
   | ArchivePost(postId) => state
   };
 };
 
-let addNewReply = (send, replyToPostId, post) => {
-  send(AddReply(post, replyToPostId));
+let addNewReply = (send, replyToPostId, ()) => {
+  send(AddNewReply(replyToPostId));
 };
 
-let addNewReplyToFirstPost = (send, post) => {
-  send(AddReplyToFirstPost(post));
+let updateReply = (send, reply) => {
+  send(UpdateReply(reply));
 };
 
-let updatePost = (send, post) => {
-  send(UpdateReply(post));
+let updateFirstPost = (send, post) => {
+  send(UpdateFirstPost(post));
+};
+
+let saveReply = (send, replyToPostId, reply) => {
+  send(SaveReply(reply, replyToPostId));
 };
 
 let addReplyLike = (send, post, like) => {
@@ -124,9 +127,11 @@ let make =
       ~target,
     ) => {
   let (state, send) =
-    React.useReducer(reducer, {topic, firstPost, replies});
+    React.useReducer(
+      reducer,
+      {topic, firstPost, replies, replyToPostId: None},
+    );
 
-  let mainThread = state.replies |> Post.mainThread(state.firstPost);
   <div className="bg-gray-100">
     <div className="flex-col items-center justify-between">
       <div
@@ -140,18 +145,21 @@ let make =
              post={state.firstPost}
              topic
              users
-             posts={state.replies}
+             posts=[||]
              currentUserId
-             updatePostCB={updatePost(send)}
-             addNewReplyCB={addNewReplyToFirstPost(send)}
+             updatePostCB={updateFirstPost(send)}
+             addNewReplyCB={addNewReply(send, None)}
              addPostLikeCB={addFirstPostLike(send)}
              removePostLikeCB={removeFirstPostLike(send)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 ml-14 border-b mb-4">
-           {(mainThread |> Array.length |> string_of_int) ++ " Replies" |> str}
+           {(state.replies |> Array.length |> string_of_int)
+            ++ " Replies"
+            |> str}
          </h5>}
-        {mainThread
+        {state.replies
+         |> Post.sort
          |> Array.map(reply =>
               <TopicsShow__PostShow
                 key={Post.id(reply)}
@@ -160,7 +168,7 @@ let make =
                 users
                 posts={state.replies}
                 currentUserId
-                updatePostCB={updatePost(send)}
+                updatePostCB={updateReply(send)}
                 addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
                 addPostLikeCB={addReplyLike(send, reply)}
                 removePostLikeCB={removeReplyLike(send, reply)}
@@ -170,10 +178,12 @@ let make =
       </div>
       <div className="mt-4">
         <TopicsShow__PostEditor
+          id="add-reply-to-topic"
           topic
           currentUserId
           postNumber={(state.replies |> Post.highestPostNumber) + 1}
-          handlePostCB={addNewReply(send, None)}
+          handlePostCB={saveReply(send, state.replyToPostId)}
+          replyToPostId=?{state.replyToPostId}
         />
       </div>
     </div>

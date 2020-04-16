@@ -12,6 +12,10 @@ type t = {
 }
 and id = string;
 
+let id = t => t.id;
+
+let creatorId = t => t.creatorId;
+
 let body = t => t.body;
 
 let replies = t => t.replies;
@@ -92,23 +96,6 @@ let make =
   replies,
   solution,
 };
-
-let mainThread = (firstPost, replies) => {
-  let replyPostIds =
-    Array.append(replies, [|firstPost|])
-    |> Array.map(post => post.replies |> Array.to_list)
-    |> Js.Array.filter(reply => reply |> ListUtils.isNotEmpty)
-    |> Array.to_list
-    |> List.flatten
-    |> Array.of_list;
-  replies
-  |> Js.Array.filter(post => !(replyPostIds |> Array.mem(post.id)))
-  |> sort;
-};
-
-let id = t => t.id;
-
-let creatorId = t => t.creatorId;
 
 let decodeReplyId = json =>
   json |> Json.Decode.field("id", Json.Decode.string);

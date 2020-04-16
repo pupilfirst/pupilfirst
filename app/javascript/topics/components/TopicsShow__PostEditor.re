@@ -166,9 +166,16 @@ let savePost =
   };
 };
 
+let onBorderAnimationEnd = event => {
+  let element =
+    ReactEvent.Animation.target(event) |> DomUtils.EventTarget.unsafeToElement;
+  element->Webapi.Dom.Element.setClassName("");
+};
+
 [@react.component]
 let make =
     (
+      ~id,
       ~topic,
       ~currentUserId,
       ~postNumber,
@@ -196,14 +203,16 @@ let make =
             htmlFor="new-answer">
             {"Your Reply" |> str}
           </label>
-          <MarkdownEditor
-            placeholder="Type in your answer. You can use Markdown to format your response."
-            textareaId="new-answer"
-            onChange=updateMarkdownCB
-            value=body
-            profile=Markdown.QuestionAndAnswer
-            maxLength=10000
-          />
+          <div id onAnimationEnd=onBorderAnimationEnd>
+            <MarkdownEditor
+              placeholder="Type in your answer. You can use Markdown to format your response."
+              textareaId="new-answer"
+              onChange=updateMarkdownCB
+              value=body
+              profile=Markdown.QuestionAndAnswer
+              maxLength=10000
+            />
+          </div>
           <div className="flex justify-end pt-3">
             {switch (handleCloseCB) {
              | Some(handleCloseCB) =>

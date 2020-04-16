@@ -1,9 +1,14 @@
+[%bs.raw {|require("./VerifyCertificate__Root.css")|}];
+
 let str = React.string;
+
+let printCertificate = _event => Webapi.Dom.(window |> Window.print);
 
 [@react.component]
 let make = (~issuedCertificate, ~verifyImageUrl) => {
   <div className="py-4">
-    <div className="container mx-auto px-3 max-w-5xl">
+    <div
+      className="verify-certificate__header container mx-auto px-3 max-w-5xl">
       <h1>
         {"Certificate "
          ++ (issuedCertificate |> IssuedCertificate.serialNumber)
@@ -28,20 +33,14 @@ let make = (~issuedCertificate, ~verifyImageUrl) => {
         <span> {"." |> str} </span>
       </span>
       <div className="mt-2">
-        <a
-          href={
-            "/c/"
-            ++ (issuedCertificate |> IssuedCertificate.serialNumber)
-            ++ "/print"
-          }
-          className="btn btn-primary">
+        <button onClick=printCertificate className="btn btn-primary">
           <i className="fas fa-print" />
           <span className="ml-2"> {"Print, or save as PDF" |> str} </span>
-        </a>
+        </button>
       </div>
     </div>
-    <div className="mt-4 max-w-2xl mx-auto">
-      <IssuedCertificate__Root issuedCertificate verifyImageUrl maxWidth=672 />
+    <div className="verify-certificate__certificate-container">
+      <IssuedCertificate__Root issuedCertificate verifyImageUrl />
     </div>
   </div>;
 };

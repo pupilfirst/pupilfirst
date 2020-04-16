@@ -6,37 +6,13 @@ let paddingPercentage = issuedCertificate =>
 let certificateContainerStyle = issuedCertificate =>
   ReactDOMRe.Style.make(~padding=issuedCertificate |> paddingPercentage, ());
 
-let issuedToStyle = (issuedCertificate, fontSize) => {
+let issuedToStyle = issuedCertificate => {
   ReactDOMRe.Style.make(
     ~top=
       (issuedCertificate |> IssuedCertificate.nameOffsetTop |> string_of_int)
       ++ "%",
-    ~fontSize=(fontSize |> Js.Math.ceil_int |> string_of_int) ++ "%",
     (),
   );
-};
-
-let computeFontSize = (~maxWidth, ~minWidth, ~issuedCertificate) => {
-  let configuredFontSize =
-    issuedCertificate |> IssuedCertificate.fontSize |> float_of_int;
-
-  let windowWidth = Webapi.Dom.(window |> Window.innerWidth);
-
-  let maxLimitedWidth =
-    maxWidth
-    |> OptionUtils.mapWithDefault(
-         maxWidth => windowWidth > maxWidth ? maxWidth : windowWidth,
-         windowWidth,
-       );
-
-  let limitedWidth =
-    minWidth
-    |> OptionUtils.mapWithDefault(
-         minWidth => windowWidth < minWidth ? minWidth : maxLimitedWidth,
-         maxLimitedWidth,
-       );
-
-  configuredFontSize *. (float_of_int(limitedWidth) /. 672.0);
 };
 
 let qrCodeStyle = issuedCertificate => {
@@ -45,12 +21,17 @@ let qrCodeStyle = issuedCertificate => {
   ReactDOMRe.Style.make(~padding, ());
 };
 
-let name = (issuedCertificate, fontSize) =>
-  <div
-    className="absolute top-0 w-full h-full text-center font-bold"
-    style={issuedToStyle(issuedCertificate, fontSize)}>
-    {issuedCertificate |> IssuedCertificate.issuedTo |> str}
-  </div>;
+let nameCanvasId = issuedCertificate =>
+  "name-canvas-" ++ IssuedCertificate.serialNumber(issuedCertificate);
+
+let nameCanvas = issuedCertificate =>
+  <canvas
+    height="100"
+    width="2000"
+    id={nameCanvasId(issuedCertificate)}
+    className="absolute top-0 w-full"
+    style={issuedToStyle(issuedCertificate)}
+  />;
 
 let qrPositionClasses = issuedCertificate =>
   switch (issuedCertificate |> IssuedCertificate.qrCorner) {
@@ -103,27 +84,67 @@ let qrCode = (issuedCertificate, verifyImageUrl) =>
     </div>
   };
 
+[@bs.send]
+external getContextWithAlpha:
+  (Dom.element, string, {. "alpha": bool}) => Webapi.Canvas.Canvas2d.t =
+  "getContext";
+
+let drawName = issuedCertificate => {
+  let canvasId = nameCanvasId(issuedCertificate);
+
+  let ctx =
+    Webapi.(
+      Dom.document
+      |> Dom.Document.getElementById(canvasId)
+      |> OptionUtils.map(el =>
+           getContextWithAlpha(el, "2d", {"alpha": true})
+         )
+    );
+
+  let fontSize =
+    50.0
+    *. (
+      (issuedCertificate |> IssuedCertificate.fontSize |> float_of_int)
+      /. 100.0
+    );
+
+  ctx
+  |> OptionUtils.map(ctx =>
+       Webapi.Canvas.Canvas2d.font(
+         ctx,
+         (fontSize |> Js.Math.floor_int |> string_of_int)
+         ++ "px Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace",
+       )
+     )
+  |> ignore;
+
+  ctx
+  |> OptionUtils.map(ctx => Webapi.Canvas.Canvas2d.textAlign(ctx, "center"))
+  |> ignore;
+
+  ctx
+  |> OptionUtils.map(ctx =>
+       Webapi.Canvas.Canvas2d.textBaseline(ctx, "middle")
+     )
+  |> ignore;
+
+  ctx
+  |> OptionUtils.map(ctx =>
+       Webapi.Canvas.Canvas2d.fillText(
+         IssuedCertificate.issuedTo(issuedCertificate),
+         ~x=1000.0,
+         ~y=50.0,
+         ctx,
+       )
+     )
+  |> ignore;
+};
+
 [@react.component]
-let make = (~issuedCertificate, ~verifyImageUrl, ~maxWidth=?, ~minWidth=?) => {
-  let (fontSize, setFontSize) =
-    React.useState(() =>
-      computeFontSize(~maxWidth, ~minWidth, ~issuedCertificate)
-    );
-
-  React.useEffect(() => {
-    let handleResize = _event =>
-      setFontSize(_ =>
-        computeFontSize(~maxWidth, ~minWidth, ~issuedCertificate)
-      );
-
-    Webapi.Dom.(window |> Window.addEventListener("resize", handleResize));
-
-    Some(
-      () =>
-        Webapi.Dom.(
-          window |> Window.removeEventListener("resize", handleResize)
-        ),
-    );
+let make = (~issuedCertificate, ~verifyImageUrl) => {
+  React.useEffect0(() => {
+    drawName(issuedCertificate);
+    None;
   });
 
   <div className="relative">
@@ -132,7 +153,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~maxWidth=?, ~minWidth=?) => {
       className="absolute top-0 left-0 w-full h-full"
       style={certificateContainerStyle(issuedCertificate)}>
       <div className="relative w-full h-full">
-        {name(issuedCertificate, fontSize)}
+        {nameCanvas(issuedCertificate)}
         {qrCode(issuedCertificate, verifyImageUrl)}
       </div>
     </div>

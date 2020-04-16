@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :certificate do
+    course
     qr_corner { %w[TopLeft TopRight BottomRight BottomLeft Hidden].sample }
     qr_scale { 100 }
     name_offset_top { 50 }

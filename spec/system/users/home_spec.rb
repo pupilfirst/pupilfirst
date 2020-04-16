@@ -94,6 +94,9 @@ feature 'User Home', js: true do
 
     # ...but not if they've dropped out from a course.
     expect(page).not_to have_text(community_4.name)
+
+    # This student doesn't have any certificates, so the tab shouldn't be visible.
+    expect(page).not_to have_button('Certificates')
   end
 
   scenario 'course coach visits home page' do
@@ -172,5 +175,21 @@ feature 'User Home', js: true do
 
     expect(page).to have_link("Edit Curriculum", href: curriculum_school_course_path(course_1))
     expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_1))
+  end
+
+  context 'when the student has been issued some certificates' do
+    let(:certificate_1) { create :certificate, course: course_1 }
+    let(:certificate_2) { create :certificate, course: course_2 }
+    let!(:issued_certificate_1) { create :issued_certificate, certificate: certificate_1, user: founder.user }
+    let!(:issued_certificate_2) { create :issued_certificate, certificate: certificate_2, user: founder.user }
+
+    scenario 'student browses certificates on the home page' do
+      sign_in_user(founder.user, referer: home_path)
+
+      # Switch to certificates tab and see if there are two links.
+      click_button 'Certificates'
+      expect(page).to have_link('View Certificate', href: "/c/#{issued_certificate_1.serial_number}")
+      expect(page).to have_link('View Certificate', href: "/c/#{issued_certificate_2.serial_number}")
+    end
   end
 end

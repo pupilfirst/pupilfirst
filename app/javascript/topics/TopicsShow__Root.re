@@ -141,9 +141,19 @@ let make =
       <div
         className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-8 my-4 border-t border-b md:border-0 rounded md:rounded-lg shadow">
         {<div>
-           <h3 className="leading-snug ml-14">
-             {topic |> Topic.title |> str}
-           </h3>
+           <div
+             className="topics-show__title-container flex items-start justify-between">
+             <h3 className="leading-snug md:pl-14 text-lg md:text-2xl">
+               {topic |> Topic.title |> str}
+             </h3>
+             <button
+               className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-4 lg:invisible">
+               <i className="far fa-edit" />
+               <span className="hidden md:inline-block ml-1">
+                 {"Edit Title" |> str}
+               </span>
+             </button>
+           </div>
            <TopicsShow__PostShow
              key={Post.id(state.firstPost)}
              post={state.firstPost}

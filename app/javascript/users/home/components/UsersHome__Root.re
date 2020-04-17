@@ -7,7 +7,8 @@ let str = React.string;
 
 type view =
   | ShowCourses
-  | ShowCommunities;
+  | ShowCommunities
+  | ShowCertificates;
 
 let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
   <div
@@ -46,7 +47,7 @@ let navButtonClasses = selected => {
   ++ (selected ? "text-primary-500 border-primary-500" : "");
 };
 
-let navSection = (view, setView, communities) => {
+let navSection = (view, setView, communities, issuedCertificates) => {
   <div className="border-b mt-6">
     <div className="flex max-w-4xl mx-auto px-3 lg:px-0">
       <button
@@ -61,6 +62,14 @@ let navSection = (view, setView, communities) => {
              onClick={_ => setView(_ => ShowCommunities)}>
              <i className="fas fa-users text-xs md:text-sm mr-2" />
              <span> {"Communities" |> str} </span>
+           </button>
+         : React.null}
+      {issuedCertificates |> ArrayUtils.isNotEmpty
+         ? <button
+             className={navButtonClasses(view == ShowCertificates)}
+             onClick={_ => setView(_ => ShowCertificates)}>
+             <i className="fas fa-certificate text-xs md:text-sm mr-2" />
+             <span> {"Certificates" |> str} </span>
            </button>
          : React.null}
     </div>
@@ -293,6 +302,50 @@ let communitiesSection = communities => {
   </div>;
 };
 
+let certificatesSection = issuedCertificates =>
+  <div className="w-full max-w-4xl mx-auto">
+    <div className="flex flex-wrap flex-1 lg:-mx-5">
+      {issuedCertificates
+       |> Array.map(issuedCertificate =>
+            <div
+              key={issuedCertificate |> IssuedCertificate.id}
+              className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+              <a
+                className="w-full h-full shadow rounded-lg hover:shadow-lg"
+                href={
+                  "/c/"
+                  ++ (issuedCertificate |> IssuedCertificate.serialNumber)
+                }>
+                <div
+                  className="user-home-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+                />
+                <div
+                  className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
+                  <div>
+                    <h4 className="font-bold text-sm pt-2 leading-tight">
+                      {issuedCertificate |> IssuedCertificate.courseName |> str}
+                    </h4>
+                    <div className="text-xs">
+                      <span> {"Issued on:" |> str} </span>
+                      <span className="ml-1">
+                        {issuedCertificate
+                         |> IssuedCertificate.createdAt
+                         |> DateTime.format(DateTime.OnlyDate)
+                         |> str}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="btn btn-small btn-primary-ghost mt-2">
+                    {"View Certificate" |> str}
+                  </div>
+                </div>
+              </a>
+            </div>
+          )
+       |> React.array}
+    </div>
+  </div>;
+
 [@react.component]
 let make =
     (
@@ -303,18 +356,20 @@ let make =
       ~userName,
       ~userTitle,
       ~avatarUrl,
+      ~issuedCertificates,
     ) => {
   let (view, setView) = React.useState(() => ShowCourses);
   <div className="bg-gray-100">
     <div className="bg-white">
       {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
-      {navSection(view, setView, communities)}
+      {navSection(view, setView, communities, issuedCertificates)}
     </div>
     <div className="pb-8">
       {switch (view) {
        | ShowCourses =>
          coursesSection(courses, communities, currentSchoolAdmin)
        | ShowCommunities => communitiesSection(communities)
+       | ShowCertificates => certificatesSection(issuedCertificates)
        }}
     </div>
   </div>;

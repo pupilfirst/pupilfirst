@@ -2,6 +2,8 @@ class Course < ApplicationRecord
   validates :name, presence: true
 
   belongs_to :school
+
+  has_many :certificates, dependent: :restrict_with_error
   has_many :levels, dependent: :restrict_with_error
   has_many :startups, through: :levels
   has_many :founders, through: :startups

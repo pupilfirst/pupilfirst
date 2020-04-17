@@ -129,6 +129,19 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.index ["email"], name: "index_bounce_reports_on_email", unique: true
   end
 
+  create_table "certificates", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.string "qr_corner", null: false
+    t.integer "qr_scale", null: false
+    t.integer "name_offset_top", null: false
+    t.integer "font_size", null: false
+    t.integer "margin", null: false
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_certificates_on_course_id"
+  end
+
   create_table "coach_notes", force: :cascade do |t|
     t.bigint "author_id"
     t.bigint "student_id"
@@ -367,6 +380,18 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.index ["college_id"], name: "index_founders_on_college_id"
     t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
+  end
+
+  create_table "issued_certificates", force: :cascade do |t|
+    t.bigint "certificate_id", null: false
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.citext "serial_number", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["certificate_id"], name: "index_issued_certificates_on_certificate_id"
+    t.index ["serial_number"], name: "index_issued_certificates_on_serial_number", unique: true
+    t.index ["user_id"], name: "index_issued_certificates_on_user_id"
   end
 
   create_table "leaderboard_entries", force: :cascade do |t|
@@ -835,6 +860,7 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "applicants", "courses"
+  add_foreign_key "certificates", "courses"
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
@@ -853,6 +879,8 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
   add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
+  add_foreign_key "issued_certificates", "certificates"
+  add_foreign_key "issued_certificates", "users"
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"

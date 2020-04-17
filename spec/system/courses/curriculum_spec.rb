@@ -180,7 +180,7 @@ feature "Student's view of Course Curriculum", js: true do
     click_link l5_non_reviewed_target.title
     click_button 'Mark As Complete'
 
-    expect(page).to have_text('Your Submission has been recorded')
+    expect(page).to have_text('Target has been marked as complete')
 
     dismiss_notification
     click_button 'Close'

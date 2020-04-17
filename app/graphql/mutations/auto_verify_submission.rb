@@ -10,7 +10,7 @@ module Mutations
       mutator = AutoVerifySubmissionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, "Done!", "Your Submission has been recorded")
+        mutator.notify(:success, "Done!", "Target has been marked as complete.")
         { submission: mutator.create_submission }
       else
         mutator.notify_errors

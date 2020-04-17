@@ -1,0 +1,14 @@
+<% presenter = IssuedCertificates::VerifyPresenter.new(self, @issued_certificate) %>
+
+<% content_for(:head) do %>
+  <title>Certificate <%= presenter.serial_number %></title>
+  <%= stylesheet_pack_tag 'IssuedCertificatesVerifyPack', media: nil %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'IssuedCertificatesVerifyPack', nonce: true %>
+<% end %>
+
+<script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>
+
+<div id="react-root"></div>

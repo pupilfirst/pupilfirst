@@ -238,7 +238,7 @@ feature 'Target Overlay', js: true do
       find('.quiz-root__answer', text: q2_answer_4.value).click
       click_button('Submit Quiz')
 
-      expect(page).to have_content('Your Submission has been recorded')
+      expect(page).to have_content('Your responses have been saved')
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)

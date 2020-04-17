@@ -1,36 +1,39 @@
-type props = {
-  currentSchoolAdmin: bool,
-  courses: array(UsersHome__Course.t),
-  communities: array(UsersHome__Community.t),
-  showUserEdit: bool,
-  userName: string,
-  userTitle: string,
-  avatarUrl: option(string),
-};
+open UsersHome__Types;
 
 let decodeProps = json =>
-  Json.Decode.{
-    currentSchoolAdmin: json |> field("currentSchoolAdmin", bool),
-    showUserEdit: json |> field("showUserEdit", bool),
-    userName: json |> field("userName", string),
-    userTitle: json |> field("userTitle", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    courses: json |> field("courses", array(UsersHome__Course.decode)),
-    communities:
-      json |> field("communities", array(UsersHome__Community.decode)),
-  };
+  Json.Decode.(
+    json |> field("currentSchoolAdmin", bool),
+    json |> field("courses", array(Course.decode)),
+    json |> field("communities", array(Community.decode)),
+    json |> field("showUserEdit", bool),
+    json |> field("userName", string),
+    json |> field("userTitle", string),
+    json |> optional(field("avatarUrl", string)),
+    json |> field("issuedCertificates", array(IssuedCertificate.decode)),
+  );
 
-let props = DomUtils.parseJsonTag(~id="users-home-data", ()) |> decodeProps;
+let (
+  currentSchoolAdmin,
+  courses,
+  communities,
+  showUserEdit,
+  userName,
+  userTitle,
+  avatarUrl,
+  issuedCertificates,
+) =
+  DomUtils.parseJsonTag(~id="users-home-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <UsersHome__Root
-    currentSchoolAdmin={props.currentSchoolAdmin}
-    courses={props.courses}
-    communities={props.communities}
-    showUserEdit={props.showUserEdit}
-    userName={props.userName}
-    userTitle={props.userTitle}
-    avatarUrl={props.avatarUrl}
+    currentSchoolAdmin
+    courses
+    communities
+    showUserEdit
+    userName
+    userTitle
+    avatarUrl
+    issuedCertificates
   />,
   "users-home",
 );

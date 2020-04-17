@@ -1,0 +1,36 @@
+<%
+  course = @issued_certificate.certificate.course
+  user = @issued_certificate.user
+  link = issued_certificate_url(serial_number: @issued_certificate.serial_number)
+%>
+
+<% content_for :title do %>
+  Congratulations!
+<% end %>
+
+<% content_for :subtitle do %>
+  You've been awarded a certificate.
+<% end %>
+
+<% content_for :title_button_text do %>
+  View Certificate
+<% end %>
+
+<% content_for(:title_button_link, link) %>
+
+<% content_for :salutation do %>
+  Hello <%= user.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    You've been awarded a certificate for completing the <strong><%= course.name %></strong> course.
+  </p>
+
+  <p>
+    The certificate was issued on <%= @issued_certificate.created_at.strftime('%b %e, %l:%M %p') %> and can be viewed
+    or printed by visiting the certificate's link.
+  </p>
+
+  <%= render 'mailers/link_fallback', url: link %>
+<% end %>

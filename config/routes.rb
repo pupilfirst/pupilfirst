@@ -221,6 +221,8 @@ Rails.application.routes.draw do
     post 'unsubscribe', action: 'email_unsubscribe_webhook'
   end
 
+  get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
+
   get '/help/:document', to: 'help#show'
 
   # Handle incoming unsubscribe webhooks from SendInBlue

@@ -26,6 +26,11 @@ feature "Automatic issuance of certificates", js: true do
   let!(:target_l1) { create :target, :with_markdown, :team, target_group: target_group_l1 }
   let!(:target_l2) { create :target, :with_markdown, :team, target_group: target_group_l2 }
 
+  before do
+    # Add one archived milestone target; it shouldn't interfere with issuance of certificates.
+    create :target, :with_markdown, :team, :archived, target_group: target_group_l2
+  end
+
   def complete_first_target
     sign_in_user student_1.user, referer: target_path(target_l2)
 

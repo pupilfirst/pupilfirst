@@ -67,7 +67,7 @@ feature "Automatic issuance of certificates", js: true do
 
       click_button 'Mark As Complete'
 
-      expect(page).to have_text('Target has been marked as complete')
+      expect(page).to have_text('Target has been marked as complete', wait: 10)
 
       expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(student_1.user.id, student_2.user.id)
 
@@ -184,12 +184,12 @@ feature "Automatic issuance of certificates", js: true do
     context 'when the milestone target is completed individually' do
       let!(:target_l2) { create :target, :with_markdown, :student, target_group: target_group_l2 }
 
-      scenario 'each student completes the last target', broken: true do
+      scenario 'each student completes the last target' do
         sign_in_user student_1.user, referer: target_path(target_l2)
 
         click_button 'Mark As Complete'
 
-        expect(page).to have_text('Target has been marked as complete')
+        expect(page).to have_text('Target has been marked as complete', wait: 10)
 
         # No certificate should be issued, yet.
         expect(IssuedCertificate.count).to eq(0)

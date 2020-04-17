@@ -29,7 +29,7 @@ module TimelineEvents
     end
 
     def students
-      @students ||= @submission.founders
+      @students ||= startup.founders
     end
 
     def startup

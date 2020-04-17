@@ -203,6 +203,24 @@ let make =
             htmlFor="new-answer">
             {"Your Reply" |> str}
           </label>
+          <div
+            className="max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3">
+            <div className="flex justify-between">
+              <div className="flex items-center border bg-white p-1 rounded">
+                <span className="text-xs font-semibold ml-2">
+                  {"User Name" |> str}
+                </span>
+              </div>
+              <div
+                className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-400 rounded bg-gray-200 hover:bg-gray-400">
+                <PfIcon className="if i-times-regular text-base" />
+              </div>
+            </div>
+            <p className="text-sm pt-2 max-w-sm truncate">
+              {"Similique sapiente non. Et consequatur. Maiores enim fugit..."
+               |> str}
+            </p>
+          </div>
           <div id onAnimationEnd=onBorderAnimationEnd>
             <MarkdownEditor
               placeholder="Type in your answer. You can use Markdown to format your response."

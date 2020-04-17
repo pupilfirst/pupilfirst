@@ -30,19 +30,20 @@ let optionsDropdown =
   let editPostButton =
     <button
       onClick={_ => toggleShowPostEdit(_ => true)}
-      className="flex p-2 items-center text-gray-700">
+      className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
       <FaIcon classes="fas fa-edit mr-2" />
       {"Edit " ++ postTypeString |> str}
     </button>;
   let markAsSolutionButton =
     isFirstPost
       ? React.null
-      : <button className="flex p-2 items-center text-gray-700">
+      : <button
+          className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
           <PfIcon className="if i-check-circle-alt-regular if-fw" />
           {"Mark as solution" |> str}
         </button>;
   let deletePostButton =
-    <button className="flex p-2 items-center text-gray-700">
+    <button className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
       <FaIcon classes="fas fa-trash-alt mr-2" />
       {"Delete " ++ postTypeString |> str}
     </button>;
@@ -117,7 +118,7 @@ let make =
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pb-4" key={post |> Post.id}>
-      <div id="likes-and-solution" className="flex flex-col w-1/8">
+      <div id="likes-and-solution" className="hidden lg:flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
         {<TopicsShow__LikeManager
            postId={post |> Post.id}
@@ -129,6 +130,23 @@ let make =
       </div>
       <div id="body-and-user-data" className="flex-1 border-b pb-8">
         <div className="pt-2" id="body">
+          <div className="flex justify-between lg:hidden">
+            <TopicsShow__UserShow
+              user={user(post |> Post.creatorId)}
+              createdAt={post |> Post.createdAt}
+            />
+            <div className="flex-shrink-0 mt-1">
+              {isPostCreator || isCoach || isTopicCreator
+                 ? optionsDropdown(
+                     isPostCreator,
+                     isTopicCreator,
+                     isCoach,
+                     isFirstPost,
+                     toggleShowPostEdit,
+                   )
+                 : React.null}
+            </div>
+          </div>
           {showPostEdit
              ? <div className="flex-1">
                  <TopicsShow__PostEditor
@@ -143,7 +161,7 @@ let make =
                </div>
              : <div className="flex items-start justify-between">
                  <div className="text-sm"> {post |> Post.body |> str} </div>
-                 <div className="flex-shrink-0">
+                 <div className="hidden lg:block flex-shrink-0">
                    {isPostCreator || isCoach || isTopicCreator
                       ? optionsDropdown(
                           isPostCreator,
@@ -157,10 +175,24 @@ let make =
                </div>}
         </div>
         <div id="user-data" className="flex justify-between pt-4">
-          <TopicsShow__UserShow
-            user={user(post |> Post.creatorId)}
-            createdAt={post |> Post.createdAt}
-          />
+          <div className="flex">
+            <div className="hidden lg:block">
+              <TopicsShow__UserShow
+                user={user(post |> Post.creatorId)}
+                createdAt={post |> Post.createdAt}
+              />
+            </div>
+            <div id="likes-and-solution" className="flex flex-col lg:hidden">
+              {post |> Post.solution ? solutionIcon : React.null}
+              {<TopicsShow__LikeManager
+                 postId={post |> Post.id}
+                 postLikes={post |> Post.postLikes}
+                 currentUserId
+                 addPostLikeCB
+                 removePostLikeCB
+               />}
+            </div>
+          </div>
           <div className="flex items-center text-sm font-semibold">
             {repliesToPost |> ArrayUtils.isNotEmpty
                ? <button

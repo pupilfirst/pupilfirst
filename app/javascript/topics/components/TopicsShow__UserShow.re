@@ -23,11 +23,11 @@ let avatar = (~size=("9", "9"), avatarUrl, name) => {
 [@react.component]
 let make = (~user, ~createdAt) =>
   <div>
-    <p className="text-xs text-gray-800">
+    <p className="hidden lg:block text-xs text-gray-800">
       {createdAt |> DateFns.format("Do MMMM, YYYY HH:mm") |> str}
     </p>
     <div
-      className="p-2 flex flex-row items-center bg-gray-100 text-gray-900 border rounded-lg mt-1">
+      className="pl-0 py-2 lg:p-2 flex flex-row items-center lg:bg-gray-100 lg:border rounded-lg lg:mt-1">
       <div
         className="w-9 h-9 rounded-full bg-gray-500 text-white border border-gray-400 flex items-center justify-center flex-shrink-0 overflow-hidden">
         {avatar(~size=("9", "9"), user |> User.avatarUrl, user |> User.name)}
@@ -37,4 +37,7 @@ let make = (~user, ~createdAt) =>
         <p className="text-xs leadig-normal"> {user |> User.title |> str} </p>
       </div>
     </div>
+    <p className="block lg:hidden pb-2 text-xs text-gray-800">
+      {createdAt |> DateFns.format("Do MMMM, YYYY HH:mm") |> str}
+    </p>
   </div>;

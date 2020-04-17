@@ -159,8 +159,6 @@ feature 'Curriculum Editor', js: true do
   scenario 'course author can navigate only to assigned courses and modify content of those courses' do
     sign_in_user course_author.user, referer: curriculum_school_course_path(course)
 
-    expect(page).to have_button(course.name)
-
     click_button course.name
 
     expect(page).to have_link(course_2.name, href: "/school/courses/#{course_2.id}/curriculum")

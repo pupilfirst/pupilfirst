@@ -360,7 +360,12 @@ let renderForgotPassword =
 
 [@react.component]
 let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
-  let (view, setView) = React.useState(() => FederatedSignIn);
+  let (view, setView) =
+    React.useState(() =>
+      oauthHost
+      |> OptionUtils.mapWithDefault(_ => FederatedSignIn, SignInWithPassword)
+    );
+
   let (email, setEmail) = React.useState(() => "");
   let (password, setPassword) = React.useState(() => "");
   let (sharedDevice, setSharedDevice) = React.useState(() => false);
@@ -374,9 +379,11 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
         className="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4">
         {headerText(view, schoolName) |> str}
       </div>
-      {switch (view) {
-       | FederatedSignIn => renderFederatedlogin(fqdn, oauthHost)
-       | SignInWithPassword =>
+      {switch (oauthHost, view) {
+       | (Some(oauthHost), FederatedSignIn) =>
+         renderFederatedlogin(fqdn, oauthHost)
+       | (None, FederatedSignIn)
+       | (_, SignInWithPassword) =>
          renderSignInWithEmail(
            email,
            setEmail,
@@ -389,8 +396,8 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
            sharedDevice,
            setSharedDevice,
          )
-       | SignInEmailSent => renderSignInEmailSent()
-       | ForgotPassword =>
+       | (_, SignInEmailSent) => renderSignInEmailSent()
+       | (_, ForgotPassword) =>
          renderForgotPassword(
            authenticityToken,
            email,
@@ -400,8 +407,8 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
            setView,
          )
        }}
-      {switch (view) {
-       | FederatedSignIn =>
+      {switch (oauthHost, view) {
+       | (_, FederatedSignIn) =>
          <div className="max-w-sm mx-auto md:px-9">
            <span
              className="federated-signin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
@@ -419,8 +426,8 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
              </span>
            </button>
          </div>
-       | SignInWithPassword
-       | ForgotPassword =>
+       | (Some(_), SignInWithPassword)
+       | (Some(_), ForgotPassword) =>
          <div className="max-w-sm mx-auto md:px-9">
            <button
              disabled=saving
@@ -429,8 +436,9 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
              {"Sign in with Google, Facebook, or Github" |> str}
            </button>
          </div>
-
-       | SignInEmailSent => React.null
+       | (None, SignInWithPassword)
+       | (None, ForgotPassword)
+       | (_, SignInEmailSent) => React.null
        }}
     </div>
   </div>;

@@ -9,6 +9,7 @@ type state = {
   firstPost: Post.t,
   replies: array(Post.t),
   replyToPostId: option(string),
+  topicTitle: string,
 };
 
 type action =
@@ -21,6 +22,7 @@ type action =
   | UpdateTopicTitle(string)
   | UpdateFirstPost(Post.t)
   | UpdateReply(Post.t)
+  | RemoveReplyToPost
   | ArchivePost(Post.id);
 
 let reducer = (state, action) => {
@@ -69,7 +71,7 @@ let reducer = (state, action) => {
         |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
         |> Array.append([|updatedPost|]),
     };
-  | UpdateTopicTitle(title) => state
+  | UpdateTopicTitle(topicTitle) => {...state, topicTitle}
   | UpdateFirstPost(firstPost) => {...state, firstPost}
   | UpdateReply(reply) => {
       ...state,
@@ -79,6 +81,7 @@ let reducer = (state, action) => {
         |> Array.append([|reply|]),
     }
   | ArchivePost(postId) => state
+  | RemoveReplyToPost => {...state, replyToPostId: None}
   };
 };
 
@@ -133,7 +136,13 @@ let make =
   let (state, send) =
     React.useReducer(
       reducer,
-      {topic, firstPost, replies, replyToPostId: None},
+      {
+        topic,
+        firstPost,
+        replies,
+        replyToPostId: None,
+        topicTitle: topic |> Topic.title,
+      },
     );
 
   <div className="bg-gray-100">
@@ -144,6 +153,28 @@ let make =
       </a>
     </div>
     <div className="flex-col items-center justify-between">
+      {switch (target) {
+       | Some(target) =>
+         <div className="max-w-4xl w-full mt-5 mx-auto">
+           <div
+             className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center mb-2">
+             <p className="w-3/5 md:w-4/5 text-sm">
+               <span className="font-semibold block text-xs">
+                 {"Linked Target: " |> str}
+               </span>
+               <span> {target |> LinkedTarget.title |> str} </span>
+             </p>
+             {switch (target |> LinkedTarget.id) {
+              | Some(id) =>
+                <a href={"/targets/" ++ id} className="btn btn-default">
+                  {"View Target" |> str}
+                </a>
+              | None => React.null
+              }}
+           </div>
+         </div>
+       | None => React.null
+       }}
       <div
         className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
         {<div>
@@ -208,6 +239,9 @@ let make =
           postNumber={(state.replies |> Post.highestPostNumber) + 1}
           handlePostCB={saveReply(send, state.replyToPostId)}
           replyToPostId=?{state.replyToPostId}
+          replies={state.replies}
+          users
+          removeReplyToPostCB={() => send(RemoveReplyToPost)}
         />
       </div>
     </div>

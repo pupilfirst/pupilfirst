@@ -1,11 +1,11 @@
 type t = {
-  id: string,
+  id: option(string),
   title: string,
 };
 
 let decode = json =>
   Json.Decode.{
-    id: json |> field("id", string),
+    id: json |> field("id", nullable(string)) |> Js.Null.toOption,
     title: json |> field("title", string),
   };
 

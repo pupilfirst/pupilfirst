@@ -158,6 +158,8 @@ let make =
                      topic
                      currentUserId
                      post
+                     replies=posts
+                     users
                      handlePostCB=updatePostCB
                      postNumber={post |> Post.postNumber}
                      handleCloseCB={() => toggleShowPostEdit(_ => false)}

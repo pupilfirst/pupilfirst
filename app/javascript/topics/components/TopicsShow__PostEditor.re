@@ -36,6 +36,7 @@ let handlePostCreateCB =
       setSaving,
       handleCloseCB,
       handlePostCB,
+      removeReplyToPostCB,
     ) => {
   let post =
     Post.make(
@@ -53,6 +54,7 @@ let handlePostCreateCB =
   setBody(_ => "");
   setSaving(_ => false);
   handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
+  removeReplyToPostCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(post);
 };
 
@@ -98,6 +100,7 @@ let savePost =
       post,
       postNumber,
       handleCloseCB,
+      removeReplyToPostCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -150,6 +153,7 @@ let savePost =
                setSaving,
                handleCloseCB,
                handlePostCB,
+               removeReplyToPostCB,
              )
            | None => setSaving(_ => false)
            };
@@ -172,6 +176,26 @@ let onBorderAnimationEnd = event => {
   element->Webapi.Dom.Element.setClassName("");
 };
 
+let replyToUserInfo = user => {
+  <div className="flex items-center border bg-white p-1 rounded">
+    {switch (user |> User.avatarUrl) {
+     | Some(avatarUrl) =>
+       <img
+         className="w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+         src=avatarUrl
+       />
+     | None =>
+       <Avatar
+         name={user |> User.name}
+         className="w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+       />
+     }}
+    <span className="text-xs font-semibold ml-2">
+      {user |> User.name |> str}
+    </span>
+  </div>;
+};
+
 [@react.component]
 let make =
     (
@@ -180,9 +204,12 @@ let make =
       ~currentUserId,
       ~postNumber,
       ~handlePostCB,
+      ~replies,
+      ~users,
       ~replyToPostId=?,
       ~post=?,
       ~handleCloseCB=?,
+      ~removeReplyToPostCB=?,
     ) => {
   let (body, setBody) =
     React.useState(() =>
@@ -203,24 +230,35 @@ let make =
             htmlFor="new-answer">
             {"Your Reply" |> str}
           </label>
-          <div
-            className="max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3">
-            <div className="flex justify-between">
-              <div className="flex items-center border bg-white p-1 rounded">
-                <span className="text-xs font-semibold ml-2">
-                  {"User Name" |> str}
-                </span>
-              </div>
-              <div
-                className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-400 rounded bg-gray-200 hover:bg-gray-400">
-                <PfIcon className="if i-times-regular text-base" />
-              </div>
-            </div>
-            <p className="text-sm pt-2 max-w-sm truncate">
-              {"Similique sapiente non. Et consequatur. Maiores enim fugit..."
-               |> str}
-            </p>
-          </div>
+          {switch (replyToPostId) {
+           | Some(id) =>
+             let reply =
+               replies
+               |> ArrayUtils.unsafeFind(
+                    reply => Post.id(reply) == id,
+                    "Unable to find reply with ID: "
+                    ++ id
+                    ++ " in TopicsShow__PostEditor",
+                  );
+             <div
+               className="max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3">
+               <div className="flex justify-between">
+                 {replyToUserInfo(reply |> Post.user(users))}
+                 <div
+                   onClick={_ =>
+                     removeReplyToPostCB
+                     |> OptionUtils.mapWithDefault(cb => cb(), ())
+                   }
+                   className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-400 rounded bg-gray-200 hover:bg-gray-400">
+                   <PfIcon className="if i-times-regular text-base" />
+                 </div>
+               </div>
+               <p className="text-sm pt-2 max-w-sm truncate">
+                 {reply |> Post.body |> str}
+               </p>
+             </div>;
+           | None => React.null
+           }}
           <div id onAnimationEnd=onBorderAnimationEnd>
             <MarkdownEditor
               placeholder="Type in your answer. You can use Markdown to format your response."
@@ -255,6 +293,7 @@ let make =
                 post,
                 postNumber,
                 handleCloseCB,
+                removeReplyToPostCB,
               )}
               className="btn btn-primary">
               {(

@@ -106,7 +106,7 @@ let make =
   let liked = currentUserId |> Like.currentUserLiked(postLikes);
   let (saving, setSaving) = React.useState(() => false);
 
-  <div className="text-center pr-1 md:pr-4">
+  <div className="text-center pr-3 md:pr-4">
     <div
       className="cursor-pointer"
       title={(liked ? "Unlike" : "Like") ++ " Answer"}
@@ -122,7 +122,7 @@ let make =
         addPostLikeCB,
       )}>
       <div
-        className="flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto"
+        className="flex items-center justify-center rounded-lg lg:rounded-full lg:bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto"
         key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>

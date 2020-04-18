@@ -132,50 +132,52 @@ let make =
       </div>
       <div id="body-and-user-data" className="flex-1 border-b pb-8">
         <div className="pt-2" id="body">
-          <div className="flex justify-between lg:hidden">
-            <TopicsShow__UserShow
-              user={user(post |> Post.creatorId)}
-              createdAt={post |> Post.createdAt}
-            />
-            <div className="flex-shrink-0 mt-1">
-              {isPostCreator || isCoach || isTopicCreator
-                 ? optionsDropdown(
-                     isPostCreator,
-                     isTopicCreator,
-                     isCoach,
-                     isFirstPost,
-                     toggleShowPostEdit,
-                   )
-                 : React.null}
+          // Topic author details on mobile screen
+
+            <div className="flex justify-between lg:hidden">
+              <TopicsShow__UserShow
+                user={user(post |> Post.creatorId)}
+                createdAt={post |> Post.createdAt}
+              />
+              <div className="flex-shrink-0 mt-1">
+                {isPostCreator || isCoach || isTopicCreator
+                   ? optionsDropdown(
+                       isPostCreator,
+                       isTopicCreator,
+                       isCoach,
+                       isFirstPost,
+                       toggleShowPostEdit,
+                     )
+                   : React.null}
+              </div>
             </div>
-          </div>
-          {showPostEdit
-             ? <div className="flex-1">
-                 <TopicsShow__PostEditor
-                   id={"edit-post-" ++ Post.id(post)}
-                   topic
-                   currentUserId
-                   post
-                   handlePostCB=updatePostCB
-                   postNumber={post |> Post.postNumber}
-                   handleCloseCB={() => toggleShowPostEdit(_ => false)}
-                 />
-               </div>
-             : <div className="flex items-start justify-between">
-                 <div className="text-sm"> {post |> Post.body |> str} </div>
-                 <div className="hidden lg:block flex-shrink-0">
-                   {isPostCreator || isCoach || isTopicCreator
-                      ? optionsDropdown(
-                          isPostCreator,
-                          isTopicCreator,
-                          isCoach,
-                          isFirstPost,
-                          toggleShowPostEdit,
-                        )
-                      : React.null}
+            {showPostEdit
+               ? <div className="flex-1">
+                   <TopicsShow__PostEditor
+                     id={"edit-post-" ++ Post.id(post)}
+                     topic
+                     currentUserId
+                     post
+                     handlePostCB=updatePostCB
+                     postNumber={post |> Post.postNumber}
+                     handleCloseCB={() => toggleShowPostEdit(_ => false)}
+                   />
                  </div>
-               </div>}
-        </div>
+               : <div className="flex items-start justify-between">
+                   <div className="text-sm"> {post |> Post.body |> str} </div>
+                   <div className="hidden lg:block flex-shrink-0">
+                     {isPostCreator || isCoach || isTopicCreator
+                        ? optionsDropdown(
+                            isPostCreator,
+                            isTopicCreator,
+                            isCoach,
+                            isFirstPost,
+                            toggleShowPostEdit,
+                          )
+                        : React.null}
+                   </div>
+                 </div>}
+          </div>
         <div id="user-data" className="flex justify-between pt-4">
           <div className="flex-1 lg:flex-initial mr-3">
             <div className="hidden lg:block">
@@ -184,6 +186,7 @@ let make =
                 createdAt={post |> Post.createdAt}
               />
             </div>
+            // Showing Like, replies and solution for mobile
             <div
               id="likes-and-solution"
               className="flex items-center lg:items-start justify-between lg:hidden">
@@ -202,16 +205,18 @@ let make =
                          onClick={_ =>
                            toggleShowReplies(showReplies => !showReplies)
                          }
-                         className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
-                         {(
-                            post
+                         className="cursor-pointer flex flex-col items-center justify-center">
+                         <span
+                           className="flex items-center justify-center rounded-lg lg:bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto">
+                           <FaIcon classes="far fa-comment-alt" />
+                         </span>
+                         <span className="text-tiny lg:text-xs font-semibold">
+                           {post
                             |> Post.replies
                             |> Array.length
                             |> string_of_int
-                          )
-                          ++ " Replies"
-                          |> str}
-                         <FaIcon classes="fas fa-chevron-down ml-2" />
+                            |> str}
+                         </span>
                        </button>
                      : React.null}
                 </div>
@@ -248,7 +253,8 @@ let make =
           </div>
         </div>
         {showReplies
-           ? <div className="pl-10 pt-2 topics-post-show__replies-container">
+           ? <div
+               className="lg:pl-10 pt-2 topics-post-show__replies-container">
                {repliesToPost
                 |> Array.map(post =>
                      <TopicsShow__PostReplyShow

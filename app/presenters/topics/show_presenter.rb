@@ -71,7 +71,7 @@ module Topics
 
       User.where(id: user_ids).with_attached_avatar.includes(:faculty).map do |user|
         user.attributes.slice('id', 'name').merge(
-          avatar_url: user.image_or_avatar_url,
+          avatar_url: user.avatar_url(variant: :thumb),
           title: user.full_title
         )
       end

@@ -155,9 +155,9 @@ let make =
     <div className="flex-col items-center justify-between">
       {switch (target) {
        | Some(target) =>
-         <div className="max-w-4xl w-full mt-5 mx-auto">
+         <div className="max-w-4xl w-full mt-5 lg:x-4 mx-auto">
            <div
-             className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center mb-2">
+             className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center">
              <p className="w-3/5 md:w-4/5 text-sm">
                <span className="font-semibold block text-xs">
                  {"Linked Target: " |> str}
@@ -231,7 +231,7 @@ let make =
             )
          |> React.array}
       </div>
-      <div className="mt-4">
+      <div className="mt-4 px-4">
         <TopicsShow__PostEditor
           id="add-reply-to-topic"
           topic

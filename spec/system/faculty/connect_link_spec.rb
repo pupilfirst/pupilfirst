@@ -59,4 +59,26 @@ feature 'Connect Link' do
     expect(page).to have_link('Connect', href: unenrolled_coach.connect_link)
     expect(page).not_to have_link('Connect', href: enrolled_hidden_coach.connect_link)
   end
+
+  context 'course has no connect to coach feature enabled' do
+    before do
+      course.update!(can_connect: false)
+    end
+
+    scenario 'student visits coaches page' do
+      sign_in_user(founder.user, referer: coaches_index_path)
+
+      expect(page).to have_selector('.faculty-card', count: 2)
+
+      # ...connect link for coach will not be displayed .
+      expect(page).to_not have_link('Connect', href: coach.connect_link)
+    end
+
+    scenario 'admin visits coaches page' do
+      sign_in_user(school_admin.user, referer: coaches_index_path)
+
+      # ...connect link for coach will be displayed
+      expect(page).to have_link('Connect', href: coach.connect_link)
+    end
+  end
 end

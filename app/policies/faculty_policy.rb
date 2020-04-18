@@ -7,13 +7,15 @@ class FacultyPolicy < ApplicationPolicy
     record.about.present?
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def connect?
     # Cannot connect if connect link is blank.
     return false if record.connect_link.blank?
 
     if current_founder.present?
-      # It should be possible to connect to course-enrolled coaches.
-      return true if current_founder.startup.course.faculty.where(id: record.id).exists?
+      course = current_founder.startup.course
+      # It should be possible to connect to course-enrolled coaches if the course connect feature is enabled in course.
+      return true if course.can_connect? && course.faculty.where(id: record.id).exists?
     end
 
     # Coaches and admins can view all connect links.
@@ -21,6 +23,7 @@ class FacultyPolicy < ApplicationPolicy
 
     false
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   class Scope < Scope
     def resolve

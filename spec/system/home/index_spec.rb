@@ -14,6 +14,7 @@ feature 'Index spec', js: true do
     before do
       school.update!(about: Faker::Lorem.sentence)
     end
+
     scenario 'When an user visits a school' do
       visit root_path
 
@@ -68,6 +69,18 @@ feature 'Index spec', js: true do
       expect(page).not_to have_text(course_2.name)
       expect(page).not_to have_text(course_3.name)
       expect(page).not_to have_text(course_4.name)
+    end
+  end
+
+  context 'when user is a student in a course' do
+    let(:level) { create :level, :one, course: course_1 }
+    let(:team) { create :team, level: level }
+    let(:student) { create :student, startup: team }
+
+    scenario 'students can jump directly into the course curriculum' do
+      sign_in_user student.user, referer: root_path
+
+      expect(page).to have_link('View Course', href: curriculum_course_path(course_1))
     end
   end
 end

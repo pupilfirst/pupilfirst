@@ -67,7 +67,9 @@ module Courses
     end
 
     def course_details
-      @course.attributes.slice('id', 'ends_at')
+      @course.attributes.slice('id', 'ends_at').merge(
+        certificate_serial_number: current_user.issued_certificates.joins(:course).find_by(courses: { id: @course.id })&.serial_number
+      )
     end
 
     def levels

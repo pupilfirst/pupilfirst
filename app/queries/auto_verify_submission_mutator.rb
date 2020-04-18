@@ -7,11 +7,15 @@ class AutoVerifySubmissionMutator < ApplicationQuery
   validate :ensure_submittability
 
   def create_submission
-    target.timeline_events.create!(
+    submission = target.timeline_events.create!(
       founders: founders,
       passed_at: Time.zone.now,
       latest: true
     )
+
+    TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
+
+    submission
   end
 
   private
@@ -20,9 +24,5 @@ class AutoVerifySubmissionMutator < ApplicationQuery
     return if target.evaluation_criteria.empty? && target.quiz.blank?
 
     errors[:base] << 'The target cannot be auto verified'
-  end
-
-  def description
-    "Target '#{target.title}' was automatically marked complete."
   end
 end

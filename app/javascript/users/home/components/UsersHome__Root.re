@@ -7,7 +7,8 @@ let str = React.string;
 
 type view =
   | ShowCourses
-  | ShowCommunities;
+  | ShowCommunities
+  | ShowCertificates;
 
 let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) => {
   <div
@@ -46,7 +47,7 @@ let navButtonClasses = selected => {
   ++ (selected ? "text-primary-500 border-primary-500" : "");
 };
 
-let navSection = (view, setView, communities) => {
+let navSection = (view, setView, communities, issuedCertificates) => {
   <div className="border-b mt-6">
     <div className="flex max-w-4xl mx-auto px-3 lg:px-0">
       <button
@@ -61,6 +62,14 @@ let navSection = (view, setView, communities) => {
              onClick={_ => setView(_ => ShowCommunities)}>
              <i className="fas fa-users text-xs md:text-sm mr-2" />
              <span> {"Communities" |> str} </span>
+           </button>
+         : React.null}
+      {issuedCertificates |> ArrayUtils.isNotEmpty
+         ? <button
+             className={navButtonClasses(view == ShowCertificates)}
+             onClick={_ => setView(_ => ShowCertificates)}>
+             <i className="fas fa-certificate text-xs md:text-sm mr-2" />
+             <span> {"Certificates" |> str} </span>
            </button>
          : React.null}
     </div>
@@ -102,27 +111,37 @@ let ctaText = (message, icon) => {
 let studentLink = (courseId, suffix) =>
   "/courses/" ++ courseId ++ "/" ++ suffix;
 
-let callToAction = (course, currentSchoolAdmin) => {
+let callToAction = (course, currentSchoolAdmin) =>
+  if (currentSchoolAdmin) {
+    `ViewCourse;
+  } else if (course |> Course.author) {
+    `EditCourse;
+  } else if (course |> Course.review) {
+    `ReviewSubmissions;
+  } else if (course |> Course.exited) {
+    `DroppedOut;
+  } else if (course |> Course.ended) {
+    `CourseEnded;
+  } else {
+    `ViewCourse;
+  };
+
+let ctaFooter = (course, currentSchoolAdmin) => {
   let courseId = course |> Course.id;
 
-  <div>
-    {if (currentSchoolAdmin) {
-       ctaButton("View Course", studentLink(courseId, "curriculum"));
-     } else if (course |> Course.author) {
-       ctaButton(
-         "Edit Curriculum",
-         "/school/courses/" ++ courseId ++ "/curriculum",
-       );
-     } else if (course |> Course.review) {
-       ctaButton("Review Submissions", studentLink(courseId, "review"));
-     } else if (course |> Course.exited) {
-       ctaText("Dropped out", "fas fa-user-slash");
-     } else if (course |> Course.ended) {
-       ctaText("Course Ended", "fas fa-history");
-     } else {
-       ctaButton("Continue Course", studentLink(courseId, "curriculum"));
-     }}
-  </div>;
+  switch (callToAction(course, currentSchoolAdmin)) {
+  | `ViewCourse =>
+    ctaButton("View Course", studentLink(courseId, "curriculum"))
+  | `EditCourse =>
+    ctaButton(
+      "Edit Curriculum",
+      "/school/courses/" ++ courseId ++ "/curriculum",
+    )
+  | `ReviewSubmissions =>
+    ctaButton("Review Submissions", studentLink(courseId, "review"))
+  | `DroppedOut => ctaText("Dropped out", "fas fa-user-slash")
+  | `CourseEnded => ctaText("Course Ended", "fas fa-history")
+  };
 };
 
 let communityLinks = (communityIds, communities) => {
@@ -147,21 +166,25 @@ let communityLinks = (communityIds, communities) => {
   |> React.array;
 };
 
-let courseLinks = (course, communities) => {
+let courseLinks = (course, currentSchoolAdmin, communities) => {
   let courseId = course |> Course.id;
+  let cta = callToAction(course, currentSchoolAdmin);
+
   <div className="flex flex-wrap px-4 mt-2">
-    {course |> Course.author
+    {course |> Course.author && cta != `EditCourse
        ? courseLink(
            "/school/courses/" ++ courseId ++ "/curriculum",
            "Edit Curriculum",
            "fas fa-check-square",
          )
        : React.null}
-    {courseLink(
-       studentLink(courseId, "curriculum"),
-       "View Curriculum",
-       "fas fa-book",
-     )}
+    {cta != `ViewCourse
+       ? courseLink(
+           studentLink(courseId, "curriculum"),
+           "View Curriculum",
+           "fas fa-book",
+         )
+       : React.null}
     {course |> Course.enableLeaderboard
        ? courseLink(
            studentLink(courseId, "leaderboard"),
@@ -169,7 +192,7 @@ let courseLinks = (course, communities) => {
            "fas fa-calendar-alt",
          )
        : React.null}
-    {course |> Course.review
+    {course |> Course.review && cta != `ReviewSubmissions
        ? courseLink(
            studentLink(courseId, "review"),
            "Review Submissions",
@@ -234,10 +257,12 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                         |> str}
                      </div>;
                    } else {
-                     <div> {courseLinks(course, communities)} </div>;
+                     <div>
+                       {courseLinks(course, currentSchoolAdmin, communities)}
+                     </div>;
                    }}
                 </div>
-                <div> {callToAction(course, currentSchoolAdmin)} </div>
+                <div> {ctaFooter(course, currentSchoolAdmin)} </div>
               </div>
             </div>
           )
@@ -277,6 +302,50 @@ let communitiesSection = communities => {
   </div>;
 };
 
+let certificatesSection = issuedCertificates =>
+  <div className="w-full max-w-4xl mx-auto">
+    <div className="flex flex-wrap flex-1 lg:-mx-5">
+      {issuedCertificates
+       |> Array.map(issuedCertificate =>
+            <div
+              key={issuedCertificate |> IssuedCertificate.id}
+              className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+              <a
+                className="w-full h-full shadow rounded-lg hover:shadow-lg"
+                href={
+                  "/c/"
+                  ++ (issuedCertificate |> IssuedCertificate.serialNumber)
+                }>
+                <div
+                  className="user-home-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+                />
+                <div
+                  className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
+                  <div>
+                    <h4 className="font-bold text-sm pt-2 leading-tight">
+                      {issuedCertificate |> IssuedCertificate.courseName |> str}
+                    </h4>
+                    <div className="text-xs">
+                      <span> {"Issued on:" |> str} </span>
+                      <span className="ml-1">
+                        {issuedCertificate
+                         |> IssuedCertificate.createdAt
+                         |> DateTime.format(DateTime.OnlyDate)
+                         |> str}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="btn btn-small btn-primary-ghost mt-2">
+                    {"View Certificate" |> str}
+                  </div>
+                </div>
+              </a>
+            </div>
+          )
+       |> React.array}
+    </div>
+  </div>;
+
 [@react.component]
 let make =
     (
@@ -287,18 +356,20 @@ let make =
       ~userName,
       ~userTitle,
       ~avatarUrl,
+      ~issuedCertificates,
     ) => {
   let (view, setView) = React.useState(() => ShowCourses);
   <div className="bg-gray-100">
     <div className="bg-white">
       {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
-      {navSection(view, setView, communities)}
+      {navSection(view, setView, communities, issuedCertificates)}
     </div>
     <div className="pb-8">
       {switch (view) {
        | ShowCourses =>
          coursesSection(courses, communities, currentSchoolAdmin)
        | ShowCommunities => communitiesSection(communities)
+       | ShowCertificates => certificatesSection(issuedCertificates)
        }}
     </div>
   </div>;

@@ -11,7 +11,7 @@ module Mutations
       mutator = CreateQuizSubmissionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, "Done!", "Your Submission has been recorded")
+        mutator.notify(:success, "Done!", "Your responses have been saved.")
         { submission: mutator.create_submission }
       else
         mutator.notify_errors

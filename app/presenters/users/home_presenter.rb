@@ -15,7 +15,8 @@ module Users
         show_user_edit: show_user_edit?,
         communities: community_details_array,
         user_name: current_user.name,
-        user_title: current_user.full_title
+        user_title: current_user.full_title,
+        issued_certificates: issued_certificate_details
       }
 
       if current_user.avatar.attached?
@@ -26,6 +27,14 @@ module Users
     end
 
     private
+
+    def issued_certificate_details
+      current_user.issued_certificates.includes(:course).map do |issued_certificate|
+        issued_certificate.attributes.slice('id', 'serial_number', 'created_at').merge(
+          course_name: issued_certificate.course.name
+        )
+      end
+    end
 
     def courses
       @courses ||= begin

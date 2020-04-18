@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_one :school_admin, dependent: :restrict_with_error
   has_many :markdown_attachments, dependent: :restrict_with_error
+  has_many :issued_certificates, dependent: :restrict_with_error
 
   has_secure_token :login_token
   has_secure_token :reset_password_token

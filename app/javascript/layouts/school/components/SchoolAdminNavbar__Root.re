@@ -90,7 +90,7 @@ let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
     defaultClasses
     ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "");
 
-  <li key=text> <a href=path className=classes> {text |> str} </a> </li>;
+  <div key=text> <a href=path className=classes> {text |> str} </a> </div>;
 };
 
 let secondaryNav = (courses, userRole, selectedOption) =>
@@ -118,13 +118,8 @@ let secondaryNav = (courses, userRole, selectedOption) =>
     <div
       key="secondary-nav"
       className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
-      <ul className="p-4">
-        <li>
-          <SchoolAdminNavbar__CourseDropdown
-            courses
-            currentCourseId=courseId
-          />
-        </li>
+      <div className="p-4">
+        <SchoolAdminNavbar__CourseDropdown courses currentCourseId=courseId />
         {secondaryNavOption(
            "/school/courses/" ++ courseId ++ "/curriculum",
            courseSelection,
@@ -168,7 +163,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
            EvaluationCriteria,
            "Evaluation Criteria",
          )}
-      </ul>
+      </div>
     </div>
   | _ => React.null
   };

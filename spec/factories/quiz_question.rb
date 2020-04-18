@@ -5,8 +5,10 @@ FactoryBot.define do
     quiz
 
     trait :with_answers do
-      answer_options { create_list(:answer_options, 4) }
-      correct_answer { answer_options.first }
+      after(:create) do |quiz_question|
+        answer_options = create_list(:answer_option, 4, quiz_question: quiz_question)
+        quiz_question.update!(correct_answer: answer_options.first)
+      end
     end
   end
 end

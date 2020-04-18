@@ -10,6 +10,8 @@ type state = {
   replies: array(Post.t),
   replyToPostId: option(string),
   topicTitle: string,
+  savingTopic: bool,
+  showTopicEditor: bool,
 };
 
 type action =
@@ -19,11 +21,14 @@ type action =
   | RemoveLikeFromFirstPost(string)
   | LikeReply(Post.t, Like.t)
   | RemoveLikeFromReply(Post.t, string)
-  | UpdateTopicTitle(string)
   | UpdateFirstPost(Post.t)
   | UpdateReply(Post.t)
   | RemoveReplyToPost
-  | ArchivePost(Post.id);
+  | ArchivePost(Post.id)
+  | UpdateTopicTitle(string)
+  | SaveTopic(Topic.t)
+  | ShowTopicEditor(bool)
+  | UpdateSavingTopic(bool);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -82,6 +87,14 @@ let reducer = (state, action) => {
     }
   | ArchivePost(postId) => state
   | RemoveReplyToPost => {...state, replyToPostId: None}
+  | UpdateSavingTopic(savingTopic) => {...state, savingTopic}
+  | SaveTopic(topic) => {
+      ...state,
+      topic,
+      savingTopic: false,
+      showTopicEditor: false,
+    }
+  | ShowTopicEditor(showTopicEditor) => {...state, showTopicEditor}
   };
 };
 
@@ -121,6 +134,41 @@ let isTopicCreator = (firstPost, currentUserId) => {
   Post.creatorId(firstPost) == currentUserId;
 };
 
+module UpdateTopicQuery = [%graphql
+  {|
+  mutation UpdateTopicMutation($id: ID!, $title: String!) {
+    updateTopic(id: $id, title: $title)  {
+      success
+    }
+  }
+|}
+];
+
+let updateTopic = (state, send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send(UpdateSavingTopic(true));
+  UpdateTopicQuery.make(
+    ~id=state.topic |> Topic.id,
+    ~title=state.topicTitle,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+       response##updateTopic##success
+         ? {
+           let topic = state.topic |> Topic.updateTitle(state.topicTitle);
+           send(SaveTopic(topic));
+         }
+         : send(UpdateSavingTopic(false));
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(_ => {
+       send(UpdateSavingTopic(false));
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 [@react.component]
 let make =
     (
@@ -142,6 +190,8 @@ let make =
         replies,
         replyToPostId: None,
         topicTitle: topic |> Topic.title,
+        savingTopic: false,
+        showTopicEditor: false,
       },
     );
 
@@ -178,19 +228,50 @@ let make =
       <div
         className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
         {<div>
-           <div
-             className="topics-show__title-container flex items-start justify-between">
-             <h3 className="leading-snug lg:pl-14 text-lg lg:text-2xl">
-               {topic |> Topic.title |> str}
-             </h3>
-             <button
-               className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-4 lg:invisible">
-               <i className="far fa-edit" />
-               <span className="hidden md:inline-block ml-1">
-                 {"Edit Title" |> str}
-               </span>
-             </button>
-           </div>
+           {state.showTopicEditor
+              ? <DisablingCover disabled={state.savingTopic}>
+                  <div className=" flex flex-col">
+                    <input
+                      onChange={event =>
+                        send(
+                          UpdateTopicTitle(
+                            ReactEvent.Form.target(event)##value,
+                          ),
+                        )
+                      }
+                      value={state.topicTitle}
+                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      type_="text"
+                    />
+                    <div className="flex justify-end mb-2">
+                      <button
+                        onClick={_ => send(ShowTopicEditor(false))}
+                        className="btn btn-subtle mr-2">
+                        {"Cancel" |> str}
+                      </button>
+                      <button
+                        onClick={updateTopic(state, send)}
+                        disabled={state.topicTitle |> Js.String.trim == ""}
+                        className="btn btn-primary">
+                        {"Update Topic" |> str}
+                      </button>
+                    </div>
+                  </div>
+                </DisablingCover>
+              : <div
+                  className="topics-show__title-container flex items-start justify-between">
+                  <h3 className="leading-snug lg:pl-14 text-lg lg:text-2xl">
+                    {state.topic |> Topic.title |> str}
+                  </h3>
+                  <button
+                    onClick={_ => send(ShowTopicEditor(true))}
+                    className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-4 lg:invisible">
+                    <i className="far fa-edit" />
+                    <span className="hidden md:inline-block ml-1">
+                      {"Edit Title" |> str}
+                    </span>
+                  </button>
+                </div>}
            <TopicsShow__PostShow
              key={Post.id(state.firstPost)}
              post={state.firstPost}

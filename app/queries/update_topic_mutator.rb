@@ -17,7 +17,7 @@ class UpdateTopicMutator < ApplicationQuery
   alias authorized? authorized_update?
 
   def community
-    @community ||= question&.community
+    @community ||= topic&.community
   end
 
   def creator

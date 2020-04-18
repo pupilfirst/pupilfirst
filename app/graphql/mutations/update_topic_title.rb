@@ -1,18 +1,17 @@
 module Mutations
-  class UpdateTopic < GraphQL::Schema::Mutation
+  class UpdateTopicTitle < GraphQL::Schema::Mutation
     argument :id, ID, required: true
     argument :title, String, required: true
 
-    description "Update a topic"
+    description "Update title of topic in community"
 
     field :success, Boolean, null: false
 
     def resolve(params)
-      mutator = UpdateTopicMutator.new(context, params)
+      mutator = UpdateTopicTitleMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Topic updated successfully!')
-        mutator.update_topic
+        mutator.update_topic_title
         true
       else
         mutator.notify_errors

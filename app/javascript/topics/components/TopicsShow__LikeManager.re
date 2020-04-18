@@ -23,7 +23,7 @@ module DeletePostLikeQuery = [%graphql
 ];
 
 let iconClasses = (liked, saving) => {
-  let classes = "text-xl text-gray-600";
+  let classes = "text-lg";
   classes
   ++ (
     if (saving) {
@@ -122,11 +122,11 @@ let make =
         addPostLikeCB,
       )}>
       <div
-        className="flex items-center justify-center rounded-full hover:bg-gray-100 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2"
+        className="flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto"
         key={iconClasses(liked, saving)}>
         <i className={iconClasses(liked, saving)} />
       </div>
-      <p className="text-xs pb-1">
+      <p className="text-tiny lg:text-xs font-semibold">
         {postLikes |> Array.length |> string_of_int |> str}
       </p>
     </div>

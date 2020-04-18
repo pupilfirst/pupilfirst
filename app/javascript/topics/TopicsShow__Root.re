@@ -137,9 +137,15 @@ let make =
     );
 
   <div className="bg-gray-100">
+    <div className="max-w-4xl w-full mx-auto mt-5">
+      <a className="btn btn-subtle">
+        <i className="fas fa-arrow-left" />
+        <span className="ml-2"> {"Back" |> str} </span>
+      </a>
+    </div>
     <div className="flex-col items-center justify-between">
       <div
-        className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
+        className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-4 lg:p-8 mb-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
         {<div>
            <div
              className="topics-show__title-container flex items-start justify-between">

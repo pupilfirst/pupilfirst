@@ -4,12 +4,14 @@ let str = React.string;
 [%bs.raw {|require("./TopicsShow__PostShow.css")|}];
 
 let solutionIcon = {
-  <div className="flex flex-col items-center pr-1 md:pr-4 pb-4 pt-2">
+  <div
+    className="flex lg:flex-col items-center px-2 lg:pl-0 py-1 lg:pr-1 lg:pr-4 lg:pb-4 lg:pt-2 bg-green-200 lg:bg-transparent rounded">
     <div
-      className="flex items-center justify-center w-8 h-8 bg-green-200 text-green-800 rounded-full">
-      <PfIcon className="if i-check-solid" />
+      className="flex items-center justify-center lg:w-8 lg:h-8 bg-green-200 text-green-800 rounded-full">
+      <PfIcon className="if i-check-solid text-sm lg:text-base" />
     </div>
-    <div className="text-tiny font-semibold text-green-800 pt-1">
+    <div
+      className="text-xs lg:text-tiny font-semibold text-green-800 pl-2 lg:pl-0 lg:pt-1">
       {"Solution" |> str}
     </div>
   </div>;
@@ -175,45 +177,71 @@ let make =
                </div>}
         </div>
         <div id="user-data" className="flex justify-between pt-4">
-          <div className="flex">
+          <div className="flex-1 lg:flex-initial mr-3">
             <div className="hidden lg:block">
               <TopicsShow__UserShow
                 user={user(post |> Post.creatorId)}
                 createdAt={post |> Post.createdAt}
               />
             </div>
-            <div id="likes-and-solution" className="flex flex-col lg:hidden">
+            <div
+              id="likes-and-solution"
+              className="flex items-center lg:items-start justify-between lg:hidden">
+              <div className="flex">
+                {<TopicsShow__LikeManager
+                   postId={post |> Post.id}
+                   postLikes={post |> Post.postLikes}
+                   currentUserId
+                   addPostLikeCB
+                   removePostLikeCB
+                 />}
+                <div>
+                  {repliesToPost |> ArrayUtils.isNotEmpty
+                     ? <button
+                         id="show-replies-button"
+                         onClick={_ =>
+                           toggleShowReplies(showReplies => !showReplies)
+                         }
+                         className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
+                         {(
+                            post
+                            |> Post.replies
+                            |> Array.length
+                            |> string_of_int
+                          )
+                          ++ " Replies"
+                          |> str}
+                         <FaIcon classes="fas fa-chevron-down ml-2" />
+                       </button>
+                     : React.null}
+                </div>
+              </div>
               {post |> Post.solution ? solutionIcon : React.null}
-              {<TopicsShow__LikeManager
-                 postId={post |> Post.id}
-                 postLikes={post |> Post.postLikes}
-                 currentUserId
-                 addPostLikeCB
-                 removePostLikeCB
-               />}
             </div>
           </div>
           <div className="flex items-center text-sm font-semibold">
-            {repliesToPost |> ArrayUtils.isNotEmpty
-               ? <button
-                   id="show-replies-button"
-                   onClick={_ =>
-                     toggleShowReplies(showReplies => !showReplies)
-                   }
-                   className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
-                   {(post |> Post.replies |> Array.length |> string_of_int)
-                    ++ " Replies"
-                    |> str}
-                   <FaIcon classes="fas fa-chevron-down ml-2" />
-                 </button>
-               : React.null}
+            <div className="hidden lg:block">
+              {repliesToPost |> ArrayUtils.isNotEmpty
+                 ? <button
+                     id="show-replies-button"
+                     onClick={_ =>
+                       toggleShowReplies(showReplies => !showReplies)
+                     }
+                     className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
+                     {(post |> Post.replies |> Array.length |> string_of_int)
+                      ++ " Replies"
+                      |> str}
+                     <FaIcon classes="fas fa-chevron-down ml-2" />
+                   </button>
+                 : React.null}
+            </div>
             <button
               onClick={_ => {
                 addNewReplyCB();
                 navigateToEditor();
               }}
               id="reply button"
-              className="border bg-gray-200 p-2 rounded text-xs font-semibold">
+              className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold">
               <FaIcon classes="fas fa-reply mr-2" />
               {"Reply" |> str}
             </button>

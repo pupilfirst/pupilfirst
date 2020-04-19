@@ -21,8 +21,70 @@ let findUser = (users, userId) => {
   users |> Array.to_list |> User.findById(userId);
 };
 
+module MarkPostAsSolutionQuery = [%graphql
+  {|
+  mutation MarkAsSolutionMutation($id: ID!) {
+    markPostAsSolution(id: $id)  {
+      success
+    }
+  }
+|}
+];
+
+module ArchivePostQuery = [%graphql
+  {|
+  mutation ArchivePostMutation($id: ID!) {
+    archivePost(id: $id)  {
+      success
+    }
+  }
+|}
+];
+
+let markPostAsSolution = (postId, markPostAsSolutionCB) => {
+  MarkPostAsSolutionQuery.make(~id=postId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+       response##markPostAsSolution##success ? markPostAsSolutionCB() : ();
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
+let archivePost = (isFirstPost, postId, archivePostCB) => {
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm(
+       (
+         isFirstPost
+           ? "Are you sure you want to delete the topic. "
+           : "Are you sure you want to delete the post. "
+       )
+       ++ "This cannot be undone",
+     )
+    ? {
+      ArchivePostQuery.make(~id=postId, ())
+      |> GraphqlQuery.sendQuery
+      |> Js.Promise.then_(response => {
+           response##archivePost##success ? archivePostCB() : ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    }
+    : ();
+};
+
 let optionsDropdown =
-    (isPostCreator, isTopicCreator, isCoach, isFirstPost, toggleShowPostEdit) => {
+    (
+      post,
+      isPostCreator,
+      isTopicCreator,
+      isCoach,
+      isFirstPost,
+      replies,
+      toggleShowPostEdit,
+      markPostAsSolutionCB,
+      archivePostCB,
+    ) => {
   let selected =
     <div
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
@@ -37,18 +99,31 @@ let optionsDropdown =
       {"Edit " ++ postTypeString |> str}
     </button>;
   let markAsSolutionButton =
-    isFirstPost
+    isFirstPost || Post.solution(post)
       ? React.null
       : <button
+          onClick={_ =>
+            markPostAsSolution(post |> Post.id, markPostAsSolutionCB)
+          }
           className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
           <PfIcon className="if i-check-circle-alt-regular if-fw" />
           {"Mark as solution" |> str}
         </button>;
+  let showDelete =
+    isFirstPost
+      ? isCoach || isPostCreator && replies |> ArrayUtils.isEmpty
+      : isCoach || isPostCreator;
   let deletePostButton =
-    <button className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
-      <FaIcon classes="fas fa-trash-alt mr-2" />
-      {"Delete " ++ postTypeString |> str}
-    </button>;
+    showDelete
+      ? <button
+          onClick={_ =>
+            archivePost(isFirstPost, post |> Post.id, archivePostCB)
+          }
+          className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
+          <FaIcon classes="fas fa-trash-alt mr-2" />
+          {"Delete " ++ postTypeString |> str}
+        </button>
+      : React.null;
 
   let contents =
     switch (isCoach, isTopicCreator, isPostCreator) {
@@ -110,11 +185,13 @@ let make =
       ~addNewReplyCB,
       ~addPostLikeCB,
       ~removePostLikeCB,
+      ~markPostAsSolutionCB,
+      ~archivePostCB,
     ) => {
   let user = findUser(users);
-  let repliesToPost = post |> Post.repliesToPost(posts);
   let isPostCreator = currentUserId == Post.creatorId(post);
   let isFirstPost = Post.postNumber(post) == 1;
+  let repliesToPost = isFirstPost ? [||] : post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
   let (showReplies, toggleShowReplies) = React.useState(() => false);
 
@@ -142,11 +219,15 @@ let make =
               <div className="flex-shrink-0 mt-1">
                 {isPostCreator || isCoach || isTopicCreator
                    ? optionsDropdown(
+                       post,
                        isPostCreator,
                        isTopicCreator,
                        isCoach,
                        isFirstPost,
+                       posts,
                        toggleShowPostEdit,
+                       markPostAsSolutionCB,
+                       archivePostCB,
                      )
                    : React.null}
               </div>
@@ -170,11 +251,15 @@ let make =
                    <div className="hidden lg:block flex-shrink-0">
                      {isPostCreator || isCoach || isTopicCreator
                         ? optionsDropdown(
+                            post,
                             isPostCreator,
                             isTopicCreator,
                             isCoach,
                             isFirstPost,
+                            posts,
                             toggleShowPostEdit,
+                            markPostAsSolutionCB,
+                            archivePostCB,
                           )
                         : React.null}
                    </div>
@@ -235,10 +320,17 @@ let make =
                        toggleShowReplies(showReplies => !showReplies)
                      }
                      className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
-                     {(post |> Post.replies |> Array.length |> string_of_int)
-                      ++ " Replies"
+                     {let numberOfReplies =
+                        post |> Post.replies |> Array.length;
+                      (numberOfReplies |> string_of_int)
+                      ++ (numberOfReplies > 1 ? " Replies" : " Reply")
                       |> str}
-                     <FaIcon classes="fas fa-chevron-down ml-2" />
+                     <FaIcon
+                       classes={
+                         "ml-2 fas fa-chevron-"
+                         ++ (showReplies ? "up" : "down")
+                       }
+                     />
                    </button>
                  : React.null}
             </div>

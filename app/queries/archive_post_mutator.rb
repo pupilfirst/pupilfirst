@@ -7,7 +7,7 @@ class ArchivePostMutator < ApplicationQuery
     Post.transaction do
       post.update!(archived_at: Time.zone.now, archiver: current_user)
 
-      if topic.first_post.id == id
+      if topic.first_post.id == post.id
         topic.update!(archived: true)
       end
     end
@@ -15,18 +15,18 @@ class ArchivePostMutator < ApplicationQuery
 
   private
 
-  alias authorized? authorized_update?
+  alias authorized? authorized_archive?
 
   def community
     topic&.community
   end
 
   def topic
-    post&.topic
+    @topic ||= post&.topic
   end
 
   def post
-    Post.find_by(id: id)
+    @post ||= Post.find_by(id: id)
   end
 
   def creator

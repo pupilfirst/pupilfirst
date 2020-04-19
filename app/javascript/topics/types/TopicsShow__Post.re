@@ -59,6 +59,14 @@ let removeLike = (likeId, t) => {
   {...t, postLikes};
 };
 
+let markAsSolution = (replyId, replies) => {
+  replies
+  |> Js.Array.map(reply =>
+       reply.id == replyId
+         ? {...reply, solution: true} : {...reply, solution: false}
+     );
+};
+
 let find = (postId, posts) => {
   posts
   |> ArrayUtils.unsafeFind(

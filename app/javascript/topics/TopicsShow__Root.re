@@ -24,11 +24,12 @@ type action =
   | UpdateFirstPost(Post.t)
   | UpdateReply(Post.t)
   | RemoveReplyToPost
-  | ArchivePost(Post.id)
+  | ArchivePost(string)
   | UpdateTopicTitle(string)
   | SaveTopic(Topic.t)
   | ShowTopicEditor(bool)
-  | UpdateSavingTopic(bool);
+  | UpdateSavingTopic(bool)
+  | MarkReplyAsSolution(string);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -85,7 +86,10 @@ let reducer = (state, action) => {
         |> Js.Array.filter(r => Post.id(r) != Post.id(reply))
         |> Array.append([|reply|]),
     }
-  | ArchivePost(postId) => state
+  | ArchivePost(postId) => {
+      ...state,
+      replies: state.replies |> Js.Array.filter(r => Post.id(r) != postId),
+    }
   | RemoveReplyToPost => {...state, replyToPostId: None}
   | UpdateSavingTopic(savingTopic) => {...state, savingTopic}
   | SaveTopic(topic) => {
@@ -95,6 +99,10 @@ let reducer = (state, action) => {
       showTopicEditor: false,
     }
   | ShowTopicEditor(showTopicEditor) => {...state, showTopicEditor}
+  | MarkReplyAsSolution(postId) => {
+      ...state,
+      replies: state.replies |> Post.markAsSolution(postId),
+    }
   };
 };
 
@@ -132,6 +140,11 @@ let removeFirstPostLike = (send, likeId) => {
 
 let isTopicCreator = (firstPost, currentUserId) => {
   Post.creatorId(firstPost) == currentUserId;
+};
+
+let archiveTopic = communityId => {
+  let communityPath = "/communities/" ++ communityId;
+  communityPath |> Webapi.Dom.Window.setLocation(Webapi.Dom.window);
 };
 
 module UpdateTopicQuery = [%graphql
@@ -197,7 +210,7 @@ let make =
 
   <div className="bg-gray-100">
     <div className="max-w-4xl w-full mt-5 pl-4 lg:pl-0 lg:mx-auto">
-      <a className="btn btn-subtle">
+      <a onClick={_ => DomUtils.goBack()} className="btn btn-subtle">
         <i className="fas fa-arrow-left" />
         <span className="ml-2"> {"Back" |> str} </span>
       </a>
@@ -263,21 +276,23 @@ let make =
                   <h3 className="leading-snug lg:pl-14 text-lg lg:text-2xl">
                     {state.topic |> Topic.title |> str}
                   </h3>
-                  <button
-                    onClick={_ => send(ShowTopicEditor(true))}
-                    className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-4 lg:invisible">
-                    <i className="far fa-edit" />
-                    <span className="hidden md:inline-block ml-1">
-                      {"Edit Title" |> str}
-                    </span>
-                  </button>
+                  {isCoach || currentUserId == (firstPost |> Post.creatorId)
+                     ? <button
+                         onClick={_ => send(ShowTopicEditor(true))}
+                         className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-4 lg:invisible">
+                         <i className="far fa-edit" />
+                         <span className="hidden md:inline-block ml-1">
+                           {"Edit Title" |> str}
+                         </span>
+                       </button>
+                     : React.null}
                 </div>}
            <TopicsShow__PostShow
              key={Post.id(state.firstPost)}
              post={state.firstPost}
              topic
              users
-             posts=[||]
+             posts={state.replies}
              currentUserId
              isCoach
              isTopicCreator={isTopicCreator(firstPost, currentUserId)}
@@ -285,11 +300,13 @@ let make =
              addNewReplyCB={addNewReply(send, None)}
              addPostLikeCB={addFirstPostLike(send)}
              removePostLikeCB={removeFirstPostLike(send)}
+             markPostAsSolutionCB={() => ()}
+             archivePostCB={() => archiveTopic(communityId)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 lg:ml-14 border-b mb-4">
            {(state.replies |> Array.length |> string_of_int)
-            ++ " Replies"
+            ++ (state.replies |> Array.length > 1 ? " Replies" : " Reply")
             |> str}
          </h5>}
         {state.replies
@@ -307,7 +324,11 @@ let make =
                 updatePostCB={updateReply(send)}
                 addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
                 addPostLikeCB={addReplyLike(send, reply)}
+                markPostAsSolutionCB={() =>
+                  send(MarkReplyAsSolution(Post.id(reply)))
+                }
                 removePostLikeCB={removeReplyLike(send, reply)}
+                archivePostCB={() => send(ArchivePost(Post.id(reply)))}
               />
             )
          |> React.array}

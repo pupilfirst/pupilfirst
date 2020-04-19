@@ -2,7 +2,6 @@ class MarkPostAsSolutionMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
   property :id
-  property :body, validates: { length: { minimum: 1, maximum: 100_000 }, presence: true }
 
   def mark_post_as_solution
     return previous_solution if previous_solution&.id == id

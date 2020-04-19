@@ -39,6 +39,10 @@ let isDevelopment = () =>
   | None => false
   };
 
+let goBack = () => {
+  Webapi.Dom.window |> Webapi.Dom.Window.history |> Webapi.Dom.History.back;
+};
+
 module FormData = {
   type t = Fetch.formData;
 

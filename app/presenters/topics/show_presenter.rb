@@ -53,7 +53,7 @@ module Topics
     end
 
     def replies
-      @topic.replies.live
+      @topic.replies.live.includes(:post_likes)
     end
 
     def details_of_replies

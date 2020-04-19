@@ -5,6 +5,16 @@ class CreatePostMutator < ApplicationQuery
   property :topic_id, validates: { presence: true }
   property :reply_to_post_id
 
+  validate :cannot_reply_to_topic_body
+
+  def cannot_reply_to_topic_body
+    return if reply_to_post_id.blank?
+
+    return if reply_to_post_id.present? && reply_to_post_id != topic.first_post.id
+
+    errors[:base] << 'cannot add reply to topic body'
+  end
+
   def create_post
     Post.transaction do
       post = Post.create!(

@@ -10,7 +10,9 @@ module Mutations
       mutator = ArchivePostMutator.new(context, params)
 
       success = if mutator.valid?
+
         mutator.archive_post
+        mutator.notify(:success, "Done!", "Post archived successfully")
         true
       else
         false

@@ -16,6 +16,14 @@ module AuthorizeCommunityUser
     authorized_create? && (creator == current_user || current_coach.present?)
   end
 
+  def authorized_archive?
+    if post.post_number != 1
+      authorized_update?
+    else
+      authorized_create? && (((creator == current_user) && !topic.replies.exist?) || current_coach.present?)
+    end
+  end
+
   def current_coach
     current_user.faculty
   end

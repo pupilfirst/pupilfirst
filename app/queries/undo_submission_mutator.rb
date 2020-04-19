@@ -36,8 +36,8 @@ class UndoSubmissionMutator < ApplicationQuery
 
   # Founders linked to a timeline event can delete it.
   def authorized?
-    founder.present? &&
-      target.present? &&
+    target.present? &&
+      founder.present? &&
       target.status(founder) == Targets::StatusService::STATUS_SUBMITTED
   end
 end

@@ -23,15 +23,6 @@
     bottom: 50%;
     transform: translateY(-50%);
   }
-  .topics-post-show__replies-container:after {
-    position: absolute;
-    content: '';
-    width: 18px;
-    height: 1px;
-    @apply bg-gray-300;
-    left: 16px;
-    bottom: 0;
-  }
 }
 
 .topics-show__replies-wrapper:not(:last-child) .topics-post-show__post-body {

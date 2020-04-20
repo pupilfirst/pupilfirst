@@ -13,4 +13,14 @@
     bottom: 50%;
     transform: translateY(-50%);
   }
+  .topics-post-reply-show__replies:last-child:after {
+    position: absolute;
+    content: '';
+    width: 2px;
+    height: 50%;
+    @apply bg-white;
+    left: -18px;
+    bottom: 0;
+    top: calc(50% - 1px);
+  }
 }

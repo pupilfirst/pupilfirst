@@ -256,7 +256,7 @@ let make =
                        profile=Markdown.QuestionAndAnswer
                      />
                    </div>
-                   <div className="hidden lg:block flex-shrink-0">
+                   <div className="hidden lg:block flex-shrink-0 ml-3">
                      {isPostCreator || isCoach || isTopicCreator
                         ? optionsDropdown(
                             post,

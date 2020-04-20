@@ -75,15 +75,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
-  create_table "answer_likes", force: :cascade do |t|
-    t.bigint "answer_id"
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["answer_id", "user_id"], name: "index_answer_likes_on_answer_id_and_user_id", unique: true
-    t.index ["user_id"], name: "index_answer_likes_on_user_id"
-  end
-
   create_table "answer_options", force: :cascade do |t|
     t.bigint "quiz_question_id"
     t.text "value"
@@ -91,21 +82,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quiz_question_id"], name: "index_answer_options_on_quiz_question_id"
-  end
-
-  create_table "answers", force: :cascade do |t|
-    t.text "description"
-    t.bigint "question_id"
-    t.bigint "creator_id"
-    t.bigint "editor_id"
-    t.bigint "archiver_id"
-    t.boolean "archived", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["archiver_id"], name: "index_answers_on_archiver_id"
-    t.index ["creator_id"], name: "index_answers_on_creator_id"
-    t.index ["editor_id"], name: "index_answers_on_editor_id"
-    t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
   create_table "applicants", force: :cascade do |t|
@@ -165,23 +141,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.integer "university_id"
     t.index ["state_id"], name: "index_colleges_on_state_id"
     t.index ["university_id"], name: "index_colleges_on_university_id"
-  end
-
-  create_table "comments", force: :cascade do |t|
-    t.text "value"
-    t.string "commentable_type"
-    t.bigint "commentable_id"
-    t.datetime "archived_at"
-    t.bigint "creator_id"
-    t.bigint "editor_id"
-    t.bigint "archiver_id"
-    t.boolean "archived", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["archiver_id"], name: "index_comments_on_archiver_id"
-    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
-    t.index ["creator_id"], name: "index_comments_on_creator_id"
-    t.index ["editor_id"], name: "index_comments_on_editor_id"
   end
 
   create_table "communities", force: :cascade do |t|
@@ -489,23 +448,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
   end
 
-  create_table "questions", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.bigint "community_id"
-    t.bigint "creator_id"
-    t.bigint "editor_id"
-    t.bigint "archiver_id"
-    t.boolean "archived", default: false
-    t.datetime "last_activity_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["archiver_id"], name: "index_questions_on_archiver_id"
-    t.index ["community_id"], name: "index_questions_on_community_id"
-    t.index ["creator_id"], name: "index_questions_on_creator_id"
-    t.index ["editor_id"], name: "index_questions_on_editor_id"
-  end
-
   create_table "quiz_questions", force: :cascade do |t|
     t.text "question"
     t.text "description"
@@ -686,13 +628,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
-  end
-
-  create_table "target_questions", force: :cascade do |t|
-    t.bigint "question_id"
-    t.bigint "target_id"
-    t.index ["question_id"], name: "index_target_questions_on_question_id"
-    t.index ["target_id", "question_id"], name: "index_target_questions_on_target_id_and_question_id", unique: true
   end
 
   create_table "target_resources", force: :cascade do |t|
@@ -940,8 +875,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "target_questions", "questions"
-  add_foreign_key "target_questions", "targets"
   add_foreign_key "target_resources", "resources"
   add_foreign_key "target_resources", "targets"
   add_foreign_key "target_versions", "targets"

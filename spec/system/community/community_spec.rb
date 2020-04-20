@@ -55,7 +55,7 @@ feature 'Community', js: true do
     expect(page).to have_text(question_3.title)
   end
 
-  scenario 'an active student creates a question in his community' do
+  scenario 'an active student creates a post in his community' do
     sign_in_user(student_1.user, referer: community_path(community))
     expect(page).to have_text(community.name)
 

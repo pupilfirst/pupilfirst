@@ -107,12 +107,8 @@ Rails.application.routes.draw do
   resources :communities, only: %i[show] do
     member do
       get 'new_topic'
-      get 'new_question'
     end
   end
-
-  get 'questions/:id(/:title)/versions', controller: "questions", action: "versions"
-  get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
   scope 'topics', controller: 'topics' do
     get '/:id(/:title)/versions', action: 'versions'

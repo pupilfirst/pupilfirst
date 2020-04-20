@@ -87,11 +87,6 @@ module Types
       argument :course_id, ID, required: true
     end
 
-    resolved_field :similar_questions, [Types::QuestionType], null: false do
-      argument :community_id, ID, required: true
-      argument :title, String, required: true
-    end
-
     resolved_field :similar_topics, [Types::TopicType], null: false do
       argument :community_id, ID, required: true
       argument :title, String, required: true

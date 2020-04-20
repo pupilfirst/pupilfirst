@@ -140,9 +140,6 @@ let redirectToNewTopic = (id, title) => {
   Webapi.Dom.(window->Window.setLocation(redirectPath));
 };
 
-let handleBack = () =>
-  Webapi.Dom.window |> Webapi.Dom.Window.history |> Webapi.Dom.History.back;
-
 let saveDisabled = state =>
   state.body |> isInvalidString || state.title |> isInvalidString;
 
@@ -151,7 +148,7 @@ let handleCreateTopic = (state, send, communityId, target, event) => {
 
   if (!saveDisabled(state)) {
     send(BeginSaving);
-    let targetId = target |> OptionUtils.map(QuestionsShow__LinkedTarget.id);
+    let targetId = target |> OptionUtils.flatMap(TopicsShow__LinkedTarget.id);
 
     CreateTopicQuery.make(
       ~body=state.body,
@@ -275,7 +272,8 @@ let make = (~communityId, ~showBackButton=true, ~target) => {
         <div className="px-3 lg:px-0">
           {showBackButton
              ? <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-                 <a className="btn btn-subtle" onClick={_ => handleBack()}>
+                 <a
+                   className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
                    <i className="fas fa-arrow-left" />
                    <span className="ml-2"> {"Back" |> str} </span>
                  </a>
@@ -292,7 +290,7 @@ let make = (~communityId, ~showBackButton=true, ~target) => {
                    {"Linked Target: " |> str}
                  </span>
                  <span>
-                   {target |> QuestionsShow__LinkedTarget.title |> str}
+                   {target |> TopicsShow__LinkedTarget.title |> str}
                  </span>
                </p>
                <a href="./new_topic" className="btn btn-default">

@@ -1,4 +1,4 @@
-open QuestionsShow__Types;
+open TopicsShow__Types;
 
 type props = {
   communityId: string,

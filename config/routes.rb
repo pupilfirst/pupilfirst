@@ -111,8 +111,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'answers/:id/versions', controller: "answers", action: "versions", as: "answer_version"
-
   get 'questions/:id(/:title)/versions', controller: "questions", action: "versions"
   get 'questions/:id(/:title)', controller: "questions", action: "show", as: "question"
 
@@ -120,6 +118,8 @@ Rails.application.routes.draw do
     get '/:id(/:title)/versions', action: 'versions'
     get '/:id(/:title)', action: "show", as: 'topic'
   end
+
+  get 'posts/:id/versions', controller: "posts", action: "versions", as: "post_version"
 
   get 'home', controller: "users", action: "home", as: "home"
 

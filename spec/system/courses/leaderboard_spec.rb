@@ -46,6 +46,8 @@ feature 'Course leaderboard' do
   end
 
   scenario 'Student visits leaderboard' do
+    skip 'The leaderboard feature is currently inactive, and needs to be re-built.'
+
     sign_in_user(student.user, referer: leaderboard_course_path(student.course))
 
     expect(page).to have_content('You are at the top of the leaderboard')
@@ -70,8 +72,9 @@ feature 'Course leaderboard' do
     within("div[data-t='inactive students count']") do
       expect(page).to have_text(4)
     end
+
     # The leaderboard from two weeks ago should include all students.
-    visit leaderboard_course_path(student.course, on: 1.week.ago.strftime("%Y%m%d"))
+    visit leaderboard_course_path(student.course, on: 8.days.ago.strftime("%Y%m%d"))
 
     ([student] + other_team_1.founders + other_team_2.founders).each do |leaderboard_founder|
       expect(page).to have_content(leaderboard_founder.name)

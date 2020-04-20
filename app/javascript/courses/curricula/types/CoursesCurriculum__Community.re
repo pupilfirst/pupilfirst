@@ -1,33 +1,33 @@
-type question = {
-  questionId: string,
-  questionTitle: string,
+type topic = {
+  topicId: string,
+  topicTitle: string,
 };
 
 type t = {
   id: string,
   name: string,
-  questions: list(question),
+  topics: array(topic),
 };
 
 let decodeQuestion = json =>
   Json.Decode.{
-    questionId: json |> field("id", string),
-    questionTitle: json |> field("title", string),
+    topicId: json |> field("id", string),
+    topicTitle: json |> field("title", string),
   };
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
-    questions: json |> field("questions", list(decodeQuestion)),
+    topics: json |> field("topics", array(decodeQuestion)),
   };
 
 let id = t => t.id;
 
 let name = t => t.name;
 
-let questions = t => t.questions;
+let topics = t => t.topics;
 
-let questionId = question => question.questionId;
+let topicId = topic => topic.topicId;
 
-let questionTitle = question => question.questionTitle;
+let topicTitle = question => question.topicTitle;

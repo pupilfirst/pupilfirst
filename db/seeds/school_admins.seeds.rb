@@ -1,8 +1,9 @@
 after 'schools', 'users' do
   puts 'Seeding school_admins (production, idempotent)'
 
+  user = User.find_by(email: 'admin@example.com')
+
   School.all.each do |school|
-    admin = school.users.where(email: 'admin@example.com').first_or_create!(name: Faker::Name.name)
-    SchoolAdmin.where(user: admin, school: school).first_or_create!
+    SchoolAdmin.where(user: user, school: school).first_or_create!
   end
 end

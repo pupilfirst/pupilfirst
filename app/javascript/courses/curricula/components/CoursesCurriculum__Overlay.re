@@ -453,9 +453,10 @@ let renderPendingStudents = (pendingUserIds, users) =>
                  );
 
             <div
+              key={user |> User.id}
               title={(user |> User.name) ++ " has not completed this target."}
               className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
-              <img src={user |> User.avatarUrl} />
+              {user |> User.avatar}
             </div>;
           })
        |> Array.of_list
@@ -547,9 +548,10 @@ let quickNavigationLinks = (targetDetails, send) => {
   </div>;
 };
 
-let updatePendingUserIdsWhenAddingSubmission = (send, target, addSubmissionCB, submission) => {
+let updatePendingUserIdsWhenAddingSubmission =
+    (send, target, addSubmissionCB, submission) => {
   send(AddSubmission(target |> Target.role));
-  addSubmissionCB(submission)
+  addSubmissionCB(submission);
 };
 
 [@react.component]
@@ -621,7 +623,11 @@ let make =
               target,
               targetDetails,
               targetStatus,
-              updatePendingUserIdsWhenAddingSubmission(send, target, addSubmissionCB),
+              updatePendingUserIdsWhenAddingSubmission(
+                send,
+                target,
+                addSubmissionCB,
+              ),
               evaluationCriteria,
               coaches,
               users,

@@ -175,6 +175,8 @@ feature "Automatic issuance of certificates", js: true do
           find("div[title='Good']").click
           click_button 'Save grades'
 
+          expect(page).to have_text('The submission has been marked as reviewed')
+
           # Both students should now have a now certificate.
           expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(student_1.user.id, student_2.user.id)
         end

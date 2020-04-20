@@ -131,7 +131,7 @@ if ENV['JAVASCRIPT_DRIVER'] == 'cuprite'
   require "capybara/cuprite"
 end
 
-Capybara.javascript_driver = ENV['JAVASCRIPT_DRIVER'].present? ? ENV['JAVASCRIPT_DRIVER'].to_sym : :chrome
+Capybara.javascript_driver = ENV['JAVASCRIPT_DRIVER'].present? ? ENV['JAVASCRIPT_DRIVER'].to_sym : :headless_chrome
 
 # Use rspec-retry to retry pesky intermittent failures.
 require 'rspec/retry'

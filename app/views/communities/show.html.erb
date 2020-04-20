@@ -1,4 +1,5 @@
-<% presenter = Communities::ShowPresenter.new(self, @community, @questions, @search, @target) %>
+<% presenter = Communities::ShowPresenter.new(self, @community, @topics, @search, @target) %>
+
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
   <%= stylesheet_pack_tag 'communities/show', media: 'all' %>
@@ -39,11 +40,11 @@
     <div class="community-ask-button-container flex max-w-3xl mx-auto px-6 mt-10 items-center justify-center w-full relative">
       <div class="bg-gray-100 px-1 z-10">
         <a class="no-underline btn btn-primary btn-large"
-           href=<%= new_question_community_path(@community) %>
+           href=<%= new_topic_community_path(@community) %>
         >
           <i class="fas fa-plus-circle text-lg"></i>
           <span class="font-semibold ml-2">
-            Ask a question
+            Create a new topic
           </span>
         </a>
       </div>
@@ -51,39 +52,40 @@
     <div class="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div class="max-w-3xl w-full mx-auto relative">
         <div class="community-question__list-container shadow bg-white rounded-lg mb-4">
-          <% @questions.map do |question| %>
+          <% @topics.map do |topic| %>
             <div class="flex items-center border-b">
               <div class="flex w-full">
                 <a class="cursor-pointer no-underline flex flex-1 justify-between items-center p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
-                   href=<%= question_path(question.id, question.title.parameterize) %>>
+                   href=<%= topic_path(id: topic.id, title: topic.title.parameterize) %>>
                   <span class="block">
                     <span class="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
-                      <%= question.title %>
+                      <%= topic.title %>
                     </span>
                     <span class="block text-xs mt-1">
                       <span>Asked by</span>
-                      <span class="font-semibold"><%= presenter.creator_name(question) %> </span>
-                      <span class="hidden md:inline-block md:mr-2">on <%= presenter.time(question) %> </span>
+                      <span class="font-semibold"><%= presenter.creator_name(topic) %> </span>
+                      <span class="hidden md:inline-block md:mr-2">on <%= presenter.time(topic) %> </span>
                       <span class="block md:inline-block mt-1 md:mt-0 md:px-2 bg-gray-100 md:border-l border-gray-400">
-                        <% if question.last_activity_at.present? %>
+                        <% if topic.last_activity_at.present? %>
                         <span class='hidden md:inline-block'>updated </span>
-                        <i class='fas fa-history mr-1 md:hidden'></i>   <%= presenter.activity(question) %>
+                          <i class='fas fa-history mr-1 md:hidden'></i>
+                          <%= presenter.activity(topic) %>
                           <span> ago </span>
                         <% end %>
                       </span>
                     </span>
                   </span>
                   <span class="flex flex-row ml-2">
-                    <% if presenter.new_question?(question) %>
+                    <% if presenter.new_topic?(topic) %>
                       <div class="bg-green-600 text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
                     <% else %>
                       <span class="px-4 text-center">
                         <i class="far fa-thumbs-up text-xl text-gray-600"></i>
-                        <p class="text-xs pt-1"><%= presenter.comment_likes(question) %></p>
+                        <p class="text-xs pt-1"><%= topic.first_post.post_likes.count %></p>
                       </span>
                       <span class="px-2 text-center">
                         <i class="far fa-comment-dots text-xl text-gray-600"></i>
-                        <p class="text-xs pt-1"><%= presenter.comments_count(question) %></p>
+                        <p class="text-xs pt-1"><%= topic.replies_count %></p>
                       </span>
                     <% end %>
                   </span>
@@ -91,7 +93,7 @@
               </div>
             </div>
           <% end %>
-          <% if @questions.blank? %>
+          <% if @topics.blank? %>
             <div class="flex flex-col mx-auto bg-white p-6 justify-center items-center">
               <i class="fas fa-comments text-5xl text-gray-400"></i>
               <h4 class="mt-3 font-semibold">There's no discussion here yet.</h4>

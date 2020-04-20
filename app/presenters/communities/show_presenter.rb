@@ -1,46 +1,38 @@
 module Communities
   class ShowPresenter < ApplicationPresenter
-    def initialize(view_context, community, questions, search, target)
+    def initialize(view_context, community, topics, search, target)
       super(view_context)
 
       @community = community
-      @questions = questions
+      @topics = topics
       @search = search
       @target = target
     end
 
-    def time(question)
-      question.created_at.to_formatted_s(:long)
+    def time(topic)
+      topic.created_at.to_formatted_s(:long)
     end
 
     def page_title
       "#{@community.name} Community | #{current_school.name}"
     end
 
-    def creator_name(question)
-      question.creator.name
+    def creator_name(topic)
+      topic.first_post.creator.name
     end
 
-    def comments_count(question)
-      question.answers.count
-    end
-
-    def comment_likes(question)
-      question.answers.joins(:answer_likes).count
-    end
-
-    def activity(question)
-      view.time_ago_in_words(question.last_activity_at)
+    def activity(topic)
+      view.time_ago_in_words(topic.last_activity_at)
     end
 
     def show_prev_page?
-      !@questions.first_page?
+      !@topics.first_page?
     end
 
     def show_next_page?
-      return false if @questions.blank?
+      return false if @topics.blank?
 
-      !@questions.last_page?
+      !@topics.last_page?
     end
 
     def next_page_path
@@ -51,12 +43,12 @@ module Communities
       view.community_path(@community.id, **page_params(:previous))
     end
 
-    def new_question?(question)
-      question.last_activity_at.blank?
+    def new_topic?(topic)
+      topic.last_activity_at.blank?
     end
 
     def page_params(direction)
-      page = direction == :next ? @questions.next_page : @questions.prev_page
+      page = direction == :next ? @topics.next_page : @topics.prev_page
 
       kwargs = { page: page }
       kwargs[:search] = @search if @search.present?

@@ -1,20 +1,20 @@
-module Questions
+module Topics
   class VersionsPresenter < ApplicationPresenter
-    def initialize(view_context, question)
+    def initialize(view_context, topic)
       super(view_context)
 
-      @question = question
+      @topic = topic
     end
 
     def page_title
-      "Versions | #{@question.title}"
+      "Versions | #{@topic.title}"
     end
 
     def versions
-      @versions ||= @question.text_versions
+      @versions ||= @topic.first_post.text_versions
     end
 
-    def version_number_for_question
+    def version_number_for_topic
       versions_count + 1
     end
 
@@ -25,16 +25,16 @@ module Questions
       }.to_json
     end
 
-    def editor_name_for_question
-      if @question.editor.present?
-        @question.editor.name
+    def editor_name_for_topic
+      if @topic.first_post.editor.present?
+        @topic.first_post.editor.name
       else
-        @question.creator.name
+        @topic.creator.name
       end
     end
 
-    def question_updated_at
-      @question.updated_at.to_formatted_s(:long)
+    def topic_updated_at
+      @topic.updated_at.to_formatted_s(:long)
     end
 
     def edited_at(version)

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Course Exports', js: true do
   include UserSpecHelper
+  include NotificationHelper
 
   let(:level) { create :level }
   let(:team_1) { create :team, level: level }
@@ -37,6 +38,8 @@ feature 'Course Exports', js: true do
 
     # The user should be notified.
     expect(page).to have_text('Your export is being processed')
+
+    dismiss_notification
 
     # The Course report should be accurate.
     export = CourseExport.last

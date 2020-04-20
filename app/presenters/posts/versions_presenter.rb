@@ -1,20 +1,20 @@
-module Answers
+module Posts
   class VersionsPresenter < ApplicationPresenter
-    def initialize(view_context, answer)
+    def initialize(view_context, post)
       super(view_context)
 
-      @answer = answer
+      @post = post
     end
 
     def page_title
-      "Versions | Answer"
+      "Versions | Post"
     end
 
     def versions
-      @versions ||= @answer.text_versions
+      @versions ||= @post.text_versions
     end
 
-    def version_number_for_answer
+    def version_number_for_post
       versions_count + 1
     end
 
@@ -30,10 +30,10 @@ module Answers
     end
 
     def editor_name_for_answer
-      if @answer.editor.present?
-        @answer.editor.name
+      if @post.editor.present?
+        @post.editor.name
       else
-        @answer.creator.name
+        @post.creator.name
       end
     end
 

@@ -74,17 +74,17 @@ module Targets
         {
           id: community.id,
           name: community.name,
-          questions: questions(community)
+          topics: topics(community)
         }
       end
     end
 
-    def questions(community)
-      community.questions.joins(:targets).where(targets: { id: @target })
-        .order("last_activity_at DESC NULLs FIRST").first(3).map do |question|
+    def topics(community)
+      community.topics.joins(:target).where(targets: { id: @target })
+        .order("last_activity_at DESC NULLs FIRST").first(3).map do |topic|
         {
-          id: question.id,
-          title: question.title
+          id: topic.id,
+          title: topic.title
         }
       end
     end

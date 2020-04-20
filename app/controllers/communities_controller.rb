@@ -2,16 +2,8 @@ class CommunitiesController < ApplicationController
   before_action :authenticate_user!
   layout 'student'
 
-  # GET /communities/:id
-  def show
-    @community = authorize(Community.find(params[:id]))
-    @search = params[:search]
-    @questions = scoped_questions.live.includes(%i[creator answers])
-      .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
-  end
-
   # GET /communities/:id/show_v2
-  def show_v2
+  def show
     @community = authorize(Community.find(params[:id]), 'show?')
     @search = params[:search]
     @topics = scoped_topics.live.includes([first_post: :creator])

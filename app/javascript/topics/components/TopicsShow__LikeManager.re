@@ -108,8 +108,8 @@ let make =
 
   <div className="text-center pr-3 md:pr-4">
     <div
+      ariaLabel={(liked ? "Unlike" : "Like") ++ " reply " ++ postId}
       className="cursor-pointer"
-      title={(liked ? "Unlike" : "Like") ++ " Answer"}
       onClick={handlePostLike(
         saving,
         liked,

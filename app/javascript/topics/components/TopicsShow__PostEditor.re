@@ -222,13 +222,20 @@ let make =
   let updateMarkdownCB = body => setBody(_ => body);
   <DisablingCover disabled=saving>
     <div
+      ariaLabel="Add new reply"
       className="py-2 lg:px-0 max-w-4xl w-full flex mx-auto items-center justify-center relative">
       <div className="flex w-full">
         <div className="w-full flex flex-col">
           <label
             className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
             htmlFor="new-answer">
-            {"Your Reply" |> str}
+            {(
+               switch (replyToPostId) {
+               | Some(_id) => "Reply To"
+               | None => "Your Reply"
+               }
+             )
+             |> str}
           </label>
           {switch (replyToPostId) {
            | Some(id) =>
@@ -298,7 +305,8 @@ let make =
               className="btn btn-primary">
               {(
                  switch (post) {
-                 | Some(_) => "Update Your Reply"
+                 | Some(post) =>
+                   Post.postNumber(post) == 1 ? "Update Post" : "Update Reply"
                  | None => "Post Your Reply"
                  }
                )

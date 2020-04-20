@@ -8,6 +8,7 @@ class UpdatePostMutator < ApplicationQuery
     Post.transaction do
       post.text_versions.create!(value: post.body, user: post.creator, edited_at: post.updated_at)
       post.update!(body: body, editor: current_user)
+      post
     end
   end
 

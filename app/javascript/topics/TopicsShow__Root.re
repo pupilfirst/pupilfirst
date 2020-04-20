@@ -274,7 +274,9 @@ let make =
                 </DisablingCover>
               : <div
                   className="topics-show__title-container flex items-start justify-between">
-                  <h3 className="leading-snug lg:pl-14 text-lg lg:text-2xl">
+                  <h3
+                    ariaLabel="Topic Title"
+                    className="leading-snug lg:pl-14 text-lg lg:text-2xl">
                     {state.topic |> Topic.title |> str}
                   </h3>
                   {isCoach || currentUserId == (firstPost |> Post.creatorId)

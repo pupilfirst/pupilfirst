@@ -323,13 +323,15 @@ let make =
   let selectedTarget =
     switch (url.path) {
     | ["targets", targetId, ..._] =>
-      Some(
-        targets
-        |> ListUtils.unsafeFind(
-             t => t |> Target.id == targetId,
-             "Could not find selectedTarget with ID " ++ targetId,
-           ),
-      )
+      targetId
+      ->StringUtils.paramToId
+      ->Belt.Option.map(targetId => {
+          targets
+          |> ListUtils.unsafeFind(
+               t => t |> Target.id == targetId,
+               "Could not find selectedTarget with ID " ++ targetId,
+             )
+        })
     | _ => None
     };
 

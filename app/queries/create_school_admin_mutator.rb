@@ -8,9 +8,16 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
   def create_school_admin
     SchoolAdmin.transaction do
+      current_admins = current_school.school_admins.load
       user = persisted_user || User.create!(email: email, school: current_school, title: 'School Admin')
       user.update!(name: name)
-      SchoolAdmin.create!(user: user, school: current_school)
+      new_school_admin = SchoolAdmin.create!(user: user, school: current_school)
+
+      current_admins.each do |admin|
+        SchoolAdminMailer.school_admin_added(admin, new_school_admin).deliver_later
+      end
+
+      new_school_admin
     end
   end
 

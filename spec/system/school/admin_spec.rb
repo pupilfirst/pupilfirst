@@ -8,9 +8,6 @@ feature 'School admins Editor', js: true do
   let!(:school) { create :school, :current }
   let!(:school_admin_1) { create :school_admin, school: school }
   let!(:school_admin_2) { create :school_admin, school: school }
-  let(:name) { Faker::Name.name }
-  let(:email) { Faker::Internet.email(name: name) }
-  let(:name_for_edit) { Faker::Name.name }
   let(:user) { create :user }
   let(:name_for_user) { Faker::Name.name }
   let(:coach) { create :faculty, school: school }
@@ -23,6 +20,9 @@ feature 'School admins Editor', js: true do
     expect(page).to have_text(school_admin_1.user.name)
     expect(page).to have_text(school_admin_2.user.name)
 
+    name = Faker::Name.name
+    email = Faker::Internet.email(name: name)
+
     # Add a new school admin
     click_button 'Add New School Admin'
     fill_in 'email', with: email
@@ -32,38 +32,63 @@ feature 'School admins Editor', js: true do
     dismiss_notification
 
     expect(page).to have_text(name)
+
     new_school_admin_user = school.users.where(email: email).first
+
     expect(new_school_admin_user.name).to eq(name)
     expect(new_school_admin_user.school_admin.present?).to eq(true)
 
+    # Existing admins should have been notified by email about the addition.
+    open_email(school_admin_1.email)
+    expect(current_email.body).to include(email)
+
+    open_email(school_admin_2.email)
+    expect(current_email.body).to include(email)
+
+    # New admin shouldn't receive that notification.
+    open_email(email)
+    expect(current_email).to be_blank
+  end
+
+  scenario "school admin edits another admin's details" do
+    sign_in_user school_admin_1.user, referer: admins_school_path
+
     # Edit school admin
-    find("a", text: new_school_admin_user.name).click
-    expect(page).to have_text(new_school_admin_user.name)
-    expect(page).to have_text(new_school_admin_user.email)
+    find("a", text: school_admin_2.name).click
+    expect(page).to have_text(school_admin_2.name)
+    expect(page).to have_text(school_admin_2.email)
+
+    name_for_edit = Faker::Name.name
+    original_title = school_admin_2.title
 
     fill_in 'name', with: name_for_edit
     click_button 'Update School Admin'
+
     expect(page).to have_text("School Admin updated successfully")
+
     dismiss_notification
 
-    expect(new_school_admin_user.reload.name).to eq(name_for_edit)
-    expect(new_school_admin_user.title).to eq('School Admin')
+    expect(school_admin_2.reload.name).to eq(name_for_edit)
+    expect(school_admin_2.title).to eq(original_title)
   end
 
   scenario 'school admin adds an existing user as an admin', js: true do
     sign_in_user school_admin_1.user, referer: admins_school_path
+
     original_title = user.title
+    altered_name = Faker::Name.name
 
     click_button 'Add New School Admin'
     fill_in 'email', with: user.email
-    fill_in 'name', with: name_for_user
+    fill_in 'name', with: altered_name
     click_button 'Create School Admin'
 
     expect(page).to have_text("School Admin created successfully")
+
     dismiss_notification
 
     expect(school.users.where(email: user.email).count).to eq(1)
-    expect(user.reload.name).to eq(name_for_user)
+    expect(user.reload.name).to eq(altered_name)
     expect(user.reload.title).to eq(original_title)
   end
 

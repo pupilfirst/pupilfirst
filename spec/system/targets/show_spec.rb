@@ -141,6 +141,12 @@ feature 'Target Overlay', js: true do
     expect(page).to have_selector('.course-overlay__body-tab-item', text: 'Complete')
   end
 
+  scenario "student visits the target's link with a mangled ID" do
+    sign_in_user student.user, referer: target_path(id: "#{target_l1.id}*")
+
+    expect(page).to have_selector('h1', text: target_l1.title)
+  end
+
   context 'when the target is auto-verified' do
     let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 

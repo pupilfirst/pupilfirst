@@ -1,4 +1,4 @@
-ruby '2.7.0'
+ruby '2.7.1'
 
 source 'https://rubygems.org'
 
@@ -152,7 +152,7 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.
-  gem 'rubocop', '~> 0.80', require: false # Ruby Style Guide.
+  gem 'rubocop', '~> 0.82', require: false # Ruby Style Guide.
   gem 'rubocop-rails', '~> 2.4', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager

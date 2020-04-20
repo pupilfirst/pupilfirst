@@ -1,32 +1,15 @@
-type props = {
-  schoolName: string,
-  authenticityToken: string,
-  fqdn: string,
-  oauthHost: string,
-};
-
 let decodeProps = json =>
-  Json.Decode.{
-    schoolName: json |> field("schoolName", string),
-    authenticityToken: json |> field("authenticityToken", string),
-    fqdn: json |> field("fqdn", string),
-    oauthHost: json |> field("oauthHost", string),
-  };
+  Json.Decode.(
+    json |> field("schoolName", string),
+    json |> field("authenticityToken", string),
+    json |> field("fqdn", string),
+    json |> optional(field("oauthHost", string)),
+  );
 
-let props =
-  DomUtils.parseJsonAttribute(
-    ~id="user-session-new",
-    ~attribute="data-json-props",
-    (),
-  )
-  |> decodeProps;
+let (schoolName, authenticityToken, fqdn, oauthHost) =
+  DomUtils.parseJsonTag(~id="user-session-new-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <UserSessionNew
-    schoolName={props.schoolName}
-    authenticityToken={props.authenticityToken}
-    fqdn={props.fqdn}
-    oauthHost={props.oauthHost}
-  />,
+  <UserSessionNew schoolName authenticityToken fqdn oauthHost />,
   "user-session-new",
 );

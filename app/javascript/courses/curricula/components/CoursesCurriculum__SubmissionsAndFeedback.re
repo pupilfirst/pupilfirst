@@ -218,11 +218,11 @@ let submissions =
 
                  let (coachName, coachTitle, coachAvatar) =
                    switch (user) {
-                   | Some(user) =>
-                     let name = user |> User.name;
-                     let avatar = user |> User.avatarUrl;
-                     let title = user |> User.title;
-                     (name, title, <img src=avatar />);
+                   | Some(user) => (
+                       User.name(user),
+                       User.title(user),
+                       User.avatar(user),
+                     )
                    | None => (
                        "Unknown Coach",
                        None,

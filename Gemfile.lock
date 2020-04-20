@@ -502,7 +502,7 @@ GEM
       childprocess (>= 0.6.3, < 4)
       iniparse (~> 1.4)
     parallel (1.19.1)
-    parser (2.7.1.0)
+    parser (2.7.1.1)
       ast (~> 2.4.0)
     pg (1.2.3)
     pg_search (2.3.2)
@@ -684,7 +684,7 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.9.2)
-    rubocop (0.81.0)
+    rubocop (0.82.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
@@ -692,7 +692,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-rails (2.5.1)
+    rubocop-rails (2.5.2)
       activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)
@@ -922,7 +922,7 @@ DEPENDENCIES
   rspec-eventually (~> 0.2.2)
   rspec-rails (~> 4.0)
   rspec-retry (~> 0.5)
-  rubocop (~> 0.80)
+  rubocop (~> 0.82)
   rubocop-rails (~> 2.4)
   sass-rails (>= 6)
   scarf (~> 0.2)
@@ -946,7 +946,7 @@ DEPENDENCIES
   webpacker (~> 5.0)
 
 RUBY VERSION
-   ruby 2.7.0p0
+   ruby 2.7.1p83
 
 BUNDLED WITH
-   2.1.2
+   2.1.4

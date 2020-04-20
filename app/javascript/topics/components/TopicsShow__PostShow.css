@@ -33,3 +33,7 @@
     bottom: 0;
   }
 }
+
+.topics-show__replies-wrapper:not(:last-child) .topics-post-show__post-body {
+  @apply border-b;
+}

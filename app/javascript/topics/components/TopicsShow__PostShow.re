@@ -196,7 +196,7 @@ let make =
   let (showReplies, toggleShowReplies) = React.useState(() => false);
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
-    <div className="flex pb-4" key={post |> Post.id}>
+    <div className="flex pt-4" key={post |> Post.id}>
       <div id="likes-and-solution" className="hidden lg:flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
         {<TopicsShow__LikeManager
@@ -207,7 +207,9 @@ let make =
            removePostLikeCB
          />}
       </div>
-      <div id="body-and-user-data" className="flex-1 border-b pb-8">
+      <div
+        id="body-and-user-data"
+        className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body">
         <div className="pt-2" id="body">
           // Topic author details on mobile screen
 
@@ -265,7 +267,7 @@ let make =
                    </div>
                  </div>}
           </div>
-        <div id="user-data" className="flex justify-between pt-4">
+        <div id="user-data" className="flex justify-between lg:items-end pt-4">
           <div className="flex-1 lg:flex-initial mr-3">
             <div className="hidden lg:block">
               <TopicsShow__UserShow
@@ -311,7 +313,7 @@ let make =
               {post |> Post.solution ? solutionIcon : React.null}
             </div>
           </div>
-          <div className="flex items-center text-sm font-semibold">
+          <div className="flex items-center text-sm font-semibold lg:mb-1">
             <div className="hidden lg:block">
               {repliesToPost |> ArrayUtils.isNotEmpty
                  ? <button

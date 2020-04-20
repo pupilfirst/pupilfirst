@@ -177,17 +177,17 @@ let onBorderAnimationEnd = event => {
 };
 
 let replyToUserInfo = user => {
-  <div className="flex items-center border bg-white p-1 rounded">
+  <div className="flex items-center border bg-white px-2 py-1 rounded-lg">
     {switch (user |> User.avatarUrl) {
      | Some(avatarUrl) =>
        <img
-         className="w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+         className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
          src=avatarUrl
        />
      | None =>
        <Avatar
          name={user |> User.name}
-         className="w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+         className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
        />
      }}
     <span className="text-xs font-semibold ml-2">

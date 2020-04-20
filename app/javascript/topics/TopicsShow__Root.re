@@ -220,7 +220,7 @@ let make =
        | Some(target) =>
          <div className="max-w-4xl w-full mt-5 lg:x-4 mx-auto">
            <div
-             className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center">
+             className="flex py-4 px-4 md:px-5 mx-3 lg:mx-0 bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center">
              <p className="w-3/5 md:w-4/5 text-sm">
                <span className="font-semibold block text-xs">
                  {"Linked Target: " |> str}
@@ -240,10 +240,11 @@ let make =
        }}
       <div
         className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
-        {<div>
+        {<div className="topics-show__">
            {state.showTopicEditor
               ? <DisablingCover disabled={state.savingTopic}>
-                  <div className=" flex flex-col">
+                  <div
+                    className="flex flex-col lg:ml-14 bg-gray-100 p-2 rounded border border-primary-200">
                     <input
                       onChange={event =>
                         send(
@@ -253,19 +254,19 @@ let make =
                         )
                       }
                       value={state.topicTitle}
-                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       type_="text"
                     />
-                    <div className="flex justify-end mb-2">
+                    <div className="flex justify-end">
                       <button
                         onClick={_ => send(ShowTopicEditor(false))}
-                        className="btn btn-subtle mr-2">
+                        className="btn btn-subtle btn-small mr-2">
                         {"Cancel" |> str}
                       </button>
                       <button
                         onClick={updateTopic(state, send)}
                         disabled={state.topicTitle |> Js.String.trim == ""}
-                        className="btn btn-primary">
+                        className="btn btn-primary btn-small">
                         {"Update Topic" |> str}
                       </button>
                     </div>
@@ -304,7 +305,7 @@ let make =
              archivePostCB={() => archiveTopic(communityId)}
            />
          </div>}
-        {<h5 className="pt-4 pb-2 lg:ml-14 border-b mb-4">
+        {<h5 className="pt-4 pb-2 lg:ml-14 border-b">
            {(state.replies |> Array.length |> string_of_int)
             ++ (state.replies |> Array.length > 1 ? " Replies" : " Reply")
             |> str}
@@ -312,24 +313,26 @@ let make =
         {state.replies
          |> Post.sort
          |> Array.map(reply =>
-              <TopicsShow__PostShow
-                key={Post.id(reply)}
-                post=reply
-                topic
-                users
-                posts={state.replies}
-                currentUserId
-                isCoach
-                isTopicCreator={isTopicCreator(firstPost, currentUserId)}
-                updatePostCB={updateReply(send)}
-                addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
-                addPostLikeCB={addReplyLike(send, reply)}
-                markPostAsSolutionCB={() =>
-                  send(MarkReplyAsSolution(Post.id(reply)))
-                }
-                removePostLikeCB={removeReplyLike(send, reply)}
-                archivePostCB={() => send(ArchivePost(Post.id(reply)))}
-              />
+              <div className="topics-show__replies-wrapper">
+                <TopicsShow__PostShow
+                  key={Post.id(reply)}
+                  post=reply
+                  topic
+                  users
+                  posts={state.replies}
+                  currentUserId
+                  isCoach
+                  isTopicCreator={isTopicCreator(firstPost, currentUserId)}
+                  updatePostCB={updateReply(send)}
+                  addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
+                  addPostLikeCB={addReplyLike(send, reply)}
+                  markPostAsSolutionCB={() =>
+                    send(MarkReplyAsSolution(Post.id(reply)))
+                  }
+                  removePostLikeCB={removeReplyLike(send, reply)}
+                  archivePostCB={() => send(ArchivePost(Post.id(reply)))}
+                />
+              </div>
             )
          |> React.array}
       </div>

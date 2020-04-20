@@ -149,11 +149,11 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
     add_index :posts, %i[post_number topic_id], unique: true
 
     # Clean up old tables.
-    # drop_table :comments
-    # drop_table :answer_likes
-    # drop_table :answers
-    # drop_table :target_questions
-    # drop_table :questions
+    drop_table :comments
+    drop_table :answer_likes
+    drop_table :answers
+    drop_table :target_questions
+    drop_table :questions
   end
 
   def down

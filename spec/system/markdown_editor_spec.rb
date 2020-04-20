@@ -21,11 +21,11 @@ feature 'Markdown editor', js: true do
   let(:intro_sentence) { Faker::Lorem.sentence }
 
   scenario 'user uploads an image and a PDF' do
-    sign_in_user(student.user, referer: new_question_community_path(community))
+    sign_in_user(student.user, referer: new_topic_community_path(community))
 
-    expect(page).to have_text('Ask a new question')
+    expect(page).to have_text('Create a new topic')
 
-    fill_in 'Question', with: 'This is a title.'
+    fill_in 'Title', with: 'This is a title.'
     add_markdown(intro_sentence)
     attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
 
@@ -41,29 +41,29 @@ feature 'Markdown editor', js: true do
     # Both attachments should not have been accessed at this point.
     expect(MarkdownAttachment.where(last_accessed_at: nil).count).to eq(2)
 
-    click_button('Post Your Question')
-    expect(page).to have_text('0 Answers')
+    click_button('Create Post')
+    expect(page).to have_text('0 Reply')
 
     # Let's check if the saved markdown is what we expect...
 
-    last_question = Question.last
+    last_topic = Topic.last
     image_attachment = MarkdownAttachment.first
     pdf_attachment = MarkdownAttachment.last
 
-    expect(last_question.description).to include("#{intro_sentence}\n![logo_lipsum_on_light_bg.png]")
+    expect(last_topic.first_post.body).to include("#{intro_sentence}\n![logo_lipsum_on_light_bg.png]")
 
     expected_url_head = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}/markdown_attachments"
 
-    expect(last_question.description).to match(
+    expect(last_topic.first_post.body).to match(
       %r{!\[logo_lipsum_on_light_bg\.png\]\(#{expected_url_head}/#{image_attachment.id}/#{image_attachment.token}\)}
     )
 
     # Make sure the token _looks_ right.
     expect(image_attachment.token).to match(/[a-zA-Z0-9\-_]{22}/)
 
-    expect(last_question.description).to include("\n[pdf-sample.pdf]")
+    expect(last_topic.first_post.body).to include("\n[pdf-sample.pdf]")
 
-    expect(last_question.description).to match(
+    expect(last_topic.first_post.body).to match(
       %r{\[pdf-sample\.pdf\]\(#{expected_url_head}/#{pdf_attachment.id}/#{pdf_attachment.token}\)}
     )
 
@@ -87,17 +87,17 @@ feature 'Markdown editor', js: true do
     end
 
     scenario 'user exceeds daily attachment limit' do
-      sign_in_user(student.user, referer: new_question_community_path(community))
-      fill_in 'Question', with: 'This is a title.'
+      sign_in_user(student.user, referer: new_topic_community_path(community))
+      fill_in 'Title', with: 'This is a title.'
 
       attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
 
       expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
-      click_button('Post Your Question')
-      expect(page).to have_text('0 Answers')
+      click_button('Create Post')
+      expect(page).to have_text('0 Reply')
 
-      # Let's try filling in an answer with an attachment.
+      # Let's try filling in an reply with an attachment.
       attach_file("Click here to attach a file.", sample_file_path('pdf-sample.pdf'), visible: false)
 
       expect(page).to have_text('You have exceeded the number of attachments allowed per day.')

@@ -476,10 +476,12 @@ feature 'Target Overlay', js: true do
   context 'when the course has a community which accepts linked targets' do
     let!(:community_1) { create :community, :target_linkable, school: course.school, courses: [course] }
     let!(:community_2) { create :community, :target_linkable, school: course.school, courses: [course] }
-    let!(:question_1) { create :question, community: community_1, creator: student.user }
-    let!(:question_2) { create :question, community: community_1, creator: student.user }
-    let(:question_title) { Faker::Lorem.sentence }
-    let(:question_description) { Faker::Lorem.paragraph }
+    let!(:topic_1) { create :topic, community: community_1 }
+    let!(:topic_1_body) { create :post, :first_post, topic: topic_1, creator: student.user }
+    let!(:topic_2) { create :topic, community: community_1 }
+    let!(:topic_2_body) { create :post, :first_post, topic: topic_2, creator: student.user }
+    let(:topic_title) { Faker::Lorem.sentence }
+    let(:topic_body) { Faker::Lorem.paragraph }
 
     scenario 'student uses the discuss feature' do
       sign_in_user student.user, referer: target_path(target_l1)
@@ -489,54 +491,54 @@ feature 'Target Overlay', js: true do
       expect(page).to have_text(community_1.name)
       expect(page).to have_text(community_2.name)
       expect(page).to have_link("Go to community", count: 2)
-      expect(page).to have_link("Ask a question", count: 2)
+      expect(page).to have_link("Create a topic", count: 2)
       expect(page).to have_text("There's been no recent discussion about this target.", count: 2)
 
       # Student can ask a question related to the target in community from target overlay.
-      find("a[title='Ask a question in the #{community_1.name} community'").click
+      find("a[title='Create a topic in the #{community_1.name} community'").click
 
       expect(page).to have_text(target_l1.title)
-      expect(page).to have_text("Ask a new question")
+      expect(page).to have_text("Create a new topic of discussion")
 
       # Try clearing the linking.
       click_link 'Clear'
 
       expect(page).not_to have_text(target_l1.title)
-      expect(page).to have_text("Ask a new question")
+      expect(page).to have_text("Create a new topic of discussion")
 
       # Let's go back to linked state and try creating a linked question.
-      visit(new_question_community_path(community_1, target_id: target_l1.id))
+      visit(new_topic_community_path(community_1, target_id: target_l1.id))
 
-      fill_in 'Question', with: question_title
-      replace_markdown(question_description)
-      click_button 'Post Your Question'
+      fill_in 'Title', with: topic_title
+      replace_markdown(topic_body)
+      click_button 'Create Post'
 
-      expect(page).to have_text(question_title)
-      expect(page).to have_text(question_description)
-      expect(page).not_to have_text("Ask a new question")
+      expect(page).to have_text(topic_title)
+      expect(page).to have_text(topic_body)
+      expect(page).not_to have_text("Create a new topic of discussion")
 
       # The question should have been linked to the target.
-      expect(Question.where(title: question_title).first.targets.first).to eq(target_l1)
+      expect(Topic.where(title: topic_title).first.target).to eq(target_l1)
 
       # Return to the target overlay. Student should be able to their question there now.
       visit target_path(target_l1)
       find('.course-overlay__body-tab-item', text: 'Discuss').click
 
       expect(page).to have_text(community_1.name)
-      expect(page).to have_text(question_title)
+      expect(page).to have_text(topic_title)
 
       # Student can filter all questions linked to the target.
-      find("a[title='Browse all questions about this target in the #{community_1.name} community'").click
+      find("a[title='Browse all topics about this target in the #{community_1.name} community'").click
       expect(page).to have_text('Clear Filter')
-      expect(page).to have_text(question_title)
-      expect(page).not_to have_text(question_1.title)
-      expect(page).not_to have_text(question_2.title)
+      expect(page).to have_text(topic_title)
+      expect(page).not_to have_text(topic_1.title)
+      expect(page).not_to have_text(topic_2.title)
 
       # Student see all questions in the community by clearing the filter.
       click_link 'Clear Filter'
-      expect(page).to have_text(question_title)
-      expect(page).to have_text(question_1.title)
-      expect(page).to have_text(question_2.title)
+      expect(page).to have_text(topic_title)
+      expect(page).to have_text(topic_1.title)
+      expect(page).to have_text(topic_2.title)
     end
   end
 

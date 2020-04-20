@@ -69,6 +69,12 @@ let make = (~post, ~users) => {
         <i className="fas fa-angle-double-down" />
       </div>
     </div>
-    <div className="text-sm ml-9"> {post |> Post.body |> str} </div>
+    <div className="text-sm ml-9">
+      <MarkdownBlock
+        markdown={post |> Post.body}
+        className="leading-normal text-sm "
+        profile=Markdown.QuestionAndAnswer
+      />
+    </div>
   </div>;
 };

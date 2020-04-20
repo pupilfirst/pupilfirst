@@ -249,7 +249,13 @@ let make =
                    />
                  </div>
                : <div className="flex items-start justify-between">
-                   <div className="text-sm"> {post |> Post.body |> str} </div>
+                   <div className="text-sm">
+                     <MarkdownBlock
+                       markdown={post |> Post.body}
+                       className="leading-normal text-sm "
+                       profile=Markdown.QuestionAndAnswer
+                     />
+                   </div>
                    <div className="hidden lg:block flex-shrink-0">
                      {isPostCreator || isCoach || isTopicCreator
                         ? optionsDropdown(

@@ -51,7 +51,7 @@ jobs:
           ruby-version: '2.7'
       - name: Cache Bundle
         id: cache-bundle
-        uses: actions/cache@v1
+        uses: actions/cache@master
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -68,10 +68,17 @@ jobs:
           bundle exec rake db:schema:load
       - name: Cache Assets
         id: cache-assets
-        uses: actions/cache@v1
+        uses: actions/cache@master
         with:
           path: public/assets
           key: ${{ runner.os }}-assets
+      - name: Restore Lerna
+        uses: actions/cache@master
+        with:
+          path: |
+            node_modules
+            app/javascript/packages/*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Precompile Assets
         run: |
           bundle exec rails assets:precompile

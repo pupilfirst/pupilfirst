@@ -69,7 +69,6 @@ feature 'Target Content Version Management', js: true do
     expect(page).to have_text(target_1.title)
 
     expect(target_1.target_versions.count).to eq(1)
-    target_version_v1 = target_1.target_versions.first
     content_blocks_v1 = target_1.current_content_blocks.order(:sort_index).map { |cb| cb.slice(:block_type, :content, :sort_index) }
 
     click_button 'Save this version'
@@ -80,8 +79,8 @@ feature 'Target Content Version Management', js: true do
     target_1.current_target_version.content_blocks.last.delete
     target_1.current_target_version.touch
 
-    click_button "Select version #{target_1.current_target_version.id}"
-    click_button "Select version #{target_version_v1.id}"
+    click_button('#2')
+    click_button('#1')
 
     click_button 'Restore this version'
     expect(page).to have_text('A new version has been created')

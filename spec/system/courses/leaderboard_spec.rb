@@ -46,6 +46,8 @@ feature 'Course leaderboard' do
   end
 
   scenario 'Student visits leaderboard' do
+    skip 'The leaderboard feature is currently inactive, and needs to be re-built.'
+
     sign_in_user(student.user, referer: leaderboard_course_path(student.course))
 
     expect(page).to have_content('You are at the top of the leaderboard')

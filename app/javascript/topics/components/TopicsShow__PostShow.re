@@ -94,9 +94,9 @@ let optionsDropdown =
   let editPostButton =
     <button
       onClick={_ => toggleShowPostEdit(_ => true)}
-      className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
-      <FaIcon classes="fas fa-edit mr-2" />
-      {"Edit " ++ postTypeString |> str}
+      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+      <FaIcon classes="fas fa-edit fa-fw text-base" />
+      <span className="ml-2"> {"Edit " ++ postTypeString |> str} </span>
     </button>;
   let markAsSolutionButton =
     isFirstPost || Post.solution(post)
@@ -105,9 +105,9 @@ let optionsDropdown =
           onClick={_ =>
             markPostAsSolution(post |> Post.id, markPostAsSolutionCB)
           }
-          className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
-          <PfIcon className="if i-check-circle-alt-regular if-fw" />
-          {"Mark as solution" |> str}
+          className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+          <PfIcon className="if i-check-circle-alt-regular if-fw text-base" />
+          <span className="ml-2"> {"Mark as solution" |> str} </span>
         </button>;
   let showDelete =
     isFirstPost
@@ -119,9 +119,9 @@ let optionsDropdown =
           onClick={_ =>
             archivePost(isFirstPost, post |> Post.id, archivePostCB)
           }
-          className="flex p-2 items-center text-gray-700 whitespace-no-wrap">
-          <FaIcon classes="fas fa-trash-alt mr-2" />
-          {"Delete " ++ postTypeString |> str}
+          className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+          <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
+          <span className="ml-2"> {"Delete " ++ postTypeString |> str} </span>
         </button>
       : React.null;
 

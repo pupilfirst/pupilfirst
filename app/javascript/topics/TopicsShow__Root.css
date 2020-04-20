@@ -25,7 +25,7 @@
   }
   100% {
     background-color: rgba(255, 250, 240, 0);
-    box-shadow: 0 0 1px #fbd38d;
+    box-shadow: 0 0 0 #fbd38d;
   }
 }
 
@@ -40,13 +40,13 @@
   }
   100% {
     background-color: rgba(255, 250, 240, 0);
-    box-shadow: 0 0 1px #fbd38d;
+    box-shadow: 0 0 0 #fbd38d;
   }
 }
 
 @-moz-keyframes topicPostGlowing {
   0% {
-    background-color: rgba(255, 250, 240, .8);
+    background-color: rgba(255, 250, 240, .1);
     box-shadow: 0 0 10px #fbd38d;
   }
   50% {
@@ -55,6 +55,6 @@
   }
   100% {
     background-color: rgba(255, 250, 240, 0);
-    box-shadow: 0 0 1px #fbd38d;
+    box-shadow: 0 0 0 #fbd38d;
   }
 }

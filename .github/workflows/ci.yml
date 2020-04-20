@@ -49,8 +49,7 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
-      - name: Cache Bundle
-        id: cache-bundle
+      - name: Restore Bundle
         uses: actions/cache@master
         with:
           path: vendor/bundle
@@ -66,8 +65,7 @@ jobs:
       - name: Setup Database
         run: |
           bundle exec rake db:schema:load
-      - name: Cache Assets
-        id: cache-assets
+      - name: Restore Assets
         uses: actions/cache@master
         with:
           path: public/assets

@@ -9,18 +9,52 @@
 }
 
 .topics-show__highlighted-item {
-  animation: topicPostGlowing 500ms ease-in;
-  @apply .border-indigo-400;
+  animation: topicPostGlowing 3s 1;
+  -webkit-animation: topicPostGlowing 3s 1;
+  -moz-animation: topicPostGlowing 3s 1;
 }
 
 @keyframes topicPostGlowing {
   0% {
-    box-shadow: 0 0 20px #7886d7;
+    background-color: rgba(255, 250, 240, 1);
+    box-shadow: 0 0 10px #fbd38d;
   }
   50% {
-    box-shadow: 0 0 10px #7886d7;
+    background-color: rgba(255, 250, 240, .5);
+    box-shadow: 0 0 5px #fbd38d;
   }
   100% {
-    box-shadow: 0 0 0 #7886d7;
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 1px #fbd38d;
+  }
+}
+
+@-webkit-keyframes topicPostGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, 1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, .5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 1px #fbd38d;
+  }
+}
+
+@-moz-keyframes topicPostGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, .8);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, .5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 1px #fbd38d;
   }
 }

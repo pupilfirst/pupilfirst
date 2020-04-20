@@ -188,7 +188,7 @@ feature 'Submission Builder', js: true do
 
   scenario 'student submits a target with an MCQ' do
     question = Faker::Lorem.sentence
-    choices = Faker::Lorem.words
+    choices = Faker::Lorem.sentences(number: 4)
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_MULTI_CHOICE, optional: false, metadata: { choices: choices } }])
     answer = choices.last
 

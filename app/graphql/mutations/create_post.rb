@@ -12,6 +12,7 @@ module Mutations
       mutator = CreatePostMutator.new(context, params)
 
       post_id = if mutator.valid?
+        mutator.notify(:success, "Done!", "Reply added successfully")
         mutator.create_post.id
       else
         mutator.notify_errors

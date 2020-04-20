@@ -5,6 +5,7 @@ let str = React.string;
 
 let solutionIcon = {
   <div
+    ariaLabel="Marked as solution icon"
     className="flex lg:flex-col items-center px-2 lg:pl-0 py-1 lg:pr-1 lg:pr-4 lg:pb-4 lg:pt-2 bg-green-200 lg:bg-transparent rounded">
     <div
       className="flex items-center justify-center lg:w-8 lg:h-8 bg-green-200 text-green-800 rounded-full">
@@ -87,6 +88,7 @@ let optionsDropdown =
     ) => {
   let selected =
     <div
+      ariaLabel={"Options for post " ++ Post.id(post)}
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>;
@@ -197,7 +199,7 @@ let make =
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pt-4" key={post |> Post.id}>
-      <div id="likes-and-solution" className="hidden lg:flex flex-col w-1/8">
+      <div className="hidden lg:flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
         {<TopicsShow__LikeManager
            postId={post |> Post.id}
@@ -207,9 +209,7 @@ let make =
            removePostLikeCB
          />}
       </div>
-      <div
-        id="body-and-user-data"
-        className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body">
+      <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body">
         <div className="pt-2" id="body">
           // Topic author details on mobile screen
 
@@ -273,7 +273,7 @@ let make =
                    </div>
                  </div>}
           </div>
-        <div id="user-data" className="flex justify-between lg:items-end pt-4">
+        <div className="flex justify-between lg:items-end pt-4">
           <div className="flex-1 lg:flex-initial mr-3">
             <div className="hidden lg:block">
               <TopicsShow__UserShow
@@ -283,7 +283,6 @@ let make =
             </div>
             // Showing Like, replies and solution for mobile
             <div
-              id="likes-and-solution"
               className="flex items-center lg:items-start justify-between lg:hidden">
               <div className="flex">
                 {<TopicsShow__LikeManager
@@ -296,7 +295,6 @@ let make =
                 <div>
                   {repliesToPost |> ArrayUtils.isNotEmpty
                      ? <button
-                         id="show-replies-button"
                          onClick={_ =>
                            toggleShowReplies(showReplies => !showReplies)
                          }
@@ -323,7 +321,8 @@ let make =
             <div className="hidden lg:block">
               {repliesToPost |> ArrayUtils.isNotEmpty
                  ? <button
-                     id="show-replies-button"
+                     id={"show-replies-" ++ Post.id(post)}
+                     ariaLabel={"Show replies of post " ++ Post.id(post)}
                      onClick={_ =>
                        toggleShowReplies(showReplies => !showReplies)
                      }
@@ -347,7 +346,12 @@ let make =
                 addNewReplyCB();
                 navigateToEditor();
               }}
-              id="reply button"
+              id={"reply-button-" ++ Post.id(post)}
+              ariaLabel={
+                isFirstPost
+                  ? "Add reply to topic"
+                  : "Add reply to post " ++ Post.id(post)
+              }
               className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold">
               <FaIcon classes="fas fa-reply mr-2" />
               {"Reply" |> str}
@@ -356,6 +360,7 @@ let make =
         </div>
         {showReplies
            ? <div
+               ariaLabel={"Replies to post " ++ Post.id(post)}
                className="lg:pl-10 pt-2 topics-post-show__replies-container">
                {repliesToPost
                 |> Array.map(post =>

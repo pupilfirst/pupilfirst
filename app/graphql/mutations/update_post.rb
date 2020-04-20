@@ -11,7 +11,10 @@ module Mutations
       mutator = UpdatePostMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.update_post
+        post = mutator.update_post
+        post_type = post.post_number == 1 ? "Post" : "Reply"
+        mutator.notify(:success, "Done!", "#{post_type} updated successfully")
+
         true
       else
         mutator.notify_errors

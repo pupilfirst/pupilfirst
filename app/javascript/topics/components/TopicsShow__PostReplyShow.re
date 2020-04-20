@@ -54,6 +54,7 @@ let make = (~post, ~users) => {
          ++ Post.creatorId(post)
          ++ " in TopicsShow__PostReplyShow",
        );
+  let tip = <div className="text-left"> {"Jump to reply" |> str} </div>;
   <div
     className="topics-post-reply-show__replies flex flex-col border bg-gray-100 rounded-lg mb-2 p-4">
     <div className="flex justify-between">
@@ -63,11 +64,14 @@ let make = (~post, ~users) => {
           {user |> User.name |> str}
         </span>
       </div>
-      <div
-        onClick={_ => navigateToPost(post |> Post.id)}
-        className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-300">
-        <i className="fas fa-angle-double-down" />
-      </div>
+      <Tooltip tip position=`Left>
+        <div
+          ariaLabel={"Navigate to post " ++ Post.id(post)}
+          onClick={_ => navigateToPost(post |> Post.id)}
+          className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-300">
+          <i className="fas fa-angle-double-down" />
+        </div>
+      </Tooltip>
     </div>
     <div className="text-sm ml-9">
       <MarkdownBlock

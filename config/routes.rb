@@ -111,7 +111,7 @@ Rails.application.routes.draw do
   end
 
   scope 'topics', controller: 'topics' do
-    get '/:id(/:title)/versions', action: 'versions'
+    get '/:id(/:title)/versions', action: 'versions', as: 'topic_versions'
     get '/:id(/:title)', action: "show", as: 'topic'
   end
 

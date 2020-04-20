@@ -1,8 +1,7 @@
 FactoryBot.define do
   factory :post do
     body { Faker::Lorem.paragraph }
-    topic
-    sequence(:post_number)
+    sequence(:post_number) { |n| n }
     creator { create :user }
   end
 

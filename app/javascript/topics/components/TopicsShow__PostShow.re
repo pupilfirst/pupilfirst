@@ -244,7 +244,6 @@ let make =
                      replies=posts
                      users
                      handlePostCB=updatePostCB
-                     postNumber={post |> Post.postNumber}
                      handleCloseCB={() => toggleShowPostEdit(_ => false)}
                    />
                  </div>

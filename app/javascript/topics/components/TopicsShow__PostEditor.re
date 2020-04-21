@@ -87,7 +87,6 @@ let handlePostUpdateResponseCB =
   handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(updatedPost);
 };
-
 let savePost =
     (
       body,
@@ -202,7 +201,6 @@ let make =
       ~id,
       ~topic,
       ~currentUserId,
-      ~postNumber,
       ~handlePostCB,
       ~replies,
       ~users,
@@ -260,8 +258,12 @@ let make =
                    <PfIcon className="if i-times-regular text-base" />
                  </div>
                </div>
-               <p className="text-sm pt-2 max-w-sm truncate">
-                 {reply |> Post.body |> str}
+               <p className="text-sm pt-2 max-w-sm">
+                 <MarkdownBlock
+                   markdown={reply |> Post.body}
+                   className="leading-normal text-sm truncate"
+                   profile=Markdown.QuestionAndAnswer
+                 />
                </p>
              </div>;
            | None => React.null
@@ -287,31 +289,35 @@ let make =
                </button>
              | None => React.null
              }}
-            <button
-              disabled={saving || body == ""}
-              onClick={savePost(
-                body,
-                topic,
-                setSaving,
-                currentUserId,
-                replyToPostId,
-                setBody,
-                handlePostCB,
-                post,
-                postNumber,
-                handleCloseCB,
-                removeReplyToPostCB,
-              )}
-              className="btn btn-primary">
-              {(
-                 switch (post) {
-                 | Some(post) =>
-                   Post.postNumber(post) == 1 ? "Update Post" : "Update Reply"
-                 | None => "Post Your Reply"
-                 }
-               )
-               |> str}
-            </button>
+            {let newPostNumber =
+               replies |> ArrayUtils.isNotEmpty
+                 ? (replies |> Post.highestPostNumber) + 1 : 2;
+             <button
+               disabled={saving || body == ""}
+               onClick={savePost(
+                 body,
+                 topic,
+                 setSaving,
+                 currentUserId,
+                 replyToPostId,
+                 setBody,
+                 handlePostCB,
+                 post,
+                 newPostNumber,
+                 handleCloseCB,
+                 removeReplyToPostCB,
+               )}
+               className="btn btn-primary">
+               {(
+                  switch (post) {
+                  | Some(post) =>
+                    Post.postNumber(post) == 1
+                      ? "Update Post" : "Update Reply"
+                  | None => "Post Your Reply"
+                  }
+                )
+                |> str}
+             </button>}
           </div>
         </div>
       </div>

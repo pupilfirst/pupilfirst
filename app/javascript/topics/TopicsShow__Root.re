@@ -343,7 +343,10 @@ let make =
           id="add-reply-to-topic"
           topic
           currentUserId
-          postNumber={(state.replies |> Post.highestPostNumber) + 1}
+          postNumber={
+            state.replies |> ArrayUtils.isNotEmpty
+              ? (state.replies |> Post.highestPostNumber) + 1 : 2
+          }
           handlePostCB={saveReply(send, state.replyToPostId)}
           replyToPostId=?{state.replyToPostId}
           replies={state.replies}

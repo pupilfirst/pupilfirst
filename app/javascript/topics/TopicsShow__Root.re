@@ -308,8 +308,12 @@ let make =
            />
          </div>}
         {<h5 className="pt-4 pb-2 lg:ml-14 border-b">
-           {(state.replies |> Array.length |> string_of_int)
-            ++ (state.replies |> Array.length > 1 ? " Replies" : " Reply")
+           {Inflector.pluralize(
+              "Reply",
+              ~count=Array.length(state.replies),
+              ~inclusive=true,
+              (),
+            )
             |> str}
          </h5>}
         {state.replies

@@ -6,6 +6,7 @@
   ],
   "dependencies": {
     "@babel/preset-react": "^7.7.4",
+    "@baransu/graphql_ppx_re": "^0.7.1",
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@glennsl/bs-json": "^5.0.1",
     "@rails/ujs": "^6.0.0",
@@ -18,6 +19,7 @@
     "bootstrap": "^4.3.1",
     "bs-date-fns": "^0.1.6",
     "bs-fetch": "^0.5.0",
+    "bs-platform": "7.2.2",
     "bs-webapi": "^0.15.2",
     "cloc": "^2.5.0",
     "coffeescript": "1.12.7",
@@ -28,6 +30,8 @@
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
+    "node-sass": "^4.12.0",
+    "pluralize": "^8.0.0",
     "pnotify": "^4.0.0",
     "postcss-scss": "^2.0.0",
     "prismjs": "^1.19.0",
@@ -38,11 +42,8 @@
     "react-dom": "^16.8.6",
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
-    "webpack-merge": "^4.2.1",
-    "@baransu/graphql_ppx_re": "^0.7.1",
     "tailwindcss": "^1.0.5",
-    "bs-platform": "7.2.2",
-    "node-sass": "^4.12.0"
+    "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",

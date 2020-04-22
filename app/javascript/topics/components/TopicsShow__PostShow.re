@@ -148,20 +148,20 @@ let optionsDropdown =
     | (true, _, _) => [|
         editPostButton,
         markAsSolutionButton,
-        deletePostButton,
         historyButton,
+        deletePostButton,
       |]
     | (false, true, false) => [|markAsSolutionButton, historyButton|]
     | (false, true, true) => [|
         editPostButton,
         markAsSolutionButton,
-        deletePostButton,
         historyButton,
+        deletePostButton,
       |]
     | (false, false, true) => [|
         editPostButton,
-        deletePostButton,
         historyButton,
+        deletePostButton,
       |]
     | _ => [||]
     };

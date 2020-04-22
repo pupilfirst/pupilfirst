@@ -23,6 +23,7 @@ let body = t => t.body;
 let replies = t => t.replies;
 
 let createdAt = t => t.createdAt;
+let updatedAt = t => t.updatedAt;
 
 let postLikes = t => t.postLikes;
 

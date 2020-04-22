@@ -277,6 +277,28 @@ let make =
                        className="leading-normal text-sm "
                        profile=Markdown.QuestionAndAnswer
                      />
+                     {switch (post |> Post.editorId) {
+                      | Some(editorId) =>
+                        <div>
+                          <div
+                            className="text-xs mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
+                            <span> {"Last edited by " |> str} </span>
+                            <span className="font-semibold">
+                              {user(editorId) |> User.name |> str}
+                            </span>
+                            <span>
+                              {" on "
+                               ++ (
+                                 post
+                                 |> Post.updatedAt
+                                 |> DateFns.format("Do MMMM, YYYY HH:mm")
+                               )
+                               |> str}
+                            </span>
+                          </div>
+                        </div>
+                      | None => React.null
+                      }}
                    </div>
                    <div className="hidden lg:block flex-shrink-0 ml-3">
                      {isPostCreator || isCoach || isTopicCreator

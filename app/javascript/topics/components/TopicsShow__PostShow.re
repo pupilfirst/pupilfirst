@@ -77,6 +77,7 @@ let archivePost = (isFirstPost, postId, archivePostCB) => {
 let optionsDropdown =
     (
       post,
+      topicId,
       isPostCreator,
       isTopicCreator,
       isCoach,
@@ -126,6 +127,21 @@ let optionsDropdown =
           <span className="ml-2"> {"Delete " ++ postTypeString |> str} </span>
         </button>
       : React.null;
+  let historyButton =
+    switch (post |> Post.editorId) {
+    | Some(_id) =>
+      <a
+        href={
+          isFirstPost
+            ? "/topics/" ++ topicId ++ "/versions"
+            : "/posts/" ++ Post.id(post) ++ "/versions"
+        }
+        className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+        <FaIcon classes="fas fa-history fa-fw text-base" />
+        <span className="ml-2"> {"History" |> str} </span>
+      </a>
+    | None => React.null
+    };
 
   let contents =
     switch (isCoach, isTopicCreator, isPostCreator) {
@@ -133,14 +149,20 @@ let optionsDropdown =
         editPostButton,
         markAsSolutionButton,
         deletePostButton,
+        historyButton,
       |]
-    | (false, true, false) => [|markAsSolutionButton|]
+    | (false, true, false) => [|markAsSolutionButton, historyButton|]
     | (false, true, true) => [|
         editPostButton,
         markAsSolutionButton,
         deletePostButton,
+        historyButton,
       |]
-    | (false, false, true) => [|editPostButton, deletePostButton|]
+    | (false, false, true) => [|
+        editPostButton,
+        deletePostButton,
+        historyButton,
+      |]
     | _ => [||]
     };
   <Dropdown selected contents right=true />;
@@ -222,6 +244,7 @@ let make =
                 {isPostCreator || isCoach || isTopicCreator
                    ? optionsDropdown(
                        post,
+                       Topic.id(topic),
                        isPostCreator,
                        isTopicCreator,
                        isCoach,
@@ -259,6 +282,7 @@ let make =
                      {isPostCreator || isCoach || isTopicCreator
                         ? optionsDropdown(
                             post,
+                            Topic.id(topic),
                             isPostCreator,
                             isTopicCreator,
                             isCoach,

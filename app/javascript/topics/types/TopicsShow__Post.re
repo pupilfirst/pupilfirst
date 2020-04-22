@@ -16,6 +16,8 @@ let id = t => t.id;
 
 let creatorId = t => t.creatorId;
 
+let editorId = t => t.editorId;
+
 let body = t => t.body;
 
 let replies = t => t.replies;

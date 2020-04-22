@@ -118,7 +118,8 @@ feature 'Community', js: true do
     expect(new_reply.text_versions.first.value).to eq(reply_body)
 
     # can see post edit history
-    visit post_version_path(new_reply)
+    find("div[aria-label='Options for post #{new_reply.id}']").click
+    click_link 'History'
     expect(page).to have_text('Post Edit History')
     expect(page).to have_text(reply_body)
     expect(page).to have_text(reply_body_for_edit)
@@ -211,8 +212,8 @@ feature 'Community', js: true do
     expect(topic_1.first_post.text_versions.first.value).to eq(old_description)
 
     # can see topic edit history
-    visit topic_versions_path(topic_1)
-    expect(page).to have_text('Topic Edit History')
+    find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
+    click_link 'History'
     expect(page).to have_text(topic_1.title)
     expect(page).to have_text(old_description)
     expect(page).to have_text(topic_body_for_edit)

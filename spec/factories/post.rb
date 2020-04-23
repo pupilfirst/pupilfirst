@@ -3,9 +3,9 @@ FactoryBot.define do
     body { Faker::Lorem.paragraph }
     sequence(:post_number) { |n| n }
     creator { create :user }
-  end
 
-  trait :first_post do
-    post_number { 1 }
+    trait :first_post do
+      post_number { 1 }
+    end
   end
 end

@@ -38,20 +38,12 @@ describe DailyDigestService do
       let(:t3_user) { team_3.founders.first.user }
       let(:t4_user) { t4_student_dropped_out.user }
 
-      let!(:topic_c1) { create :topic, community: community_1 }
-      let!(:topic_c1_fp) { create :post, :first_post, topic: topic_c1, creator: t1_user }
-      let!(:topic_c2_1) { create :topic, community: community_2 }
-      let!(:topic_c2_1_fp) { create :post, :first_post, topic: topic_c2_1, creator: t2_user_1 }
-      let!(:topic_c2_2) { create :topic, community: community_2 }
-      let!(:topic_c2_2_fp) { create :post, :first_post, topic: topic_c2_2, creator: t2_user_2 }
-      let!(:topic_c2_2) { create :topic, community: community_2 }
-      let!(:topic_c2_2_fp) { create :post, :first_post, topic: topic_c2_2, creator: t2_user_2 }
-      let!(:topic_c3_1) { create :topic, community: community_3, created_at: 2.days.ago, archived: true }
-      let!(:topic_c3_1_fp) { create :post, :first_post, topic: topic_c3_1, creator: t3_user }
-      let!(:topic_c3_2) { create :topic, community: community_3, created_at: 3.days.ago }
-      let!(:topic_c3_2_fp) { create :post, :first_post, topic: topic_c3_2, creator: t3_user }
-      let!(:topic_c3_3) { create :topic, community: community_3, created_at: 8.days.ago }
-      let!(:topic_c3_3_fp) { create :post, :first_post, topic: topic_c3_3, creator: t3_user }
+      let!(:topic_c1) { create :topic, :with_first_post, community: community_1, creator: t1_user }
+      let!(:topic_c2_1) { create :topic, :with_first_post, community: community_2, creator: t2_user_1 }
+      let!(:topic_c2_2) { create :topic, :with_first_post, community: community_2, creator: t2_user_2 }
+      let!(:topic_c3_1) { create :topic, :with_first_post, community: community_3, created_at: 2.days.ago, creator: t3_user, archived: true }
+      let!(:topic_c3_2) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, creator: t3_user }
+      let!(:topic_c3_3) { create :topic, :with_first_post, community: community_3, created_at: 8.days.ago, creator: t3_user }
 
       before do
         # Turn off daily digest for the disabled user.
@@ -134,20 +126,13 @@ describe DailyDigestService do
       end
 
       context 'when there are more than 5 topics with no activity in the past seven days' do
-        let!(:topic_c3_3) { create :topic, community: community_3, created_at: 2.days.ago }
-        let!(:topic_c3_3_fp) { create :post, :first_post, topic: topic_c3_3, creator: t1_user }
-        let!(:topic_c3_archived) { create :topic, community: community_3, created_at: 3.days.ago, archived: true }
-        let!(:topic_c3_archived_fp) { create :post, :first_post, topic: topic_c3_archived, creator: t2_user_1 }
-        let!(:topic_c3_4) { create :topic, community: community_3, created_at: 3.days.ago }
-        let!(:topic_c3_4_fp) { create :post, :first_post, topic: topic_c3_4, creator: t2_user_1 }
-        let!(:topic_c3_5) { create :topic, community: community_3, created_at: 4.days.ago }
-        let!(:topic_c3_5_fp) { create :post, :first_post, topic: topic_c3_5, creator: t2_user_2 }
-        let!(:topic_c3_6) { create :topic, community: community_3, created_at: 5.days.ago }
-        let!(:topic_c3_6_fp) { create :post, :first_post, topic: topic_c3_6, creator: t3_user }
-        let!(:topic_c3_7) { create :topic, community: community_3, created_at: 6.days.ago }
-        let!(:topic_c3_7_fp) { create :post, :first_post, topic: topic_c3_7, creator: t1_user }
-        let!(:topic_c3_8) { create :topic, community: community_3, created_at: 6.days.ago }
-        let!(:topic_c3_8_fp) { create :post, :first_post, topic: topic_c3_8, creator: t2_user_1 }
+        let!(:topic_c3_3) { create :topic, :with_first_post, community: community_3, created_at: 2.days.ago, creator: t1_user }
+        let!(:topic_c3_archived) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, archived: true, creator: t2_user_1 }
+        let!(:topic_c3_4) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, creator: t2_user_1 }
+        let!(:topic_c3_5) { create :topic, :with_first_post, community: community_3, created_at: 4.days.ago, creator: t2_user_2 }
+        let!(:topic_c3_6) { create :topic, :with_first_post, community: community_3, created_at: 5.days.ago, creator: t3_user }
+        let!(:topic_c3_7) { create :topic, :with_first_post, community: community_3, created_at: 6.days.ago, creator: t1_user }
+        let!(:topic_c3_8) { create :topic, :with_first_post, community: community_3, created_at: 6.days.ago, creator: t2_user_1 }
         let!(:reply) { create :post, topic: topic_c3_6, creator: t3_user, post_number: 2 }
 
         it 'only mails up to 5 such topics' do
@@ -216,10 +201,8 @@ describe DailyDigestService do
         create :faculty_course_enrollment, faculty: team_coach, course: course_2
         create :faculty_startup_enrollment, faculty: team_coach, startup: team_2
         create :faculty_course_enrollment, faculty: coach_2, course: course_3
-        topic_1 = create :topic, community: community_1
-        create :post, :first_post, topic: topic_1, creator: t1_user
-        topic_2 = create :topic, community: community_2
-        create :post, :first_post, topic: topic_2, creator: t3_user
+        create :topic, :with_first_post, community: community_1, creator: t1_user
+        create :topic, :with_first_post, community: community_2, creator: t3_user
 
         submission_pending_1.founders << team_1.founders
         submission_pending_2.founders << team_2.founders

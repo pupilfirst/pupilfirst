@@ -18,12 +18,9 @@ feature 'Community', js: true do
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
-  let!(:topic_1) { create :topic, community: community }
-  let!(:topic_1_body) { create :post, :first_post, topic: topic_1, creator: student_1.user }
-  let!(:topic_2) { create :topic, community: community }
-  let!(:topic_2_body) { create :post, :first_post, topic: topic_2, creator: student_1.user }
-  let!(:topic_3) { create :topic, community: community, target: target }
-  let!(:topic_3_body) { create :post, :first_post, topic: topic_3, creator: student_1.user }
+  let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user }
+  let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user }
+  let!(:topic_3) { create :topic, :with_first_post, community: community, target: target, creator: student_1.user }
   let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
   let(:topic_title) { Faker::Lorem.sentence }
   let(:topic_body) { Faker::Lorem.paragraph }

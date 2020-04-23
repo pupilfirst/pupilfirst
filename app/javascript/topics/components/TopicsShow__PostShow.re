@@ -77,7 +77,6 @@ let archivePost = (isFirstPost, postId, archivePostCB) => {
 let optionsDropdown =
     (
       post,
-      topicId,
       isPostCreator,
       isTopicCreator,
       isCoach,
@@ -131,11 +130,7 @@ let optionsDropdown =
     switch (post |> Post.editorId) {
     | Some(_id) =>
       <a
-        href={
-          isFirstPost
-            ? "/topics/" ++ topicId ++ "/versions"
-            : "/posts/" ++ Post.id(post) ++ "/versions"
-        }
+        href={"/posts/" ++ Post.id(post) ++ "/versions"}
         className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
         <FaIcon classes="fas fa-history fa-fw text-base" />
         <span className="ml-2"> {"History" |> str} </span>
@@ -244,7 +239,6 @@ let make =
                 {isPostCreator || isCoach || isTopicCreator
                    ? optionsDropdown(
                        post,
-                       Topic.id(topic),
                        isPostCreator,
                        isTopicCreator,
                        isCoach,
@@ -304,7 +298,6 @@ let make =
                      {isPostCreator || isCoach || isTopicCreator
                         ? optionsDropdown(
                             post,
-                            Topic.id(topic),
                             isPostCreator,
                             isTopicCreator,
                             isCoach,

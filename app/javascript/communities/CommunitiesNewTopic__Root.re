@@ -263,22 +263,19 @@ let searchingIndicator = state =>
     : React.null;
 
 [@react.component]
-let make = (~communityId, ~showBackButton=true, ~target) => {
+let make = (~communityId, ~target) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <DisablingCover disabled={state.saving}>
     <div className="bg-gray-100">
       <div className="flex-1 flex flex-col">
         <div className="px-3 lg:px-0">
-          {showBackButton
-             ? <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
-                 <a
-                   className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
-                   <i className="fas fa-arrow-left" />
-                   <span className="ml-2"> {"Back" |> str} </span>
-                 </a>
-               </div>
-             : React.null}
+          <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
+            <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
+              <i className="fas fa-arrow-left" />
+              <span className="ml-2"> {"Back" |> str} </span>
+            </a>
+          </div>
         </div>
         {switch (target) {
          | Some(target) =>

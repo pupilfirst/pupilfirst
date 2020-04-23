@@ -5,8 +5,4 @@ class TopicsController < ApplicationController
   def show
     @topic = authorize(Topic.live.find(params[:id]))
   end
-
-  def versions
-    @topic = authorize(Topic.live.find(params[:id]))
-  end
 end

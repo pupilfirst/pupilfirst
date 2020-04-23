@@ -195,8 +195,7 @@ let make =
       ~target,
     ) => {
   let (state, send) =
-    React.useReducer(
-      reducer,
+    React.useReducerWithMapState(reducer, topic, topic =>
       {
         topic,
         firstPost,
@@ -205,7 +204,7 @@ let make =
         topicTitle: topic |> Topic.title,
         savingTopic: false,
         showTopicEditor: false,
-      },
+      }
     );
 
   <div className="bg-gray-100">

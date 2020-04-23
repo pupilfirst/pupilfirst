@@ -4,7 +4,7 @@ class CommunitiesController < ApplicationController
 
   # GET /communities/:id
   def show
-    @community = authorize(Community.find(params[:id]), 'show?')
+    @community = authorize(Community.find(params[:id]))
     @search = params[:search]
     @topics = scoped_topics.live.includes([first_post: :creator])
       .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
@@ -15,7 +15,7 @@ class CommunitiesController < ApplicationController
 
   # GET /community/:community_id/new_topic
   def new_topic
-    @community = authorize(Community.find(params[:id]), 'new_question?')
+    @community = authorize(Community.find(params[:id]))
     target
   end
 

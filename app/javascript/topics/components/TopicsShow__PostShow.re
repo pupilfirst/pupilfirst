@@ -57,10 +57,10 @@ let archivePost = (isFirstPost, postId, archivePostCB) => {
   |> Webapi.Dom.Window.confirm(
        (
          isFirstPost
-           ? "Are you sure you want to delete the topic. "
-           : "Are you sure you want to delete the post. "
+           ? "Are you sure you want to delete the topic? "
+           : "Are you sure you want to delete the post? "
        )
-       ++ "This cannot be undone",
+       ++ "This cannot be undone.",
      )
     ? {
       ArchivePostQuery.make(~id=postId, ())
@@ -409,11 +409,7 @@ let make =
                className="lg:pl-10 pt-2 topics-post-show__replies-container">
                {repliesToPost
                 |> Array.map(post =>
-                     <TopicsShow__PostReplyShow
-                       key={post |> Post.id}
-                       post
-                       users
-                     />
+                     <TopicsShow__PostReply key={post |> Post.id} post users />
                    )
                 |> React.array}
              </div>

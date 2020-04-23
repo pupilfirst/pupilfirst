@@ -68,7 +68,7 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
       t.references :archiver
       t.datetime :archived_at
       t.references :reply_to_post, foreign_key: { to_table: :posts }
-      t.integer :post_number, null: false, default: 1 # We'll properly index this and re-number all posts at the end.
+      t.integer :post_number
       t.text :body
       t.boolean :solution, default: false
 
@@ -148,6 +148,9 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
     # Add unique index to posts table now that they've all been numbered.
     add_index :posts, %i[post_number topic_id], unique: true
 
+    # Ensure posts#post_number is not null
+    change_column_null :posts, :post_number, false
+
     # Clean up old tables.
     drop_table :comments
     drop_table :answer_likes
@@ -157,11 +160,7 @@ class CreateCommunityV2Tables < ActiveRecord::Migration[6.0]
   end
 
   def down
-    # raise ActiveRecord::IrreversibleMigration
-
-    drop_table :post_likes
-    drop_table :posts
-    drop_table :topics
+    raise ActiveRecord::IrreversibleMigration
   end
 
   def post_attributes(record, reply_to: nil)

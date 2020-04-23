@@ -22,7 +22,7 @@ class ArchivePostMutator < ApplicationQuery
   end
 
   def topic
-    @topic ||= post&.topic
+    post&.topic
   end
 
   def post

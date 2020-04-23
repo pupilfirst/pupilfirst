@@ -5,7 +5,7 @@ class CommunityPolicy < ApplicationPolicy
     scope.where(id: record.id).exists?
   end
 
-  alias new_question? show?
+  alias new_topic? show?
 
   class Scope < Scope
     def resolve

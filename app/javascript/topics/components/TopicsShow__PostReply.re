@@ -1,25 +1,14 @@
 open TopicsShow__Types;
 
 let str = React.string;
-[%bs.raw {|require("./TopicsShow__PostReplyShow.css")|}];
+[%bs.raw {|require("./TopicsShow__PostReply.css")|}];
 
-let avatarClasses = size => {
-  let (defaultSize, mdSize) = size;
-  "w-"
-  ++ defaultSize
-  ++ " h-"
-  ++ defaultSize
-  ++ " md:w-"
-  ++ mdSize
-  ++ " md:h-"
-  ++ mdSize
-  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
-};
+let avatarClasses = "w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
 
-let avatar = (~size=("6", "8"), avatarUrl, name) => {
+let avatar = (avatarUrl, name) => {
   switch (avatarUrl) {
-  | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
-  | None => <Avatar name className={avatarClasses(size)} />
+  | Some(avatarUrl) => <img className=avatarClasses src=avatarUrl />
+  | None => <Avatar name className=avatarClasses />
   };
 };
 
@@ -27,19 +16,16 @@ let navigateToPost = postId => {
   let elementId = "post-show-" ++ postId;
   let element =
     Webapi.Dom.document |> Webapi.Dom.Document.getElementById(elementId);
-  Js.Global.setTimeout(
-    () => {
-      switch (element) {
-      | Some(e) =>
-        {
-          Webapi.Dom.Element.scrollIntoView(e);
-          e->Webapi.Dom.Element.setClassName("topics-show__highlighted-item");
-        }
-        |> ignore
-      | None => Rollbar.error("Could not find the post to scroll to.")
+  (
+    switch (element) {
+    | Some(e) =>
+      {
+        Webapi.Dom.Element.scrollIntoView(e);
+        e->Webapi.Dom.Element.setClassName("topics-show__highlighted-item");
       }
-    },
-    50,
+      |> ignore
+    | None => Rollbar.error("Could not find the post to scroll to.")
+    }
   )
   |> ignore;
 };
@@ -59,7 +45,7 @@ let make = (~post, ~users) => {
     className="topics-post-reply-show__replies flex flex-col border bg-gray-100 rounded-lg mb-2 p-4">
     <div className="flex justify-between">
       <div className="flex items-center">
-        {avatar(~size=("6", "7"), user |> User.avatarUrl, user |> User.name)}
+        {avatar(user |> User.avatarUrl, user |> User.name)}
         <span className="text-xs font-semibold ml-2">
           {user |> User.name |> str}
         </span>

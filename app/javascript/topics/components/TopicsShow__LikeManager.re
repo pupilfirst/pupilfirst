@@ -67,6 +67,10 @@ let handlePostLike =
                : setSaving(_ => false);
              Js.Promise.resolve();
            })
+        |> Js.Promise.catch(_ => {
+             setSaving(_ => false);
+             Js.Promise.resolve();
+           })
         |> ignore;
       } else {
         CreatePostLikeQuery.make(~postId, ())
@@ -74,13 +78,7 @@ let handlePostLike =
         |> Js.Promise.then_(response => {
              switch (response##createPostLike##postLikeId) {
              | Some(id) =>
-               handleCreateResponse(
-                 id,
-                 currentUserId,
-                 postId,
-                 setSaving,
-                 addLikeCB,
-               )
+               handleCreateResponse(id, currentUserId, setSaving, addLikeCB)
              | None => setSaving(_ => false)
              };
              Js.Promise.resolve();
@@ -94,7 +92,7 @@ let handlePostLike =
     };
 };
 
-let handleCreateResponse = (id, currentUserId, postId, setSaving, addLikeCB) => {
+let handleCreateResponse = (id, currentUserId, setSaving, addLikeCB) => {
   let like = Like.create(id, currentUserId);
   setSaving(_ => false);
   addLikeCB(like);

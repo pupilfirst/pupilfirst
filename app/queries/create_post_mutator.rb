@@ -1,7 +1,7 @@
 class CreatePostMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  property :body, validates: { length: { minimum: 1, maximum: 15_000 } }
+  property :body, validates: { length: { minimum: 1, maximum: 10_000 } }
   property :topic_id, validates: { presence: true }
   property :reply_to_post_id
 

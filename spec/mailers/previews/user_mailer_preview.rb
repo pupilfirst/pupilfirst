@@ -1,10 +1,6 @@
 class UserMailerPreview < ActionMailer::Preview
-  def new_answer
-    UserMailer.new_answer(Answer.order('RANDOM()').first)
-  end
-
-  def new_comment
-    UserMailer.new_comment(Comment.order('RANDOM()').first)
+  def new_post
+    UserMailer.new_post(Post.order('RANDOM()').first, Faculty.last.user)
   end
 
   def daily_digest
@@ -29,7 +25,7 @@ class UserMailerPreview < ActionMailer::Preview
   def community_digest(count, starting_id = 1, no_activity = false)
     {
       community_name: Faker::Lorem.words(number: 2).join(' ').titleize,
-      questions: (1..count).map do |id|
+      topics: (1..count).map do |id|
         {
           id: starting_id + id - 1,
           title: Faker::Lorem.sentence,

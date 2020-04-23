@@ -79,8 +79,12 @@ let find = (postId, posts) => {
 };
 
 let highestPostNumber = posts => {
-  posts |> ArrayUtils.isEmpty
-    ? 0 : (posts |> sort |> Array.to_list |> List.rev |> List.hd).postNumber;
+  posts
+  |> Js.Array.reduce(
+       (maxPostNumber, t) =>
+         t.postNumber > maxPostNumber ? t.postNumber : maxPostNumber,
+       0,
+     );
 };
 
 let make =

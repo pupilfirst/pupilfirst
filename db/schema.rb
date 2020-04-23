@@ -412,7 +412,7 @@ ActiveRecord::Schema.define(version: 2020_04_13_113804) do
     t.bigint "archiver_id"
     t.datetime "archived_at"
     t.bigint "reply_to_post_id"
-    t.integer "post_number", default: 1, null: false
+    t.integer "post_number", null: false
     t.text "body"
     t.boolean "solution", default: false
     t.datetime "created_at", precision: 6, null: false

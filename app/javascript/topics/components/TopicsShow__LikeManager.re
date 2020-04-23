@@ -6,7 +6,7 @@ module CreatePostLikeQuery = [%graphql
   {|
   mutation CreatePostLikeMutation($postId: ID!) {
     createPostLike(postId: $postId)  {
-      postLikeId
+      success
     }
   }
 |}
@@ -14,8 +14,8 @@ module CreatePostLikeQuery = [%graphql
 
 module DeletePostLikeQuery = [%graphql
   {|
-  mutation DeletePostLikeMutation($id: ID!) {
-    deletePostLike(id: $id) {
+  mutation DeletePostLikeMutation($postId: ID!) {
+    deletePostLike(postId: $postId) {
       success
     }
   }
@@ -42,8 +42,6 @@ let handlePostLike =
       liked,
       setSaving,
       postId,
-      currentUserId,
-      likes,
       removeLikeCB,
       handleCreateResponse,
       addLikeCB,
@@ -55,13 +53,12 @@ let handlePostLike =
     : {
       setSaving(_ => true);
       if (liked) {
-        let id = currentUserId |> Like.findUserLike(likes) |> Like.id;
-        DeletePostLikeQuery.make(~id, ())
+        DeletePostLikeQuery.make(~postId, ())
         |> GraphqlQuery.sendQuery
         |> Js.Promise.then_(response => {
              response##deletePostLike##success
                ? {
-                 removeLikeCB(id);
+                 removeLikeCB();
                  setSaving(_ => false);
                }
                : setSaving(_ => false);
@@ -76,11 +73,9 @@ let handlePostLike =
         CreatePostLikeQuery.make(~postId, ())
         |> GraphqlQuery.sendQuery
         |> Js.Promise.then_(response => {
-             switch (response##createPostLike##postLikeId) {
-             | Some(id) =>
-               handleCreateResponse(id, currentUserId, setSaving, addLikeCB)
-             | None => setSaving(_ => false)
-             };
+             response##createPostLike##success
+               ? handleCreateResponse(setSaving, addLikeCB)
+               : setSaving(_ => false);
              Js.Promise.resolve();
            })
         |> Js.Promise.catch(_ => {
@@ -92,29 +87,24 @@ let handlePostLike =
     };
 };
 
-let handleCreateResponse = (id, currentUserId, setSaving, addLikeCB) => {
-  let like = Like.create(id, currentUserId);
+let handleCreateResponse = (setSaving, addLikeCB) => {
   setSaving(_ => false);
-  addLikeCB(like);
+  addLikeCB();
 };
 
 [@react.component]
-let make =
-    (~postId, ~postLikes, ~currentUserId, ~addPostLikeCB, ~removePostLikeCB) => {
-  let liked = currentUserId |> Like.currentUserLiked(postLikes);
+let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
   let (saving, setSaving) = React.useState(() => false);
-
+  let liked = Post.likedByUser(post);
   <div className="text-center pr-3 md:pr-4">
     <div
-      ariaLabel={(liked ? "Unlike" : "Like") ++ " reply " ++ postId}
+      ariaLabel={(liked ? "Unlike" : "Like") ++ " reply " ++ Post.id(post)}
       className="cursor-pointer"
       onClick={handlePostLike(
         saving,
         liked,
         setSaving,
-        postId,
-        currentUserId,
-        postLikes,
+        Post.id(post),
         removePostLikeCB,
         handleCreateResponse,
         addPostLikeCB,
@@ -125,7 +115,7 @@ let make =
         <i className={iconClasses(liked, saving)} />
       </div>
       <p className="text-tiny lg:text-xs font-semibold">
-        {postLikes |> Array.length |> string_of_int |> str}
+        {post |> Post.totalLikes |> string_of_int |> str}
       </p>
     </div>
   </div>;

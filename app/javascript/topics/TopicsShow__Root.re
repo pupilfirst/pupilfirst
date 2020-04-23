@@ -17,10 +17,10 @@ type state = {
 type action =
   | SaveReply(Post.t, option(string))
   | AddNewReply(option(string))
-  | LikeFirstPost(Like.t)
-  | RemoveLikeFromFirstPost(string)
-  | LikeReply(Post.t, Like.t)
-  | RemoveLikeFromReply(Post.t, string)
+  | LikeFirstPost
+  | RemoveLikeFromFirstPost
+  | LikeReply(Post.t)
+  | RemoveLikeFromReply(Post.t)
   | UpdateFirstPost(Post.t)
   | UpdateReply(Post.t)
   | RemoveReplyToPost
@@ -44,6 +44,7 @@ let reducer = (state, action) => {
           state.replies
           |> Js.Array.filter(r => Post.id(r) != id)
           |> Array.append([|newReply, updatedParentPost|]),
+        replyToPostId: None,
       };
     | None => {
         ...state,
@@ -51,16 +52,14 @@ let reducer = (state, action) => {
       }
     }
   | AddNewReply(replyToPostId) => {...state, replyToPostId}
-  | LikeFirstPost(like) => {
+  | LikeFirstPost => {...state, firstPost: state.firstPost |> Post.addLike}
+  | RemoveLikeFromFirstPost => {
       ...state,
-      firstPost: state.firstPost |> Post.addLike(like),
+      firstPost: state.firstPost |> Post.removeLike,
     }
-  | RemoveLikeFromFirstPost(likeId) => {
-      ...state,
-      firstPost: state.firstPost |> Post.removeLike(likeId),
-    }
-  | LikeReply(post, like) =>
-    let updatedPost = post |> Post.addLike(like);
+  | LikeReply(post) =>
+    let updatedPost = post |> Post.addLike;
+    Js.log(updatedPost);
     {
       ...state,
       replies:
@@ -68,8 +67,8 @@ let reducer = (state, action) => {
         |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
         |> Array.append([|updatedPost|]),
     };
-  | RemoveLikeFromReply(post, likeId) =>
-    let updatedPost = post |> Post.removeLike(likeId);
+  | RemoveLikeFromReply(post) =>
+    let updatedPost = post |> Post.removeLike;
     {
       ...state,
       replies:
@@ -120,22 +119,6 @@ let updateFirstPost = (send, post) => {
 
 let saveReply = (send, replyToPostId, reply) => {
   send(SaveReply(reply, replyToPostId));
-};
-
-let addReplyLike = (send, post, like) => {
-  send(LikeReply(post, like));
-};
-
-let removeReplyLike = (send, post, likeId) => {
-  send(RemoveLikeFromReply(post, likeId));
-};
-
-let addFirstPostLike = (send, like) => {
-  send(LikeFirstPost(like));
-};
-
-let removeFirstPostLike = (send, likeId) => {
-  send(RemoveLikeFromFirstPost(likeId));
 };
 
 let isTopicCreator = (firstPost, currentUserId) => {
@@ -300,8 +283,8 @@ let make =
              isTopicCreator={isTopicCreator(firstPost, currentUserId)}
              updatePostCB={updateFirstPost(send)}
              addNewReplyCB={addNewReply(send, None)}
-             addPostLikeCB={addFirstPostLike(send)}
-             removePostLikeCB={removeFirstPostLike(send)}
+             addPostLikeCB={() => send(LikeFirstPost)}
+             removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
              markPostAsSolutionCB={() => ()}
              archivePostCB={() => archiveTopic(communityId)}
            />
@@ -318,9 +301,9 @@ let make =
         {state.replies
          |> Post.sort
          |> Array.map(reply =>
-              <div className="topics-show__replies-wrapper">
+              <div
+                key={Post.id(reply)} className="topics-show__replies-wrapper">
                 <TopicsShow__PostShow
-                  key={Post.id(reply)}
                   post=reply
                   topic
                   users
@@ -330,11 +313,11 @@ let make =
                   isTopicCreator={isTopicCreator(firstPost, currentUserId)}
                   updatePostCB={updateReply(send)}
                   addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
-                  addPostLikeCB={addReplyLike(send, reply)}
                   markPostAsSolutionCB={() =>
                     send(MarkReplyAsSolution(Post.id(reply)))
                   }
-                  removePostLikeCB={removeReplyLike(send, reply)}
+                  removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
+                  addPostLikeCB={() => send(LikeReply(reply))}
                   archivePostCB={() => send(ArchivePost(Post.id(reply)))}
                 />
               </div>

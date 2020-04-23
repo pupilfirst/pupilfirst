@@ -7,7 +7,7 @@ module Topics
 
     POST_FIELDS = {
       only: %i[id body creator_id editor_id created_at updated_at post_number solution],
-      include: { post_likes: { only: %i[id user_id] }, replies: { only: :id } }
+      include: { replies: { only: :id } }
     }.freeze
 
     def props
@@ -49,15 +49,22 @@ module Topics
     end
 
     def first_post_details
-      first_post.as_json(POST_FIELDS)
+      first_post.as_json(POST_FIELDS).merge(like_data(first_post).as_json)
     end
 
     def replies
-      @topic.replies.live.includes(:post_likes)
+      ActiveRecord::Precounter.new(@topic.replies.live.includes(:replies)).precount(:post_likes)
     end
 
     def details_of_replies
-      replies.as_json(POST_FIELDS)
+      replies.map { |reply| reply.as_json(POST_FIELDS).merge(like_data(reply).as_json) }
+    end
+
+    def like_data(post)
+      {
+        total_likes: post.post_likes.count,
+        liked_by_user: post.post_likes.where(user_id: current_user.id).exists?
+      }
     end
 
     def users

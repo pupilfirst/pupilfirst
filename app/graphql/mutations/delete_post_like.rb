@@ -1,6 +1,6 @@
 module Mutations
   class DeletePostLike < GraphQL::Schema::Mutation
-    argument :id, ID, required: true
+    argument :post_id, ID, required: true
 
     description "Delete a like for some post"
 

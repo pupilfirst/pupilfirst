@@ -218,13 +218,7 @@ let make =
     <div className="flex pt-4" key={post |> Post.id}>
       <div className="hidden lg:flex flex-col w-1/8">
         {post |> Post.solution ? solutionIcon : React.null}
-        {<TopicsShow__LikeManager
-           postId={post |> Post.id}
-           postLikes={post |> Post.postLikes}
-           currentUserId
-           addPostLikeCB
-           removePostLikeCB
-         />}
+        {<TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />}
       </div>
       <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body">
         <div className="pt-2" id="body">
@@ -324,9 +318,7 @@ let make =
               className="flex items-center lg:items-start justify-between lg:hidden">
               <div className="flex">
                 {<TopicsShow__LikeManager
-                   postId={post |> Post.id}
-                   postLikes={post |> Post.postLikes}
-                   currentUserId
+                   post
                    addPostLikeCB
                    removePostLikeCB
                  />}

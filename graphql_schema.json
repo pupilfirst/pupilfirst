@@ -5765,7 +5765,7 @@
             "description": "",
             "args": [
               {
-                "name": "id",
+                "name": "postId",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
@@ -7703,13 +7703,17 @@
         "description": "",
         "fields": [
           {
-            "name": "postLikeId",
+            "name": "success",
             "description": "",
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

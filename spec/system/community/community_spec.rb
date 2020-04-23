@@ -211,10 +211,9 @@ feature 'Community', js: true do
     # can see topic edit history
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     click_link 'History'
-    expect(page).to have_text(topic_1.title)
     expect(page).to have_text(old_description)
     expect(page).to have_text(topic_body_for_edit)
-    click_link 'Back to Topic'
+    click_link 'Back to Post'
 
     # can mark a reply as solution
     find("div[aria-label='Options for post #{reply_1.id}']").click

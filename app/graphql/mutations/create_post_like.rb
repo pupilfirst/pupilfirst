@@ -4,19 +4,20 @@ module Mutations
 
     description "Add a like for the post"
 
-    field :post_like_id, ID, null: true
+    field :success, Boolean, null: false
 
     def resolve(params)
       mutator = CreatePostLikeMutator.new(context, params)
 
-      post_like_id = if mutator.valid?
-        mutator.create_post_like.id
+      success = if mutator.valid?
+        mutator.create_post_like
+        true
       else
         mutator.notify_errors
-        nil
+        false
       end
 
-      { post_like_id: post_like_id }
+      { success: success }
     end
   end
 end

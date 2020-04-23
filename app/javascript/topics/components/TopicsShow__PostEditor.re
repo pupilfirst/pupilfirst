@@ -30,16 +30,7 @@ module UpdatePostQuery = [%graphql
 let dateTime = Js.Date.make();
 
 let handlePostCreateResponse =
-    (
-      id,
-      body,
-      postNumber,
-      currentUserId,
-      setState,
-      handleCloseCB,
-      handlePostCB,
-      removeReplyToPostCB,
-    ) => {
+    (id, body, postNumber, currentUserId, setState, handlePostCB) => {
   let post =
     Post.make(
       id,
@@ -49,13 +40,12 @@ let handlePostCreateResponse =
       postNumber,
       dateTime,
       dateTime,
-      [||],
+      0,
+      false,
       [||],
       false,
     );
   setState(_ => {body: "", saving: false});
-  handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
-  removeReplyToPostCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(post);
 };
 
@@ -70,7 +60,8 @@ let handlePostUpdateResponse =
       post |> Post.postNumber,
       post |> Post.createdAt,
       dateTime,
-      post |> Post.postLikes,
+      post |> Post.totalLikes,
+      post |> Post.likedByUser,
       post |> Post.replies,
       post |> Post.solution,
     );
@@ -90,7 +81,6 @@ let savePost =
       post,
       postNumber,
       handleCloseCB,
-      removeReplyToPostCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -139,9 +129,7 @@ let savePost =
                postNumber,
                currentUserId,
                setState,
-               handleCloseCB,
                handlePostCB,
-               removeReplyToPostCB,
              )
            | None => setState(state => {...state, saving: false})
            };
@@ -290,7 +278,6 @@ let make =
                  post,
                  newPostNumber,
                  handleCloseCB,
-                 removeReplyToPostCB,
                )}
                className="btn btn-primary">
                {(

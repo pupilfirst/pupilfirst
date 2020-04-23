@@ -6,7 +6,8 @@ type t = {
   postNumber: int,
   createdAt: Js.Date.t,
   updatedAt: Js.Date.t,
-  postLikes: array(TopicsShow__Like.t),
+  totalLikes: int,
+  likedByUser: bool,
   replies: array(string),
   solution: bool,
 }
@@ -25,9 +26,11 @@ let replies = t => t.replies;
 let createdAt = t => t.createdAt;
 let updatedAt = t => t.updatedAt;
 
-let postLikes = t => t.postLikes;
+let likedByUser = t => t.likedByUser;
 
 let postNumber = t => t.postNumber;
+
+let totalLikes = t => t.totalLikes;
 
 let solution = t => t.solution;
 
@@ -51,15 +54,12 @@ let addReply = (newReplyId, t) => {
   {...t, replies: t.replies |> Array.append([|newReplyId|])};
 };
 
-let addLike = (like, t) => {
-  {...t, postLikes: t.postLikes |> Array.append([|like|])};
+let addLike = t => {
+  {...t, totalLikes: t.totalLikes + 1, likedByUser: true};
 };
 
-let removeLike = (likeId, t) => {
-  let postLikes =
-    t.postLikes
-    |> Js.Array.filter(like => TopicsShow__Like.id(like) != likeId);
-  {...t, postLikes};
+let removeLike = t => {
+  {...t, likedByUser: false, totalLikes: t.totalLikes - 1};
 };
 
 let markAsSolution = (replyId, replies) => {
@@ -96,7 +96,8 @@ let make =
       postNumber,
       createdAt,
       updatedAt,
-      postLikes,
+      totalLikes,
+      likedByUser,
       replies,
       solution,
     ) => {
@@ -107,7 +108,8 @@ let make =
   postNumber,
   createdAt,
   updatedAt,
-  postLikes,
+  totalLikes,
+  likedByUser,
   replies,
   solution,
 };
@@ -124,7 +126,8 @@ let decode = json =>
     postNumber: json |> field("postNumber", int),
     createdAt: json |> field("createdAt", string) |> DateFns.parseString,
     updatedAt: json |> field("updatedAt", string) |> DateFns.parseString,
-    postLikes: json |> field("postLikes", array(TopicsShow__Like.decode)),
+    totalLikes: json |> field("totalLikes", int),
+    likedByUser: json |> field("likedByUser", bool),
     replies: json |> field("replies", array(decodeReplyId)),
     solution: json |> field("solution", bool),
   };

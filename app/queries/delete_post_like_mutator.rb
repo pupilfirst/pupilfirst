@@ -1,18 +1,21 @@
 class DeletePostLikeMutator < ApplicationQuery
-  property :id, validates: { presence: true }
+  property :post_id, validates: { presence: true }
 
   def delete_post_like
-    post_like.destroy!
+    post_like.destroy! if post_like.present?
   end
 
   def authorized?
-    # User must be signed in, and must be the owner of the 'like'.
-    current_user.present? && post_like&.user == current_user
+    current_user.present?
   end
 
   private
 
   def post_like
-    @post_like ||= PostLike.find_by(id: id)
+    @post_like ||= post.post_likes.where(user: current_user).first
+  end
+
+  def post
+    @post ||= Post.find_by(id: post_id)
   end
 end

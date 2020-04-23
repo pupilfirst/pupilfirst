@@ -59,7 +59,6 @@ let reducer = (state, action) => {
     }
   | LikeReply(post) =>
     let updatedPost = post |> Post.addLike;
-    Js.log(updatedPost);
     {
       ...state,
       replies:

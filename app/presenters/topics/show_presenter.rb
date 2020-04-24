@@ -18,7 +18,7 @@ module Topics
         users: users,
         current_user_id: current_user.id,
         is_coach: current_coach.present?,
-        community_id: community.id,
+        community: community_details,
         target: linked_target
       }
     end
@@ -86,6 +86,13 @@ module Topics
 
     def community
       @topic.community
+    end
+
+    def community_details
+      {
+        id: community.id,
+        name: community.name
+      }
     end
   end
 end

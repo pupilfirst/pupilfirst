@@ -152,12 +152,12 @@ let communityLinks = (communityIds, communities) => {
        switch (community) {
        | Some(c) =>
          <a
-           key={c |> Community.id}
-           href={"/communities/" ++ (c |> Community.id)}
+           key={Community.id(c)}
+           href={Community.path(c)}
            className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
            <i className="fas fa-users" />
            <span className="font-semibold ml-2">
-             {c |> Community.name |> str}
+             {Community.name(c) |> str}
            </span>
          </a>
        | None => React.null
@@ -281,7 +281,7 @@ let communitiesSection = communities => {
               className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
               <a
                 className="w-full h-full shadow rounded-lg hover:shadow-lg"
-                href={"communities/" ++ (community |> Community.id)}>
+                href={Community.path(community)}>
                 <div
                   className="user-home-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
                 />

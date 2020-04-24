@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   resources :communities, only: %i[show] do
     member do
       get 'new_topic'
+      get ':name', action: 'show'
     end
   end
 

@@ -8,7 +8,7 @@ let decodeProps = json =>
     json |> field("users", array(User.decode)),
     json |> field("currentUserId", string),
     json |> field("isCoach", bool),
-    json |> field("communityId", string),
+    json |> field("community", Community.decode),
     json |> optional(field("target", LinkedTarget.decode)),
   );
 
@@ -19,7 +19,7 @@ let (
   users,
   currentUserId,
   isCoach,
-  communityId,
+  community,
   target,
 ) =
   DomUtils.parseJsonTag() |> decodeProps;
@@ -32,7 +32,7 @@ ReactDOMRe.renderToElementWithId(
     users
     currentUserId
     isCoach
-    communityId
+    community
     target
   />,
   "react-root",

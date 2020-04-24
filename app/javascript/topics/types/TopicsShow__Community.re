@@ -1,10 +1,11 @@
 type t = {
-  id: string,
+  id,
   name: string,
-};
+}
+and id = string;
 
-let name = t => t.name;
 let id = t => t.id;
+let name = t => t.name;
 
 let decode = json =>
   Json.Decode.{

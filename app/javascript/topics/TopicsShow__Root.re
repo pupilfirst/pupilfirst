@@ -124,9 +124,10 @@ let isTopicCreator = (firstPost, currentUserId) => {
   Post.creatorId(firstPost) == currentUserId;
 };
 
-let archiveTopic = communityId => {
-  let communityPath = "/communities/" ++ communityId;
-  communityPath |> Webapi.Dom.Window.setLocation(Webapi.Dom.window);
+let archiveTopic = community => {
+  community
+  |> Community.path
+  |> Webapi.Dom.Window.setLocation(Webapi.Dom.window);
 };
 
 module UpdateTopicQuery = [%graphql
@@ -164,11 +165,11 @@ let updateTopic = (state, send, event) => {
   |> ignore;
 };
 
-let handleBack = communityId => {
-  let communityPath = "/communities/" ++ communityId;
-  DomUtils.hasUrlParam(~key="new")
-    ? communityPath |> Webapi.Dom.Window.setLocation(Webapi.Dom.window)
-    : DomUtils.goBack();
+let communityLink = community => {
+  <a href={Community.path(community)} className="btn btn-subtle">
+    <i className="fas fa-users" />
+    <span className="ml-2"> {Community.name(community) |> str} </span>
+  </a>;
 };
 
 [@react.component]
@@ -180,7 +181,7 @@ let make =
       ~users,
       ~currentUserId,
       ~isCoach,
-      ~communityId,
+      ~community,
       ~target,
     ) => {
   let (state, send) =
@@ -198,10 +199,7 @@ let make =
 
   <div className="bg-gray-100">
     <div className="max-w-4xl w-full mt-5 pl-4 lg:pl-0 lg:mx-auto">
-      <a onClick={_ => handleBack(communityId)} className="btn btn-subtle">
-        <i className="fas fa-arrow-left" />
-        <span className="ml-2"> {"Back" |> str} </span>
-      </a>
+      {communityLink(community)}
     </div>
     <div className="flex-col items-center justify-between">
       {switch (target) {
@@ -292,7 +290,7 @@ let make =
              addPostLikeCB={() => send(LikeFirstPost)}
              removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
              markPostAsSolutionCB={() => ()}
-             archivePostCB={() => archiveTopic(communityId)}
+             archivePostCB={() => archiveTopic(community)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 lg:ml-14 border-b">

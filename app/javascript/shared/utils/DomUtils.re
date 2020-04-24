@@ -40,7 +40,18 @@ let isDevelopment = () =>
   };
 
 let goBack = () => {
-  Webapi.Dom.window |> Webapi.Dom.Window.history |> Webapi.Dom.History.back;
+  window |> Window.history |> History.back;
+};
+
+let hasUrlParam = (~key) => {
+  (
+    window
+    |> Window.location
+    |> Location.search
+    |> Webapi.Url.URLSearchParams.make
+    |> Webapi.Url.URLSearchParams.get(key)
+  )
+  ->Belt.Option.isSome;
 };
 
 module FormData = {

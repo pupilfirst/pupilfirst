@@ -136,7 +136,7 @@ module CreateTopicQuery = [%graphql
 
 let redirectToNewTopic = (id, title) => {
   let redirectPath =
-    "/topics/" ++ id ++ "/" ++ StringUtils.parameterize(title);
+    "/topics/" ++ id ++ "/" ++ StringUtils.parameterize(title) ++ "?new=true";
   Webapi.Dom.(window->Window.setLocation(redirectPath));
 };
 

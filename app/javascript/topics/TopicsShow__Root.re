@@ -164,6 +164,13 @@ let updateTopic = (state, send, event) => {
   |> ignore;
 };
 
+let handleBack = communityId => {
+  let communityPath = "/communities/" ++ communityId;
+  DomUtils.hasUrlParam(~key="new")
+    ? communityPath |> Webapi.Dom.Window.setLocation(Webapi.Dom.window)
+    : DomUtils.goBack();
+};
+
 [@react.component]
 let make =
     (
@@ -191,7 +198,7 @@ let make =
 
   <div className="bg-gray-100">
     <div className="max-w-4xl w-full mt-5 pl-4 lg:pl-0 lg:mx-auto">
-      <a onClick={_ => DomUtils.goBack()} className="btn btn-subtle">
+      <a onClick={_ => handleBack(communityId)} className="btn btn-subtle">
         <i className="fas fa-arrow-left" />
         <span className="ml-2"> {"Back" |> str} </span>
       </a>

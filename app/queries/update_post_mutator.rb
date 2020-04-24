@@ -2,7 +2,7 @@ class UpdatePostMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
   property :id
-  property :body, validates: { length: { minimum: 1, maximum: 100_000 }, presence: true }
+  property :body, validates: { length: { minimum: 1, maximum: 10_000 }, presence: true }
 
   def update_post
     Post.transaction do

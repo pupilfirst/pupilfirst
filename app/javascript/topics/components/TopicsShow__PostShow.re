@@ -357,10 +357,12 @@ let make =
                        toggleShowReplies(showReplies => !showReplies)
                      }
                      className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
-                     {let numberOfReplies =
-                        post |> Post.replies |> Array.length;
-                      (numberOfReplies |> string_of_int)
-                      ++ (numberOfReplies > 1 ? " Replies" : " Reply")
+                     {Inflector.pluralize(
+                        "Reply",
+                        ~count=post |> Post.replies |> Array.length,
+                        ~inclusive=true,
+                        (),
+                      )
                       |> str}
                      <FaIcon
                        classes={

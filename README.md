@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/SVdotCO/pupilfirst/blob/master/LICENSE)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/maintainability)](https://codeclimate.com/github/SVdotCO/pupilfirst/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/test_coverage)](https://codeclimate.com/github/SVdotCO/pupilfirst/test_coverage)
-![TeamCity Status for SVdotCO/pupilfirst](https://ci.sv.co/app/rest/builds/buildType:(id:PupilFirst_ContinuousIntegration)/statusIcon.svg)
+[![Continuous Integration](https://github.com/SVdotCO/pupilfirst/workflows/Continuous%20Integration/badge.svg?branch=master)](https://github.com/SVdotCO/pupilfirst/actions?query=workflow%3A%22Continuous+Integration%22)
 ---
 
 [![Screenshots](https://public-assets.sv.co/random/201909/pupilfirst-screenshots.png)](https://www.pupilfirst.com)

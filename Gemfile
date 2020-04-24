@@ -157,7 +157,9 @@ group :development, :test do
   gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
-  gem 'simplecov', '~> 0.17', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
+
+  # TODO: Simplecov has to be locked to < 0.18 until an issue with cc-test-reporter is fixed: https://github.com/codeclimate/test-reporter/issues/413
+  gem 'simplecov', '< 0.18', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
 end
 
 group :production do

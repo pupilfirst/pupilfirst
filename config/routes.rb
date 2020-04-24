@@ -110,10 +110,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'questions/:id(/:title)/versions', controller: "questions", action: "versions"
-
-  get 'questions/:id(/:title)', controller: "topics", action: "show", as: "question"
-
   get 'topics/:id(/:title)', controller: 'topics', action: 'show', as: 'topic'
 
   get 'posts/:id/versions', controller: "posts", action: "versions", as: "post_version"

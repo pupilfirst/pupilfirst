@@ -99,10 +99,10 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-      - name: Specs
-        run: bundle exec rspec --format progress
-      - name: Code Coverage (After)
-        run: ./cc-test-reporter after-build -t simplecov --exit-code $?
+      - name: Specs & Code Coverage (After)
+        run: |
+          bundle exec rspec --format progress
+          ./cc-test-reporter after-build -t simplecov --exit-code $?
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

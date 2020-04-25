@@ -91,18 +91,23 @@ jobs:
       - name: Restore Assets
         uses: actions/cache@master
         with:
-          path: public/assets
-          key: ${{ runner.os }}-assets
+          path: |
+            public/assets
+            public/packs-test
+          key: ${{ runner.os }}-assets-$GIT_BRANCH
+          restore-keys: |
+            ${{ runner.os }}-assets-
       - name: Restore Lerna
         uses: actions/cache@master
         with:
           path: |
             node_modules
             app/javascript/packages/*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
       - name: Precompile Assets
         run: |
           bundle exec rails assets:precompile
+          echo Precompilation complete. Cleaning assets...
           bundle exec rails assets:clean
       - name: Code Coverage (Before)
         run: |

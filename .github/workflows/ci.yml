@@ -39,7 +39,6 @@ jobs:
       DB_PASSWORD: postgres
       CAPYBARA_MAX_WAIT_TIME: 5
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      COVERAGE: true
 
     steps:
       - name: Setup Timezone
@@ -61,18 +60,20 @@ jobs:
             if (context.eventName === "push") {
               // Pushes have a '/ref/heads/' prefixed to the branch name.
               branchName = context.payload.ref.replace("refs/heads/", "");
-            } else if (context.eventName === "pull_request") {
-              // Pull request branch names need to be read from a different property than pushes.
-              branchName = context.payload.pull_request.head.ref;
             } else {
-              core.setFailed(`This event is not supported: ${context.eventName}`);
+              console.log(`Cancelling, because of event: ${context.eventName}`);
               return;
             }
 
-            console.log(`Setting GIT_BRANCH: ${branchName}`);
-            core.exportVariable("GIT_BRANCH", branchName);
-            console.log(`Settings GIT_COMMIT_SHA: ${context.sha}`);
-            core.exportVariable("GIT_COMMIT_SHA", context.sha);
+            if (branchName === "master") {
+              console.log(`Setting GIT_BRANCH=${branchName}`);
+              core.exportVariable("GIT_BRANCH", branchName);
+              console.log(`Setting GIT_COMMIT_SHA=${context.sha}`);
+              core.exportVariable("GIT_COMMIT_SHA", context.sha);
+            } else {
+              console.log(`Cancelling, because of branch: ${branchName}`);
+              return;
+            }
       - name: Restore Bundle
         uses: actions/cache@master
         with:
@@ -110,15 +111,17 @@ jobs:
           bundle exec rails assets:precompile
           echo Precompilation complete. Cleaning assets...
           bundle exec rails assets:clean
-      - name: Code Coverage (Before)
+      - name: Specs (On master branch)
+        if: env.GIT_BRANCH == 'master'
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-      - name: Specs & Code Coverage (After)
-        run: |
-          bundle exec rspec --format progress
+          COVERAGE=true bundle exec rspec --format progress
           ./cc-test-reporter after-build -t simplecov --exit-code $?
+      - name: Specs (On non-master branches)
+        if: env.GIT_BRANCH != 'master'
+        run: bundle exec rspec --format progress
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :startup do
-    sequence(:name) { |n| Faker::Lorem.words(number: rand(1..3)).push(n).join(' ') }
+    sequence(:name) { |n| Faker::Lorem.words(number: rand(2..3)).push(n).join(' ') }
     level { create :level, :one }
 
     after(:build) do |startup|

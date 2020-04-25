@@ -13,6 +13,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     services:
       postgres:
@@ -111,6 +112,7 @@ jobs:
           bundle exec rails assets:precompile
           echo Precompilation complete. Cleaning assets...
           bundle exec rails assets:clean
+          echo Cleaning complete! All done.
       - name: Specs (On master branch)
         if: env.GIT_BRANCH == 'master'
         run: |

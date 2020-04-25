@@ -51,6 +51,27 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
+      - name: Set ENV for CodeClimate
+        uses: actions/github-script@0.9.0
+        script: |
+          console.log(`Event: ${context.eventName}`);
+          let branchName = "";
+
+          if (context.eventName === "push") {
+            // Pushes have a '/ref/heads/' prefixed to the branch name.
+            branchName = context.payload.ref.replace("refs/heads/", "");
+          } else if (context.eventName === "pull_request") {
+            // Pull request branch names need to be read from a different property than pushes.
+            branchName = context.payload.pull_request.head.ref;
+          } else {
+            core.setFailed(`This event is not supported: ${context.eventName}`);
+            return;
+          }
+
+          console.log(`Setting GIT_BRANCH: ${branchName}`);
+          core.exportVariable("GIT_BRANCH", branchName);
+          console.log(`Settings GIT_COMMIT_SHA: ${context.sha}`);
+          core.exportVariable("GIT_COMMIT_SHA", context.sha);
       - name: Restore Bundle
         uses: actions/cache@master
         with:
@@ -83,17 +104,6 @@ jobs:
         run: |
           bundle exec rails assets:precompile
           bundle exec rails assets:clean
-      - name: Set ENV for CodeClimate (Pull Request)
-        run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
-          echo "::set-env name=GIT_BRANCH::$GITHUB_HEAD_REF"
-          echo "::set-env name=GIT_COMMIT_SHA::$(git rev-parse origin/$GITHUB_HEAD_REF)"
-        if: github.event_name == 'pull_request'
-      - name: Set ENV for CodeClimate (Push)
-        run: |
-          echo "::set-env name=GIT_BRANCH::$GITHUB_REF"
-          echo "::set-env name=GIT_COMMIT_SHA::$GITHUB_SHA"
-        if: github.event_name == 'push'
       - name: Code Coverage (Before)
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

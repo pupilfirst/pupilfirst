@@ -53,25 +53,26 @@ jobs:
           ruby-version: '2.7'
       - name: Set ENV for CodeClimate
         uses: actions/github-script@0.9.0
-        script: |
-          console.log(`Event: ${context.eventName}`);
-          let branchName = "";
+        with:
+          script: |
+            console.log(`Event: ${context.eventName}`);
+            let branchName = "";
 
-          if (context.eventName === "push") {
-            // Pushes have a '/ref/heads/' prefixed to the branch name.
-            branchName = context.payload.ref.replace("refs/heads/", "");
-          } else if (context.eventName === "pull_request") {
-            // Pull request branch names need to be read from a different property than pushes.
-            branchName = context.payload.pull_request.head.ref;
-          } else {
-            core.setFailed(`This event is not supported: ${context.eventName}`);
-            return;
-          }
+            if (context.eventName === "push") {
+              // Pushes have a '/ref/heads/' prefixed to the branch name.
+              branchName = context.payload.ref.replace("refs/heads/", "");
+            } else if (context.eventName === "pull_request") {
+              // Pull request branch names need to be read from a different property than pushes.
+              branchName = context.payload.pull_request.head.ref;
+            } else {
+              core.setFailed(`This event is not supported: ${context.eventName}`);
+              return;
+            }
 
-          console.log(`Setting GIT_BRANCH: ${branchName}`);
-          core.exportVariable("GIT_BRANCH", branchName);
-          console.log(`Settings GIT_COMMIT_SHA: ${context.sha}`);
-          core.exportVariable("GIT_COMMIT_SHA", context.sha);
+            console.log(`Setting GIT_BRANCH: ${branchName}`);
+            core.exportVariable("GIT_BRANCH", branchName);
+            console.log(`Settings GIT_COMMIT_SHA: ${context.sha}`);
+            core.exportVariable("GIT_COMMIT_SHA", context.sha);
       - name: Restore Bundle
         uses: actions/cache@master
         with:

@@ -20,7 +20,7 @@ module AuthorizeCommunityUser
     if post.post_number != 1
       authorized_update?
     else
-      authorized_create? && (((creator == current_user) && !topic.replies.exist?) || current_coach.present?)
+      authorized_create? && (((creator == current_user) && !topic.replies.live.exists?) || current_coach.present?)
     end
   end
 

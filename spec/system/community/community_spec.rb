@@ -227,14 +227,39 @@ feature 'Community', js: true do
   end
 
   scenario 'topic creator can mark a post as solution' do
-    sign_in_user(student_1.user, referer: community_path(community))
-    click_link topic_1.title
+    sign_in_user(student_1.user, referer: topic_path(topic_1))
 
     find("div[aria-label='Options for post #{reply_1.id}']").click
     click_button 'Mark as solution'
     within("div#post-show-#{reply_1.id}") do
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
+  end
+
+  scenario "topic creator can delete a topic when it doesn't have unarchived replies" do
+    sign_in_user(student_1.user, referer: topic_path(topic_1))
+
+    # When the topic has a reply, the first post won't have the delete option.
+    find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
+    expect(page).not_to have_button('Delete Post')
+
+    # So, let's delete the sole reply.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    accept_confirm { click_button('Delete Reply') }
+
+    expect(page).to have_text('Post archived successfully')
+    dismiss_notification
+
+    # This should make the delete option visible on the first post.
+    find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
+    accept_confirm { click_button('Delete Post') }
+
+    # Student should be back on the community main page.
+    expect(page).to have_text(topic_2.title)
+
+    expect(topic_1.reload.archived).to eq(true)
+    expect(topic_1.first_post.archived_at).to be_present
+    expect(topic_1.first_post.archiver).to eq(student_1.user)
   end
 
   scenario 'a target-linked question is viewed by student with access to target' do

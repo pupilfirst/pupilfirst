@@ -283,7 +283,7 @@ let make =
       ariaLabel={
         "Editor for content block " ++ (contentBlock |> ContentBlock.id)
       }>
-      <div className="flex-grow self-stretch">
+      <div className="flex-grow self-stretch min-w-0">
         {innerEditor(
            contentBlock,
            state.contentBlock,

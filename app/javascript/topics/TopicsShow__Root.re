@@ -225,8 +225,8 @@ let make =
        | None => React.null
        }}
       <div
-        className="max-w-4xl w-full mx-auto items-center justify-center bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
-        {<div className="topics-show__">
+        className="max-w-4xl w-full mx-auto bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
+        {<div>
            {state.showTopicEditor
               ? <DisablingCover disabled={state.savingTopic}>
                   <div

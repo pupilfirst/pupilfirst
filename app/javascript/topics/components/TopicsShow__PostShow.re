@@ -216,11 +216,11 @@ let make =
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pt-4" key={post |> Post.id}>
-      <div className="hidden lg:flex flex-col w-1/8">
+      <div className="hidden lg:flex flex-col">
         {post |> Post.solution ? solutionIcon : React.null}
         {<TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />}
       </div>
-      <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body">
+      <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body min-w-0">
         <div className="pt-2" id="body">
           // Topic author details on mobile screen
 
@@ -258,8 +258,8 @@ let make =
                      handleCloseCB={() => toggleShowPostEdit(_ => false)}
                    />
                  </div>
-               : <div className="flex items-start justify-between">
-                   <div className="text-sm">
+               : <div className="flex items-start justify-between min-w-0">
+                   <div className="text-sm min-w-0">
                      <MarkdownBlock
                        markdown={post |> Post.body}
                        className="leading-normal text-sm "

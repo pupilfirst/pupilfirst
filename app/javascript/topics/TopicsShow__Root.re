@@ -262,13 +262,13 @@ let make =
                   className="topics-show__title-container flex items-start justify-between">
                   <h3
                     ariaLabel="Topic Title"
-                    className="leading-snug lg:pl-14 text-lg lg:text-2xl">
+                    className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
                     {state.topic |> Topic.title |> str}
                   </h3>
                   {isCoach || currentUserId == (firstPost |> Post.creatorId)
                      ? <button
                          onClick={_ => send(ShowTopicEditor(true))}
-                         className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-4 lg:invisible">
+                         className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3 lg:invisible">
                          <i className="far fa-edit" />
                          <span className="hidden md:inline-block ml-1">
                            {"Edit Title" |> str}

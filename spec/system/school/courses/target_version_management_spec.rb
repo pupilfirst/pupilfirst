@@ -42,21 +42,27 @@ feature 'Target Content Version Management', js: true do
     find("a[title='Edit versions of target #{target_1.title}']").click
     expect(page).to have_text(target_1.title)
 
+    sleep 1 # Use delay to ensure new timestamp on next version.
     click_button 'Save this version'
     expect(page).to have_text('A new version has been created')
     dismiss_notification
 
     expect(page).to have_text('#2')
+
+    sleep 1 # Use delay to ensure new timestamp on next version.
     click_button 'Save this version'
     expect(page).to have_text('There are no changes from the previous version. Please make changes before trying to save this version.')
     dismiss_notification
 
+    sleep 1 # Use delay to ensure new timestamp on next version.
     target_1.current_target_version.touch
     click_button 'Save this version'
     expect(page).to have_text('A new version has been created')
     dismiss_notification
 
     expect(page).to have_text('#3')
+
+    sleep 1 # Use delay to ensure new timestamp on next version.
     target_1.current_target_version.touch
     click_button 'Save this version'
     expect(page).to have_text('You cannot create more than 3 versions per day')

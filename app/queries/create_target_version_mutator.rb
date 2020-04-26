@@ -33,7 +33,7 @@ class CreateTargetVersionMutator < ApplicationQuery
 
     return if target.target_versions.count == 1 || target.current_target_version.id != target_version.id
 
-    return if target_version.created_at != target_version.updated_at
+    return if target_version.created_at.to_i != target_version.updated_at.to_i
 
     errors[:base] << 'There are no changes from the previous version. Please make changes before trying to save this version.'
   end

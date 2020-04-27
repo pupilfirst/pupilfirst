@@ -149,7 +149,7 @@ let savePost =
 let onBorderAnimationEnd = event => {
   let element =
     ReactEvent.Animation.target(event) |> DomUtils.EventTarget.unsafeToElement;
-  element->Webapi.Dom.Element.setClassName("");
+  element->Webapi.Dom.Element.setClassName("w-full flex flex-col");
 };
 
 let replyToUserInfo = user => {
@@ -203,7 +203,10 @@ let make =
       ariaLabel="Add new reply"
       className="py-2 lg:px-0 max-w-4xl w-full flex mx-auto items-center justify-center relative">
       <div className="flex w-full">
-        <div className="w-full flex flex-col">
+        <div
+          id
+          className="w-full flex flex-col"
+          onAnimationEnd=onBorderAnimationEnd>
           <label
             className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
             htmlFor="new-answer">
@@ -242,7 +245,7 @@ let make =
                  </p>
                </div>
              )}
-          <div id onAnimationEnd=onBorderAnimationEnd>
+          <div>
             <MarkdownEditor
               placeholder="Type in your answer. You can use Markdown to format your response."
               textareaId="new-answer"

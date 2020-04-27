@@ -49,7 +49,7 @@
     <% topics_count = @updates[:community_updates].values.map { |v| v[:topics].length }.sum %>
     <p style="margin-top: 10px;">
       There <%= article(topics_count) %> <strong><%= topics_count %></strong> new
-      <%= 'question'.pluralize(topics_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
+      <%= 'topic'.pluralize(topics_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
       that you are a
       part of.
     </p>

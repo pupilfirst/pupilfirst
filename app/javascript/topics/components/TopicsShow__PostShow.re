@@ -179,7 +179,9 @@ let navigateToEditor = () => {
       | Some(e) =>
         {
           Webapi.Dom.Element.scrollIntoView(e);
-          e->Webapi.Dom.Element.setClassName("topics-show__highlighted-item");
+          e->Webapi.Dom.Element.setClassName(
+            "w-full flex flex-col topics-show__highlighted-item",
+          );
         }
         |> ignore
       | None => Rollbar.error("Could not find the post to scroll to.")

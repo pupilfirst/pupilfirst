@@ -140,7 +140,7 @@ let showContentBlocks =
       </div>
       <div className="ml-2">
         <button
-          className="text-sm appearance-none bg-white border inline-flex items-center justify-between focus:outline-none border-gray-400 hover:bg-gray-100 hover:shadow-lg px-2 py-3"
+          className="btn btn-primary-ghost"
           onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>
           {(
              selectedVersion |> Version.isLatestTargetVersion(versions)

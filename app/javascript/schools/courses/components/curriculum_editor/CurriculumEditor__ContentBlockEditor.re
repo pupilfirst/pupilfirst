@@ -293,7 +293,7 @@ let make =
          )}
       </div>
       <div
-        className="ml-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs">
+        className="pl-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs -mr-10 sticky top-0">
         {controlIcon(
            ~icon="fa-arrow-up",
            ~title="Move Up",

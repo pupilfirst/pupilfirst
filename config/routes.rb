@@ -203,6 +203,7 @@ Rails.application.routes.draw do
       get 'students', action: 'students'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
+      get 'report', action: 'report'
       get 'apply', action: 'apply'
       get '/(:name)', action: 'show'
     end

@@ -18,7 +18,7 @@ module Layouts
 
     def courses
       if current_school_admin.present?
-        # All courses are availalbe to admins.
+        # All courses are available to admins.
         current_school.courses
       else
         # Courses as a coach, plus courses as a student.
@@ -35,7 +35,7 @@ module Layouts
     end
 
     def additional_links
-      [leaderboard, review_dashboard, students] - [nil]
+      [report, leaderboard, review_dashboard, students] - [nil]
     end
 
     def review_dashboard
@@ -46,6 +46,12 @@ module Layouts
 
     def leaderboard
       @course.enable_leaderboard ? "leaderboard" : nil
+    end
+
+    def report
+      if current_founder.present? && current_founder.course.id == @course.id
+        "report"
+      end
     end
 
     def students

@@ -40,6 +40,12 @@ class CoursesController < ApplicationController
     render layout: 'student_course'
   end
 
+  # GET /courses/:id/report
+  def report
+    @course = find_course
+    render layout: 'student_course'
+  end
+
   private
 
   def find_course

@@ -10,6 +10,11 @@ module Image = {
   let make = (url, filename) => {url, filename};
 };
 
+type progressionBehavior =
+  | Limited(int)
+  | Unlimited
+  | Locked;
+
 type t = {
   id: string,
   name: string,
@@ -20,6 +25,7 @@ type t = {
   thumbnail: option(Image.t),
   cover: option(Image.t),
   featured: bool,
+  progressionBehavior,
 };
 
 let name = t => t.name;
@@ -39,6 +45,20 @@ let featured = t => t.featured;
 let cover = t => t.cover;
 
 let thumbnail = t => t.thumbnail;
+
+let progressionBehavior = t =>
+  switch (t.progressionBehavior) {
+  | Limited(_) => `Limited
+  | Unlimited => `Unlimited
+  | Locked => `Locked
+  };
+
+let progressionLimit = t =>
+  switch (t.progressionBehavior) {
+  | Limited(limit) => Some(limit)
+  | Unlimited
+  | Locked => None
+  };
 
 let imageUrl = image => image |> Image.url;
 
@@ -78,48 +98,55 @@ let addImages =
   };
 };
 
-let create =
-    (
-      ~id,
-      ~name,
-      ~description,
-      ~endsAt,
-      ~about,
-      ~publicSignup,
-      ~cover,
-      ~thumbnail,
-      ~featured,
-    ) => {
-  id,
-  name,
-  description,
-  endsAt,
-  about,
-  publicSignup,
-  cover,
-  thumbnail,
-  featured,
-};
-
 let replaceImages = (cover, thumbnail, t) => {...t, cover, thumbnail};
 
 let makeFromJs = rawCourse => {
   let endsAt =
-    switch (rawCourse##endsAt) {
-    | Some(endsAt) =>
-      Some(endsAt |> Json.Decode.string)
-      |> OptionUtils.map(DateFns.parseString)
-    | None => None
+    rawCourse##endsAt
+    ->Belt.Option.map(endsAt => Json.Decode.string(endsAt))
+    ->Belt.Option.map(DateFns.parseString);
+
+  let progressionBehavior =
+    switch (rawCourse##progressionBehavior) {
+    | `Limited => Limited(rawCourse##progressionLimit |> Belt.Option.getExn)
+    | `Unlimited => Unlimited
+    | `Locked => Locked
     };
-  create(
-    ~id=rawCourse##id,
-    ~name=rawCourse##name,
-    ~description=rawCourse##description,
-    ~endsAt,
-    ~about=rawCourse##about,
-    ~publicSignup=rawCourse##publicSignup,
-    ~thumbnail=makeImageFromJs(rawCourse##thumbnail),
-    ~cover=makeImageFromJs(rawCourse##cover),
-    ~featured=rawCourse##featured,
-  );
+
+  {
+    id: rawCourse##id,
+    name: rawCourse##name,
+    description: rawCourse##description,
+    endsAt,
+    about: rawCourse##about,
+    publicSignup: rawCourse##publicSignup,
+    thumbnail: makeImageFromJs(rawCourse##thumbnail),
+    cover: makeImageFromJs(rawCourse##cover),
+    featured: rawCourse##featured,
+    progressionBehavior,
+  };
 };
+
+module Fragments = [%graphql
+  {|
+  fragment allFields on Course {
+    id
+    name
+    description
+    endsAt
+    about
+    publicSignup
+    thumbnail {
+      url
+      filename
+    }
+    cover {
+      url
+      filename
+    }
+    featured
+    progressionBehavior
+    progressionLimit
+  }
+  |}
+];

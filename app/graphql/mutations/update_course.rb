@@ -7,6 +7,8 @@ module Mutations
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
     argument :featured, Boolean, required: true
+    argument :progression_behavior, Types::ProgressionBehaviorType, required: true
+    argument :progression_limit, Integer, required: false
 
     description "Update a course."
 

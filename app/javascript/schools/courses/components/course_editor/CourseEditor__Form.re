@@ -2,6 +2,8 @@ open CourseEditor__Types;
 
 let str = ReasonReact.string;
 
+type progressionBehavior = [ | `Limited | `Unlimited | `Locked];
+
 type state = {
   name: string,
   description: string,
@@ -14,6 +16,8 @@ type state = {
   dirty: bool,
   saving: bool,
   featured: bool,
+  progressionBehavior,
+  progressionLimit: int,
 };
 
 type action =
@@ -23,7 +27,9 @@ type action =
   | UpdateSaving
   | UpdateAbout(string)
   | UpdatePublicSignup(bool)
-  | UpdateFeatured(bool);
+  | UpdateFeatured(bool)
+  | UpdateProgressionBehavior(progressionBehavior)
+  | UpdateProgressionLimit(int);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -44,31 +50,40 @@ let reducer = (state, action) => {
   | UpdatePublicSignup(publicSignup) => {...state, publicSignup, dirty: true}
   | UpdateAbout(about) => {...state, about, dirty: true}
   | UpdateFeatured(featured) => {...state, featured, dirty: true}
+  | UpdateProgressionBehavior(progressionBehavior) => {
+      ...state,
+      progressionBehavior,
+    }
+  | UpdateProgressionLimit(progressionLimit) => {
+      ...state,
+      progressionBehavior: `Limited,
+      progressionLimit,
+    }
   };
 };
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: Date, $about: String!,$publicSignup: Boolean!,$featured: Boolean!) {
-     createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about,publicSignup: $publicSignup,featured: $featured) {
-       course {
-         id
-       }
-     }
-   }
-   |}
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+        course {
+          ...Course.Fragments.AllFields
+        }
+      }
+    }
+  |}
 ];
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation UpdateCourseMutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!) {
-    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured){
-       course {
-         id
-       }
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+        course {
+          ...Course.Fragments.AllFields
+        }
       }
-   }
-   |}
+    }
+  |}
 ];
 
 let updateName = (send, name) => {
@@ -95,28 +110,12 @@ let saveDisabled = state => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
-let handleResponseCB = (id, state, updateCourseCB, course) => {
-  let (thumbnail, cover) =
-    switch (course) {
-    | Some(c) => (c |> Course.thumbnail, c |> Course.cover)
-    | None => (None, None)
-    };
-
-  let course =
-    Course.create(
-      ~id,
-      ~name=state.name,
-      ~description=state.description,
-      ~endsAt=state.endsAt,
-      ~about=Some(state.about),
-      ~publicSignup=state.publicSignup,
-      ~thumbnail,
-      ~cover,
-      ~featured=state.featured,
-    );
-
-  updateCourseCB(course);
-};
+let progressionLimitForQuery = state =>
+  switch (state.progressionBehavior) {
+  | `Unlimited
+  | `Locked => None
+  | `Limited => Some(state.progressionLimit)
+  };
 
 let createCourse = (state, send, updateCourseCB) => {
   send(UpdateSaving);
@@ -132,18 +131,15 @@ let createCourse = (state, send, updateCourseCB) => {
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~featured=state.featured,
+      ~progressionBehavior=state.progressionBehavior,
+      ~progressionLimit=?progressionLimitForQuery(state),
       (),
     );
 
   createCourseQuery
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-       handleResponseCB(
-         result##createCourse##course##id,
-         state,
-         updateCourseCB,
-         None,
-       );
+       Course.makeFromJs(result##createCourse##course) |> updateCourseCB;
        Js.Promise.resolve();
      })
   |> ignore;
@@ -164,18 +160,15 @@ let updateCourse = (state, send, updateCourseCB, course) => {
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~featured=state.featured,
+      ~progressionBehavior=state.progressionBehavior,
+      ~progressionLimit=?progressionLimitForQuery(state),
       (),
     );
 
   updateCourseQuery
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-       handleResponseCB(
-         result##updateCourse##course##id,
-         state,
-         updateCourseCB,
-         Some(course),
-       );
+       Course.makeFromJs(result##updateCourse##course) |> updateCourseCB;
        Js.Promise.resolve();
      })
   |> ignore;
@@ -254,6 +247,9 @@ let computeInitialState = course =>
       about: about(course),
       publicSignup: course |> Course.publicSignup,
       featured: course |> Course.featured,
+      progressionBehavior: course |> Course.progressionBehavior,
+      progressionLimit:
+        Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
     }
   | None => {
       name: "",
@@ -267,6 +263,8 @@ let computeInitialState = course =>
       about: "",
       publicSignup: false,
       featured: true,
+      progressionBehavior: `Limited,
+      progressionLimit: 1,
     }
   };
 

@@ -8,25 +8,10 @@ module CoursesQuery = [%graphql
   {|
   query CoursesQuery {
     courses{
-      id
-      name
-      description
-      endsAt
-      enableLeaderboard
-      about
-      publicSignup
-      featured
-      cover{
-        url
-        filename
-      }
-      thumbnail{
-        url
-        filename
-      }
+      ...Course.Fragments.AllFields
     }
   }
-|}
+  |}
 ];
 
 type editorAction =

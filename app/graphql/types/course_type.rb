@@ -10,6 +10,8 @@ module Types
     field :thumbnail, Types::ImageType, null: true
     field :cover, Types::ImageType, null: true
     field :featured, Boolean, null: false
+    field :progression_behavior, Types::ProgressionBehaviorType, null: false
+    field :progression_limit, Integer, null: true
 
     def grades_and_labels
       object.grade_labels.map do |grade, label|

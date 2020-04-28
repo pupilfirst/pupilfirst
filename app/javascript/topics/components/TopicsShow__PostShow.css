@@ -1,0 +1,30 @@
+.topics-post-show__new-reply-container, .topics-post-show__replies-container {
+  @apply relative;
+}
+
+@screen lg {
+  .topics-post-show__new-reply-container:before, .topics-post-show__replies-container:before {
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 100%;
+    @apply bg-gray-300;
+    left: 24px;
+    top: 0;
+    bottom: 0;
+  }
+  .topics-post-show__new-reply-container:after {
+    position: absolute;
+    content: '';
+    width: 16px;
+    height: 1px;
+    @apply bg-gray-300;
+    left: 24px;
+    bottom: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.topics-show__replies-wrapper:not(:last-child) .topics-post-show__post-body {
+  @apply border-b;
+}

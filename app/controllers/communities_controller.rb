@@ -6,12 +6,15 @@ class CommunitiesController < ApplicationController
   def show
     @community = authorize(Community.find(params[:id]))
     @search = params[:search]
-    @questions = scoped_questions.live.includes(%i[creator answers])
+    @topics = scoped_topics.live.includes([first_post: :creator])
       .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
+
+    # Pre-load the counts of replies on each post.
+    ActiveRecord::Precounter.new(@topics).precount(:replies)
   end
 
-  # GET /community/:community_id/questions/new
-  def new_question
+  # GET /community/:community_id/new_topic
+  def new_topic
     @community = authorize(Community.find(params[:id]))
     target
   end
@@ -25,19 +28,19 @@ class CommunitiesController < ApplicationController
     end
   end
 
-  def scoped_questions
+  def scoped_topics
     if params[:search].present?
-      filtered_question.where('title ILIKE ?', "%#{@search}%")
+      filtered_topics.where('title ILIKE ?', "%#{@search}%")
     else
-      filtered_question
+      filtered_topics
     end
   end
 
-  def filtered_question
+  def filtered_topics
     if target.present?
-      target.questions.where(community: @community)
+      @community.topics.where(target_id: target.id)
     else
-      @community.questions
+      @community.topics
     end
   end
 

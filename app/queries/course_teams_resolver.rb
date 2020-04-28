@@ -24,7 +24,11 @@ class CourseTeamsResolver < ApplicationQuery
   end
 
   def teams_by_tag
-    teams = course.startups.active.joins(founders: :user).includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } }).distinct.order("startups.#{sort_by_string}")
+    teams = course.startups.active
+      .select('"startups".*, LOWER(startups.name) AS startup_name')
+      .joins(founders: :user)
+      .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
+      .distinct.order(sort_by_string)
     tags.present? ? teams.joins(founders: [taggings: :tag]).where(tags: { name: tags }) : teams.includes(founders: [taggings: :tag])
   end
 
@@ -35,13 +39,13 @@ class CourseTeamsResolver < ApplicationQuery
   def sort_by_string
     case sort_by
       when 'name'
-        'name'
+        'startup_name'
       when 'created_at'
         'created_at DESC'
       when 'updated_at'
         'updated_at DESC'
       else
-        'name'
+        'startup_name'
     end
   end
 end

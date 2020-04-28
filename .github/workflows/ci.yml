@@ -13,6 +13,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     services:
       postgres:
@@ -39,7 +40,6 @@ jobs:
       DB_PASSWORD: postgres
       CAPYBARA_MAX_WAIT_TIME: 5
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      COVERAGE: true
 
     steps:
       - name: Setup Timezone
@@ -51,6 +51,30 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
+      - name: Set ENV for CodeClimate
+        uses: actions/github-script@0.9.0
+        with:
+          script: |
+            console.log(`Event: ${context.eventName}`);
+            let branchName = "";
+
+            if (context.eventName === "push") {
+              // Pushes have a '/ref/heads/' prefixed to the branch name.
+              branchName = context.payload.ref.replace("refs/heads/", "");
+            } else {
+              console.log(`Cancelling, because of event: ${context.eventName}`);
+              return;
+            }
+
+            if (branchName === "master") {
+              console.log(`Setting GIT_BRANCH=${branchName}`);
+              core.exportVariable("GIT_BRANCH", branchName);
+              console.log(`Setting GIT_COMMIT_SHA=${context.sha}`);
+              core.exportVariable("GIT_COMMIT_SHA", context.sha);
+            } else {
+              console.log(`Cancelling, because of branch: ${branchName}`);
+              return;
+            }
       - name: Restore Bundle
         uses: actions/cache@master
         with:
@@ -70,39 +94,36 @@ jobs:
       - name: Restore Assets
         uses: actions/cache@master
         with:
-          path: public/assets
-          key: ${{ runner.os }}-assets
+          path: |
+            public/assets
+            public/packs-test
+          key: ${{ runner.os }}-assets-$GIT_BRANCH
+          restore-keys: |
+            ${{ runner.os }}-assets-
       - name: Restore Lerna
         uses: actions/cache@master
         with:
           path: |
             node_modules
             app/javascript/packages/*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
       - name: Precompile Assets
         run: |
           bundle exec rails assets:precompile
+          echo Precompilation complete. Cleaning assets...
           bundle exec rails assets:clean
-      - name: Set ENV for CodeClimate (Pull Request)
-        run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
-          echo "::set-env name=GIT_BRANCH::$GITHUB_HEAD_REF"
-          echo "::set-env name=GIT_COMMIT_SHA::$(git rev-parse origin/$GITHUB_HEAD_REF)"
-        if: github.event_name == 'pull_request'
-      - name: Set ENV for CodeClimate (Push)
-        run: |
-          echo "::set-env name=GIT_BRANCH::$GITHUB_REF"
-          echo "::set-env name=GIT_COMMIT_SHA::$GITHUB_SHA"
-        if: github.event_name == 'push'
-      - name: Code Coverage (Before)
+          echo Cleaning complete! All done.
+      - name: Specs (On master branch)
+        if: env.GIT_BRANCH == 'master'
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-      - name: Specs
+          COVERAGE=true bundle exec rspec --format progress
+          ./cc-test-reporter after-build -t simplecov --exit-code $?
+      - name: Specs (On non-master branches)
+        if: env.GIT_BRANCH != 'master'
         run: bundle exec rspec --format progress
-      - name: Code Coverage (After)
-        run: ./cc-test-reporter after-build -t simplecov --exit-code $?
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

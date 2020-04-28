@@ -89,7 +89,7 @@ let loadContentBlocks = (targetId, send) => {
        let contentBlocks =
          result##contentBlocks |> Js.Array.map(ContentBlock.makeFromJs);
 
-       let versions = Version.makeArrayFromJs(result##versions);
+       let versions = Version.makeArrayFromJs(result##targetVersions);
 
        send(LoadContent(contentBlocks, versions));
 
@@ -151,11 +151,11 @@ let editor = (target, state, send) => {
        | Draft
        | Archived => React.null
        }}
-      <div className="w-1/6">
-        <label className="text-xs block text-gray-600 mb-1">
+      <div className="w-2/6 text-right">
+        <label className="text-xs block text-gray-600">
           {"Last Updated" |> str}
         </label>
-        <span className="truncate text-left"> currentVersion </span>
+        <span className="text-sm font-semibold"> currentVersion </span>
       </div>
     </div>
     {sortedContentBlocks

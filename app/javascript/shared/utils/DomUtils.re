@@ -39,6 +39,21 @@ let isDevelopment = () =>
   | None => false
   };
 
+let goBack = () => {
+  window |> Window.history |> History.back;
+};
+
+let hasUrlParam = (~key) => {
+  (
+    window
+    |> Window.location
+    |> Location.search
+    |> Webapi.Url.URLSearchParams.make
+    |> Webapi.Url.URLSearchParams.get(key)
+  )
+  ->Belt.Option.isSome;
+};
+
 module FormData = {
   type t = Fetch.formData;
 

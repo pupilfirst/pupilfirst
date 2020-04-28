@@ -5,24 +5,20 @@ open CoursesCurriculum__Types;
 let linkToCommunity = (communityId, targetId) =>
   "/communities/" ++ communityId ++ "?target_id=" ++ targetId;
 
-let linkToNewQuestion = (communityId, targetId) =>
-  "/communities/"
-  ++ communityId
-  ++ "/new_question"
-  ++ "?target_id="
-  ++ targetId;
+let linkToNewPost = (communityId, targetId) =>
+  "/communities/" ++ communityId ++ "/new_topic" ++ "?target_id=" ++ targetId;
 
-let questionCard = question => {
-  let questionId = question |> Community.questionId;
-  let questionLink = "/questions/" ++ questionId;
+let topicCard = topic => {
+  let topicId = topic |> Community.topicId;
+  let topicLink = "/topics/" ++ topicId;
   <div
-    href=questionLink
-    key=questionId
+    href=topicLink
+    key=topicId
     className="flex justify-between items-center px-5 py-4 bg-white border-t">
     <span className="text-sm font-semibold">
-      {question |> Community.questionTitle |> str}
+      {topic |> Community.topicTitle |> str}
     </span>
-    <a href=questionLink className="btn btn-primary-ghost btn-small">
+    <a href=topicLink className="btn btn-primary-ghost btn-small">
       {"View" |> str}
     </a>
   </div>;
@@ -37,10 +33,8 @@ let handleEmpty = () =>
         {"There's been no recent discussion about this target." |> str}
       </h4>
       <p>
-        {
-          "Use the community to clear your doubts, and to help your peers!"
-          |> str
-        }
+        {"Use the community to clear your doubts, and to help your peers!"
+         |> str}
       </p>
     </div>
   </div>;
@@ -52,7 +46,7 @@ let actionButtons = (community, targetId) => {
   <div className="flex">
     <a
       title={
-        "Browse all questions about this target in the "
+        "Browse all topics about this target in the "
         ++ communityName
         ++ " community"
       }
@@ -61,50 +55,41 @@ let actionButtons = (community, targetId) => {
       {"Go to community" |> str}
     </a>
     <a
-      title={"Ask a question in the " ++ communityName ++ " community"}
-      href={linkToNewQuestion(communityId, targetId)}
+      title={"Create a topic in the " ++ communityName ++ " community"}
+      href={linkToNewPost(communityId, targetId)}
       className="btn btn-primary">
-      {"Ask a question" |> str}
+      {"Create a topic" |> str}
     </a>
   </div>;
 };
 
 let communityTitle = community =>
   <h5 className="font-bold">
-    {"Questions from " ++ (community |> Community.name) ++ " community" |> str}
+    {"Topics from " ++ (community |> Community.name) ++ " community" |> str}
   </h5>;
 
 [@react.component]
 let make = (~targetId, ~communities) =>
   <div className="">
-    {
-      communities
-      |> List.map(community => {
-           let communityId = community |> Community.id;
-           <div
-             key=communityId
-             className="mt-12 bg-gray-100 px-6 py-4 rounded-lg">
-             <div
-               className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
-               <div> {communityTitle(community)} </div>
-               {actionButtons(community, targetId)}
-             </div>
-             <div
-               className="justify-between rounded-lg overflow-hidden shadow">
-               {
-                 switch (community |> Community.questions) {
-                 | [] => handleEmpty()
-                 | questions =>
-                   questions
-                   |> List.map(question => questionCard(question))
-                   |> Array.of_list
-                   |> React.array
-                 }
-               }
-             </div>
-           </div>;
-         })
-      |> Array.of_list
-      |> React.array
-    }
+    {communities
+     |> List.map(community => {
+          let communityId = community |> Community.id;
+          <div
+            key=communityId className="mt-12 bg-gray-100 px-6 py-4 rounded-lg">
+            <div
+              className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
+              <div> {communityTitle(community)} </div>
+              {actionButtons(community, targetId)}
+            </div>
+            <div className="justify-between rounded-lg overflow-hidden shadow">
+              {switch (community |> Community.topics) {
+               | [||] => handleEmpty()
+               | topics =>
+                 topics |> Array.map(topic => topicCard(topic)) |> React.array
+               }}
+            </div>
+          </div>;
+        })
+     |> Array.of_list
+     |> React.array}
   </div>;

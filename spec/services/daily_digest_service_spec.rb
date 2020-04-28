@@ -16,7 +16,7 @@ describe DailyDigestService do
   let(:school) { create :school, :current }
 
   describe '#execute' do
-    context 'when there are more than 5 questions with no activity in the past seven days' do
+    context 'when there are more than 5 topics with no activity in the past seven days' do
       let(:team_1) { create :startup }
       let(:team_2) { create :team }
       let(:team_3) { create :startup }
@@ -38,12 +38,12 @@ describe DailyDigestService do
       let(:t3_user) { team_3.founders.first.user }
       let(:t4_user) { t4_student_dropped_out.user }
 
-      let!(:question_c1) { create :question, community: community_1, creator: t1_user }
-      let!(:question_c2_1) { create :question, community: community_2, creator: t2_user_1 }
-      let!(:question_c2_2) { create :question, community: community_2, creator: t2_user_2 }
-      let!(:question_c3_1) { create :question, community: community_3, creator: t3_user, created_at: 2.days.ago, archived: true }
-      let!(:question_c3_2) { create :question, community: community_3, creator: t3_user, created_at: 3.days.ago }
-      let!(:question_c3_3) { create :question, community: community_3, creator: t3_user, created_at: 8.days.ago }
+      let!(:topic_c1) { create :topic, :with_first_post, community: community_1, creator: t1_user }
+      let!(:topic_c2_1) { create :topic, :with_first_post, community: community_2, creator: t2_user_1 }
+      let!(:topic_c2_2) { create :topic, :with_first_post, community: community_2, creator: t2_user_2 }
+      let!(:topic_c3_1) { create :topic, :with_first_post, community: community_3, created_at: 2.days.ago, creator: t3_user, archived: true }
+      let!(:topic_c3_2) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, creator: t3_user }
+      let!(:topic_c3_3) { create :topic, :with_first_post, community: community_3, created_at: 8.days.ago, creator: t3_user }
 
       before do
         # Turn off daily digest for the disabled user.
@@ -53,7 +53,7 @@ describe DailyDigestService do
         BounceReport.create!(email: t2_student_bounced.email, bounce_type: 'HardBounce')
       end
 
-      it 'sends digest emails containing details about new and unanswered questions' do
+      it 'sends digest emails containing details about new topics and one without responses' do
         subject.execute
 
         open_email(t1_user.email)
@@ -70,13 +70,13 @@ describe DailyDigestService do
         expect(b1).to include(community_2.name)
         expect(b1).to include(community_3.name)
 
-        # It should include all questions except the archived one and the one from 8 days ago.
-        expect(b1).to include(question_c1.title)
-        expect(b1).to include(question_c2_1.title)
-        expect(b1).to include(question_c2_2.title)
-        expect(b1).to include(question_c3_2.title)
-        expect(b1).not_to include(question_c3_1.title)
-        expect(b1).not_to include(question_c3_3.title)
+        # It should include all topics except the archived one and the one from 8 days ago.
+        expect(b1).to include(topic_c1.title)
+        expect(b1).to include(topic_c2_1.title)
+        expect(b1).to include(topic_c2_2.title)
+        expect(b1).to include(topic_c3_2.title)
+        expect(b1).not_to include(topic_c3_1.title)
+        expect(b1).not_to include(topic_c3_3.title)
 
         open_email(t2_user_1.email)
 
@@ -87,13 +87,13 @@ describe DailyDigestService do
 
         b2 = sanitize_html(current_email.body)
 
-        # It should not have questions from the first community and one from 8 days ago.
-        expect(b2).not_to include(question_c1.title)
-        expect(b2).to include(question_c2_1.title)
-        expect(b2).to include(question_c2_2.title)
-        expect(b2).to include(question_c3_2.title)
-        expect(b2).not_to include(question_c3_1.title)
-        expect(b2).not_to include(question_c3_3.title)
+        # It should not have topics from the first community and one from 8 days ago.
+        expect(b2).not_to include(topic_c1.title)
+        expect(b2).to include(topic_c2_1.title)
+        expect(b2).to include(topic_c2_2.title)
+        expect(b2).to include(topic_c3_2.title)
+        expect(b2).not_to include(topic_c3_1.title)
+        expect(b2).not_to include(topic_c3_3.title)
 
         # User from team 2 with daily digest turned off shouldn't receive the mail.
         open_email(t2_user_2.email)
@@ -116,44 +116,44 @@ describe DailyDigestService do
 
         b3 = sanitize_html(current_email.body)
 
-        # It should only have the one question from third community.
-        expect(b3).not_to include(question_c1.title)
-        expect(b3).not_to include(question_c2_1.title)
-        expect(b3).not_to include(question_c2_2.title)
-        expect(b3).to include(question_c3_2.title)
-        expect(b3).not_to include(question_c3_1.title)
-        expect(b3).not_to include(question_c3_3.title)
+        # It should only have the one topic from third community.
+        expect(b3).not_to include(topic_c1.title)
+        expect(b3).not_to include(topic_c2_1.title)
+        expect(b3).not_to include(topic_c2_2.title)
+        expect(b3).to include(topic_c3_2.title)
+        expect(b3).not_to include(topic_c3_1.title)
+        expect(b3).not_to include(topic_c3_3.title)
       end
 
-      context 'when there are more than 5 questions with no activity in the past seven days' do
-        let!(:question_c3_3) { create :question, community: community_3, creator: t1_user, created_at: 2.days.ago }
-        let!(:question_c3_archived) { create :question, community: community_3, creator: t2_user_1, created_at: 3.days.ago, archived: true }
-        let!(:question_c3_4) { create :question, community: community_3, creator: t2_user_1, created_at: 3.days.ago }
-        let!(:question_c3_5) { create :question, community: community_3, creator: t2_user_2, created_at: 4.days.ago }
-        let!(:question_c3_6) { create :question, community: community_3, creator: t3_user, created_at: 5.days.ago }
-        let!(:question_c3_7) { create :question, community: community_3, creator: t1_user, created_at: 6.days.ago }
-        let!(:question_c3_8) { create :question, community: community_3, creator: t2_user_1, created_at: 6.days.ago }
-        let!(:comment) { create :comment, commentable: question_c3_6, creator: t1_user }
+      context 'when there are more than 5 topics with no activity in the past seven days' do
+        let!(:topic_c3_3) { create :topic, :with_first_post, community: community_3, created_at: 2.days.ago, creator: t1_user }
+        let!(:topic_c3_archived) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, archived: true, creator: t2_user_1 }
+        let!(:topic_c3_4) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, creator: t2_user_1 }
+        let!(:topic_c3_5) { create :topic, :with_first_post, community: community_3, created_at: 4.days.ago, creator: t2_user_2 }
+        let!(:topic_c3_6) { create :topic, :with_first_post, community: community_3, created_at: 5.days.ago, creator: t3_user }
+        let!(:topic_c3_7) { create :topic, :with_first_post, community: community_3, created_at: 6.days.ago, creator: t1_user }
+        let!(:topic_c3_8) { create :topic, :with_first_post, community: community_3, created_at: 6.days.ago, creator: t2_user_1 }
+        let!(:reply) { create :post, topic: topic_c3_6, creator: t3_user, post_number: 2 }
 
-        it 'only mails up to 5 such questions' do
+        it 'only mails up to 5 such topics' do
           subject.execute
 
           open_email(t3_user.email)
 
           b = sanitize_html(current_email.body)
 
-          expect(b).not_to include(question_c1.title)
-          expect(b).not_to include(question_c2_1.title)
-          expect(b).not_to include(question_c2_2.title)
-          expect(b).to include(question_c3_2.title)
-          expect(b).not_to include(question_c3_archived.title) # question was archived.
-          expect(b).to include(question_c3_3.title)
-          expect(b).not_to include(question_c3_8.title)
-          expect(b).to include(question_c3_4.title)
-          expect(b).to include(question_c3_5.title)
-          expect(b).not_to include(question_c3_6.title) # question was commented on.
-          expect(b).to include(question_c3_7.title)
-          expect(b).not_to include(question_c3_8.title)
+          expect(b).not_to include(topic_c1.title)
+          expect(b).not_to include(topic_c2_1.title)
+          expect(b).not_to include(topic_c2_2.title)
+          expect(b).to include(topic_c3_2.title)
+          expect(b).not_to include(topic_c3_archived.title) # topic was archived.
+          expect(b).to include(topic_c3_3.title)
+          expect(b).not_to include(topic_c3_8.title)
+          expect(b).to include(topic_c3_4.title)
+          expect(b).to include(topic_c3_5.title)
+          expect(b).not_to include(topic_c3_6.title) # topic was commented on.
+          expect(b).to include(topic_c3_7.title)
+          expect(b).not_to include(topic_c3_8.title)
         end
       end
     end
@@ -201,8 +201,8 @@ describe DailyDigestService do
         create :faculty_course_enrollment, faculty: team_coach, course: course_2
         create :faculty_startup_enrollment, faculty: team_coach, startup: team_2
         create :faculty_course_enrollment, faculty: coach_2, course: course_3
-        create :question, community: community_1, creator: t1_user
-        create :question, community: community_2, creator: t3_user
+        create :topic, :with_first_post, community: community_1, creator: t1_user
+        create :topic, :with_first_post, community: community_2, creator: t3_user
 
         submission_pending_1.founders << team_1.founders
         submission_pending_2.founders << team_2.founders

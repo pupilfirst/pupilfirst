@@ -46,10 +46,10 @@
   <% end %>
 
   <% if @updates[:community_updates].present? %>
-    <% question_count = @updates[:community_updates].values.map { |v| v[:questions].length }.sum %>
+    <% topics_count = @updates[:community_updates].values.map { |v| v[:topics].length }.sum %>
     <p style="margin-top: 10px;">
-      There <%= article(question_count) %> <strong><%= question_count %></strong> new
-      <%= 'question'.pluralize(question_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
+      There <%= article(topics_count) %> <strong><%= topics_count %></strong> new
+      <%= 'topic'.pluralize(topics_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
       that you are a
       part of.
     </p>
@@ -58,12 +58,12 @@
       <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 120%; color: #6025C0; border-radius: 8px; padding: 0px 4px;' %>
 
       <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
-        <% community_updates[:questions].each do |question| %>
+        <% community_updates[:topics].each do |topic| %>
           <li style="padding: 2px 0px;">
-            <%= link_to question[:title], question_url(question[:id]) %>
+            <%= link_to topic[:title], topic_url(topic[:id]) %>
             <span style="font-size: 75%;">
-            &mdash; <strong><%= question[:author] %></strong>
-              <%= question[:type] == 'new' ? '' : "(no activity, asked #{pluralize(question[:days_ago], 'day')} ago)" %>
+            &mdash; <strong><%= topic[:author] %></strong>
+              <%= topic[:type] == 'new' ? '' : "(no activity, asked #{pluralize(topic[:days_ago], 'day')} ago)" %>
           </span>
           </li>
         <% end %>

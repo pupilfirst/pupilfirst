@@ -1,0 +1,14 @@
+<% presenter = Communities::NewTopicPresenter.new(self, @community, @target) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'CommunitiesNewTopicPack' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'CommunitiesNewTopicPack', nonce: true %>
+<% end %>
+
+<script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>
+
+<div class="w-full" id="react-root"></div>

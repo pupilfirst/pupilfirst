@@ -32,7 +32,7 @@ sanitizationProfiles.permissive = [
   "tr",
   "th",
   "td",
-  "tbody"
+  "tbody",
 ];
 
 sanitizationProfiles.questionAndAnswer = sanitizationProfiles.permissive;
@@ -46,7 +46,7 @@ sanitizationProfiles.comment = [
   "a",
   "code",
   "sup",
-  "sub"
+  "sub",
 ];
 
 sanitizationProfiles.areaOfText = [
@@ -57,7 +57,7 @@ sanitizationProfiles.areaOfText = [
   "s",
   "a",
   "sup",
-  "sub"
+  "sub",
 ];
 
 const allowedCodeClasses = [
@@ -66,6 +66,7 @@ const allowedCodeClasses = [
   "language-css",
   "language-scss",
   "language-ruby",
+  "language-erb",
   "language-reason",
   "language-markup",
   "language-html", // markup
@@ -73,10 +74,10 @@ const allowedCodeClasses = [
   "language-svg", // markup
   "language-mathml", // markup
   "language-yaml",
-  "language-yml" //yaml
+  "language-yml", //yaml
 ];
 
-const sanitizationProfile = profile => {
+const sanitizationProfile = (profile) => {
   if (profile in sanitizationProfiles) {
     return sanitizationProfiles[profile];
   } else {
@@ -92,12 +93,12 @@ const sanitize = (profile, dirtyHtml) => {
     allowedAttributes: {
       a: ["href", "name", "target"],
       img: ["src", "title", "alt"],
-      td: ["rowspan", "colspan"]
+      td: ["rowspan", "colspan"],
     },
     allowedClasses: {
       pre: allowedPreClasses,
-      code: allowedCodeClasses
-    }
+      code: allowedCodeClasses,
+    },
   });
 };
 

@@ -1,0 +1,56 @@
+<% presenter = Posts::VersionsPresenter.new(self, @post) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
+<% end %>
+
+<div class="bg-gray-100 px-3 py-4">
+  <div class="mb-2 container max-w-3xl mx-auto">
+    <div class="border-b pb-3">
+      <%= link_to topic_path(@post.topic, anchor: "post-show-#{@post.id}"), class: "btn btn-default" do %>
+        <i class="fas fa-arrow-left"></i>
+        <span class="ml-2">Back to Post</span>
+      <% end %>
+    </div>
+    <div class="mt-5 inline-block bg-gray-200 border rounded px-2 pb-1 ml-8 md:ml-19">
+      <span class="text-xs font-semibold text-gray-900">Post Edit History</span>
+    </div>
+    <div class="flex items-start mt-4">
+      <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-center text-gray-500"><%= presenter.version_number_for_post %></div>
+      <div class="flex-1 overflow-hidden">
+        <div class="relative bg-white border rounded p-5 pt-8 overflow-hidden">
+          <span class="inline-block text-xs bg-green-500 text-white font-semibold rounded-b py-1 px-2 absolute top-0">Current Version</span>
+          <div class="convert-markdown mt-1" data-json-props="<%= presenter.markdown_prop(@post.body) %>">
+            <%= @post.body %>
+          </div>
+          <div class="mt-4 text-xs">
+            <span>Edited by</span>
+            <span class="font-semibold"><%= presenter.editor_name_for_answer %></span>
+            <span><%= presenter.updated_at(@post) %></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <% presenter.versions.each_with_index do |version, index| %>
+      <div class="flex items-start mt-4">
+        <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-center text-gray-500"><%= presenter.version_number(index) %></div>
+        <div class="flex-1 relative bg-orange-100 border border-orange-200 rounded p-5 overflow-hidden">
+          <div data-json-props="<%= presenter.markdown_prop(version.value) %>" class="convert-markdown">
+            <%= version.value %>
+          </div>
+          <div class="mt-4 text-xs">
+            <span>Edited by</span>
+            <span class="font-semibold"><%= version.user.name %></span>
+            <span><%= presenter.updated_at(version) %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

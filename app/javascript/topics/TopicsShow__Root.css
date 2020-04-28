@@ -1,0 +1,60 @@
+.placeholder {
+  display: none;
+}
+
+@screen lg {
+  .topics-show__title-container:hover .topics-show__title-edit-button {
+    @apply visible;
+  }
+}
+
+.topics-show__highlighted-item {
+  animation: topicPostGlowing 3s 1;
+  -webkit-animation: topicPostGlowing 3s 1;
+  -moz-animation: topicPostGlowing 3s 1;
+}
+
+@keyframes topicPostGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, 1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, .5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 0 #fbd38d;
+  }
+}
+
+@-webkit-keyframes topicPostGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, 1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, .5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 0 #fbd38d;
+  }
+}
+
+@-moz-keyframes topicPostGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, .1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, .5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 0 #fbd38d;
+  }
+}

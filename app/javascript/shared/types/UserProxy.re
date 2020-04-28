@@ -1,10 +1,11 @@
 type t = {
-  id: string,
+  id,
   userId: string,
   name: string,
   avatarUrl: option(string),
   title: string,
-};
+}
+and id = string;
 
 let id = t => t.id;
 let userId = t => t.userId;

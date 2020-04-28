@@ -11,3 +11,6 @@ let decode = json =>
     id: json |> field("id", string),
     name: json |> field("name", string),
   };
+
+let path = t =>
+  "/communities/" ++ t.id ++ "/" ++ (t.name |> StringUtils.parameterize);

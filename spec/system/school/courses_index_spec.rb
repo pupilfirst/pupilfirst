@@ -51,6 +51,8 @@ feature 'Courses Index', js: true do
     expect(course.about).to eq(nil)
     expect(course.enable_leaderboard).to eq(false)
     expect(course.public_signup).to eq(false)
+    expect(course.progression_behavior).to eq(Course::PROGRESSION_BEHAVIOR_LIMITED)
+    expect(course.progression_limit).to eq(1)
   end
 
   context 'when a course exists' do
@@ -67,8 +69,8 @@ feature 'Courses Index', js: true do
       fill_in 'Course name', with: new_course_name, fill_options: { clear: :backspace }
       fill_in 'Course description', with: new_description, fill_options: { clear: :backspace }
       fill_in 'Course end date', with: course_end_date.iso8601
-
       replace_markdown new_about
+      select 'thrice', from: 'progression-limit'
 
       within('div#public-signup') do
         click_button 'Yes'
@@ -83,6 +85,31 @@ feature 'Courses Index', js: true do
       expect(course_1.about).to eq(new_about)
       expect(course_1.public_signup).to eq(true)
       expect(course_1.ends_at.to_date).to eq(course_end_date)
+      expect(course_1.progression_behavior).to eq(Course::PROGRESSION_BEHAVIOR_LIMITED)
+      expect(course_1.progression_limit).to eq(3)
+    end
+
+    scenario 'School admin sets other progression behaviors on existing course' do
+      sign_in_user school_admin.user, referer: school_courses_path
+
+      find("a[title='Edit #{course_1.name}']").click
+
+      click_button 'Unlimited'
+      click_button 'Update Course'
+
+      expect(page).to have_text("Course updated successfully")
+      expect(course_1.reload.progression_behavior).to eq(Course::PROGRESSION_BEHAVIOR_UNLIMITED)
+      expect(course_1.progression_limit).to eq(nil)
+
+      find("a[title='Edit #{course_1.name}']").click
+
+      click_button 'Locked'
+      click_button 'Update Course'
+
+      expect(page).to have_text("Course updated successfully")
+
+      expect(course_1.reload.progression_behavior).to eq(Course::PROGRESSION_BEHAVIOR_LOCKED)
+      expect(course_1.progression_limit).to eq(nil)
     end
 
     scenario 'School admin edits images associated with the course' do

@@ -12,17 +12,20 @@ module Mutations
 
     description "Update a course."
 
-    field :course, Types::CourseType, null: false
+    field :course, Types::CourseType, null: true
 
     def resolve(params)
       mutator = UpdateCourseMutator.new(context, params)
 
-      if mutator.valid?
+      course = if mutator.valid?
         mutator.notify(:success, 'Done!', 'Course updated successfully!')
-        { course: mutator.update_course }
+        mutator.update_course
       else
-        raise "Failed with error codes: #{mutator.error_messages.to_json}"
+        mutator.notify_errors
+        nil
       end
+
+      { course: course }
     end
   end
 end

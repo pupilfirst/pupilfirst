@@ -11,17 +11,20 @@ module Mutations
 
     description "Create a new course."
 
-    field :course, Types::CourseType, null: false
+    field :course, Types::CourseType, null: true
 
     def resolve(params)
       mutator = CreateCourseMutator.new(context, params)
 
-      if mutator.valid?
+      course = if mutator.valid?
         mutator.notify(:success, 'Done!', 'Course created successfully!')
-        { course: mutator.create_course, errors: [] }
+        mutator.create_course
       else
-        { course: nil, errors: mutator.error_messages }
+        mutator.notify_errors
+        nil
       end
+
+      { course: course }
     end
   end
 end

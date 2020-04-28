@@ -8,8 +8,8 @@ module CourseEditable
     property :public_signup
     property :about, validates: { length: { maximum: 10_000 } }
     property :featured
-    property :progression_behavior, validates: { presence: true }
-    property :progression_limit, validates: { numericality: { min: 1, allow_nil: true } }
+    property :progression_behavior, validates: { inclusion: { in: Course::VALID_PROGRESSION_BEHAVIORS } }
+    property :progression_limit, validates: { numericality: { min: 1, max: 3, allow_nil: true } }
 
     validate :limited_progression_requires_details
   end
@@ -23,6 +23,6 @@ module CourseEditable
   end
 
   def sanitized_progression_limit
-    progression_limit if progression_behavior == Course::PROGRESSION_BEHAVIOR_LIMITED
+    progression_behavior == Course::PROGRESSION_BEHAVIOR_LIMITED ? progression_limit : nil
   end
 end

@@ -268,7 +268,7 @@ describe Startups::LevelUpEligibilityService do
       let(:course_1) { create :course, :locked }
       let(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
 
-      context 'when startup has submitted all milestone targets' do
+      context 'when the student has submitted all milestone targets' do
         before do
           submit_target team_target, student
           submit_target non_milestone_team_target, student

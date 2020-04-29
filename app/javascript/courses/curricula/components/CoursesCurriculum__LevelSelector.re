@@ -160,14 +160,18 @@ let make =
     </div>
     {switch (currentStudentId) {
      | Some(_id) =>
-       <a
-         href={"/courses/" ++ Course.id(course) ++ "/report"}
+       <button
+         onClick={_ =>
+           ReasonReactRouter.push(
+             "/courses/" ++ Course.id(course) ++ "/report",
+           )
+         }
          className="btn text-sm bg-gray-300 h-11 rounded-lg">
          <div>
            <FaIcon classes="fas fa-chart-line mr-2" />
            {"Report" |> str}
          </div>
-       </a>
+       </button>
      | None => React.null
      }}
   </div>;

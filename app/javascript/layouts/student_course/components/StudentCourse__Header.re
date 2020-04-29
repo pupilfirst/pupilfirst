@@ -125,7 +125,6 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
                    | "leaderboard" => ("Leaderboard", "leaderboard")
                    | "review" => ("Review", "review")
                    | "students" => ("Students", "students")
-                   | "report" => ("Report", "report")
                    | _unknown => ("Unknown", "")
                    };
 

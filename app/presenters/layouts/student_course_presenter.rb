@@ -35,7 +35,7 @@ module Layouts
     end
 
     def additional_links
-      [report, leaderboard, review_dashboard, students] - [nil]
+      [leaderboard, review_dashboard, students] - [nil]
     end
 
     def review_dashboard
@@ -46,12 +46,6 @@ module Layouts
 
     def leaderboard
       @course.enable_leaderboard ? "leaderboard" : nil
-    end
-
-    def report
-      if current_founder.present? && current_founder.course.id == @course.id
-        "report"
-      end
     end
 
     def students

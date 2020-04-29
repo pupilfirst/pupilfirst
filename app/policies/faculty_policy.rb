@@ -12,7 +12,7 @@ class FacultyPolicy < ApplicationPolicy
     return false if record.connect_link.blank?
 
     if current_founder.present?
-      connectable_courses_of_user = Course.joins(:founders).where(founders: { id: current_founder.user.founders.select(:id) }).where(can_connect: true)
+      connectable_courses_of_user = Course.joins(:founders).where(founders: { id: user.founders.select(:id) }).where(can_connect: true)
 
       # Coach must be assigned to one of the connectable courses of the user
       return true if record.courses.where(id: connectable_courses_of_user).exists?

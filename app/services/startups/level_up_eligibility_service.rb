@@ -13,12 +13,7 @@ module Startups
     ELIGIBILITY_TEAM_MEMBERS_PENDING = -'team_members_pending'
     ELIGIBILITY_DATE_LOCKED = -'date_locked'
 
-    CURRENT_LEVEL_ELIGIBLE_STATUSES = [
-      Targets::StatusService::STATUS_SUBMITTED,
-      Targets::StatusService::STATUS_PASSED
-    ].freeze
-
-    PREVIOUS_LEVEL_ELIGIBLE_STATUSES = [Targets::StatusService::STATUS_PASSED].freeze
+    MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES = [Targets::StatusService::STATUS_PASSED].freeze
 
     def eligible?
       eligibility == ELIGIBILITY_ELIGIBLE
@@ -42,23 +37,24 @@ module Startups
           ELIGIBILITY_DATE_LOCKED
         elsif current_level_milestone_targets.any?
           current_level_targets_attempted = current_level_milestone_targets.all? do |target|
-            target_eligible?(target, CURRENT_LEVEL_ELIGIBLE_STATUSES)
+            target_eligible?(target, current_level_eligible_statuses)
           end
 
           return ELIGIBILITY_TEAM_MEMBERS_PENDING if @team_members_pending
 
-          previous_level_targets_completed = previous_level_milestone_targets.all? do |target|
-            target_eligible?(target, PREVIOUS_LEVEL_ELIGIBLE_STATUSES)
+          minimum_required_level_completed = minimum_required_level_milestone_targets.all? do |target|
+            target_eligible?(target, MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES)
           end
 
           return ELIGIBILITY_TEAM_MEMBERS_PENDING if @team_members_pending
 
-          current_level_targets_attempted && previous_level_targets_completed ? ELIGIBILITY_ELIGIBLE : ELIGIBILITY_NOT_ELIGIBLE
+          current_level_targets_attempted && minimum_required_level_completed ? ELIGIBILITY_ELIGIBLE : ELIGIBILITY_NOT_ELIGIBLE
         else
           ELIGIBILITY_NOT_ELIGIBLE
         end
       end
     end
+
     # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def next_level
@@ -71,21 +67,43 @@ module Startups
 
     private
 
+    def current_level_eligible_statuses
+      case course.progression_behavior
+        when Course::PROGRESSION_BEHAVIOR_LOCKED
+          [Targets::StatusService::STATUS_PASSED]
+        when Course::PROGRESSION_BEHAVIOR_LIMITED, Course::PROGRESSION_BEHAVIOR_UNLIMITED
+          [
+            Targets::StatusService::STATUS_SUBMITTED,
+            Targets::StatusService::STATUS_PASSED
+          ]
+        else
+          raise "Unexpected progression behavior #{course.progression_behavior}"
+      end
+    end
+
     def current_level_milestone_targets
       milestone_groups = current_level.target_groups.where(milestone: true)
       Target.where(target_group: milestone_groups).live
     end
 
-    def previous_level_milestone_targets
-      if current_level.number > 1
-        last_level = current_level.course.levels.find_by(number: current_level.number - 1)
+    def minimum_required_level_milestone_targets
+      case course.progression_behavior
+        when Course::PROGRESSION_BEHAVIOR_LIMITED
+          if current_level.number > course.progression_limit
+            minimum_required_level_number = current_level.number - course.progression_limit
+            minimum_required_level = current_level.course.levels.find_by(number: minimum_required_level_number)
 
-        raise 'Could not find last level for computing level up eligibility' if last_level.blank?
+            raise 'Could not find minimum required level for computing level up eligibility' if minimum_required_level.blank?
 
-        milestone_groups = last_level.target_groups.where(milestone: true)
-        Target.where(target_group: milestone_groups).live
-      else
-        Target.none
+            milestone_groups = minimum_required_level.target_groups.where(milestone: true)
+            Target.where(target_group: milestone_groups).live
+          else
+            Target.none
+          end
+        when Course::PROGRESSION_BEHAVIOR_UNLIMITED, Course::PROGRESSION_BEHAVIOR_LOCKED
+          Target.none
+        else
+          raise "Unexpected progression behavior #{course.progression_behavior}"
       end
     end
 
@@ -110,7 +128,11 @@ module Startups
     end
 
     def current_level
-      @current_level ||= @startup.level
+      @startup.level
+    end
+
+    def course
+      @startup.course
     end
   end
 end

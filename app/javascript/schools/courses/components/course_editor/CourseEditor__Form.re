@@ -426,6 +426,12 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
                 <label className="tracking-wide text-xs font-semibold">
                   {"Progression Behavior" |> str}
                 </label>
+                <HelpIcon
+                  className="ml-2"
+                  link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+                  {"This only applies if your course has targets that requires students to submit their work for review by coaches."
+                   |> str}
+                </HelpIcon>
                 <div className="flex mt-2">
                   <button
                     onClick={_ => send(UpdateProgressionBehavior(`Limited))}

@@ -22,6 +22,9 @@ If set, your course will go into a _read-only_ mode after this date, and student
 **About**\
 This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
 
+**Progression Behavior**\
+This setting controls how students are allowed to level up in your course. This setting only applies if your course contains targets that require your students to submit work for review. There are three possible options, which are described in detail below.
+
 **Feature course in school homepage?**\
 If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
@@ -33,6 +36,18 @@ If enabled, members of the public will be able to sign up for your course.
 To edit a course's details, simply click on the course in the Courses menu. The form for editing a course is identical to the one that you used to create it.
 
 To edit the _contents_ of a course, you'll want to use the [curriculum editor](/curriculum_editor?id=curriculum-editor), which is documented separately.
+
+## Progression Behaviour
+
+The way students progress in a course can be configured in three ways:
+
+1. **Limited (default):** This setting allows students to submit work on milestone targets and then level-up immediately without waiting for a coach to review their submissions. You can configure this setting to allow students to level up once, twice, or up to three times while waiting for their submissions to be reviewed.
+
+   This is the recommended setting, as it allows coaches a bit of time to go through submissions while also not blocking students from working on the content for the next level. When students hit the configured limit, they'll need to wait until they receive a passing grade in the earliest applicable level to proceed; this prevents students from levelling up indiscriminately.
+
+2. **Unlimited**: This setting allows students to level-up all the way to the end of the course, without waiting for coaches to review their submissions.
+
+3. **Locked**: This setting prevents students from levelling-up without getting their submissions reviewed. Students will need to wait for a coach to review their submission, and get a passing grade to be able to start working on reviewed targets in the next level.
 
 ## Course Images
 

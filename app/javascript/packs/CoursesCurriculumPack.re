@@ -13,6 +13,7 @@ let decodeProps = json =>
     json |> field("evaluationCriteria", list(EvaluationCriterion.decode)),
     json |> field("preview", bool),
     json |> field("accessLockedLevels", bool),
+    json |> optional(field("currentStudentId", string)),
   );
 
 let (
@@ -27,6 +28,7 @@ let (
   evaluationCriteria,
   preview,
   accessLockedLevels,
+  currentStudentId,
 ) =
   DomUtils.parseJsonTag() |> decodeProps;
 
@@ -43,6 +45,7 @@ ReactDOMRe.renderToElementWithId(
     evaluationCriteria
     preview
     accessLockedLevels
+    ?currentStudentId
   />,
   "react-root",
 );

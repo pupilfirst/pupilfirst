@@ -15,6 +15,7 @@ module Courses
     def props
       if current_student.present?
         {
+          current_student_id: current_student.id,
           submissions: submissions,
           team: team_details,
           coaches: faculty.map(&:attributes),

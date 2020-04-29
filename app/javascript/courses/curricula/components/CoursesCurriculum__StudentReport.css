@@ -1,0 +1,160 @@
+.student-overlay__student-level-progress {
+  position: relative;
+  height: 5px;
+}
+
+.student-overlay__student-level {
+  @apply bg-gray-300 text-center;
+}
+
+.student-overlay__student-level-count {
+  @apply inline-block text-xs text-gray-500 font-semibold text-center pt-2;
+}
+
+.student-overlay__student-level--reached {
+  @apply bg-yellow-500;
+}
+
+.student-overlay__student-level--current {
+  @apply relative bg-gray-300;
+}
+
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current:after {
+  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
+  content: "";
+}
+
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current.student-overlay__student-level--completed:after {
+  @apply bg-green-400;
+}
+
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  z-index: 10;
+  bottom: 0;
+  width: 22px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%23d69e2e'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: -2px bottom;
+}
+
+:not(.student-overlay__student-level-progress--completed)
+  > .student-overlay__student-level--current.student-overlay__student-level--completed:before {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
+}
+
+.student-overlay__student-level--completed {
+  @apply relative bg-green-400;
+}
+
+.student-overlay__student-level:not(:last-child) {
+  @apply border-r-2 border-white;
+}
+
+.student-overlay__student-level-progress--completed:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  z-index: 10;
+  bottom: 0;
+  width: 22px;
+  right: -16px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
+  background-position: bottom center;
+}
+
+.student-overlay__doughnut-chart-container {
+  @apply shadow rounded-lg p-4 h-full flex flex-col;
+}
+
+.student-overlay__pie-chart-container {
+  @apply bg-gray-100 w-full rounded-lg overflow-hidden;
+}
+
+.student-overlay__doughnut-chart {
+  display: block;
+  max-width: 100%;
+  max-height: 72px;
+}
+
+.student-overlay__doughnut-chart-bg {
+  fill: none;
+  stroke-width: 2;
+}
+
+.student-overlay__doughnut-chart-stroke {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: butt;
+  animation: progress 0.5s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-bg {
+  stroke: #d3bff3;
+}
+
+.student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-bg {
+  stroke: #fcb5d0;
+}
+
+.student-overlay__doughnut-chart.purple
+  .student-overlay__doughnut-chart-stroke {
+  stroke: #6025c0;
+}
+
+.student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-stroke {
+  stroke: #f61067;
+}
+
+.student-overlay__doughnut-chart-text {
+  font-size: 0.45rem;
+  text-anchor: middle;
+}
+
+.student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-text {
+  fill: #6025c0;
+}
+
+.student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-text {
+  fill: #f95392;
+}
+
+.student-overlay__pie-chart {
+  width: 24px;
+  height: 24px;
+  transform: rotate(-90deg);
+  border-radius: 50%;
+}
+
+.student-overlay__pie-chart--pass {
+  background: theme("colors.green.200");
+}
+
+.student-overlay__pie-chart--fail {
+  background: theme("colors.orange.200");
+}
+
+.student-overlay__pie-chart .student-overlay__pie-chart-circle {
+  stroke-width: 32;
+}
+
+.student-overlay__pie-chart-circle--pass {
+  fill: theme("colors.green.200");
+  stroke: theme("colors.green.500");
+}
+
+.student-overlay__pie-chart-circle--fail {
+  fill: theme("colors.orange.200");
+  stroke: theme("colors.orange.500");
+}

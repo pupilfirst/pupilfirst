@@ -55,11 +55,11 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if current_user.faculty.blank?
+    return false if current_user.blank?
 
     return false if student.blank?
 
-    current_user.faculty.reviewable_courses.where(id: student.course).exists?
+    (student.user_id == current_user.id) || current_user.faculty.reviewable_courses.where(id: student.course).exists?
   end
 
   def levels

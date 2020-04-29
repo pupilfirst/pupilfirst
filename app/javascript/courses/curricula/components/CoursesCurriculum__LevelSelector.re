@@ -128,13 +128,16 @@ let make =
       ~showLevelZero,
       ~setShowLevelZero,
       ~levelZero,
+      ~course,
+      ~currentStudentId,
     ) => {
   let orderedLevels =
     levels |> List.filter(l => l |> Level.number != 0) |> Level.sort;
 
-  <div className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
+  <div
+    className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20 max-w-3xl mx-auto flex justify-between">
     <div
-      className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg border border-gray-400 h-11">
+      className="flex justify-center max-w-sm w-full rounded-lg border border-gray-400 h-11">
       {switch (levelZero) {
        | Some(levelZero) =>
          tabbedLevelSelector(
@@ -155,5 +158,17 @@ let make =
          )
        }}
     </div>
+    {switch (currentStudentId) {
+     | Some(_id) =>
+       <a
+         href={"/courses/" ++ Course.id(course) ++ "/report"}
+         className="btn text-sm bg-gray-300 h-11 rounded-lg">
+         <div>
+           <FaIcon classes="fas fa-chart-line mr-2" />
+           {"Report" |> str}
+         </div>
+       </a>
+     | None => React.null
+     }}
   </div>;
 };

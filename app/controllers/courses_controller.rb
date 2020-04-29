@@ -4,7 +4,6 @@ class CoursesController < ApplicationController
   # GET /courses/:id/curriculum
   def curriculum
     @course = find_course
-    @presenter = Courses::CurriculumPresenter.new(view_context, @course)
     render layout: 'student_course'
   end
 
@@ -43,7 +42,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/report
   def report
     @course = find_course
-    render layout: 'student_course'
+    render 'curriculum', layout: 'student_course'
   end
 
   private

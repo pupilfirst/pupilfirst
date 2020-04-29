@@ -16,3 +16,5 @@ module Feedback = CoursesCurriculum__Feedback;
 module Grading = CoursesCurriculum__Grading;
 module Notice = CoursesCurriculum__Notice;
 module ChecklistItem = CoursesCurriculum__ChecklistItem;
+module ReportData = CoursesCurriculum__ReportData;
+module TeamInfo = CoursesCurriculum__TeamInfo;

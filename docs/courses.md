@@ -47,7 +47,7 @@ The way students progress in a course can be configured in three ways:
 
 2. **Unlimited**: This setting allows students to level-up all the way to the end of the course, without waiting for coaches to review their submissions.
 
-3. **Strict**: This setting prevents students from levelling-up without getting their submissions reviewed. Students will need to wait for a coach to review their submission, and get a passing grade to be able to start working on reviewed targets in the next level.
+3. **Strict**: This setting prevents students from levelling-up without getting their submissions reviewed. Students will need to wait for a coach to review their submission, and get a passing grade to be able to submit work on reviewed targets in the next level.
 
 ## Course Images
 

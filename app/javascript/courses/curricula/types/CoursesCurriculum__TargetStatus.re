@@ -191,8 +191,13 @@ let canSubmit = (~resubmittable, t) =>
   | (_, Locked(_)) => false
   };
 
-let currentLevelStatuses = [Submitted, Passed];
-let lastLevelStatuses = [Passed];
+let currentLevelStatuses = progressionBehavior =>
+  switch (progressionBehavior) {
+  | `Limited(_)
+  | `Unlimited => [Submitted, Passed]
+  | `Strict => [Passed]
+  };
+let minimumRequiredLevelStatuses = [Passed];
 
 let matchesStatuses = (statuses, ts) => {
   let matchedTargetStatuses =

@@ -150,6 +150,7 @@ let isLevelComplete = (targetStatuses, eligibleStatuses) => {
 
 let computeLevelUp =
     (
+      course,
       levels,
       teamLevel,
       targetGroups,
@@ -157,13 +158,22 @@ let computeLevelUp =
       statusOfTargets,
       accessLockedLevels,
     ) => {
-  let lastLevel =
-    switch (teamLevel |> Level.number) {
-    | 0
-    | 1 => None
-    | levelTwoOrAbove =>
-      levels
-      |> ListUtils.findOpt(l => l |> Level.number == levelTwoOrAbove - 1)
+  let progressionBehavior = course |> Course.progressionBehavior;
+  let currentLevelNumber = teamLevel |> Level.number;
+
+  let minimumRequiredLevel =
+    switch (progressionBehavior) {
+    | `Strict
+    | `Unlimited => None
+    | `Limited(progressionLimit) =>
+      let minimumLevelNumber = currentLevelNumber - progressionLimit;
+
+      if (minimumLevelNumber >= 1) {
+        levels
+        |> ListUtils.findOpt(l => l |> Level.number == minimumLevelNumber);
+      } else {
+        None;
+      };
     };
 
   let statusOfCurrentMilestoneTargets =
@@ -177,14 +187,14 @@ let computeLevelUp =
   let currentLevelComplete =
     isLevelComplete(
       statusOfCurrentMilestoneTargets,
-      TargetStatus.currentLevelStatuses,
+      TargetStatus.currentLevelStatuses(progressionBehavior),
     );
 
-  let lastLevelComplete =
-    switch (lastLevel) {
+  let minimumRequiredLevelComplete =
+    switch (minimumRequiredLevel) {
     | None => true
     | Some(level) =>
-      let statusOfLastMilestoneTargets =
+      let statusOfMinimumRequiredLevelMilestoneTargets =
         statusOfMilestoneTargets(
           targetGroups,
           targets,
@@ -193,8 +203,8 @@ let computeLevelUp =
         );
 
       isLevelComplete(
-        statusOfLastMilestoneTargets,
-        TargetStatus.lastLevelStatuses,
+        statusOfMinimumRequiredLevelMilestoneTargets,
+        TargetStatus.minimumRequiredLevelStatuses,
       );
     };
 
@@ -204,13 +214,37 @@ let computeLevelUp =
          l |> Level.number == (teamLevel |> Level.number) + 1
        );
 
-  switch (nextLevel, currentLevelComplete, lastLevelComplete) {
-  | (Some(level), true, true) =>
-    level |> Level.isUnlocked || accessLockedLevels ? Notice.LevelUp : Nothing
-  | (None, true, true) => CourseComplete
-  | (Some(_), true, false) => LevelUpBlocked(teamLevel |> Level.number)
-  | (Some(_) | None, false, false | true)
-  | (None, true, false) => Nothing
+  switch (nextLevel) {
+  | None => currentLevelComplete ? Notice.CourseComplete : Nothing
+  | Some(nextLevel) =>
+    if (Level.isUnlocked(nextLevel) || accessLockedLevels) {
+      switch (progressionBehavior) {
+      | `Limited(limit) =>
+        switch (currentLevelComplete, minimumRequiredLevelComplete) {
+        | (true, true) => LevelUp
+        | (true, false) =>
+          LevelUpLimited(currentLevelNumber, currentLevelNumber - limit)
+        | (false, false)
+        | (false, true) => Nothing
+        }
+      | `Unlimited => currentLevelComplete ? LevelUp : Nothing
+      | `Strict =>
+        if (currentLevelComplete) {
+          LevelUp;
+        } else {
+          let currentLevelSubmitted =
+            isLevelComplete(
+              statusOfCurrentMilestoneTargets,
+              [TargetStatus.Submitted, Passed],
+            );
+
+          currentLevelSubmitted
+            ? Notice.LevelUpBlocked(currentLevelNumber) : Nothing;
+        }
+      };
+    } else {
+      Nothing;
+    }
   };
 };
 
@@ -232,6 +266,7 @@ let computeNotice =
   | (false, false, true) => AccessEnded
   | (false, false, false) =>
     computeLevelUp(
+      course,
       levels,
       teamLevel,
       targetGroups,

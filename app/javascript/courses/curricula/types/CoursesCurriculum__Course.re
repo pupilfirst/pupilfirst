@@ -1,23 +1,24 @@
 type t = {
   id: string,
-  endsAt: option(string),
+  endsAt: option(Js.Date.t),
   certificateSerialNumber: option(string),
 };
+
+let endsAt = t => t.endsAt;
+
+let id = t => t.id;
+
+let certificateSerialNumber = t => t.certificateSerialNumber;
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    endsAt: json |> field("endsAt", nullable(string)) |> Js.Null.toOption,
+    endsAt:
+      (json |> optional(field("endsAt", string)))
+      ->Belt.Option.map(DateFns2.parse),
     certificateSerialNumber:
       json |> optional(field("certificateSerialNumber", string)),
   };
 
-let endsAt = t => t.endsAt;
-let id = t => t.id;
-let certificateSerialNumber = t => t.certificateSerialNumber;
-
 let hasEnded = t =>
-  switch (t.endsAt) {
-  | Some(date) => date |> DateFns.parseString |> DateFns.isPast
-  | None => false
-  };
+  t.endsAt->Belt.Option.mapWithDefault(false, DateFns2.isPast);

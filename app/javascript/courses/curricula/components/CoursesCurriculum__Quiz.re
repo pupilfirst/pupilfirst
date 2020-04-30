@@ -36,7 +36,7 @@ let createQuizSubmission =
          addSubmissionCB(
            Submission.make(
              ~id=submission##id,
-             ~createdAt=submission##createdAt,
+             ~createdAt=DateFns2.parseJson(submission##createdAt),
              ~status=Submission.MarkedAsComplete,
              ~checklist,
            ),

@@ -32,16 +32,19 @@ let pendingReview = t =>
 let feedbackSent = t =>
   t.status |> OptionUtils.mapWithDefault(status => status.feedbackSent, false);
 
-let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt->DateFns2.format("MMMM D, YYYY");
 
 let timeDistance = t =>
-  t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);
+  t.createdAt
+  ->DateFns2.formatDistanceToNowStrictOpt(
+      DateFns2.formatDistanceStrictOptions(~addSuffix=true, ()),
+    );
 
 let sortArray = (sortDirection, submissions) => {
   let sortDescending =
     submissions
     |> ArrayUtils.copyAndSort((x, y) =>
-         DateFns.differenceInSeconds(y.createdAt, x.createdAt) |> int_of_float
+         DateFns2.differenceInSeconds(y.createdAt, x.createdAt)
        );
   switch (sortDirection) {
   | `Descending => sortDescending
@@ -68,20 +71,19 @@ let decodeJs = details =>
        | Some(submission) =>
          let status =
            submission##evaluatedAt
-           |> OptionUtils.map(_ =>
-                makeStatus(
-                  ~passedAt=
-                    submission##passedAt
-                    |> OptionUtils.map(DateFns.parseString),
-                  ~feedbackSent=submission##feedbackSent,
-                )
-              );
+           ->Belt.Option.map(_ =>
+               makeStatus(
+                 ~passedAt=
+                   submission##passedAt->Belt.Option.map(DateFns2.parseJson),
+                 ~feedbackSent=submission##feedbackSent,
+               )
+             );
 
          [
            make(
              ~id=submission##id,
              ~title=submission##title,
-             ~createdAt=submission##createdAt |> DateFns.parseString,
+             ~createdAt=DateFns2.parseJson(submission##createdAt),
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
              ~status,

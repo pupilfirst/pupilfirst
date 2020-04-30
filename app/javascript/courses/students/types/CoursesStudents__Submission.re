@@ -23,7 +23,7 @@ let title = t => t.title;
 let sort = submissions =>
   submissions
   |> ArrayUtils.copyAndSort((x, y) =>
-       DateFns.differenceInSeconds(y.createdAt, x.createdAt) |> int_of_float
+       DateFns2.differenceInSeconds(y.createdAt, x.createdAt)
      );
 
 let failed = t => {
@@ -33,7 +33,7 @@ let failed = t => {
   };
 };
 
-let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt->DateFns2.format("MMMM D, YYYY");
 
 let makeFromJs = submissions => {
   submissions
@@ -41,13 +41,14 @@ let makeFromJs = submissions => {
        switch (submission) {
        | Some(submission) =>
          let createdAt =
-           submission##createdAt |> Json.Decode.string |> DateFns.parseString;
+           submission##createdAt |> Json.Decode.string |> DateFns2.parse;
+
          let passedAt =
-           switch (submission##passedAt) {
-           | Some(passedAt) =>
-             Some(passedAt |> Json.Decode.string |> DateFns.parseString)
-           | None => None
-           };
+           submission##passedAt
+           ->Belt.Option.map(passedAt =>
+               passedAt |> Json.Decode.string |> DateFns2.parse
+             );
+
          [
            make(
              ~id=submission##id,

@@ -20,7 +20,7 @@ let createdAt = t => t.createdAt;
 
 let author = t => t.author;
 
-let noteOn = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+let noteOn = t => t.createdAt->DateFns2.format("MMMM D, YYYY");
 
 let sort = notes =>
   notes
@@ -32,7 +32,7 @@ let makeFromJs = note => {
   make(
     ~id=note##id,
     ~note=note##note,
-    ~createdAt=note##createdAt |> DateFns.parseString,
+    ~createdAt=note##createdAt->Json.Decode.string->DateFns2.parse,
     ~author=note##author |> OptionUtils.map(User.makeFromJs),
   );
 };

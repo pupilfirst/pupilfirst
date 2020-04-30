@@ -24,23 +24,22 @@ let makeArrayFromJs = js => {
   let length = js |> Array.length;
   js
   |> ArrayUtils.copyAndSort((x, y) =>
-       DateFns.differenceInSeconds(
-         y##createdAt |> Json.Decode.string |> DateFns.parseString,
-         x##createdAt |> Json.Decode.string |> DateFns.parseString,
+       DateFns2.differenceInSeconds(
+         y##createdAt->DateFns2.parseJson,
+         x##createdAt->DateFns2.parseJson,
        )
-       |> int_of_float
      )
   |> Array.mapi((number, c) =>
        make(
          c##id,
          length - number,
-         c##createdAt |> Json.Decode.string |> DateFns.parseString,
-         c##updatedAt |> Json.Decode.string |> DateFns.parseString,
+         c##createdAt->DateFns2.parseJson,
+         c##updatedAt->DateFns2.parseJson,
        )
      );
 };
 
-let versionAt = t => t.createdAt |> DateFns.format("MMM D, YYYY HH:MM");
+let versionAt = t => t.createdAt->DateFns2.format("MMM d, YYYY HH:mm");
 
 let isLatestTargetVersion = (versions, t) => {
   let length = versions |> Array.length;

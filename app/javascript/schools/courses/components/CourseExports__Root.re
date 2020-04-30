@@ -65,16 +65,18 @@ let readinessString = courseExport =>
   | None =>
     let timeDistance =
       courseExport
-      |> CourseExport.createdAt
-      |> DateFns.parseString
-      |> DateFns.distanceInWordsToNow(~addSuffix=true);
+      ->CourseExport.createdAt
+      ->DateFns2.formatDistanceToNowStrictOpt(
+          DateFns2.formatDistanceStrictOptions(~addSuffix=true, ()),
+        );
     "Requested " ++ timeDistance;
   | Some(file) =>
     let timeDistance =
       file
-      |> CourseExport.fileCreatedAt
-      |> DateFns.parseString
-      |> DateFns.distanceInWordsToNow(~addSuffix=true);
+      ->CourseExport.fileCreatedAt
+      ->DateFns2.formatDistanceToNowStrictOpt(
+          DateFns2.formatDistanceStrictOptions(~addSuffix=true, ()),
+        );
     "Prepared " ++ timeDistance;
   };
 
@@ -135,7 +137,7 @@ let createCourseExport = (state, send, course, event) => {
            CourseExport.make(
              ~id=export##id,
              ~exportType=state.exportType,
-             ~createdAt=export##createdAt,
+             ~createdAt=export##createdAt->Json.Decode.string->DateFns2.parse,
              ~tags=export##tags,
              ~reviewedOnly=export##reviewedOnly,
            );
@@ -303,11 +305,10 @@ let make = (~course, ~exports, ~tags) => {
                <div className="flex mt-4 -mx-3 items-start flex-wrap">
                  {state.courseExports
                   |> ArrayUtils.copyAndSort((x, y) =>
-                       DateFns.differenceInSeconds(
-                         y |> CourseExport.createdAt |> DateFns.parseString,
-                         x |> CourseExport.createdAt |> DateFns.parseString,
+                       DateFns2.differenceInSeconds(
+                         y |> CourseExport.createdAt,
+                         x |> CourseExport.createdAt,
                        )
-                       |> int_of_float
                      )
                   |> Array.map(courseExport =>
                        <div

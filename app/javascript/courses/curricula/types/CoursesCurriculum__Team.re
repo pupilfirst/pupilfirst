@@ -2,7 +2,7 @@ type t = {
   [@live]
   name: string,
   levelId: string,
-  accessEndsAt: option(string),
+  accessEndsAt: option(Js.Date.t),
 };
 
 let decode = json =>
@@ -10,14 +10,12 @@ let decode = json =>
     name: json |> field("name", string),
     levelId: json |> field("levelId", string),
     accessEndsAt:
-      json |> field("accessEndsAt", nullable(string)) |> Js.Null.toOption,
+      (json |> optional(field("accessEndsAt", string)))
+      ->Belt.Option.map(DateFns2.parse),
   };
 
 let levelId = t => t.levelId;
 let accessEndsAt = t => t.accessEndsAt;
 
 let accessEnded = t =>
-  switch (t.accessEndsAt) {
-  | Some(date) => date |> DateFns.parseString |> DateFns.isPast
-  | None => false
-  };
+  t.accessEndsAt->Belt.Option.mapWithDefault(false, DateFns2.isPast);

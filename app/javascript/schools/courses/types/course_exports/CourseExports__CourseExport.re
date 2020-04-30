@@ -4,7 +4,7 @@ type id = string;
 
 type file = {
   path: string,
-  createdAt: string,
+  createdAt: Js.Date.t,
 };
 
 type exportType =
@@ -14,7 +14,7 @@ type exportType =
 type t = {
   id,
   tags: array(string),
-  createdAt: string,
+  createdAt: Js.Date.t,
   file: option(file),
   reviewedOnly: bool,
   exportType,
@@ -32,13 +32,13 @@ let filePath = file => file.path;
 let decodeFile = json =>
   Json.Decode.{
     path: json |> field("path", string),
-    createdAt: json |> field("createdAt", string),
+    createdAt: json |> field("createdAt", string) |> DateFns2.parse,
   };
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    createdAt: json |> field("createdAt", string),
+    createdAt: json |> field("createdAt", string) |> DateFns2.parse,
     file: json |> field("file", nullable(decodeFile)) |> Js.Null.toOption,
     tags: json |> field("tags", array(string)),
     exportType:

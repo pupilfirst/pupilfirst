@@ -42,10 +42,6 @@ jobs:
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
     steps:
-      - name: Setup Timezone
-        uses: zcong1993/setup-timezone@master
-        with:
-          timezone: Asia/Kolkata
       - uses: actions/checkout@v2
       - name: Use Ruby 2.7
         uses: actions/setup-ruby@v1

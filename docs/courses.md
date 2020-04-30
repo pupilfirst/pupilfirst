@@ -6,7 +6,7 @@ Courses hold your content and can have any number of students enrolled, with coa
 
 To create a new course, head to the Courses menu from the school administration interface's navigation bar, and click the _Add New Course_ button at the top of the page.
 
-![Courses page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574237472/pupilfirst_documentation/courses/courses_page_p8p5tg.png)
+![Courses page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1588240011/pupilfirst_documentation/courses/courses_index_onpuxi.png)
 
 The form that pops up will ask you for a few details:
 

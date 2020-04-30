@@ -103,12 +103,12 @@ feature 'Courses Index', js: true do
 
       find("a[title='Edit #{course_1.name}']").click
 
-      click_button 'Locked'
+      click_button 'Strict'
       click_button 'Update Course'
 
       expect(page).to have_text("Course updated successfully")
 
-      expect(course_1.reload.progression_behavior).to eq(Course::PROGRESSION_BEHAVIOR_LOCKED)
+      expect(course_1.reload.progression_behavior).to eq(Course::PROGRESSION_BEHAVIOR_STRICT)
       expect(course_1.progression_limit).to eq(nil)
     end
 

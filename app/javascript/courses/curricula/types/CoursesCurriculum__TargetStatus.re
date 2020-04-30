@@ -195,7 +195,7 @@ let currentLevelStatuses = progressionBehavior =>
   switch (progressionBehavior) {
   | `Limited(_)
   | `Unlimited => [Submitted, Passed]
-  | `Locked => [Passed]
+  | `Strict => [Passed]
   };
 let minimumRequiredLevelStatuses = [Passed];
 

@@ -2,7 +2,7 @@ open CourseEditor__Types;
 
 let str = ReasonReact.string;
 
-type progressionBehavior = [ | `Limited | `Unlimited | `Locked];
+type progressionBehavior = [ | `Limited | `Unlimited | `Strict];
 
 type state = {
   name: string,
@@ -117,7 +117,7 @@ let formClasses = value =>
 let progressionLimitForQuery = state =>
   switch (state.progressionBehavior) {
   | `Unlimited
-  | `Locked => None
+  | `Strict => None
   | `Limited => Some(state.progressionLimit)
   };
 
@@ -481,14 +481,14 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
                     </span>
                   </button>
                   <button
-                    onClick={_ => send(UpdateProgressionBehavior(`Locked))}
+                    onClick={_ => send(UpdateProgressionBehavior(`Strict))}
                     className={progressionBehaviorButtonClasses(
                       state,
-                      `Locked,
+                      `Strict,
                       "ml-1",
                     )}>
                     <div className="font-bold text-xl">
-                      {"Locked" |> str}
+                      {"Strict" |> str}
                     </div>
                     <span className="text-xs">
                       {"Students can level up only after getting submissions reviewed, and passing."

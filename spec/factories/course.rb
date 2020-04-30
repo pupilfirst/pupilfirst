@@ -12,7 +12,7 @@ FactoryBot.define do
     end
 
     trait(:locked) do
-      progression_behavior { Course::PROGRESSION_BEHAVIOR_LOCKED }
+      progression_behavior { Course::PROGRESSION_BEHAVIOR_STRICT }
       progression_limit { nil }
     end
   end

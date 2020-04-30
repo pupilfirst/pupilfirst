@@ -5,7 +5,7 @@ type t =
   | AccessEnded
   | LevelUp
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpLocked(currentLevelNumber)
+  | LevelUpBlocked(currentLevelNumber) // For when the Strict progression behavior applies.
   | Nothing
 and currentLevelNumber = int
 and minimumRequiredLevelNumber = int;
@@ -31,6 +31,6 @@ let icon = t =>
   | AccessEnded => accessEndedImage
   | LevelUp => levelUpImage
   | LevelUpLimited(_) => levelUpBlockedImage
-  | LevelUpLocked(_) => levelUpBlockedImage
+  | LevelUpBlocked(_) => levelUpBlockedImage
   | Nothing => ""
   };

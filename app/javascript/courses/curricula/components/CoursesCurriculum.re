@@ -163,7 +163,7 @@ let computeLevelUp =
 
   let minimumRequiredLevel =
     switch (progressionBehavior) {
-    | `Locked
+    | `Strict
     | `Unlimited => None
     | `Limited(progressionLimit) =>
       let minimumLevelNumber = currentLevelNumber - progressionLimit;
@@ -228,7 +228,7 @@ let computeLevelUp =
         | (false, true) => Nothing
         }
       | `Unlimited => currentLevelComplete ? LevelUp : Nothing
-      | `Locked =>
+      | `Strict =>
         if (currentLevelComplete) {
           LevelUp;
         } else {
@@ -239,7 +239,7 @@ let computeLevelUp =
             );
 
           currentLevelSubmitted
-            ? Notice.LevelUpLocked(currentLevelNumber) : Nothing;
+            ? Notice.LevelUpBlocked(currentLevelNumber) : Nothing;
         }
       };
     } else {

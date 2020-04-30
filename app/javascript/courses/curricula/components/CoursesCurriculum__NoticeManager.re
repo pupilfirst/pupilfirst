@@ -83,7 +83,7 @@ let accessEndedMessage = () => {
   showNotice(~title, ~description, ~notice=Notice.AccessEnded, ());
 };
 
-let levelUpLockedMessage = currentLevelNumber => {
+let levelUpBlockedMessage = currentLevelNumber => {
   let title = "Review Pending";
   let description =
     "You have submitted all milestone targets in level "
@@ -93,7 +93,7 @@ let levelUpLockedMessage = currentLevelNumber => {
   showNotice(
     ~title,
     ~description,
-    ~notice=Notice.LevelUpLocked(currentLevelNumber),
+    ~notice=Notice.LevelUpBlocked(currentLevelNumber),
     (),
   );
 };
@@ -140,8 +140,8 @@ let make = (~notice, ~course) => {
   | LevelUp => renderLevelUp(course)
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber) =>
     levelUpLimitedMessage(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpLocked(currentLevelNumber) =>
-    levelUpLockedMessage(currentLevelNumber)
+  | LevelUpBlocked(currentLevelNumber) =>
+    levelUpBlockedMessage(currentLevelNumber)
   | Nothing => React.null
   };
 };

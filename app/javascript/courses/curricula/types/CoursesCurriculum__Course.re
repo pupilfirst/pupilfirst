@@ -3,7 +3,7 @@ exception UnexpectedProgressionBehavior(string);
 type progressionBehavior =
   | Limited(int)
   | Unlimited
-  | Locked;
+  | Strict;
 
 type t = {
   id: string,
@@ -21,7 +21,7 @@ let decode = json => {
         json |> Json.Decode.(field("progressionLimit", int));
       Limited(progressionLimit);
     | "Unlimited" => Unlimited
-    | "Locked" => Locked
+    | "Strict" => Strict
     | otherValue =>
       Rollbar.error("Unexpected progressionBehavior: " ++ otherValue);
       raise(UnexpectedProgressionBehavior(behavior));
@@ -41,7 +41,7 @@ let id = t => t.id;
 let certificateSerialNumber = t => t.certificateSerialNumber;
 let progressionBehavior = t =>
   switch (t.progressionBehavior) {
-  | Locked => `Locked
+  | Strict => `Strict
   | Unlimited => `Unlimited
   | Limited(progressionLimit) => `Limited(progressionLimit)
   };

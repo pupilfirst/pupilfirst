@@ -69,7 +69,7 @@ module Startups
 
     def current_level_eligible_statuses
       case course.progression_behavior
-        when Course::PROGRESSION_BEHAVIOR_LOCKED
+        when Course::PROGRESSION_BEHAVIOR_STRICT
           [Targets::StatusService::STATUS_PASSED]
         when Course::PROGRESSION_BEHAVIOR_LIMITED, Course::PROGRESSION_BEHAVIOR_UNLIMITED
           [
@@ -100,7 +100,7 @@ module Startups
           else
             Target.none
           end
-        when Course::PROGRESSION_BEHAVIOR_UNLIMITED, Course::PROGRESSION_BEHAVIOR_LOCKED
+        when Course::PROGRESSION_BEHAVIOR_UNLIMITED, Course::PROGRESSION_BEHAVIOR_STRICT
           Target.none
         else
           raise "Unexpected progression behavior #{course.progression_behavior}"

@@ -13,7 +13,7 @@ module Image = {
 type progressionBehavior =
   | Limited(int)
   | Unlimited
-  | Locked;
+  | Strict;
 
 type t = {
   id: string,
@@ -50,14 +50,14 @@ let progressionBehavior = t =>
   switch (t.progressionBehavior) {
   | Limited(_) => `Limited
   | Unlimited => `Unlimited
-  | Locked => `Locked
+  | Strict => `Strict
   };
 
 let progressionLimit = t =>
   switch (t.progressionBehavior) {
   | Limited(limit) => Some(limit)
   | Unlimited
-  | Locked => None
+  | Strict => None
   };
 
 let imageUrl = image => image |> Image.url;
@@ -110,7 +110,7 @@ let makeFromJs = rawCourse => {
     switch (rawCourse##progressionBehavior) {
     | `Limited => Limited(rawCourse##progressionLimit |> Belt.Option.getExn)
     | `Unlimited => Unlimited
-    | `Locked => Locked
+    | `Strict => Strict
     };
 
   {

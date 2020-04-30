@@ -1848,7 +1848,7 @@
             "deprecationReason": null
           },
           {
-            "name": "Locked",
+            "name": "Strict",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

@@ -23,7 +23,7 @@ If set, your course will go into a _read-only_ mode after this date, and student
 This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
 
 **Progression Behavior**\
-This setting controls how students are allowed to level up in your course. This setting only applies if your course contains targets that require your students to submit work for review. There are three possible options, which are described in detail below.
+This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/targets?id=milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
 
 **Feature course in school homepage?**\
 If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).

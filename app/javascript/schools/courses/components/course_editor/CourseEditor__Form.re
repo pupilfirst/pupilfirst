@@ -429,7 +429,7 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
                 <HelpIcon
                   className="ml-2"
                   link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
-                  {"This only applies if your course has targets that requires students to submit their work for review by coaches."
+                  {"This only applies if your course has milestone targets that requires students to submit their work for review by coaches."
                    |> str}
                 </HelpIcon>
                 <div className="flex mt-2">

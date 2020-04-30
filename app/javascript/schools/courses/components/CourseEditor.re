@@ -118,7 +118,7 @@ let make = () => {
         </button>
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
-        <div className="max-w-3xl flex flex-wrap mx-auto">
+        <div className="max-w-3xl flex flex-wrap mx-auto w-full">
           {state.courses
            |> Course.sort
            |> List.map(course =>

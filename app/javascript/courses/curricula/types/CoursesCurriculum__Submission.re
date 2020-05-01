@@ -27,17 +27,17 @@ let pending = t => {
   };
 };
 
-let createdAtPretty = t => t.createdAt->DateFns2.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let sort = ts =>
   ts->Belt.List.sort((t1, t2) => {
-    t1.createdAt->DateFns2.differenceInSeconds(t2.createdAt)
+    t1.createdAt->DateFns.differenceInSeconds(t2.createdAt)
   });
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    createdAt: json |> field("createdAt", DateFns2.parseJson),
+    createdAt: json |> field("createdAt", DateFns.parseJSONObject),
     status:
       switch (json |> field("status", string)) {
       | "marked_as_complete" => MarkedAsComplete

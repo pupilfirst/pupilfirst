@@ -43,10 +43,11 @@ let makeFromJs = details =>
   |> Js.Array.map(s =>
        make(
          ~id=s##id,
-         ~createdAt=DateFns2.parseJson(s##createdAt),
-         ~passedAt=s##passedAt->Belt.Option.map(DateFns2.parseJson),
+         ~createdAt=DateFns.parseJSONObject(s##createdAt),
+         ~passedAt=s##passedAt->Belt.Option.map(DateFns.parseJSONObject),
          ~evaluatorName=s##evaluatorName,
-         ~evaluatedAt=s##evaluatedAt->Belt.Option.map(DateFns2.parseJson),
+         ~evaluatedAt=
+           s##evaluatedAt->Belt.Option.map(DateFns.parseJSONObject),
          ~feedback=
            s##feedback
            |> Js.Array.map(f =>
@@ -54,7 +55,7 @@ let makeFromJs = details =>
                   ~coachName=f##coachName,
                   ~coachAvatarUrl=f##coachAvatarUrl,
                   ~coachTitle=f##coachTitle,
-                  ~createdAt=DateFns2.parseJson(f##createdAt),
+                  ~createdAt=DateFns.parseJSONObject(f##createdAt),
                   ~value=f##value,
                 )
               ),

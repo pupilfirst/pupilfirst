@@ -32,13 +32,13 @@ let filePath = file => file.path;
 let decodeFile = json =>
   Json.Decode.{
     path: json |> field("path", string),
-    createdAt: json |> field("createdAt", string) |> DateFns2.parse,
+    createdAt: json |> field("createdAt", string) |> DateFns.parseJSON,
   };
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    createdAt: json |> field("createdAt", string) |> DateFns2.parse,
+    createdAt: json |> field("createdAt", string) |> DateFns.parseJSON,
     file: json |> field("file", nullable(decodeFile)) |> Js.Null.toOption,
     tags: json |> field("tags", array(string)),
     exportType:

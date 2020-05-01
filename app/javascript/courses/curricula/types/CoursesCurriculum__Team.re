@@ -11,11 +11,11 @@ let decode = json =>
     levelId: json |> field("levelId", string),
     accessEndsAt:
       (json |> optional(field("accessEndsAt", string)))
-      ->Belt.Option.map(DateFns2.parse),
+      ->Belt.Option.map(DateFns.parseJSON),
   };
 
 let levelId = t => t.levelId;
 let accessEndsAt = t => t.accessEndsAt;
 
 let accessEnded = t =>
-  t.accessEndsAt->Belt.Option.mapWithDefault(false, DateFns2.isPast);
+  t.accessEndsAt->Belt.Option.mapWithDefault(false, DateFns.isPast);

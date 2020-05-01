@@ -6,7 +6,7 @@ let currentTimezone = () => "Asia/Kolkata";
 [@bs.module "date-fns-tz"]
 external utcToZonedTime: (Js.Date.t, string) => Js.Date.t = "utcToZonedTime";
 
-[@bs.module "date-fns-2"]
+[@bs.module "date-fns"]
 external formatDistanceStrict: (Js.Date.t, Js.Date.t) => string =
   "formatDistanceStrict";
 
@@ -22,7 +22,7 @@ type formatDistanceStrictOptions = {
   locale,
 };
 
-[@bs.module "date-fns-2"]
+[@bs.module "date-fns"]
 external formatDistanceStrictOpt:
   (Js.Date.t, Js.Date.t, formatDistanceStrictOptions) => string =
   "formatDistanceStrict";
@@ -53,15 +53,15 @@ external formatTz: (Js.Date.t, string, formatOptions) => string = "format";
 let format = (date, fmt) =>
   formatTz(date, fmt, formatOptions(~timeZone=currentTimezone(), ()));
 
-[@bs.module "date-fns-2"]
-external parseJson: Js.Json.t => Js.Date.t = "parseJSON";
+[@bs.module "date-fns"]
+external parseJSONObject: Js.Json.t => Js.Date.t = "parseJSON";
 
-[@bs.module "date-fns-2"] external parse: string => Js.Date.t = "parseJSON";
+[@bs.module "date-fns"] external parseJSON: string => Js.Date.t = "parseJSON";
 
-[@bs.module "date-fns-2"]
+[@bs.module "date-fns"]
 external isBefore: (Js.Date.t, Js.Date.t) => bool = "isBefore";
 
-[@bs.module "date-fns-2"]
+[@bs.module "date-fns"]
 external isAfter: (Js.Date.t, Js.Date.t) => bool = "isAfter";
 
 let isPast = date => {

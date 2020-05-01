@@ -48,7 +48,7 @@ type cachedTarget = {
   prerequisiteTargetIds: list(string),
 };
 
-let isPast = date => date->Belt.Option.mapWithDefault(false, DateFns2.isPast);
+let isPast = date => date->Belt.Option.mapWithDefault(false, DateFns.isPast);
 
 let makePending = targets =>
   targets |> List.map(t => {targetId: t |> Target.id, status: Pending});

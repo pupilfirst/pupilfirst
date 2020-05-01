@@ -13,7 +13,7 @@ let avatar = (avatarUrl, name) => {
 let make = (~user, ~createdAt) =>
   <div>
     <p className="hidden lg:block text-xs text-gray-800">
-      {createdAt->DateFns2.format("do MMMM, YYYY HH:mm") |> str}
+      {createdAt->DateFns.format("do MMMM, yyyy HH:mm") |> str}
     </p>
     <div
       className="pl-0 py-2 lg:p-2 flex flex-row items-center lg:bg-gray-100 lg:border rounded-lg lg:mt-1">
@@ -27,6 +27,6 @@ let make = (~user, ~createdAt) =>
       </div>
     </div>
     <p className="block lg:hidden pb-2 text-xs text-gray-800">
-      {createdAt->DateFns2.format("do MMMM, YYYY HH:mm") |> str}
+      {createdAt->DateFns.format("do MMMM, yyyy HH:mm") |> str}
     </p>
   </div>;

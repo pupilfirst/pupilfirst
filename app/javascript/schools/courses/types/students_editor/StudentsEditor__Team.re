@@ -49,7 +49,7 @@ let makeFromJS = teamDetails => {
              ~students,
              ~coachIds,
              ~accessEndsAt=
-               team##accessEndsAt->Belt.Option.map(DateFns2.parseJson),
+               team##accessEndsAt->Belt.Option.map(DateFns.parseJSONObject),
            ),
          ];
        | None => []
@@ -86,4 +86,4 @@ let unsafeFind = (teams, componentName, teamId) => {
 };
 
 let active = t =>
-  t.accessEndsAt->Belt.Option.mapWithDefault(true, DateFns2.isFuture);
+  t.accessEndsAt->Belt.Option.mapWithDefault(true, DateFns.isFuture);

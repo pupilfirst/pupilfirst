@@ -32,19 +32,19 @@ let pendingReview = t =>
 let feedbackSent = t =>
   t.status |> OptionUtils.mapWithDefault(status => status.feedbackSent, false);
 
-let createdAtPretty = t => t.createdAt->DateFns2.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let timeDistance = t =>
   t.createdAt
-  ->DateFns2.formatDistanceToNowStrictOpt(
-      DateFns2.formatDistanceStrictOptions(~addSuffix=true, ()),
+  ->DateFns.formatDistanceToNowStrictOpt(
+      DateFns.formatDistanceStrictOptions(~addSuffix=true, ()),
     );
 
 let sortArray = (sortDirection, submissions) => {
   let sortDescending =
     submissions
     |> ArrayUtils.copyAndSort((x, y) =>
-         DateFns2.differenceInSeconds(y.createdAt, x.createdAt)
+         DateFns.differenceInSeconds(y.createdAt, x.createdAt)
        );
   switch (sortDirection) {
   | `Descending => sortDescending
@@ -74,7 +74,8 @@ let decodeJs = details =>
            ->Belt.Option.map(_ =>
                makeStatus(
                  ~passedAt=
-                   submission##passedAt->Belt.Option.map(DateFns2.parseJson),
+                   submission##passedAt
+                   ->Belt.Option.map(DateFns.parseJSONObject),
                  ~feedbackSent=submission##feedbackSent,
                )
              );
@@ -83,7 +84,7 @@ let decodeJs = details =>
            make(
              ~id=submission##id,
              ~title=submission##title,
-             ~createdAt=DateFns2.parseJson(submission##createdAt),
+             ~createdAt=DateFns.parseJSONObject(submission##createdAt),
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
              ~status,
@@ -99,7 +100,7 @@ let replace = (e, l) => l |> Array.map(s => s.id == e.id ? e : s);
 let statusEq = (overlaySubmission, t) =>
   switch (
     t.status,
-    overlaySubmission |> CoursesReview__OverlaySubmission.evaluatedAt,
+    CoursesReview__OverlaySubmission.evaluatedAt(overlaySubmission),
   ) {
   | (None, None) => true
   | (Some({passedAt}), Some(_)) =>

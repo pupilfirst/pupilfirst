@@ -1,12 +1,5 @@
 type t = Js.Date.t;
 
-[@bs.val] [@bs.module "date-fns"]
-external dateFormat: (t, string) => string = "format";
-
-[@bs.val] [@bs.module "date-fns"] external dateParse: string => t = "parse";
-
-let parse = s => s |> dateParse;
-
 type format =
   | OnlyDate
   | DateWithYearAndTime;
@@ -14,18 +7,15 @@ type format =
 let format = (f, t) => {
   let formatString =
     switch (f) {
-    | OnlyDate => "MMM D, YYYY"
-    | DateWithYearAndTime => "Do MMM YYYY HH:mm"
+    | OnlyDate => "MMM d, yyyy"
+    | DateWithYearAndTime => "do MMM yyyy HH:mm"
     };
-  dateFormat(t, formatString);
-};
 
-let stingToFormatedTime = (f, t) => format(f, parse(t));
+  DateFns.format(t, formatString);
+};
 
 let randomId = () => {
   let number = Js.Math.random() |> Js.Float.toString;
   let time = Js.Date.now() |> Js.Float.toString;
   "I" ++ time ++ number |> Js.String.replace(".", "-");
 };
-
-let decode = json => json |> Json.Decode.string |> DateFns.parseString;

@@ -108,7 +108,7 @@ let handleLockedLevel = level =>
     {switch (level |> Level.unlockOn) {
      | Some(date) =>
        let dateString =
-         date |> DateFns.parseString |> DateFns.format("MMMM D, YYYY");
+         date->DateFns.parseJSON->DateFns.format("MMMM d, yyyy");
        <div className="font-semibold text-md px-3">
          <p> {"The level is currently locked!" |> str} </p>
          <p>

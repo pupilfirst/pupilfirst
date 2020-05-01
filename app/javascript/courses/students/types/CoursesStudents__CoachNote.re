@@ -20,19 +20,19 @@ let createdAt = t => t.createdAt;
 
 let author = t => t.author;
 
-let noteOn = t => t.createdAt->DateFns2.format("MMMM D, YYYY");
+let noteOn = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let sort = notes =>
   notes
   |> ArrayUtils.copyAndSort((x, y) =>
-       DateFns.differenceInSeconds(y.createdAt, x.createdAt) |> int_of_float
+       DateFns.differenceInSeconds(y.createdAt, x.createdAt)
      );
 
 let makeFromJs = note => {
   make(
     ~id=note##id,
     ~note=note##note,
-    ~createdAt=note##createdAt->Json.Decode.string->DateFns2.parse,
+    ~createdAt=note##createdAt->DateFns.parseJSONObject,
     ~author=note##author |> OptionUtils.map(User.makeFromJs),
   );
 };

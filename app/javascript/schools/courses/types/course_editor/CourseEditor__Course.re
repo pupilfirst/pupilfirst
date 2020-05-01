@@ -101,10 +101,7 @@ let addImages =
 let replaceImages = (cover, thumbnail, t) => {...t, cover, thumbnail};
 
 let makeFromJs = rawCourse => {
-  let endsAt =
-    rawCourse##endsAt
-    ->Belt.Option.map(endsAt => Json.Decode.string(endsAt))
-    ->Belt.Option.map(DateFns.parseString);
+  let endsAt = rawCourse##endsAt->Belt.Option.map(DateFns.parseJSONObject);
 
   let progressionBehavior =
     switch (rawCourse##progressionBehavior) {

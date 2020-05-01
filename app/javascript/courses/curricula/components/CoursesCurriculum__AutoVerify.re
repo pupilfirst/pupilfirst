@@ -28,7 +28,7 @@ let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
   addSubmissionCB(
     Submission.make(
       ~id=submission##id,
-      ~createdAt=submission##createdAt->DateFns2.parseJson,
+      ~createdAt=submission##createdAt->DateFns.parseJSONObject,
       ~status=Submission.MarkedAsComplete,
       ~checklist=[||],
     ),

@@ -45,7 +45,7 @@ let decode = json => {
     id: json |> field("id", string),
     endsAt:
       (json |> optional(field("endsAt", string)))
-      ->Belt.Option.map(DateFns2.parse),
+      ->Belt.Option.map(DateFns.parseJSON),
     certificateSerialNumber:
       json |> optional(field("certificateSerialNumber", string)),
     progressionBehavior,
@@ -53,4 +53,4 @@ let decode = json => {
 };
 
 let hasEnded = t =>
-  t.endsAt->Belt.Option.mapWithDefault(false, DateFns2.isPast);
+  t.endsAt->Belt.Option.mapWithDefault(false, DateFns.isPast);

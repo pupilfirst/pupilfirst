@@ -19,9 +19,8 @@ let decode = json =>
     name: json |> field("name", string),
     number: json |> field("number", int),
     unlockOn:
-      json
-      |> optional(field("unlockOn", string))
-      |> OptionUtils.map(DateFns.parseString),
+      (json |> optional(field("unlockOn", string)))
+      ->Belt.Option.map(DateFns.parseJSON),
   };
 
 let selectLevel = (levels, level_name) =>

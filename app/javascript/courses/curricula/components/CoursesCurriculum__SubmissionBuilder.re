@@ -110,8 +110,7 @@ let submit = (state, send, target, addSubmissionCB, event) => {
          let newSubmission =
            Submission.make(
              ~id=submission##id,
-             ~createdAt=
-               DateFns2.parse(submission##createdAt |> Json.Decode.string),
+             ~createdAt=DateFns.parseJSONObject(submission##createdAt),
              ~status=Submission.Pending,
              ~checklist=submissionChecklist,
            );

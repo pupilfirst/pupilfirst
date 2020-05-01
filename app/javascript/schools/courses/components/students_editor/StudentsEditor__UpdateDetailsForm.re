@@ -60,7 +60,7 @@ let handleErrorCB = (send, ()) => send(UpdateSaving(false));
 let successMessage = (accessEndsAt, isSingleFounder) => {
   switch (accessEndsAt) {
   | Some(date) =>
-    switch (date |> DateFns2.isPast, isSingleFounder) {
+    switch (date->DateFns.isPast, isSingleFounder) {
     | (true, true) => "Student has been updated, and moved to list of inactive students"
     | (true, false) => "Team has been updated, and moved to list of inactive students"
     | (false, true)

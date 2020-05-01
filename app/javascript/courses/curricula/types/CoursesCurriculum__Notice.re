@@ -4,8 +4,11 @@ type t =
   | CourseComplete
   | AccessEnded
   | LevelUp
-  | LevelUpBlocked(int)
-  | Nothing;
+  | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber)
+  | LevelUpBlocked(currentLevelNumber) // For when the Strict progression behavior applies.
+  | Nothing
+and currentLevelNumber = int
+and minimumRequiredLevelNumber = int;
 
 [@bs.module "../images/course-ended.svg"]
 external courseEndedImage: string = "default";
@@ -27,6 +30,7 @@ let icon = t =>
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
   | LevelUp => levelUpImage
+  | LevelUpLimited(_) => levelUpBlockedImage
   | LevelUpBlocked(_) => levelUpBlockedImage
   | Nothing => ""
   };

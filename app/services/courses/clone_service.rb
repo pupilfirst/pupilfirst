@@ -11,9 +11,13 @@ module Courses
 
     def clone(new_name, school)
       Course.transaction do
-        Course.create!(name: new_name,
-                       description: @course.description,
-                       school: school).tap do |new_course|
+        Course.create!(
+          name: new_name,
+          description: @course.description,
+          school: school,
+          progression_behavior: @course.progression_behavior,
+          progression_limit: @course.progression_limit
+        ).tap do |new_course|
           evaluation_criteria_translation = create_evaluation_criteria(new_course)
           levels = create_levels(new_course)
           target_groups = create_target_groups(levels)

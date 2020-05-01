@@ -64,5 +64,16 @@ FactoryBot.define do
         create(:content_block, :file, target_version: target_version)
       end
     end
+
+    trait :with_group do
+      transient do
+        milestone { false }
+        level { create :level }
+      end
+
+      after(:build) do |target, evaluator|
+        target.target_group = create(:target_group, level: evaluator.level, milestone: evaluator.milestone)
+      end
+    end
   end
 end

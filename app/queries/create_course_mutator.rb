@@ -1,12 +1,6 @@
 class CreateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
-
-  property :name, validates: { presence: true, length: { minimum: 2, maximum: 50 } }
-  property :description, validates: { presence: true, length: { minimum: 2, maximum: 150 } }
-  property :ends_at
-  property :public_signup
-  property :about, validates: { length: { maximum: 10_000 } }
-  property :featured
+  include CourseEditable
 
   def create_course
     Course.transaction do
@@ -16,9 +10,13 @@ class CreateCourseMutator < ApplicationQuery
         ends_at: ends_at,
         public_signup: public_signup,
         about: about,
-        featured: featured
+        featured: featured,
+        progression_behavior: progression_behavior,
+        progression_limit: sanitized_progression_limit
       )
+
       Courses::DemoContentService.new(course).execute
+
       course
     end
   end

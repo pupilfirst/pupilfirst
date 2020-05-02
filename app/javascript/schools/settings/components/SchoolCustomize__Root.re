@@ -127,7 +127,7 @@ let emailAddress = email =>
   switch (email) {
   | Some(email) =>
     <div className="text-xs font-semibold mt-4">
-      {"React us at " |> str}
+      {"Reach us at " |> str}
       <span className="font-bold"> {email |> str} </span>
     </div>
   | None =>

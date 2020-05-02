@@ -88,6 +88,7 @@ feature 'Target Content Version Management', js: true do
     click_button('#2')
     click_button('#1')
 
+    sleep 1 # Use delay to ensure new timestamp on next version.
     click_button 'Restore this version'
     expect(page).to have_text('A new version has been created')
     dismiss_notification

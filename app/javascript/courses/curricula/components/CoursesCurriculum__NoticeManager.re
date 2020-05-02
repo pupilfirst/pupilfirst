@@ -83,22 +83,39 @@ let accessEndedMessage = () => {
   showNotice(~title, ~description, ~notice=Notice.AccessEnded, ());
 };
 
-let levelUpBlockedMessage = levelNumber => {
+let levelUpBlockedMessage = currentLevelNumber => {
+  let title = "Review Pending";
+  let description =
+    "You have submitted all milestone targets in level "
+    ++ string_of_int(currentLevelNumber)
+    ++ ", but one or more submissions are pending review by a coach. You need to get a passing grade on all milestone targets to level up.";
+
+  showNotice(
+    ~title,
+    ~description,
+    ~notice=Notice.LevelUpBlocked(currentLevelNumber),
+    (),
+  );
+};
+
+let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => {
   let title = "Level Up Blocked";
-  let currentLevel = levelNumber |> string_of_int;
-  let lastLevel = levelNumber - 1 |> string_of_int;
+  let currentLevel = currentLevelNumber |> string_of_int;
+  let minimumRequiredLevel = minimumRequiredLevelNumber |> string_of_int;
   let description =
     "You're at Level "
     ++ currentLevel
     ++ ", but you have targets in the Level "
-    ++ lastLevel
+    ++ minimumRequiredLevel
     ++ " that are failed, or are pending review by a coach. You'll need to pass all milestone targets in Level "
-    ++ lastLevel
+    ++ minimumRequiredLevel
     ++ " to continue leveling up.";
+
   showNotice(
     ~title,
     ~description,
-    ~notice=Notice.LevelUpBlocked(levelNumber),
+    ~notice=
+      Notice.LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber),
     (),
   );
 };
@@ -121,7 +138,10 @@ let make = (~notice, ~course) => {
   | CourseComplete => courseCompletedMessage(course)
   | AccessEnded => accessEndedMessage()
   | LevelUp => renderLevelUp(course)
-  | LevelUpBlocked(levelNumber) => levelUpBlockedMessage(levelNumber)
+  | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber) =>
+    levelUpLimitedMessage(currentLevelNumber, minimumRequiredLevelNumber)
+  | LevelUpBlocked(currentLevelNumber) =>
+    levelUpBlockedMessage(currentLevelNumber)
   | Nothing => React.null
   };
 };

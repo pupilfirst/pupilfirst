@@ -1,32 +1,30 @@
 class UpdateCourseMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
+  include CourseEditable
 
   property :id
-  property :name, validates: { presence: true, length: { minimum: 1, maximum: 50 } }
-  property :description, validates: { presence: true, length: { minimum: 1, maximum: 150 } }
-  property :ends_at
-  property :public_signup
-  property :about, validates: { length: { maximum: 10_000 } }
-  property :featured
 
-  validate :valid_course_id
+  validate :course_must_be_present
 
-  def valid_course_id
+  def course_must_be_present
     return if course.present?
 
-    raise "UpdateCourseMutator received non-existent course ID #{id}"
+    errors[:base] << "Could not find a course with ID #{id}"
   end
 
   def update_course
-    @course.update!(
+    course.update!(
       name: name,
       description: description,
       ends_at: ends_at,
       public_signup: public_signup,
       about: about,
-      featured: featured
+      featured: featured,
+      progression_behavior: progression_behavior,
+      progression_limit: sanitized_progression_limit
     )
-    @course
+
+    course
   end
 
   private

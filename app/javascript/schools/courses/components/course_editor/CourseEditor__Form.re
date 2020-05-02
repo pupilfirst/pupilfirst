@@ -2,6 +2,8 @@ open CourseEditor__Types;
 
 let str = ReasonReact.string;
 
+type progressionBehavior = [ | `Limited | `Unlimited | `Strict];
+
 type state = {
   name: string,
   description: string,
@@ -14,20 +16,26 @@ type state = {
   dirty: bool,
   saving: bool,
   featured: bool,
+  progressionBehavior,
+  progressionLimit: int,
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string, bool)
   | UpdateEndsAt(option(Js.Date.t))
-  | UpdateSaving
+  | StartSaving
+  | FailSaving
   | UpdateAbout(string)
   | UpdatePublicSignup(bool)
-  | UpdateFeatured(bool);
+  | UpdateFeatured(bool)
+  | UpdateProgressionBehavior(progressionBehavior)
+  | UpdateProgressionLimit(int);
 
 let reducer = (state, action) => {
   switch (action) {
-  | UpdateSaving => {...state, saving: !state.saving}
+  | StartSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
   | UpdateName(name, hasNameError) => {
       ...state,
       name,
@@ -44,31 +52,42 @@ let reducer = (state, action) => {
   | UpdatePublicSignup(publicSignup) => {...state, publicSignup, dirty: true}
   | UpdateAbout(about) => {...state, about, dirty: true}
   | UpdateFeatured(featured) => {...state, featured, dirty: true}
+  | UpdateProgressionBehavior(progressionBehavior) => {
+      ...state,
+      progressionBehavior,
+      dirty: true,
+    }
+  | UpdateProgressionLimit(progressionLimit) => {
+      ...state,
+      progressionBehavior: `Limited,
+      progressionLimit,
+      dirty: true,
+    }
   };
 };
 
 module CreateCourseQuery = [%graphql
   {|
-   mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: Date, $about: String!,$publicSignup: Boolean!,$featured: Boolean!) {
-     createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about,publicSignup: $publicSignup,featured: $featured) {
-       course {
-         id
-       }
-     }
-   }
-   |}
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+        course {
+          ...Course.Fragments.AllFields
+        }
+      }
+    }
+  |}
 ];
 
 module UpdateCourseQuery = [%graphql
   {|
-   mutation UpdateCourseMutation($id: ID!, $description: String!, $name: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!) {
-    updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured){
-       course {
-         id
-       }
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+        course {
+          ...Course.Fragments.AllFields
+        }
       }
-   }
-   |}
+    }
+  |}
 ];
 
 let updateName = (send, name) => {
@@ -95,31 +114,15 @@ let saveDisabled = state => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
-let handleResponseCB = (id, state, updateCourseCB, course) => {
-  let (thumbnail, cover) =
-    switch (course) {
-    | Some(c) => (c |> Course.thumbnail, c |> Course.cover)
-    | None => (None, None)
-    };
-
-  let course =
-    Course.create(
-      ~id,
-      ~name=state.name,
-      ~description=state.description,
-      ~endsAt=state.endsAt,
-      ~about=Some(state.about),
-      ~publicSignup=state.publicSignup,
-      ~thumbnail,
-      ~cover,
-      ~featured=state.featured,
-    );
-
-  updateCourseCB(course);
-};
+let progressionLimitForQuery = state =>
+  switch (state.progressionBehavior) {
+  | `Unlimited
+  | `Strict => None
+  | `Limited => Some(state.progressionLimit)
+  };
 
 let createCourse = (state, send, updateCourseCB) => {
-  send(UpdateSaving);
+  send(StartSaving);
 
   let createCourseQuery =
     CreateCourseQuery.make(
@@ -132,25 +135,31 @@ let createCourse = (state, send, updateCourseCB) => {
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~featured=state.featured,
+      ~progressionBehavior=state.progressionBehavior,
+      ~progressionLimit=?progressionLimitForQuery(state),
       (),
     );
 
   createCourseQuery
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-       handleResponseCB(
-         result##createCourse##course##id,
-         state,
-         updateCourseCB,
-         None,
-       );
+       switch (result##createCourse##course) {
+       | Some(course) => Course.makeFromJs(course) |> updateCourseCB
+       | None => send(FailSaving)
+       };
+
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(error => {
+       Js.log(error);
+       send(FailSaving);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
 let updateCourse = (state, send, updateCourseCB, course) => {
-  send(UpdateSaving);
+  send(StartSaving);
 
   let updateCourseQuery =
     UpdateCourseQuery.make(
@@ -164,18 +173,24 @@ let updateCourse = (state, send, updateCourseCB, course) => {
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~featured=state.featured,
+      ~progressionBehavior=state.progressionBehavior,
+      ~progressionLimit=?progressionLimitForQuery(state),
       (),
     );
 
   updateCourseQuery
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-       handleResponseCB(
-         result##updateCourse##course##id,
-         state,
-         updateCourseCB,
-         Some(course),
-       );
+       switch (result##updateCourse##course) {
+       | Some(course) => Course.makeFromJs(course) |> updateCourseCB
+       | None => send(FailSaving)
+       };
+
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(error => {
+       Js.log(error);
+       send(FailSaving);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -254,6 +269,9 @@ let computeInitialState = course =>
       about: about(course),
       publicSignup: course |> Course.publicSignup,
       featured: course |> Course.featured,
+      progressionBehavior: course |> Course.progressionBehavior,
+      progressionLimit:
+        Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
     }
   | None => {
       name: "",
@@ -267,8 +285,31 @@ let computeInitialState = course =>
       about: "",
       publicSignup: false,
       featured: true,
+      progressionBehavior: `Limited,
+      progressionLimit: 1,
     }
   };
+
+let handleSelectProgressionLimit = (send, event) => {
+  let target = event |> ReactEvent.Form.target;
+
+  switch (target##value) {
+  | "1"
+  | "2"
+  | "3" => send(UpdateProgressionLimit(target##value |> int_of_string))
+  | otherValue =>
+    Rollbar.error("Unexpected progression limit was selected: " ++ otherValue)
+  };
+};
+
+let progressionBehaviorButtonClasses =
+    (state, progressionBehavior, additionalClasses) => {
+  let selected = state.progressionBehavior == progressionBehavior;
+  let defaultClasses =
+    additionalClasses
+    ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300";
+  defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "");
+};
 
 [@react.component]
 let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
@@ -364,14 +405,97 @@ let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
                 message="Enter a valid date"
                 active={state.hasDateError}
               />
-              <div id="About" className="mt-5">
-                <MarkdownEditor
-                  onChange={updateAboutCB(send)}
-                  value={state.about}
-                  placeholder="Add more details about the course."
-                  profile=Markdown.Permissive
-                  maxLength=10000
-                />
+              <div className="mt-5">
+                <label
+                  className="tracking-wide text-xs font-semibold"
+                  htmlFor="course-about">
+                  {"About" |> str}
+                </label>
+                <div className="mt-2">
+                  <MarkdownEditor
+                    textareaId="course-about"
+                    onChange={updateAboutCB(send)}
+                    value={state.about}
+                    placeholder="Add more details about the course."
+                    profile=Markdown.Permissive
+                    maxLength=10000
+                  />
+                </div>
+              </div>
+              <div className="mt-5">
+                <label className="tracking-wide text-xs font-semibold">
+                  {"Progression Behavior" |> str}
+                </label>
+                <HelpIcon
+                  className="ml-2"
+                  link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+                  {"This only applies if your course has milestone targets that requires students to submit their work for review by coaches."
+                   |> str}
+                </HelpIcon>
+                <div className="flex mt-2">
+                  <button
+                    onClick={_ => send(UpdateProgressionBehavior(`Limited))}
+                    className={progressionBehaviorButtonClasses(
+                      state,
+                      `Limited,
+                      "mr-1",
+                    )}>
+                    <div className="font-bold text-xl">
+                      {"Limited" |> str}
+                    </div>
+                    <div className="text-xs mt-2">
+                      <div> {"Students can level up" |> str} </div>
+                      <select
+                        id="progression-limit"
+                        onChange={handleSelectProgressionLimit(send)}
+                        className="my-1 cursor-pointer inline-block appearance-none bg-white border-b-2 text-xl font-semibold border-blue-500 hover:border-gray-500 p-1 leading-tight rounded-none focus:outline-none"
+                        style={ReactDOMRe.Style.make(
+                          ~textAlignLast="center",
+                          (),
+                        )}
+                        value={string_of_int(state.progressionLimit)}>
+                        <option value="1"> {"once" |> str} </option>
+                        <option value="2"> {"twice" |> str} </option>
+                        <option value="3"> {"thrice" |> str} </option>
+                      </select>
+                      <div>
+                        {" without getting submissions reviewed." |> str}
+                      </div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={_ =>
+                      send(UpdateProgressionBehavior(`Unlimited))
+                    }
+                    className={progressionBehaviorButtonClasses(
+                      state,
+                      `Unlimited,
+                      "mx-1",
+                    )}>
+                    <div className="font-bold text-xl">
+                      {"Unlimited" |> str}
+                    </div>
+                    <span className="text-xs">
+                      {"Students can level up till the end of the course, without getting submissions reviewed."
+                       |> str}
+                    </span>
+                  </button>
+                  <button
+                    onClick={_ => send(UpdateProgressionBehavior(`Strict))}
+                    className={progressionBehaviorButtonClasses(
+                      state,
+                      `Strict,
+                      "ml-1",
+                    )}>
+                    <div className="font-bold text-xl">
+                      {"Strict" |> str}
+                    </div>
+                    <span className="text-xs">
+                      {"Students can level up only after getting submissions reviewed, and passing."
+                       |> str}
+                    </span>
+                  </button>
+                </div>
               </div>
               {featuredButton(state.featured, send)}
               {enablePublicSignupButton(state.publicSignup, send)}

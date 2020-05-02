@@ -317,7 +317,6 @@ let make =
       ~evaluationCriteria,
       ~preview,
       ~accessLockedLevels,
-      ~currentStudentId=?,
     ) => {
   let url = ReasonReactRouter.useUrl();
 
@@ -478,91 +477,77 @@ let make =
     targetGroups
     |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId);
 
-  <div>
-    {switch (url.path) {
-     | ["courses", courseId, "report"] =>
-       <CoursesCurriculum__StudentReport
-         courseId
-         currentStudentId={OptionUtils.default("", currentStudentId)}
+  <div className="bg-gray-100 pt-11 pb-8 -mt-7">
+    {switch (selectedTarget) {
+     | Some(target) =>
+       let targetStatus =
+         state.statusOfTargets
+         |> ListUtils.unsafeFind(
+              ts => ts |> TargetStatus.targetId == (target |> Target.id),
+              "Could not find targetStatus for selectedTarget with ID "
+              ++ (target |> Target.id),
+            );
+
+       <CoursesCurriculum__Overlay
+         target
+         course
+         targetStatus
+         addSubmissionCB={addSubmission(setState)}
+         targets
+         statusOfTargets={state.statusOfTargets}
          users
-         levels
-       />
-     | _ => React.null
+         evaluationCriteria
+         coaches
+         preview
+       />;
+
+     | None => React.null
      }}
-    <div className="bg-gray-100 pt-11 pb-8 -mt-7">
-      {switch (selectedTarget) {
-       | Some(target) =>
-         let targetStatus =
-           state.statusOfTargets
-           |> ListUtils.unsafeFind(
-                ts => ts |> TargetStatus.targetId == (target |> Target.id),
-                "Could not find targetStatus for selectedTarget with ID "
-                ++ (target |> Target.id),
-              );
-
-         <CoursesCurriculum__Overlay
-           target
-           course
-           targetStatus
-           addSubmissionCB={addSubmission(setState)}
-           targets
-           statusOfTargets={state.statusOfTargets}
-           users
-           evaluationCriteria
-           coaches
-           preview
-         />;
-
-       | None => React.null
-       }}
-      <CoursesCurriculum__NoticeManager notice={state.notice} course />
-      {switch (state.notice) {
-       | LevelUp => React.null
-       | _anyOtherNotice =>
-         <div className="relative">
-           <CoursesCurriculum__LevelSelector
-             levels
-             teamLevel
-             selectedLevel
-             setSelectedLevelId={selectedLevelId =>
-               setState(state => {...state, selectedLevelId})
-             }
-             showLevelZero={state.showLevelZero}
-             setShowLevelZero={showLevelZero =>
-               setState(state => {...state, showLevelZero})
-             }
-             levelZero
-             course
-             currentStudentId
-           />
-           {currentLevel |> Level.isLocked && accessLockedLevels
-              ? <div
-                  className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
-                  {"This level is still locked for students, and will be unlocked on "
-                   |> str}
-                  <strong>
-                    {currentLevel |> Level.unlockDateString |> str}
-                  </strong>
-                  {"." |> str}
-                </div>
-              : React.null}
-           {currentLevel |> Level.isUnlocked || accessLockedLevels
-              ? targetGroupsInLevel
-                |> TargetGroup.sort
-                |> List.map(targetGroup =>
-                     renderTargetGroup(
-                       targetGroup,
-                       targets,
-                       state.statusOfTargets,
-                     )
+    <CoursesCurriculum__NoticeManager notice={state.notice} course />
+    {switch (state.notice) {
+     | LevelUp => React.null
+     | _anyOtherNotice =>
+       <div className="relative">
+         <CoursesCurriculum__LevelSelector
+           levels
+           teamLevel
+           selectedLevel
+           setSelectedLevelId={selectedLevelId =>
+             setState(state => {...state, selectedLevelId})
+           }
+           showLevelZero={state.showLevelZero}
+           setShowLevelZero={showLevelZero =>
+             setState(state => {...state, showLevelZero})
+           }
+           levelZero
+         />
+         {currentLevel |> Level.isLocked && accessLockedLevels
+            ? <div
+                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
+                {"This level is still locked for students, and will be unlocked on "
+                 |> str}
+                <strong>
+                  {currentLevel |> Level.unlockDateString |> str}
+                </strong>
+                {"." |> str}
+              </div>
+            : React.null}
+         {currentLevel |> Level.isUnlocked || accessLockedLevels
+            ? targetGroupsInLevel
+              |> TargetGroup.sort
+              |> List.map(targetGroup =>
+                   renderTargetGroup(
+                     targetGroup,
+                     targets,
+                     state.statusOfTargets,
                    )
-                |> Array.of_list
-                |> React.array
-              : handleLockedLevel(currentLevel)}
-         </div>
-       }}
-      {state.showLevelZero
-         ? React.null : quickNavigationLinks(levels, selectedLevel, setState)}
-    </div>
+                 )
+              |> Array.of_list
+              |> React.array
+            : handleLockedLevel(currentLevel)}
+       </div>
+     }}
+    {state.showLevelZero
+       ? React.null : quickNavigationLinks(levels, selectedLevel, setState)}
   </div>;
 };

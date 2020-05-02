@@ -1,7 +1,5 @@
-<% presenter = Courses::CurriculumPresenter.new(self, @course) %>
-
 <% content_for(:head) do %>
-  <title><%= presenter.page_title %></title>
+  <title><%= @presenter.page_title %></title>
   <%= stylesheet_pack_tag 'CoursesCurriculumPack', media: 'all' %>
 <% end %>
 
@@ -10,6 +8,6 @@
 <% end %>
 
 <% content_for(:inner_wrapper) do %>
-  <script id="react-root-data" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+  <script id="react-root-data" type="application/json"><%= @presenter.props_to_json.html_safe %></script>
   <div id="react-root"></div>
 <% end %>

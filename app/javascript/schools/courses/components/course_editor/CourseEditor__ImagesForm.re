@@ -209,7 +209,7 @@ let make = (~course, ~updateCourseCB, ~closeDrawerCB) => {
             className="text-xs ml-1"
             responsiveAlignment={HelpIcon.NonResponsive(AlignLeft)}
             link="https://docs.pupilfirst.com/#/courses?id=course-images">
-            {"The cover image for a course will be displayed at the top of all student pages within the course."
+            {"The cover will be displayed at the top of all student pages within the course, and as the header of some course emails."
              |> str}
           </HelpIcon>
           <input

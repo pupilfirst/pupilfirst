@@ -39,7 +39,7 @@ gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy t
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
 gem 'puma', '~> 4.3' # The Puma ruby web server.
-gem 'rack-timeout', '~> 0.6' # Abort requests that are taking too long - recommended by Heroku to use with Puma
+gem 'slowpoke', '~> 0.3' # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.

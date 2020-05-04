@@ -51,7 +51,7 @@ let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
   switch (element) {
   | Some(element) =>
     Api.sendFormData(
-      "courses/" ++ (course |> Course.id) ++ "/attach_images",
+      "/school/courses/" ++ (course |> Course.id) ++ "/attach_images",
       DomUtils.FormData.create(element),
       json => {
         Notification.success(

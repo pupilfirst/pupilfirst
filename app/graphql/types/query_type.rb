@@ -91,5 +91,9 @@ module Types
       argument :community_id, ID, required: true
       argument :title, String, required: true
     end
+
+    resolved_field :coach_notes, [Types::CoachNoteType], null: false do
+      argument :student_id, ID, required: true
+    end
   end
 end

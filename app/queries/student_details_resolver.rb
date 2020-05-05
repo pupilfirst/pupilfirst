@@ -5,7 +5,6 @@ class StudentDetailsResolver < ApplicationQuery
     {
       email: student.email,
       phone: student.phone,
-      coach_notes: coach_notes,
       targets_completed: targets_completed,
       total_targets: total_targets,
       level_id: level.id,
@@ -76,10 +75,6 @@ class StudentDetailsResolver < ApplicationQuery
 
   def team
     @team ||= student.startup
-  end
-
-  def coach_notes
-    CoachNote.not_archived.where(student_id: student_id).includes(author: { avatar_attachment: :blob }).order('created_at DESC').limit(20)
   end
 
   def submissions

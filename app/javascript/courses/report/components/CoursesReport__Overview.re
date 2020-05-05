@@ -40,20 +40,20 @@ let coachInfo = coaches => {
 let doughnutChart = (color, percentage) => {
   <svg
     viewBox="0 0 36 36"
-    className={"student-overlay__doughnut-chart " ++ color}>
+    className={"courses-report-overview__doughnut-chart " ++ color}>
     <path
-      className="student-overlay__doughnut-chart-bg"
+      className="courses-report-overview__doughnut-chart-bg"
       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
     />
     <path
-      className="student-overlay__doughnut-chart-stroke"
+      className="courses-report-overview__doughnut-chart-stroke"
       strokeDasharray={percentage ++ ", 100"}
       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
     />
     <text
       x="50%"
       y="58%"
-      className="student-overlay__doughnut-chart-text font-semibold">
+      className="courses-report-overview__doughnut-chart-text font-semibold">
       {percentage ++ "%" |> str}
     </text>
   </svg>;
@@ -62,7 +62,7 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   let targetCompletionPercent =
     targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int;
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
-    <div className="student-overlay__doughnut-chart-container">
+    <div className="courses-report-overview__doughnut-chart-container">
       {doughnutChart("purple", targetCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
         {"Total Targets Completed" |> str}
@@ -84,7 +84,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
     <div
       ariaLabel="quiz-performance-chart"
       className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
-      <div className="student-overlay__doughnut-chart-container">
+      <div className="courses-report-overview__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3">
           {"Average Quiz Score" |> str}
@@ -123,25 +123,25 @@ let averageGradeCharts =
          }
          key={criterion |> CoursesReport__EvaluationCriterion.id}
          className="flex w-full lg:w-1/2 px-2 mt-2">
-         <div className="student-overlay__pie-chart-container">
+         <div className="courses-report-overview__pie-chart-container">
            <div className="flex px-5 pt-4 text-center items-center">
              <svg
                className={
-                 "student-overlay__pie-chart "
+                 "courses-report-overview__pie-chart "
                  ++ (
                    averageGrade < passGrade
-                     ? "student-overlay__pie-chart--fail"
-                     : "student-overlay__pie-chart--pass"
+                     ? "courses-report-overview__pie-chart--fail"
+                     : "courses-report-overview__pie-chart--pass"
                  )
                }
                viewBox="0 0 32 32">
                <circle
                  className={
-                   "student-overlay__pie-chart-circle "
+                   "courses-report-overview__pie-chart-circle "
                    ++ (
                      averageGrade < passGrade
-                       ? "student-overlay__pie-chart-circle--fail"
-                       : "student-overlay__pie-chart-circle--pass"
+                       ? "courses-report-overview__pie-chart-circle--fail"
+                       : "courses-report-overview__pie-chart-circle--pass"
                    )
                  }
                  strokeDasharray={
@@ -171,14 +171,14 @@ let averageGradeCharts =
 let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
   let reached =
     levelNumber <= currentLevelNumber
-      ? "student-overlay__student-level--reached" : "";
+      ? "courses-report-overview__student-level--reached" : "";
 
   let current =
     levelNumber == currentLevelNumber
-      ? " student-overlay__student-level--current" : "";
+      ? " courses-report-overview__student-level--current" : "";
 
   let completed =
-    levelCompleted ? " student-overlay__student-level--completed" : "";
+    levelCompleted ? " courses-report-overview__student-level--completed" : "";
 
   reached ++ current ++ completed;
 };
@@ -214,10 +214,10 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
     <div className="h-12 flex items-center">
       <ul
         className={
-          "student-overlay__student-level-progress flex w-full "
+          "courses-report-overview__student-level-progress flex w-full "
           ++ (
             courseCompleted
-              ? "student-overlay__student-level-progress--completed" : ""
+              ? "courses-report-overview__student-level-progress--completed" : ""
           )
         }>
         {applicableLevels
@@ -230,14 +230,14 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
               <li
                 key={level |> Level.id}
                 className={
-                  "flex-1 student-overlay__student-level "
+                  "flex-1 courses-report-overview__student-level "
                   ++ studentLevelClasses(
                        levelNumber,
                        levelCompleted,
                        currentLevelNumber,
                      )
                 }>
-                <span className="student-overlay__student-level-count">
+                <span className="courses-report-overview__student-level-count">
                   {levelNumber |> string_of_int |> str}
                 </span>
               </li>;

@@ -4,6 +4,8 @@ let parseJSON: string => Js.Date.t;
 
 let parseJSONObject: Js.Json.t => Js.Date.t;
 
+let zonedTimeToUtc: Js.Date.t => Js.Date.t;
+
 let differenceInSeconds: (Js.Date.t, Js.Date.t) => int;
 
 let isPast: Js.Date.t => bool;
@@ -15,6 +17,18 @@ let isFuture: Js.Date.t => bool;
  * in the user's timezone.
  */
 let format: (Js.Date.t, string) => string;
+
+let formatDistance: (Js.Date.t, Js.Date.t) => string;
+
+type formatDistanceOptions;
+
+let formatDistanceOptions:
+  (~includeSeconds: bool=?, ~addSuffix: bool=?, ~locale: locale=?, unit) =>
+  formatDistanceOptions;
+
+let formatDistanceOpt: (Js.Date.t, Js.Date.t, formatDistanceOptions) => string;
+
+let formatDistanceToNowOpt: (Js.Date.t, formatDistanceOptions) => string;
 
 let formatDistanceStrict: (Js.Date.t, Js.Date.t) => string;
 

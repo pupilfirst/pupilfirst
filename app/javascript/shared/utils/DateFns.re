@@ -9,6 +9,34 @@ let selectedTimeFormat = () => " HH:mm";
 [@bs.module "date-fns-tz"]
 external utcToZonedTime: (Js.Date.t, string) => Js.Date.t = "utcToZonedTime";
 
+[@bs.module "date-fns-tz"]
+external zonedTimeToUtcJs: (Js.Date.t, string) => Js.Date.t = "zonedTimeToUtc";
+
+let zonedTimeToUtc = date => zonedTimeToUtcJs(date, currentTimezone());
+
+[@bs.module "date-fns"]
+external formatDistance: (Js.Date.t, Js.Date.t) => string = "formatDistance";
+
+[@bs.deriving abstract]
+type formatDistanceOptions = {
+  [@bs.optional]
+  includeSeconds: bool,
+  [@bs.optional]
+  addSuffix: bool,
+  [@bs.optional]
+  locale,
+};
+
+[@bs.module "date-fns"]
+external formatDistanceOpt:
+  (Js.Date.t, Js.Date.t, formatDistanceOptions) => string =
+  "formatDistance";
+
+let formatDistanceToNowOpt = (date, options) => {
+  let zonedTime = utcToZonedTime(date, currentTimezone());
+  zonedTime->formatDistanceOpt(Js.Date.make(), options);
+};
+
 [@bs.module "date-fns"]
 external formatDistanceStrict: (Js.Date.t, Js.Date.t) => string =
   "formatDistanceStrict";

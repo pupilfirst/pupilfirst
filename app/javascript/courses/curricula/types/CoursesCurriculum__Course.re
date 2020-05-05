@@ -45,7 +45,7 @@ let decode = json => {
     id: json |> field("id", string),
     endsAt:
       (json |> optional(field("endsAt", string)))
-      ->Belt.Option.map(DateFns.parseJSON),
+      ->Belt.Option.map(DateFns.parseISO),
     certificateSerialNumber:
       json |> optional(field("certificateSerialNumber", string)),
     progressionBehavior,

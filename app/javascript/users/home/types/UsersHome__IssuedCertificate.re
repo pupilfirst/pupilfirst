@@ -15,6 +15,6 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     serialNumber: json |> field("serialNumber", string),
-    createdAt: json |> field("createdAt", string) |> DateFns.parseJSON,
+    createdAt: json |> field("createdAt", string) |> DateFns.parseISO,
     courseName: json |> field("courseName", string),
   };

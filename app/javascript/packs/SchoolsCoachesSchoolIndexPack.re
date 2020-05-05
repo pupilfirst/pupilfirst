@@ -12,7 +12,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
+  DomUtils.parseISOAttribute(
     ~id="sa-coaches-panel",
     ~attribute="data-props",
     (),

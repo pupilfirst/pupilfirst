@@ -25,16 +25,16 @@ let makeArrayFromJs = js => {
   js
   |> ArrayUtils.copyAndSort((x, y) =>
        DateFns.differenceInSeconds(
-         y##createdAt->DateFns.parseJSONObject,
-         x##createdAt->DateFns.parseJSONObject,
+         y##createdAt->DateFns.decodeISO,
+         x##createdAt->DateFns.decodeISO,
        )
      )
   |> Array.mapi((number, c) =>
        make(
          c##id,
          length - number,
-         c##createdAt->DateFns.parseJSONObject,
-         c##updatedAt->DateFns.parseJSONObject,
+         c##createdAt->DateFns.decodeISO,
+         c##updatedAt->DateFns.decodeISO,
        )
      );
 };

@@ -40,10 +40,10 @@ let makeFromJs = submissions => {
   |> Js.Array.map(submission =>
        switch (submission) {
        | Some(submission) =>
-         let createdAt = submission##createdAt->DateFns.parseJSONObject;
+         let createdAt = submission##createdAt->DateFns.decodeISO;
 
          let passedAt =
-           submission##passedAt->Belt.Option.map(DateFns.parseJSONObject);
+           submission##passedAt->Belt.Option.map(DateFns.decodeISO);
 
          [
            make(

@@ -74,8 +74,7 @@ let decodeJs = details =>
            ->Belt.Option.map(_ =>
                makeStatus(
                  ~passedAt=
-                   submission##passedAt
-                   ->Belt.Option.map(DateFns.parseJSONObject),
+                   submission##passedAt->Belt.Option.map(DateFns.decodeISO),
                  ~feedbackSent=submission##feedbackSent,
                )
              );
@@ -84,7 +83,7 @@ let decodeJs = details =>
            make(
              ~id=submission##id,
              ~title=submission##title,
-             ~createdAt=DateFns.parseJSONObject(submission##createdAt),
+             ~createdAt=DateFns.decodeISO(submission##createdAt),
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
              ~status,

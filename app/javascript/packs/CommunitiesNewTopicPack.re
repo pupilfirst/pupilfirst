@@ -11,7 +11,7 @@ let decodeProps = json =>
     target: json |> optional(field("target", LinkedTarget.decode)),
   };
 
-let props = DomUtils.parseJsonTag() |> decodeProps;
+let props = DomUtils.parseISOTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CommunitiesNewTopic__Root

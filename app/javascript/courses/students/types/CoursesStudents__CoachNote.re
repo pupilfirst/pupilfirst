@@ -32,7 +32,7 @@ let makeFromJs = note => {
   make(
     ~id=note##id,
     ~note=note##note,
-    ~createdAt=note##createdAt->DateFns.parseJSONObject,
+    ~createdAt=note##createdAt->DateFns.decodeISO,
     ~author=note##author |> OptionUtils.map(User.makeFromJs),
   );
 };

@@ -10,7 +10,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
+  DomUtils.parseISOAttribute(
     ~id="user-session-reset-password",
     ~attribute="data-json-props",
     (),

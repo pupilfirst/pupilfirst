@@ -15,7 +15,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonTag(~id="school-customize-data", ()) |> decodeProps;
+  DomUtils.parseISOTag(~id="school-customize-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <SchoolCustomize__Root

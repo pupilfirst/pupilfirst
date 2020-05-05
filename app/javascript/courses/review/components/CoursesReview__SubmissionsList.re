@@ -198,7 +198,7 @@ let make =
           <span className="text-xs text-gray-800 pt-px">
             {overlaySubmission
              ->OverlaySubmission.createdAt
-             ->DateFns.formatLonger(false)
+             ->DateFns.formatPreset(~year=true, ())
              ->str}
           </span>
         </div>

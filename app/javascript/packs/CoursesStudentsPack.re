@@ -10,8 +10,7 @@ let decodeProps = json =>
   );
 
 let (levels, course, userId, teamCoaches, currentCoach) =
-  DomUtils.parseJsonTag(~id="school-course-students__props", ())
-  |> decodeProps;
+  DomUtils.parseISOTag(~id="school-course-students__props", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CoursesStudents__Root levels course userId teamCoaches currentCoach />,

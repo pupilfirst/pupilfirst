@@ -49,7 +49,7 @@ let makeFromJS = teamDetails => {
              ~students,
              ~coachIds,
              ~accessEndsAt=
-               team##accessEndsAt->Belt.Option.map(DateFns.parseJSONObject),
+               team##accessEndsAt->Belt.Option.map(DateFns.decodeISO),
            ),
          ];
        | None => []

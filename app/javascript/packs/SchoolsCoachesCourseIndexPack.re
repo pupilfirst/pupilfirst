@@ -16,7 +16,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonTag(~id="course-coaches__props", ()) |> decodeProps;
+  DomUtils.parseISOTag(~id="course-coaches__props", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CourseCoaches__Root

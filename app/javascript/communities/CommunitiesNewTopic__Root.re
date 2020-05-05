@@ -204,7 +204,7 @@ let suggestions = state => {
               let askedOn =
                 suggestion
                 ->TopicSuggestion.createdAt
-                ->DateFns.formatShorter(false);
+                ->DateFns.formatPreset(~short=true, ~year=true, ());
               let (answersText, answersClasses) =
                 switch (suggestion |> TopicSuggestion.repliesCount) {
                 | 0 => ("No replies", "bg-gray-300 text-gray-700")

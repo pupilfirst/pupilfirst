@@ -1,9 +1,6 @@
 class GraphqlController < ApplicationController
   skip_forgery_protection if: :introspection?
 
-  # The API should always respond in UTC.
-  skip_around_action :set_time_zone
-
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]

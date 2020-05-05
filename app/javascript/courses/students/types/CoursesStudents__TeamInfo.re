@@ -93,9 +93,9 @@ let makeFromJS = teamDetails => {
     ~students,
     ~coachUserIds=teamDetails##coachUserIds,
     ~droppedOutAt=
-      teamDetails##droppedOutAt->Belt.Option.map(DateFns.parseJSONObject),
+      teamDetails##droppedOutAt->Belt.Option.map(DateFns.decodeISO),
     ~accessEndsAt=
-      teamDetails##accessEndsAt->Belt.Option.map(DateFns.parseJSONObject),
+      teamDetails##accessEndsAt->Belt.Option.map(DateFns.decodeISO),
   );
 };
 

@@ -4,7 +4,7 @@ type locale;
 let currentTimezone = () => "Asia/Kolkata";
 
 // TODO: This function should return either "HH:mm", or "h:mm a" depending on user's preferred time format.
-let selectedTimeFormat = () => " HH:mm";
+let selectedTimeFormat = () => "HH:mm";
 
 [@bs.module "date-fns-tz"]
 external utcToZonedTime: (Js.Date.t, string) => Js.Date.t = "utcToZonedTime";
@@ -84,50 +84,28 @@ external formatTz: (Js.Date.t, string, formatOptions) => string = "format";
 let format = (date, fmt) => {
   let timeZone = currentTimezone();
 
-  // First, get the zoned time.
-  let zonedDate = utcToZonedTime(date, timeZone);
-
-  // Then format it, specifying the zone again, so that timezone in the output,
-  // if any, can be printed correctly.
-  formatTz(zonedDate, fmt, formatOptions(~timeZone, ()));
+  // Since the passed date is not time-zone-sensitive, we need to pass the
+  // time-zone here so that the user's timezone is displayed in the generated
+  // string.
+  formatTz(date, fmt, formatOptions(~timeZone, ()));
 };
 
-let formatPreset = (date, fmt, withTime) => {
-  let computedFormat = fmt ++ (withTime ? selectedTimeFormat() : "");
-  format(date, computedFormat);
+let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
+  let leading = short ? "MMM d" : "MMMM d";
+  let middle = year ? ", yyyy" : "";
+  let trailing = time ? " " ++ selectedTimeFormat() : "";
+
+  format(date, leading ++ middle ++ trailing);
 };
-
-let formatShorter = (date, withTime) =>
-  formatPreset(date, "MMM d", withTime);
-
-let formatShort = (date, withTime) => formatPreset(date, "MMMM d", withTime);
-
-let formatLong = (date, withTime) =>
-  formatPreset(date, "MMM d, yyyy", withTime);
-
-let formatLonger = (date, withTime) =>
-  formatPreset(date, "MMMM d, yyyy", withTime);
 
 [@bs.module "date-fns"]
-external parseJSONObject: Js.Json.t => Js.Date.t = "parseJSON";
+external decodeISO: Js.Json.t => Js.Date.t = "parseISO";
 
-[@bs.module "date-fns"] external parseJSON: string => Js.Date.t = "parseJSON";
+[@bs.module "date-fns"] external parseISO: string => Js.Date.t = "parseISO";
 
-[@bs.module "date-fns"]
-external isBefore: (Js.Date.t, Js.Date.t) => bool = "isBefore";
+[@bs.module "date-fns"] external isPast: Js.Date.t => bool = "isPast";
 
-[@bs.module "date-fns"]
-external isAfter: (Js.Date.t, Js.Date.t) => bool = "isAfter";
-
-let isPast = date => {
-  let zonedTime = utcToZonedTime(date, currentTimezone());
-  zonedTime->isAfter(Js.Date.make());
-};
-
-let isFuture = date => {
-  let zonedTime = utcToZonedTime(date, currentTimezone());
-  zonedTime->isBefore(Js.Date.make());
-};
+[@bs.module "date-fns"] external isFuture: Js.Date.t => bool = "isFuture";
 
 [@bs.module "date-fns"]
 external differenceInSeconds: (Js.Date.t, Js.Date.t) => int =

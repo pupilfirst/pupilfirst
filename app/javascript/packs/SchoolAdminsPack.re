@@ -9,8 +9,7 @@ let decodeProps = json =>
     admins: json |> field("admins", array(SchoolAdmin.decode)),
   };
 
-let props =
-  DomUtils.parseJsonTag(~id="school-admins-data", ()) |> decodeProps;
+let props = DomUtils.parseISOTag(~id="school-admins-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <SchoolAdmins__Editor

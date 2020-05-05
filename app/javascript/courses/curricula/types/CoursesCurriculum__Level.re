@@ -21,7 +21,7 @@ let unlockOn = t => t.unlockOn;
 
 let isUnlocked = t =>
   switch (t.unlockOn) {
-  | Some(date) => date->DateFns.parseJSON->DateFns.isPast
+  | Some(date) => date->DateFns.parseISO->DateFns.isPast
   | None => true
   };
 
@@ -44,7 +44,7 @@ let unlockDateString = t =>
       "unlockDateString was called for a CoursesCurriculum__Level without unlockOn",
     );
     "";
-  | Some(unlockOn) => unlockOn->DateFns.parseJSON->DateFns.format("MMM d")
+  | Some(unlockOn) => unlockOn->DateFns.parseISO->DateFns.format("MMM d")
   };
 
 let findByLevelNumber = (levels, levelNumber) =>

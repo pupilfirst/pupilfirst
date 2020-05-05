@@ -55,7 +55,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
             <strong>
               {issuedCertificate
                ->IssuedCertificate.issuedAt
-               ->DateFns.formatShorter(false)
+               ->DateFns.formatPreset(~short=true, ~year=true, ())
                ->str}
             </strong>
             <span> {" for completing the course " |> str} </span>

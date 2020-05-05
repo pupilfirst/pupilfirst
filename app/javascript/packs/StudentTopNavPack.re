@@ -16,7 +16,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonTag(~id="student-top-nav-props", ()) |> decodeProps;
+  DomUtils.parseISOTag(~id="student-top-nav-props", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <StudentTopNav

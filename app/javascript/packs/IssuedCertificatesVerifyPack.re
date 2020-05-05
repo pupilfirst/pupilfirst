@@ -6,7 +6,7 @@ let decodeProps = json =>
   );
 
 let (issuedCertificate, verifyImageUrl, currentUser) =
-  DomUtils.parseJsonTag() |> decodeProps;
+  DomUtils.parseISOTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <VerifyCertificate__Root issuedCertificate verifyImageUrl currentUser />,

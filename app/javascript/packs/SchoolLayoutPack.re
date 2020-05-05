@@ -8,7 +8,7 @@ let decodeProps = json =>
   );
 
 let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor) =
-  DomUtils.parseJsonAttribute(~id="school-admin-navbar__root", ())
+  DomUtils.parseISOAttribute(~id="school-admin-navbar__root", ())
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(

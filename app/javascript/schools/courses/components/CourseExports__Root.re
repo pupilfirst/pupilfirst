@@ -137,7 +137,7 @@ let createCourseExport = (state, send, course, event) => {
            CourseExport.make(
              ~id=export##id,
              ~exportType=state.exportType,
-             ~createdAt=export##createdAt->DateFns.parseJSONObject,
+             ~createdAt=export##createdAt->DateFns.decodeISO,
              ~tags=export##tags,
              ~reviewedOnly=export##reviewedOnly,
            );

@@ -9,7 +9,7 @@ let decode = json =>
     targetId: json |> field("targetId", string),
     passedAt:
       (json |> optional(field("passedAt", string)))
-      ->Belt.Option.map(DateFns.parseJSON),
+      ->Belt.Option.map(DateFns.parseISO),
     evaluatorId:
       json |> field("evaluatorId", nullable(string)) |> Js.Null.toOption,
   };

@@ -19,6 +19,10 @@ feature 'Courses Index', js: true do
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', 'files', filename))
   end
 
+  around do |example|
+    Time.use_zone(school_admin.user.time_zone) { example.run }
+  end
+
   scenario 'School admin creates a course' do
     sign_in_user school_admin.user, referer: school_courses_path
 
@@ -59,7 +63,7 @@ feature 'Courses Index', js: true do
     let(:new_course_name) { Faker::Lorem.words(number: 2).join ' ' }
     let(:new_about) { Faker::Lorem.paragraph }
     let(:new_description) { Faker::Lorem.sentences.join ' ' }
-    let(:course_end_date) { Date.today }
+    let(:course_end_date) { Time.zone.today }
 
     scenario 'School admin edits an existing course' do
       sign_in_user school_admin.user, referer: school_courses_path

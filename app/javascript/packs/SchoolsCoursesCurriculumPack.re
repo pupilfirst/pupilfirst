@@ -21,7 +21,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonAttribute(
+  DomUtils.parseISOAttribute(
     ~id="curriculum-editor",
     ~attribute="data-props",
     (),

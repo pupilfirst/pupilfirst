@@ -330,7 +330,7 @@ let certificatesSection = issuedCertificates =>
                       <span className="ml-1">
                         {issuedCertificate
                          ->IssuedCertificate.createdAt
-                         ->DateFns.formatShorter(false)
+                         ->DateFns.formatPreset(~short=true, ~year=true, ())
                          ->str}
                       </span>
                     </div>

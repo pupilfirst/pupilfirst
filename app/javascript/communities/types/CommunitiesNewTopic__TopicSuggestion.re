@@ -13,6 +13,6 @@ let repliesCount = t => t.repliesCount;
 let makeFromJs = jsObject => {
   id: jsObject##id,
   title: jsObject##title,
-  createdAt: jsObject##createdAt |> Json.Decode.string |> DateFns.parseJSON,
+  createdAt: jsObject##createdAt |> Json.Decode.string |> DateFns.parseISO,
   repliesCount: jsObject##repliesCount,
 };

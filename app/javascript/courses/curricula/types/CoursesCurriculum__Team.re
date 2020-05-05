@@ -11,7 +11,7 @@ let decode = json =>
     levelId: json |> field("levelId", string),
     accessEndsAt:
       (json |> optional(field("accessEndsAt", string)))
-      ->Belt.Option.map(DateFns.parseJSON),
+      ->Belt.Option.map(DateFns.parseISO),
   };
 
 let levelId = t => t.levelId;

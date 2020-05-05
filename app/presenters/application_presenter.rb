@@ -7,9 +7,7 @@ class ApplicationPresenter
   end
 
   def props_to_json
-    Time.use_zone('Etc/UTC') do
-      camelize_keys(stringify_ids(props)).to_json
-    end
+    camelize_keys(stringify_ids(props)).to_json
   end
 
   private

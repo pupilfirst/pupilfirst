@@ -37,7 +37,7 @@ let sort = ts =>
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    createdAt: json |> field("createdAt", DateFns.parseJSONObject),
+    createdAt: json |> field("createdAt", DateFns.decodeISO),
     status:
       switch (json |> field("status", string)) {
       | "marked_as_complete" => MarkedAsComplete

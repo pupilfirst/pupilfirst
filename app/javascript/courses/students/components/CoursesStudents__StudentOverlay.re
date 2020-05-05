@@ -475,14 +475,14 @@ let inactiveWarning = teamInfo => {
     | (Some(droppedOutAt), _) =>
       Some(
         "This student dropped out of the course on "
-        ++ (droppedOutAt |> DateTime.format(DateTime.OnlyDate))
+        ++ droppedOutAt->DateFns.formatShorter(false)
         ++ ".",
       )
     | (None, Some(accessEndsAt)) =>
       accessEndsAt |> DateFns.isPast
         ? Some(
             "This student's access to the course ended on "
-            ++ (accessEndsAt |> DateTime.format(DateTime.OnlyDate))
+            ++ accessEndsAt->DateFns.formatShorter(false)
             ++ ".",
           )
         : None

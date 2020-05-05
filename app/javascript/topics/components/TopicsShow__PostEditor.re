@@ -142,7 +142,7 @@ let savePost =
       |> ignore
     };
   } else {
-    Notification.error("Empty", "Answer cant be blank");
+    Notification.error("Empty", "Reply cant be blank");
   };
 };
 
@@ -209,7 +209,7 @@ let make =
           onAnimationEnd=onBorderAnimationEnd>
           <label
             className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
-            htmlFor="new-answer">
+            htmlFor="new-reply">
             {(
                switch (replyToPostId) {
                | Some(_id) => "Reply To"
@@ -247,8 +247,8 @@ let make =
              )}
           <div>
             <MarkdownEditor
-              placeholder="Type in your answer. You can use Markdown to format your response."
-              textareaId="new-answer"
+              placeholder="Type in your reply. You can use Markdown to format your response."
+              textareaId="new-reply"
               onChange=updateMarkdownCB
               value={state.body}
               profile=Markdown.QuestionAndAnswer

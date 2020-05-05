@@ -19,6 +19,7 @@ Rails.application.configure do
   }
 
   # Show full error reports and disable caching.
+  config.slowpoke.timeout = ENV['SLOWPOKE_TIMEOUT']&.to_i || 120
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = false
 

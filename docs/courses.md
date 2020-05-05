@@ -61,7 +61,7 @@ The image should have an aspect ratio of 2:1, with a suggested resolution of `76
 
 ### Cover
 
-This image will be displayed in all pages _within_ a course. It's the large header image that appears at the top of every course page.
+This image will be displayed in all pages _within_ a course. It's the large header image that appears at the top of every course page. It'll also be used as the header image in a few emails that are directly related to the course.
 
 Because this image fits with the width of the page, it should be created following a few guidelines:
 

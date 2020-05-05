@@ -3,15 +3,17 @@ type t = {
   title: string,
   createdAt: Js.Date.t,
   passedAt: option(Js.Date.t),
+  evaluatorId: option(string),
   levelId: string,
 };
 
-let make = (~id, ~title, ~createdAt, ~passedAt, ~levelId) => {
+let make = (~id, ~title, ~createdAt, ~passedAt, ~levelId, ~evaluatorId) => {
   id,
   title,
   createdAt,
   passedAt,
   levelId,
+  evaluatorId,
 };
 
 let id = t => t.id;
@@ -19,6 +21,8 @@ let id = t => t.id;
 let levelId = t => t.levelId;
 
 let title = t => t.title;
+
+let evaluatorId = t => t.evaluatorId;
 
 let sort = submissions =>
   submissions
@@ -34,6 +38,9 @@ let failed = t => {
 };
 
 let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+
+let timeDistance = t =>
+  t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);
 
 let makeFromJs = submissions => {
   submissions
@@ -55,6 +62,7 @@ let makeFromJs = submissions => {
              ~createdAt,
              ~passedAt,
              ~levelId=submission##levelId,
+             ~evaluatorId=submission##evaluatorId,
            ),
          ];
        | None => []

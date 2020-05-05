@@ -5,16 +5,8 @@ let str = React.string;
 
 type selectedTab = [ | `Overview | `Progress];
 
-type targetStatus = [ | `Pending | `Failed | `Submitted | `Passed];
-
-type filter = {
-  level: option(Level.t),
-  targetStatus,
-};
-
 type state = {
   selectedTab,
-  filter,
   overviewData: OverviewData.t,
 };
 
@@ -97,14 +89,7 @@ let make = (~studentId, ~levels, ~coaches) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {
-        selectedTab: `Overview,
-        filter: {
-          level: None,
-          targetStatus: `Passed,
-        },
-        overviewData: Unloaded,
-      },
+      {selectedTab: `Overview, overviewData: Unloaded},
     );
 
   React.useEffect1(getOverviewData(studentId, send), [|studentId|]);
@@ -132,7 +117,7 @@ let make = (~studentId, ~levels, ~coaches) => {
         </div>
       </div>
     </div>
-    <div className="max-w-3xl mx-auto border border-transparent shadow rounded-lg">
+    <div className="">
       {switch (state.selectedTab) {
        | `Overview =>
          <CoursesReport__Overview
@@ -140,7 +125,7 @@ let make = (~studentId, ~levels, ~coaches) => {
            levels
            coaches
          />
-       | `Progress => React.null
+       | `Progress => <CoursesReport__Progress levels submissions=[||] />
        }}
     </div>
   </div>;

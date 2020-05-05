@@ -59,8 +59,8 @@ let format = (date, fmt) => {
   // First, get the zoned time.
   let zonedDate = utcToZonedTime(date, timeZone);
 
-  // Then format it, specifying the zone again, so that timezone
-  // can be printed correctly.
+  // Then format it, specifying the zone again, so that timezone in the output,
+  // if any, can be printed correctly.
   formatTz(zonedDate, fmt, formatOptions(~timeZone, ()));
 };
 
@@ -69,26 +69,14 @@ let formatPreset = (date, fmt, withTime) => {
   format(date, computedFormat);
 };
 
-/**
- * `formatShorter(date, withTime)` will return a string wih the format 'MMM d'.
- */
 let formatShorter = (date, withTime) =>
   formatPreset(date, "MMM d", withTime);
 
-/**
- * `formatShort(date, withTime)` will return a string wih the format 'MMMM d'.
- */
 let formatShort = (date, withTime) => formatPreset(date, "MMMM d", withTime);
 
-/**
- * `formatLong(date, withTime)` will return a string wih the format 'MMM d, yyyy'.
- */
 let formatLong = (date, withTime) =>
   formatPreset(date, "MMM d, yyyy", withTime);
 
-/**
- * `formatLonger(date, withTime)` will return a string wih the format 'MMMM d, yyyy'.
- */
 let formatLonger = (date, withTime) =>
   formatPreset(date, "MMMM d, yyyy", withTime);
 

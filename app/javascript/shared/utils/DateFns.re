@@ -1,18 +1,10 @@
 type locale;
 
 // TODO: This function should return the user's actual / selected timezone.
-let currentTimezone = () => "Asia/Kolkata";
+let currentTimeZone = () => "Asia/Kolkata";
 
 // TODO: This function should return either "HH:mm", or "h:mm a" depending on user's preferred time format.
 let selectedTimeFormat = () => "HH:mm";
-
-[@bs.module "date-fns-tz"]
-external utcToZonedTime: (Js.Date.t, string) => Js.Date.t = "utcToZonedTime";
-
-[@bs.module "date-fns-tz"]
-external zonedTimeToUtcJs: (Js.Date.t, string) => Js.Date.t = "zonedTimeToUtc";
-
-let zonedTimeToUtc = date => zonedTimeToUtcJs(date, currentTimezone());
 
 [@bs.module "date-fns"]
 external formatDistance: (Js.Date.t, Js.Date.t) => string = "formatDistance";
@@ -32,10 +24,9 @@ external formatDistanceOpt:
   (Js.Date.t, Js.Date.t, formatDistanceOptions) => string =
   "formatDistance";
 
-let formatDistanceToNowOpt = (date, options) => {
-  let zonedTime = utcToZonedTime(date, currentTimezone());
-  zonedTime->formatDistanceOpt(Js.Date.make(), options);
-};
+[@bs.module "date-fns"]
+external formatDistanceToNowOpt: (Js.Date.t, formatDistanceOptions) => string =
+  "formatDistanceToNow";
 
 [@bs.module "date-fns"]
 external formatDistanceStrict: (Js.Date.t, Js.Date.t) => string =
@@ -54,14 +45,9 @@ type formatDistanceStrictOptions = {
 };
 
 [@bs.module "date-fns"]
-external formatDistanceStrictOpt:
-  (Js.Date.t, Js.Date.t, formatDistanceStrictOptions) => string =
-  "formatDistanceStrict";
-
-let formatDistanceToNowStrictOpt = (date, options) => {
-  let zonedTime = utcToZonedTime(date, currentTimezone());
-  zonedTime->formatDistanceStrictOpt(Js.Date.make(), options);
-};
+external formatDistanceToNowStrictOpt:
+  (Js.Date.t, formatDistanceStrictOptions) => string =
+  "formatDistanceToNowStrict";
 
 [@bs.deriving abstract]
 type formatOptions = {
@@ -82,7 +68,7 @@ type formatOptions = {
 external formatTz: (Js.Date.t, string, formatOptions) => string = "format";
 
 let format = (date, fmt) => {
-  let timeZone = currentTimezone();
+  let timeZone = currentTimeZone();
 
   // Since the passed date is not time-zone-sensitive, we need to pass the
   // time-zone here so that the user's timezone is displayed in the generated
@@ -100,6 +86,8 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
 
 [@bs.module "date-fns"]
 external decodeISO: Js.Json.t => Js.Date.t = "parseISO";
+
+let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string;
 
 [@bs.module "date-fns"] external parseISO: string => Js.Date.t = "parseISO";
 

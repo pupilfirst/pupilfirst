@@ -4740,7 +4740,7 @@
                 "description": "",
                 "type": {
                   "kind": "SCALAR",
-                  "name": "Date",
+                  "name": "ISO8601DateTime",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -6315,7 +6315,7 @@
                 "description": "",
                 "type": {
                   "kind": "SCALAR",
-                  "name": "Date",
+                  "name": "ISO8601DateTime",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -7284,16 +7284,6 @@
             "deprecationReason": null
           }
         ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Date",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
         "possibleTypes": null
       },
       {

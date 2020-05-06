@@ -147,9 +147,7 @@ let updateStudent = (student, state, send, responseCB) => {
     payload,
     "access_ends_at",
     state.accessEndsAt
-    |> OptionUtils.map(Js.Date.toString)
-    |> OptionUtils.default("")
-    |> Json.Encode.(string),
+    ->Belt.Option.mapWithDefault(Json.Encode.string(""), DateFns.encodeISO),
   );
 
   let url = "/school/students/" ++ (student |> Student.id);

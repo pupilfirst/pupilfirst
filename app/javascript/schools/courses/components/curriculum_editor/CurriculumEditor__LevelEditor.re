@@ -43,13 +43,16 @@ let setPayload = (authenticityToken, state) => {
     "authenticity_token",
     authenticityToken |> Js.Json.string,
   );
+
   Js.Dict.set(payload, "name", state.name |> Js.Json.string);
 
-  switch (state.unlockOn) {
-  | Some(date) =>
-    Js.Dict.set(payload, "unlock_on", date |> Date.iso8601 |> Js.Json.string)
-  | None => Js.Dict.set(payload, "unlock_on", "" |> Js.Json.string)
-  };
+  Js.Dict.set(
+    payload,
+    "unlock_on",
+    state.unlockOn
+    ->Belt.Option.mapWithDefault(Js.Json.string(""), DateFns.encodeISO),
+  );
+
   payload;
 };
 let formClasses = value =>

@@ -3,7 +3,7 @@ module Mutations
     argument :id, ID, required: true
     argument :name, String, required: true
     argument :description, String, required: true
-    argument :ends_at, Types::DateType, required: false
+    argument :ends_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :about, String, required: true
     argument :public_signup, Boolean, required: true
     argument :featured, Boolean, required: true

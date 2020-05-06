@@ -68,7 +68,7 @@ let reducer = (state, action) => {
 
 module CreateCourseQuery = [%graphql
   {|
-    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
       createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
         course {
           ...Course.Fragments.AllFields
@@ -80,7 +80,7 @@ module CreateCourseQuery = [%graphql
 
 module UpdateCourseQuery = [%graphql
   {|
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: Date, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
       updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
         course {
           ...Course.Fragments.AllFields
@@ -128,10 +128,7 @@ let createCourse = (state, send, updateCourseCB) => {
     CreateCourseQuery.make(
       ~name=state.name,
       ~description=state.description,
-      ~endsAt=?
-        state.endsAt
-        |> OptionUtils.map(Date.iso8601)
-        |> OptionUtils.map(Js.Json.string),
+      ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~featured=state.featured,
@@ -166,10 +163,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
       ~id=course |> Course.id,
       ~name=state.name,
       ~description=state.description,
-      ~endsAt=?
-        state.endsAt
-        |> OptionUtils.map(Date.iso8601)
-        |> OptionUtils.map(Js.Json.string),
+      ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
       ~about=state.about,
       ~publicSignup=state.publicSignup,
       ~featured=state.featured,

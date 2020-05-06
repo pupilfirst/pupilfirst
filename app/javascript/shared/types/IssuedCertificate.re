@@ -33,7 +33,7 @@ let decode = json =>
   Json.Decode.{
     serialNumber: json |> field("serialNumber", string),
     issuedTo: json |> field("issuedTo", string),
-    issuedAt: json |> field("issuedAt", string) |> DateFns.parseISO,
+    issuedAt: json |> field("issuedAt", DateFns.decodeISO),
     courseName: json |> field("courseName", string),
     imageUrl: json |> field("imageUrl", string),
     margin: json |> field("margin", int),

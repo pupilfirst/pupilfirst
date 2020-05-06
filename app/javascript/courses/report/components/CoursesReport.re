@@ -3,7 +3,7 @@ open CoursesReport__Types;
 
 let str = React.string;
 
-type selectedTab = [ | `Overview | `Progress];
+type selectedTab = [ | `Overview | `Submissions];
 
 type state = {
   selectedTab,
@@ -13,7 +13,7 @@ type state = {
 
 type action =
   | SelectOverviewTab
-  | SelectProgressTab
+  | SelectSubmissionsTab
   | SaveOverviewData(OverviewData.t)
   | SaveSubmissions(Submissions.t);
 
@@ -28,7 +28,7 @@ let buttonClasses = selected =>
 let reducer = (state, action) => {
   switch (action) {
   | SelectOverviewTab => {...state, selectedTab: `Overview}
-  | SelectProgressTab => {...state, selectedTab: `Progress}
+  | SelectSubmissionsTab => {...state, selectedTab: `Submissions}
   | SaveOverviewData(overviewData) => {...state, overviewData}
   | SaveSubmissions(submissions) => {...state, submissions}
   };
@@ -116,9 +116,9 @@ let make = (~studentId, ~levels, ~coaches) => {
               {"Overview" |> str}
             </button>
             <button
-              className={buttonClasses(state.selectedTab == `Progress)}
-              onClick={_ => send(SelectProgressTab)}>
-              {"Progress" |> str}
+              className={buttonClasses(state.selectedTab == `Submissions)}
+              onClick={_ => send(SelectSubmissionsTab)}>
+              {"Submissions" |> str}
             </button>
           </div>
         </div>
@@ -132,8 +132,8 @@ let make = (~studentId, ~levels, ~coaches) => {
            levels
            coaches
          />
-       | `Progress =>
-         <CoursesReport__Progress
+       | `Submissions =>
+         <CoursesReport__SubmissionsList
            studentId
            levels
            submissions={state.submissions}

@@ -4,14 +4,16 @@ type t = {
   createdAt: Js.Date.t,
   status: [ | `Pending | `Failed | `Passed],
   levelId: string,
+  targetId: string,
 };
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~status) => {
+let make = (~id, ~title, ~createdAt, ~levelId, ~status, ~targetId) => {
   id,
   title,
   createdAt,
   status,
   levelId,
+  targetId,
 };
 
 let id = t => t.id;
@@ -21,6 +23,8 @@ let levelId = t => t.levelId;
 let title = t => t.title;
 
 let status = t => t.status;
+
+let targetId = t => t.targetId;
 
 let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
 
@@ -46,6 +50,7 @@ let makeFromJs = submissions => {
              ~title=submission##title,
              ~createdAt,
              ~levelId=submission##levelId,
+             ~targetId=submission##targetId,
              ~status,
            ),
          ];

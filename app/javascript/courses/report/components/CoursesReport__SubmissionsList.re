@@ -359,7 +359,7 @@ let showSubmission = (submissions, levels) =>
      |> Array.map(submission =>
           <a
             key={submission |> Submission.id}
-            href={"/submissions/" ++ (submission |> Submission.id)}
+            href={"/targets/" ++ (submission |> Submission.targetId)}
             target="_blank">
             <div
               key={submission |> Submission.id}

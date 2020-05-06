@@ -9,7 +9,7 @@ let decodeProps = json =>
   );
 
 let (levels, courseId, teamCoaches, currentCoach) =
-  DomUtils.parseISOAttribute() |> decodeProps;
+  DomUtils.parseJSONAttribute() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CoursesReview__Root levels courseId teamCoaches currentCoach />,

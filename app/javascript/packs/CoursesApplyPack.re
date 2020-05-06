@@ -19,7 +19,7 @@ let decodeProps = json =>
     termsOfUse: json |> field("termsOfUse", bool),
   };
 
-let props = DomUtils.parseISOTag() |> decodeProps;
+let props = DomUtils.parseJSONTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CoursesApply__Root

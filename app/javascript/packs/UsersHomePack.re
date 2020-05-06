@@ -22,7 +22,7 @@ let (
   avatarUrl,
   issuedCertificates,
 ) =
-  DomUtils.parseISOTag(~id="users-home-data", ()) |> decodeProps;
+  DomUtils.parseJSONTag(~id="users-home-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <UsersHome__Root

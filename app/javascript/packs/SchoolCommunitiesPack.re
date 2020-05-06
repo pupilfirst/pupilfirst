@@ -16,7 +16,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseISOAttribute(
+  DomUtils.parseJSONAttribute(
     ~id="school-communities",
     ~attribute="data-json-props",
     (),

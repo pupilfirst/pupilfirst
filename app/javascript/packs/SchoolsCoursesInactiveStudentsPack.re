@@ -20,7 +20,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseISOAttribute(
+  DomUtils.parseJSONAttribute(
     ~id="sa-students-panel",
     ~attribute="data-props",
     (),

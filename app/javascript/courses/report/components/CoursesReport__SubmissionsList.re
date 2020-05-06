@@ -55,6 +55,7 @@ module StudentSubmissionsQuery = [%graphql
          id
         createdAt
         levelId
+        targetId
         passedAt
         title
         evaluatorId

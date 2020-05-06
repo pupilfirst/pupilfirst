@@ -6,14 +6,9 @@ module Types
     field :evaluator_id, ID, null: true
     field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
     field :level_id, String, null: false
-    field :grades, [Types::GradeType], null: false
 
     def level_id
       object.target.level.id
-    end
-
-    def grades
-      object.timeline_event_grades
     end
   end
 end

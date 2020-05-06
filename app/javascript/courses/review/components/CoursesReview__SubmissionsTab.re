@@ -281,7 +281,7 @@ let make =
               )
             : <button
                 className="btn btn-primary-ghost cursor-pointer w-full mt-4"
-                onClick={_ =>
+                onClick={_ =>{ setState(_state => Loading);
                   getSubmissions(
                     courseId,
                     Some(cursor),
@@ -292,7 +292,7 @@ let make =
                     selectedTab,
                     submissions,
                     updateSubmissionsCB,
-                  )
+                  )}
                 }>
                 {"Load More..." |> str}
               </button>}

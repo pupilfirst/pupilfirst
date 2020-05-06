@@ -8,12 +8,14 @@ type selectedTab = [ | `Overview | `Progress];
 type state = {
   selectedTab,
   overviewData: OverviewData.t,
+  submissions: Submissions.t,
 };
 
 type action =
   | SelectOverviewTab
   | SelectProgressTab
-  | SaveOverviewData(OverviewData.t);
+  | SaveOverviewData(OverviewData.t)
+  | SaveSubmissions(Submissions.t);
 
 let buttonClasses = selected =>
   "w-1/2 md:w-auto py-2 px-3 md:px-6 font-semibold text-sm focus:outline-none "
@@ -28,6 +30,7 @@ let reducer = (state, action) => {
   | SelectOverviewTab => {...state, selectedTab: `Overview}
   | SelectProgressTab => {...state, selectedTab: `Progress}
   | SaveOverviewData(overviewData) => {...state, overviewData}
+  | SaveSubmissions(submissions) => {...state, submissions}
   };
 };
 
@@ -84,12 +87,16 @@ let getOverviewData = (studentId, send, ()) => {
   None;
 };
 
+let updateSubmissions = (send, submissions) => {
+  send(SaveSubmissions(submissions));
+};
+
 [@react.component]
 let make = (~studentId, ~levels, ~coaches) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {selectedTab: `Overview, overviewData: Unloaded},
+      {selectedTab: `Overview, overviewData: Unloaded, submissions: Unloaded},
     );
 
   React.useEffect1(getOverviewData(studentId, send), [|studentId|]);
@@ -125,7 +132,13 @@ let make = (~studentId, ~levels, ~coaches) => {
            levels
            coaches
          />
-       | `Progress => <CoursesReport__Progress levels submissions=[||] />
+       | `Progress =>
+         <CoursesReport__Progress
+           studentId
+           levels
+           submissions={state.submissions}
+           updateSubmissionsCB={updateSubmissions(send)}
+         />
        }}
     </div>
   </div>;

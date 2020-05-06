@@ -5,13 +5,13 @@ class StudentSubmissionsResolver < ApplicationQuery
   property :sort_direction
 
   def student_submissions
-    applicable_submissions.includes(target: :level).distinct.order("created_at #{sort_direction_string}")
+    applicable_submissions.includes(target: :level).distinct.order("timeline_events.created_at #{sort_direction_string}")
   end
 
   def authorized?
-    return false if student.blank?
+    return false if current_user.blank?
 
-    return false if coach.blank?
+    return false if student.blank?
 
     current_user.id == student.user.id || coach.reviewable_courses.where(id: student.course).exists?
   end

@@ -24,5 +24,18 @@ let shortName = t => {
   "L" ++ (t.number |> string_of_int);
 };
 
+let levelLabel = (levels, id) => {
+  "Level "
+  ++ (
+    levels
+    |> ArrayUtils.unsafeFind(
+         level => level.id == id,
+         "Unable to find level with ID: " ++ id ++ " in CoursesReport",
+       )
+    |> number
+    |> string_of_int
+  );
+};
+
 let sort = levels =>
   levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number);

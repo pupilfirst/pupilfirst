@@ -1,4 +1,4 @@
-<% presenter = MailerPresenter.new(self, @school) %>
+<% presenter = MailerPresenter.new(self, @school, course: @course) %>
 
 <html lang='en'>
 <head>
@@ -15,15 +15,20 @@
         <table class="mailer-head__table">
           <tbody>
           <tr>
-            <td class="mailer-head__data">
-              <a class="mailer-head__logo" href="<%= presenter.school_url %>" title="<%= presenter.school_name %>" target="_blank" rel='noopener'>
-                <% if presenter.logo? %>
-                  <%= presenter.logo %>
-                <% else %>
-                  <%= presenter.school_name %>
-                <% end %>
-              </a>
-            </td>
+            <% if presenter.course_cover? %>
+              <td class="mailer-head__course-cover" style="background-image: url('<%= presenter.course_cover_url %>');">
+              </td>
+            <% else %>
+              <td class="mailer-head__data">
+                <a class="mailer-head__logo" href="<%= presenter.school_url %>" title="<%= presenter.school_name %>" target="_blank" rel='noopener'>
+                  <% if presenter.logo? %>
+                    <%= presenter.logo %>
+                  <% else %>
+                    <%= presenter.school_name %>
+                  <% end %>
+                </a>
+              </td>
+            <% end %>
           </tr>
           </tbody>
         </table>
@@ -32,9 +37,9 @@
           <tbody>
           <% if content_for?(:title) || content_for?(:subtitle) || content_for?(:title_button_text) %>
             <tr>
-              <td class="mailer-body__hero">
+              <td class="<%= presenter.hero_classes %>">
                 <% if content_for?(:title) %>
-                  <h1 class="mailer-body__hero-title"><%= yield :title %></h1>
+                  <h1 class="<%= presenter.hero_title_classes %>"><%= yield :title %></h1>
                 <% end %>
 
                 <% if content_for?(:subtitle) %>
@@ -42,7 +47,7 @@
                 <% end %>
 
                 <% if content_for?(:title_button_text) %>
-                  <a class="mailer-button" href="<%= yield(:title_button_link) %>" title="<%= presenter.school_name %>" target="_blank" rel='noopener'>
+                  <a class="<%= presenter.button_classes %>" href="<%= yield(:title_button_link) %>" title="<%= presenter.school_name %>" target="_blank" rel='noopener'>
                     <%= yield :title_button_text %>
                   </a>
                 <% end %>

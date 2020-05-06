@@ -135,7 +135,7 @@ let submissionStatus = submission => {
     } else if (submission |> IndexSubmission.failed) {
       (classes ++ "bg-red-100 border-red-500 text-red-800", "Failed");
     } else {
-      ("bg-green-100 border-green-500 text-green-800", "Passed");
+      (classes ++ "bg-green-100 border-green-500 text-green-800", "Passed");
     };
 
   <div className> {text |> str} </div>;

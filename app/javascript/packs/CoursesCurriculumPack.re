@@ -28,7 +28,7 @@ let (
   preview,
   accessLockedLevels,
 ) =
-  DomUtils.parseJsonTag() |> decodeProps;
+  DomUtils.parseJSONTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <CoursesCurriculum

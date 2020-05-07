@@ -99,7 +99,7 @@ class DailyDigestService
       .includes(:community, first_post: :creator).each_with_object(updates) do |topic, updates|
       community = topic.community
 
-      add_updates(community, topic, updates, Date.today, 'no_activity')
+      add_updates(community, topic, updates, Time.zone.today, 'no_activity')
     end
   end
 

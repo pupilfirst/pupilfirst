@@ -346,7 +346,7 @@ let submissionStatusIcon = (status, overlaySubmission, send) => {
            </div>
            <div
              className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
-             {"on " ++ (date |> DateFns.format("MMMM D, YYYY")) |> str}
+             {"on " ++ date->DateFns.format("MMMM d, yyyy") |> str}
            </div>
          </div>
        | (None, Graded(_))

@@ -96,9 +96,7 @@ let make =
             }>
             <span className="flex items-center py-2">
               <span className="truncate text-left">
-                {selectedVersion
-                 |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
-                 |> str}
+                {selectedVersion |> str}
               </span>
             </span>
             {versions |> Array.length > 1
@@ -126,9 +124,7 @@ let make =
                          version,
                        )}
                        className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
-                       {version
-                        |> DateTime.stingToFormatedTime(DateTime.OnlyDate)
-                        |> str}
+                       {version |> str}
                      </li>
                    )
                 |> Array.of_list

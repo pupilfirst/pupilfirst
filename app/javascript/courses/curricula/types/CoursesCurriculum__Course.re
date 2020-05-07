@@ -7,13 +7,27 @@ type progressionBehavior =
 
 type t = {
   id: string,
-  endsAt: option(string),
+  endsAt: option(Js.Date.t),
   certificateSerialNumber: option(string),
   progressionBehavior,
 };
 
+let endsAt = t => t.endsAt;
+
+let id = t => t.id;
+
+let certificateSerialNumber = t => t.certificateSerialNumber;
+
+let progressionBehavior = t =>
+  switch (t.progressionBehavior) {
+  | Strict => `Strict
+  | Unlimited => `Unlimited
+  | Limited(progressionLimit) => `Limited(progressionLimit)
+  };
+
 let decode = json => {
   let behavior = json |> Json.Decode.(field("progressionBehavior", string));
+
   let progressionBehavior =
     switch (behavior) {
     | "Limited" =>
@@ -29,25 +43,14 @@ let decode = json => {
 
   Json.Decode.{
     id: json |> field("id", string),
-    endsAt: json |> field("endsAt", nullable(string)) |> Js.Null.toOption,
+    endsAt:
+      (json |> optional(field("endsAt", string)))
+      ->Belt.Option.map(DateFns.parseISO),
     certificateSerialNumber:
       json |> optional(field("certificateSerialNumber", string)),
     progressionBehavior,
   };
 };
 
-let endsAt = t => t.endsAt;
-let id = t => t.id;
-let certificateSerialNumber = t => t.certificateSerialNumber;
-let progressionBehavior = t =>
-  switch (t.progressionBehavior) {
-  | Strict => `Strict
-  | Unlimited => `Unlimited
-  | Limited(progressionLimit) => `Limited(progressionLimit)
-  };
-
 let hasEnded = t =>
-  switch (t.endsAt) {
-  | Some(date) => date |> DateFns.parseString |> DateFns.isPast
-  | None => false
-  };
+  t.endsAt->Belt.Option.mapWithDefault(false, DateFns.isPast);

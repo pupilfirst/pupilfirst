@@ -54,9 +54,9 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
             <span> {" on " |> str} </span>
             <strong>
               {issuedCertificate
-               |> IssuedCertificate.issuedAt
-               |> DateTime.format(DateTime.OnlyDate)
-               |> str}
+               ->IssuedCertificate.issuedAt
+               ->DateFns.formatPreset(~short=true, ~year=true, ())
+               ->str}
             </strong>
             <span> {" for completing the course " |> str} </span>
             <strong>

@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   before_action :sign_out_if_required
   before_action :pretender
 
+  around_action :set_time_zone, if: :current_user
+
   helper_method :current_host
   helper_method :current_domain
   helper_method :current_school
@@ -152,6 +154,10 @@ class ApplicationController < ActionController::Base
   helper_method :pundit_user
 
   private
+
+  def set_time_zone(&block) # rubocop:disable Naming/AccessorMethodName
+    Time.use_zone(current_user.time_zone, &block)
+  end
 
   def sign_out_if_required
     service = ::Users::ManualSignOutService.new(self, current_user)

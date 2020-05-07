@@ -203,8 +203,8 @@ let suggestions = state => {
          |> Array.map(suggestion => {
               let askedOn =
                 suggestion
-                |> TopicSuggestion.createdAt
-                |> DateTime.format(DateTime.OnlyDate);
+                ->TopicSuggestion.createdAt
+                ->DateFns.formatPreset(~short=true, ~year=true, ());
               let (answersText, answersClasses) =
                 switch (suggestion |> TopicSuggestion.repliesCount) {
                 | 0 => ("No replies", "bg-gray-300 text-gray-700")

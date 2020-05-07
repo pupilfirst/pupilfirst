@@ -6,13 +6,19 @@ module Schools
 
       def save
         level.name = name
-        level.unlock_on = unlock_on
+        level.unlock_on = unlock_on_date
         level.save!
 
         level
       end
 
       private
+
+      def unlock_on_date
+        return if unlock_on.blank?
+
+        Time.zone.parse(unlock_on).to_date
+      end
 
       def level
         @level ||= Level.find_by(id: id)

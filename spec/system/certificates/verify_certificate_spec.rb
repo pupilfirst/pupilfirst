@@ -6,6 +6,10 @@ feature 'Certificate verification', js: true do
   let(:issued_certificate) { create :issued_certificate }
   let!(:user) { issued_certificate.user }
 
+  around do |example|
+    Time.use_zone(user.time_zone) { example.run }
+  end
+
   scenario 'user verifies certificate' do
     sign_in_user user, referer: issued_certificate_path(serial_number: issued_certificate.serial_number)
 

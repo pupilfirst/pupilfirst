@@ -7,7 +7,7 @@ let decodeProps = json =>
   );
 
 let (currentCourseId, courses, additionalLinks, coverImage) =
-  DomUtils.parseJsonAttribute(~id="course-header-root", ()) |> decodeProps;
+  DomUtils.parseJSONAttribute(~id="course-header-root", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <StudentCourse__Header currentCourseId courses additionalLinks coverImage />,

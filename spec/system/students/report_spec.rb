@@ -71,6 +71,10 @@ feature "Course students report", js: true do
     submission_target_l3.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
   end
 
+  around do |example|
+    Time.use_zone(course_coach.user.time_zone) { example.run }
+  end
+
   scenario 'coach opens the student report and checks performance' do
     sign_in_user course_coach.user, referer: students_course_path(course)
 
@@ -208,7 +212,7 @@ feature "Course students report", js: true do
     dismiss_notification
     expect(page).to have_text(course_coach.name, count: 3)
     expect(page).to have_text(course_coach.title, count: 3)
-    expect(page).to have_text(Date.today.strftime('%B %-d'), count: 4)
+    expect(page).to have_text(Time.zone.today.strftime('%B %-d'), count: 4)
     expect(CoachNote.where(student: student).last.note).to eq(note_2)
   end
 

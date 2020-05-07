@@ -116,12 +116,7 @@ let submissions =
 
   targetDetails
   |> TargetDetails.submissions
-  |> List.sort((s1, s2) => {
-       let s1CreatedAt = s1 |> Submission.createdAtDate;
-       let s2CreatedAt = s2 |> Submission.createdAtDate;
-
-       s1CreatedAt |> DateFns.differenceInSeconds(s2CreatedAt) |> int_of_float;
-     })
+  |> Submission.sort
   |> List.map(submission => {
        let grades =
          targetDetails |> TargetDetails.grades(submission |> Submission.id);

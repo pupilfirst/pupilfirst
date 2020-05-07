@@ -197,9 +197,9 @@ let make =
           </h2>
           <span className="text-xs text-gray-800 pt-px">
             {overlaySubmission
-             |> OverlaySubmission.createdAt
-             |> DateFns.format("MMMM D, YYYY")
-             |> str}
+             ->OverlaySubmission.createdAt
+             ->DateFns.formatPreset(~year=true, ())
+             ->str}
           </span>
         </div>
         <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">

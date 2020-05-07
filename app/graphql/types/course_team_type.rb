@@ -5,7 +5,7 @@ module Types
     field :level_id, ID, null: false
     field :students, [Types::CourseStudentType], null: false
     field :coach_ids, [ID], null: false
-    field :access_ends_at, String, null: true
+    field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def coach_ids
       object.faculty_startup_enrollments.pluck(:faculty_id)

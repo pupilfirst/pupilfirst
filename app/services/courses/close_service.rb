@@ -5,7 +5,7 @@ module Courses
     end
 
     def close
-      @course.update!(ends_at: Time.now)
+      @course.update!(ends_at: Time.zone.now)
     end
   end
 end

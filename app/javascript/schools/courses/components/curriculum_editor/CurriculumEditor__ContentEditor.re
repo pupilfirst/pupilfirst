@@ -124,9 +124,10 @@ let editor = (target, state, send) => {
     | [||] => <span className="italic"> {"Not Versioned" |> str} </span>
     | versions =>
       let latestVersion =
-        versions->Array.unsafe_get(0)
-        |> Version.updatedAt
-        |> DateFns.format("MMM D, YYYY HH:MM");
+        versions
+        ->Array.unsafe_get(0)
+        ->Version.updatedAt
+        ->DateFns.format("MMM d, yyyy HH:mm");
 
       latestVersion |> str;
     };

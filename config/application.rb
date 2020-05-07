@@ -22,18 +22,10 @@ module Svapp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'New Delhi'
-
     config.i18n.enforce_available_locales = true
 
     # include nested directories inside locale
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml')]
-
-    Dir.glob('config/routes/*.rb').each do |file|
-      config.paths['config/routes.rb'] << Rails.root.join(file)
-    end
 
     # Precompile fonts.
     config.assets.paths << Rails.root.join('app/assets/fonts')

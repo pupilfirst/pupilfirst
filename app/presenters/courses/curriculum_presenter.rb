@@ -157,7 +157,7 @@ module Courses
         if access_locked_levels
           scope
         else
-          scope.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Date.today))
+          scope.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Time.zone.today))
         end.pluck(:id)
       end
     end

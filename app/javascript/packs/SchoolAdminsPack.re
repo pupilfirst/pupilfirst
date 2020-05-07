@@ -10,7 +10,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonTag(~id="school-admins-data", ()) |> decodeProps;
+  DomUtils.parseJSONTag(~id="school-admins-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <SchoolAdmins__Editor

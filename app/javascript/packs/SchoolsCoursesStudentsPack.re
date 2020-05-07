@@ -18,7 +18,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJsonTag(~id="sa-students-panel-data", ()) |> decodeProps;
+  DomUtils.parseJSONTag(~id="sa-students-panel-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <StudentsEditor__Root

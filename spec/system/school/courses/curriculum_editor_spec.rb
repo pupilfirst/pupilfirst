@@ -28,7 +28,7 @@ feature 'Curriculum Editor', js: true do
 
   # Data for level
   let(:new_level_name) { Faker::Lorem.sentence }
-  let(:date) { Date.today }
+  let(:date) { Time.zone.today }
 
   # Data for target group 1
   let(:new_target_group_name) { Faker::Lorem.sentence }
@@ -39,6 +39,10 @@ feature 'Curriculum Editor', js: true do
 
   # Data for a normal target
   let(:new_target_1_title) { Faker::Lorem.sentence }
+
+  around do |example|
+    Time.use_zone(school_admin.user.time_zone) { example.run }
+  end
 
   scenario 'admin creates a basic course framework by adding level, target group and targets' do
     sign_in_user school_admin.user, referer: curriculum_school_course_path(course)

@@ -22,7 +22,7 @@ let (
   community,
   target,
 ) =
-  DomUtils.parseJsonTag() |> decodeProps;
+  DomUtils.parseJSONTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <TopicsShow__Root

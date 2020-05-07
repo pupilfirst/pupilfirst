@@ -7,7 +7,7 @@ class Level < ApplicationRecord
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :targets
 
-  scope :unlocked, -> { where(unlock_on: nil).or(where('unlock_on <= ?', Date.today)) }
+  scope :unlocked, -> { where(unlock_on: nil).or(where('unlock_on <= ?', Time.zone.today)) }
 
   belongs_to :course
 

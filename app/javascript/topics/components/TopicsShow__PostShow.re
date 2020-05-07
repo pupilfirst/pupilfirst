@@ -278,11 +278,8 @@ let make =
                             </span>
                             <span>
                               {" on "
-                               ++ (
-                                 post
-                                 |> Post.updatedAt
-                                 |> DateFns.format("Do MMMM, YYYY HH:mm")
-                               )
+                               ++ Post.updatedAt(post)
+                                  ->DateFns.format("do MMMM, yyyy HH:mm")
                                |> str}
                             </span>
                           </div>

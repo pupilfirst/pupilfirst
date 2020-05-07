@@ -66,17 +66,14 @@ let readinessString = courseExport =>
     let timeDistance =
       courseExport
       ->CourseExport.createdAt
-      ->DateFns.formatDistanceToNowOpt(
-          DateFns.formatDistanceOptions(~addSuffix=true, ()),
-        );
+      ->DateFns.formatDistanceToNow(~addSuffix=true, ());
+
     "Requested " ++ timeDistance;
   | Some(file) =>
     let timeDistance =
       file
       ->CourseExport.fileCreatedAt
-      ->DateFns.formatDistanceToNowOpt(
-          DateFns.formatDistanceOptions(~addSuffix=true, ()),
-        );
+      ->DateFns.formatDistanceToNow(~addSuffix=true, ());
     "Prepared " ++ timeDistance;
   };
 

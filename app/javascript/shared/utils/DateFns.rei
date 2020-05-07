@@ -29,31 +29,30 @@ let format: (Js.Date.t, string) => string;
 let formatPreset:
   (Js.Date.t, ~short: bool=?, ~year: bool=?, ~time: bool=?, unit) => string;
 
-let formatDistance: (Js.Date.t, Js.Date.t) => string;
+let formatDistance:
+  (Js.Date.t, Js.Date.t, ~includeSeconds: bool=?, ~addSuffix: bool=?, unit) =>
+  string;
 
-type formatDistanceOptions;
-
-let formatDistanceOptions:
-  (~includeSeconds: bool=?, ~addSuffix: bool=?, ~locale: locale=?, unit) =>
-  formatDistanceOptions;
-
-let formatDistanceOpt: (Js.Date.t, Js.Date.t, formatDistanceOptions) => string;
-
-let formatDistanceToNowOpt: (Js.Date.t, formatDistanceOptions) => string;
-
-let formatDistanceStrict: (Js.Date.t, Js.Date.t) => string;
-
-type formatDistanceStrictOptions;
-
-let formatDistanceStrictOptions:
+let formatDistanceStrict:
   (
+    Js.Date.t,
+    Js.Date.t,
     ~addSuffix: bool=?,
     ~unit: string=?,
     ~roundingMethod: string=?,
-    ~locale: locale=?,
     unit
   ) =>
-  formatDistanceStrictOptions;
+  string;
 
-let formatDistanceToNowStrictOpt:
-  (Js.Date.t, formatDistanceStrictOptions) => string;
+let formatDistanceToNow:
+  (Js.Date.t, ~includeSeconds: bool=?, ~addSuffix: bool=?, unit) => string;
+
+let formatDistanceToNowStrict:
+  (
+    Js.Date.t,
+    ~addSuffix: bool=?,
+    ~unit: string=?,
+    ~roundingMethod: string=?,
+    unit
+  ) =>
+  string;

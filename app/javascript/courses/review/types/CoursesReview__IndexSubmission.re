@@ -35,10 +35,7 @@ let feedbackSent = t =>
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let timeDistance = t =>
-  t.createdAt
-  ->DateFns.formatDistanceToNowStrictOpt(
-      DateFns.formatDistanceStrictOptions(~addSuffix=true, ()),
-    );
+  t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ());
 
 let sortArray = (sortDirection, submissions) => {
   let sortDescending =

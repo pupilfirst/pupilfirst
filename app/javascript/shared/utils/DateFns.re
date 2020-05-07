@@ -1,14 +1,5 @@
 type locale;
 
-// TODO: This function should return the user's actual / selected timezone.
-let currentTimeZone = () => "Asia/Kolkata";
-
-// TODO: This function should return either "HH:mm", or "h:mm a" depending on user's preferred time format.
-let selectedTimeFormat = () => "HH:mm";
-
-[@bs.module "date-fns"]
-external formatDistance: (Js.Date.t, Js.Date.t) => string = "formatDistance";
-
 [@bs.deriving abstract]
 type formatDistanceOptions = {
   [@bs.optional]
@@ -18,19 +9,6 @@ type formatDistanceOptions = {
   [@bs.optional]
   locale,
 };
-
-[@bs.module "date-fns"]
-external formatDistanceOpt:
-  (Js.Date.t, Js.Date.t, formatDistanceOptions) => string =
-  "formatDistance";
-
-[@bs.module "date-fns"]
-external formatDistanceToNowOpt: (Js.Date.t, formatDistanceOptions) => string =
-  "formatDistanceToNow";
-
-[@bs.module "date-fns"]
-external formatDistanceStrict: (Js.Date.t, Js.Date.t) => string =
-  "formatDistanceStrict";
 
 [@bs.deriving abstract]
 type formatDistanceStrictOptions = {
@@ -44,10 +22,56 @@ type formatDistanceStrictOptions = {
   locale,
 };
 
+// TODO: This function should return the user's actual / selected timezone.
+let currentTimeZone = () => "Asia/Kolkata";
+
+// TODO: This function should return either "HH:mm", or "h:mm a" depending on user's preferred time format.
+let selectedTimeFormat = () => "HH:mm";
+
+[@bs.module "date-fns"]
+external formatDistanceOpt:
+  (Js.Date.t, Js.Date.t, formatDistanceOptions) => string =
+  "formatDistance";
+
+[@bs.module "date-fns"]
+external formatDistanceStrictOpt:
+  (Js.Date.t, Js.Date.t, formatDistanceStrictOptions) => string =
+  "formatDistanceStrict";
+
+[@bs.module "date-fns"]
+external formatDistanceToNowOpt: (Js.Date.t, formatDistanceOptions) => string =
+  "formatDistanceToNow";
+
 [@bs.module "date-fns"]
 external formatDistanceToNowStrictOpt:
   (Js.Date.t, formatDistanceStrictOptions) => string =
   "formatDistanceToNowStrict";
+
+let formatDistance =
+    (date, baseDate, ~includeSeconds=false, ~addSuffix=false, ()) => {
+  let options = formatDistanceOptions(~includeSeconds, ~addSuffix, ());
+  formatDistanceOpt(date, baseDate, options);
+};
+
+let formatDistanceStrict =
+    (date, baseDate, ~addSuffix=false, ~unit=?, ~roundingMethod="round", ()) => {
+  let options =
+    formatDistanceStrictOptions(~addSuffix, ~unit?, ~roundingMethod, ());
+  formatDistanceStrictOpt(date, baseDate, options);
+};
+
+let formatDistanceToNow = (date, ~includeSeconds=false, ~addSuffix=false, ()) => {
+  let options = formatDistanceOptions(~includeSeconds, ~addSuffix, ());
+  formatDistanceToNowOpt(date, options);
+};
+
+let formatDistanceToNowStrict =
+    (date, ~addSuffix=false, ~unit=?, ~roundingMethod="round", ()) => {
+  let options =
+    formatDistanceStrictOptions(~addSuffix, ~unit?, ~roundingMethod, ());
+
+  formatDistanceToNowStrictOpt(date, options);
+};
 
 [@bs.deriving abstract]
 type formatOptions = {

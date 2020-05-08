@@ -12,13 +12,19 @@ module Schools
           course: course,
           name: name,
           number: next_level_number,
-          unlock_on: unlock_on
+          unlock_on: unlock_on_date
         )
         level.save
         level
       end
 
       private
+
+      def unlock_on_date
+        return if unlock_on.blank?
+
+        Time.zone.parse(unlock_on).to_date
+      end
 
       def next_level_number
         course.levels.maximum(:number) + 1

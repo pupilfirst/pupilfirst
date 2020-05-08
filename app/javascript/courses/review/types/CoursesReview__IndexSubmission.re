@@ -32,16 +32,16 @@ let pendingReview = t =>
 let feedbackSent = t =>
   t.status |> OptionUtils.mapWithDefault(status => status.feedbackSent, false);
 
-let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let timeDistance = t =>
-  t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);
+  t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ());
 
 let sortArray = (sortDirection, submissions) => {
   let sortDescending =
     submissions
     |> ArrayUtils.copyAndSort((x, y) =>
-         DateFns.differenceInSeconds(y.createdAt, x.createdAt) |> int_of_float
+         DateFns.differenceInSeconds(y.createdAt, x.createdAt)
        );
   switch (sortDirection) {
   | `Descending => sortDescending
@@ -68,20 +68,19 @@ let decodeJs = details =>
        | Some(submission) =>
          let status =
            submission##evaluatedAt
-           |> OptionUtils.map(_ =>
-                makeStatus(
-                  ~passedAt=
-                    submission##passedAt
-                    |> OptionUtils.map(DateFns.parseString),
-                  ~feedbackSent=submission##feedbackSent,
-                )
-              );
+           ->Belt.Option.map(_ =>
+               makeStatus(
+                 ~passedAt=
+                   submission##passedAt->Belt.Option.map(DateFns.decodeISO),
+                 ~feedbackSent=submission##feedbackSent,
+               )
+             );
 
          [
            make(
              ~id=submission##id,
              ~title=submission##title,
-             ~createdAt=submission##createdAt |> DateFns.parseString,
+             ~createdAt=DateFns.decodeISO(submission##createdAt),
              ~levelId=submission##levelId,
              ~userNames=submission##userNames,
              ~status,
@@ -97,7 +96,7 @@ let replace = (e, l) => l |> Array.map(s => s.id == e.id ? e : s);
 let statusEq = (overlaySubmission, t) =>
   switch (
     t.status,
-    overlaySubmission |> CoursesReview__OverlaySubmission.evaluatedAt,
+    CoursesReview__OverlaySubmission.evaluatedAt(overlaySubmission),
   ) {
   | (None, None) => true
   | (Some({passedAt}), Some(_)) =>

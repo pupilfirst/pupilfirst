@@ -1,14 +1,13 @@
 module Types
   class SubmissionType < Types::BaseObject
     field :id, ID, null: false
-    field :created_at, String, null: false
-    field :evaluated_at, String, null: true
-    field :passed_at, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :evaluated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
     field :evaluator_name, String, null: true
     field :feedback, [Types::SubmissionFeedbackType], null: false
     field :grades, [Types::GradeType], null: false
     field :files, [Types::SubmissionFileType], null: false
-    field :evaluated_at, String, null: true
     field :checklist, GraphQL::Types::JSON, null: false
     field :title, String, null: false
     field :level_id, ID, null: false

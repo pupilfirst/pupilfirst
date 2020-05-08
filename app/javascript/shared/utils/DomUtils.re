@@ -4,7 +4,7 @@ exception RootAttributeMissing(string);
 
 open Webapi.Dom;
 
-let parseJsonTag = (~id="react-root-data", ()) =>
+let parseJSONTag = (~id="react-root-data", ()) =>
   (
     switch (document |> Document.getElementById(id)) {
     | Some(rootElement) => rootElement |> Element.innerHTML
@@ -13,7 +13,7 @@ let parseJsonTag = (~id="react-root-data", ()) =>
   )
   |> Json.parseOrRaise;
 
-let parseJsonAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
+let parseJSONAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
   (
     switch (document |> Document.getElementById(id)) {
     | Some(rootElement) =>

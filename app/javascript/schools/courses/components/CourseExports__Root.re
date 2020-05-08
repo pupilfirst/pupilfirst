@@ -65,16 +65,15 @@ let readinessString = courseExport =>
   | None =>
     let timeDistance =
       courseExport
-      |> CourseExport.createdAt
-      |> DateFns.parseString
-      |> DateFns.distanceInWordsToNow(~addSuffix=true);
+      ->CourseExport.createdAt
+      ->DateFns.formatDistanceToNow(~addSuffix=true, ());
+
     "Requested " ++ timeDistance;
   | Some(file) =>
     let timeDistance =
       file
-      |> CourseExport.fileCreatedAt
-      |> DateFns.parseString
-      |> DateFns.distanceInWordsToNow(~addSuffix=true);
+      ->CourseExport.fileCreatedAt
+      ->DateFns.formatDistanceToNow(~addSuffix=true, ());
     "Prepared " ++ timeDistance;
   };
 
@@ -135,7 +134,7 @@ let createCourseExport = (state, send, course, event) => {
            CourseExport.make(
              ~id=export##id,
              ~exportType=state.exportType,
-             ~createdAt=export##createdAt,
+             ~createdAt=export##createdAt->DateFns.decodeISO,
              ~tags=export##tags,
              ~reviewedOnly=export##reviewedOnly,
            );
@@ -304,10 +303,9 @@ let make = (~course, ~exports, ~tags) => {
                  {state.courseExports
                   |> ArrayUtils.copyAndSort((x, y) =>
                        DateFns.differenceInSeconds(
-                         y |> CourseExport.createdAt |> DateFns.parseString,
-                         x |> CourseExport.createdAt |> DateFns.parseString,
+                         y |> CourseExport.createdAt,
+                         x |> CourseExport.createdAt,
                        )
-                       |> int_of_float
                      )
                   |> Array.map(courseExport =>
                        <div

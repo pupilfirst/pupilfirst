@@ -342,13 +342,15 @@ feature 'School students index', js: true do
         find("a", text: founder.name).click
 
         expect(page).to have_text(founder.startup.name)
-        fill_in "Team's Access Ends On", with: access_ends_at.iso8601
+        fill_in "Team's Access Ends On", with: access_ends_at.to_date.iso8601
         click_button 'Update Student'
 
         expect(page).to have_text("Student updated successfully")
         dismiss_notification
 
-        expect(founder.reload.startup.access_ends_at.to_date).to eq(access_ends_at.to_date)
+        expect(
+          founder.reload.startup.access_ends_at.in_time_zone(founder.user.time_zone).to_date
+        ).to eq(access_ends_at.to_date)
 
         find("a", text: founder.name).click
         fill_in "Team's Access Ends On", with: 1.day.ago.iso8601

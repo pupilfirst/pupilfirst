@@ -110,7 +110,7 @@ let submit = (state, send, target, addSubmissionCB, event) => {
          let newSubmission =
            Submission.make(
              ~id=submission##id,
-             ~createdAt=submission##createdAt,
+             ~createdAt=DateFns.decodeISO(submission##createdAt),
              ~status=Submission.Pending,
              ~checklist=submissionChecklist,
            );

@@ -40,12 +40,9 @@ jobs:
       DB_PASSWORD: postgres
       CAPYBARA_MAX_WAIT_TIME: 5
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      SPEC_USER_TIME_ZONE: Etc/UTC
 
     steps:
-      - name: Setup Timezone
-        uses: zcong1993/setup-timezone@master
-        with:
-          timezone: Asia/Kolkata
       - uses: actions/checkout@v2
       - name: Use Ruby 2.7
         uses: actions/setup-ruby@v1

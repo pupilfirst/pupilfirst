@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Faculty Weekly Slots' do
+feature 'Faculty Weekly Slots', broken: true do
   let!(:faculty) { create :faculty, current_commitment: '20 mins per week for the first 6 months this year', school: school }
   let(:school) { create :school, :current }
 

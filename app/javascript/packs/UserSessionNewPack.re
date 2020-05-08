@@ -7,7 +7,7 @@ let decodeProps = json =>
   );
 
 let (schoolName, authenticityToken, fqdn, oauthHost) =
-  DomUtils.parseJsonTag(~id="user-session-new-data", ()) |> decodeProps;
+  DomUtils.parseJSONTag(~id="user-session-new-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <UserSessionNew schoolName authenticityToken fqdn oauthHost />,

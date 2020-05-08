@@ -14,7 +14,7 @@ module JsComponent = {
 let make = (~onChange, ~selected=?, ~id=?) => {
   <JsComponent
     ?id
-    onChange={date => onChange(date |> Js.Nullable.toOption)}
+    onChange={date => onChange(date->Js.Nullable.toOption)}
     ?selected
   />;
 };

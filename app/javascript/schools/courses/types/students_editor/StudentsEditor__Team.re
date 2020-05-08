@@ -49,7 +49,7 @@ let makeFromJS = teamDetails => {
              ~students,
              ~coachIds,
              ~accessEndsAt=
-               team##accessEndsAt |> OptionUtils.map(DateFns.parseString),
+               team##accessEndsAt->Belt.Option.map(DateFns.decodeISO),
            ),
          ];
        | None => []
@@ -85,9 +85,5 @@ let unsafeFind = (teams, componentName, teamId) => {
      );
 };
 
-let active = t => {
-  switch (t.accessEndsAt) {
-  | Some(date) => date |> DateFns.isAfter(Js.Date.make())
-  | None => true
-  };
-};
+let active = t =>
+  t.accessEndsAt->Belt.Option.mapWithDefault(true, DateFns.isFuture);

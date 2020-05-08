@@ -69,7 +69,7 @@
             <%= link_to 'Terms of Use', agreement_path(agreement_type: 'terms-of-use'), class: "cursor-pointer md:mr-3 hover:text-primary-500" %>
           <% end %>
 
-          <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">&copy; <%= Time.now.year %> <%= presenter.school_name %>
+          <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">&copy; <%= Time.zone.now.year %> <%= presenter.school_name %>
             .</span>
         </div>
       </div>

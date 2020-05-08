@@ -7,7 +7,7 @@ let decodeProps = json =>
   );
 
 let (courseId, authors) =
-  DomUtils.parseJsonTag(~id="schools-courses-authors__props", ())
+  DomUtils.parseJSONTag(~id="schools-courses-authors__props", ())
   |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(

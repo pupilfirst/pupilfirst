@@ -60,7 +60,7 @@ let handleErrorCB = (send, ()) => send(UpdateSaving(false));
 let successMessage = (accessEndsAt, isSingleFounder) => {
   switch (accessEndsAt) {
   | Some(date) =>
-    switch (date |> DateFns.isBefore(Js.Date.make()), isSingleFounder) {
+    switch (date->DateFns.isPast, isSingleFounder) {
     | (true, true) => "Student has been updated, and moved to list of inactive students"
     | (true, false) => "Team has been updated, and moved to list of inactive students"
     | (false, true)
@@ -147,9 +147,7 @@ let updateStudent = (student, state, send, responseCB) => {
     payload,
     "access_ends_at",
     state.accessEndsAt
-    |> OptionUtils.map(Js.Date.toString)
-    |> OptionUtils.default("")
-    |> Json.Encode.(string),
+    ->Belt.Option.mapWithDefault(Json.Encode.string(""), DateFns.encodeISO),
   );
 
   let url = "/school/students/" ++ (student |> Student.id);

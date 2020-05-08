@@ -20,7 +20,6 @@
     "@glennsl/bs-json",
     "bs-fetch",
     "bs-webapi",
-    "bs-date-fns"
   ],
   "refmt": 3,
   "ppx-flags": ["@baransu/graphql_ppx_re/ppx6"],

@@ -329,9 +329,9 @@ let certificatesSection = issuedCertificates =>
                       <span> {"Issued on:" |> str} </span>
                       <span className="ml-1">
                         {issuedCertificate
-                         |> IssuedCertificate.createdAt
-                         |> DateTime.format(DateTime.OnlyDate)
-                         |> str}
+                         ->IssuedCertificate.createdAt
+                         ->DateFns.formatPreset(~short=true, ~year=true, ())
+                         ->str}
                       </span>
                     </div>
                   </div>

@@ -12,7 +12,7 @@ module StartupFeedbackModule
       StartupMailer.feedback_as_email(@startup_feedback).deliver_later
 
       # Mark feedback as sent.
-      @startup_feedback.update!(sent_at: Time.now)
+      @startup_feedback.update!(sent_at: Time.zone.now)
     end
   end
 end

@@ -49,16 +49,18 @@ let statusString = targetStatus => {
 
 module StudentSubmissionsQuery = [%graphql
   {|
-   query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewResult, $levelId: ID, $sortDirection: SortDirection!) {
+   query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewStatus, $levelId: ID, $sortDirection: SortDirection!) {
     studentSubmissions(studentId: $studentId, after: $after, first: 20 , status: $status, levelId: $levelId, sortDirection: $sortDirection) {
        nodes {
-         id
+        id
         createdAt
         levelId
         targetId
         passedAt
         title
         evaluatorId
+        studentIds
+        teamTarget
        }
        pageInfo {
          hasNextPage
@@ -353,52 +355,77 @@ let submissionCardClasses = submission =>
     }
   );
 
-let showSubmission = (submissions, levels) =>
+let showSubmission = (submissions, levels, teamStudentIds) =>
   <div>
     {submissions
      |> Array.map(submission =>
-          <a
-            key={submission |> Submission.id}
-            href={"/targets/" ++ (submission |> Submission.targetId)}
-            target="_blank">
-            <div
+          <div>
+            <a
               key={submission |> Submission.id}
-              ariaLabel={
-                "student-submission-card-" ++ (submission |> Submission.id)
-              }
-              className={submissionCardClasses(submission)}>
-              <div className="w-full md:w-3/4">
-                <div className="block text-sm md:pr-2">
-                  <span
-                    className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                    {submission
-                     |> Submission.levelId
-                     |> Level.levelLabel(levels)
-                     |> str}
-                  </span>
-                  <span className="ml-2 font-semibold text-base">
-                    {submission |> Submission.title |> str}
-                  </span>
+              href={"/targets/" ++ (submission |> Submission.targetId)}
+              target="_blank">
+              <div
+                key={submission |> Submission.id}
+                ariaLabel={
+                  "student-submission-card-" ++ (submission |> Submission.id)
+                }
+                className={submissionCardClasses(submission)}>
+                <div className="w-full md:w-3/4">
+                  <div className="block text-sm md:pr-2">
+                    <span
+                      className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
+                      {submission
+                       |> Submission.levelId
+                       |> Level.levelLabel(levels)
+                       |> str}
+                    </span>
+                    <span className="ml-2 font-semibold text-base">
+                      {submission |> Submission.title |> str}
+                    </span>
+                  </div>
+                  <div className="mt-1 ml-px text-xs text-gray-900">
+                    <span className="ml-1">
+                      {"Submitted on "
+                       ++ (submission |> Submission.createdAtPretty)
+                       |> str}
+                    </span>
+                  </div>
                 </div>
-                <div className="mt-1 ml-px text-xs text-gray-900">
-                  <span className="ml-1">
-                    {"Submitted on "
-                     ++ (submission |> Submission.createdAtPretty)
-                     |> str}
-                  </span>
-                </div>
+                {<div
+                   className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
+                   {showSubmissionStatus(submission)}
+                 </div>}
               </div>
-              {<div
-                 className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                 {showSubmissionStatus(submission)}
-               </div>}
-            </div>
-          </a>
+            </a>
+            {switch (submission |> Submission.targetRole) {
+             | Student => React.null
+             | Team(studentIds) =>
+               teamStudentIds == studentIds
+                 ? React.null
+                 : <div
+                     className="w-full text-xs border rounded border-none bg-indigo-100 text-indigo-700 p-2 flex flex-1 justify-between items-center">
+                     <div className="flex justify-start items-center">
+                       <FaIcon classes="fas fa-exclamation-triangle mr-1" />
+                       <div className="inline-block ml-1">
+                         {"Your team members changed post this submission. This submission will not be counted for the current team and won't reflect in the target submission history."
+                          |> str}
+                       </div>
+                     </div>
+                     <a
+                       className="flex-shrink-0 p-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-200 hover:text-indigo-700 rounded">
+                       <span className="hidden md:inline">
+                         {"View Submission" |> str}
+                       </span>
+                       <FaIcon classes="fas fa-arrow-right ml-1" />
+                     </a>
+                   </div>
+             }}
+          </div>
         )
      |> React.array}
   </div>;
 
-let showSubmissions = (submissions, levels) =>
+let showSubmissions = (submissions, levels, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div
         className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
@@ -406,10 +433,11 @@ let showSubmissions = (submissions, levels) =>
           {"No submissions to show " |> str}
         </h5>
       </div>
-    : showSubmission(submissions, levels);
+    : showSubmission(submissions, levels, teamStudentIds);
 
 [@react.component]
-let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
+let make =
+    (~studentId, ~levels, ~submissions, ~updateSubmissionsCB, ~teamStudentIds) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -471,7 +499,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
          SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
        | PartiallyLoaded(submissions, cursor) =>
          <div>
-           {showSubmissions(submissions, levels)}
+           {showSubmissions(submissions, levels, teamStudentIds)}
            {switch (state.loading) {
             | Loaded =>
               <button
@@ -498,7 +526,8 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
             | Reloading => React.null
             }}
          </div>
-       | FullyLoaded(submissions) => showSubmissions(submissions, levels)
+       | FullyLoaded(submissions) =>
+         showSubmissions(submissions, levels, teamStudentIds)
        }}
     </div>
     {switch (submissions) {

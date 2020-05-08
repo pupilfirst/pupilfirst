@@ -92,7 +92,7 @@ let updateSubmissions = (send, submissions) => {
 };
 
 [@react.component]
-let make = (~studentId, ~levels, ~coaches) => {
+let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -135,6 +135,7 @@ let make = (~studentId, ~levels, ~coaches) => {
        | `Submissions =>
          <CoursesReport__SubmissionsList
            studentId
+           teamStudentIds
            levels
            submissions={state.submissions}
            updateSubmissionsCB={updateSubmissions(send)}

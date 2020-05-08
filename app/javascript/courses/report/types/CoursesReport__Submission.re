@@ -1,3 +1,8 @@
+type targetRole =
+  | Student
+  | Team(array(studentId))
+and studentId = string;
+
 type t = {
   id: string,
   title: string,
@@ -5,15 +10,18 @@ type t = {
   status: [ | `Submitted | `Failed | `Passed],
   levelId: string,
   targetId: string,
+  targetRole,
 };
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~status, ~targetId) => {
+let make =
+    (~id, ~title, ~createdAt, ~levelId, ~status, ~targetId, ~targetRole) => {
   id,
   title,
   createdAt,
   status,
   levelId,
   targetId,
+  targetRole,
 };
 
 let id = t => t.id;
@@ -25,6 +33,8 @@ let title = t => t.title;
 let status = t => t.status;
 
 let targetId = t => t.targetId;
+
+let targetRole = t => t.targetRole;
 
 let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
 
@@ -44,6 +54,8 @@ let makeFromJs = submissions => {
              | None => `Submitted
              }
            };
+         let targetRole =
+           submission##teamTarget ? Team(submission##studentIds) : Student;
          [
            make(
              ~id=submission##id,
@@ -51,6 +63,7 @@ let makeFromJs = submissions => {
              ~createdAt,
              ~levelId=submission##levelId,
              ~targetId=submission##targetId,
+             ~targetRole,
              ~status,
            ),
          ];

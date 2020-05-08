@@ -489,7 +489,7 @@
                 "description": "",
                 "type": {
                   "kind": "ENUM",
-                  "name": "SubmissionReviewResult",
+                  "name": "SubmissionReviewStatus",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -2752,7 +2752,7 @@
       },
       {
         "kind": "ENUM",
-        "name": "SubmissionReviewResult",
+        "name": "SubmissionReviewStatus",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -2994,6 +2994,30 @@
             "deprecationReason": null
           },
           {
+            "name": "studentIds",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "targetId",
             "description": "",
             "args": [],
@@ -3003,6 +3027,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "teamTarget",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },

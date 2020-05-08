@@ -11,9 +11,10 @@ module Courses
 
     def props
       {
-        student_id: current_founder&.id,
+        student_id: current_student.id,
         levels: levels,
-        coaches: coaches
+        coaches: coaches,
+        team_student_ids: current_student.team_student_ids
       }
     end
 
@@ -23,6 +24,10 @@ module Courses
       @course.levels.map do |level|
         level.attributes.slice('id', 'name', 'number').merge(unlocked: level.unlocked?)
       end
+    end
+
+    def current_student
+      @current_student ||= @course.founders.not_dropped_out.find_by(user_id: current_user.id)
     end
 
     def coaches

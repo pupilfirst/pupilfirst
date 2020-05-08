@@ -109,7 +109,16 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
 };
 
 [@bs.module "date-fns"]
-external decodeISO: Js.Json.t => Js.Date.t = "parseISO";
+external decodeISOJs: Js.Json.t => Js.Date.t = "parseISO";
+
+let decodeISO = json =>
+  if (Js.typeof(json) == "string") {
+    decodeISOJs(json);
+  } else {
+    raise(
+      Json.Decode.DecodeError("Expected string, got " ++ Js.typeof(json)),
+    );
+  };
 
 let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string;
 

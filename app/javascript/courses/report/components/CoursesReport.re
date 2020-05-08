@@ -5,17 +5,31 @@ let str = React.string;
 
 type selectedTab = [ | `Overview | `Submissions];
 
+type targetStatus = [ | `Submitted | `Failed | `Passed];
+
+type sortDirection = [ | `Ascending | `Descending];
+
+type submissionsFilter = {
+  selectedLevel: option(Level.t),
+  selectedStatus: option(targetStatus),
+};
+
 type state = {
   selectedTab,
   overviewData: OverviewData.t,
-  submissions: Submissions.t,
+  submissionsData: Submissions.t,
+  submissionsFilter,
+  sortDirection,
 };
 
 type action =
   | SelectOverviewTab
   | SelectSubmissionsTab
   | SaveOverviewData(OverviewData.t)
-  | SaveSubmissions(Submissions.t);
+  | SaveSubmissions(Submissions.t)
+  | UpdateLevelFilter(option(Level.t))
+  | UpdateStatusFilter(option(targetStatus))
+  | UpdateSortDirection(sortDirection);
 
 let buttonClasses = selected =>
   "w-1/2 md:w-auto py-2 px-3 md:px-6 font-semibold text-sm focus:outline-none "
@@ -30,7 +44,22 @@ let reducer = (state, action) => {
   | SelectOverviewTab => {...state, selectedTab: `Overview}
   | SelectSubmissionsTab => {...state, selectedTab: `Submissions}
   | SaveOverviewData(overviewData) => {...state, overviewData}
-  | SaveSubmissions(submissions) => {...state, submissions}
+  | SaveSubmissions(submissionsData) => {...state, submissionsData}
+  | UpdateLevelFilter(level) => {
+      ...state,
+      submissionsFilter: {
+        ...state.submissionsFilter,
+        selectedLevel: level,
+      },
+    }
+  | UpdateStatusFilter(status) => {
+      ...state,
+      submissionsFilter: {
+        ...state.submissionsFilter,
+        selectedStatus: status,
+      },
+    }
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   };
 };
 
@@ -96,7 +125,16 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {selectedTab: `Overview, overviewData: Unloaded, submissions: Unloaded},
+      {
+        selectedTab: `Overview,
+        overviewData: Unloaded,
+        submissionsData: Unloaded,
+        submissionsFilter: {
+          selectedLevel: None,
+          selectedStatus: None,
+        },
+        sortDirection: `Ascending,
+      },
     );
 
   React.useEffect1(getOverviewData(studentId, send), [|studentId|]);
@@ -137,8 +175,18 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
            studentId
            teamStudentIds
            levels
-           submissions={state.submissions}
+           submissions={state.submissionsData}
            updateSubmissionsCB={updateSubmissions(send)}
+           selectedLevel={state.submissionsFilter.selectedLevel}
+           selectedStatus={state.submissionsFilter.selectedStatus}
+           sortDirection={state.sortDirection}
+           updateSelectedLevelCB={level => send(UpdateLevelFilter(level))}
+           updateSelectedStatusCB={status =>
+             send(UpdateStatusFilter(status))
+           }
+           updateSortDirectionCB={direction =>
+             send(UpdateSortDirection(direction))
+           }
          />
        }}
     </div>

@@ -10,6 +10,8 @@ type sortBy = {
   criterionType: [ | `String | `Number],
 };
 
+let sortBy = {criterion: "Submitted At", criterionType: `Number};
+
 type loading =
   | Loaded
   | Reloading
@@ -21,19 +23,11 @@ type filter = {
 };
 
 type state = {
-  filter,
-  sortBy,
-  sortDirection,
   loading,
   filterString: string,
 };
 
 type action =
-  | SelectLevel(Level.t)
-  | DeselectLevel
-  | SelectStatus(targetStatus)
-  | DeselectStatus
-  | UpdateSortDirection(sortDirection)
   | UpdateFilterString(string)
   | BeginLoadingMore
   | BeginReloading
@@ -115,11 +109,11 @@ module Selectable = {
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
 
-let unselected = (levels, filter) => {
+let unselected = (levels, selectedLevel, selectedStatus) => {
   let unselectedLevels =
     levels
     |> Js.Array.filter(level =>
-         filter.selectedLevel
+         selectedLevel
          |> OptionUtils.mapWithDefault(
               selectedLevel =>
                 level |> Level.id != (selectedLevel |> Level.id),
@@ -131,7 +125,7 @@ let unselected = (levels, filter) => {
   let unselectedStatus =
     [|`Submitted, `Failed, `Passed|]
     |> Js.Array.filter(status =>
-         filter.selectedStatus
+         selectedStatus
          |> OptionUtils.mapWithDefault(
               selectedStatus => status == selectedStatus,
               true,
@@ -142,16 +136,16 @@ let unselected = (levels, filter) => {
   unselectedLevels |> Array.append(unselectedStatus);
 };
 
-let selected = state => {
+let selected = (selectedLevel, selectedStatus) => {
   let selectedLevel =
-    state.selectedLevel
+    selectedLevel
     |> OptionUtils.mapWithDefault(
          selectedLevel => [|Selectable.level(selectedLevel)|],
          [||],
        );
 
   let selectedStatus =
-    state.selectedStatus
+    selectedStatus
     |> OptionUtils.mapWithDefault(
          selectedStatus => {[|Selectable.targetStatus(selectedStatus)|]},
          [||],
@@ -160,16 +154,20 @@ let selected = state => {
   selectedLevel |> Array.append(selectedStatus);
 };
 
-let onSelectFilter = (send, selectable) =>
+let onSelectFilter =
+    (send, updateSelectedLevelCB, updateSelectedStatusCB, selectable) => {
+  send(UpdateFilterString(""));
   switch (selectable) {
-  | Selectable.TargetStatus(status) => send(SelectStatus(status))
-  | Level(level) => send(SelectLevel(level))
+  | Selectable.TargetStatus(status) => updateSelectedStatusCB(Some(status))
+  | Level(level) => updateSelectedLevelCB(Some(level))
   };
+};
 
-let onDeselectFilter = (send, selectable) =>
+let onDeselectFilter =
+    (updateSelectedLevelCB, updateSelectedStatusCB, selectable) =>
   switch (selectable) {
-  | Selectable.TargetStatus(_status) => send(DeselectStatus)
-  | Level(_level) => send(DeselectLevel)
+  | Selectable.TargetStatus(_status) => updateSelectedStatusCB(None)
+  | Level(_level) => updateSelectedLevelCB(None)
   };
 
 module Sortable = {
@@ -181,8 +179,8 @@ module Sortable = {
 
 module SubmissionsSorter = Sorter.Make(Sortable);
 
-let submissionsSorter = (state, send) => {
-  let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
+let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
+  let criteria = [|sortBy|];
   <div
     ariaLabel="Change submissions sorting"
     className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
@@ -191,18 +189,18 @@ let submissionsSorter = (state, send) => {
     </label>
     <SubmissionsSorter
       criteria
-      selectedCriterion={state.sortBy}
-      direction={state.sortDirection}
+      selectedCriterion=sortBy
+      direction=sortDirection
       onDirectionChange={sortDirection => {
-        send(UpdateSortDirection(sortDirection))
+        updateSortDirectionCB(sortDirection)
       }}
       onCriterionChange={_ => ()}
     />
   </div>;
 };
 
-let filterPlaceholder = filter => {
-  switch (filter.selectedLevel, filter.selectedStatus) {
+let filterPlaceholder = (selectedLevel, selectedStatus) => {
+  switch (selectedLevel, selectedStatus) {
   | (None, Some(_)) => "Filter by level"
   | (None, None) => "Filter by level, or by review status"
   | (Some(_), Some(_)) => "Filter by another level"
@@ -212,37 +210,6 @@ let filterPlaceholder = filter => {
 
 let reducer = (state, action) => {
   switch (action) {
-  | SelectLevel(level) => {
-      ...state,
-      filter: {
-        ...state.filter,
-        selectedLevel: Some(level),
-      },
-      filterString: "",
-    }
-  | DeselectLevel => {
-      ...state,
-      filter: {
-        ...state.filter,
-        selectedLevel: None,
-      },
-    }
-  | SelectStatus(targetStatus) => {
-      ...state,
-      filter: {
-        ...state.filter,
-        selectedStatus: Some(targetStatus),
-      },
-      filterString: "",
-    }
-  | DeselectStatus => {
-      ...state,
-      filter: {
-        ...state.filter,
-        selectedStatus: None,
-      },
-    }
-  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   | UpdateFilterString(filterString) => {...state, filterString}
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
@@ -251,7 +218,17 @@ let reducer = (state, action) => {
 };
 
 let updateStudentSubmissions =
-    (send, updateSubmissionsCB, endCursor, hasNextPage, submissions, nodes) => {
+    (
+      send,
+      updateSubmissionsCB,
+      endCursor,
+      hasNextPage,
+      submissions,
+      selectedLevel,
+      selectedStatus,
+      sortDirection,
+      nodes,
+    ) => {
   let updatedSubmissions =
     Array.append(
       (
@@ -264,11 +241,20 @@ let updateStudentSubmissions =
       submissions,
     );
 
+  let filter = Submissions.makeFilter(selectedLevel, selectedStatus);
+
+  let submissionsData =
+    Submissions.make(
+      ~submissions=updatedSubmissions,
+      ~filter,
+      ~sortDirection,
+    );
+
   let submissionsData: Submissions.t =
     switch (hasNextPage, endCursor) {
     | (true, None)
-    | (false, _) => FullyLoaded(updatedSubmissions)
-    | (true, Some(cursor)) => PartiallyLoaded(updatedSubmissions, cursor)
+    | (false, _) => FullyLoaded(submissionsData)
+    | (true, Some(cursor)) => PartiallyLoaded(submissionsData, cursor)
     };
 
   updateSubmissionsCB(submissionsData);
@@ -318,6 +304,9 @@ let getStudentSubmissions =
             response##studentSubmissions##pageInfo##endCursor,
             response##studentSubmissions##pageInfo##hasNextPage,
             submissions,
+            level,
+            status,
+            sortDirection,
           );
        Js.Promise.resolve();
      })
@@ -359,9 +348,8 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
   <div>
     {submissions
      |> Array.map(submission =>
-          <div>
+          <div key={submission |> Submission.id}>
             <a
-              key={submission |> Submission.id}
               href={"/targets/" ++ (submission |> Submission.targetId)}
               target="_blank">
               <div
@@ -407,7 +395,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                      <div className="flex justify-start items-center">
                        <FaIcon classes="fas fa-exclamation-triangle mr-1" />
                        <div className="inline-block ml-1">
-                         {"Your team members changed post this submission. This submission will not be counted for the current team and won't reflect in the target submission history."
+                         {"This submission is not considered towards its target's completion; it was a 'team' target, and your team changed after you made this submission."
                           |> str}
                        </div>
                      </div>
@@ -437,42 +425,46 @@ let showSubmissions = (submissions, levels, teamStudentIds) =>
 
 [@react.component]
 let make =
-    (~studentId, ~levels, ~submissions, ~updateSubmissionsCB, ~teamStudentIds) => {
+    (
+      ~studentId,
+      ~levels,
+      ~submissions,
+      ~updateSubmissionsCB,
+      ~teamStudentIds,
+      ~selectedLevel,
+      ~selectedStatus,
+      ~sortDirection,
+      ~updateSelectedLevelCB,
+      ~updateSelectedStatusCB,
+      ~updateSortDirectionCB,
+    ) => {
   let (state, send) =
-    React.useReducer(
-      reducer,
-      {
-        filter: {
-          selectedLevel: None,
-          selectedStatus: None,
-        },
-        sortDirection: `Ascending,
-        filterString: "",
-        loading: Reloading,
-        sortBy: {
-          criterion: "Submitted At",
-          criterionType: `Number,
-        },
-      },
-    );
+    React.useReducer(reducer, {filterString: "", loading: Loaded});
 
-  React.useEffect2(
+  React.useEffect3(
     () => {
-      send(BeginReloading);
-      getStudentSubmissions(
-        studentId,
-        None,
-        send,
-        state.filter.selectedLevel,
-        state.filter.selectedStatus,
-        state.sortDirection,
-        [||],
-        updateSubmissionsCB,
-      );
+      if (submissions
+          |> Submissions.needsReloading(
+               selectedLevel,
+               selectedStatus,
+               sortDirection,
+             )) {
+        send(BeginReloading);
+        getStudentSubmissions(
+          studentId,
+          None,
+          send,
+          selectedLevel,
+          selectedStatus,
+          sortDirection,
+          [||],
+          updateSubmissionsCB,
+        );
+      };
 
       None;
     },
-    (state.filter, state.sortDirection),
+    (selectedLevel, selectedStatus, sortDirection),
   );
   <div className="max-w-3xl mx-auto">
     {<div className="md:flex w-full items-start pb-4">
@@ -482,40 +474,48 @@ let make =
          </label>
          <Multiselect
            id="filter"
-           unselected={unselected(levels, state.filter)}
-           selected={selected(state.filter)}
-           onSelect={onSelectFilter(send)}
-           onDeselect={onDeselectFilter(send)}
+           unselected={unselected(levels, selectedLevel, selectedStatus)}
+           selected={selected(selectedLevel, selectedStatus)}
+           onSelect={onSelectFilter(
+             send,
+             updateSelectedLevelCB,
+             updateSelectedStatusCB,
+           )}
+           onDeselect={onDeselectFilter(
+             updateSelectedLevelCB,
+             updateSelectedStatusCB,
+           )}
            value={state.filterString}
            onChange={filterString => send(UpdateFilterString(filterString))}
-           placeholder={filterPlaceholder(state.filter)}
+           placeholder={filterPlaceholder(selectedLevel, selectedStatus)}
          />
        </div>
-       {submissionsSorter(state, send)}
+       {submissionsSorter(sortDirection, updateSortDirectionCB)}
      </div>}
     <div ariaLabel="student-submissions">
       {switch ((submissions: Submissions.t)) {
        | Unloaded =>
          SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
-       | PartiallyLoaded(submissions, cursor) =>
+       | PartiallyLoaded({submissions}, cursor) =>
          <div>
            {showSubmissions(submissions, levels, teamStudentIds)}
            {switch (state.loading) {
             | Loaded =>
               <button
                 className="btn btn-primary-ghost cursor-pointer w-full mt-4"
-                onClick={_ =>
+                onClick={_ => {
+                  send(BeginLoadingMore);
                   getStudentSubmissions(
                     studentId,
                     Some(cursor),
                     send,
-                    state.filter.selectedLevel,
-                    state.filter.selectedStatus,
-                    state.sortDirection,
+                    selectedLevel,
+                    selectedStatus,
+                    sortDirection,
                     submissions,
                     updateSubmissionsCB,
-                  )
-                }>
+                  );
+                }}>
                 {"Load More..." |> str}
               </button>
             | LoadingMore =>
@@ -526,7 +526,7 @@ let make =
             | Reloading => React.null
             }}
          </div>
-       | FullyLoaded(submissions) =>
+       | FullyLoaded({submissions}) =>
          showSubmissions(submissions, levels, teamStudentIds)
        }}
     </div>

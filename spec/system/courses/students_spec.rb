@@ -20,10 +20,6 @@ feature "Course students list", js: true do
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
   let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
 
-  def teams_in_level(level)
-    level.startups.active
-  end
-
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
 
@@ -73,25 +69,24 @@ feature "Course students list", js: true do
 
     # Check number of students in levels
     within("div[aria-label='Students level-wise distribution']") do
-      expect(page).to have_selector('.level-distribution__pill', count: 3)
+      expect(page).to have_selector('.student-distribution__pill', count: 3)
     end
 
     within("div[aria-label='Students in level 1']") do
-      expect(page).to have_text(teams_in_level(level_1).count)
+      expect(page).to have_text('1')
     end
 
     within("div[aria-label='Students in level 2']") do
-      expect(page).to have_text(teams_in_level(level_2).count)
+      expect(page).to have_text('2')
     end
 
     within("div[aria-label='Students in level 3']") do
-      expect(page).to have_text(teams_in_level(level_3).count)
+      expect(page).to have_text('3')
     end
 
     # Hover over a level to get percentage data
-
     students_in_course = Founder.where(startup: course.startups).count
-    students_in_l2 = Founder.where(startup: teams_in_level(level_2)).count
+    students_in_l2 = Founder.where(startup_id: [team_2.id, team_3.id]).count
     percentage_students_in_l2 = students_in_l2 / students_in_course.to_f * 100
 
     within("div[aria-label='Students in level 2']") do
@@ -99,7 +94,7 @@ feature "Course students list", js: true do
     end
 
     expect(page).to have_text("Percentage: #{percentage_students_in_l2}")
-    expect(page).to have_text("Teams: #{teams_in_level(level_2).count}")
+    expect(page).to have_text("Teams: 2")
     expect(page).to have_text("Students: #{students_in_l2}")
   end
 
@@ -279,13 +274,44 @@ feature "Course students list", js: true do
       sign_in_user course_coach.user, referer: students_course_path(course)
 
       within("div[aria-label='Students in level 2']") do
-        expect(page).to_not have_selector('.level-distribution__pill--locked')
+        expect(page).to_not have_selector('.student-distribution__pill--locked')
       end
 
       within("div[aria-label='Students in level 4']") do
         expect(page).to have_text('0')
-        expect(page).to have_selector('.level-distribution__pill--locked')
+        expect(page).to have_selector('.student-distribution__pill--locked')
       end
+    end
+  end
+
+  scenario 'filtering by coach updates the student distribution data' do
+    sign_in_user course_coach.user, referer: students_course_path(course)
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_text('1')
+    end
+
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_text('2')
+    end
+
+    within("div[aria-label='Students in level 3']") do
+      expect(page).to have_text('3')
+    end
+
+    fill_in 'filter', with: team_coach.name
+    click_button "Assigned to: #{team_coach.name}"
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_selector('svg.i-check-solid')
+    end
+
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_selector('svg.i-check-solid')
+    end
+
+    within("div[aria-label='Students in level 3']") do
+      expect(page).to have_text('1')
     end
   end
 end

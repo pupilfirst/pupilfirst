@@ -1,4 +1,6 @@
 class TeamsResolver < ApplicationQuery
+  include AuthorizeReviewer
+
   property :course_id
   property :level_id
   property :coach_id
@@ -27,22 +29,6 @@ class TeamsResolver < ApplicationQuery
     end
 
     level_coach_and_search_filtered.distinct('startups.id')
-  end
-
-  def authorized?
-    return true if current_user.school_admin.present?
-
-    return false if current_user.faculty.blank?
-
-    faculty.reviewable_courses.where(id: course).exists?
-  end
-
-  def faculty
-    @faculty ||= current_user.faculty
-  end
-
-  def course
-    @course ||= current_school.courses.find(course_id)
   end
 
   def reviewable_teams

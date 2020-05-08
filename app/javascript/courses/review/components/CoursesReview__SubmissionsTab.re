@@ -167,7 +167,11 @@ let showSubmission = (submissions, levels, sortDirection) =>
      |> IndexSubmission.sortArray(sortDirection)
      |> Array.map(submission =>
           <Link
-            href={"/submissions/" ++ (submission |> IndexSubmission.id)}
+            href={
+              "/submissions/"
+              ++ (submission |> IndexSubmission.id)
+              ++ "/review"
+            }
             key={submission |> IndexSubmission.id}
             ariaLabel={"Submission " ++ (submission |> IndexSubmission.id)}
             className={submissionCardClasses(submission)}>
@@ -281,7 +285,8 @@ let make =
               )
             : <button
                 className="btn btn-primary-ghost cursor-pointer w-full mt-4"
-                onClick={_ =>{ setState(_state => Loading);
+                onClick={_ => {
+                  setState(_state => Loading);
                   getSubmissions(
                     courseId,
                     Some(cursor),
@@ -292,8 +297,8 @@ let make =
                     selectedTab,
                     submissions,
                     updateSubmissionsCB,
-                  )}
-                }>
+                  );
+                }}>
                 {"Load More..." |> str}
               </button>}
        </div>

@@ -1,5 +1,5 @@
 class TimelineEventPolicy < ApplicationPolicy
-  def show?
+  def review?
     return false if record.blank?
 
     return false if record.evaluation_criteria.blank?

@@ -40,7 +40,7 @@ let failed = t => {
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let timeDistance = t =>
-  t.createdAt |> DateFns.distanceInWordsToNow(~addSuffix=true);
+  t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ());
 
 let makeFromJs = submissions => {
   submissions

@@ -32,19 +32,20 @@ let title = t => t.title;
 
 let status = t => t.status;
 
+let createdAt = t => t.createdAt;
+
 let targetId = t => t.targetId;
 
 let targetRole = t => t.targetRole;
 
-let createdAtPretty = t => t.createdAt |> DateFns.format("MMMM D, YYYY");
+let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let makeFromJs = submissions => {
   submissions
   |> Js.Array.map(submission =>
        switch (submission) {
        | Some(submission) =>
-         let createdAt =
-           submission##createdAt |> Json.Decode.string |> DateFns.parseString;
+         let createdAt = submission##createdAt |> DateFns.decodeISO;
          let status =
            switch (submission##passedAt) {
            | Some(_passedAt) => `Passed

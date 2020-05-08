@@ -98,5 +98,10 @@ module Types
     resolved_field :coach_notes, [Types::CoachNoteType], null: false do
       argument :student_id, ID, required: true
     end
+
+    resolved_field :student_distribution, [Types::DistributionInLevelType], null: false do
+      argument :course_id, ID, required: true
+      argument :coach_id, ID, required: false
+    end
   end
 end

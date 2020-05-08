@@ -43,7 +43,7 @@ class StudentSubmissionsResolver < ApplicationQuery
 
   def filter_by_status(status, submissions)
     case status
-      when 'Pending'
+      when 'Submitted'
         submissions.where(evaluator_id: nil)
       when 'Passed'
         submissions.passed

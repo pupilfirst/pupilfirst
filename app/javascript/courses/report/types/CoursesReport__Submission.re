@@ -2,7 +2,7 @@ type t = {
   id: string,
   title: string,
   createdAt: Js.Date.t,
-  status: [ | `Pending | `Failed | `Passed],
+  status: [ | `Submitted | `Failed | `Passed],
   levelId: string,
   targetId: string,
 };
@@ -41,7 +41,7 @@ let makeFromJs = submissions => {
            | None =>
              switch (submission##evaluatorId) {
              | Some(_id) => `Failed
-             | None => `Pending
+             | None => `Submitted
              }
            };
          [

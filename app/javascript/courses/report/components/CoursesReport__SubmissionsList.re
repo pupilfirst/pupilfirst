@@ -1,7 +1,7 @@
 open CoursesReport__Types;
 let str = React.string;
 
-type targetStatus = [ | `Pending | `Failed | `Passed];
+type targetStatus = [ | `Submitted | `Failed | `Passed];
 
 type sortDirection = [ | `Ascending | `Descending];
 
@@ -41,7 +41,7 @@ type action =
 
 let statusString = targetStatus => {
   switch (targetStatus) {
-  | `Pending => "Submitted"
+  | `Submitted => "Submitted"
   | `Failed => "Failed"
   | `Passed => "Passed"
   };
@@ -102,7 +102,7 @@ module Selectable = {
     | Level(_level) => "gray"
     | TargetStatus(status) =>
       switch (status) {
-      | `Pending => "blue"
+      | `Submitted => "blue"
       | `Passed => "green"
       | `Failed => "red"
       }
@@ -127,7 +127,7 @@ let unselected = (levels, filter) => {
     |> Array.map(Selectable.level);
 
   let unselectedStatus =
-    [|`Pending, `Failed, `Passed|]
+    [|`Submitted, `Failed, `Passed|]
     |> Js.Array.filter(status =>
          filter.selectedStatus
          |> OptionUtils.mapWithDefault(
@@ -336,9 +336,9 @@ let showSubmissionStatus = submission =>
       {"Passed" |> str}
     </div>
 
-  | `Pending =>
+  | `Submitted =>
     <div
-      className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
+      className="bg-blue-100 border border-blue-500 flex-shrink-0 leading-normal text-blue-800 font-semibold px-3 py-px rounded">
       {"Submitted" |> str}
     </div>
   };
@@ -349,7 +349,7 @@ let submissionCardClasses = submission =>
     switch (submission |> Submission.status) {
     | `Failed => "border-red-500"
     | `Passed => "border-green-500"
-    | `Pending => "border-orange-400"
+    | `Submitted => "border-blue-500"
     }
   );
 

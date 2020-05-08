@@ -2759,7 +2759,7 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "Pending",
+            "name": "Submitted",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

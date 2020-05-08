@@ -75,7 +75,7 @@ feature 'Curriculum Editor', js: true do
     expect(level.unlock_on).to eq(date)
 
     # he should be able to edit the level
-    click_button 'edit'
+    find('button[title="Edit selected level"').click
     expect(page).to have_text(new_level_name)
     fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
     click_button 'Update Level'
@@ -191,6 +191,17 @@ feature 'Curriculum Editor', js: true do
     expect(page).to have_text("Target created successfully")
 
     dismiss_notification
+  end
+
+  scenario "author sets unlock date for a level that previously didn't have one" do
+    sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+    find('button[title="Edit selected level"').click
+    fill_in 'Unlock level on', with: date.iso8601
+    click_button 'Update Level'
+
+    expect(page).to have_text('Level updated successfully')
+    expect(level_2.reload.unlock_on).to eq(Date.current)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

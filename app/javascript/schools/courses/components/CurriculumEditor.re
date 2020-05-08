@@ -278,6 +278,7 @@ let make =
               </div>
             </div>
             <button
+              title="Edit selected level"
               className="flex text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={_ =>
                 send(
@@ -286,7 +287,7 @@ let make =
                   ),
                 )
               }>
-              <i title="edit" className="fas fa-pencil-alt" />
+              <i className="fas fa-pencil-alt" />
             </button>
             <button
               className="btn btn-primary ml-4"

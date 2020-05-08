@@ -91,5 +91,10 @@ module Types
       argument :community_id, ID, required: true
       argument :title, String, required: true
     end
+
+    resolved_field :student_distribution, [Types::DistributionInLevelType], null: false do
+      argument :course_id, ID, required: true
+      argument :coach_id, ID, required: false
+    end
   end
 end

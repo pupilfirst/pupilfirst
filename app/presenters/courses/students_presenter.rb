@@ -49,7 +49,7 @@ module Courses
 
     def props
       {
-        levels: levels,
+        levels: level_details,
         course: course_details,
         user_id: current_user.id,
         team_coaches: team_coaches,
@@ -57,13 +57,8 @@ module Courses
       }
     end
 
-    def levels
-      @course.levels.map do |level|
-        level_attributes = level.attributes.slice('id', 'name', 'number')
-        teams_in_level = level.startups.active
-        students_in_level = Founder.where(startup: teams_in_level)
-        level_attributes.merge!(students_in_level: students_in_level.count, teams_in_level: teams_in_level.count, unlocked: level.unlocked?)
-      end
+    def level_details
+      @course.levels.as_json(only: %i[id name number])
     end
 
     def course_details

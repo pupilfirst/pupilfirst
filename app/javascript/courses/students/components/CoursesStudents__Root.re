@@ -1,6 +1,7 @@
 [%bs.raw {|require("./CoursesStudents__Root.css")|}];
 
 open CoursesStudents__Types;
+
 let str = React.string;
 
 type filter = {
@@ -347,6 +348,18 @@ let computeInitialState = currentTeamCoach => {
   },
 };
 
+let selectLevel = (levels, send, levelId) => {
+  let level =
+    levels
+    |> ArrayUtils.unsafeFind(
+         level => Level.id(level) == levelId,
+         "Could not find level selected from distribution bar, with ID "
+         ++ levelId,
+       );
+
+  send(SelectLevel(level));
+};
+
 [@react.component]
 let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
   let (currentTeamCoach, _) =
@@ -391,9 +404,10 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
      | _ => React.null
      }}
     <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
-      <CoursesStudents__LevelDistribution
-        levels
-        selectLevelCB={level => send(SelectLevel(level))}
+      <CoursesStudents__StudentDistribution
+        selectLevelCB={selectLevel(levels, send)}
+        courseId
+        filterCoach={state.filter.coach}
       />
       <div
         className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">

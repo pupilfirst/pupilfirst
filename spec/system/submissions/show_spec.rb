@@ -44,7 +44,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach visits submission show', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
       within("div[aria-label='submissions-overlay-header']") do
         expect(page).to have_content('Level 1')
@@ -127,7 +127,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach generates feedback from review checklist', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
       # Checklist item 1
       checklist_title_1 = Faker::Lorem.sentence
@@ -174,7 +174,7 @@ feature 'Submissions show' do
       expect(target.reload.review_checklist).not_to eq([])
 
       # Reload Page
-      visit timeline_event_path(submission_pending)
+      visit review_timeline_event_path(submission_pending)
 
       within("div[aria-label='checklist-item-0']") do
         expect(page).to have_content(checklist_title_1)
@@ -241,7 +241,7 @@ feature 'Submissions show' do
       checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
       submission_pending.update!(checklist: checklist)
 
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
       within("div[aria-label='#{submission_pending.checklist.first['title']}']") do
         expect(page).to have_content(question_1)
@@ -292,7 +292,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach evaluates a pending submission without giving a feedback', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_content('Grade Card')
 
@@ -328,13 +328,13 @@ feature 'Submissions show' do
     end
 
     scenario 'student tries to access the submission show' do
-      sign_in_user team.founders.first.user, referer: timeline_event_path(submission_pending)
+      sign_in_user team.founders.first.user, referer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
 
     scenario 'school admin tries to access the submission show' do
-      sign_in_user school_admin.user, referer: timeline_event_path(submission_pending)
+      sign_in_user school_admin.user, referer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
@@ -342,7 +342,7 @@ feature 'Submissions show' do
     scenario 'coach is warned when a student has dropped out', js: true do
       team.update!(dropped_out_at: 1.day.ago)
 
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text('This submission is from a student whose access to the course has ended, or has dropped out.')
     end
@@ -350,7 +350,7 @@ feature 'Submissions show' do
     scenario "coach is warned when a student's access to course has ended", js: true do
       team.update!(access_ends_at: 1.day.ago)
 
-      sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text('This submission is from a student whose access to the course has ended, or has dropped out.')
     end
@@ -363,7 +363,7 @@ feature 'Submissions show' do
       end
 
       scenario 'coach is warned when one student in the submission is inactive', js: true do
-        sign_in_user coach.user, referer: timeline_event_path(submission_pending)
+        sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
         expect(page).to have_text('This submission is linked to one or more students whose access to the course has ended, or have dropped out.')
       end
@@ -372,7 +372,7 @@ feature 'Submissions show' do
     scenario 'coach leaves a note about a student', js: true do
       note = Faker::Lorem.sentence
 
-      sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_pending)
 
       click_button 'Write a Note'
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
@@ -398,7 +398,7 @@ feature 'Submissions show' do
       submission_pending.founders << another_student
       note = Faker::Lorem.sentence
 
-      sign_in_user team_coach.user, referer: timeline_event_path(submission_pending)
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_pending)
 
       click_button 'Write a Note'
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
@@ -477,7 +477,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach visits submission show', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_reviewed)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submissions-overlay-header']") do
         expect(page).to have_content('Level 1')
@@ -510,7 +510,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach add his feedback', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_reviewed)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submission-status']") do
         expect(page).to have_text('Passed')
@@ -544,7 +544,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach can undo grading', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_reviewed)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submission-status']") do
         expect(page).to have_text('Passed')
@@ -579,7 +579,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach visits a submission', js: true do
-      sign_in_user coach.user, referer: timeline_event_path(submission_reviewed)
+      sign_in_user coach.user, referer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submissions-overlay-card-#{submission_reviewed.id}']") do
         # Evaluation criteria at the point of grading are shown for reviewed submissions
@@ -612,7 +612,7 @@ feature 'Submissions show' do
     end
 
     scenario 'team coach add his feedback', js: true do
-      sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed)
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_reviewed)
       within("div[aria-label='submission-status']") do
         expect(page).to have_text('Passed')
         expect(page).to have_text('Evaluated By')
@@ -642,7 +642,7 @@ feature 'Submissions show' do
     end
 
     scenario 'team coach undo submission', js: true do
-      sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed)
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submission-status']") do
         expect(page).to have_text('Passed')
@@ -669,7 +669,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach visits submission show' do
-      sign_in_user team_coach.user, referer: timeline_event_path(auto_verified_submission)
+      sign_in_user team_coach.user, referer: review_timeline_event_path(auto_verified_submission)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
@@ -703,7 +703,7 @@ feature 'Submissions show' do
     end
 
     scenario 'coach visits submission show', js: true do
-      sign_in_user team_coach.user, referer: timeline_event_path(submission_reviewed_1)
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_reviewed_1)
 
       # submission 1
       expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
@@ -713,7 +713,7 @@ feature 'Submissions show' do
       expect(page).not_to have_text(submission_reviewed_3.checklist.first['title'])
 
       # submission 2 and 3
-      visit timeline_event_path(submission_reviewed_3)
+      visit review_timeline_event_path(submission_reviewed_3)
 
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)

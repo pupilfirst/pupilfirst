@@ -403,7 +403,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                      <div
                        className="flex flex-1 justify-start items-start pr-8">
                        <FaIcon
-                         classes="fas fa-exclamation-triangle text-base mt-1"
+                         classes="fas fa-exclamation-triangle text-sm md:text-base mt-1"
                        />
                        <div className="inline-block pl-3">
                          {"This submission is not considered towards its target's completion; it was a 'team' target, and your team changed after you made this submission."

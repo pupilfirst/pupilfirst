@@ -112,6 +112,7 @@ module Multiselect = MultiselectDropdown.Make(Selectable);
 let unselected = (levels, selectedLevel, selectedStatus) => {
   let unselectedLevels =
     levels
+    |> Js.Array.filter(level => Level.number(level) != 0)
     |> Js.Array.filter(level =>
          selectedLevel
          |> OptionUtils.mapWithDefault(

@@ -1,3 +1,5 @@
+<% presenter = TimelineEvents::ShowPresenter.new(self, @submission) %>
+
 <% content_for(:head) do %>
   <title><%= "Submission for | #{@submission.target.title}" %></title>
   <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
@@ -20,7 +22,7 @@
               <i class="if i-circle-light text-tiny"></i>
               <span class="ml-2"><%= item['title'] %></span>
             </div>
-            <div class="pl-9 p-3 pb-4 pt-0 text-sm"><%= item['result'] %></div>
+            <div class="convert-markdown pl-9 p-3 pb-4 pt-0 text-sm" data-json-props="<%= presenter.markdown_prop(item['result']) %>"><%= item['result'] %></div>
           </div>
       <% end %>
     </div>

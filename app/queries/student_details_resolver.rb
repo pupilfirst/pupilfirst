@@ -62,7 +62,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def levels
-    @levels ||= course.levels.unlocked
+    @levels ||= course.levels.unlocked.where('number <= ?', level.number)
   end
 
   def level

@@ -348,7 +348,9 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
   <div>
     {submissions
      |> Array.map(submission =>
-          <div key={submission |> Submission.id}>
+          <div
+            key={submission |> Submission.id}
+            ariaLabel={"student-submission-" ++ (submission |> Submission.id)}>
             <a
               href={"/targets/" ++ (submission |> Submission.targetId)}
               target="_blank">
@@ -391,6 +393,10 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                teamStudentIds == studentIds
                  ? React.null
                  : <div
+                     ariaLabel={
+                       "Team change notice for submission "
+                       ++ Submission.id(submission)
+                     }
                      className="w-full text-xs border rounded border-none bg-indigo-100 text-indigo-700 p-2 flex flex-1 justify-between items-center">
                      <div className="flex justify-start items-center">
                        <FaIcon classes="fas fa-exclamation-triangle mr-1" />
@@ -400,6 +406,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                        </div>
                      </div>
                      <a
+                       href={"/submissions/" ++ Submission.id(submission)}
                        className="flex-shrink-0 p-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-200 hover:text-indigo-700 rounded">
                        <span className="hidden md:inline">
                          {"View Submission" |> str}

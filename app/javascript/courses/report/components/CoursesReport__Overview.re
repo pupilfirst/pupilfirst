@@ -12,7 +12,9 @@ let avatar = (avatarUrl, name) => {
 };
 
 let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
-  <div key className="shadow rounded-lg p-4 flex items-center mt-2">
+  <div
+    key
+    className="w-full md:w-1/2 shadow rounded-lg p-4 flex items-center mt-2 bg-white">
     {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
@@ -62,18 +64,21 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   let targetCompletionPercent =
     targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int;
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
-    <div className="courses-report-overview__doughnut-chart-container">
-      {doughnutChart("purple", targetCompletionPercent)}
-      <p className="text-sm font-semibold text-center mt-3">
-        {"Total Targets Completed" |> str}
-      </p>
-      <p className="text-sm text-gray-700 font-semibold text-center mt-1">
-        {(targetsCompleted |> int_of_float |> string_of_int)
-         ++ "/"
-         ++ (totalTargets |> int_of_float |> string_of_int)
-         ++ " Targets"
-         |> str}
-      </p>
+    <div
+      className="courses-report-overview__doughnut-chart-container bg-white">
+      <div> {doughnutChart("purple", targetCompletionPercent)} </div>
+      <div className="ml-4">
+        <p className="text-sm font-semibold mt-3">
+          {"Total Targets Completed" |> str}
+        </p>
+        <p className="text-sm text-gray-700 font-semibold mt-1">
+          {(targetsCompleted |> int_of_float |> string_of_int)
+           ++ "/"
+           ++ (totalTargets |> int_of_float |> string_of_int)
+           ++ " Targets"
+           |> str}
+        </p>
+      </div>
     </div>
   </div>;
 };
@@ -84,15 +89,20 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) => {
     <div
       ariaLabel="quiz-performance-chart"
       className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
-      <div className="courses-report-overview__doughnut-chart-container">
-        {doughnutChart("pink", score |> int_of_float |> string_of_int)}
-        <p className="text-sm font-semibold text-center mt-3">
-          {"Average Quiz Score" |> str}
-        </p>
-        <p
-          className="text-sm text-gray-700 font-semibold text-center leading-tight mt-1">
-          {quizzesAttempted ++ " Quizzes Attempted" |> str}
-        </p>
+      <div
+        className="courses-report-overview__doughnut-chart-container bg-white">
+        <div>
+          {doughnutChart("pink", score |> int_of_float |> string_of_int)}
+        </div>
+        <div className="ml-4">
+          <p className="text-sm font-semibold mt-3">
+            {"Average Quiz Score" |> str}
+          </p>
+          <p
+            className="text-sm text-gray-700 font-semibold leading-tight mt-1">
+            {quizzesAttempted ++ " Quizzes Attempted" |> str}
+          </p>
+        </div>
       </div>
     </div>
   | None => React.null
@@ -122,7 +132,7 @@ let averageGradeCharts =
            ++ (criterion |> CoursesReport__EvaluationCriterion.id)
          }
          key={criterion |> CoursesReport__EvaluationCriterion.id}
-         className="flex w-full lg:w-1/2 px-2 mt-2">
+         className="flex w-full lg:w-1/3 px-2 mt-2">
          <div className="courses-report-overview__pie-chart-container">
            <div className="flex px-5 pt-4 text-center items-center">
              <svg
@@ -211,13 +221,15 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
            </p>
          : React.null}
     </div>
-    <div className="h-12 flex items-center">
+    <div
+      className="h-14 flex items-center shadow bg-white rounded-lg px-4 py-2 mt-1">
       <ul
         className={
           "courses-report-overview__student-level-progress flex w-full "
           ++ (
             courseCompleted
-              ? "courses-report-overview__student-level-progress--completed" : ""
+              ? "courses-report-overview__student-level-progress--completed"
+              : ""
           )
         }>
         {applicableLevels
@@ -250,11 +262,11 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
 
 [@react.component]
 let make = (~overviewData, ~levels, ~coaches) => {
-  <div className="max-w-3xl mx-auto border border-transparent shadow rounded-lg">
+  <div className="max-w-3xl mx-auto">
     {switch (overviewData) {
      | OverviewData.Loaded(overview) =>
        <div className="flex flex-col">
-         <div className="w-full bg-white p-8">
+         <div className="w-full">
            {levelProgressBar(
               overview |> StudentOverview.levelId,
               levels,

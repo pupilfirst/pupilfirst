@@ -352,6 +352,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
             key={submission |> Submission.id}
             ariaLabel={"student-submission-" ++ (submission |> Submission.id)}>
             <a
+              className="block relative z-10"
               href={"/targets/" ++ (submission |> Submission.targetId)}
               target="_blank">
               <div
@@ -397,21 +398,24 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                        "Team change notice for submission "
                        ++ Submission.id(submission)
                      }
-                     className="w-full text-xs border rounded border-none bg-indigo-100 text-indigo-700 p-2 flex flex-1 justify-between items-center">
-                     <div className="flex justify-start items-center">
-                       <FaIcon classes="fas fa-exclamation-triangle mr-1" />
-                       <div className="inline-block ml-1">
+                     className="w-full text-xs rounded-b bg-indigo-100 text-indigo-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
+                     <div
+                       className="flex flex-1 justify-start items-start pr-8">
+                       <FaIcon
+                         classes="fas fa-exclamation-triangle text-base mt-1"
+                       />
+                       <div className="inline-block pl-3">
                          {"This submission is not considered towards its target's completion; it was a 'team' target, and your team changed after you made this submission."
                           |> str}
                        </div>
                      </div>
                      <a
                        href={"/submissions/" ++ Submission.id(submission)}
-                       className="flex-shrink-0 p-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-200 hover:text-indigo-700 rounded">
+                       className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded">
                        <span className="hidden md:inline">
                          {"View Submission" |> str}
                        </span>
-                       <FaIcon classes="fas fa-arrow-right ml-1" />
+                       <FaIcon classes="fas fa-arrow-right ml-2" />
                      </a>
                    </div>
              }}

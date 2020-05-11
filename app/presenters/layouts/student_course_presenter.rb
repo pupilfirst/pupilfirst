@@ -49,7 +49,7 @@ module Layouts
     end
 
     def report
-      if current_founder.present? && current_founder.course.id == @course.id
+      if current_user.present? && current_user.courses.where(id: @course).exists?
         "report"
       end
     end

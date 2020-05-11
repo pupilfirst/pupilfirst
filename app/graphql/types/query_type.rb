@@ -53,6 +53,7 @@ module Types
 
     resolved_field :teams, Types::TeamType.connection_type, null: false do
       argument :course_id, ID, required: true
+      argument :coach_notes, Types::CoachNoteFilterType, required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
       argument :search, String, required: false
@@ -94,6 +95,7 @@ module Types
 
     resolved_field :student_distribution, [Types::DistributionInLevelType], null: false do
       argument :course_id, ID, required: true
+      argument :coach_notes, Types::CoachNoteFilterType, required: true
       argument :coach_id, ID, required: false
     end
   end

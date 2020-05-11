@@ -1,0 +1,26 @@
+<% content_for(:head) do %>
+  <title><%= "Submission for | #{@submission.target.title}" %></title>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
+<% end %>
+
+<div class="bg-gray-100 px-3 py-4">
+  <div class="mb-2 border border-gray-200 container max-w-3xl mx-auto">
+    <div class="bg-gray-200">
+      <div class="bg-white p-4 mb-5 flex flex-col">
+        <div class="font-semibold text-xl"> <%=@submission.title %></div>
+        <div className="text-gray-600 text-sm"> <%="Submitted on: #{@submission.created_at.strftime("%b %d, %Y")}" %></div>
+      </div>
+      <% @submission.checklist.each do |item| %>
+          <div class="mb-3">
+            <div class="text-sm font-semibold p-4 bg-white rounded"><%= item['title'] %></div>
+            <div class="pl-5 p-3 pb-4 border-t bg-gray-200 rounded-b"><%= item['result'] %></div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

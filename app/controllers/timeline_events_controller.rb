@@ -7,4 +7,10 @@ class TimelineEventsController < ApplicationController
     @course = submission.target.course
     render 'courses/review', layout: 'student_course'
   end
+
+  def show
+    @submission = authorize(TimelineEvent.find(params[:id]))
+    @course = @submission.target.course
+    render layout: 'student'
+  end
 end

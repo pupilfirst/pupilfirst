@@ -15,6 +15,7 @@ type state = {
   dirty: bool,
   saving: bool,
   tab,
+  mergeIntoLevelId: string,
 };
 
 type action =
@@ -22,7 +23,8 @@ type action =
   | UpdateUnlockOn(option(Js.Date.t))
   | BeginSaving
   | FailSaving
-  | UpdateTab(tab);
+  | UpdateTab(tab)
+  | SelectLevelToMergeInto(string);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -36,6 +38,7 @@ let reducer = (state, action) => {
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | UpdateTab(tab) => {...state, tab}
+  | SelectLevelToMergeInto(mergeIntoLevelId) => {...state, mergeIntoLevelId}
   };
 };
 
@@ -70,23 +73,20 @@ let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
 let computeInitialState = level => {
-  switch (level) {
-  | Some(level) => {
-      name: level |> Level.name,
-      unlockOn: level |> Level.unlockOn,
-      hasNameError: false,
-      dirty: false,
-      saving: false,
-      tab: Details,
-    }
-  | None => {
-      name: "",
-      unlockOn: None,
-      hasNameError: false,
-      dirty: false,
-      saving: false,
-      tab: Details,
-    }
+  let (name, unlockOn) =
+    switch (level) {
+    | Some(level) => (level |> Level.name, level |> Level.unlockOn)
+    | None => ("", None)
+    };
+
+  {
+    name,
+    unlockOn,
+    hasNameError: false,
+    dirty: false,
+    saving: false,
+    tab: Details,
+    mergeIntoLevelId: "0",
   };
 };
 
@@ -204,13 +204,98 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
   </div>;
 };
 
-let actionsForm = (level, course, updateLevelsCB, state, send) => {
+let handleSelectLevelForDeletion = (send, event) => {
+  let target = event |> ReactEvent.Form.target;
+  send(SelectLevelToMergeInto(target##value));
+};
+
+module MergeLevelsQuery = [%graphql
+  {|
+  mutation MergeLevelsQuery($deleteLevelId: ID!, $mergeIntoLevelId: ID!) {
+    mergeLevels(deleteLevelId: $deleteLevelId, mergeIntoLevelId: $mergeIntoLevelId) {
+      success
+    }
+  }
+|}
+];
+
+let deleteSelectedLevel = (state, send, level, _event) =>
+  WindowUtils.confirm("Are you sure? This action cannot be undone.", () => {
+    send(BeginSaving);
+
+    MergeLevelsQuery.make(
+      ~deleteLevelId=Level.id(level),
+      ~mergeIntoLevelId=state.mergeIntoLevelId,
+      (),
+    )
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(result => {
+         if (result##mergeLevels##success) {
+           DomUtils.reload();
+         } else {
+           send(FailSaving);
+         };
+
+         Js.Promise.resolve();
+       })
+    |> Js.Promise.catch(error => {
+         Js.log(error);
+         Notification.error(
+           "Oops!",
+           "Something went wrong when we tried to merge & delete this level. Please reload this page before trying again.",
+         );
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  });
+
+let actionsForm = (level, levels, state, send) => {
   let visibiltyClass =
     switch (state.tab) {
     | Details => Some("hidden")
     | Actions => None
     };
-  <div className=?visibiltyClass> {str("actions form goes here")} </div>;
+
+  let otherLevels =
+    Js.Array.filter(l => Level.id(level) != Level.id(l), levels);
+  <div className=?visibiltyClass>
+    <div className="mt-5">
+      <label
+        className="inline-block tracking-wide text-xs font-semibold"
+        htmlFor="name">
+        {"Delete & Merge Into" |> str}
+      </label>
+      <HelpIcon className="ml-1 text-sm">
+        {str(
+           "Pick another level to merge this level into. This action will shift all targets and students in level.",
+         )}
+      </HelpIcon>
+      <select
+        id="delete-and-merge-level"
+        onChange={handleSelectLevelForDeletion(send)}
+        className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        value={state.mergeIntoLevelId}>
+        <option key="0" value="0"> {str("Select a different level")} </option>
+        {otherLevels
+         |> Array.map(level =>
+              <option key={Level.id(level)} value={Level.id(level)}>
+                {"L"
+                 ++ Level.number(level)->string_of_int
+                 ++ ": "
+                 ++ Level.name(level)
+                 |> str}
+              </option>
+            )
+         |> React.array}
+      </select>
+      <button
+        disabled={state.mergeIntoLevelId == "0"}
+        onClick={deleteSelectedLevel(state, send, level)}
+        className="btn btn-primary mt-2">
+        {str("Merge and Delete")}
+      </button>
+    </div>
+  </div>;
 };
 
 let tab = (tab, state, send) => {
@@ -235,12 +320,12 @@ let tab = (tab, state, send) => {
 };
 
 [@react.component]
-let make = (~level, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
+let make = (~level, ~levels, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, level, computeInitialState);
 
   <SchoolAdmin__EditorDrawer closeDrawerCB=hideEditorActionCB>
-    <div>
+    <DisablingCover disabled={state.saving}>
       <div className="bg-gray-200 pt-6">
         <div className="max-w-2xl px-6 mx-auto">
           <h3> {drawerTitle(level)->str} </h3>
@@ -259,10 +344,13 @@ let make = (~level, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
         <div className="border-t border-gray-400">
           <div className="max-w-2xl mx-auto px-6">
             {detailsForm(level, course, updateLevelsCB, state, send)}
-            {actionsForm(level, course, updateLevelsCB, state, send)}
+            {switch (level) {
+             | Some(level) => actionsForm(level, levels, state, send)
+             | None => React.null
+             }}
           </div>
         </div>
       </div>
-    </div>
+    </DisablingCover>
   </SchoolAdmin__EditorDrawer>;
 };

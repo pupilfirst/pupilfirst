@@ -235,6 +235,7 @@ let make =
        />
      | ShowLevelEditor(level) =>
        <CurriculumEditor__LevelEditor
+         levels={Array.of_list(state.levels)}
          level
          course
          hideEditorActionCB

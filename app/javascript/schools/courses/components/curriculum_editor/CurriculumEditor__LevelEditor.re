@@ -262,7 +262,7 @@ let actionsForm = (level, levels, state, send) => {
     <div className="mt-5">
       <label
         className="inline-block tracking-wide text-xs font-semibold"
-        htmlFor="name">
+        htmlFor="delete-and-merge-level">
         {"Delete & Merge Into" |> str}
       </label>
       <HelpIcon className="ml-1 text-sm">

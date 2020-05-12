@@ -12,7 +12,7 @@ class GraphqlController < ApplicationController
       current_user: current_user,
       current_school_admin: current_school_admin,
       session: session,
-      notifications: []
+      notifications: [],
     }
 
     result = SvappSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
@@ -21,7 +21,7 @@ class GraphqlController < ApplicationController
     result[:notifications] = context[:notifications] if context[:notifications].any?
 
     render json: result
-  rescue => e # rubocop:disable Style/RescueStandardError
+  rescue => e
     raise e unless Rails.env.development?
 
     handle_error_in_development e
@@ -36,18 +36,18 @@ class GraphqlController < ApplicationController
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)
     case ambiguous_param
-      when String
-        if ambiguous_param.present?
-          ensure_hash(JSON.parse(ambiguous_param))
-        else
-          {}
-        end
-      when Hash, ActionController::Parameters
-        ambiguous_param
-      when nil
-        {}
+    when String
+      if ambiguous_param.present?
+        ensure_hash(JSON.parse(ambiguous_param))
       else
-        raise ArgumentError, "Unexpected parameter: #{ambiguous_param}"
+        {}
+      end
+    when Hash, ActionController::Parameters
+      ambiguous_param
+    when nil
+      {}
+    else
+      raise ArgumentError, "Unexpected parameter: #{ambiguous_param}"
     end
   end
 

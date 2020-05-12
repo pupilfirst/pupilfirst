@@ -237,7 +237,6 @@ let make =
        <CurriculumEditor__LevelEditor
          level
          course
-         authenticityToken
          hideEditorActionCB
          updateLevelsCB
        />

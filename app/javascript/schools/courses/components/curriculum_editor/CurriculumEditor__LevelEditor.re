@@ -1,6 +1,12 @@
+[%bs.raw {|require("./CurriculumEditor__LevelEditor.css")|}];
+
 open CurriculumEditor__Types;
 
 let str = ReasonReact.string;
+
+type tab =
+  | Details
+  | Actions;
 
 type state = {
   name: string,
@@ -8,12 +14,15 @@ type state = {
   hasNameError: bool,
   dirty: bool,
   saving: bool,
+  tab,
 };
 
 type action =
   | UpdateName(string, bool)
   | UpdateUnlockOn(option(Js.Date.t))
-  | UpdateSaving;
+  | BeginSaving
+  | FailSaving
+  | UpdateTab(tab);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -24,7 +33,9 @@ let reducer = (state, action) => {
       dirty: true,
     }
   | UpdateUnlockOn(date) => {...state, unlockOn: date, dirty: true}
-  | UpdateSaving => {...state, saving: !state.saving}
+  | BeginSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
+  | UpdateTab(tab) => {...state, tab}
   };
 };
 
@@ -66,6 +77,7 @@ let computeInitialState = level => {
       hasNameError: false,
       dirty: false,
       saving: false,
+      tab: Details,
     }
   | None => {
       name: "",
@@ -73,137 +85,184 @@ let computeInitialState = level => {
       hasNameError: false,
       dirty: false,
       saving: false,
+      tab: Details,
     }
   };
 };
 
+let drawerTitle = level =>
+  switch (level) {
+  | Some(level) => "Edit Level " ++ Level.number(level)->string_of_int
+  | None => "Create New Level"
+  };
+
+let handleResponseCB = (level, updateLevelsCB, state, json) => {
+  let id = json |> Json.Decode.(field("id", string));
+  let number = json |> Json.Decode.(field("number", int));
+  let newLevel = Level.create(id, state.name, number, state.unlockOn);
+
+  switch (level) {
+  | Some(_) => Notification.success("Success", "Level updated successfully")
+  | None => Notification.success("Success", "Level created successfully")
+  };
+
+  updateLevelsCB(newLevel);
+};
+
+let createLevel = (course, updateLevelsCB, state, send) => {
+  send(BeginSaving);
+
+  let handleErrorCB = () => send(FailSaving);
+  let url = "/school/courses/" ++ Course.id(course) ++ "/levels";
+
+  Api.create(
+    url,
+    setPayload(AuthenticityToken.fromHead(), state),
+    handleResponseCB(None, updateLevelsCB, state),
+    handleErrorCB,
+  );
+};
+
+let updateLevel = (level, updateLevelsCB, state, send) => {
+  send(BeginSaving);
+
+  let handleErrorCB = () => send(FailSaving);
+  let url = "/school/levels/" ++ Level.id(level);
+
+  Api.update(
+    url,
+    setPayload(AuthenticityToken.fromHead(), state),
+    handleResponseCB(Some(level), updateLevelsCB, state),
+    handleErrorCB,
+  );
+};
+
+let detailsForm = (level, course, updateLevelsCB, state, send) => {
+  let visibiltyClass =
+    switch (state.tab) {
+    | Details => None
+    | Actions => Some("hidden")
+    };
+
+  <div className=?visibiltyClass>
+    <div className="mt-5">
+      <label
+        className="inline-block tracking-wide text-xs font-semibold"
+        htmlFor="name">
+        {"Level Name" |> str}
+      </label>
+      <input
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        id="name"
+        type_="text"
+        placeholder="Type level name here"
+        value={state.name}
+        onChange={event =>
+          updateName(send, ReactEvent.Form.target(event)##value)
+        }
+      />
+      {state.hasNameError
+         ? <div className="drawer-right-form__error-msg">
+             {"not a valid name" |> str}
+           </div>
+         : ReasonReact.null}
+    </div>
+    <div className="mt-5">
+      <label
+        className="tracking-wide text-xs font-semibold"
+        htmlFor="unlock-on-input">
+        {"Unlock level on" |> str}
+      </label>
+      <span className="text-xs"> {str(" (optional)")} </span>
+      <DatePicker
+        id="unlock-on-input"
+        selected=?{state.unlockOn}
+        onChange={date => send(UpdateUnlockOn(date))}
+      />
+    </div>
+    <div className="flex mt-5">
+      {switch (level) {
+       | Some(level) =>
+         <button
+           disabled={saveDisabled(state)}
+           onClick={_event => updateLevel(level, updateLevelsCB, state, send)}
+           className="w-full btn btn-large btn-primary">
+           {"Update Level" |> str}
+         </button>
+
+       | None =>
+         <button
+           disabled={saveDisabled(state)}
+           onClick={_event =>
+             createLevel(course, updateLevelsCB, state, send)
+           }
+           className="w-full btn btn-large btn-primary">
+           {"Create New Level" |> str}
+         </button>
+       }}
+    </div>
+  </div>;
+};
+
+let actionsForm = (level, course, updateLevelsCB, state, send) => {
+  let visibiltyClass =
+    switch (state.tab) {
+    | Details => Some("hidden")
+    | Actions => None
+    };
+  <div className=?visibiltyClass> {str("actions form goes here")} </div>;
+};
+
+let tab = (tab, state, send) => {
+  let defaultClasses = "level-editor__tab cursor-pointer";
+
+  let (title, iconClass) =
+    switch (tab) {
+    | Actions => ("Actions", "fa-cogs")
+    | Details => ("Details", "fa-list-alt")
+    };
+
+  let selected = tab == state.tab;
+
+  let classes =
+    selected
+      ? defaultClasses ++ " level-editor__tab--selected" : defaultClasses;
+
+  <button onClick={_e => send(UpdateTab(tab))} className=classes>
+    <i className={"fas " ++ iconClass} />
+    <span className="ml-2"> {title |> str} </span>
+  </button>;
+};
+
 [@react.component]
-let make =
-    (
-      ~level,
-      ~course,
-      ~authenticityToken,
-      ~hideEditorActionCB,
-      ~updateLevelsCB,
-    ) => {
+let make = (~level, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, level, computeInitialState);
-  let handleErrorCB = () => send(UpdateSaving);
-  let handleResponseCB = json => {
-    let id = json |> Json.Decode.(field("id", string));
-    let number = json |> Json.Decode.(field("number", int));
-    let newLevel = Level.create(id, state.name, number, state.unlockOn);
-    switch (level) {
-    | Some(_) => Notification.success("Success", "Level updated successfully")
-    | None => Notification.success("Success", "Level created successfully")
-    };
-    updateLevelsCB(newLevel);
-  };
 
-  let createLevel = (authenticityToken, course, state) => {
-    send(UpdateSaving);
-    let course_id = course |> Course.id;
-    let url = "/school/courses/" ++ course_id ++ "/levels";
-    Api.create(
-      url,
-      setPayload(authenticityToken, state),
-      handleResponseCB,
-      handleErrorCB,
-    );
-  };
-
-  let updateLevel = (authenticityToken, levelId, state) => {
-    send(UpdateSaving);
-    let url = "/school/levels/" ++ levelId;
-    Api.update(
-      url,
-      setPayload(authenticityToken, state),
-      handleResponseCB,
-      handleErrorCB,
-    );
-  };
-
-  <div>
-    <div className="blanket" />
-    <div className="drawer-right">
-      <div className="drawer-right__close absolute">
-        <button
-          title="close"
-          onClick={_ => hideEditorActionCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-          <i className="fas fa-times text-xl" />
-        </button>
+  <SchoolAdmin__EditorDrawer closeDrawerCB=hideEditorActionCB>
+    <div>
+      <div className="bg-gray-200 pt-6">
+        <div className="max-w-2xl px-6 mx-auto">
+          <h3> {drawerTitle(level)->str} </h3>
+        </div>
+        {switch (level) {
+         | Some(_) =>
+           <div
+             className="flex w-full max-w-2xl mx-auto px-6 text-sm -mb-px mt-2">
+             {tab(Details, state, send)}
+             {tab(Actions, state, send)}
+           </div>
+         | None => <div className="h-4" />
+         }}
       </div>
-      <div className={formClasses(state.saving)}>
-        <div className="w-full">
-          <div className="mx-auto bg-white">
-            <div className="max-w-2xl p-6 mx-auto">
-              <h5 className="uppercase text-center border-b pb-2 mb-4">
-                {"Level Details" |> str}
-              </h5>
-              <div className="mt-5">
-                <label
-                  className="inline-block tracking-wide text-xs font-semibold"
-                  htmlFor="name">
-                  {"Level Name" |> str}
-                </label>
-                <span> {"*" |> str} </span>
-                <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="name"
-                  type_="text"
-                  placeholder="Type level name here"
-                  value={state.name}
-                  onChange={event =>
-                    updateName(send, ReactEvent.Form.target(event)##value)
-                  }
-                />
-                {state.hasNameError
-                   ? <div className="drawer-right-form__error-msg">
-                       {"not a valid name" |> str}
-                     </div>
-                   : ReasonReact.null}
-              </div>
-              <div className="mt-5">
-                <label
-                  className="block tracking-wide text-xs font-semibold"
-                  htmlFor="unlock-on-input">
-                  {"Unlock level on" |> str}
-                </label>
-                <DatePicker
-                  id="unlock-on-input"
-                  selected=?{state.unlockOn}
-                  onChange={date => send(UpdateUnlockOn(date))}
-                />
-              </div>
-              <div className="flex mt-5">
-                {switch (level) {
-                 | Some(level) =>
-                   let id = level |> Level.id;
-                   <button
-                     disabled={saveDisabled(state)}
-                     onClick={_event =>
-                       updateLevel(authenticityToken, id, state)
-                     }
-                     className="w-full btn btn-large btn-primary">
-                     {"Update Level" |> str}
-                   </button>;
-
-                 | None =>
-                   <button
-                     disabled={saveDisabled(state)}
-                     onClick={_event =>
-                       createLevel(authenticityToken, course, state)
-                     }
-                     className="w-full btn btn-large btn-primary">
-                     {"Create New Level" |> str}
-                   </button>
-                 }}
-              </div>
-            </div>
+      <div className="bg-white">
+        <div className="border-t border-gray-400">
+          <div className="max-w-2xl mx-auto px-6">
+            {detailsForm(level, course, updateLevelsCB, state, send)}
+            {actionsForm(level, course, updateLevelsCB, state, send)}
           </div>
         </div>
       </div>
     </div>
-  </div>;
+  </SchoolAdmin__EditorDrawer>;
 };

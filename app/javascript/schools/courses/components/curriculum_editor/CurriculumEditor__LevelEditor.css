@@ -1,0 +1,12 @@
+.level-editor__tab {
+  @apply flex items-center justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 bg-gray-100 text-gray-600;
+}
+
+.level-editor__tab--selected {
+  border-bottom-color: white;
+  @apply text-primary-500 bg-white;
+}
+
+.level-editor__tab:not(.level-editor__tab--selected):hover {
+  @apply bg-gray-200 text-primary-400 text-gray-900;
+}

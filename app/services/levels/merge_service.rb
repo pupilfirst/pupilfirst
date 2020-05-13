@@ -5,6 +5,8 @@ module Levels
     end
 
     def merge_into(other_level)
+      raise 'Cannot merge into level zero' if other_level.number.zero?
+
       Level.transaction do
         # Link startups and target groups to supplied level.
         @level.startups.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations

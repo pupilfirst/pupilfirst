@@ -257,7 +257,10 @@ let actionsForm = (level, levels, state, send) => {
     };
 
   let otherLevels =
-    Js.Array.filter(l => Level.id(level) != Level.id(l), levels);
+    Js.Array.filter(
+      l => Level.id(level) != Level.id(l) && Level.number(l) != 0,
+      levels,
+    );
   <div className=?visibiltyClass>
     <div className="mt-5">
       <label

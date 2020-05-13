@@ -204,8 +204,10 @@ feature 'Curriculum Editor', js: true do
     expect(level_2.reload.unlock_on).to eq(Date.current)
   end
 
-  context 'when there are three levels' do
+  context 'when there is a level zero and three other levels' do
+    let(:level_0) { create :level, :zero, course: course }
     let(:level_3) { create :level, :three, course: course }
+    let!(:target_group_l0) { create :target_group, level: level_0 }
     let!(:target_group_l3) { create :target_group, level: level_3 }
     let!(:team_l3) { create :startup, level: level_3 }
 
@@ -224,6 +226,14 @@ feature 'Curriculum Editor', js: true do
       expect { level_3.reload }.to raise_error(ActiveRecord::RecordNotFound)
       expect(target_group_l3.reload.level).to eq(level_1)
       expect(team_l3.reload.level).to eq(level_1)
+    end
+
+    scenario 'author is not allowed to merge third level into level zero' do
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+      find('button[title="Edit selected level"').click
+      click_button 'Actions'
+      expect(page).not_to have_text("L0: #{level_0.name}")
     end
   end
 

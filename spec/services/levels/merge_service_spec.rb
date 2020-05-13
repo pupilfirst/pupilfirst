@@ -85,5 +85,14 @@ describe Levels::MergeService do
         expect(level_3.reload.number).to eq(3)
       end
     end
+
+    it 'does not allow merging of any level into level 0' do
+      expect do
+        subject.new(level_1).merge_into(level_0)
+      end.to raise_error(StandardError, 'Cannot merge into level zero')
+
+      # Numbers should not have changed.
+      expect(level_1.reload.number).to eq(1)
+    end
   end
 end

@@ -1,0 +1,16 @@
+<% presenter = Courses::ReportPresenter.new(self, @course) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'CoursesReportPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'CoursesReportPack', nonce: true %>
+<% end %>
+
+
+<% content_for(:inner_wrapper) do %>
+  <script id="course-student-report__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+  <div id="react-root"></div>
+<% end %>

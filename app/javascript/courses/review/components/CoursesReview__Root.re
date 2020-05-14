@@ -430,7 +430,7 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
 
   <div>
     {switch (url.path) {
-     | ["submissions", submissionId, ..._] =>
+     | ["submissions", submissionId, "review"] =>
        <CoursesReview__SubmissionOverlay
          courseId
          submissionId

@@ -23,7 +23,7 @@ module Startups
       return false if @founder.user.school_admin.present?
 
       coach = @founder.user.faculty
-      return false if coach.present? && @startup.course.in?(coach.reviewable_courses)
+      return false if coach.present? && @startup.course.in?(coach.courses)
 
       true
     end

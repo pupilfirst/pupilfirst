@@ -1,0 +1,155 @@
+.courses-report-overview__student-level-progress {
+  position: relative;
+  height: 5px;
+}
+
+.courses-report-overview__student-level {
+  @apply bg-gray-300 text-center;
+}
+
+.courses-report-overview__student-level-count {
+  @apply inline-block text-xs text-gray-500 font-semibold text-center pt-2;
+}
+
+.courses-report-overview__student-level--reached {
+  @apply bg-yellow-500;
+}
+
+.courses-report-overview__student-level--current {
+  @apply relative bg-gray-300;
+}
+
+:not(.courses-report-overview__student-level-progress--completed)>.courses-report-overview__student-level--current:after {
+  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
+  content: "";
+}
+
+:not(.courses-report-overview__student-level-progress--completed)>.courses-report-overview__student-level--current.courses-report-overview__student-level--completed:after {
+  @apply bg-green-400;
+}
+
+:not(.courses-report-overview__student-level-progress--completed)>.courses-report-overview__student-level--current:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  z-index: 10;
+  bottom: 0;
+  width: 22px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%23d69e2e'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: -2px bottom;
+}
+
+:not(.courses-report-overview__student-level-progress--completed)>.courses-report-overview__student-level--current.courses-report-overview__student-level--completed:before {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
+}
+
+.courses-report-overview__student-level--completed {
+  @apply relative bg-green-400;
+}
+
+.courses-report-overview__student-level:not(:last-child) {
+  @apply border-r-2 border-white;
+}
+
+.courses-report-overview__student-level-progress--completed:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  z-index: 10;
+  bottom: 0;
+  width: 22px;
+  right: -16px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416,175.17,174,286.26V64.07ZM126,0a30,30,0,0,0-16,55.37V512h32V55.37A30,30,0,0,0,126,0Z' fill='%2348bb78'/%3E%3C/svg%3E");
+  background-position: bottom center;
+}
+
+.courses-report-overview__doughnut-chart-container {
+  @apply shadow rounded-lg p-4 h-full flex;
+}
+
+.courses-report-overview__pie-chart-container {
+  @apply bg-gray-200 w-full rounded-lg overflow-hidden;
+}
+
+.courses-report-overview__doughnut-chart {
+  display: block;
+  max-width: 100%;
+  height: 72px;
+}
+
+.courses-report-overview__doughnut-chart-bg {
+  fill: none;
+  stroke-width: 2;
+}
+
+.courses-report-overview__doughnut-chart-stroke {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: butt;
+  animation: progress 0.5s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.courses-report-overview__doughnut-chart.purple .courses-report-overview__doughnut-chart-bg {
+  stroke: #d3bff3;
+}
+
+.courses-report-overview__doughnut-chart.pink .courses-report-overview__doughnut-chart-bg {
+  stroke: #fcb5d0;
+}
+
+.courses-report-overview__doughnut-chart.purple .courses-report-overview__doughnut-chart-stroke {
+  stroke: #6025c0;
+}
+
+.courses-report-overview__doughnut-chart.pink .courses-report-overview__doughnut-chart-stroke {
+  stroke: #f61067;
+}
+
+.courses-report-overview__doughnut-chart-text {
+  font-size: 0.45rem;
+  text-anchor: middle;
+}
+
+.courses-report-overview__doughnut-chart.purple .courses-report-overview__doughnut-chart-text {
+  fill: #6025c0;
+}
+
+.courses-report-overview__doughnut-chart.pink .courses-report-overview__doughnut-chart-text {
+  fill: #f95392;
+}
+
+.courses-report-overview__pie-chart {
+  width: 24px;
+  height: 24px;
+  transform: rotate(-90deg);
+  border-radius: 50%;
+}
+
+.courses-report-overview__pie-chart--pass {
+  background: theme("colors.green.200");
+}
+
+.courses-report-overview__pie-chart--fail {
+  background: theme("colors.orange.200");
+}
+
+.courses-report-overview__pie-chart .courses-report-overview__pie-chart-circle {
+  stroke-width: 32;
+}
+
+.courses-report-overview__pie-chart-circle--pass {
+  fill: theme("colors.green.200");
+  stroke: theme("colors.green.500");
+}
+
+.courses-report-overview__pie-chart-circle--fail {
+  fill: theme("colors.orange.200");
+  stroke: theme("colors.orange.500");
+}

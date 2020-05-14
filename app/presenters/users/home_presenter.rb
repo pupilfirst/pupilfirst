@@ -59,7 +59,7 @@ module Users
 
     def courses_with_review_access
       @courses_with_review_access ||= begin
-        current_user.faculty.present? ? current_user.faculty.reviewable_courses.pluck(:id) : []
+        current_user.faculty.present? ? current_user.faculty.courses.pluck(:id) : []
       end
     end
 

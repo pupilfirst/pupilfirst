@@ -133,7 +133,7 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
           selectedLevel: None,
           selectedStatus: None,
         },
-        sortDirection: `Ascending,
+        sortDirection: `Descending,
       },
     );
 

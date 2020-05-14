@@ -82,7 +82,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions_for_grades
-    submissions.where(latest: true).includes(:founders).select { |submission| submission.founder_ids.sort == student.team_student_ids }
+    submissions.where(latest: true).includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
   end
 
   def social_links

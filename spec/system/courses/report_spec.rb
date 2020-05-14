@@ -67,7 +67,7 @@ feature 'Students view performance report and submissions overview', js: true do
     submission_target_l1_2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 1)
     submission_target_l1_1.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 2)
 
-    submission_target_l2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 2)
+    submission_target_l2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 3)
     submission_target_l2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     submission_target_l3.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
   end
@@ -102,7 +102,7 @@ feature 'Students view performance report and submissions overview', js: true do
 
     within("div[aria-label='average-grade-for-criterion-#{evaluation_criterion_1.id}']") do
       expect(page).to have_content(evaluation_criterion_1.name)
-      expect(page).to have_content('1.7/3')
+      expect(page).to have_content('2.5/3')
     end
 
     within("div[aria-label='average-grade-for-criterion-#{evaluation_criterion_2.id}']") do

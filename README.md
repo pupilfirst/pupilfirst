@@ -21,6 +21,8 @@ Visit [docs.pupilfirst.com](https://docs.pupilfirst.com) for a detailed explanat
 
 There's an article in the wiki discussing [how to deploy Pupilfirst to Heroku](https://github.com/pupilfirst/pupilfirst/wiki/Deploying-to-Heroku). Even if you're not using Heroku, we highly recommend going through the instructions before getting started.
 
+Have doubts? Talk to our development team on [our Discord server](https://discord.gg/Sh67Tca).
+
 The rest of this README file discusses how to set up this repository for development.
 
 ## Setup for development

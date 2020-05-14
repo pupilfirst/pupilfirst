@@ -32,14 +32,15 @@ module Courses
 
     def coaches
       team_coaches = current_founder.startup&.faculty
-      if team_coaches.present?
-        team_coaches.includes(:user).map do |coach|
-          {
-            name: coach.name,
-            title: coach.title,
-            avatar_url: coach.avatar.attached? ? view.rails_representation_path(coach.user.avatar_variant(:thumb), only_path: true) : nil
-          }
-        end
+
+      return [] if team_coaches.empty?
+
+      team_coaches.includes(:user).map do |coach|
+        {
+          name: coach.name,
+          title: coach.title,
+          avatar_url: coach.avatar.attached? ? view.rails_representation_path(coach.user.avatar_variant(:thumb), only_path: true) : nil
+        }
       end
     end
   end

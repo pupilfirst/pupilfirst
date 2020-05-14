@@ -205,7 +205,9 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
     applicableLevels
     |> ArrayUtils.unsafeFind(
          level => Level.id(level) == levelId,
-         "Unable to find level with id" ++ levelId ++ "in CoursesReport__Overview",
+         "Unable to find level with id"
+         ++ levelId
+         ++ "in CoursesReport__Overview",
        )
     |> Level.number;
 

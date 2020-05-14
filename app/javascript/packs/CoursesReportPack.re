@@ -12,6 +12,6 @@ let (studentId, levels, coaches, teamStudentIds) =
   DomUtils.parseJSONTag(~id="course-student-report__props", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoursesReport studentId levels coaches teamStudentIds />,
+  <CoursesReport__Root studentId levels coaches teamStudentIds />,
   "react-root",
 );

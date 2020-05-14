@@ -58,7 +58,7 @@ class StudentDetailsResolver < ApplicationQuery
 
     return false if student.blank?
 
-    current_user.id == student.user.id || current_user.faculty.reviewable_courses.where(id: student.course).exists?
+    current_user.id == student.user_id || current_user.faculty.courses.where(id: student.course).exists?
   end
 
   def levels

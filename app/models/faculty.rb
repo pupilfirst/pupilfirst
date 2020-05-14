@@ -139,6 +139,7 @@ class Faculty < ApplicationRecord
   end
 
   def reviewable_courses
+    ActiveSupport::Deprecation.warn('Use `faculty.courses` instead')
     Course.where(id: courses)
   end
 

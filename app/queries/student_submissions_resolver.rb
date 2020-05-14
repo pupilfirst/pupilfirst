@@ -13,7 +13,7 @@ class StudentSubmissionsResolver < ApplicationQuery
 
     return false if student.blank?
 
-    current_user.id == student.user.id || coach.reviewable_courses.where(id: student.course).exists?
+    current_user.id == student.user_id || coach.courses.where(id: student.course).exists?
   end
 
   def applicable_submissions

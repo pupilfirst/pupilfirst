@@ -128,7 +128,7 @@ let unselected = (levels, selectedLevel, selectedStatus) => {
     |> Js.Array.filter(status =>
          selectedStatus
          |> OptionUtils.mapWithDefault(
-              selectedStatus => status == selectedStatus,
+              selectedStatus => status != selectedStatus,
               true,
             )
        )
@@ -203,9 +203,9 @@ let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
 let filterPlaceholder = (selectedLevel, selectedStatus) => {
   switch (selectedLevel, selectedStatus) {
   | (None, Some(_)) => "Filter by level"
-  | (None, None) => "Filter by level, or by review status"
+  | (None, None) => "Filter by level, or by status"
   | (Some(_), Some(_)) => "Filter by another level"
-  | (Some(_), None) => "Filter by another level, or by review status"
+  | (Some(_), None) => "Filter by another level, or by status"
   };
 };
 
@@ -406,7 +406,10 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                          classes="fas fa-exclamation-triangle text-sm md:text-base mt-1"
                        />
                        <div className="inline-block pl-3">
-                         {"This submission is not considered towards its target's completion; it was a 'team' target, and your team changed after you made this submission."
+                         {"This submission is not considered towards its target's completion; it was a "
+                          |> str}
+                         <span className="italic"> {"team" |> str} </span>
+                         {" target, and your team changed after you made this submission."
                           |> str}
                        </div>
                      </div>

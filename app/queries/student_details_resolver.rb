@@ -32,7 +32,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def average_grades
-    @average_grades ||= TimelineEventGrade.where(timeline_event: submissions).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
+    @average_grades ||= TimelineEventGrade.where(timeline_event: submissions_for_grades).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
       { evaluation_criterion_id: ec_id, average_grade: average_grade.round(1) }
     end
   end
@@ -78,7 +78,11 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions
-    student.timeline_events
+    @submissions ||= student.timeline_events
+  end
+
+  def submissions_for_grades
+    submissions.where(latest: true).includes(:founders).select { |submission| submission.founder_ids.sort == student.team_student_ids }
   end
 
   def social_links

@@ -125,8 +125,8 @@ feature "Course students report", js: true do
     end
 
     within("div[aria-label='student-submissions']") do
-      expect(page).to have_link(href: "/submissions/#{submission_target_l1_1.id}")
-      expect(page).to have_link(href: "/submissions/#{submission_target_l3.id}")
+      expect(page).to have_link(href: "/submissions/#{submission_target_l1_1.id}/review")
+      expect(page).to have_link(href: "/submissions/#{submission_target_l3.id}/review")
     end
   end
 

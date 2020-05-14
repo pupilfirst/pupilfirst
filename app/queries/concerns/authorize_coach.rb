@@ -7,6 +7,6 @@ module AuthorizeCoach
 
     return false if course.blank?
 
-    current_user.faculty.reviewable_courses.where(id: course).exists?
+    current_user.faculty.courses.where(id: course).exists?
   end
 end

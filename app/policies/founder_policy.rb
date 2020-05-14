@@ -9,7 +9,7 @@ class FounderPolicy < ApplicationPolicy
     return true if user.founders.where(id: record).exists?
 
     # Coaches who review submissions from this student can view their profile.
-    user.faculty.present? && user.faculty.reviewable_courses.where(id: record.course).exists?
+    user.faculty.present? && user.faculty.courses.where(id: record.course).exists?
   end
 
   def paged_events?

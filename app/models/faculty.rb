@@ -138,11 +138,6 @@ class Faculty < ApplicationRecord
     course.startups.admitted
   end
 
-  def reviewable_courses
-    ActiveSupport::Deprecation.warn('Use `faculty.courses` instead')
-    Course.where(id: courses)
-  end
-
   def connect_link?
     connect_link.present?
   end

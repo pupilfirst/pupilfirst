@@ -51,6 +51,6 @@ class CoursePolicy < ApplicationPolicy
   private
 
   def reviewable_courses
-    @reviewable_courses ||= current_coach&.reviewable_courses
+    @reviewable_courses ||= current_coach&.courses
   end
 end

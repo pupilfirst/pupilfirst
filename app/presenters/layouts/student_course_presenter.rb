@@ -23,7 +23,7 @@ module Layouts
       else
         # Courses as a coach, plus courses as a student.
         courses_as_course_author = current_user.course_authors.present? ? Course.joins(:course_authors).where(course_authors: current_user.course_authors) : []
-        courses_as_coach = current_coach.present? ? current_coach.reviewable_courses : []
+        courses_as_coach = current_coach.present? ? current_coach.courses : []
         courses_as_student = Course.joins(:founders).where(school: current_school, founders: { id: current_user.founders.select(:id) })
         (courses_as_course_author + courses_as_coach + courses_as_student).uniq
       end.map do |course|
@@ -39,7 +39,7 @@ module Layouts
     end
 
     def review_dashboard
-      if current_coach.present? && current_coach.reviewable_courses.where(id: @course).exists?
+      if current_coach.present? && current_coach.courses.where(id: @course).exists?
         "review"
       end
     end
@@ -55,7 +55,7 @@ module Layouts
     end
 
     def students
-      if current_coach.present? && @course.in?(current_coach.reviewable_courses)
+      if current_coach.present? && @course.in?(current_coach.courses)
         "students"
       end
     end

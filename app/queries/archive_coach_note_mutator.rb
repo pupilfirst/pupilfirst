@@ -10,7 +10,7 @@ class ArchiveCoachNoteMutator < ApplicationQuery
   def authorized?
     return false if coach.blank? || coach_note.blank?
 
-    coach.reviewable_courses.where(id: coach_note.student.course).exists? && coach_note.author_id == current_user.id
+    coach.courses.where(id: coach_note.student.course).exists? && coach_note.author_id == current_user.id
   end
 
   def coach_note

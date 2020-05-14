@@ -1,9 +1,10 @@
-![Pupilfirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
----
+## ![Pupilfirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
+
 [![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/SVdotCO/pupilfirst/blob/master/LICENSE)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/maintainability)](https://codeclimate.com/github/SVdotCO/pupilfirst/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/test_coverage)](https://codeclimate.com/github/SVdotCO/pupilfirst/test_coverage)
 [![Continuous Integration](https://github.com/SVdotCO/pupilfirst/workflows/Continuous%20Integration/badge.svg?branch=master)](https://github.com/SVdotCO/pupilfirst/actions?query=workflow%3A%22Continuous+Integration%22)
+
 ---
 
 [![Screenshots](https://public-assets.sv.co/random/201909/pupilfirst-screenshots.png)](https://www.pupilfirst.com)
@@ -16,15 +17,21 @@ Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view t
 
 Visit [docs.pupilfirst.com](https://docs.pupilfirst.com) for a detailed explanation of Pupilfirst's features.
 
+## Deploying to production
+
+There's an article in the wiki discussing [how to deploy Pupilfirst to Heroku](https://github.com/pupilfirst/pupilfirst/wiki/Deploying-to-Heroku). Even if you're not using Heroku, we highly recommend going through the instructions before getting started.
+
 The rest of this README file discusses how to set up this repository for development.
 
 ## Setup for development
 
+This documentation covers three platforms: **macOS** (10.15), **Ubuntu** (20.04), and **Windows 10** (WSL 2.0, with Ubuntu 20.04). Instructions for Ubuntu also apply to Windows, except where special instructions are noted.
+
 1. [Install and configure dependencies](#install-and-configure-dependencies)
-    1. [Install third-party software](#install-third-party-software)
-    2. [Install Ruby environment](#install-ruby-and-rubygems)
-    3. [Setup Javascript environment](#setup-javascript-environment)
-    4. [Setup ReasonML environment](#setup-reasonml-environment)
+   1. [Install third-party software](#install-third-party-software)
+   2. [Install Ruby environment](#install-ruby-and-rubygems)
+   3. [Setup Javascript environment](#setup-javascript-environment)
+   4. [Setup ReasonML environment](#setup-reasonml-environment)
 2. [Set credentials for local database](#set-credentials-for-local-database)
 3. [Configure application environment variables](#configure-application-environment-variables)
 4. [Setup Overcommit](#setup-overcommit)
@@ -40,12 +47,12 @@ The rest of this README file discusses how to set up this repository for develop
 
 We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on OSX:
 
-  * imagemagick - `brew install imagemagick`
-  * redis - `brew install redis`. Start Redis server after installation.
-  * nginx - `brew install nginx`. Start Nginx server after installation.
-  * postgresql - Install [Postgres.app](http://postgresapp.com) and follow its
-    [instructions](https://postgresapp.com/documentation/install.html), **including** the part about setting up
-    command-line tools.
+- imagemagick - `brew install imagemagick`
+- redis - `brew install redis`. Start Redis server after installation.
+- nginx - `brew install nginx`. Start Nginx server after installation.
+- postgresql - Install [Postgres.app](http://postgresapp.com) and follow its
+  [instructions](https://postgresapp.com/documentation/install.html), **including** the part about setting up
+  command-line tools.
 
 **Important**: Make sure that you start both Nginx and Redis after you install them. Instructions on how to do that will
 be printed to the command-line after they're successfully installed.
@@ -142,7 +149,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 (the default Rails server port). Use following server configuration as an example:
 
 1. Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (OSX) or at
-`/etc/nginx/sites-enabled/pupilfirst` (Linux).
+   `/etc/nginx/sites-enabled/pupilfirst` (Linux).
 
    ```
    server {
@@ -167,7 +174,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    ```
 
 3. You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to
-`127.0.0.1` in the `/etc/hosts` file:
+   `127.0.0.1` in the `/etc/hosts` file (on OSX and Ubuntu), and the `C:\Windows\System32\Drivers\etc\hosts` file on Windows:
 
    ```
    # Append to the /etc/hosts file.

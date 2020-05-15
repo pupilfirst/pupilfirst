@@ -1,9 +1,9 @@
 ## ![Pupilfirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png)
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/SVdotCO/pupilfirst/blob/master/LICENSE)
-[![Maintainability](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/maintainability)](https://codeclimate.com/github/SVdotCO/pupilfirst/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/0c7a02f9e0c6c1fb27c8/test_coverage)](https://codeclimate.com/github/SVdotCO/pupilfirst/test_coverage)
-[![Continuous Integration](https://github.com/SVdotCO/pupilfirst/workflows/Continuous%20Integration/badge.svg?branch=master)](https://github.com/SVdotCO/pupilfirst/actions?query=workflow%3A%22Continuous+Integration%22)
+[![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/pupilfirst/pupilfirst/blob/master/LICENSE)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5a4e81245df6ef5b946b/maintainability)](https://codeclimate.com/github/pupilfirst/pupilfirst/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5a4e81245df6ef5b946b/test_coverage)](https://codeclimate.com/github/pupilfirst/pupilfirst/test_coverage)
+[![Continuous Integration](https://github.com/pupilfirst/pupilfirst/workflows/Continuous%20Integration/badge.svg?branch=master)](https://github.com/pupilfirst/pupilfirst/actions?query=workflow%3A%22Continuous+Integration%22)
 
 ---
 
@@ -27,7 +27,7 @@ The rest of this README file discusses how to set up this repository for develop
 
 ## Setup for development
 
-This documentation covers three platforms: **macOS** (10.15), **Ubuntu** (20.04), and **Windows 10** (WSL 2.0, with Ubuntu 20.04). Instructions for Ubuntu also apply to Windows, except where special instructions are noted.
+This documentation covers three platforms: **macOS** (10.15), **Ubuntu** (20.04), and **Windows 10** ([WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10#update-to-wsl-2), with Ubuntu 20.04). Instructions for Ubuntu also apply to Windows, except where special instructions are noted.
 
 1. [Install and configure dependencies](#install-and-configure-dependencies)
    1. [Install third-party software](#install-third-party-software)
@@ -45,9 +45,9 @@ This documentation covers three platforms: **macOS** (10.15), **Ubuntu** (20.04)
 
 #### Install third-party software
 
-##### On OSX
+##### On macOS
 
-We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on OSX:
+We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on macOS:
 
 - imagemagick - `brew install imagemagick`
 - redis - `brew install redis`. Start Redis server after installation.
@@ -79,7 +79,7 @@ version. Simply follow the instructions in the error message, if this occurs.
 
 If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
 
-##### On OSX:
+##### On macOS:
 
     # Find the exact path to pg_config.
     $ find /Applications -name pg_config
@@ -150,7 +150,7 @@ This will also _seed_ data into the database that will be useful for testing dur
 Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your web application running on port 3000
 (the default Rails server port). Use following server configuration as an example:
 
-1. Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (OSX) or at
+1. Place the following configuration at `/usr/local/etc/nginx/servers/pupilfirst` (macOS) or at
    `/etc/nginx/sites-enabled/pupilfirst` (Linux).
 
    ```
@@ -168,7 +168,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 2. Restart `nginx` so that it picks up the new configuration.
 
    ```
-   # OSX
+   # macOS
    $ brew services restart nginx
 
    # Ubuntu
@@ -176,7 +176,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    ```
 
 3. You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to
-   `127.0.0.1` in the `/etc/hosts` file (on OSX and Ubuntu), and the `C:\Windows\System32\Drivers\etc\hosts` file on Windows:
+   `127.0.0.1` in the `/etc/hosts` file (on macOS and Ubuntu), and the `C:\Windows\System32\Drivers\etc\hosts` file on Windows:
 
    ```
    # Append to the /etc/hosts file.

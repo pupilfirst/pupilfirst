@@ -24,7 +24,7 @@ class UpdateCommunityMutator < ApplicationQuery
     community.update!(
       name: name,
       target_linkable: target_linkable,
-      courses: courses
+      courses: courses,
     )
 
     community.id
@@ -32,11 +32,15 @@ class UpdateCommunityMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    community&.school
+  end
+
   def courses
     @courses ||= current_school.courses.where(id: course_ids)
   end
 
   def community
-    @community ||= current_school.communities.find_by(id: id)
+    @community ||= Community.find_by(id: id)
   end
 end

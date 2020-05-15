@@ -11,6 +11,10 @@ class DeleteCourseAuthorMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    course_author&.user&.school
+  end
+
   def must_be_author_in_this_school
     return if course_author.present?
 
@@ -18,6 +22,6 @@ class DeleteCourseAuthorMutator < ApplicationQuery
   end
 
   def course_author
-    CourseAuthor.joins(user: :school).where(schools: { id: current_school.id }).find_by(id: id)
+    @course_author ||= CourseAuthor.find_by(id: id)
   end
 end

@@ -7,4 +7,10 @@ class UpdateSchoolMutator < ApplicationQuery
   def update_school
     current_school.update!(name: name, about: about)
   end
+
+  private
+
+  def resource_school
+    current_school
+  end
 end

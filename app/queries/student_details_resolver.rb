@@ -13,7 +13,7 @@ class StudentDetailsResolver < ApplicationQuery
       quiz_scores: quiz_scores,
       average_grades: average_grades,
       completed_level_ids: completed_level_ids,
-      team: team
+      team: team,
     }
   end
 
@@ -58,7 +58,9 @@ class StudentDetailsResolver < ApplicationQuery
 
     return false if student.blank?
 
-    current_user.id == student.user_id || current_user.faculty.courses.where(id: student.course).exists?
+    return true if current_user.id == student.user_id
+
+    current_user.faculty.present? && current_user.faculty.courses.where(id: student.course).exists?
   end
 
   def levels
@@ -70,7 +72,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def student
-    @student ||= Founder.where(id: student_id).includes(:user).first
+    @student ||= Founder.includes(:user).find_by(id: student_id)
   end
 
   def team
@@ -95,7 +97,7 @@ class StudentDetailsResolver < ApplicationQuery
         id: ec.id,
         name: ec.name,
         max_grade: ec.max_grade,
-        pass_grade: ec.pass_grade
+        pass_grade: ec.pass_grade,
       }
     end
   end

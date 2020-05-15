@@ -14,15 +14,18 @@ class CreateCommunityMutator < ApplicationQuery
   end
 
   def create_community
-    Community.create!(
+    current_school.communities.create!(
       name: name,
       target_linkable: target_linkable,
-      school: current_school,
-      courses: courses
+      courses: courses,
     ).id
   end
 
   private
+
+  def resource_school
+    current_school
+  end
 
   def courses
     @courses ||= current_school.courses.where(id: course_ids)

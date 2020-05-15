@@ -12,10 +12,14 @@ class MergeLevelsMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    course&.school
+  end
+
   def level_to_merge_into_must_exist
     return if level_to_merge_into.present?
 
-    errors[:base] << "Level to merge into could not be found"
+    errors[:base] << 'Level to merge into could not be found'
   end
 
   def course
@@ -23,7 +27,7 @@ class MergeLevelsMutator < ApplicationQuery
   end
 
   def level_to_delete
-    @level_to_delete ||= current_school.levels.find_by(id: delete_level_id)
+    @level_to_delete ||= Level.find_by(id: delete_level_id)
   end
 
   def level_to_merge_into

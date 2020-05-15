@@ -6,10 +6,14 @@ class TargetVersionsResolver < ApplicationQuery
   end
 
   def target
-    @target ||= Target.find(target_id.to_i)
+    @target ||= Target.find_by(id: target_id.to_i)
   end
 
   def authorized?
-    current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
+    return false if target&.course&.school != current_school
+
+    return true if current_school_admin.present?
+
+    current_user.present? && current_user.course_authors.where(course: target.course).present?
   end
 end

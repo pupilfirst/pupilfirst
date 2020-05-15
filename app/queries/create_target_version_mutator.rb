@@ -12,6 +12,14 @@ class CreateTargetVersionMutator < ApplicationQuery
 
   private
 
+  def authorized?
+    return false if current_user.blank?
+
+    return false if target&.course&.school != current_school
+
+    current_school_admin.present? || current_user.course_authors.where(course: target.course).exists?
+  end
+
   def target_version_must_be_valid
     return if target_version_id.nil? || target_version.present?
 
@@ -39,14 +47,10 @@ class CreateTargetVersionMutator < ApplicationQuery
   end
 
   def target
-    @target ||= current_school.targets.find_by(id: target_version.target_id)
+    target_version&.target
   end
 
   def target_version
     @target_version ||= TargetVersion.find_by(id: target_version_id)
-  end
-
-  def authorized?
-    current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
   end
 end

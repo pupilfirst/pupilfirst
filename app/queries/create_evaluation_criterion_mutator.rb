@@ -15,7 +15,7 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
 
     return if course.evaluation_criteria.find_by(name: name, max_grade: max_grade, pass_grade: pass_grade).blank?
 
-    errors[:base] << "Criterion already exists with same name, max grade and pass grade"
+    errors[:base] << 'Criterion already exists with same name, max grade and pass grade'
   end
 
   def course_must_be_present
@@ -31,12 +31,16 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
         course_id: course_id,
         max_grade: max_grade,
         pass_grade: pass_grade,
-        grade_labels: grade_labels
+        grade_labels: grade_labels,
       )
     end
   end
 
   private
+
+  def resource_school
+    course&.school
+  end
 
   def grade_labels
     grades_and_labels.map do |grades_and_label|
@@ -48,6 +52,6 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
   end
 
   def course
-    @course ||= current_school.courses.find_by(id: course_id)
+    @course ||= Course.find_by(id: course_id)
   end
 end

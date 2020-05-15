@@ -19,7 +19,7 @@ class CreateGradingMutator < ApplicationQuery
         TimelineEventGrade.create!(
           timeline_event: submission,
           evaluation_criterion: criterion,
-          grade: grade_hash[criterion.id.to_s]
+          grade: grade_hash[criterion.id.to_s],
         )
       end
 
@@ -27,7 +27,7 @@ class CreateGradingMutator < ApplicationQuery
         passed_at: (failed? ? nil : Time.zone.now),
         evaluator: coach,
         evaluated_at: Time.zone.now,
-        checklist: checklist
+        checklist: checklist,
       )
 
       TimelineEvents::AfterGradingJob.perform_later(submission)
@@ -57,7 +57,7 @@ class CreateGradingMutator < ApplicationQuery
       feedback: feedback,
       startup: submission.startup,
       faculty: coach,
-      timeline_event: submission
+      timeline_event: submission,
     )
 
     StartupFeedbackModule::EmailService.new(startup_feedback).send
@@ -72,7 +72,7 @@ class CreateGradingMutator < ApplicationQuery
   def should_not_be_graded
     return unless submission.reviewed?
 
-    errors[:base] << "Submission cannot be Graded"
+    errors[:base] << 'Submission cannot be Graded'
   end
 
   def valid_evaluation_criteria
@@ -88,7 +88,7 @@ class CreateGradingMutator < ApplicationQuery
   end
 
   def submission
-    @submission = current_school.timeline_events.where(id: submission_id).first
+    @submission = TimelineEvent.find_by(id: submission_id)
   end
 
   def course

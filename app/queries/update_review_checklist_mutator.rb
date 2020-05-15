@@ -32,7 +32,7 @@ class UpdateReviewChecklistMutator < ApplicationQuery
   end
 
   def target
-    @target = current_school.targets.find_by(id: target_id)
+    @target = Target.find_by(id: target_id)
   end
 
   def course

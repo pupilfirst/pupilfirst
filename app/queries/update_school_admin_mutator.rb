@@ -12,6 +12,10 @@ class UpdateSchoolAdminMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    school_admin&.school
+  end
+
   def record_must_exists
     return if school_admin.present?
 
@@ -19,6 +23,6 @@ class UpdateSchoolAdminMutator < ApplicationQuery
   end
 
   def school_admin
-    @school_admin ||= current_school.school_admins.where(id: id).first
+    @school_admin ||= SchoolAdmin.find_by(id: id)
   end
 end

@@ -5,7 +5,7 @@ class CoachStatsResolver < ApplicationQuery
   def coach_stats
     {
       reviewed_submissions: reviewed_submissions,
-      pending_submissions: pending_submissions
+      pending_submissions: pending_submissions,
     }
   end
 

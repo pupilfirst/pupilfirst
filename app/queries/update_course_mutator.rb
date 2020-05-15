@@ -21,7 +21,7 @@ class UpdateCourseMutator < ApplicationQuery
       about: about,
       featured: featured,
       progression_behavior: progression_behavior,
-      progression_limit: sanitized_progression_limit
+      progression_limit: sanitized_progression_limit,
     )
 
     course
@@ -29,7 +29,11 @@ class UpdateCourseMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    course&.school
+  end
+
   def course
-    @course ||= current_school.courses.find_by(id: id)
+    @course ||= Course.find_by(id: id)
   end
 end

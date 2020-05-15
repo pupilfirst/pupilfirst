@@ -13,24 +13,25 @@ class StudentSubmissionsResolver < ApplicationQuery
 
     return false if student.blank?
 
-    current_user.id == student.user_id || coach.courses.where(id: student.course).exists?
+    return true if current_user.id == student.user_id
+
+    coach.present? && coach.courses.where(id: student.course).exists?
   end
 
   def applicable_submissions
     submissions_by_student = student.timeline_events.not_auto_verified
-    by_level = if level_id.present?
-      submissions_by_student.where(levels: { id: level_id })
-    else
-      submissions_by_student
-    end
 
-    by_level_and_status = if status.present?
+    by_level = if level_id.present?
+        submissions_by_student.where(levels: { id: level_id })
+      else
+        submissions_by_student
+      end
+
+    if status.present?
       filter_by_status(status, by_level)
     else
       by_level
     end
-
-    by_level_and_status
   end
 
   def student
@@ -43,25 +44,25 @@ class StudentSubmissionsResolver < ApplicationQuery
 
   def filter_by_status(status, submissions)
     case status
-      when 'Submitted'
-        submissions.where(evaluator_id: nil)
-      when 'Passed'
-        submissions.passed
-      when 'Failed'
-        submissions.failed
-      else
-        raise "Unexpected status '#{status}' encountered when resolving submissions"
+    when 'Submitted'
+      submissions.where(evaluator_id: nil)
+    when 'Passed'
+      submissions.passed
+    when 'Failed'
+      submissions.failed
+    else
+      raise "Unexpected status '#{status}' encountered when resolving submissions"
     end
   end
 
   def sort_direction_string
     case sort_direction
-      when 'Ascending'
-        'ASC'
-      when 'Descending'
-        'DESC'
-      else
-        raise "#{sort_direction} is not a valid sort direction"
+    when 'Ascending'
+      'ASC'
+    when 'Descending'
+      'DESC'
+    else
+      raise "#{sort_direction} is not a valid sort direction"
     end
   end
 end

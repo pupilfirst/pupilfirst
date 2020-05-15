@@ -46,7 +46,11 @@ class CreateCourseExportMutator < ApplicationQuery
     @tags ||= export_type == CourseExport::EXPORT_TYPE_STUDENTS ? current_school.founder_tags.where(id: tag_ids) : []
   end
 
+  def resource_school
+    course&.school
+  end
+
   def course
-    @course ||= current_school.courses.find_by(id: course_id)
+    @course ||= Course.find_by(id: course_id)
   end
 end

@@ -21,11 +21,16 @@ class CreateSchoolLinkMutator < ApplicationQuery
         { url: url }
       else
         raise "Unknown kind '#{kind}' encountered!"
-    end
+      end
 
     params[:kind] = kind
-    params[:school] = current_school
 
-    SchoolLink.create!(params)
+    current_school.school_links.create!(params)
+  end
+
+  private
+
+  def resource_school
+    current_school
   end
 end

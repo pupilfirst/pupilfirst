@@ -30,10 +30,10 @@ class UndoGradingMutator < ApplicationQuery
   end
 
   def submission
-    @submission = current_school.timeline_events.where(id: submission_id).first
+    @submission = TimelineEvent.find_by(id: submission_id)
   end
 
   def course
-    @course ||= submission&.target&.course
+    @course ||= submission&.course
   end
 end

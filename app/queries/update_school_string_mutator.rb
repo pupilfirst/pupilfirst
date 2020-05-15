@@ -12,16 +12,20 @@ class UpdateSchoolStringMutator < ApplicationQuery
   def update_school_string
     SchoolString.transaction do
       if value.present?
-        school_string = SchoolString.where(school: current_school, key: key).first_or_initialize
+        school_string = current_school.school_strings.where(key: key).first_or_initialize
         school_string.value = value.strip
         school_string.save!
       else
-        SchoolString.where(school: current_school, key: key).destroy_all
+        current_school.school_strings.where(key: key).destroy_all
       end
     end
   end
 
   private
+
+  def resource_school
+    current_school
+  end
 
   def agreement?
     key.in?([SchoolString::PrivacyPolicy.key, SchoolString::TermsOfUse.key])

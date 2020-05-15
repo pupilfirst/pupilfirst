@@ -1,6 +1,10 @@
 module ContentBlockCreatable
   include ActiveSupport::Concern
 
+  def resource_school
+    course&.school
+  end
+
   def course
     @course ||= target.level.course if target.present?
   end
@@ -15,8 +19,8 @@ module ContentBlockCreatable
 
   def above_content_block
     @above_content_block ||= begin
-      content_blocks.find_by(id: above_content_block_id) if above_content_block_id.present?
-    end
+        content_blocks.find_by(id: above_content_block_id) if above_content_block_id.present?
+      end
   end
 
   def shift_content_blocks_below(content_block)
@@ -25,15 +29,13 @@ module ContentBlockCreatable
   end
 
   def sort_index
-    @sort_index ||= begin
-      if above_content_block.present?
+    @sort_index ||= if above_content_block.present?
         # Put at the same position as 'above_content_block'.
         above_content_block.sort_index
       else
         # Put at the bottom.
         content_blocks.maximum(:sort_index) + 1
       end
-    end
   end
 
   def json_attributes(content_block)
@@ -44,7 +46,7 @@ module ContentBlockCreatable
     if content_block.file.attached?
       attributes.merge(
         fileUrl: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true),
-        filename: content_block.file.filename.to_s
+        filename: content_block.file.filename.to_s,
       )
     else
       attributes

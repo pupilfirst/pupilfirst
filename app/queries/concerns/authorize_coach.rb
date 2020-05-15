@@ -5,7 +5,7 @@ module AuthorizeCoach
     # Needs a valid faculty profile
     return false if current_user&.faculty.blank?
 
-    return false if course.blank?
+    return false if course&.school != current_school
 
     current_user.faculty.courses.where(id: course).exists?
   end

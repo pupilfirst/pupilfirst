@@ -13,6 +13,8 @@ class ContentBlocksResolver < ApplicationQuery
   private
 
   def authorized?
+    return false if target&.course&.school != current_school
+
     current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
   end
 
@@ -21,7 +23,7 @@ class ContentBlocksResolver < ApplicationQuery
   end
 
   def target
-    @target ||= Target.find(target_id.to_i)
+    @target ||= Target.find_by(id: target_id)
   end
 
   def file_details(content_block)

@@ -4,7 +4,7 @@ This is the documentation for the Pupilfirst LMS. Use the navigation bar to the 
 
 ## Organization of the Documentation
 
-This documentation is written from the perspective of three tasks that correspond to [the three roles in Pupilfirst](/user_roles): _administration_, _coaching_, and _learning_. Given that you're looking at the documentation for the Pupilfirst platform, it's most likely that you're a _school admin_ (you're our student!), so _administration_ is what we're going to focus on primarly. Major concepts will be explained from an admin's perspective, with specialized documentation for coaches and students for their exclusive spaces.
+This documentation is written from the perspective of four tasks that correspond to [the four roles in Pupilfirst](/user_roles): _administration_, _coaching_, _course authoring_, and _learning_. Given that you're looking at the documentation for the Pupilfirst platform, it's most likely that you're a _school admin_ (you're our student!), so _administration_ is what we're going to focus on primarily. Major concepts will be explained from the school admin's perspective, with specialized documentation for coaches and students for their exclusive spaces.
 
 ## Quickstart
 

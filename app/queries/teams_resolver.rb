@@ -22,7 +22,7 @@ class TeamsResolver < ApplicationQuery
       when 'WithCoachNotes'
         teams.joins(founders: :coach_notes)
       when 'WithoutCoachNotes'
-        teams.includes(founders: :coach_notes).where(coach_notes: { id: nil })
+        teams.left_joins(founders: :coach_notes).where(coach_notes: { id: nil })
       else
         teams
     end

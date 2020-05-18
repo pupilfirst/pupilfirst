@@ -64,7 +64,15 @@ let saveNoteButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>;
 
 [@react.component]
-let make = (~studentId, ~coachNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
+let make =
+    (
+      ~studentId,
+      ~coachNotes,
+      ~hasArchivedNotes,
+      ~addNoteCB,
+      ~removeNoteCB,
+      ~userId,
+    ) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false});
   <div className="mt-3 text-sm">
     <label
@@ -96,7 +104,12 @@ let make = (~studentId, ~coachNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
              className="bg-gray-200 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
              <i className="fas fa-sticky-note text-gray-400 text-4xl" />
              <p className="text-xs font-semibold text-gray-700 mt-2">
-               {"No notes here!" |> str}
+               {(
+                  hasArchivedNotes
+                    ? "This student has some archived notes."
+                    : "No notes here!"
+                )
+                |> str}
              </p>
            </div>
          : React.null}

@@ -116,21 +116,27 @@ let studentDistributionSkeleton =
   </div>;
 
 [@react.component]
-let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes) => {
+let make =
+    (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~reloadAt) => {
   let (studentDistribution, setStudentDistribution) =
     React.useState(() => None);
 
-  React.useEffect2(
+  React.useEffect3(
     () => {
-      refreshStudentDistribution(
-        courseId,
-        filterCoach,
-        filterCoachNotes,
-        setStudentDistribution,
-      );
+      switch (reloadAt) {
+      | None => ()
+      | Some(_) =>
+        refreshStudentDistribution(
+          courseId,
+          filterCoach,
+          filterCoachNotes,
+          setStudentDistribution,
+        )
+      };
+
       None;
     },
-    (filterCoach, filterCoachNotes),
+    (filterCoach, filterCoachNotes, reloadAt),
   );
 
   <div

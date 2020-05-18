@@ -27,6 +27,7 @@ type state = {
   teams: Teams.t,
   filterString: string,
   filter,
+  reloadDistributionAt: option(Js.Date.t),
 };
 
 type action =
@@ -125,7 +126,11 @@ let reducer = (state, action) =>
       loading: NotLoading,
     };
   | BeginLoadingMore => {...state, loading: LoadingMore}
-  | BeginReloading => {...state, loading: Reloading}
+  | BeginReloading => {
+      ...state,
+      loading: Reloading,
+      reloadDistributionAt: Some(Js.Date.make()),
+    }
   };
 
 module TeamsQuery = [%graphql
@@ -231,7 +236,7 @@ module Selectable = {
         "assigned to " ++ (coach |> Coach.name);
       }
     | NameOrEmail(search) => search
-    | CoachNotes(_) => "has does not have coach notes"
+    | CoachNotes(_) => "does not have notes has notes coach notes"
     };
 
   let color = _t => "gray";
@@ -401,6 +406,7 @@ let computeInitialState = currentTeamCoach => {
     coach: currentTeamCoach,
     coachNotes: `IgnoreCoachNotes,
   },
+  reloadDistributionAt: None,
 };
 
 let selectLevel = (levels, send, levelId) => {
@@ -413,6 +419,19 @@ let selectLevel = (levels, send, levelId) => {
        );
 
   send(SelectLevel(level));
+};
+
+let reloadTeams = (courseId, state, send) => {
+  send(BeginReloading);
+  getTeams(send, courseId, None, state.filter);
+};
+
+let onAddCoachNote = (courseId, state, send, ()) => {
+  switch (state.filter.coachNotes) {
+  | `WithCoachNotes
+  | `IgnoreCoachNotes => ()
+  | `WithoutCoachNotes => reloadTeams(courseId, state, send)
+  };
 };
 
 [@react.component]
@@ -438,9 +457,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
 
   React.useEffect1(
     () => {
-      send(BeginReloading);
-      getTeams(send, courseId, None, state.filter);
-
+      reloadTeams(courseId, state, send);
       None;
     },
     [|state.filter|],
@@ -455,6 +472,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
          levels
          userId
          teamCoaches
+         onAddCoachNotesCB={onAddCoachNote(courseId, state, send)}
        />
      | _ => React.null
      }}
@@ -464,6 +482,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
         courseId
         filterCoach={state.filter.coach}
         filterCoachNotes={state.filter.coachNotes}
+        reloadAt={state.reloadDistributionAt}
       />
       <div
         className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">

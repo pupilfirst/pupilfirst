@@ -45,6 +45,7 @@ module StudentDetailsQuery = [%graphql
             avatarUrl
           }
         },
+        hasArchivedNotes
         team {
           id
           name
@@ -378,7 +379,9 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
   </div>;
 };
 
-let addNoteCB = (setState, studentDetails, note) => {
+let addNote = (setState, studentDetails, onAddCoachNotesCB, note) => {
+  onAddCoachNotesCB();
+
   setState(state =>
     {
       ...state,
@@ -387,7 +390,7 @@ let addNoteCB = (setState, studentDetails, note) => {
   );
 };
 
-let removeNoteCB = (setState, studentDetails, noteId) => {
+let removeNote = (setState, studentDetails, noteId) => {
   setState(state =>
     {
       ...state,
@@ -506,7 +509,15 @@ let inactiveWarning = teamInfo => {
 };
 
 [@react.component]
-let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
+let make =
+    (
+      ~courseId,
+      ~studentId,
+      ~levels,
+      ~userId,
+      ~teamCoaches,
+      ~onAddCoachNotesCB,
+    ) => {
   let (state, setState) = React.useState(() => initialState);
 
   React.useEffect0(() => {
@@ -624,10 +635,17 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches) => {
               | Notes =>
                 <CoursesStudents__CoachNotes
                   studentId
+                  hasArchivedNotes={
+                    studentDetails |> StudentDetails.hasArchivedNotes
+                  }
                   coachNotes={studentDetails |> StudentDetails.coachNotes}
-                  addNoteCB={addNoteCB(setState, studentDetails)}
+                  addNoteCB={addNote(
+                    setState,
+                    studentDetails,
+                    onAddCoachNotesCB,
+                  )}
                   userId
-                  removeNoteCB={removeNoteCB(setState, studentDetails)}
+                  removeNoteCB={removeNote(setState, studentDetails)}
                 />
               | Submissions =>
                 <CoursesStudents__SubmissionsList

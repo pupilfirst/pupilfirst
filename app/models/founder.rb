@@ -25,6 +25,7 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   has_one :course, through: :level
   has_many :communities, through: :course
+  has_many :coach_notes, foreign_key: 'student_id', class_name: 'CoachNote', dependent: :destroy, inverse_of: :student
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
   has_many :platform_feedback, dependent: :nullify

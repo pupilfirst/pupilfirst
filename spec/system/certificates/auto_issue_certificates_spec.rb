@@ -161,7 +161,7 @@ feature "Automatic issuance of certificates", js: true do
           expect(IssuedCertificate.count).to eq(0)
 
           # Switch to the review interface and set a fail grade for it.
-          visit timeline_event_path(target_l2_2.timeline_events.last)
+          visit review_timeline_event_path(target_l2_2.timeline_events.last)
           find("div[title='Bad']").click
           click_button 'Save grades'
 
@@ -257,7 +257,7 @@ feature "Automatic issuance of certificates", js: true do
       end
 
       scenario 'student resubmits the final target' do
-        sign_in_user coach.user, referer: timeline_event_path(@resubmission)
+        sign_in_user coach.user, referer: review_timeline_event_path(@resubmission)
 
         within("div[aria-label='submissions-overlay-card-#{@resubmission.id}']") do
           find("div[title='Good']").click

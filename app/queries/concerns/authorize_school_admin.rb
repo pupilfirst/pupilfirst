@@ -2,6 +2,6 @@ module AuthorizeSchoolAdmin
   include ActiveSupport::Concern
 
   def authorized?
-    current_school_admin.present?
+    resource_school == current_school && current_school_admin.present?
   end
 end

@@ -138,10 +138,6 @@ class Faculty < ApplicationRecord
     course.startups.admitted
   end
 
-  def reviewable_courses
-    Course.where(id: courses)
-  end
-
   def connect_link?
     connect_link.present?
   end

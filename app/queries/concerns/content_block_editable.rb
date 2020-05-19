@@ -1,16 +1,16 @@
 module ContentBlockEditable
   include ActiveSupport::Concern
 
+  def resource_school
+    course&.school
+  end
+
   def course
-    target.level.course if target.present?
+    @course ||= target&.level&.course
   end
 
   def target
-    @target ||= begin
-      if content_block.present?
-        content_block.target_version.target
-      end
-    end
+    @target ||= content_block&.target_version&.target
   end
 
   def content_block
@@ -25,7 +25,7 @@ module ContentBlockEditable
     if content_block.file.attached?
       attributes[:content].merge!(
         url: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true),
-        filename: content_block.file.filename.to_s
+        filename: content_block.file.filename.to_s,
       )
     end
 

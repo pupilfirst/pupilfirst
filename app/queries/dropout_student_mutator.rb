@@ -11,6 +11,10 @@ class DropoutStudentMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    student&.school
+  end
+
   def active_student_must_exist
     return if student.present? && !student.dropped_out?
 
@@ -18,6 +22,6 @@ class DropoutStudentMutator < ApplicationQuery
   end
 
   def student
-    @student ||= current_school.founders.find_by(id: id)
+    @student ||= Founder.find_by(id: id)
   end
 end

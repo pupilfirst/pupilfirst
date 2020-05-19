@@ -19,6 +19,10 @@ class CourseTeamsResolver < ApplicationQuery
 
   private
 
+  def resource_school
+    course&.school
+  end
+
   def course
     @course ||= Course.find(course_id)
   end
@@ -29,6 +33,7 @@ class CourseTeamsResolver < ApplicationQuery
       .joins(founders: :user)
       .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
       .distinct.order(sort_by_string)
+
     tags.present? ? teams.joins(founders: [taggings: :tag]).where(tags: { name: tags }) : teams.includes(founders: [taggings: :tag])
   end
 
@@ -38,14 +43,14 @@ class CourseTeamsResolver < ApplicationQuery
 
   def sort_by_string
     case sort_by
-      when 'name'
-        'startup_name'
-      when 'created_at'
-        'created_at DESC'
-      when 'updated_at'
-        'updated_at DESC'
-      else
-        'startup_name'
+    when 'name'
+      'startup_name'
+    when 'created_at'
+      'created_at DESC'
+    when 'updated_at'
+      'updated_at DESC'
+    else
+      'startup_name'
     end
   end
 end

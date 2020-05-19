@@ -34,18 +34,6 @@ module StudentDetailsQuery = [%graphql
         evaluationCriteria {
           id, name, maxGrade, passGrade
         },
-        coachNotes {
-          id
-          note
-          createdAt
-          author {
-            id
-            name
-            title
-            avatarUrl
-          }
-        },
-        hasArchivedNotes
         team {
           id
           name
@@ -70,17 +58,26 @@ module StudentDetailsQuery = [%graphql
           averageGrade
         }
       }
+      coachNotes(studentId: $studentId) {
+          id
+          note
+          createdAt
+          author {
+            id
+            name
+            title
+            avatarUrl
+        }
+      }
+      hasArchivedCoachNotes(studentId: $studentId)
     }
   |}
 ];
 
-let updateStudentDetails = (setState, studentId, details) => {
-  setState(state =>
-    {
-      ...state,
-      studentData: Loaded(details |> StudentDetails.makeFromJs(studentId)),
-    }
-  );
+let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchivedCoachNotes) => {
+  let studentDetails =
+    StudentDetails.makeFromJs(studentId, details, coachNotes, hasArchivedCoachNotes);
+  setState(state => {...state, studentData: Loaded(studentDetails)});
 };
 
 let getStudentDetails = (studentId, setState, ()) => {
@@ -88,7 +85,13 @@ let getStudentDetails = (studentId, setState, ()) => {
   StudentDetailsQuery.make(~studentId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       response##studentDetails |> updateStudentDetails(setState, studentId);
+       updateStudentDetails(
+         setState,
+         studentId,
+         response##studentDetails,
+         response##coachNotes,
+         response##hasArchivedCoachNotes,
+       );
        Js.Promise.resolve();
      })
   |> ignore;

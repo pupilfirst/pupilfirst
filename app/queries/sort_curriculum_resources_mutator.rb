@@ -39,20 +39,20 @@ class SortCurriculumResourcesMutator < ApplicationQuery
   end
 
   def resources
-    @resources ||= begin
-      if resource_type == TargetGroup.name
-        current_school.target_groups.where(id: resource_ids)
+    @resources ||= if resource_type == TargetGroup.name
+        TargetGroup.where(id: resource_ids)
       else
-        current_school.targets.where(id: resource_ids)
+        Target.where(id: resource_ids)
       end
-    end
   end
 
   def course
-    resources.first.level.course
+    resources.first&.course
   end
 
   def authorized?
+    return false if course&.school != current_school
+
     current_school_admin.present? || current_user.course_authors.where(course: course).exists?
   end
 end

@@ -6,10 +6,10 @@ class EvaluationCriteriaResolver < ApplicationQuery
   private
 
   def course
-    @course ||= current_school.courses.find(course_id)
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 
   def authorized?
-    current_school_admin.present?
+    course.present? && current_school_admin.present?
   end
 end

@@ -12,6 +12,10 @@ class DeleteSchoolAdminMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    school_admin&.school
+  end
+
   def must_be_admin_of_this_school
     return if school_admin.present?
 
@@ -25,6 +29,6 @@ class DeleteSchoolAdminMutator < ApplicationQuery
   end
 
   def school_admin
-    current_school.school_admins.find_by(id: id)
+    @school_admin ||= SchoolAdmin.find_by(id: id)
   end
 end

@@ -19,14 +19,18 @@ class CreateCourseAuthorMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    course&.school
+  end
+
   def course
-    current_school.courses.find_by(id: course_id)
+    @course ||= Course.find_by(id: course_id)
   end
 
   def course_must_be_present
     return if course.present?
 
-    errors[:base] << "The supplied ID is invalid"
+    errors[:base] << 'The supplied ID is invalid'
   end
 
   def not_a_course_author
@@ -34,13 +38,13 @@ class CreateCourseAuthorMutator < ApplicationQuery
 
     return unless course.course_authors.joins(:user).pluck('users.email').include?(email)
 
-    errors[:base] << "Already enrolled as author"
+    errors[:base] << 'Already enrolled as author'
   end
 
   def not_be_an_admin
     return if persisted_user&.school_admin.blank?
 
-    errors[:base] << "This user is already a school admin"
+    errors[:base] << 'This user is already a school admin'
   end
 
   def persisted_user

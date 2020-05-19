@@ -21,6 +21,17 @@ class CoursePolicy < ApplicationPolicy
     record.present? && reviewable_courses.present? && reviewable_courses.where(id: record).exists?
   end
 
+  def report?
+    return false if record.blank?
+
+    founder = user.founders.joins(:course).where(courses: { id: record }).first
+
+    return false if founder.blank?
+
+    # Dropped out students cannot access report
+    !founder.dropped_out?
+  end
+
   def show?
     true
   end
@@ -40,6 +51,6 @@ class CoursePolicy < ApplicationPolicy
   private
 
   def reviewable_courses
-    @reviewable_courses ||= current_coach&.reviewable_courses
+    @reviewable_courses ||= current_coach&.courses
   end
 end

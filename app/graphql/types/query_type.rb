@@ -65,6 +65,9 @@ module Types
 
     resolved_field :student_submissions, Types::StudentSubmissionType.connection_type, null: false do
       argument :student_id, ID, required: true
+      argument :level_id, ID, required: false
+      argument :status, Types::SubmissionReviewStatusType, required: false
+      argument :sort_direction, Types::SortDirectionType, required: true
     end
 
     resolved_field :course_teams, Types::CourseTeamType.connection_type, null: false do
@@ -91,6 +94,14 @@ module Types
     resolved_field :similar_topics, [Types::TopicType], null: false do
       argument :community_id, ID, required: true
       argument :title, String, required: true
+    end
+
+    resolved_field :coach_notes, [Types::CoachNoteType], null: false do
+      argument :student_id, ID, required: true
+    end
+
+    resolved_field :has_archived_coach_notes, Boolean, null: false do
+      argument :student_id, ID, required: true
     end
 
     resolved_field :student_distribution, [Types::DistributionInLevelType], null: false do

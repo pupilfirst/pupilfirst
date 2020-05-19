@@ -2,11 +2,13 @@ module AuthorizeReviewer
   include ActiveSupport::Concern
 
   def authorized?
+    return false if course&.school != current_school
+
     return true if current_user.school_admin.present?
 
     return false if faculty.blank?
 
-    faculty.reviewable_courses.where(id: course).exists?
+    faculty.courses.where(id: course_id).exists?
   end
 
   def faculty
@@ -14,6 +16,6 @@ module AuthorizeReviewer
   end
 
   def course
-    @course ||= current_school.courses.find(course_id)
+    @course ||= Course.find_by(id: course_id)
   end
 end

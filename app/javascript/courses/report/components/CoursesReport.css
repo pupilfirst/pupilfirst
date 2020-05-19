@@ -1,0 +1,11 @@
+.course-report__category-tab {
+  @apply relative;
+}
+
+.course-report__category-tab > :first-child {
+  @apply border-r border-gray-400 rounded-l-lg;
+}
+
+.course-report__category-tab > :last-child {
+  @apply rounded-r-lg;
+}

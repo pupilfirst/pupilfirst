@@ -1,12 +1,16 @@
 # Student Reports
 
-Coaches have access to a _Students_ tab that lists the students that they are [assigned to review submissions from](/coaches?id=assigning-coaches-to-students).
+Coaches have access to a _Students_ tab that lists all active students in the course.
 
-![Coach's list of students](https://res.cloudinary.com/sv-co/image/upload/v1574585484/pupilfirst_documentation/student_reports/students_page_wes4vn.png)
+![Coach's list of students](https://res.cloudinary.com/sv-co/image/upload/v1589827145/pupilfirst_documentation/student_reports/students_page_nwqxia.png)
 
 If you have more than a handful of students, keeping track of them - how far they've progressed in the course, how well they're doing, and what issues they've had during their time - can be daunting. Pupilfirst sets up a few simple interfaces to make these checks easier.
 
-In the students list, coaches can search for a student by their name, or their team's name, and filter by the course level.
+At the top of the page is the student distribution bar, which shows a split of how students in the course are currently spread within the course's levels.
+
+Below that is the filter input, followed by the students list. Coaches can search for a student by their name, or their team's name, and filter by the course level.
+
+In addition to this, if [coaches are directly assigned to students](/coaches?id=assigning-coaches-to-students-and-teams), then additional filters are available on the page to display students assigned to specific coaches. Choosing to filter by a coach will also update the student distribution bar, showing counts that apply to the selected coach.
 
 ### Use levels as a rough indicator of progress
 

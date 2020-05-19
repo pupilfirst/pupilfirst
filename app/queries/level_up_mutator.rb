@@ -27,7 +27,7 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def course
-    @course ||= Course.find(course_id)
+    @course ||= Course.find_by(id: course_id)
   end
 
   def startup
@@ -35,11 +35,11 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def founder
-    @founder ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
+    @founder ||= current_user.founders.joins(:level).find_by(levels: { course_id: course_id })
   end
 
   def authorized?
-    founder.present? && course.present? && (course.school == current_school)
+    course&.school == current_school && founder.present?
   end
 
   def next_level

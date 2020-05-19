@@ -8,12 +8,11 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
   def create_school_admin
     SchoolAdmin.transaction do
-      current_admins = current_school.school_admins.load
-      user = persisted_user || User.create!(email: email, school: current_school, title: 'School Admin')
+      user = persisted_user || current_school.users.create!(email: email, title: 'School Admin')
       user.update!(name: name)
-      new_school_admin = SchoolAdmin.create!(user: user, school: current_school)
+      new_school_admin = current_school.school_admins.create!(user: user)
 
-      current_admins.each do |admin|
+      current_school.school_admins.where.not(user_id: user.id).each do |admin|
         SchoolAdminMailer.school_admin_added(admin, new_school_admin).deliver_later
       end
 
@@ -23,12 +22,16 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    current_school
+  end
+
   def not_a_school_admin
     return if persisted_user.blank?
 
     return if persisted_user.school_admin.blank?
 
-    errors[:base] << "Already enrolled as admin"
+    errors[:base] << 'Already enrolled as admin'
   end
 
   def persisted_user

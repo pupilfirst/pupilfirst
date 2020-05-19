@@ -1,9 +1,9 @@
 module AuthorizeStudent
   include ActiveSupport::Concern
 
-  def authorized? # rubocop:disable Metrics/CyclomaticComplexity
+  def authorized?
     # Has access to school
-    return false unless current_school.present? && founder.present? && (course.school == current_school)
+    return false unless course&.school == current_school && founder.present?
 
     # Founder has access to the course
     return false unless !course.ends_at&.past? && !startup.access_ends_at&.past?
@@ -28,11 +28,11 @@ module AuthorizeStudent
   end
 
   def course
-    @course ||= target.course
+    @course ||= target&.course
   end
 
   def target
-    @target ||= Target.find(target_id)
+    @target ||= Target.find_by(id: target_id)
   end
 
   def founders

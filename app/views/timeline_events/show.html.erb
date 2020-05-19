@@ -1,0 +1,30 @@
+<% presenter = TimelineEvents::ShowPresenter.new(self, @submission) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
+<% end %>
+
+<div class="bg-gray-100 px-3 py-4">
+  <div class="mb-2 container max-w-3xl mx-auto">
+    <div class="bg-white shadow p-4 rounded">
+      <div class="bg-white mb-2 p-3 flex flex-col">
+        <h2 class="font-semibold text-lg"> <%= @submission.title %></h2>
+        <p class="text-gray-600 text-xs"> <%= "Submitted on: #{@submission.created_at.strftime("%b %d, %Y")}" %></p>
+      </div>
+      <% @submission.checklist.each do |item| %>
+        <div class="mb-3 bg-gray-100 rounded">
+          <div class="text-sm font-semibold p-4 pb-3 flex items-center">
+            <i class="if i-circle-light text-tiny"></i>
+            <span class="ml-2"><%= item['title'] %></span>
+          </div>
+          <div class="convert-markdown pl-9 p-3 pb-4 pt-0 text-sm" data-json-props="<%= presenter.markdown_prop(item['result']) %>"><%= item['result'] %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

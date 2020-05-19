@@ -123,14 +123,14 @@ let averageQuizScore = t => {
     ? None : Some(computeAverageQuizScore(t.quizScores));
 };
 
-let makeFromJs = (id, studentDetails) => {
+let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
   id,
   email: studentDetails##email,
   phone: studentDetails##phone,
   coachNotes:
-    studentDetails##coachNotes
+    coachNotes
     |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
-  hasArchivedNotes: studentDetails##hasArchivedNotes,
+  hasArchivedNotes,
   evaluationCriteria:
     studentDetails##evaluationCriteria
     |> CoursesStudents__EvaluationCriterion.makeFromJs,

@@ -3,7 +3,6 @@ class CreateApplicantMutator < ApplicationQuery
   property :course_id, validates: { presence: { message: 'BlankCourseId' } }
   property :name, validates: { presence: true, length: { maximum: 128 } }
 
-  validate :course_must_exist
   validate :ensure_time_between_requests
   validate :not_a_student
   validate :email_should_not_have_bounced
@@ -29,8 +28,7 @@ class CreateApplicantMutator < ApplicationQuery
   private
 
   def authorized?
-    # Anyone can apply
-    true
+    course&.school == current_school
   end
 
   def persisted_applicant
@@ -38,13 +36,7 @@ class CreateApplicantMutator < ApplicationQuery
   end
 
   def course
-    @course ||= current_school.courses.where(id: course_id, public_signup: true).first
-  end
-
-  def course_must_exist
-    return if course.present?
-
-    errors[:base] << "The course is not open for public registration"
+    @course ||= Course.find_by(id: course_id, public_signup: true)
   end
 
   def ensure_time_between_requests

@@ -76,7 +76,7 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     return false if current_user.faculty.blank?
 
-    current_user.faculty.reviewable_courses.where(id: target.course).exists?
+    current_user.faculty.courses.where(id: target.course).exists?
   end
 
   def inactive_students

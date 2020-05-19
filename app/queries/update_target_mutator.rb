@@ -104,12 +104,16 @@ class UpdateTargetMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    course&.school
+  end
+
   def target_group
     @target_group ||= current_school.target_groups.where(id: target_group_id).first
   end
 
   def target
-    @target ||= current_school.targets.where(id: id).first
+    @target ||= Target.find_by(id: id)
   end
 
   def course
@@ -131,7 +135,7 @@ class UpdateTargetMutator < ApplicationQuery
       quiz: quiz,
       link_to_complete: link_to_complete,
       completion_instructions: completion_instructions,
-      checklist: checklist
+      checklist: checklist,
     }
   end
 end

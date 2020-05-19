@@ -195,7 +195,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :timeline_events, only: %i[show], path: 'submissions'
+  resources :timeline_events, only: %i[show], path: 'submissions' do
+    member do
+      get 'review', action: 'review'
+    end
+  end
 
   resources :courses, only: %i[show] do
     member do
@@ -203,6 +207,7 @@ Rails.application.routes.draw do
       get 'students', action: 'students'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
+      get 'report', action: 'report'
       get 'apply', action: 'apply'
       get '/(:name)', action: 'show'
     end

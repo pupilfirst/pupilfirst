@@ -12,6 +12,10 @@ class UpdateCourseAuthorMutator < ApplicationQuery
 
   private
 
+  def resource_school
+    course_author&.user&.school
+  end
+
   def author_must_exist
     return if course_author.present?
 
@@ -19,6 +23,6 @@ class UpdateCourseAuthorMutator < ApplicationQuery
   end
 
   def course_author
-    @course_author ||= CourseAuthor.joins(user: :school).where(schools: { id: current_school }).find_by(id: id)
+    @course_author ||= CourseAuthor.find_by(id: id)
   end
 end

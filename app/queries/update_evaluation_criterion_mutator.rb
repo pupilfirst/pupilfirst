@@ -16,13 +16,17 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   def update_evaluation_criterion
     evaluation_criterion.update!(
       name: name,
-      grade_labels: grade_labels
+      grade_labels: grade_labels,
     )
 
     evaluation_criterion
   end
 
   private
+
+  def resource_school
+    course&.school
+  end
 
   def grade_labels
     grades_and_labels.map do |grades_and_label|
@@ -34,10 +38,10 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   end
 
   def evaluation_criterion
-    @evaluation_criterion ||= EvaluationCriterion.find_by(course: current_school.courses, id: id)
+    @evaluation_criterion ||= EvaluationCriterion.find_by(id: id)
   end
 
   def course
-    evaluation_criterion.course
+    evaluation_criterion&.course
   end
 end

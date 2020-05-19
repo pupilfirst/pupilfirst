@@ -11,14 +11,15 @@ let str = React.string;
 
 module StudentSubmissionsQuery = [%graphql
   {|
-   query StudentSubmissionsQuery($studentId: ID!, $after: String) {
-    studentSubmissions(studentId: $studentId, after: $after, first: 20 ) {
+   query StudentSubmissionsQuery($studentId: ID!, $after: String, $sortDirection: SortDirection!) {
+    studentSubmissions(studentId: $studentId, after: $after, first: 20 , sortDirection: $sortDirection) {
        nodes {
          id
         createdAt
         levelId
         passedAt
         title
+        evaluatorId
        }
        pageInfo {
          hasNextPage
@@ -67,8 +68,14 @@ let getStudentSubmissions =
   (
     switch (cursor) {
     | Some(cursor) =>
-      StudentSubmissionsQuery.make(~studentId, ~after=cursor, ())
-    | None => StudentSubmissionsQuery.make(~studentId, ())
+      StudentSubmissionsQuery.make(
+        ~studentId,
+        ~after=cursor,
+        ~sortDirection=`Descending,
+        (),
+      )
+    | None =>
+      StudentSubmissionsQuery.make(~studentId, ~sortDirection=`Descending, ())
     }
   )
   |> GraphqlQuery.sendQuery
@@ -86,20 +93,35 @@ let getStudentSubmissions =
   |> ignore;
 };
 
-let showSubmissionStatus = failed =>
-  failed
-    ? <div
-        className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-        {"Failed" |> str}
-      </div>
-    : <div
-        className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-        {"Passed" |> str}
-      </div>;
+let showSubmissionStatus = submission =>
+  switch (submission |> Submission.evaluatorId) {
+  | Some(_id) =>
+    submission |> Submission.failed
+      ? <div
+          className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
+          {"Failed" |> str}
+        </div>
+      : <div
+          className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
+          {"Passed" |> str}
+        </div>
+
+  | None =>
+    <div
+      className="bg-orange-100 border border-orange-300 flex-shrink-0 leading-normal text-orange-600 font-semibold px-3 py-px rounded">
+      {submission |> Submission.timeDistance |> str}
+    </div>
+  };
 
 let submissionCardClasses = submission =>
   "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
-  ++ (submission |> Submission.failed ? "border-red-500" : "border-green-500");
+  ++ (
+    switch (submission |> Submission.evaluatorId) {
+    | Some(_id) =>
+      submission |> Submission.failed ? "border-red-500" : "border-green-500"
+    | None => "border-orange-400"
+    }
+  );
 
 let showSubmission = (submissions, levels) =>
   <div>
@@ -108,7 +130,9 @@ let showSubmission = (submissions, levels) =>
      |> Array.map(submission =>
           <a
             key={submission |> Submission.id}
-            href={"/submissions/" ++ (submission |> Submission.id)}
+            href={
+              "/submissions/" ++ (submission |> Submission.id) ++ "/review"
+            }
             target="_blank">
             <div
               key={submission |> Submission.id}
@@ -142,7 +166,7 @@ let showSubmission = (submissions, levels) =>
               </div>
               {<div
                  className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
-                 {showSubmissionStatus(submission |> Submission.failed)}
+                 {showSubmissionStatus(submission)}
                </div>}
             </div>
           </a>
@@ -183,7 +207,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
     [|studentId|],
   );
   <div ariaLabel="student-submissions">
-    {switch ((submissions: Submissions.t)) {
+    {switch (submissions) {
      | Unloaded =>
        SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
      | PartiallyLoaded(submissions, cursor) =>

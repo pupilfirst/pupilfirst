@@ -48,7 +48,7 @@ feature 'Curriculum Editor', js: true do
     sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
     # he should be on the last level
-    expect(page).to have_text("Level 2: " + level_2.name)
+    expect(page).to have_text('Level 2: ' + level_2.name)
 
     # all targets and target groups on that level should be visible
     expect(page).to have_text(target_group_2.name)
@@ -62,12 +62,12 @@ feature 'Curriculum Editor', js: true do
 
     # he should be able to create a new level
     click_button 'Create Level'
-    expect(page).to have_text("Level Name")
+    expect(page).to have_text('Level Name')
     fill_in 'Level Name', with: new_level_name
     fill_in 'Unlock level on', with: date.iso8601
     click_button 'Create New Level'
 
-    expect(page).to have_text("Level created successfully")
+    expect(page).to have_text('Level created successfully')
     dismiss_notification
 
     level = course.reload.levels.last
@@ -114,7 +114,7 @@ feature 'Curriculum Editor', js: true do
 
     click_button 'Update Target Group'
 
-    expect(page).to have_text("Target Group updated successfully")
+    expect(page).to have_text('Target Group updated successfully')
     dismiss_notification
 
     target_group.reload
@@ -188,7 +188,7 @@ feature 'Curriculum Editor', js: true do
     fill_in "create-target-input#{target_group_2.id}", with: new_target_1_title
     click_button 'Create'
 
-    expect(page).to have_text("Target created successfully")
+    expect(page).to have_text('Target created successfully')
 
     dismiss_notification
   end
@@ -204,9 +204,42 @@ feature 'Curriculum Editor', js: true do
     expect(level_2.reload.unlock_on).to eq(Date.current)
   end
 
+  context 'when there is a level zero and three other levels' do
+    let(:level_0) { create :level, :zero, course: course }
+    let(:level_3) { create :level, :three, course: course }
+    let!(:target_group_l0) { create :target_group, level: level_0 }
+    let!(:target_group_l3) { create :target_group, level: level_3 }
+    let!(:team_l3) { create :startup, level: level_3 }
+
+    scenario 'author merges third level into the first' do
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+      find('button[title="Edit selected level"').click
+      click_button 'Actions'
+      select "L1: #{level_1.name}", from: 'Delete & Merge Into'
+
+      accept_confirm do
+        click_button 'Merge and Delete'
+      end
+
+      expect(page).to have_text(target_group_2.name)
+      expect { level_3.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(target_group_l3.reload.level).to eq(level_1)
+      expect(team_l3.reload.level).to eq(level_1)
+    end
+
+    scenario 'author is not allowed to merge third level into level zero' do
+      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+
+      find('button[title="Edit selected level"').click
+      click_button 'Actions'
+      expect(page).not_to have_text("L0: #{level_0.name}")
+    end
+  end
+
   scenario 'user who is not logged in gets redirected to sign in page' do
     visit curriculum_school_course_path(course)
 
-    expect(page).to have_text("Please sign in to continue.")
+    expect(page).to have_text('Please sign in to continue.')
   end
 end

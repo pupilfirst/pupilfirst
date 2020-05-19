@@ -12,7 +12,7 @@ class CreateFeedbackMutator < ApplicationQuery
         feedback: feedback,
         startup: submission.startup,
         faculty: coach,
-        timeline_event: submission
+        timeline_event: submission,
       )
       StartupFeedbackModule::EmailService.new(startup_feedback).send
     end
@@ -27,11 +27,11 @@ class CreateFeedbackMutator < ApplicationQuery
   end
 
   def submission
-    @submission = current_school.timeline_events.where(id: submission_id).first
+    @submission = TimelineEvent.find_by(id: submission_id)
   end
 
   def course
-    @course ||= submission&.target&.course
+    @course ||= submission&.course
   end
 
   def coach

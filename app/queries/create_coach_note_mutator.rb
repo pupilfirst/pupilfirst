@@ -10,19 +10,19 @@ class CreateCoachNoteMutator < ApplicationQuery
 
   private
 
+  def authorized?
+    coach.present? && coach.courses.where(id: course.id).exists?
+  end
+
   def course
-    student.course
+    student&.course
   end
 
   def student
-    @student ||= Founder.find(student_id)
+    @student ||= Founder.find_by(id: student_id)
   end
 
   def coach
     @coach ||= current_user.faculty
-  end
-
-  def authorized?
-    coach.present? && (coach.courses.where(id: course.id).exists? || coach.startups.where(id: student.startup_id).present?)
   end
 end

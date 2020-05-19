@@ -5,8 +5,6 @@ class StudentDetailsResolver < ApplicationQuery
     {
       email: student.email,
       phone: student.phone,
-      coach_notes: coach_notes,
-      has_archived_notes: archived_notes?,
       targets_completed: targets_completed,
       total_targets: total_targets,
       level_id: level.id,
@@ -15,7 +13,7 @@ class StudentDetailsResolver < ApplicationQuery
       quiz_scores: quiz_scores,
       average_grades: average_grades,
       completed_level_ids: completed_level_ids,
-      team: team
+      team: team,
     }
   end
 
@@ -34,7 +32,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def average_grades
-    @average_grades ||= TimelineEventGrade.where(timeline_event: submissions).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
+    @average_grades ||= TimelineEventGrade.where(timeline_event: submissions_for_grades).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
       { evaluation_criterion_id: ec_id, average_grade: average_grade.round(1) }
     end
   end
@@ -56,15 +54,17 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if current_user.faculty.blank?
+    return false if current_user.blank?
 
     return false if student.blank?
 
-    current_user.faculty.reviewable_courses.where(id: student.course).exists?
+    return true if current_user.id == student.user_id
+
+    current_user.faculty.present? && current_user.faculty.courses.where(id: student.course).exists?
   end
 
   def levels
-    @levels ||= course.levels.unlocked
+    @levels ||= course.levels.unlocked.where('number <= ?', level.number)
   end
 
   def level
@@ -72,23 +72,19 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def student
-    @student ||= Founder.where(id: student_id).includes(:user).first
+    @student ||= Founder.includes(:user).find_by(id: student_id)
   end
 
   def team
     @team ||= student.startup
   end
 
-  def coach_notes
-    CoachNote.not_archived.where(student_id: student_id).includes(author: { avatar_attachment: :blob }).order('created_at DESC').limit(20)
-  end
-
-  def archived_notes?
-    CoachNote.archived.where(student_id: student_id).exists?
-  end
-
   def submissions
-    student.timeline_events
+    @submissions ||= student.timeline_events
+  end
+
+  def submissions_for_grades
+    submissions.where(latest: true).includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
   end
 
   def social_links
@@ -101,7 +97,7 @@ class StudentDetailsResolver < ApplicationQuery
         id: ec.id,
         name: ec.name,
         max_grade: ec.max_grade,
-        pass_grade: ec.pass_grade
+        pass_grade: ec.pass_grade,
       }
     end
   end

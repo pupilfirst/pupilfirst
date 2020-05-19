@@ -10,6 +10,6 @@ class DestroySchoolLinkMutator < ApplicationQuery
   end
 
   def authorized?
-    current_school_admin.present? && school_link.present?
+    school_link.present? && current_school_admin.present?
   end
 end

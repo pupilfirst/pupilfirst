@@ -2,8 +2,6 @@ module Types
   class StudentDetailsType < Types::BaseObject
     field :email, String, null: false
     field :phone, String, null: true
-    field :coach_notes, [Types::CoachNoteType], null: false
-    field :has_archived_notes, Boolean, null: false
     field :social_links, [String], null: false
     field :evaluation_criteria, [Types::EvaluationCriterionType], null: false
     field :targets_completed, Integer, null: false

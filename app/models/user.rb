@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :startups, through: :founders
   has_many :course_authors, dependent: :restrict_with_error
   has_many :communities, through: :founders
+  has_many :courses, through: :founders
   has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user

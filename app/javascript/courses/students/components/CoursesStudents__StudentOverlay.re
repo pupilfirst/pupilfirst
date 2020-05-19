@@ -74,9 +74,15 @@ module StudentDetailsQuery = [%graphql
   |}
 ];
 
-let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchivedCoachNotes) => {
+let updateStudentDetails =
+    (setState, studentId, details, coachNotes, hasArchivedCoachNotes) => {
   let studentDetails =
-    StudentDetails.makeFromJs(studentId, details, coachNotes, hasArchivedCoachNotes);
+    StudentDetails.makeFromJs(
+      studentId,
+      details,
+      coachNotes,
+      hasArchivedCoachNotes,
+    );
   setState(state => {...state, studentData: Loaded(studentDetails)});
 };
 
@@ -538,11 +544,12 @@ let make =
          <div
            className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
            <div className="student-overlay__student-details relative pb-8">
-             <div
+             <button
+               title="Close student report"
                onClick={_ => closeOverlay(courseId)}
                className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
                <Icon className="if i-times-regular text-xl lg:text-2xl" />
-             </div>
+             </button>
              <div
                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
                {switch (studentDetails |> StudentDetails.avatarUrl) {

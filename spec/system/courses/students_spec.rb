@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-feature "Course students list", js: true do
+feature 'Course students list', js: true do
   include UserSpecHelper
+  include MarkdownEditorHelper
 
   # The basics
   let!(:school) { create :school, :current }
@@ -94,7 +95,7 @@ feature "Course students list", js: true do
     end
 
     expect(page).to have_text("Percentage: #{percentage_students_in_l2}")
-    expect(page).to have_text("Teams: 2")
+    expect(page).to have_text('Teams: 2')
     expect(page).to have_text("Students: #{students_in_l2}")
   end
 
@@ -312,6 +313,102 @@ feature "Course students list", js: true do
 
     within("div[aria-label='Students in level 3']") do
       expect(page).to have_text('1')
+    end
+  end
+
+  context 'when some students have coach notes' do
+    let(:author) { course_coach.user }
+
+    before do
+      team_2.founders.each do |student|
+        create :coach_note, author: author, student: student
+      end
+    end
+
+    scenario 'filtering by coach notes updates list of students and distribution bar' do
+      sign_in_user course_coach.user, referer: students_course_path(course)
+
+      expect(page).to have_text(team_2.name)
+      expect(page).to have_text(team_3.name)
+
+      within("div[aria-label='Students in level 1']") do
+        expect(page).to have_text('1')
+      end
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to have_text('2')
+      end
+
+      within("div[aria-label='Students in level 3']") do
+        expect(page).to have_text('3')
+      end
+
+      fill_in 'filter', with: 'has notes'
+      click_button 'Coach Notes: Has notes'
+
+      expect(page).not_to have_text(team_3.name)
+      expect(page).to have_text(team_2.name)
+
+      within("div[aria-label='Students in level 1']") do
+        expect(page).to have_selector('svg.i-check-solid')
+      end
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to have_text('1')
+      end
+
+      within("div[aria-label='Students in level 3']") do
+        expect(page).to have_text('0')
+      end
+
+      fill_in 'filter', with: 'does not have notes'
+      click_button 'Coach Notes: Does not have notes'
+
+      expect(page).not_to have_text(team_2.name)
+      expect(page).to have_text(team_3.name)
+
+      within("div[aria-label='Students in level 1']") do
+        expect(page).to have_text('1')
+      end
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to have_text('1')
+      end
+
+      within("div[aria-label='Students in level 3']") do
+        expect(page).to have_text('3')
+      end
+    end
+
+    scenario 'adding note to all students in a team should refresh list with "does not have notes" filter' do
+      remaining_student = team_3.founders.first
+      other_students = team_3.founders.where.not(id: remaining_student)
+
+      other_students.each do |student|
+        create :coach_note, author: author, student: student
+      end
+
+      sign_in_user course_coach.user, referer: students_course_path(course)
+      fill_in 'filter', with: 'does not have notes'
+      click_button 'Coach Notes: Does not have notes'
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to have_text('1')
+      end
+
+      click_link remaining_student.name
+      add_markdown('This is a note.')
+      click_button 'Save Note'
+
+      expect(page).to have_text('Note added successfully')
+
+      find('button[title="Close student report"]').click
+
+      within("div[aria-label='Students in level 2']") do
+        expect(page).to have_text('0')
+      end
+
+      expect(page).not_to have_text(remaining_student.name)
     end
   end
 end

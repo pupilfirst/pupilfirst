@@ -31,8 +31,8 @@ let reducer = (state, action) => {
 
 module CoachInfoQuery = [%graphql
   {|
-    query CoachInfoQuery($courseId: ID!, $coachId: ID!) {
-      teams(courseId: $courseId, coachId: $coachId, first: 100) {
+    query CoachInfoQuery($courseId: ID!, $coachId: ID!, $coachNotes: CoachNoteFilter!) {
+      teams(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, first: 100) {
         nodes {
           id,
           name,
@@ -51,7 +51,7 @@ module CoachInfoQuery = [%graphql
 ];
 
 let loadCoachTeams = (courseId, coachId, send) => {
-  CoachInfoQuery.make(~courseId, ~coachId, ())
+  CoachInfoQuery.make(~courseId, ~coachId, ~coachNotes=`IgnoreCoachNotes, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        let coachTeams =

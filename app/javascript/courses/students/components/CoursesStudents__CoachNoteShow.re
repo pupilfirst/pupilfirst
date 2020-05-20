@@ -16,10 +16,11 @@ module ArchiveCoachNoteMutation = [%graphql
 
 let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-  setArchiving(_ => true);
+
   if (Webapi.Dom.(
         window |> Window.confirm("Are you sure you want to delete this note?")
       )) {
+    setArchiving(_ => true);
     ArchiveCoachNoteMutation.make(~id, ())
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response => {
@@ -36,8 +37,7 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
   };
 };
 
-let deleteIcon =
-    (note, removeCoachNote, removeNoteCB, setArchiving, archiving) => {
+let deleteIcon = (note, removeNoteCB, setArchiving, archiving) => {
   <button
     className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 focus:outline-none "
     disabled=archiving
@@ -111,13 +111,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
          | Some(user) => User.id(user) == userId
          };
        showDeleteIcon
-         ? deleteIcon(
-             note,
-             removeCoachNote,
-             removeNoteCB,
-             setArchiving,
-             archiving,
-           )
+         ? deleteIcon(note, removeNoteCB, setArchiving, archiving)
          : React.null}
     </div>
     <div className="ml-10 md:ml-13 mt-2">

@@ -8,6 +8,7 @@ type t = {
   email: string,
   phone: option(string),
   coachNotes: array(CoursesStudents__CoachNote.t),
+  hasArchivedNotes: bool,
   evaluationCriteria: array(CoursesStudents__EvaluationCriterion.t),
   socialLinks: array(string),
   totalTargets: int,
@@ -38,6 +39,8 @@ let avatarUrl = t =>
   t |> student |> CoursesStudents__TeamInfo.studentAvatarUrl;
 
 let coachNotes = t => t.coachNotes;
+
+let hasArchivedNotes = t => t.hasArchivedNotes;
 
 let teamCoachUserIds = t => t.team |> CoursesStudents__TeamInfo.coachUserIds;
 
@@ -96,7 +99,7 @@ let removeNote = (noteId, t) => {
   let notes =
     t.coachNotes
     |> Js.Array.filter(note => CoursesStudents__CoachNote.id(note) != noteId);
-  {...t, coachNotes: notes};
+  {...t, coachNotes: notes, hasArchivedNotes: true};
 };
 
 let computeAverageQuizScore = quizScores => {
@@ -120,13 +123,14 @@ let averageQuizScore = t => {
     ? None : Some(computeAverageQuizScore(t.quizScores));
 };
 
-let makeFromJs = (id, studentDetails, coachNotes) => {
+let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
   id,
   email: studentDetails##email,
   phone: studentDetails##phone,
   coachNotes:
     coachNotes
     |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
+  hasArchivedNotes,
   evaluationCriteria:
     studentDetails##evaluationCriteria
     |> CoursesStudents__EvaluationCriterion.makeFromJs,

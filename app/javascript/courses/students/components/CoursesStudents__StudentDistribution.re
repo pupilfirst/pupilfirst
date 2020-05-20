@@ -5,8 +5,8 @@ let str = React.string;
 
 module StudentDistributionQuery = [%graphql
   {|
-    query StudentDistribution($courseId: ID!, $coachId: ID) {
-      studentDistribution(courseId: $courseId, coachId: $coachId) {
+    query StudentDistribution($courseId: ID!, $coachNotes: CoachNoteFilter!, $coachId: ID) {
+      studentDistribution(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId) {
         id
         number
         studentsInLevel
@@ -42,9 +42,14 @@ let stylingForLevelPills = percentageStudents => {
 };
 
 let refreshStudentDistribution =
-    (courseId, filterCoach, setStudentDistribution) => {
+    (courseId, filterCoach, filterCoachNotes, setStudentDistribution) => {
   let coachId = filterCoach->Belt.Option.map(coach => Coach.id(coach));
-  StudentDistributionQuery.make(~courseId, ~coachId?, ())
+  StudentDistributionQuery.make(
+    ~courseId,
+    ~coachNotes=filterCoachNotes,
+    ~coachId?,
+    (),
+  )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        let distribution =
@@ -111,20 +116,27 @@ let studentDistributionSkeleton =
   </div>;
 
 [@react.component]
-let make = (~selectLevelCB, ~courseId, ~filterCoach) => {
+let make =
+    (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~reloadAt) => {
   let (studentDistribution, setStudentDistribution) =
     React.useState(() => None);
 
-  React.useEffect1(
+  React.useEffect3(
     () => {
-      refreshStudentDistribution(
-        courseId,
-        filterCoach,
-        setStudentDistribution,
-      );
+      switch (reloadAt) {
+      | None => ()
+      | Some(_) =>
+        refreshStudentDistribution(
+          courseId,
+          filterCoach,
+          filterCoachNotes,
+          setStudentDistribution,
+        )
+      };
+
       None;
     },
-    [|filterCoach|],
+    (filterCoach, filterCoachNotes, reloadAt),
   );
 
   <div

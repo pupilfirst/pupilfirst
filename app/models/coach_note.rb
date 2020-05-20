@@ -5,4 +5,5 @@ class CoachNote < ApplicationRecord
   validates :note, presence: true
 
   scope :not_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 end

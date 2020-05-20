@@ -4,8 +4,15 @@ open CoursesStudents__Types;
 
 let str = React.string;
 
+type coachNoteFilter = [
+  | `WithCoachNotes
+  | `WithoutCoachNotes
+  | `IgnoreCoachNotes
+];
+
 type filter = {
   nameOrEmail: option(string),
+  coachNotes: coachNoteFilter,
   level: option(Level.t),
   coach: option(Coach.t),
 };
@@ -20,6 +27,7 @@ type state = {
   teams: Teams.t,
   filterString: string,
   filter,
+  reloadDistributionAt: option(Js.Date.t),
 };
 
 type action =
@@ -29,6 +37,7 @@ type action =
   | DeselectCoach
   | SetNameOrEmail(string)
   | UnsetNameOrEmail
+  | SetCoachNotes(coachNoteFilter)
   | UpdateFilterString(string)
   | LoadTeams(option(string), bool, array(TeamInfo.t))
   | BeginLoadingMore
@@ -81,6 +90,22 @@ let reducer = (state, action) =>
         nameOrEmail: None,
       },
     }
+  | SetCoachNotes(coachNoteFilter) =>
+    let filterString =
+      switch (coachNoteFilter) {
+      | `WithCoachNotes
+      | `WithoutCoachNotes => ""
+      | `IgnoreCoachNotes => state.filterString
+      };
+
+    {
+      ...state,
+      filter: {
+        ...state.filter,
+        coachNotes: coachNoteFilter,
+      },
+      filterString,
+    };
   | UpdateFilterString(filterString) => {...state, filterString}
   | LoadTeams(endCursor, hasNextPage, newTeams) =>
     let updatedTeams =
@@ -101,13 +126,17 @@ let reducer = (state, action) =>
       loading: NotLoading,
     };
   | BeginLoadingMore => {...state, loading: LoadingMore}
-  | BeginReloading => {...state, loading: Reloading}
+  | BeginReloading => {
+      ...state,
+      loading: Reloading,
+      reloadDistributionAt: Some(Js.Date.make()),
+    }
   };
 
 module TeamsQuery = [%graphql
   {|
-    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $levelId: ID, $coachId: ID, $search: String, $after: String) {
-      teams(courseId: $courseId, levelId: $levelId,coachId: $coachId, search: $search, first: 10, after: $after) {
+    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $coachNotes: CoachNoteFilter!, $levelId: ID, $coachId: ID, $search: String, $after: String) {
+      teams(courseId: $courseId, coachNotes: $coachNotes, levelId: $levelId, coachId: $coachId, search: $search, first: 10, after: $after) {
         nodes {
           id,
           name,
@@ -136,6 +165,7 @@ let getTeams = (send, courseId, cursor, filter) => {
 
   TeamsQuery.make(
     ~courseId,
+    ~coachNotes=filter.coachNotes,
     ~after=?cursor,
     ~levelId?,
     ~coachId?,
@@ -171,7 +201,8 @@ module Selectable = {
   type t =
     | Level(Level.t)
     | AssignedToCoach(Coach.t, string)
-    | NameOrEmail(string);
+    | NameOrEmail(string)
+    | CoachNotes(bool);
 
   let label = t =>
     switch (t) {
@@ -179,6 +210,7 @@ module Selectable = {
       Some("Level " ++ (level |> Level.number |> string_of_int))
     | AssignedToCoach(_) => Some("Assigned to")
     | NameOrEmail(_) => Some("Name or Email")
+    | CoachNotes(_) => Some("Coach Notes")
     };
 
   let value = t =>
@@ -187,6 +219,7 @@ module Selectable = {
     | AssignedToCoach(coach, currentCoachId) =>
       coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
     | NameOrEmail(search) => search
+    | CoachNotes(on) => on ? "Has notes" : "Does not have notes"
     };
 
   let searchString = t =>
@@ -203,6 +236,7 @@ module Selectable = {
         "assigned to " ++ (coach |> Coach.name);
       }
     | NameOrEmail(search) => search
+    | CoachNotes(_) => "does not have notes has notes coach notes"
     };
 
   let color = _t => "gray";
@@ -210,6 +244,7 @@ module Selectable = {
   let assignedToCoach = (coach, currentCoachId) =>
     AssignedToCoach(coach, currentCoachId);
   let nameOrEmail = search => NameOrEmail(search);
+  let coachNotes = on => CoachNotes(on);
 };
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
@@ -239,13 +274,25 @@ let unselected = (levels, coaches, currentCoachId, state) => {
     |> Array.map(coach => Selectable.assignedToCoach(coach, currentCoachId));
 
   let trimmedFilterString = state.filterString |> String.trim;
+
   let nameOrEmail =
     trimmedFilterString == ""
       ? [||] : [|Selectable.nameOrEmail(trimmedFilterString)|];
 
+  let coachNotes =
+    switch (state.filter.coachNotes) {
+    | `WithCoachNotes => [|Selectable.coachNotes(false)|]
+    | `WithoutCoachNotes => [|Selectable.coachNotes(true)|]
+    | `IgnoreCoachNotes => [|
+        Selectable.coachNotes(true),
+        Selectable.coachNotes(false),
+      |]
+    };
+
   unselectedLevels
   |> Array.append(unselectedCoaches)
-  |> Array.append(nameOrEmail);
+  |> Array.append(nameOrEmail)
+  |> Array.append(coachNotes);
 };
 
 let selected = (state, currentCoachId) => {
@@ -272,9 +319,17 @@ let selected = (state, currentCoachId) => {
          [||],
        );
 
+  let selectedCoachNotesFilter =
+    switch (state.filter.coachNotes) {
+    | `WithCoachNotes => [|Selectable.coachNotes(true)|]
+    | `WithoutCoachNotes => [|Selectable.coachNotes(false)|]
+    | `IgnoreCoachNotes => [||]
+    };
+
   selectedLevel
   |> Array.append(selectedCoach)
-  |> Array.append(selectedSearchString);
+  |> Array.append(selectedSearchString)
+  |> Array.append(selectedCoachNotesFilter);
 };
 
 let onSelectFilter = (send, selectable) =>
@@ -283,6 +338,9 @@ let onSelectFilter = (send, selectable) =>
     send(SelectCoach(coach))
   | Level(level) => send(SelectLevel(level))
   | NameOrEmail(nameOrEmail) => send(SetNameOrEmail(nameOrEmail))
+  | CoachNotes(onOrOff) =>
+    let filter = onOrOff ? `WithCoachNotes : `WithoutCoachNotes;
+    send(SetCoachNotes(filter));
   };
 
 let onDeselectFilter = (send, selectable) =>
@@ -290,11 +348,12 @@ let onDeselectFilter = (send, selectable) =>
   | Selectable.AssignedToCoach(_) => send(DeselectCoach)
   | Level(_) => send(DeselectLevel)
   | NameOrEmail(_) => send(UnsetNameOrEmail)
+  | CoachNotes(_onOrOff) => send(SetCoachNotes(`IgnoreCoachNotes))
   };
 
 let filterPlaceholder = state => {
   switch (state.filter.level, state.filter.coach, state.filter.nameOrEmail) {
-  | (None, None, None) => "Filter by level, assigned coach, or search by name or email address"
+  | (None, None, None) => "Filter by level, assigned coach, or search by name or email address, and more..."
   | _ => ""
   };
 };
@@ -345,7 +404,9 @@ let computeInitialState = currentTeamCoach => {
     nameOrEmail: None,
     level: None,
     coach: currentTeamCoach,
+    coachNotes: `IgnoreCoachNotes,
   },
+  reloadDistributionAt: None,
 };
 
 let selectLevel = (levels, send, levelId) => {
@@ -358,6 +419,19 @@ let selectLevel = (levels, send, levelId) => {
        );
 
   send(SelectLevel(level));
+};
+
+let reloadTeams = (courseId, state, send) => {
+  send(BeginReloading);
+  getTeams(send, courseId, None, state.filter);
+};
+
+let onAddCoachNote = (courseId, state, send, ()) => {
+  switch (state.filter.coachNotes) {
+  | `WithCoachNotes
+  | `IgnoreCoachNotes => ()
+  | `WithoutCoachNotes => reloadTeams(courseId, state, send)
+  };
 };
 
 [@react.component]
@@ -383,9 +457,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
 
   React.useEffect1(
     () => {
-      send(BeginReloading);
-      getTeams(send, courseId, None, state.filter);
-
+      reloadTeams(courseId, state, send);
       None;
     },
     [|state.filter|],
@@ -400,6 +472,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
          levels
          userId
          teamCoaches
+         onAddCoachNotesCB={onAddCoachNote(courseId, state, send)}
        />
      | _ => React.null
      }}
@@ -408,6 +481,8 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
         selectLevelCB={selectLevel(levels, send)}
         courseId
         filterCoach={state.filter.coach}
+        filterCoachNotes={state.filter.coachNotes}
+        reloadAt={state.reloadDistributionAt}
       />
       <div
         className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">

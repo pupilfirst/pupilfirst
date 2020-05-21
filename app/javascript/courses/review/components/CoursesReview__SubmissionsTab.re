@@ -27,7 +27,8 @@ module SubmissionsQuery = [%graphql
           levelId,
           createdAt,
           targetId,
-          coachIds
+          coachIds,
+          teamName
         }
         pageInfo {
           endCursor,
@@ -189,9 +190,24 @@ let showSubmission = (submissions, levels, sortDirection) =>
                 </span>
               </div>
               <div className="mt-1 ml-px text-xs text-gray-900">
-                <span> {"Submitted by " |> str} </span>
+                <span>
+                  {"Submitted by "
+                   ++ (
+                     switch (submission |> IndexSubmission.teamName) {
+                     | Some(_name) => "team: "
+                     | None => ""
+                     }
+                   )
+                   |> str}
+                </span>
                 <span className="font-semibold">
-                  {submission |> IndexSubmission.userNames |> str}
+                  {(
+                     switch (submission |> IndexSubmission.teamName) {
+                     | Some(teamName) => teamName
+                     | None => submission |> IndexSubmission.userNames
+                     }
+                   )
+                   |> str}
                 </span>
                 <span className="ml-1">
                   {"on "

@@ -41,6 +41,7 @@ module SubmissionDetailsQuery = [%graphql
           checklist
         }
         coachIds
+        teamName
       }
     }
   |}
@@ -140,6 +141,15 @@ let headerSection = (submissionDetails, courseId, assignedCoaches) =>
                 </span>;
               })
            |> React.array}
+          {switch (submissionDetails |> SubmissionDetails.teamName) {
+           | Some(name) =>
+             <span className="ml-2">
+               {"( Team: " |> str}
+               <span className="font font-semibold"> {name |> str} </span>
+               {" )" |> str}
+             </span>
+           | None => React.null
+           }}
         </div>
       </div>
       <CoursesStudents__TeamCoaches

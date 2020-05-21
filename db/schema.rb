@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_05_123118) do
+ActiveRecord::Schema.define(version: 2020_05_21_120747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -777,21 +777,8 @@ ActiveRecord::Schema.define(version: 2020_05_05_123118) do
     t.datetime "confirmed_at"
     t.datetime "login_mail_sent_at"
     t.string "name"
-    t.string "phone"
-    t.string "communication_address"
     t.string "title"
-    t.string "key_skills"
     t.text "about"
-    t.string "resume_url"
-    t.string "blog_url"
-    t.string "personal_website_url"
-    t.string "linkedin_url"
-    t.string "twitter_url"
-    t.string "facebook_url"
-    t.string "angel_co_url"
-    t.string "github_url"
-    t.string "behance_url"
-    t.string "skype_id"
     t.bigint "school_id"
     t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
     t.string "reset_password_token"

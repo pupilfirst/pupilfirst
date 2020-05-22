@@ -54,9 +54,7 @@ class Faculty < ApplicationRecord
   # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
   scope :ops_team, -> { where(id: [19, 20]) }
 
-  delegate :email, :name, :phone, :communication_address, :title, :key_skills, :about,
-    :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :image, :avatar, to: :user
+  delegate :email, :name, :title, :about, :avatar, to: :user
 
   # This method sets the label used for object by Active Admin.
   def display_name

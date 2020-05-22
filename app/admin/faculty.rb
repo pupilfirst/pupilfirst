@@ -1,5 +1,5 @@
 ActiveAdmin.register Faculty do
-  permit_params :name, :title, :key_skills, :linkedin_url, :category, :image, :sort_index, :self_service,
+  permit_params :name, :title, :key_skills, :category, :image, :sort_index, :self_service,
     :current_commitment, :notify_for_submission, :about, :commitment, :compensation, :slack_username, :public, :connect_link
 
   actions :index, :show
@@ -18,7 +18,6 @@ ActiveAdmin.register Faculty do
   filter :user_email, as: :string
   filter :title
   filter :key_skills
-  filter :linkedin_url
 
   scope :all
 
@@ -40,7 +39,6 @@ ActiveAdmin.register Faculty do
       row :name
       row :title
       row :email
-      row :linkedin_url
       row :about
       row :key_skills
       row :category
@@ -86,7 +84,6 @@ ActiveAdmin.register Faculty do
       f.input :about
       f.input :image, as: :file
       f.input :key_skills
-      f.input :linkedin_url
       f.input :sort_index
       f.input :public
       f.input :notify_for_submission

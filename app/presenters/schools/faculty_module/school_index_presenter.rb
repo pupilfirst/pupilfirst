@@ -25,12 +25,11 @@ module Schools
             email: faculty.user.email,
             title: faculty.title,
             imageUrl: faculty.user.image_or_avatar_url,
-            linkedinUrl: faculty.linkedin_url,
             public: faculty.public,
             connectLink: faculty.connect_link,
             exited: faculty.exited,
             imageFileName: faculty.image_filename,
-            affiliation: faculty.user.affiliation
+            affiliation: faculty.user.affiliation,
           }
         end
       end

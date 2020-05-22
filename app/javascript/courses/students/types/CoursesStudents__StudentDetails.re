@@ -6,11 +6,9 @@ type averageGrade = {
 type t = {
   id: string,
   email: string,
-  phone: option(string),
   coachNotes: array(CoursesStudents__CoachNote.t),
   hasArchivedNotes: bool,
   evaluationCriteria: array(CoursesStudents__EvaluationCriterion.t),
-  socialLinks: array(string),
   totalTargets: int,
   targetsCompleted: int,
   quizScores: array(string),
@@ -30,10 +28,6 @@ let title = t => t |> student |> CoursesStudents__TeamInfo.studentTitle;
 let email = t => t.email;
 
 let levelId = t => t.team |> CoursesStudents__TeamInfo.levelId;
-
-let phone = t => t.phone;
-
-let socialLinks = t => t.socialLinks;
 
 let avatarUrl = t =>
   t |> student |> CoursesStudents__TeamInfo.studentAvatarUrl;
@@ -126,7 +120,6 @@ let averageQuizScore = t => {
 let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
   id,
   email: studentDetails##email,
-  phone: studentDetails##phone,
   coachNotes:
     coachNotes
     |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
@@ -134,7 +127,6 @@ let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
   evaluationCriteria:
     studentDetails##evaluationCriteria
     |> CoursesStudents__EvaluationCriterion.makeFromJs,
-  socialLinks: studentDetails##socialLinks,
   totalTargets: studentDetails##totalTargets,
   targetsCompleted: studentDetails##targetsCompleted,
   quizScores: studentDetails##quizScores,

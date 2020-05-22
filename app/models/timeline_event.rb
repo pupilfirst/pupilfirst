@@ -57,25 +57,6 @@ class TimelineEvent < ApplicationRecord
     timeline_event_grades.present?
   end
 
-  def founder_or_startup
-    founder_event? ? founder : startup
-  end
-
-  def improved_event_candidates
-    founder_or_startup.timeline_events
-      .where('created_at > ?', created_at)
-      .where.not(id: id).order('created_at DESC')
-  end
-
-  def share_url
-    Rails.application.routes.url_helpers.student_timeline_event_show_url(
-      id: founder.id,
-      event_id: id,
-      event_title: title.parameterize,
-      host: founders.first.school.domains.primary.fqdn
-    )
-  end
-
   def overall_grade_from_score
     return if score.blank?
 

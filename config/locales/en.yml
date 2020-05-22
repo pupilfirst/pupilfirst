@@ -84,23 +84,10 @@ en:
         part_time: Part-Time
         full_time: Full-Time
 
-    founder:
-      # Founder.roles is actually an array. But the translation applies to each value individually.
-      role: &founder-role
-        product: Product
-        engineering: Engineering
-        design: Design
-
     target:
       role:
         team: Team
         founder: All Founders
-
-    timeline_event:
-      grade:
-        good: 'Good'
-        great: 'Great'
-        wow: 'Wow!'
 
   presenters:
     layouts:

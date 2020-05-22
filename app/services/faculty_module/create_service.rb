@@ -11,7 +11,7 @@ module FacultyModule
 
         return user.faculty if user.faculty.present?
 
-        user.update!(name: @faculty_params[:name], title: @faculty_params[:title], linkedin_url: @faculty_params[:linkedin_url], affiliation: @faculty_params[:affiliation])
+        user.update!(name: @faculty_params[:name], title: @faculty_params[:title], affiliation: @faculty_params[:affiliation])
         user.avatar.attach(@faculty_params[:image]) if @faculty_params[:image].present?
 
         faculty = Faculty.create!(

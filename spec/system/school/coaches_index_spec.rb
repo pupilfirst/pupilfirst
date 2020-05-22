@@ -14,7 +14,7 @@ feature 'Coaches Index', js: true do
   let(:new_coach_name) { Faker::Name.name }
   let(:new_coach_email) { Faker::Internet.email(name: new_coach_name) }
   let(:new_coach_title) { Faker::Lorem.words(number: 2).join(' ') }
-  let(:new_coach_affiliation) { Faker::Lorem.words(number: 2).join(" ") }
+  let(:new_coach_affiliation) { Faker::Lorem.words(number: 2).join(' ') }
 
   let(:updated_coach_name) { Faker::Name.name }
   let(:updated_coach_title) { Faker::Lorem.words(number: 2).join(' ') }
@@ -25,7 +25,7 @@ feature 'Coaches Index', js: true do
     sign_in_user school_admin.user, referer: school_coaches_path
 
     # list all coaches
-    expect(page).to have_text("Add New Coach")
+    expect(page).to have_text('Add New Coach')
     expect(page).to have_text(coach_1.name)
     expect(page).to have_text(coach_2.name)
     expect(page).to_not have_text(coach_3.name)
@@ -54,9 +54,8 @@ feature 'Coaches Index', js: true do
     expect(user.affiliation).to eq(new_coach_affiliation)
 
     # Edit the coach to add remaining fields.
-    find("p", text: new_coach_name).click
+    find('p', text: new_coach_name).click
 
-    fill_in 'LinkedIn', with: 'https://www.linkedin.com/xyz'
     fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
     attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
     fill_in 'Name', with: updated_coach_name
@@ -67,7 +66,6 @@ feature 'Coaches Index', js: true do
 
     expect(page).to have_text('Coach updated successfully')
 
-    expect(user.reload.linkedin_url).to eq('https://www.linkedin.com/xyz')
     expect(coach.reload.connect_link).to eq('https://www.connect.com/xyz')
     expect(user.avatar.attached?).to eq(true)
     expect(user.avatar.filename).to eq('human.png')
@@ -78,6 +76,6 @@ feature 'Coaches Index', js: true do
 
   scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_coaches_path
-    expect(page).to have_text("Please sign in to continue.")
+    expect(page).to have_text('Please sign in to continue.')
   end
 end

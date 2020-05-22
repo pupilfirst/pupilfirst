@@ -427,17 +427,6 @@ ActiveRecord::Schema.define(version: 2020_05_21_120747) do
     t.index ["topic_id"], name: "index_posts_on_topic_id"
   end
 
-  create_table "prospective_applicants", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "phone"
-    t.integer "college_id"
-    t.string "college_text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["college_id"], name: "index_prospective_applicants_on_college_id"
-  end
-
   create_table "public_slack_messages", id: :serial, force: :cascade do |t|
     t.text "body"
     t.string "slack_username"

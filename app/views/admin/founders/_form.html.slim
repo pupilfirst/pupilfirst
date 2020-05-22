@@ -2,7 +2,6 @@
   = f.semantic_errors *f.object.errors.keys
   = f.inputs 'Basic Details'
     = f.input :name
-    = f.input :phone
 
     = f.input :tag_list,
       as: :select,
@@ -12,23 +11,8 @@
     = f.input :roles, as: :check_boxes, collection: Founder.valid_roles
     = f.input :about
     = f.input :startup, label: 'Product'
-    = f.input :communication_address
-    = f.input :skype_id, label: 'Skype Id'
-    = f.input :resume_url
     = f.input :avatar, as: :file
     = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
     = f.input :excluded_from_leaderboard
-
-    / When creating a founder manually, let's skip the e-mail confirmation step.
-    /= f.input :confirmed_at, as: :hidden, input_html: { value: Time.now.utc.to_s }
-
-  = f.inputs 'Social links'
-    = f.input :twitter_url
-    = f.input :linkedin_url
-    = f.input :personal_website_url
-    = f.input :blog_url
-    = f.input :angel_co_url
-    = f.input :github_url
-    = f.input :behance_url
 
   = f.submit

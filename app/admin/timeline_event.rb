@@ -39,10 +39,6 @@ ActiveAdmin.register TimelineEvent do
     actions
   end
 
-  action_item :view, only: :show do
-    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
-  end
-
   collection_action :founders_for_startup do
     @startup = Startup.find params[:startup_id]
     render 'founders_for_startup.json.erb'

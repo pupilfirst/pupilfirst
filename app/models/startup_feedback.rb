@@ -12,8 +12,4 @@ class StartupFeedback < ApplicationRecord
   def self.for_timeline_event(event)
     where(timeline_event: event).order('updated_at desc')
   end
-
-  def for_founder?
-    timeline_event.present? ? timeline_event.founder_event? : false
-  end
 end

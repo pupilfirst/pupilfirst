@@ -92,11 +92,11 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def students_have_same_team
-    Founder.where(id: student_ids).pluck(:startup_id).uniq.count == 1
+    Founder.where(id: student_ids).distinct(:startup_id).pluck(:startup_id).one?
   end
 
   def team_name
-    if target.team_target? && students_have_same_team && student_ids.count > 1
+    if submission.team_submission? && students_have_same_team && !student_ids.one?
       Founder.find_by(id: student_ids.first).startup.name
     end
   end

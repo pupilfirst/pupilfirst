@@ -100,7 +100,7 @@ class TimelineEvent < ApplicationRecord
     passed_at.present?
   end
 
-  def team_event?
+  def team_submission?
     target.team_target?
   end
 

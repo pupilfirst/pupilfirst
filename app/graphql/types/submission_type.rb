@@ -68,11 +68,11 @@ module Types
     end
 
     def students_have_same_team
-      object.founders.pluck(:startup_id).uniq.count == 1
+      object.founders.distinct(:startup_id).pluck(:startup_id).one?
     end
 
     def team_name
-      if object.target.team_target? && students_have_same_team && object.founders.count > 1
+      if object.team_submission? && students_have_same_team && object.timeline_event_owners.count > 1
         object.founders.first.startup.name
       end
     end

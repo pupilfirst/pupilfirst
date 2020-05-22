@@ -700,6 +700,8 @@ feature 'Submissions review' do
 
       submission_reviewed_3.founders << team_1.founders
       submission_reviewed_3.founders << team_2.founders
+
+      submission_reviewed_4.founders << team_1.founders
     end
 
     scenario 'coach visits submission review page', js: true do
@@ -709,6 +711,8 @@ feature 'Submissions review' do
       expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to_not have_text(team_1.name)
+      expect(page).to_not have_text(team_2.name)
       expect(page).not_to have_text(submission_reviewed_2.checklist.first['title'])
       expect(page).not_to have_text(submission_reviewed_3.checklist.first['title'])
 
@@ -720,6 +724,13 @@ feature 'Submissions review' do
       expect(page).to have_text(submission_reviewed_3.checklist.first['title'])
       expect(page).to have_text(submission_reviewed_2.checklist.first['title'])
       expect(page).not_to have_text(submission_reviewed_1.checklist.first['title'])
+
+      # submission 4
+      visit review_timeline_event_path(submission_reviewed_4)
+
+      expect(page).to have_text(team_1.founders.last.name)
+      expect(page).to have_text(team_1.founders.first.name)
+      expect(page).to have_text(team_1.name)
     end
   end
 end

@@ -41,6 +41,7 @@ module SubmissionDetailsQuery = [%graphql
           checklist
         }
         coachIds
+        teamName
       }
     }
   |}
@@ -121,7 +122,15 @@ let headerSection = (submissionDetails, courseId, assignedCoaches) =>
           </a>
         </div>
         <div className="text-left mt-1 text-xs text-gray-800">
-          <span> {"Submitted by " |> str} </span>
+          {switch (submissionDetails |> SubmissionDetails.teamName) {
+           | Some(teamName) =>
+             <span>
+               {"Submitted by team: " |> str}
+               <span className="font-semibold"> {teamName |> str} </span>
+               {" - " |> str}
+             </span>
+           | None => <span> {"Submitted by " |> str} </span>
+           }}
           {let studentCount =
              submissionDetails |> SubmissionDetails.students |> Array.length;
 

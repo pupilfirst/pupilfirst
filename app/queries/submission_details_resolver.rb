@@ -9,6 +9,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       students: students,
       level_number: level.number,
       level_id: level.id,
+      team_name: team_name,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,
@@ -88,5 +89,15 @@ class SubmissionDetailsResolver < ApplicationQuery
       .joins(startup: :faculty_startup_enrollments)
       .distinct(:faculty_id)
       .pluck(:faculty_id)
+  end
+
+  def students_have_same_team
+    Founder.where(id: student_ids).distinct(:startup_id).pluck(:startup_id).one?
+  end
+
+  def team_name
+    if submission.team_submission? && students_have_same_team && !student_ids.one?
+      Founder.find_by(id: student_ids.first).startup.name
+    end
   end
 end

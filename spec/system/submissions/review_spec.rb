@@ -675,7 +675,7 @@ feature 'Submissions review' do
     end
   end
 
-  context 'with reviewed submissions from 2 teams' do
+  context 'when there are some submissions that have a mixed list of owners' do
     let(:target) { create :target, :for_team, target_group: target_group }
 
     let(:submission_reviewed_1) { create(:timeline_event, latest: true, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
@@ -700,15 +700,19 @@ feature 'Submissions review' do
 
       submission_reviewed_3.founders << team_1.founders
       submission_reviewed_3.founders << team_2.founders
+
+      submission_reviewed_4.founders << team_1.founders
     end
 
-    scenario 'coach visits submission review page', js: true do
+    scenario "coach viewing a submission's review page is only shown other submissions with identical owners", js: true do
       sign_in_user team_coach.user, referer: review_timeline_event_path(submission_reviewed_1)
 
       # submission 1
       expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to_not have_text(team_1.name)
+      expect(page).to_not have_text(team_2.name)
       expect(page).not_to have_text(submission_reviewed_2.checklist.first['title'])
       expect(page).not_to have_text(submission_reviewed_3.checklist.first['title'])
 
@@ -720,6 +724,52 @@ feature 'Submissions review' do
       expect(page).to have_text(submission_reviewed_3.checklist.first['title'])
       expect(page).to have_text(submission_reviewed_2.checklist.first['title'])
       expect(page).not_to have_text(submission_reviewed_1.checklist.first['title'])
+    end
+  end
+
+  context 'when there are team targets and individual target submissions to review', js: true do
+    let(:individual_target) { create :target, :for_founders, target_group: target_group }
+    let(:team_target) { create :target, :for_team, target_group: target_group }
+    let(:team_1) { create :startup, level: level }
+    let(:team_2) { create :startup, level: level }
+    let(:student) { team_1.founders.first }
+
+    let(:submission_individual_target) { create(:timeline_event, latest: true, target: individual_target) }
+    let(:submission_team_target) { create(:timeline_event, latest: true, target: team_target) }
+    let(:submission_team_target_2) { create(:timeline_event, latest: true, target: team_target) }
+
+    before do
+      # Set evaluation criteria on the target so that its submissions can be reviewed.
+      individual_target.evaluation_criteria << [evaluation_criterion_1]
+      team_target.evaluation_criteria << [evaluation_criterion_1]
+
+      submission_individual_target.founders << student
+      submission_team_target.founders << team_2.founders
+      submission_team_target_2.founders << [student, team_2.founders.first]
+    end
+
+    scenario 'coaches are shown team name along with list of students if target is submitted by a team' do
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_team_target)
+
+      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to have_text(team_2.founders.last.name)
+      expect(page).to have_text(team_2.name)
+    end
+
+    scenario 'coaches are shown just the name of the student if target is not a team target' do
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_individual_target)
+
+      expect(page).to have_text(student.name)
+      expect(page).to_not have_text(team_1.name)
+    end
+
+    scenario 'coaches are shown just the name of the students if current teams of students associated with submission are different' do
+      sign_in_user team_coach.user, referer: review_timeline_event_path(submission_team_target_2)
+
+      expect(page).to have_text(student.name)
+      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to_not have_text(team_1.name)
+      expect(page).to_not have_text(team_2.name)
     end
   end
 end

@@ -5,6 +5,7 @@ module Types
     field :target_title, String, null: false
     field :students, [Types::StudentMiniType], null: false
     field :level_number, String, null: false
+    field :team_name, String, null: true
     field :level_id, ID, null: false
     field :evaluation_criteria, [Types::EvaluationCriterionType], null: false
     field :review_checklist, [Types::ReviewChecklistType], null: false

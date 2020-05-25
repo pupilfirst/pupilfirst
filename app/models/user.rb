@@ -14,8 +14,8 @@ class User < ApplicationRecord
   has_many :user_activities, dependent: :destroy
   has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_one :school_admin, dependent: :restrict_with_error
-  has_many :markdown_attachments, dependent: :restrict_with_error
-  has_many :issued_certificates, dependent: :restrict_with_error
+  has_many :markdown_attachments, dependent: :nullify
+  has_many :issued_certificates, dependent: :nullify
 
   has_secure_token :login_token
   has_secure_token :reset_password_token
@@ -60,24 +60,24 @@ class User < ApplicationRecord
 
   def avatar_variant(version)
     case version
-      when :mid
-        avatar.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: "center",
-            resize: '200x200^',
-            crop: '200x200+0+0'
-          })
-      when :thumb
-        avatar.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: 'center',
-            resize: '50x50^',
-            crop: '50x50+0+0'
-          })
-      else
-        avatar
+    when :mid
+      avatar.variant(combine_options:
+        {
+          auto_orient: true,
+          gravity: "center",
+          resize: '200x200^',
+          crop: '200x200+0+0'
+        })
+    when :thumb
+      avatar.variant(combine_options:
+        {
+          auto_orient: true,
+          gravity: 'center',
+          resize: '50x50^',
+          crop: '50x50+0+0'
+        })
+    else
+      avatar
     end
   end
 

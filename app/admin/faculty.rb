@@ -5,8 +5,6 @@ ActiveAdmin.register Faculty do
   actions :index, :show
 
   controller do
-    include DisableIntercom
-
     def find_resource
       scoped_collection.find(params[:id])
     end

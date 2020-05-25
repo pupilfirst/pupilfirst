@@ -1,8 +1,4 @@
 ActiveAdmin.register Feature do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Dashboard'
 
   form do |f|

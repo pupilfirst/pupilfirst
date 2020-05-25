@@ -19,8 +19,6 @@ ActiveAdmin.register ConnectRequest do
   filter :rating_for_team
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes :connect_slot
     end

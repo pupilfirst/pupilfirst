@@ -20,8 +20,6 @@ ActiveAdmin.register Target do
   scope :sessions
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes(:course, :level, :target_group)
     end

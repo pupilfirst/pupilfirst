@@ -11,10 +11,6 @@ ActiveAdmin.register TimelineEvent do
 
   config.sort_order = 'updated_at_desc'
 
-  controller do
-    include DisableIntercom
-  end
-
   index do
     selectable_column
 

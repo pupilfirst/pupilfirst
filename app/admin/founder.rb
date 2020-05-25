@@ -4,8 +4,6 @@ ActiveAdmin.register Founder do
   permit_params :name, :remote_avatar_url, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: [], tag_list: []
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       if request.format == 'text/csv'
         super.includes(:startup, { college: :state }, :tag_taggings, :tags, :active_admin_comments)

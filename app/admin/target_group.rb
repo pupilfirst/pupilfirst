@@ -10,8 +10,6 @@ ActiveAdmin.register TargetGroup do
   filter :course, as: :select
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes(level: :course)
     end

@@ -1,8 +1,4 @@
 ActiveAdmin.register_page 'Short URLs' do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Dashboard'
 
   content do

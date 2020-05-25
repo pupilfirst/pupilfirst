@@ -214,17 +214,9 @@ Rails.application.routes.draw do
 
   resource :impersonation, only: %i[destroy]
 
-  scope 'intercom', as: 'intercom', controller: 'intercom' do
-    post 'user_create', action: 'user_create_webhook'
-    post 'unsubscribe', action: 'email_unsubscribe_webhook'
-  end
-
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
 
   get '/help/:document', to: 'help#show'
-
-  # Handle incoming unsubscribe webhooks from SendInBlue
-  post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'

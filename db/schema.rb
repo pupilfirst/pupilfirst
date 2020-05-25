@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_05_123118) do
+ActiveRecord::Schema.define(version: 2020_05_25_084440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -714,6 +714,7 @@ ActiveRecord::Schema.define(version: 2020_05_05_123118) do
     t.bigint "founder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "latest", default: false
     t.index ["founder_id"], name: "index_timeline_event_owners_on_founder_id"
     t.index ["timeline_event_id"], name: "index_timeline_event_owners_on_timeline_event_id"
   end

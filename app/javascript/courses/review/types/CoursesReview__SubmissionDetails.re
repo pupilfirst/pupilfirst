@@ -15,6 +15,7 @@ type t = {
   targetEvaluationCriteriaIds: array(string),
   inactiveStudents: bool,
   coachIds: array(string),
+  teamName: option(string),
 };
 let submissions = t => t.submissions;
 let targetId = t => t.targetId;
@@ -26,6 +27,7 @@ let reviewChecklist = t => t.reviewChecklist;
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds;
 let inactiveStudents = t => t.inactiveStudents;
 let coachIds = t => t.coachIds;
+let teamName = t => t.teamName;
 
 let make =
     (
@@ -40,6 +42,7 @@ let make =
       ~targetEvaluationCriteriaIds,
       ~inactiveStudents,
       ~coachIds,
+      ~teamName,
     ) => {
   submissions,
   targetId,
@@ -52,6 +55,7 @@ let make =
   targetEvaluationCriteriaIds,
   inactiveStudents,
   coachIds,
+  teamName,
 };
 
 let decodeJs = details =>
@@ -83,6 +87,7 @@ let decodeJs = details =>
     ~reviewChecklist=
       details##reviewChecklist |> ReviewChecklistItem.makeFromJs,
     ~coachIds=details##coachIds,
+    ~teamName=details##teamName,
   );
 
 let updateSubmission = (submission, t) => {
@@ -113,6 +118,7 @@ let makeIndexSubmission = (overlaySubmission, t) =>
         ),
       ),
     ~coachIds=t.coachIds,
+    ~teamName=t.teamName,
   );
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist};

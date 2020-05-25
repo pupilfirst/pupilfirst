@@ -15,6 +15,7 @@ module Types
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :coach_ids, [String], null: false
+    field :team_name, String, null: true
 
     def title
       object.target.title
@@ -63,6 +64,16 @@ module Types
           title: file.file.filename,
           url: Rails.application.routes.url_helpers.download_timeline_event_file_path(file)
         }
+      end
+    end
+
+    def students_have_same_team
+      object.founders.distinct(:startup_id).pluck(:startup_id).one?
+    end
+
+    def team_name
+      if object.team_submission? && students_have_same_team && object.timeline_event_owners.count > 1
+        object.founders.first.startup.name
       end
     end
   end

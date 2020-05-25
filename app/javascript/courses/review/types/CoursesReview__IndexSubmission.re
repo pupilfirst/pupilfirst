@@ -11,13 +11,18 @@ type t = {
   userNames: string,
   status: option(status),
   coachIds: array(string),
+  teamName: option(string),
 };
 
 let id = t => t.id;
 let title = t => t.title;
 let levelId = t => t.levelId;
+
 let userNames = t => t.userNames;
+
 let coachIds = t => t.coachIds;
+
+let teamName = t => t.teamName;
 
 let failed = t =>
   switch (t.status) {
@@ -49,7 +54,7 @@ let sortArray = (sortDirection, submissions) => {
   };
 };
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds) => {
+let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds, ~teamName) => {
   id,
   title,
   createdAt,
@@ -57,6 +62,7 @@ let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds) =
   userNames,
   status,
   coachIds,
+  teamName
 };
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt, feedbackSent};
@@ -85,6 +91,7 @@ let decodeJs = details =>
              ~userNames=submission##userNames,
              ~status,
              ~coachIds=submission##coachIds,
+             ~teamName=submission##teamName,
            ),
          ];
        | None => []

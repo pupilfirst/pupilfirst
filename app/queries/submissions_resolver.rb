@@ -7,7 +7,7 @@ class SubmissionsResolver < ApplicationQuery
 
   def submissions
     applicable_submissions
-      .includes(:startup_feedback, founders: :user, target: :target_group)
+      .includes(:startup_feedback, founders: [:user, :startup], target: :target_group)
       .distinct
       .order("created_at #{sort_direction_string}")
   end

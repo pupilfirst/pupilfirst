@@ -95,19 +95,23 @@ feature 'Course review' do
       within("a[aria-label='Submission #{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
-        expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text("Submitted by: #{team_l3.founders.first.user.name}")
         expect(page).to have_text("Passed")
       end
 
       within("a[aria-label='Submission #{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
-        expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text("Submitted by: #{team_l3.founders.first.user.name}")
         expect(page).to have_text("Failed")
         expect(page).to have_text("Feedback Sent")
       end
 
       expect(page).to have_text(team_target.title).once
+
+      within("a[aria-label='Submission #{team_submission.id}']") do
+        expect(page).to have_text("Submitted by team: #{team_l3.name}")
+      end
     end
 
     scenario 'course coach uses the level filter', js: true do

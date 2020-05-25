@@ -9,17 +9,22 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   validate :ensure_submittability
 
   def create_submission
-    submission = target.timeline_events.create!(
-      founders: founders,
-      checklist: result[:checklist],
-      quiz_score: result[:score],
-      passed_at: Time.zone.now,
-      latest: true
-    )
+    TimelineEvent.transaction do
+      submission = target.timeline_events.create!(
+        checklist: result[:checklist],
+        quiz_score: result[:score],
+        passed_at: Time.zone.now,
+        latest: true
+      )
 
-    TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
+      founders.map do |student|
+        student.timeline_event_owners.create!(timeline_event: submission, latest: true)
+      end
 
-    submission
+      TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
+
+      submission
+    end
   end
 
   private

@@ -14,7 +14,8 @@ module TimelineEvents
 
     def previous_event_for_target
       @previous_event_for_target ||= begin
-        TimelineEvent.joins(:founders).where(founders: { id: @timeline_event.founders.pluck(:id) }).where(target: @timeline_event.target, latest: false)
+        TimelineEvent.joins(founders: :timeline_event_owners).where(founders: { id: @timeline_event.founders.pluck(:id) })
+          .where(target: @timeline_event.target, timeline_event_owners: { latest: false })
           .where('timeline_events.created_at < ?', @timeline_event.created_at)
           .order('timeline_events.created_at DESC')
           .first

@@ -19,15 +19,11 @@ module Targets
     private
 
     def latest_feedback
-      @latest_feedback ||= linked_event&.startup_feedback&.order('created_at')&.last
+      @latest_feedback ||= @target.latest_feedback(@founder)&.startup_feedback&.order('created_at')&.last
     end
 
     def faculty
       @faculty ||= latest_feedback.faculty
-    end
-
-    def linked_event
-      @target.latest_linked_event(@founder)
     end
   end
 end

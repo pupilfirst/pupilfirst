@@ -60,7 +60,7 @@ module CourseExports
 
     def average_grades_for_student(student)
       evaluation_criteria_ids.map do |evaluation_criterion_id|
-        TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { latest: true }, founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
+        TimelineEventGrade.joins(timeline_event: { founders: :timeline_event_owners }).where(timeline_event_owners: { latest: true }, founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
       end
     end
 

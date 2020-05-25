@@ -35,14 +35,6 @@
                 | About
               p #{@faculty.about}
 
-            - if @faculty.key_skills.present?
-              .faculty-summary-section
-                h4.skills-icon.text-uppercase.font-semibold
-                  | Skills
-                p.skill-box
-                  - @faculty.key_skills.split(',').each do |skill|
-                    span = skill
-
           - if sidebar_present?(@faculty)
             .col-lg-5.col-md-12.faculty-connect
               - connect_slots = @faculty.connect_slots.available_for_founder

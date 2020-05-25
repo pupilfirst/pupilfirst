@@ -1,4 +1,4 @@
-class CleanupUserCOlumnsAndTables < ActiveRecord::Migration[6.0]
+class CleanupUserColumnsAndTables < ActiveRecord::Migration[6.0]
   def up
     remove_column :users, :phone
     remove_column :users, :communication_address

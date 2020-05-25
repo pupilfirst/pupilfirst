@@ -282,7 +282,6 @@ ActiveRecord::Schema.define(version: 2020_05_21_120747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "token"
-    t.boolean "self_service"
     t.string "current_commitment"
     t.string "commitment"
     t.string "compensation"
@@ -655,7 +654,6 @@ ActiveRecord::Schema.define(version: 2020_05_21_120747) do
     t.string "link_to_complete"
     t.boolean "archived", default: false
     t.string "youtube_video_id"
-    t.string "google_calendar_event_id"
     t.datetime "feedback_asked_at"
     t.datetime "slack_reminders_sent_at"
     t.string "call_to_action"

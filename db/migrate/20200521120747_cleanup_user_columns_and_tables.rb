@@ -15,6 +15,9 @@ class CleanupUserCOlumnsAndTables < ActiveRecord::Migration[6.0]
     remove_column :users, :skype_id
 
     drop_table :prospective_applicants
+
+    remove_column :targets, :google_calendar_event_id
+    remove_column :faculty, :self_service
   end
 
   def down

@@ -44,7 +44,6 @@ ActiveAdmin.register Faculty do
 
       row :sort_index
       row :public
-      row :self_service
       row :notify_for_submission
       row :slack_username
       row :connect_link

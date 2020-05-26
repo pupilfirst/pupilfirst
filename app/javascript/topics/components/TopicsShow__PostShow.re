@@ -19,7 +19,9 @@ let solutionIcon = {
 };
 
 let findUser = (users, userId) => {
-  users |> Array.to_list |> User.findById(userId);
+  userId->Belt.Option.flatMap(userId =>
+    Some(users |> Array.to_list |> User.findById(userId))
+  );
 };
 
 module MarkPostAsSolutionQuery = [%graphql
@@ -210,7 +212,11 @@ let make =
       ~archivePostCB,
     ) => {
   let user = findUser(users);
-  let isPostCreator = currentUserId == Post.creatorId(post);
+  let isPostCreator =
+    switch (Post.creatorId(post)) {
+    | Some(creatorId) => currentUserId == creatorId
+    | None => false
+    };
   let isFirstPost = Post.postNumber(post) == 1;
   let repliesToPost = isFirstPost ? [||] : post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
@@ -267,25 +273,29 @@ let make =
                        className="leading-normal text-sm "
                        profile=Markdown.QuestionAndAnswer
                      />
-                     {switch (post |> Post.editorId) {
-                      | Some(editorId) =>
-                        <div>
-                          <div
-                            className="text-xs mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
-                            <span> {"Last edited by " |> str} </span>
-                            <span className="font-semibold">
-                              {user(editorId) |> User.name |> str}
-                            </span>
-                            <span>
-                              {" on "
-                               ++ Post.updatedAt(post)
-                                  ->DateFns.format("do MMMM, yyyy HH:mm")
-                               |> str}
-                            </span>
+                     {post |> Post.edited
+                        ? <div>
+                            <div
+                              className="text-xs mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
+                              <span> {"Last edited by " |> str} </span>
+                              <span className="font-semibold">
+                                {(
+                                   switch (user(Post.editorId(post))) {
+                                   | Some(user) => user |> User.name
+                                   | None => "Unknown"
+                                   }
+                                 )
+                                 |> str}
+                              </span>
+                              <span>
+                                {" on "
+                                 ++ Post.updatedAt(post)
+                                    ->DateFns.format("do MMMM, yyyy HH:mm")
+                                 |> str}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      | None => React.null
-                      }}
+                        : React.null}
                    </div>
                    <div className="hidden lg:block flex-shrink-0 ml-3">
                      {isPostCreator || isCoach || isTopicCreator

@@ -3,7 +3,7 @@ ruby '2.7.1'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.2.2'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -124,7 +124,7 @@ group :development do
   gem 'letter_opener_web', '~> 1.3' # A web interface for browsing Ruby on Rails sent emails.
   gem 'bullet', '~> 6.1' # Detect N+1 queries.
   gem 'web-console', '~> 4.0' # Rails Console on the Browser.
-  gem 'listen', '>= 3.0.5', '< 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
+  gem 'listen', '~> 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
 
   # Go faster, off the Rails - Benchmarks for your whole Rails app
   gem 'derailed_benchmarks', '~> 1.3'

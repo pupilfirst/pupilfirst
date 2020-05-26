@@ -30,9 +30,10 @@ module TimelineEvents
         .where.not(id: timeline_event)
 
       # rubocop:disable Rails/SkipsModelValidations
-      TimelineEventOwner.where(timeline_event_id: old_events).update_all(latest: false)
+      TimelineEventOwner.where(timeline_event_id: old_events, founder: @founder.startup.founders).update_all(latest: false)
       # rubocop:enable Rails/SkipsModelValidations
     end
+
 
     def team_members
       @founder.startup.founders - [@founder]

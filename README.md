@@ -23,6 +23,10 @@ There's an article in the wiki discussing [how to deploy Pupilfirst to Heroku](h
 
 Have doubts? Talk to our development team on [our Discord server](https://discord.gg/Sh67Tca).
 
+## Upgrading
+
+See [UPGRADING.md](UPGRADING.md) for details on changes that should be accounted for when upgrading an existing installation of Pupilfirst.
+
 The rest of this README file discusses how to set up this repository for development.
 
 ## Setup for development

@@ -5,7 +5,7 @@ module Users
     end
 
     def execute
-      return if @user.school_admin.present?
+      raise 'user is a school admin' if @user.school_admin.present?
 
       User.transaction do
         delete_founder_data if @user.founders.present?

@@ -16,6 +16,11 @@ class User < ApplicationRecord
   has_one :school_admin, dependent: :restrict_with_error
   has_many :markdown_attachments, dependent: :nullify
   has_many :issued_certificates, dependent: :nullify
+  has_many :post_likes, dependent: :nullify
+  has_many :text_versions, dependent: :nullify
+  has_many :course_exports, dependent: :nullify
+  has_many :created_posts, class_name: 'Post', foreign_key: 'creator_id', inverse_of: :creator, dependent: :nullify
+  has_many :edited_posts, class_name: 'Post', foreign_key: 'editor_id', inverse_of: :editor, dependent: :nullify
 
   has_secure_token :login_token
   has_secure_token :reset_password_token

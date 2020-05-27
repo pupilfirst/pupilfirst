@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+    mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
   end
 
-  post "/graphql", to: "graphql#execute"
+  post '/graphql', to: 'graphql#execute'
 
   devise_for :users, only: %i[sessions omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
 
@@ -32,10 +32,8 @@ Rails.application.routes.draw do
 
   resource :applicants, only: [] do
     get '/:token', action: 'enroll' # TODO: Legacy route - remove after a few weeks.
-    get '/:token/enroll', action: 'enroll', as: "enroll"
+    get '/:token/enroll', action: 'enroll', as: 'enroll'
   end
-
-  # TODO: Remove these founder routes as we no longer have 'founders'. Always use the corresponding 'student' routes below.
 
   resource :school, only: %i[show update] do
     get 'customize'
@@ -113,9 +111,9 @@ Rails.application.routes.draw do
 
   get 'topics/:id(/:title)', controller: 'topics', action: 'show', as: 'topic'
 
-  get 'posts/:id/versions', controller: "posts", action: "versions", as: "post_version"
+  get 'posts/:id/versions', controller: 'posts', action: 'versions', as: 'post_version'
 
-  get 'home', controller: "users", action: "home", as: "home"
+  get 'home', controller: 'users', action: 'home', as: 'home'
 
   resource :user, only: %i[edit update]
 
@@ -164,8 +162,6 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  resources :prospective_applicants, only: %i[create]
-
   resources :colleges, only: :index
 
   resource :platform_feedback, only: %i[create]
@@ -173,9 +169,6 @@ Rails.application.routes.draw do
   # Founder show
   scope 'students', controller: 'founders' do
     get '/:id/report', action: 'report', as: 'student_report'
-    get '/:id(/:slug)', action: 'show', as: 'student'
-    get '/:id/events/:page', action: 'paged_events', as: 'paged_events'
-    get '/:id/e/:event_id(/:event_title)', action: 'timeline_event_show', as: 'student_timeline_event_show'
   end
 
   get 'styleguide', to: 'home#styleguide', constraints: DevelopmentConstraint.new
@@ -221,17 +214,9 @@ Rails.application.routes.draw do
 
   resource :impersonation, only: %i[destroy]
 
-  scope 'intercom', as: 'intercom', controller: 'intercom' do
-    post 'user_create', action: 'user_create_webhook'
-    post 'unsubscribe', action: 'email_unsubscribe_webhook'
-  end
-
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
 
   get '/help/:document', to: 'help#show'
-
-  # Handle incoming unsubscribe webhooks from SendInBlue
-  post '/send_in_blue/unsubscribe', to: 'send_in_blue#unsubscribe_webhook'
 
   # Handle redirects of short URLs.
   get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'

@@ -3,10 +3,6 @@ ActiveAdmin.register Domain do
 
   permit_params :primary
 
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Schools'
 
   filter :fqdn

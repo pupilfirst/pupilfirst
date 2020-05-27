@@ -10,8 +10,6 @@ ActiveAdmin.register User do
   filter :faculty_id_not_null, label: 'Is a faculty', as: :boolean
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes({ founders: { startup: :course } }, faculty: :school)
     end

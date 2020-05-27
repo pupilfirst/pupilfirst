@@ -23,11 +23,6 @@
 
 en:
   jobs:
-    faculty_connect_session_reminder:
-      founder_reminder: ":exclamation: *Reminder:* Your team (%{startup_name}) has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes! You can <%{meeting_link}|click here> to join the meeting when it's time."
-      faculty_reminder: ":exclamation: *Reminder:* You have an office hour with <%{founder_url}|%{founder_name}> starting in 30 minutes!\nThe student plan to discuss the following questions:\n %{questions}\nYou can <%{meeting_link}|click here> to join the meeting when it's time."
-      ops_team_reminder: ":exclamation: *Reminder:* <%{founder_url}|%{founder_name}> has an office hour with <%{coach_url}|%{faculty_name}> starting in 30 minutes. Follow up!"
-
     timeline_events:
       verification_notification:
         founder:
@@ -84,49 +79,16 @@ en:
         part_time: Part-Time
         full_time: Full-Time
 
-    founder:
-      # Founder.roles is actually an array. But the translation applies to each value individually.
-      role: &founder-role
-        product: Product
-        engineering: Engineering
-        design: Design
-
     target:
       role:
         team: Team
         founder: All Founders
-
-    timeline_event:
-      grade:
-        good: 'Good'
-        great: 'Great'
-        wow: 'Wow!'
 
   presenters:
     layouts:
       footer:
         address_html: "#360, 6th Main Road<br/>1<sup>st</sup> Block, Koramangala,<br/>Bengaluru &mdash; 560034"
         email_address: support@pupilfirst.com
-
-  services:
-    targets:
-      create_or_update_calendar_event:
-        title: 'Live Session: %{title}'
-        description: |
-          The live session will be hosted using Zoom (conferencing tool). You can download Zoom software at this link:
-
-          https://zoom.us/download
-
-          Once downloaded, please sign in (or sign up) for Zoom with your email account.
-
-          The link to the session will be shared in the Collective Slack channel 15 minutes prior to the session.
-
-          Here is the general format for the session: 20 minutes talk + 10 mins Q&A. Please use the Q&A option in Zoom to post any questions you might have. They will be answered at the end of the session by the speaker.
-
-  admin:
-    connect_request:
-      cancel_request:
-        warning:  "Are you sure you want to cancel this 'confirmed' connect request? Note that you will have to manually delete the associated Zoom meeting and Google calendar event!"
 
   admissions:
     register:

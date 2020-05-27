@@ -4,7 +4,6 @@ type t = {
   imageUrl: string,
   email: string,
   title: string,
-  linkedinUrl: option(string),
   public: bool,
   exited: bool,
   connectLink: option(string),
@@ -21,8 +20,6 @@ let email = t => t.email;
 let imageUrl = t => t.imageUrl;
 
 let title = t => t.title;
-
-let linkedinUrl = t => t.linkedinUrl;
 
 let public = t => t.public;
 
@@ -41,8 +38,6 @@ let decode = json =>
     imageUrl: json |> field("imageUrl", string),
     email: json |> field("email", string),
     title: json |> field("title", string),
-    linkedinUrl:
-      json |> field("linkedinUrl", nullable(string)) |> Js.Null.toOption,
     public: json |> field("public", bool),
     connectLink:
       json |> field("connectLink", nullable(string)) |> Js.Null.toOption,
@@ -60,7 +55,6 @@ let make =
       ~imageUrl,
       ~email,
       ~title,
-      ~linkedinUrl,
       ~public,
       ~connectLink,
       ~exited,
@@ -72,7 +66,6 @@ let make =
   imageUrl,
   email,
   title,
-  linkedinUrl,
   public,
   connectLink,
   exited,

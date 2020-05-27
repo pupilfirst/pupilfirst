@@ -7,8 +7,6 @@ ActiveAdmin.register UserActivity do
   config.sort_order = 'updated_at_desc'
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes :user
     end

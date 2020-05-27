@@ -3,10 +3,6 @@ ActiveAdmin.register SchoolLink do
 
   menu parent: 'Schools'
 
-  controller do
-    include DisableIntercom
-  end
-
   filter :school
   filter :kind, as: :select, collection: SchoolLink::VALID_KINDS
   filter :title

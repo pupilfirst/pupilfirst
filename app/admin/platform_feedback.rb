@@ -1,8 +1,4 @@
 ActiveAdmin.register PlatformFeedback do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Dashboard', label: 'Platform Feedback'
 
   permit_params :founder_id, :feedback_type, :description, :promoter_score, :notes

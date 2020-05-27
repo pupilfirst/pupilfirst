@@ -1,5 +1,0 @@
-h6 Latest Conversations:
-- @conversations.each do |conversation|
-  - conversation_url = "https://app.intercom.io/a/apps/#{ENV['INTERCOM_API_ID']}/inbox/all/conversations/#{conversation[:id]}"
-  = link_to "<strong>#{truncate(conversation[:name])}:</strong> #{truncate(conversation[:body], length: 75)}".html_safe, conversation_url, target: '_blank'
-  br

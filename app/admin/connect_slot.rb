@@ -1,8 +1,4 @@
 ActiveAdmin.register ConnectSlot do
-  controller do
-    include DisableIntercom
-  end
-
   permit_params :faculty_id, :slot_at
 
   menu parent: 'Faculty'

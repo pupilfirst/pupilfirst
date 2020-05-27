@@ -1,6 +1,4 @@
 ActiveAdmin.register Quiz do
-  include DisableIntercom
-
   menu parent: 'Targets'
 
   permit_params :title, :target_id, quiz_questions_attributes: %i[question]

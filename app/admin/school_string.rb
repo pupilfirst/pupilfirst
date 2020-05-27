@@ -3,10 +3,6 @@ ActiveAdmin.register SchoolString do
 
   menu parent: 'Schools'
 
-  controller do
-    include DisableIntercom
-  end
-
   index do
     id_column
 

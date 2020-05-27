@@ -10,8 +10,6 @@ ActiveAdmin.register StartupFeedback do
   filter :activity_type
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes :startup, :faculty
     end

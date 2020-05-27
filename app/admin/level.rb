@@ -1,8 +1,4 @@
 ActiveAdmin.register Level do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Targets'
 
   permit_params :number, :name, :description, :unlock_on, :course_id

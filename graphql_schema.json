@@ -3166,12 +3166,12 @@
             "deprecationReason": null
           },
           {
-            "name": "evaluatorId",
+            "name": "evaluatedAt",
             "description": "",
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "ID",
+              "name": "ISO8601DateTime",
               "ofType": null
             },
             "isDeprecated": false,

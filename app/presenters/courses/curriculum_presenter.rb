@@ -110,7 +110,7 @@ module Courses
     def submissions
       current_student.timeline_events.joins(:target).where(latest: true).map do |submission|
         if submission.target.individual_target? || submission.founder_ids.sort == current_student.team_student_ids
-          submission.attributes.slice('target_id', 'passed_at', 'evaluator_id')
+          submission.attributes.slice('target_id', 'passed_at', 'evaluated_at')
         end
       end - [nil]
     end

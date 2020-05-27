@@ -195,11 +195,11 @@ let submissions =
                  |> Feedback.submissionId == (submission |> Submission.id)
                )
             |> List.map(feedback => {
+                 let coachId = feedback |> Feedback.coachId;
                  let coach =
-                   coaches
-                   |> ListUtils.findOpt(c =>
-                        c |> Coach.id == (feedback |> Feedback.coachId)
-                      );
+                   coachId->Belt.Option.flatMap(id =>
+                     coaches |> ListUtils.findOpt(c => c |> Coach.id == id)
+                   );
 
                  let user =
                    switch (coach) {

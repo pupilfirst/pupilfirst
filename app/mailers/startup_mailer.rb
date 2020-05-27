@@ -8,15 +8,4 @@ class StartupMailer < SchoolMailer
     subject = "New feedback from #{startup_feedback.faculty.name} on your submission"
     simple_roadie_mail(send_to, subject)
   end
-
-  # Mail sent to startup founders once a connect request is confirmed.
-  #
-  # @param connect_request [ConnectRequest] Request that was just confirmed
-  def connect_request_confirmed(connect_request)
-    @connect_request = connect_request
-    send_to = connect_request.startup.founders.map { |e| "#{e.fullname} <#{e.email}>" }
-    @school = connect_request.startup.school
-
-    simple_roadie_mail(send_to, 'Office hour confirmed.')
-  end
 end

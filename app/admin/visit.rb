@@ -1,8 +1,4 @@
 ActiveAdmin.register Visit do
-  controller do
-    include DisableIntercom
-  end
-
   scope :user_visits, default: true
   scope :all
 

@@ -30,7 +30,7 @@ module StudentDetailsQuery = [%graphql
   {|
     query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
-        email, phone, socialLinks,
+        email,
         evaluationCriteria {
           id, name, maxGrade, passGrade
         },
@@ -48,7 +48,6 @@ module StudentDetailsQuery = [%graphql
           }
           coachUserIds
         }
-        socialLinks
         totalTargets
         targetsCompleted
         completedLevelIds
@@ -289,18 +288,7 @@ let personalInfo = studentDetails => {
           {studentDetails |> StudentDetails.email |> str}
         </p>
       </div>
-      {switch (studentDetails |> StudentDetails.phone) {
-       | Some(phone) =>
-         <div className="flex items-center px-2">
-           <i className="fas fa-phone" />
-           <p className="ml-2 tracking-wide"> {phone |> str} </p>
-         </div>
-       | None => React.null
-       }}
     </div>
-    {let socialLinks = studentDetails |> StudentDetails.socialLinks;
-     socialLinks |> ArrayUtils.isNotEmpty
-       ? showSocialLinks(socialLinks) : React.null}
   </div>;
 };
 

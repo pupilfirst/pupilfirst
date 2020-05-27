@@ -12,8 +12,6 @@ let email: t => string;
 
 let title: t => string;
 
-let linkedinUrl: t => option(string);
-
 let public: t => bool;
 
 let connectLink: t => option(string);
@@ -33,7 +31,6 @@ let make:
     ~imageUrl: string,
     ~email: string,
     ~title: string,
-    ~linkedinUrl: option(string),
     ~public: bool,
     ~connectLink: option(string),
     ~exited: bool,

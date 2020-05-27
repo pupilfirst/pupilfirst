@@ -24,14 +24,5 @@
         .faculty-card-info__title
           = coach.title
 
-        - if coach.key_skills.present?
-          .faculty-card-info__key-skills
-            = coach.key_skills
-
-        - if coach.linkedin_url.present?
-          .faculty-links
-            = link_to coach.linkedin_url, target: '_blank' do
-              i.fa.fa-linkedin
-
       - if presenter.can_connect?
         == render 'connect_button', faculty: coach

@@ -1,8 +1,4 @@
 ActiveAdmin.register_page 'Vocalist Ping' do
-  controller do
-    include DisableIntercom
-  end
-
   menu parent: 'Dashboard', label: 'Send Vocalist Ping'
 
   content do

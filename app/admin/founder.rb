@@ -1,13 +1,9 @@
 ActiveAdmin.register Founder do
   actions :index, :show
 
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :about, :communication_address, :phone,
-    :college_id, :twitter_url, :linkedin_url, :personal_website_url, :blog_url, :angel_co_url, :github_url,
-    :behance_url, :skype_id, :excluded_from_leaderboard, roles: [], tag_list: []
+  permit_params :name, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: [], tag_list: []
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       if request.format == 'text/csv'
         super.includes(:startup, { college: :state }, :tag_taggings, :tags, :active_admin_comments)
@@ -82,8 +78,6 @@ ActiveAdmin.register Founder do
       founder.roles.join ', '
     end
 
-    column :phone
-    column :communication_address
     column :about
 
     column :college do |founder|
@@ -95,14 +89,6 @@ ActiveAdmin.register Founder do
     end
 
     column :slack_username
-    column(:skype_username, &:skype_id)
-    column :linkedin_url
-    column :twitter_url
-    column :personal_website_url
-    column :blog_url
-    column :angel_co_url
-    column :github_url
-    column :behance_url
   end
 
   show do
@@ -133,14 +119,7 @@ ActiveAdmin.register Founder do
       row :about
       row :slack_username
       row :slack_user_id
-      row 'Skype Id' do
-        founder.skype_id
-      end
 
-      row :phone
-      row :communication_address
-
-      row :designation
       row :college do |founder|
         if founder.college.present?
           founder.college.name
@@ -166,18 +145,6 @@ ActiveAdmin.register Founder do
       end
 
       row :excluded_from_leaderboard
-    end
-
-    panel 'Social links' do
-      attributes_table_for founder do
-        row :twitter_url
-        row :linkedin_url
-        row :personal_website_url
-        row :blog_url
-        row :angel_co_url
-        row :github_url
-        row :behance_url
-      end
     end
 
     panel 'Technical details' do

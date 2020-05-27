@@ -4,11 +4,9 @@ class StudentDetailsResolver < ApplicationQuery
   def student_details
     {
       email: student.email,
-      phone: student.phone,
       targets_completed: targets_completed,
       total_targets: total_targets,
       level_id: level.id,
-      social_links: social_links,
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
       average_grades: average_grades,
@@ -85,10 +83,6 @@ class StudentDetailsResolver < ApplicationQuery
 
   def submissions_for_grades
     submissions.where(latest: true).includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
-  end
-
-  def social_links
-    student.user.slice('linkedin_url', 'twitter_url', 'facebook_url', 'github_url', 'personal_website_url').values - [nil]
   end
 
   def evaluation_criteria

@@ -20,8 +20,6 @@ ActiveAdmin.register Target do
   scope :sessions
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes(:course, :level, :target_group)
     end
@@ -209,24 +207,5 @@ ActiveAdmin.register Target do
       end
       tags
     end
-  end
-
-  action_item :invite_on_google_calendar, only: :show, if: proc { resource.session? } do
-    link_to(
-      'Invite on Google Calendar',
-      invite_on_google_calendar_admin_target_url(id: params[:id]),
-      method: :post, data: { confirm: 'Are you sure?' }
-    )
-  end
-
-  member_action :invite_on_google_calendar, method: :post do
-    target = Target.find params[:id]
-
-    # Only the calender event needs to be created / updated manually.
-    # Notifications and emails sent before and after the session are managed using periodic tasks.
-    # See `lib/period_tasks.rake`.
-    Targets::CreateOrUpdateCalendarEventJob.perform_later(target, current_admin_user)
-    flash[:success] = "Google Calendar invitation will be created / updated shortly. You should receive an email in a few minutes with results."
-    redirect_to admin_target_path(target)
   end
 end

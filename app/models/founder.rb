@@ -55,9 +55,7 @@ class Founder < ApplicationRecord
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { not_dropped_out.access_active }
 
-  delegate :email, :name, :phone, :communication_address, :title, :affiliation, :key_skills, :about,
-    :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :avatar, :avatar_variant, :initials_avatar, to: :user
+  delegate :email, :name, :title, :affiliation, :about, :avatar, :avatar_variant, :initials_avatar, to: :user
 
   def self.ransackable_scopes(_auth)
     %i[ransack_tagged_with]
@@ -122,40 +120,6 @@ class Founder < ApplicationRecord
     startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
   end
 
-  # Returns true if any of the social URL are stored. Used on profile page.
-  def social_url_present?
-    [twitter_url, linkedin_url, personal_website_url, blog_url, angel_co_url, github_url, behance_url, facebook_url].any?(&:present?)
-  end
-
-  # Returns the percentage of profile completion as an integer
-  def profile_completion_percentage
-    score = 30 # a default score given for required fields during registration
-    # score += 15 if slack_user_id.present? # has a valid slack account associated
-    # score += 10 if skype_id.present?
-    score += 30 if social_url_present? # has atleast 1 social media links
-    score += 20 if communication_address.present?
-    score += 20 if about.present?
-    score
-  end
-
-  # Return the 'next-applicable' profile completion instruction as a string
-  def profile_completion_instruction
-    return 'Update your Skype Id' if skype_id.blank?
-    return 'Provide at-least one of your social profiles!' unless social_url_present?
-    return 'Update your communication address!' if communication_address.blank?
-    return 'Write a one-liner about yourself!' if about.blank?
-  end
-
-  # Should we give the founder a tour of the founder dashboard? If so, we shouldn't give it again.
-  def tour_dashboard?
-    if dashboard_toured
-      false
-    else
-      update!(dashboard_toured: true)
-      true
-    end
-  end
-
   def latest_submissions
     timeline_events.where(latest: true)
   end
@@ -164,12 +128,6 @@ class Founder < ApplicationRecord
     return false if slack_access_token.blank?
 
     Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
-  end
-
-  def profile_complete?
-    required_fields = %i[name roles communication_address phone]
-
-    required_fields.all? { |field| self[field].present? }
   end
 
   def faculty

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ConnectRequest < ApplicationRecord
-  MEETING_DURATION = 20.minutes
   MAX_QUESTIONS_LENGTH = 600
 
   belongs_to :connect_slot
@@ -35,18 +34,6 @@ class ConnectRequest < ApplicationRecord
 
   def set_status_for_nil
     self.status = STATUS_REQUESTED if status.nil?
-  end
-
-  def time_for_feedback_mail?
-    (connect_slot.slot_at + 40.minutes).past? ? true : false
-  end
-
-  def feedback_mails_sent?
-    feedback_mails_sent_at.present?
-  end
-
-  def feedback_mails_sent!
-    update!(feedback_mails_sent_at: Time.now)
   end
 
   def requested?

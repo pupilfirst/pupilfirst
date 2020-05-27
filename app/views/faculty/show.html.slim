@@ -18,26 +18,12 @@
           | Coach at SV.CO since&nbsp;
           = @faculty.created_at.strftime('%B %Y')
         .faculty-profile-card-footer.d-flex.align-items-center
-          - if @faculty.linkedin_url.present?
-            - if @faculty.average_rating.present?
-              = link_to @faculty.linkedin_url, class: 'faculty-card-links', target: '_blank' do
-                  i.fa.fa-linkedin
-            - else
-              = link_to @faculty.linkedin_url, class: 'faculty-card-links', target: '_blank' do
-                  i.fa.fa-linkedin
           - if @faculty.average_rating.present?
-            - if @faculty.linkedin_url.present?
-              .faculty-rating
-                span.faculty-rating__heading
-                  | Coach Rating:
-                span.rating-stars
-                  = faculty_rating_stars(@faculty.average_rating)
-            - else
-              .faculty-rating.text-center
-                span.faculty-rating__heading
-                  | Coach Rating:
-                span.rating-stars
-                  = faculty_rating_stars(@faculty.average_rating)
+            .faculty-rating.text-center
+              span.faculty-rating__heading
+                | Coach Rating:
+              span.rating-stars
+                = faculty_rating_stars(@faculty.average_rating)
     .col-lg-9.col-md-7
       .faculty-profile-right
         .faculty-profile-details.d-md-flex.flex-md-column.flex-lg-row
@@ -48,14 +34,6 @@
               h4.about-icon.text-uppercase.font-semibold
                 | About
               p #{@faculty.about}
-
-            - if @faculty.key_skills.present?
-              .faculty-summary-section
-                h4.skills-icon.text-uppercase.font-semibold
-                  | Skills
-                p.skill-box
-                  - @faculty.key_skills.split(',').each do |skill|
-                    span = skill
 
           - if sidebar_present?(@faculty)
             .col-lg-5.col-md-12.faculty-connect

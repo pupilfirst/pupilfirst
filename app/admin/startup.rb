@@ -19,8 +19,6 @@ ActiveAdmin.register Startup do
   scope :all
 
   controller do
-    include DisableIntercom
-
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end

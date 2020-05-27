@@ -1,9 +1,0 @@
-- events.each do |event|
-  == render 'timeline_event', event: event
-
-- if !@timeline_events.last_page?
-  .startup-show__load-events-button style="text-align: center;"
-  .text-center.margin-top-10
-    a.js-startup-show__load-events-link.btn.btn-primary href="#" data-load-url=paged_events_url(@founder.id, page: @timeline_events.current_page + 1)
-      | Load more submissions
-

@@ -1,8 +1,4 @@
 ActiveAdmin.register ActsAsTaggableOn::Tagging, as: 'Tagging' do
-  controller do
-    include DisableIntercom
-  end
-
   actions :index, :destroy
 
   menu false

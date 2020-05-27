@@ -15,10 +15,6 @@ class StartupMailerPreview < ActionMailer::Preview
     StartupMailer.feedback_as_email(startup_feedback)
   end
 
-  def connect_request_confirmed
-    StartupMailer.connect_request_confirmed(connect_request)
-  end
-
   private
 
   def connect_request

@@ -19,8 +19,6 @@ ActiveAdmin.register ConnectRequest do
   filter :rating_for_team
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes :connect_slot
     end
@@ -28,31 +26,6 @@ ActiveAdmin.register ConnectRequest do
 
   action_item :record_feedback, only: :show do
     link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id })
-  end
-
-  action_item :confirm_request, only: :show, if: -> { connect_request.requested? } do
-    link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), method: :patch
-  end
-
-  action_item :cancel_request, only: :show, if: -> { connect_request.confirmed? } do
-    link_to(
-      'Cancel Request', cancel_request_admin_connect_request_path(connect_request),
-      method: :patch, data: { confirm: I18n.t('admin.connect_request.cancel_request.warning') }
-    )
-  end
-
-  member_action :confirm_request, method: :patch do
-    connect_request = ConnectRequest.find(params[:id])
-    ConnectRequests::ConfirmationService.new(connect_request).execute
-    flash[:success] = 'The connect request has been confirmed and attendees notified!'
-    redirect_back(fallback_location: admin_connect_requests_path)
-  end
-
-  member_action :cancel_request, method: :patch do
-    connect_request = ConnectRequest.find(params[:id])
-    connect_request.update!(status: ConnectRequest::STATUS_CANCELLED)
-    flash[:success] = 'The connect request has been marked cancelled!'
-    redirect_back(fallback_location: admin_connect_requests_path)
   end
 
   index do
@@ -77,27 +50,6 @@ ActiveAdmin.register ConnectRequest do
       if connect_request.rating_for_team.present?
         connect_request.rating_for_team.times do
           i class: 'fa fa-star'
-        end
-      end
-    end
-
-    actions do |connect_request|
-      span do
-        link_to 'Record Feedback', new_admin_startup_feedback_path(startup_feedback: { startup_id: connect_request.startup.id }), class: 'member_link'
-      end
-
-      if connect_request.requested?
-        span do
-          link_to 'Confirm Request', confirm_request_admin_connect_request_path(connect_request), class: 'member_link', method: :patch
-        end
-      end
-
-      if connect_request.confirmed?
-        span do
-          link_to(
-            'Cancel Request', cancel_request_admin_connect_request_path(connect_request),
-            method: :patch, data: { confirm: I18n.t('admin.connect_request.cancel_request.warning') }
-          )
         end
       end
     end

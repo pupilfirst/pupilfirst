@@ -51,43 +51,12 @@ class Faculty < ApplicationRecord
   scope :vr_coaches, -> { where(category: CATEGORY_VR_COACHES).order('sort_index ASC') }
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]) }
-  # hard-wired ids of our ops_team, kireeti: 19, bharat: 20. A flag for this might be an overkill?
-  scope :ops_team, -> { where(id: [19, 20]) }
 
-  delegate :email, :name, :phone, :communication_address, :title, :key_skills, :about,
-    :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :image, :avatar, to: :user
+  delegate :email, :name, :title, :about, :avatar, to: :user
 
   # This method sets the label used for object by Active Admin.
   def display_name
     name
-  end
-
-  # copy slots from the last available week to the next week
-  def copy_weekly_slots!
-    return unless last_available_connect_date
-
-    days_to_offset = days_since_last_available_week
-    return if days_to_offset <= 0 # return if there is/are slot(s) for next week or later
-
-    slots_to_copy = last_available_weekly_slots
-
-    slots_to_copy.each do |slot|
-      connect_slots.create!(slot_at: slot.slot_at + days_to_offset)
-    end
-  end
-
-  def last_available_connect_date
-    connect_slots.order('slot_at DESC').first.try(:slot_at)
-  end
-
-  def last_available_weekly_slots
-    connect_slots.where(slot_at: (last_available_connect_date.beginning_of_week..last_available_connect_date.end_of_week))
-  end
-
-  # number of days to offset when creating next week slots (from last available weekly slots)
-  def days_since_last_available_week
-    (7.days.from_now.beginning_of_week.to_date - last_available_connect_date.beginning_of_week.to_date).to_i.days
   end
 
   # Returns completed connect requests.

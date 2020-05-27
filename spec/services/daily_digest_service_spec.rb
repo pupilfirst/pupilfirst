@@ -167,7 +167,7 @@ describe DailyDigestService do
       let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
 
       let(:team_1) { create :startup, level: level_1 }
-      let(:submission_pending_1) { create(:timeline_event, target: target_1) }
+      let!(:submission_pending_1) { create(:timeline_event, :latest_with_owners, owners: team_1.founders, target: target_1) }
 
       let(:course_2) { create :course, school: school }
       let(:level_2) { create :level, :one, course: course_2 }
@@ -177,8 +177,8 @@ describe DailyDigestService do
       let(:evaluation_criterion_2) { create :evaluation_criterion, course: course_2, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_2 }
 
       let(:team_2) { create :startup, level: level_2 }
-      let(:submission_pending_2) { create(:timeline_event, target: target_2) }
-      let(:submission_pending_3) { create(:timeline_event, target: target_2) }
+      let!(:submission_pending_2) { create(:timeline_event, :latest_with_owners, owners: team_2.founders, target: target_2) }
+      let!(:submission_pending_3) { create(:timeline_event, :latest_with_owners, owners: team_2.founders, target: target_2) }
       let(:submission_pending_4) { create(:timeline_event, target: target_1, created_at: 2.weeks.ago) }
 
       let(:coach) { create :faculty, school: school }
@@ -203,17 +203,6 @@ describe DailyDigestService do
         create :faculty_course_enrollment, faculty: coach_2, course: course_3
         create :topic, :with_first_post, community: community_1, creator: t1_user
         create :topic, :with_first_post, community: community_2, creator: t3_user
-
-        team_1.founders.each do |f|
-          create :timeline_event_owner, :latest, timeline_event: submission_pending_1, founder: f
-        end
-        team_2.founders.each do |f|
-          create :timeline_event_owner, :latest, timeline_event: submission_pending_2, founder: f
-        end
-        team_2.founders.each do |f|
-          create :timeline_event_owner, :latest, timeline_event: submission_pending_3, founder: f
-        end
-
         target_1.evaluation_criteria << evaluation_criterion_1
         target_2.evaluation_criteria << evaluation_criterion_2
       end

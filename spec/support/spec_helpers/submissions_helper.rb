@@ -14,7 +14,7 @@ module SubmissionsHelper
   def submit_target(target, student, grade: GRADE_NONE, evaluator: nil)
     options = submission_options(target, student, grade, evaluator)
 
-    FactoryBot.create(:timeline_event, options).tap do |submission|
+    FactoryBot.create(:timeline_event, :latest_with_owners, options).tap do |submission|
       grade_submission(submission, grade, target)
     end
   end
@@ -74,7 +74,7 @@ module SubmissionsHelper
     end
 
     {
-      founders: students,
+      owners: students,
       target: target,
       latest: true,
       passed_at: passed_at,

@@ -276,8 +276,8 @@ feature 'Target Overlay', js: true do
     let(:coach_1) { create :faculty, school: course.school }
     let(:coach_2) { create :faculty, school: course.school } # The 'unknown', un-enrolled coach.
     let(:coach_3) { create :faculty, school: course.school }
-    let(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, created_at: 7.days.ago }
-    let(:submission_2) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_3, passed_at: 2.days.ago, latest: true, created_at: 3.days.ago }
+    let!(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, created_at: 5.days.ago }
+    let!(:submission_2) { create :timeline_event, :latest_with_owners, target: target_l1, owners: team.founders, evaluator: coach_3, passed_at: 2.days.ago, created_at: 3.days.ago }
     let!(:attached_file) { create :timeline_event_file, timeline_event: submission_2 }
     let!(:feedback_1) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_1 }
     let!(:feedback_2) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_2 }
@@ -303,7 +303,6 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
       # Both submissions should be visible, along with grading and all feedback from coaches.
-
       within("div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']") do
         find("div[aria-label='#{submission_1.checklist.first['title']}']").click
         expect(page).to have_content(submission_1.checklist.first['result'])
@@ -362,7 +361,10 @@ feature 'Target Overlay', js: true do
       scenario 'student can resubmit non-resubmittable target if its failed' do
         # Make the first failed submission the latest, and the only one.
         submission_2.destroy!
-        submission_1.update(latest: true)
+
+        # rubocop:disable Rails/SkipsModelValidations
+        submission_1.timeline_event_owners.update_all(latest: true)
+        # rubocop:enable Rails/SkipsModelValidations
 
         sign_in_user student.user, referer: target_path(target_l1)
 
@@ -375,7 +377,7 @@ feature 'Target Overlay', js: true do
 
   context "when some team members haven't completed an individual target" do
     let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_STUDENT }
-    let!(:timeline_event) { create :timeline_event, target: target_l1, founders: [student], passed_at: 2.days.ago, latest: true }
+    let!(:timeline_event) { create :timeline_event, :latest_with_owners, target: target_l1, owners: [student], passed_at: 2.days.ago }
 
     scenario 'student is shown pending team members on individual targets' do
       sign_in_user student.user, referer: target_path(target_l1)
@@ -440,7 +442,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student views a submitted target' do
-      create :timeline_event, :latest, target: target_l1, founders: team.founders
+      create :timeline_event, :latest_with_owners, target: target_l1, owners: team.founders
 
       sign_in_user student.user, referer: target_path(target_l1)
 

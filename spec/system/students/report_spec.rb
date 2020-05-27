@@ -38,12 +38,12 @@ feature "Course students report", js: true do
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   # Create submissions for relevant targets
-  let(:submission_target_l1_1) { create(:timeline_event, latest: true, target: target_l1, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago) }
-  let(:submission_target_l1_2) { create(:timeline_event, latest: false, target: target_l2, evaluator_id: course_coach.id, evaluated_at: 3.days.ago, passed_at: nil) }
-  let(:submission_target_l2) { create(:timeline_event, latest: true, target: target_l2, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-  let(:submission_target_l3) { create(:timeline_event, latest: true, target: target_l3, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-  let(:submission_quiz_target_1) { create(:timeline_event, latest: true, target: quiz_target_1, passed_at: 1.day.ago, quiz_score: '1/3') }
-  let(:submission_quiz_target_2) { create(:timeline_event, latest: true, target: quiz_target_2, passed_at: 1.day.ago, quiz_score: '3/5') }
+  let!(:submission_target_l1_1) { create(:timeline_event, :latest_with_owners, owners: [student], target: target_l1, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago) }
+  let!(:submission_target_l1_2) { create(:timeline_event, founders: [student], target: target_l2, evaluator_id: course_coach.id, evaluated_at: 3.days.ago, passed_at: nil) }
+  let!(:submission_target_l2) { create(:timeline_event, :latest_with_owners, owners: [student], target: target_l2, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+  let!(:submission_target_l3) { create(:timeline_event, :latest_with_owners, owners: [student], target: target_l3, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+  let!(:submission_quiz_target_1) { create(:timeline_event, :latest_with_owners, owners: [student], target: quiz_target_1, passed_at: 1.day.ago, quiz_score: '1/3') }
+  let!(:submission_quiz_target_2) { create(:timeline_event, :latest_with_owners, owners: [student], target: quiz_target_2, passed_at: 1.day.ago, quiz_score: '3/5') }
   let!(:coach_note_1) { create :coach_note, author: course_coach.user, student: student }
   let!(:coach_note_2) { create :coach_note, author: team_coach.user, student: student }
 
@@ -55,13 +55,6 @@ feature "Course students report", js: true do
     target_l2.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
     target_l3.evaluation_criteria << evaluation_criterion_2
     target_4.evaluation_criteria << evaluation_criterion_2
-
-    submission_target_l1_1.founders << student
-    submission_target_l1_2.founders << student
-    submission_target_l2.founders << student
-    submission_target_l3.founders << student
-    submission_quiz_target_1.founders << student
-    submission_quiz_target_2.founders << student
 
     submission_target_l1_2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 1)
     submission_target_l1_1.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 3)
@@ -133,8 +126,7 @@ feature "Course students report", js: true do
   scenario 'coach loads more submissions' do
     # Create over 20 reviewed submissions
     20.times do
-      submission = TimelineEvent.create!(latest: true, target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
-      submission.founders << student
+      submission = create(:timeline_event, :latest_with_owners, owners: [student], target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
       submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     end
 

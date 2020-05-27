@@ -25,7 +25,7 @@ module FounderSpecHelper
   def create_timeline_event(founder, target, passed: false, passed_at: nil, grade: nil)
     options = timeline_event_options(founder, passed, passed_at, target)
 
-    FactoryBot.create(:timeline_event, options).tap do |te|
+    FactoryBot.create(:timeline_event, :latest_with_owners, options).tap do |te|
       # Add grades for passing submissions if evaluation criteria are present.
       if target.evaluation_criteria.present? && options[:passed_at].present?
         te.evaluation_criteria.each do |ec|
@@ -50,9 +50,8 @@ module FounderSpecHelper
     end
 
     {
-      founders: [founder],
+      owners: [founder],
       target: target,
-      latest: true,
       passed_at: passed_at
     }
   end

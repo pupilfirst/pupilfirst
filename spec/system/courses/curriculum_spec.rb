@@ -51,7 +51,7 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:submission_completed_target_l3) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l3, passed_at: 1.day.ago) }
   let!(:submission_completed_target_l4) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l4, passed_at: 1.day.ago, evaluator: faculty) }
   let!(:submission_submitted_target) { create(:timeline_event, :latest, founders: team.founders, target: submitted_target) }
-  let!(:submission_failed_target) { create(:timeline_event, :latest, founders: team.founders, target: failed_target, evaluator: faculty) }
+  let!(:submission_failed_target) { create(:timeline_event, :latest, founders: team.founders, target: failed_target, evaluated_at: 1.day.ago, evaluator: faculty) }
 
   before do
     # Grading for graded targets

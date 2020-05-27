@@ -106,7 +106,7 @@ describe Targets::StatusService do
       context 'when the submission was evaluated but passed_at not set' do
         let(:faculty) { create :faculty }
         let!(:submission) do
-          create :timeline_event, founders: [founder_1], target: founder_target_1, evaluator: faculty, latest: true
+          create :timeline_event, founders: [founder_1], target: founder_target_1, evaluator: faculty, evaluated_at: 1.day.ago, latest: true
         end
 
         it 'returns :failed' do

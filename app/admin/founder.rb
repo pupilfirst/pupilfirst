@@ -1,7 +1,7 @@
 ActiveAdmin.register Founder do
   actions :index, :show
 
-  permit_params :name, :remote_avatar_url, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: [], tag_list: []
+  permit_params :name, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: [], tag_list: []
 
   controller do
     def scoped_collection

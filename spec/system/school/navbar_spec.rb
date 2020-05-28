@@ -53,7 +53,7 @@ feature 'School Admin Navbar', js: true do
 
     expect(page).to have_link('Curriculum', href: "/school/courses/#{course_2.id}/curriculum")
 
-    # Navbar should also include links to home page
-    expect(page).to have_link('Home', href: "/home")
+    # Navbar should also include links to dashboard page
+    expect(page).to have_link('Dashboard', href: "/dashboard")
   end
 end

@@ -337,7 +337,7 @@ let make =
          }}
       </div>
       <ul>
-        {bottomLink("/home", shrunk, "fas fa-home", "Home")}
+        {bottomLink("/dashboaed", shrunk, "fas fa-home", "Dashboard")}
         <li>
           <a
             title=?{shrunk ? Some("Sign Out") : None}

@@ -5,11 +5,11 @@ module Users
     end
 
     def page_title
-      "Home | #{current_school.name}"
+      "Dashboard | #{current_school.name}"
     end
 
     def props
-      home_props = {
+      dashboard_props = {
         courses: course_details_array,
         current_school_admin: current_school_admin.present?,
         show_user_edit: show_user_edit?,
@@ -20,10 +20,10 @@ module Users
       }
 
       if current_user.avatar.attached?
-        home_props[:avatar_url] = view.url_for(current_user.avatar_variant(:thumb))
+        dashboard_props[:avatar_url] = view.url_for(current_user.avatar_variant(:thumb))
       end
 
-      home_props
+      dashboard_props
     end
 
     private

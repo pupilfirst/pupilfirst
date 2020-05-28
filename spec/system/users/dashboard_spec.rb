@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User Home', js: true do
+feature 'User Dashboard', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -51,8 +51,8 @@ feature 'User Home', js: true do
     create :community_course_connection, course: course_4, community: community_4
   end
 
-  scenario 'student visits the home page' do
-    sign_in_user(founder.user, referer: home_path)
+  scenario 'student visits the dashboard page' do
+    sign_in_user(founder.user, referer: dashboard_path)
 
     # A new course.
     within("div[aria-label=\"#{course_1.name}\"]") do
@@ -99,8 +99,8 @@ feature 'User Home', js: true do
     expect(page).not_to have_button('Certificates')
   end
 
-  scenario 'course coach visits home page' do
-    sign_in_user(course_coach.user, referer: home_path)
+  scenario 'course coach visits dashboard page' do
+    sign_in_user(course_coach.user, referer: dashboard_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_1.description)
@@ -121,8 +121,8 @@ feature 'User Home', js: true do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'student coach visits home page' do
-    sign_in_user(team_coach.user, referer: home_path)
+  scenario 'student coach visits dashboard page' do
+    sign_in_user(team_coach.user, referer: dashboard_path)
 
     expect(page).to have_text(course_2.name)
     expect(page).to have_text(course_2.description)
@@ -143,8 +143,8 @@ feature 'User Home', js: true do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'school admin visits home page' do
-    sign_in_user(school_admin.user, referer: home_path)
+  scenario 'school admin visits dashboard page' do
+    sign_in_user(school_admin.user, referer: dashboard_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_2.name)
@@ -165,8 +165,8 @@ feature 'User Home', js: true do
     expect(page).to have_text(community_4.name)
   end
 
-  scenario 'course author visits the home page' do
-    sign_in_user(course_author.user, referer: home_path)
+  scenario 'course author visits the dashboard page' do
+    sign_in_user(course_author.user, referer: dashboard_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).not_to have_text(course_2.name)
@@ -183,8 +183,8 @@ feature 'User Home', js: true do
     let!(:issued_certificate_1) { create :issued_certificate, certificate: certificate_1, user: founder.user }
     let!(:issued_certificate_2) { create :issued_certificate, certificate: certificate_2, user: founder.user }
 
-    scenario 'student browses certificates on the home page' do
-      sign_in_user(founder.user, referer: home_path)
+    scenario 'student browses certificates on the dashboard page' do
+      sign_in_user(founder.user, referer: dashboard_path)
 
       # Switch to certificates tab and see if there are two links.
       click_button 'Certificates'

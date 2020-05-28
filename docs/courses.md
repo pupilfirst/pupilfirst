@@ -55,7 +55,7 @@ You can customize how the course looks to the student by editing two images:
 
 ### Thumbnail
 
-This image will be displayed in the user's home page, when listing the courses that the student has access to.
+This image will be displayed in the user's dashboard page, when listing the courses that the student has access to.
 
 The image should have an aspect ratio of 2:1, with a suggested resolution of `768x384` (WxH).
 

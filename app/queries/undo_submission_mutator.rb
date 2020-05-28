@@ -10,7 +10,7 @@ class UndoSubmissionMutator < ApplicationQuery
       timeline_event.destroy!
 
       # Set the most recent submission to latest.
-      owners.map do |owner|
+      owners.each do |owner|
         timeline_event = owner.timeline_events.where(target: target).order(:created_at).last
 
         next if timeline_event.blank?

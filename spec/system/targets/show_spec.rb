@@ -362,9 +362,7 @@ feature 'Target Overlay', js: true do
         # Make the first failed submission the latest, and the only one.
         submission_2.destroy!
 
-        # rubocop:disable Rails/SkipsModelValidations
-        submission_1.timeline_event_owners.update_all(latest: true)
-        # rubocop:enable Rails/SkipsModelValidations
+        submission_1.timeline_event_owners.update_all(latest: true) # rubocop:disable Rails/SkipsModelValidations
 
         sign_in_user student.user, referer: target_path(target_l1)
 
@@ -685,10 +683,10 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text("The page you were looking for doesn't exist")
   end
 
-  context 'when the user is a school admin' do
+  context 'when the team changes for a group of students' do
     let!(:team_1) { create :startup, level: level_1 }
     let!(:team_2) { create :startup, level: level_1 }
-    scenario 'student submits work on a target' do
+    scenario 'latest flag is updated correctly on deleting the latest submission for all students' do
       student_a = team_1.founders.first
       student_c = team_1.founders.last
       student_b = team_2.founders.first

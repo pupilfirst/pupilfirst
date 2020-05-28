@@ -33,7 +33,7 @@ class TimelineEvent < ApplicationRecord
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }
   scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
-  scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
+  scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :failed, -> { where(passed_at: nil).where.not(evaluator_id: nil) }

@@ -13,7 +13,6 @@ type state = {
   name: string,
   email: string,
   title: string,
-  linkedinUrl: string,
   public: bool,
   exited: bool,
   connectLink: string,
@@ -32,7 +31,6 @@ type action =
   | UpdateName(string, bool)
   | UpdateEmail(string, bool)
   | UpdateTitle(string, bool)
-  | UpdateLinkedInUrl(string, bool)
   | UpdateConnectLink(string, bool)
   | UpdatePublic(bool)
   | UpdateImageFileName(string)
@@ -60,12 +58,7 @@ let reducer = (state, action) =>
       hasEmailError,
       dirty: true,
     }
-  | UpdateLinkedInUrl(linkedinUrl, hasLinkedInUrlError) => {
-      ...state,
-      linkedinUrl,
-      hasLinkedInUrlError,
-      dirty: true,
-    }
+
   | UpdateConnectLink(connectLink, hasConnectLinkError) => {
       ...state,
       connectLink,
@@ -101,16 +94,6 @@ let updateTitle = (send, title) => {
   send(UpdateTitle(title, title |> nameOrTitleInvalid));
 };
 
-let updateLinkedInUrl = (send, linkedinUrl) => {
-  let regex = [%re
-    {|/(https?)?:?(\/\/)?(([w]{3}||\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/|}
-  ];
-  let hasError =
-    linkedinUrl |> String.length < 1
-      ? false : !Js.Re.test_(regex, linkedinUrl);
-  send(UpdateLinkedInUrl(linkedinUrl, hasError));
-};
-
 let updateConnectLink = (send, connectLink) => {
   send(
     UpdateConnectLink(connectLink, connectLink |> UrlUtils.isInvalid(true)),
@@ -142,7 +125,6 @@ let computeInitialState = coach =>
       name: "",
       email: "",
       title: "",
-      linkedinUrl: "",
       public: false,
       connectLink: "",
       exited: false,
@@ -160,11 +142,7 @@ let computeInitialState = coach =>
       name: coach |> Coach.name,
       email: coach |> Coach.email,
       title: coach |> Coach.title,
-      linkedinUrl:
-        switch (coach |> Coach.linkedinUrl) {
-        | Some(linkedinUrl) => linkedinUrl
-        | None => ""
-        },
+
       public: coach |> Coach.public,
       connectLink:
         switch (coach |> Coach.connectLink) {
@@ -204,7 +182,6 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
         ~imageUrl,
         ~email=state.email,
         ~title=state.title,
-        ~linkedinUrl=Some(state.linkedinUrl),
         ~public=state.public,
         ~connectLink=Some(state.connectLink),
         ~exited=state.exited,
@@ -424,31 +401,6 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     name="faculty[affiliation]"
                     type_="text"
                     placeholder="Acme Inc., Acme University, etc."
-                  />
-                </div>
-                <div className="mt-5">
-                  <label
-                    className="inline-block tracking-wide text-xs font-semibold"
-                    htmlFor="linkedIn">
-                    {"LinkedIn" |> str}
-                  </label>
-                  <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="linkedIn"
-                    type_="text"
-                    name="faculty[linkedin_url]"
-                    placeholder="LinkedIn Profile URL"
-                    value={state.linkedinUrl}
-                    onChange={event =>
-                      updateLinkedInUrl(
-                        send,
-                        ReactEvent.Form.target(event)##value,
-                      )
-                    }
-                  />
-                  <School__InputGroupError
-                    message="is not a valid LinkedIn URL"
-                    active={state.hasLinkedInUrlError}
                   />
                 </div>
                 <div className="mt-5">

@@ -3,10 +3,6 @@ ActiveAdmin.register School do
 
   permit_params :logo_on_light_bg, :logo_on_dark_bg, :icon
 
-  controller do
-    include DisableIntercom
-  end
-
   filter :name
 
   show do |school|

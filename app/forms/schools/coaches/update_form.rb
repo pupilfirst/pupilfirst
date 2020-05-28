@@ -3,7 +3,6 @@ module Schools
     class UpdateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }, virtual: true
       property :title, validates: { presence: true, length: { maximum: 250 } }
-      property :linkedin_url, virtual: true
       property :connect_link
       property :exited
       property :public
@@ -35,7 +34,6 @@ module Schools
         {
           name: name,
           title: title,
-          linkedin_url: linkedin_url,
           affiliation: affiliation
         }
       end

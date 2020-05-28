@@ -8,8 +8,6 @@ ActiveAdmin.register PublicSlackMessage do
   filter :created_at
 
   controller do
-    include DisableIntercom
-
     def scoped_collection
       super.includes :founder
     end

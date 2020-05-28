@@ -1,5 +1,0 @@
-.timeline id="event-#{event.id}"
-  li style="padding:0" class="timeline#{cycle '', '-inverted', name: 'card_position'}"
-    .timeline-badge class="color#{cycle *((1..14).to_a)}"
-      = image_tag 'founders/timeline/badge.png', width: '70'
-    == render 'timeline_panel', event: event

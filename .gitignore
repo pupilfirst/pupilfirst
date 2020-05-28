@@ -7,12 +7,19 @@
 !/log/.keep
 !/tmp/.keep
 
-/node_modules
-/yarn-error.log
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
 
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+
+/public/assets
+/public/uploads
+/node_modules
 coverage
-public/uploads
-storage
 tags
 .tags*
 
@@ -28,9 +35,9 @@ tags
 
 # Ignore public packs.
 /public/packs
-/public/assets
 /public/packs-test
-yarn-debug.log*
+/yarn-error.log
+/yarn-debug.log*
 .yarn-integrity
 
 # Ignore these associated with reason-react and bsb

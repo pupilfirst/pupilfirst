@@ -12,18 +12,8 @@
             = f.error_summary
 
         = f.text_field :name, label_class: 'col-form-label', label: 'Name', required: true, maxlength: 255
-        = f.telephone_field :phone, label_class: 'col-form-label', label: 'Phone Number', maxlength: 17, pattern: MobileNumberValidator::FORM_EXPRESSION
         = f.file_field :avatar, label_class: 'col-form-label', label: 'Avatar', class: 'form-control', required: false
         = f.text_area :about, label_class: 'col-form-label', label: 'About', placeholder: 'A brief introduction about yourself', maxlength: 1000, required: false
-        = f.text_field :skype_id, label_class: 'col-form-label', label: 'Skype ID', required: false
-        = f.text_area :communication_address, label_class: 'col-form-label'
-        = f.text_field :twitter_url, label_class: 'col-form-label', label: 'Twitter Profile URL', maxlength: 255, required: false
-        = f.text_field :linkedin_url, label_class: 'col-form-label', label: 'LinkedIn Profile URL', maxlength: 255, required: false
-        = f.text_field :personal_website_url, label_class: 'col-form-label', label: 'Personal Website URL', maxlength: 255, required: false
-        = f.text_field :blog_url, label_class: 'col-form-label', label: 'Blog URL', maxlength: 255, required: false
-        = f.text_field :angel_co_url, label_class: 'col-form-label', label: 'AngelList Profile URL', maxlength: 255, required: false
-        = f.text_field :github_url, label_class: 'col-form-label', label: 'Github Profile URL', maxlength: 255, required: false
-        = f.text_field :behance_url, label_class: 'col-form-label', label: 'Behance Portfolio URL', maxlength: 255, required: false
 
         - if current_user.encrypted_password.present?
           h3.mt-4 Change your current password

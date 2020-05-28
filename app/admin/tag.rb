@@ -1,8 +1,4 @@
 ActiveAdmin.register ActsAsTaggableOn::Tag, as: 'Tag' do
-  controller do
-    include DisableIntercom
-  end
-
   actions :all, except: %i[new create]
 
   menu parent: 'Dashboard', label: 'Tags'

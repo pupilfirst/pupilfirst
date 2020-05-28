@@ -36,12 +36,6 @@
 //= require _shared
 //= require navbar
 
-// Components
-//= require components
-
 // Controller-specific
 //= require faculty
-//= require founders
-//= require story
 //= require resources
-//= require intercom_settings

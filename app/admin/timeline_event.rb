@@ -11,10 +11,6 @@ ActiveAdmin.register TimelineEvent do
 
   config.sort_order = 'updated_at_desc'
 
-  controller do
-    include DisableIntercom
-  end
-
   index do
     selectable_column
 
@@ -37,10 +33,6 @@ ActiveAdmin.register TimelineEvent do
     column :evaluated
 
     actions
-  end
-
-  action_item :view, only: :show do
-    link_to('View Timeline Entry', timeline_event.share_url, target: '_blank', rel: 'noopener')
   end
 
   collection_action :founders_for_startup do

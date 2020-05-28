@@ -24,9 +24,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
     omniauth_providers: %i[google_oauth2 facebook github]
 
-  normalize_attribute :name, :phone, :communication_address, :key_skills, :about,
-    :resume_url, :blog_url, :personal_website_url, :linkedin_url, :twitter_url, :facebook_url,
-    :angel_co_url, :github_url, :behance_url, :skype_id, :affiliation
+  normalize_attribute :name, :about, :affiliation
 
   validates :email, presence: true, email: true, uniqueness: { scope: :school_id }
 

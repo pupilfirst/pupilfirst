@@ -1,6 +1,4 @@
 ActiveAdmin.register QuizQuestion do
-  include DisableIntercom
-
   permit_params :question, :description, :correct_answer_id, :quiz_id, answer_options_attributes: %i[id value hint _destroy]
 
   menu parent: 'Targets'

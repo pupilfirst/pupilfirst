@@ -51,5 +51,6 @@ module Types
     field :mark_post_as_solution, mutation: Mutations::MarkPostAsSolution, null: false
     field :archive_post, mutation: Mutations::ArchivePost, null: false
     field :merge_levels, mutation: Mutations::MergeLevels, null: false
+    field :initiate_account_deletion, mutation: Mutations::InitiateAccountDeletion, null: false
   end
 end

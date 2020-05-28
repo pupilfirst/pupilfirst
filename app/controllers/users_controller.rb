@@ -12,6 +12,20 @@ class UsersController < ApplicationController
     @form = Users::EditForm.new(current_user)
   end
 
+  def edit_v2
+
+  end
+
+  def delete_account
+    user = Users::ValidateDeletionTokenService.new(params[:token], current_user).authenticate
+    if user.present?
+      @token = params[:token]
+    else
+      flash[:error] = "That one-time link has already been used, or is invalid. Please try again."
+    end
+    redirect_to home_path
+  end
+
   # PATCH /user
   def update
     @form = Users::EditForm.new(current_user)

@@ -11,7 +11,7 @@ module Users
         delete_founder_data if @user.founders.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
-        @user.destroy!
+        @user.reload.destroy!
       end
     end
 
@@ -31,7 +31,7 @@ module Users
     end
 
     def delete_coach_profile
-      @user.faculty.destroy!
+      @user.faculty.destroy
     end
 
     def delete_course_authors

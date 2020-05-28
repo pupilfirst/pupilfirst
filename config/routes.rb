@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'users/delete_account', controller: 'users', action: 'delete_account', as: 'delete_account'
+
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
@@ -115,7 +117,9 @@ Rails.application.routes.draw do
 
   get 'home', controller: 'users', action: 'home', as: 'home'
 
-  resource :user, only: %i[edit update]
+  resource :user, only: %i[edit update] do
+    get 'edit_v2'
+  end
 
   resources :timeline_event_files, only: %i[create] do
     member do

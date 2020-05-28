@@ -1,0 +1,12 @@
+
+<% content_for(:head) do %>
+  <title><%= 'Edit Profile' %> | Edit User</title>
+  <%= stylesheet_pack_tag 'UserEditPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'UserEditPack', nonce: true %>
+<% end %>
+
+<div id="user-edit-profile"></div>
+

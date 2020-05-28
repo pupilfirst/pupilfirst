@@ -21,4 +21,11 @@ class UserMailer < SchoolMailer
     subject = "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
     simple_roadie_mail(user.email, subject)
   end
+
+  def delete_account(user, delete_account_url)
+    @user = user
+    @school = user.school
+    @delete_account_url = delete_account_url
+    simple_roadie_mail(user.email, "Delete account from #{@school.name}")
+  end
 end

@@ -13,8 +13,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
       submission = target.timeline_events.create!(
         checklist: result[:checklist],
         quiz_score: result[:score],
-        passed_at: Time.zone.now,
-        latest: true
+        passed_at: Time.zone.now
       )
 
       founders.map do |student|

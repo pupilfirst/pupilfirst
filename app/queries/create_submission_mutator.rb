@@ -46,8 +46,6 @@ class CreateSubmissionMutator < ApplicationQuery
         timeline_event_file.update!(timeline_event: timeline_event) if file_ids.any?
       end
 
-      TimelineEvents::AfterFounderSubmitJob.perform_later(timeline_event)
-
       timeline_event
     end
   end
@@ -81,6 +79,7 @@ class CreateSubmissionMutator < ApplicationQuery
         false
     end
   end
+
   # rubocop: enable Metrics/CyclomaticComplexity
 
   def attempted_minimum_questions

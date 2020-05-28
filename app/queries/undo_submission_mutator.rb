@@ -10,9 +10,7 @@ class UndoSubmissionMutator < ApplicationQuery
 
       # Set the most recent submission to latest.
       last_submission = founder.timeline_events.where(target: target).order(created_at: :desc).first
-      # rubocop:disable Rails/SkipsModelValidations
-      last_submission.timeline_event_owenrs.update_all(latest: true) if last_submission.present?
-      # rubocop:enable Rails/SkipsModelValidations
+      last_submission.timeline_event_owners.update_all(latest: true) if last_submission.present? # rubocop:disable Rails/SkipsModelValidations
     end
   end
 

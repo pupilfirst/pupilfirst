@@ -197,10 +197,6 @@ class Target < ApplicationRecord
     student.latest_submissions.where(target: self).last
   end
 
-  def latest_feedback(student)
-    latest_submission(student)&.startup_feedback&.order('created_at')&.last
-  end
-
   def live?
     visibility == VISIBILITY_LIVE
   end

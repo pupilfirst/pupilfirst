@@ -742,6 +742,9 @@ feature 'Target Overlay', js: true do
       accept_confirm do
         click_button('Undo submission')
       end
+      # This action should reload the page and return the user to the content of the target.
+      expect(page).to have_selector('.learn-content-block__embed')
+
       expect(submission_b.timeline_event_owners.reload.where(founder: student_a).first.latest).to eq(true)
       expect(submission_b.timeline_event_owners.reload.where(founder: student_c).first.latest).to eq(true)
       expect(submission_c.timeline_event_owners.reload.where(founder: student_b).first.latest).to eq(true)

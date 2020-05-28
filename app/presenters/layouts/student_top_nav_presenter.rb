@@ -32,7 +32,7 @@ module Layouts
         end
 
         # Both, with the user-based links at the front.
-        admin_link + home_link + custom_links
+        admin_link + dashboard_link + custom_links
       end
     end
 
@@ -46,9 +46,9 @@ module Layouts
       end
     end
 
-    def home_link
+    def dashboard_link
       if current_user.present?
-        [{ title: 'Home', url: '/home' }]
+        [{ title: 'Dashboard', url: '/dashboard' }]
       else
         []
       end

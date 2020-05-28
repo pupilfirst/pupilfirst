@@ -1,5 +1,5 @@
 module Users
-  class HomePresenter < ApplicationPresenter
+  class DashboardPresenter < ApplicationPresenter
     def initialize(view_context)
       super(view_context)
     end

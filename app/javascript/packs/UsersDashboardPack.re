@@ -22,7 +22,7 @@ let (
   avatarUrl,
   issuedCertificates,
 ) =
-  DomUtils.parseJSONTag(~id="users-home-data", ()) |> decodeProps;
+  DomUtils.parseJSONTag(~id="users-dashboard-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
   <UsersDashboard__Root
@@ -35,5 +35,5 @@ ReactDOMRe.renderToElementWithId(
     avatarUrl
     issuedCertificates
   />,
-  "users-home",
+  "users-dashboard",
 );

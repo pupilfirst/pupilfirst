@@ -1,0 +1,17 @@
+<% presenter = Users::DashboardPresenter.new(self) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %> | Admins</title>
+  <%= stylesheet_pack_tag 'UsersDashboardPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'UsersDashboardPack', nonce: true %>
+<% end %>
+
+<script type="application/json" id="users-dashboard-data">
+  <%= presenter.props_to_json.html_safe %>
+</script>
+
+<div id="users-dashboard"></div>
+

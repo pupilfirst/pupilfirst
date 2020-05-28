@@ -12,7 +12,7 @@ module Users
     end
 
     def after_sign_in_path
-      url_helpers.home_path
+      url_helpers.dashboard_path
     end
   end
 end

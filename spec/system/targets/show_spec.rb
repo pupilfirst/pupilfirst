@@ -112,7 +112,7 @@ feature 'Target Overlay', js: true do
     last_submission = TimelineEvent.last
     expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Write something about your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
-    # The status should also be updated on the home page.
+    # The status should also be updated on the dashboard page.
     click_button 'Close'
 
     within("a[aria-label='Select Target #{target_l1.id}'") do

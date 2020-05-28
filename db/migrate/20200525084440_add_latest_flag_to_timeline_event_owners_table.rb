@@ -5,6 +5,12 @@ class AddLatestFlagToTimelineEventOwnersTable < ActiveRecord::Migration[6.0]
 
   class TimelineEventOwner < ApplicationRecord
     belongs_to :timeline_event
+    belongs_to :founder
+  end
+
+  class Founder < ApplicationRecord
+    has_many :timeline_event_owners, dependent: :destroy
+    has_many :timeline_events, through: :timeline_event_owners
   end
 
   def change
@@ -12,8 +18,10 @@ class AddLatestFlagToTimelineEventOwnersTable < ActiveRecord::Migration[6.0]
 
     TimelineEventOwner.reset_column_information
 
-    TimelineEvent.where(latest: true).map do |submission|
-      submission.timeline_event_owners.update_all(latest: true)
+    Founder.all.includes(:timeline_events).each do |student|
+      student.timeline_events.group_by(&:target_id).each do |target_id, submissions|
+        TimelineEventOwner.where(founder: student, timeline_event: submissions.sort_by { |s| s.created_at }.last).update(latest: true)
+      end
     end
   end
 end

@@ -735,7 +735,6 @@ feature 'Target Overlay', js: true do
       expect(student_b.latest_submissions.where(target: target_l1)).to eq([submission_a])
       expect(submission_b.timeline_event_owners.where(founder: student_a).first.latest).to eq(false)
       expect(submission_c.timeline_event_owners.where(founder: student_b).first.latest).to eq(false)
-
       # Delete Submission A
       sign_in_user student_a.user, referer: target_path(target_l1)
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
@@ -743,11 +742,10 @@ feature 'Target Overlay', js: true do
       accept_confirm do
         click_button('Undo submission')
       end
-
-      expect(submission_b.timeline_event_owners.where(founder: student_a).first.latest).to eq(true)
-      expect(submission_b.timeline_event_owners.where(founder: student_c).first.latest).to eq(true)
-      expect(submission_c.timeline_event_owners.where(founder: student_b).first.latest).to eq(true)
-      expect(submission_c.timeline_event_owners.where(founder: student_d).first.latest).to eq(true)
+      expect(submission_b.timeline_event_owners.reload.where(founder: student_a).first.latest).to eq(true)
+      expect(submission_b.timeline_event_owners.reload.where(founder: student_c).first.latest).to eq(true)
+      expect(submission_c.timeline_event_owners.reload.where(founder: student_b).first.latest).to eq(true)
+      expect(submission_c.timeline_event_owners.reload.where(founder: student_d).first.latest).to eq(true)
     end
   end
 end

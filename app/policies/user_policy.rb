@@ -1,5 +1,5 @@
 class UserPolicy < ApplicationPolicy
-  def home?
+  def dashboard?
     # All users can visit their home page.
     true
   end

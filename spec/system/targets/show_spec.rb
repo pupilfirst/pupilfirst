@@ -684,4 +684,70 @@ feature 'Target Overlay', js: true do
 
     expect(page).to have_text("The page you were looking for doesn't exist")
   end
+
+  context 'when the user is a school admin' do
+    let!(:team_1) { create :startup, level: level_1 }
+    let!(:team_2) { create :startup, level: level_1 }
+    scenario 'student submits work on a target' do
+      student_a = team_1.founders.first
+      student_c = team_1.founders.last
+      student_b = team_2.founders.first
+      student_d = team_2.founders.last
+
+      # Submission C from student_b and student_d
+      sign_in_user student_d.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+      replace_markdown Faker::Lorem.sentence
+      click_button 'Submit'
+      expect(page).to have_content('Your submission has been queued for review')
+      dismiss_notification
+
+      submission_c = TimelineEvent.last
+      expect(submission_c.timeline_event_owners.pluck(:latest).uniq).to eq([true])
+
+      # Submission B from student_a and student_c
+      sign_in_user student_c.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+      replace_markdown Faker::Lorem.sentence
+      click_button 'Submit'
+      expect(page).to have_content('Your submission has been queued for review')
+      dismiss_notification
+
+      submission_b = TimelineEvent.last
+      expect(submission_b.timeline_event_owners.pluck(:latest).uniq).to eq([true])
+
+      #change the teams
+      student_c.update!(startup: team_2)
+      student_b.update!(startup: team_1)
+
+      # Submission A from student_a and student_b
+      sign_in_user student_b.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+      replace_markdown Faker::Lorem.sentence
+      click_button 'Submit'
+      expect(page).to have_content('Your submission has been queued for review')
+      dismiss_notification
+
+      submission_a = TimelineEvent.last
+      expect(submission_a.timeline_event_owners.pluck(:latest).uniq).to eq([true])
+
+      expect(student_a.latest_submissions.where(target: target_l1)).to eq([submission_a])
+      expect(student_b.latest_submissions.where(target: target_l1)).to eq([submission_a])
+      expect(submission_b.timeline_event_owners.where(founder: student_a).first.latest).to eq(false)
+      expect(submission_c.timeline_event_owners.where(founder: student_b).first.latest).to eq(false)
+
+      # Delete Submission A
+      sign_in_user student_a.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+
+      accept_confirm do
+        click_button('Undo submission')
+      end
+
+      expect(submission_b.timeline_event_owners.where(founder: student_a).first.latest).to eq(true)
+      expect(submission_b.timeline_event_owners.where(founder: student_c).first.latest).to eq(true)
+      expect(submission_c.timeline_event_owners.where(founder: student_b).first.latest).to eq(true)
+      expect(submission_c.timeline_event_owners.where(founder: student_d).first.latest).to eq(true)
+    end
+  end
 end

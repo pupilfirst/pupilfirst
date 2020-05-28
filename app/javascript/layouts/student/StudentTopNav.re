@@ -86,7 +86,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn) => {
     <div className="container mx-auto px-3 max-w-5xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-sm" href="/">
+          <a className="max-w-sm" href={isLoggedIn ? "/dashboard" : "/"}>
             {switch (logoUrl) {
              | Some(url) =>
                <img

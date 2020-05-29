@@ -686,7 +686,7 @@ feature 'Target Overlay', js: true do
   context 'when the team changes for a group of students' do
     let!(:team_1) { create :startup, level: level_1 }
     let!(:team_2) { create :startup, level: level_1 }
-    scenario 'latest flag is updated correctly on deleting the latest submission for all students' do
+    scenario 'latest flag is updated correctly for all students when latest submission is removed' do
       student_a = team_1.founders.first
       student_c = team_1.founders.last
       student_b = team_2.founders.first

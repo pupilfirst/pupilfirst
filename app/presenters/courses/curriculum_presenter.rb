@@ -11,7 +11,6 @@ module Courses
 
     private
 
-    # rubocop:disable Metrics/MethodLength
     def props
       if current_student.present?
         {
@@ -36,7 +35,6 @@ module Courses
       end
     end
 
-    # rubocop:enable Metrics/MethodLength
 
     def default_props
       {

@@ -26,14 +26,10 @@ Style: # Style is not Rubocop's responsibility. Use an auto-formatter like rufo.
   Enabled: false
 Layout: # Layout is not Rubocop's responsibility. Use an auto-formatter like rufo.
   Enabled: false
+Metrics: # Rubocop metrics are useless.
+  Enabled: false
 Naming/VariableNumber:
   Enabled: false
-Metrics/BlockLength:
-  Exclude:
-    - "app/admin/**/*"
-    - "spec/**/*_spec.rb"
-    - "config/**/*"
-    - "spec/factories/*"
 Lint/ShadowingOuterLocalVariable: # shadowing is a language feature - we should use it where appropriate.
   Enabled: false
 Lint/RaiseException:
@@ -45,9 +41,3 @@ Lint/StructNewOverride:
 
 Bundler/OrderedGems:
   Enabled: false # we have a ton of gems, grouped arbitrarily. Could be tackled later.
-Metrics/MethodLength:
-  Max: 20 # default was 10.
-Metrics/ClassLength:
-  Max: 500 # default was 100.
-Metrics/AbcSize:
-  Max: 30 # default is 15.

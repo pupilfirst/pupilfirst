@@ -52,7 +52,6 @@ class CreateSubmissionMutator < ApplicationQuery
 
   private
 
-  # rubocop: disable Metrics/CyclomaticComplexity
   def valid_response
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
       item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) &&
@@ -80,7 +79,6 @@ class CreateSubmissionMutator < ApplicationQuery
     end
   end
 
-  # rubocop: enable Metrics/CyclomaticComplexity
 
   def attempted_minimum_questions
     target.checklist.each do |c|

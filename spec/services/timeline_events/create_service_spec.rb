@@ -52,9 +52,9 @@ describe TimelineEvents::CreateService do
     context 'when previous submissions exist' do
       let(:another_team) { create :startup, level: level }
       let(:another_student) { another_team.founders.first }
-      let!(:first_submission) { create :timeline_event, :latest_with_owners, owners: [student], target: target }
-      let!(:last_submission) { create :timeline_event, :latest_with_owners, owners: [student], target: target }
-      let!(:another_submission) { create :timeline_event, :latest_with_owners, owners: [student, another_student], target: target }
+      let!(:first_submission) { create :timeline_event, :with_owners, latest: true, owners: [student], target: target }
+      let!(:last_submission) { create :timeline_event, :with_owners, latest: true, owners: [student], target: target }
+      let!(:another_submission) { create :timeline_event, :with_owners, latest: true, owners: [student, another_student], target: target }
 
       it 'removes the latest flag from previous latest submission of same set of students' do
         expect { subject.execute }.to change { TimelineEvent.count }.by(1)

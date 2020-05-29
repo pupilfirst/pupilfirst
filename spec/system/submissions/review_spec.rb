@@ -469,7 +469,7 @@ feature 'Submissions review' do
   end
 
   context 'with a reviewed submission' do
-    let!(:submission_reviewed) { create(:timeline_event, :latest_with_owners, owners: team.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
     let!(:timeline_event_grade) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_1) }
 
     scenario 'coach visits submission review page', js: true do
@@ -563,10 +563,10 @@ feature 'Submissions review' do
 
   context 'Evaluation criteria changed for a target with graded submissions' do
     let(:target_1) { create :target, :for_founders, target_group: target_group }
-    let!(:submission_reviewed) { create(:timeline_event, :latest_with_owners, owners: [team.founders.first], target: target_1, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed) { create(:timeline_event, :with_owners, latest: true, owners: [team.founders.first], target: target_1, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
     let!(:timeline_event_grade_1) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_1) }
     let!(:timeline_event_grade_2) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_2) }
-    let!(:submission_pending) { create(:timeline_event, :latest_with_owners, owners: [team.founders.first], target: target_1) }
+    let!(:submission_pending) { create(:timeline_event, :with_owners, latest: true, owners: [team.founders.first], target: target_1) }
 
     before do
       target_1.evaluation_criteria << [evaluation_criterion_1]
@@ -597,7 +597,7 @@ feature 'Submissions review' do
   end
 
   context 'with a reviewed submission that has feedback' do
-    let!(:submission_reviewed) { create(:timeline_event, :latest_with_owners, owners: [team.founders.first], target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed) { create(:timeline_event, :with_owners, latest: true, owners: [team.founders.first], target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
     let(:feedback) { create(:startup_feedback, startup_id: team.id, faculty_id: coach.id) }
     let!(:timeline_event_grade) { create(:timeline_event_grade, timeline_event: submission_reviewed, evaluation_criterion: evaluation_criterion_1) }
     before do
@@ -656,7 +656,7 @@ feature 'Submissions review' do
   end
 
   context 'with an auto verified submission' do
-    let(:auto_verified_submission) { create(:timeline_event, :latest_with_owners, owners: [team.founders.first], target: auto_verify_target, passed_at: 1.day.ago) }
+    let(:auto_verified_submission) { create(:timeline_event, :with_owners, latest: true, owners: [team.founders.first], target: auto_verify_target, passed_at: 1.day.ago) }
 
     scenario 'coach visits submission review page' do
       sign_in_user team_coach.user, referer: review_timeline_event_path(auto_verified_submission)
@@ -671,10 +671,10 @@ feature 'Submissions review' do
     let(:team_1) { create :startup, level: level }
     let(:team_2) { create :startup, level: level }
 
-    let!(:submission_reviewed_1) { create(:timeline_event, :latest_with_owners, owners: [team_2.founders.first] + team_1.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-    let!(:submission_reviewed_2) { create(:timeline_event, :latest_with_owners, owners: team_1.founders + team_2.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-    let!(:submission_reviewed_3) { create(:timeline_event, :latest_with_owners, owners: team_1.founders + team_2.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-    let!(:submission_reviewed_4) { create(:timeline_event, :latest_with_owners, owners: team_1.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed_1) { create(:timeline_event, :with_owners, latest: true, owners: [team_2.founders.first] + team_1.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed_2) { create(:timeline_event, :with_owners, latest: true, owners: team_1.founders + team_2.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed_3) { create(:timeline_event, :with_owners, latest: true, owners: team_1.founders + team_2.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
+    let!(:submission_reviewed_4) { create(:timeline_event, :with_owners, latest: true, owners: team_1.founders, target: target, evaluator_id: coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
 
     let!(:timeline_event_grade_1) { create(:timeline_event_grade, timeline_event: submission_reviewed_1, evaluation_criterion: evaluation_criterion_1) }
     let!(:timeline_event_grade_2) { create(:timeline_event_grade, timeline_event: submission_reviewed_2, evaluation_criterion: evaluation_criterion_1) }
@@ -711,9 +711,9 @@ feature 'Submissions review' do
     let(:team_2) { create :startup, level: level }
     let(:student) { team_1.founders.first }
 
-    let!(:submission_individual_target) { create(:timeline_event, :latest_with_owners, owners: [student], target: individual_target) }
-    let!(:submission_team_target) { create(:timeline_event, :latest_with_owners, owners: team_2.founders, target: team_target) }
-    let!(:submission_team_target_2) { create(:timeline_event, :latest_with_owners, owners: [student, team_2.founders.first], target: team_target) }
+    let!(:submission_individual_target) { create(:timeline_event, :with_owners, latest: true, owners: [student], target: individual_target) }
+    let!(:submission_team_target) { create(:timeline_event, :with_owners, latest: true, owners: team_2.founders, target: team_target) }
+    let!(:submission_team_target_2) { create(:timeline_event, :with_owners, latest: true, owners: [student, team_2.founders.first], target: team_target) }
 
     before do
       # Set evaluation criteria on the target so that its submissions can be reviewed.

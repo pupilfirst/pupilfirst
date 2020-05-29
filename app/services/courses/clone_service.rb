@@ -114,7 +114,6 @@ module Courses
       end
     end
 
-    # rubocop:disable Metrics/MethodLength
     def create_quiz(targets)
       targets.each do |old_target, new_target|
         next unless old_target.quiz?
@@ -148,7 +147,6 @@ module Courses
       end
     end
 
-    # rubocop:enable Metrics/MethodLength
 
     def create_prerequisites_targets(targets)
       targets.each do |old_target, new_target|

@@ -15,7 +15,6 @@ class UpdateReviewChecklistMutator < ApplicationQuery
 
   private
 
-  # rubocop: disable Metrics/CyclomaticComplexity
   def review_checklist_shape
     return if review_checklist.respond_to?(:all?) && review_checklist.all? do |item|
       valid_title?(item['title']) && item['result'].respond_to?(:all?) && item['result'].all? do |result|
@@ -25,7 +24,7 @@ class UpdateReviewChecklistMutator < ApplicationQuery
 
     errors[:base] << 'Invalid review checklist'
   end
-  # rubocop: enable  Metrics/CyclomaticComplexity
+
 
   def valid_title?(title)
     title.is_a?(String) && title.present?

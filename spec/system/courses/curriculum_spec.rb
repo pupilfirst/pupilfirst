@@ -46,12 +46,12 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:level_6_draft_target) { create :target, :draft, target_group: target_group_l6, role: Target::ROLE_TEAM }
 
   # Submissions
-  let!(:submission_completed_target_l1) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l1, passed_at: 1.day.ago) }
-  let!(:submission_completed_target_l2) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l2, passed_at: 1.day.ago) }
-  let!(:submission_completed_target_l3) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l3, passed_at: 1.day.ago) }
-  let!(:submission_completed_target_l4) { create(:timeline_event, :latest, founders: team.founders, target: completed_target_l4, passed_at: 1.day.ago, evaluator: faculty) }
-  let!(:submission_submitted_target) { create(:timeline_event, :latest, founders: team.founders, target: submitted_target) }
-  let!(:submission_failed_target) { create(:timeline_event, :latest, founders: team.founders, target: failed_target, evaluator: faculty) }
+  let!(:submission_completed_target_l1) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: completed_target_l1, passed_at: 1.day.ago) }
+  let!(:submission_completed_target_l2) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: completed_target_l2, passed_at: 1.day.ago) }
+  let!(:submission_completed_target_l3) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: completed_target_l3, passed_at: 1.day.ago) }
+  let!(:submission_completed_target_l4) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: completed_target_l4, passed_at: 1.day.ago, evaluator: faculty) }
+  let!(:submission_submitted_target) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: submitted_target) }
+  let!(:submission_failed_target) { create(:timeline_event, :with_owners, latest: true, owners: team.founders, target: failed_target, evaluator: faculty) }
 
   before do
     # Grading for graded targets

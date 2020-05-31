@@ -1,3 +1,7 @@
+CommitMsg:
+  TextWidth:
+    enabled: false
+
 PreCommit:
   RuboCop:
     enabled: true

@@ -14,14 +14,12 @@
 
 class TimelineEvent < ApplicationRecord
   belongs_to :target
-  belongs_to :improved_timeline_event, class_name: 'TimelineEvent', optional: true
   belongs_to :evaluator, class_name: 'Faculty', optional: true
 
   has_many :target_evaluation_criteria, through: :target
   has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
-  has_one :improvement_of, class_name: 'TimelineEvent', foreign_key: 'improved_timeline_event_id', dependent: :nullify, inverse_of: :improved_timeline_event
   has_many :timeline_event_grades, dependent: :destroy
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
@@ -32,8 +30,7 @@ class TimelineEvent < ApplicationRecord
 
   scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
   scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }
-  scope :not_improved, -> { joins(:target).where(improved_timeline_event_id: nil) }
-  scope :not_auto_verified, -> { joins(:evaluation_criteria).distinct }
+  scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :failed, -> { where(passed_at: nil).where.not(evaluator_id: nil) }

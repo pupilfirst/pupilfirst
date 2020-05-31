@@ -121,7 +121,7 @@ class Founder < ApplicationRecord
   end
 
   def latest_submissions
-    timeline_events.where(latest: true)
+    timeline_events.where(timeline_event_owners: { latest: true })
   end
 
   def connected_to_slack?

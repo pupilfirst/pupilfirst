@@ -28,7 +28,6 @@ module Startups
       true
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def eligibility
       @eligibility ||= begin
         if next_level.blank?
@@ -54,8 +53,6 @@ module Startups
         end
       end
     end
-
-    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def next_level
       @next_level ||= current_level.course.levels.find_by(number: current_level.number + 1)

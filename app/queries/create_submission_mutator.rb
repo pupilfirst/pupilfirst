@@ -46,15 +46,12 @@ class CreateSubmissionMutator < ApplicationQuery
         timeline_event_file.update!(timeline_event: timeline_event) if file_ids.any?
       end
 
-      TimelineEvents::AfterFounderSubmitJob.perform_later(timeline_event)
-
       timeline_event
     end
   end
 
   private
 
-  # rubocop: disable Metrics/CyclomaticComplexity
   def valid_response
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
       item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) &&
@@ -81,7 +78,7 @@ class CreateSubmissionMutator < ApplicationQuery
         false
     end
   end
-  # rubocop: enable Metrics/CyclomaticComplexity
+
 
   def attempted_minimum_questions
     target.checklist.each do |c|

@@ -32,7 +32,7 @@ describe TimelineEvents::CreateService do
       expect(last_submission.target).to eq(target)
       expect(last_submission.founders.pluck(:id)).to eq([student.id])
       expect(last_submission.checklist).to eq(checklist)
-      expect(last_submission.latest).to eq(true)
+      expect(last_submission.timeline_event_owners.pluck(:latest).uniq).to eq([true])
     end
 
     context 'when target is a team target and student is in a team' do
@@ -52,17 +52,18 @@ describe TimelineEvents::CreateService do
     context 'when previous submissions exist' do
       let(:another_team) { create :startup, level: level }
       let(:another_student) { another_team.founders.first }
-      let!(:first_submission) { create :timeline_event, founders: [student], target: target }
-      let!(:last_submission) { create :timeline_event, :latest, founders: [student], target: target }
-      let!(:another_submission) { create :timeline_event, :latest, founders: [student, another_student], target: target }
+      let!(:first_submission) { create :timeline_event, :with_owners, latest: true, owners: [student], target: target }
+      let!(:last_submission) { create :timeline_event, :with_owners, latest: true, owners: [student], target: target }
+      let!(:another_submission) { create :timeline_event, :with_owners, latest: true, owners: [student, another_student], target: target }
 
       it 'removes the latest flag from previous latest submission of same set of students' do
         expect { subject.execute }.to change { TimelineEvent.count }.by(1)
-        expect(TimelineEvent.last.latest).to eq(true)
-        expect(last_submission.reload.latest).to eq(false)
+        expect(TimelineEvent.last.timeline_event_owners.pluck(:latest).uniq).to eq([true])
+        expect(first_submission.reload.timeline_event_owners.pluck(:latest).uniq).to eq([false])
+        expect(last_submission.reload.timeline_event_owners.pluck(:latest).uniq).to eq([false])
 
-        # Another submission that includes 'this' founder, plus another person, should be ignored.
-        expect(another_submission.reload.latest).to eq(true)
+        expect(another_submission.reload.timeline_event_owners.where(founder: student).first.latest).to eq(false)
+        expect(another_submission.reload.timeline_event_owners.where(founder: another_student).first.latest).to eq(true)
       end
     end
   end

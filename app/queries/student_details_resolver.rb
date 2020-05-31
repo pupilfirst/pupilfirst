@@ -82,7 +82,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions_for_grades
-    submissions.where(latest: true).includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
+    submissions.where(timeline_event_owners: { latest: true }).includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
   end
 
   def evaluation_criteria

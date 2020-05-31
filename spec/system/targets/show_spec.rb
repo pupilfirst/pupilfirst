@@ -724,4 +724,36 @@ feature 'Target Overlay', js: true do
       expect(target_l1.latest_submission(student_d)).to eq(submission_old_2)
     end
   end
+
+  context 'when the team changes for a group of students' do
+    let!(:team_1) { create :startup, level: level_1 }
+    let!(:team_2) { create :startup, level: level_1 }
+
+    let(:student_1) { team_1.founders.first }
+    let(:student_2) { team_2.founders.first }
+    let(:student_3) { team_2.founders.last }
+
+    # Create old submissions, linked to students who are no longer teamed up.
+    let!(:submission_old_1) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_1.founders }
+    let!(:submission_old_2) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_2.founders }
+
+    before do
+      student_2.update!(startup: team_1)
+    end
+
+    scenario 'latest flag is updated correctly for all students' do
+      sign_in_user student_1.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+      replace_markdown Faker::Lorem.sentence
+      click_button 'Submit'
+      expect(page).to have_content('Your submission has been queued for review')
+      dismiss_notification
+
+      new_submission = TimelineEvent.last
+      expect(target_l1.latest_submission(student_1)).to eq(new_submission)
+      expect(target_l1.latest_submission(student_2)).to eq(new_submission)
+      # Latest submission is not updated for the team 2 user
+      expect(target_l1.latest_submission(student_3)).to eq(submission_old_2)
+    end
+  end
 end

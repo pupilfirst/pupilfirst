@@ -10,8 +10,12 @@ module Users
       # Make sure we generate a new token.
       @user.regenerate_delete_account_token
 
+      host = @user.school.domains.where(primary: true).first
+
       url_options = {
         token: @user.delete_account_token,
+        host: host.fqdn,
+        protocol: 'https'
       }
 
       account_deletion_url = url_helpers.reset_password_url(url_options)

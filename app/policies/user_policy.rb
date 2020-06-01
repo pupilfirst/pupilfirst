@@ -8,4 +8,9 @@ class UserPolicy < ApplicationPolicy
     # All users can edit their profile.
     true
   end
+
+  def edit_v2?
+    # All users can edit their profile.
+    true
+  end
 end

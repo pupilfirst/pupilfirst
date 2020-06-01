@@ -1,6 +1,7 @@
+<% presenter = Users::EditPresenter.new(self) %>
 
 <% content_for(:head) do %>
-  <title><%= 'Edit Profile' %> | Edit User</title>
+  <title><%= presenter.page_title %> | Edit User</title>
   <%= stylesheet_pack_tag 'UserEditPack', media: 'all' %>
 <% end %>
 
@@ -8,5 +9,6 @@
   <%= javascript_pack_tag 'UserEditPack', nonce: true %>
 <% end %>
 
-<div id="user-edit-profile"></div>
+<script id="user-edit__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+<div id="react-root"></div>
 

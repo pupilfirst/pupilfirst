@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def edit_v2
-
+    @user = authorize(current_user)
   end
 
   def delete_account

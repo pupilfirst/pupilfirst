@@ -18,7 +18,7 @@ class MoveFounderTagsToStartup < ActiveRecord::Migration[6.0]
   end
 
   def up
-    Founder.joins(:taggings).includes(:tags, startup: :tags).each do |student|
+    Founder.joins(:taggings).includes(:tags, startup: :tags).find_each do |student|
       team = student.startup
       student_tags = student.tags.pluck(:name)
       team_tags = team.tags.pluck(:name)

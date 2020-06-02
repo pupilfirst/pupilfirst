@@ -13,6 +13,7 @@ type state = {
   passwordForAccountDeletion: string,
   showDeleteAccountForm: bool,
   deletingAccount: bool,
+  avatarUploadError: option(string),
   saving: bool,
 };
 
@@ -24,7 +25,9 @@ type action =
   | UpdateNewPassWordConfirm(string)
   | UpdatePasswordForDeletion(string)
   | UpdateDailyDigest(bool)
+  | UpdateAvatarUrl(option(string))
   | ChangeDeleteAccountFormVisibility(bool)
+  | SetAvatarUploadError(option(string))
   | StartSaving
   | FinishSaving
   | StartDeletingAccount
@@ -48,6 +51,8 @@ let reducer = (state, action) => {
       showDeleteAccountForm,
       passwordForAccountDeletion: "",
     }
+  | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError}
+  | UpdateAvatarUrl(avatarUrl) => {...state, avatarUrl}
   | FinishSaving => {...state, saving: false}
   | StartDeletingAccount => {...state, deletingAccount: true}
   | FinishAccountDeletion => {
@@ -78,6 +83,63 @@ module InitiateAccountDeletionQuery = [%graphql
      }
    |}
 ];
+
+let uploadAvatar = (send, formData) => {
+  Json.Decode.(
+    Api.sendFormData(
+      "/user/upload_avatar",
+      formData,
+      json => {
+        Notification.success("Done!", "Avatar uploaded successfully.");
+        let avatarUrl = json |> field("avatarUrl", string);
+        send(UpdateAvatarUrl(Some(avatarUrl)));
+      },
+      () => send(SetAvatarUploadError(Some("Failed to upload"))),
+    )
+  );
+};
+let submitAvatarForm = (send, formId) => {
+  let element = ReactDOMRe._getElementById(formId);
+
+  switch (element) {
+  | Some(element) => DomUtils.FormData.create(element) |> uploadAvatar(send)
+  | None =>
+    Rollbar.error(
+      "Could not find form to upload file for content block: " ++ formId,
+    )
+  };
+};
+
+let handleAvatarInputChange = (send, formId, event) => {
+  event |> ReactEvent.Form.preventDefault;
+
+  switch (ReactEvent.Form.target(event)##files) {
+  | [||] => ()
+  | files =>
+    let file = files[0];
+
+    let maxAllowedFileSize = 5 * 1024 * 1024;
+    let isInvalidImageFile =
+      file##size > maxAllowedFileSize
+      || (
+        switch (file##_type) {
+        | "image/jpeg"
+        | "image/gif"
+        | "image/png" => false
+        | _ => true
+        }
+      );
+
+    let error =
+      isInvalidImageFile
+        ? Some("Please select an image with a size less than 5 MB") : None;
+
+    switch (error) {
+    | Some(error) => send(SetAvatarUploadError(Some(error)))
+    | None => submitAvatarForm(send, formId)
+    };
+  };
+};
 
 let updateUser = (state, send, id, event) => {
   ReactEvent.Mouse.preventDefault(event);
@@ -150,6 +212,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
     passwordForAccountDeletion: "",
     showDeleteAccountForm: false,
     deletingAccount: false,
+    avatarUploadError: None,
   };
 
   let (state, send) = React.useReducer(reducer, initialState);
@@ -320,7 +383,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
               </div>
             </div>
             <div className="mt-6">
-              <form>
+              <form id="user-avatar-uploader">
                 <input
                   name="authenticity_token"
                   type_="hidden"
@@ -332,7 +395,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
                 <div className="mt-2 flex items-center">
                   <span
                     className="inline-block h-14 w-14 rounded-full overflow-hidden bg-gray-200 border-2 boder-gray-400">
-                    {switch (avatarUrl) {
+                    {switch (state.avatarUrl) {
                      | Some(url) => <img src=url />
                      | None => <Avatar name />
                      }}
@@ -345,8 +408,12 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
                     </label>
                     <input
                       className="hidden"
-                      name="avatar"
+                      name="user[avatar]"
                       type_="file"
+                      onChange={handleAvatarInputChange(
+                        send,
+                        "user-avatar-uploader",
+                      )}
                       id="user-edit__avatar-input"
                       required=false
                       multiple=false

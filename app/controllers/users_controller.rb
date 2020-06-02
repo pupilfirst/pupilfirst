@@ -26,6 +26,16 @@ class UsersController < ApplicationController
     redirect_to home_path
   end
 
+  def upload_avatar
+    @form = Users::UploadAvatarForm.new(current_user)
+    if @form.validate(params[:user])
+      avatar_url = @form.save!
+      render json: { avatarUrl: avatar_url }
+    else
+      render 'edit'
+    end
+  end
+
   # PATCH /user
   def update
     @form = Users::EditForm.new(current_user)

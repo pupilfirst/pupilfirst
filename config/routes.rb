@@ -119,6 +119,7 @@ Rails.application.routes.draw do
 
   resource :user, only: %i[edit update] do
     get 'edit_v2'
+    post 'upload_avatar'
   end
 
   resources :timeline_event_files, only: %i[create] do

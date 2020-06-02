@@ -36,6 +36,6 @@ class MoveFounderTagsToStartup < ActiveRecord::Migration[6.0]
   end
 
   def down
-    # noop
+    # TODO: raise ActiveRecord::IrreversibleMigration
   end
 end

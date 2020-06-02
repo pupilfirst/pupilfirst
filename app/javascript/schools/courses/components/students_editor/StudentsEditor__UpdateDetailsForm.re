@@ -84,7 +84,6 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   let newStudent =
     Student.update(
       ~name=state.name,
-      ~tags=state.tagsToApply,
       ~excludedFromLeaderboard=state.excludedFromLeaderboard,
       ~title=state.title,
       ~affiliation,
@@ -93,6 +92,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   let newTeam =
     Team.update(
       ~name=state.teamName,
+      ~tags=state.tagsToApply,
       ~student=newStudent,
       ~coachIds=state.teamCoaches,
       ~accessEndsAt=state.accessEndsAt,
@@ -235,7 +235,7 @@ let initialState = (student, team) => {
   {
     name: student |> Student.name,
     teamName: team |> Team.name,
-    tagsToApply: student |> Student.tags,
+    tagsToApply: team |> Team.tags,
     teamCoaches: team |> Team.coachIds,
     teamCoachSearchInput: "",
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,

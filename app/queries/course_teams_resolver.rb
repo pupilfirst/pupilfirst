@@ -34,7 +34,7 @@ class CourseTeamsResolver < ApplicationQuery
       .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
       .distinct.order(sort_by_string)
 
-    tags.present? ? teams.joins(founders: [taggings: :tag]).where(tags: { name: tags }) : teams.includes(founders: [taggings: :tag])
+    tags.present? ? teams.joins(taggings: :tag).where(tags: { name: tags }) : teams.includes(taggings: :tag)
   end
 
   def teams_by_level_and_tag

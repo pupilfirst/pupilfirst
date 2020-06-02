@@ -3,7 +3,6 @@ type t = {
   name: string,
   avatarUrl: option(string),
   email: string,
-  tags: array(string),
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: option(string),
@@ -20,8 +19,6 @@ let title = t => t.title;
 let affiliation = t => t.affiliation;
 
 let email = t => t.email;
-
-let tags = t => t.tags;
 
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
@@ -40,7 +37,6 @@ let make =
       ~name,
       ~avatarUrl,
       ~email,
-      ~tags,
       ~excludedFromLeaderboard,
       ~title,
       ~affiliation,
@@ -49,7 +45,6 @@ let make =
   name,
   avatarUrl,
   email,
-  tags,
   excludedFromLeaderboard,
   title,
   affiliation,
@@ -61,16 +56,14 @@ let makeFromJS = studentDetails => {
     ~name=studentDetails##name,
     ~avatarUrl=studentDetails##avatarUrl,
     ~email=studentDetails##email,
-    ~tags=studentDetails##tags,
     ~excludedFromLeaderboard=studentDetails##excludedFromLeaderboard,
     ~title=studentDetails##title,
     ~affiliation=studentDetails##affiliation,
   );
 };
 
-let update =
-    (~name, ~tags, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
-  {...student, name, tags, excludedFromLeaderboard, title, affiliation};
+let update = (~name, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+  {...student, name, excludedFromLeaderboard, title, affiliation};
 };
 
 let encode = (teamName, t) =>

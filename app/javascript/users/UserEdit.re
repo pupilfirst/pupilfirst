@@ -15,6 +15,7 @@ type state = {
   deletingAccount: bool,
   avatarUploadError: option(string),
   saving: bool,
+  dirty: bool,
 };
 
 type action =
@@ -35,11 +36,19 @@ type action =
 
 let reducer = (state, action) => {
   switch (action) {
-  | UpdateName(name) => {...state, name}
-  | UpdateAbout(about) => {...state, about}
-  | UpdateCurrentPassword(currentPassword) => {...state, currentPassword}
-  | UpdateNewPassword(newPassword) => {...state, newPassword}
-  | UpdateNewPassWordConfirm(confirmPassword) => {...state, confirmPassword}
+  | UpdateName(name) => {...state, name, dirty: true}
+  | UpdateAbout(about) => {...state, about, dirty: true}
+  | UpdateCurrentPassword(currentPassword) => {
+      ...state,
+      currentPassword,
+      dirty: true,
+    }
+  | UpdateNewPassword(newPassword) => {...state, newPassword, dirty: true}
+  | UpdateNewPassWordConfirm(confirmPassword) => {
+      ...state,
+      confirmPassword,
+      dirty: true,
+    }
   | UpdatePasswordForDeletion(passwordForAccountDeletion) => {
       ...state,
       passwordForAccountDeletion,
@@ -52,8 +61,19 @@ let reducer = (state, action) => {
       passwordForAccountDeletion: "",
     }
   | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError}
-  | UpdateAvatarUrl(avatarUrl) => {...state, avatarUrl}
-  | FinishSaving => {...state, saving: false}
+  | UpdateAvatarUrl(avatarUrl) => {
+      ...state,
+      avatarUrl,
+      avatarUploadError: None,
+    }
+  | FinishSaving => {
+      ...state,
+      saving: false,
+      dirty: false,
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    }
   | StartDeletingAccount => {...state, deletingAccount: true}
   | FinishAccountDeletion => {
       ...state,
@@ -198,6 +218,23 @@ let initiateAccountDeletion = (state, send, id, event) => {
   ();
 };
 
+let hasInvalidPassword = state => {
+  state.newPassword == ""
+  && state.confirmPassword == ""
+  || state.newPassword == state.confirmPassword
+  && state.newPassword
+  |> String.length >= 8
+    ? false : true;
+};
+
+let saveDisabled = state => {
+  hasInvalidPassword(state)
+  || state.name
+  |> String.trim
+  |> String.length < 2
+  || !state.dirty;
+};
+
 [@react.component]
 let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
   let initialState = {
@@ -213,6 +250,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
     showDeleteAccountForm: false,
     deletingAccount: false,
     avatarUploadError: None,
+    dirty: false,
   };
 
   let (state, send) = React.useReducer(reducer, initialState);
@@ -419,6 +457,11 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
                       multiple=false
                     />
                   </span>
+                  {switch (state.avatarUploadError) {
+                   | Some(error) =>
+                     <School__InputGroupError message=error active=true />
+                   | None => React.null
+                   }}
                 </div>
               </form>
             </div>
@@ -498,6 +541,10 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
                 className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
                 placeholder="Confirm new password"
               />
+              <School__InputGroupError
+                message="New password and confirmation should match and must be atleast 8 characters"
+                active={hasInvalidPassword(state)}
+              />
             </div>
           </div>
         </div>
@@ -552,6 +599,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
       <div
         className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
         <button
+          disabled={saveDisabled(state)}
           onClick={updateUser(state, send, currentUserId)}
           className="btn btn-primary">
           {"Save Changes" |> str}
@@ -564,8 +612,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
           <div className="w-full md:w-1/3 pr-4">
             <h3 className="text-lg font-semibold"> {"Account" |> str} </h3>
             <p className="mt-1 text-sm text-gray-700">
-              {"Nunc id massa ultricies, hendrerit nibh ac, consequat nisl."
-               |> str}
+              {"Manage your account in this school" |> str}
             </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
@@ -573,7 +620,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
               {"Delete account" |> str}
             </p>
             <p className="text-sm text-gray-700 mt-1">
-              {"Duis consectetur aliquam justo vitae sodales. Mauris vitae lectus id tellus blandit luctus et non leo. Nunc id massa ultricies, hendrerit nibh ac, consequat nisl."
+              {"Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.  "
                |> str}
             </p>
             <div className="mt-4">

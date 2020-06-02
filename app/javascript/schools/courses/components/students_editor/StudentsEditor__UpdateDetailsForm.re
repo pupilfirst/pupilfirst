@@ -274,7 +274,7 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make = (~student, ~team, ~studentTags, ~courseCoaches, ~updateFormCB) => {
+let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
   let (state, send) =
     React.useReducer(reducer, initialState(student, team));
 
@@ -376,11 +376,11 @@ let make = (~student, ~team, ~studentTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
-          {"Tags applied:" |> str}
+          {(isSingleStudent ? "Tags applied:" : "Team tags applied:") |> str}
         </div>
         <StudentsEditor__SearchableTagList
           unselectedTags={
-            studentTags
+            teamTags
             |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))
           }
           selectedTags={state.tagsToApply}

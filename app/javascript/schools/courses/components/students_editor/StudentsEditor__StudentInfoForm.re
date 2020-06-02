@@ -1,5 +1,3 @@
-open StudentsEditor__Types;
-
 type state = {
   name: string,
   email: string,
@@ -51,14 +49,12 @@ let handleAdd = (state, send, emailsToAdd, addToListCB) => {
 
   if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
-      StudentInfo.make(
-        ~name=state.name,
-        ~email=state.email,
-        ~title=state.title,
-        ~affiliation=state.affiliation,
-        ~tags=state.tagsToApply,
-        ~teamName,
-      ),
+      ~name=state.name,
+      ~email=state.email,
+      ~title=state.title,
+      ~affiliation=state.affiliation,
+      ~tags=state.tagsToApply,
+      ~teamName,
     );
     send(ResetForm);
   };

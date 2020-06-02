@@ -1,24 +1,24 @@
 open StudentsEditor__Types;
 
 type state = {
-  studentsToAdd: array(StudentInfo.t),
+  teamsToAdd: array(TeamInfo.t),
   saving: bool,
 };
 
 type action =
-  | AddStudentInfo(StudentInfo.t)
+  | AddStudentInfo(StudentInfo.t, string, array(string))
   | RemoveStudentInfo(StudentInfo.t)
   | SetSaving(bool);
 
 let str = React.string;
 
-let formInvalid = state => state.studentsToAdd |> ArrayUtils.isEmpty;
+let formInvalid = state => state.teamsToAdd |> ArrayUtils.isEmpty;
 let handleErrorCB = (send, ()) => send(SetSaving(false));
 
 /* Get the tags applied to a list of students. */
-let appliedTags = students =>
-  students
-  |> Array.map(student => student |> StudentInfo.tags |> Array.to_list)
+let appliedTags = teams =>
+  teams
+  |> Array.map(team => team |> TeamInfo.tags |> Array.to_list)
   |> Array.to_list
   |> List.flatten
   |> ListUtils.distinct
@@ -34,7 +34,8 @@ let allKnownTags = (incomingTags, appliedTags) =>
 let handleResponseCB = (submitCB, state, json) => {
   let (studentsAdded, studentsRequested) =
     json |> Json.Decode.(field("studentCount", pair(int, int)));
-  let tags = state.studentsToAdd |> appliedTags;
+
+  let tags = state.teamsToAdd |> appliedTags;
 
   submitCB(tags);
 
@@ -65,7 +66,7 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
   Js.Dict.set(
     payload,
     "students",
-    state.studentsToAdd |> Json.Encode.(array(StudentInfo.encode)),
+    state.teamsToAdd |> Json.Encode.(array(TeamInfo.encode)),
   );
 
   let url = "/school/courses/" ++ courseId ++ "/students";
@@ -108,13 +109,15 @@ let renderTitleAndAffiliation = (title, affiliation) => {
   };
 };
 
-let initialState = () => {studentsToAdd: [||], saving: false};
+let initialState = () => {teamsToAdd: [||], saving: false};
 
 let reducer = (state, action) =>
   switch (action) {
-  | AddStudentInfo(studentInfo) => {
+  | AddStudentInfo(studentInfo, teamName, tags) => {
       ...state,
-      studentsToAdd: state.studentsToAdd |> Array.append([|studentInfo|]),
+      teamsToAdd:
+        state.teamsToAdd
+        ->TeamInfo.addStudentToArray(studentInfo, teamName, tags),
     }
   | RemoveStudentInfo(studentInfo) => {
       ...state,

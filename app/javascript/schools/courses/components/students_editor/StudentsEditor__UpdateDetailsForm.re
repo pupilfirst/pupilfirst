@@ -376,7 +376,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
-          {(isSingleStudent ? "Tags applied:" : "Team tags applied:") |> str}
+          {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}
         </div>
         <StudentsEditor__SearchableTagList
           unselectedTags={

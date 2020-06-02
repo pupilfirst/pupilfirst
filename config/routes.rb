@@ -115,7 +115,7 @@ Rails.application.routes.draw do
 
   get 'posts/:id/versions', controller: 'posts', action: 'versions', as: 'post_version'
 
-  get 'home', controller: 'users', action: 'home', as: 'home'
+  get 'dashboard', controller: 'users', action: 'dashboard', as: 'dashboard'
 
   resource :user, only: %i[edit update] do
     get 'edit_v2'

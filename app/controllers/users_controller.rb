@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   layout 'student', except: %i[edit update]
 
-  # GET /home/
-  def home
+  # GET /dashboard/
+  def dashboard
     @user = authorize(current_user)
   end
 

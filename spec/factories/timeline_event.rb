@@ -7,8 +7,18 @@ FactoryBot.define do
       passed_at { 1.day.ago }
     end
 
-    trait(:latest) do
-      latest { true }
+    trait :with_owners do
+      transient do
+        owners { Founder.none }
+        latest { false }
+      end
+
+      after(:create) do |submission, evaluator|
+        evaluator.owners.each do |owner|
+          create(:timeline_event_owner, latest: evaluator.latest, founder: owner, timeline_event: submission)
+        end
+      end
     end
   end
 end
+

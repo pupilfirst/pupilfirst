@@ -192,24 +192,9 @@ class Target < ApplicationRecord
     role == ROLE_STUDENT
   end
 
-  # Returns the latest event linked to this target from a founder. If a team target, it responds with the latest event from the team
-  def latest_linked_event(founder, exclude = nil)
-    owner = founder_role? ? founder : founder.startup
-
-    owner.timeline_events.where.not(id: exclude).where(target: self).order('created_at').last
-  end
-
-  def latest_feedback(founder)
-    latest_linked_event(founder)&.startup_feedback&.order('created_at')&.last
-  end
-
-  def grades_for_skills(founder)
-    return unless verified?(founder)
-    return if latest_linked_event(founder).timeline_event_grades.blank?
-
-    latest_linked_event(founder).timeline_event_grades.each_with_object({}) do |te_grade, grades|
-      grades[te_grade.evaluation_criterion_id] = te_grade.grade
-    end
+  # Returns the latest submission linked to this target from a student
+  def latest_submission(student)
+    student.latest_submissions.where(target: self).last
   end
 
   def live?

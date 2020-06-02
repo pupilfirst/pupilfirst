@@ -39,10 +39,10 @@ let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
          if (response##deleteSchoolAdmin##success) {
            /*
             * If the school admin who was removed is the current user, redirect her to
-            * the home page. Otherwise, just remove the entry from the list.
+            * the dashboard page. Otherwise, just remove the entry from the list.
             */
            if (admin |> SchoolAdmin.id == currentSchoolAdminId) {
-             DomUtils.redirect("/home");
+             DomUtils.redirect("/dashboard");
            } else {
              setState(state =>
                {

@@ -1,6 +1,6 @@
 ActiveAdmin.register TimelineEvent do
   actions :index, :show
-  permit_params :improved_timeline_event_id, timeline_event_files_attributes: %i[id title file _destroy]
+  permit_params timeline_event_files_attributes: %i[id title file _destroy]
 
   filter :founders_user_name, as: :string
   filter :evaluated
@@ -65,7 +65,6 @@ ActiveAdmin.register TimelineEvent do
       row('Grade') do
         timeline_event.overall_grade_from_score if timeline_event.score.present?
       end
-      row :improved_timeline_event
       row :created_at
       row :updated_at
     end

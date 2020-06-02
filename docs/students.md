@@ -49,7 +49,7 @@ If set, the course will be marked as _ended_ for the student (or team) on this d
 In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
 
 **Has this student dropped out?**\
-If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their home page (marked as _Dropped Out_), but they will not be able to access its curriculum.
+If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their dashboard page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
 ## Inactive students
 

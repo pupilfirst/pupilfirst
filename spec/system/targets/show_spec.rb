@@ -112,7 +112,7 @@ feature 'Target Overlay', js: true do
     last_submission = TimelineEvent.last
     expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Write something about your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
-    # The status should also be updated on the home page.
+    # The status should also be updated on the dashboard page.
     click_button 'Close'
 
     within("a[aria-label='Select Target #{target_l1.id}'") do
@@ -276,8 +276,8 @@ feature 'Target Overlay', js: true do
     let(:coach_1) { create :faculty, school: course.school }
     let(:coach_2) { create :faculty, school: course.school } # The 'unknown', un-enrolled coach.
     let(:coach_3) { create :faculty, school: course.school }
-    let(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, created_at: 7.days.ago, evaluated_at: 2.days.ago }
-    let(:submission_2) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_3, evaluated_at: 2.days.ago, passed_at: 2.days.ago, latest: true, created_at: 3.days.ago }
+    let!(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, created_at: 5.days.ago }
+    let!(:submission_2) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team.founders, evaluator: coach_3, passed_at: 2.days.ago, created_at: 3.days.ago }
     let!(:attached_file) { create :timeline_event_file, timeline_event: submission_2 }
     let!(:feedback_1) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_1 }
     let!(:feedback_2) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_2 }
@@ -303,7 +303,6 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
       # Both submissions should be visible, along with grading and all feedback from coaches.
-
       within("div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']") do
         find("div[aria-label='#{submission_1.checklist.first['title']}']").click
         expect(page).to have_content(submission_1.checklist.first['result'])
@@ -362,7 +361,8 @@ feature 'Target Overlay', js: true do
       scenario 'student can resubmit non-resubmittable target if its failed' do
         # Make the first failed submission the latest, and the only one.
         submission_2.destroy!
-        submission_1.update(latest: true)
+
+        submission_1.timeline_event_owners.update_all(latest: true) # rubocop:disable Rails/SkipsModelValidations
 
         sign_in_user student.user, referer: target_path(target_l1)
 
@@ -375,7 +375,7 @@ feature 'Target Overlay', js: true do
 
   context "when some team members haven't completed an individual target" do
     let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_STUDENT }
-    let!(:timeline_event) { create :timeline_event, target: target_l1, founders: [student], passed_at: 2.days.ago, latest: true }
+    let!(:timeline_event) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: [student], passed_at: 2.days.ago }
 
     scenario 'student is shown pending team members on individual targets' do
       sign_in_user student.user, referer: target_path(target_l1)
@@ -440,7 +440,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student views a submitted target' do
-      create :timeline_event, :latest, target: target_l1, founders: team.founders
+      create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team.founders
 
       sign_in_user student.user, referer: target_path(target_l1)
 
@@ -681,5 +681,79 @@ feature 'Target Overlay', js: true do
     sign_in_user student.user, referer: target_path(target_archived)
 
     expect(page).to have_text("The page you were looking for doesn't exist")
+  end
+
+  context 'when there are two teams with cross-linked submissions' do
+    let!(:team_1) { create :startup, level: level_1 }
+    let!(:team_2) { create :startup, level: level_1 }
+
+    let(:student_a) { team_1.founders.first }
+    let(:student_b) { team_1.founders.last }
+    let(:student_c) { team_2.founders.first }
+    let(:student_d) { team_2.founders.last }
+
+    # Create old submissions, linked to students who are no longer teamed up.
+    let!(:submission_old_1) { create :timeline_event, :with_owners, target: target_l1, owners: [student_a, student_c] }
+    let!(:submission_old_2) { create :timeline_event, :with_owners, target: target_l1, owners: [student_b, student_d] }
+
+    # Create a new submission, linked to students who are currently teamed up.
+    let!(:submission_new) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_1.founders }
+
+    before do
+      # Mark ownership of old submissions as latest for C & D, since they don't have a later submission.
+      submission_old_1.timeline_event_owners.where(founder: student_c).update(latest: true)
+      submission_old_2.timeline_event_owners.where(founder: student_d).update(latest: true)
+    end
+
+    scenario 'latest flag is updated correctly on deleting the latest submission for all concerned students' do
+      # Delete Submission A
+      sign_in_user student_a.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+
+      accept_confirm do
+        click_button('Undo submission')
+      end
+
+      # This action should delete `submission_new`, reload the page and return the user to the content of the target.
+      expect(page).to have_selector('.learn-content-block__embed')
+
+      expect { submission_new.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(target_l1.latest_submission(student_a)).to eq(submission_old_1)
+      expect(target_l1.latest_submission(student_b)).to eq(submission_old_2)
+      expect(target_l1.latest_submission(student_c)).to eq(submission_old_1)
+      expect(target_l1.latest_submission(student_d)).to eq(submission_old_2)
+    end
+  end
+
+  context 'when the team changes for a group of students' do
+    let!(:team_1) { create :startup, level: level_1 }
+    let!(:team_2) { create :startup, level: level_1 }
+
+    let(:student_1) { team_1.founders.first }
+    let(:student_2) { team_2.founders.first }
+    let(:student_3) { team_2.founders.last }
+
+    # Create old submissions, linked to students who are no longer teamed up.
+    let!(:submission_old_1) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_1.founders }
+    let!(:submission_old_2) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_2.founders }
+
+    before do
+      student_2.update!(startup: team_1)
+    end
+
+    scenario 'latest flag is updated correctly for all students' do
+      sign_in_user student_1.user, referer: target_path(target_l1)
+      find('.course-overlay__body-tab-item', text: 'Complete').click
+      replace_markdown Faker::Lorem.sentence
+      click_button 'Submit'
+      expect(page).to have_content('Your submission has been queued for review')
+      dismiss_notification
+
+      new_submission = TimelineEvent.last
+      expect(target_l1.latest_submission(student_1)).to eq(new_submission)
+      expect(target_l1.latest_submission(student_2)).to eq(new_submission)
+      # Latest submission is not updated for the team 2 user
+      expect(target_l1.latest_submission(student_3)).to eq(submission_old_2)
+    end
   end
 end

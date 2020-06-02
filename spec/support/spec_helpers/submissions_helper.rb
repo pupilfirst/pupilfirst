@@ -3,18 +3,18 @@ module SubmissionsHelper
   GRADE_FAIL = :fail
   GRADE_NONE = :none
 
-  def complete_target(target, student, evaluator: nil)
-    submit_target(target, student, grade: GRADE_PASS, evaluator: evaluator)
+  def complete_target(target, student, evaluator: nil, latest: true)
+    submit_target(target, student, grade: GRADE_PASS, evaluator: evaluator, latest: latest)
   end
 
-  def fail_target(target, student, evaluator: nil)
-    submit_target(target, student, grade: GRADE_FAIL, evaluator: evaluator)
+  def fail_target(target, student, evaluator: nil, latest: true)
+    submit_target(target, student, grade: GRADE_FAIL, evaluator: evaluator, latest: latest)
   end
 
-  def submit_target(target, student, grade: GRADE_NONE, evaluator: nil)
-    options = submission_options(target, student, grade, evaluator)
+  def submit_target(target, student, grade: GRADE_NONE, evaluator: nil, latest: true)
+    options = submission_options(target, student, grade, evaluator, latest)
 
-    FactoryBot.create(:timeline_event, options).tap do |submission|
+    FactoryBot.create(:timeline_event, :with_owners, **options).tap do |submission|
       grade_submission(submission, grade, target)
     end
   end
@@ -53,7 +53,7 @@ module SubmissionsHelper
     end
   end
 
-  def submission_options(target, student, grade, evaluator) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def submission_options(target, student, grade, evaluator, latest)
     students = if target.team_target?
       student.startup.founders
     else
@@ -74,9 +74,9 @@ module SubmissionsHelper
     end
 
     {
-      founders: students,
+      owners: students,
       target: target,
-      latest: true,
+      latest: latest,
       passed_at: passed_at,
       evaluated_at: evaluated_at,
       evaluator: evaluated_at.present? ? (evaluator || get_evaluator(students)) : nil

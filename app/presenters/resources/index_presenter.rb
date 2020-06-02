@@ -11,7 +11,6 @@ module Resources
       @resource_tags ||= Resource.tag_counts_on(:tags).pluck(:name)
     end
 
-    # rubocop:disable Metrics/PerceivedComplexity
     def notice
       @notice ||= begin
         if @form.tags.present? || @form.search.present? || @form.created_after.present?
@@ -25,7 +24,7 @@ module Resources
         end
       end
     end
-    # rubocop:enable Metrics/PerceivedComplexity
+
 
     def notice?
       notice.present?

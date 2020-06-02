@@ -24,7 +24,7 @@ feature 'Top navigation bar' do
     expect(page).not_to have_link('More')
 
     expect(page).not_to have_link('Admin', href: '/school')
-    expect(page).not_to have_link('Home', href: "/home")
+    expect(page).not_to have_link('Dashboard', href: "/dashboard")
   end
 
   context 'when the user is a school admin and student' do
@@ -37,7 +37,7 @@ feature 'Top navigation bar' do
       sign_in_user student.user, referer: leaderboard_course_path(student.course)
 
       expect(page).to have_link('Admin', href: '/school')
-      expect(page).to have_link('Home', href: "/home")
+      expect(page).to have_link('Dashboard', href: "/dashboard")
       expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
 
       # None of the custom links should be visible by default.
@@ -57,11 +57,11 @@ feature 'Top navigation bar' do
   end
 
   context 'when the user is a student' do
-    it 'displays home link on the navbar', js: true do
+    it 'displays dashboard link on the navbar', js: true do
       sign_in_user student.user, referer: leaderboard_course_path(student.course)
 
       expect(page).not_to have_link('Admin', href: '/school')
-      expect(page).to have_link('Home', href: "/home")
+      expect(page).to have_link('Dashboard', href: "/dashboard")
     end
   end
 

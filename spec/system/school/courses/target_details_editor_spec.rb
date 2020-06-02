@@ -192,9 +192,9 @@ feature 'Target Details Editor', js: true do
     let!(:quiz_target) { create :target, target_group: target_group_2 }
     let(:quiz) { create :quiz, target: quiz_target }
     let(:quiz_question) { create :quiz_question, :with_answers, quiz: quiz }
-    let!(:submission_for_quiz_target_with_grades) { create(:timeline_event, latest: true, target: quiz_target, evaluated_at: 1.day.ago, passed_at: nil) }
+    let!(:submission_for_quiz_target_with_grades) { create(:timeline_event, target: quiz_target, evaluated_at: 1.day.ago, passed_at: nil) }
     let!(:timeline_event_grade) { create(:timeline_event_grade, timeline_event: submission_for_quiz_target_with_grades, evaluation_criterion: evaluation_criterion, grade: 2) }
-    let!(:submission_for_quiz_target_without_grades) { create(:timeline_event, latest: true, target: quiz_target, evaluated_at: nil, passed_at: 1.day.ago) }
+    let!(:submission_for_quiz_target_without_grades) { create(:timeline_event, target: quiz_target, evaluated_at: nil, passed_at: 1.day.ago) }
 
     scenario 'admin expands the existing checklist in an evaluated target' do
       sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_2_l2.id)

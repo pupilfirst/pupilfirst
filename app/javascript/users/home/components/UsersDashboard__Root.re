@@ -1,7 +1,7 @@
 [%bs.raw {|require("courses/shared/background_patterns.css")|}];
-[%bs.raw {|require("./UserHome__Root.css")|}];
+[%bs.raw {|require("./UserDashboard__Root.css")|}];
 
-open UsersHome__Types;
+open UsersDashboard__Types;
 
 let str = React.string;
 
@@ -233,21 +233,21 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                          />
                        | None =>
                          <div
-                           className="user-home-course__cover absolute h-full w-full svg-bg-pattern-1"
+                           className="user-dashboard-course__cover absolute h-full w-full svg-bg-pattern-1"
                          />
                        }}
                     </div>
                     <div
-                      className="user-home-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
+                      className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                       key={course |> Course.id}>
                       <h4
-                        className="user-home-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
+                        className="user-dashboard-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
                         {course |> Course.name |> str}
                       </h4>
                     </div>
                   </div>
                   <div
-                    className="user-home-course__description text-sm px-6 pt-4 w-full leading-relaxed">
+                    className="user-dashboard-course__description text-sm px-6 pt-4 w-full leading-relaxed">
                     {course |> Course.description |> str}
                   </div>
                   {if (course |> Course.exited) {
@@ -283,7 +283,7 @@ let communitiesSection = communities => {
                 className="w-full h-full shadow rounded-lg hover:shadow-lg"
                 href={Community.path(community)}>
                 <div
-                  className="user-home-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+                  className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
                 />
                 <div
                   className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
@@ -317,7 +317,7 @@ let certificatesSection = issuedCertificates =>
                   ++ (issuedCertificate |> IssuedCertificate.serialNumber)
                 }>
                 <div
-                  className="user-home-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+                  className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
                 />
                 <div
                   className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">

@@ -1,4 +1,4 @@
-open UsersHome__Types;
+open UsersDashboard__Types;
 
 let decodeProps = json =>
   Json.Decode.(
@@ -22,10 +22,10 @@ let (
   avatarUrl,
   issuedCertificates,
 ) =
-  DomUtils.parseJSONTag(~id="users-home-data", ()) |> decodeProps;
+  DomUtils.parseJSONTag(~id="users-dashboard-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <UsersHome__Root
+  <UsersDashboard__Root
     currentSchoolAdmin
     courses
     communities
@@ -35,5 +35,5 @@ ReactDOMRe.renderToElementWithId(
     avatarUrl
     issuedCertificates
   />,
-  "users-home",
+  "users-dashboard",
 );

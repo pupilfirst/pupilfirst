@@ -119,7 +119,7 @@ feature 'School admins Editor', js: true do
       find("div[title='Delete #{school_admin_1.name}'").click
     end
 
-    # User should be taken to the home page.
+    # User should be taken to the dashboard page.
     expect(page).to have_text('Edit Profile')
     expect(SchoolAdmin.count).to eq(1)
     expect(SchoolAdmin.first).to eq(school_admin_2)

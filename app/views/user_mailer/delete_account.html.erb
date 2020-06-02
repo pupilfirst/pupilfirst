@@ -1,25 +1,36 @@
-= content_for :title do
-| #{@school_name} account deletion
+<% content_for :title do %>
+  <% "#{@school.name} account deletion" %>
+<% end %>
 
-= content_for :subtitle do
-| This is a one-time link to delete your account.
+<% content_for :subtitle do %>
+  This is a one-time link to delete your account.
+<% end %>
 
-= content_for(:title_button_text, 'Delete Account')
-= content_for(:title_button_link, @delete_account_url)
+<% content_for :title_button_text do %>
+  Delete Account
+<% end %>
 
-= content_for :salutation do
-| Hello,
+<% content_for(:title_button_link, @delete_account_url) %>
 
-= content_for :body do
-p We received a request to delete your account in #{@school_name}.
-p Please click the link above to confirm account deletion.
+<% content_for :salutation do %>
+  Hello <%= @user.name %>,
+<% end %>
 
-p
-' If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
-| address bar:
+<% content_for :body do %>
+  <p>We received a request to delete your account in
+    <%= @school.name %>.</p>
+  <p> Please click the link above to confirm account deletion.</p>
 
-p.monospace = @delete_account_url
+  <p>
+    If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
+    address bar:
+  </p>
 
-p This action is irreversible, and will permanently remove your access to the school.
+  <p class="monospace">
+    <%= @delete_account_url %></p>
 
-p Please note that this is a private URL and should not be shared.
+  <p> This action is irreversible, and will permanently remove your access to the school.</p>
+
+  <p> Please note that this is a private URL and should not be shared.</p>
+<% end %>
+

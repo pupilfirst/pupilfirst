@@ -1,6 +1,6 @@
 # Reviewing Submissions
 
-When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/home` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
+When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
 
 ![Submissions for review](https://res.cloudinary.com/sv-co/image/upload/v1589826331/pupilfirst_documentation/reviewing_submissions/review_page_mwzyth.png)
 

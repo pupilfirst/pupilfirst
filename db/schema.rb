@@ -701,6 +701,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_131110) do
     t.bigint "founder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "latest", default: false
     t.index ["founder_id"], name: "index_timeline_event_owners_on_founder_id"
     t.index ["timeline_event_id"], name: "index_timeline_event_owners_on_timeline_event_id"
   end

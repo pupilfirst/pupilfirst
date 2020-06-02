@@ -54,13 +54,24 @@ module CourseExports
       empty_grades = Array.new(evaluation_criteria_ids.length)
 
       target.evaluation_criteria.pluck(:id).each_with_object(empty_grades) do |evaluation_criterion_id, grades|
-        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { target_id: target.id, latest: true }, founders: { id: students.pluck(:id) }, evaluation_criterion_id: evaluation_criterion_id).distinct.average(:grade)&.round(2)
+        average_grade = TimelineEventGrade.joins(timeline_event: :timeline_event_owners)
+          .where(
+            timeline_event_owners: { latest: true, founder_id: students.pluck(:id) },
+            timeline_events: { target_id: target.id },
+            evaluation_criterion_id: evaluation_criterion_id
+          ).distinct.average(:grade)&.round(2)
+
+        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = average_grade
       end
     end
 
     def average_grades_for_student(student)
       evaluation_criteria_ids.map do |evaluation_criterion_id|
-        TimelineEventGrade.joins(timeline_event: :founders).where(timeline_events: { latest: true }, founders: { id: student.id }, evaluation_criterion_id: evaluation_criterion_id).average(:grade)&.round(2)
+        TimelineEventGrade.joins(timeline_event: :timeline_event_owners)
+          .where(
+            timeline_event_owners: { latest: true, founder_id: student.id },
+            evaluation_criterion_id: evaluation_criterion_id
+          ).distinct.average(:grade)&.round(2)
       end
     end
 

@@ -11,7 +11,6 @@ module Courses
 
     private
 
-    # rubocop:disable Metrics/MethodLength
     def props
       if current_student.present?
         {
@@ -36,7 +35,6 @@ module Courses
       end
     end
 
-    # rubocop:enable Metrics/MethodLength
 
     def default_props
       {
@@ -108,7 +106,7 @@ module Courses
     end
 
     def submissions
-      current_student.timeline_events.joins(:target).where(latest: true).map do |submission|
+      current_student.latest_submissions.includes(:target).map do |submission|
         if submission.target.individual_target? || submission.founder_ids.sort == current_student.team_student_ids
           submission.attributes.slice('target_id', 'passed_at', 'evaluator_id')
         end

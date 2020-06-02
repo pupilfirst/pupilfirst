@@ -62,10 +62,7 @@ module Targets
     def prerequisites_incomplete?
       passed_prerequisites = @target.prerequisite_targets.joins(timeline_events: :timeline_event_owners).where(
         timeline_event_owners: {
-          founder_id: @founder.id
-        }
-      ).where(
-        timeline_events: {
+          founder_id: @founder.id,
           latest: true
         }
       ).where.not(

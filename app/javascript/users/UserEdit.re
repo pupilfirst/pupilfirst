@@ -156,7 +156,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {state.showDeleteAccountForm
        ? <div
-           className="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
+           className="fixed bottom-0 inset-x-0 z-50 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
            <div className="fixed inset-0">
              <div className="absolute inset-0 bg-gray-800 opacity-75" />
            </div>

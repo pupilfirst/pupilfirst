@@ -90,6 +90,15 @@ let addStudentToArray = (ts, studentInfo, teamName, tags) => {
   };
 };
 
+let compareStudents = (checkedStudent, requestedStudent, removedFromArray) =>
+  if (StudentInfo.email(checkedStudent)
+      != StudentInfo.email(requestedStudent)) {
+    true;
+  } else {
+    removedFromArray := true;
+    false;
+  };
+
 let removeStudentFromArray = (ts, studentInfo) => {
   // This ref is used to avoid unnecessary second pass if single-member team is filtered out.
   let removedFromArray = ref(false);
@@ -99,14 +108,14 @@ let removeStudentFromArray = (ts, studentInfo) => {
     |> Js.Array.filter(t =>
          switch (t.nature) {
          | SingleMember(student) =>
-           if (StudentInfo.email(student) != StudentInfo.email(studentInfo)) {
-             true;
+           compareStudents(student, studentInfo, removedFromArray)
+         | MultiMember(_, students) =>
+           if (students |> Js.Array.length == 1) {
+             Js.Array.unsafe_get(students, 0)
+             ->compareStudents(studentInfo, removedFromArray);
            } else {
-             removedFromArray := true;
-             false;
+             true;
            }
-
-         | MultiMember(_) => true
          }
        );
 

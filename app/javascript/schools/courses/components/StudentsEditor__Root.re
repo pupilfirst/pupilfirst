@@ -187,7 +187,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          <StudentsEditor__CreateForm
            courseId
            submitFormCB={submitForm(send)}
-           studentTags={state.tags}
+           teamTags={state.tags}
          />
        </SchoolAdmin__EditorDrawer>
 

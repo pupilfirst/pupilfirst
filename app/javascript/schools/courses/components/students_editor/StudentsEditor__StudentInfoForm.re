@@ -1,3 +1,5 @@
+open StudentsEditor__Types;
+
 type state = {
   name: string,
   email: string,
@@ -44,17 +46,19 @@ let formInvalid = (state, emailsToAdd) =>
   || hasEmailDuplication(state.email, emailsToAdd);
 
 let handleAdd = (state, send, emailsToAdd, addToListCB) => {
-  let teamName =
-    state.teamName |> String.trim == "" ? None : Some(state.teamName);
+  let trimmedTeamName = state.teamName |> String.trim;
+  let teamName = trimmedTeamName == "" ? None : Some(trimmedTeamName);
 
   if (!formInvalid(state, emailsToAdd)) {
     addToListCB(
-      ~name=state.name,
-      ~email=state.email,
-      ~title=state.title,
-      ~affiliation=state.affiliation,
-      ~tags=state.tagsToApply,
-      ~teamName,
+      StudentInfo.make(
+        ~name=state.name,
+        ~email=state.email,
+        ~title=state.title,
+        ~affiliation=state.affiliation,
+      ),
+      teamName,
+      state.tagsToApply,
     );
     send(ResetForm);
   };
@@ -96,7 +100,7 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make = (~addToListCB, ~studentTags, ~emailsToAdd) => {
+let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
   let (state, send) = React.useReducer(reducer, initialState());
   <div className="bg-gray-100 p-4">
     <div>
@@ -217,7 +221,7 @@ let make = (~addToListCB, ~studentTags, ~emailsToAdd) => {
     </div>
     <StudentsEditor__SearchableTagList
       unselectedTags={
-        studentTags
+        teamTags
         |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))
       }
       selectedTags={state.tagsToApply}

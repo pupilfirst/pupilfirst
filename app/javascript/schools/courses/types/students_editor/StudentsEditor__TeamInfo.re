@@ -1,20 +1,150 @@
+module StudentInfo = StudentsEditor__StudentInfo;
+
 type t = {
-  name: string,
-  tags: array(string),
-  students: array(StudentsEditor__StudentInfo.t),
-};
+  nature,
+  tags: Belt.Set.String.t,
+}
+and nature =
+  | SingleMember(StudentInfo.t)
+  | MultiMember(string, array(StudentInfo.t));
 
-let name = t => t.name;
+let name = t =>
+  switch (t.nature) {
+  | SingleMember(_) => ""
+  | MultiMember(name, _) => name
+  };
 
-let tags = t => t.tags;
+let tags = t => t.tags |> Belt.Set.String.toArray;
+
+let nature = t => t.nature;
+
+let students = t =>
+  switch (t.nature) {
+  | SingleMember(studentInfo) => [|studentInfo|]
+  | MultiMember(_, students) => students
+  };
 
 let encode = t =>
   Json.Encode.(
     object_([
-      ("name", t.name |> string),
-      ("tags", t.tags |> array(string)),
-      ("students", t.students |> array(StudentsEditor__StudentInfo.encode)),
+      ("name", name(t) |> string),
+      ("tags", t.tags |> Belt.Set.String.toArray |> array(string)),
+      ("students", students(t) |> array(StudentInfo.encode)),
     ])
   );
 
-let make = (~name, ~tags, ~students) => {name, tags, students};
+let make = (~name, ~tags, ~students) =>
+  if (Js.Array.length(students) > 1) {
+    {nature: MultiMember(name, students), tags};
+  } else {
+    {nature: SingleMember(Js.Array.unsafe_get(students, 0)), tags};
+  };
+
+let addStudentToArray = (ts, studentInfo, teamName, tags) => {
+  switch (teamName) {
+  | Some(teamName) =>
+    // A reference is being used to allow the scan & modification of the teamInfo array to finish in one pass.
+    let teamFoundAndUpdated = ref(false);
+
+    let teams =
+      ts
+      |> Js.Array.map(t =>
+           switch (t.nature) {
+           | SingleMember(_) => t
+           | MultiMember(name, students) =>
+             if (name == teamName) {
+               teamFoundAndUpdated := true;
+               let newStudents = students |> Js.Array.concat([|studentInfo|]);
+               {
+                 tags:
+                   Belt.Set.String.union(
+                     t.tags,
+                     Belt.Set.String.fromArray(tags),
+                   ),
+                 nature: MultiMember(name, newStudents),
+               };
+             } else {
+               t;
+             }
+           }
+         );
+
+    teamFoundAndUpdated^
+      ? teams
+      : ts
+        |> Js.Array.concat([|
+             {
+               nature: MultiMember(teamName, [|studentInfo|]),
+               tags: Belt.Set.String.fromArray(tags),
+             },
+           |]);
+
+  | None =>
+    ts
+    |> Js.Array.concat([|
+         {
+           nature: SingleMember(studentInfo),
+           tags: Belt.Set.String.fromArray(tags),
+         },
+       |])
+  };
+};
+
+let removeStudentFromArray = (ts, studentInfo) => {
+  // This ref is used to avoid unnecessary second pass if single-member team is filtered out.
+  let removedFromArray = ref(false);
+
+  let teams =
+    ts
+    |> Js.Array.filter(t =>
+         switch (t.nature) {
+         | SingleMember(student) =>
+           if (StudentInfo.email(student) != StudentInfo.email(studentInfo)) {
+             true;
+           } else {
+             removedFromArray := true;
+             false;
+           }
+
+         | MultiMember(_) => true
+         }
+       );
+
+  removedFromArray^
+    ? teams
+    : teams
+      |> Js.Array.map(t =>
+           switch (t.nature) {
+           | SingleMember(_) => t
+           | MultiMember(name, students) =>
+             let filteredStudents =
+               students
+               |> Js.Array.filter(student =>
+                    StudentInfo.email(student)
+                    != StudentInfo.email(studentInfo)
+                  );
+             {...t, nature: MultiMember(name, filteredStudents)};
+           }
+         );
+};
+
+let tagsFromArray = ts =>
+  (
+    ts
+    |> Js.Array.reduce(
+         (tags, team) => Belt.Set.String.union(tags, team.tags),
+         Belt.Set.String.empty,
+       )
+  )
+  ->Belt.Set.String.toArray;
+
+let studentEmailsFromArray = ts =>
+  ts
+  |> Js.Array.map(t =>
+       switch (t.nature) {
+       | SingleMember(studentInfo) => [|StudentInfo.email(studentInfo)|]
+       | MultiMember(_, students) =>
+         Js.Array.map(StudentInfo.email, students)
+       }
+     )
+  |> ArrayUtils.flattenV2;

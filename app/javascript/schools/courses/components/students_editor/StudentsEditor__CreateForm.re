@@ -6,7 +6,7 @@ type state = {
 };
 
 type action =
-  | AddStudentInfo(StudentInfo.t, string, array(string))
+  | AddStudentInfo(StudentInfo.t, option(string), array(string))
   | RemoveStudentInfo(StudentInfo.t)
   | SetSaving(bool);
 
@@ -29,7 +29,7 @@ let appliedTags = teams =>
  * form to suggest tags that haven't yet been persisted, but have been applied to at least one of the students in the list.
  */
 let allKnownTags = (incomingTags, appliedTags) =>
-  incomingTags |> Array.append(appliedTags) |> ArrayUtils.distinct;
+  incomingTags |> Js.Array.concat(appliedTags) |> ArrayUtils.distinct;
 
 let handleResponseCB = (submitCB, state, json) => {
   let (studentsAdded, studentsRequested) =
@@ -76,18 +76,12 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
 let teamHeader = (teamName, studentsCount) => {
   <div className="flex justify-between mb-1">
     <span className="text-tiny font-semibold">
-      {teamName
-       |> OptionUtils.mapWithDefault(
-            teamName => <span> {"TEAM: " ++ teamName |> str} </span>,
-            React.null,
-          )}
+      <span> {"TEAM: " ++ teamName |> str} </span>
     </span>
-    {studentsCount > 1
-       ? React.null
-       : <span className="text-tiny">
-           <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
-           {"Add more team members!" |> str}
-         </span>}
+    <span className="text-tiny">
+      <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
+      {"Add more team members!" |> str}
+    </span>
   </div>;
 };
 
@@ -121,17 +115,36 @@ let reducer = (state, action) =>
     }
   | RemoveStudentInfo(studentInfo) => {
       ...state,
-      studentsToAdd:
-        state.studentsToAdd
-        |> Js.Array.filter(s =>
-             StudentInfo.email(s) !== StudentInfo.email(studentInfo)
-           ),
+      teamsToAdd:
+        state.teamsToAdd->TeamInfo.removeStudentFromArray(studentInfo),
     }
   | SetSaving(saving) => {...state, saving}
   };
 
-let studentCard = (studentInfo, send) => {
-  <div key={studentInfo |> StudentInfo.email} className="flex justify-between">
+let teamTags = teamInfo => {
+  <div className="flex flex-wrap">
+    {teamInfo
+     |> TeamInfo.tags
+     |> Array.map(tag =>
+          <div
+            key=tag
+            className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+            {tag |> str}
+          </div>
+        )
+     |> React.array}
+  </div>;
+};
+
+let studentCard = (studentInfo, send, team) => {
+  let defaultClasses = "flex justify-between";
+
+  let containerClasses =
+    team
+      ? defaultClasses ++ " border-t"
+      : defaultClasses ++ " bg-white-100 border shadow rounded-lg mt-2 px-2";
+
+  <div key={studentInfo |> StudentInfo.email} className=containerClasses>
     <div className="flex flex-col flex-1 flex-wrap p-3">
       <div className="flex items-center">
         <div className="mr-1 font-semibold">
@@ -145,18 +158,6 @@ let studentCard = (studentInfo, send) => {
          studentInfo |> StudentInfo.title,
          studentInfo |> StudentInfo.affiliation,
        )}
-      <div className="flex flex-wrap">
-        {studentInfo
-         |> StudentInfo.tags
-         |> Array.map(tag =>
-              <div
-                key=tag
-                className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-                {tag |> str}
-              </div>
-            )
-         |> React.array}
-      </div>
     </div>
     <button
       className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
@@ -166,42 +167,8 @@ let studentCard = (studentInfo, send) => {
   </div>;
 };
 
-let teamNames = studentsToAdd => {
-  studentsToAdd
-  |> Array.map(student => {student |> StudentInfo.teamName})
-  |> Js.Array.filter(teamName =>
-       teamName |> OptionUtils.mapWithDefault(_ => true, false)
-     )
-  |> ArrayUtils.distinct;
-};
-
-let findStudentsInTeam = (teamName, studentsToAdd) => {
-  studentsToAdd |> Js.Array.filter(s => s |> StudentInfo.teamName == teamName);
-};
-
-let loneStudents = (studentsToAdd, send) => {
-  let students =
-    studentsToAdd
-    |> Js.Array.filter(s =>
-         s
-         |> StudentInfo.teamName
-         |> OptionUtils.mapWithDefault(_ => false, true)
-       );
-  students |> ArrayUtils.isNotEmpty
-    ? <div>
-        {students
-         |> Array.map(studentInfo =>
-              <div className="bg-white-100 border shadow rounded-lg mt-2 px-2">
-                {studentCard(studentInfo, send)}
-              </div>
-            )
-         |> React.array}
-      </div>
-    : React.null;
-};
-
 [@react.component]
-let make = (~courseId, ~submitFormCB, ~studentTags) => {
+let make = (~courseId, ~submitFormCB, ~teamTags) => {
   let (state, send) = React.useReducer(reducer, initialState());
 
   <div className="mx-auto bg-white">
@@ -210,52 +177,54 @@ let make = (~courseId, ~submitFormCB, ~studentTags) => {
         {"Student Details" |> str}
       </h5>
       <StudentsEditor__StudentInfoForm
-        addToListCB={studentInfo => send(AddStudentInfo(studentInfo))}
-        studentTags={allKnownTags(
-          studentTags,
-          state.studentsToAdd |> appliedTags,
-        )}
-        emailsToAdd={
-          state.studentsToAdd
-          |> Array.map(student => student |> StudentInfo.email)
+        addToListCB={(studentInfo, teamName, tags) =>
+          send(AddStudentInfo(studentInfo, teamName, tags))
         }
+        teamTags={allKnownTags(
+          teamTags,
+          TeamInfo.tagsFromArray(state.teamsToAdd),
+        )}
+        emailsToAdd={state.teamsToAdd |> TeamInfo.studentEmailsFromArray}
       />
       <div>
         <div className="mt-5">
           <div className="inline-block tracking-wide text-xs font-semibold">
             {"These new students will be added to the course:" |> str}
           </div>
-          {switch (state.studentsToAdd) {
+          {switch (state.teamsToAdd) {
            | [||] =>
              <div
                className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
                {"This list is empty! Add some students using the form above."
                 |> str}
              </div>
-           | studentInfos =>
-             teamNames(studentInfos)
-             |> Array.map(teamName => {
-                  let studentsInTeam =
-                    findStudentsInTeam(teamName, studentInfos);
-                  <div className="mt-3">
-                    {teamHeader(teamName, studentsInTeam |> Array.length)}
-                    <div className="bg-white-100 border shadow rounded-lg">
-                      {studentsInTeam
-                       |> Array.map(studentInfo =>
-                            studentCard(studentInfo, send)
-                          )
-                       |> React.array}
+           | teams =>
+             teams
+             |> Js.Array.map(team =>
+                  switch (TeamInfo.nature(team)) {
+                  | TeamInfo.MultiMember(teamName, studentsInTeam) =>
+                    <div className="mt-3" key=teamName>
+                      {teamHeader(teamName, studentsInTeam |> Array.length)}
+                      <div
+                        className="bg-white-100 border shadow rounded-lg mt-2 px-2">
+                        {studentsInTeam
+                         |> Array.map(studentInfo =>
+                              studentCard(studentInfo, send, true)
+                            )
+                         |> React.array}
+                      </div>
                     </div>
-                  </div>;
-                })
-             |> Array.append([|loneStudents(studentInfos, send)|])
+                  | SingleMember(studentInfo) =>
+                    studentCard(studentInfo, send, false)
+                  }
+                )
              |> React.array
            }}
         </div>
       </div>
       <div className="flex mt-4">
         <button
-          disabled={state.saving || state.studentsToAdd |> ArrayUtils.isEmpty}
+          disabled={state.saving || state.teamsToAdd |> ArrayUtils.isEmpty}
           onClick={saveStudents(
             state,
             send,

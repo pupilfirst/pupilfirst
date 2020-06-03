@@ -24,14 +24,19 @@ let students = t =>
   | MultiMember(_, students) => students
   };
 
-let encode = t =>
-  Json.Encode.(
-    object_([
-      ("name", name(t) |> string),
-      ("tags", t.tags |> Belt.Set.String.toArray |> array(string)),
-      ("students", students(t) |> array(StudentInfo.encode)),
-    ])
-  );
+let encodeArray = ts =>
+  ts
+  |> Js.Array.map(t => {
+       students(t)
+       |> Js.Array.map(
+            StudentInfo.encode(
+              ~teamName=name(t),
+              ~tags=Belt.Set.String.toArray(t.tags),
+            ),
+          )
+     })
+  |> ArrayUtils.flattenV2
+  |> Js.Json.array;
 
 let make = (~name, ~tags, ~students) =>
   if (Js.Array.length(students) > 1) {

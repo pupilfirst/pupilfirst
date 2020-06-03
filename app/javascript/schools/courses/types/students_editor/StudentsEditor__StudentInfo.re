@@ -13,9 +13,11 @@ let title = t => t.title;
 
 let affiliation = t => t.affiliation;
 
-let encode = t =>
+let encode = (~teamName, ~tags, t) =>
   Json.Encode.(
     object_([
+      ("team_name", teamName |> string),
+      ("tags", tags |> array(string)),
       ("name", t.name |> string),
       ("email", t.email |> string),
       ("title", t.title |> string),

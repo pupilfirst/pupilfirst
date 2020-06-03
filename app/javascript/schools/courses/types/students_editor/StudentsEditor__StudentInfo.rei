@@ -8,7 +8,7 @@ let title: t => string;
 
 let affiliation: t => string;
 
-let encode: t => Js.Json.t;
+let encode: (~teamName: string, ~tags: array(string), t) => Js.Json.t;
 
 let make:
   (~name: string, ~email: string, ~title: string, ~affiliation: string) => t;

@@ -63,11 +63,7 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
     "authenticity_token",
     AuthenticityToken.fromHead() |> Js.Json.string,
   );
-  Js.Dict.set(
-    payload,
-    "students",
-    state.teamsToAdd |> Json.Encode.(array(TeamInfo.encode)),
-  );
+  Js.Dict.set(payload, "students", state.teamsToAdd |> TeamInfo.encodeArray);
 
   let url = "/school/courses/" ++ courseId ++ "/students";
   Api.create(url, payload, responseCB, handleErrorCB(send));

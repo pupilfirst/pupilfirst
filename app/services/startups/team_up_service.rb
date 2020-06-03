@@ -10,7 +10,8 @@ module Startups
       Startup.transaction do
         startup = Startup.create!(
           name: name,
-          level: @founders.first.startup.level
+          level: @founders.first.startup.level,
+          tag_list: applicable_tags
         )
 
         # the new team formed should have all team coaches assigned for the current teams
@@ -32,6 +33,10 @@ module Startups
     end
 
     private
+
+    def applicable_tags
+      Startup.where(id: old_startup_ids).distinct.joins(:tags).pluck('tags.name')
+    end
 
     def old_startup_faculty
       current_faculty_enrollments = FacultyStartupEnrollment.where(startup_id: old_startup_ids)

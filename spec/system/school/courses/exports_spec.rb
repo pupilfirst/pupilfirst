@@ -16,11 +16,11 @@ feature 'Course Exports', js: true do
   let!(:target) { create :target, target_group: target_group }
 
   before do
-    # Tag both students.
-    student_1.tag_list.add('tag 1', 'tag 2')
-    student_1.save!
-    student_2.tag_list.add('tag 3')
-    student_2.save!
+    # Tag both teams.
+    team_1.tag_list.add('tag 1', 'tag 2')
+    team_1.save!
+    team_2.tag_list.add('tag 3')
+    team_2.save!
 
     # Add those tags to school student tags.
     school.founder_tag_list.add('tag 1', 'tag 2', 'tag 3')

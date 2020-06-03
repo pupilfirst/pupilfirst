@@ -12,13 +12,13 @@ class CreateCourseExportMutator < ApplicationQuery
   def require_valid_course
     return if course.present?
 
-    errors[:base] << 'InvalidCourseId'
+    errors[:base] << 'Could not find a course with the given ID'
   end
 
   def require_valid_tags
     return if tag_ids.count == tags.count
 
-    errors[:base] << 'InvalidTagsIds'
+    errors[:base] << 'Could not find tags with the given IDs'
   end
 
   def create_course_export
@@ -43,7 +43,7 @@ class CreateCourseExportMutator < ApplicationQuery
   private
 
   def tags
-    @tags ||= export_type == CourseExport::EXPORT_TYPE_STUDENTS ? current_school.founder_tags.where(id: tag_ids) : []
+    @tags ||= current_school.founder_tags.where(id: tag_ids)
   end
 
   def resource_school

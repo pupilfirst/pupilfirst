@@ -106,7 +106,7 @@ module CourseExports
           user.name,
           user.title,
           user.affiliation,
-          student.tags.order(:name).pluck(:name).join(', ')
+          student.startup.tags.order(:name).pluck(:name).join(', ')
         ] + average_grades_for_student(student)
       end
 
@@ -145,7 +145,7 @@ module CourseExports
       @students ||= begin
         # Only scan 'active' students. Also filter by tag, if applicable.
         scope = course.founders.active.includes(:user)
-        tags.present? ? scope.tagged_with(tags, any: true) : scope
+        tags.present? ? scope.joins(:startup).merge(Startup.tagged_with(tags, any: true)) : scope
       end.order('users.email')
     end
   end

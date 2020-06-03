@@ -121,10 +121,9 @@ let reducer = (state, action) =>
   | SetSaving(saving) => {...state, saving}
   };
 
-let teamTags = teamInfo => {
+let tagBoxes = tags => {
   <div className="flex flex-wrap">
-    {teamInfo
-     |> TeamInfo.tags
+    {tags
      |> Array.map(tag =>
           <div
             key=tag
@@ -136,7 +135,7 @@ let teamTags = teamInfo => {
   </div>;
 };
 
-let studentCard = (studentInfo, send, team) => {
+let studentCard = (studentInfo, send, team, tags) => {
   let defaultClasses = "flex justify-between";
 
   let containerClasses =
@@ -158,6 +157,7 @@ let studentCard = (studentInfo, send, team) => {
          studentInfo |> StudentInfo.title,
          studentInfo |> StudentInfo.affiliation,
        )}
+      {tagBoxes(tags)}
     </div>
     <button
       className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
@@ -205,17 +205,23 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
                   | TeamInfo.MultiMember(teamName, studentsInTeam) =>
                     <div className="mt-3" key=teamName>
                       {teamHeader(teamName, studentsInTeam |> Array.length)}
+                      {TeamInfo.tags(team)->tagBoxes}
                       <div
                         className="bg-white-100 border shadow rounded-lg mt-2 px-2">
                         {studentsInTeam
                          |> Array.map(studentInfo =>
-                              studentCard(studentInfo, send, true)
+                              studentCard(studentInfo, send, true, [||])
                             )
                          |> React.array}
                       </div>
                     </div>
                   | SingleMember(studentInfo) =>
-                    studentCard(studentInfo, send, false)
+                    studentCard(
+                      studentInfo,
+                      send,
+                      false,
+                      TeamInfo.tags(team),
+                    )
                   }
                 )
              |> React.array

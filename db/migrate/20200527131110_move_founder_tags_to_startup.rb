@@ -18,7 +18,13 @@ class MoveFounderTagsToStartup < ActiveRecord::Migration[6.0]
   end
 
   def up
-    Founder.joins(:taggings).includes(:tags, startup: :tags).find_each do |student|
+    require_relative '../../lib/command_line_progress'
+
+    clp = CommandLineProgress.new(Founder.joins(:taggings).distinct.count)
+
+    Founder.joins(:taggings).includes(:tags, startup: :tags).distinct.find_each do |student|
+      clp.tick
+
       team = student.startup
       student_tags = student.tags.pluck(:name)
       team_tags = team.tags.pluck(:name)

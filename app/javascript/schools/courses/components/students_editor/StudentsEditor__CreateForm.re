@@ -78,10 +78,12 @@ let teamHeader = (teamName, studentsCount) => {
     <span className="text-tiny font-semibold">
       <span> {"TEAM: " ++ teamName |> str} </span>
     </span>
-    <span className="text-tiny">
-      <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
-      {"Add more team members!" |> str}
-    </span>
+    {studentsCount < 2
+       ? <span className="text-tiny">
+           <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
+           {"Add more team members!" |> str}
+         </span>
+       : React.null}
   </div>;
 };
 

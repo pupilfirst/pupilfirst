@@ -3,7 +3,7 @@ let decodeProps = json =>
     json |> field("name", string),
     json |> field("about", string),
     json |> field("avatarUrl", optional(string)),
-    json |> field("dailyDigest", bool),
+    json |> field("dailyDigest", optional(bool)),
     json |> field("currentUserId", string),
   );
 

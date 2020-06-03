@@ -1,5 +1,3 @@
-[%bs.raw {|require("./UserEdit.css")|}];
-
 let str = React.string;
 
 type state = {
@@ -285,7 +283,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
     name,
     about,
     avatarUrl,
-    dailyDigest,
+    dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
     currentPassword: "",
     newPassword: "",

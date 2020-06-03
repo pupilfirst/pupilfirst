@@ -16,14 +16,15 @@ class UsersController < ApplicationController
     @user = authorize(current_user)
   end
 
+  # GET /users/delete_account
   def delete_account
     user = Users::ValidateDeletionTokenService.new(params[:token], current_user).authenticate
     if user.present?
       @token = params[:token]
     else
       flash[:error] = "That one-time link has already been used, or is invalid. Please try again."
+      redirect_to root_path
     end
-    redirect_to home_path
   end
 
   def upload_avatar

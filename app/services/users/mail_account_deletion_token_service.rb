@@ -18,7 +18,7 @@ module Users
         protocol: 'https'
       }
 
-      account_deletion_url = url_helpers.reset_password_url(url_options)
+      account_deletion_url = url_helpers.delete_account_url(url_options)
 
       # Send the email with link to delete account.
       UserMailer.delete_account(@user, account_deletion_url).deliver_now

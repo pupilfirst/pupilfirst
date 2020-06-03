@@ -4,7 +4,7 @@ class CommandLineProgress
     @current = 0
     @percentage = 0
 
-    puts "Starting processing of #{@max} entries..." # rubocop:disable Rails/Output
+    puts "Starting processing of #{@max} entries..." if @max.positive? # rubocop:disable Rails/Output
   end
 
   def current_string_length

@@ -10,6 +10,7 @@ type state = {
   dailyDigest: bool,
   passwordForAccountDeletion: string,
   showDeleteAccountForm: bool,
+  hasCurrentPassword: bool,
   deletingAccount: bool,
   avatarUploadError: option(string),
   saving: bool,
@@ -28,7 +29,7 @@ type action =
   | ChangeDeleteAccountFormVisibility(bool)
   | SetAvatarUploadError(option(string))
   | StartSaving
-  | FinishSaving
+  | FinishSaving(bool)
   | StartDeletingAccount
   | FinishAccountDeletion;
 
@@ -64,13 +65,14 @@ let reducer = (state, action) => {
       avatarUrl,
       avatarUploadError: None,
     }
-  | FinishSaving => {
+  | FinishSaving(hasCurrentPassword) => {
       ...state,
       saving: false,
       dirty: false,
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
+      hasCurrentPassword,
     }
   | StartDeletingAccount => {...state, deletingAccount: true}
   | FinishAccountDeletion => {
@@ -177,13 +179,14 @@ let updateUser = (state, send, id, event) => {
   |> Js.Promise.then_(result => {
        result##updateUser##success
          ? {
-           send(FinishSaving);
+           let hasCurrentPassword = state.newPassword |> String.length > 0;
+           send(FinishSaving(hasCurrentPassword));
          }
-         : send(FinishSaving);
+         : send(FinishSaving(state.hasCurrentPassword));
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {
-       send(FinishSaving);
+       send(FinishSaving(state.hasCurrentPassword));
        Js.Promise.resolve();
      })
   |> ignore;
@@ -278,7 +281,15 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
 };
 
 [@react.component]
-let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
+let make =
+    (
+      ~currentUserId,
+      ~name,
+      ~hasCurrentPassword,
+      ~about,
+      ~avatarUrl,
+      ~dailyDigest,
+    ) => {
   let initialState = {
     name,
     about,
@@ -290,6 +301,7 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
     confirmPassword: "",
     passwordForAccountDeletion: "",
     showDeleteAccountForm: false,
+    hasCurrentPassword,
     deletingAccount: false,
     avatarUploadError: None,
     dirty: false,
@@ -407,28 +419,30 @@ let make = (~currentUserId, ~name, ~about, ~avatarUrl, ~dailyDigest) => {
             <p className="font-semibold">
               {"Change your current password" |> str}
             </p>
-            <div className="mt-6">
-              <label
-                htmlFor="current_password"
-                className="block text-sm font-semibold">
-                {"Current Password" |> str}
-              </label>
-              <input
-                value={state.currentPassword}
-                type_="password"
-                autoComplete="off"
-                onChange={event =>
-                  send(
-                    UpdateCurrentPassword(
-                      ReactEvent.Form.target(event)##value,
-                    ),
-                  )
-                }
-                id="current_password"
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
-                placeholder="Type current password"
-              />
-            </div>
+            {state.hasCurrentPassword
+               ? <div className="mt-6">
+                   <label
+                     htmlFor="current_password"
+                     className="block text-sm font-semibold">
+                     {"Current Password" |> str}
+                   </label>
+                   <input
+                     value={state.currentPassword}
+                     type_="password"
+                     autoComplete="off"
+                     onChange={event =>
+                       send(
+                         UpdateCurrentPassword(
+                           ReactEvent.Form.target(event)##value,
+                         ),
+                       )
+                     }
+                     id="current_password"
+                     className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
+                     placeholder="Type current password"
+                   />
+                 </div>
+               : React.null}
             <div className="mt-6">
               <label
                 htmlFor="new_password" className="block text-sm font-semibold">

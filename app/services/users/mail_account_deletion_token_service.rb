@@ -21,7 +21,7 @@ module Users
       account_deletion_url = url_helpers.delete_account_url(url_options)
 
       # Send the email with link to delete account.
-      UserMailer.delete_account(@user, account_deletion_url).deliver_now
+      UserMailer.delete_account_token(@user, account_deletion_url).deliver_now
     end
   end
 end

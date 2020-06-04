@@ -22,7 +22,7 @@ class UserMailer < SchoolMailer
     simple_roadie_mail(user.email, subject)
   end
 
-  def delete_account(user, delete_account_url)
+  def delete_account_token(user, delete_account_url)
     @user = user
     @school = user.school
     @delete_account_url = delete_account_url

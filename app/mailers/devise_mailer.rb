@@ -5,5 +5,5 @@ class DeviseMailer < Devise::Mailer
   include Roadie::Rails::Automatic
   include Devise::Controllers::UrlHelpers
 
-  default from: 'Pupilfirst <noreply@pupilfirst.com>'
+  default from: "< #{ENV['DEFAULT_SENDER_EMAIL']}>"
 end

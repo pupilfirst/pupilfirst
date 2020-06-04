@@ -379,16 +379,12 @@ let make =
                      | None => <Avatar name />
                      }}
                   </span>
-                  <span className="ml-5 rounded-md shadow-sm">
-                    <label
-                      htmlFor="user-edit__avatar-input"
-                      className="py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 focus:outline-none active:bg-gray-100 active:text-gray-800">
-                      {"Change photo" |> str}
-                    </label>
+                  <span className="ml-5 inline-flex">
                     <input
-                      className="hidden"
+                      className="form-input__file-sr-only"
                       name="user[avatar]"
                       type_="file"
+                      ariaLabel="user-edit__avatar-input"
                       onChange={handleAvatarInputChange(
                         send,
                         "user-avatar-uploader",
@@ -397,6 +393,12 @@ let make =
                       required=false
                       multiple=false
                     />
+                    <label
+                      htmlFor="user-edit__avatar-input"
+                      ariaHidden=true
+                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-100 active:text-gray-800">
+                      {"Change photo" |> str}
+                    </label>
                   </span>
                   {switch (state.avatarUploadError) {
                    | Some(error) =>

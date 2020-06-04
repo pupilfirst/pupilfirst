@@ -5,5 +5,5 @@ class DeviseMailer < Devise::Mailer
   include Roadie::Rails::Automatic
   include Devise::Controllers::UrlHelpers
 
-  default from: "< #{ENV['DEFAULT_SENDER_EMAIL']}>"
+  default from: "<#{Rails.application.secrets.default_sender_email_address}>"
 end

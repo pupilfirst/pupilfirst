@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_28_192641) do
+ActiveRecord::Schema.define(version: 2020_06_04_153605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -95,6 +95,12 @@ ActiveRecord::Schema.define(version: 2020_05_28_192641) do
     t.index ["course_id"], name: "index_applicants_on_course_id"
     t.index ["email", "course_id"], name: "index_applicants_on_email_and_course_id", unique: true
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+  end
+
+  create_table "audit_records", force: :cascade do |t|
+    t.jsonb "data", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "bounce_reports", force: :cascade do |t|

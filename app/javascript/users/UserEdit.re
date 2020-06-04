@@ -261,6 +261,7 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
                 )
               }
               id="confirm_password"
+              autoComplete="off"
               className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
               placeholder="Type your password"
             />

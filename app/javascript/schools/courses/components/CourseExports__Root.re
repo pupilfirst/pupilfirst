@@ -109,13 +109,12 @@ let createCourseExport = (state, send, course, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(BeginSaving);
 
-  let (tagIds, exportType) =
+  let tagIds = state.selectedTags |> Array.map(Tag.id);
+
+  let exportType =
     switch (state.exportType) {
-    | CourseExport.Students => (
-        state.selectedTags |> Array.map(Tag.id),
-        `Students,
-      )
-    | Teams => ([||], `Teams)
+    | CourseExport.Students => `Students
+    | Teams => `Teams
     };
 
   CreateCourseExportQuery.make(
@@ -210,28 +209,22 @@ let make = (~course, ~exports, ~tags) => {
                    </div>
                  </div>
                </div>
-               {switch (state.exportType) {
-                | CourseExport.Students =>
-                  <div className="mt-4">
-                    <label
-                      className="block tracking-wide text-xs font-semibold mb-2">
-                      {"Export only students with the following tags:" |> str}
-                    </label>
-                    <TagsSelector
-                      placeholder="Search for a tag"
-                      emptySelectionMessage="No tags selected"
-                      selected={state.selectedTags}
-                      unselected={unselected(tags, state.selectedTags)}
-                      onChange={tagSearch =>
-                        send(UpdateTagSearch(tagSearch))
-                      }
-                      value={state.tagSearch}
-                      onSelect={tag => send(SelectTag(tag))}
-                      onDeselect={tag => send(DeselectTag(tag))}
-                    />
-                  </div>
-                | Teams => React.null
-                }}
+               <div className="mt-4">
+                 <label
+                   className="block tracking-wide text-xs font-semibold mb-2">
+                   {"Export only students with the following tags:" |> str}
+                 </label>
+                 <TagsSelector
+                   placeholder="Search for a tag"
+                   emptySelectionMessage="No tags selected"
+                   selected={state.selectedTags}
+                   unselected={unselected(tags, state.selectedTags)}
+                   onChange={tagSearch => send(UpdateTagSearch(tagSearch))}
+                   value={state.tagSearch}
+                   onSelect={tag => send(SelectTag(tag))}
+                   onDeselect={tag => send(DeselectTag(tag))}
+                 />
+               </div>
                <div className="mt-5">
                  <label
                    className="block tracking-wide text-xs font-semibold mr-6 mb-2"
@@ -337,22 +330,16 @@ let make = (~course, ~exports, ~tags) => {
                                         {"Reviewed Submissions Only" |> str}
                                       </span>
                                     : React.null}
-                                 {switch (
-                                    courseExport |> CourseExport.exportType
-                                  ) {
-                                  | Teams => ReasonReact.null
-                                  | Students =>
-                                    courseExport
-                                    |> CourseExport.tags
-                                    |> Array.map(tag =>
-                                         <span
-                                           key=tag
-                                           className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
-                                           {tag |> str}
-                                         </span>
-                                       )
-                                    |> React.array
-                                  }}
+                                 {courseExport
+                                  |> CourseExport.tags
+                                  |> Array.map(tag =>
+                                       <span
+                                         key=tag
+                                         className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
+                                         {tag |> str}
+                                       </span>
+                                     )
+                                  |> React.array}
                                </div>
                              </div>
                              {switch (courseExport |> CourseExport.file) {

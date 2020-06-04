@@ -55,13 +55,7 @@ let decode = json =>
   };
 
 let make = (~id, ~exportType, ~createdAt, ~tags, ~reviewedOnly) => {
-  let finalTags =
-    switch (exportType) {
-    | Students => tags
-    | Teams => [||]
-    };
-
-  {id, createdAt, tags: finalTags, exportType, reviewedOnly, file: None};
+  {id, createdAt, tags, exportType, reviewedOnly, file: None};
 };
 
 let exportTypeToString = t =>

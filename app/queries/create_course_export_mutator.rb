@@ -23,14 +23,15 @@ class CreateCourseExportMutator < ApplicationQuery
 
   def create_course_export
     CourseExport.transaction do
-      export = CourseExport.new(export_type: export_type, course: course, user: current_user, reviewed_only: !!reviewed_only)
+      tag_list = tags.present? ? tags.pluck(:name) : []
 
-      if tags.present?
-        tag_names = tags.pluck(:name)
-        export.tag_list.add(*tag_names)
-      end
-
-      export.save!
+      export = CourseExport.create!(
+        export_type: export_type,
+        course: course,
+        user: current_user,
+        reviewed_only: !!reviewed_only,
+        tag_list: tag_list,
+      )
 
       # Queue a job to prepare the report.
       CourseExports::PrepareJob.perform_later(export)

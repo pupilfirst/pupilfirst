@@ -6,7 +6,7 @@ module CourseExports
       tables = [
         { title: 'Targets', rows: target_rows },
         { title: 'Teams', rows: team_rows },
-        { title: 'Submissions', rows: submission_rows }
+        { title: 'Submissions', rows: submission_rows },
       ]
 
       finalize(tables)
@@ -25,12 +25,12 @@ module CourseExports
           target_type(target),
           milestone,
           teams_with_submissions(target),
-          teams_pending_review(target)
+          teams_pending_review(target),
         ]
       end
 
       ([
-        ['ID', 'Level', 'Name', 'Completion Method', 'Milestone?', 'Teams with submissions', 'Teams pending review']
+        ['ID', 'Level', 'Name', 'Completion Method', 'Milestone?', 'Teams with submissions', 'Teams pending review'],
       ] + values).transpose
     end
 
@@ -39,12 +39,14 @@ module CourseExports
         [
           team.id,
           team.name,
+          team.level.number,
           team.founders.map(&:name).sort.join(', '),
-          team.faculty.map(&:name).sort.join(', ')
+          team.faculty.map(&:name).sort.join(', '),
+          team.tags.order(:name).pluck(:name).join(', '),
         ]
       end
 
-      [['ID', 'Team Name', 'Students', 'Coaches']] + rows
+      [['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags']] + rows
     end
 
     def submission_rows
@@ -57,7 +59,7 @@ module CourseExports
 
       ([
         ['Team ID'] + team_ids,
-        ['Team Name'] + teams.pluck(:name)
+        ['Team Name'] + teams.pluck(:name),
       ] + values).transpose
     end
 
@@ -102,12 +104,15 @@ module CourseExports
     end
 
     def teams
-      @teams ||= Startup.includes(:founders, faculty: :user)
-        .joins(:course)
-        .where(courses: { id: course.id }).active
-        .order(:id).distinct.select do |team|
-        team.founders.count > 1
-      end
+      # Only scan 'active' teams. Also filter by tag, if applicable.
+      @teams ||= begin
+          scope = Startup.includes(:level, :founders, faculty: :user)
+            .joins(:course)
+            .where(courses: { id: course.id }).active
+            .order(:id).distinct
+
+          tags.present? ? scope.tagged_with(tags, any: true) : scope
+        end
     end
 
     def student_ids

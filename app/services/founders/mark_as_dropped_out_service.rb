@@ -23,6 +23,7 @@ module Founders
           # Mark the startup as exited.
           @student.startup.update!(dropped_out_at: Time.zone.now)
         end
+        create_audit_record(@student)
       end
     end
 
@@ -30,6 +31,10 @@ module Founders
 
     def create_new_team?
       @create_new_team ||= @student.startup.founders.count > 1
+    end
+
+    def create_audit_record(student)
+      AuditRecord.create!(data: { 'type' => AuditRecord::TYPE_DROPOUT_STUDENT, 'log' => "Student email: #{student.email}; Course ID: #{student.course.id}" })
     end
   end
 end

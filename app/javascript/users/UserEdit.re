@@ -261,6 +261,7 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
                 )
               }
               id="confirm_password"
+              autoComplete="off"
               className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
               placeholder="Type your password"
             />
@@ -333,6 +334,7 @@ let make =
             </div>
             <input
               id="user_name"
+              name="name"
               value={state.name}
               onChange={event =>
                 send(UpdateName(ReactEvent.Form.target(event)##value))
@@ -341,7 +343,7 @@ let make =
               placeholder="Type your name"
             />
             <School__InputGroupError
-              message="Not a valid name"
+              message="Name can't be blank"
               active={state.name |> String.trim |> String.length < 2}
             />
             <div className="mt-6">

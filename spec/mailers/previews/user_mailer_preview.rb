@@ -20,12 +20,16 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.daily_digest(user, updates)
   end
 
-  def delete_account
+  def delete_account_token
     school = School.first
     user = school.users.first
     host = school.domains.primary.fqdn
     login_url = Rails.application.routes.url_helpers.reset_password_url(token: 'LOGIN_TOKEN', host: host, protocol: 'https')
-    UserMailer.delete_account(user, login_url)
+    UserMailer.delete_account_token(user, login_url)
+  end
+
+  def confirm_account_deletion
+    UserMailer.confirm_account_deletion('test@xyz.com', School.first)
   end
 
   private

@@ -28,4 +28,10 @@ class UserMailer < SchoolMailer
     @delete_account_url = delete_account_url
     simple_roadie_mail(user.email, "Delete account from #{@school.name}")
   end
+
+  def confirm_account_deletion(email, school)
+    @email = email
+    @school = school
+    simple_roadie_mail(email, "Account deleted successfully from #{@school.name}")
+  end
 end

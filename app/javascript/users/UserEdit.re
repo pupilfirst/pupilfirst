@@ -334,6 +334,7 @@ let make =
             </div>
             <input
               id="user_name"
+              name="name"
               value={state.name}
               onChange={event =>
                 send(UpdateName(ReactEvent.Form.target(event)##value))
@@ -342,7 +343,7 @@ let make =
               placeholder="Type your name"
             />
             <School__InputGroupError
-              message="Not a valid name"
+              message="Name can't be blank"
               active={state.name |> String.trim |> String.length < 2}
             />
             <div className="mt-6">
@@ -382,6 +383,7 @@ let make =
                   </span>
                   <span className="ml-5 rounded-md shadow-sm">
                     <label
+                      name="Avatar"
                       htmlFor="user-edit__avatar-input"
                       className="py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 focus:outline-none active:bg-gray-100 active:text-gray-800">
                       {"Change photo" |> str}

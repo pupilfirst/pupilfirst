@@ -54,7 +54,7 @@ module Courses
         user_id: current_user.id,
         team_coaches: team_coaches,
         current_coach: current_coach_details,
-        tags: course_tags,
+        tags: @course.team_tags,
       }
     end
 
@@ -64,10 +64,6 @@ module Courses
 
     def course_details
       { id: @course.id }
-    end
-
-    def course_tags
-      @course.startups.active.joins(:tags).distinct('tags.name').pluck('tags.name')
     end
   end
 end

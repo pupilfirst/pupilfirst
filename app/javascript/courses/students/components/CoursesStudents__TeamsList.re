@@ -42,8 +42,22 @@ let showStudent = (team, levels, teamCoaches) => {
             {student |> TeamInfo.studentName |> str}
           </p>
           <p
-            className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+            className="text-gray-600 font-semibold text-xs mt-1 leading-snug flex items-center">
             {student |> TeamInfo.studentTitle |> str}
+            {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
+               ? <div className="hidden md:flex flex-wrap ml-2 font-normal">
+                   {team
+                    |> TeamInfo.tags
+                    |> Js.Array.map(tag =>
+                         <div
+                           className="bg-gray-300 rounded mr-1 py-px px-2 text-xs text-gray-900"
+                           key="tag">
+                           {str(tag)}
+                         </div>
+                       )
+                    |> React.array}
+                 </div>
+               : React.null}
           </p>
         </div>
       </div>
@@ -111,6 +125,20 @@ let showTeam = (team, levels, teamCoaches) => {
             className="hidden md:inline-block mt-3"
             coaches=teamCoaches
           />
+          {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
+             ? <div className="hidden md:flex flex-wrap mt-1">
+                 {team
+                  |> TeamInfo.tags
+                  |> Js.Array.map(tag =>
+                       <div
+                         className="bg-gray-300 rounded mr-1 py-px px-2 text-xs text-gray-900"
+                         key="tag">
+                         {str(tag)}
+                       </div>
+                     )
+                  |> React.array}
+               </div>
+             : React.null}
         </div>
       </div>
       <div

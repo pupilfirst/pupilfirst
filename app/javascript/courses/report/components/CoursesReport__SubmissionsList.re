@@ -406,11 +406,21 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                          classes="fas fa-exclamation-triangle text-sm md:text-base mt-1"
                        />
                        <div className="inline-block pl-3">
-                         {"This submission is not considered towards its target's completion; it was a "
+                         {"This submission is not considered towards its target's completion."
                           |> str}
-                         <span className="italic"> {"team" |> str} </span>
-                         {" target, and your team changed after you made this submission."
-                          |> str}
+                         <HelpIcon className="ml-1">
+                           {str("This is a ")}
+                           <span className="italic"> {"team" |> str} </span>
+                           {str(
+                              " target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a ",
+                            )}
+                           <span className="italic"> {"team" |> str} </span>
+                           {str(
+                              " submission, or if your team's composition changed after a ",
+                            )}
+                           <span className="italic"> {"team" |> str} </span>
+                           {str(" submission was created.")}
+                         </HelpIcon>
                        </div>
                      </div>
                      <a

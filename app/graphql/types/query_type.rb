@@ -21,7 +21,7 @@ module Types
 
     def method_missing(name, *args)
       if resolved_fields.include?(name)
-        resolver = (name.to_s + "_resolver").camelcase.constantize.new(context, args[0] || {})
+        resolver = (name.to_s + '_resolver').camelcase.constantize.new(context, args[0] || {})
         resolver.public_send(name)
       else
         super
@@ -54,6 +54,7 @@ module Types
     resolved_field :teams, Types::TeamType.connection_type, null: false do
       argument :course_id, ID, required: true
       argument :coach_notes, Types::CoachNoteFilterType, required: true
+      argument :tags, [String], required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
       argument :search, String, required: false
@@ -107,6 +108,7 @@ module Types
     resolved_field :student_distribution, [Types::DistributionInLevelType], null: false do
       argument :course_id, ID, required: true
       argument :coach_notes, Types::CoachNoteFilterType, required: true
+      argument :tags, [String], required: true
       argument :coach_id, ID, required: false
     end
   end

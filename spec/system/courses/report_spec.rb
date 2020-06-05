@@ -110,7 +110,7 @@ feature 'Students view performance report and submissions overview', js: true do
     # Checks submissions
     click_button 'Submissions'
 
-    expect(page).to have_content(target_l1.title)
+    expect(page).to have_link(target_l1.title, href: "/targets/#{target_l1.id}")
     expect(page).to_not have_content(target_4.title)
 
     # Filter submissions by level
@@ -118,7 +118,7 @@ feature 'Students view performance report and submissions overview', js: true do
     click_button "Level 2: #{level_2.name}"
 
     expect(page).not_to have_text(target_l1.title)
-    expect(page).to have_text(target_l2.title)
+    expect(page).to have_link(target_l2.title, href: "/targets/#{target_l2.id}")
 
     # Clear the level filter
     find("button[title='Remove selection: #{level_2.name}']").click
@@ -128,7 +128,7 @@ feature 'Students view performance report and submissions overview', js: true do
     click_button 'Status: Submitted'
 
     expect(page).not_to have_text(target_l1.title)
-    expect(page).to have_text(target_l3.title)
+    expect(page).to have_link(target_l3.title, href: "/targets/#{target_l3.id}")
   end
 
   scenario 'student loads more submissions' do
@@ -174,9 +174,14 @@ feature 'Students view performance report and submissions overview', js: true do
       # Switch to submissions tab
       click_button 'Submissions'
 
+      # The main link should point to the "backup" submission page.
+      expect(page).to have_link(target_l1.title, href: "/submissions/#{submission_target_l1_1.id}")
+
       within("div[aria-label='Team change notice for submission #{submission_target_l1_1.id}']") do
         expect(page).to have_content("This submission is not considered towards its target's completion")
-        expect(page).to have_link(href: "/submissions/#{submission_target_l1_1.id}")
+
+        # There should be an additional link to the target as well.
+        expect(page).to have_link('View Target', href: "/targets/#{target_l1.id}")
       end
     end
   end

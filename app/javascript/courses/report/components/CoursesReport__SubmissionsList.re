@@ -348,14 +348,22 @@ let submissionCardClasses = submission =>
 let showSubmission = (submissions, levels, teamStudentIds) =>
   <div>
     {submissions
-     |> Array.map(submission =>
+     |> Array.map(submission => {
+          let teamMismatch =
+            switch (submission |> Submission.targetRole) {
+            | Student => false
+            | Team(studentIds) => teamStudentIds != studentIds
+            };
+
+          let submissionHref =
+            teamMismatch
+              ? "/submissions/" ++ Submission.id(submission)
+              : "/targets/" ++ Submission.targetId(submission);
+
           <div
             key={submission |> Submission.id}
             ariaLabel={"student-submission-" ++ (submission |> Submission.id)}>
-            <a
-              className="block relative z-10"
-              href={"/targets/" ++ (submission |> Submission.targetId)}
-              target="_blank">
+            <a className="block relative z-10" href=submissionHref>
               <div
                 key={submission |> Submission.id}
                 ariaLabel={
@@ -389,52 +397,49 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                  </div>}
               </div>
             </a>
-            {switch (submission |> Submission.targetRole) {
-             | Student => React.null
-             | Team(studentIds) =>
-               teamStudentIds == studentIds
-                 ? React.null
-                 : <div
-                     ariaLabel={
-                       "Team change notice for submission "
-                       ++ Submission.id(submission)
-                     }
-                     className="w-full text-xs rounded-b bg-indigo-100 text-indigo-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
-                     <div
-                       className="flex flex-1 justify-start items-start pr-8">
-                       <FaIcon
-                         classes="fas fa-exclamation-triangle text-sm md:text-base mt-1"
-                       />
-                       <div className="inline-block pl-3">
-                         {"This submission is not considered towards its target's completion."
-                          |> str}
-                         <HelpIcon className="ml-1">
-                           {str("This is a ")}
-                           <span className="italic"> {"team" |> str} </span>
-                           {str(
-                              " target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a ",
-                            )}
-                           <span className="italic"> {"team" |> str} </span>
-                           {str(
-                              " submission, or if your team's composition changed after a ",
-                            )}
-                           <span className="italic"> {"team" |> str} </span>
-                           {str(" submission was created.")}
-                         </HelpIcon>
-                       </div>
+            {teamMismatch
+               ? <div
+                   ariaLabel={
+                     "Team change notice for submission "
+                     ++ Submission.id(submission)
+                   }
+                   className="w-full text-xs rounded-b bg-indigo-100 text-indigo-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
+                   <div
+                     className="flex flex-1 justify-start items-center pr-8">
+                     <FaIcon
+                       classes="fas fa-exclamation-triangle text-sm md:text-base mt-1"
+                     />
+                     <div className="inline-block pl-3">
+                       {"This submission is not considered towards its target's completion."
+                        |> str}
+                       <HelpIcon className="ml-1">
+                         {str("This is a ")}
+                         <span className="italic"> {"team" |> str} </span>
+                         {str(
+                            " target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a ",
+                          )}
+                         <span className="italic"> {"team" |> str} </span>
+                         {str(
+                            " submission, or if your team's composition changed after a ",
+                          )}
+                         <span className="italic"> {"team" |> str} </span>
+                         {str(" submission was created.")}
+                       </HelpIcon>
                      </div>
-                     <a
-                       href={"/submissions/" ++ Submission.id(submission)}
-                       className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded">
-                       <span className="hidden md:inline">
-                         {"View Submission" |> str}
-                       </span>
-                       <FaIcon classes="fas fa-arrow-right ml-2" />
-                     </a>
                    </div>
-             }}
-          </div>
-        )
+                   <a
+                     href={"/targets/" ++ Submission.targetId(submission)}
+                     className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded">
+                     <span className="hidden md:inline">
+                       {"View " |> str}
+                     </span>
+                     {str("Target")}
+                     <FaIcon classes="fas fa-arrow-right ml-2" />
+                   </a>
+                 </div>
+               : React.null}
+          </div>;
+        })
      |> React.array}
   </div>;
 

@@ -34,14 +34,9 @@ feature 'Submissions review' do
   end
 
   context 'with a pending submission' do
-    let!(:submission_pending) { create(:timeline_event, latest: true, target: target) }
-    let!(:submission_pending_2) { create(:timeline_event, latest: true, target: target_2) }
     let(:student) { team.founders.first }
-
-    before do
-      submission_pending.founders << student
-      submission_pending_2.founders << student
-    end
+    let!(:submission_pending) { create(:timeline_event, :with_owners, owners: [student], latest: true, target: target) }
+    let!(:submission_pending_2) { create(:timeline_event, :with_owners, owners: [student], latest: true, target: target_2) }
 
     scenario 'coach visits submission review page', js: true do
       sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)

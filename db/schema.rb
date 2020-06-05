@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_084440) do
+ActiveRecord::Schema.define(version: 2020_06_05_071840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -710,12 +710,10 @@ ActiveRecord::Schema.define(version: 2020_05_25_084440) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "improved_timeline_event_id"
     t.integer "target_id"
     t.decimal "score", precision: 2, scale: 1
     t.integer "evaluator_id"
     t.datetime "passed_at"
-    t.boolean "latest"
     t.string "quiz_score"
     t.datetime "evaluated_at"
     t.jsonb "checklist", default: []

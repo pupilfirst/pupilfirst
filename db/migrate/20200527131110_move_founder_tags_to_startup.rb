@@ -36,12 +36,12 @@ class MoveFounderTagsToStartup < ActiveRecord::Migration[6.0]
       end
     end
 
-    # ############################## #
-    # TODO: Remove all founder tags. #
-    # ############################## #
+    old_tags = ActsAsTaggableOn::Tagging.where(taggable_type: 'Founder')
+    puts "Deleting #{old_tags.count} old student tags..."
+    old_tags.delete_all
   end
 
   def down
-    # TODO: raise ActiveRecord::IrreversibleMigration
+    raise ActiveRecord::IrreversibleMigration
   end
 end

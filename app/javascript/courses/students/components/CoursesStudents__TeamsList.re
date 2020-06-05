@@ -120,13 +120,8 @@ let showTeam = (team, levels, teamCoaches) => {
           <h3 className="text-base font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
-          <CoursesStudents__TeamCoaches
-            title={<div className="mb-1"> {"Team Coaches" |> str} </div>}
-            className="hidden md:inline-block mt-3"
-            coaches=teamCoaches
-          />
           {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
-             ? <div className="hidden md:flex flex-wrap mt-1">
+             ? <div className="hidden md:flex flex-wrap mt-2">
                  {team
                   |> TeamInfo.tags
                   |> Js.Array.map(tag =>
@@ -139,6 +134,11 @@ let showTeam = (team, levels, teamCoaches) => {
                   |> React.array}
                </div>
              : React.null}
+          <CoursesStudents__TeamCoaches
+            title={<div className="mb-1"> {"Team Coaches" |> str} </div>}
+            className="hidden md:inline-block mt-2"
+            coaches=teamCoaches
+          />
         </div>
       </div>
       <div

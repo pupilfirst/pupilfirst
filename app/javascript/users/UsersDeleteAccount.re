@@ -50,8 +50,9 @@ let make = (~token) => {
       <img className="object-contain mx-auto" src=permanentDeleteIcon />
     </div>
     {accountDeleted
-       ? <p className="text-center max-w-sm mx-auto">
-           {"Account deletion initated successfully. This might take a few minutes. You will be notified over email once complete "
+       ? <p
+           className="text-center max-w-sm mx-auto font-semibold text-red-600">
+           {"Account deletion initated successfully. This might take a few minutes. You will be notified over email once complete."
             |> str}
          </p>
        : <div

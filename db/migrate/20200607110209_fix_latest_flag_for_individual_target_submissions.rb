@@ -16,13 +16,7 @@ class FixLatestFlagForIndividualTargetSubmissions < ActiveRecord::Migration[6.0]
   end
 
   class Target < ApplicationRecord
-    ROLE_TEAM = 'team'
-
     has_many :target_evaluation_criteria
-
-    def team_target?
-      role == ROLE_TEAM
-    end
   end
 
   class TargetEvaluationCriterion < ApplicationRecord
@@ -31,10 +25,10 @@ class FixLatestFlagForIndividualTargetSubmissions < ActiveRecord::Migration[6.0]
   def up
     Founder.joins(timeline_events: { target: :target_evaluation_criteria }).distinct.find_each do |student|
       student.timeline_events.joins(target: :target_evaluation_criteria).distinct.group_by(&:target_id).each do |_target_id, submissions|
+
+        next if submissions.first.target.role == 'team'
+
         latest_submission = submissions.sort_by { |s| s.created_at }.last
-
-        next if latest_submission.target.team_target?
-
         TimelineEventOwner.where(founder_id: student.id, timeline_event_id: latest_submission.id).update_all(latest: true)
       end
     end

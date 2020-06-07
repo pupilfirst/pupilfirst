@@ -68,9 +68,7 @@ describe TimelineEvents::CreateService do
     end
 
     context 'when target is an individual target with submissions from team members' do
-      let(:student) { create :student }
       let(:another_student) { create :student, startup: student.startup }
-      let(:target) { create :target, role: Target::ROLE_STUDENT, target_group: target_group }
       let!(:student_first_submission) { create :timeline_event, :with_owners, latest: true, owners: [student], target: target }
       let!(:another_student_submission) { create :timeline_event, :with_owners, latest: true, owners: [another_student], target: target }
 

@@ -26,12 +26,19 @@ module TimelineEvents
 
     def update_latest_flag(timeline_event)
       old_events = @target.timeline_events.joins(:timeline_event_owners)
-        .where(timeline_event_owners: { founder: @founder.startup.founders })
+        .where(timeline_event_owners: { founder: owners })
         .where.not(id: timeline_event)
 
-      TimelineEventOwner.where(timeline_event_id: old_events, founder: @founder.startup.founders).update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
+      TimelineEventOwner.where(timeline_event_id: old_events, founder: owners).update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
     end
 
+    def owners
+      if @target.team_target?
+        @founder.startup.founders
+      else
+        @founder
+      end
+    end
 
     def team_members
       @founder.startup.founders - [@founder]

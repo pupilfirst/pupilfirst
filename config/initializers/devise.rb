@@ -6,15 +6,6 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   config.secret_key = 'fb57cf065698c76155e7ec9936691d9cb9deb6c676ad55e0167397c3edfbabf3cf5882553a6dfb37ab2727c2d8c1cc880da91747fd5a4940fad29942f8799427'
 
-  # ==> Mailer Configuration
-  # Configure the e-mail address which will be shown in Devise::Mailer,
-  # note that it will be overwritten if you use your own mailer class
-  # with default "from" parameter.
-  config.mailer_sender = 'SV.CO <help@sv.co>'
-
-  # Configure the class responsible to send e-mails.
-  config.mailer = 'DeviseMailer'
-
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be

@@ -331,7 +331,7 @@ feature 'Course review' do
     before do
       (1..30).each do |n|
         # Passed submissions
-        create(:timeline_event, founders: [team_l3.founders.first], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
+        create(:timeline_event, :with_owners, owners: [team_l3.founders.first], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
 
         # Pending submissions
         create(:timeline_event, :with_owners, latest: true, target: target_l1, owners: [team_l1.founders.first], created_at: n.days.ago)

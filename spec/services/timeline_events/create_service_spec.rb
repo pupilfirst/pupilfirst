@@ -66,5 +66,21 @@ describe TimelineEvents::CreateService do
         expect(another_submission.reload.timeline_event_owners.where(founder: another_student).first.latest).to eq(true)
       end
     end
+
+    context 'when target is an individual target with submissions from team members' do
+      let(:another_student) { create :student, startup: student.startup }
+      let!(:student_first_submission) { create :timeline_event, :with_owners, latest: true, owners: [student], target: target }
+      let!(:another_student_submission) { create :timeline_event, :with_owners, latest: true, owners: [another_student], target: target }
+
+      it 'updates the latest flag only for submission from the student, not his team members' do
+        subject.execute
+
+        last_submission = TimelineEvent.last
+
+        expect(last_submission.timeline_event_owners.where(founder: student).first.latest).to eq(true)
+        expect(student_first_submission.reload.timeline_event_owners.where(founder: student).first.latest).to eq(false)
+        expect(another_student_submission.reload.timeline_event_owners.where(founder: another_student).first.latest).to eq(true)
+      end
+    end
   end
 end

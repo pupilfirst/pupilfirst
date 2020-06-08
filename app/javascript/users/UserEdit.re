@@ -52,7 +52,7 @@ let reducer = (state, action) => {
       ...state,
       passwordForAccountDeletion,
     }
-  | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest}
+  | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest, dirty: true}
   | StartSaving => {...state, saving: true}
   | ChangeDeleteAccountFormVisibility(showDeleteAccountForm) => {
       ...state,
@@ -239,15 +239,13 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
   state.showDeleteAccountForm
     ? {
       let body =
-        <div>
+        <div ariaLabel="Confirm dialog for account deletion">
           <p className="text-sm text-center sm:text-left text-gray-700">
-            {"Are you sure you want to deactivate your account? All of your data will be permanently removed from our servers forever. This action cannot be undone."
+            {"Are you sure you want to delete your account? All of your data will be permanently removed from our servers forever. This action cannot be undone."
              |> str}
           </p>
           <div className="mt-3">
-            <label
-              htmlFor="confirm_password"
-              className="block text-sm font-semibold">
+            <label htmlFor="password" className="block text-sm font-semibold">
               {"Password" |> str}
             </label>
             <input
@@ -260,7 +258,7 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
                   ),
                 )
               }
-              id="confirm_password"
+              id="password"
               autoComplete="off"
               className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
               placeholder="Type your password"

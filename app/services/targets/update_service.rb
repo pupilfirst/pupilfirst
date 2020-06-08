@@ -8,6 +8,7 @@ module Targets
       Target.transaction do
         @target.role = target_params[:role]
         @target.title = target_params[:title]
+        @target.target_group_id = target_params[:target_group_id]
         @target.target_action_type = Target::TYPE_TODO
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.link_to_complete = target_params[:link_to_complete]

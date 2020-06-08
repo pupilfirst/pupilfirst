@@ -58,7 +58,14 @@ let closeDrawer = course =>
 
 [@react.component]
 let make =
-    (~targets, ~targetGroups, ~evaluationCriteria, ~course, ~updateTargetCB) => {
+    (
+      ~targets,
+      ~targetGroups,
+      ~levels,
+      ~evaluationCriteria,
+      ~course,
+      ~updateTargetCB,
+    ) => {
   let url = ReasonReactRouter.useUrl();
   let (dirty, setDirty) = React.useState(() => false);
 
@@ -92,6 +99,7 @@ let make =
             target
             targets
             targetGroups
+            levels
             evaluationCriteria
             updateTargetCB
             setDirtyCB={dirty => setDirty(_ => dirty)}

@@ -218,7 +218,8 @@ let make =
     </div>
     <CurriculumEditor__TargetDrawer
       targets={state.targets}
-      targetGroups
+      levels={state.levels}
+      targetGroups={state.targetGroups}
       evaluationCriteria
       course
       updateTargetCB

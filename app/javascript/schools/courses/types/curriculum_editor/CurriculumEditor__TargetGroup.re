@@ -55,6 +55,16 @@ let unarchive = t => {...t, archived: false};
 
 let find = (id, targetGroups) => targetGroups |> List.find(tg => tg.id == id);
 
+let unsafeFind = (targetGroups, componentName, id) =>
+  targetGroups
+  |> ArrayUtils.unsafeFind(
+       l => l.id == id,
+       "Unable to find target group with id: "
+       ++ id
+       ++ "in CurriculumEditor__"
+       ++ componentName,
+     );
+
 let updateSortIndex = sortedTargetGroups =>
   sortedTargetGroups
   |> List.mapi((sortIndex, t) =>

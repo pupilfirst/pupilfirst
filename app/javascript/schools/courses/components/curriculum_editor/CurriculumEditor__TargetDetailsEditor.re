@@ -25,6 +25,7 @@ type state = {
   prerequisiteTargets: array(string),
   prerequisiteSearchInput: string,
   evaluationCriteriaSearchInput: string,
+  targetGroupSearchInput: string,
   methodOfCompletion,
   quiz: array(QuizQuestion.t),
   linkToComplete: string,
@@ -44,6 +45,8 @@ type action =
   | UpdateEvaluationCriteria(array(string))
   | UpdatePrerequisiteSearchInput(string)
   | UpdateEvaluationCriteriaSearchInput(string)
+  | UpdateTargetGroupSearchInput(string)
+  | UpdateTargetGroup(string)
   | UpdateLinkToComplete(string)
   | UpdateCompletionInstructions(string)
   | UpdateTargetRole(TargetDetails.role)
@@ -246,6 +249,16 @@ let reducer = (state, action) =>
     }
   | UpdateSaving => {...state, saving: !state.saving}
   | ResetEditor => {...state, saving: false, dirty: false}
+  | UpdateTargetGroupSearchInput(targetGroupSearchInput) => {
+      ...state,
+      targetGroupSearchInput,
+    }
+  | UpdateTargetGroup(targetGroupId) => {
+      ...state,
+      targetGroupId,
+      dirty: true,
+      targetGroupSearchInput: "",
+    }
   };
 
 let updateTitle = (send, event) => {
@@ -494,6 +507,101 @@ let linkEditor = (state, send) => {
   </div>;
 };
 
+module SelectableTargetGroup = {
+  type t = {
+    id,
+    name,
+  }
+  and name = string
+  and id = string;
+
+  let id = t => t.id;
+
+  let label = _t => None;
+
+  let value = t => t.name;
+
+  let searchString = t => t |> value;
+
+  let color = _t => "orange";
+
+  let make = (id, name) => {id, name};
+};
+
+module TargetGroupSelector = MultiselectDropdown.Make(SelectableTargetGroup);
+
+let selectableTargetGroupName = (levels, targetGroup) => {
+  (
+    targetGroup
+    |> TargetGroup.levelId
+    |> Level.unsafeLevelNumber(levels, "TargetDetailsEditor")
+  )
+  ++ ": "
+  ++ (targetGroup |> TargetGroup.name);
+};
+
+let unselectedTargetGroups = (levels, targetGroups, targetGroupId) => {
+  targetGroups
+  |> Js.Array.filter(t => t |> TargetGroup.id != targetGroupId)
+  |> Array.map(t =>
+       SelectableTargetGroup.make(
+         t |> TargetGroup.id,
+         selectableTargetGroupName(levels, t),
+       )
+     );
+};
+
+let selectedTargetGroup = (levels, targetGroups, targetGroupId) =>
+  if (targetGroupId |> Js.String.length == 0) {
+    [||];
+  } else {
+    let targetGroup =
+      targetGroupId
+      |> TargetGroup.unsafeFind(targetGroups, "TargetDetailsEditor");
+    [|
+      SelectableTargetGroup.make(
+        targetGroup |> TargetGroup.id,
+        selectableTargetGroupName(levels, targetGroup),
+      ),
+    |];
+  };
+let targetGroupEditor = (state, targetGroups, levels, send) => {
+  <div id="target_group_id" className="mb-6">
+    <label
+      className="block tracking-wide text-sm font-semibold mr-6 mb-2"
+      htmlFor="target_group_id">
+      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
+      {"Change Target Group" |> str}
+    </label>
+    <div className="ml-6">
+      <TargetGroupSelector
+        unselected={unselectedTargetGroups(
+          levels,
+          targetGroups,
+          state.targetGroupId,
+        )}
+        selected={selectedTargetGroup(
+          levels,
+          targetGroups,
+          state.targetGroupId,
+        )}
+        onSelect={selectable => {
+          send(UpdateTargetGroup(selectable |> SelectableTargetGroup.id))
+        }}
+        onDeselect={_ => send(UpdateTargetGroup(""))}
+        value={state.targetGroupSearchInput}
+        onChange={searchString =>
+          send(UpdateTargetGroupSearchInput(searchString))
+        }
+      />
+      <School__InputGroupError
+        message="Choose a target group"
+        active={state.targetGroupId == ""}
+      />
+    </div>
+  </div>;
+};
+
 let methodOfCompletionButtonClasses = value => {
   let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
   value
@@ -661,12 +769,14 @@ let saveDisabled =
       ~requiredStepsHaveUniqueTitles,
       ~dirty,
       ~saving,
+      ~targetGroupId,
     ) => {
   !requiredStepsHaveUniqueTitles
   || !hasValidTitle
   || !hasValidMethodOfCompletion
   || !dirty
-  || saving;
+  || saving
+  || targetGroupId == "";
 };
 
 module UpdateTargetQuery = [%graphql
@@ -754,6 +864,7 @@ let make =
       ~target,
       ~targets,
       ~targetGroups,
+      ~levels,
       ~evaluationCriteria,
       ~updateTargetCB,
       ~setDirtyCB,
@@ -778,6 +889,7 @@ let make =
         checklist: [||],
         visibility: TargetDetails.Draft,
         completionInstructions: "",
+        targetGroupSearchInput: "",
       },
     );
   let targetId = target |> Target.id;
@@ -837,6 +949,12 @@ let make =
                    />
                  </div>
                </div>
+               {targetGroupEditor(
+                  state,
+                  targetGroups |> Array.of_list,
+                  levels |> Array.of_list,
+                  send,
+                )}
                {prerequisiteTargetEditor(
                   send,
                   eligiblePrerequisiteTargets(
@@ -1117,6 +1235,7 @@ let make =
                        ~requiredStepsHaveUniqueTitles,
                        ~dirty=state.dirty,
                        ~saving=state.saving,
+                       ~targetGroupId=state.targetGroupId,
                      )}
                      onClick={updateTarget(
                        target,

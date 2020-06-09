@@ -22,7 +22,9 @@ module Users
     def valid_request?
       return false if user.blank? || @current_user.blank?
 
-      user == @current_user
+      time_since_last_mail = Time.zone.now - user.delete_account_sent_at
+
+      user == @current_user && time_since_last_mail < 30.minutes
     end
   end
 end

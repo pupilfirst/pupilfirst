@@ -9,6 +9,7 @@ module Users
     def execute
       # Make sure we generate a new token.
       @user.regenerate_delete_account_token
+      @user.update!(delete_account_sent_at: Time.zone.now)
 
       host = @user.school.domains.where(primary: true).first
 
@@ -21,7 +22,7 @@ module Users
       account_deletion_url = url_helpers.delete_account_url(url_options)
 
       # Send the email with link to delete account.
-      UserMailer.delete_account_token(@user, account_deletion_url).deliver_now
+      UserMailer.delete_account_token(@user, account_deletion_url).deliver_later
     end
   end
 end

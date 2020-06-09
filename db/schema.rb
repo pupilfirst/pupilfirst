@@ -780,6 +780,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.datetime "updated_at", null: false
     t.string "time_zone", default: "Asia/Kolkata", null: false
     t.string "delete_account_token"
+    t.datetime "delete_account_sent_at"
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

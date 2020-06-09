@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     if user.present?
       @token = params[:token]
     else
-      flash[:error] = "That one-time link has already been used, or is invalid. Please try again."
+      flash[:error] = "That link has expired or is invalid. Please try again."
       redirect_to root_path
     end
   end

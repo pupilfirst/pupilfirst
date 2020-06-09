@@ -9,6 +9,7 @@ let make =
       ~cancelButtonText,
       ~onConfirm,
       ~onCancel,
+      ~disableConfirm,
       ~alertType=`Normal,
     ) => {
   let (alertBgClass, alertTextClass, buttonClasses) = {
@@ -58,6 +59,7 @@ let make =
       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
         <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
           <button
+            disabled=disableConfirm
             onClick={event => {
               ReactEvent.Mouse.preventDefault(event);
               onConfirm();

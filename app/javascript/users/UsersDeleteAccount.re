@@ -28,10 +28,7 @@ let deleteAccount = (token, setAccountDeleted, event) => {
            )
            |> ignore;
          }
-         : Notification.error(
-             "Error!",
-             "Something went wrong! Please try again",
-           );
+         : ();
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {

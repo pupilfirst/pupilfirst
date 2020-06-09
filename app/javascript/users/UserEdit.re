@@ -273,6 +273,7 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
         cancelButtonText="Cancel"
         onConfirm={() => initiateAccountDeletion(state, send, currentUserId)}
         onCancel={() => send(ChangeDeleteAccountFormVisibility(false))}
+        disableConfirm={state.deletingAccount}
         alertType=`Critical
       />;
     }
